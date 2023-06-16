@@ -181,17 +181,19 @@ func (s *BoardService) UpdatedBoard(board database.Board) {
 		logger.Get().Errorw("unable to broadcast updated board", "err", err)
 	}
 
-	err = s.SyncBoardSettingChange(board.ID)
+	var err_msg string
+	err_msg, err = s.SyncBoardSettingChange(board.ID)
 	if err != nil {
-		logger.Get().Errorw("unable to broadcast notes, following a updated board call", "err", err)
+		logger.Get().Errorw(err_msg, "err", err)
 	}
 }
 
-func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) error {
+func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
+	var err_msg string
 	columns, err := s.database.GetColumns(boardID)
 	if err != nil {
-		logger.Get().Errorw("unable to retrieve columns, following a updated board call", "err", err)
-		return err
+		err_msg = "unable to retrieve columns, following a updated board call"
+		return err_msg, err
 	}
 
 	var columnsID []uuid.UUID
@@ -200,15 +202,19 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) error {
 	}
 	notes, err := s.database.GetNotes(boardID, columnsID...)
 	if err != nil {
-		logger.Get().Errorw("unable to retrieve notes, following a updated board call", "err", err)
-		return err
+		err_msg = "unable to retrieve notes, following a updated board call"
+		return err_msg, err
 	}
 
 	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
 		Data: dto.Notes(notes),
 	})
-	return err
+	if err != nil {
+		err_msg = "unable to broadcast notes, following a updated board call"
+		return err_msg, err
+	}
+	return "", err
 }
 
 func (s *BoardService) DeletedBoard(board uuid.UUID) {
