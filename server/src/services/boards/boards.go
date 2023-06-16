@@ -190,6 +190,7 @@ func (s *BoardService) UpdatedBoard(board database.Board) {
 func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) error {
 	columns, err := s.database.GetColumns(boardID)
 	if err != nil {
+		logger.Get().Errorw("unable to retrieve columns, following a updated board call", "err", err)
 		return err
 	}
 
@@ -199,6 +200,7 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) error {
 	}
 	notes, err := s.database.GetNotes(boardID, columnsID...)
 	if err != nil {
+		logger.Get().Errorw("unable to retrieve notes, following a updated board call", "err", err)
 		return err
 	}
 
