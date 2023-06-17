@@ -92,16 +92,18 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
       if (!isActive(id, active)) return;
 
       if (collisions && topCollision) {
-        console.log(items === localItems);
         if (items !== localItems || isColumn(topCollision)) {
-          const position = {
-            column: event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId,
-            stack: null,
-            rank: globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank ?? 0,
-          };
+          const column = event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId;
+          let rank = globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank;
+          if (rank === undefined) rank = 0;
+          // if note is moved to another column, increase rank by 1
+          if (column !== columnId) rank += 1;
 
-          console.log(globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())]));
-          console.log(position);
+          const position = {
+            column,
+            stack: null,
+            rank,
+          };
 
           store.dispatch(Actions.editNote(active.id.toString(), {position}));
         }
