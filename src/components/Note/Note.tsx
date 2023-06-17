@@ -144,9 +144,7 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <p className="note__text">
-            {note.id} - {note.position.rank}
-          </p>
+          <p className="note__text">{note.text}</p>
         )}
         <div className="note__footer">
           <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />

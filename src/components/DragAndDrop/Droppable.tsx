@@ -40,22 +40,18 @@ export const Droppable = ({className, children, items, id, setItems}: DroppableP
 
       // from own column to column droppable
       if (hasActive && isOverSelf) {
-        console.log(1);
         setItems([...items.filter((item) => item !== active.id.toString()), active.id.toString()]);
       }
       // from other column to column droppable
       if (!hasActive && isOverSelf) {
-        console.log(2);
         setItems([...items, active.id.toString()]);
       }
       // from own column to other column/note
       if (hasActive && !(hasOver || isOverSelf) && event.over !== null) {
-        console.log(3, event);
         setItems(items.filter((item) => item !== active.id.toString()));
       }
       // from other column to over own note
       if (!hasActive && hasOver) {
-        console.log(4);
         const overIndex = items.indexOf(topCollision.id.toString());
         if (overIndex === -1) return;
         setItems([...items.slice(0, overIndex), active.id.toString(), ...items.slice(overIndex, items.length)]);
