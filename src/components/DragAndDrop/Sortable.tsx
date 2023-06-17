@@ -96,8 +96,8 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
           const column = event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId;
           let rank = globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank;
           if (rank === undefined) rank = 0;
-          // if note is moved to another column, increase rank by 1
-          if (column !== columnId) rank += 1;
+          // if note is moved to another column and not dropped at the bottom of that column, increase rank by 1
+          if (column !== columnId && items[items.length - 1] !== id) rank += 1;
 
           const position = {
             column,
