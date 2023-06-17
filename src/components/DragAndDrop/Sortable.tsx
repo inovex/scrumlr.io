@@ -93,16 +93,10 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
 
       if (collisions && topCollision) {
         if (items !== localItems || isColumn(topCollision)) {
-          const column = event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId;
-          let rank = globalNotes.find((note) => note.id === localItems[items.indexOf(id.toString())])?.position.rank;
-          if (rank === undefined) rank = 0;
-          // if note is moved to another column and not dropped at the bottom of that column, increase rank by 1
-          if (column !== columnId && items[items.length - 1] !== id) rank += 1;
-
           const position = {
-            column,
+            column: event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId,
             stack: null,
-            rank,
+            rank: items.reverse().indexOf(id.toString()),
           };
 
           store.dispatch(Actions.editNote(active.id.toString(), {position}));

@@ -31,16 +31,6 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
-  const author = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
-    const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
-    const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
-    return {
-      ...noteAuthor,
-      displayName,
-      isSelf,
-    };
-  }, isEqual);
 
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const moderating = useAppSelector((state) => state.view.moderating);
