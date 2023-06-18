@@ -30,10 +30,10 @@ export interface AvatarSettingsProps {
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   const {t} = useTranslation();
   const state = useAppSelector((applicationState) => ({
-    participant: applicationState.participants!.self,
+    user: applicationState.auth.user!,
   }));
 
-  let initialState = state.participant.user.avatar;
+  let initialState = state.user.avatar;
   if (initialState === null || initialState === undefined) {
     initialState = generateRandomProps(id ?? "");
   }
@@ -53,7 +53,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   };
 
   useEffect(() => {
-    store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties}));
+    store.dispatch(Actions.editSelf({...state.user, avatar: properties}));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 

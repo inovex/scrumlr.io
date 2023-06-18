@@ -8,21 +8,49 @@
 
 .onboarding-intro-container {
   position: absolute;
-  top: 40%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
 
-  width: 800px;
+  box-shadow: $box-shadow--light;
+  border-radius: 15px;
+  padding: 1rem;
+  min-width: 50%;
+  max-width: 80%;
+  max-height: 70%;
 }
 
 .onboarding-intro-hero {
   width: 100%;
   min-height: 100px;
-  background-color: $color-icon-light-blue;
+  max-height: 100%;
+}
+
+.onboarding-intro-title {
+  text-align: center;
+  margin: 0;
+  margin-top: 1rem;
 }
 
 .onboarding-intro-content {
   text-align: center;
+  white-space: pre-wrap;
+}
+
+.onboarding-intro-mentors {
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.onboarding-intro-avatar,
+.onboarding-intro-stan {
+  width: 50%;
+}
+
+.onboarding-intro-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

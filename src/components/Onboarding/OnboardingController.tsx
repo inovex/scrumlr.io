@@ -134,8 +134,7 @@ export const OnboardingController = () => {
         <Floater
           open={stepOpen}
           component={<OnboardingBase text={t("Onboarding.newBoardWelcome")} isExercisePrompt={false} />}
-          target=".new-board__mode-selection"
-          placement="right"
+          placement="center"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
