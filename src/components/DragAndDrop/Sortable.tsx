@@ -81,10 +81,8 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
           rank: note?.position.rank ?? 0,
         };
 
-        try {
-          store.dispatch(Actions.editNote(active.id.toString(), {position}));
-          if (setItems) setItems(items.filter((item) => item !== active.id.toString()).map((item) => item.toString()));
-        } catch {}
+        store.dispatch(Actions.editNote(active.id.toString(), {position}));
+        if (setItems) setItems(items.filter((item) => item !== active.id.toString()).map((item) => item.toString()));
 
         return;
       }

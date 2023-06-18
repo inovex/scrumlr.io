@@ -1,9 +1,9 @@
-import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
 import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
+import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
 Object.assign(navigator, {
   clipboard: {
@@ -21,10 +21,11 @@ jest.mock("utils/export", () => ({
 jest.mock("file-saver", () => ({saveAs: jest.fn()}));
 
 const createHeaderMenu = (currentUserIsModerator: boolean) => {
-  const [HeaderMenuContext] = wrapWithTestBackend(HeaderMenu);
   return (
     <Provider store={getTestStore()}>
-      <HeaderMenuContext open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
+      <CustomDndContext>
+        <HeaderMenu open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
+      </CustomDndContext>
     </Provider>
   );
 };
