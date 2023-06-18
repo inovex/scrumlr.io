@@ -152,8 +152,8 @@ export const OnboardingController = () => {
         <Floater
           open={stepOpen}
           component={<OnboardingBase text={t("Onboarding.gatherDataWelcome")} isExercisePrompt={false} />}
-          target=".column + .column"
-          placement="left"
+          target=".board"
+          placement="center"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}

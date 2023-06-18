@@ -1,15 +1,6 @@
 import {Action, ReduxAction} from "store/action";
 import {OnboardingColumn, OnboardingPhase, OnboardingState} from "types/onboarding";
 
-const initialState: OnboardingState = {
-  phase: (sessionStorage.getItem("onboarding_phase") as OnboardingPhase) ?? "none",
-  step: JSON.parse(sessionStorage.getItem("onboarding_step") ?? "1"),
-  stepOpen: JSON.parse(sessionStorage.getItem("onboarding_stepOpen") ?? "true"),
-  onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
-  inUserTask: JSON.parse(sessionStorage.getItem("onboarding_inUserTask") ?? "false"),
-  fakeVotesOpen: JSON.parse(sessionStorage.getItem("onboarding_fakeVotesOpen") ?? "false"),
-};
-
 interface OnboardingPhaseSteps {
   name: OnboardingPhase;
   steps: number;
@@ -27,6 +18,15 @@ export const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "outro", steps: 2},
 ];
 
+const initialState: OnboardingState = {
+  phase: phaseSteps.find((p) => (sessionStorage.getItem("onboarding_phase") as OnboardingPhase).includes(p.name))?.name ?? "none",
+  step: JSON.parse(sessionStorage.getItem("onboarding_step") ?? "1"),
+  stepOpen: JSON.parse(sessionStorage.getItem("onboarding_stepOpen") ?? "true"),
+  onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
+  inUserTask: JSON.parse(sessionStorage.getItem("onboarding_inUserTask") ?? "false"),
+  fakeVotesOpen: JSON.parse(sessionStorage.getItem("onboarding_fakeVotesOpen") ?? "false"),
+};
+
 export const onboardingReducer = (state: OnboardingState = initialState, action: ReduxAction): OnboardingState => {
   switch (action.type) {
     case Action.ChangePhase: {
@@ -40,6 +40,7 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
     }
     case Action.IncrementStep: {
       const currentPhaseIndex = phaseSteps.findIndex((p) => p.name === state.phase);
+      console.log(currentPhaseIndex, state.phase);
       const increment = action.amount ?? 1;
       if (state.step + increment > phaseSteps[currentPhaseIndex].steps) {
         return {
