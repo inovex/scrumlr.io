@@ -48,14 +48,14 @@ exports[`Column should have correct style show column with correct style 1`] = `
       <form
         class="note-input"
       >
-        <input
+        <textarea
           class="note-input__input"
           data-tooltip-content="OPTION/ALT + 1"
           id="note-input-test-columns-id-1"
           maxlength="1024"
           placeholder="Add your note..."
-          type="text"
-          value=""
+          rows="1"
+          style="overflow-x: hidden; word-wrap: break-word; overflow-y: hidden;"
         />
         <button
           class="note-input__add-button"
