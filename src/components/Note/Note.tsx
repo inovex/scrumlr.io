@@ -39,7 +39,7 @@ export const Note = (props: NoteProps) => {
   // all authors of a note, including its children if it's a stack.
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
   const authors: ParticipantExtendedInfo[] = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
+    const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
     const childrenNoteAuthors = state.notes
       // get all notes which are in the same stack as the main note
       .filter((n) => n.position.stack === props.noteId)
