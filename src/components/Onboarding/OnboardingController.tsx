@@ -6,7 +6,6 @@ import {shallowEqual, useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
-import {onboardingAuthors} from "types/onboardingNotes";
 import {OnboardingBase} from "./OnboardingBase";
 import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
@@ -26,9 +25,9 @@ export const OnboardingController = () => {
       const column = columns.find((c) => c.name === columnName);
       if (column) {
         let index = 0;
-        onboardingNotes[columnName].forEach((n: {text: string; author: string}) => {
+        onboardingNotes[columnName].forEach((n: {text: string; author: string; votes: number}) => {
           setTimeout(() => {
-            dispatch(Actions.addOnboardingNote(column?.id ?? "", n.text, n.author));
+            dispatch(Actions.addOnboardingNote(column?.id ?? "", n.text, n.author, n.votes));
           }, index * 500);
           index++;
         });
@@ -41,19 +40,6 @@ export const OnboardingController = () => {
       case "newBoard-2":
         break;
       case "board_check_in-1": // welcome
-        break;
-      case "board_check_in-2": // add column task
-        dispatch(Actions.setInUserTask(true));
-        break;
-      case "board_check_in-3": // invite team
-        dispatch(Actions.setInUserTask(false));
-        onboardingAuthors.forEach((oa) => {
-          dispatch(Actions.createdParticipant(oa));
-        });
-        break;
-      case "board_check_in-4": // simulate team adding notes
-        spawnNotes("Check-In");
-        dispatch(Actions.incrementStep());
         break;
       case "board_data-1": // welcome
         break;
@@ -68,9 +54,14 @@ export const OnboardingController = () => {
         }, 1500);
         dispatch(Actions.incrementStep());
         break;
-      case "board_insights":
+      case "board_insights-1":
+        dispatch(Actions.setFakeVotesOpen(true));
         break;
-      case "board_actions":
+      case "board_actions-1":
+        // dispatch(Actions.setFakeVotesOpen(false));
+        break;
+      case "board_actions-2":
+        // dispatch(Actions.setFakeVotesOpen(true));
         break;
       case "board_check_out":
         break;
@@ -156,29 +147,11 @@ export const OnboardingController = () => {
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
-      {phaseStep === "board_check_in-2" && (
-        <Floater
-          open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.checkAddColumn")} isExercisePrompt />}
-          target=".column__header-edit-button-icon"
-          placement="right"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
-        />
-      )}
-      {phaseStep === "board_check_in-3" && (
-        <Floater
-          open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.checkInAddTeam")} isExercisePrompt={false} />}
-          target=".share-button"
-          placement="bottom-end"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
-        />
-      )}
       {/* board_check_in-4 and board_check_in-5 just handle spawning notes */}
       {phaseStep === "board_data-1" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.dataWelcome")} isExercisePrompt={false} />}
+          component={<OnboardingBase text={t("Onboarding.gatherDataWelcome")} isExercisePrompt={false} />}
           target=".column + .column"
           placement="left"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}

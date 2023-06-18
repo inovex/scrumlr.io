@@ -43,11 +43,12 @@ export const NoteActionFactory = {
     text,
   }),
 
-  addOnboardingNote: (columnId: string, text: string, author: string) => ({
+  addOnboardingNote: (columnId: string, text: string, author: string, votes: number) => ({
     type: NoteAction.AddOnboardingNote,
     columnId,
     text,
     author,
+    votes,
   }),
 
   updatedNotes: (notes: Note[]) => ({

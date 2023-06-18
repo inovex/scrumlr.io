@@ -8,8 +8,7 @@ import store from "../index";
 
 export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.AddNote) {
-    API.addNote(action.context.board!, action.columnId, action.text)
-    .catch(() => {
+    API.addNote(action.context.board!, action.columnId, action.text).catch(() => {
       Toast.error({
         title: i18n.t("Error.addNote"),
         buttons: [i18n.t("Error.retry")],
@@ -20,16 +19,16 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
 
   if (action.type === Action.AddOnboardingNote) {
     API.addNote(action.context.board!, action.columnId, action.text)
-    .then((note) => {
-      dispatch(Actions.registerOnboardingNote(note.id, action.author));
-    })
-    .catch(() => {
-      Toast.error({
-        title: i18n.t("Error.addNote"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.addNote(action.columnId, action.text)),
+      .then((note) => {
+        dispatch(Actions.registerOnboardingNote(note.id, action.author, action.votes));
+      })
+      .catch(() => {
+        Toast.error({
+          title: i18n.t("Error.addNote"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.addNote(action.columnId, action.text)),
+        });
       });
-    });
   }
 
   if (action.type === Action.DeleteNote) {

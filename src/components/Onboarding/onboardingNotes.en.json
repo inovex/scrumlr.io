@@ -1,30 +1,28 @@
 {
-  "Check-In": [
-    {
-      "author": "Mike",
-      "text": "Highway to Hell"
-    }
-  ],
   "Mad": [
     {
       "author": "Mike",
-      "text": "I am mad about something"
+      "text": "I am mad about something",
+      "votes": 1
     },
     {
       "author": "Mike",
-      "text": "I am mad about something else"
+      "text": "I am mad about something else",
+      "votes": 2
     }
   ],
   "Sad": [
     {
       "author": "Mike",
-      "text": "I am sad about something"
+      "text": "I am sad about something",
+      "votes": 3
     }
   ],
   "Glad": [
     {
       "author": "Mike",
-      "text": "I am glad about something"
+      "text": "I am glad about something",
+      "votes": 0
     }
   ]
 }

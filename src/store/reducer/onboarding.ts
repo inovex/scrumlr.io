@@ -7,6 +7,7 @@ const initialState: OnboardingState = {
   stepOpen: JSON.parse(sessionStorage.getItem("onboarding_stepOpen") ?? "true"),
   onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
   inUserTask: JSON.parse(sessionStorage.getItem("onboarding_inUserTask") ?? "false"),
+  fakeVotesOpen: JSON.parse(sessionStorage.getItem("onboarding_fakeVotesOpen") ?? "false"),
 };
 
 interface OnboardingPhaseSteps {
@@ -16,9 +17,9 @@ interface OnboardingPhaseSteps {
 
 export const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "none", steps: 0},
-  {name: "intro", steps: 3},
+  {name: "intro", steps: 2},
   {name: "newBoard", steps: 3},
-  {name: "board_check_in", steps: 5},
+  {name: "board_check_in", steps: 1},
   {name: "board_data", steps: 5},
   {name: "board_insights", steps: 1},
   {name: "board_actions", steps: 3},
@@ -74,10 +75,23 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
       }
       return state;
     }
+    case Action.ClearOnboardingColumns: {
+      return {
+        ...state,
+        onboardingColumns: [],
+      };
+      break;
+    }
     case Action.SetInUserTask: {
       return {
         ...state,
         inUserTask: action.inTask,
+      };
+    }
+    case Action.SetFakeVotesOpen: {
+      return {
+        ...state,
+        fakeVotesOpen: action.fakesOpen,
       };
     }
     default:

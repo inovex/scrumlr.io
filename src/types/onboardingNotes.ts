@@ -4,6 +4,7 @@ import {Participant} from "./participant";
 export interface OnboardingNote {
   id: string;
   onboardingAuthor: string;
+  votes: number;
 }
 
 export type OnboardingNotesState = OnboardingNote[];

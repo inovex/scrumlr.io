@@ -26,7 +26,8 @@ export const Votes: FC<VotesProps> = (props) => {
       (state.votings.past[0]?.votes?.votesPerNote[props.noteId]?.total ?? 0) +
       (props.aggregateVotes
         ? state.notes.filter((n) => n.position.stack === props.noteId).reduce((sum, curr) => sum + (state.votings.past[0]?.votes?.votesPerNote[curr.id]?.total ?? 0), 0)
-        : 0)
+        : 0) +
+      (state.onboarding.fakeVotesOpen ? state.onboardingNotes.find((on) => on.id === props.noteId)?.votes ?? 0 : 0)
   );
 
   return (

@@ -6,7 +6,9 @@ export const OnboardingAction = {
   IncrementStep: "scrumlr.io/incrementStep" as const,
   ToggleStepOpen: "scrumlr.io/toggleStepOpen" as const,
   RegisterOnboardingColumns: "scrumlr.io/registerOnboardingColumns" as const,
+  ClearOnboardingColumns: "scrumlr.io/clearOnboardingColumns" as const,
   SetInUserTask: "scrumlr.io/setInUserTask" as const,
+  SetFakeVotesOpen: "scrumlr.io/setFakeVotesOpen" as const,
 };
 
 export const OnboardingActionFactory = {
@@ -25,9 +27,16 @@ export const OnboardingActionFactory = {
     type: OnboardingAction.RegisterOnboardingColumns,
     columns,
   }),
+  clearOnboardingColumns: () => ({
+    type: OnboardingAction.ClearOnboardingColumns,
+  }),
   setInUserTask: (inTask: boolean) => ({
     type: OnboardingAction.SetInUserTask,
     inTask,
+  }),
+  setFakeVotesOpen: (fakesOpen: boolean) => ({
+    type: OnboardingAction.SetFakeVotesOpen,
+    fakesOpen,
   }),
 };
 
@@ -36,4 +45,6 @@ export type OnboardingReduxAction =
   | ReturnType<typeof OnboardingActionFactory.incrementStep>
   | ReturnType<typeof OnboardingActionFactory.toggleStepOpen>
   | ReturnType<typeof OnboardingActionFactory.registerOnboardingColumns>
-  | ReturnType<typeof OnboardingActionFactory.setInUserTask>;
+  | ReturnType<typeof OnboardingActionFactory.clearOnboardingColumns>
+  | ReturnType<typeof OnboardingActionFactory.setInUserTask>
+  | ReturnType<typeof OnboardingActionFactory.setFakeVotesOpen>;

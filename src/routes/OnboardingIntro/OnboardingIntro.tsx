@@ -9,20 +9,24 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as NewScrumMaster} from "assets/onboarding/onboarding_intro.svg";
 import {ReactComponent as StanMentor} from "assets/stan/Stan_coffee_bluepen_lightmode.svg";
 import "./OnboardingIntro.scss";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {AvatarSettings} from "components/SettingsDialog/Components/AvatarSettings";
+import {SettingsInput} from "components/SettingsDialog/Components/SettingsInput";
+import {useTranslation} from "react-i18next";
 
 export const OnboardingIntro = () => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const phase = useAppSelector((state) => state.onboarding.phase, isEqual);
   const step = useAppSelector((state) => state.onboarding.step, isEqual);
-  let introImage;
-  let title;
-  let content;
   const state = useAppSelector((applicationState) => ({
     user: applicationState.auth.user!,
   }));
+  const [userName, setUserName] = useState<string>(state.user.name);
+  let introImage;
+  let title;
+  let content;
 
   useEffect(() => {
     if (phase === "intro" && step === 1) {
@@ -65,6 +69,13 @@ export const OnboardingIntro = () => {
         <div className="onboarding-intro-container">
           <div className="onboarding-intro-mentors">
             <div className="onboarding-intro-avatar">
+              <SettingsInput
+                id="profileSettingsUserName"
+                label={t("ProfileSettings.UserName")}
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                submit={() => store.dispatch(Actions.editSelf({...state.user, name: userName}))}
+              />
               <AvatarSettings id={state.user.id} />
             </div>
             <div className="onboarding-intro-stan">

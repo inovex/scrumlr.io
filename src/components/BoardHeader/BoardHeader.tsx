@@ -15,7 +15,7 @@ import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
-import { isEqual } from "underscore";
+import {isEqual} from "underscore";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -46,6 +46,9 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           onAccept={() => {
             store.dispatch(Actions.leaveBoard());
             store.dispatch(Actions.changePhase("none"));
+            store.dispatch(Actions.setFakeVotesOpen(false));
+            store.dispatch(Actions.clearOnboardingNotes());
+            store.dispatch(Actions.clearOnboardingColumns());
             navigate("/");
           }}
           onDecline={() => setShowConfirmationDialog(false)}
@@ -68,17 +71,15 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
         >
           <div className="board-header__access-policy-status">
-            { onboardingState.phase !== "newBoard" ? (
+            {onboardingState.phase !== "newBoard" ? (
               <LockIcon className="board-header__access-policy-status-icon" />
-              ) : (
-                {
-                  BY_INVITE: <LockIcon className="board-header__access-policy-status-icon" />,
-                  BY_PASSPHRASE: <KeyIcon className="board-header__access-policy-status-icon" />,
-                  PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
-                }[state.accessPolicy!]
-              )
-
-            }
+            ) : (
+              {
+                BY_INVITE: <LockIcon className="board-header__access-policy-status-icon" />,
+                BY_PASSPHRASE: <KeyIcon className="board-header__access-policy-status-icon" />,
+                PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
+              }[state.accessPolicy!]
+            )}
             <span>{t(onboardingState.phase !== "newBoard" ? "AccessPolicy.ONBOARDING" : `AccessPolicy.${state.accessPolicy}`)}</span>
           </div>
           <div className="board-header__name-container">

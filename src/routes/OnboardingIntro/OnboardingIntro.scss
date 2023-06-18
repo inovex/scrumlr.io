@@ -12,12 +12,13 @@
   left: 50%;
   transform: translate(-50%, -50%);
   display: grid;
-  grid-template-rows: 1fr auto auto;
+  grid-template-rows: auto auto auto;
 
   box-shadow: $box-shadow--light;
   border-radius: 15px;
+  width: 950px;
+  height: 650px;
   padding: 1rem;
-  min-width: 50%;
   max-width: 80%;
   max-height: 70%;
 }
@@ -47,10 +48,24 @@
 .onboarding-intro-avatar,
 .onboarding-intro-stan {
   width: 50%;
+  height: 100%;
 }
-
 .onboarding-intro-avatar {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  padding: 1rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.onboarding-intro-avatar div {
+  max-height: 100%;
+}
+.onboarding-intro-avatar .settings-input__container {
+  width: fit-content;
 }

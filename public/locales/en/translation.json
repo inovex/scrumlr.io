@@ -598,13 +598,14 @@
     "skip": "Skip",
     "ok": "Understood!",
     "next": "Next",
-    "newBoardWelcome": "Schön, dass du da bist!",
-    "checkInWelcome": "Das Team scheint wird mit den Gedanken noch bei den aktuellen Problemen sein.\nLass uns eine Check-In Phase einbauen, um die Stimmung etwas aufzulockern!",
-    "checkAddColumn": "Das Board lässt sich zum Glück ganz leicht anpassen! \nFüge bitte ganz links eine neue sichtbare Spalte mit dem Namen 'Check-In' ein.",
-    "checkInAddTeam": "Super, jetzt kann es losgehen! \nIch habe das Team schon einmal zu unserer Sitzung eingeladen.",
-    "dataWelcome": "Jetzt wo du die Aufmerksamkeit deines Teams hast wird es Zeit, den Problemen auf den Grund zu gehen! \nEs wird Zeit, die Macht der Templates zu nutzen.",
-    "dataCardsAdded": "Es ist gut, dass das Team so viele Punkte benennen konnte. Leider ist das Ganze etwas unübersichtlich geworden. \nZum Glück bietet Scrumlr dafür eine Lösung!",
-    "dataStacks": "Führe bitte ähnliche Kärtchen per Drag&Drop zu Stapeln zusammen",
+    "newBoardWelcome": "Great that you are here!",
+    "checkInWelcome": "Give people time to 'arrive' and get into the right mood.",
+    "gatherDataWelcome": "Let's help everyone remember. Create a shared pool of information.",
+    "generateInsightsWelcome": "Why did things happen the way they did? Identify patterns. See the big picture.",
+    "decideWelcome": "Pick a few issues to work on and create concrete action plans of how you'll address them.",
+    "checkOutWelcome": "Clarify follow-up; Appreciations; Clear end; How could the retrospectives improve?",
+    "dataCardsAdded": "Some notes are very similar. \nThat makes it hard to vote on the important topics",
+    "dataStacks": "Let's stack the similar cards by dragging them onto each other!",
     "insightsWelcome": "test"
   }
 }

@@ -16,4 +16,5 @@ export interface OnboardingState {
   stepOpen: boolean;
   onboardingColumns: OnboardingColumn[];
   inUserTask: boolean;
+  fakeVotesOpen: boolean;
 }
