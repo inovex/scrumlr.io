@@ -1236,10 +1236,10 @@
   dependencies:
     "@floating-ui/core" "^1.2.4"
 
-"@fontsource/raleway@^5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@fontsource/raleway/-/raleway-5.0.2.tgz#4a71822fb95f80193bf33e9f08abe5a3d714a7e5"
-  integrity sha512-t7grjH+rOpBON/OsaypZfliNuFqgEkn6SZnK/ZsBYdPT4qpOGYw0ziGSYXl3YJDBga2MlnBOt2fb1Q8zBpx5uQ==
+"@fontsource/raleway@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@fontsource/raleway/-/raleway-5.0.3.tgz#3330d6f2ab132993410e1efe331199d2ff4ce20a"
+  integrity sha512-dmbHSu2cvuQb0Vlp7sOETUSsrmYESwagmK73wb5Lhs+rkM/5aciI0DnNMiarVwEfE5V2bfcn3GgDkILQG5QPWw==
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
