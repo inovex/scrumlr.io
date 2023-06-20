@@ -196,7 +196,7 @@ export const StackView = () => {
   // show toast if note has been deleted
   useLayoutEffect(() => {
     if (prevNote.current && !note) {
-      Toast.error({title: t("Toast.noteDeleted")});
+      Toast.deletion({title: t("Toast.noteDeleted")});
     }
   }, [note, t]);
 
