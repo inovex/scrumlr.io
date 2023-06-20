@@ -1236,10 +1236,10 @@
   dependencies:
     "@floating-ui/core" "^1.2.4"
 
-"@fontsource/raleway@^5.0.2":
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/@fontsource/raleway/-/raleway-5.0.2.tgz#4a71822fb95f80193bf33e9f08abe5a3d714a7e5"
-  integrity sha512-t7grjH+rOpBON/OsaypZfliNuFqgEkn6SZnK/ZsBYdPT4qpOGYw0ziGSYXl3YJDBga2MlnBOt2fb1Q8zBpx5uQ==
+"@fontsource/raleway@^5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@fontsource/raleway/-/raleway-5.0.3.tgz#3330d6f2ab132993410e1efe331199d2ff4ce20a"
+  integrity sha512-dmbHSu2cvuQb0Vlp7sOETUSsrmYESwagmK73wb5Lhs+rkM/5aciI0DnNMiarVwEfE5V2bfcn3GgDkILQG5QPWw==
 
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
@@ -2349,10 +2349,10 @@
   resolved "https://registry.yarnpkg.com/@types/use-sync-external-store/-/use-sync-external-store-0.0.3.tgz#b6725d5f4af24ace33b36fafd295136e75509f43"
   integrity sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==
 
-"@types/uuid@^9.0.1":
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-9.0.1.tgz#98586dc36aee8dacc98cc396dbca8d0429647aa6"
-  integrity sha512-rFT3ak0/2trgvp4yYZo5iKFEPsET7vKydKF+VRCxlQ9bpheehyAJH89dAkaLEq/j/RZXJIqcgsmPJKUP1Z28HA==
+"@types/uuid@^9.0.2":
+  version "9.0.2"
+  resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-9.0.2.tgz#ede1d1b1e451548d44919dc226253e32a6952c4b"
+  integrity sha512-kNnC1GFBLuhImSnV7w4njQkUiJi0ZXUycu1rUaouPqiKlXkh77JKgdRnTAp1x5eBwcIwbtI+3otwzuIDEuDoxQ==
 
 "@types/workbox-core@^5.0.0":
   version "5.0.0"
