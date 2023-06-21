@@ -93,6 +93,7 @@ jobs:
           message: |
             The deployment to the dev cluster was successful. You can find the deployment here: https://${{ env.CURRENT_BRANCH }}.development.scrumlr.fra.ics.inovex.io
             This deployment is only for testing purposes and will be deleted after 24 hours.
+            To redeploy rerun the workflow.
             <strong>DO NOT STORE IMPORTANT DATA ON THIS DEPLOYMENT</strong>
             
             <details>
