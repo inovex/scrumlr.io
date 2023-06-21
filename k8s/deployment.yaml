@@ -241,7 +241,7 @@ spec:
       secret:
         name: postgresql-creds
 ---
-# secret containing the database url
+# secret containing the database url 
 apiVersion: v1
 kind: Secret
 metadata:
