@@ -92,6 +92,11 @@ jobs:
         with:
           message: |
             The deployment to the dev cluster was successful. You can find the deployment here: https://${{ env.CURRENT_BRANCH }}.development.scrumlr.fra.ics.inovex.io
-            The following images were deployed:
+            This deployment is only for testing purposes and will be deleted after 24 hours.
+            <strong>DO NOT STORE IMPORTANT DATA ON THIS DEPLOYMENT</strong>
+            
+            <details>
+            <summary>Deployed Images</summary>
             - ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
             - ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
+            </details>
