@@ -22,6 +22,7 @@ export const OnboardingIntro = () => {
   const step = useAppSelector((state) => state.onboarding.step, isEqual);
   const state = useAppSelector((applicationState) => ({
     user: applicationState.auth.user!,
+    participants: applicationState.participants,
   }));
   const [userName, setUserName] = useState<string>(state.user.name);
   let introImage;
@@ -31,13 +32,13 @@ export const OnboardingIntro = () => {
   useEffect(() => {
     sessionStorage.setItem("onboarding_phase", JSON.stringify(phase));
     sessionStorage.setItem("onboarding_step", JSON.stringify(step));
-    if (phase === "intro" && step === 1) {
+    if (!state.participants) {
       store.dispatch(Actions.setParticipants([{user: state.user, connected: true, raisedHand: false, showHiddenColumns: true, ready: false, role: "OWNER"}]));
     }
     if (phase === "newBoard") {
       navigate("/onboarding-new");
     }
-  }, [phase, navigate, step, state.user]);
+  }, [phase, navigate, step, state.user, state.participants]);
 
   if (phase === "intro" && step === 1) {
     introImage = <NewScrumMaster />;
@@ -79,7 +80,7 @@ export const OnboardingIntro = () => {
                 onChange={(e) => setUserName(e.target.value)}
                 submit={() => store.dispatch(Actions.editSelf({...state.user, name: userName}))}
               />
-              <AvatarSettings id={state.user.id} />
+              {state.participants && <AvatarSettings id={state.user.id} />}
             </div>
             <div className="onboarding-intro__mentors-stan">
               <StanMentor />
