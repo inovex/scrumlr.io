@@ -6,9 +6,13 @@ import {shallowEqual, useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
+import gatherDataImg from "assets/onboarding/As-introduction-to-Data-collection-in-marketing-research.jpg";
+import checkInImg from "assets/onboarding/check-in_image_temp.jpg";
+import stanOk from "assets/stan/Stan_Ok.svg";
 import {OnboardingBase} from "./OnboardingBase";
 import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
+import {OnboardingModal} from "./Floaters/OnboardingModal";
 
 export const OnboardingController = () => {
   const {t} = useTranslation();
@@ -43,7 +47,7 @@ export const OnboardingController = () => {
         break;
       case "board_data-1": // welcome
         break;
-      case "board_data-2":
+      case "board_data-3":
         // in this step, the "fake" notes for the Mad/Sad/Glad columns are spawned
         spawnNotes("Mad");
         setTimeout(() => {
@@ -124,9 +128,11 @@ export const OnboardingController = () => {
       {phaseStep === "newBoard-1" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.newBoardWelcome")} isExercisePrompt={false} />}
+          component={
+            <OnboardingModal textContent={t("Onboarding.newBoardWelcome")} title="Preparation is Key!" hasNextButton image={<img src={stanOk} alt="new board hero-img" />} />
+          }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
         />
       )}
       {phaseStep === "newBoard-2" && (
@@ -135,36 +141,57 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.newBoardWelcome")} isExercisePrompt={false} />}
           target=".new-board__extended"
           placement="right-end"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
         />
       )}
       {phaseStep === "board_check_in-1" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.checkInWelcome")} isExercisePrompt={false} />}
+          component={<OnboardingModal textContent={t("Onboarding.checkInWelcome")} title="Phase 1: Set the Stage" image={<img src={checkInImg} alt="check-in hero-img" />} />}
           placement="center"
-          target=".board"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+        />
+      )}
+      {phaseStep === "board_check_in-2" && (
+        <Floater
+          open={stepOpen}
+          component={<OnboardingModal textContent="test" title="Phase 1: Set the Stage" image={<img src="" alt="check-in hero-img" />} />}
+          placement="center"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
         />
       )}
       {/* board_check_in-4 and board_check_in-5 just handle spawning notes */}
       {phaseStep === "board_data-1" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.gatherDataWelcome")} isExercisePrompt={false} />}
-          target=".board"
+          component={
+            <OnboardingModal textContent={t("Onboarding.gatherDataWelcome")} title="Phase 2: Gather Data/Topics" image={<img src={gatherDataImg} alt="gather data hero-img" />} />
+          }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
         />
       )}
-      {/* board_data-2 and board_data-3 just handle spawning notes */}
-      {phaseStep === "board_data-4" && (
+      {phaseStep === "board_data-2" && (
+        <Floater
+          open={stepOpen}
+          component={
+            <OnboardingModal
+              textContent="Please write down notes on what you were mad, sad or glad about in the last sprint"
+              title="Let's gather data on the last sprint!"
+              image={<img src="" alt="mike chat img" />}
+            />
+          }
+          placement="center"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+        />
+      )}
+      {/* board_data-3 and board_data-4 just handle spawning notes */}
+      {phaseStep === "board_data-5" && (
         <Floater
           open={stepOpen}
           component={<OnboardingBase text={t("Onboarding.dataCardsAdded")} isExercisePrompt={false} />}
           placement="center"
-          target=".board"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
         />
       )}
       {phaseStep === "board_data-5" && (
@@ -173,7 +200,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.dataStacks")} isExercisePrompt />}
           target=".column + .column"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
         />
       )}
       {phaseStep === "board_insights-1" && (
@@ -182,7 +209,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.insightsWelcome")} isExercisePrompt />}
           target=".column + .column"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
         />
       )}
     </div>

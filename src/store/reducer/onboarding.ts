@@ -11,7 +11,7 @@ export const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "intro", steps: 2},
   {name: "newBoard", steps: 3},
   {name: "board_check_in", steps: 1},
-  {name: "board_data", steps: 5},
+  {name: "board_data", steps: 6},
   {name: "board_insights", steps: 1},
   {name: "board_actions", steps: 3},
   {name: "board_check_out", steps: 2},
@@ -19,7 +19,7 @@ export const phaseSteps: OnboardingPhaseSteps[] = [
 ];
 
 const initialState: OnboardingState = {
-  phase: phaseSteps.find((p) => (sessionStorage.getItem("onboarding_phase") as OnboardingPhase).includes(p.name))?.name ?? "none",
+  phase: phaseSteps.find((p) => (sessionStorage.getItem("onboarding_phase") as OnboardingPhase)?.includes(p.name))?.name ?? "none",
   step: JSON.parse(sessionStorage.getItem("onboarding_step") ?? "1"),
   stepOpen: JSON.parse(sessionStorage.getItem("onboarding_stepOpen") ?? "true"),
   onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
@@ -40,7 +40,6 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
     }
     case Action.IncrementStep: {
       const currentPhaseIndex = phaseSteps.findIndex((p) => p.name === state.phase);
-      console.log(currentPhaseIndex, state.phase);
       const increment = action.amount ?? 1;
       if (state.step + increment > phaseSteps[currentPhaseIndex].steps) {
         return {

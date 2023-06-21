@@ -7,7 +7,6 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
     case Action.InitializeBoard:
     case Action.SetParticipants: {
       const ownUserId = action.context.user;
-
       const self = action.participants.find((p) => p.user.id === ownUserId)!;
       const others = action.participants.filter((p) => p.user.id !== ownUserId);
       const focusInitiator = null;
