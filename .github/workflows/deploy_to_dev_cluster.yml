@@ -98,6 +98,9 @@ jobs:
             
             <details>
             <summary>Deployed Images</summary>
+            
             - ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
+
             - ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
+            
             </details>
