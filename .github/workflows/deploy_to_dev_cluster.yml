@@ -38,6 +38,7 @@ jobs:
       id-token: write
       contents: read
       actions: read
+      pull-requests: write
     steps:
       - name: Install kubectl
         uses: azure/setup-kubectl@v3
