@@ -17,7 +17,7 @@ jobs:
   test_if_secret_is_defined:
     name: Test if secret is defined
     runs-on: ubuntu-latest
-    steps:
+    steps:  
       - name: Test if secret is defined
         run: |
           if [ -z "${{ secrets.KUBERNETES_SECRET }}" ]; then
