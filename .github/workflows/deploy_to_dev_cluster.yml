@@ -85,3 +85,12 @@ jobs:
           images: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
+      
+      - name: send_github_message
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            The deployment to the dev cluster was successful. You can find the deployment here: https://${{ env.CURRENT_BRANCH }}.development.scrumlr.fra.ics.inovex.io
+            The following images were deployed:
+            - ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
+            - ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
