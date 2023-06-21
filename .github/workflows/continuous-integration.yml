@@ -75,6 +75,7 @@ jobs:
 
   deploy_to_dev_cluster:
     needs: package
+    if: ${{ github.event_name == 'pull_request' }}
     # TODO change to @main once the package workflow is merged
     uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@feat/deploy_to_dev_cluster
     secrets: inherit
