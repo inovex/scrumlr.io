@@ -74,6 +74,8 @@ jobs:
 
 
   deploy_to_dev_cluster:
+    permissions:
+      pull-requests: write
     needs: package
     if: ${{ github.event_name == 'pull_request' }}
     # TODO change to @main once the package workflow is merged
