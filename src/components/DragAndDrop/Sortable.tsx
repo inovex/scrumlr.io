@@ -119,7 +119,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
       className={classNames(className, {shouldCombine: combine})}
       {...attributes}
       {...listeners}
-      style={{transition, transform: CSS.Transform.toString(transform), opacity: isDragging ? 0.5 : 1}}
+      style={{transition, transform: CSS.Transform.toString(transform), opacity: isDragging ? 0.5 : 1, touchAction: "manipulation"}}
     >
       {children}
     </div>
