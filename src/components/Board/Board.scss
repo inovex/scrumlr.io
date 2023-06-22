@@ -33,7 +33,7 @@
   }
 
   &--dragging {
-    scroll-snap-type: none;
+    scroll-snap-type: none; // disable snapping while dragging due to unwanted behavior with dnd-kit
   }
 }
 
