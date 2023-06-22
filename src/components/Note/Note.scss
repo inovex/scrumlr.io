@@ -53,8 +53,7 @@ $note__author-image-size: 26px;
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
 }
 
-// Only applies hover transform while not dragging
-body:not(:has(> div.drag-overlay)) .note:hover {
+.note:hover {
   transform: scale(1.02);
 }
 
