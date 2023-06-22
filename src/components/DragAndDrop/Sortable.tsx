@@ -92,7 +92,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
       if (collisions && topCollision) {
         if (items !== localItems || isColumn(topCollision)) {
           const position = {
-            column: event.collisions?.find((collision) => isColumn(collision))?.id.toString() ?? columnId,
+            column: event.collisions?.find(isColumn)?.id.toString() ?? columnId,
             stack: null,
             rank: items.reverse().indexOf(id.toString()),
           };
