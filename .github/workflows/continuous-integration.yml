@@ -16,63 +16,51 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # test:
-  #   name: Build and Test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: checkout repository
-  #       uses: actions/checkout@v3
+  test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
 
-  #     - name: Get yarn cache directory path
-  #       id: yarn-cache-dir-path
-  #       run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-  #     - uses: actions/cache@v3
-  #       id: yarn-cache
-  #       with:
-  #         path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-  #         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-yarn-
+      - uses: actions/cache@v3
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-  #     - uses: actions/setup-go@v3
-  #       with:
-  #         go-version: '^1.18'
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.18'
 
-  #     - name: Build server
-  #       working-directory: ./server
-  #       run: |
-  #         make test
-  #         make build-alpine
+      - name: Build server
+        working-directory: ./server
+        run: |
+          make test
+          make build-alpine
 
-  #     - name: Build client
-  #       run: |
-  #         yarn install
-  #         CI=false yarn build
+      - name: Build client
+        run: |
+          yarn install
+          CI=false yarn build
 
-  #     - name: Lint code
-  #       run: yarn lint --max-warnings 0
+      - name: Lint code
+        run: yarn lint --max-warnings 0
 
-  #     - name: Test with coverage
-  #       run: yarn test --coverage --watchAll=false --passWithNoTests
+      - name: Test with coverage
+        run: yarn test --coverage --watchAll=false --passWithNoTests
 
   package:
-    # needs: test
+    needs: test
     # TODO change to @main once the package workflow is merged
     uses: inovex/scrumlr.io/.github/workflows/package.yml@feat/deploy_to_dev_cluster
   
-  # print frontend and server image tag
-  print_image_tag:
-    needs: package
-    runs-on: ubuntu-latest
-    steps:
-      - name: print frontend image tag
-        run: echo ${{ needs.package.outputs.frontend-image-tag }}
-      - name: print server image tag
-        run: echo ${{ needs.package.outputs.server-image-tag }}
-
-
-
   deploy_to_dev_cluster:
     needs: package
     if: ${{ github.event_name == 'pull_request' }}

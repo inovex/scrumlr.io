@@ -14,24 +14,6 @@ on:
           type: string
 
 jobs:
-  test_if_secret_is_defined:
-    name: Test if secret is defined
-    runs-on: ubuntu-latest
-    steps:  
-      - name: Test if secret is defined
-        run: |
-          if [ -z "${{ secrets.KUBERNETES_SECRET }}" ]; then
-            echo "KUBERNETES_SECRET is not defined"
-            exit 1
-          fi
-  print_inputs:
-    name: Print Inputs
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print Inputs
-        run: |
-          echo "frontend_image_tag: ${{ inputs.frontend_image_tag }}"
-          echo "server_image_tag: ${{ inputs.server_image_tag }}"
   deploy:
     runs-on: self-hosted
     permissions:
@@ -53,22 +35,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      
       - name: set needed env variables
         run: |
           echo "CURRENT_BRANCH=$(echo ${{ github.head_ref }} | sed 's/[/_.]/-/g')" >> "$GITHUB_ENV"
-      
-      # - name: install yq
-      #   run: |
-      #     wget https://github.com/mikefarah/yq/releases/download/v4.34.1/yq_linux_amd64 -O /usr/bin/yq
-      #     chmod +x /usr/bin/yq
-      
-      # - name: parse_to_json
-      #   run:
-      #     yq -o=json eval k8s/deployment.yaml > k8s/deployment_json.yaml
 
-      
-      - name: Replace Branch specific Values
+      - name: Replace template variables
         run: |
           sed -i "s#BRANCH_NAME#${{ env.CURRENT_BRANCH }}#g" k8s/deployment.yaml
           sed -i "s#POSTGRES_DEV_PASSWORD#${{ secrets.POSTGRES_DEV_PASSWORD }}#g" k8s/deployment.yaml
