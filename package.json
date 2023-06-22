@@ -26,7 +26,7 @@
     "react-autosize-textarea": "^7.1.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
-    "react-dnd-multi-backend": "^8.0.0",
+    "react-dnd-multi-backend": "^8.0.1",
     "react-dnd-touch-backend": "^16.0.1",
     "react-dom": "^18.0.0-rc.3",
     "react-focus-lock": "^2.9.4",

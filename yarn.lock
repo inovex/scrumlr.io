@@ -4129,10 +4129,10 @@ dnd-core@^16.0.1:
     "@react-dnd/invariant" "^4.0.1"
     redux "^4.2.0"
 
-dnd-multi-backend@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-8.0.0.tgz#54c63d9ec12f71b7b13ac53971f60d70e2bc5487"
-  integrity sha512-5iFo8USv3+q0kVRTm9zsuyi/5GRZEA6fDZKr9ZpmV5pUdHmL9ktL/2c2Anw8T2tnpDDw8FM3k2cvqyMAKhWd/w==
+dnd-multi-backend@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/dnd-multi-backend/-/dnd-multi-backend-8.0.1.tgz#118311b998c0e142013de3aea8fc9ed8e9e7108d"
+  integrity sha512-2HLUzxU32ol+COX8klzwy41mA3wOPuSH+08vGmN9WfyrlM3cMcRWFYRStUJkR3obGVUUuQxEtg0m50VxMCHafA==
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -8382,18 +8382,18 @@ react-dnd-html5-backend@^16.0.1:
   dependencies:
     dnd-core "^16.0.1"
 
-react-dnd-multi-backend@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-8.0.0.tgz#453a28cc266231422a1f90ba7f277a5837e5a712"
-  integrity sha512-sYJmGUWRJsTa4sF/bxFu4tF/KSk668vf1TWbDqGdpvR9ltik/lBBqgihV3KLVtRRWytR/8wJCd9K5slj2Ve1tg==
+react-dnd-multi-backend@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-multi-backend/-/react-dnd-multi-backend-8.0.1.tgz#99f29926faf7115baf4a493bc63dd124a0203b74"
+  integrity sha512-+/7mFkWk4HIpQsd4d8lKB8aStafv9wgpvbkQrPWF4JeTA1j2IPAdPTOiHI5bvpyoLA5BGD02u8cgxtY/gZQpjg==
   dependencies:
-    dnd-multi-backend "^8.0.0"
-    react-dnd-preview "^8.0.0"
+    dnd-multi-backend "^8.0.1"
+    react-dnd-preview "^8.0.1"
 
-react-dnd-preview@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-8.0.0.tgz#5b90b1c934e3087e357f0c00714f9ea8429a20ac"
-  integrity sha512-pKDpJxaGya00tqPqswGHN6d1lmXe26gGkiXSb9xsDGEXMS+efjz4YAid9tKyaKNWJMU8hJOcUmJWTQpdi22P2g==
+react-dnd-preview@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-preview/-/react-dnd-preview-8.0.1.tgz#11ce1f769a1a7dac821f7fa286789bc3bf213ed6"
+  integrity sha512-CsQwvWXLXGN9DoRzHC79DbCF42AXJdoUDMxnIF7TvA/xE6Hm+cVl6kPQIYz1UL755/JNSD2/WHuILuU40k29rw==
 
 react-dnd-test-backend@^15.1.2:
   version "15.1.2"
