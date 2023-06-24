@@ -5,6 +5,11 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_run:
+    workflows: ["Package"]
+    branches: [ main ]
+    types:
+      - completed
 
 concurrency:
   group: ${{ github.ref }}
@@ -54,3 +59,12 @@ jobs:
   package:
     needs: test
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
+  
+  deploy_to_dev_cluster:
+    needs: package
+    if: ${{ github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
+    uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@main
+    secrets: inherit
+    with: 
+      frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
+      server_image_tag: ${{ needs.package.outputs.server-image-tag }}
