@@ -40,9 +40,6 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         if (message.type === "BOARD_DELETED") {
           store.dispatch(Actions.leaveBoard());
           window.location.assign("/?boardDeleted=true");
-          Toast.error({
-            title: i18n.t("Error.boardDeleted"),
-          });
         }
 
         if (message.type === "COLUMNS_UPDATED") {
