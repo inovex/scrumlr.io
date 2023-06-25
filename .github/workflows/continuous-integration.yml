@@ -62,7 +62,7 @@ jobs:
   
   deploy_to_dev_cluster:
     needs: package
-    if: ${{ github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@main
     secrets: inherit
     with: 
