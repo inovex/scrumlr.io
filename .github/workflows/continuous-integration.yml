@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: print actor
-        run: echo ${{ github.actor }}
+        run: echo ${{ github.event.pull_request.user.login }}
 
   test:
     name: Build and Test
