@@ -12,6 +12,8 @@ import {Button} from "components/Button";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
+import {Toast} from "utils/Toast";
+import {useEffect} from "react";
 import {InovexAnchor} from "./InovexAnchor";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
@@ -30,6 +32,16 @@ export const Homepage = withTranslation()(() => {
   const onLogout = () => {
     dispatch(Actions.signOut());
   };
+
+  useEffect(() => {
+    const boardDeleted = new URLSearchParams(window.location.search).get("boardDeleted");
+
+    if (boardDeleted) {
+      Toast.error({
+        title: i18n.t("Error.boardDeleted"),
+      });
+    }
+  }, [i18n]);
 
   return (
     <div className="homepage">
