@@ -71,14 +71,25 @@ exports[`Column should have correct style show column with correct style 1`] = `
       </form>
     </div>
     <div
+      aria-describedby="DndDescribedBy-9"
+      aria-disabled="false"
+      aria-roledescription="sortable"
       class="column__notes-wrapper"
+      role="button"
+      tabindex="0"
     >
       <ul
         class="column__note-list"
       >
         <li>
           <div
-            class="note__root"
+            aria-describedby="DndDescribedBy-9"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="note__root accent-color__planning-pink"
+            role="button"
+            style="opacity: 1;"
+            tabindex="0"
           >
             <button
               class="note note--stackBetween"
@@ -562,7 +573,13 @@ exports[`Column should have correct style show column with correct style 1`] = `
         </li>
         <li>
           <div
-            class="note__root"
+            aria-describedby="DndDescribedBy-9"
+            aria-disabled="false"
+            aria-roledescription="sortable"
+            class="note__root accent-color__planning-pink"
+            role="button"
+            style="opacity: 1;"
+            tabindex="0"
           >
             <button
               class="note note--stackBetween"

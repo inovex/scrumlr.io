@@ -10,6 +10,10 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/modifiers": "^6.0.1",
+    "@dnd-kit/sortable": "^7.0.2",
+    "@dnd-kit/utilities": "^3.2.1",
     "@fontsource/raleway": "^5.0.3",
     "@reduxjs/toolkit": "^1.9.5",
     "avataaars": "^2.0.0",
@@ -24,10 +28,6 @@
     "query-string": "^8.1.0",
     "react": "^18.0.0-rc.3",
     "react-autosize-textarea": "^7.1.0",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
-    "react-dnd-multi-backend": "^8.0.0",
-    "react-dnd-touch-backend": "^16.0.1",
     "react-dom": "^18.0.0-rc.3",
     "react-focus-lock": "^2.9.4",
     "react-helmet": "^6.1.0",
@@ -113,7 +113,7 @@
   },
   "jest": {
     "transformIgnorePatterns": [
-      "/node_modules/(?!react-toastify|react-dnd|core-dnd|@react-dnd|dnd-core|react-dnd-html5-backend)"
+      "/node_modules/(?!react-toastify)"
     ]
   },
   "lint-staged": {
