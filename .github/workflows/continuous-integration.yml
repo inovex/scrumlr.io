@@ -63,6 +63,7 @@ jobs:
   deploy_to_dev_cluster:
     needs: package
     if: ${{ github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
+    
     # TODO change to @main before merging
     uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@hotfix/branch-name-too-long
     secrets: inherit
