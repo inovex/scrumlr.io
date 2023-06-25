@@ -16,6 +16,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+    steps:
+      - name: print actor
+        run: echo ${{ github.actor }}
+
   test:
     name: Build and Test
     runs-on: ubuntu-latest
@@ -59,6 +67,7 @@ jobs:
   package:
     needs: test
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
+
   
   deploy_to_dev_cluster:
     needs: package
