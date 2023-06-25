@@ -16,6 +16,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  debug:
+    name: Debug
+    runs-on: ubuntu-latest
+    steps:
+      - name: print pr number
+        run: echo ${{ github.event.pull_request.number }}
   test:
     name: Build and Test
     runs-on: ubuntu-latest
