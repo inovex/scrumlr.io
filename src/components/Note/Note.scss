@@ -57,33 +57,32 @@ $note__author-image-size: 26px;
   transform: scale(1.02);
 }
 
-.note--isDragging {
-  opacity: 0.5;
-
-  & ~ .note__in-stack {
-    opacity: 0.5;
-  }
-}
-
-.note--isOver {
+.shouldCombine .note {
   transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
 
-  &.note--stackOntop,
+  transform: scale(0.98);
+
+  ~ .note__in-stack {
+    transform: scale(0.98);
+  }
+
+  // re-active this to bring back the different stacking mode effects
+  /* &.note--stackOntop,
   &.note--stackOntop ~ .note__in-stack {
     transform: translatey(8px) scale(0.98);
   }
 
   &.note--stackBetween {
     transform: translateY(-8px) scale(1.02);
-    z-index: $note-z-index + 2 * $base-z-index-step;
+    z-index: $note-z-index + 2 * $base-z-index-step * 100;
 
     & ~ .note__in-stack {
       z-index: 0;
       transform: translateY(8px) scale(0.98);
     }
-  }
+  } */
 
   &.note--stackBelow {
     transform: translateY(-8px) scale(1.02);
