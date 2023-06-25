@@ -23,9 +23,7 @@ jest.mock("file-saver", () => ({saveAs: jest.fn()}));
 const createHeaderMenu = (currentUserIsModerator: boolean) => {
   return (
     <Provider store={getTestStore()}>
-      <CustomDndContext>
-        <HeaderMenu open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
-      </CustomDndContext>
+      <HeaderMenu open onClose={() => undefined} currentUserIsModerator={currentUserIsModerator} />
     </Provider>
   );
 };
