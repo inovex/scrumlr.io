@@ -4,8 +4,7 @@
   border-radius: $rounded--default;
   padding: 1rem;
   min-width: 250px;
-  max-width: 100vw;
-  max-height: 100vh;
+  max-width: 550px;
   display: flex;
   &.img-top {
     flex-direction: column;
@@ -20,9 +19,28 @@
     overflow: hidden;
     display: inline-flex;
     justify-content: center;
-    &img {
+    min-width: 90px;
+    max-width: 90px;
+    height: auto;
+    & img,
+    svg {
       width: 100%;
       height: auto;
+    }
+  }
+  &__content {
+    padding: 1rem;
+    font-size: $text--md;
+    // letter-spacing: $letter-spacing--medium;
+    line-height: $line-height--medium;
+    display: flex;
+    flex-direction: column;
+    &-text {
+      margin-bottom: 1rem;
+    }
+    & .button {
+      width: fit-content;
+      border-radius: $rounded--default;
     }
   }
 }

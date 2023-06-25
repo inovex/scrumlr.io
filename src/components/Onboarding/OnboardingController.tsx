@@ -10,11 +10,11 @@ import gatherDataImg from "assets/onboarding/As-introduction-to-Data-collection-
 import checkInImg from "assets/onboarding/check-in_image_temp.jpg";
 import stanOk from "assets/stan/Stan_Ok.svg";
 import {onboardingAuthors} from "types/onboardingNotes";
-import {OnboardingBase} from "./OnboardingBase";
 import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
 import {OnboardingModal} from "./Floaters/OnboardingModal";
 import {OnboardingChat} from "./Floaters/OnboardingChat";
+import {OnboardingTooltip} from "./Floaters/OnboardingTooltip";
 
 export const OnboardingController = () => {
   const {t} = useTranslation();
@@ -72,26 +72,10 @@ export const OnboardingController = () => {
         dispatch(Actions.setFakeVotesOpen(true));
         break;
       case "board_actions-1":
-        dispatch(Actions.setFakeVotesOpen(false));
-        dispatch(Actions.deleteColumn(onboardingColumns.find((oc) => oc.name === "Mad")!.id));
-        dispatch(Actions.deleteColumn(onboardingColumns.find((oc) => oc.name === "Sad")!.id));
-        dispatch(Actions.deleteColumn(onboardingColumns.find((oc) => oc.name === "Glad")!.id));
-
-        dispatch(Actions.createColumn({name: "Start", color: "backlog-blue", visible: true, index: 0}));
-        setTimeout(() => {
-          dispatch(Actions.createColumn({name: "Stop", color: "grooming-green", visible: true, index: 1}));
-          setTimeout(() => {
-            dispatch(Actions.createColumn({name: "Continue", color: "online-orange", visible: true, index: 2}));
-          }, 100);
-        }, 100);
-
-        dispatch(Actions.incrementStep());
         break;
       case "board_actions-2":
         break;
       case "board_actions-3":
-        dispatch(Actions.registerOnboardingColumns(columns));
-        dispatch(Actions.incrementStep());
         break;
       case "board_check_out":
         break;
@@ -149,8 +133,6 @@ export const OnboardingController = () => {
         </button>
       )}
 
-      {/* For some reason, updating the position didn't work with a switch case outside the return but works this way:
-          TODO: find reason and refactor this if time is left at the end of development */}
       {phaseStep === "newBoard-1" && (
         <Floater
           open={stepOpen}
@@ -158,16 +140,16 @@ export const OnboardingController = () => {
             <OnboardingModal textContent={t("Onboarding.newBoardWelcome")} title="Preparation is Key!" hasNextButton image={<img src={stanOk} alt="new board hero-img" />} />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "newBoard-2" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.newBoardWelcome")} isExercisePrompt={false} />}
-          target=".new-board__extended"
+          component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} text={t("Onboarding.newBoardSettings")} />}
+          target=".new-board__extended:last-child"
           placement="right-end"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-1" && (
@@ -175,16 +157,16 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingModal textContent={t("Onboarding.checkInWelcome")} title="Phase 1: Set the Stage" image={<img src={checkInImg} alt="check-in hero-img" />} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-2" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text="I already invited the team to the board for you :)" isExercisePrompt={false} />}
+          component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} text="I already invited the Mike's team to the board!" />}
           placement="bottom-end"
           target=".share-button"
-          styles={{arrow: {length: 14, spread: 18}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 18}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-3" && (
@@ -192,7 +174,7 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingChat chatName="Chat_Check-In" title="Mikes' Check-In: Song Title" />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {/* board_check_in-4 and board_check_in-5 just handle spawning notes */}
@@ -203,7 +185,7 @@ export const OnboardingController = () => {
             <OnboardingModal textContent={t("Onboarding.gatherDataWelcome")} title="Phase 2: Gather Data/Topics" image={<img src={gatherDataImg} alt="gather data hero-img" />} />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_data-2" && (
@@ -217,34 +199,34 @@ export const OnboardingController = () => {
             />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {/* board_data-3 and board_data-4 just handle spawning notes */}
       {phaseStep === "board_data-5" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.dataCardsAdded")} isExercisePrompt={false} />}
+          component={<OnboardingTooltip text={t("Onboarding.dataCardsAdded")} image={<StanIcon />} imgPosition="left" />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_data-5" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.dataStacks")} isExercisePrompt />}
+          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" text={t("Onboarding.dataStacks")} />}
           target=".column + .column"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_insights-1" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingBase text={t("Onboarding.insightsWelcome")} isExercisePrompt />}
+          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" text={t("Onboarding.insightsWelcome")} />}
           target=".column + .column"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
     </div>

@@ -599,6 +599,7 @@
     "ok": "Understood!",
     "next": "Next",
     "newBoardWelcome": "You can easily create a board now and come back later when you need it! \n Start with a template and configure it to your hearts' content!",
+    "newBoardSettings": "It is also possible to change the board name and access rights.",
     "checkInWelcome": "Give people time to 'arrive' and get into the right mood.",
     "gatherDataWelcome": "Let's help everyone remember. Create a shared pool of information.",
     "generateInsightsWelcome": "Why did things happen the way they did? Identify patterns. See the big picture.",
