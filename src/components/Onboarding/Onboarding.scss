@@ -92,11 +92,10 @@
   color: $color-dark-one;
   min-width: 300px;
   min-height: 100px;
-  // border: 3px solid $color-backlog-blue;
 }
 
 .onboarding-base {
-  border-radius: 15px;
+  border-radius: $rounded--default;
   padding: 1rem;
   display: flex;
   flex-direction: column;

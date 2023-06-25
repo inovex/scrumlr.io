@@ -10,7 +10,7 @@ export const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "none", steps: 0},
   {name: "intro", steps: 2},
   {name: "newBoard", steps: 3},
-  {name: "board_check_in", steps: 1},
+  {name: "board_check_in", steps: 3},
   {name: "board_data", steps: 6},
   {name: "board_insights", steps: 1},
   {name: "board_actions", steps: 3},
@@ -27,6 +27,7 @@ const initialState: OnboardingState = {
   fakeVotesOpen: JSON.parse(sessionStorage.getItem("onboarding_fakeVotesOpen") ?? "false"),
 };
 
+// eslint-disable-next-line @typescript-eslint/default-param-last
 export const onboardingReducer = (state: OnboardingState = initialState, action: ReduxAction): OnboardingState => {
   switch (action.type) {
     case Action.ChangePhase: {
@@ -63,10 +64,13 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
       };
     }
     case Action.RegisterOnboardingColumns: {
-      if (state.phase === "board_check_in" && state.step === 1) {
-        const newOnboardingColumns: OnboardingColumn[] = [];
+      const newOnboardingColumns: OnboardingColumn[] = [];
+      if (state.phase !== "none") {
+        const onboardingColumnNames = ["Mad", "Sad", "Glad", "Actions", "Start", "Stop", "Continue"];
         action.columns.forEach((c) => {
-          newOnboardingColumns.push({id: c.id, name: c.name});
+          if (onboardingColumnNames.includes(c.name)) {
+            newOnboardingColumns.push({id: c.id, name: c.name});
+          }
         });
         return {
           ...state,

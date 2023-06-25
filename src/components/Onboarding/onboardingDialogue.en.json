@@ -1,0 +1,55 @@
+{
+  "Chat_Check-In": [
+    {
+      "author": "Mike",
+      "text": "I am happy to be welcomed in such a great team! \nLet us start our first digital retrospective!",
+      "color": "backlog-blue"
+    },
+    {
+      "author": "Mike",
+      "text": "We will start with a short Check-In. \nPlease describe the last sprint with a song title.",
+      "color": "backlog-blue"
+    },
+    {
+      "author": "Sandy",
+      "text": "Never Gonna Give You Up - Rick Astley",
+      "color": "poker-purple"
+    },
+    {
+      "author": "Steve",
+      "text": "Under Pressure - Queen",
+      "color": "grooming-green"
+    },
+    {
+      "author": "Andrew",
+      "text": "They Want It, But No - Tobe Nwigwe",
+      "color": "goal-green"
+    },
+    {
+      "author": "Aleyna",
+      "text": "I'm Still Standing - Elton John",
+      "color": "planning-pink"
+    },
+    {
+      "author": "Dave",
+      "text": "We Built This City - Starship",
+      "color": "retro-red"
+    },
+    {
+      "author": "Mike",
+      "text": "Little Help - The BossHoss",
+      "color": "backlog-blue"
+    },
+    {
+      "author": "Mike",
+      "text": "Thank you all for your song ideas for the sprint! \nI will have to listen to all of them later :D \n...",
+      "color": "backlog-blue"
+    },
+    {
+      "author": "Mike",
+      "text": "Let's move on to the main parts of our Retro :) \nEveryone, please write down 1-2 notes on what you were mad, sad or glad about in the last sprint.",
+      "color": "backlog-blue"
+    }
+  ],
+  "Chat2": []
+}

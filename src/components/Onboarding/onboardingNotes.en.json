@@ -1,28 +1,53 @@
 {
   "Mad": [
     {
-      "author": "Mike",
-      "text": "I am mad about something",
+      "author": "Steve",
+      "text": "The frequency of new bugs keeps increasing!",
+      "votes": 3
+    },
+    {
+      "author": "Steve",
+      "text": "We still haven't heard from the marketing team regarding the new ad campaign.",
       "votes": 1
     },
     {
-      "author": "Mike",
-      "text": "I am mad about something else",
-      "votes": 2
+      "author": "Andrew",
+      "text": "There are some contradicting feature requests in the backlog.",
+      "votes": 1
     }
   ],
   "Sad": [
     {
       "author": "Mike",
-      "text": "I am sad about something",
-      "votes": 3
+      "text": "I am not fully comfortable in my new role yet.",
+      "votes": 0
+    },
+    {
+      "author": "Steve",
+      "text": "Yet another team member left the team...",
+      "votes": 2
+    },
+    {
+      "author": "Sandy",
+      "text": "Sarah (old Scrum-Master) left the team :(",
+      "votes": 0
     }
   ],
   "Glad": [
     {
       "author": "Mike",
-      "text": "I am glad about something",
+      "text": "I am glad to receive such a warm welcome to the team <3",
       "votes": 0
+    },
+    {
+      "author": "Steve",
+      "text": "We got great user feedback on the last update! :D",
+      "votes": 0
+    },
+    {
+      "author": "Sandy",
+      "text": "Mike stepped up as new Scrum Master :)",
+      "votes": 2
     }
   ]
 }

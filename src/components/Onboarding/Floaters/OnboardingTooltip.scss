@@ -1,0 +1,28 @@
+@import "src/constants/style";
+
+.onboarding-tooltip {
+  border-radius: $rounded--default;
+  padding: 1rem;
+  min-width: 250px;
+  max-width: 100vw;
+  max-height: 100vh;
+  display: flex;
+  &.img-top {
+    flex-direction: column;
+  }
+  &.img-right {
+    flex-direction: row-reverse;
+  }
+  &.img-bottom {
+    flex-direction: column-reverse;
+  }
+  &__img {
+    overflow: hidden;
+    display: inline-flex;
+    justify-content: center;
+    &img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}

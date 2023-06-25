@@ -50,12 +50,17 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
   }
 
   if (action.type === Action.EditSelf) {
-    API.editUser(action.user).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.editSelf"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.editSelf(action.user)),
+    API.editUser(action.user)
+      .then(() => {
+        // before, the user name and avatar state in the store 'auth' field did only update on page reload
+        store.dispatch(Actions.signIn(action.user.id, action.user.name, action.user!.avatar));
+      })
+      .catch(() => {
+        Toast.error({
+          title: i18n.t("Error.editSelf"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.editSelf(action.user)),
+        });
       });
-    });
   }
 };

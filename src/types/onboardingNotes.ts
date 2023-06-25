@@ -1,4 +1,3 @@
-import {AvataaarProps} from "components/Avatar";
 import {Participant} from "./participant";
 
 export interface OnboardingNote {
@@ -9,18 +8,37 @@ export interface OnboardingNote {
 
 export type OnboardingNotesState = OnboardingNote[];
 
-export interface OnboardingAuthorAvatar {
-  onboardingAuthor: string;
-  avatar: AvataaarProps;
-  ready: boolean;
-  raisedHand: boolean;
-}
-
 export const onboardingAuthors: Participant[] = [
   {
     user: {
       id: "onboarding-Mike",
       name: "Mike",
+      avatar: {
+        accentColorClass: "accent-color__backlog-blue",
+        skinColor: "Light",
+        topType: "ShortHairShortFlat",
+        graphicType: "Skull",
+        clotheColor: "Gray01",
+        clotheType: "BlazerShirt",
+        hairColor: "Brown",
+        facialHairColor: "Brown",
+        facialHairType: "Blank",
+        accessoriesType: "Blank",
+        eyeType: "Squint",
+        eyebrowType: "Default",
+        mouthType: "Smile",
+      },
+    },
+    ready: false,
+    raisedHand: false,
+    showHiddenColumns: false,
+    connected: true,
+    role: "MODERATOR",
+  },
+  {
+    user: {
+      id: "onboarding-Steve",
+      name: "Steve",
       avatar: {
         accentColorClass: "accent-color__grooming-green",
         skinColor: "Tanned",
@@ -34,6 +52,110 @@ export const onboardingAuthors: Participant[] = [
         accessoriesType: "Sunglasses",
         eyeType: "Wink",
         eyebrowType: "Default",
+        mouthType: "Smile",
+      },
+    },
+    ready: false,
+    raisedHand: false,
+    showHiddenColumns: false,
+    connected: true,
+    role: "PARTICIPANT",
+  },
+  {
+    user: {
+      id: "onboarding-Sandy",
+      name: "Sandy",
+      avatar: {
+        accentColorClass: "accent-color__poker-purple",
+        skinColor: "Brown",
+        topType: "LongHairBob",
+        graphicType: "Skull",
+        clotheColor: "White",
+        clotheType: "ShirtVNeck",
+        hairColor: "Red",
+        facialHairColor: "Auburn",
+        facialHairType: "Blank",
+        accessoriesType: "Blank",
+        eyeType: "Squint",
+        eyebrowType: "FrownNatural",
+        mouthType: "Twinkle",
+      },
+    },
+    ready: false,
+    raisedHand: false,
+    showHiddenColumns: false,
+    connected: true,
+    role: "PARTICIPANT",
+  },
+  {
+    user: {
+      id: "onboarding-Andrew",
+      name: "Andrew",
+      avatar: {
+        accentColorClass: "accent-color__goal-green",
+        skinColor: "DarkBrown",
+        topType: "ShortHairDreads01",
+        graphicType: "Skull",
+        clotheColor: "Pink",
+        clotheType: "Hoodie",
+        hairColor: "Black",
+        facialHairColor: "Brown",
+        facialHairType: "Blank",
+        accessoriesType: "Sunglasses",
+        eyeType: "Happy",
+        eyebrowType: "RaisedExcited",
+        mouthType: "Smile",
+      },
+    },
+    ready: false,
+    raisedHand: false,
+    showHiddenColumns: false,
+    connected: true,
+    role: "PARTICIPANT",
+  },
+  {
+    user: {
+      id: "onboarding-Aleyna",
+      name: "Aleyna",
+      avatar: {
+        accentColorClass: "accent-color__planning-pink",
+        skinColor: "Light",
+        topType: "Hijab",
+        graphicType: "Skull",
+        clotheColor: "Black",
+        clotheType: "ShirtCrewNeck",
+        hairColor: "Brown",
+        facialHairColor: "Brown",
+        facialHairType: "Blank",
+        accessoriesType: "Blank",
+        eyeType: "EyeRoll",
+        eyebrowType: "RaisedExcited",
+        mouthType: "Default",
+      },
+    },
+    ready: false,
+    raisedHand: false,
+    showHiddenColumns: false,
+    connected: true,
+    role: "PARTICIPANT",
+  },
+  {
+    user: {
+      id: "onboarding-Dave",
+      name: "Dave",
+      avatar: {
+        accentColorClass: "accent-color__retro-red",
+        skinColor: "Pale",
+        topType: "ShortHairDreads01",
+        graphicType: "Skull",
+        clotheColor: "PastelBlue",
+        clotheType: "Hoodie",
+        hairColor: "Blue",
+        facialHairColor: "Brown",
+        facialHairType: "Blank",
+        accessoriesType: "Prescription01",
+        eyeType: "Dizzy",
+        eyebrowType: "RaisedExcited",
         mouthType: "Smile",
       },
     },

@@ -1,7 +1,7 @@
 @import "src/constants/style";
 
 .onboarding-modal {
-  border-radius: 15px;
+  border-radius: $rounded--default;
   padding: 1rem;
   display: flex;
   flex-direction: column;

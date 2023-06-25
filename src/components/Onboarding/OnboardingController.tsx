@@ -2,17 +2,19 @@ import {useAppSelector} from "store";
 import {isEqual} from "underscore";
 import Floater from "react-floater";
 import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
-import {shallowEqual, useDispatch} from "react-redux";
+import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
 import gatherDataImg from "assets/onboarding/As-introduction-to-Data-collection-in-marketing-research.jpg";
 import checkInImg from "assets/onboarding/check-in_image_temp.jpg";
 import stanOk from "assets/stan/Stan_Ok.svg";
+import {onboardingAuthors} from "types/onboardingNotes";
 import {OnboardingBase} from "./OnboardingBase";
 import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
 import {OnboardingModal} from "./Floaters/OnboardingModal";
+import {OnboardingChat} from "./Floaters/OnboardingChat";
 
 export const OnboardingController = () => {
   const {t} = useTranslation();
@@ -22,7 +24,15 @@ export const OnboardingController = () => {
   const phaseStep = `${phase}-${step}`;
   const stepOpen = useAppSelector((state) => state.onboarding.stepOpen, isEqual);
   const inUserTask = useAppSelector((state) => state.onboarding.inUserTask, isEqual);
-  const columns = useAppSelector((state) => state.columns, shallowEqual);
+  const onboardingColumns = useAppSelector((state) => state.onboarding.onboardingColumns);
+  const columns = useAppSelector((state) => state.columns, isEqual);
+  const participants = useAppSelector((state) => state.participants);
+
+  useEffect(() => {
+    if (phase !== "intro" && phase !== "newBoard" && phase !== "none" && phaseStep !== "board_check_in-1" && participants && participants.others.length === 0) {
+      dispatch(Actions.setParticipants([...onboardingAuthors, participants.self]));
+    }
+  }, [dispatch, participants, phase, phaseStep]);
 
   useEffect(() => {
     const spawnNotes = (columnName: string) => {
@@ -62,10 +72,26 @@ export const OnboardingController = () => {
         dispatch(Actions.setFakeVotesOpen(true));
         break;
       case "board_actions-1":
-        // dispatch(Actions.setFakeVotesOpen(false));
+        dispatch(Actions.setFakeVotesOpen(false));
+        dispatch(Actions.deleteColumn(onboardingColumns.find((oc) => oc.name === "Mad")!.id));
+        dispatch(Actions.deleteColumn(onboardingColumns.find((oc) => oc.name === "Sad")!.id));
+        dispatch(Actions.deleteColumn(onboardingColumns.find((oc) => oc.name === "Glad")!.id));
+
+        dispatch(Actions.createColumn({name: "Start", color: "backlog-blue", visible: true, index: 0}));
+        setTimeout(() => {
+          dispatch(Actions.createColumn({name: "Stop", color: "grooming-green", visible: true, index: 1}));
+          setTimeout(() => {
+            dispatch(Actions.createColumn({name: "Continue", color: "online-orange", visible: true, index: 2}));
+          }, 100);
+        }, 100);
+
+        dispatch(Actions.incrementStep());
         break;
       case "board_actions-2":
-        // dispatch(Actions.setFakeVotesOpen(true));
+        break;
+      case "board_actions-3":
+        dispatch(Actions.registerOnboardingColumns(columns));
+        dispatch(Actions.incrementStep());
         break;
       case "board_check_out":
         break;
@@ -74,7 +100,7 @@ export const OnboardingController = () => {
       default:
         break;
     }
-  }, [phaseStep, columns, dispatch]);
+  }, [phaseStep, columns, dispatch, onboardingColumns]);
 
   return (
     <div className="onboarding-controller-wrapper">
@@ -132,7 +158,7 @@ export const OnboardingController = () => {
             <OnboardingModal textContent={t("Onboarding.newBoardWelcome")} title="Preparation is Key!" hasNextButton image={<img src={stanOk} alt="new board hero-img" />} />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
       {phaseStep === "newBoard-2" && (
@@ -141,7 +167,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.newBoardWelcome")} isExercisePrompt={false} />}
           target=".new-board__extended"
           placement="right-end"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
       {phaseStep === "board_check_in-1" && (
@@ -149,15 +175,24 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingModal textContent={t("Onboarding.checkInWelcome")} title="Phase 1: Set the Stage" image={<img src={checkInImg} alt="check-in hero-img" />} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
       {phaseStep === "board_check_in-2" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingModal textContent="test" title="Phase 1: Set the Stage" image={<img src="" alt="check-in hero-img" />} />}
+          component={<OnboardingBase text="I already invited the team to the board for you :)" isExercisePrompt={false} />}
+          placement="bottom-end"
+          target=".share-button"
+          styles={{arrow: {length: 14, spread: 18}, floater: {zIndex: 1000}}}
+        />
+      )}
+      {phaseStep === "board_check_in-3" && (
+        <Floater
+          open={stepOpen}
+          component={<OnboardingChat chatName="Chat_Check-In" title="Mikes' Check-In: Song Title" />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
       {/* board_check_in-4 and board_check_in-5 just handle spawning notes */}
@@ -168,7 +203,7 @@ export const OnboardingController = () => {
             <OnboardingModal textContent={t("Onboarding.gatherDataWelcome")} title="Phase 2: Gather Data/Topics" image={<img src={gatherDataImg} alt="gather data hero-img" />} />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
       {phaseStep === "board_data-2" && (
@@ -182,7 +217,7 @@ export const OnboardingController = () => {
             />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
       {/* board_data-3 and board_data-4 just handle spawning notes */}
@@ -191,7 +226,7 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingBase text={t("Onboarding.dataCardsAdded")} isExercisePrompt={false} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
       {phaseStep === "board_data-5" && (
@@ -200,7 +235,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.dataStacks")} isExercisePrompt />}
           target=".column + .column"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
       {phaseStep === "board_insights-1" && (
@@ -209,7 +244,7 @@ export const OnboardingController = () => {
           component={<OnboardingBase text={t("Onboarding.insightsWelcome")} isExercisePrompt />}
           target=".column + .column"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 50}}}
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 1000}}}
         />
       )}
     </div>

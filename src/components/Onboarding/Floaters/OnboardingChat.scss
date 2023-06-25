@@ -1,0 +1,80 @@
+@import "src/constants/style";
+
+.onboarding-chat {
+  &__list {
+    max-height: 75%;
+    overflow-y: scroll;
+    margin: 0 4rem;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    border-radius: $rounded--default;
+    border-top: 8px solid $color-retro-red;
+    border-left: 8px solid $color-backlog-blue;
+    border-right: 8px solid $color-online-orange;
+    border-bottom: 8px solid $color-goal-green;
+    scrollbar-color: $color-backlog-blue transparent;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      border-radius: $rounded--default;
+      width: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: $color-backlog-blue;
+      border-radius: $rounded--default;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+  &__item {
+    list-style-type: none;
+    margin: 0;
+    display: inline-flex;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  &__author {
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__text {
+    font-size: $text--base;
+    letter-spacing: $letter-spacing--medium;
+    line-height: $line-height--medium;
+    height: fit-content;
+    white-space: pre-wrap;
+    border: 2px solid;
+    border-radius: $rounded--small;
+    padding: 0.5rem;
+    margin: 0 2rem;
+    &.backlog-blue {
+      border-color: $color-backlog-blue;
+    }
+    &.goal-green {
+      border-color: $color-goal-green;
+    }
+    &.grooming-green {
+      border-color: $color-grooming-green;
+    }
+    &.poker-purple {
+      border-color: $color-poker-purple;
+    }
+    &.planning-pink {
+      border-color: $color-planning-pink;
+    }
+    &.retro-red {
+      border-color: $color-retro-red;
+    }
+  }
+  &__title {
+    margin: 1rem 0;
+    text-align: center;
+    font-size: $text--lg;
+    & h2 {
+      margin: 0;
+    }
+  }
+}
