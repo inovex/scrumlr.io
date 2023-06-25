@@ -8,6 +8,7 @@ import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
 import {PrintView} from "components/SettingsDialog/ExportBoard/PrintView";
+import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 import {Board} from "./Board";
 
 interface BoardGuardProps {
@@ -34,7 +35,11 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
   }
 
   if (boardStatus === "accepted" || boardStatus === "ready") {
-    return <Board />;
+    return (
+      <CustomDndContext>
+        <Board />
+      </CustomDndContext>
+    );
   }
 
   if (boardStatus === "passphrase_required") {
