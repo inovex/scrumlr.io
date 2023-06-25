@@ -59,6 +59,7 @@ jobs:
   package:
     needs: test
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
+
   
   deploy_to_dev_cluster:
     needs: package
