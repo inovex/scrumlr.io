@@ -37,7 +37,7 @@ jobs:
 
       - name: set needed env variables
         run: |
-          echo "CURRENT_BRANCH=$(echo ${{ github.event.number }} | sed 's/[/_.]/-/g')" >> "$GITHUB_ENV"
+          echo "CURRENT_BRANCH=$(echo ${{ github.head_ref }} | sed 's/[/_.]/-/g')" >> "$GITHUB_ENV"
 
       - name: Replace template variables
         run: |
