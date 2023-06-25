@@ -10,13 +10,13 @@ $name-gap: 4px;
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  padding: 2px 14px 2px 2px;
   border-radius: $rounded--full;
 }
 
 .note-author-list--self {
   background: var(--accent-color--desaturated-light);
+  padding-right: $padding--default;
+  width: max-content;
 }
 
 .note__author {
@@ -73,7 +73,9 @@ $name-gap: 4px;
   color: $color-dark-gray;
   font-size: $text--xs;
   letter-spacing: $letter-spacing--small;
-  line-height: $line-height--small;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .note__author--self {
