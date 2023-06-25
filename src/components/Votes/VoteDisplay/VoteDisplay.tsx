@@ -15,6 +15,8 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
   const {t} = useTranslation();
   const voting = useAppSelector((state) => state.votings.open?.id);
   const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
+  const onboardingPhase = useAppSelector((state) => state.onboarding.phase);
+  const onboardingStep = useAppSelector((state) => state.onboarding.step);
 
   return (
     <div className="vote-display">
@@ -25,7 +27,15 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
       {isModerator && (
         <div className="vote-display__short-actions">
           <div className="short-actions__button-wrapper">
-            <button onClick={() => store.dispatch(Actions.closeVoting(voting!))}>
+            <button
+              onClick={() => {
+                if (onboardingPhase === "board_insights" && onboardingStep === 2) {
+                  store.dispatch(Actions.setFakeVotesOpen(true));
+                  store.dispatch(Actions.setInUserTask(false));
+                }
+                store.dispatch(Actions.closeVoting(voting!));
+              }}
+            >
               <FlagIcon />
             </button>
             <span>{t("VoteDisplay.finishActionTooltip")}</span>

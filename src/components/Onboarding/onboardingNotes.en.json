@@ -11,9 +11,19 @@
       "votes": 1
     },
     {
+      "author": "Sandy",
+      "text": "Progress feels slow lately, we have to fix more stuff than we build.",
+      "votes": 3
+    },
+    {
       "author": "Andrew",
       "text": "There are some contradicting feature requests in the backlog.",
       "votes": 1
+    },
+    {
+      "author": "Aleyna",
+      "text": "Recently, the messy code we wrote before the v1 release causes many bugs and problems!",
+      "votes": 3
     }
   ],
   "Sad": [

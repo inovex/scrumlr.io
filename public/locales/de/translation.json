@@ -596,7 +596,7 @@
   },
   "Onboarding": {
     "skip": "Skip",
-    "ok": "Alright!",
+    "ok": "OK!",
     "next": "Next",
     "newBoardWelcome": "You can easily create a board now and come back later when you need it! \n Start with a template and configure it to your hearts' content!",
     "newBoardSettings": "It is also possible to change the board name and access rights.",
@@ -605,8 +605,8 @@
     "generateInsightsWelcome": "Why did things happen the way they did? Identify patterns. See the big picture.",
     "decideWelcome": "Pick a few issues to work on and create concrete action plans of how you'll address them.",
     "checkOutWelcome": "Clarify follow-up; Appreciations; Clear end; How could the retrospectives improve?",
-    "dataCardsAdded": "Some notes are very similar. \nThat makes it hard to vote on the important topics",
-    "dataStacks": "Let's stack the similar cards by dragging them onto each other!",
-    "insightsWelcome": "test"
+    "dataCardsAdded": "Some notes are very similar. \nThat makes it hard to vote on the important topics.",
+    "dataStacks": "Let's stack the similar cards using Drag&Drop! \n\n(Just click 'next' once you are done)",
+    "insightsWelcome": "See the big picture and identify patterns. \nWhy did things happen the way they did?"
   }
 }
