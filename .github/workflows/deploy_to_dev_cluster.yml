@@ -58,7 +58,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            The deployment to the dev cluster was successful. You can find the deployment here: https://${{ env.CURRENT_BRANCH }}.development.scrumlr.fra.ics.inovex.io
+            The deployment to the dev cluster was successful. You can find the deployment here: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
             This deployment is only for testing purposes and will be deleted after 1 week.
             To redeploy rerun the workflow.
             <strong>DO NOT STORE IMPORTANT DATA ON THIS DEPLOYMENT</strong>
