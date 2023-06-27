@@ -167,7 +167,7 @@ spec:
   tls:
   - hosts:
     - "PR_NUMBER.development.scrumlr.fra.ics.inovex.io"
-    secretName: scrumlr-test-certificate 
+    secretName: scrumlr-development-certificate-PR_NUMBER
 ---
 # redirect to https
 apiVersion: networking.k8s.io/v1
