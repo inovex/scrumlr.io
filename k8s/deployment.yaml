@@ -142,7 +142,8 @@ metadata:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-staging
+      # TODO change back to staging on merge
+    cert-manager.io/cluster-issuer: letsencrypt-production
   name: scrumlr-ingress-PR_NUMBER
 spec:
   rules:
@@ -203,8 +204,9 @@ metadata:
 spec:
   secretName: scrumlr-development-certificate-PR_NUMBER
   issuerRef:
-    name: 
-      letsencrypt-staging
+  # TODO change back to staging on merge
+    name:
+      letsencrypt-production
     kind: ClusterIssuer
   commonName: PR_NUMBER.development.scrumlr.fra.ics.inovex.io
   dnsNames:
