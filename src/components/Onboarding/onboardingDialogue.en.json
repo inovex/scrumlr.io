@@ -51,5 +51,26 @@
       "color": "backlog-blue"
     }
   ],
-  "Chat2": []
+  "Chat_Generate-Insights": [
+    {
+      "author": "Mike",
+      "text": "It seems like the increased occurence of bugs is our biggest problem. \nWhy is that happening? \nLet's collect some ideas!",
+      "color": "backlog-blue"
+    },
+    {
+      "author": "Aleyna",
+      "text": "I think we have a lot of technical debt due to taking shortcuts when we had time-pressure before the last release.",
+      "color": "planning-pink"
+    },
+    {
+      "author": "Steve",
+      "text": "Yes, we should probably invest a few days to refactor some of the old code. \nSandy, you have the best knowledge of our codebase, what do you think?",
+      "color": "grooming-green"
+    },
+    {
+      "author": "Sandy",
+      "text": "I agree that we need to do some refactoring. \nBut we should also look at the cause. \nWe are often too rushed to write clean and tested code. \nWe could use more developers or reduce the tickets per sprint.",
+      "color": "poker-purple"
+    }
+  ]
 }

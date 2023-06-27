@@ -1,5 +1,5 @@
 import {Action, ReduxAction} from "store/action";
-import {ParticipantsState} from "types/participant";
+import {Participant, ParticipantsState} from "types/participant";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const participantsReducer = (state: ParticipantsState = null, action: ReduxAction): ParticipantsState => {
@@ -75,6 +75,17 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
         self: state!.self,
         others: [...state!.others],
         focusInitiator: null,
+      };
+    }
+
+    case Action.ToggleOnboardingParticipantsReady: {
+      const newOthers: Participant[] = [];
+      state!.others.forEach((o) => {
+        newOthers.push({...o, ready: !o.ready});
+      });
+      return {
+        ...state!,
+        others: newOthers,
       };
     }
 

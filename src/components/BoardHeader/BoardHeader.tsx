@@ -49,6 +49,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             store.dispatch(Actions.setFakeVotesOpen(false));
             store.dispatch(Actions.clearOnboardingNotes());
             store.dispatch(Actions.clearOnboardingColumns());
+            store.dispatch(Actions.setFakeVotesOpen(false));
             navigate("/");
           }}
           onDecline={() => setShowConfirmationDialog(false)}

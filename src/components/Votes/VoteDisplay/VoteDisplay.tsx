@@ -32,6 +32,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
                 if (onboardingPhase === "board_insights" && onboardingStep === 2) {
                   store.dispatch(Actions.setFakeVotesOpen(true));
                   store.dispatch(Actions.setInUserTask(false));
+                  store.dispatch(Actions.incrementStep());
                 }
                 store.dispatch(Actions.closeVoting(voting!));
               }}

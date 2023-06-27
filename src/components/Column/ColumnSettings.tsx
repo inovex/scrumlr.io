@@ -31,6 +31,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
   const dispatch = useDispatch();
   const columnSettingsRef = useRef<HTMLDivElement>(null);
   const onboardingColumns = useAppSelector((state) => state.onboarding.onboardingColumns);
+  const onboardingPhase = useAppSelector((state) => state.onboarding.phase);
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
@@ -58,9 +59,7 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
           <button
             onClick={() => {
               onClose?.();
-              if (!onboardingColumns.find((oc) => oc.id === id)) {
-                dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
-              }
+              dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
             }}
           >
             {visible ? <HideIcon /> : <ShowIcon />}
@@ -70,8 +69,12 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
         <li>
           <button
             onClick={() => {
-              if (!onboardingColumns.find((oc) => oc.id === id)) {
+              if (onboardingPhase === "none" || !onboardingColumns.find((oc) => oc.id === id)) {
                 onNameEdit?.();
+              } else {
+                Toast.error({
+                  title: "Sorry, we still need this column for your onboarding experience.",
+                });
               }
               onClose?.();
             }}
@@ -106,9 +109,12 @@ export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visib
           <button
             onClick={() => {
               onClose?.();
-              // TODO: better handling for these checks -> some alert?
-              if (!onboardingColumns.find((oc) => oc.id === id)) {
+              if (onboardingPhase === "none" || !onboardingColumns.find((oc) => oc.id === id)) {
                 dispatch(Actions.deleteColumn(id));
+              } else {
+                Toast.error({
+                  title: "Sorry, we still need this column for your onboarding experience.",
+                });
               }
             }}
           >

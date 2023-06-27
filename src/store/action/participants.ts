@@ -21,6 +21,8 @@ export const ParticipantAction = {
 
   SetFocusInitiator: "scrumlr.io/setFocusInitiator" as const,
   ClearFocusInitiator: "scrumlr.io/clearFocusInitiator" as const,
+
+  ToggleOnboardingParticipantsReady: "scrumlr.io/toggleOnboardingParticipantsReady" as const,
 };
 
 /** Factory or creator class of internal Redux board users object specific actions. */
@@ -103,6 +105,10 @@ export const ParticipantActionFactory = {
   clearFocusInitiator: () => ({
     type: ParticipantAction.ClearFocusInitiator,
   }),
+
+  toggleOnboardingParticipantsReady: () => ({
+    type: ParticipantAction.ToggleOnboardingParticipantsReady,
+  }),
 };
 
 export type ParticipantReduxAction =
@@ -115,4 +121,5 @@ export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.editSelf>
   | ReturnType<typeof ParticipantActionFactory.changePermission>
   | ReturnType<typeof ParticipantActionFactory.setFocusInitiator>
-  | ReturnType<typeof ParticipantActionFactory.clearFocusInitiator>;
+  | ReturnType<typeof ParticipantActionFactory.clearFocusInitiator>
+  | ReturnType<typeof ParticipantActionFactory.toggleOnboardingParticipantsReady>;
