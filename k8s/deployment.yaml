@@ -36,9 +36,6 @@ spec:
           requests:
             cpu: "10m"
             memory: "50Mi"
-          limits:
-            cpu: "10m"
-            memory: "50Mi"
         env:
         - name: SCRUMLR_SERVER_PORT
           value: "8080"
@@ -123,9 +120,6 @@ spec:
         image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
         resources:
           requests:
-            cpu: "10m"
-            memory: "50Mi"
-          limits:
             cpu: "10m"
             memory: "50Mi"
         env:

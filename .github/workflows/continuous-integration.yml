@@ -80,4 +80,4 @@ jobs:
         uses: OctoMind-dev/automagically-action-execute@v1
         with:
           url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          token: ${{ github.secrets.AUTOMAGICALLY_TOKEN }}
+          token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
