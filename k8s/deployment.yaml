@@ -34,11 +34,11 @@ spec:
           - "-disable-check-origin"
         resources:
           requests:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "10m"
+            memory: "50Mi"
           limits:
-            cpu: "800m"
-            memory: "800Mi"
+            cpu: "10m"
+            memory: "50Mi"
         env:
         - name: SCRUMLR_SERVER_PORT
           value: "8080"
@@ -123,11 +123,11 @@ spec:
         image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
         resources:
           requests:
-            cpu: "500m"
-            memory: "500Mi"
+            cpu: "10m"
+            memory: "50Mi"
           limits:
-            cpu: "800m"
-            memory: "800Mi"
+            cpu: "10m"
+            memory: "50Mi"
         env:
         # - name: SCRUMLR_SERVER_PORT
         #   value: "80"
