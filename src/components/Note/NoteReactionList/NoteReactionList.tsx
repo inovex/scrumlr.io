@@ -93,6 +93,10 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     );
   };
 
+  const replaceReaction = (reactionId: string, reactionType: ReactionType) => {
+    dispatch(Actions.updateReaction(reactionId, reactionType));
+  };
+
   const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
     // in board overview, prevent note from opening stack view
     e.stopPropagation();
@@ -110,8 +114,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     }
     // other reaction -> replace
     else {
-      deleteReaction(reactionMadeByUser.myReactionId!);
-      addReaction(props.noteId, reactionType);
+      replaceReaction(reactionMadeByUser.myReactionId!, reactionType);
     }
   };
 

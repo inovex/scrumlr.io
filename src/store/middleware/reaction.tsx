@@ -10,4 +10,7 @@ export const passReactionMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applica
   if (action.type === Action.DeleteReaction) {
     API.deleteReaction(action.context.board!, action.reactionId);
   }
+  if (action.type === Action.UpdateReaction) {
+    API.updateReaction(action.context.board!, action.reactionId, action.reactionType);
+  }
 };

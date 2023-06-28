@@ -39,4 +39,21 @@ export const ReactionAPI = {
       throw new Error(`unable to remove reaction with error: ${error}`);
     }
   },
+  updateReaction: async (board: string, reaction: string, reactionType: ReactionType) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions/${reaction}`, {
+        method: "PUT",
+        credentials: "include",
+        body: JSON.stringify({reactionType}),
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Reaction;
+      }
+
+      throw new Error(`patch reaction request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to patch reaction with error: ${error}`);
+    }
+  },
 };
