@@ -69,3 +69,21 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 	render.Status(r, http.StatusNoContent)
 	render.Respond(w, r, nil)
 }
+
+func (s *Server) patchReaction(w http.ResponseWriter, r *http.Request) {
+	id := r.Context().Value("Reaction").(uuid.UUID)
+	var body dto.ReactionPatchTypeRequest
+	if err := render.Decode(r, &body); err != nil {
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+
+	reaction, err := s.reactions.Patch(r.Context(), id, body)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, reaction)
+}

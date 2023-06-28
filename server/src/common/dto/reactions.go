@@ -35,6 +35,11 @@ type ReactionCreateRequest struct {
 	ReactionType string `json:"reactionType"`
 }
 
+// ReactionPatchTypeRequest is the struct to use when updating the type of the reaction (effectively replacing it)
+type ReactionPatchTypeRequest struct {
+	ReactionType string `json:"reactionType"`
+}
+
 func (r *Reaction) From(reaction database.Reaction) *Reaction {
 	r.ID = reaction.ID
 	r.Note = reaction.Note

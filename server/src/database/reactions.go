@@ -22,6 +22,11 @@ type ReactionInsert struct {
 	ReactionType  string
 }
 
+type ReactionPatch struct {
+	bun.BaseModel `bun:"table:reactions"`
+	ReactionType  string
+}
+
 // GetReaction gets a specific Reaction
 func (d *Database) GetReaction(id uuid.UUID) (Reaction, error) {
 	var reaction Reaction
@@ -66,4 +71,18 @@ func (d *Database) RemoveReaction(board, id uuid.UUID) error {
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Reaction", id))
 
 	return err
+}
+
+// PatchReaction updates the reaction type
+func (d *Database) PatchReaction(id uuid.UUID, patch ReactionPatch) (Reaction, error) {
+	var reaction Reaction
+	_, err := d.db.
+		NewUpdate().
+		Model(&reaction).
+		Set("reaction_type = ?", patch.ReactionType).
+		Where("id = ?", id).
+		Returning("*").
+		Exec(context.Background())
+
+	return reaction, err
 }

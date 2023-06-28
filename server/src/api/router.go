@@ -287,6 +287,7 @@ func (s *Server) initReactionResources(r chi.Router) {
 
 			r.Get("/", s.getReaction)
 			r.Delete("/", s.removeReaction)
+			r.Patch("/", s.patchReaction)
 		})
 	})
 }
