@@ -94,13 +94,8 @@ exports[`Column should have correct style show column with correct style 1`] = `
             <button
               class="note note--stackBetween"
             >
-              <p
-                class="note__text"
-              >
-                Lorem Ipsum
-              </p>
-              <div
-                class="note__footer"
+              <header
+                class="note__header"
               >
                 <div
                   class="note-author-list"
@@ -567,7 +562,33 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     </svg>
                   </button>
                 </div>
-              </div>
+              </header>
+              <main
+                class="note__text"
+              >
+                Lorem Ipsum
+              </main>
+              <footer
+                class="note__footer"
+              >
+                <div
+                  class="note-reaction-list__root"
+                >
+                  <div
+                    class="note-reaction-list__reaction-bar-container"
+                  >
+                    <button
+                      class="note-reaction-list__add-reaction-sticker-container"
+                    >
+                      <svg
+                        class="note-reaction-list__add-reaction-sticker"
+                      >
+                        icon-emoji.svg
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </footer>
             </button>
           </div>
         </li>
@@ -584,13 +605,8 @@ exports[`Column should have correct style show column with correct style 1`] = `
             <button
               class="note note--stackBetween"
             >
-              <p
-                class="note__text"
-              >
-                Lorem Ipsum
-              </p>
-              <div
-                class="note__footer"
+              <header
+                class="note__header"
               >
                 <div
                   class="note-author-list"
@@ -1046,7 +1062,33 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     </svg>
                   </button>
                 </div>
-              </div>
+              </header>
+              <main
+                class="note__text"
+              >
+                Lorem Ipsum
+              </main>
+              <footer
+                class="note__footer"
+              >
+                <div
+                  class="note-reaction-list__root"
+                >
+                  <div
+                    class="note-reaction-list__reaction-bar-container"
+                  >
+                    <button
+                      class="note-reaction-list__add-reaction-sticker-container"
+                    >
+                      <svg
+                        class="note-reaction-list__add-reaction-sticker"
+                      >
+                        icon-emoji.svg
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </footer>
             </button>
           </div>
         </li>
