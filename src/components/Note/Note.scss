@@ -22,7 +22,7 @@ $note__author-image-size: 26px;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: all 0.1s ease-in-out;
   z-index: $note-z-index;
-  padding: $padding--default $padding--medium 20px;
+  padding: $padding--default $padding--medium 12px $padding--default;
   width: 100%;
   text-align: start;
   border: 2px solid transparent;
