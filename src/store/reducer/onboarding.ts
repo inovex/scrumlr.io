@@ -14,8 +14,8 @@ export const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "board_data", steps: 5},
   {name: "board_insights", steps: 5},
   {name: "board_actions", steps: 4},
-  {name: "board_check_out", steps: 2},
-  {name: "outro", steps: 2},
+  {name: "board_check_out", steps: 3},
+  {name: "outro", steps: 1},
 ];
 
 const initialState: OnboardingState = {

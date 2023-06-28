@@ -98,5 +98,43 @@
       "id": 6
     }
   ],
-  "Chat_Decide": []
+  "Chat_Decide": [],
+  "Chat_Check-Out": [
+    {
+      "author": "Mike",
+      "text": "With this, we are done with our retrospective. \nThank you all for your participation and good ideas, I hope we will see good results next sprint.",
+      "color": "backlog-blue",
+      "id": 1
+    },
+    {
+      "author": "Mike",
+      "text": "I will export the bord and post it in the team channel if anyone wants to take another look later. \nLet's continue to work well!",
+      "color": "backlog-blue",
+      "id": 2
+    },
+    {
+      "author": "Aleyna",
+      "text": "Yes, thank you all! Bye!",
+      "color": "planning-pink",
+      "id": 3
+    },
+    {
+      "author": "Steve",
+      "text": "Have a great day, bye bye!",
+      "color": "grooming-green",
+      "id": 4
+    },
+    {
+      "author": "Sandy",
+      "text": "Bye bye! \nI will message you later for the refactoring session.",
+      "color": "poker-purple",
+      "id": 5
+    },
+    {
+      "author": "Andrew",
+      "text": "See you later!",
+      "color": "goal-green",
+      "id": 6
+    }
+  ]
 }

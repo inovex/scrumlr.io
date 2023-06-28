@@ -3,6 +3,7 @@ import {isEqual} from "underscore";
 import Floater from "react-floater";
 import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
 import {ReactComponent as GatheringDataImg} from "assets/onboarding/Gathering-Data-Image.svg";
+import {ReactComponent as MikeHappy} from "assets/onboarding/Mike_Happy.svg";
 import stanDrink from "assets/stan/Slooth_drink.png";
 import stanComputer from "assets/stan/Stan_computer.png";
 import {useDispatch} from "react-redux";
@@ -96,7 +97,8 @@ export const OnboardingController = () => {
         spawnNotes("Actions");
         dispatch(Actions.incrementStep());
         break;
-      case "outro":
+      case "outro-1":
+        dispatch(Actions.setInUserTask(true));
         break;
       default:
         break;
@@ -108,10 +110,12 @@ export const OnboardingController = () => {
       {phase !== "newBoard" ? (
         <div className="onboarding-controller">
           <button
-            className="onboarding-button onboarding-skip-button"
+            className={`onboarding-button onboarding-skip-button ${phase === "outro" ? "onboarding-button-disabled" : ""}`}
             aria-label="Skip this step"
             onClick={() => {
-              dispatch(Actions.incrementStep());
+              if (phase !== "outro") {
+                dispatch(Actions.incrementStep());
+              }
             }}
           >
             {t("Onboarding.skip")}
@@ -316,9 +320,33 @@ export const OnboardingController = () => {
       {phaseStep === "board_check_out-2" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text="To document your results, you can even export the board in the settings!" />}
+          component={
+            <OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="next" text="To document your results, you can even export the board in the settings!" />
+          }
           target=".user-menu .menu__items li:last-child"
           placement="right"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "board_check_out-3" && (
+        <Floater
+          open={stepOpen}
+          component={<OnboardingChat chatName="Chat_Check-Out" title="Example: Check-Out" />}
+          placement="center"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "outro-1" && (
+        <Floater
+          open={stepOpen}
+          component={
+            <OnboardingModal
+              image={<MikeHappy />}
+              title="Mike: Thank you for your help!"
+              textContent="You were a great help during this retrospective! Thanks to you the retrospective was a success. I will do my best on my own in the next sessions!"
+            />
+          }
+          placement="center"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
