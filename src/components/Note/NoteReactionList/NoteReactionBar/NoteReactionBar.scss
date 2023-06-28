@@ -35,7 +35,7 @@
   }
 }
 
-@container note (max-width: 300px) {
+@container #{$container__note} {
   .note-reaction-bar__root {
     gap: $reaction__gap-size--small;
   }

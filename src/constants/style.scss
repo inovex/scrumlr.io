@@ -177,13 +177,16 @@ $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 $request-z-index: $base-z-index + (9 * $base-z-index-step);
 
-// responsive
+// responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";
 $smartphone: "screen and (max-width: 767px)";
 $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
 $menu-mobile: "screen and (max-width: 1343px)";
 $menu-desktop: "screen and (min-width: 1344px)";
+
+// responsive: @container query
+$container__note: "note (max-width: 300px)";
 
 // shadows
 $box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);

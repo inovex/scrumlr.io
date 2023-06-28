@@ -187,7 +187,7 @@ $note__author-image-size: 26px;
 }
 
 // change note padding based on note size
-@container note (max-width: 300px) {
+@container #{$container__note} {
   .note {
     padding: 10px $padding--default 5px 10px;
   }
