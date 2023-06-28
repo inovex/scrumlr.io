@@ -111,3 +111,14 @@ func (s *ReactionService) DeletedReaction(board, reaction uuid.UUID) {
 		logger.Get().Errorw("unable to broadcast deleted reaction", "err", err)
 	}
 }
+
+func (s *ReactionService) UpdatedReaction(board, reaction uuid.UUID) {
+	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventReactionUpdated,
+		Data: reaction,
+	})
+
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated reaction", "err", err)
+	}
+}

@@ -20,6 +20,7 @@ const (
 	BoardEventNoteDeleted           BoardEventType = "NOTE_DELETED"
 	BoardEventReactionAdded         BoardEventType = "REACTION_ADDED"
 	BoardEventReactionDeleted       BoardEventType = "REACTION_DELETED"
+	BoardEventReactionUpdated       BoardEventType = "REACTION_UPDATED"
 	BoardEventVotesUpdated          BoardEventType = "VOTES_UPDATED"
 	BoardEventSessionRequestCreated BoardEventType = "REQUEST_CREATED"
 	BoardEventSessionRequestUpdated BoardEventType = "REQUEST_UPDATED"
