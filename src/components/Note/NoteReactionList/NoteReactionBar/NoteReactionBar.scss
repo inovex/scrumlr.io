@@ -35,6 +35,12 @@
   }
 }
 
+@container note (max-width: 300px) {
+  .note-reaction-bar__root {
+    gap: $reaction__gap-size--small;
+  }
+}
+
 [theme="dark"] {
   .note-reaction-bar__reaction {
     &:hover {

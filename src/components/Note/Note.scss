@@ -10,6 +10,8 @@ $note__author-image-size: 26px;
 
 .note__root {
   position: relative;
+  container-type: inline-size;
+  container-name: note;
 }
 
 .note {
@@ -182,6 +184,13 @@ $note__author-image-size: 26px;
 
 .note__disabled-click {
   pointer-events: none;
+}
+
+// change note padding based on note size
+@container note (max-width: 300px) {
+  .note {
+    padding: 10px $padding--default 5px 10px;
+  }
 }
 
 [theme="dark"] {
