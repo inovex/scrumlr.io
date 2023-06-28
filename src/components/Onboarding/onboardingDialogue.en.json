@@ -3,83 +3,99 @@
     {
       "author": "Mike",
       "text": "I am happy to be welcomed in such a great team! \nLet us start our first digital retrospective!",
-      "color": "backlog-blue"
+      "color": "backlog-blue",
+      "id": 1
     },
     {
       "author": "Mike",
       "text": "We will start with a short Check-In. \nPlease describe the last sprint with a song title.",
-      "color": "backlog-blue"
+      "color": "backlog-blue",
+      "id": 2
     },
     {
       "author": "Sandy",
       "text": "Never Gonna Give You Up - Rick Astley",
-      "color": "poker-purple"
+      "color": "poker-purple",
+      "id": 3
     },
     {
       "author": "Steve",
       "text": "Under Pressure - Queen",
-      "color": "grooming-green"
+      "color": "grooming-green",
+      "id": 4
     },
     {
       "author": "Andrew",
       "text": "They Want It, But No - Tobe Nwigwe",
-      "color": "goal-green"
+      "color": "goal-green",
+      "id": 5
     },
     {
       "author": "Aleyna",
       "text": "I'm Still Standing - Elton John",
-      "color": "planning-pink"
+      "color": "planning-pink",
+      "id": 6
     },
     {
       "author": "Dave",
       "text": "We Built This City - Starship",
-      "color": "retro-red"
+      "color": "retro-red",
+      "id": 7
     },
     {
       "author": "Mike",
       "text": "Little Help - The BossHoss",
-      "color": "backlog-blue"
+      "color": "backlog-blue",
+      "id": 8
     },
     {
       "author": "Mike",
       "text": "Thank you all for your song ideas for the sprint! \nI will have to listen to all of them later :D \n...",
-      "color": "backlog-blue"
+      "color": "backlog-blue",
+      "id": 9
     },
     {
       "author": "Mike",
       "text": "Let's move on to the main parts of our Retro :) \nEveryone, please write down 1-2 notes on what you were mad, sad or glad about in the last sprint.",
-      "color": "backlog-blue"
+      "color": "backlog-blue",
+      "id": 10
     }
   ],
   "Chat_Generate-Insights": [
     {
       "author": "Mike",
       "text": "It seems like the increased occurence of bugs is our biggest problem. \nWhy is that happening? \nLet's collect some ideas!",
-      "color": "backlog-blue"
+      "color": "backlog-blue",
+      "id": 1
     },
     {
       "author": "Aleyna",
       "text": "I think we have a lot of technical debt due to taking shortcuts when we had time-pressure before the last release.",
-      "color": "planning-pink"
+      "color": "planning-pink",
+      "id": 2
     },
     {
       "author": "Steve",
       "text": "Yes, we should probably invest a few days to refactor some of the old code. \nSandy, you have the best knowledge of our codebase, what do you think?",
-      "color": "grooming-green"
+      "color": "grooming-green",
+      "id": 3
     },
     {
       "author": "Sandy",
       "text": "I agree that we need to do some refactoring. \nBut we should also look at the cause. \nWe are often too rushed to write clean and tested code. \nWe could use more developers or reduce the tickets per sprint.",
-      "color": "poker-purple"
+      "color": "poker-purple",
+      "id": 4
     },
     {
       "author": "Andrew",
       "text": "What do you guys think of trying pair programming to catch more bugs in the future?",
-      "color": "goal-green"
+      "color": "goal-green",
+      "id": 5
     },
     {
       "text": ".  .  .",
-      "color": ""
+      "color": "",
+      "id": 6
     }
   ],
   "Chat_Decide": []

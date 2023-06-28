@@ -29,8 +29,8 @@ export const OnboardingChat = (props: OnboardingChatProps) => {
         <CloseIcon className="close-button__icon" />
       </button>
       <ul className="onboarding-chat__list">
-        {onboardingChats[props.chatName].map((chat: {author?: string; text: string; color: string}) => (
-          <li className="onboarding-chat__item">
+        {onboardingChats[props.chatName].map((chat: {author?: string; text: string; color: string; id: number}) => (
+          <li className="onboarding-chat__item" key={chat.id}>
             <div className="onboarding-chat__author">
               {generateUserAvatar(chat.author)}
               <div>{chat.author}</div>

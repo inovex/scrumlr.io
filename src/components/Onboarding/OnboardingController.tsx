@@ -3,13 +3,13 @@ import {isEqual} from "underscore";
 import Floater from "react-floater";
 import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
 import {ReactComponent as GatheringDataImg} from "assets/onboarding/Gathering-Data-Image.svg";
-import stanDrink from "assets/stan/Slooth_3_drink (2)@4x.png";
+import stanDrink from "assets/stan/Slooth_drink.png";
+import stanComputer from "assets/stan/Stan_computer.png";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
 import checkInImg from "assets/onboarding/check-in_image_temp.jpg";
-import {ReactComponent as StanOk} from "assets/stan/Stan_Ok.svg";
 import {onboardingAuthors} from "types/onboardingNotes";
 import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
@@ -49,16 +49,20 @@ export const OnboardingController = () => {
         });
       }
     };
+
+    const actionColumnVisible = (): boolean => {
+      const actionColumnID = onboardingColumns.find((oc) => oc.name === "Actions")?.id;
+      if (!actionColumnID) {
+        return false;
+      }
+      const actionColumnVisibility = columns.find((c) => c.id === actionColumnID)?.visible;
+      if (actionColumnVisibility) {
+        return true;
+      }
+      return false;
+    };
+
     switch (phaseStep) {
-      /* phase "intro" handles itself - phase "none" has no onboarding activities */
-      case "newBoard-1":
-        break;
-      case "newBoard-2":
-        break;
-      case "board_check_in-1": // welcome
-        break;
-      case "board_data-1": // welcome
-        break;
       case "board_data-2":
         // in this step, the "fake" notes for the Mad/Sad/Glad columns are spawned
         spawnNotes("Mad");
@@ -74,11 +78,7 @@ export const OnboardingController = () => {
         dispatch(Actions.setInUserTask(true));
         if (participants?.self.ready) {
           dispatch(Actions.setInUserTask(false));
-          // dispatch(Actions.incrementStep());
         }
-        break;
-      case "board_insights-1":
-        // dispatch(Actions.setFakeVotesOpen(true));
         break;
       case "board_insights-2":
         dispatch(Actions.setInUserTask(true));
@@ -86,17 +86,15 @@ export const OnboardingController = () => {
       case "board_insights-4":
         dispatch(Actions.setFakeVotesOpen(true));
         break;
-      case "board_actions-1":
-        break;
       case "board_actions-2":
+        dispatch(Actions.setInUserTask(true));
+        if (actionColumnVisible()) {
+          dispatch(Actions.setInUserTask(false));
+        }
         break;
       case "board_actions-3":
         spawnNotes("Actions");
         dispatch(Actions.incrementStep());
-        break;
-      case "board-actions-4":
-        break;
-      case "board_check_out":
         break;
       case "outro":
         break;
@@ -158,7 +156,14 @@ export const OnboardingController = () => {
       {phaseStep === "newBoard-2" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingModal textContent={t("Onboarding.newBoardWelcome")} title="Preparation is Key!" hasNextButton image={<StanOk />} />}
+          component={
+            <OnboardingModal
+              textContent={t("Onboarding.newBoardWelcome")}
+              title="Preparation is Key!"
+              hasNextButton
+              image={<img src={stanComputer} alt="Stan sitting in front of a computer" />}
+            />
+          }
           placement="center"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
@@ -299,6 +304,7 @@ export const OnboardingController = () => {
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
+      {/* board_actions 3 and 4 are for spawning & looking at action-notes */}
       {phaseStep === "board_check_out-1" && (
         <Floater
           open={stepOpen}
