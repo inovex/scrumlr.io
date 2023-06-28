@@ -15,10 +15,10 @@ type OnboardingChatProps = {
 export const OnboardingChat = (props: OnboardingChatProps) => {
   const dispatch = useDispatch();
 
-  const generateUserAvatar = (name: string): JSX.Element => {
+  const generateUserAvatar = (name?: string): JSX.Element => {
     const author = onboardingAuthors.find((oa) => oa.user.name === name);
     if (!author) {
-      return <div>error</div>;
+      return <div />;
     }
     return <UserAvatar id={author.user.id} title={author.user.name} avatar={author.user.avatar} />;
   };
@@ -29,7 +29,7 @@ export const OnboardingChat = (props: OnboardingChatProps) => {
         <CloseIcon className="close-button__icon" />
       </button>
       <ul className="onboarding-chat__list">
-        {onboardingChats[props.chatName].map((chat: {author: string; text: string; color: string}) => (
+        {onboardingChats[props.chatName].map((chat: {author?: string; text: string; color: string}) => (
           <li className="onboarding-chat__item">
             <div className="onboarding-chat__author">
               {generateUserAvatar(chat.author)}

@@ -3,6 +3,7 @@ import {isEqual} from "underscore";
 import Floater from "react-floater";
 import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
 import {ReactComponent as GatheringDataImg} from "assets/onboarding/Gathering-Data-Image.svg";
+import stanDrink from "assets/stan/Slooth_3_drink (2)@4x.png";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
@@ -15,6 +16,7 @@ import "./Onboarding.scss";
 import {OnboardingModal} from "./Floaters/OnboardingModal";
 import {OnboardingChat} from "./Floaters/OnboardingChat";
 import {OnboardingTooltip} from "./Floaters/OnboardingTooltip";
+import {OnboardingModalRetro} from "./Floaters/OnboardingModalRetro";
 
 export const OnboardingController = () => {
   const {t} = useTranslation();
@@ -68,13 +70,20 @@ export const OnboardingController = () => {
         }, 1500);
         dispatch(Actions.incrementStep());
         break;
+      case "board_data-5":
+        dispatch(Actions.setInUserTask(true));
+        if (participants?.self.ready) {
+          dispatch(Actions.setInUserTask(false));
+          // dispatch(Actions.incrementStep());
+        }
+        break;
       case "board_insights-1":
         // dispatch(Actions.setFakeVotesOpen(true));
         break;
       case "board_insights-2":
         dispatch(Actions.setInUserTask(true));
         break;
-      case "board_insights-3":
+      case "board_insights-4":
         dispatch(Actions.setFakeVotesOpen(true));
         break;
       case "board_actions-1":
@@ -82,6 +91,10 @@ export const OnboardingController = () => {
       case "board_actions-2":
         break;
       case "board_actions-3":
+        spawnNotes("Actions");
+        dispatch(Actions.incrementStep());
+        break;
+      case "board-actions-4":
         break;
       case "board_check_out":
         break;
@@ -90,7 +103,7 @@ export const OnboardingController = () => {
       default:
         break;
     }
-  }, [phaseStep, columns, dispatch, onboardingColumns]);
+  }, [phaseStep, columns, dispatch, onboardingColumns, participants?.self.ready]);
 
   return (
     <div className="onboarding-controller-wrapper">
@@ -140,6 +153,9 @@ export const OnboardingController = () => {
       )}
 
       {phaseStep === "newBoard-1" && (
+        <Floater open={stepOpen} component={<OnboardingModalRetro />} placement="center" styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}} />
+      )}
+      {phaseStep === "newBoard-2" && (
         <Floater
           open={stepOpen}
           component={<OnboardingModal textContent={t("Onboarding.newBoardWelcome")} title="Preparation is Key!" hasNextButton image={<StanOk />} />}
@@ -147,12 +163,21 @@ export const OnboardingController = () => {
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
-      {phaseStep === "newBoard-2" && (
+      {phaseStep === "newBoard-3" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="ok" text={t("Onboarding.newBoardSettings")} />}
+          component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text={t("Onboarding.newBoardSettings")} />}
           target=".new-board__extended:last-child"
           placement="right-end"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "newBoard-4" && (
+        <Floater
+          open={stepOpen}
+          component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="ok" text={t("Onboarding.newBoardCreate")} />}
+          target=".new-board"
+          placement="right"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}
@@ -202,8 +227,8 @@ export const OnboardingController = () => {
       {phaseStep === "board_data-5" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text={t("Onboarding.dataStacks")} />}
-          target=".column"
+          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text="Please mark yourself as 'ready' once you are done." />}
+          target=".user-menu button"
           placement="right"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
@@ -219,7 +244,14 @@ export const OnboardingController = () => {
       {phaseStep === "board_insights-2" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text="Please create a voting with 3 votes per participant!" />}
+          component={
+            <OnboardingTooltip
+              image={<StanIcon />}
+              imgPosition="left"
+              buttonType="ok"
+              text="Please create a voting with 3 votes per participant to identify the most important topics!"
+            />
+          }
           target=".admin-menu"
           placement="left"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
@@ -228,8 +260,59 @@ export const OnboardingController = () => {
       {phaseStep === "board_insights-3" && (
         <Floater
           open={stepOpen}
+          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text="Click here once you want to finish the voting!" />}
+          target=".vote-display"
+          placement="bottom"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {/* insights step 4 is for looking at the generated votes */}
+      {phaseStep === "board_insights-5" && (
+        <Floater
+          open={stepOpen}
           component={<OnboardingChat chatName="Chat_Generate-Insights" title="Example: Generating Insights" />}
           placement="center"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "board_actions-1" && (
+        <Floater
+          open={stepOpen}
+          component={<OnboardingModal image={<StanIcon />} title="Phase 4: Decide what to do" textContent={t("Onboarding.decideWelcome")} />}
+          placement="center"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "board_actions-2" && (
+        <Floater
+          open={stepOpen}
+          component={
+            <OnboardingTooltip
+              image={<StanIcon />}
+              imgPosition="left"
+              buttonType="ok"
+              text="Please make the Actions-column visible now so that Mike can discuss the actions with the team."
+            />
+          }
+          target=".board .column:last-of-type .column__header-title"
+          placement="left"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "board_check_out-1" && (
+        <Floater
+          open={stepOpen}
+          component={<OnboardingModal image={<img src={stanDrink} alt="Stan drinking" />} title="Phase 5: Close the Retrospective" textContent={t("Onboarding.checkOutWelcome")} />}
+          placement="center"
+          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "board_check_out-2" && (
+        <Floater
+          open={stepOpen}
+          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text="To document your results, you can even export the board in the settings!" />}
+          target=".user-menu .menu__items li:last-child"
+          placement="right"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
       )}

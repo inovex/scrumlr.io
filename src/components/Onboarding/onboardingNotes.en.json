@@ -59,5 +59,17 @@
       "text": "Mike stepped up as new Scrum Master :)",
       "votes": 2
     }
+  ],
+  "Actions": [
+    {
+      "author": "Mike",
+      "text": "Conduct big Code-Refactoring Session -> Sandy",
+      "votes": 0
+    },
+    {
+      "author": "Mike",
+      "text": "Talk to the customer about more developers / less tickets per sprint -> Mike",
+      "votes": 0
+    }
   ]
 }

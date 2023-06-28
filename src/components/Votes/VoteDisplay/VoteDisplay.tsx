@@ -29,7 +29,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
           <div className="short-actions__button-wrapper">
             <button
               onClick={() => {
-                if (onboardingPhase === "board_insights" && onboardingStep === 2) {
+                if (onboardingPhase === "board_insights" && onboardingStep === 3) {
                   store.dispatch(Actions.setFakeVotesOpen(true));
                   store.dispatch(Actions.setInUserTask(false));
                   store.dispatch(Actions.incrementStep());

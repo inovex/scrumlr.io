@@ -51,6 +51,7 @@ export const VotingDialog: VFC = () => {
   const startVoting = () => {
     if (onboardingPhase === "board_insights" && onboardingStep === 2) {
       setTimeout(() => {
+        store.dispatch(Actions.incrementStep());
         store.dispatch(Actions.toggleOnboardingParticipantsReady());
       }, 1500);
     }

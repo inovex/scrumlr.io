@@ -1,0 +1,62 @@
+@import "src/constants/style";
+
+.onboarding-modal-retro {
+  border-radius: $rounded--default;
+  padding: 1rem 4rem;
+  display: grid;
+  grid-template-areas:
+    "title title"
+    "content image";
+  width: fit-content;
+  height: fit-content;
+  font-size: $text--md;
+
+  &__title {
+    grid-area: title;
+    & h2 {
+      font-size: $text--2xl;
+    }
+  }
+
+  &__content {
+    grid-area: content;
+    &-description {
+      padding: 1rem;
+      border-radius: $rounded--default;
+      border: 3px solid $color-backlog-blue;
+      & p {
+        margin: 0;
+        &:first-child {
+          margin-bottom: 1rem;
+        }
+      }
+    }
+    &-questions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      & ul {
+        padding: 1rem;
+        margin-top: 0;
+        border-radius: $rounded--default;
+        border: 3px solid $color-retro-red;
+        & li {
+          list-style: none;
+          & b {
+            color: $color-retro-red;
+          }
+          &::marker {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+  &__next {
+    display: inline-flex;
+    justify-content: center;
+  }
+  &__image {
+    grid-area: image;
+  }
+}

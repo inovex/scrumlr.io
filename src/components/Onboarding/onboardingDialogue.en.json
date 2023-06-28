@@ -71,6 +71,16 @@
       "author": "Sandy",
       "text": "I agree that we need to do some refactoring. \nBut we should also look at the cause. \nWe are often too rushed to write clean and tested code. \nWe could use more developers or reduce the tickets per sprint.",
       "color": "poker-purple"
+    },
+    {
+      "author": "Andrew",
+      "text": "What do you guys think of trying pair programming to catch more bugs in the future?",
+      "color": "goal-green"
+    },
+    {
+      "text": ".  .  .",
+      "color": ""
     }
-  ]
+  ],
+  "Chat_Decide": []
 }

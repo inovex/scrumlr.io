@@ -598,15 +598,16 @@
     "skip": "Skip",
     "ok": "OK!",
     "next": "Next",
+    "retrospectives": "Retrospectives are opportunities to learn and improve - usually happening after a work period (e.g. Sprint). \nWe mainly try to answer 3 Questions: \n\n1. What worked well? \n2. What didn't work well? \n3. What are we going to try differently?",
     "newBoardWelcome": "You can easily create a board now and come back later when you need it! \n\nWe often use special retrospective activities to guide our discussions. \nYou can just select a template and then customize it to your preferences!",
     "newBoardSettings": "It is also possible to change the board name and access rights.",
+    "newBoardCreate": "Since Mike is new to the team, let's choose the easy to use 'Mad/Sad/Glad' template to get an overview of the situation.",
     "checkInWelcome": "Give people time to 'arrive' and get into the right mood.",
     "gatherDataWelcome": "Let's help everyone remember. Create a shared pool of information. \nFind the most important topics to discuss. \nExamine facts and feelings.",
-    "generateInsightsWelcome": "Why did things happen the way they did? Identify patterns. See the big picture.",
-    "decideWelcome": "Pick a few issues to work on and create concrete action plans of how you'll address them.",
-    "checkOutWelcome": "Clarify follow-up; Appreciations; Clear end; How could the retrospectives improve?",
-    "dataCardsAdded": "Some notes are very similar. \nThat makes it hard to vote on the important topics.",
-    "dataStacks": "Let's stack the similar cards using Drag&Drop! \n\n(Just click 'next' once you are done)",
+    "dataCardsAdded": "Some notes are very similar. \nThat makes it hard to vote on the important topics.\n\nLet's stack the similar cards using Drag&Drop!",
+    "generateInsightsWelcome": "Why did things happen the way they did? Identify patterns. See the big picture. Brainstorm experiments and improvements.",
+    "decideWelcome": "You should have some potential experiments and improvements at this point. \nNow pick the top items and plan in more detail.",
+    "checkOutWelcome": "All good things come to an end. \nEnd the retrospective decisively. \nDocument the experience and plan for follow-up.",
     "insightsWelcome": "See the big picture and identify patterns. \nWhy did things happen the way they did?"
   }
 }
