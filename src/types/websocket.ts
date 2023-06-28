@@ -60,7 +60,7 @@ export interface DeletedNoteEvent {
   };
 }
 
-export interface UpdatedReactionsEvent {
+export interface AddedReactionEvent {
   type: "REACTION_ADDED";
   data: Reaction;
 }
@@ -68,6 +68,11 @@ export interface UpdatedReactionsEvent {
 export interface DeletedReactionEvent {
   type: "REACTION_DELETED";
   data: string;
+}
+
+export interface UpdatedReactionEvent {
+  type: "REACTION_UPDATED";
+  data: Reaction;
 }
 
 export interface RequestCreatedEvent {
@@ -131,8 +136,9 @@ export type ServerEvent =
   | DeletedColumnEvent
   | UpdatedNotesEvent
   | DeletedNoteEvent
-  | UpdatedReactionsEvent
+  | AddedReactionEvent
   | DeletedReactionEvent
+  | UpdatedReactionEvent
   | RequestCreatedEvent
   | RequestUpdatedEvent
   | ParticipantCreatedEvent

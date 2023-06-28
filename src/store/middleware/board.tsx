@@ -68,6 +68,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           const reactionId = message.data;
           store.dispatch(Actions.deletedReaction(reactionId));
         }
+        if (message.type === "REACTION_UPDATED") {
+          const reaction = message.data;
+          store.dispatch(Actions.updatedReaction(reaction));
+        }
         if (message.type === "PARTICIPANT_CREATED") {
           store.dispatch(Actions.createdParticipant(message.data));
         }
