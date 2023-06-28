@@ -8,6 +8,9 @@ $note__indicator-width: 3px;
 
 $note__author-image-size: 26px;
 
+$note__text-margin-top: 12px;
+$note__text-margin-top--small: 6px;
+
 .note__root {
   position: relative;
   container-type: inline-size;
@@ -109,7 +112,7 @@ $note__author-image-size: 26px;
 }
 
 .note__text {
-  margin: 0 0 $margin--small;
+  margin: $note__text-margin-top 0 $margin--small;
   min-height: 3 * $line-height--medium;
   width: 100%;
   color: $color-black;
@@ -190,6 +193,10 @@ $note__author-image-size: 26px;
 @container #{$container__note} {
   .note {
     padding: 10px $padding--default 5px 10px;
+  }
+
+  .note__text {
+    margin-top: $note__text-margin-top--small;
   }
 }
 

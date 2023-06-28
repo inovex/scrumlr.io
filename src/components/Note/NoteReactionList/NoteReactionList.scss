@@ -13,7 +13,7 @@
   align-items: center;
   gap: $reaction__gap-size;
 
-  padding-left: $reaction__padding--outer-left-right;
+  padding-left: $reaction__padding--outer-left-right; // TODO: line up icon with AuthorList? but take larger border into account
 
   border-radius: $rounded--full;
 
