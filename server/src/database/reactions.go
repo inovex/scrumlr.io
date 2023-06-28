@@ -73,16 +73,16 @@ func (d *Database) RemoveReaction(board, id uuid.UUID) error {
 	return err
 }
 
-// PatchReaction updates the reaction type
-func (d *Database) UpdateReaction(id uuid.UUID, patch ReactionUpdate) (Reaction, error) {
+// UpdateReaction updates the reaction type
+func (d *Database) UpdateReaction(board, id uuid.UUID, update ReactionUpdate) (Reaction, error) {
 	var reaction Reaction
 	_, err := d.db.
 		NewUpdate().
 		Model(&reaction).
-		Set("reaction_type = ?", patch.ReactionType).
+		Set("reaction_type = ?", update.ReactionType).
 		Where("id = ?", id).
 		Returning("*").
-		Exec(context.Background())
+		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Reaction", reaction))
 
 	return reaction, err
 }

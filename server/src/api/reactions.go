@@ -71,6 +71,7 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
+	board := r.Context().Value("Board").(uuid.UUID)
 	id := r.Context().Value("Reaction").(uuid.UUID)
 	var body dto.ReactionUpdateTypeRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -78,7 +79,7 @@ func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reaction, err := s.reactions.Update(r.Context(), id, body)
+	reaction, err := s.reactions.Update(r.Context(), board, id, body)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
