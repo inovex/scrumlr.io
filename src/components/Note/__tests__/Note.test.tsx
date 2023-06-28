@@ -1,6 +1,5 @@
 import {fireEvent} from "@testing-library/react";
 import {Note} from "components/Note";
-import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Provider} from "react-redux";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
@@ -10,6 +9,7 @@ import {ApplicationState} from "types";
 import {BoardState} from "types/board";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestNote from "utils/test/getTestNote";
+import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
 const NOTE_ID = "test-notes-id-1";
 
@@ -28,10 +28,11 @@ const createBoardData = (overwrite?: Partial<BoardState["data"]> & Partial<Pick<
 };
 
 const createNote = (isModerator: boolean, overwrite?: Partial<ApplicationState>) => {
-  const [NoteContext] = wrapWithTestBackend(Note);
   return (
     <Provider store={getTestStore(overwrite)}>
-      <NoteContext key={NOTE_ID} noteId={NOTE_ID} viewer={getTestParticipant(isModerator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})} />
+      <CustomDndContext>
+        <Note key={NOTE_ID} noteId={NOTE_ID} viewer={getTestParticipant(isModerator ? {role: "MODERATOR"} : {role: "PARTICIPANT"})} />
+      </CustomDndContext>
     </Provider>
   );
 };

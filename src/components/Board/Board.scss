@@ -23,13 +23,18 @@
 
   overflow: hidden;
   overflow-x: scroll;
-}
-.board::-webkit-scrollbar {
-  display: none;
-}
 
-.board > * {
-  scroll-snap-align: start;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > * {
+    scroll-snap-align: start;
+  }
+
+  &--dragging {
+    scroll-snap-type: none; // disable snapping while dragging due to unwanted behavior with dnd-kit
+  }
 }
 
 .board__spacer-left {

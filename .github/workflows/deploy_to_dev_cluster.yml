@@ -1,0 +1,73 @@
+# deploy to dev cluster using own runner
+
+name: Deploy to dev cluster
+on:
+  workflow_call:
+    inputs:
+        frontend_image_tag:
+          required: true
+          description: 'frontend image tag'
+          type: string
+        server_image_tag:
+          required: true
+          description: 'server image tag'
+          type: string
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    permissions:
+      id-token: write
+      contents: read
+      actions: read
+      pull-requests: write
+    steps:
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v3
+        id: install
+      - name: Set up Kubernetes Auth
+        uses: azure/k8s-set-context@v3
+        with:
+          method: service-account
+          k8s-secret: ${{ secrets.KUBERNETES_SECRET }}
+          k8s-url: https://kubernetes.default.svc
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Replace template variables
+        run: |
+          sed -i "s#PR_NUMBER#${{ github.event.pull_request.number }}#g" k8s/deployment.yaml
+          sed -i "s#POSTGRES_DEV_PASSWORD#${{ secrets.POSTGRES_DEV_PASSWORD }}#g" k8s/deployment.yaml
+      
+      - name: json_debug
+        run: |
+          cat k8s/deployment.yaml
+
+      - name: Deploy to dev cluster 
+        uses: Azure/k8s-deploy@v4
+        with:
+          namespace: scrumlr-dev-deployments
+          manifests: |
+            k8s/deployment.yaml
+          images: |
+            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
+      
+      - name: send_github_message
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            The deployment to the dev cluster was successful. You can find the deployment here: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
+            This deployment is only for testing purposes and will be deleted after 1 week.
+            To redeploy rerun the workflow.
+            <strong>DO NOT STORE IMPORTANT DATA ON THIS DEPLOYMENT</strong>
+            
+            <details>
+            <summary>Deployed Images</summary>
+            
+            - ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
+
+            - ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
+            
+            </details>
