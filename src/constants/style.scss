@@ -45,6 +45,7 @@ $color-warning-red: #eb625b;
   --accent-color--desaturated-light: #{color.change($color, $lightness: 90%)};
   --accent-color--desaturated-light-hover: #{color.change($color, $lightness: 85%)};
   --accent-color--desaturated-dark: #{color.change($color, $lightness: 39%, $saturation: 48%)};
+  --accent-color--desaturated-dark-hover: #{color.change($color, $lightness: 50%, $saturation: 48%)};
   --accent-color--background-light: #{color.change($color, $lightness: 80%, $alpha: 0.2, $saturation: 60%)};
   --accent-color--background-dark: #{color.change($color, $lightness: 75%, $alpha: 0.04, $saturation: 75%)};
 }
