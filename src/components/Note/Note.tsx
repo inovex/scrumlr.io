@@ -141,7 +141,7 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <p className="note__text">{note.text}</p>
+          <main className="note__text">{note.text}</main>
         )}
         <footer className="note__footer">
           <NoteReactionList noteId={props.noteId} dimensions={dimensions} />
