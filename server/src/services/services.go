@@ -74,7 +74,7 @@ type Reactions interface {
 	List(ctx context.Context, boardID uuid.UUID) ([]*dto.Reaction, error)
 	Create(ctx context.Context, board uuid.UUID, body dto.ReactionCreateRequest) (*dto.Reaction, error)
 	Delete(ctx context.Context, board, id uuid.UUID) error
-	Patch(ctx context.Context, id uuid.UUID, body dto.ReactionPatchTypeRequest) (*dto.Reaction, error)
+	Update(ctx context.Context, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error)
 }
 
 type Votings interface {

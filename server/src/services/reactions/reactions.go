@@ -26,7 +26,7 @@ type DB interface {
 	GetReactions(board uuid.UUID) ([]database.Reaction, error)
 	CreateReaction(board uuid.UUID, insert database.ReactionInsert) (database.Reaction, error)
 	RemoveReaction(board, id uuid.UUID) error
-	PatchReaction(id uuid.UUID, patch database.ReactionPatch) (database.Reaction, error)
+	UpdateReaction(id uuid.UUID, patch database.ReactionUpdate) (database.Reaction, error)
 }
 
 func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
@@ -74,14 +74,14 @@ func (s *ReactionService) Delete(_ context.Context, board, id uuid.UUID) error {
 	return s.database.RemoveReaction(board, id)
 }
 
-func (s *ReactionService) Patch(ctx context.Context, id uuid.UUID, body dto.ReactionPatchTypeRequest) (*dto.Reaction, error) {
+func (s *ReactionService) Update(ctx context.Context, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error) {
 	log := logger.FromContext(ctx)
-	reaction, err := s.database.PatchReaction(id, database.ReactionPatch{
+	reaction, err := s.database.UpdateReaction(id, database.ReactionUpdate{
 		ReactionType: body.ReactionType,
 	})
 
 	if err != nil {
-		log.Errorw("unable to patch reaction", "id", id, "type", body.ReactionType, "error", err)
+		log.Errorw("unable to update reaction", "id", id, "type", body.ReactionType, "error", err)
 		return nil, common.InternalServerError
 	}
 

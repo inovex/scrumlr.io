@@ -22,7 +22,7 @@ type ReactionInsert struct {
 	ReactionType  string
 }
 
-type ReactionPatch struct {
+type ReactionUpdate struct {
 	bun.BaseModel `bun:"table:reactions"`
 	ReactionType  string
 }
@@ -74,7 +74,7 @@ func (d *Database) RemoveReaction(board, id uuid.UUID) error {
 }
 
 // PatchReaction updates the reaction type
-func (d *Database) PatchReaction(id uuid.UUID, patch ReactionPatch) (Reaction, error) {
+func (d *Database) UpdateReaction(id uuid.UUID, patch ReactionUpdate) (Reaction, error) {
 	var reaction Reaction
 	_, err := d.db.
 		NewUpdate().

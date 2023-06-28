@@ -35,8 +35,8 @@ type ReactionCreateRequest struct {
 	ReactionType string `json:"reactionType"`
 }
 
-// ReactionPatchTypeRequest is the struct to use when updating the type of the reaction (effectively replacing it)
-type ReactionPatchTypeRequest struct {
+// ReactionUpdateTypeRequest is the struct to use when updating the type of the reaction (effectively replacing it)
+type ReactionUpdateTypeRequest struct {
 	ReactionType string `json:"reactionType"`
 }
 
