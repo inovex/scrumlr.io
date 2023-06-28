@@ -9,8 +9,12 @@ export const ReactionAction = {
    */
   AddReaction: "scrumlr.io/addReaction" as const,
   AddedReaction: "scrumlr.io/addedReaction" as const,
+
   DeleteReaction: "scrumlr.io/deleteReaction" as const,
   DeletedReaction: "scrumlr.io/deletedReaction" as const,
+
+  UpdateReaction: "scrumlr.io/updateReaction" as const,
+  UpdatedReaction: "scrumlr.io/updatedReaction" as const,
 };
 
 /** Factory or creator class of internal Redux reaction object specific actions. */
@@ -59,10 +63,31 @@ export const ReactionActionFactory = {
     type: ReactionAction.DeletedReaction,
     reactionId,
   }),
+  /**
+   * Creates an action which should be dispatched when a reaction should be deleted
+   * @param reactionId which reaction to update
+   * @param reactionType new reaction type
+   */
+  updateReaction: (reactionId: string, reactionType: ReactionType) => ({
+    type: ReactionAction.UpdateReaction,
+    reactionId,
+    reactionType,
+  }),
+
+  /**
+   * Creates an action which should be dispatched when a reaction was deleted
+   * @param reaction updated reaction
+   */
+  updatedReaction: (reaction: Reaction) => ({
+    type: ReactionAction.UpdatedReaction,
+    reaction,
+  }),
 };
 
 export type ReactionReduxAction =
   | ReturnType<typeof ReactionActionFactory.addReaction>
   | ReturnType<typeof ReactionActionFactory.addedReaction>
   | ReturnType<typeof ReactionActionFactory.deleteReaction>
-  | ReturnType<typeof ReactionActionFactory.deletedReaction>;
+  | ReturnType<typeof ReactionActionFactory.deletedReaction>
+  | ReturnType<typeof ReactionActionFactory.updateReaction>
+  | ReturnType<typeof ReactionActionFactory.updatedReaction>;
