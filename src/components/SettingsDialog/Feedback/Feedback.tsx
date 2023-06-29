@@ -8,13 +8,15 @@ import {ReactComponent as BugIcon} from "assets/icon-bug.svg";
 import {ReactComponent as PraiseIcon} from "assets/icon-praise.svg";
 import {ReactComponent as AddFeatureIcon} from "assets/icon-add-feature.svg";
 import "./Feedback.scss";
-import {DefaultTFuncReturn} from "i18next";
+// import {DefaultTFuncReturn} from "i18next";
 
 export const Feedback: React.FC = () => {
   const {t} = useTranslation();
-  const [errorMessage, setErrorMessage] = useState<string | DefaultTFuncReturn>();
+  // const [errorMessage, setErrorMessage] = useState<string | DefaultTFuncReturn>();
+  const [errorMessage, setErrorMessage] = useState<string>();
   const [feedbackTypeInput, setFeedbackTypeInput] = useState("PRAISE");
-  const [feedbackInputLabel, setFeedbackInputLabel] = useState<string | DefaultTFuncReturn>(t("Feedback.PraiseInputLabel"));
+  // const [feedbackInputLabel, setFeedbackInputLabel] = useState<string | DefaultTFuncReturn>(t("Feedback.PraiseInputLabel"));
+  const [feedbackInputLabel, setFeedbackInputLabel] = useState<string>(t("Feedback.PraiseInputLabel"));
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
   const contactInput = useRef<HTMLInputElement>(null);
   const feedbackTextarea = useRef<HTMLTextAreaElement>(null);

@@ -1,10 +1,11 @@
 import classNames from "classnames";
-import {DefaultTFuncReturn} from "i18next";
+// import {DefaultTFuncReturn} from "i18next";
 import {FC, ElementType, MouseEventHandler, FocusEventHandler, PropsWithChildren} from "react";
 import "./SettingsButton.scss";
 
 export interface SettingsButtonProps {
-  label?: string | DefaultTFuncReturn;
+  // label?: string | DefaultTFuncReturn;
+  label?: string;
   icon?: ElementType;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   onBlur?: FocusEventHandler<HTMLButtonElement> | undefined;
