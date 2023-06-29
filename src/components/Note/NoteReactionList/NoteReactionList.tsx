@@ -126,16 +126,18 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         </button>
         {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactions} handleClickReaction={handleClickReaction} />}
       </div>
-      {!showReactionBar &&
-        // show either condensed or normal reaction chips
-        (showCondensed ? (
-          <>
-            <NoteReactionChipCondensed reactions={reactions} />
-            {reactionMadeByUser && <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} />}
-          </>
-        ) : (
-          reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} />)
-        ))}
+      <div className="note-reaction-list__reaction-chips-container">
+        {!showReactionBar &&
+          // show either condensed or normal reaction chips
+          (showCondensed ? (
+            <>
+              <NoteReactionChipCondensed reactions={reactions} />
+              {reactionMadeByUser && <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} />}
+            </>
+          ) : (
+            reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} />)
+          ))}
+      </div>
     </div>
   );
 };
