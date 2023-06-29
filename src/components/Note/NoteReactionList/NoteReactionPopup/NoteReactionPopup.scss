@@ -1,3 +1,5 @@
+@import "src/constants/style";
+
 .note-reaction-popup__root {
   position: absolute;
   width: 100%;
@@ -7,5 +9,38 @@
 
   transform: translateX(-50%); // show on whole screen
 
-  background-color: #86d586;
+  padding: $padding--large $padding--default;
+
+  background-color: $color-white;
+}
+
+.note-reaction-popup__tab-bar {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.note-reaction-popup__tab--all {
+  // TODO: use @mixins for repeating styling
+  all: unset; // remove default buttons styling
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 18px;
+  padding: 6px 9px 4px 10px;
+  border-radius: $rounded--full;
+  background-color: $color-lighter-gray;
+
+  font-size: $text--sm;
+  font-weight: 600;
+  line-height: 18px;
+  color: $color-black;
+
+  &:hover {
+    background-color: $hover-background-light;
+  }
 }
