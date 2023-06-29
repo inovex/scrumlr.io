@@ -11,6 +11,7 @@ import {Participant} from "../../../types/participant";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import {NoteReactionBar} from "./NoteReactionBar/NoteReactionBar";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
+import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
 import {Actions} from "../../../store/action";
 import "./NoteReactionList.scss";
 
@@ -127,7 +128,11 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const openReactionsPopup = (e: LongPressReactEvents) => {
     e.stopPropagation();
     setShowReactionPopup(true);
-    console.log("long press");
+  };
+
+  const closeReactionPopup = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setShowReactionPopup(false);
   };
 
   return (
@@ -150,6 +155,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
             reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />)
           ))}
       </div>
+      {showReactionPopup && <NoteReactionPopup onClose={closeReactionPopup} />}
     </div>
   );
 };

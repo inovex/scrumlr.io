@@ -1,0 +1,11 @@
+.note-reaction-popup__root {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+
+  bottom: 0;
+
+  transform: translateX(-50%); // show on whole screen
+
+  background-color: #86d586;
+}
