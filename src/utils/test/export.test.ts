@@ -24,7 +24,7 @@ describe("the board export functions", () => {
       expect(API.exportBoard).toHaveBeenCalledTimes(1);
       expect(mdExport).toBe(
         // eslint-disable-next-line max-len
-        `# Test Board\n\n- Participants: 1\n- [Link to board](https://scrumlr.io/board/4af0854f-2cf1-4607-b1a6-6f96cd88a000)\n\n## Positive (2 Notes)\n\n- qwert _(Happy Hornet, 2 Votes)_\n    - asdf _(Happy Hornet, 1 Vote)_\n\n## Negative (2 Notes)\n\n- asdf _(Happy Hornet, 2 Votes)_\n- poiuz _(Happy Hornet)_\n\n> Generated on [scrumlr.io](https://scrumlr.io)  \nProvided with ♥️ by [inovex](https://www.inovex.de)  \n\n![Scrumlr Logo](//scrumlr-logo-light.svg)`
+        `# Test Board\n\n- Participants: 1\n- [Link to board](https://scrumlr.io/board/4af0854f-2cf1-4607-b1a6-6f96cd88a000)\n\n## Positive (2 Notes)\n\n- qwert _(Happy Hornet, 2 Votes)_\n    - asdf _(Happy Hornet, 1 Vote)_\n\n## Negative (2 Notes)\n\n- asdf _(Happy Hornet, 2 Votes)_\n- poiuz _(Happy Hornet)_\n\n> Generated on [scrumlr.io](https://scrumlr.io)  \nProvided with ♥️ by [inovex](https://www.inovex.de)  \n\n![Scrumlr Logo](https://scrumlr.io/scrumlr-logo-light.svg)`
       );
     });
   });

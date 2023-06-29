@@ -59,12 +59,25 @@ jobs:
   package:
     needs: test
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
+
   
   deploy_to_dev_cluster:
     needs: package
-    if: ${{ github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@main
     secrets: inherit
     with: 
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
+
+  end_to_end_test:
+    name: End to End Test
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deploy_to_dev_cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: run tests
+        uses: OctoMind-dev/automagically-action-execute@v1
+        with:
+          url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
+          token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
