@@ -37,7 +37,7 @@ export const Homepage = withTranslation()(() => {
     const boardDeleted = new URLSearchParams(window.location.search).get("boardDeleted");
 
     if (boardDeleted) {
-      Toast.error({
+      Toast.info({
         title: i18n.t("Error.boardDeleted"),
       });
     }
