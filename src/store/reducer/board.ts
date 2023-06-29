@@ -84,6 +84,19 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
       return state;
     }
 
+    case Action.DeletedNote: {
+      if (action.noteId === state.data?.sharedNote) {
+        return {
+          status: state.status,
+          data: {
+            ...state.data!,
+            sharedNote: undefined,
+          },
+        };
+      }
+      return state;
+    }
+
     default: {
       return state;
     }

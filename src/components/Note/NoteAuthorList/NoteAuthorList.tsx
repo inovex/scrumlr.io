@@ -38,11 +38,8 @@ export const NoteAuthorList = (props: Props) => {
             aria-roledescription="author"
             key={a.user!.id}
           >
-            {isOnboarding ? (
-              <UserAvatar id={a.user!.id} avatar={a.user!.avatar} title={a.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-            ) : (
-              <UserAvatar id={a.user!.id} avatar={a.user!.avatar} title={a.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-            )}
+            {/* TODO: why? */}
+            <UserAvatar id={a.user!.id} avatar={a.user!.avatar} title={a.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
           </figure>
         )
       )}

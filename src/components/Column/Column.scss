@@ -148,7 +148,7 @@
   @include scrollbar();
 }
 
-.column__notes-wrapper--isOver {
+.column__notes-wrapper.isOver {
   border-color: var(--accent-color);
   background-color: rgba(var(--accent-color-rgb), 0.2);
 }

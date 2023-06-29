@@ -1,4 +1,4 @@
-import {useEffect, useRef, VFC} from "react";
+import {FC} from "react";
 import {Actions} from "store/action";
 import {ReactComponent as HideIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as ShowIcon} from "assets/icon-visible.svg";
@@ -12,6 +12,7 @@ import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
 import {useAppSelector} from "store";
 import classNames from "classnames";
+import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 
@@ -25,23 +26,13 @@ type ColumnSettingsProps = {
   onNameEdit?: () => void;
 };
 
-export const ColumnSettings: VFC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit}) => {
+export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit}) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
-  const columnSettingsRef = useRef<HTMLDivElement>(null);
+  const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
   const onboardingColumns = useAppSelector((state) => state.onboarding.onboardingColumns);
   const onboardingPhase = useAppSelector((state) => state.onboarding.phase);
-
-  useEffect(() => {
-    const handleClickOutside = ({target}: MouseEvent) => {
-      if (!columnSettingsRef.current?.contains(target as Node)) {
-        onClose?.();
-      }
-    };
-    document.addEventListener("click", handleClickOutside, true);
-    return () => document.removeEventListener("click", handleClickOutside, true);
-  }, [columnSettingsRef, onClose]);
 
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {

@@ -2,9 +2,8 @@ import "./Column.scss";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteInput} from "components/NoteInput";
 import {useEffect, useRef, useState} from "react";
-import {useDrop} from "react-dnd";
 import classNames from "classnames";
-import store, {useAppSelector} from "store";
+import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
@@ -14,6 +13,7 @@ import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {hotkeyMap} from "constants/hotkeys";
+import {Droppable} from "components/DragAndDrop/Droppable";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
@@ -32,18 +32,19 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const state = useAppSelector(
-    (applicationState) => ({
-      notes: applicationState.notes
+  const notes = useAppSelector(
+    (state) =>
+      state.notes
         .filter((note) => !note.position.stack)
-        .filter((note) => (applicationState.board.data?.showNotesOfOtherUsers || applicationState.auth.user!.id === note.author) && note.position.column === id)
+        .filter((note) => (state.board.data?.showNotesOfOtherUsers || state.auth.user!.id === note.author) && note.position.column === id)
         .map((note) => note.id),
-      moderating: applicationState.view.moderating,
-      viewer: applicationState.participants!.self,
-    }),
     _.isEqual
   );
-  const isModerator = state.viewer.role === "OWNER" || state.viewer.role === "MODERATOR";
+  const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
+  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+
+  const colorClassName = getColorClassName(color);
+  const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
   const [columnName, setColumnName] = useState(name);
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
   const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
@@ -52,26 +53,17 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLDivElement>(null);
 
-  const [{isOver, canDrop}, drop] = useDrop(() => ({
-    accept: ["NOTE", "STACK"],
-    drop: (item: {id: string; columnId: string}, monitor) => {
-      if (item.columnId !== id && !monitor.didDrop()) {
-        store.dispatch(Actions.editNote(item.id, {position: {column: id, stack: null, rank: 0}}));
-      }
-    },
-    collect: (monitor) => ({isOver: monitor.isOver(), canDrop: monitor.canDrop()}),
-    canDrop: (item: {id: string; columnId: string}) => item.columnId !== id,
-  }));
-
-  if (columnRef.current && isOver) {
-    const rect = columnRef.current.getBoundingClientRect();
-    if (rect.left <= 0 || rect.right >= document.documentElement.clientWidth) {
-      columnRef.current.scrollIntoView({inline: "start", behavior: "smooth"});
-    }
-  }
-
   const toggleVisibilityHandler = () => {
     dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+  };
+
+  const [localNotes, setLocalNotes] = useState(notes);
+  useEffect(() => {
+    setLocalNotes(notes);
+  }, [notes]);
+
+  const setItems = (items: string[]) => {
+    setLocalNotes(items);
   };
 
   useEffect(() => {
@@ -171,17 +163,14 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   );
 
   return (
-    <section
-      className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && state.moderating}, getColorClassName(color))}
-      ref={columnRef}
-    >
+    <section className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && moderating}, colorClassName)} ref={columnRef}>
       <div className="column__content">
         <div className="column__header">
           <div className="column__header-title">
             {renderColumnName()}
-            {columnNameMode === "VIEW" && state.notes.length > 0 && (
-              <span className="column__header-card-number" title={t("Column.notes", {count: state.notes.length})}>
-                {state.notes.length}
+            {columnNameMode === "VIEW" && notes.length > 0 && (
+              <span className="column__header-card-number" title={t("Column.notes", {count: notes.length})}>
+                {notes.length}
               </span>
             )}
             {isModerator && renderColumnModifiers()}
@@ -206,15 +195,15 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}
           />
         </div>
-        <div className={classNames("column__notes-wrapper", {"column__notes-wrapper--isOver": isOver && canDrop})} ref={drop}>
+        <Droppable id={id} items={localNotes} setItems={setItems} globalNotes={notes} className="column__notes-wrapper">
           <ul className="column__note-list">
-            {state.notes.map((note) => (
+            {localNotes.map((note) => (
               <li key={note}>
-                <Note noteId={note} viewer={state.viewer} />
+                <Note setItems={setItems} noteId={note} viewer={viewer} colorClassName={colorClassName} />
               </li>
             ))}
           </ul>
-        </div>
+        </Droppable>
       </div>
     </section>
   );

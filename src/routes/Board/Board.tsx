@@ -3,7 +3,6 @@ import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
 import {Requests} from "components/Requests";
 import store, {useAppSelector} from "store";
-import {InfoBar} from "components/Infobar";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
 import {Actions} from "store/action";
@@ -91,7 +90,6 @@ export const Board = () => {
             participantsWithRaisedHand={state.participants!.others.filter((p) => p.raisedHand)}
           />
         )}
-        <InfoBar />
         <Outlet />
         <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
           {state.columns

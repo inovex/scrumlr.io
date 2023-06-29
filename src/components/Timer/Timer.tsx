@@ -4,6 +4,7 @@ import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
+import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
@@ -16,8 +17,6 @@ type TimerProps = {
   startTime: Date;
   endTime: Date;
 };
-
-const HIDE_TIMER_AFTER_SECONDS = 15;
 
 const usePrevious = (value: boolean) => {
   const ref = useRef<boolean>();
@@ -48,10 +47,6 @@ export const Timer = (props: TimerProps) => {
   const [playTimesUp, setPlayTimesUp] = useState(false);
   const previousPlayTimesUpState = usePrevious(playTimesUp);
 
-  const hideTimerAfterSeconds = (time: number) => {
-    setTimeout(() => store.dispatch(Actions.cancelTimer()), time * 1000);
-  };
-
   useEffect(() => {
     const timerUpdateTimeout = setTimeout(() => {
       setTimeLeft(TimerUtils.calculateTimeLeft(props.endTime));
@@ -64,7 +59,6 @@ export const Timer = (props: TimerProps) => {
     if (!previousPlayTimesUpState && playTimesUp) {
       timesUpSoundObject.on("end", () => setPlayTimesUp(false));
       playTimesUpSound();
-      hideTimerAfterSeconds(HIDE_TIMER_AFTER_SECONDS);
       if (!isModerator && !isReady) {
         Toast.info({
           title: t("Toast.ready"),
@@ -113,16 +107,28 @@ export const Timer = (props: TimerProps) => {
       <span>
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
-      {isModerator && (
-        <div className="timer__short-actions">
-          <div className="short-actions__button-wrapper">
-            <button onClick={() => store.dispatch(Actions.cancelTimer())}>
+      <div className="timer__short-actions">
+        {isModerator ? (
+          <div className="short-actions__short-action">
+            <button aria-label={t("VoteDisplay.finishActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
               <CancelIcon />
             </button>
-            <span>{t("VoteDisplay.finishActionTooltip")}</span>
+            <span className="short-action__tooltip">{t("VoteDisplay.finishActionTooltip")}</span>
           </div>
-        </div>
-      )}
+        ) : (
+          <div className="short-actions__short-action">
+            <button
+              aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+              className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
+              onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
+            >
+              <CheckIcon className="short-action__check-icon" />
+              <CancelIcon className="short-action__cancel-icon" />
+            </button>
+            <span className="short-action__tooltip">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</span>
+          </div>
+        )}
+      </div>
       <TimerIcon />
     </div>
   );
