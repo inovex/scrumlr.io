@@ -16,7 +16,7 @@ export const OnboardingModalRetro = () => {
 
       <div className="onboarding-modal-retro__content">
         <div className="onboarding-modal-retro__content-description">
-          <p>Retrospectives are opportunities to learn and improve by looking back!</p>
+          <p>Retrospectives are opportunities to learn and improve by taking a look back!</p>
         </div>
         <div className="onboarding-modal-retro__content-questions">
           <p>We mainly try to answer 3 questions:</p>
@@ -25,7 +25,7 @@ export const OnboardingModalRetro = () => {
               <b>1. </b> What worked well?
             </li>
             <li>
-              <b>2. </b> What didn't work well?
+              <b>2. </b> What didn&apos;t work well?
             </li>
             <li>
               <b>3. </b>What are we going to try differently?

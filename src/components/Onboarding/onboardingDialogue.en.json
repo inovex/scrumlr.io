@@ -2,13 +2,13 @@
   "Chat_Check-In": [
     {
       "author": "Mike",
-      "text": "I am happy to be welcomed in such a great team! \nLet us start our first digital retrospective!",
+      "text": "I am happy to be welcomed in such a great team! \nSince I am pretty new to the team, I want to use this retrospective to get an overview of where we currently are as a team and how the last sprint(s) went.",
       "color": "backlog-blue",
       "id": 1
     },
     {
       "author": "Mike",
-      "text": "We will start with a short Check-In. \nPlease describe the last sprint with a song title.",
+      "text": "We will start with a short check-in activity to get into the right mood: \nPlease describe the last sprint with a song title.",
       "color": "backlog-blue",
       "id": 2
     },
@@ -49,16 +49,20 @@
       "id": 8
     },
     {
+      "text": ".  .  .",
+      "id": 9
+    },
+    {
       "author": "Mike",
       "text": "Thank you all for your song ideas for the sprint! \nI will have to listen to all of them later :D \n...",
       "color": "backlog-blue",
-      "id": 9
+      "id": 10
     },
     {
       "author": "Mike",
       "text": "Let's move on to the main parts of our Retro :) \nEveryone, please write down 1-2 notes on what you were mad, sad or glad about in the last sprint.",
       "color": "backlog-blue",
-      "id": 10
+      "id": 11
     }
   ],
   "Chat_Generate-Insights": [

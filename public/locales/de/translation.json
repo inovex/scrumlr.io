@@ -602,7 +602,7 @@
     "newBoardWelcome": "You can easily create a board now and come back later when you need it! \n\nWe often use special retrospective activities to guide our discussions. \nYou can just select a template and then customize it to your preferences!",
     "newBoardSettings": "It is also possible to change the board name and access rights.",
     "newBoardCreate": "Since Mike is new to the team, let's choose the easy to use 'Mad/Sad/Glad' template to get an overview of the situation.",
-    "checkInWelcome": "Give people time to 'arrive' and get into the right mood.",
+    "checkInWelcome": "Give people time to 'arrive' and get into the right mood. \nReiterate the goal for the time the team has together in the retrospective.",
     "gatherDataWelcome": "Let's help everyone remember. Create a shared pool of information. \nFind the most important topics to discuss. \nExamine facts and feelings.",
     "dataCardsAdded": "Some notes are very similar. \nThat makes it hard to vote on the important topics.\n\nLet's stack the similar cards using Drag&Drop!",
     "generateInsightsWelcome": "Why did things happen the way they did? Identify patterns. See the big picture. Brainstorm experiments and improvements.",

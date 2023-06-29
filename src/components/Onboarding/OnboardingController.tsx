@@ -3,6 +3,9 @@ import {isEqual} from "underscore";
 import Floater from "react-floater";
 import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
 import {ReactComponent as GatheringDataImg} from "assets/onboarding/Gathering-Data-Image.svg";
+import {ReactComponent as GenerateInsights} from "assets/onboarding/Generate-Insights-Image.svg";
+import setStageImg from "assets/onboarding/SetStage-Image.png";
+import decideImg from "assets/onboarding/Decide-Image.png";
 import {ReactComponent as MikeHappy} from "assets/onboarding/Mike_Happy.svg";
 import stanDrink from "assets/stan/Slooth_drink.png";
 import stanComputer from "assets/stan/Stan_computer.png";
@@ -10,7 +13,6 @@ import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
-import checkInImg from "assets/onboarding/check-in_image_temp.jpg";
 import {onboardingAuthors} from "types/onboardingNotes";
 import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
@@ -113,8 +115,24 @@ export const OnboardingController = () => {
             className={`onboarding-button onboarding-skip-button ${phase === "outro" ? "onboarding-button-disabled" : ""}`}
             aria-label="Skip this step"
             onClick={() => {
-              if (phase !== "outro") {
-                dispatch(Actions.incrementStep());
+              switch (phaseStep) {
+                case "outro-1":
+                  break;
+                case "board_data-5":
+                  dispatch(Actions.incrementStep());
+                  dispatch(Actions.setInUserTask(false));
+                  break;
+                case "board_insights-2":
+                  dispatch(Actions.incrementStep(2));
+                  dispatch(Actions.setInUserTask(false));
+                  break;
+                case "board_actions-2":
+                  dispatch(Actions.incrementStep());
+                  dispatch(Actions.setInUserTask(false));
+                  break;
+                default:
+                  dispatch(Actions.incrementStep());
+                  break;
               }
             }}
           >
@@ -193,7 +211,13 @@ export const OnboardingController = () => {
       {phaseStep === "board_check_in-1" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingModal textContent={t("Onboarding.checkInWelcome")} title="Phase 1: Set the Stage" image={<img src={checkInImg} alt="check-in hero-img" />} />}
+          component={
+            <OnboardingModal
+              textContent={t("Onboarding.checkInWelcome")}
+              title="Phase 1: Set the Stage"
+              image={<img src={setStageImg} alt="Whiteboard with set-the-stage activity icons" />}
+            />
+          }
           placement="center"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
@@ -210,7 +234,7 @@ export const OnboardingController = () => {
       {phaseStep === "board_check_in-3" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingChat chatName="Chat_Check-In" title="Mike's Check-In: Song Title" />}
+          component={<OnboardingChat chatName="Chat_Check-In" title="Mike's Set-The-Stage: Song Title" />}
           placement="center"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
@@ -245,7 +269,7 @@ export const OnboardingController = () => {
       {phaseStep === "board_insights-1" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingModal image={<StanIcon />} title="Phase 3: Generate Insights" textContent={t("Onboarding.insightsWelcome")} />}
+          component={<OnboardingModal image={<GenerateInsights />} title="Phase 3: Generate Insights" textContent={t("Onboarding.insightsWelcome")} />}
           placement="center"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
@@ -287,7 +311,13 @@ export const OnboardingController = () => {
       {phaseStep === "board_actions-1" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingModal image={<StanIcon />} title="Phase 4: Decide what to do" textContent={t("Onboarding.decideWelcome")} />}
+          component={
+            <OnboardingModal
+              image={<img src={decideImg} alt="Stan with question-marks and exclamation-points" />}
+              title="Phase 4: Decide what to do"
+              textContent={t("Onboarding.decideWelcome")}
+            />
+          }
           placement="center"
           styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
         />
