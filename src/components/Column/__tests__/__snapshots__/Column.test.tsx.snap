@@ -587,6 +587,9 @@ exports[`Column should have correct style show column with correct style 1`] = `
                       </svg>
                     </button>
                   </div>
+                  <div
+                    class="note-reaction-list__reaction-chips-container"
+                  />
                 </div>
               </footer>
             </button>
@@ -1087,6 +1090,9 @@ exports[`Column should have correct style show column with correct style 1`] = `
                       </svg>
                     </button>
                   </div>
+                  <div
+                    class="note-reaction-list__reaction-chips-container"
+                  />
                 </div>
               </footer>
             </button>
