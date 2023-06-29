@@ -4,13 +4,13 @@ exports[`Note Input should render correctly 1`] = `
 <form
   class="note-input"
 >
-  <input
+  <textarea
     class="note-input__input"
     id="note-input-TestID"
     maxlength="1024"
     placeholder="Add your note..."
-    type="text"
-    value=""
+    rows="1"
+    style="overflow-x: hidden; word-wrap: break-word; overflow-y: hidden;"
   />
   <button
     class="note-input__add-button"

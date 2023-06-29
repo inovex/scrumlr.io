@@ -1,15 +1,16 @@
-import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Column} from "components/Column";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import {ApplicationState} from "types";
+import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
-const [ColumnContext] = wrapWithTestBackend(Column);
 const createColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
-      <ColumnContext id="test-columns-id-1" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+      <CustomDndContext>
+        <Column id="test-columns-id-1" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+      </CustomDndContext>
     </Provider>
   );
 };
@@ -17,7 +18,9 @@ const createColumn = (overwrite?: Partial<ApplicationState>) => {
 const createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
-      <ColumnContext id="test-columns-id-3" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+      <CustomDndContext>
+        <Column id="test-columns-id-3" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+      </CustomDndContext>
     </Provider>
   );
 };
