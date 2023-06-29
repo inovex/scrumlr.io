@@ -43,6 +43,7 @@
     "react-tooltip": "^5.15.0",
     "sockette": "^2.0.6",
     "underscore": "^1.13.6",
+    "use-long-press": "^3.1.5",
     "use-sound": "^4.0.1",
     "workbox-core": "^7.0.0",
     "workbox-precaching": "^7.0.0",
