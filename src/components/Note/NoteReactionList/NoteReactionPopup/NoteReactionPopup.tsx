@@ -3,11 +3,11 @@ import {Portal} from "components/Portal";
 import "./NoteReactionPopup.scss";
 
 interface NoteReactionPopupProps {
-  onClose: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClose: (e: React.MouseEvent) => void;
 }
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => (
-    <Portal hiddenOverflow onClick={(e) => e.stopPropagation()}>
+    <Portal hiddenOverflow onClick={props.onClose}>
       <div className="note-reaction-popup__root">
         Popup
         <button className="note-reaction-popup__close" onClick={props.onClose}>
