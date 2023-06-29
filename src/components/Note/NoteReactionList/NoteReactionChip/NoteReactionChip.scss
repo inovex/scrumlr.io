@@ -23,14 +23,6 @@
   }
 }
 
-.note-reaction-chip__root--self {
-  background-color: var(--accent-color--desaturated-light);
-
-  &:hover {
-    background-color: var(--accent-color--desaturated-light-hover);
-  }
-}
-
 .note-reaction-chip__reaction {
   font-size: $text--md;
 }
@@ -40,6 +32,23 @@
   font-weight: 600;
   line-height: 18px;
   color: $color-black;
+}
+
+.note-reaction-chip__root--self {
+  background-color: var(--accent-color--desaturated-light);
+
+  &:hover {
+    background-color: var(--accent-color--desaturated-light-hover);
+  }
+}
+
+// override
+.note-reaction-chip__root--override-active {
+  background-color: var(--accent-color);
+
+  .note-reaction-chip__amount {
+    color: $color-white;
+  }
 }
 
 [theme="dark"] {
@@ -57,6 +66,10 @@
     &:hover {
       background-color: var(--accent-color--desaturated-dark-hover);
     }
+  }
+
+  .note-reaction-chip__root--override-active {
+    background-color: var(--accent-color);
   }
 
   .note-reaction-chip__amount {

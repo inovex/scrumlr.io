@@ -11,6 +11,7 @@ interface NoteReactionChipProps {
   reaction: ReactionModeled;
   handleClickReaction?: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
   handleLongPressReaction?: (e: LongPressReactEvents) => void;
+  overrideActive?: boolean; // if this is set, the chip will be highlighted no matter if yourself reacted to it
 }
 
 export const NoteReactionChip = (props: NoteReactionChipProps) => {
@@ -27,7 +28,10 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
     <>
       <button
         id={`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`} // unique identifier
-        className={classNames("note-reaction-chip__root", {"note-reaction-chip__root--self": props.reaction.myReactionId})} // highlight chips that yourself reacted to
+        className={classNames("note-reaction-chip__root", {
+          "note-reaction-chip__root--self": props.reaction.myReactionId, // highlight chips that yourself reacted to
+          "note-reaction-chip__root--override-active": props.overrideActive,
+        })}
         onClick={(e) => {
           if (props.handleClickReaction) {
             props.handleClickReaction(e, props.reaction.reactionType);
