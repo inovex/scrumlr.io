@@ -4,6 +4,7 @@ import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
 import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
 import React, {useState} from "react";
 import classNames from "classnames";
+import {LongPressReactEvents} from "use-long-press";
 import {useAppSelector} from "../../../store";
 import {Reaction, ReactionType} from "../../../types/reaction";
 import {Participant} from "../../../types/participant";
@@ -78,6 +79,8 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const showCondensed = reactions.length > CONDENSED_VIEW_MIN_USER_AMOUNT && (props.dimensions?.width ?? 0) < CONDENSED_VIEW_WIDTH_LIMIT;
 
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
+  const [showReactionPopup, setShowReactionPopup] = useState<boolean>(false);
+
   const toggleReactionBar = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setShowReactionBar(!showReactionBar);
@@ -100,6 +103,9 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
     // in board overview, prevent note from opening stack view
     e.stopPropagation();
+
+    if (showReactionPopup) return;
+
     const isSameReaction = reactionMadeByUser?.reactionType === reactionType;
 
     // no reaction exists -> add
@@ -118,6 +124,12 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     }
   };
 
+  const openReactionsPopup = (e: LongPressReactEvents) => {
+    e.stopPropagation();
+    setShowReactionPopup(true);
+    console.log("long press");
+  };
+
   return (
     <div className="note-reaction-list__root">
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
@@ -132,10 +144,10 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           (showCondensed ? (
             <>
               <NoteReactionChipCondensed reactions={reactions} />
-              {reactionMadeByUser && <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} />}
+              {reactionMadeByUser && <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />}
             </>
           ) : (
-            reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} />)
+            reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />)
           ))}
       </div>
     </div>
