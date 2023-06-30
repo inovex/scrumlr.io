@@ -29,6 +29,10 @@ export const Votes: FC<VotesProps> = (props) => {
         : 0)
   );
 
+  if (!voting && allPastVotes === 0) {
+    return null;
+  }
+
   return (
     <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
       {!voting && allPastVotes > 0 && (
