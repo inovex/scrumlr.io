@@ -9,6 +9,7 @@ import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
+import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {Toast} from "utils/Toast";
 import "./StackView.scss";
@@ -196,7 +197,7 @@ export const StackView = () => {
   // show toast if note has been deleted
   useLayoutEffect(() => {
     if (prevNote.current && !note) {
-      Toast.deletion({title: t("Toast.noteDeleted")});
+      Toast.info({title: t("Toast.noteDeleted"), icon: TrashIcon});
     }
   }, [note, t]);
 
