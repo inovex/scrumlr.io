@@ -29,6 +29,10 @@ export const Votes: FC<VotesProps> = (props) => {
         : 0)
   );
 
+  /**
+   * If there's no active voting going on and there are no casted votes for
+   * this note from previous votings, we don't need to render anything.
+   */
   if (!voting && allPastVotes === 0) {
     return null;
   }
