@@ -78,12 +78,15 @@ export const Homepage = withTranslation()(() => {
                   <Trans i18nKey="Homepage.startButton" />
                 </Button>
 
-                <button className="button homepage__start-button"
+                <button
+                  className="button homepage__start-button"
                   onClick={() => {
-                    dispatch(Actions.changePhase("intro"));
-                    navigate("/onboarding-intro")
-                  }}>
-                  <Trans i18nKey="Homepage.onboardingButton" /><IconArrowRight className="homepage__proceed-icon" />
+                    dispatch(Actions.changePhase("newBoard"));
+                    navigate("/onboarding-new");
+                  }}
+                >
+                  <Trans i18nKey="Homepage.onboardingButton" />
+                  <IconArrowRight className="homepage__proceed-icon" />
                 </button>
               </div>
             </main>

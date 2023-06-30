@@ -29,37 +29,6 @@ exports[`Appearance should render all Settings correctly 1`] = `
       >
         <label
           class="appearence-settings__theme-option"
-          for="auto"
-          title="Appearance.SyncModeDescription"
-        >
-          <input
-            checked=""
-            id="auto"
-            name="themeAuto"
-            type="radio"
-            value="auto"
-          />
-          <img
-            alt="Appearance.colorScheme Auto"
-            src="theme-preview-light.svg"
-          />
-          <img
-            alt="Appearance.colorScheme Auto"
-            src="theme-preview-dark.svg"
-          />
-          <p>
-            <svg
-              class="appearance-settings__theme-icon"
-            >
-              icon-settings.svg
-            </svg>
-            <span>
-              Auto
-            </span>
-          </p>
-        </label>
-        <label
-          class="appearence-settings__theme-option"
           for="light"
         >
           <input
@@ -83,35 +52,11 @@ exports[`Appearance should render all Settings correctly 1`] = `
             </span>
           </p>
         </label>
-        <label
-          class="appearence-settings__theme-option"
-          for="dark"
-        >
-          <input
-            id="dark"
-            name="themeDark"
-            type="radio"
-            value="dark"
-          />
-          <img
-            alt="Appearance.colorScheme Appearance.colorSchemeDark"
-            src="theme-preview-dark.svg"
-          />
-          <p>
-            <svg
-              class="appearance-settings__theme-icon"
-            >
-              icon-darkmode.svg
-            </svg>
-            <span>
-              Appearance.colorSchemeDark
-            </span>
-          </p>
-        </label>
       </form>
     </div>
     <section>
       <button
+        aria-checked="false"
         aria-label="Appearance.showHotkeyNotifications"
         class="settings-option-button"
         role="switch"

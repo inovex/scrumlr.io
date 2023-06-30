@@ -72,7 +72,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
         >
           <div className="board-header__access-policy-status">
-            {onboardingState.phase !== "newBoard" ? (
+            {onboardingState.phase !== "none" ? (
               <LockIcon className="board-header__access-policy-status-icon" />
             ) : (
               {
@@ -81,7 +81,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
                 PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
               }[state.accessPolicy!]
             )}
-            <span>{t(onboardingState.phase !== "newBoard" ? "AccessPolicy.ONBOARDING" : `AccessPolicy.${state.accessPolicy}`)}</span>
+            <span>{t(onboardingState.phase !== "none" ? "AccessPolicy.ONBOARDING" : `AccessPolicy.${state.accessPolicy}`)}</span>
           </div>
           <div className="board-header__name-container">
             <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
