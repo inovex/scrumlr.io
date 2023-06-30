@@ -44,14 +44,13 @@ export const OnboardingIntro = () => {
   if (phase === "intro" && step === 1) {
     introImage = <NewScrumMaster />;
     title = "Meet Mike!";
-    content = "He somehow ended up as the new Scrum-Master for a Software-Development Team. \n" + "Now, he was tasked with moderating the Retrospective . . .";
+    content = "He somehow ended up as the new Scrum-Master for a Software-Development Team. \nNow, he was tasked with moderating the Retrospective . . .";
   } else if (phase === "intro" && step === 2) {
     introImage = <MikeWorries />;
     title = "Mike's worries";
     content = "With his first retrospective approaching, especially in a remote setting, he has many worries . . .";
   } else if (phase === "intro" && step === 3) {
-    content =
-      "Luckily, he has competent mentors like you and Stan! \n" + "You recommend him the free, secure, and open-source tool Scrumlr to help him with the Retrospective . . .";
+    content = "Luckily, he has competent mentors like you and Stan! \nYou recommend him the free, secure, and open-source tool Scrumlr to help him with the Retrospective . . .";
     title = "To the Rescue!";
   }
 
