@@ -4,14 +4,14 @@ name: Deploy to dev cluster
 on:
   workflow_call:
     inputs:
-        frontend_image_tag:
-          required: true
-          description: 'frontend image tag'
-          type: string
-        server_image_tag:
-          required: true
-          description: 'server image tag'
-          type: string
+      frontend_image_tag:
+        required: true
+        description: "frontend image tag"
+        type: string
+      server_image_tag:
+        required: true
+        description: "server image tag"
+        type: string
 
 jobs:
   deploy:
@@ -39,12 +39,12 @@ jobs:
         run: |
           sed -i "s#PR_NUMBER#${{ github.event.pull_request.number }}#g" k8s/deployment.yaml
           sed -i "s#POSTGRES_DEV_PASSWORD#${{ secrets.POSTGRES_DEV_PASSWORD }}#g" k8s/deployment.yaml
-      
+
       - name: json_debug
         run: |
           cat k8s/deployment.yaml
 
-      - name: Deploy to dev cluster 
+      - name: Deploy to dev cluster
         uses: Azure/k8s-deploy@v4
         with:
           namespace: scrumlr-dev-deployments
@@ -53,7 +53,7 @@ jobs:
           images: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
-      
+
       - name: send_github_message
         uses: thollander/actions-comment-pull-request@v2
         with:
@@ -62,12 +62,12 @@ jobs:
             This deployment is only for testing purposes and will be deleted after 1 week.
             To redeploy rerun the workflow.
             <strong>DO NOT STORE IMPORTANT DATA ON THIS DEPLOYMENT</strong>
-            
+
             <details>
             <summary>Deployed Images</summary>
-            
+
             - ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
 
             - ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
-            
+
             </details>
