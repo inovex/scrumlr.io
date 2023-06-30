@@ -1,0 +1,114 @@
+@import "src/constants/style.scss";
+
+$overlap-margin: -10px;
+$name-gap: 4px;
+
+// --self classes: indicates yourself as the stack author,
+// which is highlighted by the accent color of that column
+
+.note-author-list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  padding: 0 14px 0 2px;
+  border-radius: $rounded--full;
+}
+
+.note-author-list--self {
+  background: var(--accent-color--desaturated-light);
+}
+
+.note__author {
+  // reset css from figure-element:
+  border: 0;
+
+  font: inherit;
+  height: 28px;
+  border-radius: $rounded--default;
+
+  // reset margin and overlap avatars on top of each other
+  margin: 0 0 0 $overlap-margin;
+  // counter the slight offset from centering because UserAvatar real size is larger than what you actually see
+  transform: translateY(-2px);
+
+  &:first-of-type {
+    // reset negative margin on first avatar
+    margin: 0;
+    // render above second avatar
+    z-index: $note-z-index + 2;
+  }
+
+  &:nth-of-type(2) {
+    // render above third avatar / rest bubble
+    z-index: $note-z-index + 1;
+  }
+
+  &:last-of-type:not(.note__author--with-rest) {
+    padding-right: 0;
+    // make a gap after last avatar unless .note-author-rest bubble exists
+    margin-right: $name-gap;
+  }
+}
+
+// the rest bubble should be about the same size as the avatars
+.note-author-rest {
+  display: inline-flex;
+  width: $icon--medium;
+  height: $icon--medium;
+  font-size: $text--xs;
+  color: $color-white;
+  background-color: $menu-icon-background-color--dark;
+
+  // add 1px because it's a little bit off in comparison to .note__author margin
+  margin: 0 calc($name-gap + 1px) 0 $overlap-margin;
+
+  justify-content: center;
+  align-items: center;
+
+  border: 1.5px solid $color-white-one;
+  border-radius: $rounded--full;
+}
+
+.note-author-rest--self {
+  border-color: $menu-icon-background-color--dark;
+}
+
+.note__author-name {
+  color: $color-dark-gray;
+  font-size: $text--xs;
+  letter-spacing: $letter-spacing--small;
+  line-height: $line-height--small;
+}
+
+.note__author--self > .note__user-avatar #Circle-Background {
+  stroke: none;
+}
+
+.note__author-name--self {
+  color: $color-black;
+}
+
+[theme="dark"] {
+  .note-author-list--self {
+    background: var(--accent-color--desaturated-dark);
+  }
+
+  .note__author-name {
+    color: $color-white;
+  }
+
+  .note__author-name--self {
+    font-weight: bold;
+  }
+
+  .note-author-rest {
+    background-color: $color-icon-light-blue;
+    color: $color-dark-two;
+    border-color: $color-dark-one;
+  }
+
+  .note-author-rest--self {
+    border-color: $color-icon-light-blue;
+  }
+}

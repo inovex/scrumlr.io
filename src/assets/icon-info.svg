@@ -1,10 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 21">
-  <g transform="translate(-1878 -303)">
-    <g id="info-icon" transform="translate(1878 303)" fill="none" stroke-width="1.5">
-      <circle cx="10.5" cy="10.5" r="10.5" stroke="none" />
-      <circle cx="10.5" cy="10.5" r="9.75" fill="none" />
-    </g>
-  </g>
-  <line y2="6" transform="translate(10.5 9.5)" fill="none" stroke-linecap="round" stroke-width="2" />
-  <line transform="translate(10.5 5.5)" fill="none" stroke-linecap="round" stroke-width="2" />
+
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M6.34425 2.59413C4.63081 3.46571 3.26078 4.8889 2.45501 6.63426C1.64924 8.37963 1.45468 10.3455 1.90269 12.2149C2.35071 14.0844 3.41519 15.7485 4.92455 16.9391C6.43391 18.1296 8.3002 18.7772 10.2226 18.7775C12.477 18.7552 14.6315 17.844 16.2178 16.242C17.8041 14.64 18.694 12.4766 18.694 10.222C18.694 7.96752 17.8041 5.80412 16.2178 4.20208C14.6315 2.60005 12.477 1.68888 10.2226 1.66663" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.2218 9.6875V13.965" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.2218 5.40991V6.47908" stroke="white" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
