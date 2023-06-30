@@ -4,6 +4,7 @@
 @import "src/components/Votes/Votes.scss";
 
 .note-dialog__note-footer {
+  height: var(--note-footer-height);
   position: relative;
   display: flex;
   gap: $margin--default;
@@ -13,6 +14,7 @@
 }
 
 .note-dialog__author-container {
+  height: 100%;
   flex-grow: 1;
   overflow: hidden;
 }
@@ -20,7 +22,7 @@
 .note-dialog__note-author {
   display: inline-flex;
   align-items: center;
-  height: 36px;
+  gap: $margin--small;
   width: 100%;
   // reset css from figure-element:
   margin: 0;
@@ -37,7 +39,6 @@
 }
 
 .note-dialog__note-author-name {
-  margin-left: $margin--small;
   color: $color-dark-gray;
   font-size: $text-size--small;
   letter-spacing: $letter-spacing--small;
@@ -50,7 +51,6 @@
   height: var(--note-footer-height);
   width: var(--note-footer-height);
   padding: 0;
-  margin-bottom: 4px;
 
   #Circle-Background {
     stroke: none;
