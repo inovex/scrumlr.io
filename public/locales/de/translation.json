@@ -389,7 +389,7 @@
     "serverConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden.",
     "retry": "Wiederholen",
     "joinBoard": "Es tut uns leid, aber wir haben ein Problem beim Beitreten des Boards. Bitte versuche es erneut.",
-    "boardDeleted": "Das Board wurde gelöscht! Du wirst zur Startseite weitergeleitet.",
+    "boardDeleted": "Das Board wurde gelöscht! Du wurdest zur Startseite weitergeleitet.",
     "acceptJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Akzeptieren der Beitrittsanfragen. Bitte versuche es erneut.",
     "rejectJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Ablehnen der Beitrittsanfragen. Bitte versuche es erneut.",
     "initApplication": "Es tut uns leid, aber wir haben ein Problem beim Erreichen des Servers. Bitte versuche die Seite neu zu laden.",
