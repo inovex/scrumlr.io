@@ -392,6 +392,7 @@
     "serverConnection": "The connection to the server could not be established. Please try to reload the page.",
     "retry": "Retry",
     "joinBoard": "Sorry, but we're having trouble joining the board. Please try again.",
+    "boardDeleted": "The board has been deleted! You've been redirected to the homepage.",
     "acceptJoinRequests": "Sorry, but we're having trouble accepting the requests. Please try again.",
     "rejectJoinRequests": "Sorry, but we're having trouble rejecting the requests. Please try again.",
     "initApplication": "Sorry, but we're having trouble reaching the server for information. Please try to reload the page.",

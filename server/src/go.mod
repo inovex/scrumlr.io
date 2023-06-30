@@ -9,7 +9,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.8
 	github.com/go-chi/cors v1.2.1
 	github.com/go-chi/httprate v0.7.4
-	github.com/go-chi/jwtauth/v5 v5.1.0
+	github.com/go-chi/jwtauth/v5 v5.1.1
 	github.com/go-chi/render v1.0.2
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-migrate/migrate/v4 v4.16.2
