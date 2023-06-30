@@ -9,7 +9,7 @@ export const Html: FC = () => {
   const lang = useAppSelector((state) => state.view.language);
   let title = useAppSelector((state) => state.board.data?.name);
   // const [theme, setTheme] = useState(localStorage.getItem("theme") ?? (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
-  //TODO: revert if onboarding is adjusted for dark theme
+  // TODO: revert if onboarding is adjusted for dark theme
   const [theme, setTheme] = useState("light");
 
   if (title) title = `scrumlr.io - ${title}`;
