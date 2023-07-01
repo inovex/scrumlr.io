@@ -49,7 +49,7 @@ export const VotingDialog: VFC = () => {
   }
 
   const startVoting = () => {
-    if (onboardingPhase === "board_insights" && onboardingStep === 2) {
+    if (onboardingPhase === "board_insights" && onboardingStep === 2 && numberOfVotes === 3) {
       setTimeout(() => {
         store.dispatch(Actions.incrementStep());
       }, 500);

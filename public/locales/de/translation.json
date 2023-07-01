@@ -599,6 +599,7 @@
     "skip": "Skip",
     "ok": "OK!",
     "next": "Next",
+    "back": "Back",
     "retrospectives": "Retrospectives are opportunities to learn and improve - usually happening after a work period (e.g. Sprint). \nWe mainly try to answer 3 Questions: \n\n1. What worked well? \n2. What didn't work well? \n3. What are we going to try differently?",
     "newBoardWelcome": "You can easily create a board now and come back later when you need it! \n\nWe often use special retrospective activities to guide our discussions. \nYou can just select a template and then customize it to your preferences!",
     "newBoardSettings": "It is also possible to change the board name and access rights.",

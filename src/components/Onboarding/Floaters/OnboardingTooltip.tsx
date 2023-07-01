@@ -8,6 +8,8 @@ type OnboardingToolTipProps = {
   imgPosition: "top" | "right" | "bottom" | "left";
   image?: JSX.Element;
   buttonType: "next" | "ok";
+  isActionPrompt?: boolean;
+  phaseStep?: string;
 };
 
 export const OnboardingTooltip = (props: OnboardingToolTipProps) => {
@@ -35,6 +37,34 @@ export const OnboardingTooltip = (props: OnboardingToolTipProps) => {
             }}
           >
             {t("Onboarding.ok")}
+          </button>
+        )}
+        {props.isActionPrompt === true && (
+          <button
+            className="button onboarding-skip"
+            onClick={() => {
+              switch (props.phaseStep) {
+                case "outro-1":
+                  break;
+                case "board_data-5":
+                  dispatch(Actions.incrementStep());
+                  dispatch(Actions.setInUserTask(false));
+                  break;
+                case "board_insights-2":
+                  dispatch(Actions.incrementStep(2));
+                  dispatch(Actions.setInUserTask(false));
+                  break;
+                case "board_actions-2":
+                  dispatch(Actions.incrementStep());
+                  dispatch(Actions.setInUserTask(false));
+                  break;
+                default:
+                  dispatch(Actions.incrementStep());
+                  break;
+              }
+            }}
+          >
+            {t("Onboarding.skip")}
           </button>
         )}
       </div>

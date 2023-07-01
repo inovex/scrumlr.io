@@ -24,17 +24,21 @@ import {OnboardingModalRetro} from "./Floaters/OnboardingModalRetro";
 export const OnboardingController = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const phase = useAppSelector((state) => state.onboarding.phase, isEqual);
-  const step = useAppSelector((state) => state.onboarding.step, isEqual);
+  const {phase, step, stepOpen, inUserTask, onboardingColumns, spawnedActionNotes, spawnedBoardNotes} = useAppSelector((state) => state.onboarding, isEqual);
   const phaseStep = `${phase}-${step}`;
-  const stepOpen = useAppSelector((state) => state.onboarding.stepOpen, isEqual);
-  const inUserTask = useAppSelector((state) => state.onboarding.inUserTask, isEqual);
-  const onboardingColumns = useAppSelector((state) => state.onboarding.onboardingColumns);
   const columns = useAppSelector((state) => state.columns, isEqual);
   const participants = useAppSelector((state) => state.participants);
 
   useEffect(() => {
-    if (phase !== "intro" && phase !== "newBoard" && phase !== "none" && phaseStep !== "board_check_in-1" && participants && participants.others.length === 0) {
+    if (
+      phase !== "intro" &&
+      phase !== "newBoard" &&
+      phase !== "none" &&
+      phaseStep !== "board_check_in-1" &&
+      phaseStep !== "board_check_in-2" &&
+      participants &&
+      participants.others.length === 0
+    ) {
       dispatch(Actions.setParticipants([...onboardingAuthors, participants.self]));
     }
   }, [dispatch, participants, phase, phaseStep]);
@@ -58,24 +62,40 @@ export const OnboardingController = () => {
       if (!actionColumnID) {
         return false;
       }
-      const actionColumnVisibility = columns.find((c) => c.id === actionColumnID)?.visible;
-      if (actionColumnVisibility) {
+      const actionColumn = columns.find((c) => c.id === actionColumnID);
+      if (actionColumn) {
         return true;
       }
       return false;
     };
 
+    const setActionColumnVisible = (isVisible: boolean) => {
+      const actionColumnID = onboardingColumns.find((oc) => oc.name === "Actions")?.id;
+      if (!actionColumnID) {
+        return;
+      }
+      const actionColumn = columns.find((c) => c.id === actionColumnID);
+      if (!actionColumn) {
+        return;
+      }
+      dispatch(Actions.editColumn(actionColumn.id, {...actionColumn, visible: isVisible}));
+    };
+
     switch (phaseStep) {
       case "board_data-2":
-        // in this step, the "fake" notes for the Mad/Sad/Glad columns are spawned
-        spawnNotes("Mad");
-        setTimeout(() => {
-          spawnNotes("Sad");
-        }, 500);
-        setTimeout(() => {
-          spawnNotes("Glad");
-        }, 1500);
-        dispatch(Actions.incrementStep());
+        if (!spawnedBoardNotes) {
+          spawnNotes("Mad");
+          setTimeout(() => {
+            spawnNotes("Sad");
+          }, 500);
+          setTimeout(() => {
+            spawnNotes("Glad");
+          }, 1500);
+          dispatch(Actions.setSpawnedNotes("board", true));
+          dispatch(Actions.incrementStep());
+        } else {
+          dispatch(Actions.incrementStep(2));
+        }
         break;
       case "board_data-5":
         dispatch(Actions.setInUserTask(true));
@@ -96,8 +116,14 @@ export const OnboardingController = () => {
         }
         break;
       case "board_actions-3":
-        spawnNotes("Actions");
-        dispatch(Actions.incrementStep());
+        if (!spawnedActionNotes) {
+          setActionColumnVisible(true);
+          spawnNotes("Actions");
+          dispatch(Actions.setSpawnedNotes("action", true));
+          dispatch(Actions.incrementStep());
+        } else {
+          dispatch(Actions.incrementStep(2));
+        }
         break;
       case "outro-1":
         dispatch(Actions.setInUserTask(true));
@@ -105,45 +131,44 @@ export const OnboardingController = () => {
       default:
         break;
     }
-  }, [phaseStep, columns, dispatch, onboardingColumns, participants?.self.ready]);
+  }, [phaseStep, columns, dispatch, onboardingColumns, participants?.self.ready, spawnedBoardNotes, spawnedActionNotes]);
 
   return (
     <div className="onboarding-controller-wrapper">
       {phase !== "newBoard" ? (
         <div className="onboarding-controller">
           <button
-            className={`onboarding-button onboarding-skip-button ${phase === "outro" ? "onboarding-button-disabled" : ""}`}
-            aria-label="Skip this step"
+            className={`onboarding-button onboarding-back-button ${phaseStep === "board_check_in-1" ? "onboarding-button-disabled" : ""}`}
+            aria-label="Go back one step"
             onClick={() => {
               switch (phaseStep) {
-                case "outro-1":
+                case "board_check_in-1":
                   break;
-                case "board_data-5":
-                  dispatch(Actions.incrementStep());
-                  dispatch(Actions.setInUserTask(false));
+                case "board_check_out-1":
+                  dispatch(Actions.switchPhaseStep("board_actions", 2));
                   break;
-                case "board_insights-2":
-                  dispatch(Actions.incrementStep(2));
-                  dispatch(Actions.setInUserTask(false));
+                case "board_data-4":
+                  dispatch(Actions.switchPhaseStep("board_data", 1));
                   break;
-                case "board_actions-2":
-                  dispatch(Actions.incrementStep());
-                  dispatch(Actions.setInUserTask(false));
+                case "board_insights-4":
+                  dispatch(Actions.switchPhaseStep("board_insights", 2));
                   break;
                 default:
-                  dispatch(Actions.incrementStep());
+                  dispatch(Actions.decrementStep());
                   break;
               }
             }}
           >
-            {t("Onboarding.skip")}
+            {t("Onboarding.back")}
           </button>
 
           <button
-            className={`onboarding-icon-button ${!stepOpen ? "onboarding-icon-button_pulse" : ""}`}
+            className={`onboarding-icon-button ${!stepOpen && phase !== "intro" ? "onboarding-icon-button_pulse" : ""}`}
             aria-label="Toggle Onboarding Popup"
             onClick={() => {
-              dispatch(Actions.toggleStepOpen());
+              if (phase !== "intro") {
+                dispatch(Actions.toggleStepOpen());
+              }
             }}
           >
             <StanIcon />
@@ -163,7 +188,7 @@ export const OnboardingController = () => {
         </div>
       ) : (
         <button
-          className="onboarding-icon-button onboarding-new_board"
+          className={`onboarding-icon-button onboarding-new_board ${!stepOpen ? "onboarding-icon-button_pulse" : ""}`}
           onClick={() => {
             dispatch(Actions.toggleStepOpen());
           }}
@@ -223,21 +248,20 @@ export const OnboardingController = () => {
       {phaseStep === "board_check_in-2" && (
         <Floater
           open={stepOpen}
+          component={<OnboardingChat chatName="Chat_Check-In" title="Mike's Set-The-Stage: Song Title" />}
+          placement="center"
+          styles={{floater: {zIndex: 10000}}}
+        />
+      )}
+      {phaseStep === "board_check_in-3" && (
+        <Floater
+          open={stepOpen}
           component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text="I already invited Mike's team to the board!" />}
           placement="bottom-end"
           target=".share-button"
           styles={{arrow: {length: 14, spread: 18, color: "#ea434b"}, floater: {zIndex: 10000}}}
         />
       )}
-      {phaseStep === "board_check_in-3" && (
-        <Floater
-          open={stepOpen}
-          component={<OnboardingChat chatName="Chat_Check-In" title="Mike's Set-The-Stage: Song Title" />}
-          placement="center"
-          styles={{floater: {zIndex: 10000}}}
-        />
-      )}
-      {/* board_check_in-4 and board_check_in-5 just handle spawning notes */}
       {phaseStep === "board_data-1" && (
         <Floater
           open={stepOpen}
@@ -258,7 +282,16 @@ export const OnboardingController = () => {
       {phaseStep === "board_data-5" && (
         <Floater
           open={stepOpen}
-          component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text="Please mark yourself as 'ready' once you are done." />}
+          component={
+            <OnboardingTooltip
+              image={<StanIcon />}
+              imgPosition="left"
+              buttonType="ok"
+              isActionPrompt
+              phaseStep={phaseStep}
+              text="Please mark yourself as 'ready' once you are done."
+            />
+          }
           target=".user-menu button"
           placement="right"
           styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 10000}}}
@@ -281,6 +314,8 @@ export const OnboardingController = () => {
               imgPosition="left"
               buttonType="ok"
               text="Please create a voting with 3 votes per participant to identify the most important topics!"
+              isActionPrompt
+              phaseStep={phaseStep}
             />
           }
           target=".admin-menu"
@@ -328,6 +363,8 @@ export const OnboardingController = () => {
               image={<StanIcon />}
               imgPosition="left"
               buttonType="ok"
+              isActionPrompt
+              phaseStep={phaseStep}
               text="Please make the Actions-column visible now so that Mike can discuss the actions with the team."
             />
           }

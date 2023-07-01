@@ -31,6 +31,8 @@ export const Board = () => {
         sessionStorage.setItem("onboarding_columns", JSON.stringify(onboarding.onboardingColumns));
         sessionStorage.setItem("onboarding_inUserTask", JSON.stringify(onboarding.inUserTask));
         sessionStorage.setItem("onboarding_fakeVotesOpen", JSON.stringify(onboarding.fakeVotesOpen));
+        sessionStorage.setItem("onboarding_spawnedActionNotes", JSON.stringify(onboarding.spawnedActionNotes));
+        sessionStorage.setItem("onboarding_spawnedBoardNotes", JSON.stringify(onboarding.spawnedBoardNotes));
         sessionStorage.setItem("onboardingNotes", JSON.stringify(onboardingNotes));
         store.dispatch(Actions.leaveBoard());
       },
@@ -48,6 +50,8 @@ export const Board = () => {
         sessionStorage.setItem("onboarding_inUserTask", JSON.stringify(onboarding.inUserTask));
         sessionStorage.setItem("onboarding_fakeVotesOpen", JSON.stringify(onboarding.fakeVotesOpen));
         sessionStorage.setItem("onboardingNotes", JSON.stringify(onboardingNotes));
+        sessionStorage.setItem("onboarding_spawnedActionNotes", JSON.stringify(onboarding.spawnedActionNotes));
+        sessionStorage.setItem("onboarding_spawnedBoardNotes", JSON.stringify(onboarding.spawnedBoardNotes));
         store.dispatch(Actions.leaveBoard());
       },
       false

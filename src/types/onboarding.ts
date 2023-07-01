@@ -17,4 +17,6 @@ export interface OnboardingState {
   onboardingColumns: OnboardingColumn[];
   inUserTask: boolean;
   fakeVotesOpen: boolean;
+  spawnedBoardNotes: boolean;
+  spawnedActionNotes: boolean;
 }

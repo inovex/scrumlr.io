@@ -38,11 +38,28 @@
     margin-left: 1rem;
     margin-top: 2rem;
     padding: 0.5rem;
+    padding-bottom: 1rem;
     font-size: $text--md;
     line-height: $line-height--medium;
     white-space: pre-wrap;
     border-radius: $rounded--default;
     border-top-left-radius: 0;
     border: 3px solid $color-backlog-blue;
+    height: fit-content;
   }
+}
+
+.onboarding-ok,
+.onboarding-next {
+  background-color: $color-backlog-blue;
+  padding: 0 2rem;
+  border-radius: $rounded--default;
+}
+
+.onboarding-skip {
+  background-color: transparent;
+  color: $color-backlog-blue;
+  border: 1px solid $color-backlog-blue;
+  height: 32px;
+  margin-top: 0.5rem;
 }

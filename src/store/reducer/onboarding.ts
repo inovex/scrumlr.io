@@ -25,6 +25,8 @@ const initialState: OnboardingState = {
   onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
   inUserTask: JSON.parse(sessionStorage.getItem("onboarding_inUserTask") ?? "false"),
   fakeVotesOpen: JSON.parse(sessionStorage.getItem("onboarding_fakeVotesOpen") ?? "false"),
+  spawnedActionNotes: JSON.parse(sessionStorage.getItem("onboarding_spawnedActionNotes") ?? "false"),
+  spawnedBoardNotes: JSON.parse(sessionStorage.getItem("onboarding_spawnedBoardNotes") ?? "false"),
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -56,6 +58,46 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
         step: state.step + increment,
         stepOpen: true,
       };
+    }
+    case Action.DecrementStep: {
+      const currentPhaseIndex = phaseSteps.findIndex((p) => p.name === state.phase);
+      const decrement = action.amount ?? 1;
+      if (state.step - decrement < 1) {
+        if (currentPhaseIndex === 0) {
+          return {
+            ...state,
+            step: 1,
+            stepOpen: true,
+            inUserTask: false,
+          };
+        }
+        return {
+          ...state,
+          phase: phaseSteps[currentPhaseIndex - 1].name,
+          step: phaseSteps[currentPhaseIndex - 1].steps,
+          stepOpen: true,
+          inUserTask: false,
+        };
+      }
+      return {
+        ...state,
+        step: state.step - decrement,
+        stepOpen: true,
+        inUserTask: false,
+      };
+    }
+    case Action.SwitchPhaseStep: {
+      const desiredPhase = phaseSteps.find((phase) => phase.name === action.phase);
+      if (desiredPhase && action.step >= 1 && action.step <= desiredPhase.steps) {
+        return {
+          ...state,
+          phase: action.phase,
+          step: action.step,
+          stepOpen: true,
+          inUserTask: false,
+        };
+      }
+      return state;
     }
     case Action.ToggleStepOpen: {
       return {
@@ -97,6 +139,21 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
         ...state,
         fakeVotesOpen: action.fakesOpen,
       };
+    }
+    case Action.SetSpawnedNotes: {
+      if (action.notesType === "board") {
+        return {
+          ...state,
+          spawnedBoardNotes: action.spawned,
+        };
+      }
+      if (action.notesType === "action") {
+        return {
+          ...state,
+          spawnedActionNotes: action.spawned,
+        };
+      }
+      return state;
     }
     default:
       return state;

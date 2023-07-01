@@ -21,7 +21,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  // margin: 0 1.5rem;
   padding: 0.5rem 0;
   width: 70px;
   height: 70px;
@@ -68,7 +67,7 @@
   padding: 0.5rem 0;
 }
 
-.onboarding-skip-button,
+.onboarding-back-button,
 .onboarding-next-button {
   background-color: $color-retro-red;
   color: $color-white;
@@ -87,7 +86,7 @@
   padding-right: 2rem;
   padding-left: 1rem;
 }
-.onboarding-skip-button {
+.onboarding-back-button {
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   margin-right: -1rem;
@@ -133,16 +132,4 @@
 .onboarding-actions {
   display: inline-flex;
   justify-content: space-around;
-}
-
-.onboarding-skip {
-  background-color: transparent;
-  color: $color-backlog-blue;
-  border: 1px solid $color-backlog-blue;
-}
-.onboarding-ok,
-.onboarding-next {
-  background-color: $color-backlog-blue;
-  padding: 0 2rem;
-  border-radius: $rounded--default;
 }

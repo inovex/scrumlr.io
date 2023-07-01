@@ -49,6 +49,9 @@ export const NewBoard = () => {
         navigate(`/board/${boardId}`);
       } else {
         dispatch(Actions.changePhase("board_check_in"));
+        dispatch(Actions.setFakeVotesOpen(false));
+        dispatch(Actions.setSpawnedNotes("action", false));
+        dispatch(Actions.setSpawnedNotes("board", false));
         navigate(`/onboarding-board/${boardId}`);
       }
     }
