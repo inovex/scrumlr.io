@@ -16,6 +16,10 @@
     flex-direction: column;
     box-shadow: $box-shadow--light;
     border-radius: 15px;
+    border-top: 8px solid $color-retro-red;
+    border-left: 8px solid $color-backlog-blue;
+    border-right: 8px solid $color-online-orange;
+    border-bottom: 8px solid $color-goal-green;
     width: 950px;
     height: 650px;
     padding: 1rem;

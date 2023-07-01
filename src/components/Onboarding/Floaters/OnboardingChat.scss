@@ -8,23 +8,24 @@
     margin-top: 2rem;
     padding: 1rem 2rem;
     border-radius: $rounded--default;
-    border-top: 8px solid $color-retro-red;
-    border-left: 8px solid $color-backlog-blue;
-    border-right: 8px solid $color-online-orange;
-    border-bottom: 8px solid $color-goal-green;
-    scrollbar-color: $color-backlog-blue transparent;
+    border: 4px solid $color-planning-pink;
+    // border: 8px solid $color-backlog-blue;
+    // border-right: 8px solid $color-online-orange;
+    // border-bottom: 8px solid $color-goal-green;
+    scrollbar-color: $color-poker-purple transparent;
     scrollbar-width: thin;
 
     &::-webkit-scrollbar {
       border-radius: $rounded--default;
-      width: 10px;
+      width: 8px;
     }
     &::-webkit-scrollbar-thumb {
-      background-color: $color-backlog-blue;
+      background-color: $color-poker-purple;
       border-radius: $rounded--default;
     }
     &::-webkit-scrollbar-track {
       background: transparent;
+      margin: 0.5rem 0;
     }
   }
   &__item {

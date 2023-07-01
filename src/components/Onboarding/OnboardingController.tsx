@@ -140,7 +140,7 @@ export const OnboardingController = () => {
           </button>
 
           <button
-            className="onboarding-icon-button"
+            className={`onboarding-icon-button ${!stepOpen ? "onboarding-icon-button_pulse" : ""}`}
             aria-label="Toggle Onboarding Popup"
             onClick={() => {
               dispatch(Actions.toggleStepOpen());
@@ -172,9 +172,7 @@ export const OnboardingController = () => {
         </button>
       )}
 
-      {phaseStep === "newBoard-1" && (
-        <Floater open={stepOpen} component={<OnboardingModalRetro />} placement="center" styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}} />
-      )}
+      {phaseStep === "newBoard-1" && <Floater open={stepOpen} component={<OnboardingModalRetro />} placement="center" styles={{floater: {zIndex: 10000}}} />}
       {phaseStep === "newBoard-2" && (
         <Floater
           open={stepOpen}
@@ -187,7 +185,7 @@ export const OnboardingController = () => {
             />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "newBoard-3" && (
@@ -196,7 +194,7 @@ export const OnboardingController = () => {
           component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text={t("Onboarding.newBoardSettings")} />}
           target=".new-board__extended:last-child"
           placement="right-end"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "newBoard-4" && (
@@ -205,7 +203,7 @@ export const OnboardingController = () => {
           component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="ok" text={t("Onboarding.newBoardCreate")} />}
           target=".new-board"
           placement="right"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-1" && (
@@ -219,7 +217,7 @@ export const OnboardingController = () => {
             />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-2" && (
@@ -228,7 +226,7 @@ export const OnboardingController = () => {
           component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text="I already invited Mike's team to the board!" />}
           placement="bottom-end"
           target=".share-button"
-          styles={{arrow: {length: 14, spread: 18}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 18, color: "#ea434b"}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_in-3" && (
@@ -236,7 +234,7 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingChat chatName="Chat_Check-In" title="Mike's Set-The-Stage: Song Title" />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {/* board_check_in-4 and board_check_in-5 just handle spawning notes */}
@@ -245,7 +243,7 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingModal textContent={t("Onboarding.gatherDataWelcome")} title="Phase 2: Gather Data/Topics" image={<GatheringDataImg />} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {/* board_data-2 and board_data-3 just handle spawning notes */}
@@ -254,7 +252,7 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="next" text={t("Onboarding.dataCardsAdded")} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_data-5" && (
@@ -263,7 +261,7 @@ export const OnboardingController = () => {
           component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text="Please mark yourself as 'ready' once you are done." />}
           target=".user-menu button"
           placement="right"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_insights-1" && (
@@ -271,7 +269,7 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingModal image={<GenerateInsights />} title="Phase 3: Generate Insights" textContent={t("Onboarding.insightsWelcome")} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_insights-2" && (
@@ -287,7 +285,7 @@ export const OnboardingController = () => {
           }
           target=".admin-menu"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22, color: "#ffaa5a"}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_insights-3" && (
@@ -296,7 +294,7 @@ export const OnboardingController = () => {
           component={<OnboardingTooltip image={<StanIcon />} imgPosition="left" buttonType="ok" text="Click here once you want to finish the voting!" />}
           target=".vote-display"
           placement="bottom"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22, color: "#ea434b"}, floater: {zIndex: 10000}}}
         />
       )}
       {/* insights step 4 is for looking at the generated votes */}
@@ -305,7 +303,7 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingChat chatName="Chat_Generate-Insights" title="Example: Generating Insights" />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_actions-1" && (
@@ -319,7 +317,7 @@ export const OnboardingController = () => {
             />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_actions-2" && (
@@ -335,7 +333,7 @@ export const OnboardingController = () => {
           }
           target=".board .column:last-of-type .column__header-title"
           placement="left"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22, color: "#ffaa5a"}, floater: {zIndex: 10000}}}
         />
       )}
       {/* board_actions 3 and 4 are for spawning & looking at action-notes */}
@@ -344,7 +342,7 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingModal image={<img src={stanDrink} alt="Stan drinking" />} title="Phase 5: Close the Retrospective" textContent={t("Onboarding.checkOutWelcome")} />}
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_out-2" && (
@@ -355,16 +353,11 @@ export const OnboardingController = () => {
           }
           target=".user-menu .menu__items li:last-child"
           placement="right"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_check_out-3" && (
-        <Floater
-          open={stepOpen}
-          component={<OnboardingChat chatName="Chat_Check-Out" title="Example: Check-Out" />}
-          placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
-        />
+        <Floater open={stepOpen} component={<OnboardingChat chatName="Chat_Check-Out" title="Example: Check-Out" />} placement="center" styles={{floater: {zIndex: 10000}}} />
       )}
       {phaseStep === "outro-1" && (
         <Floater
@@ -377,7 +370,7 @@ export const OnboardingController = () => {
             />
           }
           placement="center"
-          styles={{arrow: {length: 14, spread: 22}, floater: {zIndex: 10000}}}
+          styles={{floater: {zIndex: 10000}}}
         />
       )}
     </div>
