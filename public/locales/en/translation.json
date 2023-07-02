@@ -593,7 +593,14 @@
     }
   },
   "Templates": {
-
+    "leanCoffee": "A Lean Coffee is without an agenda. Goal oriented and productive.",
+    "positiveNegative": "What went well (Positive)? \nWhat didn't go well (Negative)?",
+    "startStopContinue": "Action-oriented activity, generating an immediate list of practical ideas for continuous improvement.",
+    "madSadGlad": "Frames discussion around the emotional journey of your team during the previous sprint.",
+    "plusDelta": "Simple Activity. \nWhat went well (Plus)? \nWhat changes could we make (Delta)?",
+    "kalm": "Fosters the conversation about current activities and their perceived value.",
+    "fourL": "Highlights both positives (what the team liked and learned) as well as negatives (what the team lacked or learned for), from both a factual and emotional perspective.",
+    "swot": "SWOT helps team members better understand each other's strengths and weaknesses, as well as find opportunities and threats they might face together. \nIdeal for the early project phase."
   },
   "Onboarding": {
     "skip": "Skip",

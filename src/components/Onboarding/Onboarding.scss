@@ -1,4 +1,6 @@
 @import "constants/style.scss";
+// TODO: rework some of the sizes (rem for (fontsize) scaling stuff, px for non-scaling stuff)
+// -> make sure things look right even with zooming (make more mindful unit choices)
 
 .onboarding-controller {
   position: absolute;
