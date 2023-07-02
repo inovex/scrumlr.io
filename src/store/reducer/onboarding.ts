@@ -21,7 +21,7 @@ export const phaseSteps: OnboardingPhaseSteps[] = [
 const initialState: OnboardingState = {
   phase: phaseSteps.find((p) => (sessionStorage.getItem("onboarding_phase") as OnboardingPhase)?.includes(p.name))?.name ?? "none",
   step: JSON.parse(sessionStorage.getItem("onboarding_step") ?? "1"),
-  stepOpen: JSON.parse(sessionStorage.getItem("onboarding_stepOpen") ?? "true"),
+  stepOpen: JSON.parse(sessionStorage.getItem("onboarding_stepOpen") ?? "false"),
   onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
   inUserTask: JSON.parse(sessionStorage.getItem("onboarding_inUserTask") ?? "false"),
   fakeVotesOpen: JSON.parse(sessionStorage.getItem("onboarding_fakeVotesOpen") ?? "false"),
@@ -33,6 +33,15 @@ const initialState: OnboardingState = {
 export const onboardingReducer = (state: OnboardingState = initialState, action: ReduxAction): OnboardingState => {
   switch (action.type) {
     case Action.ChangePhase: {
+      if (action.phase === "none") {
+        return {
+          ...state,
+          phase: action.phase,
+          step: 1,
+          stepOpen: false,
+          inUserTask: false,
+        };
+      }
       return {
         ...state,
         phase: action.phase,
@@ -63,7 +72,7 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
       const currentPhaseIndex = phaseSteps.findIndex((p) => p.name === state.phase);
       const decrement = action.amount ?? 1;
       if (state.step - decrement < 1) {
-        if (currentPhaseIndex === 0) {
+        if (currentPhaseIndex === 1) {
           return {
             ...state,
             step: 1,

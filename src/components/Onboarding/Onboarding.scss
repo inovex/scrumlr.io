@@ -114,6 +114,7 @@
   color: $color-dark-one;
   min-width: 300px;
   min-height: 100px;
+  z-index: 10000;
   border-top: 6px solid $color-retro-red;
   border-left: 6px solid $color-backlog-blue;
   border-right: 6px solid $color-online-orange;
@@ -132,4 +133,8 @@
 .onboarding-actions {
   display: inline-flex;
   justify-content: space-around;
+}
+
+#react-floater-portal div {
+  z-index: 10000 !important;
 }

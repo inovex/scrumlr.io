@@ -4,7 +4,7 @@ import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
 import {ReactComponent as IconArrowRight} from "assets/icon-arrow-right.svg";
-import {Link, useHref, useNavigate} from "react-router-dom";
+import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ReactComponent as LogoutIcon} from "assets/icon-logout.svg";
@@ -14,15 +14,16 @@ import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {Toast} from "utils/Toast";
 import {useEffect} from "react";
+import {OnboardingPathModal} from "components/Onboarding/Floaters/OnboardingPathModal";
 import {InovexAnchor} from "./InovexAnchor";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
 export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
-  const navigate = useNavigate();
   const {user} = useAppSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const onboardingOpen = useAppSelector((state) => state.onboarding.stepOpen);
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
@@ -73,6 +74,9 @@ export const Homepage = withTranslation()(() => {
         </header>
 
         <div className="homepage__hero-content-wrapper">
+          {onboardingOpen === true && <OnboardingPathModal />}
+          {/* {(onboardingOpen === true) && <OnboardingCloseOverlay />} */}
+
           <div className="homepage__hero-content">
             <main className="homepage__main">
               <h1 className="homepage__hero-title">
@@ -91,10 +95,9 @@ export const Homepage = withTranslation()(() => {
                 </Button>
 
                 <button
-                  className="button homepage__start-button"
+                  className="button homepage__onboarding-button"
                   onClick={() => {
-                    dispatch(Actions.changePhase("intro"));
-                    navigate("/onboarding-intro");
+                    dispatch(Actions.toggleStepOpen());
                   }}
                 >
                   <Trans i18nKey="Homepage.onboardingButton" />

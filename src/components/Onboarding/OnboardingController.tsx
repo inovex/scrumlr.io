@@ -135,13 +135,18 @@ export const OnboardingController = () => {
 
   return (
     <div className="onboarding-controller-wrapper">
+      {/* {(stepOpen === true && phase !== "intro") && <OnboardingCloseOverlay />} */}
       {phase !== "newBoard" ? (
         <div className="onboarding-controller">
           <button
-            className={`onboarding-button onboarding-back-button ${phaseStep === "board_check_in-1" ? "onboarding-button-disabled" : ""}`}
+            disabled={phaseStep === "board_check_in-1" || phaseStep === "intro-1"}
+            className={`onboarding-button onboarding-back-button 
+              ${phaseStep === "board_check_in-1" || phaseStep === "intro-1" ? "onboarding-button-disabled" : ""}`}
             aria-label="Go back one step"
             onClick={() => {
               switch (phaseStep) {
+                case "intro-1":
+                  break;
                 case "board_check_in-1":
                   break;
                 case "board_check_out-1":
@@ -222,7 +227,7 @@ export const OnboardingController = () => {
           component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text={t("Onboarding.newBoardSettings")} />}
           target=".new-board__extended:last-child"
           placement="right-end"
-          styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 10000}, container: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "newBoard-4" && (
@@ -262,7 +267,7 @@ export const OnboardingController = () => {
           component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text="I already invited Mike's team to the board!" />}
           placement="bottom-end"
           target=".share-button"
-          styles={{arrow: {length: 14, spread: 18, color: "#ea434b"}, floater: {zIndex: 10000}}}
+          styles={{arrow: {length: 14, spread: 18, color: "#ea434b"}, floater: {zIndex: 10000}, wrapper: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "board_data-1" && (
