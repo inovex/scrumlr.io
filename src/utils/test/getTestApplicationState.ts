@@ -159,7 +159,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     onboardingColumns: [],
     inUserTask: false,
     fakeVotesOpen: false,
-    spawnedActionNotes: false,
+    explanationOpen: false,
     spawnedBoardNotes: false,
   },
   onboardingNotes: [],

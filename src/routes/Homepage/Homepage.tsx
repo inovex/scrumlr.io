@@ -15,6 +15,7 @@ import {useDispatch} from "react-redux";
 import {Toast} from "utils/Toast";
 import {useEffect} from "react";
 import {OnboardingPathModal} from "components/Onboarding/Floaters/OnboardingPathModal";
+import {OnboardingExplanation} from "components/Onboarding/Explanation/OnboardingExplanation";
 import {InovexAnchor} from "./InovexAnchor";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
@@ -24,6 +25,7 @@ export const Homepage = withTranslation()(() => {
   const {user} = useAppSelector((state) => state.auth);
   const dispatch = useDispatch();
   const onboardingOpen = useAppSelector((state) => state.onboarding.stepOpen);
+  const onboardingExplanationOpen = useAppSelector((state) => state.onboarding.explanationOpen);
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
@@ -75,7 +77,7 @@ export const Homepage = withTranslation()(() => {
 
         <div className="homepage__hero-content-wrapper">
           {onboardingOpen === true && <OnboardingPathModal />}
-          {/* {(onboardingOpen === true) && <OnboardingCloseOverlay />} */}
+          {onboardingExplanationOpen === true && <OnboardingExplanation />}
 
           <div className="homepage__hero-content">
             <main className="homepage__main">

@@ -9,6 +9,7 @@ type OnboardingModalProps = {
   title: string;
   image?: JSX.Element;
   hasNextButton?: boolean;
+  isFloater?: boolean;
 };
 
 export const OnboardingModal = (props: OnboardingModalProps) => {
@@ -16,10 +17,12 @@ export const OnboardingModal = (props: OnboardingModalProps) => {
   const {t} = useTranslation();
 
   return (
-    <div className="floater onboarding-modal">
-      <button className="onboarding-modal__close" onClick={() => dispatch(Actions.toggleStepOpen())}>
-        <CloseIcon className="close-button__icon" />
-      </button>
+    <div className={`onboarding-modal ${props.isFloater === true ? "floater" : ""}`}>
+      {props.isFloater === true && (
+        <button className="onboarding-modal__close" onClick={() => dispatch(Actions.toggleStepOpen())}>
+          <CloseIcon className="close-button__icon" />
+        </button>
+      )}
       <div className="onboarding-modal__img">{props.image}</div>
       <div className="onboarding-modal__title">
         <h2>{props.title}</h2>

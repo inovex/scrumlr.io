@@ -2,29 +2,18 @@ import {useAppSelector} from "store";
 import {isEqual} from "underscore";
 import Floater from "react-floater";
 import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
-// import {ReactComponent as GatheringDataImg} from "assets/onboarding/Gathering-Data-Image.svg";
-// import {ReactComponent as GenerateInsights} from "assets/onboarding/Generate-Insights-Image.svg";
-// import setStageImg from "assets/onboarding/SetStage-Image.png";
-// import decideImg from "assets/onboarding/Decide-Image.png";
-// import stanDrink from "assets/stan/Slooth_drink.png";
-// import stanComputer from "assets/stan/Stan_computer.png";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
-// import {onboardingAuthors} from "types/onboardingNotes";
-// import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
-// import {OnboardingModal} from "./Floaters/OnboardingModal";
-// import {OnboardingChat} from "./Floaters/OnboardingChat";
 import {OnboardingTooltip} from "./Floaters/OnboardingTooltip";
-// import {OnboardingModalRetro} from "./Floaters/OnboardingModalRetro";
 import {OnboardingModalOutro} from "./Floaters/OnboardingModalOutro";
 
 export const OnboardingController = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
-  const {phase, step, stepOpen, inUserTask, onboardingColumns, spawnedActionNotes, spawnedBoardNotes} = useAppSelector((state) => state.onboarding, isEqual);
+  const {phase, step, stepOpen, inUserTask, onboardingColumns, spawnedBoardNotes} = useAppSelector((state) => state.onboarding, isEqual);
   const phaseStep = `${phase}-${step}`;
   const columns = useAppSelector((state) => state.columns, isEqual);
   const participants = useAppSelector((state) => state.participants);
@@ -58,7 +47,7 @@ export const OnboardingController = () => {
       default:
         break;
     }
-  }, [phaseStep, columns, dispatch, onboardingColumns, participants?.self.ready, spawnedBoardNotes, spawnedActionNotes]);
+  }, [phaseStep, columns, dispatch, onboardingColumns, participants?.self.ready, spawnedBoardNotes]);
 
   return (
     <div className="onboarding-controller-wrapper">
@@ -92,7 +81,7 @@ export const OnboardingController = () => {
             className={`onboarding-button onboarding-next-button ${inUserTask || phase === "board_outro" ? "onboarding-button-disabled" : ""}`}
             aria-label="Go to next step"
             onClick={() => {
-              if (!(inUserTask && phase !== "board_outro")) {
+              if (!(inUserTask || phase === "board_outro")) {
                 dispatch(Actions.incrementStep());
               }
             }}
@@ -111,7 +100,6 @@ export const OnboardingController = () => {
         </button>
       )}
 
-      {/* {phaseStep === "newBoard-1" && <Floater open={stepOpen} component={<OnboardingModalRetro />} placement="center" styles={{floater: {zIndex: 10000}}} />} */}
       {phaseStep === "newBoard-1" && (
         <Floater
           open={stepOpen}
@@ -239,58 +227,6 @@ export const OnboardingController = () => {
         />
       )}
       {phaseStep === "board_outro-1" && <Floater open={stepOpen} component={<OnboardingModalOutro />} placement="center" styles={{floater: {zIndex: 10000}}} />}
-      {/* {phaseStep === "board_check_in-1" && (
-        <Floater
-          open={stepOpen}
-          component={
-            <OnboardingModal
-              textContent={t("Onboarding.checkInWelcome")}
-              title="Phase 1: Set the Stage"
-              image={<img src={setStageImg} alt="Whiteboard with set-the-stage activity icons" />}
-            />
-          }
-          placement="center"
-          styles={{floater: {zIndex: 10000}}}
-        />
-      )} */}
-      {/* {phaseStep === "board_data-1" && (
-        <Floater
-          open={stepOpen}
-          component={<OnboardingModal image={<GatheringDataImg />} textContent={t("Onboarding.gatherDataWelcome")} title="Phase 2: Gather Data/Topics"/>}
-          placement="center"
-          styles={{floater: {zIndex: 1000}}}
-        />
-      )} */}
-      {/* {phaseStep === "board_insights-1" && (
-        <Floater
-          open={stepOpen}
-          component={<OnboardingModal image={<GenerateInsights />} title="Phase 3: Generate Insights" textContent={t("Onboarding.insightsWelcome")} />}
-          placement="center"
-          styles={{floater: {zIndex: 1000}}}
-        />
-      )} */}
-      {/* {phaseStep === "board_actions-1" && (
-        <Floater
-          open={stepOpen}
-          component={
-            <OnboardingModal
-              image={<img src={decideImg} alt="Stan with question-marks and exclamation-points" />}
-              title="Phase 4: Decide what to do"
-              textContent={t("Onboarding.decideWelcome")}
-            />
-          }
-          placement="center"
-          styles={{floater: {zIndex: 10000}}}
-        />
-      )} */}
-      {/* {phaseStep === "board_check_out-1" && (
-        <Floater
-          open={stepOpen}
-          component={<OnboardingModal image={<img src={stanDrink} alt="Stan drinking" />} title="Phase 5: Close the Retrospective" textContent={t("Onboarding.checkOutWelcome")} />}
-          placement="center"
-          styles={{floater: {zIndex: 10000}}}
-        />
-      )} */}
     </div>
   );
 };

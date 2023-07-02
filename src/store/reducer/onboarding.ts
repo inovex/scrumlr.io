@@ -23,7 +23,7 @@ const initialState: OnboardingState = {
   onboardingColumns: JSON.parse(sessionStorage.getItem("onboarding_columns") ?? "[]"),
   inUserTask: JSON.parse(sessionStorage.getItem("onboarding_inUserTask") ?? "false"),
   fakeVotesOpen: JSON.parse(sessionStorage.getItem("onboarding_fakeVotesOpen") ?? "false"),
-  spawnedActionNotes: JSON.parse(sessionStorage.getItem("onboarding_spawnedActionNotes") ?? "false"),
+  explanationOpen: JSON.parse(sessionStorage.getItem("onboarding_explanationOpen") ?? "false"),
   spawnedBoardNotes: JSON.parse(sessionStorage.getItem("onboarding_spawnedBoardNotes") ?? "false"),
 };
 
@@ -148,19 +148,16 @@ export const onboardingReducer = (state: OnboardingState = initialState, action:
       };
     }
     case Action.SetSpawnedNotes: {
-      if (action.notesType === "board") {
-        return {
-          ...state,
-          spawnedBoardNotes: action.spawned,
-        };
-      }
-      if (action.notesType === "action") {
-        return {
-          ...state,
-          spawnedActionNotes: action.spawned,
-        };
-      }
-      return state;
+      return {
+        ...state,
+        spawnedBoardNotes: action.spawned,
+      };
+    }
+    case Action.ToggleExplanationOpen: {
+      return {
+        ...state,
+        explanationOpen: !state.explanationOpen,
+      };
     }
     default:
       return state;

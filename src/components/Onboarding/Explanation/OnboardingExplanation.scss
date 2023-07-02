@@ -1,0 +1,85 @@
+@import "src/constants/style";
+
+.onboarding-explanation__wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 10000;
+  background-color: rgba($color: #000000, $alpha: 0.2);
+}
+
+.onboarding-explanation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 11000;
+
+  display: grid;
+  grid-area: "btn-back content btn-next";
+  grid-template-columns: 50px 1fr 50px;
+
+  border-top: 6px solid $color-retro-red;
+  border-left: 6px solid $color-backlog-blue;
+  border-right: 6px solid $color-online-orange;
+  border-bottom: 6px solid $color-goal-green;
+  border-radius: $rounded--default;
+  background-color: $color-white;
+  color: $color-dark-one;
+
+  &__close {
+    position: absolute;
+    width: $icon--extralarge;
+    height: $icon--extralarge;
+    border-radius: $rounded--full;
+    background-color: $color-white-one;
+    color: $color-retro-red;
+    border: 2px solid $color-retro-red;
+    outline: none;
+    padding: 0;
+    top: -22px;
+    right: -22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.08s ease-out;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.02);
+      color: $color-white-one;
+      background-color: $color-retro-red;
+    }
+    & > svg {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
+
+.onboarding-explanation__next,
+.onboarding-explanation__back {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  & button {
+    font-size: $text--2xl;
+    font-weight: 600;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: $color-dark-one;
+    transition: ease-in-out 0.1s;
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.05);
+    }
+    &.btn-disabled {
+      color: $color-light-gray;
+      &:hover {
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+  }
+}

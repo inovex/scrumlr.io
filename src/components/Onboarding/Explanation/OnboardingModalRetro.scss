@@ -1,8 +1,7 @@
 @import "src/constants/style";
 
 .onboarding-modal-retro {
-  border-radius: $rounded--default;
-  padding: 1rem 4rem;
+  padding: 1rem;
   display: grid;
   grid-template-areas:
     "title title"

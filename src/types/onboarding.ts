@@ -18,5 +18,5 @@ export interface OnboardingState {
   inUserTask: boolean;
   fakeVotesOpen: boolean;
   spawnedBoardNotes: boolean;
-  spawnedActionNotes: boolean;
+  explanationOpen: boolean;
 }

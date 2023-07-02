@@ -26,7 +26,6 @@
   &__title {
     grid-area: title;
     text-align: center;
-    font-size: 24px;
     margin-bottom: 1rem;
     & h2 {
       margin: 0;
@@ -38,6 +37,7 @@
   }
   &__text {
     padding: 1rem;
+    font-size: clamp(16px, 1vw, 18px);
     border-radius: $rounded--default;
     border-bottom-right-radius: 0;
     border: 3px solid $color-backlog-blue;
@@ -86,9 +86,21 @@
 .onboarding-path__moderator {
   margin-left: 1rem;
   background-color: $color-retro-red;
+  & .homepage__proceed-icon {
+    flex: 0 0 20px;
+    height: 20px;
+    width: 20px;
+    margin-left: $margin--small;
+  }
 }
 .onboarding-path__participant {
   background-color: $color-retro-red-disabled;
+  & .homepage__proceed-icon {
+    flex: 0 0 20px;
+    height: 20px;
+    width: 20px;
+    margin-left: $margin--small;
+  }
   &:hover {
     cursor: not-allowed;
   }

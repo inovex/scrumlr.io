@@ -12,6 +12,7 @@ export const OnboardingAction = {
   SetInUserTask: "scrumlr.io/setInUserTask" as const,
   SetFakeVotesOpen: "scrumlr.io/setFakeVotesOpen" as const,
   SetSpawnedNotes: "scrumlr.io/setSpawnedNotes" as const,
+  ToggleExplanationOpen: "scrumlr.io/toggleExplanationOpen" as const,
 };
 
 export const OnboardingActionFactory = {
@@ -55,6 +56,9 @@ export const OnboardingActionFactory = {
     notesType,
     spawned,
   }),
+  toggleExplanationOpen: () => ({
+    type: OnboardingAction.ToggleExplanationOpen,
+  }),
 };
 
 export type OnboardingReduxAction =
@@ -67,4 +71,5 @@ export type OnboardingReduxAction =
   | ReturnType<typeof OnboardingActionFactory.clearOnboardingColumns>
   | ReturnType<typeof OnboardingActionFactory.setInUserTask>
   | ReturnType<typeof OnboardingActionFactory.setFakeVotesOpen>
-  | ReturnType<typeof OnboardingActionFactory.setSpawnedNotes>;
+  | ReturnType<typeof OnboardingActionFactory.setSpawnedNotes>
+  | ReturnType<typeof OnboardingActionFactory.toggleExplanationOpen>;

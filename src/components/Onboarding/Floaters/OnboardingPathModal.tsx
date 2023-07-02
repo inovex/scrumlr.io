@@ -2,6 +2,7 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
+import {ReactComponent as IconArrowRight} from "assets/icon-arrow-right.svg";
 import {Actions} from "store/action";
 import "./OnboardingPathModal.scss";
 // TODO: unify OnboardingPathModal and OnboardingModalOutro components
@@ -30,6 +31,7 @@ export const OnboardingPathModal = () => {
         <div className="onboarding-buttons">
           <button className="button onboarding-path__participant" disabled>
             Participant
+            <IconArrowRight className="homepage__proceed-icon" />
           </button>
           <button
             className="button onboarding-path__moderator"
@@ -39,9 +41,15 @@ export const OnboardingPathModal = () => {
             }}
           >
             Moderator
+            <IconArrowRight className="homepage__proceed-icon" />
           </button>
         </div>
-        <button className="button onboarding-retro_explanation" onClick={() => {}}>
+        <button
+          className="button onboarding-retro_explanation"
+          onClick={() => {
+            dispatch(Actions.toggleExplanationOpen());
+          }}
+        >
           What are retrospectives ?
         </button>
       </div>
