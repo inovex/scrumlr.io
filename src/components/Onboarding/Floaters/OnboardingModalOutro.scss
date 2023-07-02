@@ -1,0 +1,56 @@
+@import "src/constants/style";
+
+.onboarding-modal-outro {
+  border-radius: $rounded--default;
+  padding: 1rem;
+  padding-bottom: 3rem;
+  display: grid;
+  grid-template-areas:
+    "title title"
+    "content image";
+  grid-template-columns: 1fr 150px;
+  width: 900px;
+  max-width: 80vw;
+
+  &__title {
+    grid-area: title;
+    & h2 {
+      font-size: $text--2xl;
+      margin: 0;
+    }
+  }
+
+  &__content {
+    grid-area: content;
+  }
+  &__text {
+    padding: 1rem;
+    border-radius: $rounded--default;
+    border-bottom-right-radius: 0;
+    border: 3px solid $color-backlog-blue;
+    white-space: pre-wrap;
+    font-size: $text--md;
+  }
+
+  &__img {
+    grid-area: image;
+    & .user-avatar {
+      margin-top: 2.5rem;
+      width: 150px;
+      height: 150px;
+      & svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.onboarding-button_newBoard {
+  margin-left: 1rem;
+  background-color: $color-retro-red;
+}
+.onboarding-button_stay {
+  margin-left: 1rem;
+  background-color: $color-grooming-green;
+}

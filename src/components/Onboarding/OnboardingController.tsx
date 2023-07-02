@@ -6,7 +6,6 @@ import {ReactComponent as GatheringDataImg} from "assets/onboarding/Gathering-Da
 import {ReactComponent as GenerateInsights} from "assets/onboarding/Generate-Insights-Image.svg";
 import setStageImg from "assets/onboarding/SetStage-Image.png";
 import decideImg from "assets/onboarding/Decide-Image.png";
-import {ReactComponent as MikeHappy} from "assets/onboarding/Mike_Happy.svg";
 import stanDrink from "assets/stan/Slooth_drink.png";
 import stanComputer from "assets/stan/Stan_computer.png";
 import {useDispatch} from "react-redux";
@@ -20,6 +19,7 @@ import {OnboardingModal} from "./Floaters/OnboardingModal";
 import {OnboardingChat} from "./Floaters/OnboardingChat";
 import {OnboardingTooltip} from "./Floaters/OnboardingTooltip";
 import {OnboardingModalRetro} from "./Floaters/OnboardingModalRetro";
+import {OnboardingModalOutro} from "./Floaters/OnboardingModalOutro";
 
 export const OnboardingController = () => {
   const {t} = useTranslation();
@@ -63,7 +63,7 @@ export const OnboardingController = () => {
         return false;
       }
       const actionColumn = columns.find((c) => c.id === actionColumnID);
-      if (actionColumn) {
+      if (actionColumn && actionColumn.visible) {
         return true;
       }
       return false;
@@ -152,6 +152,9 @@ export const OnboardingController = () => {
                   break;
                 case "board_insights-4":
                   dispatch(Actions.switchPhaseStep("board_insights", 2));
+                  break;
+                case "board_actions-4":
+                  dispatch(Actions.switchPhaseStep("board_actions", 2));
                   break;
                 default:
                   dispatch(Actions.decrementStep());
@@ -396,20 +399,7 @@ export const OnboardingController = () => {
       {phaseStep === "board_check_out-3" && (
         <Floater open={stepOpen} component={<OnboardingChat chatName="Chat_Check-Out" title="Example: Check-Out" />} placement="center" styles={{floater: {zIndex: 10000}}} />
       )}
-      {phaseStep === "outro-1" && (
-        <Floater
-          open={stepOpen}
-          component={
-            <OnboardingModal
-              image={<MikeHappy />}
-              title="Mike: Thank you for your help!"
-              textContent="You were a great help during this retrospective! Thanks to you the retrospective was a success. I will do my best on my own in the next sessions!"
-            />
-          }
-          placement="center"
-          styles={{floater: {zIndex: 10000}}}
-        />
-      )}
+      {phaseStep === "outro-1" && <Floater open={stepOpen} component={<OnboardingModalOutro />} placement="center" styles={{floater: {zIndex: 10000}}} />}
     </div>
   );
 };
