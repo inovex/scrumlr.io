@@ -8,14 +8,12 @@ interface OnboardingPhaseSteps {
 
 export const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "none", steps: 0},
-  {name: "intro", steps: 3},
-  {name: "newBoard", steps: 4},
-  {name: "board_check_in", steps: 3},
-  {name: "board_data", steps: 5},
-  {name: "board_insights", steps: 5},
-  {name: "board_actions", steps: 4},
-  {name: "board_check_out", steps: 3},
-  {name: "outro", steps: 1},
+  {name: "newBoard", steps: 2},
+  {name: "board_column", steps: 1},
+  {name: "board_users", steps: 2},
+  {name: "board_participant", steps: 2},
+  {name: "board_moderator", steps: 3},
+  {name: "board_outro", steps: 1},
 ];
 
 const initialState: OnboardingState = {

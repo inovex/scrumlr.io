@@ -1,15 +1,12 @@
-import {UserAvatar} from "components/BoardUsers";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {Actions} from "store/action";
-import {onboardingAuthors} from "types/onboardingNotes";
+import {ReactComponent as StanIcon} from "assets/stan/Stan_ellipse_logo.svg";
 import "./OnboardingModalOutro.scss";
 
 export const OnboardingModalOutro = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const mikeAvatar = onboardingAuthors.find((oa) => oa.user.name === "Mike")?.user.avatar;
 
   const onboardingCleanup = () => {
     dispatch(Actions.changePhase("none"));
@@ -34,11 +31,12 @@ export const OnboardingModalOutro = () => {
   return (
     <div className="floater onboarding-modal-outro">
       <div className="onboarding-modal-outro__title">
-        <h2>Thank you for your help!</h2>
+        <h2>Well Done!</h2>
       </div>
       <div className="onboarding-modal-outro__content">
         <p className="onboarding-modal-outro__text">
-          {"You were a great help during this retro! \nThanks to you it was a success.\nI will do my best on my own in the next sessions!"}
+          {"You now know about the most important tools. \nHowever, there are many more features for you to explore!" +
+            "\n\nUse Scrumlr to elevate your retrospectives to the next level!"}
         </p>
         <div className="onboarding-modal-outro__buttons">
           <button
@@ -64,7 +62,9 @@ export const OnboardingModalOutro = () => {
           </button>
         </div>
       </div>
-      <div className="onboarding-modal-outro__img">{mikeAvatar && <UserAvatar title="Mike" id="onboarding-Mike" avatar={mikeAvatar} />}</div>
+      <div className="onboarding-modal-outro__img">
+        <StanIcon />
+      </div>
     </div>
   );
 };

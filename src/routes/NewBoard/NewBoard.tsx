@@ -1,7 +1,7 @@
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
 import "components/Onboarding/Onboarding.scss";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
 import {useTranslation} from "react-i18next";
@@ -10,6 +10,7 @@ import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {OnboardingController} from "components/Onboarding/OnboardingController";
+import store from "store";
 import {columnTemplates} from "./columnTemplates";
 import {TextInputLabel} from "../../components/TextInputLabel";
 import {TextInput} from "../../components/TextInput";
@@ -26,6 +27,32 @@ export const NewBoard = () => {
   const [passphrase, setPassphrase] = useState("");
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
   const isOnboarding = window.location.pathname.startsWith("/onboarding");
+
+  useEffect(() => {
+    window.addEventListener(
+      "beforeunload",
+      () => {
+        const {onboarding} = store.getState();
+        sessionStorage.setItem("onboarding_phase", JSON.stringify(onboarding.phase));
+        sessionStorage.setItem("onboarding_step", JSON.stringify(onboarding.step));
+        sessionStorage.setItem("onboarding_stepOpen", JSON.stringify(onboarding.stepOpen));
+        store.dispatch(Actions.leaveBoard());
+      },
+      false
+    );
+
+    window.addEventListener(
+      "onunload",
+      () => {
+        const {onboarding} = store.getState();
+        sessionStorage.setItem("onboarding_phase", JSON.stringify(onboarding.phase));
+        sessionStorage.setItem("onboarding_step", JSON.stringify(onboarding.step));
+        sessionStorage.setItem("onboarding_stepOpen", JSON.stringify(onboarding.stepOpen));
+        store.dispatch(Actions.leaveBoard());
+      },
+      false
+    );
+  }, []);
 
   async function onCreateBoard() {
     let additionalAccessPolicyOptions = {};
@@ -48,7 +75,7 @@ export const NewBoard = () => {
       if (!isOnboarding) {
         navigate(`/board/${boardId}`);
       } else {
-        dispatch(Actions.changePhase("board_check_in"));
+        dispatch(Actions.changePhase("board_column"));
         dispatch(Actions.setFakeVotesOpen(false));
         dispatch(Actions.setSpawnedNotes("action", false));
         dispatch(Actions.setSpawnedNotes("board", false));
@@ -57,9 +84,7 @@ export const NewBoard = () => {
     }
   }
 
-  const isCreatedBoardDisabled = isOnboarding
-    ? !columnTemplate || columnTemplate !== "madSadGlad"
-    : !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
+  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
 
   return (
     <div className="new-board__wrapper">

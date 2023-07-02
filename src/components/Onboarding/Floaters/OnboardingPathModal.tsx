@@ -34,13 +34,16 @@ export const OnboardingPathModal = () => {
           <button
             className="button onboarding-path__moderator"
             onClick={() => {
-              dispatch(Actions.changePhase("intro"));
-              navigate("/onboarding-intro");
+              dispatch(Actions.changePhase("newBoard"));
+              navigate("/onboarding-new");
             }}
           >
             Moderator
           </button>
         </div>
+        <button className="button onboarding-retro_explanation" onClick={() => {}}>
+          What are retrospectives ?
+        </button>
       </div>
       <div className="onboarding-path-modal__img">
         <StanIcon />

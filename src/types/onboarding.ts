@@ -1,4 +1,4 @@
-export type OnboardingPhase = "none" | "intro" | "outro" | "newBoard" | "board_check_in" | "board_data" | "board_insights" | "board_actions" | "board_check_out";
+export type OnboardingPhase = "none" | "newBoard" | "board_column" | "board_users" | "board_participant" | "board_moderator" | "board_outro";
 
 export interface OnboardingNote {
   columnId: string;

@@ -9,7 +9,7 @@
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 2rem;
-  z-index: 1000;
+  z-index: 130;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   justify-content: space-between;
@@ -116,7 +116,7 @@
   color: $color-dark-one;
   min-width: 300px;
   min-height: 100px;
-  z-index: 10000;
+  z-index: 130;
   border-top: 6px solid $color-retro-red;
   border-left: 6px solid $color-backlog-blue;
   border-right: 6px solid $color-online-orange;
@@ -138,5 +138,5 @@
 }
 
 #react-floater-portal div {
-  z-index: 10000 !important;
+  z-index: 120 !important;
 }

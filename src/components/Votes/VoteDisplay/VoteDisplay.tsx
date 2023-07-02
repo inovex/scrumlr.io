@@ -19,8 +19,8 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
   const voting = useAppSelector((state) => state.votings.open?.id);
   const isAdmin = me.role === "OWNER" || me.role === "MODERATOR";
   const isReady = me.ready;
-  const onboardingPhase = useAppSelector((state) => state.onboarding.phase);
-  const onboardingStep = useAppSelector((state) => state.onboarding.step);
+  // const onboardingPhase = useAppSelector((state) => state.onboarding.phase);
+  // const onboardingStep = useAppSelector((state) => state.onboarding.step);
 
   return (
     <div className={classNames("vote-display", {"vote-display--votes-depleted": usedVotes === possibleVotes})}>
@@ -36,11 +36,11 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
                 aria-label={t("VoteDisplay.finishActionTooltip")}
                 className="short-action__button"
                 onClick={() => {
-                  if (onboardingPhase === "board_insights" && onboardingStep === 3) {
-                    store.dispatch(Actions.setFakeVotesOpen(true));
-                    store.dispatch(Actions.setInUserTask(false));
-                    store.dispatch(Actions.switchPhaseStep("board_insights", 4));
-                  }
+                  // if (onboardingPhase === "board_insights" && onboardingStep === 3) {
+                  //   store.dispatch(Actions.setFakeVotesOpen(true));
+                  //   store.dispatch(Actions.setInUserTask(false));
+                  //   store.dispatch(Actions.switchPhaseStep("board_insights", 4));
+                  // }
                   store.dispatch(Actions.closeVoting(voting!));
                 }}
               >

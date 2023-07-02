@@ -16,8 +16,8 @@ export const VotingDialog: VFC = () => {
   const navigate = useNavigate();
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
   const voting = useAppSelector((state) => state.votings.open?.id);
-  const onboardingPhase = useAppSelector((state) => state.onboarding.phase);
-  const onboardingStep = useAppSelector((state) => state.onboarding.step);
+  // const onboardingPhase = useAppSelector((state) => state.onboarding.phase);
+  // const onboardingStep = useAppSelector((state) => state.onboarding.step);
 
   const cumulativeVotingStorage = getFromStorage(CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY);
   const cumulativeVotingDefault = !(typeof cumulativeVotingStorage !== "undefined" && cumulativeVotingStorage !== null && cumulativeVotingStorage === "false");
@@ -49,14 +49,14 @@ export const VotingDialog: VFC = () => {
   }
 
   const startVoting = () => {
-    if (onboardingPhase === "board_insights" && onboardingStep === 2 && numberOfVotes === 3) {
-      setTimeout(() => {
-        store.dispatch(Actions.incrementStep());
-      }, 500);
-      setTimeout(() => {
-        store.dispatch(Actions.toggleOnboardingParticipantsReady());
-      }, 1500);
-    }
+    // if (onboardingPhase === "board_insights" && onboardingStep === 2 && numberOfVotes === 3) {
+    //   setTimeout(() => {
+    //     store.dispatch(Actions.incrementStep());
+    //   }, 500);
+    //   setTimeout(() => {
+    //     store.dispatch(Actions.toggleOnboardingParticipantsReady());
+    //   }, 1500);
+    // }
     store.dispatch(
       Actions.createVoting({
         voteLimit: numberOfVotes,

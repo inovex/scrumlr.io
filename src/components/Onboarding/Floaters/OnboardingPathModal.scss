@@ -8,7 +8,7 @@
   z-index: 10000;
   transform: translate(-50%, -50%);
   padding: 1rem 1.5rem;
-  width: 550px;
+  width: 600px;
 
   border-top: 6px solid $color-retro-red;
   border-left: 6px solid $color-backlog-blue;
@@ -64,8 +64,8 @@
     border: 2px solid $color-retro-red;
     outline: none;
     padding: 0;
-    top: -18px;
-    right: -18px;
+    top: -20px;
+    right: -20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,4 +92,11 @@
   &:hover {
     cursor: not-allowed;
   }
+}
+.onboarding-retro_explanation {
+  height: 2rem;
+  background-color: transparent;
+  border: 2px solid $color-backlog-blue;
+  color: $color-backlog-blue;
+  margin-top: 1rem;
 }

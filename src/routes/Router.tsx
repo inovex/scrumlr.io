@@ -19,7 +19,6 @@ import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
-import {OnboardingIntro} from "./OnboardingIntro/OnboardingIntro";
 
 const Router = () => (
   <BrowserRouter>
@@ -42,14 +41,6 @@ const Router = () => (
         element={
           <RequireAuthentication>
             <NewBoard />
-          </RequireAuthentication>
-        }
-      />
-      <Route
-        path="/onboarding-intro"
-        element={
-          <RequireAuthentication>
-            <OnboardingIntro />
           </RequireAuthentication>
         }
       />
