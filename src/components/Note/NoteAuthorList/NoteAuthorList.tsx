@@ -1,14 +1,50 @@
 import classNames from "classnames";
 import {Participant, ParticipantExtendedInfo} from "types/participant";
+import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
+import {useAppSelector} from "../../../store";
 import "./NoteAuthorList.scss";
 
-type Props = {
-  authors: ParticipantExtendedInfo[];
+type NoteAuthorListProps = {
+  authors: Participant[];
   showAuthors: boolean;
   viewer: Participant;
 };
-export const NoteAuthorList = (props: Props) => {
+export const NoteAuthorList = (props: NoteAuthorListProps) => {
+  const {t} = useTranslation();
+  const me = useAppSelector((state) => state.participants?.self);
+
+  // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
+  const prepareAuthors = (authors: Participant[]): ParticipantExtendedInfo[] => {
+    const allAuthors = authors
+      .map((a) => {
+        const isSelf = a?.user.id === me?.user.id;
+        const displayName = isSelf ? t("Note.me") : a!.user.name;
+        return {
+          ...a,
+          displayName,
+          isSelf,
+        } as ParticipantExtendedInfo;
+      })
+      // remove duplicates (because notes can have multiple children by the same authors)
+      .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i);
+
+    // if self is part of the authors, we always want it to be visible
+    const selfIndex = allAuthors.findIndex((a) => a.isSelf);
+    if (selfIndex > 1) {
+      // in-place swap with second author
+      [allAuthors[selfIndex], allAuthors[1]] = [allAuthors[1], allAuthors[selfIndex]];
+    }
+
+    // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
+    // the other authors are excluded as we only require the stack author
+    if (!props.showAuthors && props.viewer.user.id === props.authors[0].user!.id) {
+      return [allAuthors[0]]; // stack author is always first element
+    }
+
+    return allAuthors;
+  };
+  const authorExtendedInfo = prepareAuthors(props.authors);
   // expected behaviour:
   // 1 => p
   // 2 => p p
@@ -17,9 +53,9 @@ export const NoteAuthorList = (props: Props) => {
   // n where n >= 4 => p p (n - 2)
   // where (n) displays a number and p displays an avatar
   const SHOW_MAX_AUTHORS = 3;
-  const stackAuthor = props.authors[0];
-  const restAuthors = props.authors.slice();
-  const slicedAuthors = restAuthors.splice(0, props.authors.length > SHOW_MAX_AUTHORS ? SHOW_MAX_AUTHORS - 1 : SHOW_MAX_AUTHORS); // max first n authors
+  const stackAuthor = authorExtendedInfo[0];
+  const restAuthors = authorExtendedInfo.slice();
+  const slicedAuthors = restAuthors.splice(0, authorExtendedInfo.length > SHOW_MAX_AUTHORS ? SHOW_MAX_AUTHORS - 1 : SHOW_MAX_AUTHORS); // max first n authors
   const restUsersExist = restAuthors.length > 0;
   const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
   return props.showAuthors || props.viewer.user.id === stackAuthor.user!.id ? (
