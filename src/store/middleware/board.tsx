@@ -39,6 +39,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
         if (message.type === "BOARD_DELETED") {
           store.dispatch(Actions.leaveBoard());
+          window.location.assign("/?boardDeleted=true");
         }
 
         if (message.type === "COLUMNS_UPDATED") {
