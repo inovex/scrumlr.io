@@ -136,7 +136,9 @@ export const Note = (props: NoteProps) => {
           <p className="note__text">{note.text}</p>
         )}
         <div className="note__footer">
-          <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+          <div className="note__author-container">
+            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+          </div>
           <Votes noteId={props.noteId!} aggregateVotes />
         </div>
       </button>
