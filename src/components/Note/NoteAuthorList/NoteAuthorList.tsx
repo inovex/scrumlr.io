@@ -2,7 +2,6 @@ import classNames from "classnames";
 import {Participant, ParticipantExtendedInfo} from "types/participant";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
-import {useAppSelector} from "../../../store";
 import "./NoteAuthorList.scss";
 
 type NoteAuthorListProps = {
@@ -12,13 +11,12 @@ type NoteAuthorListProps = {
 };
 export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const {t} = useTranslation();
-  const me = useAppSelector((state) => state.participants?.self);
 
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
   const prepareAuthors = (authors: Participant[]): ParticipantExtendedInfo[] => {
     const allAuthors = authors
       .map((a) => {
-        const isSelf = a?.user.id === me?.user.id;
+        const isSelf = a?.user.id === props.viewer.user.id; // assertion: viewer is self
         const displayName = isSelf ? t("Note.me") : a!.user.name;
         return {
           ...a,
