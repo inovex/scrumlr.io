@@ -4,7 +4,6 @@
 @import "src/components/Votes/Votes.scss";
 
 .note-dialog__note-footer {
-  height: var(--note-footer-height);
   position: relative;
   display: flex;
   gap: $margin--default;
