@@ -155,7 +155,12 @@ $note__text-margin-top--small: 6px;
   height: 28px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: $margin--default;
+}
+
+.note__author-container {
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .note__footer {

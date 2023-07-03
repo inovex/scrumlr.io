@@ -34,18 +34,20 @@ export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteD
   }, _.isEqual);
   return (
     <div className="note-dialog__note-footer">
-      {(props.showAuthors || props.viewer.user.id === props.authorId) && (
-        <figure className={classNames("note-dialog__note-author", {"note-dialog__note-author--self": author.isSelf})}>
-          <UserAvatar
-            id={props.authorId}
-            avatar={props.avatar}
-            title={props.authorName}
-            className="note-dialog__note-user-avatar"
-            avatarClassName="note-dialog__note-user-avatar"
-          />
-          <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
-        </figure>
-      )}
+      <div className="note-dialog__author-container">
+        {(props.showAuthors || props.viewer.user.id === props.authorId) && (
+          <figure className={classNames("note-dialog__note-author", {"note-dialog__note-author--self": author.isSelf})}>
+            <UserAvatar
+              id={props.authorId}
+              avatar={props.avatar}
+              title={props.authorName}
+              className="note-dialog__note-user-avatar"
+              avatarClassName="note-dialog__note-user-avatar"
+            />
+            <figcaption className="note-dialog__note-author-name">{props.authorName}</figcaption>
+          </figure>
+        )}
+      </div>
       <Votes {...props} className="note-dialog__note-votes" />
     </div>
   );
