@@ -1,18 +1,18 @@
-import {isEqual} from "underscore";
 import {useDispatch} from "react-redux";
 import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
 import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
 import React, {useState} from "react";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
+import _ from "underscore";
+import {Actions} from "store/action";
+import {ReactionType} from "types/reaction";
+import {Participant} from "types/participant";
 import {useAppSelector} from "../../../store";
-import {Reaction, ReactionType} from "../../../types/reaction";
-import {Participant} from "../../../types/participant";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import {NoteReactionBar} from "./NoteReactionBar/NoteReactionBar";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
-import {Actions} from "../../../store/action";
 import "./NoteReactionList.scss";
 
 interface NoteReactionListProps {
@@ -37,42 +37,50 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
-  /*
-   * a filtered reactions list, where reactions of the same type are combined into the ReactionModeled interface.
-   * that way we have easy access to the amount of the same reactions and the users who made them
+
+  /**
+   * a flat array where each reaction of a note is cast to the type ReactionModeled.
+   * use this if you want to handle each reaction each on its own
    */
-  const reactions = useAppSelector(
+  const reactionsFlat = useAppSelector(
     (state) =>
       state.reactions
         .filter((r) => r.note === props.noteId)
-        .reduce((acc: ReactionModeled[], reaction: Reaction, _, self) => {
-          // check if a reaction of respective reaction type is already in the accumulator
-          const existingReaction = acc.find((r) => r.reactionType === reaction.reactionType);
+        .map((r, _, self) => {
           // get the participant who issued that reaction
-          const participant = participants.find((p) => p?.user.id === reaction.user);
+          const participant = participants.find((p) => p?.user.id === r.user);
           // if yourself made a reaction of a respective type, get the id
-          const myReactionId = self.find((s) => s.user === me?.user.id && s.reactionType === reaction.reactionType)?.id;
+          const myReactionId = self.find((s) => s.user === me?.user.id && s.reactionType === r.reactionType)?.id;
 
           if (!participant) throw new Error("participant must exist");
 
-          if (existingReaction) {
-            existingReaction.amount++;
-            existingReaction.users.push(participant);
-          } else {
-            acc.push({
-              reactionType: reaction.reactionType,
-              amount: 1,
-              users: [participant],
-              myReactionId,
-              noteId: props.noteId,
-            });
-          }
-
-          return acc;
-        }, [])
-        .sort((a, b) => a.reactionType.localeCompare(b.reactionType)), // always the same order to avoid confusion
-    isEqual
+          return {
+            reactionType: r.reactionType,
+            amount: 1,
+            users: [participant],
+            myReactionId,
+            noteId: props.noteId,
+          } as ReactionModeled;
+        }),
+    _.isEqual
   );
+
+  /*
+   * a reduced reactions list, where reactions of the same type are combined into the ReactionModeled interface.
+   * that way we have easy access to the amount of the same reactions and the users who made them
+   * use this if you want to handle each group of reactions
+   */
+  const reactions = reactionsFlat.reduce((acc: ReactionModeled[], curr) => {
+    // check if a reaction of respective reaction type is already in the accumulator
+    const existingReaction = acc.find((r) => r.reactionType === curr.reactionType);
+    if (existingReaction) {
+      existingReaction.amount++;
+      existingReaction.users.push(curr.users[0]); // exactly one user existing can be asserted (see reactionsFlat)
+    } else {
+      acc.push(curr);
+    }
+    return acc;
+  }, []);
 
   // only one reaction can be made per user per note
   const reactionMadeByUser = reactions.find((r) => !!r.myReactionId);
