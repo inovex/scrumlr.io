@@ -226,8 +226,8 @@ export const OnboardingController = () => {
           open={stepOpen}
           component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text={t("Onboarding.newBoardSettings")} />}
           target=".new-board__extended:last-child"
-          placement="right-end"
-          styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 10000}, container: {zIndex: 10000}}}
+          placement="top"
+          styles={{arrow: {length: 14, spread: 22, color: "#70e000"}, floater: {zIndex: 10000}, container: {zIndex: 10000}}}
         />
       )}
       {phaseStep === "newBoard-4" && (
