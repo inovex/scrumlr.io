@@ -1,74 +1,13 @@
 {
-  "Mad": [
+  "Board": [
     {
-      "author": "Steve",
-      "text": "The frequency of new bugs keeps increasing!",
-      "votes": 3
-    },
-    {
-      "author": "Steve",
-      "text": "We still haven't heard from the marketing team regarding the new ad campaign.",
-      "votes": 1
-    },
-    {
-      "author": "Sandy",
-      "text": "Progress feels slow lately, we have to fix more stuff than we build.",
-      "votes": 3
-    },
-    {
-      "author": "Andrew",
-      "text": "There are some contradicting feature requests in the backlog.",
-      "votes": 1
-    },
-    {
-      "author": "Aleyna",
-      "text": "Recently, the messy code we wrote before the v1 release causes many bugs and problems!",
-      "votes": 3
-    }
-  ],
-  "Sad": [
-    {
-      "author": "Mike",
-      "text": "I am not fully comfortable in my new role yet.",
+      "author": "-",
+      "text": "I am a note.",
       "votes": 0
     },
     {
-      "author": "Steve",
-      "text": "Yet another team member left the team...",
-      "votes": 2
-    },
-    {
-      "author": "Sandy",
-      "text": "Sarah (old Scrum-Master) left the team :(",
-      "votes": 0
-    }
-  ],
-  "Glad": [
-    {
-      "author": "Mike",
-      "text": "I am glad to receive such a warm welcome to the team <3",
-      "votes": 0
-    },
-    {
-      "author": "Steve",
-      "text": "We got great user feedback on the last update! :D",
-      "votes": 0
-    },
-    {
-      "author": "Sandy",
-      "text": "Mike stepped up as new Scrum Master :)",
-      "votes": 2
-    }
-  ],
-  "Actions": [
-    {
-      "author": "Mike",
-      "text": "Conduct big Code-Refactoring Session -> Sandy",
-      "votes": 0
-    },
-    {
-      "author": "Mike",
-      "text": "Talk to the customer about more developers / less tickets per sprint -> Mike",
+      "author": "-",
+      "text": "You can stack us using Drag&Drop!",
       "votes": 0
     }
   ]

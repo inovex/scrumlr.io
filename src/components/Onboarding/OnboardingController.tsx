@@ -6,6 +6,7 @@ import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useEffect} from "react";
+import onboardingNotes from "./onboardingNotes.en.json";
 import "./Onboarding.scss";
 import {OnboardingTooltip} from "./Floaters/OnboardingTooltip";
 import {OnboardingModalOutro} from "./Floaters/OnboardingModalOutro";
@@ -16,38 +17,24 @@ export const OnboardingController = () => {
   const {phase, step, stepOpen, inUserTask, onboardingColumns, spawnedBoardNotes} = useAppSelector((state) => state.onboarding, isEqual);
   const phaseStep = `${phase}-${step}`;
   const columns = useAppSelector((state) => state.columns, isEqual);
-  const participants = useAppSelector((state) => state.participants);
-
-  // useEffect(() => {
-  //   if (
-  //     phase !== "newBoard" &&
-  //     phase !== "none" &&
-  //     participants &&
-  //     participants.others.length === 0
-  //   ) {
-  //     dispatch(Actions.setParticipants([...onboardingAuthors, participants.self]));
-  //   }
-  // }, [dispatch, participants, phase, phaseStep]);
-
-  // const spawnNotes = (columnName: string) => {
-  //   const column = columns.find((c) => c.name === columnName);
-  //   if (column) {
-  //     let index = 0;
-  //     onboardingNotes[columnName].forEach((n: {text: string; author: string; votes: number}) => {
-  //       setTimeout(() => {
-  //         dispatch(Actions.addOnboardingNote(column?.id ?? "", n.text, n.author, n.votes));
-  //       }, index * 500);
-  //       index++;
-  //     });
-  //   }
-  // };
+  // const participants = useAppSelector((state) => state.participants);
 
   useEffect(() => {
-    switch (phaseStep) {
-      default:
-        break;
+    const spawnNotes = (columnName: string) => {
+      const column = columnName === "Board" ? columns[0] : columns.find((c) => c.name === columnName);
+      if (column) {
+        onboardingNotes[columnName].forEach((n: {text: string}) => {
+          dispatch(Actions.addNote(column.id, n.text));
+        });
+      }
+      return false;
+    };
+
+    if (!spawnedBoardNotes && phase === "board_users") {
+      spawnNotes("Board");
+      dispatch(Actions.setSpawnedNotes("board", true));
     }
-  }, [phaseStep, columns, dispatch, onboardingColumns, participants?.self.ready, spawnedBoardNotes]);
+  }, [columns, dispatch, onboardingColumns, phase, spawnedBoardNotes]);
 
   return (
     <div className="onboarding-controller-wrapper">
