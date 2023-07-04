@@ -11,7 +11,7 @@ export const phaseSteps: OnboardingPhaseSteps[] = [
   {name: "newBoard", steps: 2},
   {name: "board_column", steps: 1},
   {name: "board_users", steps: 2},
-  {name: "board_participant", steps: 2},
+  {name: "board_participant", steps: 1},
   {name: "board_moderator", steps: 3},
   {name: "board_outro", steps: 1},
 ];

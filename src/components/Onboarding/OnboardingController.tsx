@@ -142,25 +142,14 @@ export const OnboardingController = () => {
         <Floater
           open={stepOpen}
           component={
-            <OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text="After finishing an assignment, all participants can mark themselves as ready." />
-          }
-          target=".user-menu .menu__items li:nth-child(1)"
-          placement="right"
-          styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 1000}, container: {zIndex: 10000}}}
-        />
-      )}
-      {phaseStep === "board_participant-2" && (
-        <Floater
-          open={stepOpen}
-          component={
             <OnboardingTooltip
               imgPosition="left"
               image={<StanIcon />}
               buttonType="next"
-              text="Participants can also discretely signal that they want to contribute something to the discussion by raising their hand."
+              text="All participants can mark themselves as ready or raise their hand to discretely report their status."
             />
           }
-          target=".user-menu .menu__items li:nth-child(2)"
+          target=".user-menu"
           placement="right"
           styles={{arrow: {length: 14, spread: 22, color: "#0057ff"}, floater: {zIndex: 1000}, container: {zIndex: 10000}}}
         />
@@ -173,7 +162,7 @@ export const OnboardingController = () => {
               imgPosition="left"
               image={<StanIcon />}
               buttonType="next"
-              text="As board owner or moderator, create and configure votings to help with making decisions or identifying important topics!"
+              text="As board owner or moderator, use votings to help with making decisions or identifying important topics!"
             />
           }
           target=".admin-menu .menu__items li:nth-child(2)"
@@ -184,14 +173,7 @@ export const OnboardingController = () => {
       {phaseStep === "board_moderator-2" && (
         <Floater
           open={stepOpen}
-          component={
-            <OnboardingTooltip
-              imgPosition="left"
-              image={<StanIcon />}
-              buttonType="next"
-              text="Make use of timers to keep track of the time used for specific discussions or votings!"
-            />
-          }
+          component={<OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text="Keep track of the time used for discussions or votings!" />}
           target=".admin-menu .menu__items li:nth-child(1)"
           placement="left"
           styles={{arrow: {length: 14, spread: 22, color: "#ffaa5a"}, floater: {zIndex: 1000}, container: {zIndex: 10000}}}
@@ -201,12 +183,7 @@ export const OnboardingController = () => {
         <Floater
           open={stepOpen}
           component={
-            <OnboardingTooltip
-              imgPosition="left"
-              image={<StanIcon />}
-              buttonType="next"
-              text="To further focus the discussion on specific topics, use the presenter-mode to highlight the notes you click on for your team!"
-            />
+            <OnboardingTooltip imgPosition="left" image={<StanIcon />} buttonType="next" text="Use the presenter-mode to highlight the notes you click on for your team!" />
           }
           target=".admin-menu .menu__items li:nth-child(3)"
           placement="left"

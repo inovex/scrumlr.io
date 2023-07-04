@@ -35,7 +35,7 @@ export const OnboardingModalOutro = () => {
       </div>
       <div className="onboarding-modal-outro__content">
         <p className="onboarding-modal-outro__text">
-          {"You now know about the most important tools. \nHowever, there are many more features for you to explore!" +
+          {"You now know about the most important tools. \nHowever, there are even more features for you to explore!" +
             "\n\nUse Scrumlr to elevate your retrospectives to the next level!"}
         </p>
         <div className="onboarding-modal-outro__buttons">
