@@ -11,110 +11,81 @@ import (
 	"scrumlr.io/server/realtime"
 )
 
-func TestEventFilter(t *testing.T) {
-	t.Run("TestModIsModerator", testIsModModerator)
-	t.Run("TestOwnerIsModerator", testIsOwnerAlsoModerator)
-	t.Run("TestIsNotModerator", testIsNotModerator)
-	t.Run("TestSortSessions", testSortSessions)
-	t.Run("TestParseColumns", testParseColumn)
-	t.Run("TestParseNotes", testParseNote)
-	t.Run("TestFilterColumns", testColumnFilter)
-	t.Run("TestFilterNotes", testNoteFilter)
-}
-
 var (
-	moderatorID = uuid.New()
-	moderator   = dto.BoardSession{
-		User: dto.User{ID: moderatorID},
+	// Test data for event filter helper functions
+	moderatorBoardSession = dto.BoardSession{
+		User: dto.User{ID: uuid.New()},
 		Role: types.SessionRoleModerator,
 	}
-	ownerID = uuid.New()
-	owner   = dto.BoardSession{
-		User: dto.User{ID: ownerID},
+	ownerBoardSession = dto.BoardSession{
+		User: dto.User{ID: uuid.New()},
 		Role: types.SessionRoleOwner,
 	}
-
-	sessions = []*dto.BoardSession{
-		{User: dto.User{ID: uuid.New()}, Role: types.SessionRoleParticipant},
-		{User: dto.User{ID: uuid.New()}, Role: types.SessionRoleParticipant},
-		&owner,
-		{User: dto.User{ID: uuid.New()}, Role: types.SessionRoleParticipant},
-		&moderator,
+	participantBoardSession = dto.BoardSession{
+		User: dto.User{ID: uuid.New()},
+		Role: types.SessionRoleParticipant,
 	}
-)
-
-func testIsModModerator(t *testing.T) {
-	isMod := isModerator(moderatorID, sessions)
-
-	assert.NotNil(t, isMod)
-	assert.True(t, isMod)
-	assert.Equal(t, types.SessionRoleModerator, moderator.Role)
-}
-
-func testIsOwnerAlsoModerator(t *testing.T) {
-	isMod := isModerator(ownerID, sessions)
-
-	assert.NotNil(t, isMod)
-	assert.True(t, isMod)
-	assert.Equal(t, types.SessionRoleOwner, owner.Role)
-}
-
-func testIsNotModerator(t *testing.T) {
-	isMod := isModerator(uuid.New(), sessions)
-
-	assert.NotNil(t, isMod)
-	assert.False(t, isMod)
-
-}
-
-var (
-	participantID, _ = uuid.Parse("3113b096-986c-4e23-adf7-b3fa19224bd2")
-	uIdTwo, _        = uuid.Parse("3113b096-986c-4e23-adf7-b3fa19224bd3")
-	uIdThree, _      = uuid.Parse("3113b096-986c-4e23-adf7-b3fa19224bd4")
-
+	boardSessions = []*dto.BoardSession{
+		&participantBoardSession,
+		&ownerBoardSession,
+		&moderatorBoardSession,
+	}
 	clients = []client{
-		{userID: participantID, conn: nil, role: types.SessionRoleParticipant},
-		{userID: uIdTwo, conn: nil, role: types.SessionRoleOwner},
-		{userID: uIdThree, conn: nil, role: types.SessionRoleModerator},
+		{userID: participantBoardSession.User.ID, conn: nil, role: types.SessionRoleParticipant},
+		{userID: ownerBoardSession.User.ID, conn: nil, role: types.SessionRoleOwner},
+		{userID: moderatorBoardSession.User.ID, conn: nil, role: types.SessionRoleModerator},
 	}
 
-	expected = []client{
-		{userID: uIdThree, conn: nil, role: types.SessionRoleModerator},
-		{userID: uIdTwo, conn: nil, role: types.SessionRoleOwner},
-		{userID: participantID, conn: nil, role: types.SessionRoleParticipant},
-	}
-)
-
-func testSortSessions(t *testing.T) {
-	sort.Sort(ByRole(clients))
-
-	assert.Equal(t, expected, clients)
-}
-
-// Test EventFilter
-var (
-	columnID, _ = uuid.Parse("90dfa512-2b5c-42ea-9c98-3cc3ff8922Cc")
-	aColumn     = dto.Column{
-		ID:      columnID,
-		Name:    "Lean Coffee",
-		Color:   "backlog-blue",
-		Visible: false,
-		Index:   0,
-	}
-
-	columnIDSeeable, _ = uuid.Parse("90dfa512-2b5c-42ea-9c98-3cc3ff8922ff")
-	aSeeableColumn     = dto.Column{
-		ID:      columnIDSeeable,
+	// Test data for event filtering
+	aSeeableColumn = dto.Column{
+		ID:      uuid.New(),
 		Name:    "Main Thread",
 		Color:   "backlog-blue",
 		Visible: true,
+		Index:   0,
+	}
+	aModeratorNote = dto.Note{
+		ID:     uuid.New(),
+		Author: moderatorBoardSession.User.ID,
+		Text:   "Moderator Text",
+		Position: dto.NotePosition{
+			Column: aSeeableColumn.ID,
+			Stack:  uuid.NullUUID{},
+			Rank:   1,
+		},
+	}
+	aUserNote = dto.Note{
+		ID:     uuid.New(),
+		Author: participantBoardSession.User.ID,
+		Text:   "User Text",
+		Position: dto.NotePosition{
+			Column: aSeeableColumn.ID,
+			Stack:  uuid.NullUUID{},
+			Rank:   0,
+		},
+	}
+	aHiddenColumn = dto.Column{
+		ID:      uuid.New(),
+		Name:    "Lean Coffee",
+		Color:   "poker-purple",
+		Visible: false,
 		Index:   1,
+	}
+	aOwnerNote = dto.Note{
+		ID:     uuid.New(),
+		Author: participantBoardSession.User.ID,
+		Text:   "Owner Text",
+		Position: dto.NotePosition{
+			Column: aHiddenColumn.ID,
+			Rank:   1,
+			Stack:  uuid.NullUUID{},
+		},
 	}
 
 	boardSub = &BoardSubscription{
-		boardParticipants: []*dto.BoardSession{},
-		boardColumns:      []*dto.Column{&aSeeableColumn},
-		boardNotes:        []*dto.Note{},
+		boardParticipants: []*dto.BoardSession{&moderatorBoardSession, &ownerBoardSession, &participantBoardSession},
+		boardColumns:      []*dto.Column{&aSeeableColumn, &aHiddenColumn},
+		boardNotes:        []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote},
 		boardSettings: &dto.Board{
 			ShowNotesOfOtherUsers: false,
 		},
@@ -122,56 +93,123 @@ var (
 
 	columnEvent = &realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
-		Data: []dto.Column{aColumn},
+		Data: []*dto.Column{&aSeeableColumn, &aHiddenColumn},
 	}
 
-	expectedFilteredColumn = &realtime.BoardEvent{
-		Type: realtime.BoardEventColumnsUpdated,
-		Data: []*dto.Column{},
-	}
-
-	noteID, _ = uuid.Parse("90dfa512-2b5c-42ea-9c98-3cc3ff8922CN")
-	aNote     = dto.Note{
-		ID:     noteID,
-		Author: participantID,
-		Text:   "Hello World",
-		Position: dto.NotePosition{
-			Column: columnID,
-		},
-	}
 	noteEvent = &realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
-		Data: []dto.Note{aNote},
-	}
-
-	expectedFilteredNotes = &realtime.BoardEvent{
-		Type: realtime.BoardEventNotesUpdated,
-		Data: []*dto.Note{},
+		Data: []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote},
 	}
 )
 
+func TestEventFilter(t *testing.T) {
+	t.Run("TestModIsModerator", testIsModModerator)
+	t.Run("TestOwnerIsModerator", testIsOwnerAlsoModerator)
+	t.Run("TestIsNotModerator", testIsNotModerator)
+	t.Run("TestSortSessions", testSortSessions)
+	t.Run("TestParseColumns", testParseColumn)
+	t.Run("TestParseNotes", testParseNote)
+	t.Run("TestFilterColumnsAsParticipant", testColumnFilterAsParticipant)
+	t.Run("TestFilterColumnsAsOwner", testColumnFilterAsOwner)
+	t.Run("TestFilterColumnsAsModerator", testColumnFilterAsModerator)
+	t.Run("TestFilterNotesAsParticipant", testNoteFilterAsParticipant)
+	t.Run("TestFilterNotesAsOwner", testNoteFilterAsOwner)
+	t.Run("TestFilterNotesAsModerator", testNoteFilterAsModerator)
+	t.Run("TestFilterNotesWithNonExistingUUID", testNoteFilterWithNonExistingUUID)
+}
+
+func testIsModModerator(t *testing.T) {
+	isMod := isModerator(moderatorBoardSession.User.ID, boardSessions)
+
+	assert.NotNil(t, isMod)
+	assert.True(t, isMod)
+	assert.Equal(t, types.SessionRoleModerator, moderatorBoardSession.Role)
+}
+
+func testIsOwnerAlsoModerator(t *testing.T) {
+	isMod := isModerator(ownerBoardSession.User.ID, boardSessions)
+
+	assert.NotNil(t, isMod)
+	assert.True(t, isMod)
+	assert.Equal(t, types.SessionRoleOwner, ownerBoardSession.Role)
+}
+
+func testIsNotModerator(t *testing.T) {
+	isMod := isModerator(uuid.New(), boardSessions)
+
+	assert.NotNil(t, isMod)
+	assert.False(t, isMod)
+}
+
+func testSortSessions(t *testing.T) {
+	expected := []client{
+		{userID: moderatorBoardSession.User.ID, conn: nil, role: types.SessionRoleModerator},
+		{userID: ownerBoardSession.User.ID, conn: nil, role: types.SessionRoleOwner},
+		{userID: participantBoardSession.User.ID, conn: nil, role: types.SessionRoleParticipant},
+	}
+
+	sort.Sort(ByRole(clients))
+	assert.Equal(t, expected, clients)
+}
+
 func testParseColumn(t *testing.T) {
-	parsedColumns, err := parseColumnUpdatedEvent(columnEvent.Data)
+	expectedColumns := []*dto.Column{&aSeeableColumn, &aHiddenColumn}
+	actualColumns, err := parseColumnUpdatedEvent(columnEvent.Data)
 
 	assert.Nil(t, err)
-	assert.Equal(t, []*dto.Column{&aColumn}, parsedColumns)
+	assert.NotNil(t, actualColumns)
+	assert.Equal(t, expectedColumns, actualColumns)
 }
 
 func testParseNote(t *testing.T) {
-	parsedNotes, err := parseNotesUpdated(noteEvent.Data)
+	expectedNotes := []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote}
+	actualNotes, err := parseNotesUpdated(noteEvent.Data)
 
 	assert.Nil(t, err)
-	assert.Equal(t, []*dto.Note{&aNote}, parsedNotes)
+	assert.NotNil(t, actualNotes)
+	assert.Equal(t, expectedNotes, actualNotes)
 }
 
-func testColumnFilter(t *testing.T) {
-	filteredColumns := boardSub.eventFilter(columnEvent, participantID)
+func testColumnFilterAsParticipant(t *testing.T) {
+	expectedFilteredColumns := []*dto.Column{&aSeeableColumn}
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, participantBoardSession.User.ID)
 
-	assert.Equal(t, expectedFilteredColumn, filteredColumns)
+	assert.Equal(t, expectedFilteredColumns, returnedColumnEvent.Data)
+}
+func testColumnFilterAsOwner(t *testing.T) {
+	expectedFilteredColumns := []*dto.Column{&aSeeableColumn, &aHiddenColumn}
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, ownerBoardSession.User.ID)
+
+	assert.Equal(t, expectedFilteredColumns, returnedColumnEvent.Data)
+}
+func testColumnFilterAsModerator(t *testing.T) {
+	expectedFilteredColumns := []*dto.Column{&aSeeableColumn, &aHiddenColumn}
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, moderatorBoardSession.User.ID)
+
+	assert.Equal(t, expectedFilteredColumns, returnedColumnEvent.Data)
 }
 
-func testNoteFilter(t *testing.T) {
-	filteredNotes := boardSub.eventFilter(noteEvent, uuid.New())
+func testNoteFilterAsParticipant(t *testing.T) {
+	expectedNotes := []*dto.Note{&aUserNote}
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, participantBoardSession.User.ID)
 
-	assert.Equal(t, expectedFilteredNotes, filteredNotes)
+	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
+}
+func testNoteFilterAsOwner(t *testing.T) {
+	expectedNotes := []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote}
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, ownerBoardSession.User.ID)
+
+	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
+}
+func testNoteFilterAsModerator(t *testing.T) {
+	expectedNotes := []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote}
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, moderatorBoardSession.User.ID)
+
+	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
+}
+func testNoteFilterWithNonExistingUUID(t *testing.T) {
+	expectedNotes := []*dto.Note{}
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, uuid.New())
+
+	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
 }
