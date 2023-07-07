@@ -4,7 +4,7 @@ import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
 import React, {useState} from "react";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
-import _ from "underscore";
+import {isEqual} from "underscore";
 import {Actions} from "store/action";
 import {ReactionType} from "types/reaction";
 import {Participant} from "types/participant";
@@ -62,7 +62,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
             noteId: props.noteId,
           } as ReactionModeled;
         }),
-    _.isEqual
+    isEqual
   );
 
   /*
