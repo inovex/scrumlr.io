@@ -3,6 +3,7 @@ import {Portal} from "components/Portal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionPopup.scss";
 import {NoteReactionChip} from "../NoteReactionChip/NoteReactionChip";
+import {ReactionImageMap} from "../../../../types/reaction";
 
 interface NoteReactionPopupProps {
   reactions: ReactionModeled[];
@@ -15,7 +16,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   return (
     <Portal hiddenOverflow onClick={props.onClose}>
       <div className="note-reaction-popup__root">
-        <div className="note-reaction-popup__tab-bar">
+        <nav className="note-reaction-popup__tab-bar">
           <button className="note-reaction-popup__tab--all">
             <div className="note-reaction-popup__tab--text">Alle</div>
             <div className="note-reaction-popup__tab--amount">{totalReactions}</div>
@@ -23,7 +24,18 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
           {props.reactions.map((r) => (
             <NoteReactionChip reaction={r} key={r.reactionType} />
           ))}
-        </div>
+        </nav>
+        <main className="note-reaction-popup__main">
+          {props.reactions.map((r) => (
+            <>
+              <div className="note-reaction-popup__row">
+                <div className="note-reaction-popup__row-user">{r.users[0].user.name}</div> {/* replace with AuthorList later */}
+                <div className="note-reaction-popup__row-reaction">{ReactionImageMap.get(r.reactionType)}</div>
+              </div>
+              <hr />
+            </>
+          ))}
+        </main>
       </div>
     </Portal>
   );
