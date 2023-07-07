@@ -52,6 +52,8 @@
   flex-direction: row;
   align-items: center;
   gap: $reaction__gap-size;
+
+  user-select: none;
 }
 
 [theme="dark"] {

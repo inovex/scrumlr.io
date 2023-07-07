@@ -12,6 +12,8 @@
   padding: $padding--large $padding--default;
 
   background-color: $color-white;
+
+  user-select: none;
 }
 
 .note-reaction-popup__tab-bar {

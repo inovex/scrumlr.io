@@ -18,6 +18,8 @@
 
   font-size: $text--base;
 
+  user-select: none;
+
   &:hover {
     background-color: $hover-background-light;
   }
