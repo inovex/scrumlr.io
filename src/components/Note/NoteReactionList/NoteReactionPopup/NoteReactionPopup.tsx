@@ -1,9 +1,10 @@
 import React from "react";
 import {Portal} from "components/Portal";
+import classNames from "classnames";
+import {ReactionImageMap} from "types/reaction";
 import {ReactionModeled} from "../NoteReactionList";
-import "./NoteReactionPopup.scss";
 import {NoteReactionChip} from "../NoteReactionChip/NoteReactionChip";
-import {ReactionImageMap} from "../../../../types/reaction";
+import "./NoteReactionPopup.scss";
 
 interface NoteReactionPopupProps {
   reactions: ReactionModeled[];
@@ -30,7 +31,9 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
             <>
               <div className="note-reaction-popup__row">
                 <div className="note-reaction-popup__row-user">{r.users[0].user.name}</div> {/* replace with AuthorList later */}
-                <div className="note-reaction-popup__row-reaction">{ReactionImageMap.get(r.reactionType)}</div>
+                <div className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}>
+                  {ReactionImageMap.get(r.reactionType)}
+                </div>
               </div>
               <hr />
             </>

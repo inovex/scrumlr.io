@@ -68,5 +68,17 @@
 }
 
 .note-reaction-popup__row-reaction {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   font-size: $text--md;
+
+  width: 34px;
+  height: 34px;
+  border-radius: $rounded--full;
+
+  &--active {
+    background-color: var(--accent-color--desaturated-light);
+  }
 }
