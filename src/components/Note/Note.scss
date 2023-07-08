@@ -150,7 +150,12 @@ $note__author-image-size: 26px;
   height: 28px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: $margin--default;
+}
+
+.note__author-container {
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .note__author-image {
