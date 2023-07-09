@@ -16,28 +16,23 @@
 
 .user-avatar__ready {
   position: absolute;
-  top: -8px;
-  right: -8px;
-
-  width: 24px;
-  height: 24px;
+  top: 4px;
+  width: 100%;
+  height: 100%;
 
   color: $color-grooming-green;
 
   .circle {
-    --dasharray: 55;
-    stroke-dasharray: var(--dasharray);
-    stroke-dashoffset: 0;
-    animation: draw 0.45s ease-out, scale 0.3s ease-out;
-    transform-origin: 37% 40%;
+    opacity: 0.4;
+    filter: brightness(1.3);
   }
 
   .check {
     --dasharray: 20;
     stroke-dasharray: var(--dasharray);
     stroke-dashoffset: 0;
-    animation: draw 0.6s ease-in-out, scale 0.3s ease-out;
-    transform-origin: 37% 40%;
+    animation: draw 0.6s ease-in-out, scale 0.3s ease-in-out;
+    transform-origin: 35% 50%;
   }
 }
 
@@ -49,7 +44,7 @@
     --dasharray: 760;
     stroke-dasharray: var(--dasharray);
     stroke-dashoffset: 0;
-    animation: draw 0.45s ease-out;
+    animation: draw 0.45s ease-in-out;
     transform-origin: 45.5% 43%;
   }
 }
@@ -85,6 +80,10 @@
 
   .user-ready #Circle-Background {
     stroke: $color-grooming-green;
+  }
+
+  .user-avatar__ready .circle {
+    filter: brightness(0.8);
   }
 }
 

@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import "./UserAvatar.scss";
 import classNames from "classnames";
-import {ReactComponent as IconCheck} from "assets/icon-check.svg";
+import {ReactComponent as IconCheck} from "assets/icon-ready.svg";
 import {ReactComponent as RaisedHand} from "assets/icon-hand.svg";
 import {AvataaarProps, Avatar} from "../Avatar";
 import {Badge} from "../Badge";
