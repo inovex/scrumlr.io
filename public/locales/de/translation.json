@@ -226,8 +226,8 @@
     "stopVoting": "Abstimmung beenden"
   },
   "VoteDisplay": {
-    "finishActionTooltip": "Beenden",
-    "abortActionTooltip": "Abbrechen",
+    "finishActionTooltip": "Abstimmung beenden",
+    "abortActionTooltip": "Abstimmung abbrechen",
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
   },
   "TimerToggleButton": {
