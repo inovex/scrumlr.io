@@ -91,7 +91,7 @@
     "husky": "^8.0.3",
     "i18next-fs-backend": "^2.1.5",
     "lint-staged": "^13.2.3",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "react-dnd-test-backend": "^15.1.2",
     "react-dnd-test-utils": "^15.1.2",
     "react-scripts": "^5.0.1",
