@@ -44,7 +44,7 @@ export const Note = (props: NoteProps) => {
       .filter((n) => n.position.stack === props.noteId)
       // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
       .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
-    return [noteAuthor, ...childrenNoteAuthors].filter((a): a is Participant => !!a); // remove undefined values (which shouldn't exists, only for TS type assertion)
+    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[]; // remove undefined values (which shouldn't exists, only for TS type assertion)
   }, isEqual);
 
   /* eslint-disable */
