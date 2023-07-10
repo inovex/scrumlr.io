@@ -21,11 +21,7 @@
   width: 100%;
   height: 100%;
 
-  color: $color-goal-green;
-
-  .circle {
-    fill: color.change($color-grooming-green, $lightness: 80%, $saturation: 70%, $alpha: 0.6);
-  }
+  color: #1bd47e;
 
   .check {
     --dasharray: 20;
@@ -33,14 +29,14 @@
     stroke-dashoffset: 0;
     animation: draw 0.6s ease-in-out, scale 0.3s ease-in-out;
     transform-origin: 35% 50%;
-    filter: brightness(0.7) saturate(2);
+    filter: drop-shadow(0 0 4px $color-white);
   }
 }
 
 .user-ready {
   > .avatar #Circle-Background {
     transform: rotate(90deg) scale(-1, 1);
-    stroke: $color-grooming-green;
+    stroke: #1bd47e;
     stroke-width: 24px;
     --dasharray: 760;
     stroke-dasharray: var(--dasharray);
@@ -49,8 +45,15 @@
     transform-origin: 45.5% 43%;
   }
 
+  > .avatar #Avataaar #Avataaar {
+    transition: all 0.3s ease-in-out;
+    filter: url(#blur) saturate(0.5);
+    opacity: 0.3;
+  }
+
   > .avatar #Circle-Background,
   .avatar #Color\/Palette\/Blue-01 {
+    transition: fill 0.15s ease-in-out;
     fill: color.change($color-grooming-green, $lightness: 100%, $saturation: 0%);
   }
 }
@@ -84,8 +87,27 @@
     stroke: $color-dark-one;
   }
 
-  .user-ready #Circle-Background {
-    stroke: $color-grooming-green;
+  .user-avatar__ready {
+    color: #4ae89f;
+  }
+
+  .user-ready {
+    #Circle-Background {
+      stroke: #4ae89f;
+    }
+
+    .circle {
+      fill: color.change($color-grooming-green, $lightness: 20%, $saturation: 70%, $alpha: 0.6);
+    }
+
+    .check {
+      filter: drop-shadow(0 0 3px $color-dark-one);
+    }
+
+    > .avatar #Circle-Background,
+    .avatar #Color\/Palette\/Blue-01 {
+      fill: $color-black;
+    }
   }
 
   .user-avatar__ready .circle {
