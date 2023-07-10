@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {useRef, useEffect, KeyboardEvent} from "react";
+import {KeyboardEvent, useEffect, useRef} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
@@ -7,12 +7,12 @@ import {isEqual} from "underscore";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {Participant, ParticipantExtendedInfo} from "types/participant";
-import "./Note.scss";
+import {Participant} from "types/participant";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {Sortable} from "components/DragAndDrop/Sortable";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
+import "./Note.scss";
 
 interface NoteProps {
   noteId: string;
@@ -32,47 +32,19 @@ export const Note = (props: NoteProps) => {
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
+  const me = useAppSelector((state) => state.participants?.self);
   const moderating = useAppSelector((state) => state.view.moderating);
   const isModerator = props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER";
 
   // all authors of a note, including its children if it's a stack.
-  // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
-  const authors: ParticipantExtendedInfo[] = useAppSelector((state) => {
+  const authors = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
     const childrenNoteAuthors = state.notes
       // get all notes which are in the same stack as the main note
       .filter((n) => n.position.stack === props.noteId)
       // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
       .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
-    const allAuthorsRaw = [noteAuthor, ...childrenNoteAuthors];
-    // process and filter
-    const allAuthors = allAuthorsRaw
-      .map((a) => {
-        const isSelf = a?.user.id === state.participants?.self.user.id;
-        const displayName = isSelf ? t("Note.me") : a!.user.name;
-        return {
-          ...a,
-          displayName,
-          isSelf,
-        } as ParticipantExtendedInfo;
-      })
-      // remove duplicates (because notes can have multiple children by the same authors)
-      .filter((v, i, self) => self.findIndex((a) => a.user?.id === v.user?.id) === i);
-
-    // if self is part of the authors, we always want it to be visible
-    const selfIndex = allAuthors.findIndex((a) => a.isSelf);
-    if (selfIndex > 1) {
-      // in-place swap with second author
-      [allAuthors[selfIndex], allAuthors[1]] = [allAuthors[1], allAuthors[selfIndex]];
-    }
-
-    // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
-    // the other authors are excluded as we only require the stack author
-    if (!showAuthors && props.viewer.user.id === noteAuthor!.user!.id) {
-      return [allAuthors[0]]; // stack author is always first element
-    }
-
-    return allAuthors;
+    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[]; // remove undefined values (which shouldn't exists, only for TS type assertion)
   }, isEqual);
 
   /* eslint-disable */
@@ -128,7 +100,7 @@ export const Note = (props: NoteProps) => {
             <img
               src={addProtocol(note.text)}
               className="note__image"
-              alt={t("Note.userImageAlt", {user: authors[0].isSelf ? t("Note.you") : authors[0].displayName})}
+              alt={t("Note.userImageAlt", {user: authors[0].user.id === me?.user.id ? t("Note.you") : authors[0].user.name})}
               draggable={false} // safari bugfix
             />
           </div>
