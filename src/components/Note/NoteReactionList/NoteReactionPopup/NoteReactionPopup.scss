@@ -22,7 +22,7 @@
   gap: 10px;
 }
 
-.note-reaction-popup__tab--all {
+.note-reaction-popup__tab-all {
   // TODO: use @mixins for repeating styling
   all: unset; // remove default buttons styling
 
@@ -44,6 +44,11 @@
 
   &:hover {
     background-color: $hover-background-light;
+  }
+
+  &--active {
+    background-color: var(--accent-color);
+    color: $color-white;
   }
 }
 

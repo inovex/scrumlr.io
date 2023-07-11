@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
-import {ReactionImageMap} from "types/reaction";
+import {ReactionImageMap, ReactionType} from "types/reaction";
 import _ from "underscore";
 import {useAppSelector} from "store";
 import {ReactionModeled} from "../NoteReactionList";
@@ -19,20 +19,31 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const totalReactions = props.reactions.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
 
+  // activeTab === undefined -> all are active
+  const [activeTab, setActiveTab] = useState<ReactionType>();
+
+  const changeTab = (e: React.MouseEvent<HTMLButtonElement>, reactionType?: ReactionType) => {
+    e.stopPropagation();
+    setActiveTab(reactionType);
+  };
+
+  // filter by ReactionType, or if that's undefined filter nothing.
+  const filterFunc = (r: ReactionModeled) => (!activeTab ? true : activeTab === r.reactionType);
+
   return (
     <Portal hiddenOverflow onClick={props.onClose}>
       <div className="note-reaction-popup__root">
         <nav className="note-reaction-popup__tab-bar">
-          <button className="note-reaction-popup__tab--all">
+          <button className={classNames("note-reaction-popup__tab-all", {"note-reaction-popup__tab-all--active": !activeTab})} onClick={(e) => changeTab(e, undefined)}>
             <div className="note-reaction-popup__tab--text">Alle</div>
             <div className="note-reaction-popup__tab--amount">{totalReactions}</div>
           </button>
           {props.reactions.map((r) => (
-            <NoteReactionChip reaction={r} key={r.reactionType} />
+            <NoteReactionChip reaction={r} key={r.reactionType} overrideActive={r.reactionType === activeTab} handleClickReaction={(e) => changeTab(e, r.reactionType)} />
           ))}
         </nav>
         <main className="note-reaction-popup__main">
-          {props.reactions.map((r) => (
+          {props.reactions.filter(filterFunc).map((r) => (
             <>
               <div className="note-reaction-popup__row">
                 <NoteAuthorList authors={r.users} showAuthors viewer={viewer} />

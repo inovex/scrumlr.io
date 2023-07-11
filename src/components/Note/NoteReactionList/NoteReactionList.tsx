@@ -163,7 +163,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
             reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />)
           ))}
       </div>
-      {showReactionPopup && <NoteReactionPopup reactions={reactions} onClose={closeReactionPopup} />}
+      {showReactionPopup && <NoteReactionPopup reactions={reactionsFlat} onClose={closeReactionPopup} />}
     </div>
   );
 };
