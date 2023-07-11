@@ -142,6 +142,10 @@
   }
 }
 
+.participant__avatar {
+  flex-shrink: 0;
+}
+
 .participant__avatar > svg {
   height: $icon--extralarge;
   width: $icon--extralarge;
