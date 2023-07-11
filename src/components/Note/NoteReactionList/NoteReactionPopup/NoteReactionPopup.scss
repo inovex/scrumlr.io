@@ -25,6 +25,7 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  overflow-x: scroll;
 }
 
 .note-reaction-popup__tab-all {
@@ -68,6 +69,7 @@
   height: 100%;
 
   margin-top: $margin--medium;
+  padding-bottom: $padding--small;
 
   overflow: scroll;
   scroll-snap-type: x mandatory;
@@ -81,6 +83,7 @@
   width: 100%;
   height: 100%;
 
+  overflow-y: scroll;
   scroll-snap-align: center;
 }
 
