@@ -57,7 +57,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
                   {ReactionImageMap.get(r.reactionType)}
                 </div>
               </div>
-              <hr />
+              <div className="note-reaction-popup__row-divider" />
             </div>
           ))}
         </main>
