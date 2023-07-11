@@ -6,18 +6,23 @@
 .note-dialog__note-footer {
   position: relative;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  gap: $margin--default;
   align-items: center;
   height: var(--note-footer-height);
   grid-area: 2 / 1 / 3 / 3;
 }
 
+.note-dialog__author-container {
+  height: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
 .note-dialog__note-author {
   display: inline-flex;
   align-items: center;
-  flex-grow: 1;
-  height: 35px;
+  gap: $margin--small;
+  width: 100%;
   // reset css from figure-element:
   margin: 0;
   padding: 0;
@@ -33,11 +38,12 @@
 }
 
 .note-dialog__note-author-name {
-  margin-left: $margin--small;
   color: $color-dark-gray;
   font-size: $text-size--small;
   letter-spacing: $letter-spacing--small;
-  line-height: $line-height--small;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .note-dialog__note-user-avatar {
@@ -51,24 +57,12 @@
   }
 }
 
-.note-dialog__note-author {
-  display: inline-flex;
-  align-items: center;
-  // reset css from figure-element:
-  margin: 0;
-  border: 0;
-  font: inherit;
-  vertical-align: baseline;
-  flex-grow: 0;
-  height: 35px;
-  padding: 0 $padding--default 0 0;
-}
-
 .note-dialog__note-author--self {
   background: var(--accent-color--desaturated-light);
   border-radius: 21px;
-  padding-left: 2px;
+  padding-right: $padding--default;
   height: var(--note-footer-height);
+  width: max-content;
 
   .note-dialog__note-author-name {
     color: $color-black;

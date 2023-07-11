@@ -5,6 +5,11 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_run:
+    workflows: ["Package"]
+    branches: [ main ]
+    types:
+      - completed
 
 concurrency:
   group: ${{ github.ref }}
@@ -16,13 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -30,7 +35,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
           go-version: '^1.18'
 
@@ -53,5 +58,26 @@ jobs:
 
   package:
     needs: test
-    if: ${{ github.event_name == 'push' }}
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
+
+  
+  deploy_to_dev_cluster:
+    needs: package
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@main
+    secrets: inherit
+    with: 
+      frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
+      server_image_tag: ${{ needs.package.outputs.server-image-tag }}
+
+  end_to_end_test:
+    name: End to End Test
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deploy_to_dev_cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: run tests
+        uses: OctoMind-dev/automagically-action-execute@v1
+        with:
+          url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
+          token: ${{ secrets.AUTOMAGICALLY_TOKEN }}

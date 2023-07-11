@@ -125,6 +125,12 @@
     "navigateHome": "Startseite",
     "navigateBack": "Gehe zurück"
   },
+  "NotFoundPage": {
+    "title": "Och nö! Fehler",
+    "descriptionLine1": "Diese Seite existiert nicht.",
+    "descriptionLine2": "Geh zur Startseite zurück.",
+    "navigateHome": "Zurück zur Startseite"
+  },
   "JoinRequest": {
     "title": "Möchte der Sitzung beitreten",
     "accept": "Akzeptieren",
@@ -224,8 +230,8 @@
     "stopVoting": "Abstimmung beenden"
   },
   "VoteDisplay": {
-    "finishActionTooltip": "Beenden",
-    "abortActionTooltip": "Abbrechen",
+    "finishActionTooltip": "Abstimmung beenden",
+    "abortActionTooltip": "Abstimmung abbrechen",
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
   },
   "TimerToggleButton": {
@@ -259,10 +265,12 @@
     "allParticipantsDone": "Alle Teilnehmer sind fertig!",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
-    "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt!",
+    "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
-    "noteDeleted": "Die Karte wurde gelöscht!"
+    "noteDeleted": "Die Karte wurde gelöscht!",
+    "ready": "Bist du fertig?",
+    "readyButton": "Fertig!"
   },
   "Language": {
     "german": "Deutsch",
@@ -344,7 +352,8 @@
     "Language": "Sprache",
     "colorScheme": "Farbschema",
     "colorSchemeLight": "Hell",
-    "colorSchemeDark": "Dunkel"
+    "colorSchemeDark": "Dunkel",
+    "showHotkeyNotifications": "Zeige Hotkey-Notifikationen"
   },
   "Feedback": {
     "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",
@@ -386,6 +395,7 @@
     "serverConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden.",
     "retry": "Wiederholen",
     "joinBoard": "Es tut uns leid, aber wir haben ein Problem beim Beitreten des Boards. Bitte versuche es erneut.",
+    "boardDeleted": "Das Board wurde gelöscht! Du wurdest zur Startseite weitergeleitet.",
     "acceptJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Akzeptieren der Beitrittsanfragen. Bitte versuche es erneut.",
     "rejectJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Ablehnen der Beitrittsanfragen. Bitte versuche es erneut.",
     "initApplication": "Es tut uns leid, aber wir haben ein Problem beim Erreichen des Servers. Bitte versuche die Seite neu zu laden.",

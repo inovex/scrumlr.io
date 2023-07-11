@@ -47,24 +47,13 @@ export const BoardSettings = () => {
     setPassword(newPassword);
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
       store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
-      navigator.clipboard.writeText(newPassword).then(() =>
-        Toast.success(
-          <div>
-            <div>{t("Toast.passwordCopied")}</div>
-          </div>,
-          TOAST_TIMER_SHORT
-        )
-      );
+      navigator.clipboard.writeText(newPassword).then(() => Toast.success({title: t("Toast.passwordCopied"), autoClose: TOAST_TIMER_SHORT}));
       setIsProtected(true);
     } else if (isProtected || isProtectedOnInitialSettingsOpen) {
       store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
       setIsProtectedOnInitialSettingsOpen(false);
       setIsProtected(false);
-      Toast.info(
-        <div>
-          <div>{t("Toast.boardMadePublic")}</div>
-        </div>
-      );
+      Toast.info({title: t("Toast.boardMadePublic"), autoClose: TOAST_TIMER_SHORT});
     }
   };
 
@@ -181,6 +170,8 @@ export const BoardSettings = () => {
                   onClick={() => {
                     store.dispatch(Actions.editBoard({showAuthors: !state.board.showAuthors}));
                   }}
+                  role="switch"
+                  aria-checked={state.board.showAuthors}
                 >
                   <div className="board-settings__show-author-value">
                     <Toggle active={state.board.showAuthors} />
@@ -192,6 +183,8 @@ export const BoardSettings = () => {
                   className="board-settings__show-notes-button"
                   label={t("BoardSettings.ShowOtherUsersNotesOption")}
                   onClick={() => store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
+                  role="switch"
+                  aria-checked={state.board.showNotesOfOtherUsers}
                 >
                   <div className="board-settings__show-notes-value">
                     <Toggle active={state.board.showNotesOfOtherUsers} />
@@ -203,9 +196,11 @@ export const BoardSettings = () => {
                   className="board-settings__show-columns-button"
                   label={t("BoardSettings.ShowHiddenColumnsOption")}
                   onClick={() => store.dispatch(Actions.setShowHiddenColumns(!state.me?.showHiddenColumns))}
+                  role="switch"
+                  aria-checked={!!state.me?.showHiddenColumns}
                 >
                   <div className="board-settings__show-columns-value">
-                    <Toggle active={state.me?.showHiddenColumns ?? false} />
+                    <Toggle active={!!state.me?.showHiddenColumns} />
                   </div>
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />
@@ -214,6 +209,8 @@ export const BoardSettings = () => {
                   className="board-settings__allow-note-repositioning-button"
                   label={t("BoardSettings.AllowNoteRepositioningOption")}
                   onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                  role="switch"
+                  aria-checked={state.board.allowStacking}
                 >
                   <div className="board-settings__allow-note-repositioning-value">
                     <Toggle active={state.board.allowStacking} />

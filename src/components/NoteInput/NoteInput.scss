@@ -6,25 +6,18 @@ $note-input__input-right: 40px;
 .note-input {
   display: flex;
   justify-content: space-between;
-  height: 40px;
+  min-height: 36px;
   width: 100%;
   position: relative;
   margin-bottom: $margin--default;
   background-color: $color-lighter-gray;
-  border-radius: 20px;
+  border-radius: $rounded--medium;
   transition: all 0.12s ease-in-out;
+  border: 2px solid transparent;
 
-  &:hover::before,
-  &:focus-within::before {
-    content: "";
-    position: absolute;
-    top: -3px;
-    right: -3px;
-    bottom: -3px;
-    left: -3px;
-    border: 2px solid rgba(var(--accent-color-rgb), 0.5);
-    border-radius: $rounded--full;
-    pointer-events: none;
+  &:hover,
+  &:focus-within {
+    border-color: rgba(var(--accent-color-rgb), 0.5);
     box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.16);
   }
 }
@@ -36,6 +29,7 @@ $note-input__input-right: 40px;
   font-size: $text-size--medium;
   font-weight: bold;
   line-height: 24px;
+  max-height: 70vh;
   letter-spacing: $letter-spacing--small;
   padding: $padding--small 0;
   font-family: Raleway, sans-serif;
@@ -43,8 +37,9 @@ $note-input__input-right: 40px;
   border: none;
   margin-left: $margin--default;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
-  caret-color: var(--accent-color);
   outline: none;
+
+  resize: none;
 
   &:focus::placeholder {
     color: transparent;
@@ -54,6 +49,9 @@ $note-input__input-right: 40px;
 .note-input__add-button {
   all: unset;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: $padding--small 0;
 
   &:hover > .note-input__icon {
     filter: brightness(1.2);
@@ -115,16 +113,6 @@ $note-input__input-right: 40px;
   }
 }
 
-.toast-button {
-  background-color: $color-backlog-blue;
-  border-style: none;
-  border-radius: 8px;
-  height: 40px;
-  width: 100%;
-  margin-top: $margin--default;
-  color: $color-white;
-}
-
 [theme="dark"] {
   .note-input {
     background-color: $color-dark-mode-note;
@@ -137,10 +125,6 @@ $note-input__input-right: 40px;
 
   .note-input__input {
     color: $color-white;
-  }
-
-  .toast-button {
-    background-color: $color-planning-pink;
   }
 }
 

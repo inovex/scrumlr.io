@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {ProgressCircle} from "components/BoardHeader/ParticipantsList/ProgressCircle";
-import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as CheckIcon} from "assets/icon-ready.svg";
 import {UserAvatar} from "./UserAvatar";
 
 const getWindowDimensions = () => {

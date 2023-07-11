@@ -2,10 +2,12 @@ import React, {useEffect, useRef, useState} from "react";
 import {getColorClassName} from "constants/colors";
 import {ColumnProps} from "components/Column";
 import {MenuBars} from "components/MenuBars";
+import {InfoBar} from "components/Infobar";
 import {BoardHeader} from "components/BoardHeader";
-import "./Board.scss";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
-import CustomDragLayer from "./CustomDragLayer";
+import "./Board.scss";
+import {useDndMonitor} from "@dnd-kit/core";
+import classNames from "classnames";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -36,19 +38,26 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
     lastVisibleColumnIndex: React.Children.count(children),
   });
 
+  const [dragActive, setDragActive] = useState(false);
+  useDndMonitor({
+    onDragStart() {
+      setDragActive(true);
+    },
+    onDragEnd() {
+      setDragActive(false);
+    },
+    onDragCancel() {
+      setDragActive(false);
+    },
+  });
+
   const boardRef = useRef<HTMLDivElement>(null);
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
-  const intersectionObserverRef = useRef<IntersectionObserver | null>(null);
 
   const columnsCount = React.Children.count(children);
 
   useEffect(() => {
     const board = boardRef.current;
-
-    // disconnect the previous observer, if there is one
-    if (intersectionObserverRef.current !== null) {
-      intersectionObserverRef.current.disconnect();
-    }
 
     if (board) {
       // initialize column visibility states
@@ -120,6 +129,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <div className="board--empty">
         <style>{`.board { --board__columns: ${columnsCount} }`}</style>
         <BoardHeader currentUserIsModerator={currentUserIsModerator} />
+        <InfoBar />
         <MenuBars showPreviousColumn={false} showNextColumn={false} onPreviousColumn={() => {}} onNextColumn={() => {}} />
         <HotkeyAnchor />
         <main className="board" ref={boardRef}>
@@ -149,14 +159,13 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
     <>
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
+      <InfoBar />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
-
-      <main className="board" ref={boardRef}>
+      <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
         {children}
         <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
-        <CustomDragLayer />
       </main>
     </>
   );

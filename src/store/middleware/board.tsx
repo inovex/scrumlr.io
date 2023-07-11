@@ -8,7 +8,6 @@ import {API} from "api";
 import {Timer} from "utils/timer";
 import {Toast} from "../../utils/Toast";
 import i18n from "../../i18n";
-import {Button} from "../../components/Button";
 import {SERVER_WEBSOCKET_URL} from "../../config";
 
 let socket: Socket | undefined;
@@ -40,6 +39,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
 
         if (message.type === "BOARD_DELETED") {
           store.dispatch(Actions.leaveBoard());
+          window.location.assign("/?boardDeleted=true");
         }
 
         if (message.type === "COLUMNS_UPDATED") {
@@ -116,12 +116,13 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       showNotesOfOtherUsers: action.board.showNotesOfOtherUsers,
       name: action.board.name == null ? currentState.name : action.board.name,
     }).catch(() => {
-      Toast.error(
-        <div>
-          <div>{i18n.t("Error.editBoard")}</div>
-          <Button onClick={() => store.dispatch(Actions.editBoard(action.board))}>{i18n.t("Error.retry")}</Button>
-        </div>
-      );
+      i18n.on("loaded", () => {
+        Toast.error({
+          title: i18n.t("Error.editBoard"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.editBoard(action.board)),
+        });
+      });
     });
   }
 
@@ -146,12 +147,13 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       timerStart: Timer.removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
       timerEnd: Timer.removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
     }).catch(() => {
-      Toast.error(
-        <div>
-          <div>{i18n.t("Error.shareNote")}</div>
-          <Button onClick={() => store.dispatch(Actions.shareNote(action.note))}>{i18n.t("Error.retry")}</Button>
-        </div>
-      );
+      i18n.on("loaded", () => {
+        Toast.error({
+          title: i18n.t("Error.shareNote"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.shareNote(action.note)),
+        });
+      });
     });
   }
 
@@ -163,12 +165,13 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       timerStart: Timer.removeOffsetFromDate(currentState.timerStart, stateAPI.getState().view.serverTimeOffset),
       timerEnd: Timer.removeOffsetFromDate(currentState.timerEnd, stateAPI.getState().view.serverTimeOffset),
     }).catch(() => {
-      Toast.error(
-        <div>
-          <div>{i18n.t("Error.unshareNote")}</div>
-          <Button onClick={() => store.dispatch(Actions.stopSharing())}>{i18n.t("Error.retry")}</Button>
-        </div>
-      );
+      i18n.on("loaded", () => {
+        Toast.error({
+          title: i18n.t("Error.unshareNote"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.stopSharing()),
+        });
+      });
     });
   }
 
@@ -178,12 +181,13 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         document.location.pathname = "/";
       })
       .catch(() => {
-        Toast.error(
-          <div>
-            <div>{i18n.t("Error.deleteBoard")}</div>
-            <Button onClick={() => store.dispatch(Actions.deleteBoard())}>{i18n.t("Error.retry")}</Button>
-          </div>
-        );
+        i18n.on("loaded", () => {
+          Toast.error({
+            title: i18n.t("Error.deleteBoard"),
+            buttons: [i18n.t("Error.retry")],
+            firstButtonOnClick: () => store.dispatch(Actions.deleteBoard()),
+          });
+        });
       });
   }
 };

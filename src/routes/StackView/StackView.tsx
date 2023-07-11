@@ -9,6 +9,7 @@ import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
+import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {Toast} from "utils/Toast";
 import "./StackView.scss";
@@ -189,22 +190,14 @@ export const StackView = () => {
   useEffect(() => {
     if (note && prevNote.current && !prevNote.current.position.stack && note.position.stack) {
       navigate(`/board/${boardId}/note/${note.position.stack}/stack`);
-      Toast.info(
-        <div>
-          <div>{t("Toast.noteMovedToStack")}</div>
-        </div>
-      );
+      Toast.info({title: t("Toast.noteMovedToStack")});
     }
   }, [boardId, navigate, note, t]);
 
   // show toast if note has been deleted
   useLayoutEffect(() => {
     if (prevNote.current && !note) {
-      Toast.error(
-        <div>
-          <div>{t("Toast.noteDeleted")}</div>
-        </div>
-      );
+      Toast.info({title: t("Toast.noteDeleted"), icon: TrashIcon});
     }
   }, [note, t]);
 

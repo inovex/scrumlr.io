@@ -20,7 +20,7 @@ const signInAnonymously = async (displayName: string) => {
     }
     return true;
   } catch (err) {
-    Toast.error(i18n.t("Toast.authenticationError"));
+    Toast.error({title: i18n.t("Toast.authenticationError")});
     return null;
   }
 };

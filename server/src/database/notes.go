@@ -145,6 +145,8 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 	rankSelection := d.db.NewSelect().ColumnExpr("LEAST((SELECT max_rank FROM rank_range), ?) as new_rank", newRank)
 	// make room for this note (shift notes by +1 above the new rank) if this note will be moved into a new column or out of a stack
 	updateWhenPreviouslyStackedOrInOtherColumn := d.db.NewUpdate().Model((*Note)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = 0").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)")
+	// If the note is moved into a new column, decrease the ranks of the notes in the previous column that where above the note
+	decreaseRanksInPreviousColumn := d.db.NewUpdate().Model((*Note)(nil)).Set("rank=rank-1").Where("\"column\" = (SELECT \"column\" FROM previous)").Where("board = ?", update.Board).Where("rank > (SELECT rank FROM previous)").Where("stack IS NULL").Where("\"column\" <> ?", update.Position.Column)
 	// shift notes within column if the new rank is lower than before
 	updateWhenNewIsLower := d.db.NewUpdate().Model((*Note)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = -1").Where("(SELECT new_rank FROM rank_selection) < (SELECT rank FROM previous)").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)").Where("rank < (SELECT rank FROM previous)").Where("stack IS NULL")
 	// shift notes within column if the new rank is higher than before
@@ -157,6 +159,7 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 		With("rank_addition", rankAddition).
 		With("rank_range", rankRange).
 		With("rank_selection", rankSelection).
+		With("decrease_rank", decreaseRanksInPreviousColumn).
 		With("update_when_previously_stacked_or_in_other_column", updateWhenPreviouslyStackedOrInOtherColumn).
 		With("update_when_new_is_lower", updateWhenNewIsLower).
 		With("update_when_new_is_higher", updateWhenNewIsHigher).

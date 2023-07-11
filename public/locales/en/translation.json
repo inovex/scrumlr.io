@@ -125,6 +125,12 @@
     "navigateHome": "Home",
     "navigateBack": "Go back"
   },
+  "NotFoundPage": {
+    "title": "Oh no! Error",
+    "descriptionLine1": "This page does not exist.",
+    "descriptionLine2": "Go back to the Homepage.",
+    "navigateHome": "Back to Homepage"
+  },
   "JoinRequest": {
     "title": "Is requesting to participate",
     "accept": "Accept",
@@ -224,8 +230,8 @@
     "stopVoting": "End voting phase"
   },
   "VoteDisplay": {
-    "finishActionTooltip": "Finish",
-    "abortActionTooltip": "Abort",
+    "finishActionTooltip": "Conclude voting",
+    "abortActionTooltip": "Cancel voting",
     "tooltip": "{{remaining}} of {{total}} votes remaining"
   },
   "TimerToggleButton": {
@@ -262,7 +268,9 @@
     "noteToHiddenColumn": "You just added a note to a hidden column!",
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
-    "noteDeleted": "The note has been deleted!"
+    "noteDeleted": "The note has been deleted!",
+    "ready": "Are you ready?",
+    "readyButton": "Ready!"
   },
   "Language": {
     "german": "German",
@@ -344,7 +352,8 @@
     "Language": "Language",
     "colorScheme": "Color scheme",
     "colorSchemeLight": "Light",
-    "colorSchemeDark": "Dark"
+    "colorSchemeDark": "Dark",
+    "showHotkeyNotifications": "Show hotkey notifications"
   },
   "Feedback": {
     "PraiseInputLabel": "Anything else you want to tell us?",
@@ -386,6 +395,7 @@
     "serverConnection": "The connection to the server could not be established. Please try to reload the page.",
     "retry": "Retry",
     "joinBoard": "Sorry, but we're having trouble joining the board. Please try again.",
+    "boardDeleted": "The board has been deleted! You've been redirected to the homepage.",
     "acceptJoinRequests": "Sorry, but we're having trouble accepting the requests. Please try again.",
     "rejectJoinRequests": "Sorry, but we're having trouble rejecting the requests. Please try again.",
     "initApplication": "Sorry, but we're having trouble reaching the server for information. Please try to reload the page.",
