@@ -29,7 +29,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
       <button
         id={`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`} // unique identifier
         className={classNames("note-reaction-chip__root", {
-          "note-reaction-chip__root--self": props.reaction.myReactionId, // highlight chips that yourself reacted to
+          "note-reaction-chip__root--self": props.reaction.myReactionId && props.overrideActive === undefined, // highlight chips that yourself reacted to (if no override)
           "note-reaction-chip__root--override-active": props.overrideActive,
         })}
         onClick={(e) => {
