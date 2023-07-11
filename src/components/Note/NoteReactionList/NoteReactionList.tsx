@@ -6,7 +6,7 @@ import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
 import {isEqual} from "underscore";
 import {Actions} from "store/action";
-import {ReactionType} from "types/reaction";
+import {Reaction, ReactionType} from "types/reaction";
 import {Participant} from "types/participant";
 import {useAppSelector} from "../../../store";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
@@ -38,54 +38,59 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
 
+  /** helper function that converts a Reaction object to ReactionModeled object */
+  const convertToModeled = (reaction: Reaction, allReactions: Reaction[]) => {
+    // get the participant who issued that reaction
+    const participant = participants.find((p) => p?.user.id === reaction.user);
+    // if yourself made a reaction of a respective type, get the id
+    const myReactionId = allReactions.find((s) => s.user === me?.user.id && s.reactionType === reaction.reactionType)?.id;
+
+    if (!participant) throw new Error("participant must exist");
+
+    return {
+      reactionType: reaction.reactionType,
+      amount: 1,
+      users: [participant],
+      myReactionId,
+      noteId: reaction.note,
+    } as ReactionModeled;
+  };
+
   /**
    * a flat array where each reaction of a note is cast to the type ReactionModeled.
    * use this if you want to handle each reaction each on its own
    */
-  const reactionsFlat = useAppSelector(
-    (state) =>
-      state.reactions
-        .filter((r) => r.note === props.noteId)
-        .map((r, _, self) => {
-          // get the participant who issued that reaction
-          const participant = participants.find((p) => p?.user.id === r.user);
-          // if yourself made a reaction of a respective type, get the id
-          const myReactionId = self.find((s) => s.user === me?.user.id && s.reactionType === r.reactionType)?.id;
-
-          if (!participant) throw new Error("participant must exist");
-
-          return {
-            reactionType: r.reactionType,
-            amount: 1,
-            users: [participant],
-            myReactionId,
-            noteId: props.noteId,
-          } as ReactionModeled;
-        }),
-    isEqual
-  );
+  const reactionsFlat = useAppSelector((state) => state.reactions.filter((r) => r.note === props.noteId).map((r, _, self) => convertToModeled(r, self)), isEqual);
 
   /*
    * a reduced reactions list, where reactions of the same type are combined into the ReactionModeled interface.
    * that way we have easy access to the amount of the same reactions and the users who made them
    * use this if you want to handle each group of reactions
    */
-  const reactions = reactionsFlat.reduce((acc: ReactionModeled[], curr) => {
-    // check if a reaction of respective reaction type is already in the accumulator
-    const existingReaction = acc.find((r) => r.reactionType === curr.reactionType);
-    if (existingReaction) {
-      existingReaction.amount++;
-      existingReaction.users.push(curr.users[0]); // exactly one user existing can be asserted (see reactionsFlat)
-    } else {
-      acc.push(curr);
-    }
-    return acc;
-  }, []);
+  const reactionsReduced = useAppSelector(
+    (state) =>
+      state.reactions
+        .filter((r) => r.note === props.noteId)
+        .map((r, _, self) => convertToModeled(r, self))
+        // cannot reuse reactionsFlat here because of the reference objects will interfere, so we have to regenerate it with different objects
+        .reduce((acc: ReactionModeled[], curr) => {
+          // check if a reaction of respective reaction type is already in the accumulator
+          const existingReaction = acc.find((r) => r.reactionType === curr.reactionType);
+          if (existingReaction) {
+            existingReaction.amount++;
+            existingReaction.users.push(curr.users[0]); // exactly one user existing can be asserted (see convertToModeled)
+          } else {
+            acc.push(curr);
+          }
+          return acc;
+        }, []),
+    isEqual
+  );
 
   // only one reaction can be made per user per note
-  const reactionMadeByUser = reactions.find((r) => !!r.myReactionId);
+  const reactionMadeByUser = reactionsReduced.find((r) => !!r.myReactionId);
 
-  const showCondensed = reactions.length > CONDENSED_VIEW_MIN_USER_AMOUNT && (props.dimensions?.width ?? 0) < CONDENSED_VIEW_WIDTH_LIMIT;
+  const showCondensed = reactionsReduced.length > CONDENSED_VIEW_MIN_USER_AMOUNT && (props.dimensions?.width ?? 0) < CONDENSED_VIEW_WIDTH_LIMIT;
 
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
   const [showReactionPopup, setShowReactionPopup] = useState<boolean>(false);
@@ -149,21 +154,23 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         <button className="note-reaction-list__add-reaction-sticker-container" onClick={(e) => toggleReactionBar(e)}>
           {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
-        {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactions} handleClickReaction={handleClickReaction} />}
+        {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
       </div>
       <div className="note-reaction-list__reaction-chips-container">
         {!showReactionBar &&
           // show either condensed or normal reaction chips
           (showCondensed ? (
             <>
-              <NoteReactionChipCondensed reactions={reactions} />
+              <NoteReactionChipCondensed reactions={reactionsReduced} />
               {reactionMadeByUser && <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />}
             </>
           ) : (
-            reactions.map((r) => <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />)
+            reactionsReduced.map((r) => (
+              <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />
+            ))
           ))}
       </div>
-      {showReactionPopup && <NoteReactionPopup reactions={reactionsFlat} onClose={closeReactionPopup} />}
+      {showReactionPopup && <NoteReactionPopup reactionsFlat={reactionsFlat} reactionsReduced={reactionsReduced} onClose={closeReactionPopup} />}
     </div>
   );
 };

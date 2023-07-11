@@ -10,13 +10,14 @@ import {NoteAuthorList} from "../../NoteAuthorList/NoteAuthorList";
 import "./NoteReactionPopup.scss";
 
 interface NoteReactionPopupProps {
-  reactions: ReactionModeled[];
+  reactionsFlat: ReactionModeled[];
+  reactionsReduced: ReactionModeled[];
   onClose: (e: React.MouseEvent) => void;
 }
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   // sum total reactions
-  const totalReactions = props.reactions.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
+  const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
 
   // activeTab === undefined -> all are active
@@ -38,12 +39,12 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
             <div className="note-reaction-popup__tab--text">Alle</div>
             <div className="note-reaction-popup__tab--amount">{totalReactions}</div>
           </button>
-          {props.reactions.map((r) => (
+          {props.reactionsReduced.map((r) => (
             <NoteReactionChip reaction={r} key={r.reactionType} overrideActive={r.reactionType === activeTab} handleClickReaction={(e) => changeTab(e, r.reactionType)} />
           ))}
         </nav>
         <main className="note-reaction-popup__main">
-          {props.reactions.filter(filterFunc).map((r) => (
+          {props.reactionsFlat.filter(filterFunc).map((r) => (
             <>
               <div className="note-reaction-popup__row">
                 <NoteAuthorList authors={r.users} showAuthors viewer={viewer} />
