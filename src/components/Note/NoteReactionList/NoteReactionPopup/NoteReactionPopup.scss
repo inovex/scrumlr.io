@@ -49,6 +49,10 @@
   &--active {
     background-color: var(--accent-color);
     color: $color-white;
+
+    &:hover {
+      background-color: var(--accent-color); // essentially no hover color when active.
+    }
   }
 }
 

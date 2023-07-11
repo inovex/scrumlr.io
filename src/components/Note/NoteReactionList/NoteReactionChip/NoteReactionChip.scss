@@ -51,6 +51,10 @@
   .note-reaction-chip__amount {
     color: $color-white;
   }
+
+  &:hover {
+    background-color: var(--accent-color); // essentially no hover color when active.
+  }
 }
 
 [theme="dark"] {
