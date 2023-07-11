@@ -50,7 +50,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
         </nav>
         <main className="note-reaction-popup__main">
           {props.reactionsFlat.filter(filterFunc).map((r) => (
-            <>
+            <div className="note-reaction-popup__row-container" key={`${r.users[0].user.id}-${r.reactionType}`}>
               <div className="note-reaction-popup__row">
                 <NoteAuthorList authors={r.users} showAuthors viewer={viewer} />
                 <div className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}>
@@ -58,7 +58,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
                 </div>
               </div>
               <hr />
-            </>
+            </div>
           ))}
         </main>
       </div>
