@@ -167,11 +167,13 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           (showCondensed ? (
             <>
               <NoteReactionChipCondensed reactions={reactionsReduced} />
-              {reactionMadeByUser && <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />}
+              {reactionMadeByUser && (
+                <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} showTooltip />
+              )}
             </>
           ) : (
             reactionsReduced.map((r) => (
-              <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} />
+              <NoteReactionChip reaction={r} key={r.reactionType} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} showTooltip />
             ))
           ))}
       </div>

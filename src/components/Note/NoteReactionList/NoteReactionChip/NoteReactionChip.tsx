@@ -11,6 +11,7 @@ interface NoteReactionChipProps {
   reaction: ReactionModeled;
   handleClickReaction?: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
   handleLongPressReaction?: (e: LongPressReactEvents) => void;
+  showTooltip?: boolean;
   overrideActive?: boolean; // if this is set, the chip will be highlighted no matter if yourself reacted to it
 }
 
@@ -43,12 +44,14 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         <div className="note-reaction-chip__reaction">{reactionImage}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
-      <Tooltip
-        anchorSelect={`#reaction-${props.reaction.noteId}-${props.reaction.reactionType}`}
-        place="top"
-        variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
-        content={reactionUsers}
-      />
+      {props.showTooltip && (
+        <Tooltip
+          anchorSelect={`#reaction-${props.reaction.noteId}-${props.reaction.reactionType}`}
+          place="top"
+          variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
+          content={reactionUsers}
+        />
+      )}
     </>
   );
 };
