@@ -43,7 +43,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     // get the participant who issued that reaction
     const participant = participants.find((p) => p?.user.id === reaction.user);
     // if yourself made a reaction of a respective type, get the id
-    const myReactionId = allReactions.find((s) => s.user === me?.user.id && s.reactionType === reaction.reactionType)?.id;
+    const myReactionId = reaction.user === me?.user.id ? reaction.id : undefined;
 
     if (!participant) throw new Error("participant must exist");
 
@@ -78,7 +78,12 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           const existingReaction = acc.find((r) => r.reactionType === curr.reactionType);
           if (existingReaction) {
             existingReaction.amount++;
-            existingReaction.users.push(curr.users[0]); // exactly one user existing can be asserted (see convertToModeled)
+            existingReaction.users.push(...curr.users); // exactly one user existing can be asserted (see convertToModeled)
+
+            // if your own reaction is found while iterating, add it to the object
+            if (curr.myReactionId) {
+              existingReaction.myReactionId = curr.myReactionId;
+            }
           } else {
             acc.push(curr);
           }
