@@ -29,12 +29,30 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   };
 
   // filter by ReactionType, or if that's undefined filter nothing.
-  const filterFunc = (r: ReactionModeled) => (!activeTab ? true : activeTab === r.reactionType);
+  // const filterFunc = (r: ReactionModeled) => (!activeTab ? true : activeTab === r.reactionType);
 
   // if a tab is active and the existing reactions are removed, default to showing all
   if (activeTab && !props.reactionsReduced.some((r) => r.reactionType === activeTab)) {
     setActiveTab(undefined);
   }
+
+  const renderContainer = (reaction?: ReactionModeled) => (
+    <div className="note-reaction-popup__container">
+      {props.reactionsFlat
+        .filter((r) => (reaction ? r.reactionType === reaction.reactionType : true))
+        .map((r) => (
+          <div className="note-reaction-popup__row-container" key={`${r.users[0].user.id}-${r.reactionType}`}>
+            <div className="note-reaction-popup__row">
+              <NoteAuthorList authors={r.users} showAuthors viewer={viewer} />
+              <div className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}>
+                {ReactionImageMap.get(r.reactionType)}
+              </div>
+            </div>
+            <div className="note-reaction-popup__row-divider" />
+          </div>
+        ))}
+    </div>
+  );
 
   return (
     <Portal hiddenOverflow onClick={props.onClose}>
@@ -49,17 +67,8 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
           ))}
         </nav>
         <main className="note-reaction-popup__main">
-          {props.reactionsFlat.filter(filterFunc).map((r) => (
-            <div className="note-reaction-popup__row-container" key={`${r.users[0].user.id}-${r.reactionType}`}>
-              <div className="note-reaction-popup__row">
-                <NoteAuthorList authors={r.users} showAuthors viewer={viewer} />
-                <div className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}>
-                  {ReactionImageMap.get(r.reactionType)}
-                </div>
-              </div>
-              <div className="note-reaction-popup__row-divider" />
-            </div>
-          ))}
+          {renderContainer(undefined) /* render all first */}
+          {props.reactionsReduced.map((r) => renderContainer(r)) /* now for each reaction type */}
         </main>
       </div>
     </Portal>
