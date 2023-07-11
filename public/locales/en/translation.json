@@ -226,8 +226,8 @@
     "stopVoting": "End voting phase"
   },
   "VoteDisplay": {
-    "finishActionTooltip": "Finish",
-    "abortActionTooltip": "Abort",
+    "finishActionTooltip": "Conclude voting",
+    "abortActionTooltip": "Cancel voting",
     "tooltip": "{{remaining}} of {{total}} votes remaining"
   },
   "TimerToggleButton": {
