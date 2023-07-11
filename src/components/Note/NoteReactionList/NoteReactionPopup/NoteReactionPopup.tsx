@@ -31,6 +31,11 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   // filter by ReactionType, or if that's undefined filter nothing.
   const filterFunc = (r: ReactionModeled) => (!activeTab ? true : activeTab === r.reactionType);
 
+  // if a tab is active and the existing reactions are removed, default to showing all
+  if (activeTab && !props.reactionsReduced.some((r) => r.reactionType === activeTab)) {
+    setActiveTab(undefined);
+  }
+
   return (
     <Portal hiddenOverflow onClick={props.onClose}>
       <div className="note-reaction-popup__root">
