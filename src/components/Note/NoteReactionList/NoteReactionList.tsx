@@ -39,7 +39,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const participants = [me, ...others];
 
   /** helper function that converts a Reaction object to ReactionModeled object */
-  const convertToModeled = (reaction: Reaction, allReactions: Reaction[]) => {
+  const convertToModeled = (reaction: Reaction) => {
     // get the participant who issued that reaction
     const participant = participants.find((p) => p?.user.id === reaction.user);
     // if yourself made a reaction of a respective type, get the id
@@ -60,7 +60,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
    * a flat array where each reaction of a note is cast to the type ReactionModeled.
    * use this if you want to handle each reaction each on its own
    */
-  const reactionsFlat = useAppSelector((state) => state.reactions.filter((r) => r.note === props.noteId).map((r, _, self) => convertToModeled(r, self)), isEqual);
+  const reactionsFlat = useAppSelector((state) => state.reactions.filter((r) => r.note === props.noteId).map((r) => convertToModeled(r)), isEqual);
 
   /*
    * a reduced reactions list, where reactions of the same type are combined into the ReactionModeled interface.
@@ -71,7 +71,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     (state) =>
       state.reactions
         .filter((r) => r.note === props.noteId)
-        .map((r, _, self) => convertToModeled(r, self))
+        .map((r) => convertToModeled(r))
         // cannot reuse reactionsFlat here because of the reference objects will interfere, so we have to regenerate it with different objects
         .reduce((acc: ReactionModeled[], curr) => {
           // check if a reaction of respective reaction type is already in the accumulator
