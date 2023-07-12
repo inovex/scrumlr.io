@@ -29,8 +29,6 @@ $name-gap: 4px;
 
   // reset margin and overlap avatars on top of each other
   margin: 0 0 0 $overlap-margin;
-  // counter the slight offset from centering because UserAvatar real size is larger than what you actually see
-  transform: translateY(-2px);
 
   &:first-of-type {
     // reset negative margin on first avatar
