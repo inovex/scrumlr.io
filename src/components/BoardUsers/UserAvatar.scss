@@ -26,9 +26,6 @@
     --dasharray: 20;
     stroke-dasharray: var(--dasharray);
     stroke-dashoffset: 0;
-    animation:
-      draw 0.6s ease-in-out,
-      scale 0.3s ease-in-out;
     transform-origin: 35% 50%;
     filter: drop-shadow(0 0 4px $color-white);
   }
@@ -42,7 +39,6 @@
     --dasharray: 760;
     stroke-dasharray: var(--dasharray);
     stroke-dashoffset: 0;
-    animation: draw 0.45s ease-in-out;
     transform-origin: 45.5% 43%;
   }
 
@@ -56,6 +52,18 @@
   .avatar #Color\/Palette\/Blue-01 {
     transition: fill 0.15s ease-in-out;
     fill: color.change($color-grooming-green, $lightness: 100%, $saturation: 0%);
+  }
+}
+
+.user-avatar--ready-animated {
+  > .avatar #Circle-Background {
+    animation: draw 0.45s ease-in-out;
+  }
+
+  > .user-avatar__ready .check {
+    animation:
+      draw 0.6s ease-in-out,
+      scale 0.3s ease-in-out;
   }
 }
 

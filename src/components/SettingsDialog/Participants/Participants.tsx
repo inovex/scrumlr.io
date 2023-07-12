@@ -97,7 +97,7 @@ export const Participants = () => {
             .filter((participant) => participant.connected === onlineFilter)
             .map((participant) => (
               <li key={participant.user.id} className="participants__list-item">
-                <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} title={participant.user.name} />
+                <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} ready={participant.ready} title={participant.user.name} />
                 <div className="participant__name-role-wrapper">
                   <span className="participant__name">{participant.user.name}</span>
                   {participant.role === "OWNER" || !isModerator || participant.user.id === self.user.id ? (
