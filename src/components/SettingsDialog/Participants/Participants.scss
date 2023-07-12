@@ -137,15 +137,15 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: $margin--small;
 
   &:not(:last-child) {
     border-bottom: 1px solid $color-lighter-gray;
   }
 }
 
-.participant__avatar > svg {
-  height: $icon--extralarge;
-  width: $icon--extralarge;
+.participant__avatar {
+  flex-shrink: 0;
 }
 
 .participant__name-role-wrapper {
