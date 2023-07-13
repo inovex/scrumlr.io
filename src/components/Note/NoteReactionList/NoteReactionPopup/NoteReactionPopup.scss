@@ -109,6 +109,7 @@
 }
 
 .note-reaction-popup__row-reaction {
+  all: unset; // reset button
   display: flex;
   justify-content: center;
   align-items: center;

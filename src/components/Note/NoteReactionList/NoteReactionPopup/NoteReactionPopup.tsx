@@ -5,6 +5,8 @@ import {ReactionImageMap, ReactionType} from "types/reaction";
 import _ from "underscore";
 import {useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
+import {useDispatch} from "react-redux";
+import {Actions} from "store/action";
 import {ReactionModeled} from "../NoteReactionList";
 import {NoteReactionChip} from "../NoteReactionChip/NoteReactionChip";
 import {NoteAuthorList} from "../../NoteAuthorList/NoteAuthorList";
@@ -17,6 +19,7 @@ interface NoteReactionPopupProps {
 }
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
+  const dispatch = useDispatch();
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useIsScrolling(containerRef);
   // sum total reactions
@@ -53,6 +56,14 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     scrollToContainer(index);
   };
 
+  // on clicking your own reaction it gets removed
+  const removeOwnReaction = (e: React.MouseEvent<HTMLButtonElement>, r: ReactionModeled) => {
+    e.stopPropagation();
+    if (r.myReactionId) {
+      dispatch(Actions.deleteReaction(r.myReactionId));
+    }
+  };
+
   const renderContainer = (reaction?: ReactionModeled) => (
     <div className="note-reaction-popup__container">
       {props.reactionsFlat
@@ -61,9 +72,12 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
           <div className="note-reaction-popup__row-container" key={`${r.users[0].user.id}-${r.reactionType}`}>
             <div className="note-reaction-popup__row">
               <NoteAuthorList authors={r.users} showAuthors viewer={viewer} />
-              <div className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}>
+              <button
+                className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}
+                onClick={(e) => removeOwnReaction(e, r)}
+              >
                 {ReactionImageMap.get(r.reactionType)}
-              </div>
+              </button>
             </div>
             <div className="note-reaction-popup__row-divider" />
           </div>
