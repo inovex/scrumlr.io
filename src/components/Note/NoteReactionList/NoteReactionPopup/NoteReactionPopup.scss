@@ -9,7 +9,7 @@
 
   transform: translateX(-50%); // show on whole screen
 
-  padding: $padding--small $padding--default $padding--large $padding--default;
+  padding: $padding--small $padding--default $padding--large * 2 $padding--default;
 
   background-color: $color-white;
 
