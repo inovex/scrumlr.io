@@ -53,14 +53,6 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     scrollToContainer(index);
   };
 
-  // filter by ReactionType, or if that's undefined filter nothing.
-  // const filterFunc = (r: ReactionModeled) => (!activeTab ? true : activeTab === r.reactionType);
-
-  // if a tab is active and the existing reactions are removed, default to showing all
-  if (activeTab && !props.reactionsReduced.some((r) => r.reactionType === activeTab)) {
-    setActiveTab(undefined);
-  }
-
   const renderContainer = (reaction?: ReactionModeled) => (
     <div className="note-reaction-popup__container">
       {props.reactionsFlat
