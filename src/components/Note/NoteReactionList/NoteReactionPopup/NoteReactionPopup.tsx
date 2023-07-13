@@ -1,9 +1,10 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
 import {ReactionImageMap, ReactionType} from "types/reaction";
 import _ from "underscore";
 import {useAppSelector} from "store";
+import {useIsScrolling} from "utils/hooks/useIsScrolling";
 import {ReactionModeled} from "../NoteReactionList";
 import {NoteReactionChip} from "../NoteReactionChip/NoteReactionChip";
 import {NoteAuthorList} from "../../NoteAuthorList/NoteAuthorList";
@@ -17,12 +18,27 @@ interface NoteReactionPopupProps {
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isScrolling = useIsScrolling(containerRef);
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
 
   // activeTab === undefined -> all are active
   const [activeTab, setActiveTab] = useState<ReactionType>();
+
+  // after scrolling has stopped, divide the scroll offset by the main container width
+  // to get which inner container is currently visible.
+  // then, we can find which tab corresponds to it and set it to active.
+  useEffect(() => {
+    if (!isScrolling) {
+      const current = containerRef.current!;
+      const width = current.offsetWidth;
+      const offset = current.scrollLeft;
+      const index = Math.floor(offset / width);
+      const tabTo = index > 0 ? props.reactionsReduced[index - 1].reactionType : undefined;
+      setActiveTab(tabTo);
+    }
+  }, [isScrolling, props.reactionsReduced]);
 
   const scrollToContainer = (index: number) => {
     const current = containerRef.current!;
