@@ -61,6 +61,12 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
    * use this if you want to handle each reaction each on its own
    */
   const reactionsFlat = useAppSelector((state) => state.reactions.filter((r) => r.note === props.noteId).map((r) => convertToModeled(r)), isEqual);
+  // swap own reaction to first place
+  const myIndex = reactionsFlat.findIndex((r) => r.myReactionId);
+  if (myIndex > 0) {
+    // in-place swap
+    [reactionsFlat[myIndex], reactionsFlat[0]] = [reactionsFlat[0], reactionsFlat[myIndex]];
+  }
 
   /*
    * a reduced reactions list, where reactions of the same type are combined into the ReactionModeled interface.
