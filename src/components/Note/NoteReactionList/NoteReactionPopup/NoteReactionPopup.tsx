@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
 import {ReactionImageMap, ReactionType} from "types/reaction";
@@ -16,6 +16,7 @@ interface NoteReactionPopupProps {
 }
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
@@ -23,9 +24,17 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   // activeTab === undefined -> all are active
   const [activeTab, setActiveTab] = useState<ReactionType>();
 
+  const scrollToContainer = (index: number) => {
+    const current = containerRef.current!;
+    const offset = current.offsetWidth * index;
+    current.scrollTo({left: offset, behavior: "smooth"});
+  };
+
   const changeTab = (e: React.MouseEvent<HTMLButtonElement>, reactionType?: ReactionType) => {
     e.stopPropagation();
+    const index = reactionType ? props.reactionsReduced.findIndex((r) => r.reactionType === reactionType) + 1 : 0;
     setActiveTab(reactionType);
+    scrollToContainer(index);
   };
 
   // filter by ReactionType, or if that's undefined filter nothing.
@@ -66,7 +75,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
             <NoteReactionChip reaction={r} key={r.reactionType} overrideActive={r.reactionType === activeTab} handleClickReaction={(e) => changeTab(e, r.reactionType)} />
           ))}
         </nav>
-        <main className="note-reaction-popup__main">
+        <main className="note-reaction-popup__main" ref={containerRef}>
           {renderContainer(undefined) /* render all first */}
           {props.reactionsReduced.map((r) => renderContainer(r)) /* now for each reaction type */}
         </main>
