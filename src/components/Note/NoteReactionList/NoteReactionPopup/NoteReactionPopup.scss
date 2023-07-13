@@ -9,7 +9,7 @@
 
   transform: translateX(-50%); // show on whole screen
 
-  padding: $padding--large $padding--default;
+  padding: $padding--small $padding--default $padding--large $padding--default;
 
   background-color: $color-white;
 
@@ -19,6 +19,20 @@
   box-shadow: 0 2px 30px 0 rgba($menu-icon-background-color--dark, 0.12);
 
   animation: slide-in 0.3s ease-in-out;
+}
+
+.note-reaction-popup__notch-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.note-reaction-popup__notch {
+  width: 64px;
+  height: 4px;
+  background-color: $color-lighter-gray;
+  border-radius: $rounded--default;
+  margin-bottom: $margin--default;
 }
 
 .note-reaction-popup__tab-bar {

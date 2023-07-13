@@ -74,6 +74,9 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   return (
     <Portal hiddenOverflow onClick={props.onClose}>
       <div className="note-reaction-popup__root">
+        <div className="note-reaction-popup__notch-container">
+          <div className="note-reaction-popup__notch" />
+        </div>
         <nav className="note-reaction-popup__tab-bar">
           <button className={classNames("note-reaction-popup__tab-all", {"note-reaction-popup__tab-all--active": !activeTab})} onClick={(e) => changeTab(e, undefined)}>
             <div className="note-reaction-popup__tab--text">Alle</div>
