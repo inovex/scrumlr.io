@@ -1,0 +1,11 @@
+<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+<defs>
+        <filter id="blur">
+            <feGaussianBlur stdDeviation="5" />
+        </filter>
+    </defs>
+<g fill="none" stroke="currentColor">
+<polyline class="check" points="12.463 18.398 16.477 22.324 26.463 12.324" stroke-linecap="square" stroke-width="2"/>
+<circle class="circle" cx="18" cy="17.8" r="16" fill="currentColor" opacity="0.14" />
+</g>
+</svg>

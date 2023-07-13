@@ -2,17 +2,17 @@ import {ApplicationState} from "types";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import {NoteAuthorList} from "../NoteAuthorList";
-import {Participant, ParticipantExtendedInfo} from "types/participant";
+import {Participant} from "types/participant";
 import {render} from "testUtils";
 import getTestParticipant from "utils/test/getTestParticipant";
 
-const AUTHOR1: ParticipantExtendedInfo = {...getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}}), isSelf: true, displayName: "Me"};
-const AUTHOR2: ParticipantExtendedInfo = {...getTestParticipant({user: {id: "test-participant-id-2", name: "test-participant-name-2"}}), isSelf: false, displayName: "test-user-2"};
-const AUTHOR3: ParticipantExtendedInfo = {...getTestParticipant({user: {id: "test-participant-id-3", name: "test-participant-name-3"}}), isSelf: false, displayName: "test-user-3"};
-const AUTHOR4: ParticipantExtendedInfo = {...getTestParticipant({user: {id: "test-participant-id-4", name: "test-participant-name-4"}}), isSelf: false, displayName: "test-user-4"};
+const AUTHOR1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}});
+const AUTHOR2: Participant = getTestParticipant({user: {id: "test-participant-id-2", name: "test-participant-name-2"}});
+const AUTHOR3: Participant = getTestParticipant({user: {id: "test-participant-id-3", name: "test-participant-name-3"}});
+const AUTHOR4: Participant = getTestParticipant({user: {id: "test-participant-id-4", name: "test-participant-name-4"}});
 const VIEWER1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}});
 
-const createNoteAuthorList = (authors: ParticipantExtendedInfo[], showAuthors: boolean, overwrite?: Partial<ApplicationState>) => {
+const createNoteAuthorList = (authors: Participant[], showAuthors: boolean, overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
       <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={VIEWER1} />
@@ -42,6 +42,17 @@ describe("NoteAuthorList", () => {
     it("should have self class for self", () => {
       const {container} = render(createNoteAuthorList([AUTHOR1], true));
       expect(container.firstChild).toHaveClass("note-author-list--self");
+    });
+
+    it("should contain Me as name", () => {
+      const {container} = render(createNoteAuthorList([AUTHOR1], true));
+      expect(container.firstChild).toHaveTextContent("Me");
+    });
+
+    it("should contain author 2s name", () => {
+      const {container} = render(createNoteAuthorList([AUTHOR2], true));
+      expect(container.firstChild).not.toHaveTextContent(AUTHOR1.user.name);
+      expect(container.firstChild).toHaveTextContent(AUTHOR2.user.name);
     });
 
     it("should not have a rest bubble", () => {

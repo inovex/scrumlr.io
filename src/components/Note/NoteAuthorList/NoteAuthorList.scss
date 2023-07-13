@@ -2,6 +2,7 @@
 
 $overlap-margin: -10px;
 $name-gap: 4px;
+$avatar-size: 28px;
 
 // --self classes: indicates yourself as the stack author,
 // which is highlighted by the accent color of that column
@@ -10,13 +11,13 @@ $name-gap: 4px;
   display: flex;
   flex-direction: row;
   align-items: center;
-
-  padding: 0 14px 0 2px;
   border-radius: $rounded--full;
 }
 
 .note-author-list--self {
   background: var(--accent-color--desaturated-light);
+  padding-right: $padding--default;
+  width: max-content;
 }
 
 .note__author {
@@ -24,13 +25,11 @@ $name-gap: 4px;
   border: 0;
 
   font: inherit;
-  height: 28px;
+  height: $avatar-size;
   border-radius: $rounded--default;
 
   // reset margin and overlap avatars on top of each other
   margin: 0 0 0 $overlap-margin;
-  // counter the slight offset from centering because UserAvatar real size is larger than what you actually see
-  transform: translateY(-2px);
 
   &:first-of-type {
     // reset negative margin on first avatar
@@ -49,6 +48,11 @@ $name-gap: 4px;
     // make a gap after last avatar unless .note-author-rest bubble exists
     margin-right: $name-gap;
   }
+}
+
+.note__user-avatar {
+  width: $avatar-size;
+  height: $avatar-size;
 }
 
 // the rest bubble should be about the same size as the avatars
@@ -78,7 +82,9 @@ $name-gap: 4px;
   color: $color-dark-gray;
   font-size: $text--xs;
   letter-spacing: $letter-spacing--small;
-  line-height: $line-height--small;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .note__author--self > .note__user-avatar #Circle-Background {

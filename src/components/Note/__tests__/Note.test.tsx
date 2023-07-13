@@ -8,7 +8,6 @@ import * as reactRouter from "react-router";
 import {ApplicationState} from "types";
 import {BoardState} from "types/board";
 import getTestApplicationState from "utils/test/getTestApplicationState";
-import getTestNote from "utils/test/getTestNote";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
 const NOTE_ID = "test-notes-id-1";
@@ -54,11 +53,6 @@ describe("Note", () => {
       expect(note).toBeDefined();
       const {container} = render(createNote(false));
       expect(container.firstChild).toHaveTextContent(note!.text);
-    });
-
-    test("own note author name is me", () => {
-      const {container} = render(createNote(false, {notes: [getTestNote({id: "test-notes-id-1", author: getTestParticipant().user.id})]}));
-      expect(container.firstChild).toHaveTextContent("Me");
     });
   });
 

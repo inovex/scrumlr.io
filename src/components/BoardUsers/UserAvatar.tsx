@@ -1,10 +1,10 @@
-import {useEffect, useRef, useState} from "react";
-import "./UserAvatar.scss";
+import {useEffect, useState, useRef} from "react";
 import classNames from "classnames";
-import {ReactComponent as IconCheck} from "assets/icon-check.svg";
+import {ReactComponent as IconCheck} from "assets/icon-ready.svg";
 import {ReactComponent as RaisedHand} from "assets/icon-hand.svg";
 import {AvataaarProps, Avatar} from "../Avatar";
 import {Badge} from "../Badge";
+import "./UserAvatar.scss";
 
 export interface UserAvatarProps {
   className?: string;
@@ -18,28 +18,22 @@ export interface UserAvatarProps {
 }
 
 export const UserAvatar = ({title, badgeText, id, ready, raisedHand, avatar, className, avatarClassName}: UserAvatarProps) => {
-  const [showHand, setShowHand] = useState<boolean | undefined>(raisedHand);
-  const prevReadyRef = useRef<boolean | undefined>(ready);
-  const handRef = useRef<boolean | undefined>(raisedHand);
+  const [readyAnimation, setReadyAnimation] = useState<boolean>(false);
+  const prevReadyRef = useRef<boolean>();
 
   useEffect(() => {
-    if (prevReadyRef.current === false && ready === true && raisedHand === true) {
-      setShowHand(false);
-      setTimeout(() => {
-        setShowHand(handRef.current);
-      }, 2000);
-    } else {
-      setShowHand(raisedHand);
+    if (ready && prevReadyRef.current === false) {
+      setReadyAnimation(true);
+      setTimeout(() => setReadyAnimation(false), 600);
     }
 
     prevReadyRef.current = ready;
-    handRef.current = raisedHand;
-  }, [ready, raisedHand]);
+  }, [ready]);
 
   return (
-    <div className={classNames("user-avatar", className, ready && "user-ready")} title={title}>
-      {ready && !showHand && <IconCheck className="user-avatar__ready" />}
-      {showHand && <RaisedHand className="user-avatar__raised-hand" />}
+    <div className={classNames("user-avatar", className, ready && "user-ready", {"user-avatar--ready-animated": readyAnimation})} title={title}>
+      {ready && <IconCheck className="user-avatar__ready" />}
+      {raisedHand && <RaisedHand className="user-avatar__raised-hand" />}
       <Avatar seed={id} avatar={avatar} className={avatarClassName} />
       {badgeText && <Badge text={badgeText} />}
     </div>
