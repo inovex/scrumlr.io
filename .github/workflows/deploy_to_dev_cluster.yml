@@ -72,4 +72,4 @@ jobs:
 
             </details>
           comment_tag: dev-deployment
-          mode: recreate
+          mode: upsert
