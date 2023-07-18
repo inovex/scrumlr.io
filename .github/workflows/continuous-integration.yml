@@ -65,8 +65,7 @@ jobs:
   deploy_to_dev_cluster:
     needs: package
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    # TODO change to main before merging
-    uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@improvement/cleanup-deploy-messages
+    uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@main
     secrets: inherit
     with:
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
