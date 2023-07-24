@@ -16,8 +16,10 @@ import "./NoteReactionPopup.scss";
 interface NoteReactionPopupProps {
   reactionsFlat: ReactionModeled[];
   reactionsReduced: ReactionModeled[];
-  onClose: (e: React.MouseEvent) => void;
+  onClose: (e?: React.MouseEvent) => void;
 }
+
+const CLOSING_THRESHOLD = 250; // px
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const dispatch = useDispatch();
@@ -25,7 +27,8 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const draggableNotchRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useIsScrolling(containerRef);
-  // const [popupDeltaY, setPopupDeltaY] = useState(0);
+  const popupDeltaY = useMoveDelta(draggableNotchRef, rootRef);
+  const translateY = popupDeltaY > 0 ? popupDeltaY : 0; // only allow scrolling down
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
@@ -46,6 +49,12 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
       setActiveTab(tabTo);
     }
   }, [isScrolling, props.reactionsReduced]);
+
+  useEffect(() => {
+    if (translateY > CLOSING_THRESHOLD) {
+      props.onClose();
+    }
+  }, [translateY, props]);
 
   const scrollToContainer = (index: number) => {
     const current = containerRef.current!;
@@ -92,11 +101,9 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     </div>
   );
 
-  const popupDeltaY = useMoveDelta(draggableNotchRef, rootRef);
-
   return (
     <Portal hiddenOverflow onClick={props.onClose}>
-      <div className="note-reaction-popup__root" ref={rootRef} style={{transform: `translate(-50%, ${popupDeltaY}px)`}}>
+      <div className="note-reaction-popup__root" ref={rootRef} style={{transform: `translate(-50%, ${translateY}px)`}}>
         <div className="note-reaction-popup__notch-container" ref={draggableNotchRef}>
           <div className="note-reaction-popup__notch" />
         </div>

@@ -154,8 +154,10 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     setShowReactionPopup(true);
   };
 
-  const closeReactionPopup = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const closeReactionPopup = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
     setShowReactionPopup(false);
   };
 
