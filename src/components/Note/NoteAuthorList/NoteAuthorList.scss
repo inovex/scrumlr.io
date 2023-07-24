@@ -2,8 +2,9 @@
 
 $overlap-margin: -10px;
 $name-gap: 4px;
-$stack-author-rest-author-gap: 10px;
+$stack-author-rest-author-gap: 9px;
 $avatar-size: 28px;
+$max-name-length: 115px;
 
 // --self classes: indicates yourself as the stack author,
 // which is highlighted by the accent color of that column
@@ -92,6 +93,7 @@ $avatar-size: 28px;
   color: $color-dark-gray;
   font-size: $text--xs;
   letter-spacing: $letter-spacing--small;
+  max-width: $max-name-length;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
