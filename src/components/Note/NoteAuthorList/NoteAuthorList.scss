@@ -21,6 +21,7 @@ $avatar-size: 28px;
   align-items: center;
   gap: $name-gap;
   border-radius: $rounded--full;
+  overflow: hidden; // always try to fit content (by cutting the author name)
 }
 
 .note-author__container--self {
