@@ -64,9 +64,12 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     }
   };
 
+  // this is a container element. one exists for all reactions and also one for each reaction type.
+  // the containers are scrollable and snap horizontally.
   const renderContainer = (reaction?: ReactionModeled) => (
     <div className="note-reaction-popup__container">
       {props.reactionsFlat
+        // if a reaction is given as parameter, filter only that reaction type, otherwise show all.
         .filter((r) => (reaction ? r.reactionType === reaction.reactionType : true))
         .map((r) => (
           <div className="note-reaction-popup__row-container" key={`${r.users[0].user.id}-${r.reactionType}`}>
