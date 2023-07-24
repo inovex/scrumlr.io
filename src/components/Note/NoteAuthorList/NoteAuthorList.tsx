@@ -53,7 +53,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const SHOW_MAX_AUTHORS = 3;
   const stackAuthor = authorExtendedInfo[0];
   const restAuthors = authorExtendedInfo.slice(1);
-  const slicedAuthors = restAuthors.splice(0, authorExtendedInfo.length > SHOW_MAX_AUTHORS ? SHOW_MAX_AUTHORS - 1 : SHOW_MAX_AUTHORS); // max first n authors
+  const slicedAuthors = restAuthors.splice(0, authorExtendedInfo.length - 1 > SHOW_MAX_AUTHORS ? SHOW_MAX_AUTHORS - 1 : SHOW_MAX_AUTHORS); // max first n authors
   const restUsersExist = restAuthors.length > 0;
   const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
   return props.showAuthors || props.viewer.user.id === stackAuthor.user!.id ? (
