@@ -5,6 +5,7 @@ import {ReactionImageMap, ReactionType} from "types/reaction";
 import _ from "underscore";
 import {useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
+import {useMoveDelta} from "utils/hooks/useMoveDelta";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {ReactionModeled} from "../NoteReactionList";
@@ -20,8 +21,11 @@ interface NoteReactionPopupProps {
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const dispatch = useDispatch();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const draggableNotchRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useIsScrolling(containerRef);
+  // const [popupDeltaY, setPopupDeltaY] = useState(0);
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
@@ -88,10 +92,12 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     </div>
   );
 
+  const popupDeltaY = useMoveDelta(draggableNotchRef, rootRef);
+
   return (
     <Portal hiddenOverflow onClick={props.onClose}>
-      <div className="note-reaction-popup__root">
-        <div className="note-reaction-popup__notch-container">
+      <div className="note-reaction-popup__root" ref={rootRef} style={{transform: `translate(-50%, ${popupDeltaY}px)`}}>
+        <div className="note-reaction-popup__notch-container" ref={draggableNotchRef}>
           <div className="note-reaction-popup__notch" />
         </div>
         <nav className="note-reaction-popup__tab-bar">
