@@ -110,7 +110,7 @@ $avatar-size: 28px;
 }
 
 [theme="dark"] {
-  .note-author-list--self {
+  .note-author__container--self {
     background: var(--accent-color--desaturated-dark);
   }
 
