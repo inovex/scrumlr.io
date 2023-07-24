@@ -62,7 +62,6 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
         <figure
           className={classNames("note__author", {
             "note__author--self": stackAuthor.isSelf,
-            "note__author--with-rest": restUsersExist,
           })}
           aria-roledescription="author"
           key={stackAuthor.user!.id}
@@ -81,14 +80,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
 
       <div className="note-rest-authors__container">
         {slicedAuthors.map((a) => (
-          <figure
-            className={classNames("note__author", {
-              "note__author--self": stackAuthor.isSelf,
-              "note__author--with-rest": restUsersExist,
-            })}
-            aria-roledescription="author"
-            key={a.user!.id}
-          >
+          <figure className="note__author" aria-roledescription="author" key={a.user!.id}>
             <UserAvatar id={a.user!.id} avatar={a.user!.avatar} title={a.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
           </figure>
         ))}

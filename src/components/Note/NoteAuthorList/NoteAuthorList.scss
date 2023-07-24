@@ -19,6 +19,7 @@ $avatar-size: 28px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: $name-gap;
   border-radius: $rounded--full;
 }
 
@@ -55,12 +56,6 @@ $avatar-size: 28px;
   &:nth-of-type(2) {
     // render above third avatar / rest bubble
     z-index: $note-z-index + 1;
-  }
-
-  &:last-of-type:not(.note__author--with-rest) {
-    padding-right: 0;
-    // make a gap after last avatar unless .note-author-rest bubble exists
-    margin-right: $name-gap;
   }
 }
 
