@@ -19,6 +19,8 @@ interface NoteReactionPopupProps {
   onClose: (e?: React.MouseEvent) => void;
 }
 
+const CLOSING_THRESHOLD_PERCENT = 80; // %
+
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const dispatch = useDispatch();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -26,8 +28,8 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useIsScrolling(containerRef);
   const popupDelta = useMoveDelta(draggableNotchRef);
-  const popupDeltaYWithOffset = popupDelta.y + (rootRef.current?.offsetHeight ?? 0);
-  const popupTranslateY = popupDeltaYWithOffset > 0 ? popupDeltaYWithOffset : 0;
+  const containerOffsetHeight = popupDelta.y + (rootRef.current?.offsetHeight ?? 0);
+  const popupTranslateY = containerOffsetHeight > 0 ? containerOffsetHeight : 0;
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
@@ -69,6 +71,16 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
       dispatch(Actions.deleteReaction(r.myReactionId));
     }
   };
+
+  // close popup if moving it below the threshold
+  useEffect(() => {
+    const containerFullHeight = rootRef.current!.getBoundingClientRect().height;
+    const calculatedThreshold = (containerFullHeight * CLOSING_THRESHOLD_PERCENT) / 100;
+
+    if (popupTranslateY > calculatedThreshold) {
+      props.onClose();
+    }
+  }, [popupTranslateY, props]);
 
   // this is a container element. one exists for all reactions and also one for each reaction type.
   // the containers are scrollable and snap horizontally.
