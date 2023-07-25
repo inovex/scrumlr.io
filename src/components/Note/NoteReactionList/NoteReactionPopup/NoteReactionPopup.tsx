@@ -19,16 +19,15 @@ interface NoteReactionPopupProps {
   onClose: (e?: React.MouseEvent) => void;
 }
 
-const CLOSING_THRESHOLD = 250; // px
-
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const dispatch = useDispatch();
   const rootRef = useRef<HTMLDivElement>(null);
   const draggableNotchRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useIsScrolling(containerRef);
-  const popupDeltaY = useMoveDelta(draggableNotchRef, rootRef);
-  const translateY = popupDeltaY > 0 ? popupDeltaY : 0; // only allow scrolling down
+  const popupDelta = useMoveDelta(draggableNotchRef);
+  const popupDeltaYWithOffset = popupDelta.y + (rootRef.current?.offsetHeight ?? 0);
+  const popupTranslateY = popupDeltaYWithOffset > 0 ? popupDeltaYWithOffset : 0;
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
@@ -49,12 +48,6 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
       setActiveTab(tabTo);
     }
   }, [isScrolling, props.reactionsReduced]);
-
-  useEffect(() => {
-    if (translateY > CLOSING_THRESHOLD) {
-      props.onClose();
-    }
-  }, [translateY, props]);
 
   const scrollToContainer = (index: number) => {
     const current = containerRef.current!;
@@ -103,7 +96,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
 
   return (
     <Portal hiddenOverflow onClick={props.onClose}>
-      <div className="note-reaction-popup__root" ref={rootRef} style={{transform: `translate(-50%, ${translateY}px)`}}>
+      <div className="note-reaction-popup__root" ref={rootRef} style={{transform: `translate(-50%, ${popupTranslateY}px)`}}>
         <div className="note-reaction-popup__notch-container" ref={draggableNotchRef}>
           <div className="note-reaction-popup__notch" />
         </div>
