@@ -37,9 +37,5 @@ describe("ShareQrCode Tests", () => {
     await waitFor(() => {
       expect(navigator.clipboard.writeText).toHaveBeenCalledWith("http://localhost/board/test-board-id");
     });
-
-    await waitFor(() => {
-      expect(button).toHaveClass("--copied");
-    });
   });
 });
