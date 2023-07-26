@@ -1,6 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {Helmet} from "react-helmet";
 import {useAppSelector} from "store";
+import {ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "../../config";
 
 type HelmetProps = React.ComponentProps<typeof Helmet>;
 const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
@@ -11,6 +12,14 @@ export const Html: FC = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
 
   if (title) title = `scrumlr.io - ${title}`;
+
+  const scripts = [
+    {
+      defer: true,
+      "data-domain": ANALYTICS_DATA_DOMAIN,
+      src: ANALYTICS_SRC,
+    },
+  ];
 
   useEffect(() => {
     if (theme === "auto") {
@@ -28,5 +37,5 @@ export const Html: FC = () => {
     }
   });
 
-  return <HelmetWorkaround title={title} htmlAttributes={{lang, theme}} />;
+  return <HelmetWorkaround title={title} htmlAttributes={{lang, theme}} script={scripts} />;
 };
