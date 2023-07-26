@@ -119,12 +119,20 @@ exports[`Feedback should match snapshot 1`] = `
         placeholder="mail@inovex.de"
       />
     </button>
-    <button
-      class="feedback-form__submit-button"
-      type="submit"
+    <div
+      class="settings-dialog__footer"
     >
-      Feedback.SubmitButton
-    </button>
+      <button
+        class="button button--inherit button--contained button__label--shown"
+        type="submit"
+      >
+        <span
+          class="button__label"
+        >
+          Feedback.SubmitButton
+        </span>
+      </button>
+    </div>
   </form>
 </div>
 `;

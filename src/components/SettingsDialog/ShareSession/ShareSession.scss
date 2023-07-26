@@ -50,18 +50,6 @@ $header-menu-border-bottom-color: #efefef;
   &:focus-visible {
     outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
   }
-
-  &.--copied {
-    background-color: transparent;
-    color: var(--accent-color);
-    cursor: default;
-
-    &:hover {
-      filter: none;
-      transform: none;
-      box-shadow: none;
-    }
-  }
 }
 
 .share-session__container {

@@ -6,21 +6,21 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="settings-dialog__container"
+        class="settings-dialog__container accent-color__planning-pink"
         data-testid="qrcode"
       >
         <div
           class="settings-dialog__header"
         >
           <h2
-            class="settings-dialog__header-text accent-color__planning-pink"
+            class="settings-dialog__header-text"
           >
              
             Share Session
           </h2>
         </div>
         <div
-          class="share-session__container accent-color__planning-pink"
+          class="share-session__container"
         >
           <div
             class="share-session__background"
@@ -43,10 +43,18 @@ Object {
               />
             </svg>
           </div>
+        </div>
+        <div
+          class="settings-dialog__footer"
+        >
           <button
-            class="share-qr-code-option__copy-to-clipboard"
+            class="button button--inherit button--contained button__label--shown"
           >
-            Copy Invite URL
+            <span
+              class="button__label"
+            >
+              Copy Invite URL
+            </span>
           </button>
         </div>
       </div>
@@ -54,21 +62,21 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="settings-dialog__container"
+      class="settings-dialog__container accent-color__planning-pink"
       data-testid="qrcode"
     >
       <div
         class="settings-dialog__header"
       >
         <h2
-          class="settings-dialog__header-text accent-color__planning-pink"
+          class="settings-dialog__header-text"
         >
            
           Share Session
         </h2>
       </div>
       <div
-        class="share-session__container accent-color__planning-pink"
+        class="share-session__container"
       >
         <div
           class="share-session__background"
@@ -91,10 +99,18 @@ Object {
             />
           </svg>
         </div>
+      </div>
+      <div
+        class="settings-dialog__footer"
+      >
         <button
-          class="share-qr-code-option__copy-to-clipboard"
+          class="button button--inherit button--contained button__label--shown"
         >
-          Copy Invite URL
+          <span
+            class="button__label"
+          >
+            Copy Invite URL
+          </span>
         </button>
       </div>
     </div>

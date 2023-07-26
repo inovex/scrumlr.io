@@ -14,171 +14,206 @@ exports[`Appearance should render all Settings correctly 1`] = `
     </h2>
   </header>
   <div
-    class="appearance-container"
+    class="appearance-container-wrapper"
   >
     <div
-      class="appearance-settings__theme-container"
+      class="appearance-container"
     >
-      <span
-        class="appearance-settings__theme-title"
-      >
-        Appearance.colorScheme
-      </span>
-      <form
-        class="appearance-settings__theme-options"
-      >
-        <label
-          class="appearence-settings__theme-option"
-          for="auto"
-          title="Appearance.SyncModeDescription"
-        >
-          <input
-            checked=""
-            id="auto"
-            name="themeAuto"
-            type="radio"
-            value="auto"
-          />
-          <img
-            alt="Appearance.colorScheme Auto"
-            src="theme-preview-light.svg"
-          />
-          <img
-            alt="Appearance.colorScheme Auto"
-            src="theme-preview-dark.svg"
-          />
-          <p>
-            <svg
-              class="appearance-settings__theme-icon"
-            >
-              icon-settings.svg
-            </svg>
-            <span>
-              Auto
-            </span>
-          </p>
-        </label>
-        <label
-          class="appearence-settings__theme-option"
-          for="light"
-        >
-          <input
-            id="light"
-            name="themeLight"
-            type="radio"
-            value="light"
-          />
-          <img
-            alt="Appearance.colorScheme Appearance.colorSchemeLight"
-            src="theme-preview-light.svg"
-          />
-          <p>
-            <svg
-              class="appearance-settings__theme-icon"
-            >
-              icon-lightmode.svg
-            </svg>
-            <span>
-              Appearance.colorSchemeLight
-            </span>
-          </p>
-        </label>
-        <label
-          class="appearence-settings__theme-option"
-          for="dark"
-        >
-          <input
-            id="dark"
-            name="themeDark"
-            type="radio"
-            value="dark"
-          />
-          <img
-            alt="Appearance.colorScheme Appearance.colorSchemeDark"
-            src="theme-preview-dark.svg"
-          />
-          <p>
-            <svg
-              class="appearance-settings__theme-icon"
-            >
-              icon-darkmode.svg
-            </svg>
-            <span>
-              Appearance.colorSchemeDark
-            </span>
-          </p>
-        </label>
-      </form>
-    </div>
-    <section>
-      <button
-        aria-label="Appearance.showHotkeyNotifications"
-        class="settings-option-button"
-        role="switch"
-        type="button"
+      <div
+        class="appearance-settings__theme-container"
       >
         <span
-          class="settings-option-button__label"
+          class="appearance-settings__theme-title"
         >
-          Appearance.showHotkeyNotifications
+          Appearance.colorScheme
         </span>
-        <div
-          class="toggle"
-        />
-      </button>
-    </section>
-    <div
-      class="settings-dropdown"
-    >
-      <button
-        aria-controls="dropdown-list"
-        aria-expanded="false"
-        class="settings-dropdown__button"
-        role="combobox"
-      >
-        <span>
-          Appearance.Language
-        </span>
-        <p
-          class="settings-dropdown__item--current"
+        <form
+          class="appearance-settings__theme-options"
         >
-          <svg
-            class="settings-dropdown__item-icon"
+          <label
+            class="appearence-settings__theme-option"
+            for="auto"
+            title="Appearance.SyncModeDescription"
           >
-            US.svg
-          </svg>
+            <input
+              checked=""
+              id="auto"
+              name="themeAuto"
+              type="radio"
+              value="auto"
+            />
+            <img
+              alt="Appearance.colorScheme Auto"
+              src="theme-preview-light.svg"
+            />
+            <img
+              alt="Appearance.colorScheme Auto"
+              src="theme-preview-dark.svg"
+            />
+            <p>
+              <svg
+                class="appearance-settings__theme-icon"
+              >
+                icon-settings.svg
+              </svg>
+              <span>
+                Auto
+              </span>
+            </p>
+          </label>
+          <label
+            class="appearence-settings__theme-option"
+            for="light"
+          >
+            <input
+              id="light"
+              name="themeLight"
+              type="radio"
+              value="light"
+            />
+            <img
+              alt="Appearance.colorScheme Appearance.colorSchemeLight"
+              src="theme-preview-light.svg"
+            />
+            <p>
+              <svg
+                class="appearance-settings__theme-icon"
+              >
+                icon-lightmode.svg
+              </svg>
+              <span>
+                Appearance.colorSchemeLight
+              </span>
+            </p>
+          </label>
+          <label
+            class="appearence-settings__theme-option"
+            for="dark"
+          >
+            <input
+              id="dark"
+              name="themeDark"
+              type="radio"
+              value="dark"
+            />
+            <img
+              alt="Appearance.colorScheme Appearance.colorSchemeDark"
+              src="theme-preview-dark.svg"
+            />
+            <p>
+              <svg
+                class="appearance-settings__theme-icon"
+              >
+                icon-darkmode.svg
+              </svg>
+              <span>
+                Appearance.colorSchemeDark
+              </span>
+            </p>
+          </label>
+        </form>
+      </div>
+      <div
+        class="settings-dropdown"
+      >
+        <button
+          aria-controls="dropdown-list"
+          aria-expanded="false"
+          class="settings-dropdown__button"
+          role="combobox"
+        >
           <span>
-            Language.english
+            Appearance.Language
           </span>
-          <svg
-            class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
-          >
-            icon-arrow-next.svg
-          </svg>
-        </p>
-      </button>
-      <ul
-        class="settings-dropdown__list"
-        id="dropdown-list"
-        role="listbox"
-      >
-        <li
-          class="settings-dropdown__item"
-        >
-          <button
-            class="settings-dropdown__button"
+          <p
+            class="settings-dropdown__item--current"
           >
             <svg
               class="settings-dropdown__item-icon"
             >
-              DE.svg
+              US.svg
             </svg>
             <span>
-              Language.german
+              Language.english
             </span>
-          </button>
-        </li>
-      </ul>
+            <svg
+              class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
+            >
+              icon-arrow-next.svg
+            </svg>
+          </p>
+        </button>
+        <ul
+          class="settings-dropdown__list"
+          id="dropdown-list"
+          role="listbox"
+        >
+          <li
+            class="settings-dropdown__item"
+          >
+            <button
+              class="settings-dropdown__button"
+            >
+              <svg
+                class="settings-dropdown__item-icon"
+              >
+                DE.svg
+              </svg>
+              <span>
+                Language.german
+              </span>
+            </button>
+          </li>
+        </ul>
+      </div>
+      <section>
+        <button
+          aria-label="Appearance.showHotkeyNotifications"
+          class="settings-option-button"
+          role="switch"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Appearance.showHotkeyNotifications
+          </span>
+          <div
+            class="toggle"
+          />
+        </button>
+      </section>
+      <section>
+        <button
+          aria-checked="true"
+          aria-label="Hotkeys.hotkeyToggle"
+          class="settings-option-button"
+          role="switch"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Hotkeys.hotkeyToggle
+          </span>
+          <div
+            class="toggle toggle--active"
+          />
+        </button>
+        <a
+          class="profile-settings__open-cheat-sheet-button"
+          href="/hotkeys.pdf"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <p>
+            Hotkeys.cheatSheet
+          </p>
+          <svg>
+            icon-info.svg
+          </svg>
+        </a>
+      </section>
     </div>
   </div>
 </div>
