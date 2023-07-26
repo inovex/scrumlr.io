@@ -61,8 +61,8 @@
     "deleteStackButton": "Stapel löschen",
     "deleteOptions": "Was möchtest du löschen?",
     "unsavedChanges": "Möchtest du die Änderungen an deinem {{setting}} speichern?",
-    "deleteWarning": "Die Aktion ist nicht umkehrbar.",
-    "saveWarning": "Ungespeicherte Änderungen gehen verloren",
+    "deleteWarning": "Beachte bitte, dass diese Aktion unwiderruflich ist.",
+    "saveWarning": "Nicht gespeicherte Änderungen gehen verloren.",
     "discard": "Verwerfen",
     "save": "Speichern",
     "yes": "Ja",
@@ -337,8 +337,7 @@
     "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer",
     "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
     "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator",
-    "ResetBannerText": "Fertige Teilnehmer zurücksetzen.",
-    "ResetBannerButton": "Zurücksetzen"
+    "ResetReadyStatesButton": "Alle Fertig-Markierungen zurücksetzen"
   },
   "UserRole": {
     "Owner": "Besitzer",
@@ -371,7 +370,7 @@
   "ProfileSettings": {
     "Profile": "Profil",
     "UserName": "Nutzername",
-    "Save": "Speichern",
+    "SaveAvatar": "Avatar Speichern",
     "Cancel": "Abbrechen"
   },
   "Error": {

@@ -5,6 +5,7 @@ import "../SettingsDialog.scss";
 import "./Appearance.scss";
 import {ThemeSettings} from "../Components/ThemeSettings";
 import {NotificationSettings} from "../Components/NotificationSettings";
+import {HotkeySettings} from "../Components/HotkeySettings";
 
 export const Appearance = () => {
   const {t} = useTranslation();
@@ -14,10 +15,13 @@ export const Appearance = () => {
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("SettingsDialog.Appearance")}</h2>
       </header>
-      <div className="appearance-container">
-        <ThemeSettings />
-        <NotificationSettings />
-        <LanguageSettingsDropdown />
+      <div className="appearance-container-wrapper">
+        <div className="appearance-container">
+          <ThemeSettings />
+          <LanguageSettingsDropdown />
+          <NotificationSettings />
+          <HotkeySettings />
+        </div>
       </div>
     </div>
   );

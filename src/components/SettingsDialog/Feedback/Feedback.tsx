@@ -2,6 +2,7 @@ import React, {FormEvent, useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {SettingsButton} from "components/SettingsDialog/Components/SettingsButton";
+import {Button} from "components/Button";
 import {FeedbackAPI} from "api/feedback";
 import {useAppSelector} from "store";
 import {ReactComponent as BugIcon} from "assets/icon-bug.svg";
@@ -9,6 +10,7 @@ import {ReactComponent as PraiseIcon} from "assets/icon-praise.svg";
 import {ReactComponent as AddFeatureIcon} from "assets/icon-add-feature.svg";
 import "./Feedback.scss";
 import {DefaultTFuncReturn} from "i18next";
+import {SettingsFooter} from "../Components/SettingsFooter";
 
 export const Feedback: React.FC = () => {
   const {t} = useTranslation();
@@ -122,9 +124,11 @@ export const Feedback: React.FC = () => {
           <SettingsButton label={t("Feedback.ContactInputLabel")} className="feedback-form__settings-button" onClick={() => contactInput.current?.focus()}>
             <input name="contact" placeholder="mail@inovex.de" className="feedback-form__contact-input" ref={contactInput} />
           </SettingsButton>
-          <button type="submit" className="feedback-form__submit-button">
-            {t("Feedback.SubmitButton")}
-          </button>
+          <SettingsFooter>
+            <Button type="submit" color="inherit" variant="contained">
+              {t("Feedback.SubmitButton")}
+            </Button>
+          </SettingsFooter>
         </form>
       )}
       {errorMessage && <span className="settings-dialog__error-message">{errorMessage}</span>}

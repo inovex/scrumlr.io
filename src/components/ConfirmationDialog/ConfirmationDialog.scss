@@ -69,7 +69,7 @@
 }
 .confirmation-dialog__warning > p {
   margin: 0px;
-  font-size: $text-size--medium;
+  font-size: $text--sm;
   letter-spacing: $letter-spacing--small;
 }
 
@@ -79,6 +79,7 @@
   }
   .confirmation-dialog__buttons {
     flex-wrap: wrap;
+    gap: $margin--small;
   }
   .confirmation-dialog__button {
     width: 100%;
@@ -95,7 +96,7 @@
   border: 2px solid $color-backlog-blue;
   border-radius: $rounded--full;
   padding: $padding--small $padding--medium;
-  font-size: 14px;
+  font-size: $text--sm;
   font-weight: bold;
   min-height: 48px;
   cursor: pointer;
@@ -116,7 +117,7 @@
 .confirmation-dialog__buttons {
   display: flex;
   justify-content: flex-end;
-  gap: $margin--small;
+  gap: 18px;
 }
 .confirmation-dialog__buttons-reverse {
   flex-direction: row-reverse;

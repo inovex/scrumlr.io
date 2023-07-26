@@ -44,7 +44,6 @@ $settings-dialog-container--bottom: 62px;
   background: $color-white-one;
   width: 100%;
   padding-top: 50px;
-  overflow-y: hidden; // so that reset state banner can flow out
 }
 [theme="dark"] .settings-dialog__content {
   background: $color-dark-two;
@@ -95,6 +94,18 @@ $settings-dialog-container--bottom: 62px;
     height: 100%;
     border-radius: $rounded--small 0 0 $rounded--small;
   }
+}
+
+.settings-dialog__footer {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
 }
 
 .settings-dialog__scrumlr-logo {
@@ -273,6 +284,7 @@ $settings-dialog-container--bottom: 62px;
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
 }
 
 @media screen and (min-width: 920px) {

@@ -4,6 +4,8 @@ import {useTranslation} from "react-i18next";
 import "./ShareSession.scss";
 import {useState, VFC} from "react";
 import {useAppSelector} from "store";
+import {Button} from "components/Button";
+import {SettingsFooter} from "../Components/SettingsFooter";
 
 export const ShareSession: VFC = () => {
   const {t} = useTranslation();
@@ -17,18 +19,20 @@ export const ShareSession: VFC = () => {
   };
 
   return (
-    <div data-testid="qrcode" className="settings-dialog__container">
+    <div data-testid="qrcode" className="settings-dialog__container accent-color__planning-pink">
       <div className="settings-dialog__header">
-        <h2 className={classNames("settings-dialog__header-text", "accent-color__planning-pink")}> {t("ShareQrCodeOption.title")}</h2>
+        <h2 className={classNames("settings-dialog__header-text")}> {t("ShareQrCodeOption.title")}</h2>
       </div>
-      <div className={classNames("share-session__container", "accent-color__planning-pink")}>
+      <div className={classNames("share-session__container")}>
         <div className="share-session__background">
           <QRCode value={`${window.location.origin}/board/${boardId}`} renderAs="svg" className="share-qr-code-option__qrcode" />
         </div>
-        <button className={classNames("share-qr-code-option__copy-to-clipboard", {"--copied": urlInClipBoard})} onClick={handleCopyToClipboard} disabled={urlInClipBoard}>
-          {urlInClipBoard ? t("ShareQrCodeOption.inviteUrlCopied") : t("ShareQrCodeOption.copyInviteURL")}
-        </button>
       </div>
+      <SettingsFooter>
+        <Button color="inherit" variant={urlInClipBoard ? "outlined" : "contained"} onClick={handleCopyToClipboard} disabled={urlInClipBoard}>
+          {urlInClipBoard ? t("ShareQrCodeOption.inviteUrlCopied") : t("ShareQrCodeOption.copyInviteURL")}
+        </Button>
+      </SettingsFooter>
     </div>
   );
 };

@@ -3,21 +3,16 @@ import {useTranslation} from "react-i18next";
 import {useContext, useState} from "react";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {useDispatch} from "react-redux";
-import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
-import {Toggle} from "components/Toggle";
 import {Button} from "components/Button";
 import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
-import {SettingsButton} from "../Components/SettingsButton";
-import {Footer} from "../Components/Footer";
 import {SettingsContext} from "../SettingsContext";
+import {SettingsFooter} from "../Components/SettingsFooter";
 import "./ProfileSettings.scss";
 
 export const ProfileSettings = () => {
   const {settings} = useContext(SettingsContext);
   const {t} = useTranslation();
-  const dispatch = useDispatch();
   const state = useAppSelector((applicationState) => ({
     participant: applicationState.participants!.self,
     hotkeysAreActive: applicationState.view.hotkeysAreActive,
@@ -44,31 +39,18 @@ export const ProfileSettings = () => {
           />
 
           <AvatarSettings id={id} saved={saved} setSaved={setSaved} canceled={canceled} setCanceled={setCanceled} />
-          <div className="profile-settings__hotkey-settings">
-            <SettingsButton
-              className="profile-settings__toggle-hotkeys-button"
-              label={t("Hotkeys.hotkeyToggle")}
-              onClick={() => {
-                dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
-              }}
-            >
-              <Toggle active={state.hotkeysAreActive} />
-            </SettingsButton>
-            <a className="profile-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
-              <p>{t("Hotkeys.cheatSheet")}</p>
-              <InfoIcon />
-            </a>
-          </div>
         </div>
       </div>
-      <Footer visible={isFooterVisible} className="profile-settings__footer">
-        <Button color="inherit" onClick={() => setSaved(true)}>
-          {t("ProfileSettings.Save")}
-        </Button>
-        <Button variant="outlined" color="inherit" onClick={() => setCanceled(true)}>
-          {t("ProfileSettings.Cancel")}
-        </Button>
-      </Footer>
+      {isFooterVisible && (
+        <SettingsFooter>
+          <Button variant="outlined" color="inherit" onClick={() => setCanceled(true)}>
+            {t("ProfileSettings.Cancel")}
+          </Button>
+          <Button color="inherit" onClick={() => setSaved(true)}>
+            {t("ProfileSettings.SaveAvatar")}
+          </Button>
+        </SettingsFooter>
+      )}
     </div>
   );
 };

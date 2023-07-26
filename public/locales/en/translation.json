@@ -60,9 +60,9 @@
     "deleteNoteButton": "Delete Note",
     "deleteStackButton": "Delete Stack",
     "deleteOptions": "What do you want to delete?",
-    "unsavedChanges": "Do you want to save the changes to your {{setting}}?",
-    "deleteWarning": "This action cannot be undone.",
-    "saveWarning": "Unsaved changes will be lost",
+    "unsavedChanges": "Would you like to save the changes to your {{setting}}?",
+    "deleteWarning": "Please be aware, this action is irreversible.",
+    "saveWarning": "Changes that haven't been saved will be lost.",
     "discard": "Discard",
     "save": "Save",
     "yes": "Yes",
@@ -337,8 +337,7 @@
     "OnlineFilterTooltip": "Show disconnected participants",
     "ChangeRoleToParticipantTooltip": "Change role to participant",
     "ChangeRoleToModeratorTooltip": "Change role to moderator",
-    "ResetBannerText": "Reset ready states of all users.",
-    "ResetBannerButton": "Reset"
+    "ResetReadyStatesButton": "Reset all ready states"
   },
   "UserRole": {
     "Owner": "Owner",
@@ -371,7 +370,7 @@
   "ProfileSettings": {
     "Profile": "Profile",
     "UserName": "User Name",
-    "Save": "Save",
+    "SaveAvatar": "Save Avatar",
     "Cancel": "Cancel"
   },
   "Error": {

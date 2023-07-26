@@ -9,9 +9,8 @@ import {useDebounce} from "utils/hooks/useDebounce";
 import {UserAvatar} from "components/BoardUsers";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
-import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
 import {Button} from "components/Button";
-import {Footer} from "../Components/Footer";
+import {SettingsFooter} from "../Components/SettingsFooter";
 import "./Participants.scss";
 
 export const Participants = () => {
@@ -131,16 +130,12 @@ export const Participants = () => {
             ))}
         </ul>
       </div>
-      {isModerator && (
-        <Footer visible={existsAtLeastOneReadyUser}>
-          <div className="participants-reset-state-banner__icon-and-text">
-            <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
-            <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
-          </div>
-          <Button color="inherit" onClick={resetReadyStateOfAllUsers}>
-            {t("Participants.ResetBannerButton")}
+      {isModerator && existsAtLeastOneReadyUser && (
+        <SettingsFooter>
+          <Button color="inherit" variant="contained" onClick={resetReadyStateOfAllUsers}>
+            {t("Participants.ResetReadyStatesButton")}
           </Button>
-        </Footer>
+        </SettingsFooter>
       )}
     </section>
   );

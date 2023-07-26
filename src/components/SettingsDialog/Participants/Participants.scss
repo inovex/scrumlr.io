@@ -113,7 +113,7 @@
   overflow: auto;
   margin: $margin--default 0px;
   border-radius: $rounded--default;
-  margin-bottom: auto;
+  margin-bottom: 62px;
 
   @include scrollbar();
 }
@@ -206,54 +206,6 @@
   gap: $margin--small;
 }
 
-.participants-reset-state-banner__container {
-  margin-top: auto; // position at the very bottom
-  margin-left: -$settings-dialog-container--sides-small;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-
-  width: calc(100% + 2 * $settings-dialog-container--sides-small); // overflow over parent margin
-
-  background-color: $color-lighter-gray;
-
-  transform: translateY(100%);
-  transition: transform ease-in-out 0.3s;
-}
-
-.participants-reset-state-banner__container--is-active {
-  transform: translateY(0);
-}
-
-.participants-reset-state-banner__icon-and-text {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 4px;
-}
-
-.participants-reset-state-banner__check-icon {
-  width: $icon--large;
-  height: $icon--large;
-  min-width: $icon--large;
-  min-height: $icon--large;
-}
-
-.participants-reset-state-banner__text {
-  color: $menu-icon-background-color--dark;
-  font-weight: 600;
-}
-
-@media screen and (min-width: 920px) {
-  // SettingsDialog changes margin here, so we have to do the same
-  .participants-reset-state-banner__container {
-    width: calc(100% + 2 * $settings-dialog-container--sides-large);
-    margin-left: -$settings-dialog-container--sides-large;
-  }
-}
-
 [theme="dark"] {
   .participants__search-input {
     background-color: $color-dark-mode-note;
@@ -301,14 +253,5 @@
       background-color: var(--accent-color);
       border-color: var(--accent-color);
     }
-  }
-
-  .participants-reset-state-banner__container {
-    background-color: $color-dark-mode-note;
-  }
-
-  .participants-reset-state-banner__check-icon,
-  .participants-reset-state-banner__text {
-    color: $color-white;
   }
 }

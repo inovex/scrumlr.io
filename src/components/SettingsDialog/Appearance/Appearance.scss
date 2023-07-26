@@ -1,6 +1,28 @@
 @import "constants/style";
 @import "../SettingsDialog";
 
+.appearance-container-wrapper {
+  padding-right: $padding--small;
+  margin-right: calc(-1 * ($padding--small + 10px));
+  margin-bottom: $settings-dialog-container--bottom;
+  overflow-y: auto;
+
+  &:focus-visible {
+    outline: 2px dashed rgba(var(--accent-color-rgb), 0.5);
+    border-radius: 8px;
+  }
+
+  @include scrollbar();
+}
+
+@media screen and (min-width: 920px) {
+  .appearance-container-wrapper {
+    padding-right: $padding--medium;
+    margin-right: calc(-1 * ($padding--medium + 10px));
+    overflow-y: unset;
+  }
+}
+
 .appearance-container {
   display: flex;
   flex-direction: column;
