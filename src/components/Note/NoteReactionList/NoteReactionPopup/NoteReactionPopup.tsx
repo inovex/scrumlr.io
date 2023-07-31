@@ -5,7 +5,6 @@ import {ReactionImageMap, ReactionType} from "types/reaction";
 import _ from "underscore";
 import {useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
-import {useMoveDelta} from "utils/hooks/useMoveDelta";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {ReactionModeled} from "../NoteReactionList";
@@ -20,17 +19,12 @@ interface NoteReactionPopupProps {
   colorClassName?: string; // override portal color, since it's outside and doesn't know the note. possible TODO useContext
 }
 
-const CLOSING_THRESHOLD_PERCENT = 80; // %
-
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const dispatch = useDispatch();
   const rootRef = useRef<HTMLDivElement>(null);
   const draggableNotchRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const isScrolling = useIsScrolling(containerRef);
-  const popupDelta = useMoveDelta(draggableNotchRef);
-  const containerOffsetHeight = popupDelta.y + (rootRef.current?.offsetHeight ?? 0);
-  const popupTranslateY = containerOffsetHeight > 0 ? containerOffsetHeight : 0;
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
   const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
@@ -73,16 +67,6 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     }
   };
 
-  // close popup if moving it below the threshold
-  useEffect(() => {
-    const containerFullHeight = rootRef.current!.getBoundingClientRect().height;
-    const calculatedThreshold = (containerFullHeight * CLOSING_THRESHOLD_PERCENT) / 100;
-
-    if (popupTranslateY > calculatedThreshold) {
-      props.onClose();
-    }
-  }, [popupTranslateY, props]);
-
   // this is a container element. one exists for all reactions and also one for each reaction type.
   // the containers are scrollable and snap horizontally.
   const renderContainer = (reaction?: ReactionModeled) => (
@@ -109,7 +93,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
 
   return (
     <Portal hiddenOverflow onClick={props.onClose} accentColor={props.colorClassName}>
-      <div className="note-reaction-popup__root" ref={rootRef} style={{transform: `translate(-50%, ${popupTranslateY}px)`}}>
+      <div className="note-reaction-popup__root" ref={rootRef}>
         <div className="note-reaction-popup__notch-container" ref={draggableNotchRef}>
           <div className="note-reaction-popup__notch" />
         </div>
