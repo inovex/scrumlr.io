@@ -75,9 +75,9 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
         // if a reaction is given as parameter, filter only that reaction type, otherwise show all.
         .filter((r) => (reaction ? r.reactionType === reaction.reactionType : true))
         .map((r) => (
-          <div className="note-reaction-popup__row-container" key={`${r.users[0].user.id}-${r.reactionType}`}>
+          <div className="note-reaction-popup__row-container">
             <div className="note-reaction-popup__row">
-              <NoteAuthorList authors={r.users} showAuthors viewer={viewer} />
+              <NoteAuthorList authors={r.users} showAuthors viewer={viewer} key={`${r.users[0].user.id}-${reaction?.reactionType ?? "all"}`} />
               <button
                 className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}
                 onClick={(e) => removeOwnReaction(e, r)}
@@ -103,7 +103,13 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
             <div className="note-reaction-popup__tab--amount">{totalReactions}</div>
           </button>
           {props.reactionsReduced.map((r) => (
-            <NoteReactionChip reaction={r} key={r.reactionType} overrideActive={r.reactionType === activeTab} handleClickReaction={(e) => changeTab(e, r.reactionType)} />
+            <NoteReactionChip
+              reaction={r}
+              key={r.reactionType}
+              overrideActive={r.reactionType === activeTab}
+              showTooltip={false}
+              handleClickReaction={(e) => changeTab(e, r.reactionType)}
+            />
           ))}
         </nav>
         <main className="note-reaction-popup__main" ref={containerRef}>
