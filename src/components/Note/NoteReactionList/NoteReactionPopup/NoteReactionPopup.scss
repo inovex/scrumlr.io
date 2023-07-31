@@ -152,6 +152,15 @@
     background-color: #5a647d;
   }
 
+  .note-reaction-popup__tab-all {
+    color: $color-white;
+    background-color: $color-dark-one;
+
+    &--active {
+      background-color: var(--accent-color--desaturated-dark-hover);
+    }
+  }
+
   .note-reaction-popup__row-reaction {
     &--active {
       background-color: var(--accent-color--desaturated-dark);

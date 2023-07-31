@@ -75,7 +75,11 @@
   }
 
   .note-reaction-chip__root--override-active {
-    background-color: var(--accent-color);
+    background-color: var(--accent-color--desaturated-dark-hover);
+
+    &:hover {
+      background-color: var(--accent-color--desaturated-dark-hover);
+    }
   }
 
   .note-reaction-chip__amount {
