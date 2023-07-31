@@ -45,12 +45,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
       {props.showTooltip && (
-        <Tooltip
-          anchorSelect={`#reaction-${props.reaction.noteId}-${props.reaction.reactionType}`}
-          place="top"
-          variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
-          content={reactionUsers}
-        />
+        <Tooltip anchorSelect={`#reaction-${props.reaction.noteId}-${props.reaction.reactionType}`} className="note-reaction-chip__tooltip" place="top" content={reactionUsers} />
       )}
     </>
   );

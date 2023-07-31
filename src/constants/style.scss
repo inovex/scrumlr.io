@@ -228,3 +228,20 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
     }
   }
 }
+
+// tooltip
+@mixin tooltip {
+  border-radius: $rounded--large;
+}
+
+@mixin tooltip--light {
+  @include tooltip;
+  color: $color-black;
+  background-color: $hover-background-light;
+}
+
+@mixin tooltip--dark {
+  @include tooltip;
+  color: $color-white;
+  background-color: $hover-background-dark;
+}

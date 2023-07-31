@@ -38,9 +38,10 @@
   font-weight: 600;
 }
 
-.note-reaction-chip-condensed__tooltip {
+div .note-reaction-chip-condensed__tooltip {
   display: flex;
   flex-direction: column;
+  @include tooltip--light;
 }
 
 [theme="dark"] {
@@ -54,5 +55,9 @@
 
   .note-reaction-chip-condensed__amount {
     color: $color-white;
+  }
+
+  div .note-reaction-chip-condensed__tooltip {
+    @include tooltip--dark;
   }
 }
