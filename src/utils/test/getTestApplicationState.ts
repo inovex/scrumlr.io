@@ -115,7 +115,26 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       },
     },
   ],
-  reactions: [],
+  reactions: [
+    {
+      id: "test-reactions-id-1",
+      note: "test-notes-id-1",
+      user: "test-participants-self-user-id",
+      reactionType: "like",
+    },
+    {
+      id: "test-reactions-id-2",
+      note: "test-notes-id-2",
+      user: "test-participants-self-user-id",
+      reactionType: "like",
+    },
+    {
+      id: "test-reactions-id-3",
+      note: "test-notes-id-1",
+      user: "test-participants-self-user-id",
+      reactionType: "heart",
+    },
+  ],
   votes: [
     {
       voting: "test-votings-open-id-1",
