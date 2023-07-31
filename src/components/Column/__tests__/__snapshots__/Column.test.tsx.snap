@@ -593,7 +593,38 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   </div>
                   <div
                     class="note-reaction-list__reaction-chips-container"
-                  />
+                  >
+                    <button
+                      class="note-reaction-chip__root note-reaction-chip__root--self"
+                      id="reaction-test-notes-id-1-like"
+                    >
+                      <div
+                        class="note-reaction-chip__reaction"
+                      >
+                        👍
+                      </div>
+                      <div
+                        class="note-reaction-chip__amount"
+                      >
+                        1
+                      </div>
+                    </button>
+                    <button
+                      class="note-reaction-chip__root note-reaction-chip__root--self"
+                      id="reaction-test-notes-id-1-heart"
+                    >
+                      <div
+                        class="note-reaction-chip__reaction"
+                      >
+                        💖
+                      </div>
+                      <div
+                        class="note-reaction-chip__amount"
+                      >
+                        1
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </footer>
             </button>
@@ -1100,7 +1131,23 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   </div>
                   <div
                     class="note-reaction-list__reaction-chips-container"
-                  />
+                  >
+                    <button
+                      class="note-reaction-chip__root note-reaction-chip__root--self"
+                      id="reaction-test-notes-id-2-like"
+                    >
+                      <div
+                        class="note-reaction-chip__reaction"
+                      >
+                        👍
+                      </div>
+                      <div
+                        class="note-reaction-chip__amount"
+                      >
+                        1
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </footer>
             </button>
