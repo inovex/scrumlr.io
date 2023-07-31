@@ -44,12 +44,12 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   };
   const authorExtendedInfo = prepareAuthors(props.authors);
   // expected behaviour:
-  // 1 => p
-  // 2 => p p
-  // 3 => p p p
-  // 4 => p p (2)
-  // n where n >= 4 => p p (n - 2)
-  // where (n) displays a number and p displays an avatar
+  // 1 => avatar1 name
+  // 2 => avatar1 name avatar2
+  // 3 => avatar1 name avatar2 avatar3
+  // 4 => avatar1 name avatar2 avatar3 avatar4
+  // n where n >= 4 => avatar1 name  avatar2 avatar3 (n - 2)
+  // where (n) displays a number
   const SHOW_MAX_AUTHORS = 3;
   const stackAuthor = authorExtendedInfo[0];
   const restAuthors = authorExtendedInfo.slice(1);
