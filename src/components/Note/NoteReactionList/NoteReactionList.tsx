@@ -152,7 +152,10 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   const openReactionsPopup = (e: LongPressReactEvents) => {
     e.stopPropagation();
-    setShowReactionPopup(true);
+    // only allow opening when using a touch screen.
+    if (e.nativeEvent instanceof TouchEvent) {
+      setShowReactionPopup(true);
+    }
   };
 
   const closeReactionPopup = (e?: React.MouseEvent) => {
