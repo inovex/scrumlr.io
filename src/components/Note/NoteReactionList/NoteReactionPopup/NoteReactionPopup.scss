@@ -142,3 +142,23 @@
     transform: translateX(-50%) translateY(0);
   }
 }
+
+[theme="dark"] {
+  .note-reaction-popup__root {
+    background-color: $color-dark-mode-note;
+  }
+
+  .note-reaction-popup__notch {
+    background-color: #5a647d;
+  }
+
+  .note-reaction-popup__row-reaction {
+    &--active {
+      background-color: var(--accent-color--desaturated-dark);
+    }
+  }
+
+  .note-reaction-popup__row-divider {
+    background-color: $color-dark-one;
+  }
+}
