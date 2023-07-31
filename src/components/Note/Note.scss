@@ -169,6 +169,7 @@ $note__text-margin-top--small: 6px;
   justify-content: space-between;
 
   height: 38px;
+  margin-left: -$reaction-list__left-spacing; // a little to the left, the icon in NoteReactionList lines up
 }
 
 .note__author-image {
