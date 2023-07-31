@@ -118,7 +118,7 @@ export const Note = (props: NoteProps) => {
           <main className="note__text">{note.text}</main>
         )}
         <footer className="note__footer">
-          <NoteReactionList noteId={props.noteId} dimensions={dimensions} />
+          <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} />
         </footer>
       </button>
       {isStack && <div className="note__in-stack" />}

@@ -18,6 +18,7 @@ import "./NoteReactionList.scss";
 interface NoteReactionListProps {
   noteId: string;
   dimensions?: DOMRect; // used for note width
+  colorClassName?: string;
 }
 
 export interface ReactionModeled {
@@ -185,7 +186,9 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
             ))
           ))}
       </div>
-      {showReactionPopup && <NoteReactionPopup reactionsFlat={reactionsFlat} reactionsReduced={reactionsReduced} onClose={closeReactionPopup} />}
+      {showReactionPopup && (
+        <NoteReactionPopup reactionsFlat={reactionsFlat} reactionsReduced={reactionsReduced} onClose={closeReactionPopup} colorClassName={props.colorClassName} />
+      )}
     </div>
   );
 };

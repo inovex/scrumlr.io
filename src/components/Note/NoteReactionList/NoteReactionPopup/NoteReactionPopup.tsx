@@ -17,6 +17,7 @@ interface NoteReactionPopupProps {
   reactionsFlat: ReactionModeled[];
   reactionsReduced: ReactionModeled[];
   onClose: (e?: React.MouseEvent) => void;
+  colorClassName?: string; // override portal color, since it's outside and doesn't know the note. possible TODO useContext
 }
 
 const CLOSING_THRESHOLD_PERCENT = 80; // %
@@ -107,7 +108,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   );
 
   return (
-    <Portal hiddenOverflow onClick={props.onClose}>
+    <Portal hiddenOverflow onClick={props.onClose} accentColor={props.colorClassName}>
       <div className="note-reaction-popup__root" ref={rootRef} style={{transform: `translate(-50%, ${popupTranslateY}px)`}}>
         <div className="note-reaction-popup__notch-container" ref={draggableNotchRef}>
           <div className="note-reaction-popup__notch" />
