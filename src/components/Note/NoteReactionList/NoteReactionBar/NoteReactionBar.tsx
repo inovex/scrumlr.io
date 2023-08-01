@@ -23,7 +23,12 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
         // highlight reaction made by yourself
         const active = !!props.reactions.find((r) => r.reactionType === type && !!r.myReactionId);
         return (
-          <button key={type} className={classNames("note-reaction-bar__reaction", {"note-reaction-bar__reaction--active": active})} onClick={(e) => handleClickBar(e, type)}>
+          <button
+            key={type}
+            className={classNames("note-reaction-bar__reaction", {"note-reaction-bar__reaction--active": active})}
+            onClick={(e) => handleClickBar(e, type)}
+            onMouseDown={(e) => e.preventDefault() /* prevent note from losing focus */}
+          >
             {emoji}
           </button>
         );
