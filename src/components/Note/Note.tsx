@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {KeyboardEvent, useEffect, useRef} from "react";
+import {KeyboardEvent, useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
@@ -15,6 +15,8 @@ import {Sortable} from "components/DragAndDrop/Sortable";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import "./Note.scss";
+import {NoteContext} from "../../utils/context/note";
+import {NoteContextType} from "../../types/note";
 
 interface NoteProps {
   noteId: string;
@@ -71,6 +73,8 @@ export const Note = (props: NoteProps) => {
 
   const dimensions = useSize(noteRef);
 
+  const [noteContext, setNoteContext] = useState<NoteContextType>({isFocused: false});
+
   const handleClick = () => {
     if (moderating && isModerator) {
       dispatch(Actions.shareNote(props.noteId));
@@ -98,29 +102,38 @@ export const Note = (props: NoteProps) => {
       className={classNames("note__root", props.colorClassName)}
       disabled={!(isModerator || allowStacking)}
     >
-      <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
-        <header className="note__header">
-          <div className="note__author-container">
-            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
-          </div>
-          <Votes noteId={props.noteId!} aggregateVotes />
-        </header>
-        {isImage ? (
-          <div className="note__image-wrapper">
-            <img
-              src={addProtocol(note.text)}
-              className="note__image"
-              alt={t("Note.userImageAlt", {user: authors[0].user.id === me?.user.id ? t("Note.you") : authors[0].user.name})}
-              draggable={false} // safari bugfix
-            />
-          </div>
-        ) : (
-          <main className="note__text">{note.text}</main>
-        )}
-        <footer className="note__footer">
-          <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} />
-        </footer>
-      </button>
+      <NoteContext.Provider value={noteContext}>
+        <button
+          className={`note note--${stackSetting}`}
+          onClick={handleClick}
+          onKeyDown={handleKeyPress}
+          ref={noteRef}
+          onFocus={() => setNoteContext({...noteContext, isFocused: true})}
+          onBlur={() => setNoteContext({...noteContext, isFocused: false})}
+        >
+          <header className="note__header">
+            <div className="note__author-container">
+              <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+            </div>
+            <Votes noteId={props.noteId!} aggregateVotes />
+          </header>
+          {isImage ? (
+            <div className="note__image-wrapper">
+              <img
+                src={addProtocol(note.text)}
+                className="note__image"
+                alt={t("Note.userImageAlt", {user: authors[0].user.id === me?.user.id ? t("Note.you") : authors[0].user.name})}
+                draggable={false} // safari bugfix
+              />
+            </div>
+          ) : (
+            <main className="note__text">{note.text}</main>
+          )}
+          <footer className="note__footer">
+            <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} />
+          </footer>
+        </button>
+      </NoteContext.Provider>
       {isStack && <div className="note__in-stack" />}
     </Sortable>
   );
