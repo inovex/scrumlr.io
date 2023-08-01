@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
 import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
 import {isEqual} from "underscore";
@@ -14,10 +14,10 @@ import {NoteReactionBar} from "./NoteReactionBar/NoteReactionBar";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
 import {NoteReactionPopup} from "./NoteReactionPopup/NoteReactionPopup";
 import "./NoteReactionList.scss";
-import {NoteContext} from "../../../utils/context/note";
 
 interface NoteReactionListProps {
   noteId: string;
+  parentFocus: boolean;
   dimensions?: DOMRect; // used for note width
   colorClassName?: string;
 }
@@ -108,13 +108,11 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
   const [showReactionPopup, setShowReactionPopup] = useState<boolean>(false);
 
-  const {isFocused} = useContext(NoteContext);
-
   useEffect(() => {
-    if (!isFocused) {
+    if (!props.parentFocus) {
       setShowReactionBar(false);
     }
-  }, [isFocused]);
+  }, [props.parentFocus]);
 
   const toggleReactionBar = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();

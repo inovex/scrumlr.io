@@ -15,8 +15,3 @@ export interface Note {
 export type EditNote = Partial<Omit<Note, "id" | "author">>;
 
 export type NotesState = Note[];
-
-// this can be used to avoid prop drilling
-export interface NoteContextType {
-  isFocused: boolean;
-}
