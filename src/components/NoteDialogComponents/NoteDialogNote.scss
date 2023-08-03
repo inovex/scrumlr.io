@@ -5,20 +5,42 @@
   --note-footer-height: 28px;
 
   display: grid;
+  grid-template-areas:
+    "head options"
+    "main options"
+    "foot foot";
   grid-template-columns: 11fr 1fr;
-  grid-template-rows: 4fr 1fr;
+  grid-template-rows: 1fr 4fr 1fr;
 
   margin-bottom: $margin--default;
   padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  transition:
+    transform 0.3s ease-in-out,
+    box-shadow 0.3s ease-in-out;
   list-style-type: none;
   z-index: $note-dialog-z-index;
   min-width: calc(240px);
   width: 100vw;
   max-width: 380px;
+}
+
+.note-dialog-note__header {
+  grid-area: head;
+}
+
+.note-dialog-note__content {
+  grid-area: main;
+}
+
+.note-dialog-note__options {
+  grid-area: options;
+}
+
+.note-dialog-note__footer {
+  grid-area: foot;
 }
 
 @media #{$tablet} {
