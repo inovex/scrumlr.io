@@ -37,6 +37,8 @@
   border-radius: $rounded--full;
   background-color: $color-lighter-gray;
 
+  cursor: pointer;
+
   &:hover {
     background-color: $hover-background-light;
   }

@@ -22,6 +22,8 @@
   border-radius: $rounded--full;
   font-size: $text--md;
 
+  cursor: pointer;
+
   &:hover {
     background-color: $hover-background-light;
   }
