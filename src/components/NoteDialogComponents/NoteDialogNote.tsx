@@ -30,9 +30,7 @@ export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNotePro
     <aside className="note-dialog-note__options">
       <NoteDialogNoteComponents.Options {...props} />
     </aside>
-    <main className="note-dialog-note__content">
-      <NoteDialogNoteComponents.Content {...props} />
-    </main>
+    <NoteDialogNoteComponents.Content {...props} /> {/* no wrapper because of weird behaviour */}
     <footer className="note-dialog-note__footer">
       <NoteDialogNoteComponents.Footer {...props} />
     </footer>
