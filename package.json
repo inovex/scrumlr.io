@@ -39,7 +39,7 @@
     "react-spring": "^9.7.2",
     "react-to-print": "^2.14.12",
     "react-toastify": "^9.1.3",
-    "react-tooltip": "^5.18.0",
+    "react-tooltip": "^5.20.0",
     "sockette": "^2.0.6",
     "underscore": "^1.13.6",
     "use-sound": "^4.0.1",
