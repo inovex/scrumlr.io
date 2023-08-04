@@ -1,6 +1,6 @@
 module scrumlr.io/server
 
-go 1.18
+go 1.19
 
 // https://github.com/inovex/scrumlr.io/security/dependabot/108
 replace github.com/opencontainers/runc v1.1.0 => github.com/opencontainers/runc v1.1.2
@@ -17,7 +17,7 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/lestrrat-go/jwx/v2 v2.0.11
 	github.com/markbates/goth v1.77.0
-	github.com/nats-io/nats.go v1.27.1
+	github.com/nats-io/nats.go v1.28.0
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
