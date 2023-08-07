@@ -295,6 +295,9 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Remove this note from stack"
   },
+  "NoteReactionsPopup": {
+    "allReactionsTab": "All"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
     "BoardSettingsDescription": "Name, Access Policy",

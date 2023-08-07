@@ -295,6 +295,9 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
   },
+  "NoteReactionsPopup": {
+    "allReactionsTab": "Alle"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
     "BoardSettingsDescription": "Name, Zugriffseinstellungen",

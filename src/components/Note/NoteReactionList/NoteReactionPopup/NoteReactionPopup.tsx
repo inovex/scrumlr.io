@@ -7,6 +7,7 @@ import {useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
+import {useTranslation} from "react-i18next";
 import {ReactionModeled} from "../NoteReactionList";
 import {NoteReactionChip} from "../NoteReactionChip/NoteReactionChip";
 import {NoteAuthorList} from "../../NoteAuthorList/NoteAuthorList";
@@ -21,6 +22,7 @@ interface NoteReactionPopupProps {
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const draggableNotchRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -106,7 +108,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
         </div>
         <nav className="note-reaction-popup__tab-bar">
           <button className={classNames("note-reaction-popup__tab-all", {"note-reaction-popup__tab-all--active": !activeTab})} onClick={(e) => changeTab(e, undefined)}>
-            <div className="note-reaction-popup__tab--text">Alle</div>
+            <div className="note-reaction-popup__tab--text">{t("NoteReactionsPopup.allReactionsTab")}</div>
             <div className="note-reaction-popup__tab--amount">{totalReactions}</div>
           </button>
           {props.reactionsReduced.map((r) => (
