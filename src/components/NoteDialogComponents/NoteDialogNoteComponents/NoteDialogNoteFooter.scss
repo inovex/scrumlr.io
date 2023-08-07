@@ -6,81 +6,8 @@
 .note-dialog__note-footer {
   position: relative;
   display: flex;
-  gap: $margin--default;
+  justify-content: space-between;
   align-items: center;
+
   height: var(--note-footer-height);
-  grid-area: 2 / 1 / 3 / 3;
-}
-
-.note-dialog__author-container {
-  height: 100%;
-  flex-grow: 1;
-  overflow: hidden;
-}
-
-.note-dialog__note-author {
-  display: inline-flex;
-  align-items: center;
-  gap: $margin--small;
-  width: 100%;
-  // reset css from figure-element:
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font: inherit;
-  vertical-align: baseline;
-}
-
-.note-dialog__note-author-image {
-  height: $note__author-image-size;
-  width: $note__author-image-size;
-  border-radius: 100%;
-}
-
-.note-dialog__note-author-name {
-  color: $color-dark-gray;
-  font-size: $text-size--small;
-  letter-spacing: $letter-spacing--small;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.note-dialog__note-user-avatar {
-  height: var(--note-footer-height);
-  width: var(--note-footer-height);
-  padding: 0;
-
-  #Circle-Background {
-    stroke: none;
-  }
-}
-
-.note-dialog__note-author--self {
-  background: var(--accent-color--desaturated-light);
-  border-radius: 21px;
-  padding-right: $padding--default;
-  height: var(--note-footer-height);
-  width: max-content;
-
-  .note-dialog__note-author-name {
-    color: $color-black;
-  }
-}
-
-.note-dialog__note-votes > *:last-child {
-  margin: 0 calc(($tooltip-button-size - var(--note-footer-height, $votes-button-size)) / 2);
-}
-
-[theme="dark"] {
-  .note-dialog__note-author--self {
-    background: var(--accent-color--desaturated-dark);
-
-    .note-dialog__note-author-name {
-      color: $color-white;
-    }
-  }
-  .note-dialog__note-user-avatar #Circle-Background {
-    stroke: none;
-  }
 }
