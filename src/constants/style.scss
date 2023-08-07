@@ -178,6 +178,7 @@ $backdrop-z-index: $base-z-index + (9 * $base-z-index-step);
 $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 $request-z-index: $base-z-index + (9 * $base-z-index-step);
+$tooltip-z-index: $request-z-index;
 
 // responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";
@@ -233,6 +234,7 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 // tooltip
 @mixin tooltip {
   border-radius: $rounded--large;
+  z-index: $tooltip-z-index;
 }
 
 @mixin tooltip--light {
