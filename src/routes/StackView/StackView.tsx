@@ -99,6 +99,8 @@ export const StackView = () => {
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
   const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
 
+  const colorClassName = getColorClassName(column?.color as Color);
+
   const [transitionConfig, setTransitionConfig] = useState({
     from: {transform: "translateX(0%)", position: "relative", opacity: 0},
     enter: {transform: "translateX(0%)", position: "relative", opacity: 1},
@@ -236,12 +238,12 @@ export const StackView = () => {
   return (
     <Portal
       onClose={handleClose}
-      className={classNames("stack-view__portal", getColorClassName(column?.color as Color), {"stack-view__portal-moderation-visible": moderating})}
+      className={classNames("stack-view__portal", colorClassName, {"stack-view__portal-moderation-visible": moderating})}
       hiddenOverflow
       centered
       disabledPadding
     >
-      <div className={classNames("stack-view", getColorClassName(column?.color as Color))}>
+      <div className={classNames("stack-view", colorClassName)}>
         <NoteDialogComponents.Header columnName={column?.name ?? ""} />
         <StackNavigation {...navigationProps} />
         <div className="stack-view__content">
@@ -264,6 +266,7 @@ export const StackView = () => {
                       stackHasMixedAuthors={stackHasMixedAuthors}
                       viewer={viewer}
                       className="stack-view__parent-note"
+                      colorClassName={colorClassName}
                     />
                     <NoteDialogComponents.Wrapper>
                       {item.stack?.map((n: StackedNote) => (
@@ -278,6 +281,8 @@ export const StackView = () => {
                           onClose={handleClose}
                           isStackedNote
                           viewer={viewer}
+                          className="stack-view__child-note"
+                          colorClassName={colorClassName}
                         />
                       ))}
                     </NoteDialogComponents.Wrapper>
@@ -288,7 +293,7 @@ export const StackView = () => {
           </Transition>
         </div>
       </div>
-      <div className={classNames("stack-view__border", {"stack-view__border--moderating": userIsModerating}, getColorClassName(column?.color as Color))} />
+      <div className={classNames("stack-view__border", {"stack-view__border--moderating": userIsModerating}, colorClassName)} />
       <button onClick={handleClose} className="stack-view__close-button">
         <CloseIcon />
       </button>

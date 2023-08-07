@@ -17,6 +17,7 @@ export type NoteDialogNoteProps = {
   hasStackedNotes?: boolean;
   stackHasMixedAuthors?: boolean;
   className?: string;
+  colorClassName?: string;
 
   viewer: Participant;
 };

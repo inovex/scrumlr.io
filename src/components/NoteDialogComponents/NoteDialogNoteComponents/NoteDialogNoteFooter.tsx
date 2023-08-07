@@ -12,11 +12,12 @@ type NoteDialogNoteFooterProps = {
   authorName: string;
   noteId: string;
   viewer: Participant;
+  colorClassName?: string;
 };
 
 export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => (
   <div className="note-dialog__note-footer">
-    <NoteReactionList noteId={props.noteId} parentFocus />
+    <NoteReactionList noteId={props.noteId} colorClassName={props.colorClassName} parentFocus />
     <Votes {...props} className="note-dialog__note-votes" />
   </div>
 );
