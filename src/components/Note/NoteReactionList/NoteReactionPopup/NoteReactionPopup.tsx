@@ -67,6 +67,13 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
     }
   };
 
+  // automatically close when there are no reactions
+  useEffect(() => {
+    if (totalReactions === 0) {
+      props.onClose();
+    }
+  }, [props, totalReactions]);
+
   // this is a container element. one exists for all reactions and also one for each reaction type.
   // the containers are scrollable and snap horizontally.
   const renderContainer = (reaction?: ReactionModeled) => (
