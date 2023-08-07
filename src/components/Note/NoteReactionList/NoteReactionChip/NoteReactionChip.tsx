@@ -2,9 +2,9 @@ import classNames from "classnames";
 import React from "react";
 import {Tooltip} from "react-tooltip";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
+import _ from "underscore";
+import {ReactionImageMap, ReactionType} from "types/reaction";
 import {ReactionModeled} from "../NoteReactionList";
-import {ReactionImageMap, ReactionType} from "../../../../types/reaction";
-
 import "./NoteReactionChip.scss";
 
 interface NoteReactionChipProps {
@@ -18,6 +18,8 @@ interface NoteReactionChipProps {
 export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const reactionImage = ReactionImageMap.get(props.reaction.reactionType);
   const reactionUsers = props.reaction.users.map((u) => u.user.name).join(", ");
+  // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
+  const anchorId = _.uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}-`);
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
@@ -28,7 +30,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   return (
     <>
       <button
-        id={`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`} // unique identifier
+        id={anchorId} // unique identifier
         className={classNames("note-reaction-chip__root", {
           "note-reaction-chip__root--self": props.reaction.myReactionId && props.overrideActive === undefined, // highlight chips that yourself reacted to (if no override)
           "note-reaction-chip__root--override-active": props.overrideActive,
@@ -44,9 +46,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         <div className="note-reaction-chip__reaction">{reactionImage}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
-      {props.showTooltip && (
-        <Tooltip anchorSelect={`#reaction-${props.reaction.noteId}-${props.reaction.reactionType}`} className="note-reaction-chip__tooltip" place="top" content={reactionUsers} />
-      )}
+      {props.showTooltip && <Tooltip anchorSelect={`#${anchorId}`} className="note-reaction-chip__tooltip" place="top" content={reactionUsers} />}
     </>
   );
 };
