@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {KeyboardEvent, useEffect, useRef, useState} from "react";
+import {KeyboardEvent, useEffect, useRef} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
@@ -71,8 +71,6 @@ export const Note = (props: NoteProps) => {
 
   const dimensions = useSize(noteRef);
 
-  const [isFocused, setIsFocused] = useState(false);
-
   const handleClick = () => {
     if (moderating && isModerator) {
       dispatch(Actions.shareNote(props.noteId));
@@ -100,14 +98,7 @@ export const Note = (props: NoteProps) => {
       className={classNames("note__root", props.colorClassName)}
       disabled={!(isModerator || allowStacking)}
     >
-      <button
-        className={`note note--${stackSetting}`}
-        onClick={handleClick}
-        onKeyDown={handleKeyPress}
-        ref={noteRef}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-      >
+      <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
           <div className="note__author-container">
             <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
@@ -127,7 +118,7 @@ export const Note = (props: NoteProps) => {
           <main className="note__text">{note.text}</main>
         )}
         <footer className="note__footer">
-          <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} parentFocus={isFocused} />
+          <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} />
         </footer>
       </button>
       {isStack && <div className="note__in-stack" />}

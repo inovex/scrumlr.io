@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
 import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
 import {isEqual} from "underscore";
@@ -17,7 +17,6 @@ import "./NoteReactionList.scss";
 
 interface NoteReactionListProps {
   noteId: string;
-  parentFocus: boolean;
   dimensions?: DOMRect; // used for note width
   colorClassName?: string;
 }
@@ -108,12 +107,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
   const [showReactionPopup, setShowReactionPopup] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!props.parentFocus) {
-      setShowReactionBar(false);
-    }
-  }, [props.parentFocus]);
-
   const toggleReactionBar = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setShowReactionBar(!showReactionBar);
@@ -170,7 +163,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   };
 
   return (
-    <div className="note-reaction-list__root">
+    <div className="note-reaction-list__root" onBlur={() => setShowReactionBar(false)}>
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
         <button className="note-reaction-list__add-reaction-sticker-container" onClick={(e) => toggleReactionBar(e)}>
           {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}

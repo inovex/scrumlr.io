@@ -17,7 +17,7 @@ type NoteDialogNoteFooterProps = {
 
 export const NoteDialogNoteFooter: FC<NoteDialogNoteFooterProps> = (props: NoteDialogNoteFooterProps) => (
   <div className="note-dialog__note-footer">
-    <NoteReactionList noteId={props.noteId} colorClassName={props.colorClassName} parentFocus />
+    <NoteReactionList noteId={props.noteId} colorClassName={props.colorClassName} />
     <Votes {...props} className="note-dialog__note-votes" />
   </div>
 );
