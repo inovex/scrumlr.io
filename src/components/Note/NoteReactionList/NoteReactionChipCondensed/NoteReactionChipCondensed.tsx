@@ -1,12 +1,14 @@
 import {Tooltip} from "react-tooltip";
 import {hashCode} from "utils/hash";
+import {LongPressReactEvents, useLongPress} from "use-long-press";
+import {ReactionImageMap} from "types/reaction";
 import {ReactionModeled} from "../NoteReactionList";
-import {ReactionImageMap} from "../../../../types/reaction";
 
 import "./NoteReactionChipCondensed.scss";
 
 interface NoteReactionChipPropsCondensed {
   reactions: ReactionModeled[];
+  handleLongPressReaction: (e: LongPressReactEvents) => void;
 }
 
 export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed) => {
@@ -20,9 +22,20 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const reactionUsersTitle = reactionsFiltered.map((r) => `${r.users.map((u) => u.user.name).join(", ")}: ${ReactionImageMap.get(r.reactionType)}`);
   const totalAmount = reactionsFiltered.reduce((sum, reactionModeled) => sum + reactionModeled.amount, 0);
 
+  const bindLongPress = useLongPress((e) => {
+    if (props.handleLongPressReaction) {
+      props.handleLongPressReaction(e);
+    }
+  });
+
   return (
     <>
-      <div id={`reactions-condensed-${noteId}`} className="note-reaction-chip-condensed__root">
+      <div
+        id={`reactions-condensed-${noteId}`}
+        className="note-reaction-chip-condensed__root"
+        onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
+        {...bindLongPress()}
+      >
         <div className="note-reaction-chip-condensed__reactions-container">
           {reactionImages.map((emoji) => (
             <div className="note-reaction-chip-condensed__reaction" key={`reaction-${emoji}`}>
