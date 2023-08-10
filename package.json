@@ -23,7 +23,7 @@
     "i18next-browser-languagedetector": "^7.1.0",
     "i18next-http-backend": "^2.2.1",
     "js-cookie": "^3.0.5",
-    "marked": "7.0.1",
+    "marked": "7.0.2",
     "qrcode.react": "^3.1.0",
     "query-string": "^8.1.0",
     "react": "^18.0.0-rc.3",
