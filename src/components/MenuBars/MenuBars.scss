@@ -84,6 +84,10 @@ $tooltip-gap: 12px;
   &--horizontal {
     animation: expandHorizontally 0.25s ease forwards;
   }
+
+  &--active {
+    background-color: $menu-icon-background-color--dark;
+  }
 }
 
 [theme="dark"] {
@@ -94,6 +98,10 @@ $tooltip-gap: 12px;
 
   .menu-bars-mobile__fab-option {
     box-shadow: $box-shadow--dark;
+
+    &--active {
+      background-color: $color-white;
+    }
   }
 }
 

@@ -185,7 +185,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             })}
           >
             {(fabIsExpanded || isReady) && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
+              <li className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": isReady})}>
                 <TooltipButton
                   active={isReady}
                   direction="left"
@@ -196,7 +196,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             )}
             {(fabIsExpanded || raisedHand) && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
+              <li className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": raisedHand})}>
                 <TooltipButton
                   active={raisedHand}
                   direction="left"
@@ -233,7 +233,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </>
             )}
             {(fabIsExpanded || state.moderation) && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
+              <li className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--vertical", {"menu-bars-mobile__fab-option--active": state.moderation})}>
                 <TooltipButton
                   active={state.moderation}
                   direction="right"
