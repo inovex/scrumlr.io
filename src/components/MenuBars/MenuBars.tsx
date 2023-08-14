@@ -37,16 +37,22 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const menuBarsMobileRef = useRef<HTMLElement>(null);
 
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
+  const [showBoardReactionsMenu, setShowBoarReactionsMenu] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
-      if (!menuBarsMobileRef.current?.contains(target as Node) && fabIsExpanded) {
-        setFabIsExpanded(!fabIsExpanded);
+      if (!menuBarsMobileRef.current?.contains(target as Node)) {
+        if (fabIsExpanded) {
+          setFabIsExpanded(!fabIsExpanded);
+        }
+        if (showBoardReactionsMenu) {
+          setShowBoarReactionsMenu(false);
+        }
       }
     };
     document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
-  }, [menuBarsMobileRef, fabIsExpanded]);
+  }, [menuBarsMobileRef, fabIsExpanded, showBoardReactionsMenu]);
 
   const {SHOW_TIMER_MENU, SHOW_VOTING_MENU, SHOW_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 
@@ -67,7 +73,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const isAdmin = state.currentUser.role === "OWNER" || state.currentUser.role === "MODERATOR";
   const isReady = state.currentUser.ready;
   const {raisedHand} = state.currentUser;
-  const [showBoardReactionsMenu, setShowBoarReactionsMenu] = useState(false);
 
   const toggleReadyState = () => {
     dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
