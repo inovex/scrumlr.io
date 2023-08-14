@@ -16,10 +16,10 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
-import "./MenuBars.scss";
 import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
+import "./MenuBars.scss";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -96,7 +96,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   return (
     <>
+      {/* desktop view */}
       <aside className="menu-bars">
+        {/* role=any: toggle ready, toggle raise hand, options */}
         <section className="menu user-menu">
           <ul className="menu__items">
             <li>
@@ -129,6 +131,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           </button>
         </section>
 
+        {/* role=moderator: timer, votes, presenter mode */}
         <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin})}>
           {isAdmin && (
             <ul className="menu__items">
@@ -160,6 +163,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           </button>
         </section>
       </aside>
+
+      {/* mobile view */}
       <aside className="menu-bars-mobile" ref={menuBarsMobileRef}>
         <button
           className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
@@ -170,18 +175,20 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         >
           {fabIsExpanded ? <CloseIcon aria-hidden /> : <MenuIcon aria-hidden />}
         </button>
+
+        {/* role=any: toggle ready, toggle raise hand, options */}
         {(fabIsExpanded || isReady || raisedHand) && (
           <ul
-            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--vertical", {
+            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {
               "menu-bars-mobile__options--isExpanded": fabIsExpanded,
               "menu-bars-mobile__options--hasActiveButton": isReady || raisedHand,
             })}
           >
             {(fabIsExpanded || isReady) && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
                 <TooltipButton
                   active={isReady}
-                  direction="right"
+                  direction="left"
                   label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
                   icon={CheckIcon}
                   onClick={toggleReadyState}
@@ -189,10 +196,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             )}
             {(fabIsExpanded || raisedHand) && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
                 <TooltipButton
                   active={raisedHand}
-                  direction="right"
+                  direction="left"
                   label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
                   icon={RaiseHand}
                   onClick={toggleRaiseHand}
@@ -200,34 +207,36 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             )}
             {fabIsExpanded && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
+                <TooltipButton direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
               </li>
             )}
           </ul>
         )}
+
+        {/* role=moderator: timer, votes, presenter mode */}
         {isAdmin && (fabIsExpanded || state.moderation) && (
           <ul
-            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {
+            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--vertical", {
               "menu-bars-mobile__options--isExpanded": fabIsExpanded,
               "menu-bars-mobile__options--hasActiveButton": state.moderation,
             })}
           >
             {fabIsExpanded && (
               <>
-                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                  <TooltipButton direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
+                  <TooltipButton direction="right" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
                 </li>
-                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                  <TooltipButton direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
+                  <TooltipButton direction="right" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
                 </li>
               </>
             )}
             {(fabIsExpanded || state.moderation) && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
+              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
                 <TooltipButton
                   active={state.moderation}
-                  direction="left"
+                  direction="right"
                   label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
                   icon={FocusIcon}
                   onClick={toggleModeration}
