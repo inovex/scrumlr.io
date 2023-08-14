@@ -8,6 +8,7 @@ import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as BoardReactionIcon} from "assets/icon-add-board-reaction.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
@@ -19,6 +20,7 @@ import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
+import {BoardReactionMenu} from "../BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
 
 export interface MenuBarsProps {
@@ -65,6 +67,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const isAdmin = state.currentUser.role === "OWNER" || state.currentUser.role === "MODERATOR";
   const isReady = state.currentUser.ready;
   const {raisedHand} = state.currentUser;
+  const [showBoardReactionsMenu, setShowBoarReactionsMenu] = useState(false);
 
   const toggleReadyState = () => {
     dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
@@ -72,6 +75,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   const toggleRaiseHand = () => {
     dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
+  };
+
+  const toggleBoardReactionsMenu = () => {
+    setShowBoarReactionsMenu(!showBoardReactionsMenu);
   };
 
   const toggleModeration = () => {
@@ -119,6 +126,15 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 onClick={toggleRaiseHand}
                 active={raisedHand}
                 hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
+              />
+            </li>
+            <li>
+              <TooltipButton
+                direction="right"
+                label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
+                icon={BoardReactionIcon}
+                onClick={toggleBoardReactionsMenu}
+                active={showBoardReactionsMenu}
               />
             </li>
             <li>
@@ -207,6 +223,19 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             )}
             {fabIsExpanded && (
+              <li
+                className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": showBoardReactionsMenu})}
+              >
+                <TooltipButton
+                  active={showBoardReactionsMenu}
+                  direction="left"
+                  label={showBoardReactionsMenu ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
+                  icon={BoardReactionIcon}
+                  onClick={toggleBoardReactionsMenu}
+                />
+              </li>
+            )}
+            {fabIsExpanded && (
               <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
                 <TooltipButton direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
               </li>
@@ -246,6 +275,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           </ul>
         )}
       </aside>
+
+      {showBoardReactionsMenu && <BoardReactionMenu />}
     </>
   );
 };
