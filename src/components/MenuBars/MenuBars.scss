@@ -1,15 +1,17 @@
 @import "constants/style.scss";
 
+$tooltip-gap: 12px;
+
 @keyframes expandHorizontally {
   to {
-    margin-right: $margin--small;
+    margin-right: $tooltip-gap;
     opacity: 1;
   }
 }
 
 @keyframes expandVertically {
   to {
-    margin-bottom: $margin--small;
+    margin-bottom: $tooltip-gap;
     opacity: 1;
   }
 }
@@ -18,7 +20,9 @@
   display: none;
   z-index: $menu-z-index;
   position: fixed;
-  transition: bottom 0.25s, right 0.25s;
+  transition:
+    bottom 0.25s,
+    right 0.25s;
 }
 
 .menu-bars-mobile__options {
