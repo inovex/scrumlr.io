@@ -18,7 +18,7 @@
   align-items: center;
   gap: 8px;
 
-  background-color: $color-white;
+  background-color: $color-white-one;
   border-radius: $rounded--large;
 
   padding: 0 $padding--default;
@@ -39,6 +39,7 @@
 .board-reactions__close {
   width: $icon--large;
   height: $icon--large;
+  color: $color-dark-mode-note;
 }
 
 @media #{$smartphone} {
@@ -48,5 +49,15 @@
 
   .board-reactions__close {
     display: none;
+  }
+}
+
+[theme="dark"] {
+  .board-reactions__container {
+    background-color: $color-dark-mode-note;
+  }
+
+  .board-reactions__close {
+    color: $color-white;
   }
 }
