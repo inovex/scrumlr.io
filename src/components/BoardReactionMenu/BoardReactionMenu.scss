@@ -1,0 +1,42 @@
+@import "src/constants/style";
+
+.board-reactions__root {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: $column__border-width;
+}
+
+.board-reactions__container {
+  width: 374px;
+  height: 64px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+
+  background-color: $color-white;
+  border-radius: $rounded--large;
+
+  padding: 0 $padding--default;
+}
+
+.board-reactions__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board-reactions__reaction {
+  width: 54px;
+  height: 54px;
+  font-size: 36px;
+}
+
+.board-reactions__close {
+  width: $icon--large;
+  height: $icon--large;
+}
