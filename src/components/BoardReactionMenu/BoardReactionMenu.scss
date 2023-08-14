@@ -40,3 +40,13 @@
   width: $icon--large;
   height: $icon--large;
 }
+
+@media #{$smartphone} {
+  .board-reactions__root {
+    bottom: $column__border-width + $margin--medium + 64px;
+  }
+
+  .board-reactions__close {
+    display: none;
+  }
+}
