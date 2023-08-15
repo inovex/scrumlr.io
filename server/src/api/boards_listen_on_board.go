@@ -36,11 +36,6 @@ type EventData struct {
 	Assignments []*dto2.Assignment          `json:"assignments"`
 }
 
-type Event struct {
-	Type realtime.BoardEventType `json:"type"`
-	Data interface{}             `json:"data"`
-}
-
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	id := r.Context().Value("Board").(uuid.UUID)
 	userID := r.Context().Value("User").(uuid.UUID)

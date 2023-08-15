@@ -140,15 +140,15 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 
 		var ret realtime.BoardEvent
-		var seeableColumns = make([]*dto2.Column, 0, len(boardSubscription.boardColumns))
+		var visibleColumns = make([]*dto2.Column, 0, len(boardSubscription.boardColumns))
 		for _, column := range columns {
-			if column.Visible && !isMod {
-				seeableColumns = append(seeableColumns, column)
+			if column.Visible {
+				visibleColumns = append(visibleColumns, column)
 			}
 		}
 
 		ret.Type = event.Type
-		ret.Data = seeableColumns
+		ret.Data = visibleColumns
 		return &ret
 	}
 
@@ -164,28 +164,28 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 
 		var ret realtime.BoardEvent
-		var seeableNotes = make([]*dto2.Note, 0, len(boardSubscription.boardNotes))
+		var visibleNotes = make([]*dto2.Note, 0, len(boardSubscription.boardNotes))
 		for _, note := range notes {
 			for _, column := range boardSubscription.boardColumns {
 				if (note.Position.Column == column.ID) && column.Visible {
 					// BoardSettings -> Remove other participant cards
 					if boardSubscription.boardSettings.ShowNotesOfOtherUsers {
-						seeableNotes = append(seeableNotes, note)
-					} else if !boardSubscription.boardSettings.ShowNotesOfOtherUsers && (userID == note.Author) {
-						seeableNotes = append(seeableNotes, note)
+						visibleNotes = append(visibleNotes, note)
+					} else if userID == note.Author {
+						visibleNotes = append(visibleNotes, note)
 					}
 				}
 			}
 		}
 		// Authors
-		for _, note := range seeableNotes {
+		for _, note := range visibleNotes {
 			if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
 				note.Author = uuid.Nil
 			}
 		}
 
 		ret.Type = event.Type
-		ret.Data = seeableNotes
+		ret.Data = visibleNotes
 		return &ret
 	}
 
@@ -221,51 +221,51 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 
 		var filteredData = VoteUpdated{}
-		var seeableNotes = make([]*dto2.Note, 0)
+		var visibleNotes = make([]*dto2.Note, 0)
 		if voting.Notes != nil {
 			for _, note := range voting.Notes {
 				for _, column := range boardSubscription.boardColumns {
 					if (note.Position.Column == column.ID) && column.Visible {
 						// BoardSettings -> Remove other participant cards
 						if boardSubscription.boardSettings.ShowNotesOfOtherUsers {
-							seeableNotes = append(seeableNotes, note)
-						} else if !boardSubscription.boardSettings.ShowNotesOfOtherUsers && (userID == note.Author) {
-							seeableNotes = append(seeableNotes, note)
+							visibleNotes = append(visibleNotes, note)
+						} else if userID == note.Author {
+							visibleNotes = append(visibleNotes, note)
 						}
 					}
 				}
 			}
 			// Authors
-			for _, note := range seeableNotes {
+			for _, note := range visibleNotes {
 				if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
 					note.Author = uuid.Nil
 				}
 			}
-			filteredData.Notes = seeableNotes
+			filteredData.Notes = visibleNotes
 		}
 
 		// More filtering needed for voting results
-		seeableVotingNotes := &dto2.VotingResults{}
+		visibleVotingNotes := &dto2.VotingResults{}
 		overallVoteCount := 0
 		if voting.Notes != nil || len(voting.Notes) > 0 {
 			allVotingResults := voting.Voting.VotingResults.Votes
-			seeableVotingResults := make(map[uuid.UUID]dto2.VotingResultsPerNote)
-			for _, note := range seeableNotes {
+			visibleVotingResults := make(map[uuid.UUID]dto2.VotingResultsPerNote)
+			for _, note := range visibleNotes {
 				if _, ok := allVotingResults[note.ID]; ok { // Check if note was voted on
-					votingResult := seeableVotingResults[note.ID]
+					votingResult := visibleVotingResults[note.ID]
 					votingResult.Total = allVotingResults[note.ID].Total
 					votingResult.Users = allVotingResults[note.ID].Users
 
-					seeableVotingResults[note.ID] = votingResult
+					visibleVotingResults[note.ID] = votingResult
 					overallVoteCount += allVotingResults[note.ID].Total
 				}
 			}
-			seeableVotingNotes.Total = overallVoteCount
-			seeableVotingNotes.Votes = seeableVotingResults
+			visibleVotingNotes.Total = overallVoteCount
+			visibleVotingNotes.Votes = visibleVotingResults
 		}
-		filteredData.Notes = seeableNotes
+		filteredData.Notes = visibleNotes
 		filteredData.Voting = voting.Voting                    // To keep voting settings
-		filteredData.Voting.VotingResults = seeableVotingNotes // override just the filtered data
+		filteredData.Voting.VotingResults = visibleVotingNotes // override just the filtered data
 
 		ret.Data = filteredData
 		return &ret
@@ -280,8 +280,8 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		return event
 	}
 
-	var seeableColumns = make([]*dto2.Column, 0)
-	var seeableNotes = make([]*dto2.Note, 0)
+	var visibleColumns = make([]*dto2.Column, 0)
+	var visibleNotes = make([]*dto2.Note, 0)
 	retEvent := InitEvent{
 		Type: event.Type,
 		Data: EventData{
@@ -298,69 +298,67 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	// Columns
 	for _, column := range event.Data.Columns {
 		if column.Visible {
-			seeableColumns = append(seeableColumns, column)
+			visibleColumns = append(visibleColumns, column)
 		}
 	}
 	// Notes
 	for _, note := range event.Data.Notes {
-		for _, column := range seeableColumns {
+		for _, column := range visibleColumns {
 			if note.Position.Column == column.ID {
 				// BoardSettings -> Remove other participant cards
 				if retEvent.Data.Board.ShowNotesOfOtherUsers {
-					seeableNotes = append(seeableNotes, note)
-				} else if !retEvent.Data.Board.ShowNotesOfOtherUsers && (clientID == note.Author) {
-					seeableNotes = append(seeableNotes, note)
+					visibleNotes = append(visibleNotes, note)
+				} else if clientID == note.Author {
+					visibleNotes = append(visibleNotes, note)
 				}
 			}
 		}
 	}
 	// BoardSettings -> Author
-	for _, note := range seeableNotes {
+	for _, note := range visibleNotes {
 		if !retEvent.Data.Board.ShowAuthors && note.Author != clientID {
 			note.Author = uuid.Nil
 		}
 	}
-
 	// Votes
-	seeableVotes := make([]*dto2.Vote, 0)
+	visibleVotes := make([]*dto2.Vote, 0)
 	for _, v := range event.Data.Votes {
-		for _, n := range seeableNotes {
+		for _, n := range visibleNotes {
 			if v.Note == n.ID {
 				aVote := dto2.Vote{
 					Voting: v.Voting,
 					Note:   n.ID,
 				}
-				seeableVotes = append(seeableVotes, &aVote)
+				visibleVotes = append(visibleVotes, &aVote)
 			}
 		}
 	}
-
 	// Votings
-	seeableVotings := make([]*dto2.Voting, 0)
+	visibleVotings := make([]*dto2.Voting, 0)
 	for _, v := range event.Data.Votings {
 		overallVoteCount := 0
-		seeableVoting := v
+		visibleVoting := v
 
 		allVotingResults := v.VotingResults.Votes
-		seeableVotingResults := make(map[uuid.UUID]dto2.VotingResultsPerNote)
-		for _, note := range seeableNotes {
+		visibleVotingResults := make(map[uuid.UUID]dto2.VotingResultsPerNote)
+		for _, note := range visibleNotes {
 			if _, ok := allVotingResults[note.ID]; ok { // Check if note was voted on
-				votingResult := seeableVotingResults[note.ID]
+				votingResult := visibleVotingResults[note.ID]
 				votingResult.Total = allVotingResults[note.ID].Total
 				votingResult.Users = allVotingResults[note.ID].Users
 
-				seeableVotingResults[note.ID] = votingResult
+				visibleVotingResults[note.ID] = votingResult
 				overallVoteCount += allVotingResults[note.ID].Total
 			}
 		}
-		seeableVoting.VotingResults.Total = overallVoteCount
-		seeableVoting.VotingResults.Votes = seeableVotingResults
-		seeableVotings = append(seeableVotings, seeableVoting)
+		visibleVoting.VotingResults.Total = overallVoteCount
+		visibleVoting.VotingResults.Votes = visibleVotingResults
+		visibleVotings = append(visibleVotings, visibleVoting)
 	}
 
-	retEvent.Data.Columns = seeableColumns
-	retEvent.Data.Notes = seeableNotes
-	retEvent.Data.Votes = seeableVotes
-	retEvent.Data.Votings = seeableVotings
+	retEvent.Data.Columns = visibleColumns
+	retEvent.Data.Notes = visibleNotes
+	retEvent.Data.Votes = visibleVotes
+	retEvent.Data.Votings = visibleVotings
 	return retEvent
 }
