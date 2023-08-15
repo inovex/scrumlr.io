@@ -321,7 +321,46 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		}
 	}
 
+	// Votes
+	seeableVotes := make([]*dto2.Vote, 0)
+	for _, v := range event.Data.Votes {
+		for _, n := range seeableNotes {
+			if v.Note == n.ID {
+				aVote := dto2.Vote{
+					Voting: v.Voting,
+					Note:   n.ID,
+				}
+				seeableVotes = append(seeableVotes, &aVote)
+			}
+		}
+	}
+
+	// Votings
+	seeableVotings := make([]*dto2.Voting, 0)
+	for _, v := range event.Data.Votings {
+		overallVoteCount := 0
+		seeableVoting := v
+
+		allVotingResults := v.VotingResults.Votes
+		seeableVotingResults := make(map[uuid.UUID]dto2.VotingResultsPerNote)
+		for _, note := range seeableNotes {
+			if _, ok := allVotingResults[note.ID]; ok { // Check if note was voted on
+				votingResult := seeableVotingResults[note.ID]
+				votingResult.Total = allVotingResults[note.ID].Total
+				votingResult.Users = allVotingResults[note.ID].Users
+
+				seeableVotingResults[note.ID] = votingResult
+				overallVoteCount += allVotingResults[note.ID].Total
+			}
+		}
+		seeableVoting.VotingResults.Total = overallVoteCount
+		seeableVoting.VotingResults.Votes = seeableVotingResults
+		seeableVotings = append(seeableVotings, seeableVoting)
+	}
+
 	retEvent.Data.Columns = seeableColumns
 	retEvent.Data.Notes = seeableNotes
+	retEvent.Data.Votes = seeableVotes
+	retEvent.Data.Votings = seeableVotings
 	return retEvent
 }
