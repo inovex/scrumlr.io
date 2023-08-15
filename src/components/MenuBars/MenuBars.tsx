@@ -35,6 +35,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const menuBarsMobileRef = useRef<HTMLElement>(null);
+  const menuBarsDesktopRef = useRef<HTMLElement>(null);
 
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
   const [showBoardReactionsMenu, setShowBoarReactionsMenu] = useState(false);
@@ -42,12 +43,12 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
       if (!menuBarsMobileRef.current?.contains(target as Node)) {
-        if (fabIsExpanded) {
-          setFabIsExpanded(!fabIsExpanded);
-        }
-        if (showBoardReactionsMenu) {
-          setShowBoarReactionsMenu(false);
-        }
+        setFabIsExpanded(false);
+      }
+
+      // only hide if menu wasn't clicked to avoid double onClick toggle
+      if (!menuBarsDesktopRef.current?.contains(target as Node)) {
+        setShowBoarReactionsMenu(false);
       }
     };
     document.addEventListener("click", handleClickOutside, true);
@@ -109,7 +110,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   return (
     <>
       {/* desktop view */}
-      <aside className="menu-bars">
+      <aside className="menu-bars" ref={menuBarsDesktopRef}>
         {/* role=any: toggle ready, toggle raise hand, options */}
         <section className="menu user-menu">
           <ul className="menu__items">
