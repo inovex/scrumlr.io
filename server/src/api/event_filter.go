@@ -108,6 +108,24 @@ func parseBoardUpdated(data interface{}) (*dto2.Board, error) {
 	return ret, nil
 }
 
+type VoteUpdated struct {
+	Notes  []*dto2.Note `json:"notes"`
+	Voting *dto2.Voting `json:"voting"`
+}
+
+func parseVotingUpdatedEvent(data interface{}) (*VoteUpdated, error) {
+	var ret *VoteUpdated
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
 func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
 	isMod := isModerator(userID, boardSubscription.boardParticipants)
 	if event.Type == realtime.BoardEventColumnsUpdated {
@@ -181,7 +199,78 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			event.Data = boardSettings
 			return event
 		}
+		return event
 	}
+
+	if event.Type == realtime.BoardEventVotingUpdated {
+		voting, err := parseVotingUpdatedEvent(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+		}
+		if isMod {
+			return event
+		}
+
+		if voting.Voting.Status != "CLOSED" {
+			return event
+		}
+
+		ret := realtime.BoardEvent{
+			Type: realtime.BoardEventVotingUpdated,
+			Data: nil,
+		}
+
+		var filteredData = VoteUpdated{}
+		var seeableNotes = make([]*dto2.Note, 0)
+		if voting.Notes != nil {
+			for _, note := range voting.Notes {
+				for _, column := range boardSubscription.boardColumns {
+					if (note.Position.Column == column.ID) && column.Visible {
+						// BoardSettings -> Remove other participant cards
+						if boardSubscription.boardSettings.ShowNotesOfOtherUsers {
+							seeableNotes = append(seeableNotes, note)
+						} else if !boardSubscription.boardSettings.ShowNotesOfOtherUsers && (userID == note.Author) {
+							seeableNotes = append(seeableNotes, note)
+						}
+					}
+				}
+			}
+			// Authors
+			for _, note := range seeableNotes {
+				if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
+					note.Author = uuid.Nil
+				}
+			}
+			filteredData.Notes = seeableNotes
+		}
+
+		// More filtering needed for voting results
+		seeableVotingNotes := &dto2.VotingResults{}
+		overallVoteCount := 0
+		if voting.Notes != nil || len(voting.Notes) > 0 {
+			allVotingResults := voting.Voting.VotingResults.Votes
+			seeableVotingResults := make(map[uuid.UUID]dto2.VotingResultsPerNote)
+			for _, note := range seeableNotes {
+				if _, ok := allVotingResults[note.ID]; ok { // Check if note was voted on
+					votingResult := seeableVotingResults[note.ID]
+					votingResult.Total = allVotingResults[note.ID].Total
+					votingResult.Users = allVotingResults[note.ID].Users
+
+					seeableVotingResults[note.ID] = votingResult
+					overallVoteCount += allVotingResults[note.ID].Total
+				}
+			}
+			seeableVotingNotes.Total = overallVoteCount
+			seeableVotingNotes.Votes = seeableVotingResults
+		}
+		filteredData.Notes = seeableNotes
+		filteredData.Voting = voting.Voting                    // To keep voting settings
+		filteredData.Voting.VotingResults = seeableVotingNotes // override just the filtered data
+
+		ret.Data = filteredData
+		return &ret
+	}
+	// returns, if no filter match occured
 	return event
 }
 
