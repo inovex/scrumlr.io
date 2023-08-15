@@ -28,12 +28,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  cursor: pointer;
 }
 
 .board-reactions__reaction {
   width: 54px;
   height: 54px;
   font-size: 36px;
+
+  border-radius: $rounded--full;
+
+  &:hover {
+    background-color: $hover-background-light;
+  }
 }
 
 .board-reactions__close {

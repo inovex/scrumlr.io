@@ -20,7 +20,7 @@ import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
-import {BoardReactionMenu} from "../BoardReactionMenu/BoardReactionMenu";
+import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
 
 export interface MenuBarsProps {
@@ -36,12 +36,17 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const navigate = useNavigate();
   const menuBarsMobileRef = useRef<HTMLElement>(null);
   const menuBarsDesktopRef = useRef<HTMLElement>(null);
+  const boardReactionRef = useRef<HTMLDivElement>(null);
 
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
   const [showBoardReactionsMenu, setShowBoarReactionsMenu] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
+      if (boardReactionRef.current?.contains(target as Node)) {
+        return;
+      }
+
       if (!menuBarsMobileRef.current?.contains(target as Node)) {
         setFabIsExpanded(false);
       }
@@ -282,7 +287,12 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         )}
       </aside>
 
-      {showBoardReactionsMenu && <BoardReactionMenu />}
+      {/* should this be inside a Portal instead? */}
+      {showBoardReactionsMenu && (
+        <div ref={boardReactionRef}>
+          <BoardReactionMenu />
+        </div>
+      )}
     </>
   );
 };
