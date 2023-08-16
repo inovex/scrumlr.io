@@ -11,24 +11,17 @@ export const Html: FC = () => {
   const lang = useAppSelector((state) => state.view.language);
   let title = useAppSelector((state) => state.board.data?.name);
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
-  const scripts = [];
 
   if (title) title = `scrumlr.io - ${title}`;
 
-  // Dirty version for Testing
-  // if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
-  // }
-  // scripts.push({
-  //   defer: true,
-  //   "data-domain": "development.scrumlr.fra.ics.inovex.io",
-  //   src: "https://analytics.development.scrumlr.fra.ics.inovex.io/js/script.js",
-  // });
-  const {trackPageview} = Plausible({
-    domain: "development.scrumlr.fra.ics.inovex.io",
-    apiHost: "https://analytics.development.scrumlr.fra.ics.inovex.io",
-  });
+  if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
+    const {trackPageview} = Plausible({
+      domain: ANALYTICS_DATA_DOMAIN,
+      apiHost: ANALYTICS_SRC,
+    });
 
-  trackPageview();
+    trackPageview();
+  }
 
   useEffect(() => {
     if (theme === "auto") {
