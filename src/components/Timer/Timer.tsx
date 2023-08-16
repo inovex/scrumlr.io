@@ -110,10 +110,10 @@ export const Timer = (props: TimerProps) => {
       <div className="timer__short-actions">
         {isModerator ? (
           <div className="short-actions__short-action">
-            <button aria-label={t("VoteDisplay.finishActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
+            <button aria-label={t("Timer.stopTimer")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
               <CancelIcon />
             </button>
-            <span className="short-action__tooltip">{t("VoteDisplay.finishActionTooltip")}</span>
+            <span className="short-action__tooltip">{t("Timer.stopTimer")}</span>
           </div>
         ) : (
           <div className="short-actions__short-action">
