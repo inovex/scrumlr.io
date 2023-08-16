@@ -1,8 +1,6 @@
 import {FC, useEffect, useState} from "react";
 import {Helmet} from "react-helmet";
 import {useAppSelector} from "store";
-import Plausible from "plausible-tracker";
-import {ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "../../config";
 
 type HelmetProps = React.ComponentProps<typeof Helmet>;
 const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
@@ -13,15 +11,6 @@ export const Html: FC = () => {
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
 
   if (title) title = `scrumlr.io - ${title}`;
-
-  if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
-    const {trackPageview} = Plausible({
-      domain: ANALYTICS_DATA_DOMAIN,
-      apiHost: ANALYTICS_SRC,
-    });
-
-    trackPageview();
-  }
 
   useEffect(() => {
     if (theme === "auto") {

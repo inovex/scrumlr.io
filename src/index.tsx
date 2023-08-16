@@ -15,12 +15,23 @@ import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import {register} from "serviceWorkerRegistration";
 
-import {SHOW_LEGAL_DOCUMENTS} from "./config";
+import {SHOW_LEGAL_DOCUMENTS,ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "./config";
 import "react-tooltip/dist/react-tooltip.css";
+
+import Plausible from "plausible-tracker";
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
 if (APP_VERSION) {
   saveToStorage(APP_VERSION_STORAGE_KEY, APP_VERSION);
+}
+
+if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
+  const {trackPageview} = Plausible({
+    domain: ANALYTICS_DATA_DOMAIN,
+    apiHost: ANALYTICS_SRC,
+  });
+
+  trackPageview();
 }
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
