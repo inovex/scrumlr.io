@@ -367,7 +367,7 @@
     "ErrorMissingBugReportText": "Bitte gib an, welchen Bug du melden möchtest!",
     "SubmitNotification": "Vielen Dank für dein Feedback!"
   },
-  "ProfileSettings": {
+  "ProfileSettings": { 
     "Profile": "Profil",
     "UserName": "Benutzername",
     "SaveAvatar": "Avatar Speichern",
