@@ -39,7 +39,7 @@ jobs:
 
       - uses: actions/setup-go@v3
         with:
-          go-version: "^1.18"
+          go-version: "^1.19"
 
       - name: Build server
         working-directory: ./server
@@ -78,7 +78,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: run tests
-        uses: OctoMind-dev/automagically-action-execute@v1
+        uses: OctoMind-dev/automagically-action-execute@v2
         with:
           url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
           token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
+<<<<<<< HEAD
+=======
+          testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
+>>>>>>> main
