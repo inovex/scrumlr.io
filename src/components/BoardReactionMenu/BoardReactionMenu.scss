@@ -33,12 +33,19 @@
 }
 
 .board-reactions__reaction {
+  all: unset; // reset button
+  cursor: pointer;
+
   width: 54px;
   height: 54px;
-  font-size: 36px;
+
+  font-size: $text--xl;
 
   border-radius: $rounded--full;
 
+  span {
+    margin-left: 0.3em; // manually center those stubborn emojis
+  }
   &:hover {
     background-color: $hover-background-light;
   }
