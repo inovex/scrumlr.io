@@ -14,13 +14,14 @@ export const Html: FC = () => {
 
   if (title) title = `scrumlr.io - ${title}`;
 
+  // Dirty version for Testing
   if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
-    scripts.push({
-      defer: true,
-      "data-domain": ANALYTICS_DATA_DOMAIN,
-      src: ANALYTICS_SRC,
-    });
   }
+  scripts.push({
+    defer: true,
+    "data-domain": "development.scrumlr.fra.ics.inovex.io",
+    src: "https://analytics.development.scrumlr.fra.ics.inovex.io/js/script.js",
+  });
 
   useEffect(() => {
     if (theme === "auto") {
