@@ -1,6 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {Helmet} from "react-helmet";
 import {useAppSelector} from "store";
+import Plausible from "plausible-tracker";
 import {ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "../../config";
 
 type HelmetProps = React.ComponentProps<typeof Helmet>;
@@ -15,13 +16,19 @@ export const Html: FC = () => {
   if (title) title = `scrumlr.io - ${title}`;
 
   // Dirty version for Testing
-  if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
-  }
-  scripts.push({
-    defer: true,
-    "data-domain": "development.scrumlr.fra.ics.inovex.io",
-    src: "https://analytics.development.scrumlr.fra.ics.inovex.io/js/script.js",
+  // if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
+  // }
+  // scripts.push({
+  //   defer: true,
+  //   "data-domain": "development.scrumlr.fra.ics.inovex.io",
+  //   src: "https://analytics.development.scrumlr.fra.ics.inovex.io/js/script.js",
+  // });
+  const {trackPageview} = Plausible({
+    domain: "development.scrumlr.fra.ics.inovex.io",
+    apiHost: "https://analytics.development.scrumlr.fra.ics.inovex.io",
   });
+
+  trackPageview();
 
   useEffect(() => {
     if (theme === "auto") {
