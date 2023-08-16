@@ -39,5 +39,5 @@ export const Html: FC = () => {
     }
   });
 
-  return <HelmetWorkaround title={title} htmlAttributes={{lang, theme}} script={scripts} />;
+  return <HelmetWorkaround title={title} htmlAttributes={{lang, theme}} />;
 };
