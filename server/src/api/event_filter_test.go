@@ -206,55 +206,81 @@ func testParseNote(t *testing.T) {
 }
 
 func testColumnFilterAsParticipant(t *testing.T) {
-	expectedFilteredColumns := []*dto.Column{&aSeeableColumn}
+	expectedColumnEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventColumnsUpdated,
+		Data: []*dto.Column{&aSeeableColumn},
+	}
 	returnedColumnEvent := boardSub.eventFilter(columnEvent, participantBoardSession.User.ID)
 
-	assert.Equal(t, expectedFilteredColumns, returnedColumnEvent.Data)
+	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
 func testColumnFilterAsOwner(t *testing.T) {
-	expectedFilteredColumns := []*dto.Column{&aSeeableColumn, &aHiddenColumn}
+	expectedColumnEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventColumnsUpdated,
+		Data: []*dto.Column{&aSeeableColumn, &aHiddenColumn},
+	}
 	returnedColumnEvent := boardSub.eventFilter(columnEvent, ownerBoardSession.User.ID)
 
-	assert.Equal(t, expectedFilteredColumns, returnedColumnEvent.Data)
+	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
 func testColumnFilterAsModerator(t *testing.T) {
-	expectedFilteredColumns := []*dto.Column{&aSeeableColumn, &aHiddenColumn}
+	expectedColumnEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventColumnsUpdated,
+		Data: []*dto.Column{&aSeeableColumn, &aHiddenColumn},
+	}
+
 	returnedColumnEvent := boardSub.eventFilter(columnEvent, moderatorBoardSession.User.ID)
 
-	assert.Equal(t, expectedFilteredColumns, returnedColumnEvent.Data)
+	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
 
 func testNoteFilterAsParticipant(t *testing.T) {
-	expectedNotes := []*dto.Note{&aUserNote}
+	expectedNoteEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventNotesUpdated,
+		Data: []*dto.Note{&aUserNote},
+	}
 	returnedNoteEvent := boardSub.eventFilter(noteEvent, participantBoardSession.User.ID)
 
-	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
+	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
 func testNoteFilterAsOwner(t *testing.T) {
-	expectedNotes := []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote}
+	expectedNoteEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventNotesUpdated,
+		Data: []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote},
+	}
 	returnedNoteEvent := boardSub.eventFilter(noteEvent, ownerBoardSession.User.ID)
 
-	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
+	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
 func testNoteFilterAsModerator(t *testing.T) {
-	expectedNotes := []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote}
+	expectedNoteEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventNotesUpdated,
+		Data: []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote},
+	}
 	returnedNoteEvent := boardSub.eventFilter(noteEvent, moderatorBoardSession.User.ID)
 
-	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
+	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
 func testNoteFilterWithNonExistingUUID(t *testing.T) {
-	expectedNotes := []*dto.Note{}
+	expectedNoteEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventNotesUpdated,
+		Data: []*dto.Note{},
+	}
 	returnedNoteEvent := boardSub.eventFilter(noteEvent, uuid.New())
 
-	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
+	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
 func testFilterVotingUpdatedAsModerator(t *testing.T) {
-	expectedVoting := votingData
+	expectedVotingEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventVotingUpdated,
+		Data: votingData,
+	}
 	returnedVoteEvent := boardSub.eventFilter(votingEvent, moderatorBoardSession.User.ID)
 
-	assert.Equal(t, expectedVoting, returnedVoteEvent.Data)
-	assert.NotNil(t, returnedVoteEvent.Data)
+	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
+	assert.NotNil(t, returnedVoteEvent)
 }
+
 func testFilterVotingUpdatedAsParticipant(t *testing.T) {
 	expectedVoting := VoteUpdated{
 		Notes: []*dto.Note{&aUserNote},
