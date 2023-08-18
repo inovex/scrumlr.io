@@ -142,6 +142,7 @@ func TestEventFilter(t *testing.T) {
 	t.Run("TestSortSessions", testSortSessions)
 	t.Run("TestParseColumns", testParseColumn)
 	t.Run("TestParseNotes", testParseNote)
+	t.Run("TestParseVoting", testParseVoting)
 	t.Run("TestFilterColumnsAsParticipant", testColumnFilterAsParticipant)
 	t.Run("TestFilterColumnsAsOwner", testColumnFilterAsOwner)
 	t.Run("TestFilterColumnsAsModerator", testColumnFilterAsModerator)
@@ -203,6 +204,15 @@ func testParseNote(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, actualNotes)
 	assert.Equal(t, expectedNotes, actualNotes)
+}
+
+func testParseVoting(t *testing.T) {
+	expectedVoting := &votingData
+	actualVoting, err := parseVotingUpdatedEvent(votingEvent.Data)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, actualVoting)
+	assert.Equal(t, expectedVoting, actualVoting)
 }
 
 func testColumnFilterAsParticipant(t *testing.T) {
