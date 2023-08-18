@@ -354,13 +354,29 @@ func testInitFilterAsModerator(t *testing.T) {
 }
 
 func testInitFilterAsParticipant(t *testing.T) {
+	expectedVoting := dto.Voting{
+		ID:                 votingID,
+		VoteLimit:          5,
+		AllowMultipleVotes: true,
+		ShowVotesOfOthers:  false,
+		Status:             "CLOSED",
+		VotingResults: &dto.VotingResults{
+			Total: 2,
+			Votes: map[uuid.UUID]dto.VotingResultsPerNote{
+				aParticipantNote.ID: {
+					Total: 2,
+					Users: nil,
+				},
+			},
+		},
+	}
 	expectedInitEvent := InitEvent{
 		Type: realtime.BoardEventInit,
 		Data: EventData{
 			Board:       &dto.Board{},
 			Columns:     []*dto.Column{&aSeeableColumn},
 			Notes:       []*dto.Note{&aParticipantNote},
-			Votings:     []*dto.Voting{votingData.Voting},
+			Votings:     []*dto.Voting{&expectedVoting},
 			Votes:       []*dto.Vote{},
 			Sessions:    boardSessions,
 			Requests:    []*dto.BoardSessionRequest{},
