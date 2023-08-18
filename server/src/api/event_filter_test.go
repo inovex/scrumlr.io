@@ -81,7 +81,6 @@ var (
 			Stack:  uuid.NullUUID{},
 		},
 	}
-
 	boardSub = &BoardSubscription{
 		boardParticipants: []*dto.BoardSession{&moderatorBoardSession, &ownerBoardSession, &participantBoardSession},
 		boardColumns:      []*dto.Column{&aSeeableColumn, &aHiddenColumn},
@@ -90,12 +89,10 @@ var (
 			ShowNotesOfOtherUsers: false,
 		},
 	}
-
 	columnEvent = &realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: []*dto.Column{&aSeeableColumn, &aHiddenColumn},
 	}
-
 	noteEvent = &realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote},
@@ -128,7 +125,6 @@ var (
 			},
 		},
 	}
-
 	votingEvent = &realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: votingData,
@@ -224,6 +220,7 @@ func testColumnFilterAsParticipant(t *testing.T) {
 
 	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
+
 func testColumnFilterAsOwner(t *testing.T) {
 	expectedColumnEvent := &realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
@@ -233,6 +230,7 @@ func testColumnFilterAsOwner(t *testing.T) {
 
 	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
+
 func testColumnFilterAsModerator(t *testing.T) {
 	expectedColumnEvent := &realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
@@ -253,6 +251,7 @@ func testNoteFilterAsParticipant(t *testing.T) {
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
+
 func testNoteFilterAsOwner(t *testing.T) {
 	expectedNoteEvent := &realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
@@ -262,6 +261,7 @@ func testNoteFilterAsOwner(t *testing.T) {
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
+
 func testNoteFilterAsModerator(t *testing.T) {
 	expectedNoteEvent := &realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
@@ -271,6 +271,7 @@ func testNoteFilterAsModerator(t *testing.T) {
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
+
 func testNoteFilterWithNonExistingUUID(t *testing.T) {
 	expectedNoteEvent := &realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
@@ -280,6 +281,7 @@ func testNoteFilterWithNonExistingUUID(t *testing.T) {
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
+
 func testFilterVotingUpdatedAsModerator(t *testing.T) {
 	expectedVotingEvent := &realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
