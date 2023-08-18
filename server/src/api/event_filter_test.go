@@ -73,7 +73,7 @@ var (
 	}
 	aOwnerNote = dto.Note{
 		ID:     uuid.New(),
-		Author: participantBoardSession.User.ID,
+		Author: ownerBoardSession.User.ID,
 		Text:   "Owner Text",
 		Position: dto.NotePosition{
 			Column: aHiddenColumn.ID,
@@ -100,6 +100,39 @@ var (
 		Type: realtime.BoardEventNotesUpdated,
 		Data: []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote},
 	}
+	votingID   = uuid.New()
+	votingData = VoteUpdated{
+		Notes: []*dto.Note{&aUserNote, &aModeratorNote, &aOwnerNote},
+		Voting: &dto.Voting{
+			ID:                 votingID,
+			VoteLimit:          5,
+			AllowMultipleVotes: true,
+			ShowVotesOfOthers:  false,
+			Status:             "CLOSED",
+			VotingResults: &dto.VotingResults{
+				Total: 5,
+				Votes: map[uuid.UUID]dto.VotingResultsPerNote{
+					aUserNote.ID: {
+						Total: 2,
+						Users: nil,
+					},
+					aModeratorNote.ID: {
+						Total: 1,
+						Users: nil,
+					},
+					aOwnerNote.ID: {
+						Total: 2,
+						Users: nil,
+					},
+				},
+			},
+		},
+	}
+
+	votingEvent = &realtime.BoardEvent{
+		Type: realtime.BoardEventVotingUpdated,
+		Data: votingData,
+	}
 )
 
 func TestEventFilter(t *testing.T) {
@@ -116,6 +149,8 @@ func TestEventFilter(t *testing.T) {
 	t.Run("TestFilterNotesAsOwner", testNoteFilterAsOwner)
 	t.Run("TestFilterNotesAsModerator", testNoteFilterAsModerator)
 	t.Run("TestFilterNotesWithNonExistingUUID", testNoteFilterWithNonExistingUUID)
+	t.Run("TestFilterVotingUpdatedAsModerator", testFilterVotingUpdatedAsModerator)
+	t.Run("TestFilterVotingUpdatedAsParticipant", testFilterVotingUpdatedAsParticipant)
 }
 
 func testIsModModerator(t *testing.T) {
@@ -212,4 +247,39 @@ func testNoteFilterWithNonExistingUUID(t *testing.T) {
 	returnedNoteEvent := boardSub.eventFilter(noteEvent, uuid.New())
 
 	assert.Equal(t, expectedNotes, returnedNoteEvent.Data)
+}
+func testFilterVotingUpdatedAsModerator(t *testing.T) {
+	expectedVoting := votingData
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, moderatorBoardSession.User.ID)
+
+	assert.Equal(t, expectedVoting, returnedVoteEvent.Data)
+	assert.NotNil(t, returnedVoteEvent.Data)
+}
+func testFilterVotingUpdatedAsParticipant(t *testing.T) {
+	expectedVoting := VoteUpdated{
+		Notes: []*dto.Note{&aUserNote},
+		Voting: &dto.Voting{
+			ID:                 votingID,
+			VoteLimit:          5,
+			AllowMultipleVotes: true,
+			ShowVotesOfOthers:  false,
+			Status:             "CLOSED",
+			VotingResults: &dto.VotingResults{
+				Total: 2,
+				Votes: map[uuid.UUID]dto.VotingResultsPerNote{
+					aUserNote.ID: {
+						Total: 2,
+						Users: nil,
+					},
+				},
+			},
+		},
+	}
+	expectedVotingEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventVotingUpdated,
+		Data: expectedVoting,
+	}
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, participantBoardSession.User.ID)
+
+	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
 }
