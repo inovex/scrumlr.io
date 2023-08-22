@@ -51,12 +51,12 @@ jobs:
         run: |
           yarn install
           CI=false yarn build
-# TODO REENABLE LINTER
-      # - name: Lint code
-      #   run: yarn lint --max-warnings 0
 
-      # - name: Test with coverage
-      #   run: yarn test --coverage --watchAll=false --passWithNoTests
+      - name: Lint code
+        run: yarn lint --max-warnings 0
+
+      - name: Test with coverage
+        run: yarn test --coverage --watchAll=false --passWithNoTests
 
   package:
     needs: test
