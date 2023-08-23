@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/database/types"
 )
 
 type Reaction struct {
@@ -12,19 +13,19 @@ type Reaction struct {
 	ID            uuid.UUID
 	Note          uuid.UUID
 	User          uuid.UUID
-	ReactionType  string
+	ReactionType  types.Reaction
 }
 
 type ReactionInsert struct {
 	bun.BaseModel `bun:"table:reactions"`
 	Note          uuid.UUID
 	User          uuid.UUID
-	ReactionType  string
+	ReactionType  types.Reaction
 }
 
 type ReactionUpdate struct {
 	bun.BaseModel `bun:"table:reactions"`
-	ReactionType  string
+	ReactionType  types.Reaction
 }
 
 // GetReaction gets a specific Reaction

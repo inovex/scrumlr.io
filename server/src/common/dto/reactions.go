@@ -3,6 +3,7 @@ package dto
 import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/database"
+	"scrumlr.io/server/database/types"
 )
 
 // Reaction is the response for all reaction requests
@@ -17,7 +18,7 @@ type Reaction struct {
 	User uuid.UUID `json:"user"`
 
 	// The type of reaction
-	ReactionType string `json:"reactionType"`
+	ReactionType types.Reaction `json:"reactionType"`
 }
 
 // ReactionCreateRequest is the struct to use when creating a new reaction
@@ -32,12 +33,12 @@ type ReactionCreateRequest struct {
 	User uuid.UUID `json:"-"`
 
 	// The type of reaction
-	ReactionType string `json:"reactionType"`
+	ReactionType types.Reaction `json:"reactionType"`
 }
 
 // ReactionUpdateTypeRequest is the struct to use when updating the type of the reaction (effectively replacing it)
 type ReactionUpdateTypeRequest struct {
-	ReactionType string `json:"reactionType"`
+	ReactionType types.Reaction `json:"reactionType"`
 }
 
 func (r *Reaction) From(reaction database.Reaction) *Reaction {
