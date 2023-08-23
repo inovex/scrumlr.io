@@ -233,8 +233,9 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
 // tooltip
 @mixin tooltip {
-  border-radius: $rounded--large;
   z-index: $tooltip-z-index;
+  border-radius: $rounded--large;
+  opacity: 100%;
 }
 
 @mixin tooltip--light {
