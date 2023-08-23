@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"errors"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
@@ -53,8 +54,28 @@ func (d *Database) GetReactions(board uuid.UUID) ([]Reaction, error) {
 	return reactions, err
 }
 
+// GetReactionsForNote gets all reactions for a specific note
+func (d *Database) GetReactionsForNote(note uuid.UUID) ([]Reaction, error) {
+	var reactions []Reaction
+	err := d.db.
+		NewSelect().
+		Model(&reactions).
+		Where("note = ?", note).
+		Scan(context.Background())
+
+	return reactions, err
+}
+
 // CreateReaction inserts a new reaction
 func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (Reaction, error) {
+	var currentNoteReactions, _ = d.GetReactionsForNote(insert.Note)
+	// check if user has already made a reaction on this note
+	for _, r := range currentNoteReactions {
+		if r.User == insert.User {
+			return Reaction{}, errors.New("cannot make multiple reactions on the same note by the same user")
+		}
+	}
+
 	var reaction Reaction
 	_, err := d.db.NewInsert().
 		Model(&insert).
