@@ -59,9 +59,10 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value("Board").(uuid.UUID)
+	user := r.Context().Value("User").(uuid.UUID)
 	id := r.Context().Value("Reaction").(uuid.UUID)
 
-	if err := s.reactions.Delete(r.Context(), board, id); err != nil {
+	if err := s.reactions.Delete(r.Context(), board, user, id); err != nil {
 		common.Throw(w, r, err)
 		return
 	}
@@ -72,6 +73,7 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value("Board").(uuid.UUID)
+	user := r.Context().Value("User").(uuid.UUID)
 	id := r.Context().Value("Reaction").(uuid.UUID)
 	var body dto.ReactionUpdateTypeRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -79,7 +81,7 @@ func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reaction, err := s.reactions.Update(r.Context(), board, id, body)
+	reaction, err := s.reactions.Update(r.Context(), board, user, id, body)
 	if err != nil {
 		common.Throw(w, r, err)
 		return

@@ -68,7 +68,10 @@ func (d *Database) GetReactionsForNote(note uuid.UUID) ([]Reaction, error) {
 
 // CreateReaction inserts a new reaction
 func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (Reaction, error) {
-	var currentNoteReactions, _ = d.GetReactionsForNote(insert.Note)
+	var currentNoteReactions, err = d.GetReactionsForNote(insert.Note)
+	if err != nil {
+		return Reaction{}, err
+	}
 	// check if user has already made a reaction on this note
 	for _, r := range currentNoteReactions {
 		if r.User == insert.User {
@@ -77,7 +80,7 @@ func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (React
 	}
 
 	var reaction Reaction
-	_, err := d.db.NewInsert().
+	_, err = d.db.NewInsert().
 		Model(&insert).
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board), &reaction)
@@ -86,8 +89,15 @@ func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (React
 }
 
 // RemoveReaction deletes a reaction
-func (d *Database) RemoveReaction(board, id uuid.UUID) error {
-	_, err := d.db.NewDelete().
+func (d *Database) RemoveReaction(board, user, id uuid.UUID) error {
+	var r, err = d.GetReaction(id)
+	if err != nil {
+		return err
+	}
+	if r.User != user {
+		return common.ForbiddenError(errors.New("forbidden"))
+	}
+	_, err = d.db.NewDelete().
 		Model((*Reaction)(nil)).
 		Where("id = ?", id).
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Reaction", id))
@@ -96,9 +106,17 @@ func (d *Database) RemoveReaction(board, id uuid.UUID) error {
 }
 
 // UpdateReaction updates the reaction type
-func (d *Database) UpdateReaction(board, id uuid.UUID, update ReactionUpdate) (Reaction, error) {
+func (d *Database) UpdateReaction(board, user, id uuid.UUID, update ReactionUpdate) (Reaction, error) {
+	var r, err = d.GetReaction(id)
+	if err != nil {
+		return Reaction{}, err
+	}
+	if r.User != user {
+		return Reaction{}, common.ForbiddenError(errors.New("forbidden"))
+	}
+
 	var reaction Reaction
-	_, err := d.db.
+	_, err = d.db.
 		NewUpdate().
 		Model(&reaction).
 		Set("reaction_type = ?", update.ReactionType).

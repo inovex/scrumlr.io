@@ -25,8 +25,8 @@ type DB interface {
 	GetReaction(id uuid.UUID) (database.Reaction, error)
 	GetReactions(board uuid.UUID) ([]database.Reaction, error)
 	CreateReaction(board uuid.UUID, insert database.ReactionInsert) (database.Reaction, error)
-	RemoveReaction(board, id uuid.UUID) error
-	UpdateReaction(board uuid.UUID, id uuid.UUID, update database.ReactionUpdate) (database.Reaction, error)
+	RemoveReaction(board, user, id uuid.UUID) error
+	UpdateReaction(board, user, id uuid.UUID, update database.ReactionUpdate) (database.Reaction, error)
 }
 
 func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
@@ -70,13 +70,13 @@ func (s *ReactionService) Create(ctx context.Context, board uuid.UUID, body dto.
 	return new(dto.Reaction).From(reaction), err
 }
 
-func (s *ReactionService) Delete(_ context.Context, board, id uuid.UUID) error {
-	return s.database.RemoveReaction(board, id)
+func (s *ReactionService) Delete(_ context.Context, board, user, id uuid.UUID) error {
+	return s.database.RemoveReaction(board, user, id)
 }
 
-func (s *ReactionService) Update(ctx context.Context, board, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error) {
+func (s *ReactionService) Update(ctx context.Context, board, user, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error) {
 	log := logger.FromContext(ctx)
-	reaction, err := s.database.UpdateReaction(board, id, database.ReactionUpdate{
+	reaction, err := s.database.UpdateReaction(board, user, id, database.ReactionUpdate{
 		ReactionType: body.ReactionType,
 	})
 
