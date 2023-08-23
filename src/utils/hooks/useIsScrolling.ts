@@ -1,5 +1,12 @@
 import React, {useEffect, useState} from "react";
 
+/**
+ * this hook returns whether a references container is currently being scrolled.
+ * this can be used to do certain tasks when scrolling has started or stopped
+ * @param ref the container which can be scrolled
+ * @param delay the required timespan of not scrolling to be recognized as such
+ * @returns boolean whether or not ref container is currently being scrolled
+ */
 export const useIsScrolling = (ref: React.RefObject<HTMLDivElement>, delay = 200) => {
   const [isScrolling, setIsScrolling] = useState(false);
 
