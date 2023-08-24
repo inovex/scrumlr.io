@@ -131,14 +131,11 @@ func (b *BoardSubscription) startListeningOnBoard() {
 		select {
 		case msg := <-b.subscription:
 			logger.Get().Debugw("message received", "message", msg)
-			// This client sorting is needed for displaying all participant notes correctly.
-			// 	Needs to be further investigated, on why this is the case...
-			sortedClients := sortClientsByRole(b.clients, b.boardParticipants)
-			for _, user := range sortedClients {
-				msg = b.eventFilter(msg, user.userID)
-				err := user.conn.WriteJSON(msg)
+			for id, conn := range b.clients {
+				filteredMsg := b.eventFilter(msg, id)
+				err := conn.WriteJSON(filteredMsg)
 				if err != nil {
-					logger.Get().Warnw("failed to send message", "message", msg, "err", err)
+					logger.Get().Warnw("failed to send message", "message", filteredMsg, "err", err)
 				}
 			}
 		}
