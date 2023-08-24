@@ -295,6 +295,9 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
   },
+  "NoteReactionList": {
+    "toggleBarLabel": "Emojiliste umschalten"
+  },
   "NoteReactionsPopup": {
     "allReactionsTab": "Alle"
   },

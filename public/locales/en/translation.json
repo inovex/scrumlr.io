@@ -295,6 +295,9 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Remove this note from stack"
   },
+  "NoteReactionList": {
+    "toggleBarLabel": "toggle the reaction bar"
+  },
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
   },

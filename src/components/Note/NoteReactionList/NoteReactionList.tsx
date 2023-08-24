@@ -2,6 +2,7 @@ import {useDispatch} from "react-redux";
 import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
 import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
 import React, {useState} from "react";
+import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
 import {isEqual} from "underscore";
@@ -35,6 +36,7 @@ const CONDENSED_VIEW_WIDTH_LIMIT = 330; // pixels
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
   const dispatch = useDispatch();
+  const {t} = useTranslation();
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
@@ -165,7 +167,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   return (
     <div className="note-reaction-list__root" onBlur={() => setShowReactionBar(false)}>
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
-        <button className="note-reaction-list__add-reaction-sticker-container" onClick={(e) => toggleReactionBar(e)}>
+        <button className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")} onClick={(e) => toggleReactionBar(e)}>
           {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
         {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
