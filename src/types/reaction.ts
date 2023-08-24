@@ -1,7 +1,7 @@
-export interface BoardReaction {
+export type BoardReaction = {
   user: string; // participant uuid
   reactionType: ReactionType;
-}
+};
 
 export type ReactionType = "thinking" | "heart" | "like" | "dislike" | "joy" | "celebration" | "poop" | "applause" | "tada";
 

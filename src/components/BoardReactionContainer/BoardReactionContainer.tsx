@@ -1,14 +1,14 @@
 import {useEffect} from "react";
-import {ReactionType} from "types/reaction";
+import {BoardReaction} from "types/reaction";
 
 export const BoardReactionContainer = () => {
   useEffect(() => {
-    const handle = (e: CustomEvent<ReactionType>) => {
+    const handle = (e: CustomEvent<BoardReaction>) => {
       console.log("evnt", e.detail);
     };
-    document.addEventListener("BoardReaction", handle as EventListener);
+    document.addEventListener("BoardReactionEvent", handle as EventListener);
 
-    return () => document.removeEventListener("BoardReaction", handle as EventListener);
+    return () => document.removeEventListener("BoardReactionEvent", handle as EventListener);
   }, []);
 
   return <div className="board-reaction-container__root" />;
