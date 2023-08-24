@@ -21,8 +21,9 @@ func isModerator(clientID uuid.UUID, sessions []*dto2.BoardSession) bool {
 	return false
 }
 
-func parseColumnUpdatedEvent(data interface{}) ([]*dto2.Column, error) {
+func parseColumnUpdated(data interface{}) ([]*dto2.Column, error) {
 	var ret []*dto2.Column
+
 	b, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
@@ -67,8 +68,9 @@ type VoteUpdated struct {
 	Voting *dto2.Voting `json:"voting"`
 }
 
-func parseVotingUpdatedEvent(data interface{}) (*VoteUpdated, error) {
+func parseVotingUpdated(data interface{}) (*VoteUpdated, error) {
 	var ret *VoteUpdated
+
 	b, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
@@ -83,7 +85,7 @@ func parseVotingUpdatedEvent(data interface{}) (*VoteUpdated, error) {
 func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
 	isMod := isModerator(userID, boardSubscription.boardParticipants)
 	if event.Type == realtime.BoardEventColumnsUpdated {
-		columns, err := parseColumnUpdatedEvent(event.Data)
+		columns, err := parseColumnUpdated(event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
 		}
@@ -100,9 +102,9 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 				visibleColumns = append(visibleColumns, column)
 			}
 		}
-
 		ret.Type = event.Type
 		ret.Data = visibleColumns
+
 		return &ret
 	}
 
@@ -137,9 +139,9 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 				note.Author = uuid.Nil
 			}
 		}
-
 		ret.Type = event.Type
 		ret.Data = visibleNotes
+
 		return &ret
 	}
 
@@ -157,7 +159,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	}
 
 	if event.Type == realtime.BoardEventVotingUpdated {
-		voting, err := parseVotingUpdatedEvent(event.Data)
+		voting, err := parseVotingUpdated(event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
 		}
@@ -173,7 +175,6 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			Type: realtime.BoardEventVotingUpdated,
 			Data: nil,
 		}
-
 		var filteredData = VoteUpdated{}
 		var visibleNotes = make([]*dto2.Note, 0)
 		if voting.Notes != nil {
@@ -219,9 +220,10 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 		filteredData.Notes = visibleNotes
 		filteredData.Voting = voting.Voting                    // To keep voting settings
-		filteredData.Voting.VotingResults = visibleVotingNotes // override just the filtered data
+		filteredData.Voting.VotingResults = visibleVotingNotes // override just the votingResults with filtered ones
 
 		ret.Data = filteredData
+
 		return &ret
 	}
 	// returns, if no filter match occured
@@ -314,5 +316,6 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	retEvent.Data.Notes = visibleNotes
 	retEvent.Data.Votes = visibleVotes
 	retEvent.Data.Votings = visibleVotings
+
 	return retEvent
 }

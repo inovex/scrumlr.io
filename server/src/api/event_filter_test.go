@@ -11,7 +11,6 @@ import (
 )
 
 var (
-	// Test data for event filter helper functions
 	moderatorBoardSession = dto.BoardSession{
 		User: dto.User{ID: uuid.New()},
 		Role: types.SessionRoleModerator,
@@ -29,8 +28,13 @@ var (
 		&ownerBoardSession,
 		&moderatorBoardSession,
 	}
-
-	// Test data for event filtering
+	boardSettings = &dto.Board{
+		ID:                    uuid.New(),
+		AccessPolicy:          types.AccessPolicyPublic,
+		ShowAuthors:           true,
+		ShowNotesOfOtherUsers: true,
+		AllowStacking:         true,
+	}
 	aSeeableColumn = dto.Column{
 		ID:      uuid.New(),
 		Name:    "Main Thread",
@@ -82,6 +86,10 @@ var (
 		boardSettings: &dto.Board{
 			ShowNotesOfOtherUsers: false,
 		},
+	}
+	boardEvent = &realtime.BoardEvent{
+		Type: realtime.BoardEventBoardUpdated,
+		Data: boardSettings,
 	}
 	columnEvent = &realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
@@ -139,19 +147,21 @@ var (
 )
 
 func TestEventFilter(t *testing.T) {
-	t.Run("TestModIsModerator", testIsModModerator)
-	t.Run("TestOwnerIsModerator", testIsOwnerAlsoModerator)
-	t.Run("TestIsNotModerator", testIsNotModerator)
-	t.Run("TestParseColumns", testParseColumn)
-	t.Run("TestParseNotes", testParseNote)
-	t.Run("TestParseVoting", testParseVoting)
-	t.Run("TestFilterColumnsAsParticipant", testColumnFilterAsParticipant)
+	t.Run("TestIsOwnerModerator", testIsOwnerModerator)
+	t.Run("TestIsModModerator", testIsModModerator)
+	t.Run("TestIsParticipantModerator", testIsParticipantModerator)
+	t.Run("TestIsUnknownUuidModerator", testIsUnknownUuidModerator)
+	t.Run("TestParseBoardSettingsData", testParseBoardSettingsData)
+	t.Run("TestParseColumnData", testParseColumnData)
+	t.Run("TestParseNoteData", testParseNoteData)
+	t.Run("TestParseVotingData", testParseVotingData)
 	t.Run("TestFilterColumnsAsOwner", testColumnFilterAsOwner)
 	t.Run("TestFilterColumnsAsModerator", testColumnFilterAsModerator)
-	t.Run("TestFilterNotesAsParticipant", testNoteFilterAsParticipant)
+	t.Run("TestFilterColumnsAsParticipant", testColumnFilterAsParticipant)
 	t.Run("TestFilterNotesAsOwner", testNoteFilterAsOwner)
 	t.Run("TestFilterNotesAsModerator", testNoteFilterAsModerator)
-	t.Run("TestFilterNotesWithNonExistingUUID", testNoteFilterWithNonExistingUUID)
+	t.Run("TestFilterNotesAsParticipant", testNoteFilterAsParticipant)
+	t.Run("TestFilterVotingUpdatedAsOwner", testFilterVotingUpdatedAsOwner)
 	t.Run("TestFilterVotingUpdatedAsModerator", testFilterVotingUpdatedAsModerator)
 	t.Run("TestFilterVotingUpdatedAsParticipant", testFilterVotingUpdatedAsParticipant)
 	t.Run("TestInitEventAsOwner", testInitFilterAsOwner)
@@ -168,7 +178,7 @@ func testIsModModerator(t *testing.T) {
 	assert.Equal(t, types.SessionRoleModerator, moderatorBoardSession.Role)
 }
 
-func testIsOwnerAlsoModerator(t *testing.T) {
+func testIsOwnerModerator(t *testing.T) {
 	isMod := isModerator(ownerBoardSession.User.ID, boardSessions)
 
 	assert.NotNil(t, isMod)
@@ -176,23 +186,39 @@ func testIsOwnerAlsoModerator(t *testing.T) {
 	assert.Equal(t, types.SessionRoleOwner, ownerBoardSession.Role)
 }
 
-func testIsNotModerator(t *testing.T) {
+func testIsParticipantModerator(t *testing.T) {
+	isMod := isModerator(participantBoardSession.User.ID, boardSessions)
+
+	assert.NotNil(t, isMod)
+	assert.False(t, isMod)
+}
+
+func testIsUnknownUuidModerator(t *testing.T) {
 	isMod := isModerator(uuid.New(), boardSessions)
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
 }
 
-func testParseColumn(t *testing.T) {
+func testParseBoardSettingsData(t *testing.T) {
+	expectedBoardSettings := boardSettings
+	actualBoardSettings, err := parseBoardUpdated(boardEvent.Data)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, actualBoardSettings)
+	assert.Equal(t, expectedBoardSettings, actualBoardSettings)
+}
+
+func testParseColumnData(t *testing.T) {
 	expectedColumns := []*dto.Column{&aSeeableColumn, &aHiddenColumn}
-	actualColumns, err := parseColumnUpdatedEvent(columnEvent.Data)
+	actualColumns, err := parseColumnUpdated(columnEvent.Data)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, actualColumns)
 	assert.Equal(t, expectedColumns, actualColumns)
 }
 
-func testParseNote(t *testing.T) {
+func testParseNoteData(t *testing.T) {
 	expectedNotes := []*dto.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote}
 	actualNotes, err := parseNotesUpdated(noteEvent.Data)
 
@@ -201,9 +227,9 @@ func testParseNote(t *testing.T) {
 	assert.Equal(t, expectedNotes, actualNotes)
 }
 
-func testParseVoting(t *testing.T) {
+func testParseVotingData(t *testing.T) {
 	expectedVoting := &votingData
-	actualVoting, err := parseVotingUpdatedEvent(votingEvent.Data)
+	actualVoting, err := parseVotingUpdated(votingEvent.Data)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, actualVoting)
@@ -271,14 +297,15 @@ func testNoteFilterAsModerator(t *testing.T) {
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
 
-func testNoteFilterWithNonExistingUUID(t *testing.T) {
-	expectedNoteEvent := &realtime.BoardEvent{
-		Type: realtime.BoardEventNotesUpdated,
-		Data: []*dto.Note{},
+func testFilterVotingUpdatedAsOwner(t *testing.T) {
+	expectedVotingEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventVotingUpdated,
+		Data: votingData,
 	}
-	returnedNoteEvent := boardSub.eventFilter(noteEvent, uuid.New())
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, ownerBoardSession.User.ID)
 
-	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
+	assert.NotNil(t, returnedVoteEvent)
+	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
 }
 
 func testFilterVotingUpdatedAsModerator(t *testing.T) {
@@ -288,8 +315,8 @@ func testFilterVotingUpdatedAsModerator(t *testing.T) {
 	}
 	returnedVoteEvent := boardSub.eventFilter(votingEvent, moderatorBoardSession.User.ID)
 
-	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
 	assert.NotNil(t, returnedVoteEvent)
+	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
 }
 
 func testFilterVotingUpdatedAsParticipant(t *testing.T) {
@@ -318,6 +345,7 @@ func testFilterVotingUpdatedAsParticipant(t *testing.T) {
 	}
 	returnedVoteEvent := boardSub.eventFilter(votingEvent, participantBoardSession.User.ID)
 
+	assert.NotNil(t, returnedVoteEvent)
 	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
 }
 
