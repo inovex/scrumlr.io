@@ -1,2 +1,19 @@
+@import "src/constants/style";
+
 .board-reaction__root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.board-reaction__emoji-container {
+  font-size: $text--xl;
+}
+
+.board-reaction__name-container {
+  padding: 10px;
+  font-size: $text--base;
+  font-weight: 600;
+  background-color: $color-lighter-gray;
+  border-radius: $rounded--large;
 }
