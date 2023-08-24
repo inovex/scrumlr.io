@@ -2,10 +2,8 @@ package api
 
 import (
 	"encoding/json"
-	"sort"
 
 	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
 	dto2 "scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
@@ -21,50 +19,6 @@ func isModerator(clientID uuid.UUID, sessions []*dto2.BoardSession) bool {
 		}
 	}
 	return false
-}
-
-// ToDo: Refactor the client sorting or even find a better solution to avoid it
-type client struct {
-	userID uuid.UUID
-	conn   *websocket.Conn
-	role   types.SessionRole
-}
-
-type ByRole []client
-
-func (b ByRole) Len() int {
-	return len(b)
-}
-
-func (b ByRole) Less(i, j int) bool {
-	return b[i].role < b[j].role
-}
-
-func (b ByRole) Swap(i, j int) {
-	b[i], b[j] = b[j], b[i]
-}
-
-func sortClientsByRole(clients map[uuid.UUID]*websocket.Conn, boardParticipants []*dto2.BoardSession) []client {
-	mappedClients := make([]client, 0, len(clients))
-	for id := range clients {
-		var role types.SessionRole
-		// retrieve role
-		for _, user := range boardParticipants {
-			if id == user.User.ID {
-				role = user.Role
-			}
-		}
-		aClient := client{
-			userID: id,
-			conn:   clients[id],
-			role:   role,
-		}
-		mappedClients = append(mappedClients, aClient)
-	}
-
-	// Sort new slice via Role and iterate over it
-	sort.Sort(ByRole(mappedClients))
-	return mappedClients
 }
 
 func parseColumnUpdatedEvent(data interface{}) ([]*dto2.Column, error) {
