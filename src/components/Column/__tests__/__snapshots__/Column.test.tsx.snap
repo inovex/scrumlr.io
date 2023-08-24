@@ -582,6 +582,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     class="note-reaction-list__reaction-bar-container"
                   >
                     <button
+                      aria-label="toggle the reaction bar"
                       class="note-reaction-list__add-reaction-sticker-container"
                     >
                       <svg
@@ -1120,6 +1121,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     class="note-reaction-list__reaction-bar-container"
                   >
                     <button
+                      aria-label="toggle the reaction bar"
                       class="note-reaction-list__add-reaction-sticker-container"
                     >
                       <svg
