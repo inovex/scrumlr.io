@@ -1,11 +1,18 @@
 import {NoteAuthorList} from "components/Note/NoteAuthorList/NoteAuthorList";
 import {Participant} from "types/participant";
 import {useAppSelector} from "store";
+import {Votes} from "../../Votes";
+import {AvataaarProps} from "../../Avatar";
+import "./NoteDialogNoteHeader.scss";
 
 interface NoteDialogNoteHeaderProps {
-  authorId: string;
   showAuthors: boolean;
+  authorId: string;
+  avatar?: AvataaarProps;
+  authorName: string;
+  noteId: string;
   viewer: Participant;
+  colorClassName?: string;
 }
 
 export const NoteDialogNoteHeader = (props: NoteDialogNoteHeaderProps) => {
@@ -16,6 +23,7 @@ export const NoteDialogNoteHeader = (props: NoteDialogNoteHeaderProps) => {
   return (
     <div className="note-dialog-note-header__root">
       <NoteAuthorList authors={[author]} showAuthors={props.showAuthors} viewer={props.viewer} />
+      <Votes {...props} className="note-dialog__note-votes" />
     </div>
   );
 };

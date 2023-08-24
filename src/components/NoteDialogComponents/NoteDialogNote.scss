@@ -8,8 +8,8 @@ $row-gap: 3px;
 
   display: grid;
   grid-template-areas:
-    "head options"
-    ". options"
+    "head head"
+    "content options"
     "foot foot";
   grid-template-columns: 11fr 1fr;
   grid-template-rows: 1fr 4fr 1fr;
@@ -34,6 +34,10 @@ $row-gap: 3px;
   grid-area: head;
 }
 
+.note-dialog-note__main {
+  grid-area: content;
+}
+
 .note-dialog-note__options {
   grid-area: options;
 }
@@ -51,6 +55,12 @@ $row-gap: 3px;
 @media #{$smartphone} {
   .note-dialog__note {
     width: calc(100vw - 5 * $column__border-width);
+  }
+}
+
+@media #{$mini-smartphone} {
+  .note-dialog__note {
+    padding: $padding--default $padding--default $padding--default $padding--small;
   }
 }
 
