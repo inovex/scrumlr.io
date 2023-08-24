@@ -1,7 +1,6 @@
 package api
 
 import (
-	"sort"
 	"testing"
 
 	"github.com/google/uuid"
@@ -29,11 +28,6 @@ var (
 		&participantBoardSession,
 		&ownerBoardSession,
 		&moderatorBoardSession,
-	}
-	clients = []client{
-		{userID: participantBoardSession.User.ID, conn: nil, role: types.SessionRoleParticipant},
-		{userID: ownerBoardSession.User.ID, conn: nil, role: types.SessionRoleOwner},
-		{userID: moderatorBoardSession.User.ID, conn: nil, role: types.SessionRoleModerator},
 	}
 
 	// Test data for event filtering
@@ -148,7 +142,6 @@ func TestEventFilter(t *testing.T) {
 	t.Run("TestModIsModerator", testIsModModerator)
 	t.Run("TestOwnerIsModerator", testIsOwnerAlsoModerator)
 	t.Run("TestIsNotModerator", testIsNotModerator)
-	t.Run("TestSortSessions", testSortSessions)
 	t.Run("TestParseColumns", testParseColumn)
 	t.Run("TestParseNotes", testParseNote)
 	t.Run("TestParseVoting", testParseVoting)
@@ -188,17 +181,6 @@ func testIsNotModerator(t *testing.T) {
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
-}
-
-func testSortSessions(t *testing.T) {
-	expected := []client{
-		{userID: moderatorBoardSession.User.ID, conn: nil, role: types.SessionRoleModerator},
-		{userID: ownerBoardSession.User.ID, conn: nil, role: types.SessionRoleOwner},
-		{userID: participantBoardSession.User.ID, conn: nil, role: types.SessionRoleParticipant},
-	}
-
-	sort.Sort(ByRole(clients))
-	assert.Equal(t, expected, clients)
 }
 
 func testParseColumn(t *testing.T) {
