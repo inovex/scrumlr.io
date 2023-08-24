@@ -1,15 +1,15 @@
 import React from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {BoardReaction, BoardReactionImageMap, ReactionType} from "types/reaction";
+import {BoardReactionEventType, BoardReactionImageMap, ReactionType} from "types/reaction";
 import {useAppSelector} from "store";
 import "./BoardReactionMenu.scss";
 
 export const BoardReactionMenu = () => {
-  const me = useAppSelector((state) => state.participants!.self.user.id);
+  const me = useAppSelector((state) => state.participants?.self);
 
   const onClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reaction: ReactionType) => {
     e.stopPropagation();
-    document.dispatchEvent(new CustomEvent<BoardReaction>("BoardReactionEvent", {detail: {reactionType: reaction, user: me}}));
+    document.dispatchEvent(new CustomEvent<BoardReactionEventType>("BoardReactionEvent", {detail: {reactionType: reaction, user: me!}}));
   };
 
   return (

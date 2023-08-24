@@ -1,10 +1,12 @@
 import {useEffect, useState} from "react";
-import {BoardReaction} from "types/reaction";
+import {BoardReactionEventType} from "types/reaction";
+import {BoardReaction} from "../BoardReaction/BoardReaction";
+import "./BoardReactionContainer.scss";
 
 export const BoardReactionContainer = () => {
-  const [reactions, setReactions] = useState<BoardReaction[]>([]);
+  const [reactions, setReactions] = useState<BoardReactionEventType[]>([]);
   useEffect(() => {
-    const handle = (e: CustomEvent<BoardReaction>) => {
+    const handle = (e: CustomEvent<BoardReactionEventType>) => {
       setReactions([...reactions, e.detail]);
     };
     document.addEventListener("BoardReactionEvent", handle as EventListener);
@@ -15,7 +17,7 @@ export const BoardReactionContainer = () => {
   return (
     <div className="board-reaction-container__root">
       {reactions.map((r) => (
-        <div>{r.reactionType}</div>
+        <BoardReaction reaction={r} />
       ))}
     </div>
   );

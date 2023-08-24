@@ -1,5 +1,7 @@
-export type BoardReaction = {
-  user: string; // participant uuid
+import {Participant} from "./participant";
+
+export type BoardReactionEventType = {
+  user: Participant;
   reactionType: ReactionType;
 };
 
