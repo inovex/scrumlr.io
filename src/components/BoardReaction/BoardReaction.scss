@@ -11,6 +11,8 @@ $bottom-end-pos: 60vh;
   align-items: center;
 
   animation: fly-top 5s linear;
+
+  z-index: $board-reaction-z-index;
 }
 
 .board-reaction__emoji-container {
