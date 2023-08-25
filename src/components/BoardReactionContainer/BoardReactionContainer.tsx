@@ -5,9 +5,16 @@ import "./BoardReactionContainer.scss";
 
 export const BoardReactionContainer = () => {
   const [reactions, setReactions] = useState<BoardReactionEventType[]>([]);
+
   useEffect(() => {
+    const removeAfterDelay = (id: string, delay: number) => {
+      setTimeout(() => {
+        setReactions((prevState) => prevState.filter((r) => r.id !== id));
+      }, delay);
+    };
     const handle = (e: CustomEvent<BoardReactionEventType>) => {
-      setReactions([...reactions, e.detail]);
+      setReactions((prevState) => [...prevState, e.detail]);
+      removeAfterDelay(e.detail.id, 5_000);
     };
     document.addEventListener("BoardReactionEvent", handle as EventListener);
 
@@ -17,7 +24,7 @@ export const BoardReactionContainer = () => {
   return (
     <div className="board-reaction-container__root">
       {reactions.map((r) => (
-        <BoardReaction reaction={r} />
+        <BoardReaction key={r.id} reaction={r} />
       ))}
     </div>
   );

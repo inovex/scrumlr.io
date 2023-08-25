@@ -2,6 +2,7 @@ import React from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {BoardReactionEventType, BoardReactionImageMap, ReactionType} from "types/reaction";
 import {useAppSelector} from "store";
+import {uniqueId} from "underscore";
 import "./BoardReactionMenu.scss";
 
 export const BoardReactionMenu = () => {
@@ -9,7 +10,8 @@ export const BoardReactionMenu = () => {
 
   const onClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reaction: ReactionType) => {
     e.stopPropagation();
-    document.dispatchEvent(new CustomEvent<BoardReactionEventType>("BoardReactionEvent", {detail: {reactionType: reaction, user: me!}}));
+    const id = uniqueId();
+    document.dispatchEvent(new CustomEvent<BoardReactionEventType>("BoardReactionEvent", {detail: {id, reactionType: reaction, user: me!}}));
   };
 
   return (

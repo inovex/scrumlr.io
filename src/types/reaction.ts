@@ -1,6 +1,7 @@
 import {Participant} from "./participant";
 
 export type BoardReactionEventType = {
+  id: string;
   user: Participant;
   reactionType: ReactionType;
 };
