@@ -100,7 +100,7 @@ var (
 		Data: []*dto.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
 	}
 	votingID   = uuid.New()
-	votingData = VoteUpdated{
+	votingData = &VotingUpdated{
 		Notes: []*dto.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
 		Voting: &dto.Voting{
 			ID:                 votingID,
@@ -228,7 +228,7 @@ func testParseNoteData(t *testing.T) {
 }
 
 func testParseVotingData(t *testing.T) {
-	expectedVoting := &votingData
+	expectedVoting := votingData
 	actualVoting, err := parseVotingUpdated(votingEvent.Data)
 
 	assert.Nil(t, err)
@@ -320,7 +320,7 @@ func testFilterVotingUpdatedAsModerator(t *testing.T) {
 }
 
 func testFilterVotingUpdatedAsParticipant(t *testing.T) {
-	expectedVoting := VoteUpdated{
+	expectedVoting := &VotingUpdated{
 		Notes: []*dto.Note{&aParticipantNote},
 		Voting: &dto.Voting{
 			ID:                 votingID,

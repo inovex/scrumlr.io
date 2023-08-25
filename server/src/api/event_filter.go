@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 
 	"github.com/google/uuid"
-	dto2 "scrumlr.io/server/common/dto"
+	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
-func isModerator(clientID uuid.UUID, sessions []*dto2.BoardSession) bool {
+func isModerator(clientID uuid.UUID, sessions []*dto.BoardSession) bool {
 	for _, session := range sessions {
 		if clientID == session.User.ID {
 			if session.Role == types.SessionRoleModerator || session.Role == types.SessionRoleOwner {
@@ -21,8 +21,8 @@ func isModerator(clientID uuid.UUID, sessions []*dto2.BoardSession) bool {
 	return false
 }
 
-func parseColumnUpdated(data interface{}) ([]*dto2.Column, error) {
-	var ret []*dto2.Column
+func parseColumnUpdated(data interface{}) ([]*dto.Column, error) {
+	var ret []*dto.Column
 
 	b, err := json.Marshal(data)
 	if err != nil {
@@ -35,8 +35,8 @@ func parseColumnUpdated(data interface{}) ([]*dto2.Column, error) {
 	return ret, nil
 }
 
-func parseNotesUpdated(data interface{}) ([]*dto2.Note, error) {
-	var ret []*dto2.Note
+func parseNotesUpdated(data interface{}) ([]*dto.Note, error) {
+	var ret []*dto.Note
 
 	b, err := json.Marshal(data)
 	if err != nil {
@@ -49,8 +49,8 @@ func parseNotesUpdated(data interface{}) ([]*dto2.Note, error) {
 	return ret, nil
 }
 
-func parseBoardUpdated(data interface{}) (*dto2.Board, error) {
-	var ret *dto2.Board
+func parseBoardUpdated(data interface{}) (*dto.Board, error) {
+	var ret *dto.Board
 
 	b, err := json.Marshal(data)
 	if err != nil {
@@ -63,13 +63,13 @@ func parseBoardUpdated(data interface{}) (*dto2.Board, error) {
 	return ret, nil
 }
 
-type VoteUpdated struct {
-	Notes  []*dto2.Note `json:"notes"`
-	Voting *dto2.Voting `json:"voting"`
+type VotingUpdated struct {
+	Notes  []*dto.Note `json:"notes"`
+	Voting *dto.Voting `json:"voting"`
 }
 
-func parseVotingUpdated(data interface{}) (*VoteUpdated, error) {
-	var ret *VoteUpdated
+func parseVotingUpdated(data interface{}) (*VotingUpdated, error) {
+	var ret *VotingUpdated
 
 	b, err := json.Marshal(data)
 	if err != nil {
@@ -80,6 +80,95 @@ func parseVotingUpdated(data interface{}) (*VoteUpdated, error) {
 		return nil, err
 	}
 	return ret, nil
+}
+
+func filterColumns(eventColumns []*dto.Column) []*dto.Column {
+	var visibleColumns = make([]*dto.Column, 0, len(eventColumns))
+	for _, column := range eventColumns {
+		if column.Visible {
+			visibleColumns = append(visibleColumns, column)
+		}
+	}
+
+	return visibleColumns
+}
+
+func filterNotes(eventNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board, columns []*dto.Column) []*dto.Note {
+	var visibleNotes = make([]*dto.Note, 0, len(eventNotes))
+	for _, note := range eventNotes {
+		for _, column := range columns {
+			if (note.Position.Column == column.ID) && column.Visible {
+				// BoardSettings -> Remove other participant cards
+				if boardSettings.ShowNotesOfOtherUsers {
+					visibleNotes = append(visibleNotes, note)
+				} else if userID == note.Author {
+					visibleNotes = append(visibleNotes, note)
+				}
+			}
+		}
+	}
+	// Authors
+	for _, note := range visibleNotes {
+		if !boardSettings.ShowAuthors && note.Author != userID {
+			note.Author = uuid.Nil
+		}
+	}
+
+	return visibleNotes
+}
+
+func filterVotingUpdated(voting *VotingUpdated, userID uuid.UUID, boardSettings *dto.Board, columns []*dto.Column) *VotingUpdated {
+	filteredVoting := voting
+	// Filter voting notes
+	filteredVotingNotes := filterNotes(voting.Notes, userID, boardSettings, columns)
+
+	// Filter voting results
+	filteredVotingResult := &dto.VotingResults{}
+	overallVoteCount := 0
+	mappedResultVotes := voting.Voting.VotingResults.Votes
+	visibleVotingResults := make(map[uuid.UUID]dto.VotingResultsPerNote)
+	for _, note := range filteredVotingNotes {
+		if _, ok := mappedResultVotes[note.ID]; ok { // Check if note was voted on
+			votingResult := visibleVotingResults[note.ID]
+			votingResult.Total = mappedResultVotes[note.ID].Total
+			votingResult.Users = mappedResultVotes[note.ID].Users
+
+			visibleVotingResults[note.ID] = votingResult
+			overallVoteCount += mappedResultVotes[note.ID].Total
+		}
+	}
+	filteredVotingResult.Total = overallVoteCount
+	filteredVotingResult.Votes = visibleVotingResults
+
+	filteredVoting.Notes = filteredVotingNotes
+	filteredVoting.Voting.VotingResults = filteredVotingResult
+
+	return filteredVoting
+}
+func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUID) *dto.Voting {
+	filteredVoting := voting
+
+	// Filter voting results
+	filteredVotingResult := &dto.VotingResults{}
+	overallVoteCount := 0
+	mappedResultVotes := voting.VotingResults.Votes
+	visibleVotingResults := make(map[uuid.UUID]dto.VotingResultsPerNote)
+	for _, note := range filteredNotes {
+		if _, ok := mappedResultVotes[note.ID]; ok { // Check if note was voted on
+			votingResult := visibleVotingResults[note.ID]
+			votingResult.Total = mappedResultVotes[note.ID].Total
+			votingResult.Users = mappedResultVotes[note.ID].Users
+
+			visibleVotingResults[note.ID] = votingResult
+			overallVoteCount += mappedResultVotes[note.ID].Total
+		}
+	}
+	filteredVotingResult.Total = overallVoteCount
+	filteredVotingResult.Votes = visibleVotingResults
+
+	filteredVoting.VotingResults = filteredVotingResult
+
+	return filteredVoting
 }
 
 func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
@@ -95,15 +184,11 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			return event
 		}
 
-		var ret realtime.BoardEvent
-		var visibleColumns = make([]*dto2.Column, 0, len(boardSubscription.boardColumns))
-		for _, column := range columns {
-			if column.Visible {
-				visibleColumns = append(visibleColumns, column)
-			}
+		filteredColumns := filterColumns(columns)
+		ret := realtime.BoardEvent{
+			Type: event.Type,
+			Data: filteredColumns,
 		}
-		ret.Type = event.Type
-		ret.Data = visibleColumns
 
 		return &ret
 	}
@@ -119,28 +204,11 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			return event
 		}
 
-		var ret realtime.BoardEvent
-		var visibleNotes = make([]*dto2.Note, 0, len(boardSubscription.boardNotes))
-		for _, note := range notes {
-			for _, column := range boardSubscription.boardColumns {
-				if (note.Position.Column == column.ID) && column.Visible {
-					// BoardSettings -> Remove other participant cards
-					if boardSubscription.boardSettings.ShowNotesOfOtherUsers {
-						visibleNotes = append(visibleNotes, note)
-					} else if userID == note.Author {
-						visibleNotes = append(visibleNotes, note)
-					}
-				}
-			}
+		filteredNotes := filterNotes(notes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+		ret := realtime.BoardEvent{
+			Type: event.Type,
+			Data: filteredNotes,
 		}
-		// Authors
-		for _, note := range visibleNotes {
-			if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
-				note.Author = uuid.Nil
-			}
-		}
-		ret.Type = event.Type
-		ret.Data = visibleNotes
 
 		return &ret
 	}
@@ -171,58 +239,35 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			return event
 		}
 
-		ret := realtime.BoardEvent{
-			Type: realtime.BoardEventVotingUpdated,
-			Data: nil,
-		}
-		var filteredData = VoteUpdated{}
-		var visibleNotes = make([]*dto2.Note, 0)
-		if voting.Notes != nil {
-			for _, note := range voting.Notes {
-				for _, column := range boardSubscription.boardColumns {
-					if (note.Position.Column == column.ID) && column.Visible {
-						// BoardSettings -> Remove other participant cards
-						if boardSubscription.boardSettings.ShowNotesOfOtherUsers {
-							visibleNotes = append(visibleNotes, note)
-						} else if userID == note.Author {
-							visibleNotes = append(visibleNotes, note)
-						}
-					}
-				}
-			}
-			// Authors
-			for _, note := range visibleNotes {
-				if !boardSubscription.boardSettings.ShowAuthors && note.Author != userID {
-					note.Author = uuid.Nil
-				}
-			}
-			filteredData.Notes = visibleNotes
-		}
-
-		// More filtering needed for voting results
-		visibleVotingNotes := &dto2.VotingResults{}
-		overallVoteCount := 0
+		// Filter voting notes
 		if voting.Notes != nil || len(voting.Notes) > 0 {
-			allVotingResults := voting.Voting.VotingResults.Votes
-			visibleVotingResults := make(map[uuid.UUID]dto2.VotingResultsPerNote)
-			for _, note := range visibleNotes {
-				if _, ok := allVotingResults[note.ID]; ok { // Check if note was voted on
-					votingResult := visibleVotingResults[note.ID]
-					votingResult.Total = allVotingResults[note.ID].Total
-					votingResult.Users = allVotingResults[note.ID].Users
-
-					visibleVotingResults[note.ID] = votingResult
-					overallVoteCount += allVotingResults[note.ID].Total
-				}
+			filteredVoting := filterVotingUpdated(voting, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+			ret := realtime.BoardEvent{
+				Type: event.Type,
+				Data: filteredVoting,
 			}
-			visibleVotingNotes.Total = overallVoteCount
-			visibleVotingNotes.Votes = visibleVotingResults
+			return &ret
+		} else {
+			panic("OH NO! YOU NEED TO FIX ME!")
 		}
-		filteredData.Notes = visibleNotes
-		filteredData.Voting = voting.Voting                    // To keep voting settings
-		filteredData.Voting.VotingResults = visibleVotingNotes // override just the votingResults with filtered ones
+	}
 
-		ret.Data = filteredData
+	if event.Type == realtime.BoardEventNotesSync {
+		notes, err := parseNotesUpdated(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+		}
+
+		if isMod {
+			boardSubscription.boardNotes = notes
+			return event
+		}
+
+		filteredNotes := filterNotes(notes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+		ret := realtime.BoardEvent{
+			Type: event.Type,
+			Data: filteredNotes,
+		}
 
 		return &ret
 	}
@@ -236,8 +281,6 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		return event
 	}
 
-	var visibleColumns = make([]*dto2.Column, 0)
-	var visibleNotes = make([]*dto2.Note, 0)
 	retEvent := InitEvent{
 		Type: event.Type,
 		Data: EventData{
@@ -252,36 +295,17 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		},
 	}
 	// Columns
-	for _, column := range event.Data.Columns {
-		if column.Visible {
-			visibleColumns = append(visibleColumns, column)
-		}
-	}
+	filteredColumns := filterColumns(event.Data.Columns)
+
 	// Notes
-	for _, note := range event.Data.Notes {
-		for _, column := range visibleColumns {
-			if note.Position.Column == column.ID {
-				// BoardSettings -> Remove other participant cards
-				if retEvent.Data.Board.ShowNotesOfOtherUsers {
-					visibleNotes = append(visibleNotes, note)
-				} else if clientID == note.Author {
-					visibleNotes = append(visibleNotes, note)
-				}
-			}
-		}
-	}
-	// BoardSettings -> Author
-	for _, note := range visibleNotes {
-		if !retEvent.Data.Board.ShowAuthors && note.Author != clientID {
-			note.Author = uuid.Nil
-		}
-	}
+	filteredNotes := filterNotes(event.Data.Notes, clientID, event.Data.Board, event.Data.Columns)
+
 	// Votes
-	visibleVotes := make([]*dto2.Vote, 0)
+	visibleVotes := make([]*dto.Vote, 0)
 	for _, v := range event.Data.Votes {
-		for _, n := range visibleNotes {
+		for _, n := range filteredNotes {
 			if v.Note == n.ID {
-				aVote := dto2.Vote{
+				aVote := dto.Vote{
 					Voting: v.Voting,
 					Note:   n.ID,
 				}
@@ -290,30 +314,14 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		}
 	}
 	// Votings
-	visibleVotings := make([]*dto2.Voting, 0)
+	visibleVotings := make([]*dto.Voting, 0)
 	for _, v := range event.Data.Votings {
-		overallVoteCount := 0
-		visibleVoting := v
-
-		allVotingResults := v.VotingResults.Votes
-		visibleVotingResults := make(map[uuid.UUID]dto2.VotingResultsPerNote)
-		for _, note := range visibleNotes {
-			if _, ok := allVotingResults[note.ID]; ok { // Check if note was voted on
-				votingResult := visibleVotingResults[note.ID]
-				votingResult.Total = allVotingResults[note.ID].Total
-				votingResult.Users = allVotingResults[note.ID].Users
-
-				visibleVotingResults[note.ID] = votingResult
-				overallVoteCount += allVotingResults[note.ID].Total
-			}
-		}
-		visibleVoting.VotingResults.Total = overallVoteCount
-		visibleVoting.VotingResults.Votes = visibleVotingResults
-		visibleVotings = append(visibleVotings, visibleVoting)
+		filteredVoting := filterVoting(v, filteredNotes, clientID)
+		visibleVotings = append(visibleVotings, filteredVoting)
 	}
 
-	retEvent.Data.Columns = visibleColumns
-	retEvent.Data.Notes = visibleNotes
+	retEvent.Data.Columns = filteredColumns
+	retEvent.Data.Notes = filteredNotes
 	retEvent.Data.Votes = visibleVotes
 	retEvent.Data.Votings = visibleVotings
 
