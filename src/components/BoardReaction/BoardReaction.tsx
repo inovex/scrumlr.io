@@ -1,11 +1,14 @@
 import {BoardReactionEventType, BoardReactionImageMap} from "types/reaction";
 import "./BoardReaction.scss";
+import {memo} from "react";
 
 type BoardReactionProps = {
   reaction: BoardReactionEventType;
 };
 
-export const BoardReaction = (props: BoardReactionProps) => {
+// component that displays a board reaction (emoji + name)
+// memo prevents re-rendering even when parent state changes
+export const BoardReaction = memo((props: BoardReactionProps) => {
   const emoji = BoardReactionImageMap.get(props.reaction.reactionType);
   const {name} = props.reaction.user.user;
 
@@ -22,4 +25,4 @@ export const BoardReaction = (props: BoardReactionProps) => {
       <div className="board-reaction__name-container">{name}</div>
     </div>
   );
-};
+});
