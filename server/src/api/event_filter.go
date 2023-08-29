@@ -122,49 +122,59 @@ func filterVotingUpdated(voting *VotingUpdated, userID uuid.UUID, boardSettings 
 	// Filter voting notes
 	filteredVotingNotes := filterNotes(voting.Notes, userID, boardSettings, columns)
 
+	// Safeguard if voting is terminated without any votes
+	if voting.Voting.VotingResults == nil {
+		ret := &VotingUpdated{
+			Notes:  filteredVotingNotes,
+			Voting: voting.Voting,
+		}
+		return ret
+	}
+
 	// Filter voting results
-	filteredVotingResult := &dto.VotingResults{}
+	filteredVotingResult := &dto.VotingResults{
+		Votes: make(map[uuid.UUID]dto.VotingResultsPerNote),
+	}
 	overallVoteCount := 0
 	mappedResultVotes := voting.Voting.VotingResults.Votes
-	visibleVotingResults := make(map[uuid.UUID]dto.VotingResultsPerNote)
 	for _, note := range filteredVotingNotes {
-		if _, ok := mappedResultVotes[note.ID]; ok { // Check if note was voted on
-			votingResult := visibleVotingResults[note.ID]
-			votingResult.Total = mappedResultVotes[note.ID].Total
-			votingResult.Users = mappedResultVotes[note.ID].Users
-
-			visibleVotingResults[note.ID] = votingResult
+		if voteResults, ok := mappedResultVotes[note.ID]; ok { // Check if note was voted on
+			filteredVotingResult.Votes[note.ID] = dto.VotingResultsPerNote{
+				Total: voteResults.Total,
+				Users: voteResults.Users,
+			}
 			overallVoteCount += mappedResultVotes[note.ID].Total
 		}
 	}
 	filteredVotingResult.Total = overallVoteCount
-	filteredVotingResult.Votes = visibleVotingResults
 
 	filteredVoting.Notes = filteredVotingNotes
 	filteredVoting.Voting.VotingResults = filteredVotingResult
 
 	return filteredVoting
 }
-func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUID) *dto.Voting {
-	filteredVoting := voting
 
-	// Filter voting results
-	filteredVotingResult := &dto.VotingResults{}
+func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUID) *dto.Voting {
+	if voting.VotingResults == nil {
+		return voting
+	}
+
+	filteredVoting := voting
+	filteredVotingResult := &dto.VotingResults{
+		Votes: make(map[uuid.UUID]dto.VotingResultsPerNote),
+	}
 	overallVoteCount := 0
 	mappedResultVotes := voting.VotingResults.Votes
-	visibleVotingResults := make(map[uuid.UUID]dto.VotingResultsPerNote)
 	for _, note := range filteredNotes {
-		if _, ok := mappedResultVotes[note.ID]; ok { // Check if note was voted on
-			votingResult := visibleVotingResults[note.ID]
-			votingResult.Total = mappedResultVotes[note.ID].Total
-			votingResult.Users = mappedResultVotes[note.ID].Users
-
-			visibleVotingResults[note.ID] = votingResult
+		if votingResult, ok := mappedResultVotes[note.ID]; ok { // Check if note was voted on
+			filteredVotingResult.Votes[note.ID] = dto.VotingResultsPerNote{
+				Total: votingResult.Total,
+				Users: votingResult.Users,
+			}
 			overallVoteCount += mappedResultVotes[note.ID].Total
 		}
 	}
 	filteredVotingResult.Total = overallVoteCount
-	filteredVotingResult.Votes = visibleVotingResults
 
 	filteredVoting.VotingResults = filteredVotingResult
 
@@ -234,22 +244,16 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		if isMod {
 			return event
 		}
-
-		if voting.Voting.Status != "CLOSED" {
+		if voting.Voting.Status != types.VotingStatusClosed {
 			return event
 		}
 
-		// Filter voting notes
-		if voting.Notes != nil || len(voting.Notes) > 0 {
-			filteredVoting := filterVotingUpdated(voting, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
-			ret := realtime.BoardEvent{
-				Type: event.Type,
-				Data: filteredVoting,
-			}
-			return &ret
-		} else {
-			panic("OH NO! YOU NEED TO FIX ME!")
+		filteredVoting := filterVotingUpdated(voting, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+		ret := realtime.BoardEvent{
+			Type: event.Type,
+			Data: filteredVoting,
 		}
+		return &ret
 	}
 
 	if event.Type == realtime.BoardEventNotesSync {
