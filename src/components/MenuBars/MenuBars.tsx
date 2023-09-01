@@ -60,7 +60,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [menuBarsMobileRef, fabIsExpanded, showBoardReactionsMenu]);
 
-  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU, SHOW_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
+  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU, SHOW_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_BOARD_REACTION_MENU, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 
   const state = useAppSelector(
     (rootState) => ({
@@ -89,7 +89,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   };
 
   const toggleBoardReactionsMenu = () => {
-    setShowBoarReactionsMenu(!showBoardReactionsMenu);
+    setShowBoarReactionsMenu((show) => !show);
   };
 
   const toggleModeration = () => {
@@ -105,10 +105,17 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const showVotingMenu = () => navigate("voting");
   const showSettings = () => navigate("settings");
 
-  const hotkeyOptionsAdmin = {
-    enabled: state.hotkeysAreActive && isAdmin,
+  // normal users
+  const hotkeyOptionsUser = {
+    enabled: state.hotkeysAreActive,
   };
 
+  // admins
+  const hotkeyOptionsAdmin = {
+    enabled: hotkeyOptionsUser.enabled && isAdmin,
+  };
+
+  useHotkeys(TOGGLE_BOARD_REACTION_MENU, toggleBoardReactionsMenu, hotkeyOptionsUser, []);
   useHotkeys(SHOW_TIMER_MENU, showTimerMenu, hotkeyOptionsAdmin, []);
   useHotkeys(SHOW_VOTING_MENU, showVotingMenu, hotkeyOptionsAdmin, []);
 
@@ -146,6 +153,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 icon={BoardReactionIcon}
                 onClick={toggleBoardReactionsMenu}
                 active={showBoardReactionsMenu}
+                hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
               />
             </li>
             <li>
