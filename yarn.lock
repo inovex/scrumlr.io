@@ -2442,10 +2442,10 @@
   resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.3.tgz#a136f83b0758698df454e328759dbd3d44555311"
   integrity sha512-NfQ4gyz38SL8sDNrSixxU2Os1a5xcdFxipAFxYEuLUlvU2uDwS4NUpsImcf1//SlWItCVMMLiylsxbmNMToV/g==
 
-"@types/underscore@^1.11.5":
-  version "1.11.8"
-  resolved "https://registry.yarnpkg.com/@types/underscore/-/underscore-1.11.8.tgz#278b49c13f8f35fd6215c4896393636e5aaf31ec"
-  integrity sha512-p6xsoGDciPWrMc5EgyYwPdluONx1dXiXAZ+CqfGMJfsGcm+VkSLS8fP7I1DWGa3uRo9o2E6mAgBAXpWQAhk8jg==
+"@types/underscore@^1.11.9":
+  version "1.11.9"
+  resolved "https://registry.yarnpkg.com/@types/underscore/-/underscore-1.11.9.tgz#76a071d27e544e422dbf00f956818b1057f377b2"
+  integrity sha512-M63wKUdsjDFUfyFt1TCUZHGFk9KDAa5JP0adNUErbm0U45Lr06HtANdYRP+GyleEopEoZ4UyBcdAC5TnW4Uz2w==
 
 "@types/use-sync-external-store@^0.0.3":
   version "0.0.3"
