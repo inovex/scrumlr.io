@@ -1,6 +1,6 @@
 import React from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {BoardReactionEventType, BoardReactionImageMap, ReactionType} from "types/reaction";
+import {BoardReactionType, BoardReactionImageMap, ReactionType} from "types/reaction";
 import {useAppSelector} from "store";
 import {uniqueId} from "underscore";
 import {useDispatch} from "react-redux";
@@ -22,7 +22,7 @@ export const BoardReactionMenu = () => {
   const onClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reaction: ReactionType) => {
     e.stopPropagation();
     const id = uniqueId();
-    const boardReaction: BoardReactionEventType = {id, reactionType: reaction, user: me!};
+    const boardReaction: BoardReactionType = {id, reactionType: reaction, user: me!};
     dispatch(Actions.addBoardReaction(boardReaction));
     removeAfterDelay(id, REMOVAL_DELAY_MS);
   };

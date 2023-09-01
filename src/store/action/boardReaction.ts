@@ -1,4 +1,4 @@
-import {BoardReactionEventType} from "types/reaction";
+import {BoardReactionType} from "types/reaction";
 
 export const BoardReactionAction = {
   AddBoardReaction: "scrumlr.io/addBoardReaction" as const,
@@ -6,7 +6,7 @@ export const BoardReactionAction = {
 };
 
 export const BoardReactionActionFactory = {
-  addBoardReaction: (boardReaction: BoardReactionEventType) => ({
+  addBoardReaction: (boardReaction: BoardReactionType) => ({
     type: BoardReactionAction.AddBoardReaction,
     boardReaction,
   }),

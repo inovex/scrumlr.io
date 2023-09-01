@@ -1,6 +1,6 @@
 import {Participant} from "./participant";
 
-export type BoardReactionEventType = {
+export type BoardReactionType = {
   id: string;
   user: Participant;
   reactionType: ReactionType;
@@ -16,4 +16,4 @@ export const BoardReactionImageMap = new Map<ReactionType, string>([
   ["dislike", "👎"],
 ]);
 
-export type BoardReactionState = BoardReactionEventType[];
+export type BoardReactionState = BoardReactionType[];

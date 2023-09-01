@@ -1,10 +1,10 @@
-import {BoardReactionEventType, BoardReactionImageMap} from "types/reaction";
+import {BoardReactionType, BoardReactionImageMap} from "types/reaction";
 import {memo} from "react";
 import {getRandomNumberInRange} from "utils/random";
 import "./BoardReaction.scss";
 
 type BoardReactionProps = {
-  reaction: BoardReactionEventType;
+  reaction: BoardReactionType;
 };
 
 // component that displays a board reaction (emoji + name)
