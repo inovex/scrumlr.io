@@ -22,7 +22,6 @@ import {passRequestMiddleware} from "./middleware/request";
 import {passViewMiddleware} from "./middleware/view";
 import {assignmentReducer} from "./reducer/assignment";
 import {passAssignmentMiddlware} from "./middleware/assignment";
-import {boardReactionReducer} from "./reducer/boardReaction";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -44,7 +43,6 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
     passVoteMiddleware(stateAPI, dispatch, action);
     passVotingMiddleware(stateAPI, dispatch, action);
     passAssignmentMiddlware(stateAPI, dispatch, action);
-    // TODO add board reaction MW
   }
 };
 
@@ -59,7 +57,6 @@ const rootReducer = combineReducers<ApplicationState>({
   votings: votingReducer,
   view: viewReducer,
   assignments: assignmentReducer,
-  boardReactions: boardReactionReducer,
 });
 
 const store = configureStore({

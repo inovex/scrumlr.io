@@ -15,5 +15,3 @@ export const BoardReactionImageMap = new Map<ReactionType, string>([
   ["like", "👍"],
   ["dislike", "👎"],
 ]);
-
-export type BoardReactionState = BoardReactionType[];
