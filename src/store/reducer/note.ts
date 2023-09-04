@@ -8,6 +8,11 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
     case Action.UpdatedNotes: {
       return action.notes;
     }
+    case Action.NoteCreated: {
+      const newNote = action.note;
+      const updatedNotes = [...state, newNote];
+      return updatedNotes;
+    }
     case Action.DeletedNote: {
       const deletedNote = state.find((n) => n.id === action.noteId);
 

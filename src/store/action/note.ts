@@ -8,6 +8,7 @@ export const NoteAction = {
    * won't work otherwise (e.g. in reducers).
    */
   AddNote: "scrumlr.io/addNote" as const,
+  NoteCreated: "scrumlr.io/createdNote" as const,
   UpdatedNotes: "scrumlr.io/updatedNotes" as const,
   DeletedNote: "scrumlr.io/deletedNote" as const,
 
@@ -40,6 +41,11 @@ export const NoteActionFactory = {
     type: NoteAction.AddNote,
     columnId,
     text,
+  }),
+
+  createdNote: (note: Note) => ({
+    type: NoteAction.NoteCreated,
+    note,
   }),
 
   updatedNotes: (notes: Note[]) => ({
@@ -104,6 +110,7 @@ export const NoteActionFactory = {
 
 export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.addNote>
+  | ReturnType<typeof NoteActionFactory.createdNote>
   | ReturnType<typeof NoteActionFactory.updatedNotes>
   | ReturnType<typeof NoteActionFactory.deletedNote>
   | ReturnType<typeof NoteActionFactory.shareNote>
