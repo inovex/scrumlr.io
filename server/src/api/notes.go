@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/realtime"
 )
 
 // createNote creates a new note
@@ -29,6 +30,10 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, err)
 		return
 	}
+	s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteCreated,
+		Data: note,
+	})
 	if s.basePath == "/" {
 		w.Header().Set("Location", fmt.Sprintf("%s://%s/boards/%s/notes/%s", common.GetProtocol(r), r.Host, board, note.ID))
 	} else {

@@ -52,6 +52,17 @@ func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*
 	return new(dto.Note).From(note), err
 }
 
+func (s *NoteService) CreatedNote(boardId uuid.UUID, note database.Note) {
+	eventNote := *new(dto.Note).From(note)
+	err := s.realtime.BroadcastToBoard(boardId, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteCreated,
+		Data: eventNote,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast note created", "err", err)
+	}
+}
+
 func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) {
 	log := logger.FromContext(ctx)
 	note, err := s.database.GetNote(id)
@@ -112,6 +123,7 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
 	}
 }
+
 func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,
