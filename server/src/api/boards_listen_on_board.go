@@ -56,7 +56,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	eventData := EventData{
+	initEventData := EventData{
 		Board:       board,
 		Columns:     columns,
 		Notes:       notes,
@@ -69,7 +69,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 
 	initEvent := InitEvent{
 		Type: realtime.BoardEventInit,
-		Data: eventData,
+		Data: initEventData,
 	}
 
 	initEvent = eventInitFilter(initEvent, userID)
@@ -86,7 +86,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	defer s.closeBoardSocket(id, userID, conn)
 
-	s.listenOnBoard(id, userID, conn, initEvent)
+	s.listenOnBoard(id, userID, conn, initEvent.Data)
 
 	for {
 		_, message, err := conn.ReadMessage()
@@ -105,7 +105,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEvent InitEvent) {
+func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData EventData) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
@@ -114,10 +114,10 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 
 	b := s.boardSubscriptions[boardID]
 	b.clients[userID] = conn
-	b.boardParticipants = initEvent.Data.Sessions
-	b.boardSettings = initEvent.Data.Board
-	b.boardColumns = initEvent.Data.Columns
-	b.boardNotes = initEvent.Data.Notes
+	b.boardParticipants = initEventData.Sessions
+	b.boardSettings = initEventData.Board
+	b.boardColumns = initEventData.Columns
+	b.boardNotes = initEventData.Notes
 
 	// if not already done, start listening to board changes
 	if b.subscription == nil {
