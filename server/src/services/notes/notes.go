@@ -49,6 +49,14 @@ func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*
 		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
 		return nil, common.InternalServerError
 	}
+	err = s.realtime.BroadcastToBoard(body.Board, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteCreated,
+		Data: new(dto.Note).From(note),
+	})
+	if err != nil {
+		log.Errorw("unable to broadcast create note", "board", body.Board, "user", body.User, "error", err)
+		return nil, common.InternalServerError
+	}
 	return new(dto.Note).From(note), err
 }
 
