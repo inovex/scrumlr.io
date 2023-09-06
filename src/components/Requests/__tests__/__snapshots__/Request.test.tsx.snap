@@ -447,7 +447,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
       <svg
         class="request-icon"
       >
-        icon-hand.svg
+        icon-join.svg
       </svg>
     </div>
   </div>
@@ -896,7 +896,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
       <svg
         class="request-icon"
       >
-        icon-hand.svg
+        icon-join.svg
       </svg>
     </div>
   </div>
@@ -1376,7 +1376,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
       <svg
         class="request-icon"
       >
-        icon-hand.svg
+        icon-join.svg
       </svg>
     </div>
   </div>
@@ -1830,7 +1830,7 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
       <svg
         class="request-icon"
       >
-        icon-hand.svg
+        icon-join.svg
       </svg>
     </div>
   </div>
