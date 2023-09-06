@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"scrumlr.io/server/services/board_reactions"
 	"strings"
 
 	"scrumlr.io/server/auth"
@@ -16,12 +17,12 @@ import (
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/services/assignments"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
-	"scrumlr.io/server/services/assignments"
 
 	"github.com/pkg/errors"
 	"github.com/urfave/cli/v2"
@@ -293,7 +294,8 @@ func run(c *cli.Context) error {
 	noteService := notes.NewNoteService(dbConnection, rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
-  assignmentService := assignments.NewAssignmentService(dbConnection, rt)
+	assignmentService := assignments.NewAssignmentService(dbConnection, rt)
+	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
 
 	s := api.New(
 		basePath,
@@ -306,7 +308,9 @@ func run(c *cli.Context) error {
 		boardSessionService,
 		healthService,
 		feedbackService,
-    assignmentService,
+		assignmentService,
+		boardReactionService,
+
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
 	)

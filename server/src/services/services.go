@@ -90,3 +90,6 @@ type Assignments interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 }
 
+type BoardReactions interface {
+	Create(ctx context.Context, board uuid.UUID, body dto.BoardReactionCreateRequest)
+}
