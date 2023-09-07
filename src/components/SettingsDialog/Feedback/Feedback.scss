@@ -82,6 +82,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   align-items: flex-start;
   height: auto;
   gap: $padding--small;
+  padding: $padding--default $padding--medium;
 }
 .feedback-form__settings-button > span {
   padding-bottom: 0;
@@ -95,10 +96,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   resize: none;
   width: calc(100% - (2 * $margin--medium));
   height: 80px;
-  margin-top: 0;
-  margin-bottom: $margin--default;
-  margin-left: $margin--medium;
-  margin-right: $margin--medium;
+  margin: 0;
   padding: 0;
 }
 [theme="dark"] .feedback-form__feedback-textarea {
