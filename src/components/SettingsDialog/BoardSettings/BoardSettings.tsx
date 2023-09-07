@@ -218,11 +218,12 @@ export const BoardSettings = () => {
                 </SettingsButton>
               </div>
 
-              <SettingsButton className={classNames("board-settings__delete-button")} label={t("BoardSettings.DeleteBoard")} onClick={() => setShowConfirmationDialog(true)}>
-                <div className="board-settings__delete-value">
-                  <DeleteIcon />
-                </div>
-              </SettingsButton>
+              <SettingsButton
+                className={classNames("board-settings__delete-button")}
+                label={t("BoardSettings.DeleteBoard")}
+                onClick={() => setShowConfirmationDialog(true)}
+                icon={DeleteIcon}
+              />
             </>
           )}
 
