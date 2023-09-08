@@ -98,6 +98,9 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         if (message.type === "ASSIGNMENT_DELETED") {
           store.dispatch(Actions.deletedAssignment(message.data));
         }
+        if (message.type === "BOARD_REACTION_ADDED") {
+          store.dispatch(Actions.addedBoardReaction(message.data));
+        }
       },
     });
   }

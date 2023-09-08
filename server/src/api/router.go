@@ -167,6 +167,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initVotingResources(r)
 			s.initVoteResources(r)
 			s.initAssignmentResources(r)
+			s.initBoardReactionResources(r)
 		})
 
 		r.Route("/user", func(r chi.Router) {

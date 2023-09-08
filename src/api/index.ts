@@ -9,6 +9,7 @@ import {RequestAPI} from "api/request";
 import {InfoAPI} from "api/info";
 import {UserAPI} from "api/user";
 import {AssignmentAPI} from "api/assignment";
+import {BoardReactionAPI} from "api/boardReaction";
 
 /** This class lists all API functions of the server. */
 export const API = {
@@ -23,4 +24,5 @@ export const API = {
   ...VotingAPI,
   ...UserAPI,
   ...AssignmentAPI,
+  ...BoardReactionAPI,
 };

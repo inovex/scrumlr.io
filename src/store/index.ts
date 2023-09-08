@@ -23,6 +23,7 @@ import {passViewMiddleware} from "./middleware/view";
 import {assignmentReducer} from "./reducer/assignment";
 import {passAssignmentMiddlware} from "./middleware/assignment";
 import {boardReactionReducer} from "./reducer/boardReaction";
+import {passBoardReactionMiddleware} from "./middleware/boardReaction";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -44,7 +45,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
     passVoteMiddleware(stateAPI, dispatch, action);
     passVotingMiddleware(stateAPI, dispatch, action);
     passAssignmentMiddlware(stateAPI, dispatch, action);
-    // TODO add board reaction MW
+    passBoardReactionMiddleware(stateAPI, dispatch, action);
   }
 };
 

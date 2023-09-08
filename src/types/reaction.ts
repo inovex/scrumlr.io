@@ -1,8 +1,6 @@
-import {Participant} from "./participant";
-
 export type BoardReactionType = {
   id: string;
-  user: Participant;
+  user: string;
   reactionType: ReactionType;
 };
 
