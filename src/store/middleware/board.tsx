@@ -100,6 +100,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         }
         if (message.type === "BOARD_REACTION_ADDED") {
           store.dispatch(Actions.addedBoardReaction(message.data));
+          setTimeout(() => store.dispatch(Actions.removeBoardReaction(message.data.id)), 5000);
         }
       },
     });
