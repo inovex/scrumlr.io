@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -15,7 +14,7 @@ type NotesObserver interface {
 	// UpdatedNotes will be called if the notes of the board with the specified id were updated.
 	UpdatedNotes(board uuid.UUID, notes []Note)
 
-	// PublishCreated will be called if a note has been created.
+	// CreatedNote will be called if a note has been created.
 	CreatedNote(board uuid.UUID, note Note)
 
 	// DeletedNote will be called if a note has been deleted.
@@ -26,15 +25,8 @@ var _ bun.AfterInsertHook = (*NoteInsert)(nil)
 var _ bun.AfterUpdateHook = (*NoteUpdate)(nil)
 var _ bun.AfterDeleteHook = (*Note)(nil)
 
-func (*NoteInsert) AfterInsert(ctx context.Context, bun *bun.InsertQuery) error {
-	// return notifyNotesUpdated(ctx)
-	// var note Note
-	// err := bun.Returning("ID").Scan(ctx, &note)
-	// if err != nil {
-	// 	return err
-	// }
-	// return notifyNoteCreated(ctx, note)
-	return nil
+func (*NoteInsert) AfterInsert(ctx context.Context, _ *bun.InsertQuery) error {
+	return notifyNoteCreated(ctx)
 }
 
 func (*NoteUpdate) AfterUpdate(ctx context.Context, _ *bun.UpdateQuery) error {
@@ -49,15 +41,21 @@ func (*Note) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
 	return nil
 }
 
-func notifyNoteCreated(ctx context.Context, note Note) error {
+func notifyNoteCreated(ctx context.Context) error {
 	if ctx.Value("Database") == nil {
 		return nil
 	}
 
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		fmt.Print("DEBUG: -> INSERT HOOK", ctx)
-
+		board := ctx.Value("Board").(uuid.UUID)
+		note := ctx.Value("Note").(*Note)
+		for _, observer := range d.observer {
+			if o, ok := observer.(NotesObserver); ok {
+				o.CreatedNote(board, *note)
+				return nil
+			}
+		}
 	}
 	return nil
 }

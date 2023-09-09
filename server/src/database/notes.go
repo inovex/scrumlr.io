@@ -51,7 +51,7 @@ func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
 		Model(&insert).
 		Value("rank", "coalesce((SELECT COUNT(*) as rank FROM notes WHERE board = ? AND \"column\" = ? AND stack IS NULL), 0)", insert.Board, insert.Column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board), &note)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board, "Note", &note), &note)
 	return note, err
 }
 
