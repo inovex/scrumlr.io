@@ -8,7 +8,7 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
     case Action.UpdatedNotes: {
       return action.notes;
     }
-    case Action.NoteCreated: {
+    case Action.CreatedNote: {
       const newNote = action.note;
       const updatedNotes = [newNote, ...state];
       return updatedNotes;

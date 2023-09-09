@@ -8,7 +8,7 @@ export const NoteAction = {
    * won't work otherwise (e.g. in reducers).
    */
   AddNote: "scrumlr.io/addNote" as const,
-  NoteCreated: "scrumlr.io/createdNote" as const,
+  CreatedNote: "scrumlr.io/createdNote" as const,
   UpdatedNotes: "scrumlr.io/updatedNotes" as const,
   DeletedNote: "scrumlr.io/deletedNote" as const,
 
@@ -44,7 +44,7 @@ export const NoteActionFactory = {
   }),
 
   createdNote: (note: Note) => ({
-    type: NoteAction.NoteCreated,
+    type: NoteAction.CreatedNote,
     note,
   }),
 
