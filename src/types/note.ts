@@ -3,6 +3,7 @@
  */
 export interface Note {
   id: string;
+  sequence_num: number;
   author: string;
   text: string;
   position: {

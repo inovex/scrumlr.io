@@ -14,6 +14,7 @@ import (
 type Note struct {
 	bun.BaseModel `bun:"table:notes"`
 	ID            uuid.UUID
+	Sequence_num  int
 	CreatedAt     time.Time
 	Author        uuid.UUID
 	Board         uuid.UUID
@@ -25,6 +26,7 @@ type Note struct {
 
 type NoteInsert struct {
 	bun.BaseModel `bun:"table:notes"`
+	Sequence_num  int
 	Author        uuid.UUID
 	Board         uuid.UUID
 	Column        uuid.UUID
@@ -50,6 +52,7 @@ func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
 	_, err := d.db.NewInsert().
 		Model(&insert).
 		Value("rank", "coalesce((SELECT COUNT(*) as rank FROM notes WHERE board = ? AND \"column\" = ? AND stack IS NULL), 0)", insert.Board, insert.Column).
+		Value("sequence_num", "(SELECT COUNT(*) as sequence_num FROM notes WHERE board = ?)", insert.Board).
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board, "Note", &note), &note)
 	return note, err

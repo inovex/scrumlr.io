@@ -1,0 +1,1 @@
+ALTER TABLE IF EXISTS notes DROP COLUMN IF EXISTS sequence_num;

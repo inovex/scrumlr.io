@@ -24,6 +24,9 @@ type Note struct {
 	// The id of the note
 	ID uuid.UUID `json:"id"`
 
+	// The sequence number
+	Sequence_num int `json:"sequence_num"`
+
 	// The author of the note.
 	Author uuid.UUID `json:"author"`
 
@@ -36,6 +39,7 @@ type Note struct {
 
 func (n *Note) From(note database.Note) *Note {
 	n.ID = note.ID
+	n.Sequence_num = note.Sequence_num
 	n.Author = note.Author
 	n.Text = note.Text
 	n.Position = NotePosition{
