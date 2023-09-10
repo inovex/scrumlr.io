@@ -13,7 +13,7 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
       if (state.length > 0) {
         const nextSequenceNumber = state[0].nxt_sequence_num;
 
-        if (nextSequenceNumber != newNote.sequence_num) {
+        if (nextSequenceNumber !== newNote.sequence_num) {
           console.error("Whoops, need to resend it first.");
           // resentLogic(newNote.sequence_num, nextSequenceNumber)
         } else {

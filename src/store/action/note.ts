@@ -18,6 +18,7 @@ export const NoteAction = {
   OnNoteFocus: "scrumlr.io/onNoteFocus" as const,
   OnNoteBlur: "scrumlr.io/onNoteBlur" as const,
   EditNote: "scrumlr.io/editNote" as const,
+  ResentNote: "scrumlr.io/resentNote" as const,
   UnstackNote: "scrumlr.io/unstackNote" as const,
 
   DeleteNote: "scrumlr.io/deleteNote" as const,
@@ -57,6 +58,11 @@ export const NoteActionFactory = {
     type: NoteAction.DeletedNote,
     noteId,
     deleteStack,
+  }),
+
+  resentNote: (note: Note) => ({
+    type: NoteAction.ResentNote,
+    note,
   }),
 
   shareNote: (note: string) => ({
@@ -113,6 +119,7 @@ export type NoteReduxAction =
   | ReturnType<typeof NoteActionFactory.createdNote>
   | ReturnType<typeof NoteActionFactory.updatedNotes>
   | ReturnType<typeof NoteActionFactory.deletedNote>
+  | ReturnType<typeof NoteActionFactory.resentNote>
   | ReturnType<typeof NoteActionFactory.shareNote>
   | ReturnType<typeof NoteActionFactory.stopSharing>
   | ReturnType<typeof NoteActionFactory.onNoteFocus>
