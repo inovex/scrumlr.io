@@ -29,6 +29,7 @@ type DB interface {
 	Observer
 	CreateNote(insert database.NoteInsert) (database.Note, error)
 	GetNote(id uuid.UUID) (database.Note, error)
+	GetNoteBySeqNum(board uuid.UUID, seq_num int) (database.Note, error)
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
@@ -71,6 +72,19 @@ func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) 
 			return nil, common.NotFoundError
 		}
 		log.Errorw("unable to get note", "note", id, "error", err)
+		return nil, common.InternalServerError
+	}
+	return new(dto.Note).From(note), err
+}
+
+func (s *NoteService) GetBySeqNum(ctx context.Context, body dto.NoteResentRequest) (*dto.Note, error) {
+	log := logger.FromContext(ctx)
+	note, err := s.database.GetNoteBySeqNum(body.Board, body.Sequence_num)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, common.NotFoundError
+		}
+		log.Errorw("unable to get note by sequence", "note", body.Sequence_num, "error", err)
 		return nil, common.InternalServerError
 	}
 	return new(dto.Note).From(note), err

@@ -91,6 +91,12 @@ type NoteUpdateRequest struct {
 	Board uuid.UUID `json:"-"`
 }
 
+// NoteResentRequest represents the request to resent a note
+type NoteResentRequest struct {
+	Board        uuid.UUID `json:"-"`
+	Sequence_num int       `json:"sequence_num"`
+}
+
 // NoteDeleteRequest represents the request to delete a note.
 type NoteDeleteRequest struct {
 

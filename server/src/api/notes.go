@@ -52,6 +52,23 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, note)
 }
 
+func (s *Server) getNoteBySeqNum(w http.ResponseWriter, r *http.Request) {
+	board := r.Context().Value("Board").(uuid.UUID)
+	var body dto.NoteResentRequest
+	if err := render.Decode(r, &body); err != nil {
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+	body.Board = board
+	note, err := s.notes.GetBySeqNum(r.Context(), body)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, note)
+}
+
 // getNotes get all notes
 func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value("Board").(uuid.UUID)

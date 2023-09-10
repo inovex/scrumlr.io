@@ -64,6 +64,12 @@ func (d *Database) GetNote(id uuid.UUID) (Note, error) {
 	return note, err
 }
 
+func (d *Database) GetNoteBySeqNum(board uuid.UUID, seq_num int) (Note, error) {
+	var note Note
+	err := d.db.NewSelect().Model((*Note)(nil)).Where("board = ? AND sequence_num = ?", board, seq_num).Scan(context.Background(), &note)
+	return note, err
+}
+
 func (d *Database) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]Note, error) {
 	var notes []Note
 	query := d.db.NewSelect().Model((*Note)(nil)).Where("board = ?", board)

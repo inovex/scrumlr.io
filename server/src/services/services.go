@@ -64,6 +64,7 @@ type BoardSessions interface {
 type Notes interface {
 	Create(ctx context.Context, body dto.NoteCreateRequest) (*dto.Note, error)
 	Get(ctx context.Context, id uuid.UUID) (*dto.Note, error)
+	GetBySeqNum(ctx context.Context, body dto.NoteResentRequest) (*dto.Note, error)
 	Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error)
 	List(ctx context.Context, id uuid.UUID) ([]*dto.Note, error)
 	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
@@ -89,4 +90,3 @@ type Assignments interface {
 	Create(ctx context.Context, body dto.AssignmentCreateRequest) (*dto.Assignment, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 }
-
