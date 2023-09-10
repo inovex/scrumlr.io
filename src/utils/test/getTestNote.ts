@@ -2,6 +2,7 @@ import {Note} from "../../types/note";
 
 export default (overwrite?: Partial<Note>): Note => ({
   id: "test-note-id",
+  status: "ACTIVE",
   sequence_num: 0,
   nxt_sequence_num: 1,
   author: "test-note-author",

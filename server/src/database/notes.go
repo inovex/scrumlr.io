@@ -14,6 +14,7 @@ import (
 type Note struct {
 	bun.BaseModel `bun:"table:notes"`
 	ID            uuid.UUID
+	Status        string
 	Sequence_num  int
 	CreatedAt     time.Time
 	Author        uuid.UUID

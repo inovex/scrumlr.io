@@ -86,6 +86,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   notes: [
     {
       id: "test-notes-id-1",
+      status: "ACTIVE",
       sequence_num: 0,
       nxt_sequence_num: 1,
       author: "test-participants-others-user-id-1",
@@ -98,6 +99,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     },
     {
       id: "test-notes-id-2",
+      status: "ACTIVE",
       sequence_num: 1,
       nxt_sequence_num: 2,
       author: "test-participants-others-user-id-1",
@@ -110,6 +112,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     },
     {
       id: "test-notes-id-3",
+      status: "ACTIVE",
       sequence_num: 3,
       nxt_sequence_num: 4,
       author: "test-participants-others-user-id-1",

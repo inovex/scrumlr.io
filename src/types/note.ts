@@ -3,6 +3,7 @@
  */
 export interface Note {
   id: string;
+  status: string;
   sequence_num: number;
   nxt_sequence_num: number;
   author: string;
