@@ -10,6 +10,17 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
     }
     case Action.CreatedNote: {
       const newNote = action.note;
+      if (state.length > 0) {
+        const nextSequenceNumber = state[0].nxt_sequence_num;
+
+        if (nextSequenceNumber != newNote.sequence_num) {
+          console.error("Whoops, need to resend it first.");
+          // resentLogic(newNote.sequence_num, nextSequenceNumber)
+        } else {
+          console.info("Good to go!");
+        }
+      }
+      newNote.nxt_sequence_num = action.note.sequence_num + 1;
       const updatedNotes = [newNote, ...state];
       return updatedNotes;
     }
@@ -93,3 +104,10 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
       return state;
   }
 };
+
+// function resentLogic(currentSequenceNum: number, lastSendSequenceNum: number){
+//   // implement loop where all not sent notes are retried
+//   while(lastSendSequenceNum >= currentSequenceNum){
+//     resentNote(0)
+//   }
+// }

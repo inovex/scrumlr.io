@@ -380,6 +380,7 @@
     "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
     "deleteNoteWhenShared": "Sorry, but you can not delete your card while it is shared.",
     "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
+    "resentNote": "Sorry, but we're having trouble resending a note. Please try again.",
     "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
     "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",
     "setUserReady": "Sorry, but we're having trouble setting you ready. Please try again.",

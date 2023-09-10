@@ -45,6 +45,20 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
     });
   }
 
+  if (action.type === Action.ResentNote) {
+    const {note} = action;
+    // Add note to state
+    stateAPI.getState().notes.unshift(note);
+
+    API.resentNote(action.context.board!, 0).catch(() => {
+      Toast.error({
+        title: i18n.t("Error.resentNote"),
+        buttons: [i18n.t("Error.retry")],
+        firstButtonOnClick: () => store.dispatch(Actions.resentNote(action.note)),
+      });
+    });
+  }
+
   if (action.type === Action.UnstackNote) {
     const note = stateAPI.getState().notes.find((n) => n.id === action.note)!;
     const parent = stateAPI.getState().notes.find((n) => n.id === note.position.stack)!;

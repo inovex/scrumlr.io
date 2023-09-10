@@ -380,6 +380,7 @@
     "deleteNote": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Kärtchens. Bitte versuche es erneut.",
     "deleteNoteWhenShared": "Das Kärtchen kann, während es geteilt wird, nicht von dir gelöscht werden.",
     "editNote": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Kärtchens. Bitte versuche es erneut.",
+    "resentNote": "Es tut uns leid, aber wir haben ein Problem beim Übersenden eines Kärtchens. Bitte versuche es erneut.",
     "unstackNote": "Es tut uns leid, aber wir haben ein Problem beim Entstapeln des Kärtchens. Bitte versuche es erneut.",
     "setRaiseHand": "Es tut uns leid, aber wir haben ein Problem beim Heben deiner Hand. Bitte versuche es erneut.",
     "setUserReady": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deines Statuses. Bitte versuche es erneut.",

@@ -60,6 +60,28 @@ export const NoteAPI = {
     }
   },
 
+  resentNote: async (boardId: string, sequence_num: number) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/notes/resent`, {
+        method: "GET",
+        credentials: "include",
+        body: JSON.stringify({
+          sequence_num,
+        }),
+      });
+
+      if (response.status === 200) {
+        const note = (await response.json()) as Note;
+        console.log("Received: ", note);
+        return (await response.json()) as Note;
+      }
+
+      throw new Error(`resent note request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to resent note with error: ${error}`);
+    }
+  },
+
   /**
    * Edit a note with the specified id.
    *

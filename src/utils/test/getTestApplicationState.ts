@@ -87,6 +87,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     {
       id: "test-notes-id-1",
       sequence_num: 0,
+      nxt_sequence_num: 1,
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
@@ -98,6 +99,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     {
       id: "test-notes-id-2",
       sequence_num: 1,
+      nxt_sequence_num: 2,
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
@@ -109,6 +111,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     {
       id: "test-notes-id-3",
       sequence_num: 3,
+      nxt_sequence_num: 4,
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
