@@ -149,7 +149,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             <li>
               <TooltipButton
                 direction="right"
-                label={raisedHand ? t("MenuBars.openBoardReactionMenu") : t("MenuBars.openBoardReactionMenu")}
+                label={t("MenuBars.openBoardReactionMenu")}
                 icon={BoardReactionIcon}
                 onClick={toggleBoardReactionsMenu}
                 active={showBoardReactionsMenu}
@@ -248,7 +248,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 <TooltipButton
                   active={showBoardReactionsMenu}
                   direction="left"
-                  label={showBoardReactionsMenu ? t("MenuBars.openBoardReactionMenu") : t("MenuBars.openBoardReactionMenu")}
+                  label={t("MenuBars.openBoardReactionMenu")}
                   icon={BoardReactionIcon}
                   onClick={toggleBoardReactionsMenu}
                 />
