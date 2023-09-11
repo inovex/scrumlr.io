@@ -22,6 +22,8 @@
   border-radius: $rounded--large;
 
   padding: 0 $padding--default;
+
+  user-select: none;
 }
 
 .board-reactions__item {
