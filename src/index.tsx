@@ -28,8 +28,21 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
     domain: ANALYTICS_DATA_DOMAIN,
     apiHost: ANALYTICS_SRC,
   });
-
-  trackPageview();
+  const handleAnalytics = async () => {
+    if (window.location.href.includes("/board/")) {
+      const [baseUrl, boardId] = window.location.href.split("/board/");
+      const hash = await window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(boardId));
+      const url = `${baseUrl}/${Array.from(new Uint8Array(hash))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("")}`;
+      trackPageview({
+        url,
+      });
+    } else {
+      trackPageview();
+    }
+  };
+  handleAnalytics();
 }
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
