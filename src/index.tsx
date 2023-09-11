@@ -32,7 +32,7 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
     if (window.location.href.includes("/board/")) {
       const [baseUrl, boardId] = window.location.href.split("/board/");
       const hash = await window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(boardId));
-      const url = `${baseUrl}/${Array.from(new Uint8Array(hash))
+      const url = `${baseUrl}/board/${Array.from(new Uint8Array(hash))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("")}`;
       trackPageview({
