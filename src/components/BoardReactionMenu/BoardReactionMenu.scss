@@ -61,7 +61,7 @@
 
 @media #{$smartphone} {
   .board-reactions__root {
-    bottom: $column__border-width + $margin--medium + 64px;
+    bottom: $column__border-width + $margin--medium + 32px;
   }
 
   .board-reactions__close {
@@ -76,5 +76,12 @@
 
   .board-reactions__close {
     color: $color-white;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .board-reactions__container {
+    width: 300px;
+    gap: 4px;
   }
 }
