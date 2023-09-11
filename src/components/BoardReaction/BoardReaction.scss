@@ -13,6 +13,7 @@ $bottom-end-pos: 60vh;
   animation: fly-top 5s linear;
 
   z-index: $board-reaction-z-index;
+  pointer-events: none;
 }
 
 .board-reaction__emoji-container {
