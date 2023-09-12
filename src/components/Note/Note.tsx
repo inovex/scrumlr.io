@@ -33,6 +33,7 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const me = useAppSelector((state) => state.participants?.self);
   const moderating = useAppSelector((state) => state.view.moderating);
@@ -115,10 +116,10 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <main className="note__text">{note.text}</main>
+          <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>{note.text}</main>
         )}
-        <footer className="note__footer">
-          <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} />
+        <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
+          <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
         </footer>
       </button>
       {isStack && <div className="note__in-stack" />}

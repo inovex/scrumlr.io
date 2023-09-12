@@ -20,6 +20,7 @@ interface NoteReactionListProps {
   noteId: string;
   dimensions?: DOMRect; // used for note width
   colorClassName?: string;
+  show: boolean;
 }
 
 export interface ReactionModeled {
@@ -163,6 +164,8 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     }
     setShowReactionPopup(false);
   };
+
+  if (!props.show) return null;
 
   return (
     <div className="note-reaction-list__root" onBlur={() => setShowReactionBar(false)}>

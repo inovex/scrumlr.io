@@ -11,6 +11,8 @@ $note__author-image-size: 26px;
 $note__text-margin-top: 12px;
 $note__text-margin-top--small: 6px;
 
+$note__footer-height: 38px;
+
 .note__root {
   position: relative;
   container-type: inline-size;
@@ -125,6 +127,11 @@ $note__text-margin-top--small: 6px;
   display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
+
+  &--extended {
+    // add the difference of note__footer
+    min-height: 3 * $line-height--medium + $note__footer-height;
+  }
 }
 
 .note__image-wrapper {
@@ -168,8 +175,12 @@ $note__text-margin-top--small: 6px;
   flex-direction: row;
   justify-content: space-between;
 
-  height: 38px;
+  height: $note__footer-height;
   margin-left: -$reaction-list__left-spacing; // a little to the left, the icon in NoteReactionList lines up
+
+  &--collapsed {
+    height: 0;
+  }
 }
 
 .note__author-image {
