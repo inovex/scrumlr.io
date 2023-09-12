@@ -103,6 +103,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		Name:                  body.Name,
 		ShowAuthors:           body.ShowAuthors,
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
+		ShowNoteReactions:     body.ShowNoteReactions,
 		AllowStacking:         body.AllowStacking,
 		TimerStart:            body.TimerStart,
 		TimerEnd:              body.TimerEnd,
