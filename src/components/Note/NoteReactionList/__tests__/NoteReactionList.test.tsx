@@ -8,7 +8,7 @@ const NOTE_ID = "test-notes-id-1";
 
 const createNoteReactionList = (note: string) => (
   <Provider store={getTestStore()}>
-    <NoteReactionList noteId={note}></NoteReactionList>
+    <NoteReactionList noteId={note} show></NoteReactionList>
   </Provider>
 );
 
