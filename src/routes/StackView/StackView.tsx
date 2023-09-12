@@ -97,6 +97,7 @@ export const StackView = () => {
   );
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
   const showAuthors = useAppSelector((state) => state.board.data?.showAuthors ?? true, _.isEqual);
+  const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true, _.isEqual);
   const userIsModerating = moderating && (viewer.role === "MODERATOR" || viewer.role === "OWNER");
 
   const colorClassName = getColorClassName(column?.color as Color);
@@ -260,6 +261,7 @@ export const StackView = () => {
                       avatar={item.avatar}
                       authorName={item.authorName}
                       showAuthors={showAuthors}
+                      showNoteReactions={showNoteReactions}
                       onClose={handleClose}
                       isStackedNote={false}
                       hasStackedNotes={item.stack.length > 0}
@@ -278,6 +280,7 @@ export const StackView = () => {
                           avatar={n.avatar}
                           authorName={n.authorName}
                           showAuthors={showAuthors}
+                          showNoteReactions={showNoteReactions}
                           onClose={handleClose}
                           isStackedNote
                           viewer={viewer}

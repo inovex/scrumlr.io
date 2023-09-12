@@ -12,4 +12,8 @@
   margin-left: -$reaction-list__left-spacing; // a little to the left, the icon in NoteReactionList lines up
 
   height: var(--note-footer-height);
+
+  &--collapsed {
+    height: 0;
+  }
 }

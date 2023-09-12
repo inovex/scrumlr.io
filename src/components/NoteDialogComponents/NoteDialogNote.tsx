@@ -12,6 +12,7 @@ export type NoteDialogNoteProps = {
   avatar?: AvataaarProps;
   authorName: string;
   showAuthors: boolean;
+  showNoteReactions: boolean;
   onClose: () => void;
   isStackedNote: boolean;
   hasStackedNotes?: boolean;
