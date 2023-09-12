@@ -326,6 +326,7 @@
     "ShowAuthorOption": "Show authors of notes",
     "ShowHiddenColumnsOption": "Show hidden columns for me",
     "ShowOtherUsersNotesOption": "Show notes of other users",
+    "ShowNoteReactionsOptions": "Show note reactions",
     "AllowNoteRepositioningOption": "Allow note repositioning",
     "generatePassword": "Generate password and protect",
     "save": "save",

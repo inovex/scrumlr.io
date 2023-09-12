@@ -326,6 +326,7 @@
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
+    "ShowNoteReactionsOptions": "Emoji-Reaktionen auf Karten anzeigen",
     "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
