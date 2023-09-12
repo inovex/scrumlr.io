@@ -261,20 +261,6 @@
   letter-spacing: $letter-spacing--medium;
 }
 
-.board-settings__show-author,
-.board-settings__show-notes,
-.board-settings__delete,
-.board-settings__show-columns,
-.board-settings__allow-note-repositioning {
-  &-button {
-    justify-content: space-between;
-  }
-
-  &-value {
-    padding-right: $padding--medium;
-  }
-}
-
 .board-settings__delete-button span {
   color: $color-retro-red;
   font-weight: bold;
@@ -288,8 +274,6 @@
 
 .board-settings__delete-button svg {
   color: $color-retro-red;
-  width: $icon--medium;
-  height: $icon--medium;
 }
 
 .board-settings__confirmation-dialog {
