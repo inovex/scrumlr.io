@@ -46,6 +46,7 @@ export const StackView = () => {
   const stackedNotes = useAppSelector(
     (state) =>
       state.notes
+        .filter((n) => n.status === "ACTIVE")
         .filter((n) => n.position.stack === note?.id)
         // if showNotesOfOtherUsers is disabled, only show own notes
         // same as showNotesOfOtherUsers ? true : n.author === viewer.user.id

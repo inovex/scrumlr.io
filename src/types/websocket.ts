@@ -58,7 +58,7 @@ export interface UpdatedNotesEvent {
 export interface DeletedNoteEvent {
   type: "NOTE_DELETED";
   data: {
-    note: string;
+    note: Note;
     deleteStack: boolean;
   };
 }

@@ -110,12 +110,17 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	note := r.Context().Value("Note").(uuid.UUID)
+	board := r.Context().Value("Board").(uuid.UUID)
+	caller := r.Context().Value("User").(uuid.UUID)
 
 	var body dto.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
+	body.Board = board
+	body.Note = note
+	body.Caller = caller
 
 	if err := s.notes.Delete(r.Context(), body, note); err != nil {
 		common.Throw(w, r, err)

@@ -48,6 +48,14 @@ type NoteUpdate struct {
 	Position      *NoteUpdatePosition `bun:"embed"`
 }
 
+type NoteDelete struct {
+	bun.BaseModel `bun:"table:notes"`
+	ID            uuid.UUID
+	Board         uuid.UUID
+	Caller        uuid.UUID
+	DeleteStack   bool
+}
+
 func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
 	var note Note
 	_, err := d.db.NewInsert().
@@ -311,9 +319,9 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	return note[0], err
 }
 
-func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
-	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
-	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
+func (d *Database) DeleteNote(delete NoteDelete) error {
+	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", delete.Caller).Where("board = ?", delete.Board)
+	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", delete.ID).Where("board = ?", delete.Board)
 
 	var precondition struct {
 		StackingAllowed bool
@@ -328,21 +336,21 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 		return err
 	}
 
-	if precondition.Author == caller || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
-		previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board)
+	if precondition.Author == delete.Caller || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
+		previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", delete.ID).Where("board = ?", delete.Board)
 
-		children := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id)
+		children := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", delete.ID)
 
 		updateBoard := d.db.NewUpdate().
 			Model((*Board)(nil)).
 			Set("shared_note = null").
-			Where("id = ? AND shared_note = ?", board, id)
+			Where("id = ? AND shared_note = ?", delete.Board, delete.ID)
 
 		updateRanks := d.db.NewUpdate().
 			With("previous", previous).
 			With("children", children).
 			Model((*Note)(nil)).Set("rank = rank-1").
-			Where("board = ?", board).
+			Where("board = ?", delete.Board).
 			Where("\"column\" = (SELECT \"column\" FROM previous)").
 			WhereGroup(" AND ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
 				return q.
@@ -351,44 +359,45 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 						return q.
 							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
 								return q.
-									Where("(?) IS FALSE", deleteStack).
+									Where("(?) IS FALSE", delete.DeleteStack).
 									Where("(SELECT stack FROM previous) IS NULL").
 									Where("NOT EXISTS (?)", children).
 									Where("stack IS NULL")
 							}).
 							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
 								return q.
-									Where("(?) IS FALSE", deleteStack).
+									Where("(?) IS FALSE", delete.DeleteStack).
 									Where("(SELECT stack FROM previous) IS NOT NULL").
 									Where("stack = (SELECT stack FROM previous)")
 							}).
 							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
 								return q.
-									Where("(?) IS TRUE", deleteStack).
+									Where("(?) IS TRUE", delete.DeleteStack).
 									Where("stack IS NULL")
 							})
 					})
 			})
 
-		var notes []Note
+		var note Note
 
-		if deleteStack {
-			_, err := d.db.NewDelete().
+		if delete.DeleteStack {
+			_, err := d.db.NewUpdate().
 				With("update_board", updateBoard).
 				With("update_ranks", updateRanks).
-				Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+				Set("status = ?", "DELETED").
+				Model((*NoteDelete)(nil)).Where("id = ?", delete.ID).Where("board = ?", delete.Board).Returning("*").
+				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", delete.Board, "Note", delete.ID, "User", delete.Caller, "DeleteStack", delete.DeleteStack, "Result", &note), &note)
 
 			return err
 		}
 
-		nextParentSelect := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id).Where("rank = (SELECT MAX(rank) FROM notes WHERE stack = ?)", id).Limit((1))
+		nextParentSelect := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", delete.ID).Where("rank = (SELECT MAX(rank) FROM notes WHERE stack = ?)", delete.ID).Limit((1))
 
 		updateStackRefs := d.db.NewUpdate().
 			With("next_parent", nextParentSelect).
 			Model((*Note)(nil)).Set("stack = (SELECT id FROM next_parent)").
-			Where("board = ?", board).
-			Where("stack = ?", id)
+			Where("board = ?", delete.Board).
+			Where("stack = ?", delete.ID)
 
 		updateNextParentStackId := d.db.NewUpdate().
 			With("previous", previous).
@@ -398,13 +407,14 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 			Set("rank = (SELECT rank FROM previous)").
 			Where("id = (SELECT id FROM next_parent)")
 
-		_, err := d.db.NewDelete().
+		_, err := d.db.NewUpdate().
 			With("update_board", updateBoard).
 			With("update_ranks", updateRanks).
 			With("update_stackrefs", updateStackRefs).
 			With("update_parentStackId", updateNextParentStackId).
-			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+			Set("status = ?", "DELETED").
+			Model((*NoteDelete)(nil)).Where("id = ?", delete.ID).Where("board = ?", delete.Board).Returning("*").
+			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", delete.Board, "Note", delete.ID, "User", delete.Caller, "DeleteStack", delete.DeleteStack, "Result", &note), &note)
 
 		return err
 	}

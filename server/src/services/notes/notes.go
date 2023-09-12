@@ -32,7 +32,7 @@ type DB interface {
 	GetNoteBySeqNum(board uuid.UUID, seq_num int) (database.Note, error)
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
-	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
+	DeleteNote(delete database.NoteDelete) error
 }
 
 func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
@@ -121,7 +121,7 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 }
 
 func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
-	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), ctx.Value("Board").(uuid.UUID), id, body.DeleteStack)
+	return s.database.DeleteNote(database.NoteDelete{ID: body.Note, Board: body.Board, Caller: body.Caller, DeleteStack: body.DeleteStack})
 }
 
 func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
@@ -138,9 +138,9 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 	}
 }
 
-func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote, deleteStack bool) {
+func (s *NoteService) DeletedNote(user, board uuid.UUID, note database.Note, votes []database.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
-		"note":        note,
+		"note":        new(dto.Note).From(note),
 		"deleteStack": deleteStack,
 	}
 	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{

@@ -29,6 +29,7 @@ export const Note = (props: NoteProps) => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
+  // const isDeleted = useAppSelector((state) => state.notes.filter((n) => n.id === props.noteId))
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
@@ -46,6 +47,12 @@ export const Note = (props: NoteProps) => {
       .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
     return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[]; // remove undefined values (which shouldn't exists, only for TS type assertion)
   }, isEqual);
+
+  useEffect(() => {
+    if (note?.status === "DELETED") {
+      navigate(".");
+    }
+  });
 
   /* eslint-disable */
   useEffect(() => {

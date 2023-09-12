@@ -103,7 +103,9 @@ type NoteResentRequest struct {
 
 // NoteDeleteRequest represents the request to delete a note.
 type NoteDeleteRequest struct {
-
+	Note   uuid.UUID `json:"-"`
+	Caller uuid.UUID `json:"-"`
+	Board  uuid.UUID `json:"-"`
 	// Delete note or the complete stack.
 	DeleteStack bool `json:"deleteStack"`
 }
