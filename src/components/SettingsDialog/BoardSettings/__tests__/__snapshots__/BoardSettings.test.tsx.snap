@@ -144,6 +144,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           </div>
         </button>
         <button
+          aria-checked="true"
           aria-label="BoardSettings.ShowNoteReactionsOptions"
           class="settings-option-button board-settings__show-reactions-button"
           data-testid="reactions"
@@ -159,7 +160,7 @@ exports[`BoardSettings should match snapshot 1`] = `
             class="board-settings__show-reactions-value"
           >
             <div
-              class="toggle"
+              class="toggle toggle--active"
             />
           </div>
         </button>
