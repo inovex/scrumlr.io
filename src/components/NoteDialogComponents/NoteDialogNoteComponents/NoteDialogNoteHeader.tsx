@@ -22,7 +22,9 @@ export const NoteDialogNoteHeader = (props: NoteDialogNoteHeaderProps) => {
   const author = participants.find((p) => p?.user.id === props.authorId)!;
   return (
     <div className="note-dialog-note-header__root">
-      <NoteAuthorList authors={[author]} showAuthors={props.showAuthors} viewer={props.viewer} />
+      <div className="note-dialog-note-header__author-list-container">
+        <NoteAuthorList authors={[author]} showAuthors={props.showAuthors} viewer={props.viewer} />
+      </div>
       <Votes {...props} className="note-dialog__note-votes" />
     </div>
   );
