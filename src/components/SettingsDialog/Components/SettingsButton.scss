@@ -2,19 +2,18 @@
 
 $header-menu__item-border-width: 1px;
 $header-menu-button-height: 24px;
-$header-menu-icon-width: 79px;
-$header-menu-icon-height: 24px;
 $settings__item-height: 48px;
 $header-menu-border-bottom-color: #efefef;
 
 .settings-option-button {
   display: flex;
   align-items: center;
+  gap: $padding--default;
 
   background-color: $color-white;
   border-radius: 8px;
   border: none;
-  padding: 0;
+  padding: 0 $padding--medium;
   height: $settings__item-height;
   width: 100%;
   text-align: left;
@@ -39,14 +38,12 @@ $header-menu-border-bottom-color: #efefef;
   font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
-  padding: $padding--default $padding--medium;
   hyphens: auto;
-  width: 290px;
+  flex-grow: 1;
 }
 
 .settings-option-button__icon {
-  width: $header-menu-icon-width;
-  height: $header-menu-icon-height;
+  width: $icon--large;
   color: var(--accent-color);
   vertical-align: middle;
   border-bottom: none !important;

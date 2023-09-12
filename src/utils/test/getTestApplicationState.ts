@@ -89,6 +89,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
+        stack: null,
         column: "test-columns-id-1",
         rank: 0,
         stack: null,
@@ -99,6 +100,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
+        stack: null,
         column: "test-columns-id-1",
         rank: 1,
         stack: null,
@@ -109,6 +111,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
+        stack: null,
         column: "test-columns-id-2",
         rank: 0,
         stack: null,
@@ -164,6 +167,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     ],
   },
   view: {
+    hotkeyNotificationsEnabled: true,
     moderating: false,
     serverTimeOffset: 0,
     enabledAuthProvider: [],

@@ -5,6 +5,7 @@ export default (overwrite?: Partial<Note>): Note => ({
   author: "test-note-author",
   text: "Lorem ipsum dolor sit amet",
   position: {
+    stack: null,
     column: "test-note-position-column-id",
     rank: 0,
   },
