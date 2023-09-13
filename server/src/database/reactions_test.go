@@ -13,14 +13,15 @@ func TestRunnerForReactions(t *testing.T) {
 
 	t.Run("Create=0", testCreateReaction)
 	t.Run("Create=1", testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote)
+
+	t.Run("Update=0", testUpdateReaction)
+	t.Run("Update=1", testUpdateReactionFailsBecauseForbidden)
 }
 
 var notesTestA1 *Note
 var boardTestBoard *Board
 var reactionUserJay *User
 var reactionUserJack *User
-
-var reactionA *Reaction
 
 func testGetReaction(t *testing.T) {
 	reaction := fixture.MustRow("Reaction.reactionA").(*Reaction)
@@ -79,4 +80,35 @@ func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 
 	assert.NotNil(t, err)
 	assert.Error(t, err)
+}
+
+func testUpdateReaction(t *testing.T) {
+	newReactionType := types.ReactionCelebration
+	board := fixture.MustRow("Board.notesTestBoard").(*Board) // cannot reuse vars here
+	user := fixture.MustRow("User.jane").(*User)
+	reaction := fixture.MustRow("Reaction.reactionB").(*Reaction)
+
+	r, err := testDb.UpdateReaction(board.ID, user.ID, reaction.ID, ReactionUpdate{
+		ReactionType: newReactionType,
+	})
+
+	assert.Nil(t, err)
+	assert.Equal(t, reaction.ID, r.ID)
+	assert.Equal(t, user.ID, r.User)
+	assert.Equal(t, newReactionType, r.ReactionType)
+}
+
+func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
+	newReactionType := types.ReactionCelebration
+	board := fixture.MustRow("Board.notesTestBoard").(*Board)
+	wrongUser := fixture.MustRow("User.jack").(*User)
+	reaction := fixture.MustRow("Reaction.reactionB").(*Reaction)
+
+	_, err := testDb.UpdateReaction(board.ID, wrongUser.ID, reaction.ID, ReactionUpdate{
+		ReactionType: newReactionType,
+	})
+
+	assert.NotNil(t, err)
+	assert.Error(t, err)
+	assert.ErrorContains(t, err, "forbidden")
 }
