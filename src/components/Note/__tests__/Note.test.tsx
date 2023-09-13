@@ -20,6 +20,7 @@ const createBoardData = (overwrite?: Partial<BoardState["data"]> & Partial<Pick<
       name: overwrite?.name ?? "note-tests-board",
       accessPolicy: overwrite?.accessPolicy ?? "PUBLIC",
       showAuthors: overwrite?.showAuthors ?? false,
+      showNoteReactions: overwrite?.showNoteReactions ?? true,
       showNotesOfOtherUsers: overwrite?.showNotesOfOtherUsers ?? true,
       allowStacking: overwrite?.allowStacking ?? true,
     },
@@ -43,7 +44,7 @@ describe("Note", () => {
         ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as unknown as IntersectionObserver)
+        }) as unknown as IntersectionObserver
     );
   });
 
