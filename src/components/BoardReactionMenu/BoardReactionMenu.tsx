@@ -17,7 +17,7 @@ export const BoardReactionMenu = () => {
   };
 
   // hotkey is converted to a number which is then used as the index for the reaction type
-  useHotkeys(["1", "2", "3", "4", "5"], (e, k) => onClickReaction(e, boardReactions[+k.keys![0]][0]));
+  useHotkeys(["1", "2", "3", "4", "5"], (e, k) => onClickReaction(e, boardReactions[+k.keys![0] - 1][0]));
 
   return (
     <div className="board-reactions__root">
