@@ -39,7 +39,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const boardReactionRef = useRef<HTMLDivElement>(null);
 
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
-  const [showBoardReactionsMenu, setShowBoarReactionsMenu] = useState(false);
+  const [showBoardReactionsMenu, setShowBoardReactionsMenu] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
@@ -53,7 +53,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
       // only hide if menu wasn't clicked to avoid double onClick toggle
       if (!menuBarsDesktopRef.current?.contains(target as Node)) {
-        setShowBoarReactionsMenu(false);
+        setShowBoardReactionsMenu(false);
       }
     };
     document.addEventListener("click", handleClickOutside, true);
@@ -89,7 +89,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   };
 
   const toggleBoardReactionsMenu = () => {
-    setShowBoarReactionsMenu((show) => !show);
+    setShowBoardReactionsMenu((show) => !show);
   };
 
   const toggleModeration = () => {
