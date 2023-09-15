@@ -202,13 +202,11 @@ exports[`BoardSettings should match snapshot 1`] = `
         >
           BoardSettings.DeleteBoard
         </span>
-        <div
-          class="board-settings__delete-value"
+        <svg
+          class="settings-option-button__icon"
         >
-          <svg>
-            icon-delete.svg
-          </svg>
-        </div>
+          icon-delete.svg
+        </svg>
       </button>
     </div>
   </div>
