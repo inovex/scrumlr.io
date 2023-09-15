@@ -298,7 +298,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       {/* should this be inside a Portal instead? */}
       {showBoardReactionsMenu && (
         <div ref={boardReactionRef}>
-          <BoardReactionMenu />
+          <BoardReactionMenu close={toggleBoardReactionsMenu} />
         </div>
       )}
     </>

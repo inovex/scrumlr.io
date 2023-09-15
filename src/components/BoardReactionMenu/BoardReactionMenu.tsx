@@ -6,7 +6,11 @@ import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
 import "./BoardReactionMenu.scss";
 
-export const BoardReactionMenu = () => {
+type BoardReactionMenuProps = {
+  close: () => void;
+};
+
+export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   const dispatch = useDispatch();
 
   const boardReactions = [...BoardReactionImageMap];
@@ -28,7 +32,7 @@ export const BoardReactionMenu = () => {
           </button>
         ))}
 
-        <CloseIcon className="board-reactions__item board-reactions__close" aria-hidden />
+        <CloseIcon className="board-reactions__item board-reactions__close" onClick={props.close} aria-hidden />
       </div>
     </div>
   );
