@@ -24,8 +24,13 @@ $bottom-end-pos: 60vh;
   padding: 10px;
   font-size: $text--base;
   font-weight: 600;
-  background-color: $color-lighter-gray;
+  background-color: $color-white-one;
   border-radius: $rounded--large;
+
+  &--self {
+    color: $color-white;
+    background-color: $color-board-reaction-name-self--light;
+  }
 }
 
 @keyframes fly-top {
@@ -36,5 +41,16 @@ $bottom-end-pos: 60vh;
   to {
     bottom: $bottom-end-pos;
     opacity: 0;
+  }
+}
+
+[theme="dark"] {
+  .board-reaction__name-container {
+    color: $color-white;
+    background-color: $color-board-reaction-name--dark;
+
+    &--self {
+      background-color: $color-board-reaction-name-self--dark;
+    }
   }
 }
