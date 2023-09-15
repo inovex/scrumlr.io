@@ -153,5 +153,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     noteFocused: false,
   },
   assignments: [],
+  boardReactions: [],
   ...overwrite,
 });
