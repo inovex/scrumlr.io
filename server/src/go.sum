@@ -327,8 +327,8 @@ github.com/uptrace/bun/dbfixture v1.1.16 h1:CEdQaeptGRRvwVRhn9PMrawo+yaK+HzAU8/O
 github.com/uptrace/bun/dbfixture v1.1.16/go.mod h1:kw11JRwFD3eAHs3Lyq7sHJ6i2KWngUlZQsrvyRy+dqY=
 github.com/uptrace/bun/dialect/pgdialect v1.1.16 h1:eUPZ+YCJ69BA+W1X1ZmpOJSkv1oYtinr0zCXf7zCo5g=
 github.com/uptrace/bun/dialect/pgdialect v1.1.16/go.mod h1:KQjfx/r6JM0OXfbv0rFrxAbdkPD7idK8VitnjIV9fZI=
-github.com/uptrace/bun/extra/bundebug v1.1.15 h1:pSOPAaGop9ZzoOxM/iPHqDOnm0tO6zIt8QJmKIclTdM=
-github.com/uptrace/bun/extra/bundebug v1.1.15/go.mod h1:TyoPJ6i3BfNbVEFnpdVL5q+sMgDlClFHAJ2DQUFea88=
+github.com/uptrace/bun/extra/bundebug v1.1.16 h1:SgicRQGtnjhrIhlYOxdkOm1Em4s6HykmT3JblHnoTBM=
+github.com/uptrace/bun/extra/bundebug v1.1.16/go.mod h1:SkiOkfUirBiO1Htc4s5bQKEq+JSeU1TkBVpMsPz2ePM=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
 github.com/urfave/cli/v2 v2.25.7 h1:VAzn5oq403l5pHjc4OhD54+XGO9cdKVL/7lDjF+iKUs=
 github.com/urfave/cli/v2 v2.25.7/go.mod h1:8qnjx1vcq5s2/wpsqoZFndg2CE5tNFyrTvS6SinrnYQ=
