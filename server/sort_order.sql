@@ -6,7 +6,7 @@ ALTER TABLE columns ADD notes_order uuid ARRAY;
 ALTER TABLE notes ADD stack_order uuid ARRAY;
 
 -- MIGRATE columns
-UPDATE boards AS b SET columns_order=(SELECT array_agg(id::uuid ORDER BY index) FROM columns WHERE board=b.id) WHERE id=b.id;
+UPDATE boards AS b SET columns_order=(SELECT array_agg(id::uuid ORDER BY index ASC) FROM columns WHERE board=b.id) WHERE id=b.id;
 
 -- MIGRATE notes
 UPDATE columns AS c SET notes_order=(SELECT array_agg(id::uuid ORDER BY rank DESC) FROM notes WHERE "column"=c.id AND stack IS null) WHERE id=c.id;
@@ -16,7 +16,7 @@ UPDATE notes AS n SET stack_order=(SELECT array_agg(id::uuid ORDER BY rank DESC)
 
 -- INSERT COLUMN AT THE END
 WITH insert_column AS (
-  INSERT INTO columns (board,name,color,visible) VALUES ('${board_id}', 'Test', 'backlog-blue', true) RETURNING *
+  INSERT INTO columns (board,name,color,visible) VALUES ('faa7a927-23e3-4072-b75c-8843a3a3fcd4', 'Test', 'backlog-blue', true) RETURNING *
 )
 UPDATE boards SET columns_order=array_append(boards.columns_order, (SElECT id FROM insert_column)) WHERE id=(SELECT board FROM insert_column);
 
