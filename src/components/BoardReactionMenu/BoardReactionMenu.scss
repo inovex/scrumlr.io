@@ -75,6 +75,12 @@
     background-color: $color-dark-mode-note;
   }
 
+  .board-reactions__reaction {
+    &:hover {
+      background-color: $hover-background-dark;
+    }
+  }
+
   .board-reactions__close {
     color: $color-white;
   }
