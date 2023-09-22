@@ -7,6 +7,7 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
+import classNames from "classnames";
 import "./BoardReactionMenu.scss";
 
 type BoardReactionMenuProps = {
@@ -41,7 +42,11 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
     <div className="board-reactions__root">
       <div className="board-reactions__container">
         {boardReactions.map(([reactionType, emoji]) => (
-          <button key={reactionType} className="board-reactions__item board-reactions__reaction" onClick={(e) => onClickReaction(e, reactionType)}>
+          <button
+            key={reactionType}
+            className={classNames("board-reactions__item board-reactions__reaction", {"board-reactions__reaction--disabled": !showBoardReactions})}
+            onClick={(e) => onClickReaction(e, reactionType)}
+          >
             <span>{emoji}</span>
           </button>
         ))}

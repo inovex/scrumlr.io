@@ -49,8 +49,14 @@
   span {
     margin-left: 0.3em; // manually center those stubborn emojis
   }
+
   &:hover {
     background-color: $hover-background-light;
+  }
+
+  &--disabled {
+    filter: grayscale(100%);
+    cursor: not-allowed;
   }
 }
 
