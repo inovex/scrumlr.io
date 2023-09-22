@@ -6,6 +6,7 @@ import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useAppSelector} from "store";
 import {Toast} from "utils/Toast";
+import {useTranslation} from "react-i18next";
 import "./BoardReactionMenu.scss";
 
 type BoardReactionMenuProps = {
@@ -14,6 +15,7 @@ type BoardReactionMenuProps = {
 
 export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const boardReactions = [...BoardReactionImageMap];
 
@@ -23,8 +25,8 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
     e.stopPropagation();
     if (!showBoardReactions) {
       Toast.info({
-        title: "Board reaction are disabled. Click to enable.",
-        buttons: ["Enable"],
+        title: t("Toast.boardReactionsDisabled"),
+        buttons: [t("Toast.enable")],
         firstButtonOnClick: () => dispatch(Actions.setShowBoardReactions(true)),
       });
     } else {

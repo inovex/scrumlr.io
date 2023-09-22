@@ -267,7 +267,9 @@
     "noteMovedToStack": "The note was moved to a stack!",
     "noteDeleted": "The note has been deleted!",
     "ready": "Are you ready?",
-    "readyButton": "Ready!"
+    "readyButton": "Ready!",
+    "boardReactionsDisabled": "Board reactions are disabled",
+    "enable": "Enable"
   },
   "Language": {
     "german": "German",
