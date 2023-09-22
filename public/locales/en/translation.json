@@ -240,6 +240,9 @@
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
+  "BoardReactionsMenu": {
+    "react": "React {{reaction}}"
+  },
   "AppInfo": {
     "version": "Link to list of releases on GitHub"
   },

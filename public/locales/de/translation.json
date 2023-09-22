@@ -240,6 +240,9 @@
     "customTime": "Manuelle Zeit",
     "cancelTimer": "Alarm beenden"
   },
+  "BoardReactionsMenu": {
+    "react": "Reagiere mit {{reaction}}"
+  },
   "AppInfo": {
     "version": "Link zur Übersicht über alle Anwendungsversionen auf GitHub"
   },

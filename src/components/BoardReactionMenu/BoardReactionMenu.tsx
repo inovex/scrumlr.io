@@ -45,6 +45,8 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
           <button
             key={reactionType}
             className={classNames("board-reactions__item board-reactions__reaction", {"board-reactions__reaction--disabled": !showBoardReactions})}
+            aria-disabled={!showBoardReactions}
+            aria-label={t("BoardReactionsMenu.react", {reaction: reactionType})}
             onClick={(e) => onClickReaction(e, reactionType)}
           >
             <span>{emoji}</span>
