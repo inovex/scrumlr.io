@@ -350,7 +350,8 @@
     "colorScheme": "Color scheme",
     "colorSchemeLight": "Light",
     "colorSchemeDark": "Dark",
-    "showHotkeyNotifications": "Show hotkey notifications"
+    "showHotkeyNotifications": "Show hotkey notifications",
+    "showBoardReactions": "Show board reactions"
   },
   "Feedback": {
     "PraiseInputLabel": "Anything else you want to tell us?",

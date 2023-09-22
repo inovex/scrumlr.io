@@ -11,6 +11,7 @@ const INITIAL_VIEW_STATE: ViewState = {
   hotkeysAreActive: true,
   noteFocused: false,
   hotkeyNotificationsEnabled: typeof window !== "undefined" && getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
+  showBoardReactions: true,
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -95,6 +96,13 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
       return {
         ...state,
         hotkeyNotificationsEnabled: false,
+      };
+    }
+
+    case Action.SetShowBoardReactions: {
+      return {
+        ...state,
+        showBoardReactions: action.show,
       };
     }
 

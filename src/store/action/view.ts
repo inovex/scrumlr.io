@@ -7,6 +7,7 @@ export const ViewAction = {
   SetHotkeyState: "scrumlr.io/setHotkeyState" as const,
   EnableHotkeyNotifications: "scrumlr.io/enableHotkeyNotifications" as const,
   DisableHotkeyNotifications: "scrumlr.io/disableHotkeyNotifications" as const,
+  SetShowBoardReactions: "scrumlr.io/setShowBoardReactions" as const,
 };
 
 export const ViewActionFactory = {
@@ -48,6 +49,11 @@ export const ViewActionFactory = {
   disableHotkeyNotifications: () => ({
     type: ViewAction.DisableHotkeyNotifications,
   }),
+
+  setShowBoardReactions: (show: boolean) => ({
+    type: ViewAction.SetShowBoardReactions,
+    show,
+  }),
 };
 
 export type ViewReduxAction =
@@ -58,4 +64,5 @@ export type ViewReduxAction =
   | ReturnType<typeof ViewActionFactory.setServerInfo>
   | ReturnType<typeof ViewActionFactory.setHotkeyState>
   | ReturnType<typeof ViewActionFactory.enableHotkeyNotifications>
-  | ReturnType<typeof ViewActionFactory.disableHotkeyNotifications>;
+  | ReturnType<typeof ViewActionFactory.disableHotkeyNotifications>
+  | ReturnType<typeof ViewActionFactory.setShowBoardReactions>;

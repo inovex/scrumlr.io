@@ -350,7 +350,8 @@
     "colorScheme": "Farbschema",
     "colorSchemeLight": "Hell",
     "colorSchemeDark": "Dunkel",
-    "showHotkeyNotifications": "Zeige Hotkey-Notifikationen"
+    "showHotkeyNotifications": "Zeige Hotkey-Notifikationen",
+    "showBoardReactions": "Zeige Board-Reaktionen"
   },
   "Feedback": {
     "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",
