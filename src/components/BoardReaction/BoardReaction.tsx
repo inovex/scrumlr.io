@@ -20,7 +20,7 @@ export const BoardReaction = memo((props: BoardReactionProps) => {
   const {name} = reactionUser.user;
   const reactedSelf = reactionUser.user.id === me.user.id;
 
-  const leftOffset = getRandomNumberInRange(5, 95);
+  const leftOffset = getRandomNumberInRange(5, 85);
 
   return (
     <div className="board-reaction__root" style={{left: `${leftOffset}vw`}}>
