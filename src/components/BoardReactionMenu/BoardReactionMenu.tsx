@@ -4,6 +4,8 @@ import {BoardReactionImageMap, ReactionType} from "types/reaction";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
+import {useAppSelector} from "store";
+import {Toast} from "utils/Toast";
 import "./BoardReactionMenu.scss";
 
 type BoardReactionMenuProps = {
@@ -15,9 +17,19 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
 
   const boardReactions = [...BoardReactionImageMap];
 
+  const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
+
   const onClickReaction = (e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent, reaction: ReactionType) => {
     e.stopPropagation();
-    dispatch(Actions.addBoardReaction(reaction));
+    if (!showBoardReactions) {
+      Toast.info({
+        title: "Board reaction are disabled. Click to enable.",
+        buttons: ["Enable"],
+        firstButtonOnClick: () => dispatch(Actions.setShowBoardReactions(true)),
+      });
+    } else {
+      dispatch(Actions.addBoardReaction(reaction));
+    }
   };
 
   // hotkey is converted to a number which is then used as the index for the reaction type
