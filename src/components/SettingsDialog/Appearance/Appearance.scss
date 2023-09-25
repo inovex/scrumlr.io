@@ -5,8 +5,10 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  height: 100%;
   margin-bottom: $settings-dialog-container--bottom;
+  overflow-y: scroll;
+
+  @include scrollbar();
 }
 
 .appearance-container > button {
