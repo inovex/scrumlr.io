@@ -6,7 +6,7 @@
   flex-direction: column;
   gap: 32px;
   margin-bottom: $settings-dialog-container--bottom;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   @include scrollbar();
 }
