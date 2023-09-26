@@ -48,9 +48,6 @@ CREATE OR REPLACE FUNCTION record_deleted_board_statistics()
             SELECT count(board) INTO total_votes FROM votes WHERE board = OLD.id;
             SELECT count(id) INTO total_votings FROM votings WHERE board = OLD.id;
 
-
-
-
             --  Insert data
             INSERT INTO deleted_boards (id, access_policy, total_columns, hidden_columns, total_notes, hidden_notes, avg_chars_per_note, first_note_created, last_note_created, total_users, total_admins, total_votes, total_votings, created_at) 
                 VALUES (OLD.id, OLD.access_policy, total_columns, hidden_columns, total_notes, hidden_notes, avg_chars_per_note, first_note_created, last_note_created, total_users, total_admins, total_votes, total_votings, OLD.created_at);
@@ -62,3 +59,4 @@ CREATE TRIGGER before_delete_board
     BEFORE DELETE ON boards
     FOR EACH ROW
     EXECUTE FUNCTION record_deleted_board_statistics();
+    
