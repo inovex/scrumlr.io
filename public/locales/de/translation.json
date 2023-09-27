@@ -265,7 +265,7 @@
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
     "noteDeleted": "Die Karte wurde gelöscht!",
-    "emptyNoteDialog": "Die Karte muss Text enthalten.",
+    "emptyNoteDialog": "Es tut uns leid, aber wir können deine Karte nicht updaten. Die Karte muss Text enthalten.",
     "ready": "Bist du fertig?",
     "readyButton": "Fertig!"
   },
