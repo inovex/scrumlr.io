@@ -49,7 +49,7 @@
     "workbox-routing": "^7.0.0"
   },
   "devDependencies": {
-    "@testing-library/dom": "^9.3.1",
+    "@testing-library/dom": "^9.3.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.5.1",
