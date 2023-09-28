@@ -21,7 +21,7 @@ exports[`Timer should render correctly 1`] = `
       class="short-actions__short-action"
     >
       <button
-        aria-label="Conclude voting"
+        aria-label="Stop timer"
         class="short-action__button"
       >
         <svg>
@@ -31,7 +31,7 @@ exports[`Timer should render correctly 1`] = `
       <span
         class="short-action__tooltip"
       >
-        Conclude voting
+        Stop timer
       </span>
     </div>
   </div>
