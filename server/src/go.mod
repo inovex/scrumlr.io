@@ -15,18 +15,18 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.16.2
 	github.com/google/uuid v1.3.1
 	github.com/gorilla/websocket v1.5.0
-	github.com/lestrrat-go/jwx/v2 v2.0.12
+	github.com/lestrrat-go/jwx/v2 v2.0.13
 	github.com/markbates/goth v1.78.0
-	github.com/nats-io/nats.go v1.28.0
+	github.com/nats-io/nats.go v1.30.2
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
-	github.com/uptrace/bun v1.1.14
-	github.com/uptrace/bun/dbfixture v1.1.14
-	github.com/uptrace/bun/dialect/pgdialect v1.1.14
-	github.com/uptrace/bun/extra/bundebug v1.1.14
+	github.com/uptrace/bun v1.1.16
+	github.com/uptrace/bun/dbfixture v1.1.16
+	github.com/uptrace/bun/dialect/pgdialect v1.1.16
+	github.com/uptrace/bun/extra/bundebug v1.1.16
 	github.com/urfave/cli/v2 v2.25.7
-	go.uber.org/zap v1.25.0
+	go.uber.org/zap v1.26.0
 	golang.org/x/crypto v0.13.0
 )
 
@@ -61,9 +61,9 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/klauspost/compress v1.16.5 // indirect
+	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/lestrrat-go/backoff/v2 v2.0.8 // indirect
-	github.com/lestrrat-go/blackmagic v1.0.1 // indirect
+	github.com/lestrrat-go/blackmagic v1.0.2 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
 	github.com/lestrrat-go/httprc v1.0.4 // indirect
 	github.com/lestrrat-go/iter v1.0.2 // indirect
@@ -76,7 +76,7 @@ require (
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/moby/term v0.5.0 // indirect
 	github.com/nats-io/nats-server/v2 v2.8.2 // indirect
-	github.com/nats-io/nkeys v0.4.4 // indirect
+	github.com/nats-io/nkeys v0.4.5 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.0.2 // indirect
