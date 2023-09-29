@@ -4665,10 +4665,10 @@ eslint-module-utils@^2.7.4, eslint-module-utils@^2.8.0:
   dependencies:
     debug "^3.2.7"
 
-eslint-plugin-css-modules@^2.11.0:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-css-modules/-/eslint-plugin-css-modules-2.11.0.tgz#8de4d01d523a2d51c03043fa8004aab6b6cf3b1a"
-  integrity sha512-CLvQvJOMlCywZzaI4HVu7QH/ltgNXvCg7giJGiE+sA9wh5zQ+AqTgftAzrERV22wHe1p688wrU/Zwxt1Ry922w==
+eslint-plugin-css-modules@^2.11.4:
+  version "2.11.4"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-css-modules/-/eslint-plugin-css-modules-2.11.4.tgz#cabe500fc672a3ba0a4a7af18ecfc36357dc53a3"
+  integrity sha512-pZYaW2hDUSz8Exb3BXVeu075MV23roLmubPb4EVeKvNdksVZ3gyzfuBCNazdxmPJkVspu3A6cwjH08y+GcoXkg==
   dependencies:
     gonzales-pe "^4.0.3"
     lodash "^4.17.2"
