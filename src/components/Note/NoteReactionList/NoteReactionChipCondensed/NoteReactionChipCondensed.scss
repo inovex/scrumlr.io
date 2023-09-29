@@ -43,6 +43,7 @@ div .note-reaction-chip-condensed__tooltip {
   display: flex;
   flex-direction: column;
   @include tooltip--light;
+  // TODO: ellipsis
 }
 
 [theme="dark"] {

@@ -1,5 +1,7 @@
 @import "src/constants/style";
 
+$tooltip-max-width: 250px;
+
 .note-reaction-chip__root {
   all: unset; // remove default buttons styling
 
@@ -61,6 +63,11 @@
 // 'div' is required (CSS specificity)
 div .note-reaction-chip__tooltip {
   @include tooltip--light;
+
+  max-width: $tooltip-max-width;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 [theme="dark"] {
