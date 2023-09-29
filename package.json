@@ -65,7 +65,7 @@
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@types/react-helmet": "^6.1.7",
-    "@types/redux-mock-store": "^1.0.3",
+    "@types/redux-mock-store": "^1.0.4",
     "@types/smoothscroll-polyfill": "^0.3.1",
     "@types/underscore": "^1.11.9",
     "@types/uuid": "^9.0.4",
