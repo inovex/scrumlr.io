@@ -26,7 +26,7 @@ import {DetailedHTMLProps, HTMLProps, useCallback, useEffect, useRef, useState} 
  */
 export function useStripeOffset({
   gradientLength = 40,
-  gradientAngle = 45, // TODO this ins't fully implemented & tested
+  gradientAngle = 45,
   phaseOffset = 0,
   cssVariableName = "stripe-offset",
 }: {
@@ -35,54 +35,67 @@ export function useStripeOffset({
   phaseOffset?: number;
   cssVariableName?: string;
 } = {}) {
+  // convert degrees to radians because Math.sin and Math.cos expect radians
   const gradientAngleRad = (gradientAngle / 180) * Math.PI;
-  const repeatHeight = gradientLength / Math.sin(gradientAngleRad);
-  const repeatWidth = gradientLength / Math.cos(gradientAngleRad);
 
-  const ref = useRef<HTMLElement | null>(null);
+  const stripedElementRef = useRef<HTMLElement | null>(null);
 
   const [offset, setOffset] = useState(0);
 
   const updateOffset = useCallback(() => {
-    // TODO throttle?
-    if (!ref.current || typeof window === undefined) return;
+    if (!stripedElementRef.current || typeof window === undefined) return;
 
-    const {left, bottom} = ref.current.getBoundingClientRect();
+    // find the origin of the gradient on the page, independent of scroll of parent elements
+    let el: HTMLElement | null = stripedElementRef.current;
 
-    const elementX = (left + window.scrollX) % repeatWidth;
-    const elementY = (bottom + window.scrollY) % repeatHeight;
+    let stripeOriginX = 0;
+    let stripeOriginY = 0;
 
-    setOffset(elementY * Math.sin(gradientAngleRad) - elementX * Math.cos(gradientAngleRad));
-  }, [gradientAngleRad, repeatHeight, repeatWidth]);
+    do {
+      stripeOriginX += el.offsetLeft;
+      stripeOriginY += el.offsetTop;
 
+      // loop over every parent element to sum up the offset
+      el = el.offsetParent as HTMLElement | null;
+    } while (el !== null);
+
+    // depending on the angle, the gradient starts on a different edge of the element
+    if (Math.sin(gradientAngleRad) < 0) stripeOriginX += stripedElementRef.current.getBoundingClientRect().width; // gradient starts on the right edge
+    if (Math.cos(gradientAngleRad) > 0) stripeOriginY += stripedElementRef.current.getBoundingClientRect().height; // gradient starts on the bottom edge
+
+    // calculate the distance from the gradient origin to the "zero-line"
+    // the zero-line is a line at (0/0) with the same direction as the gradient stripes
+    const distanceToLine = -stripeOriginX * Math.cos(gradientAngleRad - 0.5 * Math.PI) + stripeOriginY * Math.sin(gradientAngleRad - 0.5 * Math.PI);
+
+    // take the offset modulo the length to lower the offset amount
+    // add in the phase offset to shift the gradient
+    setOffset((distanceToLine + phaseOffset * gradientLength) % gradientLength);
+  }, [gradientAngleRad, gradientLength, phaseOffset]);
+
+  // set the offset on mount
   useEffect(() => {
     updateOffset();
   }, [updateOffset]);
 
+  // update the offset when the element size changes
   useEffect(() => {
-    if (!ref.current) return () => {};
+    if (!stripedElementRef.current) return () => {};
 
-    const observer = new ResizeObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.target !== ref.current) return;
-
-        updateOffset();
-      });
+    const resizeObserver = new ResizeObserver(() => {
+      updateOffset();
     });
 
-    observer.observe(ref.current);
+    resizeObserver.observe(stripedElementRef.current);
 
     return () => {
-      observer.disconnect();
+      resizeObserver.disconnect();
     };
-  });
-
-  const finalOffset = offset + phaseOffset * gradientLength;
+  }, [updateOffset]);
 
   return {
-    ref,
+    ref: stripedElementRef,
     style: {
-      [`--${cssVariableName}`]: `${finalOffset}px`,
+      [`--${cssVariableName}`]: `${offset}px`,
     },
   } satisfies DetailedHTMLProps<HTMLProps<HTMLElement>, HTMLElement>;
 }
