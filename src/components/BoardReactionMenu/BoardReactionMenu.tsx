@@ -8,11 +8,14 @@ import {useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
+import {useBooleanArrayWithTimeout} from "utils/hooks/useDebounceArray";
 import "./BoardReactionMenu.scss";
 
 type BoardReactionMenuProps = {
   close: () => void;
 };
+
+const REACTION_DEBOUNCE_TIME = 1000; // ms
 
 export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   const dispatch = useDispatch();
@@ -21,6 +24,9 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   const boardReactions = [...BoardReactionImageMap];
 
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
+
+  // keep track of which buttons are debounced are therefore clickable
+  const [debounce, setDebounceAtIndex] = useBooleanArrayWithTimeout(boardReactions.length, REACTION_DEBOUNCE_TIME);
 
   const onClickReaction = (e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent, reaction: ReactionType) => {
     e.stopPropagation();
@@ -31,7 +37,12 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
         firstButtonOnClick: () => dispatch(Actions.setShowBoardReactions(true)),
       });
     } else {
-      dispatch(Actions.addBoardReaction(reaction));
+      const index = boardReactions.findIndex(([type]) => type === reaction);
+      // only dispatch if button is debounced
+      if (debounce[index]) {
+        dispatch(Actions.addBoardReaction(reaction));
+        setDebounceAtIndex(index, false);
+      }
     }
   };
 
