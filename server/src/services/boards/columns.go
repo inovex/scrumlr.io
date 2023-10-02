@@ -19,8 +19,8 @@ func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (
 	return new(dto.Column).From(column), err
 }
 
-func (s *BoardService) DeleteColumn(_ context.Context, board, column, user uuid.UUID) error {
-	return s.database.DeleteColumn(board, column, user)
+func (s *BoardService) DeleteColumn(_ context.Context, board, column uuid.UUID) error {
+	return s.database.DeleteColumn(board, column)
 }
 
 func (s *BoardService) UpdateColumn(_ context.Context, body dto.ColumnUpdateRequest) (*dto.Column, error) {

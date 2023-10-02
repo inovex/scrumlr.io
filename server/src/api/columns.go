@@ -44,9 +44,8 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value("Board").(uuid.UUID)
 	column := r.Context().Value("Column").(uuid.UUID)
-	user := r.Context().Value("User").(uuid.UUID)
 
-	if err := s.boards.DeleteColumn(r.Context(), board, column, user); err != nil {
+	if err := s.boards.DeleteColumn(r.Context(), board, column); err != nil {
 		http.Error(w, "unable to delete column", http.StatusInternalServerError)
 		return
 	}
