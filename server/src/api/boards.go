@@ -257,7 +257,6 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
-// FIXME ORDER: export of columns doesn't seem to work
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
