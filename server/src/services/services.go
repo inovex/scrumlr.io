@@ -39,6 +39,7 @@ type Boards interface {
 	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.WrappedColumn, error)
 	ListColumns(ctx context.Context, boardID uuid.UUID) (*dto.WrappedColumns, error)
 
+	// FIXME ORDER: replace dto.Column[] by wrappedcolumns here
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error)
 }
 
