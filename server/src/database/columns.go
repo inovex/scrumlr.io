@@ -16,7 +16,7 @@ type Column struct {
 	Name          string
 	Color         types.Color
 	Visible       bool
-	ColumnsOrder  []uuid.UUID `bun:",array"`
+	ColumnsOrder  []uuid.UUID `bun:",array,scanonly"`
 }
 
 // ColumnInsert the insert model for a new Column

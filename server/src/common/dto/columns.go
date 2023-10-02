@@ -53,18 +53,6 @@ func (*Column) Render(_ http.ResponseWriter, _ *http.Request) error {
 	return nil
 }
 
-func Columns(columns []database.Column) []*Column {
-	if columns == nil {
-		return nil
-	}
-
-	list := make([]*Column, len(columns))
-	for index, column := range columns {
-		list[index] = new(Column).From(column)
-	}
-	return list
-}
-
 func WrapColumns(columns []database.Column) *WrappedColumns {
 	if columns == nil {
 		return &WrappedColumns{}
