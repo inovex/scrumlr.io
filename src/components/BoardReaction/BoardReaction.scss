@@ -3,6 +3,8 @@
 $bottom-start-pos: 10vh;
 $bottom-end-pos: 60vh;
 
+$name-max-length: 20em;
+
 .board-reaction__root {
   position: absolute;
   left: 50vw;
@@ -23,7 +25,13 @@ $bottom-end-pos: 60vh;
 .board-reaction__name-container {
   padding: 10px;
   font-size: $text--base;
+  max-width: $name-max-length;
+  max-height: 5em;
   font-weight: 600;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   background-color: $color-white-one;
   border-radius: $rounded--large;
 
