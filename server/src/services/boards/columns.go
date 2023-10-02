@@ -15,8 +15,12 @@ import (
 )
 
 func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.WrappedColumn, error) {
-	column, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible}, body.Index)
-	return new(dto.WrappedColumn).From(column), err
+	result, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible}, body.Index)
+	column := new(dto.WrappedColumn).From(result)
+	if err != nil {
+		defer s.CreatedColumn(body.Board, *column)
+	}
+	return column, err
 }
 
 func (s *BoardService) DeleteColumn(_ context.Context, board, column uuid.UUID) error {
@@ -51,9 +55,19 @@ func (s *BoardService) ListColumns(ctx context.Context, boardID uuid.UUID) (*dto
 	return dto.WrapColumns(columns), err
 }
 
+func (s *BoardService) CreatedColumn(board uuid.UUID, column dto.WrappedColumn) {
+	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventColumnCreated,
+		Data: column,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast created column", "err", err)
+	}
+}
+
 func (s *BoardService) UpdatedColumns(board uuid.UUID, columns []database.Column) {
 	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-		Type: realtime.BoardEventColumnsUpdated,
+		Type: realtime.BoardEventColumnUpdated,
 		Data: dto.Columns(columns),
 	})
 	if err != nil {

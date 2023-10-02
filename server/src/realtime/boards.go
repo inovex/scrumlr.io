@@ -14,7 +14,8 @@ const (
 	BoardEventInit                  BoardEventType = "INIT"
 	BoardEventBoardUpdated          BoardEventType = "BOARD_UPDATED"
 	BoardEventBoardDeleted          BoardEventType = "BOARD_DELETED"
-	BoardEventColumnsUpdated        BoardEventType = "COLUMNS_UPDATED"
+	BoardEventColumnCreated         BoardEventType = "COLUMN_CREATED"
+	BoardEventColumnUpdated         BoardEventType = "COLUMN_UPDATED"
 	BoardEventColumnDeleted         BoardEventType = "COLUMN_DELETED"
 	BoardEventNotesUpdated          BoardEventType = "NOTES_UPDATED"
 	BoardEventNoteDeleted           BoardEventType = "NOTE_DELETED"
@@ -27,8 +28,8 @@ const (
 	BoardEventVotingCreated         BoardEventType = "VOTING_CREATED"
 	BoardEventVotingUpdated         BoardEventType = "VOTING_UPDATED"
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"
-  BoardEventAssignmentCreated     BoardEventType = "ASSIGNMENT_CREATED"
-  BoardEventAssignmentDeleted     BoardEventType = "ASSIGNMENT_DELETED"
+	BoardEventAssignmentCreated     BoardEventType = "ASSIGNMENT_CREATED"
+	BoardEventAssignmentDeleted     BoardEventType = "ASSIGNMENT_DELETED"
 )
 
 type BoardEvent struct {
