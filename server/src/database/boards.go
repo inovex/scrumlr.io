@@ -61,7 +61,7 @@ type BoardUpdate struct {
 type BoardColumns struct {
 	bun.BaseModel `bun:"table:board_columns"`
 	Board         uuid.UUID
-	Columns       []uuid.UUID
+	Columns       []uuid.UUID `bun:",array"`
 }
 
 func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []ColumnInsert) (Board, error) {

@@ -10,4 +10,3 @@ CREATE INDEX board_columns_board_index ON board_columns (board);
 INSERT INTO board_columns (board, columns) SELECT b.id, array_agg(c.id ORDER BY c.index) FROM boards AS b JOIN columns c ON c.board=b.id GROUP BY b.id;
 
 ALTER TABLE columns DROP COLUMN index;
-

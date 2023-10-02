@@ -123,9 +123,7 @@ func testCreateBoardAlsoGeneratesColumns(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, "A", columns[0].Name)
-	assert.Equal(t, 0, columns[0].Index)
 	assert.Equal(t, "B", columns[1].Name)
-	assert.Equal(t, 1, columns[1].Index)
 }
 
 func testCreateByPassphraseBoard(t *testing.T) {
