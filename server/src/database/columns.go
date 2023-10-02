@@ -151,7 +151,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 }
 
 // DeleteColumn deletes a column and adapts all indices of the other columns.
-func (d *Database) DeleteColumn(board, column, user uuid.UUID) error {
+func (d *Database) DeleteColumn(board, column uuid.UUID) error {
 
 	deleteColumn := d.db.NewDelete().
 		Model((*Column)(nil)).
