@@ -257,6 +257,7 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+// FIXME ORDER: export of columns doesn't seem to work
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
@@ -268,17 +269,24 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	visibleColumns := []*dto.Column{}
-	for _, column := range columns {
+	var visibleColumns []*dto.Column
+	var visibleColumnsOrder []uuid.UUID
+
+	visibleWrappedColumns := dto.WrappedColumns{
+		Columns:      visibleColumns,
+		ColumnsOrder: visibleColumnsOrder,
+	}
+	for _, column := range columns.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
+			visibleColumnsOrder = append(visibleColumnsOrder, column.ID)
 		}
 	}
 
 	visibleNotes := []*dto.Note{}
 	for _, note := range notes {
-		for _, column := range visibleColumns {
-			if note.Position.Column == column.ID {
+		for _, column := range visibleColumnsOrder {
+			if note.Position.Column == column {
 				visibleNotes = append(visibleNotes, note)
 			}
 		}
@@ -289,13 +297,13 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		render.Respond(w, r, struct {
 			Board        *dto.Board          `json:"board"`
 			Participants []*dto.BoardSession `json:"participants"`
-			Columns      []*dto.Column       `json:"columns"`
+			Columns      *dto.WrappedColumns `json:"columns"`
 			Notes        []*dto.Note         `json:"notes"`
 			Votings      []*dto.Voting       `json:"votings"`
 		}{
 			Board:        board,
 			Participants: sessions,
-			Columns:      visibleColumns,
+			Columns:      &visibleWrappedColumns,
 			Notes:        visibleNotes,
 			Votings:      votings,
 		})
