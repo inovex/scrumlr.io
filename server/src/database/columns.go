@@ -104,26 +104,15 @@ func (d *Database) UpdateColumn(column ColumnUpdate, index *int) (Column, error)
 	updateColumn := tx.NewUpdate().
 		Model(&column).
 		ModelTableExpr("columns AS c").
+		OmitZero().
 		Returning("c.*, (SELECT columns FROM board_columns WHERE board = ?) AS columns_order", column.Board).
 		Where("c.id = ?", column.ID)
-
-	if column.Visible == nil {
-		updateColumn.ExcludeColumn("visible")
-	}
-	if column.Name == nil {
-		updateColumn.ExcludeColumn("name")
-	}
 
 	_, err = updateColumn.Exec(context.Background(), &c)
 	if err != nil {
 		return c, err
 	}
-
 	err = tx.Commit()
-
-	// FIXME ORDER: check effect on realtime server
-	// FIXME ORDER: return of err doesn't log
-
 	return c, err
 }
 
@@ -144,8 +133,6 @@ func (d *Database) DeleteColumn(board, column uuid.UUID) error {
 	_, err := updateColumnOrder.
 		With("deleteColumn", deleteColumn).
 		Exec(context.Background())
-
-	// FIXME ORDER: check effect on realtime server
 
 	return err
 }
