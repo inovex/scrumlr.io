@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 )
 
@@ -42,45 +43,29 @@ type ColumnUpdate struct {
 func (d *Database) CreateColumn(column ColumnInsert, index *int) (Column, error) {
 
 	// insert column
-	insertColumn := d.db.NewInsert().
-		Model(&column).
-		Returning("*")
+	insertColumn := d.db.NewInsert().Model(&column).Returning("*")
 	if column.Visible == nil {
 		insertColumn.ExcludeColumn("visible")
 	}
 
-	var updateBoardColumns *bun.UpdateQuery
-	if index != nil {
-		// insert column into the order
-		updateBoardColumns = d.db.NewUpdate().
-			Model((*BoardColumns)(nil)).
-			ModelTableExpr("board_columns AS b").
-			Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", *index, *index+1).
-			Where("\"board\" = ?", column.Board).
-			Returning("columns")
+	// append or set index, depending on the specified parameter
+	updateBoardColumns := d.db.NewUpdate().Model((*BoardColumns)(nil)).ModelTableExpr("board_columns AS b")
+	if index == nil {
+		updateBoardColumns.Set("columns=array_append(b.columns, (SELECT id FROM \"insertColumn\"))")
 	} else {
-		// append column at the end
-		updateBoardColumns = d.db.NewUpdate().
-			Model((*BoardColumns)(nil)).
-			ModelTableExpr("board_columns AS b").
-			Set("columns=array_append(b.columns, (SELECT id FROM \"insertColumn\"))").
-			Where("\"board\" = ?", column.Board).
-			Returning("columns")
+		updateBoardColumns.Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", *index, *index+1)
 	}
+	updateBoardColumns.Where("\"board\" = ?", column.Board).Returning("columns")
 
 	// select the results of the insertion as return result
-	selectColumn := d.db.NewSelect().
-		Model((*Column)(nil)).
-		ModelTableExpr("\"insertColumn\" AS c").
+	selectColumn := d.db.NewSelect().Model((*Column)(nil)).ModelTableExpr("\"insertColumn\" AS c").
 		ColumnExpr("c.*, (SELECT columns FROM \"updateBoardColumns\") AS columns_order")
 
 	var c Column
 	err := selectColumn.
 		With("insertColumn", insertColumn).
 		With("updateBoardColumns", updateBoardColumns).
-		Scan(context.Background(), &c)
-
-	// FIXME ORDER: check effect on realtime server
+		Scan(common.ContextWithValues(context.Background(), "Insert", true), &c)
 
 	return c, err
 }
