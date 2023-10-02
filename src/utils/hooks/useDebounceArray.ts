@@ -1,11 +1,21 @@
 import {useState, useEffect} from "react";
 
-export const useBooleanArrayWithTimeout = (length: number, timeoutDuration: number): [boolean[], (index: number, value: boolean) => void] => {
-  const initialArray = Array.from({length}, () => true);
-  const [booleanArray, setBooleanArray] = useState(initialArray);
+/**
+ * this hook keeps track of an array of type T.
+ * if any value equals the active value, it is set back to the passive value after the given timeout.
+ * the timeouts are separate for each index value!
+ * @param length total number of elements in the array
+ * @param activeValue value which activates the timeout for an index
+ * @param passiveValue value which the index is reset to after the timeout
+ * @param timeoutDuration value of timeout in milliseconds
+ * @returns an array containing array with value, setterFunction to set a value at given index
+ */
+export const useDebounceArray = <T>(length: number, activeValue: T, passiveValue: T, timeoutDuration: number): [T[], (index: number, value: T) => void] => {
+  const initialArray = Array.from({length}, () => activeValue);
+  const [valueArray, setValueArray] = useState(initialArray);
 
-  const setBooleanAtIndex = (index: number, value: boolean) => {
-    setBooleanArray((prevArray) => {
+  const setValueAtIndex = (index: number, value: T) => {
+    setValueArray((prevArray) => {
       const newArray = [...prevArray];
       newArray[index] = value;
       return newArray;
@@ -13,10 +23,10 @@ export const useBooleanArrayWithTimeout = (length: number, timeoutDuration: numb
   };
 
   useEffect(() => {
-    const timeoutIds = booleanArray.map((value, index) => {
-      if (!value) {
+    const timeoutIds = valueArray.map((value, index) => {
+      if (value === activeValue) {
         return setTimeout(() => {
-          setBooleanAtIndex(index, true);
+          setValueAtIndex(index, passiveValue);
         }, timeoutDuration);
       }
       return null;
@@ -29,7 +39,7 @@ export const useBooleanArrayWithTimeout = (length: number, timeoutDuration: numb
         }
       });
     };
-  }, [booleanArray, timeoutDuration]);
+  });
 
-  return [booleanArray, setBooleanAtIndex];
+  return [valueArray, setValueAtIndex];
 };

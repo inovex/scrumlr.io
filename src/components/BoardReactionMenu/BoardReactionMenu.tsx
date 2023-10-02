@@ -8,7 +8,7 @@ import {useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
-import {useBooleanArrayWithTimeout} from "utils/hooks/useDebounceArray";
+import {useDebounceArray} from "utils/hooks/useDebounceArray";
 import "./BoardReactionMenu.scss";
 
 type BoardReactionMenuProps = {
@@ -26,7 +26,7 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
 
   // keep track of which buttons are debounced are therefore clickable
-  const [debounce, setDebounceAtIndex] = useBooleanArrayWithTimeout(boardReactions.length, REACTION_DEBOUNCE_TIME);
+  const [debounce, setDebounceAtIndex] = useDebounceArray<boolean>(boardReactions.length, false, true, REACTION_DEBOUNCE_TIME);
 
   const onClickReaction = (e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent, reaction: ReactionType) => {
     e.stopPropagation();
