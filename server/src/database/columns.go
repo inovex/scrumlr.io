@@ -52,7 +52,7 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 	updateBoardColumns := d.db.NewUpdate().
 		Model((*BoardColumns)(nil)).
 		ModelTableExpr("board_columns AS b").
-		Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", *column.Index+1, *column.Index+2).
+		Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", *column.Index, *column.Index+1).
 		Where("\"board\" = ?", column.Board).
 		Returning("columns")
 
@@ -95,7 +95,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 	_, err = tx.NewUpdate().
 		Model((*BoardColumns)(nil)).
 		ModelTableExpr("board_columns AS b").
-		Set("columns=b.columns[:?]||?::uuid||b.columns[?:]", column.Index+1, column.ID, column.Index+2).
+		Set("columns=b.columns[:?]||?::uuid||b.columns[?:]", column.Index, column.ID, column.Index+1).
 		Where("\"board\" = ?", column.Board).
 		Exec(context.Background())
 	if err != nil {
@@ -152,6 +152,13 @@ func (d *Database) GetColumn(board, id uuid.UUID) (Column, error) {
 // GetColumns returns all columns for the specified board.
 func (d *Database) GetColumns(board uuid.UUID) ([]Column, error) {
 	var columns []Column
-	err := d.db.NewSelect().Model(&columns).Where("board = ?", board).Order("index ASC").Scan(context.Background())
+	err := d.db.NewSelect().
+		Model(&columns).
+		ModelTableExpr("columns AS c").
+		Column("c.*").
+		Join("JOIN board_columns AS b ON b.board=c.board").
+		Where("c.board = ?", board).
+		OrderExpr("array_position(b.columns, c.id)").
+		Scan(context.Background())
 	return columns, err
 }
