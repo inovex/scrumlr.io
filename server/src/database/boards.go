@@ -76,7 +76,7 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 	// insert board
 	insertBoard := d.db.NewInsert().
 		Model(&board).
-		Returning("id")
+		Returning("*")
 
 	// insert board session with role 'owner' for creator of the board
 	insertSession := d.db.NewInsert().
@@ -98,7 +98,7 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 	// select the result of the board insertion and return it
 	selectBoard := d.db.NewSelect().
 		Model((*Board)(nil)).
-		Table("insertBoard").
+		ModelTableExpr("\"insertBoard\"").
 		ColumnExpr("*")
 
 	var b Board
