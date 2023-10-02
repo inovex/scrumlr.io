@@ -100,12 +100,15 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 		ColumnExpr("*")
 
 	var b Board
-	err := selectBoard.
+	selectBoard.
 		With("insertBoard", insertBoard).
-		With("insertSession", insertSession).
-		With("insertColumns", insertColumns).
-		With("insertColumnsOrder", insertColumnOrder).
-		Scan(context.Background(), &b)
+		With("insertSession", insertSession)
+	if len(columns) > 0 {
+		selectBoard.
+			With("insertColumns", insertColumns).
+			With("insertColumnsOrder", insertColumnOrder)
+	}
+	err := selectBoard.Scan(context.Background(), &b)
 
 	return b, err
 }
