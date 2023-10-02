@@ -2,10 +2,8 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 )
 
@@ -54,7 +52,7 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 	updateBoardColumns := d.db.NewUpdate().
 		Model((*BoardColumns)(nil)).
 		ModelTableExpr("board_columns AS b").
-		Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", *column.Index-2, *column.Index-1).
+		Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", *column.Index+1, *column.Index+2).
 		Where("\"board\" = ?", column.Board).
 		Returning("columns")
 
@@ -77,41 +75,46 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 
 // UpdateColumn updates the column and re-orders all indices of the columns if necessary.
 func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
-	newIndex := column.Index
-	if column.Index < 0 {
-		newIndex = 0
+	var c Column
+
+	tx, err := d.db.Begin()
+	if err != nil {
+		return c, err
 	}
 
-	selectPrevious := d.db.NewSelect().Model((*Column)(nil)).Column("board", "index").Where("id = ?", column.ID).Where("board = ?", column.Board)
-	maxIndexSelect := d.db.NewSelect().Model((*Column)(nil)).Column("index").Where("board = ?", column.Board)
-	updateOnSmallerIndex := d.db.NewUpdate().
-		Model((*Column)(nil)).
-		Column("index").
-		Set("index = index+1").
-		Where("index < (SELECT index FROM \"selectPrevious\")").
+	_, err = tx.NewUpdate().
+		Model((*BoardColumns)(nil)).
+		ModelTableExpr("board_columns AS b").
+		Set("columns=array_remove(b.columns, ?)", column.ID).
 		Where("board = ?", column.Board).
-		Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
-		Where("index >= ?", newIndex)
-	updateOnGreaterIndex := d.db.NewUpdate().
-		Model((*Column)(nil)).
-		Column("index").
-		Set("index = index-1").
-		Where("index > (SELECT index FROM \"selectPrevious\")").
-		Where("board = ?", column.Board).
-		Where("(SELECT index FROM \"selectPrevious\") < ?", newIndex).
-		Where("index <= ?", newIndex)
+		Exec(context.Background())
+	if err != nil {
+		return c, err
+	}
 
-	var c Column
-	_, err := d.db.NewUpdate().
-		With("selectPrevious", selectPrevious).
-		With("maxIndexSelect", maxIndexSelect).
-		With("updateOnSmallerIndex", updateOnSmallerIndex).
-		With("updateOnGreaterIndex", updateOnGreaterIndex).
+	_, err = tx.NewUpdate().
+		Model((*BoardColumns)(nil)).
+		ModelTableExpr("board_columns AS b").
+		Set("columns=b.columns[:?]||?::uuid||b.columns[?:]", column.Index+1, column.ID, column.Index+2).
+		Where("\"board\" = ?", column.Board).
+		Exec(context.Background())
+	if err != nil {
+		return c, err
+	}
+
+	_, err = tx.NewUpdate().
 		Model(&column).
-		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
-		Where("id = ?", column.ID).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", column.Board), &c)
+		Where("id = ?", column.ID).
+		Exec(context.Background(), &c)
+	if err != nil {
+		return c, err
+	}
+
+	err = tx.Commit()
+
+	// FIXME ORDER: check effect on realtime server
+	// FIXME ORDER: return of err doesn't log
 
 	return c, err
 }
