@@ -272,15 +272,15 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	var visibleColumns []*dto.Column
 	var visibleColumnsOrder []uuid.UUID
 
-	visibleWrappedColumns := dto.WrappedColumns{
-		Columns:      visibleColumns,
-		ColumnsOrder: visibleColumnsOrder,
-	}
 	for _, column := range columns.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 			visibleColumnsOrder = append(visibleColumnsOrder, column.ID)
 		}
+	}
+	visibleWrappedColumns := dto.WrappedColumns{
+		Columns:      visibleColumns,
+		ColumnsOrder: visibleColumnsOrder,
 	}
 
 	visibleNotes := []*dto.Note{}
@@ -295,17 +295,17 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
-			Board        *dto.Board          `json:"board"`
+			Board *dto.Board `json:"board"`
+			*dto.WrappedColumns
 			Participants []*dto.BoardSession `json:"participants"`
-			Columns      *dto.WrappedColumns `json:"columns"`
 			Notes        []*dto.Note         `json:"notes"`
 			Votings      []*dto.Voting       `json:"votings"`
 		}{
-			Board:        board,
-			Participants: sessions,
-			Columns:      &visibleWrappedColumns,
-			Notes:        visibleNotes,
-			Votings:      votings,
+			Board:          board,
+			WrappedColumns: &visibleWrappedColumns,
+			Participants:   sessions,
+			Notes:          visibleNotes,
+			Votings:        votings,
 		})
 		return
 	} else if r.Header.Get("Accept") == "text/csv" {
