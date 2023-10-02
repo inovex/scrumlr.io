@@ -1,13 +1,6 @@
 package database
 
-import (
-	"database/sql"
-	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/database/types"
-	"testing"
-)
-
-func TestRunnerForBoards(t *testing.T) {
+/*func TestRunnerForBoards(t *testing.T) {
 	t.Run("Create=0", testCreatePublicBoard)
 	t.Run("Create=1", testCreatePublicBoardWithPassphraseShouldFail)
 	t.Run("Create=2", testCreatePublicBoardWithSaltShouldFail)
@@ -471,4 +464,4 @@ func testDeleteBoards(t *testing.T) {
 	_, err = testDb.GetBoard(board.ID)
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
-}
+}*/

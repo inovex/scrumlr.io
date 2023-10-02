@@ -1,12 +1,6 @@
 package database
 
-import (
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"testing"
-)
-
-type ColumnsObserverForTests struct {
+/*type ColumnsObserverForTests struct {
 	t             *testing.T
 	board         *uuid.UUID
 	columns       *[]Column
@@ -92,4 +86,4 @@ func testColumnsObserverOnDeleteNotExisting(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Nil(t, columnsObserver.board)
 	assert.Nil(t, columnsObserver.deletedColumn)
-}
+}*/

@@ -2,10 +2,10 @@ package database
 
 import (
 	"context"
-	"fmt"
+	"database/sql"
+	"github.com/emvi/null"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"math"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 )
@@ -18,7 +18,13 @@ type Column struct {
 	Name          string
 	Color         types.Color
 	Visible       bool
-	Index         int
+	ColumnsOrder  []uuid.UUID
+}
+
+// ColumnWithSortOrder the model for a column and the sort order
+type ColumnWithSortOrder struct {
+	Column
+	ColumnsOrder []uuid.UUID
 }
 
 // ColumnInsert the insert model for a new Column
@@ -27,8 +33,7 @@ type ColumnInsert struct {
 	Board         uuid.UUID
 	Name          string
 	Color         types.Color
-	Visible       *bool
-	Index         *int
+	Visible       sql.NullBool
 }
 
 // ColumnUpdate the update model for a new Column
@@ -36,118 +41,138 @@ type ColumnUpdate struct {
 	bun.BaseModel `bun:"table:columns"`
 	ID            uuid.UUID
 	Board         uuid.UUID
-	Name          string
+	Name          sql.NullString
 	Color         types.Color
-	Visible       bool
-	Index         int
+	Visible       sql.NullBool
 }
 
-// CreateColumn creates a new column. The index will be set to the highest available or the specified one. All other
-// indices will be adopted (increased by 1) to the new index.
-func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
-	maxIndexSelect := d.db.NewSelect().Model((*Column)(nil)).ColumnExpr("COUNT(*) as index").Where("board = ?", column.Board)
-
-	newIndex := math.MaxInt
-	if column.Index != nil {
-		if *column.Index < 0 {
-			newIndex = 0
-		} else {
-			newIndex = *column.Index
-		}
+// CreateColumn creates a new column. If index is left out, the column will be added to the end of the list, otherwise
+// it will be used to set the position accordingly.
+func (d *Database) CreateColumn(board uuid.UUID, name string, color types.Color, visible null.Bool, index null.Int32) (Column, []uuid.UUID, error) {
+	column := ColumnInsert{
+		Board:   board,
+		Name:    name,
+		Color:   color,
+		Visible: visible.NullBool,
 	}
 
-	query := d.db.NewInsert()
-	if column.Index != nil {
-		indexUpdate := d.db.NewUpdate().Model((*Column)(nil)).Set("index = index+1").Where("index >= ?", newIndex).Where("board = ?", column.Board)
-		query = query.With("indexUpdate", indexUpdate)
+	// insert column first ...
+	insertColumnQuery := d.db.NewInsert().Model(&column).Returning("*")
+	if !visible.Valid {
+		insertColumnQuery.ExcludeColumn("visible")
 	}
 
-	var c Column
-	_, err := query.
-		With("maxIndexSelect", maxIndexSelect).
-		Model(&column).
-		Value("index", fmt.Sprintf("LEAST(coalesce((SELECT index FROM \"maxIndexSelect\"),0), %d)", newIndex)).
-		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", column.Board), &c)
+	// ... then update the columns sort order in the related board
+	var c ColumnWithSortOrder
+	updateColumnsQuery := d.db.NewUpdate().With("insert_column", insertColumnQuery).Table("boards AS b")
+	if index.Valid {
+		updateColumnsQuery.Set("columns_order=b.columns_order[:?]||(SELECT id FROM insert_column)||b.columns_order[?:]", index.Int32+1, index.Int32+2)
+	} else {
+		updateColumnsQuery.Set("columns_order=array_append(b.columns_order, (SELECT id FROM insert_column))")
+	}
+	_, err := updateColumnsQuery.Returning(
+		"(SELECT id FROM insert_column) AS id, "+
+			"(SELECT board FROM insert_column) AS board, "+
+			"(SELECT name FROM insert_column) AS name, "+
+			"(SELECT color FROM insert_column) AS color, "+
+			"(SELECT visible FROM insert_column) AS visible, "+
+			"columns_order").
+		Where("board = ?", column.Board).Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", column.Board), &c)
 
-	return c, err
+	return c.Column, c.ColumnsOrder, err
 }
 
 // UpdateColumn updates the column and re-orders all indices of the columns if necessary.
-func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
-	newIndex := column.Index
-	if column.Index < 0 {
-		newIndex = 0
+func (d *Database) UpdateColumn(board uuid.UUID, id uuid.UUID, name null.String, color types.Color, visible null.Bool, index null.Int32) (Column, []uuid.UUID, error) {
+	column := ColumnUpdate{
+		ID:      id,
+		Board:   board,
+		Name:    name.NullString,
+		Color:   color,
+		Visible: visible.NullBool,
 	}
 
-	selectPrevious := d.db.NewSelect().Model((*Column)(nil)).Column("board", "index").Where("id = ?", column.ID).Where("board = ?", column.Board)
-	maxIndexSelect := d.db.NewSelect().Model((*Column)(nil)).Column("index").Where("board = ?", column.Board)
-	updateOnSmallerIndex := d.db.NewUpdate().
-		Model((*Column)(nil)).
-		Column("index").
-		Set("index = index+1").
-		Where("index < (SELECT index FROM \"selectPrevious\")").
-		Where("board = ?", column.Board).
-		Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
-		Where("index >= ?", newIndex)
-	updateOnGreaterIndex := d.db.NewUpdate().
-		Model((*Column)(nil)).
-		Column("index").
-		Set("index = index-1").
-		Where("index > (SELECT index FROM \"selectPrevious\")").
-		Where("board = ?", column.Board).
-		Where("(SELECT index FROM \"selectPrevious\") < ?", newIndex).
-		Where("index <= ?", newIndex)
+	var c ColumnWithSortOrder
+	if index.Valid {
+		selectColumnsOrder := d.db.NewSelect().Model(Board{}).Where("board = ?", board).Column("columns_order")
+		_, err := d.db.NewUpdate().OmitZero().With("select_columns_order", selectColumnsOrder).Model(&column).Where("id = ?", id).
+			Returning("(SELECT columns_order FROM select_columns_order) AS columns_order, *").
+			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board), &c)
 
-	var c Column
-	_, err := d.db.NewUpdate().
-		With("selectPrevious", selectPrevious).
-		With("maxIndexSelect", maxIndexSelect).
-		With("updateOnSmallerIndex", updateOnSmallerIndex).
-		With("updateOnGreaterIndex", updateOnGreaterIndex).
-		Model(&column).
-		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
-		Where("id = ?", column.ID).
-		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", column.Board), &c)
+		return c.Column, c.ColumnsOrder, err
+	} else {
+		// columns order update has to run in a transaction and will otherwise fail
+		tx, err := d.db.BeginTx(common.ContextWithValues(context.Background()), &sql.TxOptions{})
+		if err != nil {
+			return c.Column, c.ColumnsOrder, err
+		}
+		_, err = tx.NewUpdate().Model(Board{}).Set("columns_order=array_remove(boards.columns_order, ?)", id).Where("board = ?", board).Exec(common.ContextWithValues(context.Background()))
+		if err != nil {
+			return c.Column, c.ColumnsOrder, err
+		}
 
-	return c, err
+		selectColumnsOrder := tx.NewUpdate().Table("boards AS b").
+			Set("columns_order=b.columns_order[:?]||?::uuid||b.columns_order[?:]", index.Int32+1, id, index.Int32+2).
+			Where("b.id = ?", board).Returning("columns_order")
+
+		_, err = tx.NewUpdate().OmitZero().With("select_columns_order", selectColumnsOrder).Model(&column).
+			Where("id = ?", id).
+			Returning("(SELECT columns_order FROM select_columns_order) AS columns_order, *").
+			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board), &c)
+		return c.Column, c.ColumnsOrder, err
+	}
 }
 
 // DeleteColumn deletes a column and adapts all indices of the other columns.
-func (d *Database) DeleteColumn(board, column, user uuid.UUID) error {
-	var columns []Column
-	selectPreviousIndex := d.db.NewSelect().Model((*Column)(nil)).Column("index", "board").Where("id = ?", column)
-	indexUpdate := d.db.NewUpdate().
-		With("selectPreviousIndex", selectPreviousIndex).
-		Model((*Column)(nil)).Set("index = index-1").
-		Where("board = (SELECT board from \"selectPreviousIndex\")").
-		Where("index >= (SELECT index from \"selectPreviousIndex\")")
-	boardUpdate := d.db.NewUpdate().
-		Model((*Board)(nil)).
-		Set("shared_note = null").
-		Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", board, board, column)
-	_, err := d.db.NewDelete().
-		With("boardUpdate", boardUpdate).
-		With("indexUpdate", indexUpdate).
-		Model((*Column)(nil)).
-		Where("id = ?", column).
-		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Column", column, "User", user, "Result", &columns), &columns)
+func (d *Database) DeleteColumn(board, column uuid.UUID) error {
+	deleteColumn := d.db.NewDelete().Where("board = ?", board).Where("column = ?", column).Returning("id, board")
+	_, err := d.db.NewUpdate().With("delete_column", deleteColumn).Model(Board{}).
+		Set("columns_order=array_remove(boards.columns_order, (SELECT id FROM delete_column)) WHERE id=(SELECT board FROM delete_column)").
+		Exec(context.Background(), "Database", d, "Board", board, "Column", column)
 
 	return err
 }
 
 // GetColumn returns the column for the specified id.
-func (d *Database) GetColumn(board, id uuid.UUID) (Column, error) {
+func (d *Database) GetColumn(board, id uuid.UUID) (Column, []uuid.UUID, error) {
 	var column Column
-	err := d.db.NewSelect().Model(&column).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
-	return column, err
+	var columnsOrder []uuid.UUID
+
+	tx, err := d.db.Begin()
+	if err != nil {
+		return column, columnsOrder, err
+	}
+	err = tx.NewSelect().Table("boards").Model(columnsOrder).Column("columns_order").Where("board = ?", board).Scan(context.Background())
+	if err != nil {
+		return column, columnsOrder, err
+	}
+	err = tx.NewSelect().Model(&column).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
+	if err != nil {
+		return column, columnsOrder, err
+	}
+	err = tx.Commit()
+
+	return column, columnsOrder, err
 }
 
 // GetColumns returns all columns for the specified board.
-func (d *Database) GetColumns(board uuid.UUID) ([]Column, error) {
+func (d *Database) GetColumns(board uuid.UUID) ([]Column, []uuid.UUID, error) {
 	var columns []Column
-	err := d.db.NewSelect().Model(&columns).Where("board = ?", board).Order("index ASC").Scan(context.Background())
-	return columns, err
+	var columnsOrder []uuid.UUID
+
+	tx, err := d.db.Begin()
+	if err != nil {
+		return columns, columnsOrder, err
+	}
+	err = tx.NewSelect().Table("boards").Model(columnsOrder).Column("columns_order").Where("board = ?", board).Scan(context.Background())
+	if err != nil {
+		return columns, columnsOrder, err
+	}
+	err = tx.NewSelect().Model(&columns).Table("columns AS c").Where("board = ?", board).Column("c.*").Join("JOIN boards b ON b.id = c.board").Order("array_position(b.columns_order, c.id)").Scan(context.Background())
+	if err != nil {
+		return columns, columnsOrder, err
+	}
+	err = tx.Commit()
+
+	return columns, columnsOrder, err
 }

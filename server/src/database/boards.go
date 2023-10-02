@@ -21,7 +21,7 @@ type Board struct {
 	ShowNotesOfOtherUsers bool
 	AllowStacking         bool
 	CreatedAt             time.Time
-  TimerStart            *time.Time
+	TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
@@ -38,7 +38,7 @@ type BoardInsert struct {
 type BoardTimerUpdate struct {
 	bun.BaseModel `bun:"table:boards"`
 	ID            uuid.UUID
-  TimerStart    *time.Time
+	TimerStart    *time.Time
 	TimerEnd      *time.Time
 }
 
@@ -52,7 +52,7 @@ type BoardUpdate struct {
 	ShowAuthors           *bool
 	ShowNotesOfOtherUsers *bool
 	AllowStacking         *bool
-  TimerStart            *time.Time
+	TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
@@ -72,14 +72,11 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 	var b Board
 	query := d.db.NewSelect().With("createdBoard", boardInsert)
 	if len(columns) > 0 {
-		for index := range columns {
-			newColumnIndex := index
-			columns[index].Index = &newColumnIndex
-		}
-
-		query = query.With("createdColumns", d.db.NewInsert().
+		insertColumns := d.db.NewInsert().
 			Model(&columns).
-			Value("board", "(SELECT id FROM \"createdBoard\")"))
+			Value("board", "(SELECT id FROM \"createdBoard\")").Returning("*")
+
+		query = query.With("updatedBoard", d.db.NewUpdate().With("insertedColumns", insertColumns).Model(Board{}).Set("columns_order = (SELECT array_agg(id::uuid) FROM insertedColumns)")) // TODO update board
 	}
 	err := query.
 		With("createdSession", d.db.NewInsert().

@@ -1,10 +1,7 @@
 package database
 
 import (
-	"context"
 	"github.com/google/uuid"
-	"github.com/uptrace/bun"
-	"scrumlr.io/server/common/filter"
 )
 
 type ColumnsObserver interface {
@@ -15,7 +12,7 @@ type ColumnsObserver interface {
 	DeletedColumn(user, board, column uuid.UUID, notes []Note, votes []Vote)
 }
 
-var _ bun.AfterInsertHook = (*ColumnInsert)(nil)
+/*var _ bun.AfterInsertHook = (*ColumnInsert)(nil)
 var _ bun.AfterUpdateHook = (*ColumnUpdate)(nil)
 var _ bun.AfterDeleteHook = (*Column)(nil)
 
@@ -79,4 +76,4 @@ func notifyColumnDeleted(ctx context.Context) error {
 	}
 	return nil
 
-}
+}*/

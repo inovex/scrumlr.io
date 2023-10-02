@@ -42,7 +42,7 @@ func (d *Database) Get(id uuid.UUID) (Board, []BoardSessionRequest, []BoardSessi
 	var notes []Note
 	var votings []Voting
 	var votes []Vote
-  var assignments []Assignment
+	var assignments []Assignment
 	var err error
 
 	board, err = d.GetBoard(id)
@@ -60,7 +60,7 @@ func (d *Database) Get(id uuid.UUID) (Board, []BoardSessionRequest, []BoardSessi
 		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
-	columns, err = d.GetColumns(id)
+	columns, _, err = d.GetColumns(id)
 	if err != nil {
 		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
@@ -75,7 +75,7 @@ func (d *Database) Get(id uuid.UUID) (Board, []BoardSessionRequest, []BoardSessi
 		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
-  assignments, err = d.GetAssignments(id)
+	assignments, err = d.GetAssignments(id)
 	if err != nil {
 		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
