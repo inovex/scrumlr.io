@@ -2,6 +2,7 @@ package dto
 
 import (
 	"github.com/google/uuid"
+	"gopkg.in/guregu/null.v4"
 	"net/http"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
@@ -63,10 +64,10 @@ type ColumnRequest struct {
 	// Sets whether this column should be visible to regular participants.
 	//
 	// The default value on creation is 'false'.
-	Visible *bool `json:"visible"`
+	Visible null.Bool `json:"visible"`
 
 	// Sets the index of this column in the sort order.
-	Index *int `json:"index"`
+	Index null.Int `json:"index"`
 
 	Board uuid.UUID `json:"-"`
 	User  uuid.UUID `json:"-"`
@@ -76,16 +77,16 @@ type ColumnRequest struct {
 type ColumnUpdateRequest struct {
 
 	// The column name to set.
-	Name string `json:"name"`
+	Name null.String `json:"name"`
 
 	// The column color to set.
 	Color types.Color `json:"color"`
 
 	// Sets whether this column should be visible to regular participants.
-	Visible bool `json:"visible"`
+	Visible null.Bool `json:"visible"`
 
 	// Sets the index of this column in the sort order.
-	Index int `json:"index"`
+	Index null.Int `json:"index"`
 
 	ID    uuid.UUID `json:"-"`
 	Board uuid.UUID `json:"-"`

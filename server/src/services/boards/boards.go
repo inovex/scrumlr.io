@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gopkg.in/guregu/null.v4"
 	"time"
 
 	"github.com/google/uuid"
@@ -64,7 +65,7 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	columns := make([]database.ColumnInsert, 0, len(body.Columns))
 	for index, value := range body.Columns {
 		var currentIndex = index
-		columns = append(columns, database.ColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible, Index: &currentIndex})
+		columns = append(columns, database.ColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible.NullBool, Index: null.NewInt(int64(currentIndex), true).NullInt64})
 	}
 
 	// create the board
@@ -104,7 +105,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		ShowAuthors:           body.ShowAuthors,
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
 		AllowStacking:         body.AllowStacking,
-    TimerStart:            body.TimerStart,
+		TimerStart:            body.TimerStart,
 		TimerEnd:              body.TimerEnd,
 		SharedNote:            body.SharedNote,
 	}
@@ -135,12 +136,12 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 }
 
 func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error) {
-  timerStart := time.Now().Local();
+	timerStart := time.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(minutes))
 	update := database.BoardTimerUpdate{
-		ID:       id,
-    TimerStart: &timerStart,
-		TimerEnd: &timerEnd,
+		ID:         id,
+		TimerStart: &timerStart,
+		TimerEnd:   &timerEnd,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
@@ -151,9 +152,9 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 
 func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board, error) {
 	update := database.BoardTimerUpdate{
-		ID:       id,
-    TimerStart: nil,
-		TimerEnd: nil,
+		ID:         id,
+		TimerStart: nil,
+		TimerEnd:   nil,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
