@@ -60,35 +60,48 @@ type BoardUpdate struct {
 	ShowVoting            uuid.NullUUID
 }
 
-func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []ColumnInsert) (Board, error) {
-	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
+type BoardColumns struct {
+	bun.BaseModel `bun:"table:board_columns"`
+	Board         uuid.UUID
+	Columns       []uuid.UUID
+}
 
+func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []ColumnInsert) (Board, error) {
 	if board.AccessPolicy == types.AccessPolicyByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
 		return Board{}, errors.New("passphrase or salt may not be empty")
 	} else if board.AccessPolicy != types.AccessPolicyByPassphrase && (board.Passphrase != nil || board.Salt != nil) {
 		return Board{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
 	}
 
-	session := BoardSessionInsert{User: creator, Role: types.SessionRoleOwner}
+	insertBoard := d.db.NewInsert().
+		Model(&board).
+		Returning("id")
+
+	insertSession := d.db.NewInsert().
+		Model(&BoardSessionInsert{User: creator, Role: types.SessionRoleOwner}).
+		Value("board", "(SELECT id FROM \"insertBoard\")")
+
+	insertColumns := d.db.NewInsert().
+		Model(&columns).
+		Value("board", "(SELECT id FROM \"insertBoard\")").
+		Returning("id")
+
+	insertColumnOrder := d.db.NewInsert().
+		Model(&BoardColumns{}).
+		Value("board", "(SELECT id FROM \"insertBoard\")").
+		Value("columns", "(SELECT array_agg(id::uuid) FROM \"insertColumns\")")
+
+	selectBoard := d.db.NewSelect().
+		Model(&Board{}).
+		Table("insertBoard").
+		ColumnExpr("*")
 
 	var b Board
-	query := d.db.NewSelect().With("createdBoard", boardInsert)
-	if len(columns) > 0 {
-		for index := range columns {
-			newColumnIndex := index
-			columns[index].Index = &newColumnIndex
-		}
-
-		query = query.With("createdColumns", d.db.NewInsert().
-			Model(&columns).
-			Value("board", "(SELECT id FROM \"createdBoard\")"))
-	}
-	err := query.
-		With("createdSession", d.db.NewInsert().
-			Model(&session).
-			Value("board", "(SELECT id FROM \"createdBoard\")")).
-		Table("createdBoard").
-		Column("*").
+	err := selectBoard.
+		With("insertBoard", insertBoard).
+		With("insertSession", insertSession).
+		With("insertColumns", insertColumns).
+		With("insertColumnsOrder", insertColumnOrder).
 		Scan(context.Background(), &b)
 
 	return b, err
