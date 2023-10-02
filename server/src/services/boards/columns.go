@@ -15,7 +15,7 @@ import (
 )
 
 func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.Column, error) {
-	column, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible, Index: body.Index})
+	column, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible.NullBool, Index: body.Index.NullInt64})
 	return new(dto.Column).From(column), err
 }
 
@@ -24,7 +24,7 @@ func (s *BoardService) DeleteColumn(_ context.Context, board, column, user uuid.
 }
 
 func (s *BoardService) UpdateColumn(_ context.Context, body dto.ColumnUpdateRequest) (*dto.Column, error) {
-	column, err := s.database.UpdateColumn(database.ColumnUpdate{ID: body.ID, Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible, Index: body.Index})
+	column, err := s.database.UpdateColumn(database.ColumnUpdate{ID: body.ID, Board: body.Board, Name: body.Name.NullString, Color: body.Color, Visible: body.Visible.NullBool, Index: body.Index.NullInt64})
 	return new(dto.Column).From(column), err
 }
 
