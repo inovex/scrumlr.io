@@ -26,7 +26,6 @@ type ColumnInsert struct {
 	Name          string
 	Color         types.Color
 	Visible       sql.NullBool
-	Index         sql.NullInt64
 }
 
 // ColumnUpdate the update model for a new Column
@@ -37,32 +36,27 @@ type ColumnUpdate struct {
 	Name          sql.NullString
 	Color         types.Color
 	Visible       sql.NullBool
-	Index         sql.NullInt64
 }
 
 // CreateColumn creates a new column. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
-func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
+func (d *Database) CreateColumn(column ColumnInsert, index sql.NullInt64) (Column, error) {
 
 	// insert column
 	insertColumn := d.db.NewInsert().
 		Model(&column).
-		ExcludeColumn("index"). // FIXME ORDER: remove this once index is properly removed
 		Returning("*")
 	if !column.Visible.Valid {
 		insertColumn.ExcludeColumn("visible")
 	}
-	if !column.Index.Valid {
-		insertColumn.ExcludeColumn("index") // FIXME ORDER: remove this once index is properly removed
-	}
 
 	var updateBoardColumns *bun.UpdateQuery
-	if column.Index.Valid {
+	if index.Valid {
 		// insert column into the order
 		updateBoardColumns = d.db.NewUpdate().
 			Model((*BoardColumns)(nil)).
 			ModelTableExpr("board_columns AS b").
-			Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", column.Index.Int64, column.Index.Int64+1).
+			Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", index.Int64, index.Int64+1).
 			Where("\"board\" = ?", column.Board).
 			Returning("columns")
 	} else {
@@ -93,7 +87,7 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 }
 
 // UpdateColumn updates the column and re-orders all indices of the columns if necessary.
-func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
+func (d *Database) UpdateColumn(column ColumnUpdate, index sql.NullInt64) (Column, error) {
 	var c Column
 
 	tx, err := d.db.Begin()
@@ -101,7 +95,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 		return c, err
 	}
 
-	if column.Index.Valid {
+	if index.Valid {
 		_, err = tx.NewUpdate().
 			Model((*BoardColumns)(nil)).
 			ModelTableExpr("board_columns AS b").
@@ -115,7 +109,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 		_, err = tx.NewUpdate().
 			Model((*BoardColumns)(nil)).
 			ModelTableExpr("board_columns AS b").
-			Set("columns=b.columns[:?]||?::uuid||b.columns[?:]", column.Index.Int64, column.ID, column.Index.Int64+1).
+			Set("columns=b.columns[:?]||?::uuid||b.columns[?:]", index.Int64, column.ID, index.Int64+1).
 			Where("\"board\" = ?", column.Board).
 			Exec(context.Background())
 		if err != nil {
@@ -135,9 +129,6 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 	}
 	if !column.Name.Valid {
 		updateColumn.ExcludeColumn("name")
-	}
-	if !column.Index.Valid {
-		updateColumn.ExcludeColumn("index")
 	}
 
 	_, err = updateColumn.Exec(context.Background(), &c)
