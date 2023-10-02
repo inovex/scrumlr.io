@@ -73,26 +73,31 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 		return Board{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
 	}
 
+	// insert board
 	insertBoard := d.db.NewInsert().
 		Model(&board).
 		Returning("id")
 
+	// insert board session with role 'owner' for creator of the board
 	insertSession := d.db.NewInsert().
 		Model(&BoardSessionInsert{User: creator, Role: types.SessionRoleOwner}).
 		Value("board", "(SELECT id FROM \"insertBoard\")")
 
+	// insert specified columns
 	insertColumns := d.db.NewInsert().
 		Model(&columns).
 		Value("board", "(SELECT id FROM \"insertBoard\")").
 		Returning("id")
 
+	// insert columns order into mapping table
 	insertColumnOrder := d.db.NewInsert().
-		Model(&BoardColumns{}).
+		Model((*BoardColumns)(nil)).
 		Value("board", "(SELECT id FROM \"insertBoard\")").
 		Value("columns", "(SELECT array_agg(id::uuid) FROM \"insertColumns\")")
 
+	// select the result of the board insertion and return it
 	selectBoard := d.db.NewSelect().
-		Model(&Board{}).
+		Model((*Board)(nil)).
 		Table("insertBoard").
 		ColumnExpr("*")
 
