@@ -3,6 +3,7 @@
 exports[`Column should have correct style show column with correct style 1`] = `
 <section
   class="column column--hidden accent-color__planning-pink"
+  style="--stripe-offset: 0px;"
 >
   <div
     class="column__content"
