@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 )
 
