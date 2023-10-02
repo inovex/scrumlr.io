@@ -34,7 +34,7 @@ type Boards interface {
 	DeleteTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error)
 
 	CreateColumn(ctx context.Context, body dto.ColumnRequest) (*dto.Column, error)
-	DeleteColumn(ctx context.Context, board, column, user uuid.UUID) error
+	DeleteColumn(ctx context.Context, board, column uuid.UUID) error
 	UpdateColumn(ctx context.Context, body dto.ColumnUpdateRequest) (*dto.Column, error)
 	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error)
 	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
@@ -89,4 +89,3 @@ type Assignments interface {
 	Create(ctx context.Context, body dto.AssignmentCreateRequest) (*dto.Assignment, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 }
-
