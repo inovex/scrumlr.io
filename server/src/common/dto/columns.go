@@ -21,9 +21,6 @@ type Column struct {
 
 	// The column visibility.
 	Visible bool `json:"visible"`
-
-	// The column rank.
-	Index int `json:"index"`
 }
 
 type WrappedColumn struct {
@@ -41,7 +38,6 @@ func (c *WrappedColumn) From(column database.Column) *WrappedColumn {
 	c.Column.Name = column.Name
 	c.Column.Color = column.Color
 	c.Column.Visible = column.Visible
-	c.Column.Index = column.Index
 	c.ColumnsOrder = column.ColumnsOrder
 	return c
 }
@@ -51,7 +47,6 @@ func (c *Column) From(column database.Column) *Column {
 	c.Name = column.Name
 	c.Color = column.Color
 	c.Visible = column.Visible
-	c.Index = column.Index
 	return c
 }
 

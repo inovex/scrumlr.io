@@ -16,7 +16,6 @@ type Column struct {
 	Name          string
 	Color         types.Color
 	Visible       bool
-	Index         int
 	ColumnsOrder  []uuid.UUID `bun:",array"`
 }
 
@@ -48,12 +47,13 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 	// insert column
 	insertColumn := d.db.NewInsert().
 		Model(&column).
+		ExcludeColumn("index"). // FIXME ORDER: remove this once index is properly removed
 		Returning("*")
 	if !column.Visible.Valid {
 		insertColumn.ExcludeColumn("visible")
 	}
 	if !column.Index.Valid {
-		insertColumn.ExcludeColumn("index")
+		insertColumn.ExcludeColumn("index") // FIXME ORDER: remove this once index is properly removed
 	}
 
 	var updateBoardColumns *bun.UpdateQuery
@@ -126,6 +126,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 	updateColumn := tx.NewUpdate().
 		Model(&column).
 		ModelTableExpr("columns AS c").
+		ExcludeColumn("index").
 		Returning("c.*, (SELECT columns FROM board_columns WHERE board = ?) AS columns_order", column.Board).
 		Where("c.id = ?", column.ID)
 

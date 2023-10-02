@@ -84,6 +84,7 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 	// insert specified columns
 	insertColumns := d.db.NewInsert().
 		Model(&columns).
+		ExcludeColumn("index"). // FIXME ORDER: remove this once index is properly removed
 		Value("board", "(SELECT id FROM \"insertBoard\")").
 		Returning("id")
 
