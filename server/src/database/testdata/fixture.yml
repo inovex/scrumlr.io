@@ -238,112 +238,121 @@
       name: First column
       color: backlog-blue
       visible: true
-      index: 0
     - _id: secondColumn
       id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.columnsTestBoard.ID }}'
       name: Second column
       color: backlog-blue
       visible: true
-      index: 1
     - _id: thirdColumn
       id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.columnsTestBoard.ID }}'
       name: Third column
       color: backlog-blue
       visible: true
-      index: 2
     - _id: openMultipleVotesColumn
       id: "2813b000-0003-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
-      index: 0
     - _id: openSingleVotesColumn
       id: "2813b000-0004-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
-      index: 0
     - _id: closedVotesColumn
       id: "2813b000-0005-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.closedVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
-      index: 0
     - _id: abortedVotesColumn
       id: "2813b000-0006-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.abortedVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
-      index: 0
     - _id: votingColumn
       id: "3113b196-986c-5f23-adf7-c3fa19224bd4"
       board: '{{ $.Board.votingTestBoard.ID }}'
       name: Voting column
       color: backlog-blue
       visible: true
-      index: 0
     - _id: notesColumnA
       id: "3113b196-986c-2123-adf7-c3fa19224bd4"
       board: '{{ $.Board.notesTestBoard.ID }}'
       name: A
       color: backlog-blue
       visible: true
-      index: 0
     - _id: notesColumnB
       id: "3113b196-986c-2923-adf7-c3fa19224bd4"
       board: '{{ $.Board.notesTestBoard.ID }}'
       name: B
       color: backlog-blue
       visible: true
-      index: 0
     - _id: notesColumnC
       id: "2cf7f80e-d3ed-4606-be72-59f5dc05ec47"
       board: '{{ $.Board.notesTestBoard.ID }}'
       name: C
       color: backlog-blue
       visible: true
-      index: 0
     - _id: notesObserverTestColumn
       id: "3113b196-986c-2951-adf7-c3fa19224bd4"
       board: '{{ $.Board.notesObserverTestBoard.ID }}'
       name: B
       color: backlog-blue
       visible: true
-      index: 0
     - _id: votingSortingColumn
       id: "00c8c51b-d391-4472-8136-06efdfe7bbd2"
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       name: Voting Sorting column
       color: backlog-blue
       visible: true
-      index: 0
     - _id: stackTestColumnA
       id: "00c8c51b-0000-4472-8136-06eadff7bbd6"
       board: '{{ $.Board.stackTestBoard.ID }}'
       name: Stack test columnA
       color: backlog-blue
       visible: true
-      index: 0
     - _id: stackTestColumnB
       id: "00c8c51b-0001-4472-8136-06eadff7bbd6"
       board: '{{ $.Board.stackTestBoard.ID }}'
       name: Stack test columnB
       color: backlog-blue
       visible: true
-      index: 1
     - _id: assignmentsTestColumn
       id: "ea86db5c-bb75-4e81-b7b2-6774ff26acd4"
       board: '{{ $.Board.assignmentsTestBoard.ID }}'
       name: Assignments Test Column
       color: backlog-blue
       visible: true
-      index: 0
+
+- model: BoardColumns
+  rows:
+    - board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
+      columns: [ '2813b000-0003-4e23-adf7-c3fa19224bd4' ]
+    - board: '{{ $.Board.columnsTestBoard.ID }}'
+      columns: ['2813b000-0000-4e23-adf7-c3fa19224bd4', '2813b000-0001-4e23-adf7-c3fa19224bd4', '2813b000-0002-4e23-adf7-c3fa19224bd4']
+    - board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
+      columns: ['2813b000-0004-4e23-adf7-c3fa19224bd4']
+    - board: '{{ $.Board.closedVotesTestBoard.ID }}'
+      columns: ['2813b000-0005-4e23-adf7-c3fa19224bd4']
+    - board: '{{ $.Board.abortedVotesTestBoard.ID }}'
+      columns: ['2813b000-0006-4e23-adf7-c3fa19224bd4']
+    - board: '{{ $.Board.votingTestBoard.ID }}'
+      columns: ['3113b196-986c-5f23-adf7-c3fa19224bd4']
+    - board: '{{ $.Board.notesTestBoard.ID }}'
+      columns: ['3113b196-986c-2123-adf7-c3fa19224bd4','3113b196-986c-2923-adf7-c3fa19224bd4','2cf7f80e-d3ed-4606-be72-59f5dc05ec47']
+    - board: '{{ $.Board.notesObserverTestBoard.ID }}'
+      columns: ['3113b196-986c-2951-adf7-c3fa19224bd4']
+    - board: '{{ $.Board.notesObserverTestBoard.ID }}'
+      columns: ['00c8c51b-d391-4472-8136-06efdfe7bbd2']
+    - board: '{{ $.Board.stackTestBoard.ID }}'
+      columns: ['00c8c51b-0000-4472-8136-06eadff7bbd6','00c8c51b-0001-4472-8136-06eadff7bbd6']
+    - board: '{{ $.Board.assignmentsTestBoard.ID }}'
+      columns: ['ea86db5c-bb75-4e81-b7b2-6774ff26acd4']
 
 - model: Note
   rows:

@@ -112,6 +112,7 @@ func loadTestdata() error {
 		(*Board)(nil),
 		(*BoardSessionInsert)(nil),
 		(*Column)(nil),
+		(*BoardColumns)(nil),
 		(*Note)(nil),
 		(*Voting)(nil),
 		(*Vote)(nil),
