@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -13,41 +14,41 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.Column, error) {
+func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.WrappedColumn, error) {
 	column, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible.NullBool, Index: body.Index.NullInt64})
-	return new(dto.Column).From(column), err
+	return new(dto.WrappedColumn).From(column), err
 }
 
 func (s *BoardService) DeleteColumn(_ context.Context, board, column uuid.UUID) error {
 	return s.database.DeleteColumn(board, column)
 }
 
-func (s *BoardService) UpdateColumn(_ context.Context, body dto.ColumnUpdateRequest) (*dto.Column, error) {
+func (s *BoardService) UpdateColumn(_ context.Context, body dto.ColumnUpdateRequest) (*dto.WrappedColumn, error) {
 	column, err := s.database.UpdateColumn(database.ColumnUpdate{ID: body.ID, Board: body.Board, Name: body.Name.NullString, Color: body.Color, Visible: body.Visible.NullBool, Index: body.Index.NullInt64})
-	return new(dto.Column).From(column), err
+	return new(dto.WrappedColumn).From(column), err
 }
 
-func (s *BoardService) GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error) {
+func (s *BoardService) GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.WrappedColumn, error) {
 	log := logger.FromContext(ctx)
 	column, err := s.database.GetColumn(boardID, columnID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, common.NotFoundError
 		}
 		log.Errorw("unable to get column", "board", boardID, "column", columnID, "error", err)
 		return nil, fmt.Errorf("unable to get column: %w", err)
 	}
-	return new(dto.Column).From(column), err
+	return new(dto.WrappedColumn).From(column), err
 }
 
-func (s *BoardService) ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error) {
+func (s *BoardService) ListColumns(ctx context.Context, boardID uuid.UUID) (*dto.WrappedColumns, error) {
 	log := logger.FromContext(ctx)
 	columns, err := s.database.GetColumns(boardID)
 	if err != nil {
 		log.Errorw("unable to get columns", "board", boardID, "error", err)
 		return nil, fmt.Errorf("unable to get columns: %w", err)
 	}
-	return dto.Columns(columns), err
+	return dto.WrapColumns(columns), err
 }
 
 func (s *BoardService) UpdatedColumns(board uuid.UUID, columns []database.Column) {
