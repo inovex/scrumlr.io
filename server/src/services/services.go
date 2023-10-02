@@ -33,11 +33,11 @@ type Boards interface {
 	SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error)
 	DeleteTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error)
 
-	CreateColumn(ctx context.Context, body dto.ColumnRequest) (*dto.Column, error)
+	CreateColumn(ctx context.Context, body dto.ColumnRequest) (*dto.WrappedColumn, error)
 	DeleteColumn(ctx context.Context, board, column uuid.UUID) error
-	UpdateColumn(ctx context.Context, body dto.ColumnUpdateRequest) (*dto.Column, error)
-	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error)
-	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
+	UpdateColumn(ctx context.Context, body dto.ColumnUpdateRequest) (*dto.WrappedColumn, error)
+	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.WrappedColumn, error)
+	ListColumns(ctx context.Context, boardID uuid.UUID) (*dto.WrappedColumns, error)
 
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error)
 }
