@@ -41,6 +41,26 @@ func (c *WrappedColumn) From(column database.Column) *WrappedColumn {
 	return c
 }
 
+type WrappedColumn struct {
+	Column       Column      `json:"column"`
+	ColumnsOrder []uuid.UUID `json:"order"`
+}
+
+type WrappedColumns struct {
+	Column       []*Column   `json:"columns"`
+	ColumnsOrder []uuid.UUID `json:"order"`
+}
+
+func (c *WrappedColumn) From(column database.Column) *WrappedColumn {
+	c.Column.ID = column.ID
+	c.Column.Name = column.Name
+	c.Column.Color = column.Color
+	c.Column.Visible = column.Visible
+	c.Column.Index = column.Index
+	c.ColumnsOrder = column.ColumnsOrder
+	return c
+}
+
 func (c *Column) From(column database.Column) *Column {
 	c.ID = column.ID
 	c.Name = column.Name
@@ -66,6 +86,21 @@ func WrapColumns(columns []database.Column) *WrappedColumns {
 	}
 
 	return &WrappedColumns{Columns: dtoColumns, ColumnsOrder: dtoOrder}
+}
+
+func WrapColumns(columns []database.Column) *WrappedColumns {
+	if columns == nil {
+		return &WrappedColumns{}
+	}
+
+	dtoColumns := make([]*Column, len(columns))
+	dtoOrder := make([]uuid.UUID, len(columns))
+	for index, column := range columns {
+		dtoColumns[index] = new(Column).From(column)
+		dtoOrder[index] = column.ID
+	}
+
+	return &WrappedColumns{Column: dtoColumns, ColumnsOrder: dtoOrder}
 }
 
 // ColumnRequest represents the request to create a new column.
