@@ -163,7 +163,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     </>
   );
 
-  const {ref: stripeRef, style: stripeStyle} = useStripeOffset(); // TODO phase offset based on index
+  const {ref: stripeRef, style: stripeStyle} = useStripeOffset({gradientLength: 40, gradientAngle: 45});
 
   return (
     <section

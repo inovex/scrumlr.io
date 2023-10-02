@@ -8,6 +8,7 @@ import {HotkeyAnchor} from "components/HotkeyAnchor";
 import "./Board.scss";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
+import {useStripeOffset} from "utils/hooks/useStripeOffset";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -55,6 +56,10 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   const columnVisibilityStatesRef = useRef<boolean[]>([]);
 
   const columnsCount = React.Children.count(children);
+
+  // stripe offset for spacer divs
+  const leftSpacerOffsetBindings = useStripeOffset<HTMLDivElement>({gradientLength: 40, gradientAngle: 45});
+  const rightSpacerOffsetBindings = useStripeOffset<HTMLDivElement>({gradientLength: 40, gradientAngle: 45});
 
   useEffect(() => {
     const board = boardRef.current;
@@ -134,8 +139,8 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
         <HotkeyAnchor />
         <main className="board" ref={boardRef}>
           {/* Fixed color - can also be dynamic */}
-          <div className={`board__spacer-left ${getColorClassName("backlog-blue")}`} />
-          <div className={`board__spacer-right ${getColorClassName("backlog-blue")}`} />
+          <div className={`board__spacer-left ${getColorClassName("backlog-blue")}`} {...leftSpacerOffsetBindings} />
+          <div className={`board__spacer-right ${getColorClassName("backlog-blue")}`} {...rightSpacerOffsetBindings} />
         </main>
       </div>
     );
@@ -163,9 +168,15 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
-        <div className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`} />
+        <div
+          className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`}
+          {...leftSpacerOffsetBindings}
+        />
         {children}
-        <div className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`} />
+        <div
+          className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`}
+          {...rightSpacerOffsetBindings}
+        />
       </main>
     </>
   );

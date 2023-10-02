@@ -28,25 +28,11 @@
   }
 }
 .column--hidden {
-  --stripe-offset: 0px;
-
-  background-image: repeating-linear-gradient(
-    45deg,
-    $color-white-one calc(0px + var(--stripe-offset)),
-    $color-white-one calc(20px + var(--stripe-offset)),
-    var(--accent-color--background-light) calc(20px + var(--stripe-offset)),
-    var(--accent-color--background-light) calc(40px + var(--stripe-offset))
-  );
+  background-image: $column-stripes--light;
 }
 [theme="dark"] {
   .column--hidden {
-    background-image: repeating-linear-gradient(
-      45deg,
-      $color-dark-one calc(0px + var(--stripe-offset)),
-      $color-dark-one calc(20px + var(--stripe-offset)),
-      var(--accent-color--background-dark) calc(20px + var(--stripe-offset)),
-      var(--accent-color--background-dark) calc(40px + var(--stripe-offset))
-    );
+    background-image: $column-stripes--dark;
   }
 }
 

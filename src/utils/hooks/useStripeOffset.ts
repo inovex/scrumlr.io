@@ -4,16 +4,15 @@ import {DetailedHTMLProps, HTMLProps, useCallback, useEffect, useRef, useState} 
  * this function sets the css offset variable for a repeating css gradient so that the gradient is uniform across multiple elements
  * we can't use the css `background-offset` property because it will cause a break in the gradient.
  *
- * instead shift the gradient start point like this:
+ * instead shift the gradient start point with a css variable like this:
  * ```css
  * .striped {
- *   --stripe-offset: 0px;
  *   background-image: repeating-linear-gradient(
  *    45deg,
- *    transparent calc(0px + var(--stripe-offset)),
- *    transparent calc(20px + var(--stripe-offset)),
- *    #fff calc(20px + var(--stripe-offset)),
- *    #fff calc(40px + var(--stripe-offset))
+ *    transparent calc(0px  + var(--stripe-offset, 0px)),
+ *    transparent calc(20px + var(--stripe-offset, 0px)),
+ *    #fff        calc(20px + var(--stripe-offset, 0px)),
+ *    #fff        calc(40px + var(--stripe-offset, 0px))
  *   );
  * }
  * ```
@@ -24,7 +23,7 @@ import {DetailedHTMLProps, HTMLProps, useCallback, useEffect, useRef, useState} 
  * @param cssVariableName the name of the css offset variable
  *
  */
-export function useStripeOffset({
+export function useStripeOffset<RefElement extends HTMLElement>({
   gradientLength = 40,
   gradientAngle = 45,
   phaseOffset = 0,
@@ -38,7 +37,7 @@ export function useStripeOffset({
   // convert degrees to radians because Math.sin and Math.cos expect radians
   const gradientAngleRad = (gradientAngle / 180) * Math.PI;
 
-  const stripedElementRef = useRef<HTMLElement | null>(null);
+  const stripedElementRef = useRef<RefElement | null>(null);
 
   const [offset, setOffset] = useState(0);
 
@@ -97,5 +96,5 @@ export function useStripeOffset({
     style: {
       [`--${cssVariableName}`]: `${offset}px`,
     },
-  } satisfies DetailedHTMLProps<HTMLProps<HTMLElement>, HTMLElement>;
+  } satisfies DetailedHTMLProps<HTMLProps<RefElement>, RefElement>;
 }
