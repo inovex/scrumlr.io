@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"database/sql"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/database/types"
@@ -25,7 +24,7 @@ type ColumnInsert struct {
 	Board         uuid.UUID
 	Name          string
 	Color         types.Color
-	Visible       sql.NullBool
+	Visible       *bool
 }
 
 // ColumnUpdate the update model for a new Column
@@ -33,30 +32,30 @@ type ColumnUpdate struct {
 	bun.BaseModel `bun:"table:columns"`
 	ID            uuid.UUID
 	Board         uuid.UUID
-	Name          sql.NullString
-	Color         types.Color
-	Visible       sql.NullBool
+	Name          *string
+	Color         *types.Color
+	Visible       *bool
 }
 
 // CreateColumn creates a new column. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
-func (d *Database) CreateColumn(column ColumnInsert, index sql.NullInt64) (Column, error) {
+func (d *Database) CreateColumn(column ColumnInsert, index *int) (Column, error) {
 
 	// insert column
 	insertColumn := d.db.NewInsert().
 		Model(&column).
 		Returning("*")
-	if !column.Visible.Valid {
+	if column.Visible == nil {
 		insertColumn.ExcludeColumn("visible")
 	}
 
 	var updateBoardColumns *bun.UpdateQuery
-	if index.Valid {
+	if index != nil {
 		// insert column into the order
 		updateBoardColumns = d.db.NewUpdate().
 			Model((*BoardColumns)(nil)).
 			ModelTableExpr("board_columns AS b").
-			Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", index.Int64, index.Int64+1).
+			Set("columns=b.columns[:?]||(SELECT id FROM \"insertColumn\")||b.columns[?:]", *index, *index+1).
 			Where("\"board\" = ?", column.Board).
 			Returning("columns")
 	} else {
@@ -87,7 +86,7 @@ func (d *Database) CreateColumn(column ColumnInsert, index sql.NullInt64) (Colum
 }
 
 // UpdateColumn updates the column and re-orders all indices of the columns if necessary.
-func (d *Database) UpdateColumn(column ColumnUpdate, index sql.NullInt64) (Column, error) {
+func (d *Database) UpdateColumn(column ColumnUpdate, index *int) (Column, error) {
 	var c Column
 
 	tx, err := d.db.Begin()
@@ -95,7 +94,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate, index sql.NullInt64) (Colum
 		return c, err
 	}
 
-	if index.Valid {
+	if index != nil {
 		_, err = tx.NewUpdate().
 			Model((*BoardColumns)(nil)).
 			ModelTableExpr("board_columns AS b").
@@ -109,7 +108,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate, index sql.NullInt64) (Colum
 		_, err = tx.NewUpdate().
 			Model((*BoardColumns)(nil)).
 			ModelTableExpr("board_columns AS b").
-			Set("columns=b.columns[:?]||?::uuid||b.columns[?:]", index.Int64, column.ID, index.Int64+1).
+			Set("columns=b.columns[:?]||?::uuid||b.columns[?:]", *index, column.ID, *index+1).
 			Where("\"board\" = ?", column.Board).
 			Exec(context.Background())
 		if err != nil {
@@ -120,14 +119,13 @@ func (d *Database) UpdateColumn(column ColumnUpdate, index sql.NullInt64) (Colum
 	updateColumn := tx.NewUpdate().
 		Model(&column).
 		ModelTableExpr("columns AS c").
-		ExcludeColumn("index").
 		Returning("c.*, (SELECT columns FROM board_columns WHERE board = ?) AS columns_order", column.Board).
 		Where("c.id = ?", column.ID)
 
-	if !column.Visible.Valid {
+	if column.Visible == nil {
 		updateColumn.ExcludeColumn("visible")
 	}
-	if !column.Name.Valid {
+	if column.Name == nil {
 		updateColumn.ExcludeColumn("name")
 	}
 

@@ -63,7 +63,7 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	// map request on column objects to insert into database
 	columns := make([]database.ColumnInsert, 0, len(body.Columns))
 	for _, value := range body.Columns {
-		columns = append(columns, database.ColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible.NullBool})
+		columns = append(columns, database.ColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible})
 	}
 
 	// create the board
