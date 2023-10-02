@@ -17,6 +17,7 @@ type Column struct {
 	Color         types.Color
 	Visible       bool
 	Index         int
+	ColumnsOrder  []uuid.UUID `bun:",array"`
 }
 
 // ColumnInsert the insert model for a new Column
@@ -56,7 +57,7 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 	}
 
 	var updateBoardColumns *bun.UpdateQuery
-	if !column.Index.Valid {
+	if column.Index.Valid {
 		// insert column into the order
 		updateBoardColumns = d.db.NewUpdate().
 			Model((*BoardColumns)(nil)).
@@ -77,8 +78,8 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 	// select the results of the insertion as return result
 	selectColumn := d.db.NewSelect().
 		Model((*Column)(nil)).
-		Table("insertColumn").
-		ColumnExpr("*")
+		ModelTableExpr("\"insertColumn\" AS c").
+		ColumnExpr("c.*, (SELECT columns FROM \"updateBoardColumns\") AS columns_order")
 
 	var c Column
 	err := selectColumn.
@@ -124,8 +125,9 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 
 	updateColumn := tx.NewUpdate().
 		Model(&column).
-		Returning("*").
-		Where("id = ?", column.ID)
+		ModelTableExpr("columns AS c").
+		Returning("c.*, (SELECT columns FROM board_columns WHERE board = ?) AS columns_order", column.Board).
+		Where("c.id = ?", column.ID)
 
 	if !column.Visible.Valid {
 		updateColumn.ExcludeColumn("visible")
@@ -176,7 +178,13 @@ func (d *Database) DeleteColumn(board, column uuid.UUID) error {
 // GetColumn returns the column for the specified id.
 func (d *Database) GetColumn(board, id uuid.UUID) (Column, error) {
 	var column Column
-	err := d.db.NewSelect().Model(&column).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
+	err := d.db.NewSelect().
+		Model(&column).
+		ModelTableExpr("columns AS c").
+		ColumnExpr("c.*, (SELECT columns FROM board_columns WHERE board = ?) AS columns_order", board).
+		Where("c.board = ?", board).
+		Where("c.id = ?", id).
+		Scan(context.Background())
 	return column, err
 }
 
