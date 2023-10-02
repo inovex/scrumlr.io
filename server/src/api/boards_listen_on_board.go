@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"net/http"
-
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	dto2 "scrumlr.io/server/common/dto"
@@ -58,6 +57,31 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = conn.WriteJSON(struct {
+		Type realtime.BoardEventType `json:"type"`
+		Data interface{}             `json:"data"`
+	}{
+		Type: realtime.BoardEventInit,
+		Data: struct {
+			Board       *dto2.Board                 `json:"board"`
+			Columns     *dto2.WrappedColumns        `json:"columns"`
+			Notes       []*dto2.Note                `json:"notes"`
+			Votings     []*dto2.Voting              `json:"votings"`
+			Votes       []*dto2.Vote                `json:"votes"`
+			Sessions    []*dto2.BoardSession        `json:"participants"`
+			Requests    []*dto2.BoardSessionRequest `json:"requests"`
+			Assignments []*dto2.Assignment          `json:"assignments"`
+		}{
+			Board:       board,
+			Columns:     columns,
+			Notes:       notes,
+			Votings:     votings,
+			Votes:       votes,
+			Sessions:    sessions,
+			Requests:    requests,
+			Assignments: assignments,
+		},
+	})
 	initEventData := EventData{
 		Board:       board,
 		Columns:     columns,

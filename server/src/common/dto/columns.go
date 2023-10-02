@@ -29,7 +29,7 @@ type WrappedColumn struct {
 }
 
 type WrappedColumns struct {
-	Column       []*Column   `json:"columns"`
+	Columns      []*Column   `json:"columns"`
 	ColumnsOrder []uuid.UUID `json:"columns_order"`
 }
 
@@ -78,7 +78,7 @@ func WrapColumns(columns []database.Column) *WrappedColumns {
 		dtoOrder[index] = column.ID
 	}
 
-	return &WrappedColumns{Column: dtoColumns, ColumnsOrder: dtoOrder}
+	return &WrappedColumns{Columns: dtoColumns, ColumnsOrder: dtoOrder}
 }
 
 // ColumnRequest represents the request to create a new column.
