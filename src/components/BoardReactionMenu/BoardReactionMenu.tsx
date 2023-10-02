@@ -41,12 +41,13 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   return (
     <div className="board-reactions__root">
       <div className="board-reactions__container">
-        {boardReactions.map(([reactionType, emoji]) => (
+        {boardReactions.map(([reactionType, emoji], index) => (
           <button
             key={reactionType}
             className={classNames("board-reactions__item board-reactions__reaction", {"board-reactions__reaction--disabled": !showBoardReactions})}
             aria-disabled={!showBoardReactions}
-            aria-label={t("BoardReactionsMenu.react", {reaction: reactionType})}
+            aria-label={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
+            title={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
             onClick={(e) => onClickReaction(e, reactionType)}
           >
             <span>{emoji}</span>

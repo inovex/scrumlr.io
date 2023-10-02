@@ -241,7 +241,7 @@
     "cancelTimer": "Alarm beenden"
   },
   "BoardReactionsMenu": {
-    "react": "Reagiere mit {{reaction}}"
+    "react": "Reagiere mit {{reaction}} [{{shortcut}}]"
   },
   "AppInfo": {
     "version": "Link zur Übersicht über alle Anwendungsversionen auf GitHub"

@@ -241,7 +241,7 @@
     "cancelTimer": "Cancel timer"
   },
   "BoardReactionsMenu": {
-    "react": "React {{reaction}}"
+    "react": "React with {{reaction}} [{{shortcut}}]"
   },
   "AppInfo": {
     "version": "Link to list of releases on GitHub"
