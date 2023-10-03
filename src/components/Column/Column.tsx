@@ -163,7 +163,18 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     </>
   );
 
-  const {ref: stripeRef, style: stripeStyle} = useStripeOffset({gradientLength: 40, gradientAngle: 45});
+  const {
+    bindings: {ref: stripeRef, style: stripeStyle},
+    updateOffset,
+  } = useStripeOffset({gradientLength: 40, gradientAngle: 45});
+
+  const columnCount = useAppSelector((state) => state.columns.length);
+
+  useEffect(() => {
+    updateOffset();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columnCount]);
 
   return (
     <section

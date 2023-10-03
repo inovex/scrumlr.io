@@ -1,4 +1,4 @@
-import {DetailedHTMLProps, HTMLProps, useCallback, useEffect, useRef, useState} from "react";
+import {DetailedHTMLProps, HTMLProps, useCallback, useEffect, useMemo, useRef, useState} from "react";
 
 /**
  * this function sets the css offset variable for a repeating css gradient so that the gradient is uniform across multiple elements
@@ -16,6 +16,9 @@ import {DetailedHTMLProps, HTMLProps, useCallback, useEffect, useRef, useState} 
  *   );
  * }
  * ```
+ *
+ * the hook takes care of updating the offset when the element size changes but not when the dom changes, since it would need to observe the whole tree
+ * if the position of the striped element changes, you will need to call `updateOffset` manually
  *
  * @param gradientLength the length of the gradient **in pixels** until it repeats as specified in the css
  * @param gradientAngle the angle of the gradient **in degrees** as specified in the css
@@ -71,14 +74,10 @@ export function useStripeOffset<RefElement extends HTMLElement>({
     setOffset((distanceToLine + phaseOffset * gradientLength) % gradientLength);
   }, [gradientAngleRad, gradientLength, phaseOffset]);
 
-  // set the offset on mount
-  useEffect(() => {
-    updateOffset();
-  }, [updateOffset]);
-
   // update the offset when the element size changes
+  // this also updates on mount since the ResizeObserver fires on `observe()` call
   useEffect(() => {
-    if (!stripedElementRef.current) return () => {};
+    if (!stripedElementRef.current) return undefined;
 
     const resizeObserver = new ResizeObserver(() => {
       updateOffset();
@@ -91,10 +90,16 @@ export function useStripeOffset<RefElement extends HTMLElement>({
     };
   }, [updateOffset]);
 
-  return {
-    ref: stripedElementRef,
-    style: {
-      [`--${cssVariableName}`]: `${offset}px`,
-    },
-  } satisfies DetailedHTMLProps<HTMLProps<RefElement>, RefElement>;
+  return useMemo(
+    () => ({
+      bindings: {
+        ref: stripedElementRef,
+        style: {
+          [`--${cssVariableName}`]: `${offset}px`,
+        },
+      } satisfies DetailedHTMLProps<HTMLProps<RefElement>, RefElement>,
+      updateOffset,
+    }),
+    [cssVariableName, offset, updateOffset]
+  );
 }
