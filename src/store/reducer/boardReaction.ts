@@ -1,7 +1,6 @@
 import {Action, ReduxAction} from "store/action";
 import {BoardReactionState} from "types/reaction";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
 export const boardReactionReducer = (state: BoardReactionState = [], action: ReduxAction): BoardReactionState => {
   switch (action.type) {
     case Action.AddedBoardReaction:
