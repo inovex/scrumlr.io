@@ -243,6 +243,9 @@
   "BoardReactionsMenu": {
     "react": "React with {{reaction}} [{{shortcut}}]"
   },
+  "BoardReaction": {
+    "me": "Me"
+  },
   "AppInfo": {
     "version": "Link to list of releases on GitHub"
   },

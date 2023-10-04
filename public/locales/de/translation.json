@@ -243,6 +243,9 @@
   "BoardReactionsMenu": {
     "react": "Reagiere mit {{reaction}} [{{shortcut}}]"
   },
+  "BoardReaction": {
+    "me": "Ich"
+  },
   "AppInfo": {
     "version": "Link zur Übersicht über alle Anwendungsversionen auf GitHub"
   },
