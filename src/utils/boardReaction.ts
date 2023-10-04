@@ -1,6 +1,6 @@
 import {BoardReactionType} from "types/reaction";
 
-// these are custom events that are can be emitted and subscribed to.
+// these are custom events that can be emitted and subscribed to.
 // using redux is overkill, so we decided to separate the logic, similar to toasts
 export const ADD_BOARD_REACTION = "scrumlr.io/addBoardReaction";
 export const REMOVE_BOARD_REACTION = "scrumlr.io/removeBoardReaction";
