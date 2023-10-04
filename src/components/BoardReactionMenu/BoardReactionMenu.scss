@@ -1,5 +1,8 @@
 @import "src/constants/style";
 
+$container-height: 64px;
+$reaction-size: 54px;
+
 .board-reactions__root {
   position: absolute;
   display: flex;
@@ -9,7 +12,7 @@
 }
 
 .board-reactions__container {
-  height: 64px;
+  height: $container-height;
 
   display: flex;
   flex-direction: row;
@@ -35,18 +38,18 @@
 }
 
 .board-reactions__reaction {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   all: unset; // reset button
   cursor: pointer;
 
-  width: 54px;
-  height: 54px;
+  width: $reaction-size;
+  height: $reaction-size;
 
   font-size: $text--xl;
 
   border-radius: $rounded--full;
-display: flex;
-justify-content: center;
-align-items: center;
 
   &:hover {
     background-color: $hover-background-light;
