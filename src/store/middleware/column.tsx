@@ -34,4 +34,7 @@ export const passColumnMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
       });
     });
   }
+  if (action.type === Action.CreatedColumn || action.type === Action.UpdatedColumn) {
+    // TODO ORDER: implement trigger of update here if a column is missing
+  }
 };

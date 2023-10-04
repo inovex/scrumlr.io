@@ -47,6 +47,14 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.updateColumns(columns));
         }
 
+        if (message.type === "COLUMN_CREATED") {
+          store.dispatch(Actions.createdColumn(message.data.column, message.data.columns_order));
+        }
+
+        if (message.type === "COLUMN_UPDATED") {
+          store.dispatch(Actions.updatedColumn(message.data.column, message.data.columns_order));
+        }
+
         if (message.type === "COLUMN_DELETED") {
           const columnId = message.data;
           store.dispatch(Actions.deletedColumn(columnId));
