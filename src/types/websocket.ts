@@ -41,6 +41,20 @@ export interface UpdatedColumnsEvent {
   type: "COLUMNS_UPDATED";
   data: Column[];
 }
+export interface CreatedColumnEvent {
+  type: "COLUMN_CREATED";
+  data: {
+    column: Column;
+    columns_order: string[];
+  };
+}
+export interface UpdatedColumnEvent {
+  type: "COLUMN_UPDATED";
+  data: {
+    column: Column;
+    columns_order: string[];
+  };
+}
 
 export interface DeletedColumnEvent {
   type: "COLUMN_DELETED";
@@ -139,6 +153,8 @@ export type ServerEvent =
   | BoardDeletedEvent
   | UpdatedColumnsEvent
   | DeletedColumnEvent
+  | CreatedColumnEvent
+  | UpdatedColumnEvent
   | UpdatedNotesEvent
   | DeletedNoteEvent
   | SyncNotesEvent

@@ -16,6 +16,8 @@ export const ColumnAction = {
   DeleteColumn: "scrumlr.io/deleteColumn" as const,
   DeleteColumnOptimistically: "scrumlr.io/deleteColumnOptimistically" as const,
   UpdatedColumns: "scrumlr.io/updatedColumns" as const,
+  CreatedColumn: "scrumlr.io/createdColumn" as const,
+  UpdatedColumn: "scrumlr.io/updatedColumn" as const,
 };
 
 /** Factory or creator class of internal Redux column object specific actions. */
@@ -60,6 +62,7 @@ export const ColumnActionFactory = {
     type: ColumnAction.DeleteColumnOptimistically,
     id,
   }),
+  // FIXME ORDER: remove this call
   updateColumns: (columns: Column[]) => ({
     type: ColumnAction.UpdatedColumns,
     columns,
@@ -72,6 +75,16 @@ export const ColumnActionFactory = {
     type: ColumnAction.CreateColumnOptimistically,
     column,
   }),
+  createdColumn: (column: {id: string; name: string; color: Color; visible: boolean}, columns_order: string[]) => ({
+    type: ColumnAction.CreatedColumn,
+    column,
+    columns_order,
+  }),
+  updatedColumn: (column: {id: string; name: string; color: Color; visible: boolean}, columns_order: string[]) => ({
+    type: ColumnAction.UpdatedColumn,
+    column,
+    columns_order,
+  }),
 };
 
 export type ColumnReduxAction =
@@ -82,4 +95,6 @@ export type ColumnReduxAction =
   | ReturnType<typeof ColumnActionFactory.createColumnOptimistically>
   | ReturnType<typeof ColumnActionFactory.editColumn>
   | ReturnType<typeof ColumnActionFactory.editColumnOptimistically>
-  | ReturnType<typeof ColumnActionFactory.updateColumns>;
+  | ReturnType<typeof ColumnActionFactory.updateColumns>
+  | ReturnType<typeof ColumnActionFactory.createdColumn>
+  | ReturnType<typeof ColumnActionFactory.updatedColumn>;

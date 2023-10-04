@@ -22,5 +22,11 @@ export const columnsReducer = (state: ColumnsState = [], action: ReduxAction): C
   if (action.type === Action.DeletedColumn) {
     return state.filter((c) => c.id !== action.columnId);
   }
+  if (action.type === Action.CreatedColumn) {
+    // TODO ORDER: implement
+  }
+  if (action.type === Action.UpdatedColumn) {
+    // TODO ORDER: implement
+  }
   return state;
 };
