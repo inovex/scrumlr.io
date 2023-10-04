@@ -38,9 +38,6 @@ $reaction-size: 54px;
 }
 
 .board-reactions__reaction {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   all: unset; // reset button
   cursor: pointer;
 
@@ -50,6 +47,10 @@ $reaction-size: 54px;
   font-size: $text--xl;
 
   border-radius: $rounded--full;
+
+  span {
+    margin-left: 0.3em; // manually center those stubborn emojis
+  }
 
   &:hover {
     background-color: $hover-background-light;
@@ -95,6 +96,7 @@ $reaction-size: 54px;
 
 @media screen and (max-width: 400px) {
   .board-reactions__container {
+    width: 300px;
     gap: 4px;
   }
 }
