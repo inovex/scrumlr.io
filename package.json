@@ -59,7 +59,7 @@
     "@types/i18next-fs-backend": "^1.1.2",
     "@types/jest": "^29.5.5",
     "@types/js-cookie": "^3.0.4",
-    "@types/marked": "^5.0.1",
+    "@types/marked": "^6.0.0",
     "@types/node": "^20.7.1",
     "@types/qrcode.react": "^1.0.3",
     "@types/react": "^18.2.23",
