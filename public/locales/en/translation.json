@@ -265,7 +265,7 @@
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
     "noteDeleted": "The note has been deleted!",
-    "emptyNoteDialog": "Sorry, but we're having trouble updating this note. The note must contain text.",
+    "emptyNoteDialog": "The note must contain text.",
     "ready": "Are you ready?",
     "readyButton": "Ready!"
   },
