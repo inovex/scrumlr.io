@@ -30,7 +30,8 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
   });
   const handleAnalytics = async () => {
     if (window.location.href.includes("/board/")) {
-      const [baseUrl, boardId] = window.location.href.split("/board/");
+      const [baseUrl, boardUrl] = window.location.href.split("/board/");
+      const boardId = boardUrl.slice(0, 32);
       const hash = await window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(boardId));
       const url = `${baseUrl}/board/${Array.from(new Uint8Array(hash))
         .map((b) => b.toString(16).padStart(2, "0"))
