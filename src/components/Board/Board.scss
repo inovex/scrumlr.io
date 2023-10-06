@@ -54,6 +54,11 @@
   background-color: $color-white-one;
 }
 
+.column--hidden + .board__spacer-right,
+.board__spacer-left:has(+ .column--hidden) {
+  background-image: $column-stripes--light;
+}
+
 [theme="dark"] {
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
@@ -63,6 +68,11 @@
   .board__spacer-left:nth-child(even),
   .board__spacer-right:nth-child(even) {
     background-color: $color-dark-two;
+  }
+
+  .column--hidden + .board__spacer-right,
+  .board__spacer-left:has(+ .column--hidden) {
+    background-image: $column-stripes--dark;
   }
 }
 
