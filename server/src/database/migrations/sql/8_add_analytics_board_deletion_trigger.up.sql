@@ -42,7 +42,7 @@ CREATE OR REPLACE FUNCTION record_deleted_board_statistics()
             SELECT max(created_at) INTO last_note_created FROM notes WHERE board = OLD.id;
             SELECT AVG(LENGTH(text)) INTO avg_chars_per_note FROM notes WHERE board = OLD.id;
 
-            SELECT count(user) INTO total_participants FROM board_sessions s WHERE board = OLD.id AND s.role = 'PARTICIPANT';
+            SELECT count(user) INTO total_participants FROM board_sessions s WHERE s.board = OLD.id AND s.role = 'PARTICIPANT';
             SELECT count(user) INTO total_moderators FROM board_sessions s WHERE s.board = OLD.id AND s.role = 'OWNER' OR s.role = 'MODERATOR';
 
             SELECT count(board) INTO total_votes FROM votes WHERE board = OLD.id;
