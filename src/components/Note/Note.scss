@@ -12,6 +12,7 @@ $note__text-margin-top: 12px;
 $note__text-margin-top--small: 6px;
 
 $note__footer-height: 38px;
+$note__footer-gap: 42px;
 
 .note__root {
   position: relative;
@@ -127,6 +128,7 @@ $note__footer-height: 38px;
   display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
+  white-space: pre-line;
 
   &--extended {
     // add the difference of note__footer
@@ -161,7 +163,7 @@ $note__footer-height: 38px;
   height: 28px;
   display: flex;
   flex-direction: row;
-  gap: $margin--default;
+  gap: $note__footer-gap;
 }
 
 .note__author-container {
