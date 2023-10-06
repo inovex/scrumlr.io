@@ -180,6 +180,23 @@ $menu-desktop: "screen and (min-width: 1344px)";
 $box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
 $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 
+// gradients
+$column-stripes--light: repeating-linear-gradient(
+  45deg,
+  $color-white-one calc(0px + var(--stripe-offset, 0px)),
+  $color-white-one calc(20px + var(--stripe-offset, 0px)),
+  var(--accent-color--background-light) calc(20px + var(--stripe-offset, 0px)),
+  var(--accent-color--background-light) calc(40px + var(--stripe-offset, 0px))
+);
+
+$column-stripes--dark: repeating-linear-gradient(
+  45deg,
+  $color-dark-one calc(0px + var(--stripe-offset, 0px)),
+  $color-dark-one calc(20px + var(--stripe-offset, 0px)),
+  var(--accent-color--background-dark) calc(20px + var(--stripe-offset, 0px)),
+  var(--accent-color--background-dark) calc(40px + var(--stripe-offset, 0px))
+);
+
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
   $props: ();
