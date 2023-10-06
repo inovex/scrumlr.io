@@ -10,6 +10,7 @@ const AUTHOR1: Participant = getTestParticipant({user: {id: "test-participant-id
 const AUTHOR2: Participant = getTestParticipant({user: {id: "test-participant-id-2", name: "test-participant-name-2"}});
 const AUTHOR3: Participant = getTestParticipant({user: {id: "test-participant-id-3", name: "test-participant-name-3"}});
 const AUTHOR4: Participant = getTestParticipant({user: {id: "test-participant-id-4", name: "test-participant-name-4"}});
+const AUTHOR5: Participant = getTestParticipant({user: {id: "test-participant-id-5", name: "test-participant-name-5"}});
 const VIEWER1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}});
 
 const createNoteAuthorList = (authors: Participant[], showAuthors: boolean, overwrite?: Partial<ApplicationState>) => {
@@ -41,7 +42,7 @@ describe("NoteAuthorList", () => {
 
     it("should have self class for self", () => {
       const {container} = render(createNoteAuthorList([AUTHOR1], true));
-      expect(container.firstChild).toHaveClass("note-author-list--self");
+      expect(container.getElementsByClassName("note-author__container")[0]).toHaveClass("note-author__container--self");
     });
 
     it("should contain Me as name", () => {
@@ -60,8 +61,8 @@ describe("NoteAuthorList", () => {
       expect(container.querySelector(".note-author-rest")).toBeNull();
     });
 
-    it("should have a rest bubble after exceeding 3 authors", () => {
-      const {container} = render(createNoteAuthorList([AUTHOR1, AUTHOR2, AUTHOR3, AUTHOR4], true));
+    it("should have a rest bubble after exceeding 4 authors", () => {
+      const {container} = render(createNoteAuthorList([AUTHOR1, AUTHOR2, AUTHOR3, AUTHOR4, AUTHOR5], true));
       expect(container.querySelector(".note-author-rest")).not.toBeNull();
     });
   });

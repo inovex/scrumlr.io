@@ -8,6 +8,8 @@ $note__indicator-width: 3px;
 
 $note__author-image-size: 26px;
 
+$note__footer-gap: 42px;
+
 .note__root {
   position: relative;
 }
@@ -150,7 +152,7 @@ $note__author-image-size: 26px;
   height: 28px;
   display: flex;
   flex-direction: row;
-  gap: $margin--default;
+  gap: $note__footer-gap;
 }
 
 .note__author-container {
