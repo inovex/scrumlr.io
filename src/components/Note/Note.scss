@@ -122,6 +122,7 @@ $note__footer-gap: 42px;
   display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
+  white-space: pre-line;
 }
 
 .note__image-wrapper {
