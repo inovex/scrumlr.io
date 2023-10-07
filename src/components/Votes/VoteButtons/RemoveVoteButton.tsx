@@ -4,6 +4,7 @@ import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./RemoveVoteButton.scss";
 import classNames from "classnames";
+import {ReactComponent as RemoveIcon} from "assets/icon-remove.svg";
 
 type RemoveVoteProps = {
   noteId: string;
@@ -19,6 +20,7 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
 
   const [doBump, setDoBump] = useState(false);
   const firstUpdate = useRef(true);
+  const [removeVoteIconVisible, setRemoveVoteIconVisible] = useState(false);
 
   useEffect(() => {
     if (firstUpdate.current) {
@@ -36,9 +38,11 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
       onAnimationEnd={() => {
         setDoBump(false);
       }}
+      onMouseEnter={() => setRemoveVoteIconVisible(true)}
+      onMouseLeave={() => setRemoveVoteIconVisible(false)}
     >
       <span className="vote-button-remove__folded-corner" />
-      <span>{children}</span>
+      {removeVoteIconVisible ? <RemoveIcon /> : <span>{children}</span>}
     </DotButton>
   );
 };
