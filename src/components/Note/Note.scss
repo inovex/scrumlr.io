@@ -164,6 +164,8 @@ $note__footer-gap: 42px;
   display: flex;
   flex-direction: row;
   gap: $note__footer-gap;
+
+  z-index: $note-z-index; // prevent the background image from overlaying it
 }
 
 .note__author-container {
