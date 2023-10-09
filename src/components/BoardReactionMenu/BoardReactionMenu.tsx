@@ -8,14 +8,14 @@ import {useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
-import {useDebounceArray} from "utils/hooks/useDebounceArray";
+import {useDelayedReset} from "utils/hooks/useDelayedReset";
 import "./BoardReactionMenu.scss";
 
 type BoardReactionMenuProps = {
   close: () => void;
 };
 
-const REACTION_DEBOUNCE_TIME = 1000; // ms
+const REACTION_DEBOUNCE_TIME = 300; // milliseconds
 
 export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   const dispatch = useDispatch();
@@ -25,8 +25,7 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
 
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
 
-  // keep track of which buttons are debounced are therefore clickable
-  const [debounce, setDebounceAtIndex] = useDebounceArray<boolean>(boardReactions.length, false, true, REACTION_DEBOUNCE_TIME);
+  const [debounce, resetDebounce] = useDelayedReset<boolean>(false, true, REACTION_DEBOUNCE_TIME);
 
   const onClickReaction = (e: React.MouseEvent<HTMLButtonElement> | KeyboardEvent, reaction: ReactionType) => {
     e.stopPropagation();
@@ -36,13 +35,11 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
         buttons: [t("Toast.enable")],
         firstButtonOnClick: () => dispatch(Actions.setShowBoardReactions(true)),
       });
+    } else if (debounce) {
+       // not ready yet
     } else {
-      const index = boardReactions.findIndex(([type]) => type === reaction);
-      // only dispatch if button is debounced
-      if (debounce[index]) {
-        dispatch(Actions.addBoardReaction(reaction));
-        setDebounceAtIndex(index, false);
-      }
+      dispatch(Actions.addBoardReaction(reaction));
+      resetDebounce();
     }
   };
 
