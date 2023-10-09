@@ -10,7 +10,7 @@ $row-gap: 3px;
   grid-template-areas:
     "head head"
     "content options"
-    "foot foot";
+    "foot options";
   grid-template-columns: 11fr 1fr;
   grid-template-rows: 1fr 4fr 1fr;
   row-gap: $row-gap;
@@ -41,6 +41,7 @@ $row-gap: 3px;
 
 .note-dialog-note__options {
   grid-area: options;
+  align-self: end;
 }
 
 .note-dialog-note__footer {
