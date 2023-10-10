@@ -60,7 +60,7 @@
     "@types/jest": "^29.5.5",
     "@types/js-cookie": "^3.0.4",
     "@types/marked": "^6.0.0",
-    "@types/node": "^20.8.2",
+    "@types/node": "^20.8.4",
     "@types/qrcode.react": "^1.0.3",
     "@types/react": "^18.2.25",
     "@types/react-dom": "^18.2.10",
