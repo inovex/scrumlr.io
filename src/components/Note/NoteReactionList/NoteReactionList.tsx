@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
 import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
@@ -36,6 +36,7 @@ const CONDENSED_VIEW_MIN_USER_AMOUNT = 3;
 const CONDENSED_VIEW_WIDTH_LIMIT = 330; // pixels
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
+  const ref = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const me = useAppSelector((state) => state.participants?.self);
@@ -110,9 +111,28 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
   const [showReactionPopup, setShowReactionPopup] = useState<boolean>(false);
 
+  const closeReactionBar = () => {
+    setShowReactionBar(false);
+  };
+
+  // use a side effect to close the bar, because using blur/focus events leads to unexpected behaviour
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!ref.current?.contains(e.target as Node)) {
+        closeReactionBar();
+      }
+    };
+    document.addEventListener("click", handleClickOutside, true);
+    return () => document.removeEventListener("click", handleClickOutside, true);
+  }, [ref, showReactionBar]);
+
   const toggleReactionBar = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setShowReactionBar(!showReactionBar);
+    setShowReactionBar((show) => !show);
+  };
+
+  const onFocusBarContainer = () => {
+    // TODO: open bar without weird behaviour
   };
 
   const addReaction = (noteId: string, reactionType: ReactionType) => {
@@ -168,12 +188,17 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   if (!props.show) return null;
 
   return (
-    <div className="note-reaction-list__root" onBlur={() => setShowReactionBar(false)}>
+    <div className="note-reaction-list__root" ref={ref}>
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
-        <button className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")} onClick={(e) => toggleReactionBar(e)}>
+        <button
+          className="note-reaction-list__add-reaction-sticker-container"
+          aria-label={t("NoteReactionList.toggleBarLabel")}
+          onClick={(e) => toggleReactionBar(e)}
+          onFocus={onFocusBarContainer}
+        >
           {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
-        {showReactionBar && <NoteReactionBar setShowReactionBar={setShowReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
+        {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
       </div>
       <div className="note-reaction-list__reaction-chips-container">
         {!showReactionBar &&

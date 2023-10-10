@@ -38,6 +38,10 @@ $scale-factor: 120%;
       background-color: var(--accent-color--desaturated-light-hover);
     }
   }
+
+  &:focus {
+    background-color: hotpink; // TODO: change color
+  }
 }
 
 @container #{$container__note} {
