@@ -5,7 +5,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
-import {isEqual} from "underscore";
+import {isEqual, uniqueId} from "underscore";
 import {Actions} from "store/action";
 import {Reaction, ReactionType} from "types/reaction";
 import {Participant} from "types/participant";
@@ -37,6 +37,7 @@ const CONDENSED_VIEW_WIDTH_LIMIT = 330; // pixels
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const me = useAppSelector((state) => state.participants?.self);
@@ -111,28 +112,88 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
   const [showReactionPopup, setShowReactionPopup] = useState<boolean>(false);
 
+  const _id = uniqueId("note");
+  const [id] = useState(_id);
+
   const closeReactionBar = () => {
     setShowReactionBar(false);
   };
 
+  // logic:
+  // bar closed:
+  //    focus -> open
+  //    click -> nothing
+  // bar open:
+  //    blur  -> close
+  //    click -> close
+  //
   // use a side effect to close the bar, because using blur/focus events leads to unexpected behaviour
+  // CLICK OUTSIDE
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
+      // e.stopPropagation(); // leave this out
       if (!ref.current?.contains(e.target as Node)) {
+        console.log(id, "close by click outside");
         closeReactionBar();
+      } else {
+        console.log(id, e.target, "is in ", ref.current);
       }
     };
     document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [ref, showReactionBar]);
 
-  const toggleReactionBar = (e: React.MouseEvent<HTMLButtonElement>) => {
+  // CLICK INSIDE
+  useEffect(() => {
+    const handleMouseDown = (e: MouseEvent) => {
+      if (e.target === buttonRef?.current) toggleByClick(e);
+    };
+
+    document.addEventListener("mousedown", handleMouseDown, true);
+    return () => document.removeEventListener("mousedown", handleMouseDown, true);
+  }, []);
+
+  // FOCUS
+  useEffect(() => {
+    const handleFocus = (e: FocusEvent) => {
+      if (ref.current?.contains(e.target as Node)) {
+        onFocusBarContainer(e);
+      } else {
+        closeReactionBar();
+      }
+    };
+
+    document.addEventListener("focus", handleFocus, true);
+    return () => document.removeEventListener("focus", handleFocus, true);
+  }, []);
+
+  // BLUR
+  useEffect(() => {
+    const handleBlurOutside = (e: FocusEvent) => {
+      if (ref.current?.contains(e.target as Node)) {
+        // TODO: how can we differentiate between un-focus because of clicking elsewhere or by pressing tab?
+        // console.log(id,"close by blur");
+        // e.stopPropagation()
+        // closeReactionBar();
+      } else {
+        console.log(id, "no blur");
+      }
+    };
+
+    document.addEventListener("blur", handleBlurOutside, true);
+    return () => document.removeEventListener("blur", handleBlurOutside, true);
+  }, [ref]);
+
+  const toggleByClick = (e: MouseEvent) => {
+    console.log(id, `${showReactionBar ? "close" : "open"} by click`);
     e.stopPropagation();
     setShowReactionBar((show) => !show);
   };
 
-  const onFocusBarContainer = () => {
-    // TODO: open bar without weird behaviour
+  const onFocusBarContainer = (e: FocusEvent) => {
+    console.log(id, "open by focus");
+    e.stopPropagation();
+    setShowReactionBar(true);
   };
 
   const addReaction = (noteId: string, reactionType: ReactionType) => {
@@ -190,12 +251,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   return (
     <div className="note-reaction-list__root" ref={ref}>
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
-        <button
-          className="note-reaction-list__add-reaction-sticker-container"
-          aria-label={t("NoteReactionList.toggleBarLabel")}
-          onClick={(e) => toggleReactionBar(e)}
-          onFocus={onFocusBarContainer}
-        >
+        <button ref={buttonRef} className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")}>
           {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
         {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
