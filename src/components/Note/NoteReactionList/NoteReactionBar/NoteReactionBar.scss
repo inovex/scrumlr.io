@@ -40,7 +40,7 @@ $scale-factor: 120%;
   }
 
   &:focus {
-    background-color: hotpink; // TODO: change color
+    background-color: var(--accent-color--desaturated-light-hover);
   }
 }
 
@@ -62,6 +62,10 @@ $scale-factor: 120%;
       &:hover {
         background-color: var(--accent-color--desaturated-dark-hover);
       }
+    }
+
+    &:focus {
+      background-color: var(--accent-color--desaturated-dark-hover);
     }
   }
 }
