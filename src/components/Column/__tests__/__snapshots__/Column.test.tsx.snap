@@ -90,7 +90,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
             class="note__root accent-color__planning-pink"
             role="button"
             style="opacity: 1;"
-            tabindex="0"
+            tabindex="-1"
           >
             <button
               class="note note--stackBetween"
@@ -647,7 +647,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
             class="note__root accent-color__planning-pink"
             role="button"
             style="opacity: 1;"
-            tabindex="0"
+            tabindex="-1"
           >
             <button
               class="note note--stackBetween"
