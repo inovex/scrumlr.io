@@ -5,7 +5,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
-import {isEqual, uniqueId} from "underscore";
+import {isEqual} from "underscore";
 import {Actions} from "store/action";
 import {Reaction, ReactionType} from "types/reaction";
 import {Participant} from "types/participant";
@@ -113,90 +113,53 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const [showReactionBar, setShowReactionBar] = useState<boolean>(false);
   const [showReactionPopup, setShowReactionPopup] = useState<boolean>(false);
 
-  const _id = uniqueId("note");
-  const [id] = useState(_id);
-
+  // extra function because it is exported in a prop and passing the dispatch function directly seems wrong to me
   const closeReactionBar = () => {
     setShowReactionBar(false);
   };
 
-  // logic:
-  // bar closed:
-  //    focus -> open
-  //    click -> nothing
-  // bar open:
-  //    blur  -> close
-  //    click -> close
-  //
-  // use a side effect to close the bar, because using blur/focus events leads to unexpected behaviour
-  // CLICK OUTSIDE
   // on clicking anywhere but the note, close the reaction bar
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (!rootRef.current?.contains(e.target as Node)) {
-        // click not inside note
-        closeReactionBar();
+        // click not inside note -> close bar
+        setShowReactionBar(false);
       }
     };
     document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
-  }, [rootRef, showReactionBar]);
+  }, [rootRef]);
 
-  // CLICK INSIDE
+  // clicking the button toggles the bar
   useEffect(() => {
     const handleClickButton = (e: MouseEvent) => {
       if (buttonRef.current?.contains(e.target as Node) && !listRef.current?.contains(e.target as Node)) {
-        // click is on button (or the icon inside to be precise)
-        e.stopPropagation();
-        toggleByClick(e);
+        // click is on button (or the icon inside to be precise) -> toggle bar
+        setShowReactionBar((show) => !show);
       }
     };
 
     document.addEventListener("click", handleClickButton, true);
     return () => document.removeEventListener("click", handleClickButton, true);
-  }, []);
+  }, [buttonRef, listRef]);
 
-  // FOCUS
+  // the bar opens when in active focus
+  // this happens when initially clicking on a button before it is focused,
+  // or when cycling through the note using Tab
   useEffect(() => {
     const handleFocus = (e: FocusEvent) => {
       if (rootRef.current?.contains(e.target as Node) && !listRef.current?.contains(e.target as Node)) {
-        console.log(e.target);
-        onFocusBarContainer(e);
+        // active focus on the bar
+        setShowReactionBar(true);
       } else {
-        closeReactionBar();
+        // lost focus
+        setShowReactionBar(false);
       }
     };
 
     document.addEventListener("focus", handleFocus, true);
     return () => document.removeEventListener("focus", handleFocus, true);
-  }, []);
-
-  // BLUR
-  useEffect(() => {
-    const handleBlurOutside = (e: FocusEvent) => {
-      if (rootRef.current?.contains(e.target as Node)) {
-        // TODO: how can we differentiate between un-focus because of clicking elsewhere or by pressing tab?
-        // console.log(id,"close by blur");
-        // e.stopPropagation()
-        // closeReactionBar();
-      }
-    };
-
-    document.addEventListener("blur", handleBlurOutside, true);
-    return () => document.removeEventListener("blur", handleBlurOutside, true);
-  }, [rootRef]);
-
-  const toggleByClick = (e: MouseEvent) => {
-    console.log(id, `${showReactionBar ? "close" : "open"} by click`);
-    e.stopPropagation();
-    setShowReactionBar((show) => !show);
-  };
-
-  const onFocusBarContainer = (e: FocusEvent) => {
-    console.log(id, "open by focus");
-    e.stopPropagation();
-    setShowReactionBar(true);
-  };
+  }, [rootRef, listRef]);
 
   const addReaction = (noteId: string, reactionType: ReactionType) => {
     dispatch(Actions.addReaction(noteId, reactionType));
