@@ -36,8 +36,9 @@ const CONDENSED_VIEW_MIN_USER_AMOUNT = 3;
 const CONDENSED_VIEW_WIDTH_LIMIT = 330; // pixels
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
-  const ref = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const me = useAppSelector((state) => state.participants?.self);
@@ -132,19 +133,19 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   // on clicking anywhere but the note, close the reaction bar
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (!ref.current?.contains(e.target as Node)) {
+      if (!rootRef.current?.contains(e.target as Node)) {
         // click not inside note
         closeReactionBar();
       }
     };
     document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
-  }, [ref, showReactionBar]);
+  }, [rootRef, showReactionBar]);
 
   // CLICK INSIDE
   useEffect(() => {
     const handleClickButton = (e: MouseEvent) => {
-      if (buttonRef.current?.contains(e.target as Node)) {
+      if (buttonRef.current?.contains(e.target as Node) && !listRef.current?.contains(e.target as Node)) {
         // click is on button (or the icon inside to be precise)
         e.stopPropagation();
         toggleByClick(e);
@@ -158,7 +159,8 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   // FOCUS
   useEffect(() => {
     const handleFocus = (e: FocusEvent) => {
-      if (ref.current?.contains(e.target as Node)) {
+      if (rootRef.current?.contains(e.target as Node) && !listRef.current?.contains(e.target as Node)) {
+        console.log(e.target);
         onFocusBarContainer(e);
       } else {
         closeReactionBar();
@@ -172,7 +174,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   // BLUR
   useEffect(() => {
     const handleBlurOutside = (e: FocusEvent) => {
-      if (ref.current?.contains(e.target as Node)) {
+      if (rootRef.current?.contains(e.target as Node)) {
         // TODO: how can we differentiate between un-focus because of clicking elsewhere or by pressing tab?
         // console.log(id,"close by blur");
         // e.stopPropagation()
@@ -182,7 +184,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
     document.addEventListener("blur", handleBlurOutside, true);
     return () => document.removeEventListener("blur", handleBlurOutside, true);
-  }, [ref]);
+  }, [rootRef]);
 
   const toggleByClick = (e: MouseEvent) => {
     console.log(id, `${showReactionBar ? "close" : "open"} by click`);
@@ -249,14 +251,14 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   if (!props.show) return null;
 
   return (
-    <div className="note-reaction-list__root" ref={ref}>
+    <div className="note-reaction-list__root" ref={rootRef}>
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
         <button ref={buttonRef} className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")}>
           {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
         {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
       </div>
-      <div className="note-reaction-list__reaction-chips-container">
+      <div className="note-reaction-list__reaction-chips-container" ref={listRef}>
         {!showReactionBar &&
           // show either condensed or normal reaction chips
           (showCondensed ? (
