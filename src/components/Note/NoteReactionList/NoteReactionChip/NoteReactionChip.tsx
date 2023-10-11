@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, {useEffect} from "react";
+import React from "react";
 import {Tooltip} from "react-tooltip";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import _ from "underscore";
@@ -26,19 +26,6 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
       props.handleLongPressReaction(e);
     }
   });
-
-  // this allows the selection of a chip using the enter key
-  // by preventing the note to be opened if it's active
-  useEffect(() => {
-    const handlePressEnter = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        e.stopPropagation();
-      }
-    };
-
-    document.addEventListener("keydown", handlePressEnter, true);
-    return () => document.removeEventListener("keydown", handlePressEnter, true);
-  }, []);
 
   return (
     <>

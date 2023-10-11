@@ -219,7 +219,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         <button ref={buttonRef} className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")}>
           {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
-        {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
+        {showReactionBar && <NoteReactionBar isOpen={showReactionBar} closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
       </div>
       <div className="note-reaction-list__reaction-chips-container" ref={listRef}>
         {!showReactionBar &&

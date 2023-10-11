@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useEffect} from "react";
 import classNames from "classnames";
 import {ReactionImageMap, ReactionType} from "types/reaction";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionBar.scss";
 
 interface NoteReactionBarProps {
+  isOpen: boolean;
   closeReactionBar: () => void;
   reactions: ReactionModeled[];
   handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
@@ -24,6 +25,20 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
       props.closeReactionBar();
     }
   };
+
+  // this allows the selection of an emoji using the enter key
+  // by preventing the note from being opened if it's active
+  useEffect(() => {
+    const handlePressEnter = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && props.isOpen) {
+        // only stop bubbling if the bar is open to prevent unintended behaviour
+        e.stopPropagation();
+      }
+    };
+
+    document.addEventListener("keydown", handlePressEnter, true);
+    return () => document.removeEventListener("keydown", handlePressEnter, true);
+  }, [props.isOpen]);
 
   return (
     <div className="note-reaction-bar__root">
