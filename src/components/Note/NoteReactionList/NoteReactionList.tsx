@@ -129,14 +129,12 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   //
   // use a side effect to close the bar, because using blur/focus events leads to unexpected behaviour
   // CLICK OUTSIDE
+  // on clicking anywhere but the note, close the reaction bar
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      // e.stopPropagation(); // leave this out
       if (!ref.current?.contains(e.target as Node)) {
-        console.log(id, "close by click outside");
+        // click not inside note
         closeReactionBar();
-      } else {
-        console.log(id, e.target, "is in ", ref.current);
       }
     };
     document.addEventListener("click", handleClickOutside, true);
@@ -145,12 +143,16 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   // CLICK INSIDE
   useEffect(() => {
-    const handleMouseDown = (e: MouseEvent) => {
-      if (e.target === buttonRef?.current) toggleByClick(e);
+    const handleClickButton = (e: MouseEvent) => {
+      if (buttonRef.current?.contains(e.target as Node)) {
+        // click is on button (or the icon inside to be precise)
+        e.stopPropagation();
+        toggleByClick(e);
+      }
     };
 
-    document.addEventListener("mousedown", handleMouseDown, true);
-    return () => document.removeEventListener("mousedown", handleMouseDown, true);
+    document.addEventListener("click", handleClickButton, true);
+    return () => document.removeEventListener("click", handleClickButton, true);
   }, []);
 
   // FOCUS
@@ -175,8 +177,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
         // console.log(id,"close by blur");
         // e.stopPropagation()
         // closeReactionBar();
-      } else {
-        console.log(id, "no blur");
       }
     };
 
