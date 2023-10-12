@@ -253,6 +253,7 @@ $column-stripes--dark: repeating-linear-gradient(
   z-index: $tooltip-z-index;
   border-radius: $rounded--large;
   opacity: 100%;
+  font-size: $text--sm;
 }
 
 @mixin tooltip--light {
