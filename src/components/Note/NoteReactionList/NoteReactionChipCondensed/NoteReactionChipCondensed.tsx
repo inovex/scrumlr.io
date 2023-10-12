@@ -2,8 +2,8 @@ import {Tooltip} from "react-tooltip";
 import {hashCode} from "utils/hash";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {ReactionImageMap} from "types/reaction";
+import {uniqueId} from "underscore";
 import {ReactionModeled} from "../NoteReactionList";
-
 import "./NoteReactionChipCondensed.scss";
 
 interface NoteReactionChipPropsCondensed {
@@ -22,6 +22,8 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const reactionUsersTitle = reactionsFiltered.map((r) => `${r.users.map((u) => u.user.name).join(", ")}: ${ReactionImageMap.get(r.reactionType)}`);
   const totalAmount = reactionsFiltered.reduce((sum, reactionModeled) => sum + reactionModeled.amount, 0);
 
+  const anchorId = uniqueId(`reactions-${noteId}-condensed`);
+
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
       props.handleLongPressReaction(e);
@@ -31,7 +33,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   return (
     <>
       <div
-        id={`reactions-condensed-${noteId}`}
+        id={`${anchorId}`}
         className="note-reaction-chip-condensed__root"
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()}
@@ -45,7 +47,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
         </div>
         <div className="note-reaction-chip-condensed__amount">{totalAmount}</div>
       </div>
-      <Tooltip anchorSelect={`#reactions-condensed-${noteId}`} className="note-reaction-chip-condensed__tooltip" place="top">
+      <Tooltip anchorSelect={`#${anchorId}`} className="note-reaction-chip-condensed__tooltip" place="top">
         <div className="note-reaction-chip-condensed__tooltip">
           {reactionUsersTitle.map((t) => (
             // hash because a unique key is required to make linter happy
