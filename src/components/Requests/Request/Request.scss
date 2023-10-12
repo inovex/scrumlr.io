@@ -12,6 +12,7 @@ $fly-in-time: 0.5s;
   column-gap: 12px;
 
   width: auto;
+  max-width: max(400px, 36vw);
   height: 56px;
 
   padding: 0 $padding--small;
@@ -22,7 +23,9 @@ $fly-in-time: 0.5s;
   background-color: $color-white;
   box-shadow: 3px 5px 3px rgba($menu-icon-background-color--dark, 30%);
 
-  transition: margin-right $transition-time ease-out, padding-right $transition-time ease-out;
+  transition:
+    margin-right $transition-time ease-out,
+    padding-right $transition-time ease-out;
 
   &:hover {
     padding-right: $padding--small;
@@ -45,6 +48,8 @@ $fly-in-time: 0.5s;
 // MIDDLE WRAPPER
 .request__wrapper {
   position: relative;
+  flex: 1;
+  overflow: hidden;
 }
 
 // NAME AND TEXT
@@ -59,11 +64,17 @@ $fly-in-time: 0.5s;
 .request__participant-name {
   color: $menu-icon-background-color--dark;
   font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .request__info-text {
   color: $menu-icon-background-color--dark;
   opacity: 50%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 // BUTTON
@@ -102,6 +113,17 @@ $fly-in-time: 0.5s;
 .request__icon-container {
   width: $icon--extralarge;
   height: $icon--extralarge;
+
+  > svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media #{$mini-smartphone} {
+  .request__container {
+    max-width: 80vw;
+  }
 }
 
 // ANIMATION

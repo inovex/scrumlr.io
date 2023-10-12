@@ -55,9 +55,15 @@
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
-    "deleteBoard": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
+    "deleteBoard": "Bist du dir absolut sicher, dass du die Sitzung löschen möchtest?",
+    "deleteNote": "Bist du dir sicher, dass du das Kärtchen löschen möchtest?",
+    "deleteNoteButton": "Kärtchen löschen",
+    "deleteStackButton": "Stapel löschen",
+    "deleteOptions": "Was möchtest du löschen?",
+    "warning": "Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "cancel": "Abbrechen"
   },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
@@ -107,11 +113,19 @@
     "deleteColumn": "Löschen",
     "addColumnLeft": "Links einfügen",
     "addColumnRight": "Rechts einfügen",
-    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet"
+    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
+    "notes_one": "{{count}} Kärtchen",
+    "notes_other": "{{count}} Kärtchen"
   },
   "ErrorPage": {
     "navigateHome": "Startseite",
     "navigateBack": "Gehe zurück"
+  },
+  "NotFoundPage": {
+    "title": "Och nö! Fehler",
+    "descriptionLine1": "Diese Seite existiert nicht.",
+    "descriptionLine2": "Geh zur Startseite zurück.",
+    "navigateHome": "Zurück zur Startseite"
   },
   "JoinRequest": {
     "title": "Möchte der Sitzung beitreten",
@@ -142,7 +156,7 @@
     "submit": "Absenden"
   },
   "Timer": {
-    "stopTimer": "Stoppe Alarm"
+    "stopTimer": "Stoppe Timer"
   },
   "CookieNotice": {
     "description": "Wir und ausgewählte Partner verwenden Cookies oder ähnliche Technologien, wie in der Cookie-Richtlinie angegeben. Sie können der Verwendung solcher Technologien zustimmen, indem Sie diesen Hinweis schließen, mit einem Link oder einer Schaltfläche außerhalb dieses Hinweises interagieren oder auf andere Weise weitersurfen.",
@@ -176,7 +190,31 @@
     "hotkeysEnabled": "Hotkeys aktiviert!",
     "hotkeysDisabled": "Hotkeys deaktiviert!",
     "hotkeyToggle": "Hotkeys aktivieren",
-    "cheatSheet": "Hotkey Spickzettel"
+    "cheatSheet": "Hotkey Spickzettel",
+    "toggleColumnVisibility": {
+      "hide": "Ausgeblendete Spalten sind nun auch für dich ausgeblendet",
+      "show": "Ausgeblendete Spalten sind nun für dich sichtbar"
+    },
+    "toggleShowOtherUsersNotes": {
+      "hide": "Die Kärtchen anderer Teilnehmer sind nun ausgeblendet",
+      "show": "Die Kärtchen anderer Teilnehmer sind nun sichtbar"
+    },
+    "toggleShowAuthors": {
+      "hide": "Die Autoren der Kärtchen sind  nun ausgeblendet",
+      "show": "Die Autoren der Kärtchen sind nun sichtbar"
+    },
+    "toggleRaisedHand": {
+      "raise": "Du hast deine Hand gehoben",
+      "lower": "Du hast deine Hand gesenkt"
+    },
+    "toggleReadyState": {
+      "ready": "Du hast dich als bereit markiert",
+      "notReady": "Du hast dich als nicht bereit markiert"
+    },
+    "togglePresentationMode": {
+      "startPresenting": "Du hast den Präsentiermodus gestartet",
+      "endPresenting": "Du hast den Präsentiermodus beendet"
+    }
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",
@@ -188,8 +226,8 @@
     "stopVoting": "Abstimmung beenden"
   },
   "VoteDisplay": {
-    "finishActionTooltip": "Beenden",
-    "abortActionTooltip": "Abbrechen",
+    "finishActionTooltip": "Abstimmung beenden",
+    "abortActionTooltip": "Abstimmung abbrechen",
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
   },
   "TimerToggleButton": {
@@ -208,7 +246,7 @@
     "authenticationError": "Ein Fehler trat beim Einloggen auf",
     "votingStarted": "Du hast eine Abstimmung gestartet!",
     "votingFinished": "Du hast die Abstimmung beendet!",
-    "focusModeStart": "Du hast die Moderation gestartet! Die von dir ausgewählten Karten werden jedem Nutzer präsentiert.",
+    "focusModeStart": "Du hast die Moderation gestartet! Die von dir ausgewählten Karten werden jedem Nutzer präsentiert",
     "focusModeFinished": "Du hast die Moderation beendet!",
     "votingPhaseStarted": "Eine Abstimmung wurde gestartet und du kannst jetzt deine Stimmen vergeben!",
     "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weiteren Stimmen werden gezählt!",
@@ -220,11 +258,16 @@
     "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
     "passwordCopied": "Board geschützt und Passwort kopiert!",
     "boardMadePublic": "Das Board ist nun öffentlich!",
-    "allParticipantsDone": "Alle Teilnehmer sind fertig.",
+    "allParticipantsDone": "Alle Teilnehmer sind fertig!",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
-    "noteToHiddenColumn": "Du hast gerade ein Karte einer ausgeblendeten Spalte hinzugefügt.",
-    "noteToHiddenColumnButton": "Spalte für alle anzeigen"
+    "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
+    "noteToHiddenColumnButton": "Spalte für alle anzeigen",
+    "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
+    "noteDeleted": "Die Karte wurde gelöscht!",
+    "emptyNoteDialog": "Die Karte muss Text enthalten.",
+    "ready": "Bist du fertig?",
+    "readyButton": "Fertig!"
   },
   "Language": {
     "german": "Deutsch",
@@ -306,7 +349,8 @@
     "Language": "Sprache",
     "colorScheme": "Farbschema",
     "colorSchemeLight": "Hell",
-    "colorSchemeDark": "Dunkel"
+    "colorSchemeDark": "Dunkel",
+    "showHotkeyNotifications": "Zeige Hotkey-Notifikationen"
   },
   "Feedback": {
     "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",
@@ -346,6 +390,7 @@
     "serverConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden.",
     "retry": "Wiederholen",
     "joinBoard": "Es tut uns leid, aber wir haben ein Problem beim Beitreten des Boards. Bitte versuche es erneut.",
+    "boardDeleted": "Das Board wurde gelöscht! Du wurdest zur Startseite weitergeleitet.",
     "acceptJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Akzeptieren der Beitrittsanfragen. Bitte versuche es erneut.",
     "rejectJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Ablehnen der Beitrittsanfragen. Bitte versuche es erneut.",
     "initApplication": "Es tut uns leid, aber wir haben ein Problem beim Erreichen des Servers. Bitte versuche die Seite neu zu laden.",

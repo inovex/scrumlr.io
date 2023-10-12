@@ -9,10 +9,12 @@ import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
+import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {Toast} from "utils/Toast";
 import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
-import {CSSProperties, useEffect, useRef, useState} from "react";
+import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
 
@@ -116,6 +118,14 @@ export const StackView = () => {
   const authorRef = useRef<{name: string | undefined; avatar?: AvataaarProps}>({name: authorName, avatar: author?.user.avatar});
   const stackedNotesRef = useRef<StackedNote[]>(stackedNotes);
 
+  const hasMixedAuthors = (stack: Note[]) => {
+    if (!stack || !author) return undefined;
+    const authors = stack.map((n) => n.author);
+    return authors.some((item) => item !== authors[0]);
+  };
+  const entireStack = useAppSelector((state) => state.notes.filter((n) => n.id === note?.id || n.position.stack === note?.id));
+  const stackHasMixedAuthors = hasMixedAuthors(entireStack);
+
   // update transition config when note changes so that the visible notes are updated without any animation
   useEffect(() => {
     if (
@@ -142,6 +152,7 @@ export const StackView = () => {
     stackedNotesRef.current = stackedNotes;
   }, [author, authorName, note, stackedNotes]);
 
+  // update transition config when navigating to a new note
   useEffect(() => {
     if (prevNote.current && prevNote.current?.id !== note?.id) {
       let direction: "left" | "right" | undefined;
@@ -174,6 +185,21 @@ export const StackView = () => {
       prevNote.current = note;
     }
   }, [author, authorName, columns, note, stackedNotes]);
+
+  // redirect to stack and show toast if note has been stacked on another note
+  useEffect(() => {
+    if (note && prevNote.current && !prevNote.current.position.stack && note.position.stack) {
+      navigate(`/board/${boardId}/note/${note.position.stack}/stack`);
+      Toast.info({title: t("Toast.noteMovedToStack")});
+    }
+  }, [boardId, navigate, note, t]);
+
+  // show toast if note has been deleted
+  useLayoutEffect(() => {
+    if (prevNote.current && !note) {
+      Toast.info({title: t("Toast.noteDeleted"), icon: TrashIcon});
+    }
+  }, [note, t]);
 
   if (!note) {
     navigate(`/board/${boardId}`);
@@ -233,9 +259,9 @@ export const StackView = () => {
                       authorName={item.authorName}
                       showAuthors={showAuthors}
                       onClose={handleClose}
-                      onDeleteOfParent={handleClose}
                       isStackedNote={false}
                       hasStackedNotes={item.stack.length > 0}
+                      stackHasMixedAuthors={stackHasMixedAuthors}
                       viewer={viewer}
                       className="stack-view__parent-note"
                     />
@@ -250,7 +276,6 @@ export const StackView = () => {
                           authorName={n.authorName}
                           showAuthors={showAuthors}
                           onClose={handleClose}
-                          onDeleteOfParent={handleClose}
                           isStackedNote
                           viewer={viewer}
                         />

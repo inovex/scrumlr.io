@@ -1,23 +1,24 @@
 import classNames from "classnames";
-import {useRef, useEffect, KeyboardEvent} from "react";
-import {useDrag, useDrop} from "react-dnd";
+import {KeyboardEvent, useEffect, useRef} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
-import {UserAvatar} from "components/BoardUsers";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {Participant} from "types/participant";
-import "./Note.scss";
-import {getEmptyImage} from "react-dnd-html5-backend";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
+import {Sortable} from "components/DragAndDrop/Sortable";
+import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
+import "./Note.scss";
 
 interface NoteProps {
   noteId: string;
   viewer: Participant;
+  setItems?: (items: string[]) => void;
+  colorClassName?: string;
 }
 
 export const Note = (props: NoteProps) => {
@@ -29,33 +30,34 @@ export const Note = (props: NoteProps) => {
   const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
-  const author = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === note!.author) ?? state.participants?.self;
-    const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
-    const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
-    return {
-      ...noteAuthor,
-      displayName,
-      isSelf,
-    };
-  }, isEqual);
-
-  const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
-  const moderating = useAppSelector((state) => state.view.moderating);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
-  const isModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
+  const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
+  const me = useAppSelector((state) => state.participants?.self);
+  const moderating = useAppSelector((state) => state.view.moderating);
+  const isModerator = props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER";
+
+  // all authors of a note, including its children if it's a stack.
+  const authors = useAppSelector((state) => {
+    const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
+    const childrenNoteAuthors = state.notes
+      // get all notes which are in the same stack as the main note
+      .filter((n) => n.position.stack === props.noteId)
+      // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
+      .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
+    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[]; // remove undefined values (which shouldn't exists, only for TS type assertion)
+  }, isEqual);
 
   /* eslint-disable */
   useEffect(() => {
     if (isShared && !document.location.pathname.endsWith(props.noteId + "/stack")) {
-      navigate(`note/${note!.id}/stack`);
+      navigate(`note/${note?.id}/stack`);
     }
   }, []);
 
   useEffect(() => {
     if (isShared) {
       if (!document.location.pathname.endsWith(props.noteId + "/stack")) {
-        navigate(`note/${note!.id}/stack`);
+        navigate(`note/${note?.id}/stack`);
       }
     } else if (document.location.pathname.endsWith(props.noteId)) {
       navigate(`.`);
@@ -65,32 +67,8 @@ export const Note = (props: NoteProps) => {
 
   const isImage = useImageChecker(note?.text ?? "");
 
-  const [{isDragging}, drag, preview] = useDrag({
-    type: isStack ? "STACK" : "NOTE",
-    item: {id: props.noteId, columnId: note!.position.column},
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    canDrag: isModerator || allowStacking,
-  });
-
-  const [{isOver}, drop] = useDrop(() => ({
-    accept: ["NOTE", "STACK"],
-    drop: (item: {id: string}, monitor) => {
-      if (!monitor.didDrop()) {
-        dispatch(Actions.editNote(item.id, {position: {stack: props.noteId!, column: note!.position.column, rank: 0}}));
-      }
-    },
-    collect: (monitor) => ({isOver: monitor.isOver({shallow: true}) && monitor.canDrop()}),
-    canDrop: (item: {id: string}) => item.id !== props.noteId,
-  }));
-
-  useEffect(() => {
-    preview(getEmptyImage());
-  }, [preview]);
-
   const handleClick = () => {
-    if (moderating && (props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER")) {
+    if (moderating && isModerator) {
       dispatch(Actions.shareNote(props.noteId));
     }
     navigate(`note/${props.noteId}/stack`);
@@ -102,43 +80,41 @@ export const Note = (props: NoteProps) => {
     }
   };
 
-  drag(noteRef);
-  drop(noteRef);
-
   // TODO: replace with stack setting from state when implemented. thanks, love u <3
+  // de-activated in css for now
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
 
+  if (!note) return null;
+
   return (
-    <div className="note__root">
-      <button
-        className={classNames("note", {"note--isDragging": isDragging}, {"note--isOver": isOver}, `note--${stackSetting}`)}
-        onClick={handleClick}
-        onKeyDown={handleKeyPress}
-        ref={noteRef}
-      >
+    <Sortable
+      setItems={props.setItems}
+      id={props.noteId}
+      columnId={note.position.column}
+      className={classNames("note__root", props.colorClassName)}
+      disabled={!(isModerator || allowStacking)}
+    >
+      <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         {isImage ? (
           <div className="note__image-wrapper">
             <img
-              src={addProtocol(note!.text)}
+              src={addProtocol(note.text)}
               className="note__image"
-              alt={t("Note.userImageAlt", {user: author.isSelf ? t("Note.you") : author.displayName})}
+              alt={t("Note.userImageAlt", {user: authors[0].user.id === me?.user.id ? t("Note.you") : authors[0].user.name})}
               draggable={false} // safari bugfix
             />
           </div>
         ) : (
-          <p className="note__text">{note!.text}</p>
+          <p className="note__text">{note.text}</p>
         )}
         <div className="note__footer">
-          {(showAuthors || props.viewer.user.id === author.user!.id) && (
-            <figure className={classNames("note__author", {"note__author--self": author.isSelf})} aria-roledescription="author">
-              <UserAvatar id={note!.author} avatar={author.user!.avatar} title={author.displayName} className="note__user-avatar" avatarClassName="note__user-avatar" />
-              <figcaption className="note__author-name">{author.displayName}</figcaption>
-            </figure>
-          )}
+          <div className="note__author-container">
+            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+          </div>
           <Votes noteId={props.noteId!} aggregateVotes />
         </div>
       </button>
       {isStack && <div className="note__in-stack" />}
-    </div>
+    </Sortable>
   );
 };

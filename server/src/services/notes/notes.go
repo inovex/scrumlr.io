@@ -31,7 +31,7 @@ type DB interface {
 	GetNote(id uuid.UUID) (database.Note, error)
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
-	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID) error
+	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 }
 
 func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
@@ -95,8 +95,8 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 	return new(dto.Note).From(note), err
 }
 
-func (s *NoteService) Delete(ctx context.Context, id uuid.UUID) error {
-	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), ctx.Value("Board").(uuid.UUID), id)
+func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
+	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), ctx.Value("Board").(uuid.UUID), id, body.DeleteStack)
 }
 
 func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
@@ -112,10 +112,14 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
 	}
 }
-func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote) {
+func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote, deleteStack bool) {
+	noteData := map[string]interface{}{
+		"note":        note,
+		"deleteStack": deleteStack,
+	}
 	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventNoteDeleted,
-		Data: note,
+		Data: noteData,
 	})
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)

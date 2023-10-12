@@ -75,6 +75,13 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       visible: true,
       index: 1,
     },
+    {
+      id: "test-columns-id-3",
+      name: "test-columns-name-3",
+      color: "planning-pink",
+      visible: true,
+      index: 2,
+    },
   ],
   notes: [
     {
@@ -82,6 +89,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
+        stack: null,
         column: "test-columns-id-1",
         rank: 0,
       },
@@ -91,6 +99,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
+        stack: null,
         column: "test-columns-id-1",
         rank: 1,
       },
@@ -100,6 +109,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       author: "test-participants-others-user-id-1",
       text: "Lorem Ipsum",
       position: {
+        stack: null,
         column: "test-columns-id-2",
         rank: 0,
       },
@@ -134,6 +144,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     ],
   },
   view: {
+    hotkeyNotificationsEnabled: true,
     moderating: false,
     serverTimeOffset: 0,
     enabledAuthProvider: [],

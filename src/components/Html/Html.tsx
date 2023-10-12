@@ -7,7 +7,10 @@ const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
 
 export const Html: FC = () => {
   const lang = useAppSelector((state) => state.view.language);
+  let title = useAppSelector((state) => state.board.data?.name);
   const [theme, setTheme] = useState(localStorage.getItem("theme") ?? (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
+
+  if (title) title = `scrumlr.io - ${title}`;
 
   useEffect(() => {
     if (theme === "auto") {
@@ -25,5 +28,5 @@ export const Html: FC = () => {
     }
   });
 
-  return <HelmetWorkaround htmlAttributes={{lang, theme}} />;
+  return <HelmetWorkaround title={title} htmlAttributes={{lang, theme}} />;
 };

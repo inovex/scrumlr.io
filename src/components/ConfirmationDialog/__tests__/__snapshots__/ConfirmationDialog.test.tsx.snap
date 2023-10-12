@@ -44,28 +44,38 @@ exports[`<ConfirmationDialog /> snapshot test 1`] = `
                 icon-close.svg
               </svg>
             </button>
-            <h2
-              class="confirmation-dialog__title"
-            >
-              headline
-            </h2>
             <div
-              class="confirmation-dialog__buttons"
+              class="confirmation-dialog__icon-content-wrapper"
             >
-              <button
-                aria-label="accept"
-                class="confirmation-dialog__button confirmation-dialog__button--accept"
-                type="button"
+              <div
+                class="confirmation-dialog__content"
               >
-                accept
-              </button>
-              <button
-                aria-label="decline"
-                class="confirmation-dialog__button confirmation-dialog__button--decline"
-                type="button"
-              >
-                decline
-              </button>
+                <div>
+                  <h2
+                    class="confirmation-dialog__title"
+                  >
+                    headline
+                  </h2>
+                </div>
+                <div
+                  class="confirmation-dialog__buttons"
+                >
+                  <button
+                    aria-label="accept"
+                    class="confirmation-dialog__button confirmation-dialog__button--accept"
+                    type="button"
+                  >
+                    accept
+                  </button>
+                  <button
+                    aria-label="decline"
+                    class="confirmation-dialog__button confirmation-dialog__button--decline"
+                    type="button"
+                  >
+                    decline
+                  </button>
+                </div>
+              </div>
             </div>
           </aside>
         </div>

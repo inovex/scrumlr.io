@@ -2,13 +2,13 @@
 @import "components/Column/Column";
 
 .board {
-  --n: 1;
+  --visible-columns: 1;
 
   display: grid;
   grid-auto-flow: column;
   grid-template-columns:
     minmax($board__side-panel-width, 1fr)
-    repeat(var(--board__columns), Min(calc((100% - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--n))), #{$column__max-width}))
+    repeat(var(--board__columns), Min(calc((100% - #{$board__side-panel-width * 2}) / min(var(--board__columns), var(--visible-columns))), #{$column__max-width}))
     minmax($board__side-panel-width, 1fr);
 
   scroll-snap-type: x mandatory;
@@ -23,13 +23,18 @@
 
   overflow: hidden;
   overflow-x: scroll;
-}
-.board::-webkit-scrollbar {
-  display: none;
-}
 
-.board > * {
-  scroll-snap-align: start;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  > * {
+    scroll-snap-align: start;
+  }
+
+  &--dragging {
+    scroll-snap-type: none; // disable snapping while dragging due to unwanted behavior with dnd-kit
+  }
 }
 
 .board__spacer-left {
@@ -49,6 +54,11 @@
   background-color: $color-white-one;
 }
 
+.column--hidden + .board__spacer-right,
+.board__spacer-left:has(+ .column--hidden) {
+  background-image: $column-stripes--light;
+}
+
 [theme="dark"] {
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
@@ -58,6 +68,11 @@
   .board__spacer-left:nth-child(even),
   .board__spacer-right:nth-child(even) {
     background-color: $color-dark-two;
+  }
+
+  .column--hidden + .board__spacer-right,
+  .board__spacer-left:has(+ .column--hidden) {
+    background-image: $column-stripes--dark;
   }
 }
 
@@ -73,7 +88,7 @@
 @for $i from 1 through 16 {
   @media screen and (min-width: $i*($column__min-width+2*$board__side-panel-width)) {
     .board {
-      --n: #{$i};
+      --visible-columns: #{$i};
     }
   }
 }

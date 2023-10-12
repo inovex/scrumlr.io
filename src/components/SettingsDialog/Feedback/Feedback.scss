@@ -82,6 +82,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   align-items: flex-start;
   height: auto;
   gap: $padding--small;
+  padding: $padding--default $padding--medium;
 }
 .feedback-form__settings-button > span {
   padding-bottom: 0;
@@ -93,12 +94,8 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   border: none;
   outline: none;
   resize: none;
-  width: calc(100% - (2 * $margin--medium));
+  width: 100%;
   height: 80px;
-  margin-top: 0;
-  margin-bottom: $margin--default;
-  margin-left: $margin--medium;
-  margin-right: $margin--medium;
   padding: 0;
 }
 [theme="dark"] .feedback-form__feedback-textarea {
@@ -109,11 +106,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   background-color: transparent;
   border: none;
   outline: none;
-  width: calc(100% - (2 * $margin--medium));
-  margin-top: 0;
-  margin-bottom: $margin--default;
-  margin-left: $margin--medium;
-  margin-right: $margin--medium;
+  width: 100%;
   padding: 0;
 }
 [theme="dark"] .feedback-form__contact-input {

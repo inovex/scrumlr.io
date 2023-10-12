@@ -2,6 +2,7 @@ import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
+import {ReactComponent as LeaveIcon} from "assets/icon-share.svg";
 import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -45,6 +46,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             navigate("/");
           }}
           onDecline={() => setShowConfirmationDialog(false)}
+          icon={LeaveIcon}
         />
       )}
       <header className="board-header">
@@ -52,39 +54,37 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </button>
 
-        <div className="board-header__name-and-settings">
-          <button
-            className="board-header_name-and-settings-button"
-            onClick={() => {
-              setShowMenu(!showMenu);
-            }}
-            aria-haspopup
-            aria-pressed={showMenu}
-            id="board-header__name-and-settings-button"
-            data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
-          >
-            <div className="board-header__access-policy-status">
+        <button
+          className="board-header_name-and-settings"
+          onClick={() => {
+            setShowMenu(!showMenu);
+          }}
+          aria-haspopup
+          aria-pressed={showMenu}
+          id="board-header__name-and-settings"
+          data-tooltip-content={state.name || DEFAULT_BOARD_NAME}
+        >
+          <div className="board-header__access-policy-status">
+            {
               {
-                {
-                  BY_INVITE: <LockIcon className="board-header__access-policy-status-icon" />,
-                  BY_PASSPHRASE: <KeyIcon className="board-header__access-policy-status-icon" />,
-                  PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
-                }[state.accessPolicy!]
-              }
-              <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
-            </div>
-            <div className="board-header__name-container">
-              <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
-            </div>
-          </button>
+                BY_INVITE: <LockIcon className="board-header__access-policy-status-icon" />,
+                BY_PASSPHRASE: <KeyIcon className="board-header__access-policy-status-icon" />,
+                PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
+              }[state.accessPolicy!]
+            }
+            <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
+          </div>
+          <div className="board-header__name-container">
+            <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
+          </div>
           <Tooltip
-            anchorId="board-header__name-and-settings-button"
-            place="bottom"
+            anchorSelect="#board-header__name-and-settings"
+            float
             variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
             delayShow={500}
             style={{zIndex: 999}}
           />
-        </div>
+        </button>
 
         <div className="board-header__users">
           <BoardUsers />

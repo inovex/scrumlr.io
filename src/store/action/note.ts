@@ -47,9 +47,11 @@ export const NoteActionFactory = {
     type: NoteAction.UpdatedNotes,
     notes,
   }),
-  deletedNote: (noteId: string) => ({
+
+  deletedNote: (noteId: string, deleteStack: boolean) => ({
     type: NoteAction.DeletedNote,
     noteId,
+    deleteStack,
   }),
   syncNotes: (notes: Note[]) => ({
     type: NoteAction.SyncNotes,
@@ -98,9 +100,10 @@ export const NoteActionFactory = {
    *
    * @param noteId the note id
    */
-  deleteNote: (noteId: string) => ({
+  deleteNote: (noteId: string, deleteStack = false) => ({
     type: NoteAction.DeleteNote,
     noteId,
+    deleteStack,
   }),
 };
 

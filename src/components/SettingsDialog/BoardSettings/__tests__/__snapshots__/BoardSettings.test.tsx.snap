@@ -43,6 +43,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           class="settings-dialog__group"
         >
           <button
+            aria-label="BoardSettings.AccessPolicy"
             class="settings-option-button settings-option-button--disabled board-settings__policy-button"
             disabled=""
             type="button"
@@ -98,8 +99,11 @@ exports[`BoardSettings should match snapshot 1`] = `
         class="settings-dialog__group"
       >
         <button
+          aria-checked="true"
+          aria-label="BoardSettings.ShowAuthorOption"
           class="settings-option-button board-settings__show-author-button"
           data-testid="author"
+          role="switch"
           type="button"
         >
           <span
@@ -119,8 +123,11 @@ exports[`BoardSettings should match snapshot 1`] = `
           class="settings-dialog__separator"
         />
         <button
+          aria-checked="true"
+          aria-label="BoardSettings.ShowOtherUsersNotesOption"
           class="settings-option-button board-settings__show-notes-button"
           data-testid="notes"
+          role="switch"
           type="button"
         >
           <span
@@ -140,8 +147,11 @@ exports[`BoardSettings should match snapshot 1`] = `
           class="settings-dialog__separator"
         />
         <button
+          aria-checked="false"
+          aria-label="BoardSettings.ShowHiddenColumnsOption"
           class="settings-option-button board-settings__show-columns-button"
           data-testid="columns"
+          role="switch"
           type="button"
         >
           <span
@@ -161,8 +171,11 @@ exports[`BoardSettings should match snapshot 1`] = `
           class="settings-dialog__separator"
         />
         <button
+          aria-checked="true"
+          aria-label="BoardSettings.AllowNoteRepositioningOption"
           class="settings-option-button board-settings__allow-note-repositioning-button"
           data-testid="note-repositioning"
+          role="switch"
           type="button"
         >
           <span
@@ -180,6 +193,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         </button>
       </div>
       <button
+        aria-label="BoardSettings.DeleteBoard"
         class="settings-option-button board-settings__delete-button"
         type="button"
       >
@@ -188,13 +202,11 @@ exports[`BoardSettings should match snapshot 1`] = `
         >
           BoardSettings.DeleteBoard
         </span>
-        <div
-          class="board-settings__delete-value"
+        <svg
+          class="settings-option-button__icon"
         >
-          <svg>
-            icon-delete.svg
-          </svg>
-        </div>
+          icon-delete.svg
+        </svg>
       </button>
     </div>
   </div>

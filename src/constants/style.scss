@@ -44,6 +44,8 @@ $color-warning-red: #eb625b;
   --accent-color--dark: #{color.change($color, $lightness: 72%, $saturation: 99%)};
   --accent-color--desaturated-light: #{color.change($color, $lightness: 90%)};
   --accent-color--desaturated-dark: #{color.change($color, $lightness: 39%, $saturation: 48%)};
+  --accent-color--background-light: #{color.change($color, $lightness: 80%, $alpha: 0.2, $saturation: 60%)};
+  --accent-color--background-dark: #{color.change($color, $lightness: 75%, $alpha: 0.04, $saturation: 75%)};
 }
 
 .accent-color__backlog-blue {
@@ -81,7 +83,8 @@ $color-placeholder-dark: #ffffff4d;
 
 // board & column constants
 $board__side-panel-width: 64px;
-$header__height: 100px;
+$header__height: 92px;
+$info-bar__height: 42px;
 $column__min-width: 300px;
 $column__max-width: 960px;
 $column__border-width: 12px;
@@ -138,6 +141,16 @@ $line-height--small: 16px;
 $line-height--medium: 20px;
 $line-height--large: 32px;
 
+// new font size constants
+$text--xs: 0.75rem; // 12px
+$text--sm: 0.875rem; // 14px
+$text--base: 1rem; // 16px
+$text--md: 1.25rem; // 20px
+$text--lg: 1.5rem; // 24px
+$text--xl: 2rem; // 32px
+$text--2xl: 2.5rem; // 40px
+$text--3xl: 3.875rem; // 62px
+
 // filters
 $darken--slightly: brightness(0.9);
 $brighten--slightly: brightness(1.1);
@@ -166,6 +179,23 @@ $menu-desktop: "screen and (min-width: 1344px)";
 // shadows
 $box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);
 $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
+
+// gradients
+$column-stripes--light: repeating-linear-gradient(
+  45deg,
+  $color-white-one calc(0px + var(--stripe-offset, 0px)),
+  $color-white-one calc(20px + var(--stripe-offset, 0px)),
+  var(--accent-color--background-light) calc(20px + var(--stripe-offset, 0px)),
+  var(--accent-color--background-light) calc(40px + var(--stripe-offset, 0px))
+);
+
+$column-stripes--dark: repeating-linear-gradient(
+  45deg,
+  $color-dark-one calc(0px + var(--stripe-offset, 0px)),
+  $color-dark-one calc(20px + var(--stripe-offset, 0px)),
+  var(--accent-color--background-dark) calc(20px + var(--stripe-offset, 0px)),
+  var(--accent-color--background-dark) calc(40px + var(--stripe-offset, 0px))
+);
 
 // helper functions
 @function inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {

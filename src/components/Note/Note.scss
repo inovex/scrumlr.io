@@ -8,6 +8,8 @@ $note__indicator-width: 3px;
 
 $note__author-image-size: 26px;
 
+$note__footer-gap: 42px;
+
 .note__root {
   position: relative;
 }
@@ -31,7 +33,6 @@ $note__author-image-size: 26px;
   height: 28px;
   width: 28px;
   padding: 0;
-  margin-bottom: 4px;
 }
 
 .note__in-stack {
@@ -57,33 +58,32 @@ $note__author-image-size: 26px;
   transform: scale(1.02);
 }
 
-.note--isDragging {
-  opacity: 0.5;
-
-  & ~ .note__in-stack {
-    opacity: 0.5;
-  }
-}
-
-.note--isOver {
+.shouldCombine .note {
   transform-origin: center;
   border: 2px solid var(--accent-color);
   border-radius: $note__border-radius;
 
-  &.note--stackOntop,
+  transform: scale(0.98);
+
+  ~ .note__in-stack {
+    transform: scale(0.98);
+  }
+
+  // re-active this to bring back the different stacking mode effects
+  /* &.note--stackOntop,
   &.note--stackOntop ~ .note__in-stack {
     transform: translatey(8px) scale(0.98);
   }
 
   &.note--stackBetween {
     transform: translateY(-8px) scale(1.02);
-    z-index: $note-z-index + 2 * $base-z-index-step;
+    z-index: $note-z-index + 2 * $base-z-index-step * 100;
 
     & ~ .note__in-stack {
       z-index: 0;
       transform: translateY(8px) scale(0.98);
     }
-  }
+  } */
 
   &.note--stackBelow {
     transform: translateY(-8px) scale(1.02);
@@ -122,6 +122,7 @@ $note__author-image-size: 26px;
   display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
+  white-space: pre-line;
 }
 
 .note__image-wrapper {
@@ -151,48 +152,18 @@ $note__author-image-size: 26px;
   height: 28px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: $note__footer-gap;
 }
 
-.note__author {
-  display: inline-flex;
-  align-items: center;
-  // reset css from figure-element:
-  margin: 0;
-  border: 0;
-  font: inherit;
-  vertical-align: baseline;
-  flex-grow: 0;
-  height: 28px;
-  padding: 0 $margin--default 0 2px;
-  background: $color-white;
-  border-radius: 21px;
-}
-
-.note__author--self {
-  background: var(--accent-color--desaturated-light);
-}
-
-.note__author--self > .note__user-avatar #Circle-Background {
-  stroke: none;
-}
-
-.note__author--self > .note__author-name {
-  color: $color-black;
+.note__author-container {
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .note__author-image {
   height: $note__author-image-size;
   width: $note__author-image-size;
   border-radius: 100%;
-}
-
-.note__author-name {
-  margin-left: $margin--small;
-  color: $color-dark-gray;
-  font-size: $text-size--small;
-  letter-spacing: $letter-spacing--small;
-  line-height: $line-height--small;
 }
 
 .note__delete-button {
@@ -220,22 +191,5 @@ $note__author-image-size: 26px;
 
   .note__text {
     color: $color-white;
-  }
-
-  .note__author {
-    background: $color-dark-mode-note;
-  }
-
-  .note__author-name {
-    color: $color-white;
-  }
-
-  .note__author--self {
-    background: var(--accent-color--desaturated-dark);
-  }
-
-  .note__author--self > .note__author-name {
-    color: $color-white;
-    font-weight: bold;
   }
 }

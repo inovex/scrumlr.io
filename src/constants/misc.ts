@@ -4,5 +4,7 @@ export const PLACEHOLDER_PASSWORD = "••••••••••";
 export const TEMPORARY_COLUMN_ID = "TEMP_ID";
 export const DEFAULT_URL = "https://scrumlr.io";
 
-export const TOAST_TIMER_DEFAULT = 3000;
-export const TOAST_TIMER_SHORT = 1500;
+export const COMBINE_THRESHOLD = 0.15;
+export const MOVE_THRESHOLD = 0.6;
+export const TOAST_TIMER_DEFAULT = 5000;
+export const TOAST_TIMER_SHORT = 3000;

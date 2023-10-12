@@ -110,6 +110,24 @@ exports[`Appearance should render all Settings correctly 1`] = `
         </label>
       </form>
     </div>
+    <section>
+      <button
+        aria-checked="true"
+        aria-label="Appearance.showHotkeyNotifications"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Appearance.showHotkeyNotifications
+        </span>
+        <div
+          class="toggle toggle--active"
+        />
+      </button>
+    </section>
     <div
       class="settings-dropdown"
     >

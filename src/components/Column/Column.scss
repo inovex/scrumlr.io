@@ -5,7 +5,7 @@
   width: 100%;
   max-width: $column__max-width;
   @include inset-border($top: true, $bottom: true);
-  padding-top: $header__height;
+  padding-top: calc($column__border-width + $header__height + $info-bar__height);
   height: 100%;
   overflow-y: auto;
   display: flex;
@@ -28,18 +28,18 @@
   }
 }
 .column--hidden {
-  background-image: repeating-linear-gradient(45deg, $color-white-one, $color-white-one 20px, $color-white-two 20px, $color-white-two 40px);
+  background-image: $column-stripes--light;
 }
 [theme="dark"] {
   .column--hidden {
-    background-image: repeating-linear-gradient(45deg, $color-dark-one, $color-dark-one 20px, $color-dark-two 20px, $color-dark-two 40px);
+    background-image: $column-stripes--dark;
   }
 }
 
 .column__content {
   max-height: 100%;
   max-width: 100%;
-  padding: $padding--large 0 $column__border-width 0;
+  padding: 0 0 $column__border-width 0;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -50,7 +50,7 @@
 
 .column__header {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   padding: 0 $padding--large;
 }
 
@@ -58,7 +58,7 @@
   display: flex;
   word-break: break-word;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: $margin--default;
   height: 48px;
   position: relative;
@@ -112,7 +112,6 @@
   outline: none;
   max-width: 300px;
   width: 50%;
-  caret-color: var(--accent-color);
 }
 [theme="dark"] {
   .column__header-input {
@@ -143,7 +142,7 @@
   @include scrollbar();
 }
 
-.column__notes-wrapper--isOver {
+.column__notes-wrapper.isOver {
   border-color: var(--accent-color);
   background-color: rgba(var(--accent-color-rgb), 0.2);
 }

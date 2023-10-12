@@ -1,9 +1,10 @@
 package database
 
 import (
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 type NotesObserverForTests struct {
@@ -18,7 +19,7 @@ func (o *NotesObserverForTests) UpdatedNotes(board uuid.UUID, notes []Note) {
 	o.notes = &notes
 }
 
-func (o *NotesObserverForTests) DeletedNote(user, board, note uuid.UUID, votes []Vote) {
+func (o *NotesObserverForTests) DeletedNote(user, board, note uuid.UUID, votes []Vote, deleteStack bool) {
 	o.board = &board
 	o.deletedNote = &note
 }
@@ -89,14 +90,16 @@ func testNotesObserverOnUpdate(t *testing.T) {
 }
 func testNotesObserverOnDelete(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
-	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID)
+	deleteStack = false
+	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID, deleteStack)
 	assert.Nil(t, err)
 	assert.NotNil(t, notesObserver.board)
 	assert.NotNil(t, notesObserver.deletedNote)
 }
 func testNotesObserverOnDeleteNotExisting(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
-	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID)
+	deleteStack = false
+	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID, deleteStack)
 	assert.Nil(t, err)
 	assert.Nil(t, notesObserver.board)
 	assert.Nil(t, notesObserver.deletedNote)

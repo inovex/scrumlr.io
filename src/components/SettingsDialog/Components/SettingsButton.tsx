@@ -1,10 +1,9 @@
 import classNames from "classnames";
-import {DefaultTFuncReturn} from "i18next";
 import {FC, ElementType, MouseEventHandler, FocusEventHandler, PropsWithChildren} from "react";
 import "./SettingsButton.scss";
 
 export interface SettingsButtonProps {
-  label?: string | DefaultTFuncReturn;
+  label?: string;
   icon?: ElementType;
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
   onBlur?: FocusEventHandler<HTMLButtonElement> | undefined;
@@ -18,11 +17,12 @@ export const SettingsButton: FC<PropsWithChildren<SettingsButtonProps>> = ({labe
 
   return (
     <button
-      type="button"
-      disabled={disabled}
+      aria-label={label}
       className={classNames("settings-option-button", {"settings-option-button--disabled": disabled}, className)}
+      disabled={disabled}
       onClick={onClick}
       onBlur={onBlur}
+      type="button"
       {...other}
     >
       {label && <span className="settings-option-button__label">{label}</span>}

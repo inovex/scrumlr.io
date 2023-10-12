@@ -42,7 +42,7 @@ export const LoginBoard = () => {
         await Auth.signInAnonymously(displayName);
         navigate(redirectPath);
       } catch (err) {
-        Toast.error(t("LoginBoard.errorOnRedirect"));
+        Toast.error({title: t("LoginBoard.errorOnRedirect")});
       }
     }
     setSubmitted(true);

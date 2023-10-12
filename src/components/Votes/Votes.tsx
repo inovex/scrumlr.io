@@ -1,4 +1,4 @@
-import {VFC} from "react";
+import {FC} from "react";
 import classNames from "classnames";
 import _ from "underscore";
 import {useAppSelector} from "store";
@@ -12,7 +12,7 @@ type VotesProps = {
   aggregateVotes?: boolean;
 };
 
-export const Votes: VFC<VotesProps> = (props) => {
+export const Votes: FC<VotesProps> = (props) => {
   const voting = useAppSelector((state) => state.votings.open);
   const ongoingVotes = useAppSelector(
     (state) => ({
@@ -28,6 +28,14 @@ export const Votes: VFC<VotesProps> = (props) => {
         ? state.notes.filter((n) => n.position.stack === props.noteId).reduce((sum, curr) => sum + (state.votings.past[0]?.votes?.votesPerNote[curr.id]?.total ?? 0), 0)
         : 0)
   );
+
+  /**
+   * If there's no active voting going on and there are no casted votes for
+   * this note from previous votings, we don't need to render anything.
+   */
+  if (!voting && allPastVotes === 0) {
+    return null;
+  }
 
   return (
     <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>

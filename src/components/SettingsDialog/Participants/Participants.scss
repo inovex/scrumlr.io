@@ -5,9 +5,22 @@
   position: relative;
   height: 40px;
   width: 100%;
+
+  &:hover::before,
+  &:focus-within::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    bottom: -3px;
+    left: -3px;
+    border: 2px solid var(--accent-color);
+    border-radius: $rounded--full;
+    pointer-events: none;
+  }
 }
 .participants__search-input {
-  height: 100%;
+  height: 40px;
   width: 100%;
   padding: 0 calc($padding--default + $icon--medium + $padding--small) 0 $padding--default;
   font-size: 14px;
@@ -17,16 +30,9 @@
   background-color: $color-white;
   border: none;
   border-radius: $rounded--full;
+  outline: none;
+}
 
-  &:focus {
-    outline: 2px solid var(--accent-color);
-  }
-}
-@media (hover: hover) {
-  .participants__search-input:hover {
-    background-color: var(--accent-color--desaturated-light);
-  }
-}
 .participants__search-icon {
   position: absolute;
   height: 100%;
@@ -103,12 +109,24 @@
   }
 }
 
+.participants__list-wrapper {
+  overflow: auto;
+  margin: $margin--default 0px;
+  border-radius: $rounded--default;
+
+  @include scrollbar();
+}
+
 .participants__list {
-  margin-top: $margin--default;
   border-radius: $rounded--default;
   list-style-type: none;
   padding: 0;
-  overflow: scroll;
+  margin: 0;
+  overflow: hidden;
+}
+
+.participants__list-scrollable {
+  padding-right: $padding--medium;
 }
 
 .participants__list-item {
@@ -118,15 +136,15 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: $margin--small;
 
   &:not(:last-child) {
     border-bottom: 1px solid $color-lighter-gray;
   }
 }
 
-.participant__avatar > svg {
-  height: $icon--extralarge;
-  width: $icon--extralarge;
+.participant__avatar {
+  flex-shrink: 0;
 }
 
 .participant__name-role-wrapper {
@@ -201,11 +219,13 @@
 
   background-color: $color-lighter-gray;
 
+  visibility: hidden;
   transform: translateY(100%);
   transition: transform ease-in-out 0.3s;
 }
 
 .participants-reset-state-banner__container--is-active {
+  visibility: visible;
   transform: translateY(0);
 }
 
@@ -258,11 +278,6 @@
   .participants__search-input {
     background-color: $color-dark-mode-note;
     color: $color-white;
-  }
-  @media (hover: hover) {
-    .participants__search-input:hover {
-      background-color: var(--accent-color--desaturated-dark);
-    }
   }
   .participants__search-icon {
     color: $color-white;

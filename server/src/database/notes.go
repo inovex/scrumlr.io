@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
@@ -144,6 +145,8 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 	rankSelection := d.db.NewSelect().ColumnExpr("LEAST((SELECT max_rank FROM rank_range), ?) as new_rank", newRank)
 	// make room for this note (shift notes by +1 above the new rank) if this note will be moved into a new column or out of a stack
 	updateWhenPreviouslyStackedOrInOtherColumn := d.db.NewUpdate().Model((*Note)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = 0").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)")
+	// If the note is moved into a new column, decrease the ranks of the notes in the previous column that where above the note
+	decreaseRanksInPreviousColumn := d.db.NewUpdate().Model((*Note)(nil)).Set("rank=rank-1").Where("\"column\" = (SELECT \"column\" FROM previous)").Where("board = ?", update.Board).Where("rank > (SELECT rank FROM previous)").Where("stack IS NULL").Where("\"column\" <> ?", update.Position.Column)
 	// shift notes within column if the new rank is lower than before
 	updateWhenNewIsLower := d.db.NewUpdate().Model((*Note)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = -1").Where("(SELECT new_rank FROM rank_selection) < (SELECT rank FROM previous)").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)").Where("rank < (SELECT rank FROM previous)").Where("stack IS NULL")
 	// shift notes within column if the new rank is higher than before
@@ -156,6 +159,7 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 		With("rank_addition", rankAddition).
 		With("rank_range", rankRange).
 		With("rank_selection", rankSelection).
+		With("decrease_rank", decreaseRanksInPreviousColumn).
 		With("update_when_previously_stacked_or_in_other_column", updateWhenPreviouslyStackedOrInOtherColumn).
 		With("update_when_new_is_lower", updateWhenNewIsLower).
 		With("update_when_new_is_higher", updateWhenNewIsHigher).
@@ -297,7 +301,7 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	return note[0], err
 }
 
-func (d *Database) DeleteNote(caller, board, id uuid.UUID) error {
+func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
 	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
 
@@ -316,36 +320,82 @@ func (d *Database) DeleteNote(caller, board, id uuid.UUID) error {
 
 	if precondition.Author == caller || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
 		previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board)
-		updateRanks := d.db.NewUpdate().
-			With("previous", previous).
-			Model((*Note)(nil)).Set("rank = rank-1").
-			Where("board = ?", board).
-			Where("\"column\" = (SELECT \"column\" FROM previous)").
-			WhereGroup(" AND ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
-				return q.
-					WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
-						return q.
-							Where("(SELECT stack FROM previous) IS NULL").
-							Where("stack IS NULL")
-					}).
-					WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
-						return q.
-							Where("(SELECT stack FROM previous) IS NOT NULL").
-							Where("stack = (SELECT stack FROM previous)")
-					})
-			})
+
+		children := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id)
 
 		updateBoard := d.db.NewUpdate().
 			Model((*Board)(nil)).
 			Set("shared_note = null").
 			Where("id = ? AND shared_note = ?", board, id)
 
+		updateRanks := d.db.NewUpdate().
+			With("previous", previous).
+			With("children", children).
+			Model((*Note)(nil)).Set("rank = rank-1").
+			Where("board = ?", board).
+			Where("\"column\" = (SELECT \"column\" FROM previous)").
+			WhereGroup(" AND ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+				return q.
+					Where("rank > (SELECT rank FROM previous)").
+					WhereGroup(" AND ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+						return q.
+							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+								return q.
+									Where("(?) IS FALSE", deleteStack).
+									Where("(SELECT stack FROM previous) IS NULL").
+									Where("NOT EXISTS (?)", children).
+									Where("stack IS NULL")
+							}).
+							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+								return q.
+									Where("(?) IS FALSE", deleteStack).
+									Where("(SELECT stack FROM previous) IS NOT NULL").
+									Where("stack = (SELECT stack FROM previous)")
+							}).
+							WhereGroup(" OR ", func(q *bun.UpdateQuery) *bun.UpdateQuery {
+								return q.
+									Where("(?) IS TRUE", deleteStack).
+									Where("stack IS NULL")
+							})
+					})
+			})
+
 		var notes []Note
+
+		if deleteStack {
+			_, err := d.db.NewDelete().
+				With("update_board", updateBoard).
+				With("update_ranks", updateRanks).
+				Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
+				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+
+			return err
+		}
+
+		nextParentSelect := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id).Where("rank = (SELECT MAX(rank) FROM notes WHERE stack = ?)", id).Limit((1))
+
+		updateStackRefs := d.db.NewUpdate().
+			With("next_parent", nextParentSelect).
+			Model((*Note)(nil)).Set("stack = (SELECT id FROM next_parent)").
+			Where("board = ?", board).
+			Where("stack = ?", id)
+
+		updateNextParentStackId := d.db.NewUpdate().
+			With("previous", previous).
+			With("next_parent", nextParentSelect).
+			Model((*Note)(nil)).
+			Set("stack = null").
+			Set("rank = (SELECT rank FROM previous)").
+			Where("id = (SELECT id FROM next_parent)")
+
 		_, err := d.db.NewDelete().
 			With("update_board", updateBoard).
 			With("update_ranks", updateRanks).
+			With("update_stackrefs", updateStackRefs).
+			With("update_parentStackId", updateNextParentStackId).
 			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "Result", &notes), &notes)
+			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+
 		return err
 	}
 	return errors.New("not permitted to delete note")

@@ -57,7 +57,10 @@ export interface SyncNotesEvent {
 
 export interface DeletedNoteEvent {
   type: "NOTE_DELETED";
-  data: string;
+  data: {
+    note: string;
+    deleteStack: boolean;
+  };
 }
 
 export interface RequestCreatedEvent {

@@ -1,9 +1,17 @@
 @import "constants/style";
 
 .avatar {
-  width: 48px;
-  height: 48px;
+  height: 100%;
+  width: 100%;
   overflow: visible;
+
+  #Avataaar {
+    transform: translateY(-20px);
+  }
+
+  #Avataaar #Avataaar {
+    transform: scale(0.85) translate(23px, 55px);
+  }
 }
 
 .avatar #Circle-Background,

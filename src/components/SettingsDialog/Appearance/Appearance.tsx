@@ -4,6 +4,7 @@ import {LanguageSettingsDropdown} from "../Components/LanguageSettingsDropdown";
 import "../SettingsDialog.scss";
 import "./Appearance.scss";
 import {ThemeSettings} from "../Components/ThemeSettings";
+import {NotificationSettings} from "../Components/NotificationSettings";
 
 export const Appearance = () => {
   const {t} = useTranslation();
@@ -15,6 +16,7 @@ export const Appearance = () => {
       </header>
       <div className="appearance-container">
         <ThemeSettings />
+        <NotificationSettings />
         <LanguageSettingsDropdown />
       </div>
     </div>

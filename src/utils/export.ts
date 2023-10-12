@@ -96,9 +96,9 @@ const mdColumns = (boardData: BoardDataType) => {
 };
 
 const mdBranding = () =>
-  `> ${t("PrintView.GeneratedOn")} [scrumlr.io](${DEFAULT_URL})  \n${t("PrintView.ProvidedBy")} [inovex](https://www.inovex.de)  \n\n![Scrumlr Logo](${
-    process.env.REACT_APP_PUBLIC_URL || DEFAULT_URL
-  }/scrumlr-logo-light.svg)`;
+  `> ${t("PrintView.GeneratedOn")} [scrumlr.io](${DEFAULT_URL})  \n${t(
+    "PrintView.ProvidedBy"
+  )} [inovex](https://www.inovex.de)  \n\n![Scrumlr Logo](${DEFAULT_URL}/scrumlr-logo-light.svg)`;
 
 const mdTemplate = (boardData: BoardDataType) =>
   mdBoardHeader(boardData.board.name || DEFAULT_BOARD_NAME) + mdBoardProperties(boardData.board, boardData.participants) + mdColumns(boardData) + mdBranding();

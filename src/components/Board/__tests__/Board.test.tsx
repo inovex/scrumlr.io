@@ -1,21 +1,22 @@
 import {act, fireEvent} from "@testing-library/react";
-import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Column} from "components/Column";
 import {Color} from "constants/colors";
 import {Provider} from "react-redux";
 import {BoardComponent} from "components/Board";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
+import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
 const createBoardWithColumns = (...colors: Color[]) => {
-  const [BoardContext] = wrapWithTestBackend(BoardComponent);
   return (
     <Provider store={getTestStore()}>
-      <BoardContext currentUserIsModerator moderating={false}>
-        {colors.map((color, index) => (
-          <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" visible={false} index={index} />
-        ))}
-      </BoardContext>
+      <CustomDndContext>
+        <BoardComponent currentUserIsModerator moderating={false}>
+          {colors.map((color, index) => (
+            <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" visible={false} index={index} />
+          ))}
+        </BoardComponent>
+      </CustomDndContext>
     </Provider>
   );
 };
@@ -27,7 +28,15 @@ describe("basic", () => {
         ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as unknown as IntersectionObserver)
+        }) as unknown as IntersectionObserver
+    );
+
+    window.ResizeObserver = jest.fn(
+      () =>
+        ({
+          observe: jest.fn(),
+          disconnect: jest.fn(),
+        }) as unknown as ResizeObserver
     );
   });
 
@@ -100,7 +109,15 @@ describe("navigation", () => {
         ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as unknown as IntersectionObserver)
+        }) as unknown as IntersectionObserver
+    );
+
+    window.ResizeObserver = jest.fn(
+      () =>
+        ({
+          observe: jest.fn(),
+          disconnect: jest.fn(),
+        }) as unknown as ResizeObserver
     );
 
     const root = global.document.createElement("div");

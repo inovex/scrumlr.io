@@ -1,29 +1,36 @@
 @import "constants/style.scss";
 
-$timer-display-height: 42px;
 $timer-display-width: 114px;
 $timer__content-height: 38px;
 $timer__short-actions-height: 28px;
-$timer__short-actions-tooltip-height: 36px;
+
+$timer__progress-bar-color: #6096ff;
 
 .timer {
-  height: $timer-display-height;
+  height: 100%;
   width: $timer-display-width;
+  color: $color-dark-mode-note;
+  background-color: $menu-icon-background-color--light;
+  border-radius: $rounded--full;
+  position: relative;
+  border: 2px solid $menu-icon-background-color--light;
+  box-shadow: $box-shadow--light;
+}
+[theme="dark"] .timer {
   color: $color-white;
   background-color: $menu-icon-background-color--dark;
-  border-radius: calc($timer-display-height / 2);
-  position: relative;
-  border: 2px solid $menu-icon-background-color--dark;
+  border-color: $menu-icon-background-color--dark;
 }
 .timer > svg {
   position: absolute;
   height: 100%;
-  background-color: $menu-icon-background-color--dark;
+  background-color: $color-dark-mode-note;
+  color: $color-white;
   border-radius: 100%;
 }
 [theme="dark"] .timer > svg {
   background-color: $color-white;
-  color: $color-black;
+  color: $color-dark-mode-note;
 }
 
 .timer > span {
@@ -43,41 +50,44 @@ $timer__short-actions-tooltip-height: 36px;
   top: 0;
   left: calc($timer__content-height / 2);
   height: $timer__content-height;
-  border-top-right-radius: calc($timer__content-height / 2);
-  border-bottom-right-radius: calc($timer__content-height / 2);
-  background-color: $color-progress-circle;
+  border-top-right-radius: $rounded--full;
+  border-bottom-right-radius: $rounded--full;
+  background-color: $timer__progress-bar-color;
 }
 
 .timer__short-actions {
   height: 100%;
   width: 100%;
   position: absolute;
-  border-radius: calc($timer__content-height / 2);
-  background-color: $menu-icon-background-color--dark;
+  border-radius: $rounded--full;
+  background-color: $menu-icon-background-color--light;
   display: none;
   justify-content: end;
   align-items: center;
   gap: $margin--small;
   padding-right: 4px;
 }
+[theme="dark"] .timer__short-actions {
+  background-color: $menu-icon-background-color--dark;
+}
 
 .timer:hover > .timer__short-actions {
   display: flex;
 }
 
-.short-actions__button-wrapper {
+.short-actions__short-action {
   position: relative;
   height: $timer__short-actions-height;
   width: $timer__short-actions-height;
-  border-radius: calc($timer__short-actions-height / 2);
+  border-radius: $rounded--full;
 }
 
-.short-actions__button-wrapper > button {
+.short-action__button {
   height: $timer__short-actions-height;
   width: $timer__short-actions-height;
-  border-radius: calc($timer__short-actions-height / 2);
-  background-color: $color-dark-gray;
-  color: $menu-icon-background-color--dark;
+  border-radius: $rounded--full;
+  background-color: $color-lighter-gray;
+  color: $color-dark-mode-note;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -85,48 +95,69 @@ $timer__short-actions-tooltip-height: 36px;
   justify-content: center;
   align-items: center;
 }
-.short-actions__button-wrapper > button > svg {
+[theme="dark"] .short-action__button {
+  background-color: $color-dark-one;
+  color: $color-white;
+}
+.short-action__button > svg {
+  position: absolute;
   height: $icon--small;
   width: $icon--small;
 }
-.short-actions__button-wrapper > button:hover {
-  background-color: $color-progress-circle;
+.short-action__button--ready > .short-action__cancel-icon,
+.short-action__button--unready > .short-action__cancel-icon {
+  visibility: hidden;
+}
+.short-action__button--ready:hover > .short-action__check-icon {
+  visibility: hidden;
+}
+.short-action__button--ready:hover > .short-action__cancel-icon {
+  visibility: visible;
+}
+.short-action__button > .short-action__check-icon {
+  height: $timer__short-actions-height;
+  width: $timer__short-actions-height;
+}
+
+.short-action__button:hover {
+  background-color: $timer__progress-bar-color;
   color: $color-white;
 }
 
-// Short Actions Button Tooltip
-.short-actions__button-wrapper > span {
+.short-action__tooltip {
+  width: max-content;
   visibility: hidden;
   opacity: 0;
   transition: opacity 150ms linear;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  height: $timer__short-actions-tooltip-height;
-  border-radius: calc($timer__short-actions-tooltip-height / 2);
-  padding: 5px $padding--default;
+  border-radius: $rounded--full;
+  padding: $padding--small $padding--default;
   background-color: $tooltip-background-color--light;
   color: $menu-icon-background-color--dark;
+  font-size: $text--base;
   font-weight: bold;
-  height: auto;
-  bottom: calc(100% + 4px);
+  bottom: calc(100% + 6px);
   box-shadow: $box-shadow--light;
+  // Increased the z-index to make sure the tooltip doesn't get overlapped by the absolute positioned icon
+  z-index: calc($infobar-z-index + 50);
 }
 @media (prefers-reduced-motion) {
-  .short-actions__button-wrapper > span {
+  .short-action__tooltip {
     transition: none;
   }
 }
-.short-actions__button-wrapper:hover > span {
+.short-actions__short-action:hover > .short-action__tooltip {
   visibility: visible;
   opacity: 1;
 }
-[theme="dark"] .short-actions__button-wrapper > span {
+[theme="dark"] .short-action__tooltip {
   background-color: $tooltip-background-color--dark;
   color: $color-white;
 }
 
-.short-actions__button-wrapper > span::after {
+.short-action__tooltip::after {
   content: "";
   position: absolute;
   border: 4px solid;
@@ -135,12 +166,12 @@ $timer__short-actions-tooltip-height: 36px;
   transform: translateX(-50%);
   top: 100%;
 }
-[theme="dark"] .short-actions__button-wrapper > span::after {
+[theme="dark"] .short-action__tooltip::after {
   border-color: $tooltip-background-color--dark transparent transparent transparent;
 }
 
 // Shake animation on expired timer
-.timer--expired > span {
+.timer--expired {
   animation: shake 0.5s;
   animation-iteration-count: 10;
 }

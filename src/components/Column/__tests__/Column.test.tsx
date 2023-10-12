@@ -1,20 +1,41 @@
-import {wrapWithTestBackend} from "react-dnd-test-utils";
 import {Column} from "components/Column";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import {ApplicationState} from "types";
+import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
-const [ColumnContext] = wrapWithTestBackend(Column);
 const createColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
-      <ColumnContext id="TestID" name="Testheader" color="planning-pink" visible={false} index={0} />
+      <CustomDndContext>
+        <Column id="test-columns-id-1" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+      </CustomDndContext>
+    </Provider>
+  );
+};
+
+const createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
+  return (
+    <Provider store={getTestStore(overwrite)}>
+      <CustomDndContext>
+        <Column id="test-columns-id-3" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+      </CustomDndContext>
     </Provider>
   );
 };
 
 describe("Column", () => {
+  beforeEach(() => {
+    window.ResizeObserver = jest.fn(
+      () =>
+        ({
+          observe: jest.fn(),
+          disconnect: jest.fn(),
+        }) as unknown as ResizeObserver
+    );
+  });
+
   describe("should render correctly", () => {
     test("column has correct accent-color", () => {
       const {container} = render(createColumn());
@@ -33,7 +54,7 @@ describe("Column", () => {
 
     test("column header title is present", () => {
       const {container} = render(createColumn());
-      expect(container.querySelector(".column__header")!.childNodes.item(1)).toHaveClass("column__header-title");
+      expect(container.querySelector(".column__header")!.childNodes.item(0)).toHaveClass("column__header-title");
     });
 
     test("column header text is present", () => {
@@ -41,9 +62,19 @@ describe("Column", () => {
       expect(container.querySelector(".column__header-title")!.firstChild).toHaveClass("column__header-text-wrapper");
     });
 
-    test("column header cardnumber is present", () => {
+    test("column header card number is present", () => {
       const {container} = render(createColumn());
       expect(container.querySelector(".column__header-title")!.children[1]).toHaveClass("column__header-card-number");
+    });
+
+    test("column header card number is not present", () => {
+      const {container} = render(createEmptyColumn());
+      expect(container.querySelector(".column__header-title")!.children[1]).not.toHaveClass("column__header-card-number");
+    });
+
+    test("column header card number is correct number", () => {
+      const {container} = render(createColumn());
+      expect(container.querySelector(".column__header-card-number")!).toHaveTextContent("2");
     });
 
     test("header text has correct title", () => {

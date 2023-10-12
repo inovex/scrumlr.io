@@ -1,4 +1,4 @@
-FROM node:16-alpine as build-stage
+FROM node:lts-hydrogen as build-stage
 
 WORKDIR /usr/src/app
 
@@ -28,6 +28,10 @@ ENV SCRUMLR_WEBSOCKET_URL=''
 
 # Server port
 ENV SCRUMLR_LISTEN_PORT='8080'
+
+# Analytics variables
+ENV SCRUMLR_ANALYTICS_DATA_DOMAIN=''
+ENV SCRUMLR_ANALYTICS_SRC=''
 
 COPY ./nginx.conf /etc/nginx/templates/scrumlr.io.conf.template
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html

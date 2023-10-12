@@ -18,15 +18,20 @@ exports[`Timer should render correctly 1`] = `
     class="timer__short-actions"
   >
     <div
-      class="short-actions__button-wrapper"
+      class="short-actions__short-action"
     >
-      <button>
+      <button
+        aria-label="Stop timer"
+        class="short-action__button"
+      >
         <svg>
           icon-cancel.svg
         </svg>
       </button>
-      <span>
-        Finish
+      <span
+        class="short-action__tooltip"
+      >
+        Stop timer
       </span>
     </div>
   </div>
