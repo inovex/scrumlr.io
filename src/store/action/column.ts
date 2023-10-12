@@ -75,15 +75,15 @@ export const ColumnActionFactory = {
     type: ColumnAction.CreateColumnOptimistically,
     column,
   }),
-  createdColumn: (column: {id: string; name: string; color: Color; visible: boolean}, columns_order: string[]) => ({
+  createdColumn: (column: {id: string; name: string; color: Color; visible: boolean}, columnsOrder: string[]) => ({
     type: ColumnAction.CreatedColumn,
     column,
-    columns_order,
+    columnsOrder,
   }),
-  updatedColumn: (column: {id: string; name: string; color: Color; visible: boolean}, columns_order: string[]) => ({
+  updatedColumn: (column: {id: string; name: string; color: Color; visible: boolean}, columnsOrder: string[]) => ({
     type: ColumnAction.UpdatedColumn,
     column,
-    columns_order,
+    columnsOrder,
   }),
 };
 
