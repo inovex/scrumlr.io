@@ -40,10 +40,13 @@
 }
 
 div .note-reaction-chip-condensed__tooltip {
+  @include tooltip--light;
+  max-width: 100%;
+}
+
+.note-reaction-chip-condensed__tooltip-content {
   display: flex;
   flex-direction: column;
-  @include tooltip--light;
-  // TODO: ellipsis
 }
 
 [theme="dark"] {
