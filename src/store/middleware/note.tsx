@@ -57,4 +57,13 @@ export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
       });
     });
   }
+
+  if (action.type === Action.DeletedColumn) {
+    stateAPI
+      .getState()
+      .notes.filter((n) => n.position.column === action.columnId)
+      .forEach((n) => {
+        dispatch(Actions.deletedNote(n.id, true));
+      });
+  }
 };

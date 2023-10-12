@@ -84,6 +84,7 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
       }
       return state;
     }
+
     default:
       return state;
   }
