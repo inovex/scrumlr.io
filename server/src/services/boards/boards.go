@@ -104,7 +104,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		ShowAuthors:           body.ShowAuthors,
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
 		AllowStacking:         body.AllowStacking,
-    TimerStart:            body.TimerStart,
+		TimerStart:            body.TimerStart,
 		TimerEnd:              body.TimerEnd,
 		SharedNote:            body.SharedNote,
 	}
@@ -135,12 +135,12 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 }
 
 func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error) {
-  timerStart := time.Now().Local();
+	timerStart := time.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(minutes))
 	update := database.BoardTimerUpdate{
-		ID:       id,
-    TimerStart: &timerStart,
-		TimerEnd: &timerEnd,
+		ID:         id,
+		TimerStart: &timerStart,
+		TimerEnd:   &timerEnd,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
@@ -151,9 +151,9 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 
 func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board, error) {
 	update := database.BoardTimerUpdate{
-		ID:       id,
-    TimerStart: nil,
-		TimerEnd: nil,
+		ID:         id,
+		TimerStart: nil,
+		TimerEnd:   nil,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
@@ -180,6 +180,41 @@ func (s *BoardService) UpdatedBoard(board database.Board) {
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast updated board", "err", err)
 	}
+
+	var err_msg string
+	err_msg, err = s.SyncBoardSettingChange(board.ID)
+	if err != nil {
+		logger.Get().Errorw(err_msg, "err", err)
+	}
+}
+
+func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
+	var err_msg string
+	columns, err := s.database.GetColumns(boardID)
+	if err != nil {
+		err_msg = "unable to retrieve columns, following a updated board call"
+		return err_msg, err
+	}
+
+	var columnsID []uuid.UUID
+	for _, column := range columns {
+		columnsID = append(columnsID, column.ID)
+	}
+	notes, err := s.database.GetNotes(boardID, columnsID...)
+	if err != nil {
+		err_msg = "unable to retrieve notes, following a updated board call"
+		return err_msg, err
+	}
+
+	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: dto.Notes(notes),
+	})
+	if err != nil {
+		err_msg = "unable to broadcast notes, following a updated board call"
+		return err_msg, err
+	}
+	return "", err
 }
 
 func (s *BoardService) DeletedBoard(board uuid.UUID) {
