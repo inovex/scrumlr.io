@@ -115,6 +115,8 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   // extra function because it is exported in a prop and passing the dispatch function directly seems wrong to me
   const closeReactionBar = () => {
+    // remove focus to avoid bar from opening when going to another tab and back because of the focus event
+    (document.activeElement as HTMLButtonElement).blur();
     setShowReactionBar(false);
   };
 
