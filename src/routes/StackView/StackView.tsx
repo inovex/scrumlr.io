@@ -61,7 +61,8 @@ export const StackView = () => {
   const prevColumnParent = useAppSelector((state) => {
     if (!column) return undefined;
     // the last stack in the previous column
-    let prevColumns = state.columns.filter((c) => c.index < column.index).reverse(); // get all columns before current column, in descending order
+    const columnIndex = state.columns.findIndex((c) => c.id === column.id);
+    let prevColumns = state.columns.filter((c, index) => index < columnIndex).reverse(); // get all columns before current column, in descending order
     if (viewer.role === "PARTICIPANT") prevColumns = prevColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
     let prevStack;
     while (prevColumns.length > 0 && !prevStack) {
@@ -76,7 +77,8 @@ export const StackView = () => {
   const nextColumnParent = useAppSelector((state) => {
     if (!column) return undefined;
     // the first stack in the next column
-    let nextColumns = state.columns.slice(column.index + 1); // get all columns after current column, in ascending order
+    const columnIndex = state.columns.findIndex((c) => c.id === column.id);
+    let nextColumns = state.columns.slice(columnIndex + 1); // get all columns after current column, in ascending order
     if (viewer.role === "PARTICIPANT") nextColumns = nextColumns.filter((c) => c.visible); // filter out all columns that are not visible to the participant
     let nextStack;
     while (nextColumns.length > 0 && !nextStack) {

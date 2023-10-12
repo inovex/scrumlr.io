@@ -5,9 +5,10 @@ export interface Column {
   name: string;
   color: Color;
   visible: boolean;
-  index: number;
 }
 
-export type EditColumnRequest = Omit<Column, "id">;
+export interface EditColumnRequest extends Omit<Column, "id"> {
+  index: number;
+}
 
 export type ColumnsState = Column[];
