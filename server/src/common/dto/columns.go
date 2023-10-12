@@ -24,12 +24,12 @@ type Column struct {
 
 type WrappedColumn struct {
 	Column       Column      `json:"column"`
-	ColumnsOrder []uuid.UUID `json:"columns_order"`
+	ColumnsOrder []uuid.UUID `json:"columnsOrder"`
 }
 
 type WrappedColumns struct {
 	Columns      []*Column   `json:"columns"`
-	ColumnsOrder []uuid.UUID `json:"columns_order"`
+	ColumnsOrder []uuid.UUID `json:"columnsOrder"`
 }
 
 func (c *WrappedColumn) From(column database.Column) *WrappedColumn {

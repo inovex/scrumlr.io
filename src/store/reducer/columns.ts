@@ -33,20 +33,20 @@ export const columnsReducer = (state: ColumnsState = [], action: ReduxAction): C
       if (temporaryColumn.name === action.column.name && temporaryColumn.color === action.column.color && temporaryColumn.visible === action.column.visible) {
         // replace temporary column by created column if they are equal
         const columns = [...state.filter((c) => c.id !== TEMPORARY_COLUMN_ID), action.column];
-        return columns.sort((a, b) => action.columns_order.indexOf(a.id) - action.columns_order.indexOf(b.id));
+        return columns.sort((a, b) => action.columnsOrder.indexOf(a.id) - action.columnsOrder.indexOf(b.id));
       }
 
       // create column and insert temporary column where it was before
       const indexOfTemporaryColumn = state.findIndex((c) => c.id === TEMPORARY_COLUMN_ID);
 
       const columns = [...state.filter((c) => c.id !== TEMPORARY_COLUMN_ID), action.column];
-      const sortedColumns = columns.sort((a, b) => action.columns_order.indexOf(a.id) - action.columns_order.indexOf(b.id));
+      const sortedColumns = columns.sort((a, b) => action.columnsOrder.indexOf(a.id) - action.columnsOrder.indexOf(b.id));
 
       return [...sortedColumns.slice(0, indexOfTemporaryColumn), temporaryColumn, ...sortedColumns.slice(indexOfTemporaryColumn)];
     }
     // just add the new column and sort according by the specified order
     const columns = [...state, action.column];
-    return columns.sort((a, b) => action.columns_order.indexOf(a.id) - action.columns_order.indexOf(b.id));
+    return columns.sort((a, b) => action.columnsOrder.indexOf(a.id) - action.columnsOrder.indexOf(b.id));
   }
 
   if (action.type === Action.UpdatedColumn) {
@@ -55,13 +55,13 @@ export const columnsReducer = (state: ColumnsState = [], action: ReduxAction): C
       const indexOfTemporaryColumn = state.findIndex((c) => c.id === TEMPORARY_COLUMN_ID);
 
       const columns = [...state.filter((c) => c.id !== TEMPORARY_COLUMN_ID), action.column];
-      const sortedColumns = columns.sort((a, b) => action.columns_order.indexOf(a.id) - action.columns_order.indexOf(b.id));
-      sortedColumns[action.columns_order.indexOf(action.column.id)] = action.column;
+      const sortedColumns = columns.sort((a, b) => action.columnsOrder.indexOf(a.id) - action.columnsOrder.indexOf(b.id));
+      sortedColumns[action.columnsOrder.indexOf(action.column.id)] = action.column;
 
       return [...sortedColumns.slice(0, indexOfTemporaryColumn), temporaryColumn, ...sortedColumns.slice(indexOfTemporaryColumn)];
     }
-    const columns = [...state].sort((a, b) => action.columns_order.indexOf(a.id) - action.columns_order.indexOf(b.id));
-    columns[action.columns_order.indexOf(action.column.id)] = action.column;
+    const columns = [...state].sort((a, b) => action.columnsOrder.indexOf(a.id) - action.columnsOrder.indexOf(b.id));
+    columns[action.columnsOrder.indexOf(action.column.id)] = action.column;
     return columns;
   }
 

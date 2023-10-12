@@ -46,14 +46,14 @@ export interface CreatedColumnEvent {
   type: "COLUMN_CREATED";
   data: {
     column: Column;
-    columns_order: string[];
+    columnsOrder: string[];
   };
 }
 export interface UpdatedColumnEvent {
   type: "COLUMN_UPDATED";
   data: {
     column: Column;
-    columns_order: string[];
+    columnsOrder: string[];
   };
 }
 
