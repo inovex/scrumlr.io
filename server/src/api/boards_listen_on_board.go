@@ -63,8 +63,8 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}{
 		Type: realtime.BoardEventInit,
 		Data: struct {
+			*dto2.WrappedColumns
 			Board       *dto2.Board                 `json:"board"`
-			Columns     *dto2.WrappedColumns        `json:"columns"`
 			Notes       []*dto2.Note                `json:"notes"`
 			Votings     []*dto2.Voting              `json:"votings"`
 			Votes       []*dto2.Vote                `json:"votes"`
@@ -72,14 +72,14 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 			Requests    []*dto2.BoardSessionRequest `json:"requests"`
 			Assignments []*dto2.Assignment          `json:"assignments"`
 		}{
-			Board:       board,
-			Columns:     columns,
-			Notes:       notes,
-			Votings:     votings,
-			Votes:       votes,
-			Sessions:    sessions,
-			Requests:    requests,
-			Assignments: assignments,
+			WrappedColumns: columns,
+			Board:          board,
+			Notes:          notes,
+			Votings:        votings,
+			Votes:          votes,
+			Sessions:       sessions,
+			Requests:       requests,
+			Assignments:    assignments,
 		},
 	})
 	initEventData := EventData{

@@ -67,21 +67,18 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       name: "test-columns-name-1",
       color: "backlog-blue",
       visible: true,
-      index: 0,
     },
     {
       id: "test-columns-id-2",
       name: "test-columns-name-2",
       color: "planning-pink",
       visible: true,
-      index: 1,
     },
     {
       id: "test-columns-id-3",
       name: "test-columns-name-3",
       color: "planning-pink",
       visible: true,
-      index: 2,
     },
   ],
   notes: [
