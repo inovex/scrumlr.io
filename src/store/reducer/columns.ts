@@ -23,10 +23,13 @@ export const columnsReducer = (state: ColumnsState = [], action: ReduxAction): C
     return state.filter((c) => c.id !== action.columnId);
   }
   if (action.type === Action.CreatedColumn) {
-    // TODO ORDER: implement
+    const columns = [...state, action.column];
+    return columns.sort((a, b) => action.columns_order.indexOf(b.id) - action.columns_order.indexOf(a.id));
   }
   if (action.type === Action.UpdatedColumn) {
-    // TODO ORDER: implement
+    const columns = state.sort((a, b) => action.columns_order.indexOf(b.id) - action.columns_order.indexOf(a.id));
+    columns[action.columns_order.indexOf(action.column.id)] = action.column;
+    return columns;
   }
   return state;
 };
