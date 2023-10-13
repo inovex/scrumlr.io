@@ -31,6 +31,7 @@ func TestRunnerForBoards(t *testing.T) {
 	t.Run("Update=10", testUpdateBoardSettings)
 
 	t.Run("Get=0", testGetBoard)
+	t.Run("Get=1", testGetUserBoards)
 
 	t.Run("Delete=0", testDeleteBoards)
 }
@@ -463,6 +464,40 @@ func testGetBoard(t *testing.T) {
 	assert.Equal(t, board.AccessPolicy, gotBoard.AccessPolicy)
 	assert.Equal(t, board.Passphrase, gotBoard.Passphrase)
 	assert.Equal(t, board.Salt, gotBoard.Salt)
+}
+
+func testGetUserBoards(t *testing.T) {
+	user := fixture.MustRow("User.jack").(*User)
+
+	// Create some boards associated with the user
+	boardName1 := "Board 1"
+	board1, err := testDb.CreateBoard(user.ID, BoardInsert{
+		Name:         &boardName1,
+		AccessPolicy: types.AccessPolicyPublic,
+		Passphrase:   nil,
+		Salt:         nil,
+	}, []ColumnInsert{})
+	assert.Nil(t, err)
+	boardName2 := "Board 2"
+	board2, err := testDb.CreateBoard(user.ID, BoardInsert{
+		Name:         &boardName2,
+		AccessPolicy: types.AccessPolicyPublic,
+		Passphrase:   nil,
+		Salt:         nil,
+	}, []ColumnInsert{})
+	assert.Nil(t, err)
+
+	// Retrieve the boards associated with the user
+	boards, err := testDb.GetUserBoards(user.ID)
+	assert.Nil(t, err)
+
+	// Check that the correct boards were retrieved
+
+	amountOfBoards := len(boards)
+	assert.Equal(t, board1.ID, boards[amountOfBoards-2].ID)
+	assert.Equal(t, board1.Name, boards[amountOfBoards-2].Name)
+	assert.Equal(t, board2.ID, boards[amountOfBoards-1].ID)
+	assert.Equal(t, board2.Name, boards[amountOfBoards-1].Name)
 }
 
 func testDeleteBoards(t *testing.T) {
