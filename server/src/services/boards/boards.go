@@ -39,6 +39,19 @@ func (s *BoardService) Get(_ context.Context, id uuid.UUID) (*dto.Board, error) 
 	return new(dto.Board).From(board), err
 }
 
+// get all associated boards of a given user
+func (s *BoardService) GetUserBoards(_ context.Context, userID uuid.UUID) ([]*dto.Board, error) {
+	boards, err := s.database.GetUserBoards(userID)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*dto.Board, len(boards))
+	for i, board := range boards {
+		result[i] = new(dto.Board).From(board)
+	}
+	return result, nil
+}
+
 func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) (*dto.Board, error) {
 	log := logger.FromContext(ctx)
 	// map request on board object to insert into database

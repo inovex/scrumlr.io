@@ -178,3 +178,17 @@ func (d *Database) GetBoard(id uuid.UUID) (Board, error) {
 	err := d.db.NewSelect().Model(&board).Where("id = ?", id).Scan(context.Background())
 	return board, err
 }
+
+func (d *Database) GetUserBoards(userID uuid.UUID) ([]Board, error) {
+	var boards []Board
+	err := d.db.NewSelect().
+		TableExpr("board AS b").
+		ColumnExpr("b.*").
+		Join("INNER JOIN board_session AS s ON s.board_id = b.id").
+		Where("s.user_id = ?", userID).
+		Scan(context.Background(), &boards)
+	if err != nil {
+		return nil, err
+	}
+	return boards, err
+}
