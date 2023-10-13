@@ -182,10 +182,10 @@ func (d *Database) GetBoard(id uuid.UUID) (Board, error) {
 func (d *Database) GetUserBoards(userID uuid.UUID) ([]Board, error) {
 	var boards []Board
 	err := d.db.NewSelect().
-		TableExpr("board AS b").
+		TableExpr("boards AS b").
 		ColumnExpr("b.*").
-		Join("INNER JOIN board_session AS s ON s.board_id = b.id").
-		Where("s.user_id = ?", userID).
+		Join("INNER JOIN board_sessions AS s ON s.board = b.id").
+		Where("s.user = ?", userID).
 		Scan(context.Background(), &boards)
 	if err != nil {
 		return nil, err
