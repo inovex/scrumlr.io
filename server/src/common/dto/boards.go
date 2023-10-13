@@ -1,11 +1,12 @@
 package dto
 
 import (
-	"github.com/google/uuid"
 	"net/http"
+	"time"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
-	"time"
 )
 
 // Board is the response for all board requests.
@@ -27,7 +28,7 @@ type Board struct {
 	AllowStacking bool `json:"allowStacking"`
 
 	TimerStart *time.Time `json:"timerStart,omitempty"`
-	TimerEnd *time.Time `json:"timerEnd,omitempty"`
+	TimerEnd   *time.Time `json:"timerEnd,omitempty"`
 
 	// The id of a note to share with other users.
 	// FIXME omitempty works only with nil in combination with pointers
@@ -48,7 +49,7 @@ func (b *Board) From(board database.Board) *Board {
 	b.AllowStacking = board.AllowStacking
 	b.SharedNote = board.SharedNote
 	b.ShowVoting = board.ShowVoting
-  b.TimerStart = board.TimerStart
+	b.TimerStart = board.TimerStart
 	b.TimerEnd = board.TimerEnd
 	b.Passphrase = board.Passphrase
 	b.Salt = board.Salt

@@ -40,6 +40,7 @@ type Boards interface {
 	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
 
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error)
+	GetUserBoards(ctx context.Context, userID uuid.UUID) ([]*dto.Board, error)
 }
 
 type BoardSessions interface {
@@ -89,4 +90,3 @@ type Assignments interface {
 	Create(ctx context.Context, body dto.AssignmentCreateRequest) (*dto.Assignment, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 }
-

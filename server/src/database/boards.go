@@ -3,11 +3,12 @@ package database
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
-	"time"
 )
 
 type Board struct {
@@ -21,7 +22,7 @@ type Board struct {
 	ShowNotesOfOtherUsers bool
 	AllowStacking         bool
 	CreatedAt             time.Time
-  TimerStart            *time.Time
+	TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
@@ -38,7 +39,7 @@ type BoardInsert struct {
 type BoardTimerUpdate struct {
 	bun.BaseModel `bun:"table:boards"`
 	ID            uuid.UUID
-  TimerStart    *time.Time
+	TimerStart    *time.Time
 	TimerEnd      *time.Time
 }
 
@@ -52,7 +53,7 @@ type BoardUpdate struct {
 	ShowAuthors           *bool
 	ShowNotesOfOtherUsers *bool
 	AllowStacking         *bool
-  TimerStart            *time.Time
+	TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
@@ -166,4 +167,18 @@ func (d *Database) GetBoard(id uuid.UUID) (Board, error) {
 	var board Board
 	err := d.db.NewSelect().Model(&board).Where("id = ?", id).Scan(context.Background())
 	return board, err
+}
+
+func (d *Database) GetUserBoards(userID uuid.UUID) ([]Board, error) {
+	var boards []Board
+	err := d.db.NewSelect().
+		TableExpr("board AS b").
+		ColumnExpr("b.*").
+		Join("INNER JOIN board_session AS s ON s.board_id = b.id").
+		Where("s.user_id = ?", userID).
+		Scan(context.Background(), &boards)
+	if err != nil {
+		return nil, err
+	}
+	return boards, err
 }
