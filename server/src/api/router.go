@@ -171,6 +171,10 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initBoardReactionResources(r)
 		})
 
+		r.Route("/boards/user", func(r chi.Router) {
+			r.Get("/", s.getUserBoards)
+		})
+
 		r.Route("/user", func(r chi.Router) {
 			r.Get("/", s.getUser)
 			r.Put("/", s.updateUser)
