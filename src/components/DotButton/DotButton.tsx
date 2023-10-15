@@ -8,8 +8,6 @@ type DotButtonProps = {
   onClick?: () => void;
   title?: string;
   onAnimationEnd?: () => void;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
 };
 
 export const DotButton: FC<PropsWithChildren<DotButtonProps>> = (props) => (
@@ -22,8 +20,6 @@ export const DotButton: FC<PropsWithChildren<DotButtonProps>> = (props) => (
     }}
     title={props.title}
     onAnimationEnd={props.onAnimationEnd}
-    onMouseEnter={() => props.onMouseEnter?.()}
-    onMouseLeave={() => props.onMouseLeave?.()}
   >
     {props.children}
   </button>
