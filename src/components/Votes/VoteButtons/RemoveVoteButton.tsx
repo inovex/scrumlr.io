@@ -20,7 +20,6 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
 
   const [doBump, setDoBump] = useState(false);
   const firstUpdate = useRef(true);
-  const [removeVoteIconVisible, setRemoveVoteIconVisible] = useState(false);
 
   useEffect(() => {
     if (firstUpdate.current) {
@@ -38,11 +37,10 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
       onAnimationEnd={() => {
         setDoBump(false);
       }}
-      onMouseEnter={() => setRemoveVoteIconVisible(true)}
-      onMouseLeave={() => setRemoveVoteIconVisible(false)}
     >
       <span className="vote-button-remove__folded-corner" />
-      {removeVoteIconVisible ? <RemoveIcon /> : <span>{children}</span>}
+      <RemoveIcon className="vote-button-remove-icon" />
+      <span className="vote-button-remove-count">{children}</span>
     </DotButton>
   );
 };
