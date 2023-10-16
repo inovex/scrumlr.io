@@ -18,6 +18,7 @@ const (
 	BoardEventColumnDeleted         BoardEventType = "COLUMN_DELETED"
 	BoardEventNotesUpdated          BoardEventType = "NOTES_UPDATED"
 	BoardEventNoteDeleted           BoardEventType = "NOTE_DELETED"
+	BoardEventNotesSync             BoardEventType = "NOTES_SYNC"
 	BoardEventReactionAdded         BoardEventType = "REACTION_ADDED"
 	BoardEventReactionDeleted       BoardEventType = "REACTION_DELETED"
 	BoardEventReactionUpdated       BoardEventType = "REACTION_UPDATED"
