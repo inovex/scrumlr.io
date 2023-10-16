@@ -10,6 +10,8 @@ import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
 import classNames from "classnames";
 import {createPortal} from "react-dom";
+import {Toast} from "utils/Toast";
+import i18n from "../../../i18n";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -40,8 +42,12 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   };
 
   const onEdit = (id: string, newText: string) => {
-    if (editable && newText !== text) {
+    if (editable && newText !== text && newText.length > 0) {
       dispatch(Actions.editNote(id, {text: newText}));
+    } else if (editable && newText.length === 0) {
+      Toast.info({
+        title: i18n.t("Toast.emptyNoteDialog"),
+      });
     }
     dispatch(Actions.onNoteBlur());
   };
@@ -80,7 +86,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
           onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
           onFocus={onFocus}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               (e.target as HTMLTextAreaElement).blur();
             }

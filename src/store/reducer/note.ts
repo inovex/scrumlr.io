@@ -78,6 +78,9 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
         return n;
       });
     }
+    case Action.SyncNotes: {
+      return action.notes;
+    }
     case Action.UpdatedVoting: {
       if (action.notes) {
         return action.notes;
