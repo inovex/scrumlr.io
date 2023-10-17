@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState} from "react";
 import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {ReactComponent as ImageIcon} from "assets/icon-addimage.svg";
@@ -12,6 +12,23 @@ import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "../../constants/hotkeys";
+
+const emojiRegex = /^:([a-z0-9_]+):?$/i;
+
+// const testJSON = import("./emoji-data.json");
+
+type EmojiDataVersionNumber = `${number}.${number}`;
+
+type EmojiData = {
+  [emoji: string]: {
+    name: string;
+    slug: string;
+    group: string;
+    emoji_version: EmojiDataVersionNumber;
+    unicode_version: EmojiDataVersionNumber;
+    skin_tone_support: boolean;
+  };
+};
 
 export interface NoteInputProps {
   columnId: string;
@@ -44,11 +61,50 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
 
   const isImage = useImageChecker(value);
 
+  const [emojiData, setEmojiData] = useState<EmojiData | null>(null);
+
+  const [emojiAutocompleteName, setEmojiAutocompleteName] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!emojiAutocompleteName) setEmojiData(null);
+    else {
+      setEmojiData({
+        [emojiAutocompleteName]: {
+          name: "Emoji Autocomplete Name",
+          slug: `${emojiAutocompleteName}_slug`,
+          group: "Emoji Autocomplete Group",
+          emoji_version: "1.0",
+          unicode_version: "1.0",
+          skin_tone_support: false,
+        },
+      });
+    }
+  }, [emojiAutocompleteName]);
+
+  const checkEmoji = useCallback((newValue: string, cursor: number): string => {
+    setEmojiAutocompleteName(null);
+
+    const lastWord = newValue.slice(0, cursor).split(/\s+/).pop();
+    if (!lastWord) return newValue;
+
+    const [, emojiName] = lastWord.match(emojiRegex) || [];
+    if (!emojiName) return newValue;
+
+    // emoji autocomplete
+    setEmojiAutocompleteName(emojiName);
+
+    return newValue;
+  }, []);
+
   const handleChangeNoteText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     // Avoid long messages
-    if (e.target.value.length <= maxNoteLength) {
-      setValue(e.target.value);
-    }
+
+    const cursor = e.target.selectionStart;
+    const newValue = checkEmoji(e.target.value, cursor);
+
+    if (e.target.value.length > maxNoteLength) return;
+
+    setValue(newValue);
   };
 
   const onAddNote = () => {
@@ -67,6 +123,12 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   };
   return (
     <form className="note-input">
+      {emojiAutocompleteName && (
+        <div className="note-input__emoji-autocomplete">
+          <div className="note-input__emoji-autocomplete--emoji">{emojiAutocompleteName}</div>
+          <div className="note-input__emoji-autocomplete--name">{emojiData?.[emojiAutocompleteName]?.slug}</div>
+        </div>
+      )}
       <TextareaAutosize
         ref={noteInputRef}
         className="note-input__input"
@@ -79,6 +141,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
             onAddNote();
           }
         }}
+        onBlur={() => setEmojiAutocompleteName(null)}
         maxLength={maxNoteLength}
         id={`note-input-${columnId}`}
         data-tooltip-content={hotkeyKey}

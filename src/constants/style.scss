@@ -160,6 +160,7 @@ $brighten--strongly: brightness(1.4);
 $base-z-index: 100;
 $base-z-index-step: 10;
 $note-z-index: $base-z-index + (2 * $base-z-index-step);
+$note-input__emoji-picker-z-index: $note-z-index + $base-z-index-step;
 $menu-z-index: $base-z-index + (8 * $base-z-index-step);
 $menu-item-z-index: $menu-z-index + $base-z-index-step;
 $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);
