@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import React from "react";
-import {Tooltip} from "react-tooltip";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
 import {ReactionImageMap, ReactionType} from "types/reaction";
+import {TooltipPortal} from "components/Tooltip/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
 
@@ -46,7 +46,9 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         <div className="note-reaction-chip__reaction">{reactionImage}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
-      {props.showTooltip && <Tooltip anchorSelect={`#${anchorId}`} className="note-reaction-chip__tooltip" place="top" content={reactionUsers} />}
+      <TooltipPortal anchor={anchorId} place="top" show={props.showTooltip}>
+        {reactionUsers}
+      </TooltipPortal>
     </>
   );
 };
