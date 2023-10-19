@@ -16,6 +16,8 @@
 
   font-size: $text--base;
 
+  cursor: pointer;
+
   &:hover {
     background-color: $hover-background-light;
   }
