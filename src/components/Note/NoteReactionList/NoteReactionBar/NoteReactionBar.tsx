@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import classNames from "classnames";
-import {ReactionImageMap, ReactionType} from "types/reaction";
+import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionBar.scss";
 
@@ -20,7 +20,7 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
   // after tabbing through the list of buttons, the bar should close automatically after leaving the focus
   // note that shift+tab is not possible while on the last item because the tabbing direction isn't an event property, I hope nobody minds
   const handleBlurButton = (index: number) => {
-    if (index === ReactionImageMap.size - 1) {
+    if (index === REACTION_EMOJI_MAP.size - 1) {
       // only close upon leaving the last item
       props.closeReactionBar();
     }
@@ -42,7 +42,7 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
 
   return (
     <div className="note-reaction-bar__root">
-      {[...ReactionImageMap.entries()].map(([type, emoji], index) => {
+      {[...REACTION_EMOJI_MAP.entries()].map(([type, emoji], index) => {
         // highlight reaction made by yourself
         const active = !!props.reactions.find((r) => r.reactionType === type && !!r.myReactionId);
         return (

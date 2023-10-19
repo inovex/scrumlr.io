@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
-import {ReactionImageMap, ReactionType} from "types/reaction";
+import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
@@ -16,7 +16,7 @@ interface NoteReactionChipProps {
 }
 
 export const NoteReactionChip = (props: NoteReactionChipProps) => {
-  const reactionImage = ReactionImageMap.get(props.reaction.reactionType);
+  const reactionImage = REACTION_EMOJI_MAP.get(props.reaction.reactionType);
   const reactionUsers = props.reaction.users.map((u) => u.user.name).join(", ");
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);

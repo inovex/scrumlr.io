@@ -1,6 +1,6 @@
 import {hashCode} from "utils/hash";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
-import {ReactionImageMap} from "types/reaction";
+import {REACTION_EMOJI_MAP} from "types/reaction";
 import {uniqueId} from "underscore";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
@@ -16,10 +16,10 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const {noteId} = props.reactions[0];
   // filter out own reaction if exists.
   const reactionsFiltered = props.reactions.filter((r) => !r.myReactionId);
-  const reactionImages = reactionsFiltered.map((r) => ReactionImageMap.get(r.reactionType));
+  const reactionImages = reactionsFiltered.map((r) => REACTION_EMOJI_MAP.get(r.reactionType));
   // result example: [0]: "User 1, User 2: laughingEmoji"
   //                 [1]: "User 3: heartEmoji"
-  const reactionUsersTitle = reactionsFiltered.map((r) => `${r.users.map((u) => u.user.name).join(", ")}: ${ReactionImageMap.get(r.reactionType)}`);
+  const reactionUsersTitle = reactionsFiltered.map((r) => `${r.users.map((u) => u.user.name).join(", ")}: ${REACTION_EMOJI_MAP.get(r.reactionType)}`);
   const totalAmount = reactionsFiltered.reduce((sum, reactionModeled) => sum + reactionModeled.amount, 0);
 
   const anchorId = uniqueId(`reactions-${noteId}-condensed`);

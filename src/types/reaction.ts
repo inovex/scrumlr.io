@@ -12,7 +12,7 @@ export type ReactionState = Reaction[];
 
 export type ReactionType = "thinking" | "heart" | "like" | "dislike" | "joy" | "celebration" | "poop";
 
-export const ReactionImageMap = new Map<ReactionType, string>([
+export const REACTION_EMOJI_MAP = new Map<ReactionType, string>([
   ["thinking", "🤔"],
   ["heart", "💖"],
   ["like", "👍"],

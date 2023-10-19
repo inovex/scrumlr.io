@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
-import {ReactionImageMap, ReactionType} from "types/reaction";
+import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import _ from "underscore";
 import {useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
@@ -91,7 +91,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
                 className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}
                 onClick={(e) => removeOwnReaction(e, r)}
               >
-                {ReactionImageMap.get(r.reactionType)}
+                {REACTION_EMOJI_MAP.get(r.reactionType)}
               </button>
             </div>
             <div className="note-reaction-popup__row-divider" />
