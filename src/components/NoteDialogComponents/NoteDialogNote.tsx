@@ -12,11 +12,13 @@ export type NoteDialogNoteProps = {
   avatar?: AvataaarProps;
   authorName: string;
   showAuthors: boolean;
+  showNoteReactions: boolean;
   onClose: () => void;
   isStackedNote: boolean;
   hasStackedNotes?: boolean;
   stackHasMixedAuthors?: boolean;
   className?: string;
+  colorClassName?: string;
 
   viewer: Participant;
 };
@@ -24,8 +26,17 @@ export type NoteDialogNoteProps = {
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (
   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
   <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId}, props.className)} onClick={(e) => e.stopPropagation()}>
-    <NoteDialogNoteComponents.Content {...props} />
-    <NoteDialogNoteComponents.Options {...props} />
-    <NoteDialogNoteComponents.Footer {...props} />
+    <header className="note-dialog-note__header">
+      <NoteDialogNoteComponents.Header {...props} />
+    </header>
+    <main className="note-dialog-note__main">
+      <NoteDialogNoteComponents.Content {...props} />
+    </main>
+    <aside className="note-dialog-note__options">
+      <NoteDialogNoteComponents.Options {...props} />
+    </aside>
+    <footer className="note-dialog-note__footer">
+      <NoteDialogNoteComponents.Footer {...props} />
+    </footer>
   </div>
 );

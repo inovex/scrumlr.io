@@ -11,6 +11,7 @@ export interface Board {
   accessPolicy: keyof typeof AccessPolicy;
   showAuthors: boolean;
   showNotesOfOtherUsers: boolean;
+  showNoteReactions: boolean;
   allowStacking: boolean;
   timerStart?: Date;
   timerEnd?: Date;

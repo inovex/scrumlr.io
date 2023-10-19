@@ -22,6 +22,8 @@ import {passRequestMiddleware} from "./middleware/request";
 import {passViewMiddleware} from "./middleware/view";
 import {assignmentReducer} from "./reducer/assignment";
 import {passAssignmentMiddlware} from "./middleware/assignment";
+import {reactionReducer} from "./reducer/reaction";
+import {passReactionMiddleware} from "./middleware/reaction";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -40,6 +42,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
     passRequestMiddleware(stateAPI, dispatch, action);
     passColumnMiddleware(stateAPI, dispatch, action);
     passNoteMiddleware(stateAPI, dispatch, action);
+    passReactionMiddleware(stateAPI, dispatch, action);
     passVoteMiddleware(stateAPI, dispatch, action);
     passVotingMiddleware(stateAPI, dispatch, action);
     passAssignmentMiddlware(stateAPI, dispatch, action);
@@ -50,6 +53,7 @@ const rootReducer = combineReducers<ApplicationState>({
   board: boardReducer,
   columns: columnsReducer,
   notes: noteReducer,
+  reactions: reactionReducer,
   auth: authReducer,
   participants: participantsReducer,
   requests: joinRequestReducer,
