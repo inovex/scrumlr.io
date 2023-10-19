@@ -10,8 +10,10 @@ import {Actions} from "store/action";
 import {Participant} from "types/participant";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
+import {useSize} from "utils/hooks/useSize";
 import {Sortable} from "components/DragAndDrop/Sortable";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
+import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import "./Note.scss";
 
 interface NoteProps {
@@ -31,6 +33,7 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const me = useAppSelector((state) => state.participants?.self);
   const moderating = useAppSelector((state) => state.view.moderating);
@@ -67,6 +70,8 @@ export const Note = (props: NoteProps) => {
 
   const isImage = useImageChecker(note?.text ?? "");
 
+  const dimensions = useSize(noteRef);
+
   const handleClick = () => {
     if (moderating && isModerator) {
       dispatch(Actions.shareNote(props.noteId));
@@ -95,6 +100,12 @@ export const Note = (props: NoteProps) => {
       disabled={!(isModerator || allowStacking)}
     >
       <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
+        <header className="note__header">
+          <div className="note__author-container">
+            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+          </div>
+          <Votes noteId={props.noteId!} aggregateVotes />
+        </header>
         {isImage ? (
           <div className="note__image-wrapper">
             <img
@@ -105,14 +116,11 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <p className="note__text">{note.text}</p>
+          <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>{note.text}</main>
         )}
-        <div className="note__footer">
-          <div className="note__author-container">
-            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
-          </div>
-          <Votes noteId={props.noteId!} aggregateVotes />
-        </div>
+        <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
+          <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
+        </footer>
       </button>
       {isStack && <div className="note__in-stack" />}
     </Sortable>

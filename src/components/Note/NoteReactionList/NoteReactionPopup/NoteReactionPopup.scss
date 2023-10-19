@@ -1,0 +1,173 @@
+@import "src/constants/style";
+
+.note-reaction-popup__root {
+  position: absolute;
+  width: 100%;
+  height: 50%;
+
+  bottom: 0;
+
+  transform: translateX(-50%); // show on whole screen
+
+  padding: $padding--small $padding--default $padding--large * 2 $padding--default;
+
+  background-color: $color-white;
+
+  user-select: none;
+
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 2px 30px 0 rgba($menu-icon-background-color--dark, 0.12);
+
+  animation: slide-in 0.3s ease-in-out;
+}
+
+.note-reaction-popup__notch-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.note-reaction-popup__notch {
+  width: 64px;
+  height: 4px;
+  background-color: $color-lighter-gray;
+  border-radius: $rounded--default;
+  margin-bottom: $margin--default;
+}
+
+.note-reaction-popup__tab-bar {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: scroll;
+}
+
+.note-reaction-popup__tab-all {
+  // TODO: use @mixins for repeating styling
+  all: unset; // remove default buttons styling
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 18px;
+  padding: 6px 9px 4px 10px;
+  border-radius: $rounded--full;
+  background-color: $color-lighter-gray;
+
+  font-size: $text--sm;
+  font-weight: 600;
+  line-height: 18px;
+  color: $color-black;
+
+  &:hover {
+    background-color: $hover-background-light;
+  }
+
+  &--active {
+    background-color: var(--accent-color);
+    color: $color-white;
+
+    &:hover {
+      background-color: var(--accent-color); // essentially no hover color when active.
+    }
+  }
+}
+
+.note-reaction-popup__main {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+
+  margin-top: $margin--medium;
+  padding-bottom: $padding--small;
+
+  overflow: scroll;
+  scroll-snap-type: x mandatory;
+}
+
+.note-reaction-popup__container {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0; // don't allow shrinking so that containers are placed next to each other
+
+  width: 100%;
+  height: 100%;
+
+  overflow-y: scroll;
+  scroll-snap-align: center;
+}
+
+.note-reaction-popup__row {
+  height: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.note-reaction-popup__row-reaction {
+  all: unset; // reset button
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: $text--md;
+
+  width: 34px;
+  height: 34px;
+  border-radius: $rounded--full;
+
+  &--active {
+    background-color: var(--accent-color--desaturated-light);
+  }
+}
+
+.note-reaction-popup__row-divider {
+  width: 100%;
+  height: 1px;
+
+  margin: 7px 0 10px 0;
+
+  background-color: $color-lighter-gray;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-50%) translateY(100%);
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+[theme="dark"] {
+  .note-reaction-popup__root {
+    background-color: $color-dark-mode-note;
+  }
+
+  .note-reaction-popup__notch {
+    background-color: #5a647d;
+  }
+
+  .note-reaction-popup__tab-all {
+    color: $color-white;
+    background-color: $color-dark-one;
+
+    &--active {
+      background-color: var(--accent-color--desaturated-dark-hover);
+    }
+  }
+
+  .note-reaction-popup__row-reaction {
+    &--active {
+      background-color: var(--accent-color--desaturated-dark);
+    }
+  }
+
+  .note-reaction-popup__row-divider {
+    background-color: $color-dark-one;
+  }
+}

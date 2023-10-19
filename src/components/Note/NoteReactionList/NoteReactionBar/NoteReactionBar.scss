@@ -1,0 +1,71 @@
+@import "src/constants/style";
+
+$scale-factor: 120%;
+
+.note-reaction-bar__root {
+  display: inline-flex;
+  flex-direction: row;
+  gap: $reaction__gap-size;
+
+  padding: $reaction__padding--outer-top-bottom $reaction__padding--outer-left-right $reaction__padding--outer-top-bottom 0; // left padding in NoteReactionList because of icon
+}
+
+.note-reaction-bar__reaction {
+  all: unset;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  width: $reaction__inner-size;
+  height: $reaction__inner-size;
+  padding: $reaction__padding--inner;
+
+  border-radius: $rounded--full;
+  font-size: $text--md;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: $hover-background-light;
+    transform: scale($scale-factor);
+  }
+
+  &--active {
+    background-color: var(--accent-color--desaturated-light);
+
+    &:hover {
+      background-color: var(--accent-color--desaturated-light-hover);
+    }
+  }
+
+  &:focus {
+    background-color: var(--accent-color--desaturated-light-hover);
+  }
+}
+
+@container #{$container__note} {
+  .note-reaction-bar__root {
+    gap: $reaction__gap-size--small;
+  }
+}
+
+[theme="dark"] {
+  .note-reaction-bar__reaction {
+    &:hover {
+      background-color: $hover-background-dark;
+    }
+
+    &--active {
+      background-color: var(--accent-color--desaturated-dark);
+
+      &:hover {
+        background-color: var(--accent-color--desaturated-dark-hover);
+      }
+    }
+
+    &:focus {
+      background-color: var(--accent-color--desaturated-dark-hover);
+    }
+  }
+}

@@ -18,6 +18,7 @@ type BoardSubscription struct {
 	boardSettings     *dto2.Board
 	boardColumns      []*dto2.Column
 	boardNotes        []*dto2.Note
+	boardReactions    []*dto2.Reaction
 }
 
 type InitEvent struct {
@@ -29,6 +30,7 @@ type EventData struct {
 	Board       *dto2.Board                 `json:"board"`
 	Columns     []*dto2.Column              `json:"columns"`
 	Notes       []*dto2.Note                `json:"notes"`
+	Reactions   []*dto2.Reaction            `json:"reactions"`
 	Votings     []*dto2.Voting              `json:"votings"`
 	Votes       []*dto2.Vote                `json:"votes"`
 	Sessions    []*dto2.BoardSession        `json:"participants"`
@@ -49,7 +51,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	board, requests, sessions, columns, notes, votings, votes, assignments, err := s.boards.FullBoard(r.Context(), id)
+	board, requests, sessions, columns, notes, reactions, votings, votes, assignments, err := s.boards.FullBoard(r.Context(), id)
 	if err != nil {
 		logger.Get().Errorw("failed to prepare init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
@@ -60,6 +62,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		Board:       board,
 		Columns:     columns,
 		Notes:       notes,
+		Reactions:   reactions,
 		Votings:     votings,
 		Votes:       votes,
 		Sessions:    sessions,
@@ -118,6 +121,7 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 	b.boardSettings = initEventData.Board
 	b.boardColumns = initEventData.Columns
 	b.boardNotes = initEventData.Notes
+	b.boardReactions = initEventData.Reactions
 
 	// if not already done, start listening to board changes
 	if b.subscription == nil {

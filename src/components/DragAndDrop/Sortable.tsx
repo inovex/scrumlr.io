@@ -120,6 +120,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
       {...attributes}
       {...listeners}
       style={{transition, transform: CSS.Transform.toString(transform), opacity: isDragging ? 0.5 : 1, touchAction: "manipulation"}}
+      tabIndex={-1}
     >
       {children}
     </div>

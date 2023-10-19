@@ -296,6 +296,12 @@
   "NoteDialogUnstackNoteButton": {
     "title": "Diese Notiz aus dem Stapel herausnehmen"
   },
+  "NoteReactionList": {
+    "toggleBarLabel": "Emojiliste umschalten"
+  },
+  "NoteReactionsPopup": {
+    "allReactionsTab": "Alle"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
     "BoardSettingsDescription": "Name, Zugriffseinstellungen",
@@ -321,6 +327,7 @@
     "ShowAuthorOption": "Kartenautoren anzeigen",
     "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
+    "ShowNoteReactionsOptions": "Emoji-Reaktionen auf Karten anzeigen",
     "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",

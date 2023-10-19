@@ -143,6 +143,27 @@ exports[`BoardSettings should match snapshot 1`] = `
             />
           </div>
         </button>
+        <button
+          aria-checked="true"
+          aria-label="BoardSettings.ShowNoteReactionsOptions"
+          class="settings-option-button board-settings__show-reactions-button"
+          data-testid="reactions"
+          role="switch"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            BoardSettings.ShowNoteReactionsOptions
+          </span>
+          <div
+            class="board-settings__show-reactions-value"
+          >
+            <div
+              class="toggle toggle--active"
+            />
+          </div>
+        </button>
         <hr
           class="settings-dialog__separator"
         />
