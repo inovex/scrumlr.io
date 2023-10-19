@@ -6,6 +6,7 @@ $row-gap: 3px;
 .note-dialog__note {
   --note-footer-height: 28px;
 
+  // TODO: fix NoteReactionList pushing away NoteDialogNoteOptions on smaller screens (#3499)
   display: grid;
   grid-template-areas:
     "head head"
