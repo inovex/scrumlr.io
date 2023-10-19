@@ -17,18 +17,7 @@ const emojiRegex = /^:([a-z0-9_]+):?$/i;
 
 // const testJSON = import("./emoji-data.json");
 
-type EmojiDataVersionNumber = `${number}.${number}`;
-
-type EmojiData = {
-  [emoji: string]: {
-    name: string;
-    slug: string;
-    group: string;
-    emoji_version: EmojiDataVersionNumber;
-    unicode_version: EmojiDataVersionNumber;
-    skin_tone_support: boolean;
-  };
-};
+type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean];
 
 export interface NoteInputProps {
   columnId: string;
@@ -61,25 +50,23 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
 
   const isImage = useImageChecker(value);
 
-  const [emojiData, setEmojiData] = useState<EmojiData | null>(null);
+  const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
+
+  const [autocompleteEmojis, setAutocompleteEmojis] = useState<EmojiData[] | null>(null);
 
   const [emojiAutocompleteName, setEmojiAutocompleteName] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!emojiAutocompleteName) setEmojiData(null);
-    else {
-      setEmojiData({
-        [emojiAutocompleteName]: {
-          name: "Emoji Autocomplete Name",
-          slug: `${emojiAutocompleteName}_slug`,
-          group: "Emoji Autocomplete Group",
-          emoji_version: "1.0",
-          unicode_version: "1.0",
-          skin_tone_support: false,
-        },
-      });
+    if (!emojiAutocompleteName) {
+      setAutocompleteEmojis(null);
+      return;
     }
-  }, [emojiAutocompleteName]);
+    if (!emojiData) {
+      import("./emojis.json").then((data) => setEmojiData(data.default as EmojiData[]));
+      return;
+    }
+    setAutocompleteEmojis(emojiData.filter(([slug]) => slug.includes(emojiAutocompleteName)));
+  }, [emojiAutocompleteName, emojiData]);
 
   const checkEmoji = useCallback((newValue: string, cursor: number): string => {
     setEmojiAutocompleteName(null);
@@ -123,10 +110,10 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   };
   return (
     <form className="note-input">
-      {emojiAutocompleteName && (
+      {autocompleteEmojis && (
         <div className="note-input__emoji-autocomplete">
-          <div className="note-input__emoji-autocomplete--emoji">{emojiAutocompleteName}</div>
-          <div className="note-input__emoji-autocomplete--name">{emojiData?.[emojiAutocompleteName]?.slug}</div>
+          <div className="note-input__emoji-autocomplete--emoji">found {autocompleteEmojis.length} emojis</div>
+          <div className="note-input__emoji-autocomplete--name">{autocompleteEmojis[0]}</div>
         </div>
       )}
       <TextareaAutosize
