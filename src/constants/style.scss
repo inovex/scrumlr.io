@@ -247,23 +247,3 @@ $column-stripes--dark: repeating-linear-gradient(
     }
   }
 }
-
-// tooltip
-@mixin tooltip {
-  z-index: $tooltip-z-index;
-  border-radius: $rounded--large;
-  opacity: 100%;
-  font-size: $text--sm;
-}
-
-@mixin tooltip--light {
-  @include tooltip;
-  color: $color-black;
-  background-color: $hover-background-light;
-}
-
-@mixin tooltip--dark {
-  @include tooltip;
-  color: $color-white;
-  background-color: $hover-background-dark;
-}

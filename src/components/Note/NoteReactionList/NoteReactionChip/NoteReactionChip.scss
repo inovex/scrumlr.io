@@ -1,7 +1,5 @@
 @import "src/constants/style";
 
-$tooltip-max-width: 100%;
-
 .note-reaction-chip__root {
   all: unset; // remove default buttons styling
 
@@ -60,13 +58,6 @@ $tooltip-max-width: 100%;
   }
 }
 
-// 'div' is required (CSS specificity)
-div .note-reaction-chip__tooltip {
-  @include tooltip--light;
-
-  max-width: $tooltip-max-width;
-}
-
 [theme="dark"] {
   .note-reaction-chip__root {
     background-color: $color-dark-one;
@@ -94,9 +85,5 @@ div .note-reaction-chip__tooltip {
 
   .note-reaction-chip__amount {
     color: $color-white;
-  }
-
-  div .note-reaction-chip__tooltip {
-    @include tooltip--dark;
   }
 }

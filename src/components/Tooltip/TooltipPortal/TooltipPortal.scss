@@ -1,0 +1,33 @@
+@import "src/constants/style";
+
+// tooltip
+@mixin tooltip {
+  z-index: $tooltip-z-index;
+  border-radius: $rounded--large;
+  opacity: 100%;
+  max-width: 100%;
+  font-size: $text--sm;
+}
+
+@mixin tooltip--light {
+  @include tooltip;
+  color: $color-black;
+  background-color: $hover-background-light;
+}
+
+@mixin tooltip--dark {
+  @include tooltip;
+  color: $color-white;
+  background-color: $hover-background-dark;
+}
+
+// selecting .tooltip-portal directly won't work because of CSS specificity
+.tooltip-portal__root .tooltip-portal {
+  @include tooltip--light;
+}
+
+[theme="dark"] {
+  .tooltip-portal__root .tooltip-portal {
+    @include tooltip--dark;
+  }
+}

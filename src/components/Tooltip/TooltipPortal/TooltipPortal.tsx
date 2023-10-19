@@ -1,6 +1,7 @@
 import {PlacesType, Tooltip} from "react-tooltip";
 import {ReactNode} from "react";
 import {createPortal} from "react-dom";
+import "./TooltipPortal.scss";
 
 interface TooltipPortalProps {
   anchor: string;
@@ -14,9 +15,11 @@ export const TooltipPortal = (props: TooltipPortalProps) => {
   if (!props.show) return null;
 
   return createPortal(
-    <Tooltip className="tooltip-portal" anchorSelect={`#${props.anchor}`} place={props.place}>
-      {props.children}
-    </Tooltip>,
+    <div className="tooltip-portal__root">
+      <Tooltip className="tooltip-portal" anchorSelect={`#${props.anchor}`} place={props.place}>
+        {props.children}
+      </Tooltip>
+    </div>,
     document.body
   );
 };
