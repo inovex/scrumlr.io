@@ -3,7 +3,7 @@ import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
 import {ReactionImageMap, ReactionType} from "types/reaction";
-import {TooltipPortal} from "components/Tooltip/TooltipPortal/TooltipPortal";
+import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
 
