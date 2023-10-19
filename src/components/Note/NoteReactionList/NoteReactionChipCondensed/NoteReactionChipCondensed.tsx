@@ -1,8 +1,8 @@
-import {Tooltip} from "react-tooltip";
 import {hashCode} from "utils/hash";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {ReactionImageMap} from "types/reaction";
 import {uniqueId} from "underscore";
+import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
 
@@ -47,14 +47,14 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
         </div>
         <div className="note-reaction-chip-condensed__amount">{totalAmount}</div>
       </div>
-      <Tooltip anchorSelect={`#${anchorId}`} className="note-reaction-chip-condensed__tooltip" place="top">
+      <TooltipPortal anchor={anchorId} place="top" show>
         <div className="note-reaction-chip-condensed__tooltip-content">
           {reactionUsersTitle.map((t) => (
             // hash because a unique key is required to make linter happy
             <span key={hashCode(t)}>{t}</span>
           ))}
         </div>
-      </Tooltip>
+      </TooltipPortal>
     </>
   );
 };
