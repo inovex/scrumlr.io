@@ -1,11 +1,13 @@
 @import "src/constants/style";
 
+$tooltip-max-width: 80%;
+
 // tooltip
 @mixin tooltip {
   z-index: $tooltip-z-index;
   border-radius: $rounded--large;
   opacity: 100%;
-  max-width: 100%;
+  max-width: $tooltip-max-width;
   font-size: $text--sm;
 }
 
