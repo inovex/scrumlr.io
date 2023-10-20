@@ -14,7 +14,7 @@
     "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.2",
     "@dnd-kit/utilities": "^3.2.1",
-    "@fontsource/raleway": "^5.0.13",
+    "@fontsource/raleway": "^5.0.14",
     "@react-hook/resize-observer": "^1.2.6",
     "@reduxjs/toolkit": "^1.9.7",
     "avataaars": "^2.0.0",
