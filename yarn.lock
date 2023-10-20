@@ -4736,12 +4736,12 @@ eslint-module-utils@^2.7.4, eslint-module-utils@^2.8.0:
   dependencies:
     debug "^3.2.7"
 
-eslint-plugin-css-modules@^2.11.4:
-  version "2.11.4"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-css-modules/-/eslint-plugin-css-modules-2.11.4.tgz#cabe500fc672a3ba0a4a7af18ecfc36357dc53a3"
-  integrity sha512-pZYaW2hDUSz8Exb3BXVeu075MV23roLmubPb4EVeKvNdksVZ3gyzfuBCNazdxmPJkVspu3A6cwjH08y+GcoXkg==
+eslint-plugin-css-modules@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-css-modules/-/eslint-plugin-css-modules-2.12.0.tgz#c4102c390c7efd68c4d53677c5e763971699322c"
+  integrity sha512-ruFBdad69ABrbCDCh5mXj7UzNmrvytfzPACjyvZWIAjFZAG8BXpYSbqmE8gU5wF+pIzV3jU2CWhLvfekXT/IgQ==
   dependencies:
-    gonzales-pe "^4.0.3"
+    gonzales-pe "^4.3.0"
     lodash "^4.17.2"
 
 eslint-plugin-flowtype@^8.0.3:
@@ -5538,7 +5538,7 @@ globby@^11.0.4, globby@^11.1.0:
     merge2 "^1.4.1"
     slash "^3.0.0"
 
-gonzales-pe@^4.0.3:
+gonzales-pe@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/gonzales-pe/-/gonzales-pe-4.3.0.tgz#fe9dec5f3c557eead09ff868c65826be54d067b3"
   integrity sha512-otgSPpUmdWJ43VXyiNgEYE4luzHCL2pz4wQ0OnDluC6Eg4Ko3Vexy/SrSynglw/eR+OhkzmqFCZa/OFa/RgAOQ==
