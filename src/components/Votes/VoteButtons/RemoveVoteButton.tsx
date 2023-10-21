@@ -39,8 +39,8 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
       }}
     >
       <span className="vote-button-remove__folded-corner" />
-      <RemoveIcon className="vote-button-remove-icon" />
-      <span className="vote-button-remove-count">{children}</span>
+      <RemoveIcon className="vote-button-remove__icon" />
+      <span className="vote-button-remove__count">{children}</span>
     </DotButton>
   );
 };

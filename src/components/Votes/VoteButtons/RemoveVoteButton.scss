@@ -26,19 +26,22 @@
 .vote-button-remove:enabled:hover {
   background-color: var(--accent-color);
   color: $color-white;
-  .vote-button-remove-count {
+  .vote-button-remove__count {
     display: none;
   }
-  .vote-button-remove-icon {
+  .vote-button-remove__icon {
     display: block;
   }
 }
 
 .vote-button-remove:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+  .vote-button-remove__icon {
+    display: block;
+  }
 }
 
-.vote-button-remove-icon {
+.vote-button-remove__icon {
   display: none;
 }
 
