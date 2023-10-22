@@ -11,13 +11,11 @@ import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
-import {hotkeyMap} from "../../constants/hotkeys";
+import {MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS, MAX_EMOJI_SUGGESTION_COUNT} from "constants/misc";
+import {hotkeyMap} from "constants/hotkeys";
 import {NoteInputEmojiSuggestions} from "./EmojiSuggestions";
 
 const emojiRegex = /^:([a-z0-9_]+):?$/i;
-
-const MAX_SUGGESTION_COUNT = 25;
-const MIN_CHARACTERS_TO_TRIGGER_SUGGESTIONS = 2;
 
 // const testJSON = import("./emoji-data.json");
 
@@ -66,7 +64,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       return;
     }
     if (!emojiData) {
-      import("./emojis.json").then((data) => setEmojiData(data.default as EmojiData[]));
+      import("constants/emojis.json").then((data) => setEmojiData(data.default as EmojiData[]));
       return;
     }
     setAutocompleteEmojis(emojiData.filter(([slug]) => slug.includes(emojiAutocompleteName)));
@@ -79,7 +77,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
     if (!lastWord) return newValue;
 
     const [, emojiName] = lastWord.match(emojiRegex) || [];
-    if (!emojiName || emojiName.length < MIN_CHARACTERS_TO_TRIGGER_SUGGESTIONS) return newValue;
+    if (!emojiName || emojiName.length < MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS) return newValue;
 
     // emoji autocomplete
     setEmojiAutocompleteName(emojiName);
@@ -116,7 +114,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
     <form className="note-input">
       {autocompleteEmojis.length > 0 && (
         <div className="note-input__emoji-autocomplete">
-          <NoteInputEmojiSuggestions suggestions={autocompleteEmojis.slice(0, MAX_SUGGESTION_COUNT)} keyboardFocusedIndex={0} />
+          <NoteInputEmojiSuggestions suggestions={autocompleteEmojis.slice(0, MAX_EMOJI_SUGGESTION_COUNT)} keyboardFocusedIndex={0} />
         </div>
       )}
       <TextareaAutosize
