@@ -12,12 +12,16 @@ import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "../../constants/hotkeys";
+import {NoteInputEmojiSuggestions} from "./EmojiSuggestions";
 
 const emojiRegex = /^:([a-z0-9_]+):?$/i;
 
+const MAX_SUGGESTION_COUNT = 25;
+const MIN_CHARACTERS_TO_TRIGGER_SUGGESTIONS = 2;
+
 // const testJSON = import("./emoji-data.json");
 
-type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean];
+export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean];
 
 export interface NoteInputProps {
   columnId: string;
@@ -52,13 +56,13 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
 
   const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
 
-  const [autocompleteEmojis, setAutocompleteEmojis] = useState<EmojiData[] | null>(null);
+  const [autocompleteEmojis, setAutocompleteEmojis] = useState<EmojiData[]>([]);
 
-  const [emojiAutocompleteName, setEmojiAutocompleteName] = useState<string | null>(null);
+  const [emojiAutocompleteName, setEmojiAutocompleteName] = useState<string>("");
 
   useEffect(() => {
     if (!emojiAutocompleteName) {
-      setAutocompleteEmojis(null);
+      setAutocompleteEmojis([]);
       return;
     }
     if (!emojiData) {
@@ -69,13 +73,13 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   }, [emojiAutocompleteName, emojiData]);
 
   const checkEmoji = useCallback((newValue: string, cursor: number): string => {
-    setEmojiAutocompleteName(null);
+    setEmojiAutocompleteName("");
 
     const lastWord = newValue.slice(0, cursor).split(/\s+/).pop();
     if (!lastWord) return newValue;
 
     const [, emojiName] = lastWord.match(emojiRegex) || [];
-    if (!emojiName) return newValue;
+    if (!emojiName || emojiName.length < MIN_CHARACTERS_TO_TRIGGER_SUGGESTIONS) return newValue;
 
     // emoji autocomplete
     setEmojiAutocompleteName(emojiName);
@@ -110,10 +114,9 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   };
   return (
     <form className="note-input">
-      {autocompleteEmojis && (
+      {autocompleteEmojis.length > 0 && (
         <div className="note-input__emoji-autocomplete">
-          <div className="note-input__emoji-autocomplete--emoji">found {autocompleteEmojis.length} emojis</div>
-          <div className="note-input__emoji-autocomplete--name">{autocompleteEmojis[0]}</div>
+          <NoteInputEmojiSuggestions suggestions={autocompleteEmojis.slice(0, MAX_SUGGESTION_COUNT)} keyboardFocusedIndex={0} />
         </div>
       )}
       <TextareaAutosize
@@ -128,7 +131,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
             onAddNote();
           }
         }}
-        onBlur={() => setEmojiAutocompleteName(null)}
+        onBlur={() => setEmojiAutocompleteName("")}
         maxLength={maxNoteLength}
         id={`note-input-${columnId}`}
         data-tooltip-content={hotkeyKey}

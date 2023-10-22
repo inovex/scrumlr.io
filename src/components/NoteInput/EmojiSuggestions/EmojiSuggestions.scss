@@ -1,0 +1,40 @@
+@import "constants/style";
+
+.emoji-suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  color: $color-black;
+
+  &__element {
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: $padding--small;
+    border-radius: $rounded--small;
+  }
+
+  &__element:hover,
+  &:not(:hover) .emoji-suggestions__element--focus {
+    background-color: rgba(var(--accent-color-rgb), 0.2);
+  }
+
+  &__emoji {
+    margin-right: $margin--small;
+    user-select: none;
+    font-size: $text--md;
+  }
+}
+
+[theme="dark"] {
+  .emoji-suggestions {
+    color: $color-white;
+
+    &__element:hover,
+    &:not(:hover) .emoji-suggestions__element--focus {
+      background-color: #485064;
+    }
+  }
+}
