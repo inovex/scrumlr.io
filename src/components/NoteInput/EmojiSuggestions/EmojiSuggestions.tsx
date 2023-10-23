@@ -10,7 +10,11 @@ type NoteInputEmojiSuggestionsProps = {
 export const NoteInputEmojiSuggestions = ({suggestions, keyboardFocusedIndex}: NoteInputEmojiSuggestionsProps) => (
   <ul className="emoji-suggestions">
     {suggestions.map(([slug, emoji, _supportsSkintones], i) => (
-      <li className={classNames("emoji-suggestions__element", {"emoji-suggestions__element--focus": i === keyboardFocusedIndex})}>
+      <li
+        className={classNames("emoji-suggestions__element", {"emoji-suggestions__element--focus": i === keyboardFocusedIndex})}
+        onClick={() => console.log("clicked on", emoji, slug)}
+        key={slug}
+      >
         <span className="emoji-suggestions__emoji">{emoji}</span>:{slug}:
       </li>
     ))}

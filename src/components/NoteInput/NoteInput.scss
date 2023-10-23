@@ -118,12 +118,10 @@ $note-input__input-right: 40px;
   top: calc(100% + $padding--small);
   width: 100%;
   z-index: $note-input__emoji-picker-z-index;
-  padding: $padding--small;
   border-radius: $rounded--default;
   max-height: $emoji-suggestions__max-height;
   overflow-y: auto;
   left: 0;
-  background-color: $color-lighter-gray;
   box-shadow: $box-shadow--light;
 
   @include scrollbar();
@@ -144,7 +142,6 @@ $note-input__input-right: 40px;
   }
 
   .note-input__emoji-autocomplete {
-    background-color: $color-dark-mode-note;
     box-shadow: $box-shadow--dark;
   }
 }

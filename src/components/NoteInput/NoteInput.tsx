@@ -13,6 +13,7 @@ import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
 import {MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS, MAX_EMOJI_SUGGESTION_COUNT} from "constants/misc";
 import {hotkeyMap} from "constants/hotkeys";
+import {useOnBlur} from "utils/hooks/useOnBlur";
 import {NoteInputEmojiSuggestions} from "./EmojiSuggestions";
 
 const emojiRegex = /^:([a-z0-9_]+):?$/i;
@@ -57,6 +58,8 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
   const [autocompleteEmojis, setAutocompleteEmojis] = useState<EmojiData[]>([]);
 
   const [emojiAutocompleteName, setEmojiAutocompleteName] = useState<string>("");
+
+  const blurRef = useOnBlur<HTMLTextAreaElement>(() => setEmojiAutocompleteName(""));
 
   useEffect(() => {
     if (!emojiAutocompleteName) {
@@ -118,7 +121,10 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         </div>
       )}
       <TextareaAutosize
-        ref={noteInputRef}
+        ref={(ref) => {
+          noteInputRef.current = ref;
+          blurRef.current = ref;
+        }}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
         value={value}
@@ -129,7 +135,6 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
             onAddNote();
           }
         }}
-        onBlur={() => setEmojiAutocompleteName("")}
         maxLength={maxNoteLength}
         id={`note-input-${columnId}`}
         data-tooltip-content={hotkeyKey}

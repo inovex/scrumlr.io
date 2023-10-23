@@ -1,8 +1,10 @@
 @import "constants/style";
 
 .emoji-suggestions {
+  padding: $padding--small;
+  border-radius: $rounded--default;
+  background-color: $color-lighter-gray;
   list-style: none;
-  padding: 0;
   margin: 0;
 
   color: $color-black;
@@ -14,6 +16,7 @@
     text-overflow: ellipsis;
     padding: $padding--small;
     border-radius: $rounded--small;
+    line-height: $line-height--medium;
   }
 
   &__element:hover,
@@ -31,6 +34,7 @@
 [theme="dark"] {
   .emoji-suggestions {
     color: $color-white;
+    background-color: $color-dark-mode-note;
 
     &__element:hover,
     &:not(:hover) .emoji-suggestions__element--focus {
