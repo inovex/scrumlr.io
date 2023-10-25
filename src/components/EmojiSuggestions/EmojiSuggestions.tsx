@@ -1,13 +1,13 @@
 import classNames from "classnames";
-import {EmojiData} from "../NoteInput";
+import {EmojiData} from "utils/hooks/useEmojiAutocomplete";
 import "./EmojiSuggestions.scss";
 
-type NoteInputEmojiSuggestionsProps = {
+type EmojiSuggestionsProps = {
   suggestions: EmojiData[];
   keyboardFocusedIndex: number;
 };
 
-export const NoteInputEmojiSuggestions = ({suggestions, keyboardFocusedIndex}: NoteInputEmojiSuggestionsProps) => (
+export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex}: EmojiSuggestionsProps) => (
   <ul className="emoji-suggestions">
     {suggestions.map(([slug, emoji, _supportsSkintones], i) => (
       <li

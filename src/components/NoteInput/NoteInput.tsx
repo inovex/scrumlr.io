@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {ReactComponent as ImageIcon} from "assets/icon-addimage.svg";
@@ -11,16 +11,8 @@ import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
-import {MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS, MAX_EMOJI_SUGGESTION_COUNT} from "constants/misc";
 import {hotkeyMap} from "constants/hotkeys";
-import {useOnBlur} from "utils/hooks/useOnBlur";
-import {NoteInputEmojiSuggestions} from "./EmojiSuggestions";
-
-const emojiRegex = /^:([a-z0-9_]+):?$/i;
-
-// const testJSON = import("./emoji-data.json");
-
-export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean];
+import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 
 export interface NoteInputProps {
   columnId: string;
@@ -34,9 +26,32 @@ export interface NoteInputProps {
 export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
-  const [value, setValue] = useState("");
-  const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
   const [toastDisplayed, setToastDisplayed] = useState(false);
+
+  const addNote = (content: string) => {
+    if (!content.trim()) return;
+    dispatch(Actions.addNote(columnId!, content));
+    if (!columnIsVisible && !toastDisplayed) {
+      Toast.info({
+        title: t("Toast.noteToHiddenColumn"),
+        buttons: [t("Toast.noteToHiddenColumnButton")],
+        firstButtonOnClick: toggleColumnVisibility,
+      });
+      setToastDisplayed(true);
+    }
+  };
+
+  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLFormElement>({
+    maxInputLength: maxNoteLength,
+    onKeyDown: (e, content) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        addNote(content);
+        setValue("");
+      }
+    },
+  });
+  const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
   const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${columnIndex + 1}`).join(",");
@@ -53,91 +68,27 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
 
   const isImage = useImageChecker(value);
 
-  const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
-
-  const [autocompleteEmojis, setAutocompleteEmojis] = useState<EmojiData[]>([]);
-
-  const [emojiAutocompleteName, setEmojiAutocompleteName] = useState<string>("");
-
-  const blurRef = useOnBlur<HTMLTextAreaElement>(() => setEmojiAutocompleteName(""));
-
-  useEffect(() => {
-    if (!emojiAutocompleteName) {
-      setAutocompleteEmojis([]);
-      return;
-    }
-    if (!emojiData) {
-      import("constants/emojis.json").then((data) => setEmojiData(data.default as EmojiData[]));
-      return;
-    }
-    setAutocompleteEmojis(emojiData.filter(([slug]) => slug.includes(emojiAutocompleteName)));
-  }, [emojiAutocompleteName, emojiData]);
-
-  const checkEmoji = useCallback((newValue: string, cursor: number): string => {
-    setEmojiAutocompleteName("");
-
-    const lastWord = newValue.slice(0, cursor).split(/\s+/).pop();
-    if (!lastWord) return newValue;
-
-    const [, emojiName] = lastWord.match(emojiRegex) || [];
-    if (!emojiName || emojiName.length < MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS) return newValue;
-
-    // emoji autocomplete
-    setEmojiAutocompleteName(emojiName);
-
-    return newValue;
-  }, []);
-
-  const handleChangeNoteText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // Avoid long messages
-
-    const cursor = e.target.selectionStart;
-    const newValue = checkEmoji(e.target.value, cursor);
-
-    if (e.target.value.length > maxNoteLength) return;
-
-    setValue(newValue);
-  };
-
-  const onAddNote = () => {
-    if (value) {
-      dispatch(Actions.addNote(columnId!, value));
-      if (!columnIsVisible && !toastDisplayed) {
-        Toast.info({
-          title: t("Toast.noteToHiddenColumn"),
-          buttons: [t("Toast.noteToHiddenColumnButton")],
-          firstButtonOnClick: toggleColumnVisibility,
-        });
-        setToastDisplayed(true);
-      }
-      setValue("");
-    }
-  };
   return (
-    <form className="note-input">
-      {autocompleteEmojis.length > 0 && (
-        <div className="note-input__emoji-autocomplete">
-          <NoteInputEmojiSuggestions suggestions={autocompleteEmojis.slice(0, MAX_EMOJI_SUGGESTION_COUNT)} keyboardFocusedIndex={0} />
-        </div>
-      )}
+    <form
+      className="note-input"
+      onSubmit={(e) => {
+        e.preventDefault();
+        addNote(value);
+        setValue("");
+      }}
+      ref={emoji.containerRef}
+    >
+      <div className="note-input__emoji-autocomplete">
+        <emoji.Suggestions />
+      </div>
       <TextareaAutosize
-        ref={(ref) => {
-          noteInputRef.current = ref;
-          blurRef.current = ref;
-        }}
+        ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
-        value={value}
-        onChange={handleChangeNoteText}
-        onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            onAddNote();
-          }
-        }}
         maxLength={maxNoteLength}
         id={`note-input-${columnId}`}
         data-tooltip-content={hotkeyKey}
+        {...emoji.inputBindings}
       />
       <Tooltip
         anchorSelect={`#note-input-${columnId}`}
@@ -158,10 +109,6 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         type="submit"
         tabIndex={-1} // skip focus
         className="note-input__add-button"
-        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-          e.preventDefault();
-          onAddNote();
-        }}
       >
         <PlusIcon className="note-input__icon--add" />
       </button>
