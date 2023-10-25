@@ -48,9 +48,9 @@ $reaction-size: 54px;
 
   border-radius: $rounded--full;
 
-  span {
-    margin-left: 0.3em; // manually center those stubborn emojis
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     background-color: $hover-background-light;
