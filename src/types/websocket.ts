@@ -6,7 +6,8 @@ import {Vote} from "./vote";
 import {Voting} from "./voting";
 import {Request} from "./request";
 import {Assignment} from "./assignment";
-import {Reaction,BoardReactionType} from "./reaction";
+import {Reaction} from "./reaction";
+import {BoardReactionType} from "./boardReaction";
 
 export interface BoardInitEvent {
   type: "INIT";

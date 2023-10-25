@@ -1,4 +1,4 @@
-import {BoardReactionType} from "types/reaction";
+import {BoardReactionType} from "types/boardReaction";
 
 // these are custom events that can be emitted and subscribed to.
 // using redux is overkill, so we decided to separate the logic, similar to toasts

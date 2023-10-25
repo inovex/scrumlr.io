@@ -1,4 +1,5 @@
-import {BoardReactionType, ReactionType} from "types/reaction";
+import {ReactionType} from "types/reaction";
+import {BoardReactionType} from "types/boardReaction";
 
 export const BoardReactionAction = {
   AddBoardReaction: "scrumlr.io/addBoardReaction" as const,

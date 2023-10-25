@@ -1,4 +1,4 @@
-import {BoardReactionType, BOARD_REACTION_EMOJI_MAP} from "types/reaction";
+import {BoardReactionType, BOARD_REACTION_EMOJI_MAP} from "types/boardReaction";
 import {memo} from "react";
 import {getRandomNumberInRange} from "utils/random";
 import {useAppSelector} from "store";

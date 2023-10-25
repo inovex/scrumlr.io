@@ -1,6 +1,7 @@
 import React from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {BOARD_REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
+import {ReactionType} from "types/reaction";
+import {BOARD_REACTION_EMOJI_MAP} from "types/boardReaction";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";

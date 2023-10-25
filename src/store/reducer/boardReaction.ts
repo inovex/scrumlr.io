@@ -1,5 +1,5 @@
 import {Action, ReduxAction} from "store/action";
-import {BoardReactionState} from "types/reaction";
+import {BoardReactionState} from "types/boardReaction";
 
 export const boardReactionReducer = (state: BoardReactionState = [], action: ReduxAction): BoardReactionState => {
   switch (action.type) {
