@@ -33,7 +33,8 @@ $name-max-length: 20em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  background-color: $color-white-one;
+  color: $color-black;
+  background-color: $hover-background-light;
   border-radius: $rounded--large;
 
   &--self {
