@@ -95,12 +95,6 @@ $stack-view__min-height: 82px;
   }
 }
 
-@media screen and (max-height: 660px) {
-  .stack-view__parent-note {
-    grid-template-rows: 2fr 1fr;
-  }
-}
-
 [theme="dark"] {
   .stack-view__portal {
     backdrop-filter: blur(10px) brightness(0.24) saturate(0);

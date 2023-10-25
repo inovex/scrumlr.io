@@ -1,0 +1,89 @@
+@import "src/constants/style";
+
+.note-reaction-chip__root {
+  all: unset; // remove default buttons styling
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  // total dimensions: 50x28
+  width: 35px;
+  height: 18px;
+  padding: 5px 8px 5px 7px;
+  border-radius: $rounded--full;
+  background-color: $color-lighter-gray;
+
+  font-size: $text--base;
+
+  user-select: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $hover-background-light;
+  }
+}
+
+.note-reaction-chip__reaction {
+  font-size: $text--md;
+}
+
+.note-reaction-chip__amount {
+  font-size: $text--sm;
+  font-weight: 600;
+  line-height: 18px;
+  color: $color-black;
+}
+
+.note-reaction-chip__root--self {
+  background-color: var(--accent-color--desaturated-light);
+
+  &:hover {
+    background-color: var(--accent-color--desaturated-light-hover);
+  }
+}
+
+// override
+.note-reaction-chip__root--override-active {
+  background-color: var(--accent-color);
+
+  .note-reaction-chip__amount {
+    color: $color-white;
+  }
+
+  &:hover {
+    background-color: var(--accent-color); // essentially no hover color when active.
+  }
+}
+
+[theme="dark"] {
+  .note-reaction-chip__root {
+    background-color: $color-dark-one;
+
+    &:hover {
+      background-color: $hover-background-dark;
+    }
+  }
+
+  .note-reaction-chip__root--self {
+    background-color: var(--accent-color--desaturated-dark);
+
+    &:hover {
+      background-color: var(--accent-color--desaturated-dark-hover);
+    }
+  }
+
+  .note-reaction-chip__root--override-active {
+    background-color: var(--accent-color--desaturated-dark-hover);
+
+    &:hover {
+      background-color: var(--accent-color--desaturated-dark-hover);
+    }
+  }
+
+  .note-reaction-chip__amount {
+    color: $color-white;
+  }
+}

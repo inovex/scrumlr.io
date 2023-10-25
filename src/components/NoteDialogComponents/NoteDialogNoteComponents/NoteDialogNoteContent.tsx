@@ -10,15 +10,18 @@ import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
 import classNames from "classnames";
 import {createPortal} from "react-dom";
+import {Toast} from "utils/Toast";
+import i18n from "../../../i18n";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
   authorId: string;
   text: string;
   viewer: Participant;
+  showNoteReactions: boolean; // used for style adjustments
 };
 
-export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer}: NoteDialogNoteContentProps) => {
+export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, showNoteReactions}: NoteDialogNoteContentProps) => {
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useDispatch();
   const {t} = useTranslation();
@@ -40,8 +43,12 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   };
 
   const onEdit = (id: string, newText: string) => {
-    if (editable && newText !== text) {
+    if (editable && newText !== text && newText.length > 0) {
       dispatch(Actions.editNote(id, {text: newText}));
+    } else if (editable && newText.length === 0) {
+      Toast.info({
+        title: i18n.t("Toast.emptyNoteDialog"),
+      });
     }
     dispatch(Actions.onNoteBlur());
   };
@@ -49,7 +56,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const isImage = useImageChecker(text);
 
   return (
-    <div className="note-dialog__note-content">
+    <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})}>
       {isImage ? (
         <>
           <img

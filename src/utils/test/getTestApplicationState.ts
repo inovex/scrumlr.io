@@ -10,6 +10,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       accessPolicy: "PUBLIC",
       showAuthors: true,
       showNotesOfOtherUsers: true,
+      showNoteReactions: true,
       allowStacking: true,
     },
   },
@@ -113,6 +114,26 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         column: "test-columns-id-2",
         rank: 0,
       },
+    },
+  ],
+  reactions: [
+    {
+      id: "test-reactions-id-1",
+      note: "test-notes-id-1",
+      user: "test-participants-self-user-id",
+      reactionType: "like",
+    },
+    {
+      id: "test-reactions-id-2",
+      note: "test-notes-id-2",
+      user: "test-participants-self-user-id",
+      reactionType: "like",
+    },
+    {
+      id: "test-reactions-id-3",
+      note: "test-notes-id-1",
+      user: "test-participants-self-user-id",
+      reactionType: "heart",
     },
   ],
   votes: [

@@ -30,7 +30,7 @@ type Server struct {
 	votings        services.Votings
 	users          services.Users
 	notes          services.Notes
-	sessions       services.BoardSessions
+	reactions   services.Reactionssessions       services.BoardSessions
 	health         services.Health
 	feedback       services.Feedback
 	assignments    services.Assignments
@@ -51,6 +51,7 @@ func New(
 	votings services.Votings,
 	users services.Users,
 	notes services.Notes,
+	reactions services.Reactions,
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,
@@ -93,6 +94,7 @@ func New(
 		votings:                          votings,
 		users:                            users,
 		notes:                            notes,
+		reactions:                        reactions,
 		sessions:                         sessions,
 		health:                           health,
 		feedback:                         feedback,
@@ -164,6 +166,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initBoardSessionResources(r)
 			s.initColumnResources(r)
 			s.initNoteResources(r)
+			s.initReactionResources(r)
 			s.initVotingResources(r)
 			s.initVoteResources(r)
 			s.initAssignmentResources(r)
@@ -271,6 +274,23 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Put("/", s.updateNote)
 
 			r.Delete("/", s.deleteNote)
+		})
+	})
+}
+
+func (s *Server) initReactionResources(r chi.Router) {
+	r.Route("/reactions", func(r chi.Router) {
+		r.Use(s.BoardParticipantContext)
+
+		r.Get("/", s.getReactions)
+		r.Post("/", s.createReaction)
+
+		r.Route("/{reaction}", func(r chi.Router) {
+			r.Use(s.ReactionContext)
+
+			r.Get("/", s.getReaction)
+			r.Delete("/", s.removeReaction)
+			r.Put("/", s.updateReaction)
 		})
 	})
 }
