@@ -30,7 +30,8 @@ type Server struct {
 	votings        services.Votings
 	users          services.Users
 	notes          services.Notes
-	reactions   services.Reactionssessions       services.BoardSessions
+	reactions      services.Reactions
+	sessions       services.BoardSessions
 	health         services.Health
 	feedback       services.Feedback
 	assignments    services.Assignments
