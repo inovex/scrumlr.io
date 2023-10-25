@@ -1,6 +1,6 @@
 import React from "react";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {BoardReactionImageMap, ReactionType} from "types/reaction";
+import {BOARD_REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
@@ -21,7 +21,7 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
 
-  const boardReactions = [...BoardReactionImageMap];
+  const boardReactions = [...BOARD_REACTION_EMOJI_MAP];
 
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
 
@@ -36,7 +36,7 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
         firstButtonOnClick: () => dispatch(Actions.setShowBoardReactions(true)),
       });
     } else if (debounce) {
-       // not ready yet
+      // not ready yet
     } else {
       dispatch(Actions.addBoardReaction(reaction));
       resetDebounce();

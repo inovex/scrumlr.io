@@ -1,4 +1,4 @@
-import {BoardReactionType, BoardReactionImageMap} from "types/reaction";
+import {BoardReactionType, BOARD_REACTION_EMOJI_MAP} from "types/reaction";
 import {memo} from "react";
 import {getRandomNumberInRange} from "utils/random";
 import {useAppSelector} from "store";
@@ -14,7 +14,7 @@ type BoardReactionProps = {
 // memo prevents re-rendering even when parent state changes
 export const BoardReaction = memo((props: BoardReactionProps) => {
   const {t} = useTranslation();
-  const emoji = BoardReactionImageMap.get(props.reaction.reactionType);
+  const emoji = BOARD_REACTION_EMOJI_MAP.get(props.reaction.reactionType);
   const me = useAppSelector((state) => state.participants!.self);
   const others = useAppSelector((state) => state.participants!.others);
   const all = [me, ...others];

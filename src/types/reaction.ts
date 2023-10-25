@@ -31,7 +31,7 @@ export type BoardReactionType = {
   reactionType: ReactionType;
 };
 
-export const BoardReactionImageMap = new Map<ReactionType, string>([
+export const BOARD_REACTION_EMOJI_MAP = new Map<ReactionType, string>([
   ["tada", "🎉"],
   ["applause", "👏"],
   ["heart", "💖"],
