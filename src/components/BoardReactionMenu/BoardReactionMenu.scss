@@ -56,6 +56,11 @@ $reaction-size: 54px;
     background-color: $hover-background-light;
   }
 
+  &:focus-visible {
+    // lose focus after click
+    background-color: $color-icon-light-blue;
+  }
+
   &--disabled {
     filter: grayscale(100%);
     cursor: not-allowed;
@@ -86,6 +91,10 @@ $reaction-size: 54px;
   .board-reactions__reaction {
     &:hover {
       background-color: $hover-background-dark;
+    }
+
+    &:focus-visible {
+      background-color: $tooltip-background-color--dark;
     }
   }
 
