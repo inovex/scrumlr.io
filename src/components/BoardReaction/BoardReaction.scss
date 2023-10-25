@@ -23,7 +23,7 @@ $name-max-length: 20em;
 }
 
 .board-reaction__name-container {
-  padding: 10px;
+  padding: $padding--small $padding--default;
   font-size: $text--base;
   max-width: $name-max-length;
   max-height: 5em;
