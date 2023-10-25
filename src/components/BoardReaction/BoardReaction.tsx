@@ -15,7 +15,7 @@ type BoardReactionProps = {
 // memo prevents re-rendering even when parent state changes
 export const BoardReaction = memo((props: BoardReactionProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [displayOffset, setDisplayOffset] = useState<number>(0);
+  const [displayOffset, setDisplayOffset] = useState<number>(-100);
   const {t} = useTranslation();
   const emoji = BOARD_REACTION_EMOJI_MAP.get(props.reaction.reactionType);
   const me = useAppSelector((state) => state.participants!.self);
@@ -43,9 +43,12 @@ export const BoardReaction = memo((props: BoardReactionProps) => {
   useEffect(() => {
     if (containerRef.current && containerDimensions) {
       const offset = calcRandomOffsetVW(containerDimensions);
-      setDisplayOffset(offset);
+      if (displayOffset < 0) {
+        // prevent multiple updates from side effects, as the container starts jumping around
+        setDisplayOffset(offset);
+      }
     }
-  }, [containerRef, containerDimensions]);
+  }, [containerRef, containerDimensions, displayOffset]);
 
   return (
     <div className="board-reaction__root" ref={containerRef} style={{left: `${displayOffset}vw`}}>
