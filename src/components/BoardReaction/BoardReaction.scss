@@ -3,6 +3,7 @@
 $bottom-start-pos: 10vh;
 $bottom-end-pos: 60vh;
 
+$name-max-height: 5em;
 $name-max-length: 20em;
 
 .board-reaction__root {
@@ -26,7 +27,7 @@ $name-max-length: 20em;
   padding: $padding--small $padding--default;
   font-size: $text--base;
   max-width: $name-max-length;
-  max-height: 5em;
+  max-height: $name-max-height;
   font-weight: 600;
   text-align: center;
   overflow: hidden;
