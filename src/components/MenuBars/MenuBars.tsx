@@ -52,7 +52,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       }
 
       // only hide if menu wasn't clicked to avoid double onClick toggle
-      if (!menuBarsDesktopRef.current?.contains(target as Node)) {
+      if (!(menuBarsDesktopRef.current?.contains(target as Node) || menuBarsMobileRef.current?.contains(target as Node))) {
         setShowBoardReactionsMenu(false);
       }
     };
