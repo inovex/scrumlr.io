@@ -30,6 +30,24 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
 
   const containerRef = useOnBlur<ContainerElement>(() => setEmojiName(""));
 
+  const acceptSuggestion = useCallback(
+    (emoji: string) => {
+      if (cursor === null) return;
+
+      setValue((prev) => {
+        // end replace is cursor
+        // start replace is last /\s+/
+        const lastWordStart =
+          prev
+            .slice(0, cursor ?? -1)
+            .split("")
+            .findLastIndex((c) => /\s+/.test(c)) + 1;
+        return prev.slice(0, lastWordStart) + emoji + prev.slice(cursor);
+      });
+    },
+    [cursor]
+  );
+
   // get suggestions for emoji name
   useEffect(() => {
     if (!emojiName) {
@@ -57,9 +75,18 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
     const [, newEmojiName] = lastWord.match(emojiRegex) || [];
     if (!newEmojiName || newEmojiName.length < MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS) return;
 
+    if (lastWord.endsWith(":")) {
+      const emoji = emojiData?.find(([slug]) => slug === newEmojiName);
+
+      if (emoji) acceptSuggestion(emoji[1]);
+
+      // dont set emoji name if emoji is not found
+      return;
+    }
+
     // emoji autocomplete
     setEmojiName(newEmojiName);
-  }, [value, cursor]);
+  }, [value, cursor, emojiData, acceptSuggestion]);
 
   const updateCursor = useCallback((target: InputElement) => setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null), []);
 
@@ -68,29 +95,11 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
   const handleChange: FormEventHandler<InputElement> & ChangeEventHandler<InputElement> = useCallback(
     (e) => {
       const newVal = e.currentTarget.value;
-      if (maxInputLength !== undefined && newVal.length > maxInputLength) return;
-      setValue(newVal);
+      if (maxInputLength !== undefined && newVal.length > maxInputLength) setValue(newVal.slice(0, maxInputLength));
+      else setValue(newVal);
       updateCursor(e.currentTarget);
     },
     [maxInputLength, updateCursor]
-  );
-
-  const acceptSuggestion = useCallback(
-    (emoji: string) => {
-      if (cursor === null) return;
-
-      setValue((prev) => {
-        // end replace is cursor
-        // start replace is last /\s+/
-        const lastWordStart =
-          prev
-            .slice(0, cursor ?? -1)
-            .split("")
-            .findLastIndex((c) => /\s+/.test(c)) + 1;
-        return prev.slice(0, lastWordStart) + emoji + prev.slice(cursor);
-      });
-    },
-    [cursor]
   );
 
   // handle: enter/tab (accept suggestion), arrow up/down (switch suggestion), escape (close suggestions)
