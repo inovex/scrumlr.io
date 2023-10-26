@@ -89,7 +89,8 @@ $column__min-width: 300px;
 $column__max-width: 960px;
 $column__border-width: 12px;
 $action-bar__width: 64px;
-$emoji-suggestions__max-height: 350px;
+$column-emoji-autocomplete__max-height: 350px;
+$column-emoji-autocomplete__approx-top-distance: 320px;
 
 // icons
 $icon--small: 16px;
@@ -161,7 +162,7 @@ $brighten--strongly: brightness(1.4);
 $base-z-index: 100;
 $base-z-index-step: 10;
 $note-z-index: $base-z-index + (2 * $base-z-index-step);
-$note-input__emoji-picker-z-index: $note-z-index + $base-z-index-step;
+$note-input__emoji-autocomplete-z-index: $note-z-index + $base-z-index-step;
 $menu-z-index: $base-z-index + (8 * $base-z-index-step);
 $menu-item-z-index: $menu-z-index + $base-z-index-step;
 $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);

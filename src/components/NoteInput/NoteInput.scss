@@ -117,9 +117,10 @@ $note-input__input-right: 40px;
   position: absolute;
   top: calc(100% + $padding--small);
   width: 100%;
-  z-index: $note-input__emoji-picker-z-index;
+  z-index: $note-input__emoji-autocomplete-z-index;
   border-radius: $rounded--default;
-  max-height: $emoji-suggestions__max-height;
+  // prevent overflow by approximating available space below the input box
+  max-height: min($column-emoji-autocomplete__max-height, calc(100svh - $column-emoji-autocomplete__approx-top-distance));
   overflow-y: auto;
   left: 0;
   box-shadow: $box-shadow--light;
