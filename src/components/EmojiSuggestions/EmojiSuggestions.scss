@@ -20,7 +20,7 @@
   }
 
   &__element:hover,
-  &:not(:hover) .emoji-suggestions__element--focus {
+  .emoji-suggestions__element--focus {
     background-color: rgba(var(--accent-color-rgb), 0.2);
   }
 
@@ -37,7 +37,7 @@
     background-color: $color-dark-mode-note;
 
     &__element:hover,
-    &:not(:hover) .emoji-suggestions__element--focus {
+    .emoji-suggestions__element--focus {
       background-color: #485064;
     }
   }

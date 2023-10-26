@@ -13,6 +13,7 @@ import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {EmojiSuggestions} from "components/EmojiSuggestions";
 
 export interface NoteInputProps {
   columnId: string;
@@ -79,7 +80,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       ref={emoji.containerRef}
     >
       <div className="note-input__emoji-autocomplete">
-        <emoji.Suggestions />
+        <EmojiSuggestions {...emoji.suggestionsProps} />
       </div>
       <TextareaAutosize
         ref={noteInputRef}

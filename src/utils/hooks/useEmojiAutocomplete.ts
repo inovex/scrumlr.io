@@ -1,4 +1,4 @@
-import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, KeyboardEvent} from "react";
+import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, KeyboardEvent, ComponentProps} from "react";
 import {MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useOnBlur} from "./useOnBlur";
@@ -26,6 +26,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
 
   const [emojiName, setEmojiName] = useState("");
   const [suggestions, setSuggestions] = useState<EmojiData[]>([]);
+  const [focusedIndex, setFocusedIndex] = useState(0);
 
   const containerRef = useOnBlur<ContainerElement>(() => setEmojiName(""));
 
@@ -46,6 +47,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
   // get emoji name from value
   useEffect(() => {
     setEmojiName("");
+    setFocusedIndex(0);
 
     if (cursor === null) return;
 
@@ -61,8 +63,6 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
 
   const updateCursor = useCallback((target: InputElement) => setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null), []);
 
-  const Suggestions = useCallback(() => suggestions.length > 0 && <EmojiSuggestions keyboardFocusedIndex={0} suggestions={suggestions} />, [suggestions]); // TODO use context
-
   // handle: update input, update suggestions
   // FormEventHandler for TextareaAutosize
   const handleChange: FormEventHandler<InputElement> & ChangeEventHandler<InputElement> = useCallback(
@@ -75,16 +75,58 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
     [maxInputLength, updateCursor]
   );
 
+  const acceptSuggestion = useCallback(
+    (emoji: string) => {
+      if (cursor === null) return;
+
+      setValue((prev) => {
+        // end replace is cursor
+        // start replace is last /\s+/
+        const lastWordStart =
+          prev
+            .slice(0, cursor ?? -1)
+            .split("")
+            .findLastIndex((c) => /\s+/.test(c)) + 1;
+        return prev.slice(0, lastWordStart) + emoji + prev.slice(cursor);
+      });
+    },
+    [cursor]
+  );
+
   // handle: enter/tab (accept suggestion), arrow up/down (switch suggestion), escape (close suggestions)
   const handleKeyDown: KeyboardEventHandler<InputElement> = (e) => {
     if (!emojiName || suggestions.length === 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) {
       // nothing to do with emoji suggestions
       handleKeyDownInput?.(e, value);
+      return;
     }
 
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      console.log("enter pressed", suggestions[0]);
+    switch (e.key) {
+      case "Enter":
+      case "Tab": {
+        e.preventDefault();
+        acceptSuggestion(suggestions[focusedIndex][1]);
+        break;
+      }
+      case "ArrowDown": {
+        e.preventDefault();
+        setFocusedIndex((prev) => (prev + 1) % suggestions.length);
+        break;
+      }
+      case "ArrowUp": {
+        e.preventDefault();
+        setFocusedIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
+        break;
+      }
+      case "Escape": {
+        e.preventDefault();
+        setEmojiName("");
+        break;
+      }
+      default: {
+        handleKeyDownInput?.(e, value);
+        break;
+      }
     }
   };
 
@@ -97,7 +139,11 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
 
   return {
     containerRef,
-    Suggestions,
+    suggestionsProps: {
+      suggestions,
+      keyboardFocusedIndex: focusedIndex,
+      acceptSuggestion,
+    } satisfies ComponentProps<typeof EmojiSuggestions>,
     value,
     setValue,
     inputBindings: {
