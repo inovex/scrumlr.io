@@ -44,13 +44,6 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
 
   const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLFormElement>({
     maxInputLength: maxNoteLength,
-    onKeyDown: (e, content) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        addNote(content);
-        setValue("");
-      }
-    },
   });
   const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -90,6 +83,18 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         id={`note-input-${columnId}`}
         data-tooltip-content={hotkeyKey}
         {...emoji.inputBindings}
+        onKeyDown={(e) => {
+          // handle emoji input
+          emoji.inputBindings.onKeyDown(e);
+          if (e.isDefaultPrevented()) return;
+
+          // other functions
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            addNote(value);
+            setValue("");
+          }
+        }}
       />
       <Tooltip
         anchorSelect={`#note-input-${columnId}`}

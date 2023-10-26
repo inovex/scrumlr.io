@@ -1,4 +1,4 @@
-import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, KeyboardEvent, ComponentProps} from "react";
+import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps} from "react";
 import {MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useOnBlur} from "./useOnBlur";
@@ -9,15 +9,7 @@ export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean
 
 type InputElement = HTMLTextAreaElement | HTMLInputElement;
 
-export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
-  onKeyDown: handleKeyDownInput,
-  onKeyUp: handleKeyUpInput,
-  maxInputLength,
-}: {
-  onKeyDown?: (e: KeyboardEvent<InputElement>, value: string) => void;
-  onKeyUp?: (e: KeyboardEvent<InputElement>, value: string) => void;
-  maxInputLength?: number;
-}) => {
+export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({maxInputLength}: {maxInputLength?: number}) => {
   const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
 
   const [value, setValue] = useState("");
@@ -106,7 +98,6 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
   const handleKeyDown: KeyboardEventHandler<InputElement> = (e) => {
     if (!emojiName || suggestions.length === 0 || e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) {
       // nothing to do with emoji suggestions
-      handleKeyDownInput?.(e, value);
       return;
     }
 
@@ -133,7 +124,6 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
         break;
       }
       default: {
-        handleKeyDownInput?.(e, value);
         break;
       }
     }
@@ -142,8 +132,6 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({
   // handle: arrow left/right -> update cursor
   const handleKeyUp: KeyboardEventHandler<InputElement> = (e) => {
     updateCursor(e.currentTarget);
-
-    handleKeyUpInput?.(e, value);
   };
 
   return {
