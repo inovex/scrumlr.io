@@ -63,7 +63,9 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
           </button>
         ))}
 
-        <CloseIcon className="board-reactions__item board-reactions__close" onClick={props.close} aria-hidden />
+        <button className="board-reactions__item board-reactions__close" onClick={props.close} tabIndex={0} aria-hidden>
+          <CloseIcon />
+        </button>
       </div>
     </div>
   );

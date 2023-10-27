@@ -68,9 +68,15 @@ $reaction-size: 54px;
 }
 
 .board-reactions__close {
+  all: unset;
   width: $icon--large;
   height: $icon--large;
   color: $color-dark-mode-note;
+  border-radius: $rounded--full;
+
+  &:focus {
+    background-color: $color-icon-light-blue;
+  }
 }
 
 @media #{$smartphone} {
