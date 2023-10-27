@@ -8,7 +8,9 @@
   overflow: hidden;
   background-color: var(--accent-color--desaturated-light);
   color: var(--accent-color);
-  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
+  transition:
+    background-color 150ms ease-in-out,
+    color 150ms ease-in-out;
 
   filter: drop-shadow(0 4px 3px rgba(var(--accent-color-rgb), 0.48));
 }
@@ -24,10 +26,23 @@
 .vote-button-remove:enabled:hover {
   background-color: var(--accent-color);
   color: $color-white;
+  .vote-button-remove__count {
+    display: none;
+  }
+  .vote-button-remove__icon {
+    display: block;
+  }
 }
 
 .vote-button-remove:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+  .vote-button-remove__icon {
+    display: block;
+  }
+}
+
+.vote-button-remove__icon {
+  display: none;
 }
 
 .bump {
@@ -55,7 +70,10 @@
   border-width: 0;
   border-style: solid;
   background: rgba($color-middle-gray, 0.5);
-  box-shadow: 2px -2px 0px $color-white, 0 1px 1px rgba($color-black, 0.1), -1px 1px 1px rgba($color-black, 0.1);
+  box-shadow:
+    2px -2px 0px $color-white,
+    0 1px 1px rgba($color-black, 0.1),
+    -1px 1px 1px rgba($color-black, 0.1);
   border-radius: 0 0 0 16px;
   border-color: $color-white $color-white transparent transparent;
   transition: border-width 0.15s ease-in-out;
@@ -73,7 +91,10 @@
   }
 
   .vote-button-remove__folded-corner {
-    box-shadow: 2px -2px 0px $color-dark-mode-note, 0 1px 1px rgba($color-black, 0.1), -1px 1px 1px rgba($color-black, 0.1);
+    box-shadow:
+      2px -2px 0px $color-dark-mode-note,
+      0 1px 1px rgba($color-black, 0.1),
+      -1px 1px 1px rgba($color-black, 0.1);
     border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
   }
 }

@@ -4,6 +4,7 @@ import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import "./RemoveVoteButton.scss";
 import classNames from "classnames";
+import {ReactComponent as RemoveIcon} from "assets/icon-remove.svg";
 
 type RemoveVoteProps = {
   noteId: string;
@@ -38,7 +39,8 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
       }}
     >
       <span className="vote-button-remove__folded-corner" />
-      <span>{children}</span>
+      <RemoveIcon className="vote-button-remove__icon" />
+      <span className="vote-button-remove__count">{children}</span>
     </DotButton>
   );
 };
