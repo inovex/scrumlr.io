@@ -559,7 +559,14 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <span
                       class="vote-button-remove__folded-corner"
                     />
-                    <span>
+                    <svg
+                      class="vote-button-remove__icon"
+                    >
+                      icon-remove.svg
+                    </svg>
+                    <span
+                      class="vote-button-remove__count"
+                    >
                       1
                     </span>
                   </button>

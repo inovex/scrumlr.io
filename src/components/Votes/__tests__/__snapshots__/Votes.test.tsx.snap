@@ -33,7 +33,14 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
       <span
         class="vote-button-remove__folded-corner"
       />
-      <span>
+      <svg
+        class="vote-button-remove__icon"
+      >
+        icon-remove.svg
+      </svg>
+      <span
+        class="vote-button-remove__count"
+      >
         1
       </span>
     </button>
@@ -64,7 +71,14 @@ exports[`Votes should render correctly with votes and disabled voting 1`] = `
       <span
         class="vote-button-remove__folded-corner"
       />
-      <span>
+      <svg
+        class="vote-button-remove__icon"
+      >
+        icon-remove.svg
+      </svg>
+      <span
+        class="vote-button-remove__count"
+      >
         1
       </span>
     </button>
