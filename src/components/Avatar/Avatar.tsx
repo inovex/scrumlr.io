@@ -1,6 +1,7 @@
 import Avataar from "avataaars";
 import React from "react";
 import _ from "underscore";
+import {hashCode} from "utils/hash";
 import "./Avatar.scss";
 import classNames from "classnames";
 import {getColorClassName, getColorForIndex} from "../../constants/colors";
@@ -51,25 +52,6 @@ export type AvatarProps = {
   seed: string;
   className?: string;
   avatar?: AvataaarProps;
-};
-
-/**
- * Generates a fixed hash number for any given string.
- *
- * @param s the string to hash
- * @returns the hash code
- */
-const hashCode = (s: string) => {
-  let hash = 0;
-  const stringLength = s.length;
-  let i = 0;
-  if (stringLength > 0) {
-    while (i < stringLength) {
-      // eslint-disable-next-line no-bitwise
-      hash = ((hash << 5) - hash + s.charCodeAt(i++)) | 0;
-    }
-  }
-  return Math.abs(hash);
 };
 
 /**

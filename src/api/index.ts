@@ -1,6 +1,7 @@
 import {AuthAPI} from "api/auth";
 import {BoardAPI} from "api/board";
 import {NoteAPI} from "api/note";
+import {ReactionAPI} from "api/reaction";
 import {ColumnAPI} from "api/column";
 import {VoteAPI} from "api/vote";
 import {VotingAPI} from "api/votings";
@@ -19,6 +20,7 @@ export const API = {
   ...RequestAPI,
   ...ColumnAPI,
   ...NoteAPI,
+  ...ReactionAPI,
   ...VoteAPI,
   ...VotingAPI,
   ...UserAPI,
