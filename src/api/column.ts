@@ -1,4 +1,4 @@
-import {EditColumnRequest} from "types/column";
+import {Column, EditColumnRequest} from "types/column";
 import {SERVER_HTTP_URL} from "../config";
 
 export const ColumnAPI = {
@@ -29,6 +29,22 @@ export const ColumnAPI = {
       throw new Error(`unable to update column with response status ${response.status}`);
     } catch (error) {
       throw new Error(`unable to update column: ${error}`);
+    }
+  },
+  getColumn: async (boardId: string, columnId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/columns/${columnId}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as {column: Column; columnsOrder: string[]};
+      }
+
+      throw new Error(`unable to get column with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get column: ${error}`);
     }
   },
   deleteColumn: async (boardId: string, columnId: string) => {

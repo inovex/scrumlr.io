@@ -35,6 +35,13 @@ export const passColumnMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
     });
   }
   if (action.type === Action.CreatedColumn || action.type === Action.UpdatedColumn) {
-    // TODO ORDER: implement trigger of update here if a column is missing
+    const columns = stateAPI.getState().columns.map((c) => c.id);
+    action.columnsOrder.forEach((c) => {
+      if (columns.indexOf(c) < 0) {
+        API.getColumn(action.context.board!, c).then((response) => {
+          dispatch(Actions.createdColumn(response.column, response.columnsOrder));
+        });
+      }
+    });
   }
 };
