@@ -154,13 +154,13 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 	}
 }
 
-func (b *BoardSubscription) startListeningOnBoard() {
+func (boardSubscription *BoardSubscription) startListeningOnBoard() {
 	for {
 		select {
-		case msg := <-b.subscription:
+		case msg := <-boardSubscription.subscription:
 			logger.Get().Debugw("message received", "message", msg)
-			for id, conn := range b.clients {
-				filteredMsg := b.eventFilter(msg, id)
+			for id, conn := range boardSubscription.clients {
+				filteredMsg := boardSubscription.eventFilter(msg, id)
 				err := conn.WriteJSON(filteredMsg)
 				if err != nil {
 					logger.Get().Warnw("failed to send message", "message", filteredMsg, "err", err)
