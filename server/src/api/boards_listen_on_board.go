@@ -15,7 +15,7 @@ type BoardSubscription struct {
 	clients           map[uuid.UUID]*websocket.Conn
 	boardParticipants []*dto2.BoardSession
 	boardSettings     *dto2.Board
-	boardColumns      []*dto2.Column
+	boardColumns      *dto2.WrappedColumns
 	boardNotes        []*dto2.Note
 	boardReactions    []*dto2.Reaction
 }
@@ -143,7 +143,7 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 	b.clients[userID] = conn
 	b.boardParticipants = initEventData.Sessions
 	b.boardSettings = initEventData.Board
-	b.boardColumns = initEventData.Columns
+	b.boardColumns = initEventData.WrappedColumns
 	b.boardNotes = initEventData.Notes
 	b.boardReactions = initEventData.Reactions
 
