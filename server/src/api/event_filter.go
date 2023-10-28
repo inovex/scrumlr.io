@@ -183,7 +183,7 @@ func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUI
 
 func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
 	isMod := isModerator(userID, boardSubscription.boardParticipants)
-	if event.Type == realtime.BoardEventColumnsUpdated {
+	if event.Type == realtime.BoardEventColumnUpdated {
 		columns, err := parseColumnUpdated(event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
@@ -288,15 +288,15 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	retEvent := InitEvent{
 		Type: event.Type,
 		Data: EventData{
-			Board:       event.Data.Board,
-			Notes:       nil,
-			Reactions:   event.Data.Reactions,
-			Columns:     nil,
-			Votings:     event.Data.Votings,
-			Votes:       event.Data.Votes,
-			Sessions:    event.Data.Sessions,
-			Requests:    event.Data.Requests,
-			Assignments: event.Data.Assignments,
+			WrappedColumns: nil,
+			Board:          event.Data.Board,
+			Notes:          nil,
+			Reactions:      event.Data.Reactions,
+			Votings:        event.Data.Votings,
+			Votes:          event.Data.Votes,
+			Sessions:       event.Data.Sessions,
+			Requests:       event.Data.Requests,
+			Assignments:    event.Data.Assignments,
 		},
 	}
 	// Columns

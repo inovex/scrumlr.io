@@ -2,9 +2,9 @@ package api
 
 import (
 	"context"
-	"net/http"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"net/http"
 	dto2 "scrumlr.io/server/common/dto"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -26,8 +26,8 @@ type InitEvent struct {
 }
 
 type EventData struct {
+	*dto2.WrappedColumns
 	Board       *dto2.Board                 `json:"board"`
-	Columns     []*dto2.Column              `json:"columns"`
 	Notes       []*dto2.Note                `json:"notes"`
 	Reactions   []*dto2.Reaction            `json:"reactions"`
 	Votings     []*dto2.Voting              `json:"votings"`
@@ -83,15 +83,15 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		},
 	})
 	initEventData := EventData{
-		Board:       board,
-		Columns:     columns,
-		Notes:       notes,
-		Reactions:   reactions,
-		Votings:     votings,
-		Votes:       votes,
-		Sessions:    sessions,
-		Requests:    requests,
-		Assignments: assignments,
+		Board:          board,
+		WrappedColumns: columns,
+		Notes:          notes,
+		Reactions:      reactions,
+		Votings:        votings,
+		Votes:          votes,
+		Sessions:       sessions,
+		Requests:       requests,
+		Assignments:    assignments,
 	}
 
 	initEvent := InitEvent{
