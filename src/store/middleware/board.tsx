@@ -42,11 +42,6 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           window.location.assign("/?boardDeleted=true");
         }
 
-        if (message.type === "COLUMNS_UPDATED") {
-          const columns = message.data;
-          store.dispatch(Actions.updateColumns(columns));
-        }
-
         if (message.type === "COLUMN_CREATED") {
           store.dispatch(Actions.createdColumn(message.data.column, message.data.columnsOrder));
         }
