@@ -1,4 +1,4 @@
-import {Column, EditColumnRequest} from "types/column";
+import {EditColumnRequest} from "types/column";
 import {Color} from "../../constants/colors";
 
 /** This object lists column object specific internal Redux Action types. */
@@ -15,7 +15,6 @@ export const ColumnAction = {
   EditColumnOptimistically: "scrumlr.io/editColumnOptimistically" as const,
   DeleteColumn: "scrumlr.io/deleteColumn" as const,
   DeleteColumnOptimistically: "scrumlr.io/deleteColumnOptimistically" as const,
-  UpdatedColumns: "scrumlr.io/updatedColumns" as const,
   CreatedColumn: "scrumlr.io/createdColumn" as const,
   UpdatedColumn: "scrumlr.io/updatedColumn" as const,
 };
@@ -62,11 +61,6 @@ export const ColumnActionFactory = {
     type: ColumnAction.DeleteColumnOptimistically,
     id,
   }),
-  // FIXME ORDER: remove this call
-  updateColumns: (columns: Column[]) => ({
-    type: ColumnAction.UpdatedColumns,
-    columns,
-  }),
   createColumn: (column: {name: string; color: Color; visible: boolean; index: number}) => ({
     type: ColumnAction.CreateColumn,
     column,
@@ -95,6 +89,5 @@ export type ColumnReduxAction =
   | ReturnType<typeof ColumnActionFactory.createColumnOptimistically>
   | ReturnType<typeof ColumnActionFactory.editColumn>
   | ReturnType<typeof ColumnActionFactory.editColumnOptimistically>
-  | ReturnType<typeof ColumnActionFactory.updateColumns>
   | ReturnType<typeof ColumnActionFactory.createdColumn>
   | ReturnType<typeof ColumnActionFactory.updatedColumn>;

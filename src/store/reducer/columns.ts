@@ -4,7 +4,7 @@ import {TEMPORARY_COLUMN_ID} from "../../constants/misc";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const columnsReducer = (state: ColumnsState = [], action: ReduxAction): ColumnsState => {
-  if (action.type === Action.InitializeBoard || action.type === Action.UpdatedColumns) {
+  if (action.type === Action.InitializeBoard) {
     return action.columns;
   }
 
