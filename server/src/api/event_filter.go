@@ -154,7 +154,7 @@ func filterVotingUpdated(voting *VotingUpdated, userID uuid.UUID, boardSettings 
 	return filteredVoting
 }
 
-func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUID) *dto.Voting {
+func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note) *dto.Voting {
 	if voting.VotingResults == nil {
 		return voting
 	}
@@ -275,7 +275,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 		return &ret
 	}
-	// returns, if no filter match occured
+	// returns, if no filter match occurred
 	return event
 }
 
@@ -321,7 +321,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	// Votings
 	visibleVotings := make([]*dto.Voting, 0)
 	for _, v := range event.Data.Votings {
-		filteredVoting := filterVoting(v, filteredNotes, clientID)
+		filteredVoting := filterVoting(v, filteredNotes)
 		visibleVotings = append(visibleVotings, filteredVoting)
 	}
 
