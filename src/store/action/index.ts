@@ -9,6 +9,7 @@ import {AuthActionFactory, AuthAction, AuthReduxAction} from "./auth";
 import {ViewAction, ViewActionFactory, ViewReduxAction} from "./view";
 import {AssignmentAction, AssignmentActionFactory, AssignmentReduxAction} from "./assignment";
 import {ReactionAction, ReactionActionFactory, ReactionReduxAction} from "./reaction";
+import {BoardReactionAction, BoardReactionActionFactory, BoardReactionReduxAction} from "./boardReaction";
 
 /** This object lists all internal Redux Action types. */
 export const Action = {
@@ -23,6 +24,7 @@ export const Action = {
   ...VotingAction,
   ...ViewAction,
   ...AssignmentAction,
+  ...BoardReactionAction,
 };
 
 /** Factory or creator class of internal Redux actions. */
@@ -39,6 +41,7 @@ export const Actions = {
   ...VotingActionFactory,
   ...ViewActionFactory,
   ...AssignmentActionFactory,
+  ...BoardReactionActionFactory,
 };
 
 /** The types of all application internal redux actions. */
@@ -54,4 +57,5 @@ export type ReduxAction = {context: {board?: string; user?: string; voting?: str
   | VotingReduxAction
   | ViewReduxAction
   | AssignmentReduxAction
+  | BoardReactionReduxAction
 );

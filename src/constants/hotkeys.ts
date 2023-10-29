@@ -3,6 +3,7 @@ export const hotkeyMap = {
   TOGGLE_MODERATION: "p",
   TOGGLE_READY_STATE: "d",
   TOGGLE_RAISED_HAND: "h",
+  TOGGLE_BOARD_REACTION_MENU: "r",
   SHOW_TIMER_MENU: "t",
   SHOW_VOTING_MENU: "v",
   SHOW_SETTINGS: "s",

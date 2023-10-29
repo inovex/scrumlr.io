@@ -183,6 +183,7 @@
     "returnToHomepage": "Kehre zur Homepage zurück",
     "raiseHand": "Hebe deine Hand",
     "lowerHand": "Senke deine Hand",
+    "openBoardReactionMenu": "Reagieren",
     "settings": "Einstellungen",
     "openMenu": "Öffne das Benutzermenü"
   },
@@ -239,6 +240,12 @@
     "customTime": "Manuelle Zeit",
     "cancelTimer": "Alarm beenden"
   },
+  "BoardReactionsMenu": {
+    "react": "Reagiere mit {{reaction}} [{{shortcut}}]"
+  },
+  "BoardReaction": {
+    "me": "Ich"
+  },
   "AppInfo": {
     "version": "Link zur Übersicht über alle Anwendungsversionen auf GitHub"
   },
@@ -267,7 +274,9 @@
     "noteDeleted": "Die Karte wurde gelöscht!",
     "emptyNoteDialog": "Die Karte muss Text enthalten.",
     "ready": "Bist du fertig?",
-    "readyButton": "Fertig!"
+    "readyButton": "Fertig!",
+    "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
+    "enable": "Aktivieren"
   },
   "Language": {
     "german": "Deutsch",
@@ -357,7 +366,8 @@
     "colorScheme": "Farbschema",
     "colorSchemeLight": "Hell",
     "colorSchemeDark": "Dunkel",
-    "showHotkeyNotifications": "Zeige Hotkey-Notifikationen"
+    "showHotkeyNotifications": "Zeige Hotkey-Notifikationen",
+    "showBoardReactions": "Zeige Board-Reaktionen"
   },
   "Feedback": {
     "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",

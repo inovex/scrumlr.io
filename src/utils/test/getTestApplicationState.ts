@@ -172,7 +172,9 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     feedbackEnabled: false,
     hotkeysAreActive: true,
     noteFocused: false,
+    showBoardReactions: true,
   },
   assignments: [],
+  boardReactions: [],
   ...overwrite,
 });
