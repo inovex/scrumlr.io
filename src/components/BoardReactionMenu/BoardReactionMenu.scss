@@ -1,0 +1,117 @@
+@import "src/constants/style";
+
+$container-height: 64px;
+$reaction-size: 54px;
+
+.board-reactions__root {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  bottom: $column__border-width;
+}
+
+.board-reactions__container {
+  height: $container-height;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+
+  background-color: $color-white-one;
+  border-radius: $rounded--large;
+  box-shadow: $box-shadow--light;
+
+  padding: 0 $padding--default;
+
+  user-select: none;
+}
+
+.board-reactions__item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+}
+
+.board-reactions__reaction {
+  all: unset; // reset button
+  cursor: pointer;
+
+  width: $reaction-size;
+  height: $reaction-size;
+
+  font-size: $text--xl;
+
+  border-radius: $rounded--full;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: $hover-background-light;
+  }
+
+  &:focus-visible {
+    // lose focus after click
+    background-color: $color-icon-light-blue;
+  }
+
+  &--disabled {
+    filter: grayscale(100%);
+    cursor: not-allowed;
+  }
+}
+
+.board-reactions__close {
+  all: unset;
+  width: $icon--large;
+  height: $icon--large;
+  color: $color-dark-mode-note;
+  border-radius: $rounded--full;
+
+  &:focus {
+    background-color: $color-icon-light-blue;
+  }
+}
+
+@media #{$smartphone} {
+  .board-reactions__root {
+    bottom: $column__border-width + $margin--medium + 32px;
+  }
+
+  .board-reactions__close {
+    display: none;
+  }
+}
+
+[theme="dark"] {
+  .board-reactions__container {
+    background-color: $color-dark-mode-note;
+  }
+
+  .board-reactions__reaction {
+    &:hover {
+      background-color: $hover-background-dark;
+    }
+
+    &:focus-visible {
+      background-color: $tooltip-background-color--dark;
+    }
+  }
+
+  .board-reactions__close {
+    color: $color-white;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .board-reactions__container {
+    padding: 0 $padding--small;
+    gap: 2px;
+  }
+}

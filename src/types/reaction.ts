@@ -1,5 +1,5 @@
 /**
- * representation of a reaction on the server side
+ * representation of a note reaction on the server side
  */
 export type Reaction = {
   id: string;
@@ -10,7 +10,7 @@ export type Reaction = {
 
 export type ReactionState = Reaction[];
 
-export type ReactionType = "thinking" | "heart" | "like" | "dislike" | "joy" | "celebration" | "poop";
+export type ReactionType = "thinking" | "heart" | "like" | "dislike" | "joy" | "celebration" | "poop" | "tada" | "applause";
 
 export const REACTION_EMOJI_MAP = new Map<ReactionType, string>([
   ["thinking", "🤔"],

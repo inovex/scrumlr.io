@@ -183,6 +183,7 @@
     "returnToHomepage": "Return to Homepage",
     "raiseHand": "Raise your hand",
     "lowerHand": "Lower your hand",
+    "openBoardReactionMenu": "React",
     "settings": "Settings",
     "openMenu": "Open user menu"
   },
@@ -239,6 +240,12 @@
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
+  "BoardReactionsMenu": {
+    "react": "React with {{reaction}} [{{shortcut}}]"
+  },
+  "BoardReaction": {
+    "me": "Me"
+  },
   "AppInfo": {
     "version": "Link to list of releases on GitHub"
   },
@@ -267,7 +274,9 @@
     "noteDeleted": "The note has been deleted!",
     "emptyNoteDialog": "The note must contain text.",
     "ready": "Are you ready?",
-    "readyButton": "Ready!"
+    "readyButton": "Ready!",
+    "boardReactionsDisabled": "Board reactions are disabled",
+    "enable": "Enable"
   },
   "Language": {
     "german": "German",
@@ -357,7 +366,8 @@
     "colorScheme": "Color scheme",
     "colorSchemeLight": "Light",
     "colorSchemeDark": "Dark",
-    "showHotkeyNotifications": "Show hotkey notifications"
+    "showHotkeyNotifications": "Show hotkey notifications",
+    "showBoardReactions": "Show board reactions"
   },
   "Feedback": {
     "PraiseInputLabel": "Anything else you want to tell us?",

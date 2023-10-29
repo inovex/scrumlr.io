@@ -26,6 +26,9 @@ $tooltip-background-color--light: #d3daf0;
 $tooltip-background-color--dark: #485064;
 $color-progress-circle: #3c7fff;
 $color-icon-light-blue: #9ebfff;
+$color-board-reaction-name--dark: #5a647d;
+$color-board-reaction-name-self--light: #0057ff;
+$color-board-reaction-name-self--dark: #6096ff;
 
 // theme colors
 $color-backlog-blue: #0057ff;
@@ -179,6 +182,7 @@ $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 $request-z-index: $base-z-index + (9 * $base-z-index-step);
 $tooltip-z-index: $request-z-index;
+$board-reaction-z-index: $base-z-index + (9 * $base-z-index-step);
 
 // responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";

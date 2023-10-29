@@ -7,6 +7,7 @@ import {Voting} from "./voting";
 import {Request} from "./request";
 import {Assignment} from "./assignment";
 import {Reaction} from "./reaction";
+import {BoardReactionType} from "./boardReaction";
 
 export interface BoardInitEvent {
   type: "INIT";
@@ -131,6 +132,10 @@ export interface DeletedAssignmentEvent {
   type: "ASSIGNMENT_DELETED";
   data: string;
 }
+export interface AddedBoardReactionEvent {
+  type: "BOARD_REACTION_ADDED";
+  data: BoardReactionType;
+}
 
 export type ServerEvent =
   | BoardInitEvent
@@ -154,4 +159,5 @@ export type ServerEvent =
   | VotingUpdatedEvent
   | UpdatedVotesEvent
   | CreatedAssignmentEvent
-  | DeletedAssignmentEvent;
+  | DeletedAssignmentEvent
+  | AddedBoardReactionEvent;

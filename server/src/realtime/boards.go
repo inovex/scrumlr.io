@@ -33,6 +33,7 @@ const (
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"
 	BoardEventAssignmentCreated     BoardEventType = "ASSIGNMENT_CREATED"
 	BoardEventAssignmentDeleted     BoardEventType = "ASSIGNMENT_DELETED"
+	BoardEventBoardReactionAdded    BoardEventType = "BOARD_REACTION_ADDED"
 )
 
 type BoardEvent struct {
