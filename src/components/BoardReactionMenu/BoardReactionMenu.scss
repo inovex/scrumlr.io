@@ -27,6 +27,8 @@ $reaction-size: 54px;
   padding: 0 $padding--default;
 
   user-select: none;
+
+  z-index: $board-reaction-z-index;
 }
 
 .board-reactions__item {
