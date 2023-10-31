@@ -13,5 +13,4 @@ CREATE TABLE reactions (
 CREATE INDEX reactions_note_index ON reactions (note);
 
 /* also alter board to add option whether to show the reactions to all users */
-ALTER TABLE IF EXISTS boards ADD COLUMN show_note_reactions bool;
-ALTER TABLE boards ALTER COLUMN show_note_reactions SET DEFAULT true;
+ALTER TABLE IF EXISTS boards ADD COLUMN show_note_reactions bool DEFAULT true;
