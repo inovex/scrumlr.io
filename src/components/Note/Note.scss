@@ -125,6 +125,10 @@ $note__footer-gap: 42px;
   white-space: pre-line;
 }
 
+.note__text--emoji {
+  letter-spacing: normal;
+}
+
 .note__image-wrapper {
   height: 72px;
 }
