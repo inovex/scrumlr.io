@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
@@ -58,7 +59,42 @@ func (s *BoardService) UpdatedColumns(board uuid.UUID, columns []database.Column
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast updated columns", "err", err)
 	}
+	var err_msg string
+	err_msg, err = s.SyncNotesOnColumnChange(board)
+	if err != nil {
+		logger.Get().Errorw(err_msg, "err", err)
+	}
 }
+
+func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error) {
+	var err_msg string
+	columns, err := s.database.GetColumns(boardID)
+	if err != nil {
+		err_msg = "unable to retrieve columns, following a updated board call"
+		return err_msg, err
+	}
+
+	var columnsID []uuid.UUID
+	for _, column := range columns {
+		columnsID = append(columnsID, column.ID)
+	}
+	notes, err := s.database.GetNotes(boardID, columnsID...)
+	if err != nil {
+		err_msg = "unable to retrieve notes, following a updated board call"
+		return err_msg, err
+	}
+
+	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: dto.Notes(notes),
+	})
+	if err != nil {
+		err_msg = "unable to broadcast notes, following a updated board call"
+		return err_msg, err
+	}
+	return "", err
+}
+
 func (s *BoardService) DeletedColumn(user, board, column uuid.UUID, notes []database.Note, votes []database.Vote) {
 	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
