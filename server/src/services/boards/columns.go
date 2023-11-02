@@ -70,7 +70,7 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 	var err_msg string
 	columns, err := s.database.GetColumns(boardID)
 	if err != nil {
-		err_msg = "unable to retrieve columns, following a updated board call"
+		err_msg = "unable to retrieve columns, following a updated columns call"
 		return err_msg, err
 	}
 
@@ -80,7 +80,7 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 	}
 	notes, err := s.database.GetNotes(boardID, columnsID...)
 	if err != nil {
-		err_msg = "unable to retrieve notes, following a updated board call"
+		err_msg = "unable to retrieve notes, following a updated columns call"
 		return err_msg, err
 	}
 
@@ -89,7 +89,7 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 		Data: dto.Notes(notes),
 	})
 	if err != nil {
-		err_msg = "unable to broadcast notes, following a updated board call"
+		err_msg = "unable to broadcast notes, following a updated columns call"
 		return err_msg, err
 	}
 	return "", err
