@@ -87,6 +87,7 @@ export const BoardUsers = () => {
             e.stopPropagation();
             navigate("settings/profile");
           }}
+          aria-label={t("BoardHeader.showProfileSettings")}
         >
           <UserAvatar id={me.user.id} avatar={me.user.avatar} ready={me.ready} raisedHand={me.raisedHand} title={me.user.name} className="board-users__avatar" />
         </button>
