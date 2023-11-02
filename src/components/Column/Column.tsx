@@ -137,6 +137,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           onClick={() => {
             handleEditColumnName(inputRef.current?.value ?? "");
           }}
+          aria-label={t("Column.submitName")}
         >
           <SubmitIcon className="column__header-edit-button-icon" />
         </button>
@@ -151,6 +152,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             }
             setColumnNameMode("VIEW");
           }}
+          aria-label={t("Column.resetName")}
         >
           <CloseIcon className="column__header-edit-button-icon" />
         </button>

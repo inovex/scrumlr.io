@@ -50,8 +50,10 @@
     "togglePassphraseVisibility": "Toggle passphrase visibility"
   },
   "BoardHeader": {
+    "returnToHomepage": "Return to homepage",
     "showParticipants": "Show participants",
-    "showAllBoardSettings": "Show all board settings"
+    "showAllBoardSettings": "Show all board settings",
+    "showProfileSettings": "Show profile settings"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Are you sure that you want to leave this session and return to the homepage?",
@@ -63,7 +65,8 @@
     "warning": "This action cannot be undone.",
     "yes": "Yes",
     "no": "No",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "close": "Close"
   },
   "DeleteBoardOption": {
     "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
@@ -84,7 +87,9 @@
     "GeneratedOn": "Generated on",
     "ProvidedBy": "Provided with ♥️ by",
     "Notes": "Notes",
-    "Votes": "Votes"
+    "Votes": "Votes",
+    "Print": "Print",
+    "Close": "Close"
   },
   "MarkdownExport": {
     "columns": "Columns",
@@ -148,7 +153,8 @@
   },
   "NoteInput": {
     "placeholder": "Add your note...",
-    "imageInfo": "This link will be added as an image!"
+    "imageInfo": "This link will be added as an image!",
+    "create": "Create note"
   },
   "PassphraseDialog": {
     "passphraseInputLabel": "Enter the passphrase to access this board",
@@ -156,7 +162,9 @@
     "submit": "Submit"
   },
   "Timer": {
-    "stopTimer": "Stop timer"
+    "stopTimer": "Stop timer",
+    "reduce": "Reduce time",
+    "increase": "Increase time"
   },
   "CookieNotice": {
     "description": "We and selected partners use cookies or similar technologies as specified in the cookie policy. You can consent to the use of such technologies by closing this notice,\n            by interacting with any link or button outside of this notice or by continuing to browse otherwise.",
@@ -222,6 +230,8 @@
     "showVotesOfOthers": "Anonymous voting",
     "allowMultipleVotesPerNote": "Allow cumulative voting",
     "numberOfVotes": "Number of votes",
+    "increaseVotes": "Increase number of votes",
+    "decreaseVotes": "Decrease number of votes",
     "startVoting": "Start voting phase",
     "cancelVoting": "Cancel voting phase",
     "stopVoting": "End voting phase"
@@ -295,6 +305,11 @@
     "me": "Me",
     "you": "you",
     "userImageAlt": "media provided by {{user}}"
+  },
+  "StackView": {
+    "prevNote": "Previous note",
+    "nextNote": "Next note",
+    "close": "Close"
   },
   "NoteDialogDeleteStackButton": {
     "title": "Delete this stack"
@@ -419,6 +434,9 @@
     "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
   },
   "Avatar": {
+    "random": "Generate random avatar",
+    "prevOption": "Previous option",
+    "nextOption": "Next option",
     "groups": {
       "hair": "Hats and hairstyle",
       "facialFeatures": "Facial features",
@@ -606,5 +624,9 @@
       "SkullOutline": "Outlined skull",
       "Skull": "Skull"
     }
+  },
+  "ToggleButton": {
+    "active": "Active",
+    "inactive": "Inactive"
   }
 }

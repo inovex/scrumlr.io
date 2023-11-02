@@ -87,13 +87,23 @@ export const VotingDialog: VFC = () => {
           </button>
           <div className="dialog__button">
             <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
-            <button onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 1))} className="voting-dialog__vote-button" data-testid="voting-dialog__minus-button">
+            <button
+              onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 1))}
+              className="voting-dialog__vote-button"
+              data-testid="voting-dialog__minus-button"
+              aria-label={t("VoteConfigurationButton.decreaseVotes")}
+            >
               <MinusIcon />
             </button>
             <label className="voting-dialog__vote-label" onMouseDown={(e) => setStartPositionX(e.clientX)}>
               {numberOfVotes}
             </label>
-            <button onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))} className="voting-dialog__vote-button" data-testid="voting-dialog__plus-button">
+            <button
+              onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))}
+              className="voting-dialog__vote-button"
+              data-testid="voting-dialog__plus-button"
+              aria-label={t("VoteConfigurationButton.increaseVotes")}
+            >
               <PlusIcon />
             </button>
           </div>

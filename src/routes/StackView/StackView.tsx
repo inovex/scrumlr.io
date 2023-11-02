@@ -297,7 +297,7 @@ export const StackView = () => {
         </div>
       </div>
       <div className={classNames("stack-view__border", {"stack-view__border--moderating": userIsModerating}, colorClassName)} />
-      <button onClick={handleClose} className="stack-view__close-button">
+      <button onClick={handleClose} className="stack-view__close-button" aria-label={t("StackView.close")}>
         <CloseIcon />
       </button>
     </Portal>
