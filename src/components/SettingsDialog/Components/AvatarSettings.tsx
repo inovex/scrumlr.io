@@ -90,7 +90,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     <>
       <div className="avatar-settings__avatar">
         <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
-        <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))}>
+        <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
           <IconShuffle />
         </button>
       </div>

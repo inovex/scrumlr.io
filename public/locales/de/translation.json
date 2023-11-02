@@ -50,8 +50,10 @@
     "togglePassphraseVisibility": "Passwort Sichtbarkeit umschalten"
   },
   "BoardHeader": {
+    "returnToHomepage": "Zur Homepage zurückkehren.",
     "showParticipants": "Zeige Teilnehmer",
-    "showAllBoardSettings": "Zeige alle Einstellungen"
+    "showAllBoardSettings": "Zeige alle Einstellungen",
+    "showProfileSettings": "Zeige Profileinstellungen"
   },
   "ConfirmationDialog": {
     "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
@@ -63,7 +65,8 @@
     "warning": "Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
     "no": "Nein",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "close": "Schließen"
   },
   "DeleteBoardOption": {
     "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
@@ -84,7 +87,9 @@
     "GeneratedOn": "Erstellt auf",
     "ProvidedBy": "Bereitgestellt mit ♥️ von",
     "Notes": "Kärtchen",
-    "Votes": "Stimmen"
+    "Votes": "Stimmen",
+    "Print": "Drucken",
+    "Close": "Schließen"
   },
   "MarkdownExport": {
     "columns": "Spalten",
@@ -148,7 +153,8 @@
   },
   "NoteInput": {
     "placeholder": "Füge ein Kärtchen hinzu...",
-    "imageInfo": "Dieser Link wird als Bild eingefügt!"
+    "imageInfo": "Dieser Link wird als Bild eingefügt!",
+    "create": "Kärtchen erstellen"
   },
   "PassphraseDialog": {
     "passphraseInputLabel": "Gib das Passwort ein, um beizutreten",
@@ -156,7 +162,9 @@
     "submit": "Absenden"
   },
   "Timer": {
-    "stopTimer": "Stoppe Timer"
+    "stopTimer": "Stoppe Timer",
+    "reduce": "Reduziere Zeit",
+    "increase": "Erhöhe Zeit"
   },
   "CookieNotice": {
     "description": "Wir und ausgewählte Partner verwenden Cookies oder ähnliche Technologien, wie in der Cookie-Richtlinie angegeben. Sie können der Verwendung solcher Technologien zustimmen, indem Sie diesen Hinweis schließen, mit einem Link oder einer Schaltfläche außerhalb dieses Hinweises interagieren oder auf andere Weise weitersurfen.",
@@ -222,6 +230,8 @@
     "showVotesOfOthers": "Anonyme Abstimmung",
     "allowMultipleVotesPerNote": "Erlaube Stimmhäufung",
     "numberOfVotes": "Anzahl Stimmen",
+    "increaseVotes": "Anzahl Stimmen erhöhen",
+    "decreaseVotes": "Anzahl Stimmen verringern",
     "startVoting": "Abstimmung starten",
     "cancelVoting": "Abstimmung abbrechen",
     "stopVoting": "Abstimmung beenden"
@@ -295,6 +305,11 @@
     "me": "Ich",
     "you": "dir",
     "userImageAlt": "Von {{user}} hochgeladenes Bild"
+  },
+  "StackView": {
+    "prevNote": "Vorheriges Kärtchen",
+    "nextNote": "Nächstes Kärtchen",
+    "close": "Schließen"
   },
   "NoteDialogDeleteStackButton": {
     "title": "Diesen Stapel löschen"
@@ -419,6 +434,9 @@
     "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
   },
   "Avatar": {
+    "random": "Zufälligen Avatar generieren",
+    "prevOption": "Vorherige Option",
+    "nextOption": "Nächste Option",
     "groups": {
       "hair": "Hüte und Haare",
       "facialFeatures": "Rund ums Gesicht",
@@ -606,5 +624,9 @@
       "SkullOutline": "Totenkopf Kontur",
       "Skull": "Totenkopf"
     }
+  },
+  "ToggleButton": {
+    "active": "Aktiv",
+    "inactive": "Inaktiv"
   }
 }
