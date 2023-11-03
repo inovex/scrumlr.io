@@ -2,7 +2,9 @@
 
 $overlap-margin: -10px;
 $name-gap: 4px;
+$stack-author-rest-author-gap: 8px;
 $avatar-size: 28px;
+$max-name-length: 112px;
 
 // --self classes: indicates yourself as the stack author,
 // which is highlighted by the accent color of that column
@@ -11,13 +13,28 @@ $avatar-size: 28px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  border-radius: $rounded--full;
+  gap: $stack-author-rest-author-gap;
 }
 
-.note-author-list--self {
+.note-author__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $name-gap;
+  border-radius: $rounded--full;
+  overflow: hidden; // always try to fit content (by cutting the author name)
+}
+
+.note-author__container--self {
   background: var(--accent-color--desaturated-light);
   padding-right: $padding--default;
   width: max-content;
+}
+
+.note-rest-authors__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .note__author {
@@ -41,12 +58,6 @@ $avatar-size: 28px;
   &:nth-of-type(2) {
     // render above third avatar / rest bubble
     z-index: $note-z-index + 1;
-  }
-
-  &:last-of-type:not(.note__author--with-rest) {
-    padding-right: 0;
-    // make a gap after last avatar unless .note-author-rest bubble exists
-    margin-right: $name-gap;
   }
 }
 
@@ -82,6 +93,7 @@ $avatar-size: 28px;
   color: $color-dark-gray;
   font-size: $text--xs;
   letter-spacing: $letter-spacing--small;
+  max-width: $max-name-length;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -96,7 +108,7 @@ $avatar-size: 28px;
 }
 
 [theme="dark"] {
-  .note-author-list--self {
+  .note-author__container--self {
     background: var(--accent-color--desaturated-dark);
   }
 

@@ -26,6 +26,16 @@ const createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
 };
 
 describe("Column", () => {
+  beforeEach(() => {
+    window.ResizeObserver = jest.fn(
+      () =>
+        ({
+          observe: jest.fn(),
+          disconnect: jest.fn(),
+        }) as unknown as ResizeObserver
+    );
+  });
+
   describe("should render correctly", () => {
     test("column has correct accent-color", () => {
       const {container} = render(createColumn());

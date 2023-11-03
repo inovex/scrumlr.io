@@ -2,17 +2,40 @@ package api
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"net/http"
 	dto2 "scrumlr.io/server/common/dto"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
 type BoardSubscription struct {
-	subscription chan *realtime.BoardEvent
-	clients      map[uuid.UUID]*websocket.Conn
+	subscription      chan *realtime.BoardEvent
+	clients           map[uuid.UUID]*websocket.Conn
+	boardParticipants []*dto2.BoardSession
+	boardSettings     *dto2.Board
+	boardColumns      []*dto2.Column
+	boardNotes        []*dto2.Note
+	boardReactions    []*dto2.Reaction
+}
+
+type InitEvent struct {
+	Type realtime.BoardEventType `json:"type"`
+	Data EventData               `json:"data"`
+}
+
+type EventData struct {
+	Board       *dto2.Board                 `json:"board"`
+	Columns     []*dto2.Column              `json:"columns"`
+	Notes       []*dto2.Note                `json:"notes"`
+	Reactions   []*dto2.Reaction            `json:"reactions"`
+	Votings     []*dto2.Voting              `json:"votings"`
+	Votes       []*dto2.Vote                `json:"votes"`
+	Sessions    []*dto2.BoardSession        `json:"participants"`
+	Requests    []*dto2.BoardSessionRequest `json:"requests"`
+	Assignments []*dto2.Assignment          `json:"assignments"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
@@ -28,38 +51,32 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	board, requests, sessions, columns, notes, votings, votes, assignments, err := s.boards.FullBoard(r.Context(), id)
+	board, requests, sessions, columns, notes, reactions, votings, votes, assignments, err := s.boards.FullBoard(r.Context(), id)
 	if err != nil {
 		logger.Get().Errorw("failed to prepare init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
 		return
 	}
 
-	err = conn.WriteJSON(struct {
-		Type realtime.BoardEventType `json:"type"`
-		Data interface{}             `json:"data"`
-	}{
+	initEventData := EventData{
+		Board:       board,
+		Columns:     columns,
+		Notes:       notes,
+		Reactions:   reactions,
+		Votings:     votings,
+		Votes:       votes,
+		Sessions:    sessions,
+		Requests:    requests,
+		Assignments: assignments,
+	}
+
+	initEvent := InitEvent{
 		Type: realtime.BoardEventInit,
-		Data: struct {
-			Board      *dto2.Board                 `json:"board"`
-			Columns    []*dto2.Column              `json:"columns"`
-			Notes      []*dto2.Note                `json:"notes"`
-			Votings    []*dto2.Voting              `json:"votings"`
-			Votes      []*dto2.Vote                `json:"votes"`
-			Sessions   []*dto2.BoardSession        `json:"participants"`
-			Requests   []*dto2.BoardSessionRequest `json:"requests"`
-      Assignments []*dto2.Assignment          `json:"assignments"`
-		}{
-			Board:    board,
-			Columns:  columns,
-			Notes:    notes,
-			Votings:  votings,
-			Votes:    votes,
-			Sessions: sessions,
-			Requests: requests,
-      Assignments: assignments,
-		},
-	})
+		Data: initEventData,
+	}
+
+	initEvent = eventInitFilter(initEvent, userID)
+	err = conn.WriteJSON(initEvent)
 	if err != nil {
 		logger.Get().Errorw("failed to send init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
@@ -72,7 +89,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	defer s.closeBoardSocket(id, userID, conn)
 
-	s.listenOnBoard(id, userID, conn)
+	s.listenOnBoard(id, userID, conn, initEvent.Data)
 
 	for {
 		_, message, err := conn.ReadMessage()
@@ -91,7 +108,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn) {
+func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData EventData) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
@@ -100,6 +117,11 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn) 
 
 	b := s.boardSubscriptions[boardID]
 	b.clients[userID] = conn
+	b.boardParticipants = initEventData.Sessions
+	b.boardSettings = initEventData.Board
+	b.boardColumns = initEventData.Columns
+	b.boardNotes = initEventData.Notes
+	b.boardReactions = initEventData.Reactions
 
 	// if not already done, start listening to board changes
 	if b.subscription == nil {
@@ -113,10 +135,11 @@ func (b *BoardSubscription) startListeningOnBoard() {
 		select {
 		case msg := <-b.subscription:
 			logger.Get().Debugw("message received", "message", msg)
-			for _, conn := range b.clients {
-				err := conn.WriteJSON(msg)
+			for id, conn := range b.clients {
+				filteredMsg := b.eventFilter(msg, id)
+				err := conn.WriteJSON(filteredMsg)
 				if err != nil {
-					logger.Get().Warnw("failed to send message", "message", msg, "err", err)
+					logger.Get().Warnw("failed to send message", "message", filteredMsg, "err", err)
 				}
 			}
 		}

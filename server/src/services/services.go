@@ -39,7 +39,7 @@ type Boards interface {
 	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error)
 	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
 
-	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error)
+	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error)
 }
 
 type BoardSessions interface {
@@ -69,6 +69,14 @@ type Notes interface {
 	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
 }
 
+type Reactions interface {
+	Get(ctx context.Context, id uuid.UUID) (*dto.Reaction, error)
+	List(ctx context.Context, boardID uuid.UUID) ([]*dto.Reaction, error)
+	Create(ctx context.Context, board uuid.UUID, body dto.ReactionCreateRequest) (*dto.Reaction, error)
+	Delete(ctx context.Context, board, user, id uuid.UUID) error
+	Update(ctx context.Context, board, user, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error)
+}
+
 type Votings interface {
 	Create(ctx context.Context, body dto.VotingCreateRequest) (*dto.Voting, error)
 	Update(ctx context.Context, body dto.VotingUpdateRequest) (*dto.Voting, error)
@@ -90,3 +98,6 @@ type Assignments interface {
 	Delete(ctx context.Context, id uuid.UUID) error
 }
 
+type BoardReactions interface {
+	Create(ctx context.Context, board uuid.UUID, body dto.BoardReactionCreateRequest)
+}

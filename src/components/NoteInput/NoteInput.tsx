@@ -74,7 +74,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         value={value}
         onChange={handleChangeNoteText}
         onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-          if (e.key === "Enter") {
+          if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             onAddNote();
           }
@@ -106,6 +106,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
           e.preventDefault();
           onAddNote();
         }}
+        aria-label={t("NoteInput.create")}
       >
         <PlusIcon className="note-input__icon--add" />
       </button>

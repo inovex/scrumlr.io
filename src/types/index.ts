@@ -8,6 +8,8 @@ import {ParticipantsState} from "./participant";
 import {NotesState} from "./note";
 import {ViewState} from "./view";
 import {AssignmentsState} from "./assignment";
+import {ReactionState} from "./reaction";
+import {BoardReactionState} from "./boardReaction";
 
 export interface ApplicationState {
   auth: AuthState;
@@ -16,8 +18,10 @@ export interface ApplicationState {
   participants: ParticipantsState;
   columns: ColumnsState;
   notes: NotesState;
+  reactions: ReactionState;
   votes: VotesState;
   votings: VotingsState;
   view: ViewState;
   assignments: AssignmentsState;
+  boardReactions: BoardReactionState;
 }

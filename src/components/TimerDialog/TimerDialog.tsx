@@ -79,6 +79,7 @@ export const TimerDialog: VFC = () => {
           }}
           className="timer-dialog__time-button"
           data-testid="timer-dialog__minus-button"
+          aria-label={t("Timer.reduce")}
         >
           <MinusIcon />
         </button>
@@ -92,6 +93,7 @@ export const TimerDialog: VFC = () => {
           }}
           className="timer-dialog__time-button"
           data-testid="timer-dialog__plus-button"
+          aria-label={t("Timer.increase")}
         >
           <PlusIcon />
         </button>

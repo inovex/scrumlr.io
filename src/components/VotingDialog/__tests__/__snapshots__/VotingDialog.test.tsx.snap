@@ -49,6 +49,7 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
             </button>
           </article>
           <button
+            aria-label="Close"
             class="dialog__close-button"
           >
             <svg
@@ -118,6 +119,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
                 Number of votes
               </label>
               <button
+                aria-label="Decrease number of votes"
                 class="voting-dialog__vote-button"
                 data-testid="voting-dialog__minus-button"
               >
@@ -131,6 +133,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
                 5
               </label>
               <button
+                aria-label="Increase number of votes"
                 class="voting-dialog__vote-button"
                 data-testid="voting-dialog__plus-button"
               >
@@ -149,6 +152,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
             </button>
           </article>
           <button
+            aria-label="Close"
             class="dialog__close-button"
           >
             <svg

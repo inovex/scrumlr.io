@@ -50,7 +50,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         />
       )}
       <header className="board-header">
-        <button className="board-header__link" onClick={() => setShowConfirmationDialog(true)}>
+        <button className="board-header__link" onClick={() => setShowConfirmationDialog(true)} aria-label={t("BoardHeader.returnToHomepage")}>
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </button>
 

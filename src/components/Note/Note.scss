@@ -8,8 +8,16 @@ $note__indicator-width: 3px;
 
 $note__author-image-size: 26px;
 
+$note__text-margin-top: 12px;
+$note__text-margin-top--small: 6px;
+
+$note__footer-height: 38px;
+$note__footer-gap: 42px;
+
 .note__root {
   position: relative;
+  container-type: inline-size;
+  container-name: note;
 }
 
 .note {
@@ -20,11 +28,11 @@ $note__author-image-size: 26px;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: all 0.1s ease-in-out;
   z-index: $note-z-index;
-  padding: $padding--default $padding--medium 20px;
+  padding: $padding--default $padding--medium 12px $padding--default;
   width: 100%;
   text-align: start;
   border: 2px solid transparent;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .note .note__user-avatar {
@@ -106,7 +114,7 @@ $note__author-image-size: 26px;
 }
 
 .note__text {
-  margin: 0 0 $margin--small;
+  margin: $note__text-margin-top 0 $margin--small;
   min-height: 3 * $line-height--medium;
   width: 100%;
   color: $color-black;
@@ -120,6 +128,12 @@ $note__author-image-size: 26px;
   display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
+  white-space: pre-line;
+
+  &--extended {
+    // add the difference of note__footer
+    min-height: 3 * $line-height--medium + $note__footer-height;
+  }
 }
 
 .note__image-wrapper {
@@ -144,17 +158,33 @@ $note__author-image-size: 26px;
   fill: var(--accent-color);
 }
 
-.note__footer {
+.note__header {
   position: relative;
   height: 28px;
   display: flex;
   flex-direction: row;
-  gap: $margin--default;
+  gap: $note__footer-gap;
+
+  z-index: $note-z-index; // prevent the background image from overlaying it
 }
 
 .note__author-container {
   flex-grow: 1;
   overflow: hidden;
+}
+
+.note__footer {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  height: $note__footer-height;
+  margin-left: -$reaction-list__left-spacing; // a little to the left, the icon in NoteReactionList lines up
+
+  &--collapsed {
+    height: 0;
+  }
 }
 
 .note__author-image {
@@ -177,6 +207,17 @@ $note__author-image-size: 26px;
 
 .note__disabled-click {
   pointer-events: none;
+}
+
+// change note padding based on note size
+@container #{$container__note} {
+  .note {
+    padding: 10px $padding--default 5px 10px;
+  }
+
+  .note__text {
+    margin-top: $note__text-margin-top--small;
+  }
 }
 
 [theme="dark"] {

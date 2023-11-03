@@ -91,10 +91,10 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   return (
     <div className="print-view__container">
       <div className="print-view__button-container">
-        <button className="print-view__button" onClick={handlePrint}>
+        <button className="print-view__button" onClick={handlePrint} aria-label={t("PrintView.Print")}>
           <PrintIcon className="print-view__icon-print" />
         </button>
-        <button className="print-view__button" onClick={handleClose}>
+        <button className="print-view__button" onClick={handleClose} aria-label={t("PrintView.Close")}>
           <CloseIcon className="print-view__icon-close" />
         </button>
       </div>

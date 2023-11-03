@@ -725,3 +725,29 @@
       note: '{{ $.Note.assignmentsTestNote.ID }}'
       name: "Assignments Observer Test Assignment"
 
+- model: Reaction
+  rows:
+    # A: board A, note A, user A
+    - _id: reactionA
+      id: "0fb0a05b-9793-479e-9ac0-1a90b10880fa"
+      note: '{{ $.Note.notesTestA1.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      reaction_type: "like"
+    # B: board A, note A, user B
+    - _id: reactionB
+      id: "98b92853-9f8e-42d4-8ec3-0ad8b6596eae"
+      note: '{{ $.Note.notesTestA1.ID }}'
+      user: '{{ $.User.jane.ID }}'
+      reaction_type: "heart"
+    # C: board A, note B, user A
+    - _id: reactionC
+      id: "fee4f00e-9399-438f-b9bb-f3675d2b9eca"
+      note: '{{ $.Note.notesTestA2.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      reaction_type: "heart"
+    # D: board B, note C, user C
+    - _id: reactionD
+      id: "56becd3e-74b3-42b4-acde-4a59003379f2"
+      note: '{{ $.Note.stackTestNote1.ID }}'
+      user: '{{ $.User.jay.ID }}'
+      reaction_type: "laughing"

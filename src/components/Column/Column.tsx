@@ -14,6 +14,7 @@ import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {hotkeyMap} from "constants/hotkeys";
 import {Droppable} from "components/DragAndDrop/Droppable";
+import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
@@ -51,7 +52,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const [isTemporary, setIsTemporary] = useState(id === "TEMP_ID");
 
   const inputRef = useRef<HTMLInputElement>();
-  const columnRef = useRef<HTMLDivElement>(null);
+  const columnRef = useRef<HTMLElement | null>(null);
 
   const toggleVisibilityHandler = () => {
     dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
@@ -136,6 +137,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           onClick={() => {
             handleEditColumnName(inputRef.current?.value ?? "");
           }}
+          aria-label={t("Column.submitName")}
         >
           <SubmitIcon className="column__header-edit-button-icon" />
         </button>
@@ -150,6 +152,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             }
             setColumnNameMode("VIEW");
           }}
+          aria-label={t("Column.resetName")}
         >
           <CloseIcon className="column__header-edit-button-icon" />
         </button>
@@ -162,8 +165,28 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     </>
   );
 
+  const {
+    bindings: {ref: stripeRef, style: stripeStyle},
+    updateOffset,
+  } = useStripeOffset({gradientLength: 40, gradientAngle: 45});
+
+  const columnCount = useAppSelector((state) => state.columns.length);
+
+  useEffect(() => {
+    updateOffset();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [columnCount]);
+
   return (
-    <section className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && moderating}, colorClassName)} ref={columnRef}>
+    <section
+      className={classNames("column", {"column--hidden": !visible}, {"column__moderation-isActive": isModerator && moderating}, colorClassName)}
+      style={stripeStyle}
+      ref={(r) => {
+        columnRef.current = r;
+        stripeRef.current = r;
+      }}
+    >
       <div className="column__content">
         <div className="column__header">
           <div className="column__header-title">
