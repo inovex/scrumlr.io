@@ -22,16 +22,6 @@ type DBMock struct {
 	mock.Mock
 }
 
-type MockGoroutineRunner struct {
-	RunFunc func(fn func())
-}
-
-func (m *MockGoroutineRunner) Run(fn func()) {
-	if m.RunFunc != nil {
-		m.RunFunc(fn)
-	}
-}
-
 func (m *DBMock) CreateNote(insert database.NoteInsert) (database.Note, error) {
 	args := m.Called(insert)
 	return args.Get(0).(database.Note), args.Error(1)
@@ -45,22 +35,11 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 	s := new(NoteService)
 	mock := new(DBMock)
 	s.database = mock
-	mockRunner := &MockGoroutineRunner{}
-	s.runner = mockRunner
 
 	authorID, _ := uuid.NewRandom()
 	boardID, _ := uuid.NewRandom()
 	colID, _ := uuid.NewRandom()
 	txt := "aaaaaaaaaaaaaaaaaaaa"
-
-	// Create a flag to indicate whether the goroutine was called
-	goroutineCalled := false
-
-	// Set up expectations for the mock GoroutineRunner
-	mockRunner.RunFunc = func(fn func()) {
-		// Set the flag when the goroutine is called
-		goroutineCalled = true
-	}
 
 	mock.On("CreateNote", database.NoteInsert{
 		Author: authorID,
@@ -76,7 +55,6 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 		Text:   txt,
 	})
 	assert.NoError(suite.T(), err, "No error in create function.")
-	assert.True(suite.T(), goroutineCalled, "The goroutine should have been called.")
 	mock.AssertExpectations(suite.T())
 
 }

@@ -16,14 +16,12 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-type GoroutineRunner interface {
-	Run(fn func())
-}
-
 type NoteService struct {
 	database DB
 	realtime *realtime.Broker
-	runner   GoroutineRunner
+}
+
+type NotesUpdater interface {
 }
 
 type DB interface {
@@ -34,11 +32,10 @@ type DB interface {
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 }
 
-func NewNoteService(db DB, rt *realtime.Broker, runner GoroutineRunner) services.Notes {
+func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
 	b := new(NoteService)
 	b.database = db
 	b.realtime = rt
-	b.runner = runner
 	return b
 }
 
@@ -49,10 +46,6 @@ func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*
 		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
 		return nil, common.InternalServerError
 	}
-	// Use s.runner.Run to run the UpdatedNotes function
-	s.runner.Run(func() {
-		s.UpdatedNotes(body.Board)
-	})
 	return new(dto.Note).From(note), err
 }
 
