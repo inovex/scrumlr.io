@@ -70,9 +70,34 @@ func (s *Server) getUserBoards(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
-
+	boardsWithDetails := make([]*dto.BoardWithDetails, len(boards))
+	for i, board := range boards {
+		board, _, sessions, cols, _, _, _, _, err := s.boards.FullBoard(r.Context(), board.ID)
+		participantNum := len(sessions)
+		if err != nil {
+			log.Errorw("unable to get full board details", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+		if err != nil {
+			log.Errorw("unable to get full board details", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+		for _, session := range sessions {
+			if session.User.ID == user {
+				sessionCreated := session.CreatedAt
+				boardsWithDetails[i] = &dto.BoardWithDetails{
+					Board:        board,
+					Participants: participantNum,
+					CreatedAt:    sessionCreated,
+					Columns:      cols,
+				}
+			}
+		}
+	}
 	render.Status(r, http.StatusOK)
-	render.Respond(w, r, boards)
+	render.Respond(w, r, boardsWithDetails)
 }
 
 // getBoard get a board

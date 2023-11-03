@@ -2,6 +2,7 @@ package dto
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/database"
@@ -31,6 +32,8 @@ type BoardSession struct {
 	// roles are able to promote users, change board settings, edit columns,
 	// start voting sessions etc.
 	Role types.SessionRole `json:"role"`
+
+	CreatedAt time.Time `json:"CreatedAt"`
 }
 
 func (b *BoardSession) From(session database.BoardSession) *BoardSession {
@@ -45,6 +48,7 @@ func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	b.RaisedHand = session.RaisedHand
 	b.ShowHiddenColumns = session.ShowHiddenColumns
 	b.Role = session.Role
+	b.CreatedAt = session.CreatedAt
 	return b
 }
 
