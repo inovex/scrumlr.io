@@ -5,7 +5,8 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  margin-bottom: $settings-dialog-container--bottom;
+  padding-bottom: $settings-dialog-container--bottom;
+  height: 100%;
   overflow-y: auto;
   flex-grow: 1;
 
