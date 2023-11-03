@@ -6,6 +6,7 @@ import {Vote} from "types/vote";
 import {Voting} from "types/voting";
 import {Request} from "types/request";
 import {Assignment} from "types/assignment";
+import {Reaction} from "../../types/reaction";
 
 /** This object lists board object specific internal Redux Action types. */
 export const BoardAction = {
@@ -65,6 +66,7 @@ export const BoardActionFactory = {
     requests: Request[],
     columns: Column[],
     notes: Note[],
+    reactions: Reaction[],
     votes: Vote[],
     votings: Voting[],
     assignments: Assignment[]
@@ -75,6 +77,7 @@ export const BoardActionFactory = {
     requests,
     columns,
     notes,
+    reactions,
     votes,
     votings,
     assignments,

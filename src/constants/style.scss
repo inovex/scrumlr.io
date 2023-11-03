@@ -26,6 +26,9 @@ $tooltip-background-color--light: #d3daf0;
 $tooltip-background-color--dark: #485064;
 $color-progress-circle: #3c7fff;
 $color-icon-light-blue: #9ebfff;
+$color-board-reaction-name--dark: #5a647d;
+$color-board-reaction-name-self--light: #0057ff;
+$color-board-reaction-name-self--dark: #6096ff;
 
 // theme colors
 $color-backlog-blue: #0057ff;
@@ -43,7 +46,9 @@ $color-warning-red: #eb625b;
   --accent-color-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
   --accent-color--dark: #{color.change($color, $lightness: 72%, $saturation: 99%)};
   --accent-color--desaturated-light: #{color.change($color, $lightness: 90%)};
+  --accent-color--desaturated-light-hover: #{color.change($color, $lightness: 85%)};
   --accent-color--desaturated-dark: #{color.change($color, $lightness: 39%, $saturation: 48%)};
+  --accent-color--desaturated-dark-hover: #{color.change($color, $lightness: 50%, $saturation: 48%)};
   --accent-color--background-light: #{color.change($color, $lightness: 80%, $alpha: 0.2, $saturation: 60%)};
   --accent-color--background-dark: #{color.change($color, $lightness: 75%, $alpha: 0.04, $saturation: 75%)};
 }
@@ -74,8 +79,8 @@ $color-warning-red: #eb625b;
 }
 
 // hover colors
-$hover-background-light: #efefef;
-$hover-background-dark: #414959;
+$hover-background-light: #e4e8f6;
+$hover-background-dark: #5a647d;
 
 // placeholder text colors
 $color-placeholder: #1010104d;
@@ -96,6 +101,15 @@ $icon--medium: 24px;
 $icon--large: 32px;
 $icon--extralarge: 40px;
 $icon--huge: 48px;
+
+// reaction constants
+$reaction__inner-size: $icon--medium;
+$reaction__padding--inner: 2px; // total: 24px + 2*2px = 28px
+$reaction__gap-size: 4px;
+$reaction__gap-size--small: 2px;
+$reaction__padding--outer-top-bottom: 5px;
+$reaction__padding--outer-left-right: 6px;
+$reaction-list__left-spacing: 6px;
 
 // flexbox
 @mixin flex-center {
@@ -167,14 +181,19 @@ $backdrop-z-index: $base-z-index + (9 * $base-z-index-step);
 $note-dialog-z-index: $base-z-index + (6 * $base-z-index-step);
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 $request-z-index: $base-z-index + (9 * $base-z-index-step);
+$tooltip-z-index: $request-z-index;
+$board-reaction-z-index: $base-z-index + (9 * $base-z-index-step);
 
-// responsive
+// responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";
 $smartphone: "screen and (max-width: 767px)";
 $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
 $menu-mobile: "screen and (max-width: 1343px)";
 $menu-desktop: "screen and (min-width: 1344px)";
+
+// responsive: @container query
+$container__note: "note (max-width: 300px)";
 
 // shadows
 $box-shadow--light: 0px 5px 15px 0px rgba(0, 0, 0, 0.2);

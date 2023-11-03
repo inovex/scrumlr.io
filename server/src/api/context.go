@@ -128,6 +128,20 @@ func (s *Server) NoteContext(next http.Handler) http.Handler {
   })
 }
 
+func (s *Server) ReactionContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		reactionParam := chi.URLParam(r, "reaction")
+		reaction, err := uuid.Parse(reactionParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid reaction id")))
+			return
+		}
+
+		reactionContext := context.WithValue(r.Context(), "Reaction", reaction)
+		next.ServeHTTP(w, r.WithContext(reactionContext))
+	})
+}
+
 func (s *Server) AssignmentContext(next http.Handler) http.Handler {
   return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     assignmentParam := chi.URLParam(r, "assignment")

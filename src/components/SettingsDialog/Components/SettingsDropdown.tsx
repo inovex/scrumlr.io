@@ -1,4 +1,4 @@
-import {ElementType, VFC, useState, FocusEvent} from "react";
+import {ElementType, useState, FocusEvent, FC, useRef, useEffect} from "react";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import "./SettingsDropdown.scss";
 import classNames from "classnames";
@@ -15,8 +15,16 @@ interface DropdownItem {
   callback?: () => unknown;
 }
 
-export const SettingsDropdown: VFC<SettingsDropdownProps> = ({label, items, current}) => {
+export const SettingsDropdown: FC<SettingsDropdownProps> = ({label, items, current}) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const dropdownListRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      dropdownListRef.current?.scrollIntoView();
+    }
+  }, [isOpen]);
 
   let Icon = current.icon!;
 
@@ -40,7 +48,7 @@ export const SettingsDropdown: VFC<SettingsDropdownProps> = ({label, items, curr
           <DropdownIcon className="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown" />
         </p>
       </button>
-      <ul id="dropdown-list" className={classNames({"settings-dropdown__list": true, active: isOpen})} role="listbox">
+      <ul id="dropdown-list" className={classNames({"settings-dropdown__list": true, active: isOpen})} role="listbox" ref={dropdownListRef}>
         {items
           .filter((item) => current !== item)
           .map((item) => {

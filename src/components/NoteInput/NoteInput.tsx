@@ -106,6 +106,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
           e.preventDefault();
           onAddNote();
         }}
+        aria-label={t("NoteInput.create")}
       >
         <PlusIcon className="note-input__icon--add" />
       </button>

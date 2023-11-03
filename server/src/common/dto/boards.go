@@ -25,6 +25,9 @@ type Board struct {
 	// The show notes
 	ShowNotesOfOtherUsers bool `json:"showNotesOfOtherUsers"`
 
+	// show note reactions
+	ShowNoteReactions bool `json:"showNoteReactions"`
+
 	AllowStacking bool `json:"allowStacking"`
 
 	TimerStart *time.Time `json:"timerStart,omitempty"`
@@ -46,6 +49,7 @@ func (b *Board) From(board database.Board) *Board {
 	b.AccessPolicy = board.AccessPolicy
 	b.ShowAuthors = board.ShowAuthors
 	b.ShowNotesOfOtherUsers = board.ShowNotesOfOtherUsers
+	b.ShowNoteReactions = board.ShowNoteReactions
 	b.AllowStacking = board.AllowStacking
 	b.SharedNote = board.SharedNote
 	b.ShowVoting = board.ShowVoting
@@ -96,6 +100,9 @@ type BoardUpdateRequest struct {
 
 	// Set whether notes of other users should be visible for everyone else.
 	ShowNotesOfOtherUsers *bool `json:"showNotesOfOtherUsers"`
+
+	// Set whether note reactions should be shown to all users.
+	ShowNoteReactions *bool `json:"showNoteReactions"`
 
 	// Set whether stacking should be allowed to all users or only moderators.
 	AllowStacking *bool `json:"allowStacking"`

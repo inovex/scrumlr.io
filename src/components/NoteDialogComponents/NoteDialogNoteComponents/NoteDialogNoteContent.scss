@@ -5,7 +5,8 @@
 .note-dialog__note-content {
   display: flex;
   width: 100%;
-  max-height: 20vh;
+  height: 100%;
+  line-height: $line-height--medium;
   flex: 1;
   overflow: hidden;
   justify-content: center;
@@ -15,6 +16,10 @@
   }
   &:has(&--image-zoom) {
     overflow: visible;
+  }
+
+  &--extended {
+    height: 5.5 * $line-height--medium;
   }
 }
 
@@ -26,7 +31,6 @@
   width: 100%;
   color: $color-black;
   letter-spacing: $letter-spacing--medium;
-  margin-bottom: $margin--small;
   border: 2px dashed transparent;
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;

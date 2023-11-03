@@ -80,6 +80,40 @@ exports[`MenuBars should match snapshot 1`] = `
       </li>
       <li>
         <button
+          aria-label="MenuBars.openBoardReactionMenu"
+          class="tooltip-button tooltip-button--right"
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              MenuBars.openBoardReactionMenu
+              <span
+                class="tooltip-button__hotkey"
+              >
+                 [R]
+              </span>
+            </span>
+          </div>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-add-board-reaction.svg
+          </svg>
+          <svg
+            aria-hidden="true"
+            class="tooltip-button__icon"
+          >
+            icon-close.svg
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
           aria-label="MenuBars.settings"
           class="tooltip-button tooltip-button--right"
         >

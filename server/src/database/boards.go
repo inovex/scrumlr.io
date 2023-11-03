@@ -20,6 +20,7 @@ type Board struct {
 	Salt                  *string
 	ShowAuthors           bool
 	ShowNotesOfOtherUsers bool
+	ShowNoteReactions     bool
 	AllowStacking         bool
 	CreatedAt             time.Time
 	TimerStart            *time.Time
@@ -52,6 +53,7 @@ type BoardUpdate struct {
 	Salt                  *string
 	ShowAuthors           *bool
 	ShowNotesOfOtherUsers *bool
+	ShowNoteReactions     *bool
 	AllowStacking         *bool
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
@@ -125,6 +127,9 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 	}
 	if update.ShowNotesOfOtherUsers != nil {
 		query.Column("show_notes_of_other_users")
+	}
+	if update.ShowNoteReactions != nil {
+		query.Column("show_note_reactions")
 	}
 	if update.AllowStacking != nil {
 		query.Column("allow_stacking")
