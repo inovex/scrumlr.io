@@ -200,7 +200,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			Data: filteredColumns,
 		}
 
-		return &ret
+		return &ret // after this event, a syncNotes event is triggered from the board service
 	}
 
 	if event.Type == realtime.BoardEventNotesUpdated {
@@ -233,7 +233,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			event.Data = boardSettings
 			return event
 		}
-		return event
+		return event // after this event, a syncNotes event is triggered from the board service
 	}
 
 	if event.Type == realtime.BoardEventVotingUpdated {
