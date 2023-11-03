@@ -21,8 +21,8 @@ func isModerator(clientID uuid.UUID, sessions []*dto.BoardSession) bool {
 	return false
 }
 
-func parseColumnUpdated(data interface{}) ([]*dto.Column, error) {
-	var ret []*dto.Column
+func parseColumnUpdated(data interface{}) (*dto.WrappedColumn, error) {
+	var ret *dto.WrappedColumn
 
 	b, err := json.Marshal(data)
 	if err != nil {
@@ -82,21 +82,21 @@ func parseVotingUpdated(data interface{}) (*VotingUpdated, error) {
 	return ret, nil
 }
 
-func filterColumns(eventColumns []*dto.Column) []*dto.Column {
-	var visibleColumns = make([]*dto.Column, 0, len(eventColumns))
-	for _, column := range eventColumns {
+func filterColumns(eventColumns *dto.WrappedColumns) *dto.WrappedColumns {
+	var visibleColumns = make([]*dto.Column, 0, len(eventColumns.Columns))
+	for _, column := range eventColumns.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 		}
 	}
 
-	return visibleColumns
+	return &dto.WrappedColumns{Columns: visibleColumns, ColumnsOrder: eventColumns.ColumnsOrder}
 }
 
-func filterNotes(eventNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board, columns []*dto.Column) []*dto.Note {
+func filterNotes(eventNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board, columns *dto.WrappedColumns) []*dto.Note {
 	var visibleNotes = make([]*dto.Note, 0, len(eventNotes))
 	for _, note := range eventNotes {
-		for _, column := range columns {
+		for _, column := range columns.Columns {
 			if (note.Position.Column == column.ID) && column.Visible {
 				// BoardSettings -> Remove other participant cards
 				if boardSettings.ShowNotesOfOtherUsers {
@@ -117,7 +117,7 @@ func filterNotes(eventNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Bo
 	return visibleNotes
 }
 
-func filterVotingUpdated(voting *VotingUpdated, userID uuid.UUID, boardSettings *dto.Board, columns []*dto.Column) *VotingUpdated {
+func filterVotingUpdated(voting *VotingUpdated, userID uuid.UUID, boardSettings *dto.Board, columns *dto.WrappedColumns) *VotingUpdated {
 	filteredVoting := voting
 	// Filter voting notes
 	filteredVotingNotes := filterNotes(voting.Notes, userID, boardSettings, columns)
@@ -183,25 +183,20 @@ func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note) *dto.Voting {
 
 func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
 	isMod := isModerator(userID, boardSubscription.boardParticipants)
-	if event.Type == realtime.BoardEventColumnUpdated {
-		columns, err := parseColumnUpdated(event.Data)
+	if event.Type == realtime.BoardEventColumnUpdated || event.Type == realtime.BoardEventColumnCreated {
+		column, err := parseColumnUpdated(event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
 		}
 		// Cache the incoming changes, mod only since they receive all changes
-		if isMod {
-			boardSubscription.boardColumns = columns
+		// FIXME order: add column to board columns
+
+		if isMod || column.Column.Visible {
 			return event
 		}
-
-		filteredColumns := filterColumns(columns)
-		ret := realtime.BoardEvent{
-			Type: event.Type,
-			Data: filteredColumns,
-		}
-
-		return &ret // after this event, a syncNotes event is triggered from the board service
 	}
+
+	// FIXME order: add cleanup on delete of column
 
 	if event.Type == realtime.BoardEventNotesUpdated {
 		notes, err := parseNotesUpdated(event.Data)
@@ -299,11 +294,12 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			Assignments:    event.Data.Assignments,
 		},
 	}
+
 	// Columns
-	filteredColumns := filterColumns(event.Data.Columns)
+	filteredColumns := filterColumns(event.Data.WrappedColumns)
 
 	// Notes
-	filteredNotes := filterNotes(event.Data.Notes, clientID, event.Data.Board, event.Data.Columns)
+	filteredNotes := filterNotes(event.Data.Notes, clientID, event.Data.Board, event.Data.WrappedColumns)
 
 	// Votes
 	visibleVotes := make([]*dto.Vote, 0)
@@ -325,7 +321,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		visibleVotings = append(visibleVotings, filteredVoting)
 	}
 
-	retEvent.Data.Columns = filteredColumns
+	retEvent.Data.WrappedColumns = filteredColumns
 	retEvent.Data.Notes = filteredNotes
 	retEvent.Data.Votes = visibleVotes
 	retEvent.Data.Votings = visibleVotings
