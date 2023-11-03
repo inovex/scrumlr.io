@@ -72,7 +72,7 @@ func (s *Server) getUserBoards(w http.ResponseWriter, r *http.Request) {
 	}
 	boardsWithDetails := make([]*dto.BoardWithDetails, len(boards))
 	for i, board := range boards {
-		board, _, sessions, cols, _, _, _, _, err := s.boards.FullBoard(r.Context(), board.ID)
+		board, _, sessions, cols, _, _, _, _, _, err := s.boards.FullBoard(r.Context(), board.ID)
 		participantNum := len(sessions)
 		if err != nil {
 			log.Errorw("unable to get full board details", "err", err)
