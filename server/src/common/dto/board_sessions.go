@@ -2,6 +2,7 @@ package dto
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/database"
@@ -34,6 +35,8 @@ type BoardSession struct {
 
 	// Flag indicates whether the user is banned
 	Banned bool `json:"banned"`
+
+	CreatedAt time.Time `json:"CreatedAt"`
 }
 
 func (b *BoardSession) From(session database.BoardSession) *BoardSession {
@@ -49,6 +52,7 @@ func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	b.ShowHiddenColumns = session.ShowHiddenColumns
 	b.Role = session.Role
 	b.Banned = session.Banned
+	b.CreatedAt = session.CreatedAt
 	return b
 }
 
