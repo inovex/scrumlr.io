@@ -22,6 +22,8 @@ import {passRequestMiddleware} from "./middleware/request";
 import {passViewMiddleware} from "./middleware/view";
 import {assignmentReducer} from "./reducer/assignment";
 import {passAssignmentMiddlware} from "./middleware/assignment";
+import {boardReactionReducer} from "./reducer/boardReaction";
+import {passBoardReactionMiddleware} from "./middleware/boardReaction";
 import {reactionReducer} from "./reducer/reaction";
 import {passReactionMiddleware} from "./middleware/reaction";
 
@@ -46,6 +48,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
     passVoteMiddleware(stateAPI, dispatch, action);
     passVotingMiddleware(stateAPI, dispatch, action);
     passAssignmentMiddlware(stateAPI, dispatch, action);
+    passBoardReactionMiddleware(stateAPI, dispatch, action);
   }
 };
 
@@ -61,6 +64,7 @@ const rootReducer = combineReducers<ApplicationState>({
   votings: votingReducer,
   view: viewReducer,
   assignments: assignmentReducer,
+  boardReactions: boardReactionReducer,
 });
 
 const store = configureStore({

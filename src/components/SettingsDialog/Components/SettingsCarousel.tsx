@@ -30,14 +30,14 @@ export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselIt
 
   return (
     <div className={classNames("settings-carousel", className)}>
-      <button className="settings-carousel__button settings-carousel__button--left" disabled={disabled} onClick={() => handleClick(true)}>
+      <button className="settings-carousel__button settings-carousel__button--left" disabled={disabled} onClick={() => handleClick(true)} aria-label={t("Avatar.prevOption")}>
         <LeftArrowIcon />
       </button>
       <div className="settings-carousel__text">
         {label && <span className="settings-carousel__text-label">{label}</span>}
         <span className="settings-carousel__text-value">{localizationPath !== undefined ? t(`${localizationPath}${currentValue}`) : currentValue}</span>
       </div>
-      <button className="settings-carousel__button settings-carousel__button--right" disabled={disabled} onClick={() => handleClick()}>
+      <button className="settings-carousel__button settings-carousel__button--right" disabled={disabled} onClick={() => handleClick()} aria-label={t("Avatar.nextOption")}>
         <RightArrowIcon />
       </button>
     </div>

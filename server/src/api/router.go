@@ -26,15 +26,16 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards      services.Boards
-	votings     services.Votings
-	users       services.Users
-	notes       services.Notes
-	reactions   services.Reactions
-	sessions    services.BoardSessions
-	health      services.Health
-	feedback    services.Feedback
-	assignments services.Assignments
+	boards         services.Boards
+	votings        services.Votings
+	users          services.Users
+	notes          services.Notes
+	reactions      services.Reactions
+	sessions       services.BoardSessions
+	health         services.Health
+	feedback       services.Feedback
+	assignments    services.Assignments
+	boardReactions services.BoardReactions
 
 	upgrader websocket.Upgrader
 
@@ -56,6 +57,7 @@ func New(
 	health services.Health,
 	feedback services.Feedback,
 	assignments services.Assignments,
+	boardReactions services.BoardReactions,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -98,6 +100,7 @@ func New(
 		health:                           health,
 		feedback:                         feedback,
 		assignments:                      assignments,
+		boardReactions:                   boardReactions,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -168,6 +171,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initVotingResources(r)
 			s.initVoteResources(r)
 			s.initAssignmentResources(r)
+			s.initBoardReactionResources(r)
 		})
 
 		r.Route("/user", func(r chi.Router) {
@@ -301,5 +305,13 @@ func (s *Server) initAssignmentResources(r chi.Router) {
 			r.Use(s.AssignmentContext)
 			r.Delete("/", s.deleteAssignment)
 		})
+	})
+}
+
+func (s *Server) initBoardReactionResources(r chi.Router) {
+	r.Route("/board-reactions", func(r chi.Router) {
+		r.Use(s.BoardParticipantContext)
+
+		r.Post("/", s.createBoardReaction)
 	})
 }

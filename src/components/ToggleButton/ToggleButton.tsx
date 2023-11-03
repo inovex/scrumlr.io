@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import "./ToggleButton.scss";
+import {useTranslation} from "react-i18next";
 import {Toggle} from "../Toggle";
 
 type ToggleButtonProps<T> = {
@@ -38,6 +39,7 @@ type ToggleButtonProps<T> = {
 
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
 export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => {
+  const {t} = useTranslation();
   const onClick = () => {
     if (props.disabled) return;
     const newValue = props.value === props.values[0] ? props.values[1] : props.values[0];
@@ -53,7 +55,13 @@ export const ToggleButton = <T extends unknown>(props: ToggleButtonProps<T>) => 
 
   return (
     // aria-disabled instead of disabled so that it is focusable but not editable
-    <button aria-disabled={props.disabled} onClick={onClick} className={classNames("toggle-button", props.className)} aria-pressed={isActive}>
+    <button
+      aria-disabled={props.disabled}
+      onClick={onClick}
+      className={classNames("toggle-button", props.className)}
+      aria-pressed={isActive}
+      aria-label={isActive ? t("ToggleButton.active") : t("ToggleButton.inactive")}
+    >
       <Toggle active={isActive} disabled={props.disabled} />
     </button>
   );

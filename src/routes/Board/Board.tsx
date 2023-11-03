@@ -2,6 +2,7 @@ import {LoadingScreen} from "components/LoadingScreen";
 import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
 import {Requests} from "components/Requests";
+import {BoardReactionContainer} from "components/BoardReactionContainer/BoardReactionContainer";
 import store, {useAppSelector} from "store";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
@@ -74,6 +75,7 @@ export const Board = () => {
               <Column key={column.id} id={column.id} index={column.index} name={column.name} visible={column.visible} color={column.color} />
             ))}
         </BoardComponent>
+        <BoardReactionContainer />
       </>
     );
   }
