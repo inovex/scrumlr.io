@@ -6,7 +6,6 @@ $tooltip-max-width: 80%;
 @mixin tooltip {
   z-index: $tooltip-z-index;
   border-radius: $rounded--large;
-  opacity: 100%;
   max-width: $tooltip-max-width;
   font-size: $text--sm;
 }
