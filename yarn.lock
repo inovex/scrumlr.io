@@ -2305,10 +2305,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/i18next-fs-backend@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@types/i18next-fs-backend/-/i18next-fs-backend-1.1.4.tgz#eec40b8f086bd300f93f797aadff4296f8a665a9"
-  integrity sha512-wzpP9CTffoFo5er1REmfKVaZm5Ox+rVEucy6mTRgEDGIUrz3+Ixw/bmqkJLUooLmvDEf8JlnZutGzOZo7s1BaA==
+"@types/i18next-fs-backend@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@types/i18next-fs-backend/-/i18next-fs-backend-1.1.5.tgz#39dae6057f4386f6eaacc36e69346d3783834ada"
+  integrity sha512-QKKYWkfQ13spBwa+5/lBThkPkMv8svU6a5Z0Bz96IuN+HupJZXVAbP93p5bK7iOcY7Y/g/W9Y6qy5z0i0NpTog==
   dependencies:
     i18next "^21.0.1"
 
