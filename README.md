@@ -15,7 +15,6 @@
   <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/inovex/scrumlr.io/continuous-integration.yml?style=for-the-badge">
 </p>
 
-
 <p align="center">
   <a href="https://scrumlr.io">
     <img src="board.png" alt="scrumlr.io" />
@@ -23,6 +22,7 @@
 </p>
 
 ## Features
+
 - 🔁 Retrospectives made easy.
 - 🤝 Collaborate with your team.
 - 💯 Free & open-source.
@@ -39,6 +39,7 @@
 - Want to contribute? Check out our [contribution guide.](https://github.com/inovex/scrumlr.io/blob/main/CONTRIBUTING.md)
 
 ## Collaborators and beloved friends
+
 Thanks to all our users, collaborators, contributors & supporters! ❤️
 
 [<img src="https://avatars.githubusercontent.com/u/36969812?s=48&amp;v=4" width="48" height="48" alt="brandstetterm">](https://github.com/brandstetterm)
@@ -70,19 +71,22 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
 [<img src="https://avatars.githubusercontent.com/u/58441634?s=3648&amp;v=4" width="48" height="48" alt="NNKKOO">](https://github.com/NNKKOO)
 [<img src="https://avatars.githubusercontent.com/u/44020029?s=48&amp;v=4" width="48" height="48" alt="CronJorian">](https://github.com/CronJorian)
 [<img src="https://avatars.githubusercontent.com/u/88541778?s=48&amp;v=4" width="48" height="48" alt="dbaderINO">](https://github.com/dbaderINO)
+[<img src="https://avatars.githubusercontent.com/u/39419411?v=4" width="48" height="48" alt="MarvinRoth">](https://github.com/MarvinRoth)
+[<img src="https://avatars.githubusercontent.com/u/71148001?v=4" width="48" height="48" alt="blxckOxymoron">](https://github.com/blxckOxymoron)
+[<img src="https://avatars.githubusercontent.com/u/54246641?v=4" width="48" height="48" alt="Quasilius-Starlord">](https://github.com/Quasilius-Starlord)
 
 ... and many more!
 
 ## Sponsors
+
 A special shout-out goes to [inovex](https://inovex.de) for all the support and the opportunity to realize this project! 🙌
 [Contact us](https://www.inovex.de/de/kontakt/) if you look for the best IT service provider out there.
+
 <p align="center" style="margin: 0">
   <a href="https://inovex.de/en/" align="center">
     <img src="inovex.svg" height="128" alt="inovex">
   </a>
 </p>
-
-
 
 ## License
 
