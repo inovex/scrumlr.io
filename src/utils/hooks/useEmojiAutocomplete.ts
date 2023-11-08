@@ -3,7 +3,7 @@ import {MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useOnBlur} from "./useOnBlur";
 
-export const emojiRegex = /^:([a-z0-9_]+):?$/i;
+export const emojiRegex = /^:([\w\d]+):?$/i;
 
 export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean];
 
@@ -51,7 +51,9 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({maxI
       import("constants/emojis.json").then((data) => setEmojiData(data.default as EmojiData[]));
       return;
     }
-    setSuggestions(emojiData.filter(([slug]) => slug.includes(emojiName)));
+
+    // filter emojis
+    setSuggestions(emojiData.filter(([slug]) => slug.includes(emojiName.toLowerCase())));
   }, [emojiName, emojiData]);
 
   // get emoji name from value
