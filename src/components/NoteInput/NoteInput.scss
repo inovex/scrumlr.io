@@ -30,6 +30,7 @@ $note-input__input-right: 40px;
   font-weight: bold;
   line-height: 24px;
   max-height: 70vh;
+  letter-spacing: $letter-spacing--small;
   padding: $padding--small 0;
   font-family: Raleway, sans-serif;
   background-color: transparent;
@@ -123,7 +124,6 @@ $note-input__input-right: 40px;
   overflow-y: auto;
   left: 0;
   box-shadow: $box-shadow--light;
-  background-color: $color-lighter-gray;
 
   @include scrollbar();
 }
@@ -144,7 +144,6 @@ $note-input__input-right: 40px;
 
   .note-input__emoji-autocomplete {
     box-shadow: $box-shadow--dark;
-    background-color: $color-dark-mode-note;
   }
 }
 

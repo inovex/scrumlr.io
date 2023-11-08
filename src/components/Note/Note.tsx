@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {KeyboardEvent, useEffect, useMemo, useRef} from "react";
+import {KeyboardEvent, useEffect, useRef} from "react";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
@@ -11,7 +11,6 @@ import {Participant} from "types/participant";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {Sortable} from "components/DragAndDrop/Sortable";
-import createRegex from "emoji-regex";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import "./Note.scss";
 
@@ -36,13 +35,6 @@ export const Note = (props: NoteProps) => {
   const me = useAppSelector((state) => state.participants?.self);
   const moderating = useAppSelector((state) => state.view.moderating);
   const isModerator = props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER";
-
-  // emojis like pilot are not displayed correctly when letter-spacing is not set to normal. this is a workaround to fix that.
-  // this is especially performance intensive when dragging a note
-  const textWithEmojisSeparated = useMemo(
-    () => note?.text.split(new RegExp(`(${createRegex().source})`)).map((txt, i) => (i % 2 === 1 ? <span className="note__text--emoji">{txt}</span> : txt)),
-    [note]
-  );
 
   // all authors of a note, including its children if it's a stack.
   const authors = useAppSelector((state) => {
@@ -113,7 +105,7 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <p className="note__text">{textWithEmojisSeparated}</p>
+          <p className="note__text">{note.text}</p>
         )}
         <div className="note__footer">
           <div className="note__author-container">
