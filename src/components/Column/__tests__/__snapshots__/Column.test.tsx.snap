@@ -59,6 +59,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           style="overflow-x: hidden; word-wrap: break-word; overflow-y: hidden;"
         />
         <button
+          aria-label="Create note"
           class="note-input__add-button"
           tabindex="-1"
           type="submit"
@@ -90,18 +91,13 @@ exports[`Column should have correct style show column with correct style 1`] = `
             class="note__root accent-color__planning-pink"
             role="button"
             style="opacity: 1;"
-            tabindex="0"
+            tabindex="-1"
           >
             <button
               class="note note--stackBetween"
             >
-              <p
-                class="note__text"
-              >
-                Lorem Ipsum
-              </p>
-              <div
-                class="note__footer"
+              <header
+                class="note__header"
               >
                 <div
                   class="note__author-container"
@@ -564,7 +560,14 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <span
                       class="vote-button-remove__folded-corner"
                     />
-                    <span>
+                    <svg
+                      class="vote-button-remove__icon"
+                    >
+                      icon-remove.svg
+                    </svg>
+                    <span
+                      class="vote-button-remove__count"
+                    >
                       1
                     </span>
                   </button>
@@ -579,7 +582,68 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     </svg>
                   </button>
                 </div>
-              </div>
+              </header>
+              <main
+                class="note__text"
+              >
+                Lorem Ipsum
+              </main>
+              <footer
+                class="note__footer"
+              >
+                <div
+                  class="note-reaction-list__root"
+                >
+                  <div
+                    class="note-reaction-list__reaction-bar-container"
+                  >
+                    <button
+                      aria-label="toggle the reaction bar"
+                      class="note-reaction-list__add-reaction-sticker-container"
+                    >
+                      <svg
+                        class="note-reaction-list__add-reaction-sticker"
+                      >
+                        icon-emoji.svg
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    class="note-reaction-list__reaction-chips-container"
+                  >
+                    <button
+                      class="note-reaction-chip__root note-reaction-chip__root--self"
+                      id="reaction-test-notes-id-1-like52"
+                    >
+                      <div
+                        class="note-reaction-chip__reaction"
+                      >
+                        👍
+                      </div>
+                      <div
+                        class="note-reaction-chip__amount"
+                      >
+                        1
+                      </div>
+                    </button>
+                    <button
+                      class="note-reaction-chip__root note-reaction-chip__root--self"
+                      id="reaction-test-notes-id-1-heart53"
+                    >
+                      <div
+                        class="note-reaction-chip__reaction"
+                      >
+                        💖
+                      </div>
+                      <div
+                        class="note-reaction-chip__amount"
+                      >
+                        1
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </footer>
             </button>
           </div>
         </li>
@@ -591,18 +655,13 @@ exports[`Column should have correct style show column with correct style 1`] = `
             class="note__root accent-color__planning-pink"
             role="button"
             style="opacity: 1;"
-            tabindex="0"
+            tabindex="-1"
           >
             <button
               class="note note--stackBetween"
             >
-              <p
-                class="note__text"
-              >
-                Lorem Ipsum
-              </p>
-              <div
-                class="note__footer"
+              <header
+                class="note__header"
               >
                 <div
                   class="note__author-container"
@@ -1069,7 +1128,53 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     </svg>
                   </button>
                 </div>
-              </div>
+              </header>
+              <main
+                class="note__text"
+              >
+                Lorem Ipsum
+              </main>
+              <footer
+                class="note__footer"
+              >
+                <div
+                  class="note-reaction-list__root"
+                >
+                  <div
+                    class="note-reaction-list__reaction-bar-container"
+                  >
+                    <button
+                      aria-label="toggle the reaction bar"
+                      class="note-reaction-list__add-reaction-sticker-container"
+                    >
+                      <svg
+                        class="note-reaction-list__add-reaction-sticker"
+                      >
+                        icon-emoji.svg
+                      </svg>
+                    </button>
+                  </div>
+                  <div
+                    class="note-reaction-list__reaction-chips-container"
+                  >
+                    <button
+                      class="note-reaction-chip__root note-reaction-chip__root--self"
+                      id="reaction-test-notes-id-2-like54"
+                    >
+                      <div
+                        class="note-reaction-chip__reaction"
+                      >
+                        👍
+                      </div>
+                      <div
+                        class="note-reaction-chip__amount"
+                      >
+                        1
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </footer>
             </button>
           </div>
         </li>

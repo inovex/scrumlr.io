@@ -19,9 +19,10 @@ type Board struct {
 	Salt                  *string
 	ShowAuthors           bool
 	ShowNotesOfOtherUsers bool
+	ShowNoteReactions     bool
 	AllowStacking         bool
 	CreatedAt             time.Time
-  TimerStart            *time.Time
+	TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
@@ -38,7 +39,7 @@ type BoardInsert struct {
 type BoardTimerUpdate struct {
 	bun.BaseModel `bun:"table:boards"`
 	ID            uuid.UUID
-  TimerStart    *time.Time
+	TimerStart    *time.Time
 	TimerEnd      *time.Time
 }
 
@@ -51,8 +52,9 @@ type BoardUpdate struct {
 	Salt                  *string
 	ShowAuthors           *bool
 	ShowNotesOfOtherUsers *bool
+	ShowNoteReactions     *bool
 	AllowStacking         *bool
-  TimerStart            *time.Time
+	TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
 	ShowVoting            uuid.NullUUID
@@ -124,6 +126,9 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 	}
 	if update.ShowNotesOfOtherUsers != nil {
 		query.Column("show_notes_of_other_users")
+	}
+	if update.ShowNoteReactions != nil {
+		query.Column("show_note_reactions")
 	}
 	if update.AllowStacking != nil {
 		query.Column("allow_stacking")

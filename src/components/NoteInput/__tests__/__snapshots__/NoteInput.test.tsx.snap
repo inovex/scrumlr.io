@@ -13,6 +13,7 @@ exports[`Note Input should render correctly 1`] = `
     style="overflow-x: hidden; word-wrap: break-word; overflow-y: hidden;"
   />
   <button
+    aria-label="Create note"
     class="note-input__add-button"
     tabindex="-1"
     type="submit"

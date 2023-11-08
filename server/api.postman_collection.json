@@ -1,10 +1,9 @@
 {
 	"info": {
-		"_postman_id": "9bcffd62-c660-4fc9-9e2e-0d6a0ee381c7",
+		"_postman_id": "4878c8e9-c563-4710-acbc-78c551583a72",
 		"name": "scrumlr.io",
 		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the *User* section for more information.\n\n1.  A user signs into the application (see *Login* section)\n2.  The user creates a new board (`POST` on `/boards`, checkout *Boards* section)\n3.  Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout *Participants* section)\n    1.  If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2.  If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3.  If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section *Realtime* to see how you can open websockets and listen to live updates on the data.",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "13848138"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -2946,6 +2945,302 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "Reactions",
+			"item": [
+				{
+					"name": "Get reactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/reactions/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"reactions",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get reactions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}/reactions/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}",
+										"reactions",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 13 Jul 2023 15:52:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "323"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"58562099-099e-4436-ac4b-bfbde912c042\",\n        \"note\": \"69711746-baf2-42f5-bcaa-ce1bdcf45d75\",\n        \"user\": \"29358bed-2933-46c9-8fd3-6597d500493c\",\n        \"reactionType\": \"heart\"\n    },\n    {\n        \"id\": \"34dd8e86-42dc-46ad-8ee4-f0d301839ae4\",\n        \"note\": \"69711746-baf2-42f5-bcaa-ce1bdcf45d75\",\n        \"user\": \"29358bed-2933-46c9-8fd3-6597d500493c\",\n        \"reactionType\": \"like\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create reaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"reaction_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"note\": \"{{note_id}}\",\n    \"reactionType\": \"like\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/reactions/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"reactions",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create reaction",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"note\": \"{{note_id}}\",\n    \"reactionType\": \"like\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}/reactions/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}",
+										"reactions",
+										""
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 13 Jul 2023 16:09:42 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "160"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"f1a90e1d-d8b4-44b6-8b4f-c784ec191902\",\n    \"note\": \"34132d00-adf8-4dfa-8cfe-b00bc8a75ab1\",\n    \"user\": \"5828fb99-53ed-4224-87a7-3151a4c39ef6\",\n    \"reactionType\": \"like\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get reaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"reaction_id\", jsonData.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/reactions/{{reaction_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"reactions",
+								"{{reaction_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get reaction",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}/reactions/{{reaction_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}",
+										"reactions",
+										"{{reaction_id}}"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 13 Jul 2023 16:09:56 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "160"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"f1a90e1d-d8b4-44b6-8b4f-c784ec191902\",\n    \"note\": \"34132d00-adf8-4dfa-8cfe-b00bc8a75ab1\",\n    \"user\": \"5828fb99-53ed-4224-87a7-3151a4c39ef6\",\n    \"reactionType\": \"like\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update reaction",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"reactionType\": \"laughing\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/reactions/{{reaction_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"reactions",
+								"{{reaction_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete reaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/reactions/{{reaction_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"reactions",
+								"{{reaction_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
@@ -2991,16 +3286,20 @@
 			"value": "{user}"
 		},
 		{
-			"key": "note_id",
-			"value": "{note}"
-		},
-		{
 			"key": "voting_id",
 			"value": "{voting}"
 		},
 		{
 			"key": "user_id",
 			"value": "{user}"
+		},
+		{
+			"key": "note_id",
+			"value": "{note}"
+		},
+		{
+			"key": "reaction_id",
+			"value": "{reaction}"
 		}
 	]
 }

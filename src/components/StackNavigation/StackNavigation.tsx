@@ -4,6 +4,7 @@ import {Note} from "types/note";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./StackNavigation.scss";
+import {useTranslation} from "react-i18next";
 import {StackNavigationDots} from "./Dots/StackNavigationDots";
 import {ApplicationState} from "../../types";
 import {useAppSelector} from "../../store";
@@ -17,6 +18,7 @@ interface StackNavigationProps {
 }
 
 export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack, prevColumnStack, nextColumnStack, handleModeration}: StackNavigationProps) => {
+  const {t} = useTranslation();
   const noteFocus = useAppSelector((s: ApplicationState) => s.view.noteFocused);
 
   const navigate = useNavigate();
@@ -65,6 +67,7 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
           handleNavigation(currentIndex - 1);
         }}
         className="stack-view__navigation-button"
+        aria-label={t("StackView.prevNote")}
       >
         <LeftArrowIcon
           onClick={(e) => {
@@ -81,6 +84,7 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
           handleNavigation(currentIndex + 1);
         }}
         className="stack-view__navigation-button"
+        aria-label={t("StackView.nextNote")}
       >
         <RightArrowIcon
           onClick={(e) => {

@@ -90,9 +90,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
 
           // other functions
           if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            addNote(value);
-            setValue("");
+            e.currentTarget.form?.submit();
           }
         }}
       />
@@ -115,6 +113,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         type="submit"
         tabIndex={-1} // skip focus
         className="note-input__add-button"
+        aria-label={t("NoteInput.create")}
       >
         <PlusIcon className="note-input__icon--add" />
       </button>

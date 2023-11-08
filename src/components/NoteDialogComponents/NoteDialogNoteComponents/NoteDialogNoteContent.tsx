@@ -18,9 +18,10 @@ type NoteDialogNoteContentProps = {
   authorId: string;
   text: string;
   viewer: Participant;
+  showNoteReactions: boolean; // used for style adjustments
 };
 
-export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer}: NoteDialogNoteContentProps) => {
+export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, showNoteReactions}: NoteDialogNoteContentProps) => {
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useDispatch();
   const {t} = useTranslation();
@@ -55,7 +56,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const isImage = useImageChecker(text);
 
   return (
-    <div className="note-dialog__note-content">
+    <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})}>
       {isImage ? (
         <>
           <img

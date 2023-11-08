@@ -6,7 +6,7 @@ import dummyBoardData from "./dummy-board-data.json";
 describe("the board export functions", () => {
   it("returns the board data in markdown format", async () => {
     // eslint-disable-next-line jest/valid-expect-in-promise
-    import("i18nTest").then(async () => {
+    await import("i18nTest").then(async () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const boardData: BoardDataType = dummyBoardData;

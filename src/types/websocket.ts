@@ -6,6 +6,8 @@ import {Vote} from "./vote";
 import {Voting} from "./voting";
 import {Request} from "./request";
 import {Assignment} from "./assignment";
+import {Reaction} from "./reaction";
+import {BoardReactionType} from "./boardReaction";
 
 export interface BoardInitEvent {
   type: "INIT";
@@ -13,6 +15,7 @@ export interface BoardInitEvent {
     board: Board;
     columns: Column[];
     notes?: Note[];
+    reactions?: Reaction[];
     votings?: Voting[];
     votes?: Vote[];
     participants: Participant[];
@@ -61,6 +64,21 @@ export interface DeletedNoteEvent {
     note: string;
     deleteStack: boolean;
   };
+}
+
+export interface AddedReactionEvent {
+  type: "REACTION_ADDED";
+  data: Reaction;
+}
+
+export interface DeletedReactionEvent {
+  type: "REACTION_DELETED";
+  data: string;
+}
+
+export interface UpdatedReactionEvent {
+  type: "REACTION_UPDATED";
+  data: Reaction;
 }
 
 export interface RequestCreatedEvent {
@@ -114,6 +132,10 @@ export interface DeletedAssignmentEvent {
   type: "ASSIGNMENT_DELETED";
   data: string;
 }
+export interface AddedBoardReactionEvent {
+  type: "BOARD_REACTION_ADDED";
+  data: BoardReactionType;
+}
 
 export type ServerEvent =
   | BoardInitEvent
@@ -125,6 +147,9 @@ export type ServerEvent =
   | UpdatedNotesEvent
   | DeletedNoteEvent
   | SyncNotesEvent
+  | AddedReactionEvent
+  | DeletedReactionEvent
+  | UpdatedReactionEvent
   | RequestCreatedEvent
   | RequestUpdatedEvent
   | ParticipantCreatedEvent
@@ -134,4 +159,5 @@ export type ServerEvent =
   | VotingUpdatedEvent
   | UpdatedVotesEvent
   | CreatedAssignmentEvent
-  | DeletedAssignmentEvent;
+  | DeletedAssignmentEvent
+  | AddedBoardReactionEvent;

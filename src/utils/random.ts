@@ -7,3 +7,13 @@ export const generateRandomString = (length = 8) => {
   }
   return result;
 };
+
+/**
+ * returns a random whole number in the given range
+ * @param min lower bound
+ * @param max upper bound
+ */
+export const getRandomNumberInRange = (min: number, max: number): number => {
+  const range = max - min + 1;
+  return Math.floor(Math.random() * range) + min;
+};
