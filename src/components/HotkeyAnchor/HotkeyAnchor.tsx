@@ -30,7 +30,7 @@ export const HotkeyAnchor = () => {
     TOGGLE_MODERATION,
     TOGGLE_RAISED_HAND,
     TOGGLE_READY_STATE,
-    SHOW_SETTINGS,
+    TOGGLE_SETTINGS,
     TOGGLE_HOTKEYS,
     TOGGLE_SHOW_AUTHORS,
     TOGGLE_SHOW_OTHER_USERS_NOTES,
@@ -117,13 +117,13 @@ export const HotkeyAnchor = () => {
     Toast.info({title: `${t("TimerToggleButton.customTime")}: ${minutes} ${t("TimerToggleButton.min")}`});
   };
 
-  const showSettings = () => navigate("settings");
+  const toggleSettings = () => (window.location.pathname.includes("settings") ? navigate("") : navigate("settings/board"));
 
   useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [state.hotkeysAreActive, state.hotkeyNotificationsEnabled]);
   useHotkeys(TOGGLE_MODERATION, toggleModeration, hotkeyOptions, [state.moderation, state.hotkeyNotificationsEnabled]);
   useHotkeys(TOGGLE_READY_STATE, toggleReadyState, hotkeyOptions, [isReady, state.hotkeyNotificationsEnabled]);
   useHotkeys(TOGGLE_RAISED_HAND, toggleRaiseHand, hotkeyOptions, [raisedHand, state.hotkeyNotificationsEnabled]);
-  useHotkeys(SHOW_SETTINGS, showSettings, hotkeyOptions);
+  useHotkeys(TOGGLE_SETTINGS, toggleSettings, hotkeyOptions);
   useHotkeys(
     TOGGLE_SHOW_AUTHORS,
     (e: KeyboardEvent) => {
