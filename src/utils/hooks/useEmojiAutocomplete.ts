@@ -13,10 +13,12 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
   {
     maxInputLength = MAX_NOTE_LENGTH,
     initialValue = "",
+    suggestionsHidden = false,
   }: {
     maxInputLength?: number;
     initialValue?: string;
-  } = {maxInputLength: MAX_NOTE_LENGTH, initialValue: ""} // names 3 times?! better syntax please @typescript ^^
+    suggestionsHidden?: boolean;
+  } = {maxInputLength: MAX_NOTE_LENGTH, initialValue: "", suggestionsHidden: false} // names 3 times?! better syntax please @typescript ^^
 ) => {
   const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
 
@@ -91,6 +93,10 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     setEmojiName(newEmojiName);
   }, [value, cursor, emojiData, acceptSuggestion]);
 
+  useEffect(() => {
+    containerRef.current?.scrollIntoView();
+  }, [containerRef, suggestions]);
+
   const updateCursor = useCallback((target: InputElement) => setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null), []);
 
   // handle: update input, update suggestions
@@ -120,11 +126,13 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
         break;
       }
       case "ArrowDown": {
+        if (suggestionsHidden) return;
         e.preventDefault();
         setFocusedIndex((prev) => (prev + 1) % suggestions.length);
         break;
       }
       case "ArrowUp": {
+        if (suggestionsHidden) return;
         e.preventDefault();
         setFocusedIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
         break;

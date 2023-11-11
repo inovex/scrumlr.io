@@ -21,9 +21,10 @@ type NoteDialogNoteContentProps = {
   text: string;
   viewer: Participant;
   showNoteReactions: boolean; // used for style adjustments
+  isStackedNote: boolean;
 };
 
-export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, showNoteReactions}: NoteDialogNoteContentProps) => {
+export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, showNoteReactions, isStackedNote}: NoteDialogNoteContentProps) => {
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useDispatch();
   const {t} = useTranslation();
@@ -57,7 +58,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(text);
 
-  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({initialValue: text});
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({initialValue: text, suggestionsHidden: isStackedNote});
 
   return (
     <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})} ref={emoji.containerRef}>
@@ -102,9 +103,12 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
               }
             }}
           />
-          <div className="note-dialog__note-content--emoji-suggestions">
-            <EmojiSuggestions {...emoji.suggestionsProps} />
-          </div>
+
+          {!isStackedNote && (
+            <div className="note-dialog__note-content--emoji-suggestions">
+              <EmojiSuggestions {...emoji.suggestionsProps} />
+            </div>
+          )}
         </>
       )}
     </div>
