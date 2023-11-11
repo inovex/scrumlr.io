@@ -1,5 +1,5 @@
 import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps} from "react";
-import {MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
+import {MAX_NOTE_LENGTH, MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useOnBlur} from "./useOnBlur";
 
@@ -9,10 +9,18 @@ export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean
 
 type InputElement = HTMLTextAreaElement | HTMLInputElement;
 
-export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({maxInputLength}: {maxInputLength?: number}) => {
+export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
+  {
+    maxInputLength = MAX_NOTE_LENGTH,
+    initialValue = "",
+  }: {
+    maxInputLength?: number;
+    initialValue?: string;
+  } = {maxInputLength: MAX_NOTE_LENGTH, initialValue: ""} // names 3 times?! better syntax please @typescript ^^
+) => {
   const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(initialValue);
   // null -> no cursor
   const [cursor, setCursor] = useState<number | null>(null);
 
@@ -34,7 +42,8 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({maxI
             .slice(0, cursor ?? -1)
             .split("")
             .findLastIndex((c) => /\s+/.test(c)) + 1;
-        return prev.slice(0, lastWordStart) + emoji + prev.slice(cursor);
+        // add space behind emoji
+        return `${prev.slice(0, lastWordStart)}${emoji} ${prev.slice(cursor)}`;
       });
     },
     [cursor]
@@ -149,6 +158,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>({maxI
       onChange: handleChange,
       onKeyDown: handleKeyDown,
       onKeyUp: handleKeyUp,
+      maxLength: maxInputLength,
       value,
     } satisfies HTMLProps<InputElement>,
   };

@@ -17,14 +17,13 @@ import {EmojiSuggestions} from "components/EmojiSuggestions";
 
 export interface NoteInputProps {
   columnId: string;
-  maxNoteLength: number;
   columnIndex: number;
   columnIsVisible: boolean;
   toggleColumnVisibility: () => void;
   hotkeyKey?: string;
 }
 
-export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
@@ -42,9 +41,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
     }
   };
 
-  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLFormElement>({
-    maxInputLength: maxNoteLength,
-  });
+  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLFormElement>();
   const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
@@ -72,28 +69,28 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
       }}
       ref={emoji.containerRef}
     >
-      <div className="note-input__emoji-autocomplete">
-        <EmojiSuggestions {...emoji.suggestionsProps} />
-      </div>
       <TextareaAutosize
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
-        maxLength={maxNoteLength}
         id={`note-input-${columnId}`}
         data-tooltip-content={hotkeyKey}
         {...emoji.inputBindings}
         onKeyDown={(e) => {
           // handle emoji input
           emoji.inputBindings.onKeyDown(e);
-          if (e.isDefaultPrevented()) return;
+          if (e.defaultPrevented) return;
 
           // other functions
           if (e.key === "Enter" && !e.shiftKey) {
-            e.currentTarget.form?.submit();
+            e.preventDefault();
+            e.currentTarget.form?.requestSubmit();
           }
         }}
       />
+      <div className="note-input__emoji-suggestions">
+        <EmojiSuggestions {...emoji.suggestionsProps} />
+      </div>
       <Tooltip
         anchorSelect={`#note-input-${columnId}`}
         place="bottom"

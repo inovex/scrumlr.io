@@ -17,15 +17,12 @@
 }
 
 .note-dialog__note-wrapper {
-  margin: 0 $margin--default $margin--default 0;
+  margin: 0 $margin--default $margin--large 0;
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
-}
-
-.note-dialog__note-wrapper .note-dialog__note:last-child {
-  margin-bottom: 0;
+  gap: $margin--default;
 }
 
 @media #{$smartphone} {

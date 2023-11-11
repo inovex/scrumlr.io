@@ -11,6 +11,8 @@ import {isEqual} from "underscore";
 import classNames from "classnames";
 import {createPortal} from "react-dom";
 import {Toast} from "utils/Toast";
+import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {EmojiSuggestions} from "components/EmojiSuggestions";
 import i18n from "../../../i18n";
 
 type NoteDialogNoteContentProps = {
@@ -55,8 +57,10 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(text);
 
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({initialValue: text});
+
   return (
-    <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})}>
+    <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})} ref={emoji.containerRef}>
       {isImage ? (
         <>
           <img
@@ -81,19 +85,27 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
             )}
         </>
       ) : (
-        <textarea
-          className="note-dialog__note-content--text"
-          disabled={!editable}
-          onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
-          onFocus={onFocus}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              (e.target as HTMLTextAreaElement).blur();
-            }
-          }}
-          defaultValue={text}
-        />
+        <>
+          <textarea
+            className="note-dialog__note-content--text"
+            disabled={!editable}
+            onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
+            onFocus={onFocus}
+            {...emoji.inputBindings}
+            onKeyDown={(e) => {
+              emoji.inputBindings.onKeyDown(e);
+              if (e.defaultPrevented) return;
+
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                (e.target as HTMLTextAreaElement).blur();
+              }
+            }}
+          />
+          <div className="note-dialog__note-content--emoji-suggestions">
+            <EmojiSuggestions {...emoji.suggestionsProps} />
+          </div>
+        </>
       )}
     </div>
   );
