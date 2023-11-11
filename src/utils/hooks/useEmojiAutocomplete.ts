@@ -93,10 +93,6 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     setEmojiName(newEmojiName);
   }, [value, cursor, emojiData, acceptSuggestion]);
 
-  useEffect(() => {
-    containerRef.current?.scrollIntoView();
-  }, [containerRef, suggestions]);
-
   const updateCursor = useCallback((target: InputElement) => setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null), []);
 
   // handle: update input, update suggestions
