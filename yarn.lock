@@ -2513,10 +2513,10 @@
   resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.3.tgz#a136f83b0758698df454e328759dbd3d44555311"
   integrity sha512-NfQ4gyz38SL8sDNrSixxU2Os1a5xcdFxipAFxYEuLUlvU2uDwS4NUpsImcf1//SlWItCVMMLiylsxbmNMToV/g==
 
-"@types/underscore@^1.11.13":
-  version "1.11.13"
-  resolved "https://registry.yarnpkg.com/@types/underscore/-/underscore-1.11.13.tgz#a7bc9dd049621399a492cf4691e1d2ba01b8c1e0"
-  integrity sha512-x/KVdl2MXWKrQmcGktLLZfT6LVDIgSZhWWWrKgoEXSv2BSUkqJOoELJMphnnZBbrpZ62U8z+9eyusxyIP8lxFw==
+"@types/underscore@^1.11.14":
+  version "1.11.14"
+  resolved "https://registry.yarnpkg.com/@types/underscore/-/underscore-1.11.14.tgz#7ed563754abe73f95e91a2a3e630f80a6760a354"
+  integrity sha512-13RYuwqoXZgLO3Nu4zsISqYAexCILtKIMGx+7+vY6gEsGFjrcHU57iDxPmaA2E5d4v5NwebNweiXLbaZWHWI9A==
 
 "@types/use-sync-external-store@^0.0.3":
   version "0.0.3"
