@@ -14,7 +14,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-migrate/migrate/v4 v4.16.2
 	github.com/google/uuid v1.4.0
-	github.com/gorilla/websocket v1.5.0
+	github.com/gorilla/websocket v1.5.1
 	github.com/lestrrat-go/jwx/v2 v2.0.16
 	github.com/markbates/goth v1.78.0
 	github.com/nats-io/nats.go v1.31.0
@@ -27,7 +27,7 @@ require (
 	github.com/uptrace/bun/extra/bundebug v1.1.16
 	github.com/urfave/cli/v2 v2.25.7
 	go.uber.org/zap v1.26.0
-	golang.org/x/crypto v0.14.0
+	golang.org/x/crypto v0.15.0
 )
 
 require (
@@ -97,7 +97,7 @@ require (
 	golang.org/x/mod v0.10.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/oauth2 v0.1.0 // indirect
-	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
