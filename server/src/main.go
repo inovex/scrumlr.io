@@ -17,16 +17,17 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/assignments"
+	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/reactions"
-  "scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
 
 	"github.com/pkg/errors"
 	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2/altsrc"
 )
 
 func main() {
@@ -37,163 +38,170 @@ func main() {
 		UsageText: "scrumlr [global options]",
 		Action:    run,
 		Flags: []cli.Flag{
-			&cli.IntFlag{
+			altsrc.NewIntFlag(&cli.IntFlag{
 				Name:    "port",
 				Aliases: []string{"p"},
 				EnvVars: []string{"SCRUMLR_SERVER_PORT"},
 				Usage:   "the `port` of the server to launch",
 				Value:   8080,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "nats",
 				Aliases: []string{"n"},
 				EnvVars: []string{"SCRUMLR_SERVER_NATS_URL"},
 				Usage:   "the `url` of the nats server",
 				Value:   "nats://localhost:4222", // nats://nats:4222
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "redis-address",
 				EnvVars: []string{"SCRUMLR_SERVER_REDIS_HOST"},
 				Usage:   "the `address` of the redis server. Example `localhost:6379`. If redis-address is set, it's used over the default nats",
 				Value:   "",
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "redis-username",
 				EnvVars: []string{"SCRUMLR_SERVER_REDIS_USERNAME"},
 				Usage:   "the redis user (if required)",
 				Value:   "",
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "redis-password",
 				EnvVars: []string{"SCRUMLR_SERVER_REDIS_PASSWORD"},
 				Usage:   "the redis password (if required)",
 				Value:   "",
-			},
-			&cli.BoolFlag{
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:    "insecure",
 				Aliases: []string{"i"},
 				EnvVars: []string{"SCRUMLR_INSECURE"},
 				Usage:   "use default and embedded key to sign jwt's",
 				Value:   false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "unsafe-key",
 				EnvVars: []string{"SCRUMLR_UNSAFE_PRIVATE_KEY"},
 				Usage:   "the private key which should be replaced by the new key, that'll be used to sign the jwt's - needed in ES512 (ecdsa)",
 				Value:   "",
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "key",
 				EnvVars: []string{"SCRUMLR_PRIVATE_KEY"},
 				Usage:   "the private key, used to sign the jwt's - needed in ES512 (ecdsa)",
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:    "database",
 				Aliases: []string{"d"},
 				EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
 				Usage:   "the connection `url` for the database",
 				Value:   "postgresql://localhost:5432", // postgres://YourUserName:YourPassword@YourHostname:5432/YourDatabaseName?sslmode=disable
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "base-path",
 				Aliases:  []string{"b"},
 				EnvVars:  []string{"SCRUMLR_BASE_PATH"},
 				Usage:    "the base `path` of the application (e.g. '/api'); must start with '/'",
 				Required: false,
 				Value:    "/",
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-callback-host",
 				Aliases:  []string{"c"},
 				EnvVars:  []string{"SCRUMLR_AUTH_CALLBACK_HOST"},
 				Usage:    "the protocol and host for the auth provider callbacks (e.g. https://scrumlr.io)",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-google-client-id",
 				EnvVars:  []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_ID"},
 				Usage:    "the client `id` for Google",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-google-client-secret",
 				EnvVars:  []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET"},
 				Usage:    "the client `secret` for Google",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-github-client-id",
 				EnvVars:  []string{"SCRUMLR_AUTH_GITHUB_CLIENT_ID"},
 				Usage:    "the client `id` for GitHub",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-github-client-secret",
 				EnvVars:  []string{"SCRUMLR_AUTH_GITHUB_CLIENT_SECRET"},
 				Usage:    "the client `secret` for GitHub",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-microsoft-client-id",
 				EnvVars:  []string{"SCRUMLR_AUTH_MICROSOFT_CLIENT_ID"},
 				Usage:    "the client `id` for Microsoft",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-microsoft-client-secret",
 				EnvVars:  []string{"SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET"},
 				Usage:    "the client `secret` for Microsoft",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-azure-ad-tenant-id",
 				EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_TENANT_ID"},
 				Usage:    "the tenant `id` for Azure AD",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-azure-ad-client-id",
 				EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_ID"},
 				Usage:    "the client `id` for Azure AD",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-azure-ad-client-secret",
 				EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET"},
 				Usage:    "the client `secret` for Azure AD",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-apple-client-id",
 				EnvVars:  []string{"SCRUMLR_AUTH_APPLE_CLIENT_ID"},
 				Usage:    "the client `id` for Apple",
 				Required: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-apple-client-secret",
 				EnvVars:  []string{"SCRUMLR_AUTH_APPLE_CLIENT_SECRET"},
 				Usage:    "the client `secret` for Apple",
 				Required: false,
-			},
-			&cli.BoolFlag{
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:    "verbose",
 				Aliases: []string{"v"},
 				Usage:   "enable verbose logging",
 				Value:   false,
-			},
-			&cli.BoolFlag{
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:  "disable-check-origin",
 				Usage: "disable check origin (strongly suggestion to only use this for development)",
 				Value: false,
-			},
-			&cli.StringFlag{
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "feedback-webhook-url",
 				EnvVars:  []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"},
 				Usage:    "the url where feedback will be sent to",
 				Required: false,
+			}),
+			&cli.StringFlag{
+				Name:     "config",
+				EnvVars:  []string{"SCRUMLR_CONFIG_PATH"},
+				Usage:    "TOML `filepath` to be loaded ",
+				Required: false,
 			},
 		},
 	}
+	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
 	// check if process is executed within docker environment
 	if _, err := os.Stat("/.dockerenv"); err != nil {
