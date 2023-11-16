@@ -26,8 +26,6 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({label, items, curre
     }
   }, [isOpen]);
 
-  let Icon = current.icon!;
-
   const handleBlur = (e: FocusEvent<HTMLDivElement, Element>) => {
     if (!e.currentTarget.contains(e.relatedTarget)) setIsOpen(false);
   };
@@ -43,7 +41,7 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({label, items, curre
       <button className="settings-dropdown__button" onClick={() => handleClick()} role="combobox" aria-controls="dropdown-list" aria-expanded={isOpen}>
         <span>{label}</span>
         <p className="settings-dropdown__item--current">
-          <Icon className="settings-dropdown__item-icon" />
+          {current.icon && <current.icon className="settings-dropdown__item-icon" />}
           <span>{current.text}</span>
           <DropdownIcon className="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown" />
         </p>
@@ -51,18 +49,14 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({label, items, curre
       <ul id="dropdown-list" className={classNames({"settings-dropdown__list": true, active: isOpen})} role="listbox" ref={dropdownListRef}>
         {items
           .filter((item) => current !== item)
-          .map((item) => {
-            Icon = item.icon!;
-
-            return (
-              <li className="settings-dropdown__item" key={item.text}>
-                <button className="settings-dropdown__button" onClick={() => handleClick(item.callback)}>
-                  {Icon && <Icon className="settings-dropdown__item-icon" />}
-                  <span>{item.text}</span>
-                </button>
-              </li>
-            );
-          })}
+          .map((item) => (
+            <li className="settings-dropdown__item" key={item.text}>
+              <button className="settings-dropdown__button" onClick={() => handleClick(item.callback)}>
+                {item.icon && <item.icon className="settings-dropdown__item-icon" />}
+                <span>{item.text}</span>
+              </button>
+            </li>
+          ))}
       </ul>
     </div>
   );

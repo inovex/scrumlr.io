@@ -378,6 +378,7 @@
     "SyncModeDescription": "Scrumlr will match the appearance mode (dark or light) with your active system settings",
     "AllowNotifications": "Allow Notifications",
     "Language": "Language",
+    "EmojiSkinTone": "Emoji skin tone",
     "colorScheme": "Color scheme",
     "colorSchemeLight": "Light",
     "colorSchemeDark": "Dark",

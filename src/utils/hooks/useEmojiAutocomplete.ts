@@ -1,6 +1,8 @@
 import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps} from "react";
 import {MAX_NOTE_LENGTH, MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {SkinToneComponent} from "types/skinTone";
+import {useAppSelector} from "store";
 import {useOnBlur} from "./useOnBlur";
 
 export const emojiRegex = /^:([\w\d]+):?$/i;
@@ -8,6 +10,12 @@ export const emojiRegex = /^:([\w\d]+):?$/i;
 export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean];
 
 type InputElement = HTMLTextAreaElement | HTMLInputElement;
+
+export function emojiWithSkinTone(emoji: string, skinTone: SkinToneComponent) {
+  // the emoji with skin color support is assumed to be the first unicode character
+  // this means emojis with multiple people are unfortunately not supported
+  return emoji.substring(0, 2) + skinTone + emoji.substring(2);
+}
 
 export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
   {
@@ -30,10 +38,12 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
   const [suggestions, setSuggestions] = useState<EmojiData[]>([]);
   const [focusedIndex, setFocusedIndex] = useState(0);
 
+  const skinToneComponent = useAppSelector((state) => state.skinTone.component);
+
   const containerRef = useOnBlur<ContainerElement>(() => setEmojiName(""));
 
   const acceptSuggestion = useCallback(
-    (emoji: string) => {
+    (insertedEmoji: string) => {
       if (cursor === null) return;
 
       setValue((prev) => {
@@ -45,7 +55,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
             .split("")
             .findLastIndex((c) => /\s+/.test(c)) + 1;
         // add space behind emoji
-        return `${prev.slice(0, lastWordStart)}${emoji} ${prev.slice(cursor)}`;
+        return `${prev.slice(0, lastWordStart)}${insertedEmoji} ${prev.slice(cursor)}`;
       });
     },
     [cursor]
@@ -83,7 +93,10 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     if (lastWord.endsWith(":")) {
       const emoji = emojiData?.find(([slug]) => slug === newEmojiName);
 
-      if (emoji) acceptSuggestion(emoji[1]);
+      if (emoji) {
+        const [, emojiString, supportsSkintones] = emoji;
+        acceptSuggestion(supportsSkintones ? emojiWithSkinTone(emojiString, skinToneComponent) : emojiString);
+      }
 
       // dont set emoji name if emoji is not found
       return;
@@ -91,7 +104,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
 
     // emoji autocomplete
     setEmojiName(newEmojiName);
-  }, [value, cursor, emojiData, acceptSuggestion]);
+  }, [value, cursor, emojiData, acceptSuggestion, skinToneComponent]);
 
   const updateCursor = useCallback((target: InputElement) => setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null), []);
 
@@ -118,7 +131,8 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
       case "Enter":
       case "Tab": {
         e.preventDefault();
-        acceptSuggestion(suggestions[focusedIndex][1]);
+        const [, emojiString, supportsSkintones] = suggestions[focusedIndex];
+        acceptSuggestion(supportsSkintones ? emojiWithSkinTone(emojiString, skinToneComponent) : emojiString);
         break;
       }
       case "ArrowDown": {

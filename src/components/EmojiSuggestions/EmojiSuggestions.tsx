@@ -1,7 +1,8 @@
 import classNames from "classnames";
-import {EmojiData} from "utils/hooks/useEmojiAutocomplete";
+import {EmojiData, emojiWithSkinTone} from "utils/hooks/useEmojiAutocomplete";
 import "./EmojiSuggestions.scss";
 import {useEffect, useRef} from "react";
+import {useAppSelector} from "store";
 
 type EmojiSuggestionsProps = {
   suggestions: EmojiData[];
@@ -17,11 +18,13 @@ export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSugge
     suggestionsRef.current[keyboardFocusedIndex]?.scrollIntoView({block: "nearest"});
   }, [keyboardFocusedIndex, suggestions]);
 
+  const skinToneComponent = useAppSelector((state) => state.skinTone.component);
+
   if (suggestions.length === 0) return null;
 
   return (
     <ul className="emoji-suggestions">
-      {suggestions.map(([slug, emoji, _supportsSkintones], i) => (
+      {suggestions.map(([slug, emoji, supportsSkintones], i) => (
         <li
           className={classNames("emoji-suggestions__element", {"emoji-suggestions__element--focus": i === keyboardFocusedIndex})}
           onMouseDown={(e) => {
@@ -34,7 +37,7 @@ export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSugge
             suggestionsRef.current[i] = el!;
           }}
         >
-          <span className="emoji-suggestions__emoji">{emoji}</span>:{slug}:
+          <span className="emoji-suggestions__emoji">{supportsSkintones ? emojiWithSkinTone(emoji, skinToneComponent) : emoji}</span>:{slug}:
         </li>
       ))}
     </ul>
