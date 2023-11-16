@@ -24,22 +24,25 @@ export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSugge
 
   return (
     <ul className="emoji-suggestions">
-      {suggestions.map(([slug, emoji, supportsSkintones], i) => (
-        <li
-          className={classNames("emoji-suggestions__element", {"emoji-suggestions__element--focus": i === keyboardFocusedIndex})}
-          onMouseDown={(e) => {
-            // Prevent the input from losing focus
-            e.preventDefault();
-            acceptSuggestion(emoji);
-          }}
-          key={slug}
-          ref={(el) => {
-            suggestionsRef.current[i] = el!;
-          }}
-        >
-          <span className="emoji-suggestions__emoji">{supportsSkintones ? emojiWithSkinTone(emoji, skinToneComponent) : emoji}</span>:{slug}:
-        </li>
-      ))}
+      {suggestions.map(([slug, emoji, supportsSkintones], i) => {
+        const actualEmoji = supportsSkintones ? emojiWithSkinTone(emoji, skinToneComponent) : emoji;
+        return (
+          <li
+            className={classNames("emoji-suggestions__element", {"emoji-suggestions__element--focus": i === keyboardFocusedIndex})}
+            onMouseDown={(e) => {
+              // Prevent the input from losing focus
+              e.preventDefault();
+              acceptSuggestion(actualEmoji);
+            }}
+            key={slug}
+            ref={(el) => {
+              suggestionsRef.current[i] = el!;
+            }}
+          >
+            <span className="emoji-suggestions__emoji">{actualEmoji}</span>:{slug}:
+          </li>
+        );
+      })}
     </ul>
   );
 };
