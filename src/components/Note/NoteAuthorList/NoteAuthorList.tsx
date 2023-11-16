@@ -17,7 +17,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
     const allAuthors = authors
       .map((a) => {
         const isSelf = a?.user.id === props.viewer.user.id; // assertion: viewer is self
-        const displayName = isSelf ? t("Note.me") : a!.user.name;
+        const displayName = isSelf ? t("Note.me") : a.user.name;
         return {
           ...a,
           displayName,

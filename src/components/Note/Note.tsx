@@ -101,9 +101,7 @@ export const Note = (props: NoteProps) => {
     >
       <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
-          <div className="note__author-container">
-            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
-          </div>
+          <div className="note__author-container">{showAuthors && <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />}</div>
           <Votes noteId={props.noteId!} aggregateVotes />
         </header>
         {isImage ? (

@@ -18,12 +18,13 @@ interface NoteDialogNoteHeaderProps {
 export const NoteDialogNoteHeader = (props: NoteDialogNoteHeaderProps) => {
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
+  const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const participants = [me, ...others];
   const author = participants.find((p) => p?.user.id === props.authorId)!;
   return (
     <div className="note-dialog-note-header__root">
       <div className="note-dialog-note-header__author-list-container">
-        <NoteAuthorList authors={[author]} showAuthors={props.showAuthors} viewer={props.viewer} />
+        {showAuthors && <NoteAuthorList authors={[author]} showAuthors={props.showAuthors} viewer={props.viewer} />}
       </div>
       <Votes {...props} className="note-dialog__note-votes" />
     </div>
