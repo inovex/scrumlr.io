@@ -36,9 +36,11 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const notes = useAppSelector(
     (state) =>
       state.notes
-        .filter((note) => !note.position.stack)
-        .filter((note) => (state.board.data?.showNotesOfOtherUsers || state.auth.user!.id === note.author) && note.position.column === id)
-        .map((note) => note.id),
+        ? state.notes
+            .filter((note) => !note.position.stack)
+            .filter((note) => (state.board.data?.showNotesOfOtherUsers || state.auth.user!.id === note.author) && note.position.column === id)
+            .map((note) => note.id)
+        : [],
     _.isEqual
   );
   const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);

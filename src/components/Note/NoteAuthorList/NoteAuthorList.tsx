@@ -12,12 +12,16 @@ type NoteAuthorListProps = {
 export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const {t} = useTranslation();
 
+  if (!props.authors[0] || props.authors.length === 0) {
+    return null;
+  }
+
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
   const prepareAuthors = (authors: Participant[]): ParticipantExtendedInfo[] => {
     const allAuthors = authors
       .map((a) => {
         const isSelf = a?.user.id === props.viewer.user.id; // assertion: viewer is self
-        const displayName = isSelf ? t("Note.me") : a!.user.name;
+        const displayName = isSelf ? t("Note.me") : a.user.name;
         return {
           ...a,
           displayName,
@@ -36,7 +40,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
 
     // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
     // the other authors are excluded as we only require the stack author
-    if (!props.showAuthors && props.viewer.user.id === props.authors[0].user!.id) {
+    if (!props.showAuthors && props.viewer.user.id === props.authors[0].user.id) {
       return [allAuthors[0]]; // stack author is always first element
     }
 
