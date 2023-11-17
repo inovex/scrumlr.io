@@ -41,7 +41,7 @@ export const Note = (props: NoteProps) => {
 
   // all authors of a note, including its children if it's a stack.
   const authors = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
+    const noteAuthor = state.participants?.others.concat(state.participants?.self).find((p) => p.user.id === note?.author);
     const childrenNoteAuthors = state.notes
       // get all notes which are in the same stack as the main note
       .filter((n) => n.position.stack === props.noteId)
@@ -101,7 +101,9 @@ export const Note = (props: NoteProps) => {
     >
       <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
-          <div className="note__author-container">{showAuthors && <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />}</div>
+          <div className="note__author-container">
+            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+          </div>
           <Votes noteId={props.noteId!} aggregateVotes />
         </header>
         {isImage ? (
