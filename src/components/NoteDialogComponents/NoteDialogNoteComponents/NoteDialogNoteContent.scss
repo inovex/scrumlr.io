@@ -100,7 +100,7 @@
   top: calc(100% + $padding--small);
   left: 0;
   width: 100%;
-  max-height: min(300px, calc(100svh - $column-emoji-suggestions__approx-top-distance));
+  max-height: min(300px, calc(100svh - $note-dialog-emoji-suggestions__approx-top-distance));
   margin-bottom: $margin--large;
 
   z-index: $note-dialog__emoji-suggestions-z-index;

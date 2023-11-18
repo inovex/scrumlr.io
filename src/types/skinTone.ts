@@ -1,3 +1,4 @@
+// the [?] characters are the skin tone modifiers
 export const skinTones = {
   default: "",
   light: "🏻",

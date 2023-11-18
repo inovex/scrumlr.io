@@ -11,10 +11,14 @@ type EmojiSuggestionsProps = {
 };
 
 export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSuggestion}: EmojiSuggestionsProps) => {
+  // the refs of the elements to scroll into view
   const suggestionsRef = useRef<HTMLLIElement[]>([]);
 
   useEffect(() => {
+    // whenever the suggestions change, remove the old refs
     suggestionsRef.current = suggestionsRef.current.slice(0, suggestions.length);
+
+    // scroll the currently selected element into view
     suggestionsRef.current[keyboardFocusedIndex]?.scrollIntoView({block: "nearest"});
   }, [keyboardFocusedIndex, suggestions]);
 
@@ -30,7 +34,7 @@ export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSugge
           <li
             className={classNames("emoji-suggestions__element", {"emoji-suggestions__element--focus": i === keyboardFocusedIndex})}
             onMouseDown={(e) => {
-              // Prevent the input from losing focus
+              // using onMouseDown to prevent the input from losing focus
               e.preventDefault();
               acceptSuggestion(actualEmoji);
             }}

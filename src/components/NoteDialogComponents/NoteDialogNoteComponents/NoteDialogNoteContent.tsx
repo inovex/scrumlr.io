@@ -99,7 +99,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
-                (e.target as HTMLTextAreaElement).blur();
+                e.currentTarget.blur();
               }
             }}
           />

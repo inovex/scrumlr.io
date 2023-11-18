@@ -1,4 +1,4 @@
-import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps} from "react";
+import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps, ReactEventHandler} from "react";
 import {MAX_NOTE_LENGTH, MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {SkinToneComponent} from "types/skinTone";
@@ -17,6 +17,19 @@ export function emojiWithSkinTone(emoji: string, skinTone: SkinToneComponent) {
   return emoji.substring(0, 2) + skinTone + emoji.substring(2);
 }
 
+/**
+ * this hook handles all the logic for the emoji autocomplete
+ * if you want to extend the event handlers, first call the handler retured,
+ * then check with e.defaultPrevented if the input has something to do with the emoji suggestions
+ *
+ * @param maxInputLength the maximum length of the input
+ * @param initialValue the initial value of the input
+ * @param suggestionsHidden whether the suggestions should be hidden (affects keyboard navigation)
+ * @returns `containerRef`: set this to the container element that includes both the input and the `EmojiSuggestions` component (used for onBlur)
+ * @returns `suggestionsProps`: props for the EmojiSuggestions component
+ * @returns `value` and `setValue`: get and set the value of the input
+ * @returns `inputBindings`: bindings for the input element (onChange, onKeyDown, onKeyUp, onClick, maxLength, value)
+ */
 export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
   {
     maxInputLength = MAX_NOTE_LENGTH,
@@ -28,18 +41,23 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     suggestionsHidden?: boolean;
   } = {maxInputLength: MAX_NOTE_LENGTH, initialValue: "", suggestionsHidden: false} // names 3 times?! better syntax please @typescript ^^
 ) => {
+  // stores all the emojis
   const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
 
   const [value, setValue] = useState(initialValue);
   // null -> no cursor
   const [cursor, setCursor] = useState<number | null>(null);
 
+  // stores the currently inputed emoji name
   const [emojiName, setEmojiName] = useState("");
   const [suggestions, setSuggestions] = useState<EmojiData[]>([]);
+
+  // focused index for EmojiSuggestions
   const [focusedIndex, setFocusedIndex] = useState(0);
 
   const skinToneComponent = useAppSelector((state) => state.skinTone.component);
 
+  // set the emoji name to "" when the input loses focus to hide the suggestions
   const containerRef = useOnBlur<ContainerElement>(() => setEmojiName(""));
 
   const acceptSuggestion = useCallback(
@@ -51,10 +69,10 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
         // start replace is last /\s+/
         const lastWordStart =
           prev
-            .slice(0, cursor ?? -1)
+            .slice(0, cursor)
             .split("")
             .findLastIndex((c) => /\s+/.test(c)) + 1;
-        // add space behind emoji
+        // remove the inputed :emoji_name add space behind emoji
         return `${prev.slice(0, lastWordStart)}${insertedEmoji} ${prev.slice(cursor)}`;
       });
     },
@@ -73,12 +91,13 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
       return;
     }
 
-    // filter emojis
+    // update suggestions with filtered emojis
     setSuggestions(emojiData.filter(([slug]) => slug.includes(emojiName.toLowerCase())));
   }, [emojiName, emojiData]);
 
-  // get emoji name from value
+  // extract emoji name from value
   useEffect(() => {
+    // reset emoji name and focused index when value changes
     setEmojiName("");
     setFocusedIndex(0);
 
@@ -91,6 +110,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     if (!newEmojiName || newEmojiName.length < MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS) return;
 
     if (lastWord.endsWith(":")) {
+      // find and insert emoji
       const emoji = emojiData?.find(([slug]) => slug === newEmojiName);
 
       if (emoji) {
@@ -106,18 +126,16 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     setEmojiName(newEmojiName);
   }, [value, cursor, emojiData, acceptSuggestion, skinToneComponent]);
 
-  const updateCursor = useCallback((target: InputElement) => setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null), []);
-
   // handle: update input, update suggestions
   // FormEventHandler for TextareaAutosize
   const handleChange: FormEventHandler<InputElement> & ChangeEventHandler<InputElement> = useCallback(
     (e) => {
       const newVal = e.currentTarget.value;
+      // prevent exceeding max input length by slicing the input
       if (maxInputLength !== undefined && newVal.length > maxInputLength) setValue(newVal.slice(0, maxInputLength));
       else setValue(newVal);
-      updateCursor(e.currentTarget);
     },
-    [maxInputLength, updateCursor]
+    [maxInputLength]
   );
 
   // handle: enter/tab (accept suggestion), arrow up/down (switch suggestion), escape (close suggestions)
@@ -158,10 +176,13 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     }
   };
 
-  // handle: arrow left/right -> update cursor
-  const handleKeyUp: KeyboardEventHandler<InputElement> = (e) => {
-    updateCursor(e.currentTarget);
-  };
+  // cursor culd change from
+  // - typing / arrow keys -> onKeyUp
+  // - clicking -> onClick
+  const handleUpdateCursor: ReactEventHandler<InputElement> = useCallback((e) => {
+    const target = e.currentTarget;
+    setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null);
+  }, []);
 
   return {
     containerRef,
@@ -175,7 +196,8 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     inputBindings: {
       onChange: handleChange,
       onKeyDown: handleKeyDown,
-      onKeyUp: handleKeyUp,
+      onKeyUp: handleUpdateCursor,
+      onClick: handleUpdateCursor,
       maxLength: maxInputLength,
       value,
     } satisfies HTMLProps<InputElement>,
