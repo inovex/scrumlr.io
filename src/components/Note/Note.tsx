@@ -41,7 +41,7 @@ export const Note = (props: NoteProps) => {
 
   // all authors of a note, including its children if it's a stack.
   const authors = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === note?.author) ?? state.participants?.self;
+    const noteAuthor = state.participants?.others.concat(state.participants?.self).find((p) => p.user.id === note?.author);
     const childrenNoteAuthors = state.notes
       // get all notes which are in the same stack as the main note
       .filter((n) => n.position.stack === props.noteId)
