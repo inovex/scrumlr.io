@@ -12,7 +12,7 @@ type NotesObserver interface {
 	Observer
 
 	// UpdatedNotes will be called if the notes of the board with the specified id were updated.
-	UpdatedNotes(board uuid.UUID, notes []Note)
+	UpdatedNotes(board uuid.UUID, notes []Note, reactions []Reaction)
 
 	// DeletedNote will be called if a note has been deleted.
 	DeletedNote(user, board, note uuid.UUID, votes []Vote, deleteStack bool)
@@ -45,13 +45,17 @@ func notifyNotesUpdated(ctx context.Context) error {
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
 		board := ctx.Value("Board").(uuid.UUID)
-		notes, err := d.GetNotes(board)
+		var notes []Note
+		var reactions []Reaction
+		var err error
+		notes, err = d.GetNotes(board)
 		if err != nil {
 			return err
 		}
+		reactions, err = d.GetReactions(board)
 		for _, observer := range d.observer {
 			if o, ok := observer.(NotesObserver); ok {
-				o.UpdatedNotes(board, notes)
+				o.UpdatedNotes(board, notes, reactions)
 				return nil
 			}
 		}

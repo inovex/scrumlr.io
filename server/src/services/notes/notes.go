@@ -3,6 +3,7 @@ package notes
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/services"
@@ -99,7 +100,7 @@ func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id
 	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), ctx.Value("Board").(uuid.UUID), id, body.DeleteStack)
 }
 
-func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
+func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note, reactions []database.Reaction) {
 	eventNotes := make([]dto.Note, len(notes))
 	for index, note := range notes {
 		eventNotes[index] = *new(dto.Note).From(note)
@@ -111,6 +112,17 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
 	}
+
+	fmt.Println("Reactions from Notes Service: ", reactions)
+	// send note reactions too, since they are not integrated into notes
+	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventReactionsSync,
+		Data: reactions,
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated notes reactions", "err", err)
+	}
+
 }
 func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
