@@ -227,7 +227,7 @@ func filterNoteReaction(reaction *dto.Reaction, filteredNotes []*dto.Note, showO
 	return &dto.Reaction{}
 }
 
-func filterNoteReactionsSync(reactions []*dto.Reaction, filteredNotes []*dto.Note, showOtherUsers bool) []*dto.Reaction {
+func filterNoteReactions(reactions []*dto.Reaction, filteredNotes []*dto.Note, showOtherUsers bool) []*dto.Reaction {
 	ret := []*dto.Reaction{}
 	// filtered Notes, check for visibility -> if no, do not enter into returned array
 	for _, reaction := range reactions {
@@ -371,7 +371,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			return event
 		}
 		filteredNotes := filterNotes(boardSubscription.boardNotes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
-		filteredReactions := filterNoteReactionsSync(reactions, filteredNotes, boardSubscription.boardSettings.ShowAuthors)
+		filteredReactions := filterNoteReactions(reactions, filteredNotes, boardSubscription.boardSettings.ShowAuthors)
 
 		ret := realtime.BoardEvent{
 			Type: event.Type,
@@ -395,10 +395,10 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		Data: EventData{
 			Board:       event.Data.Board,
 			Notes:       nil,
-			Reactions:   event.Data.Reactions,
+			Reactions:   nil,
 			Columns:     nil,
-			Votings:     event.Data.Votings,
-			Votes:       event.Data.Votes,
+			Votings:     nil,
+			Votes:       nil,
 			Sessions:    event.Data.Sessions,
 			Requests:    event.Data.Requests,
 			Assignments: event.Data.Assignments,
@@ -430,10 +430,14 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		visibleVotings = append(visibleVotings, filteredVoting)
 	}
 
+	// Reactions
+	filteredReactions := filterNoteReactions(event.Data.Reactions, filteredNotes, event.Data.Board.ShowAuthors)
+
 	retEvent.Data.Columns = filteredColumns
 	retEvent.Data.Notes = filteredNotes
 	retEvent.Data.Votes = visibleVotes
 	retEvent.Data.Votings = visibleVotings
+	retEvent.Data.Reactions = filteredReactions
 
 	return retEvent
 }
