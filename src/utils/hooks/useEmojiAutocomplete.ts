@@ -92,18 +92,17 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     }
 
     // update suggestions with filtered emojis
-    const emojisWithIndex = emojiData
-      .map((currentEmoji) => {
-        const keywordIndex = currentEmoji[3 /** = names */].findIndex((name) => name.includes(emojiName.toLowerCase()));
-        if (keywordIndex === -1) return null;
-        return [keywordIndex, currentEmoji] as const;
-      })
-      .filter((suggestion) => suggestion !== null) as [number, EmojiData][];
+    const matchedInName: EmojiData[] = [];
+    const matchedInSlug: EmojiData[] = [];
 
-    // the first element is the slug, this way the emojis matched through the slug are prioritized
-    emojisWithIndex.sort(([aIndex], [bIndex]) => aIndex - bIndex);
+    // no for ... of
+    emojiData.forEach((emoji) => {
+      const [slug, , , names] = emoji;
+      if (slug.includes(emojiName.toLowerCase())) matchedInSlug.push(emoji);
+      else if (names.some((name) => name.includes(emojiName.toLowerCase()))) matchedInName.push(emoji);
+    });
 
-    setSuggestions(emojisWithIndex.map(([, suggestion]) => suggestion));
+    setSuggestions([...matchedInSlug, ...matchedInName]);
   }, [emojiName, emojiData]);
 
   // extract emoji name from value

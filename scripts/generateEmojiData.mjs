@@ -31,8 +31,8 @@ async function main() {
     if (!(emoji in emojilibData)) console.warn(`Missing data in emojilib for emoji ${emoji} (${slug})`);
 
     let /** @type {string[]} */ alternateNames = emojilibData[emoji] ?? [];
-    // don't include names with special characters
-    alternateNames = alternateNames.filter(name => /^[\w\s]+$/.test(name));
+    // don't include the first name which is the slug as well as names with special characters
+    alternateNames = alternateNames.slice(1).filter(name => /^[\w\s]+$/.test(name));
 
     let skinToneSupport = skin_tone_support;
     if (multipleSkinTonesExclude.some(regex => regex.test(slug))) {
