@@ -7,7 +7,7 @@ import {useOnBlur} from "./useOnBlur";
 
 export const emojiRegex = /^:([\w\d]+):?$/i;
 
-export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean];
+export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean, names: string[]];
 
 type InputElement = HTMLTextAreaElement | HTMLInputElement;
 
@@ -92,7 +92,18 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     }
 
     // update suggestions with filtered emojis
-    setSuggestions(emojiData.filter(([slug]) => slug.includes(emojiName.toLowerCase())));
+    const emojisWithIndex = emojiData
+      .map((currentEmoji) => {
+        const keywordIndex = currentEmoji[3 /** = names */].findIndex((name) => name.includes(emojiName.toLowerCase()));
+        if (keywordIndex === -1) return null;
+        return [keywordIndex, currentEmoji] as const;
+      })
+      .filter((suggestion) => suggestion !== null) as [number, EmojiData][];
+
+    // the first element is the slug, this way the emojis matched through the slug are prioritized
+    emojisWithIndex.sort(([aIndex], [bIndex]) => aIndex - bIndex);
+
+    setSuggestions(emojisWithIndex.map(([, suggestion]) => suggestion));
   }, [emojiName, emojiData]);
 
   // extract emoji name from value
