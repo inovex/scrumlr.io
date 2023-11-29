@@ -189,6 +189,7 @@ func (s *BoardService) UpdatedBoard(board database.Board) {
 	}
 }
 
+// e.g. changed visibility of other authors etc.
 func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
 	var err_msg string
 	columns, err := s.database.GetColumns(boardID)
