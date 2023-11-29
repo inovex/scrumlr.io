@@ -81,6 +81,11 @@ export interface UpdatedReactionEvent {
   data: Reaction;
 }
 
+export interface SyncReactionsEvent {
+  type: "REACTIONS_SYNC";
+  data: Reaction[];
+}
+
 export interface RequestCreatedEvent {
   type: "REQUEST_CREATED";
   data: Request;
@@ -150,6 +155,7 @@ export type ServerEvent =
   | AddedReactionEvent
   | DeletedReactionEvent
   | UpdatedReactionEvent
+  | SyncReactionsEvent
   | RequestCreatedEvent
   | RequestUpdatedEvent
   | ParticipantCreatedEvent

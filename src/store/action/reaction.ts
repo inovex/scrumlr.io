@@ -15,6 +15,8 @@ export const ReactionAction = {
 
   UpdateReaction: "scrumlr.io/updateReaction" as const,
   UpdatedReaction: "scrumlr.io/updatedReaction" as const,
+
+  SyncReactions: "scrumlr.io/syncReactions" as const,
 };
 
 /** Factory or creator class of internal Redux reaction object specific actions. */
@@ -82,6 +84,16 @@ export const ReactionActionFactory = {
     type: ReactionAction.UpdatedReaction,
     reaction,
   }),
+
+  /**
+   * Creates an action which should be dispatched when a reaction set changes
+   * e.g. when moving notes from hidden to shown columns for participants
+   * @param reaction updated reaction
+   */
+  syncReactions: (reactions: Reaction[]) => ({
+    type: ReactionAction.SyncReactions,
+    reactions,
+  }),
 };
 
 export type ReactionReduxAction =
@@ -90,4 +102,5 @@ export type ReactionReduxAction =
   | ReturnType<typeof ReactionActionFactory.deleteReaction>
   | ReturnType<typeof ReactionActionFactory.deletedReaction>
   | ReturnType<typeof ReactionActionFactory.updateReaction>
-  | ReturnType<typeof ReactionActionFactory.updatedReaction>;
+  | ReturnType<typeof ReactionActionFactory.updatedReaction>
+  | ReturnType<typeof ReactionActionFactory.syncReactions>;

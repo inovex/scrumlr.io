@@ -20,6 +20,9 @@ export const reactionReducer = (state: ReactionState = [], action: ReduxAction):
       // ... then add the reaction with the new reactionType
       return [...filteredState, updatedReaction];
     }
+    case Action.SyncReactions: {
+      return action.reactions;
+    }
 
     default:
       return state;

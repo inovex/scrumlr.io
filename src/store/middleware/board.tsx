@@ -73,6 +73,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           const reaction = message.data;
           store.dispatch(Actions.updatedReaction(reaction));
         }
+        if (message.type === "REACTIONS_SYNC") {
+          const reactions = message.data;
+          store.dispatch(Actions.syncReactions(reactions ?? []));
+        }
         if (message.type === "NOTES_SYNC") {
           const notes = message.data;
           store.dispatch(Actions.syncNotes(notes ?? []));
