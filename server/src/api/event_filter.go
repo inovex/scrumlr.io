@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
@@ -93,6 +94,34 @@ func filterColumns(eventColumns []*dto.Column) []*dto.Column {
 	return visibleColumns
 }
 
+func parseNoteReactionAdded(data interface{}) (*dto.Reaction, error) {
+	var ret *dto.Reaction
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func parseNoteReactionsSync(data interface{}) ([]*dto.Reaction, error) {
+	var ret []*dto.Reaction
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
 func filterNotes(eventNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board, columns []*dto.Column) []*dto.Note {
 	var visibleNotes = make([]*dto.Note, 0, len(eventNotes))
 	for _, note := range eventNotes {
@@ -179,6 +208,40 @@ func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUI
 	filteredVoting.VotingResults = filteredVotingResult
 
 	return filteredVoting
+}
+
+func filterNoteReaction(reaction *dto.Reaction, filteredNotes []*dto.Note, showOtherUsers bool) *dto.Reaction {
+	filteredReaction := dto.Reaction{}
+	fmt.Println(reaction)
+	for _, note := range filteredNotes {
+		if reaction.Note == note.ID {
+			filteredReaction = *reaction
+			// Hide User UUID if applicable
+			if !showOtherUsers && (reaction.User != note.Author) {
+				filteredReaction.User = uuid.Nil
+			}
+			return &filteredReaction
+		}
+	}
+	// return empty if no condition was met
+	return &dto.Reaction{}
+}
+
+func filterNoteReactionsSync(reactions []*dto.Reaction, filteredNotes []*dto.Note, showOtherUsers bool) []*dto.Reaction {
+	ret := []*dto.Reaction{}
+	// filtered Notes, check for visibility -> if no, do not enter into returned array
+	for _, reaction := range reactions {
+		for _, note := range filteredNotes {
+			if reaction.Note == note.ID {
+				// Check if showOtherUsers is disabled and the note reaction is not from the particpant itself
+				if !showOtherUsers && (reaction.User != note.Author) {
+					reaction.User = uuid.Nil
+				}
+				ret = append(ret, reaction)
+			}
+		}
+	}
+	return ret
 }
 
 func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
@@ -275,6 +338,48 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 		return &ret
 	}
+
+	if event.Type == realtime.BoardEventReactionAdded {
+		reaction, err := parseNoteReactionAdded(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse reactionAdded in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+		}
+
+		if isMod {
+			return event
+		}
+
+		filteredNotes := filterNotes(boardSubscription.boardNotes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+		filteredReaction := filterNoteReaction(reaction, filteredNotes, boardSubscription.boardSettings.ShowAuthors)
+
+		ret := realtime.BoardEvent{
+			Type: event.Type,
+			Data: filteredReaction,
+		}
+		return &ret
+	}
+
+	if event.Type == realtime.BoardEventReactionsSync {
+		// fmt.Println("Hello from the sync!")
+		reactions, err := parseNoteReactionsSync(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse reactionsSync in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+		}
+
+		if isMod {
+			// fmt.Println("Here are the reactions: ", reactions[0])
+			return event
+		}
+		filteredNotes := filterNotes(boardSubscription.boardNotes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+		filteredReactions := filterNoteReactionsSync(reactions, filteredNotes, boardSubscription.boardSettings.ShowAuthors)
+
+		ret := realtime.BoardEvent{
+			Type: event.Type,
+			Data: filteredReactions,
+		}
+		return &ret
+	}
+
 	// returns, if no filter match occured
 	return event
 }
