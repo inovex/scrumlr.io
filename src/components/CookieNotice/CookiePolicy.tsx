@@ -17,7 +17,7 @@ export const CookiePolicy: React.VFC<CookiePolicyProps> = ({decline, accept, onC
     return null;
   }
 
-  const body = marked.parse(t("CookiePolicy.body") as string);
+  const body = marked.parse(t("CookiePolicy.body") as string, {async: false}) as string;
 
   return (
     <Portal onClose={onClose}>
