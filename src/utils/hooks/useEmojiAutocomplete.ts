@@ -36,7 +36,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     initialValue = "",
     suggestionsHidden = false,
   }: {
-    maxInputLength?: number;
+    maxInputLength?: number | undefined;
     initialValue?: string;
     suggestionsHidden?: boolean;
   } = {maxInputLength: MAX_NOTE_LENGTH, initialValue: "", suggestionsHidden: false} // names 3 times?! better syntax please @typescript ^^
