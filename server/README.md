@@ -22,6 +22,17 @@ Or simply call `go run . -h` to see all available command line arguments. Many o
 can also be set by environment variables so you don't have to worry about the run arguments
 each time.
 
+## Configuration via TOML file
+You can also configure the server using a TOML file. To do this, pass the `--config` flag to the server executable, followed by the path to the TOML file. 
+
+For example, to configure the server using a file named `config_example.toml`, you would run the following command:
+
+```bash
+go run . --config config_example.toml
+```
+
+To see all values that can be set and what purpose they serve, take a look at the provided `config_example.toml` file. 
+
 ## API
 
 The API is currently documented in the [Postman](https://www.postman.com/) collection `api.postman_collection.json`.

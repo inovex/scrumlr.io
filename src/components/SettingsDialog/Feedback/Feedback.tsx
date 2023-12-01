@@ -119,7 +119,7 @@ export const Feedback: React.FC = () => {
             <textarea name="feedback" placeholder={t("Feedback.FeedbackInputPlaceholder")} className="feedback-form__feedback-textarea" ref={feedbackTextarea} />
           </SettingsButton>
           <SettingsButton label={t("Feedback.ContactInputLabel")} className="feedback-form__settings-button" onClick={() => contactInput.current?.focus()}>
-            <input name="contact" placeholder="mail@inovex.de" className="feedback-form__contact-input" ref={contactInput} />
+            <input name="contact" placeholder="stan@scrumlr.io" className="feedback-form__contact-input" ref={contactInput} />
           </SettingsButton>
           <button type="submit" className="feedback-form__submit-button">
             {t("Feedback.SubmitButton")}
