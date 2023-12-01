@@ -27,7 +27,7 @@ const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.resolvedLanguage]);
 
-  const markdownText = marked.parse(text);
+  const markdownText = marked.parse(text, {async: false}) as string;
 
   return (
     <div className="legal">
