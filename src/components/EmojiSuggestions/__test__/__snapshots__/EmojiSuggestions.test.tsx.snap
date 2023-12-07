@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmojiSuggestions should match the snapshot 1`] = `
+<ul
+  class="emoji-suggestions"
+>
+  <li
+    class="emoji-suggestions__element emoji-suggestions__element--focus"
+  >
+    <span
+      class="emoji-suggestions__emoji"
+    >
+      😂
+    </span>
+    :
+    face_with_tears_of_joy
+    :
+  </li>
+  <li
+    class="emoji-suggestions__element"
+  >
+    <span
+      class="emoji-suggestions__emoji"
+    >
+      💖
+    </span>
+    :
+    sparkling_heart
+    :
+  </li>
+  <li
+    class="emoji-suggestions__element"
+  >
+    <span
+      class="emoji-suggestions__emoji"
+    >
+      👍
+    </span>
+    :
+    thumbs_up
+    :
+  </li>
+  <li
+    class="emoji-suggestions__element"
+  >
+    <span
+      class="emoji-suggestions__emoji"
+    >
+      👩‍✈️
+    </span>
+    :
+    woman_pilot
+    :
+  </li>
+</ul>
+`;
+
+exports[`EmojiSuggestions should use skin tones where supported should use skin tone from store 1`] = `
+<ul
+  class="emoji-suggestions"
+>
+  <li
+    class="emoji-suggestions__element emoji-suggestions__element--focus"
+  >
+    <span
+      class="emoji-suggestions__emoji"
+    >
+      😂
+    </span>
+    :
+    face_with_tears_of_joy
+    :
+  </li>
+  <li
+    class="emoji-suggestions__element"
+  >
+    <span
+      class="emoji-suggestions__emoji"
+    >
+      💖
+    </span>
+    :
+    sparkling_heart
+    :
+  </li>
+  <li
+    class="emoji-suggestions__element"
+  >
+    <span
+      class="emoji-suggestions__emoji"
+    >
+      👍🏽
+    </span>
+    :
+    thumbs_up
+    :
+  </li>
+  <li
+    class="emoji-suggestions__element"
+  >
+    <span
+      class="emoji-suggestions__emoji"
+    >
+      👩🏽‍✈️
+    </span>
+    :
+    woman_pilot
+    :
+  </li>
+</ul>
+`;

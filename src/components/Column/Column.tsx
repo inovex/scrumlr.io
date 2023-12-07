@@ -18,7 +18,6 @@ import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
-const MAX_NOTE_LENGTH = 1024;
 const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
 
 export interface ColumnProps {
@@ -214,7 +213,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <NoteInput
             columnIndex={index}
             columnId={id}
-            maxNoteLength={MAX_NOTE_LENGTH}
             columnIsVisible={visible}
             toggleColumnVisibility={toggleVisibilityHandler}
             hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}

@@ -34,3 +34,6 @@ ui-debug.log
 
 # env files
 server/.env
+
+# script output
+scripts/out
