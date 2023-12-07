@@ -1,0 +1,44 @@
+@import "constants/style";
+
+.emoji-suggestions {
+  padding: $padding--small;
+  border-radius: $rounded--default;
+  background-color: $color-lighter-gray;
+  list-style: none;
+  margin: 0;
+
+  color: $color-black;
+
+  &__element {
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    padding: $padding--small;
+    border-radius: $rounded--small;
+    line-height: $line-height--medium;
+  }
+
+  &__element:hover,
+  .emoji-suggestions__element--focus {
+    background-color: rgba(var(--accent-color-rgb), 0.2);
+  }
+
+  &__emoji {
+    margin-right: $margin--small;
+    user-select: none;
+    font-size: $text--md;
+  }
+}
+
+[theme="dark"] {
+  .emoji-suggestions {
+    color: $color-white;
+    background-color: $color-dark-mode-note;
+
+    &__element:hover,
+    .emoji-suggestions__element--focus {
+      background-color: #485064;
+    }
+  }
+}

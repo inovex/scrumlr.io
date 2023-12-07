@@ -176,5 +176,9 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   },
   assignments: [],
   boardReactions: [],
+  skinTone: {
+    name: "default",
+    component: "",
+  },
   ...overwrite,
 });

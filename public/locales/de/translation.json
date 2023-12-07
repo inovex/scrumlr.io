@@ -378,6 +378,7 @@
     "SyncModeDescription": "Scrumlr passt den Darstellungsmodus (Dunkel oder Hell) deinen aktuellen Systemeinstellungen an",
     "AllowNotifications": "Erlaube Notifikationen",
     "Language": "Sprache",
+    "EmojiSkinTone": "Emoji Hautfarbe",
     "colorScheme": "Farbschema",
     "colorSchemeLight": "Hell",
     "colorSchemeDark": "Dunkel",

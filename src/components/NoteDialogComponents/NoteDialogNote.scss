@@ -16,7 +16,6 @@ $row-gap: 3px;
   grid-template-rows: 1fr 4fr 1fr;
   row-gap: $row-gap;
 
-  margin-bottom: $margin--default;
   padding: $padding--default $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
@@ -37,7 +36,7 @@ $row-gap: 3px;
 
 .note-dialog-note__main {
   grid-area: content;
-  overflow: auto;
+  overflow: visible;
 }
 
 .note-dialog-note__options {
