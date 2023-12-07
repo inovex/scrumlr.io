@@ -10,6 +10,7 @@ import {ViewState} from "./view";
 import {AssignmentsState} from "./assignment";
 import {ReactionState} from "./reaction";
 import {BoardReactionState} from "./boardReaction";
+import {SkinToneState} from "./skinTone";
 
 export interface ApplicationState {
   auth: AuthState;
@@ -24,4 +25,5 @@ export interface ApplicationState {
   view: ViewState;
   assignments: AssignmentsState;
   boardReactions: BoardReactionState;
+  skinTone: SkinToneState;
 }

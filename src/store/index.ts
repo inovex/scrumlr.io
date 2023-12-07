@@ -26,6 +26,8 @@ import {boardReactionReducer} from "./reducer/boardReaction";
 import {passBoardReactionMiddleware} from "./middleware/boardReaction";
 import {reactionReducer} from "./reducer/reaction";
 import {passReactionMiddleware} from "./middleware/reaction";
+import {passSkinToneMiddleware} from "./middleware/skinTone";
+import {skinToneReducer} from "./reducer/skinTone";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
@@ -49,6 +51,7 @@ const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) =>
     passVotingMiddleware(stateAPI, dispatch, action);
     passAssignmentMiddlware(stateAPI, dispatch, action);
     passBoardReactionMiddleware(stateAPI, dispatch, action);
+    passSkinToneMiddleware(stateAPI, dispatch, action);
   }
 };
 
@@ -65,6 +68,7 @@ const rootReducer = combineReducers<ApplicationState>({
   view: viewReducer,
   assignments: assignmentReducer,
   boardReactions: boardReactionReducer,
+  skinTone: skinToneReducer,
 });
 
 const store = configureStore({

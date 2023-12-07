@@ -59,6 +59,7 @@
   }
 
   &__list {
+    z-index: 1;
     list-style: none;
     position: absolute;
     width: fit-content;
@@ -67,7 +68,7 @@
     padding: 0;
     background-color: $color-white;
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 2px 2px 0 rgba(var(--accent-color-rgb), 0.1);
+    box-shadow: 0 4px 8px 0 rgba(var(--accent-color-rgb), 0.4);
 
     &:not(.active) {
       display: none;
