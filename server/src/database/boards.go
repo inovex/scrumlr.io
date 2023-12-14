@@ -61,7 +61,7 @@ type BoardUpdate struct {
 }
 
 func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []ColumnInsert) (Board, error) {
-	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
+	boardInsert := d.writeDB.NewInsert().Model(&board).Returning("*")
 
 	if board.AccessPolicy == types.AccessPolicyByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
 		return Board{}, errors.New("passphrase or salt may not be empty")
@@ -72,19 +72,19 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 	session := BoardSessionInsert{User: creator, Role: types.SessionRoleOwner}
 
 	var b Board
-	query := d.db.NewSelect().With("createdBoard", boardInsert)
+	query := d.readDB.NewSelect().With("createdBoard", boardInsert)
 	if len(columns) > 0 {
 		for index := range columns {
 			newColumnIndex := index
 			columns[index].Index = &newColumnIndex
 		}
 
-		query = query.With("createdColumns", d.db.NewInsert().
+		query = query.With("createdColumns", d.writeDB.NewInsert().
 			Model(&columns).
 			Value("board", "(SELECT id FROM \"createdBoard\")"))
 	}
 	err := query.
-		With("createdSession", d.db.NewInsert().
+		With("createdSession", d.writeDB.NewInsert().
 			Model(&session).
 			Value("board", "(SELECT id FROM \"createdBoard\")")).
 		Table("createdBoard").
@@ -96,12 +96,12 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 
 func (d *Database) UpdateBoardTimer(update BoardTimerUpdate) (Board, error) {
 	var board Board
-	_, err := d.db.NewUpdate().Model(&update).Column("timer_start", "timer_end").Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
+	_, err := d.writeDB.NewUpdate().Model(&update).Column("timer_start", "timer_end").Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
 	return board, err
 }
 
 func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
-	query := d.db.NewUpdate().Model(&update).Column("timer_start", "timer_end", "shared_note")
+	query := d.writeDB.NewUpdate().Model(&update).Column("timer_start", "timer_end", "shared_note")
 
 	if update.Name != nil {
 		query.Column("name")
@@ -137,7 +137,7 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 	var board Board
 	var err error
 	if update.ShowVoting.Valid {
-		votingQuery := d.db.NewSelect().
+		votingQuery := d.readDB.NewSelect().
 			Model((*Voting)(nil)).
 			Column("id").
 			Where("board = ?", update.ID).
@@ -163,12 +163,12 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 }
 
 func (d *Database) DeleteBoard(id uuid.UUID) error {
-	_, err := d.db.NewDelete().Model((*Board)(nil)).Where("id = ?", id).Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", id))
+	_, err := d.writeDB.NewDelete().Model((*Board)(nil)).Where("id = ?", id).Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", id))
 	return err
 }
 
 func (d *Database) GetBoard(id uuid.UUID) (Board, error) {
 	var board Board
-	err := d.db.NewSelect().Model(&board).Where("id = ?", id).Scan(context.Background())
+	err := d.readDB.NewSelect().Model(&board).Where("id = ?", id).Scan(context.Background())
 	return board, err
 }

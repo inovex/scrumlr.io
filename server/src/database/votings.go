@@ -50,8 +50,8 @@ func (d *Database) CreateVoting(insert VotingInsert) (Voting, error) {
 		return Voting{}, errors.New("vote limit shall not be greater than 99")
 	}
 
-	countOpenVotings := d.db.NewSelect().Model((*Voting)(nil)).ColumnExpr("COUNT(*) as count").Where("board = ?", insert.Board).Where("status = ?", types.VotingStatusOpen)
-	values := d.db.NewSelect().
+	countOpenVotings := d.readDB.NewSelect().Model((*Voting)(nil)).ColumnExpr("COUNT(*) as count").Where("board = ?", insert.Board).Where("status = ?", types.VotingStatusOpen)
+	values := d.readDB.NewSelect().
 		ColumnExpr("uuid(?) as board", insert.Board).
 		ColumnExpr("? as vote_limit", insert.VoteLimit).
 		ColumnExpr("? as show_votes_of_others", insert.ShowVotesOfOthers).
@@ -59,10 +59,10 @@ func (d *Database) CreateVoting(insert VotingInsert) (Voting, error) {
 		ColumnExpr("?::voting_status as status", insert.Status).
 		Where("(SELECT count FROM \"countOpenVotings\") = 0")
 
-	updateBoard := d.db.NewUpdate().Model((*Board)(nil)).Set("show_voting = null").Where("(SELECT count FROM \"countOpenVotings\") = 0")
+	updateBoard := d.writeDB.NewUpdate().Model((*Board)(nil)).Set("show_voting = null").Where("(SELECT count FROM \"countOpenVotings\") = 0")
 
 	var voting Voting
-	_, err := d.db.NewInsert().
+	_, err := d.writeDB.NewInsert().
 		With("countOpenVotings", countOpenVotings).
 		With("updateBoard", updateBoard).
 		With("_values", values).
@@ -80,7 +80,7 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 		return Voting{}, errors.New("only allowed to close or a abort a voting")
 	}
 
-	updateQuery := d.db.NewUpdate().
+	updateQuery := d.writeDB.NewUpdate().
 		Model(&update).
 		Where("id = ?", update.ID).
 		Where("board = ?", update.Board).
@@ -91,9 +91,9 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 	var err error
 
 	if update.Status == types.VotingStatusClosed {
-		updateBoard := d.db.NewUpdate().Model((*Board)(nil)).Set("show_voting = (SELECT id FROM \"updateQuery\")").Where("id = ?", update.Board)
+		updateBoard := d.writeDB.NewUpdate().Model((*Board)(nil)).Set("show_voting = (SELECT id FROM \"updateQuery\")").Where("id = ?", update.Board)
 
-		err = d.db.NewSelect().
+		err = d.readDB.NewSelect().
 			With("updateQuery", updateQuery).
 			With("updateBoard", updateBoard).
 			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
@@ -103,11 +103,11 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 	}
 
 	if update.Status == types.VotingStatusAborted {
-		deleteVotes := d.db.NewDelete().
+		deleteVotes := d.writeDB.NewDelete().
 			Model((*Vote)(nil)).
 			Where("voting = (SELECT id FROM \"updateQuery\")")
 
-		err = d.db.NewSelect().
+		err = d.readDB.NewSelect().
 			With("updateQuery", updateQuery).
 			With("deleteVotes", deleteVotes).
 			Model((*Voting)(nil)).
@@ -119,7 +119,7 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 }
 
 func (d *Database) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery {
-	newRankSelect := d.db.NewSelect().
+	newRankSelect := d.readDB.NewSelect().
 		TableExpr("notes as note").
 		ColumnExpr(fmt.Sprintf(
 			"ROW_NUMBER() OVER (PARTITION BY \"column\" ORDER BY "+
@@ -129,7 +129,7 @@ func (d *Database) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.Up
 		Where(fmt.Sprintf("stack IS NULL AND board = (SELECT board FROM \"%s\")", votingQuery)).
 		GroupExpr("id")
 
-	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
+	rankUpdate := d.writeDB.NewUpdate().With("_data", newRankSelect).
 		Model((*Note)(nil)).
 		TableExpr("_data").
 		Set("rank = _data.new_rank").
@@ -141,7 +141,7 @@ func (d *Database) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.Up
 
 func (d *Database) GetVoting(board, id uuid.UUID) (Voting, []Vote, error) {
 	var voting Voting
-	err := d.db.NewSelect().Model(&voting).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
+	err := d.readDB.NewSelect().Model(&voting).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
 
 	if voting.Status == types.VotingStatusClosed {
 		votes, err := d.GetVotes(filter.VoteFilter{Board: board, Voting: &id})
@@ -153,7 +153,7 @@ func (d *Database) GetVoting(board, id uuid.UUID) (Voting, []Vote, error) {
 
 func (d *Database) GetVotings(board uuid.UUID) ([]Voting, []Vote, error) {
 	var votings []Voting
-	err := d.db.NewSelect().
+	err := d.readDB.NewSelect().
 		Model(&votings).
 		Where("board = ?", board).
 		OrderExpr("array_position(array['OPEN', 'CLOSED', 'ABORTED']::voting_status[], status) ASC, created_at DESC").

@@ -45,7 +45,7 @@ type ColumnUpdate struct {
 // CreateColumn creates a new column. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
 func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
-	maxIndexSelect := d.db.NewSelect().Model((*Column)(nil)).ColumnExpr("COUNT(*) as index").Where("board = ?", column.Board)
+	maxIndexSelect := d.readDB.NewSelect().Model((*Column)(nil)).ColumnExpr("COUNT(*) as index").Where("board = ?", column.Board)
 
 	newIndex := math.MaxInt
 	if column.Index != nil {
@@ -56,9 +56,9 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 		}
 	}
 
-	query := d.db.NewInsert()
+	query := d.writeDB.NewInsert()
 	if column.Index != nil {
-		indexUpdate := d.db.NewUpdate().Model((*Column)(nil)).Set("index = index+1").Where("index >= ?", newIndex).Where("board = ?", column.Board)
+		indexUpdate := d.writeDB.NewUpdate().Model((*Column)(nil)).Set("index = index+1").Where("index >= ?", newIndex).Where("board = ?", column.Board)
 		query = query.With("indexUpdate", indexUpdate)
 	}
 
@@ -80,9 +80,9 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 		newIndex = 0
 	}
 
-	selectPrevious := d.db.NewSelect().Model((*Column)(nil)).Column("board", "index").Where("id = ?", column.ID).Where("board = ?", column.Board)
-	maxIndexSelect := d.db.NewSelect().Model((*Column)(nil)).Column("index").Where("board = ?", column.Board)
-	updateOnSmallerIndex := d.db.NewUpdate().
+	selectPrevious := d.readDB.NewSelect().Model((*Column)(nil)).Column("board", "index").Where("id = ?", column.ID).Where("board = ?", column.Board)
+	maxIndexSelect := d.readDB.NewSelect().Model((*Column)(nil)).Column("index").Where("board = ?", column.Board)
+	updateOnSmallerIndex := d.writeDB.NewUpdate().
 		Model((*Column)(nil)).
 		Column("index").
 		Set("index = index+1").
@@ -90,7 +90,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 		Where("board = ?", column.Board).
 		Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
 		Where("index >= ?", newIndex)
-	updateOnGreaterIndex := d.db.NewUpdate().
+	updateOnGreaterIndex := d.writeDB.NewUpdate().
 		Model((*Column)(nil)).
 		Column("index").
 		Set("index = index-1").
@@ -100,7 +100,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 		Where("index <= ?", newIndex)
 
 	var c Column
-	_, err := d.db.NewUpdate().
+	_, err := d.writeDB.NewUpdate().
 		With("selectPrevious", selectPrevious).
 		With("maxIndexSelect", maxIndexSelect).
 		With("updateOnSmallerIndex", updateOnSmallerIndex).
@@ -117,17 +117,17 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 // DeleteColumn deletes a column and adapts all indices of the other columns.
 func (d *Database) DeleteColumn(board, column, user uuid.UUID) error {
 	var columns []Column
-	selectPreviousIndex := d.db.NewSelect().Model((*Column)(nil)).Column("index", "board").Where("id = ?", column)
-	indexUpdate := d.db.NewUpdate().
+	selectPreviousIndex := d.readDB.NewSelect().Model((*Column)(nil)).Column("index", "board").Where("id = ?", column)
+	indexUpdate := d.writeDB.NewUpdate().
 		With("selectPreviousIndex", selectPreviousIndex).
 		Model((*Column)(nil)).Set("index = index-1").
 		Where("board = (SELECT board from \"selectPreviousIndex\")").
 		Where("index >= (SELECT index from \"selectPreviousIndex\")")
-	boardUpdate := d.db.NewUpdate().
+	boardUpdate := d.writeDB.NewUpdate().
 		Model((*Board)(nil)).
 		Set("shared_note = null").
 		Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", board, board, column)
-	_, err := d.db.NewDelete().
+	_, err := d.writeDB.NewDelete().
 		With("boardUpdate", boardUpdate).
 		With("indexUpdate", indexUpdate).
 		Model((*Column)(nil)).
@@ -141,13 +141,13 @@ func (d *Database) DeleteColumn(board, column, user uuid.UUID) error {
 // GetColumn returns the column for the specified id.
 func (d *Database) GetColumn(board, id uuid.UUID) (Column, error) {
 	var column Column
-	err := d.db.NewSelect().Model(&column).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
+	err := d.readDB.NewSelect().Model(&column).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
 	return column, err
 }
 
 // GetColumns returns all columns for the specified board.
 func (d *Database) GetColumns(board uuid.UUID) ([]Column, error) {
 	var columns []Column
-	err := d.db.NewSelect().Model(&columns).Where("board = ?", board).Order("index ASC").Scan(context.Background())
+	err := d.readDB.NewSelect().Model(&columns).Where("board = ?", board).Order("index ASC").Scan(context.Background())
 	return columns, err
 }

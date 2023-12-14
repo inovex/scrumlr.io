@@ -77,10 +77,10 @@ func (d *Database) CreateBoardSession(boardSession BoardSessionInsert) (BoardSes
 	}
 
 	var s BoardSession
-	insertQuery := d.db.NewInsert().
+	insertQuery := d.writeDB.NewInsert().
 		Model(&boardSession).
 		Returning("*")
-	err := d.db.NewSelect().
+	err := d.readDB.NewSelect().
 		With("insertQuery", insertQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"insertQuery\" AS s").
@@ -99,7 +99,7 @@ func (d *Database) CreateBoardSession(boardSession BoardSessionInsert) (BoardSes
 }
 
 func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, error) {
-	updateQuery := d.db.NewUpdate().Model(&update)
+	updateQuery := d.writeDB.NewUpdate().Model(&update)
 	if update.Connected != nil {
 		updateQuery = updateQuery.Column("connected")
 	}
@@ -122,7 +122,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 	updateQuery.Where("\"board\" = ?", update.Board).Where("\"user\" = ?", update.User).Returning("*")
 
 	var session BoardSession
-	err := d.db.NewSelect().
+	err := d.readDB.NewSelect().
 		With("updateQuery", updateQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
@@ -141,7 +141,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 }
 
 func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSession, error) {
-	updateQuery := d.db.NewUpdate().Model(&update)
+	updateQuery := d.writeDB.NewUpdate().Model(&update)
 	if update.Ready != nil {
 		updateQuery = updateQuery.Column("ready")
 	}
@@ -152,7 +152,7 @@ func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSessio
 	updateQuery.Where("\"board\" = ?", update.Board).Returning("*")
 
 	var sessions []BoardSession
-	err := d.db.NewSelect().
+	err := d.readDB.NewSelect().
 		With("updateQuery", updateQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
@@ -161,28 +161,28 @@ func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSessio
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Scan(context.Background(), &sessions)
 
-    // send update to observers here, as bun .AfterScanRow() is triggered for each updated row
-    // see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
-    for _, observer := range d.observer {
-      if o, ok := observer.(BoardSessionsObserver); ok {
-        o.UpdatedSessions(update.Board, sessions)
-      }
-    }
+	// send update to observers here, as bun .AfterScanRow() is triggered for each updated row
+	// see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
+	for _, observer := range d.observer {
+		if o, ok := observer.(BoardSessionsObserver); ok {
+			o.UpdatedSessions(update.Board, sessions)
+		}
+	}
 
 	return sessions, err
 }
 
 func (d *Database) BoardSessionExists(board, user uuid.UUID) (bool, error) {
-	return d.db.NewSelect().Table("board_sessions").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Exists(context.Background())
+	return d.readDB.NewSelect().Table("board_sessions").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Exists(context.Background())
 }
 
 func (d *Database) BoardModeratorSessionExists(board, user uuid.UUID) (bool, error) {
-	return d.db.NewSelect().Table("board_sessions").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Where("role <> ?", types.SessionRoleParticipant).Exists(context.Background())
+	return d.readDB.NewSelect().Table("board_sessions").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Where("role <> ?", types.SessionRoleParticipant).Exists(context.Background())
 }
 
 func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) {
 	var session BoardSession
-	err := d.db.NewSelect().
+	err := d.readDB.NewSelect().
 		TableExpr("board_sessions AS s").
 		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
 		Where("s.board = ?", board).
@@ -193,7 +193,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
 }
 
 func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessionFilter) ([]BoardSession, error) {
-	query := d.db.NewSelect().
+	query := d.readDB.NewSelect().
 		TableExpr("board_sessions AS s").
 		ColumnExpr("s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
 		Where("s.board = ?", board).

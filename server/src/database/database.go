@@ -12,23 +12,28 @@ import (
 
 // Database is the main class within this package and will be extended by several receiver functions
 type Database struct {
-	db       *bun.DB
+	readDB   *bun.DB
+	writeDB  *bun.DB
 	observer []Observer
 }
 
 // New creates a new instance of Database
-func New(db *sql.DB, verbose bool) *Database {
+func New(readDB *sql.DB, writeDB *sql.DB, verbose bool) *Database {
 	d := new(Database)
-	d.db = bun.NewDB(db, pgdialect.New())
+	d.readDB = bun.NewDB(readDB, pgdialect.New())
+	d.writeDB = bun.NewDB(writeDB, pgdialect.New())
 	d.observer = []Observer{}
 
 	// configuration of database
 	maxOpenConnections := 4 * runtime.GOMAXPROCS(0)
-	d.db.SetMaxOpenConns(maxOpenConnections)
-	d.db.SetMaxIdleConns(maxOpenConnections)
+	d.readDB.SetMaxOpenConns(maxOpenConnections / 2)
+	d.readDB.SetMaxIdleConns(maxOpenConnections / 2)
+	d.writeDB.SetMaxOpenConns(maxOpenConnections / 2)
+	d.writeDB.SetMaxIdleConns(maxOpenConnections / 2)
 
 	if verbose {
-		d.db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+		d.readDB.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
+		d.writeDB.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 	}
 
 	return d

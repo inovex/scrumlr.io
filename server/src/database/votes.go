@@ -20,25 +20,25 @@ type Vote struct {
 //
 // If the vote limit is reached no further votes will be allowed.
 func (d *Database) AddVote(board, user, note uuid.UUID) (Vote, error) {
-	openVotingQuery := d.db.NewSelect().
+	openVotingQuery := d.readDB.NewSelect().
 		Model((*Voting)(nil)).
 		Column("id", "vote_limit", "allow_multiple_votes").
 		Where("board = ?", board).
 		Where("status = ?", types.VotingStatusOpen)
 
-	currentVoteCount := d.db.NewSelect().
+	currentVoteCount := d.readDB.NewSelect().
 		Model((*Vote)(nil)).ColumnExpr("note").
 		Where("voting = (SELECT id FROM \"openVotingQuery\")").
 		Where("\"user\" = ?", user)
 
-	currentVotesOnNoteCount := d.db.NewSelect().
+	currentVotesOnNoteCount := d.readDB.NewSelect().
 		Model((*Vote)(nil)).
 		ColumnExpr("COUNT(*) as count").
 		Where("voting = (SELECT id FROM \"openVotingQuery\")").
 		Where("\"user\" = ?", user).
 		Where("note = ?", note)
 
-	values := d.db.NewSelect().
+	values := d.readDB.NewSelect().
 		ColumnExpr("(SELECT id FROM \"openVotingQuery\") as voting").
 		ColumnExpr("uuid(?) as board", board).
 		ColumnExpr("uuid(?) as note", note).
@@ -57,7 +57,7 @@ func (d *Database) AddVote(board, user, note uuid.UUID) (Vote, error) {
 
 	var result Vote
 	insert := Vote{Board: board, User: user, Note: note}
-	_, err := d.db.NewInsert().
+	_, err := d.writeDB.NewInsert().
 		With("openVotingQuery", openVotingQuery).
 		With("currentVoteCount", currentVoteCount).
 		With("currentVotesOnNoteCount", currentVotesOnNoteCount).
@@ -73,11 +73,11 @@ func (d *Database) AddVote(board, user, note uuid.UUID) (Vote, error) {
 
 // RemoveVote removes a vote from the current voting session.
 func (d *Database) RemoveVote(board, user, note uuid.UUID) error {
-	openVotingQuery := d.db.NewSelect().Model((*Voting)(nil)).Column("id").Where("board = ?", board).Where("status = ?", types.VotingStatusOpen)
-	limitQuery := d.db.NewSelect().Model((*Vote)(nil)).Column("ctid").Where("voting = (SELECT id FROM \"openVotingQuery\")").Where("\"user\" = ?", user).Where("note = ?", note).Limit(1)
+	openVotingQuery := d.readDB.NewSelect().Model((*Voting)(nil)).Column("id").Where("board = ?", board).Where("status = ?", types.VotingStatusOpen)
+	limitQuery := d.readDB.NewSelect().Model((*Vote)(nil)).Column("ctid").Where("voting = (SELECT id FROM \"openVotingQuery\")").Where("\"user\" = ?", user).Where("note = ?", note).Limit(1)
 
 	deleteQuery := Vote{Board: board, User: user, Note: note}
-	_, err := d.db.NewDelete().
+	_, err := d.writeDB.NewDelete().
 		With("openVotingQuery", openVotingQuery).
 		Model(&deleteQuery).
 		Where("voting = (SELECT id FROM \"openVotingQuery\")").
@@ -89,7 +89,7 @@ func (d *Database) RemoveVote(board, user, note uuid.UUID) error {
 
 // GetVotes returns all votes for a closed voting session.
 func (d *Database) GetVotes(f filter.VoteFilter) ([]Vote, error) {
-	voteQuery := d.db.NewSelect().Model((*Vote)(nil)).Where("board = ?", f.Board)
+	voteQuery := d.readDB.NewSelect().Model((*Vote)(nil)).Where("board = ?", f.Board)
 
 	if f.Voting != nil {
 		voteQuery = voteQuery.Where("voting = ?", *f.Voting)
