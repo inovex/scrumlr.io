@@ -113,6 +113,23 @@ $note-input__input-right: 40px;
   }
 }
 
+.note-input__emoji-suggestions {
+  position: absolute;
+  top: calc(100% + $padding--small);
+  left: 0;
+  width: 100%;
+  background-color: $color-lighter-gray;
+  // prevent overflow by approximating available space below the input box
+  max-height: min($column-emoji-suggestions__max-height, calc(100svh - $column-emoji-suggestions__approx-top-distance));
+
+  z-index: $note-input__emoji-suggestions-z-index;
+  border-radius: $rounded--default;
+  overflow-y: auto;
+  box-shadow: $box-shadow--light;
+
+  @include scrollbar();
+}
+
 [theme="dark"] {
   .note-input {
     background-color: $color-dark-mode-note;
@@ -125,6 +142,11 @@ $note-input__input-right: 40px;
 
   .note-input__input {
     color: $color-white;
+  }
+
+  .note-input__emoji-suggestions {
+    background-color: $color-dark-mode-note;
+    box-shadow: $box-shadow--dark;
   }
 }
 

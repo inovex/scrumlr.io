@@ -3,12 +3,13 @@
 @import "routes/StackView/StackView.scss";
 
 .note-dialog__note-content {
+  position: relative;
   display: flex;
   width: 100%;
   height: 100%;
   line-height: $line-height--medium;
   flex: 1;
-  overflow: hidden;
+  overflow-y: visible;
   justify-content: center;
 
   &:has(&--image) {
@@ -94,8 +95,30 @@
   }
 }
 
+.note-dialog__note-content--emoji-suggestions {
+  position: absolute;
+  top: calc(100% + $padding--small);
+  left: 0;
+  width: 100%;
+  max-height: min(300px, calc(100svh - $note-dialog-emoji-suggestions__approx-top-distance));
+  margin-bottom: $margin--large;
+
+  z-index: $note-dialog__emoji-suggestions-z-index;
+  border-radius: $rounded--default;
+  overflow-y: auto;
+  box-shadow: $box-shadow--light;
+  background-color: $color-lighter-gray;
+
+  @include scrollbar();
+}
+
 [theme="dark"] {
   .note-dialog__note-content--text {
     color: $color-white;
+  }
+
+  .note-dialog__note-content--emoji-suggestions {
+    background-color: $color-dark-mode-note;
+    box-shadow: $box-shadow--dark;
   }
 }
