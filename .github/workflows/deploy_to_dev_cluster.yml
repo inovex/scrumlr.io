@@ -37,7 +37,12 @@ jobs:
 
       - name: Replace template variables
         run: |
-          sed -i "s#PR_NUMBER#${{ github.event.pull_request.number }}#g" k8s/deployment.yaml
+          if [ -z "${{ github.event.pull_request.number }}" ]; then
+            echo "No pull request number found. This was triggered by the main branch. Using main instead of PR_NUMBER"
+            sed -i "s#PR_NUMBER#main#g" k8s/deployment.yaml
+          else
+            sed -i "s#PR_NUMBER#${{ github.event.pull_request.number }}#g" k8s/deployment.yaml
+          fi
           sed -i "s#POSTGRES_DEV_PASSWORD#${{ secrets.POSTGRES_DEV_PASSWORD }}#g" k8s/deployment.yaml
 
       - name: json_debug
