@@ -29,7 +29,7 @@ export const Note = (props: NoteProps) => {
   const navigate = useNavigate();
   const noteRef = useRef<HTMLDivElement>(null);
 
-  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId));
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
