@@ -21,6 +21,7 @@ import {MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode, useState} from "react";
 import {useAppSelector} from "store";
 import {Column} from "types/column";
+import {isEqual} from "underscore";
 
 type CustomDndContextProps = {
   children: ReactNode;
@@ -30,7 +31,7 @@ export const CustomDndContext = ({children}: CustomDndContextProps) => {
   const [maxCollision, setMaxCollision] = useState<Collision | undefined>();
   const [dragActive, setDragActive] = useState<{id: string; colorClassName: string} | undefined>();
 
-  const {self, columns, notes} = useAppSelector((state) => ({self: state.participants?.self, columns: state.columns, notes: state.notes}));
+  const {self, columns, notes} = useAppSelector((state) => ({self: state.participants?.self, columns: state.columns, notes: state.notes}), isEqual);
 
   const sensors = useSensors(useSensor(MouseSensor, {activationConstraint: {distance: 2}}), useSensor(TouchSensor, {activationConstraint: {delay: 200, tolerance: 5}}));
   const dropAnimation: DropAnimation = {
