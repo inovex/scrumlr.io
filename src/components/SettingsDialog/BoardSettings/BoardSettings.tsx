@@ -13,6 +13,7 @@ import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
 import {Toggle} from "components/Toggle";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {isEqual} from "underscore";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
@@ -20,11 +21,14 @@ import "./BoardSettings.scss";
 export const BoardSettings = () => {
   const {t} = useTranslation();
 
-  const state = useAppSelector((applicationState) => ({
-    board: applicationState.board.data!,
-    me: applicationState.participants?.self,
-    currentUserIsModerator: applicationState.participants?.self.role === "OWNER" || applicationState.participants?.self.role === "MODERATOR",
-  }));
+  const state = useAppSelector(
+    (applicationState) => ({
+      board: applicationState.board.data!,
+      me: applicationState.participants?.self,
+      currentUserIsModerator: applicationState.participants?.self.role === "OWNER" || applicationState.participants?.self.role === "MODERATOR",
+    }),
+    isEqual
+  );
 
   const [boardName, setBoardName] = useState<string>(state.board.name ?? "");
   const [password, setPassword] = useState<string>("");
