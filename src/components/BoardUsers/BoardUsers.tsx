@@ -5,6 +5,7 @@ import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {ProgressCircle} from "components/BoardHeader/ParticipantsList/ProgressCircle";
 import {ReactComponent as CheckIcon} from "assets/icon-ready.svg";
+import {isEqual} from "underscore";
 import {UserAvatar} from "./UserAvatar";
 
 const getWindowDimensions = () => {
@@ -38,10 +39,13 @@ export const BoardUsers = () => {
     NUM_OF_DISPLAYED_USERS = 4;
   }
 
-  const {me, them} = useAppSelector((state) => ({
-    them: state.participants!.others.filter((participant) => participant.connected),
-    me: state.participants!.self,
-  }));
+  const {me, them} = useAppSelector(
+    (state) => ({
+      them: state.participants!.others.filter((participant) => participant.connected),
+      me: state.participants!.self,
+    }),
+    isEqual
+  );
 
   const usersRest = them.slice();
   const usersToShow = usersRest.splice(0, them.length > NUM_OF_DISPLAYED_USERS ? NUM_OF_DISPLAYED_USERS - 1 : NUM_OF_DISPLAYED_USERS);

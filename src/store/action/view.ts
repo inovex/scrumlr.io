@@ -25,7 +25,7 @@ export const ViewActionFactory = {
     language,
   }),
 
-  setServerInfo: (enabledAuthProvider: string[], serverTime: Date, feedbackEnabled: boolean) => ({
+  setServerInfo: (enabledAuthProvider: string[], serverTime: number, feedbackEnabled: boolean) => ({
     type: ViewAction.SetServerInfo,
     enabledAuthProvider,
     serverTime,
