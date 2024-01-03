@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
 import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
-import _ from "underscore";
 import {useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
 import {useDispatch} from "react-redux";
@@ -29,7 +28,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const isScrolling = useIsScrolling(containerRef);
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
-  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+  const viewer = useAppSelector((state) => state.participants!.self);
 
   // activeTab === undefined -> all are active
   const [activeTab, setActiveTab] = useState<ReactionType>();

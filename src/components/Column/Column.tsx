@@ -42,8 +42,8 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         : [],
     _.isEqual
   );
-  const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
-  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+  const moderating = useAppSelector((state) => state.view.moderating);
+  const viewer = useAppSelector((state) => state.participants!.self);
 
   const colorClassName = getColorClassName(color);
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
