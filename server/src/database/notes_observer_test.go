@@ -11,12 +11,15 @@ type NotesObserverForTests struct {
 	t           *testing.T
 	board       *uuid.UUID
 	notes       *[]Note
+	reactions   *[]Reaction
 	deletedNote *uuid.UUID
 }
 
-func (o *NotesObserverForTests) UpdatedNotes(board uuid.UUID, notes []Note) {
+func (o *NotesObserverForTests) UpdatedNotes(board uuid.UUID, notes []Note, reactions []Reaction) {
 	o.board = &board
 	o.notes = &notes
+	o.reactions = &reactions
+
 }
 
 func (o *NotesObserverForTests) DeletedNote(user, board, note uuid.UUID, votes []Vote, deleteStack bool) {
@@ -27,6 +30,7 @@ func (o *NotesObserverForTests) DeletedNote(user, board, note uuid.UUID, votes [
 func (o *NotesObserverForTests) Reset() {
 	o.board = nil
 	o.notes = nil
+	o.reactions = nil
 	o.deletedNote = nil
 }
 
