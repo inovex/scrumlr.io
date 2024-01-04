@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
@@ -212,7 +211,6 @@ func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUI
 
 func filterNoteReaction(reaction *dto.Reaction, filteredNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board) *dto.Reaction {
 	filteredReaction := dto.Reaction{}
-	fmt.Println(reaction)
 	for _, note := range filteredNotes {
 		if reaction.Note == note.ID {
 			filteredReaction = *reaction
@@ -360,14 +358,12 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	}
 
 	if event.Type == realtime.BoardEventReactionsSync {
-		// fmt.Println("Hello from the sync!")
 		reactions, err := parseNoteReactions(event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse reactionsSync in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
 		}
 
 		if isMod {
-			// fmt.Println("Here are the reactions: ", reactions[0])
 			return event
 		}
 		filteredNotes := filterNotes(boardSubscription.boardNotes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)

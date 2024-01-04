@@ -52,8 +52,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     // if yourself made a reaction of a respective type, get the id
     const myReactionId = reaction.user === me?.user.id ? reaction.id : undefined;
 
-    // if (!participant) throw new Error("participant must exist"); // Dangerous change! Check me again!!
-
     return {
       reactionType: reaction.reactionType,
       amount: 1,
