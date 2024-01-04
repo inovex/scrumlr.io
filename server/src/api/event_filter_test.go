@@ -62,6 +62,18 @@ var (
 			Rank:   0,
 		},
 	}
+	aHiddenReaction = dto.Reaction{
+		ID:           uuid.New(),
+		Note:         aOwnerNote.ID,
+		User:         aOwnerNote.Author,
+		ReactionType: types.ReactionHeart,
+	}
+	aSeeableReaction = dto.Reaction{
+		ID:           uuid.New(),
+		Note:         aParticipantNote.ID,
+		User:         aParticipantNote.Author,
+		ReactionType: types.ReactionJoy,
+	}
 	aHiddenColumn = dto.Column{
 		ID:      uuid.New(),
 		Name:    "Lean Coffee",
@@ -98,6 +110,14 @@ var (
 	noteEvent = &realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: []*dto.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
+	}
+	noteReactionEvent = &realtime.BoardEvent{
+		Type: realtime.BoardEventReactionAdded,
+		Data: &aHiddenReaction,
+	}
+	noteReactionsEvent = &realtime.BoardEvent{
+		Type: realtime.BoardEventReactionsSync,
+		Data: []*dto.Reaction{&aSeeableReaction, &aHiddenReaction},
 	}
 	votingID   = uuid.New()
 	votingData = &VotingUpdated{
@@ -137,6 +157,7 @@ var (
 			Board:       &dto.Board{},
 			Columns:     []*dto.Column{&aSeeableColumn, &aHiddenColumn},
 			Notes:       []*dto.Note{&aOwnerNote, &aModeratorNote, &aParticipantNote},
+			Reactions:   []*dto.Reaction{&aHiddenReaction, &aSeeableReaction},
 			Votings:     []*dto.Voting{votingData.Voting},
 			Votes:       []*dto.Vote{},
 			Sessions:    boardSessions,
@@ -154,6 +175,8 @@ func TestEventFilter(t *testing.T) {
 	t.Run("TestParseBoardSettingsData", testParseBoardSettingsData)
 	t.Run("TestParseColumnData", testParseColumnData)
 	t.Run("TestParseNoteData", testParseNoteData)
+	t.Run("TestParseNoteReaction", testParseNoteReactionData)
+	t.Run("TestParseNoteReactions", testParseNoteReactionsData)
 	t.Run("TestParseVotingData", testParseVotingData)
 	t.Run("TestFilterColumnsAsOwner", testColumnFilterAsOwner)
 	t.Run("TestFilterColumnsAsModerator", testColumnFilterAsModerator)
@@ -161,6 +184,9 @@ func TestEventFilter(t *testing.T) {
 	t.Run("TestFilterNotesAsOwner", testNoteFilterAsOwner)
 	t.Run("TestFilterNotesAsModerator", testNoteFilterAsModerator)
 	t.Run("TestFilterNotesAsParticipant", testNoteFilterAsParticipant)
+	t.Run("TestFilterNoteReactionAddedAsOwner", testReactionAddedFilterAsOwner)
+	t.Run("TestFilterNoteReactionAddedAsModerator", testReactionAddedFilterAsModerator)
+	t.Run("TestFilterNoteReactionAddedAsParticipant", testReactionAddedFilterAsParticipant)
 	t.Run("TestFilterVotingUpdatedAsOwner", testFilterVotingUpdatedAsOwner)
 	t.Run("TestFilterVotingUpdatedAsModerator", testFilterVotingUpdatedAsModerator)
 	t.Run("TestFilterVotingUpdatedAsParticipant", testFilterVotingUpdatedAsParticipant)
@@ -225,6 +251,25 @@ func testParseNoteData(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, actualNotes)
 	assert.Equal(t, expectedNotes, actualNotes)
+}
+
+func testParseNoteReactionData(t *testing.T) {
+	expectedReaction := &aHiddenReaction
+	actualReaction, err := parseNoteReactionAdded(noteReactionEvent.Data)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, actualReaction)
+	assert.Equal(t, expectedReaction, actualReaction)
+}
+
+func testParseNoteReactionsData(t *testing.T) {
+	expectedReactions := []*dto.Reaction{&aSeeableReaction, &aHiddenReaction}
+	actualReactions, err := parseNoteReactions(noteReactionsEvent.Data)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, actualReactions)
+	assert.Equal(t, expectedReactions, actualReactions)
+
 }
 
 func testParseVotingData(t *testing.T) {
@@ -295,6 +340,36 @@ func testNoteFilterAsModerator(t *testing.T) {
 	returnedNoteEvent := boardSub.eventFilter(noteEvent, moderatorBoardSession.User.ID)
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
+}
+
+func testReactionAddedFilterAsParticipant(t *testing.T) {
+	expectedReactionAddedEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventReactionAdded,
+		Data: &dto.Reaction{},
+	}
+	returnedReactionAddedEvent := boardSub.eventFilter(noteReactionEvent, participantBoardSession.User.ID)
+
+	assert.Equal(t, expectedReactionAddedEvent, returnedReactionAddedEvent)
+}
+
+func testReactionAddedFilterAsOwner(t *testing.T) {
+	expectedReactionAddedEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventReactionAdded,
+		Data: &aHiddenReaction,
+	}
+	returnedReactionAddedEvent := boardSub.eventFilter(noteReactionEvent, ownerBoardSession.User.ID)
+
+	assert.Equal(t, expectedReactionAddedEvent, returnedReactionAddedEvent)
+}
+
+func testReactionAddedFilterAsModerator(t *testing.T) {
+	expectedReactionAddedEvent := &realtime.BoardEvent{
+		Type: realtime.BoardEventReactionAdded,
+		Data: &aHiddenReaction,
+	}
+	returnedReactionAddedEvent := boardSub.eventFilter(noteReactionEvent, moderatorBoardSession.User.ID)
+
+	assert.Equal(t, expectedReactionAddedEvent, returnedReactionAddedEvent)
 }
 
 func testFilterVotingUpdatedAsOwner(t *testing.T) {
@@ -386,6 +461,7 @@ func testInitFilterAsParticipant(t *testing.T) {
 			Board:       &dto.Board{},
 			Columns:     []*dto.Column{&aSeeableColumn},
 			Notes:       []*dto.Note{&aParticipantNote},
+			Reactions:   []*dto.Reaction{&aSeeableReaction},
 			Votings:     []*dto.Voting{&expectedVoting},
 			Votes:       []*dto.Vote{},
 			Sessions:    boardSessions,

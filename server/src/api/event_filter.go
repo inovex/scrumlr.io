@@ -108,7 +108,7 @@ func parseNoteReactionAdded(data interface{}) (*dto.Reaction, error) {
 	return ret, nil
 }
 
-func parseNoteReactionsSync(data interface{}) ([]*dto.Reaction, error) {
+func parseNoteReactions(data interface{}) ([]*dto.Reaction, error) {
 	var ret []*dto.Reaction
 
 	b, err := json.Marshal(data)
@@ -210,14 +210,14 @@ func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUI
 	return filteredVoting
 }
 
-func filterNoteReaction(reaction *dto.Reaction, filteredNotes []*dto.Note, showOtherUsers bool) *dto.Reaction {
+func filterNoteReaction(reaction *dto.Reaction, filteredNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board) *dto.Reaction {
 	filteredReaction := dto.Reaction{}
 	fmt.Println(reaction)
 	for _, note := range filteredNotes {
 		if reaction.Note == note.ID {
 			filteredReaction = *reaction
 			// Hide User UUID if applicable
-			if !showOtherUsers && (reaction.User != note.Author) {
+			if !boardSettings.ShowAuthors && (reaction.User != userID) {
 				filteredReaction.User = uuid.Nil
 			}
 			return &filteredReaction
@@ -227,14 +227,14 @@ func filterNoteReaction(reaction *dto.Reaction, filteredNotes []*dto.Note, showO
 	return &dto.Reaction{}
 }
 
-func filterNoteReactions(reactions []*dto.Reaction, filteredNotes []*dto.Note, showOtherUsers bool) []*dto.Reaction {
+func filterNoteReactions(reactions []*dto.Reaction, filteredNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board) []*dto.Reaction {
 	ret := []*dto.Reaction{}
 	// filtered Notes, check for visibility -> if no, do not enter into returned array
 	for _, reaction := range reactions {
 		for _, note := range filteredNotes {
 			if reaction.Note == note.ID {
 				// Check if showOtherUsers is disabled and the note reaction is not from the particpant itself
-				if !showOtherUsers && (reaction.User != note.Author) {
+				if !boardSettings.ShowAuthors && (reaction.User != userID) {
 					reaction.User = uuid.Nil
 				}
 				ret = append(ret, reaction)
@@ -350,7 +350,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 
 		filteredNotes := filterNotes(boardSubscription.boardNotes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
-		filteredReaction := filterNoteReaction(reaction, filteredNotes, boardSubscription.boardSettings.ShowAuthors)
+		filteredReaction := filterNoteReaction(reaction, filteredNotes, userID, boardSubscription.boardSettings)
 
 		ret := realtime.BoardEvent{
 			Type: event.Type,
@@ -361,7 +361,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 	if event.Type == realtime.BoardEventReactionsSync {
 		// fmt.Println("Hello from the sync!")
-		reactions, err := parseNoteReactionsSync(event.Data)
+		reactions, err := parseNoteReactions(event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse reactionsSync in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
 		}
@@ -371,7 +371,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			return event
 		}
 		filteredNotes := filterNotes(boardSubscription.boardNotes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
-		filteredReactions := filterNoteReactions(reactions, filteredNotes, boardSubscription.boardSettings.ShowAuthors)
+		filteredReactions := filterNoteReactions(reactions, filteredNotes, userID, boardSubscription.boardSettings)
 
 		ret := realtime.BoardEvent{
 			Type: event.Type,
@@ -431,13 +431,13 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	}
 
 	// Reactions
-	filteredReactions := filterNoteReactions(event.Data.Reactions, filteredNotes, event.Data.Board.ShowAuthors)
+	filteredReactions := filterNoteReactions(event.Data.Reactions, filteredNotes, clientID, event.Data.Board)
 
 	retEvent.Data.Columns = filteredColumns
 	retEvent.Data.Notes = filteredNotes
+	retEvent.Data.Reactions = filteredReactions
 	retEvent.Data.Votes = visibleVotes
 	retEvent.Data.Votings = visibleVotings
-	retEvent.Data.Reactions = filteredReactions
 
 	return retEvent
 }
