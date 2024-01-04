@@ -21,7 +21,9 @@ export const reactionReducer = (state: ReactionState = [], action: ReduxAction):
       return [...filteredState, updatedReaction];
     }
     case Action.SyncReactions: {
-      return action.reactions;
+      // filter for new reactions and only add those to the state
+      const newReactions = action.reactions.filter((newItem) => !state.some((item) => item.id === newItem.id));
+      return [...state, ...newReactions];
     }
 
     default:

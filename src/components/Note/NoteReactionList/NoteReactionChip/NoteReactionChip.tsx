@@ -17,8 +17,13 @@ interface NoteReactionChipProps {
 
 export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const reactionImage = REACTION_EMOJI_MAP.get(props.reaction.reactionType);
-  // Checking u existence to account for nulled user id´s, due to the event filter
-  const reactionUsers = props.reaction.users.map((u) => (u && u.user ? u.user.name : "")).join(", ");
+  // filter out users with nulled ID´s (due to the event filter)
+  const reactionUsers =
+    props.reaction.users
+      .map((u) => (u && u.user && u.user.name ? u.user.name : ""))
+      .filter((name) => name !== "") // when a name is empty, the next line appends a info string
+      .join(", ") + (props.reaction.users.some((u) => !(u && u.user && u.user.name)) ? " and hidden users" : "");
+
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);
 
