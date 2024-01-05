@@ -216,6 +216,23 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 		err_msg = "unable to broadcast notes, following a updated board call"
 		return err_msg, err
 	}
+
+	// Send reactions as well, since the reactions are depending on notes but are not connected
+	reactions, err := s.database.GetReactions(boardID)
+	if err != nil {
+		err_msg = "unable to retrieve reactions, following a updated board call"
+		return err_msg, err
+	}
+
+	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventReactionsSync,
+		Data: reactions,
+	})
+	if err != nil {
+		err_msg = "unable to broadcast reactions, following a updated board call"
+		return err_msg, err
+	}
+
 	return "", err
 }
 

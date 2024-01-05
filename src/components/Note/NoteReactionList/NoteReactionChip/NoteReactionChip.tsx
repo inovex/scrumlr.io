@@ -6,6 +6,7 @@ import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
+import {useTranslation} from "react-i18next";
 
 interface NoteReactionChipProps {
   reaction: ReactionModeled;
@@ -16,13 +17,18 @@ interface NoteReactionChipProps {
 }
 
 export const NoteReactionChip = (props: NoteReactionChipProps) => {
+  const {t} = useTranslation();
   const reactionImage = REACTION_EMOJI_MAP.get(props.reaction.reactionType);
-  // filter out users with nulled ID´s (due to the event filter)
+
+  for (let index = 0; index < props.reaction.users.length; index++) {
+    // console.log(props.reaction.users[index]?.user.id);
+  }
+
   const reactionUsers =
     props.reaction.users
       .map((u) => (u && u.user && u.user.name ? u.user.name : ""))
       .filter((name) => name !== "") // when a name is empty, the next line appends a info string
-      .join(", ") + (props.reaction.users.some((u) => !(u && u.user && u.user.name)) ? " and hidden users" : "");
+      .join(", ") + (props.reaction.users.some((u) => !(u && u.user && u.user.name)) ? t("NoteReactionsPopup.hiddenUsersText") : "");
 
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);

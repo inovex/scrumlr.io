@@ -43,6 +43,8 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const {t} = useTranslation();
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
+  console.log(others);
+
   const participants = [me, ...others];
 
   /** helper function that converts a Reaction object to ReactionModeled object */

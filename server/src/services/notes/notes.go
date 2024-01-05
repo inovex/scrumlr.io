@@ -3,7 +3,6 @@ package notes
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/services"
@@ -113,7 +112,6 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note, react
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
 	}
 
-	fmt.Println("Reactions from Notes Service: ", reactions)
 	// send note reactions too, since they are not integrated into notes
 	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventReactionsSync,
