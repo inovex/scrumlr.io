@@ -244,8 +244,8 @@
   "TimerToggleButton": {
     "label": "Timer",
     "1min": "1 minute",
-    "3min": "3 minute",
-    "5min": "5 minute",
+    "3min": "3 minutes",
+    "5min": "5 minutes",
     "min": "minutes",
     "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
