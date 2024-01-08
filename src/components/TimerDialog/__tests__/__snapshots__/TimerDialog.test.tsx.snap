@@ -49,7 +49,7 @@ exports[`TimerDialog should match the snapshot 1`] = `
               data-testid="timer-dialog__3-minute-button"
             >
               <label>
-                3 minute
+                3 minutes
               </label>
               <svg
                 class="timer-dialog__button-icon"
@@ -62,7 +62,7 @@ exports[`TimerDialog should match the snapshot 1`] = `
               data-testid="timer-dialog__5-minute-button"
             >
               <label>
-                5 minute
+                5 minutes
               </label>
               <svg
                 class="timer-dialog__button-icon"

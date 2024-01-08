@@ -42,7 +42,7 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
       return {
         ...state,
         enabledAuthProvider: action.enabledAuthProvider,
-        serverTimeOffset: new Date().getTime() - action.serverTime.getTime(),
+        serverTimeOffset: new Date().getTime() - action.serverTime,
         feedbackEnabled: action.feedbackEnabled,
       };
     }
