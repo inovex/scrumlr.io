@@ -9,6 +9,7 @@ import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
 import {PrintView} from "components/SettingsDialog/ExportBoard/PrintView";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
+import {RejectionPage} from "components/RejectionPage";
 import {Board} from "./Board";
 
 interface BoardGuardProps {
@@ -62,14 +63,7 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
   }
 
   if (boardStatus === "rejected" || boardStatus === "too_many_join_requests") {
-    return (
-      <div className="board-guard">
-        <p className="board-guard__info">{t("BoardGuard.reject")}</p>
-        <a href="/" className="board-guard__denied-link">
-          {t("BoardGuard.returnToHomepage")}
-        </a>
-      </div>
-    );
+    return <RejectionPage />;
   }
 
   return (
