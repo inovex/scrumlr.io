@@ -33,6 +33,7 @@ exports[`Dialog should match snapshot 1`] = `
             </h2>
           </article>
           <button
+            aria-label="ConfirmationDialog.close"
             class="dialog__close-button"
           >
             <svg

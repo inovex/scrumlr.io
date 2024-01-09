@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import {useRef, useState} from "react";
 import "./NoteInput.scss";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import {ReactComponent as ImageIcon} from "assets/icon-addimage.svg";
@@ -11,23 +11,38 @@ import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
 import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
-import {hotkeyMap} from "../../constants/hotkeys";
+import {hotkeyMap} from "constants/hotkeys";
+import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {EmojiSuggestions} from "components/EmojiSuggestions";
 
 export interface NoteInputProps {
   columnId: string;
-  maxNoteLength: number;
   columnIndex: number;
   columnIsVisible: boolean;
   toggleColumnVisibility: () => void;
   hotkeyKey?: string;
 }
 
-export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
-  const [value, setValue] = useState("");
-  const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
   const [toastDisplayed, setToastDisplayed] = useState(false);
+
+  const addNote = (content: string) => {
+    if (!content.trim()) return;
+    dispatch(Actions.addNote(columnId!, content));
+    if (!columnIsVisible && !toastDisplayed) {
+      Toast.info({
+        title: t("Toast.noteToHiddenColumn"),
+        buttons: [t("Toast.noteToHiddenColumnButton")],
+        firstButtonOnClick: toggleColumnVisibility,
+      });
+      setToastDisplayed(true);
+    }
+  };
+
+  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLFormElement>();
+  const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
   const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${columnIndex + 1}`).join(",");
@@ -44,45 +59,38 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
 
   const isImage = useImageChecker(value);
 
-  const handleChangeNoteText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // Avoid long messages
-    if (e.target.value.length <= maxNoteLength) {
-      setValue(e.target.value);
-    }
-  };
-
-  const onAddNote = () => {
-    if (value) {
-      dispatch(Actions.addNote(columnId!, value));
-      if (!columnIsVisible && !toastDisplayed) {
-        Toast.info({
-          title: t("Toast.noteToHiddenColumn"),
-          buttons: [t("Toast.noteToHiddenColumnButton")],
-          firstButtonOnClick: toggleColumnVisibility,
-        });
-        setToastDisplayed(true);
-      }
-      setValue("");
-    }
-  };
   return (
-    <form className="note-input">
+    <form
+      className="note-input"
+      onSubmit={(e) => {
+        e.preventDefault();
+        addNote(value);
+        setValue("");
+      }}
+      ref={emoji.containerRef}
+    >
       <TextareaAutosize
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
-        value={value}
-        onChange={handleChangeNoteText}
-        onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            onAddNote();
-          }
-        }}
-        maxLength={maxNoteLength}
         id={`note-input-${columnId}`}
         data-tooltip-content={hotkeyKey}
+        {...emoji.inputBindings}
+        onKeyDown={(e) => {
+          // handle emoji input
+          emoji.inputBindings.onKeyDown(e);
+          if (e.defaultPrevented) return;
+
+          // other functions
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            e.currentTarget.form?.requestSubmit();
+          }
+        }}
       />
+      <div className="note-input__emoji-suggestions">
+        <EmojiSuggestions {...emoji.suggestionsProps} />
+      </div>
       <Tooltip
         anchorSelect={`#note-input-${columnId}`}
         place="bottom"
@@ -102,10 +110,7 @@ export const NoteInput = ({columnIndex, columnId, maxNoteLength, columnIsVisible
         type="submit"
         tabIndex={-1} // skip focus
         className="note-input__add-button"
-        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-          e.preventDefault();
-          onAddNote();
-        }}
+        aria-label={t("NoteInput.create")}
       >
         <PlusIcon className="note-input__icon--add" />
       </button>

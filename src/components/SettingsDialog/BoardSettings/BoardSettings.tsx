@@ -13,6 +13,7 @@ import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
 import {Toggle} from "components/Toggle";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {isEqual} from "underscore";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
@@ -20,11 +21,14 @@ import "./BoardSettings.scss";
 export const BoardSettings = () => {
   const {t} = useTranslation();
 
-  const state = useAppSelector((applicationState) => ({
-    board: applicationState.board.data!,
-    me: applicationState.participants?.self,
-    currentUserIsModerator: applicationState.participants?.self.role === "OWNER" || applicationState.participants?.self.role === "MODERATOR",
-  }));
+  const state = useAppSelector(
+    (applicationState) => ({
+      board: applicationState.board.data!,
+      me: applicationState.participants?.self,
+      currentUserIsModerator: applicationState.participants?.self.role === "OWNER" || applicationState.participants?.self.role === "MODERATOR",
+    }),
+    isEqual
+  );
 
   const [boardName, setBoardName] = useState<string>(state.board.name ?? "");
   const [password, setPassword] = useState<string>("");
@@ -188,6 +192,18 @@ export const BoardSettings = () => {
                 >
                   <div className="board-settings__show-notes-value">
                     <Toggle active={state.board.showNotesOfOtherUsers} />
+                  </div>
+                </SettingsButton>
+                <SettingsButton
+                  data-testid="reactions"
+                  className="board-settings__show-reactions-button"
+                  label={t("BoardSettings.ShowNoteReactionsOptions")}
+                  onClick={() => store.dispatch(Actions.editBoard({showNoteReactions: !state.board.showNoteReactions}))}
+                  role="switch"
+                  aria-checked={state.board.showNoteReactions}
+                >
+                  <div className="board-settings__show-reactions-value">
+                    <Toggle active={state.board.showNoteReactions} />
                   </div>
                 </SettingsButton>
                 <hr className="settings-dialog__separator" />

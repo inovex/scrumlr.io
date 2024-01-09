@@ -116,7 +116,7 @@ exports[`Feedback should match snapshot 1`] = `
       <input
         class="feedback-form__contact-input"
         name="contact"
-        placeholder="mail@inovex.de"
+        placeholder="stan@scrumlr.io"
       />
     </button>
     <button

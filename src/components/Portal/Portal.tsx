@@ -10,12 +10,13 @@ export type PortalProps = {
   hiddenOverflow?: boolean;
   centered?: boolean;
   disabledPadding?: boolean;
+  accentColor?: string;
 } & HTMLAttributes<HTMLDivElement>;
 
 /**
  * Portal for modals adds backdrop and locks focus within portal content.
  */
-export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverflow, centered, disabledPadding, children, className, ...otherProps}) => {
+export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverflow, centered, disabledPadding, accentColor, children, className, ...otherProps}) => {
   // Check existence of portal node
   const portal: HTMLElement | null = document.getElementById("portal");
   if (portal == null) {
@@ -31,6 +32,11 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
     onClose?.();
   });
 
+  const getAccentColor = () => {
+    if (accentColor) return accentColor;
+    return theme === "light" ? "accent-color__backlog-blue" : "accent-color__planning-pink";
+  };
+
   return ReactDOM.createPortal(
     <div className={classNames("portal", className)} onClick={() => onClose?.()} role="dialog" {...otherProps}>
       <FocusLock autoFocus={false} returnFocus>
@@ -40,7 +46,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
             {"portal__frame--hiddenOverflow": hiddenOverflow},
             {"portal__frame--centered": centered},
             {"portal__frame--disabledPadding": disabledPadding},
-            theme === "light" ? "accent-color__backlog-blue" : "accent-color__planning-pink"
+            getAccentColor()
           )}
         >
           <div className="portal__content" role="dialog">

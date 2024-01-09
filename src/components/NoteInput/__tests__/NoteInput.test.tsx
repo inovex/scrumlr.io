@@ -8,7 +8,7 @@ import getTestStore from "utils/test/getTestStore";
 const createNoteInput = (columnId: string, maxNoteLength: number) => (
   <I18nextProvider i18n={i18nTest}>
     <Provider store={getTestStore()}>
-      <NoteInput columnId={columnId} maxNoteLength={maxNoteLength} />
+      <NoteInput columnId={columnId} maxNoteLength={maxNoteLength} columnIndex={1} columnIsVisible toggleColumnVisibility={() => undefined} />
     </Provider>
   </I18nextProvider>
 );
@@ -20,7 +20,7 @@ describe("Note Input", () => {
         ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as unknown as IntersectionObserver)
+        }) as unknown as IntersectionObserver
     );
   });
 

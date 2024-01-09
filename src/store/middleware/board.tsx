@@ -25,8 +25,8 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         const message: ServerEvent = JSON.parse(evt.data);
 
         if (message.type === "INIT") {
-          const {board, columns, participants, notes, votes, votings, requests, assignments} = message.data;
-          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], votes || [], votings || [], assignments || []));
+          const {board, columns, participants, notes, reactions, votes, votings, requests, assignments} = message.data;
+          store.dispatch(Actions.initializeBoard(board, participants, requests || [], columns, notes || [], reactions || [], votes || [], votings || [], assignments || []));
         }
 
         if (message.type === "BOARD_UPDATED") {
@@ -61,7 +61,22 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           const {deleteStack} = message.data;
           store.dispatch(Actions.deletedNote(noteId, deleteStack));
         }
-
+        if (message.type === "REACTION_ADDED") {
+          const reaction = message.data;
+          store.dispatch(Actions.addedReaction(reaction));
+        }
+        if (message.type === "REACTION_DELETED") {
+          const reactionId = message.data;
+          store.dispatch(Actions.deletedReaction(reactionId));
+        }
+        if (message.type === "REACTION_UPDATED") {
+          const reaction = message.data;
+          store.dispatch(Actions.updatedReaction(reaction));
+        }
+        if (message.type === "NOTES_SYNC") {
+          const notes = message.data;
+          store.dispatch(Actions.syncNotes(notes ?? []));
+        }
         if (message.type === "PARTICIPANT_CREATED") {
           store.dispatch(Actions.createdParticipant(message.data));
         }
@@ -98,6 +113,10 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
         if (message.type === "ASSIGNMENT_DELETED") {
           store.dispatch(Actions.deletedAssignment(message.data));
         }
+        if (message.type === "BOARD_REACTION_ADDED") {
+          store.dispatch(Actions.addedBoardReaction(message.data));
+          setTimeout(() => store.dispatch(Actions.removeBoardReaction(message.data.id)), 5000);
+        }
       },
     });
   }
@@ -114,6 +133,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       allowStacking: action.board.allowStacking,
       showAuthors: action.board.showAuthors,
       showNotesOfOtherUsers: action.board.showNotesOfOtherUsers,
+      showNoteReactions: action.board.showNoteReactions,
       name: action.board.name == null ? currentState.name : action.board.name,
     }).catch(() => {
       i18n.on("loaded", () => {

@@ -25,7 +25,7 @@ $settings__item-height: 48px;
       overflow-x: hidden;
       padding-right: $padding--small;
       margin-right: calc(-1 * (#{$padding--small} + 10px));
-      margin-bottom: $settings-dialog-container--bottom;
+      padding-bottom: $settings-dialog-container--bottom;
 
       @media screen and (min-width: 920px) {
         padding-right: $padding--medium;

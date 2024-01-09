@@ -1,0 +1,66 @@
+@import "src/constants/style";
+
+$bottom-start-pos: 10vh;
+$bottom-end-pos: 60vh;
+
+$name-max-height: 5em;
+$name-max-length: 20em;
+
+.board-reaction__root {
+  position: absolute;
+  left: 50vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  animation: fly-top 5s linear;
+
+  z-index: $board-reaction-z-index;
+  pointer-events: none;
+}
+
+.board-reaction__emoji-container {
+  font-size: $text--xl;
+}
+
+.board-reaction__name-container {
+  padding: $padding--small $padding--default;
+  font-size: $text--base;
+  max-width: $name-max-length;
+  max-height: $name-max-height;
+  font-weight: 600;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: $color-black;
+  background-color: $hover-background-light;
+  border-radius: $rounded--large;
+
+  &--self {
+    color: $color-white;
+    background-color: $color-board-reaction-name-self--light;
+  }
+}
+
+@keyframes fly-top {
+  from {
+    bottom: $bottom-start-pos;
+    opacity: 100%;
+  }
+  to {
+    bottom: $bottom-end-pos;
+    opacity: 0;
+  }
+}
+
+[theme="dark"] {
+  .board-reaction__name-container {
+    color: $color-white;
+    background-color: $color-board-reaction-name--dark;
+
+    &--self {
+      background-color: $color-board-reaction-name-self--dark;
+    }
+  }
+}

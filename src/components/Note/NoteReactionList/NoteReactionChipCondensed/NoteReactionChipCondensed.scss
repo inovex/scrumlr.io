@@ -1,0 +1,61 @@
+@import "src/constants/style";
+
+.note-reaction-chip-condensed__root {
+  all: unset; // remove default buttons styling
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  height: 18px;
+  padding: 5px 8px 5px 7px;
+  border-radius: $rounded--full;
+  background-color: $color-lighter-gray;
+
+  font-size: $text--base;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: $hover-background-light;
+  }
+}
+
+.note-reaction-chip-condensed__reactions-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.note-reaction-chip-condensed__reaction {
+  font-size: $text--md;
+}
+
+.note-reaction-chip-condensed__amount {
+  color: $color-black;
+  font-size: $text--sm;
+  font-weight: 600;
+}
+
+.note-reaction-chip-condensed__tooltip-content {
+  display: flex;
+  flex-direction: column;
+}
+
+[theme="dark"] {
+  .note-reaction-chip-condensed__root {
+    background-color: $color-dark-one;
+
+    &:hover {
+      background-color: $hover-background-dark;
+    }
+  }
+
+  .note-reaction-chip-condensed__amount {
+    color: $color-white;
+  }
+}

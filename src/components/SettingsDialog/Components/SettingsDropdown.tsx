@@ -1,4 +1,4 @@
-import {ElementType, VFC, useState, FocusEvent} from "react";
+import {ElementType, useState, FocusEvent, FC, useRef, useEffect} from "react";
 import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
 import "./SettingsDropdown.scss";
 import classNames from "classnames";
@@ -15,10 +15,16 @@ interface DropdownItem {
   callback?: () => unknown;
 }
 
-export const SettingsDropdown: VFC<SettingsDropdownProps> = ({label, items, current}) => {
+export const SettingsDropdown: FC<SettingsDropdownProps> = ({label, items, current}) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  let Icon = current.icon!;
+  const dropdownListRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      dropdownListRef.current?.scrollIntoView();
+    }
+  }, [isOpen]);
 
   const handleBlur = (e: FocusEvent<HTMLDivElement, Element>) => {
     if (!e.currentTarget.contains(e.relatedTarget)) setIsOpen(false);
@@ -35,26 +41,22 @@ export const SettingsDropdown: VFC<SettingsDropdownProps> = ({label, items, curr
       <button className="settings-dropdown__button" onClick={() => handleClick()} role="combobox" aria-controls="dropdown-list" aria-expanded={isOpen}>
         <span>{label}</span>
         <p className="settings-dropdown__item--current">
-          <Icon className="settings-dropdown__item-icon" />
+          {current.icon && <current.icon className="settings-dropdown__item-icon" />}
           <span>{current.text}</span>
           <DropdownIcon className="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown" />
         </p>
       </button>
-      <ul id="dropdown-list" className={classNames({"settings-dropdown__list": true, active: isOpen})} role="listbox">
+      <ul id="dropdown-list" className={classNames({"settings-dropdown__list": true, active: isOpen})} role="listbox" ref={dropdownListRef}>
         {items
           .filter((item) => current !== item)
-          .map((item) => {
-            Icon = item.icon!;
-
-            return (
-              <li className="settings-dropdown__item" key={item.text}>
-                <button className="settings-dropdown__button" onClick={() => handleClick(item.callback)}>
-                  {Icon && <Icon className="settings-dropdown__item-icon" />}
-                  <span>{item.text}</span>
-                </button>
-              </li>
-            );
-          })}
+          .map((item) => (
+            <li className="settings-dropdown__item" key={item.text}>
+              <button className="settings-dropdown__button" onClick={() => handleClick(item.callback)}>
+                {item.icon && <item.icon className="settings-dropdown__item-icon" />}
+                <span>{item.text}</span>
+              </button>
+            </li>
+          ))}
       </ul>
     </div>
   );

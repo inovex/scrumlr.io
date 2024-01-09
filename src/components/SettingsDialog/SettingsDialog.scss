@@ -22,6 +22,7 @@ $settings-dialog-container--sides-large: 92px;
 $settings-dialog-container--bottom: 62px;
 
 .settings-dialog {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;

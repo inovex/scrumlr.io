@@ -1,4 +1,3 @@
-import {fireEvent} from "@testing-library/react";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
@@ -20,7 +19,7 @@ describe("Board Header", () => {
         ({
           observe: jest.fn(),
           disconnect: jest.fn(),
-        } as unknown as IntersectionObserver)
+        }) as unknown as IntersectionObserver
     );
   });
 
@@ -69,6 +68,7 @@ describe("Board Header", () => {
               showAuthors: true,
               showNotesOfOtherUsers: true,
               allowStacking: true,
+              showNoteReactions: true,
             },
           },
         })

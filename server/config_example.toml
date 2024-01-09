@@ -1,0 +1,74 @@
+# Specify the port number for the server application to run on.
+port = 8080
+
+# Define the connection string for the NATS messaging system.
+nats = "nats://localhost:4222"
+
+# Set the address of the Redis server. If redis-address is set, it's used over the default nats
+redis-address = ""
+
+# Set the username for the Redis server (if required).
+redis-username = ""
+
+# Set the password for the Redis server (if required).
+redis-password = ""
+
+# Enable or disable insecure mode. If set default and embedded key are used to sign jwt's
+insecure = true
+
+# The private key which should be replaced by the new key, that'll be used to sign the jwt's - needed in ES512 (ecdsa)
+unsafe-key = ""
+
+# Set the private key, used to sign the jwt's - needed in ES512 (ecdsa)
+key = ""
+
+# Set the connection string for the PostgreSQL database.
+database = "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable"
+
+# Define the base path for the application.
+base-path = "/"
+
+# Set the protocol and host for the auth provider callbacks (e.g. https://scrumlr.io)
+auth-callback-host = ""
+
+# Set the client ID for Google OAuth authentication.
+auth-google-client-id = ""
+
+# Set the client secret for Google OAuth authentication.
+auth-google-client-secret = ""
+
+# Set the client ID for GitHub OAuth authentication.
+auth-github-client-id = ""
+
+# Set the client secret for GitHub OAuth authentication.
+auth-github-client-secret = ""
+
+# Set the client ID for Microsoft OAuth authentication.
+auth-microsoft-client-id = ""
+
+# Set the client secret for Microsoft OAuth authentication.
+auth-microsoft-client-secret = ""
+
+# Set the tenant ID for Azure Active Directory authentication.
+auth-azure-ad-tenant-id = ""
+
+# Set the client ID for Azure Active Directory authentication.
+auth-azure-ad-client-id = ""
+
+# Set the client secret for Azure Active Directory authentication.
+auth-azure-ad-client-secret = ""
+
+# Set the client ID for Apple OAuth authentication.
+auth-apple-client-id = ""
+
+# Set the client secret for Apple OAuth authentication.
+auth-apple-client-secret = ""
+
+# Enable or disable verbose logging.
+verbose = true
+
+# Disable check origin (strongly suggestion to only use this for development)
+disable-check-origin = true
+
+# Specify the URL for the feedback webhook.
+feedback-webhook-url = ""

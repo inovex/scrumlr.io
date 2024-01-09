@@ -75,10 +75,10 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	return new(dto.Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error) {
-	board, requests, sessions, columns, notes, votings, votes, assignments, err := s.database.Get(boardID)
+func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error) {
+	board, requests, sessions, columns, notes, reactions, votings, votes, assignments, err := s.database.Get(boardID)
 	if err != nil {
-		return nil, nil, nil, nil, nil, nil, nil, nil, err
+		return nil, nil, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	personalVotes := []*dto.Vote{}
@@ -88,7 +88,7 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 		}
 	}
 
-	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Votings(votings, votes), personalVotes, dto.Assignments(assignments), err
+	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Reactions(reactions), dto.Votings(votings, votes), personalVotes, dto.Assignments(assignments), err
 }
 
 func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
@@ -107,6 +107,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		Name:                  body.Name,
 		ShowAuthors:           body.ShowAuthors,
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
+		ShowNoteReactions:     body.ShowNoteReactions,
 		AllowStacking:         body.AllowStacking,
 		TimerStart:            body.TimerStart,
 		TimerEnd:              body.TimerEnd,
@@ -187,6 +188,41 @@ func (s *BoardService) UpdatedBoard(board database.Board) {
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast updated board", "err", err)
 	}
+
+	var err_msg string
+	err_msg, err = s.SyncBoardSettingChange(board.ID)
+	if err != nil {
+		logger.Get().Errorw(err_msg, "err", err)
+	}
+}
+
+func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
+	var err_msg string
+	columns, err := s.database.GetColumns(boardID)
+	if err != nil {
+		err_msg = "unable to retrieve columns, following a updated board call"
+		return err_msg, err
+	}
+
+	var columnsID []uuid.UUID
+	for _, column := range columns {
+		columnsID = append(columnsID, column.ID)
+	}
+	notes, err := s.database.GetNotes(boardID, columnsID...)
+	if err != nil {
+		err_msg = "unable to retrieve notes, following a updated board call"
+		return err_msg, err
+	}
+
+	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: dto.Notes(notes),
+	})
+	if err != nil {
+		err_msg = "unable to broadcast notes, following a updated board call"
+		return err_msg, err
+	}
+	return "", err
 }
 
 func (s *BoardService) DeletedBoard(board uuid.UUID) {

@@ -18,7 +18,6 @@ import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
-const MAX_NOTE_LENGTH = 1024;
 const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
 
 export interface ColumnProps {
@@ -36,13 +35,15 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const notes = useAppSelector(
     (state) =>
       state.notes
-        .filter((note) => !note.position.stack)
-        .filter((note) => (state.board.data?.showNotesOfOtherUsers || state.auth.user!.id === note.author) && note.position.column === id)
-        .map((note) => note.id),
+        ? state.notes
+            .filter((note) => !note.position.stack)
+            .filter((note) => (state.board.data?.showNotesOfOtherUsers || state.auth.user!.id === note.author) && note.position.column === id)
+            .map((note) => note.id)
+        : [],
     _.isEqual
   );
-  const moderating = useAppSelector((state) => state.view.moderating, _.isEqual);
-  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+  const moderating = useAppSelector((state) => state.view.moderating);
+  const viewer = useAppSelector((state) => state.participants!.self);
 
   const colorClassName = getColorClassName(color);
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
@@ -137,6 +138,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           onClick={() => {
             handleEditColumnName(inputRef.current?.value ?? "");
           }}
+          aria-label={t("Column.submitName")}
         >
           <SubmitIcon className="column__header-edit-button-icon" />
         </button>
@@ -151,6 +153,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             }
             setColumnNameMode("VIEW");
           }}
+          aria-label={t("Column.resetName")}
         >
           <CloseIcon className="column__header-edit-button-icon" />
         </button>
@@ -210,7 +213,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <NoteInput
             columnIndex={index}
             columnId={id}
-            maxNoteLength={MAX_NOTE_LENGTH}
             columnIsVisible={visible}
             toggleColumnVisibility={toggleVisibilityHandler}
             hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}

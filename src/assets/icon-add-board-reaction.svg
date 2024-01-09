@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g id="icon/icon-32-add-sticker-reaction" fill="none">
+    <path id="Shape"
+          d="M14.0755 9H14H21.7705C23.4274 9 24.7705 10.3431 24.7705 12C24.7705 12.9602 24.7705 13.6803 24.7705 14.1604M17.6128 26C16.0923 26 13.8115 26 10.7705 26C9.11365 26 7.77051 24.6569 7.77051 23V15.0947V15"
+          stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5"/>
+    <path id="Line-2" d="M5 9H11" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+    <path id="Line-2_2" d="M8 6V12" stroke="currentColor" stroke-width="1.75" stroke-linecap="square"/>
+    <path id="Oval" d="M21 27C24.866 27 28 23.866 28 20C28 16.134 24.866 13 21 13C17.134 13 14 16.134 14 20C14 23.866 17.134 27 21 27Z" stroke="currentColor" stroke-width="1.75"
+          stroke-linecap="round" stroke-linejoin="round"/>
+    <path id="Shape_2"
+          d="M25 21.9134C24.1591 23.2191 22.627 24.014 20.9784 23.9998C19.3298 23.9856 17.8141 23.1644 17 21.8443M17.5 18.9208C17.5 18.4123 17.9477 18 18.5 18C19.0523 18 19.5 18.4123 19.5 18.9208M22.5 18.9208C22.5 18.4123 22.9477 18 23.5 18C24.0523 18 24.5 18.4123 24.5 18.9208"
+          stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

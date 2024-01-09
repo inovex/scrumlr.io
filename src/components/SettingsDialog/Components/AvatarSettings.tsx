@@ -20,6 +20,7 @@ import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import "./AvatarSettings.scss";
+import {isEqual} from "underscore";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 
@@ -29,9 +30,12 @@ export interface AvatarSettingsProps {
 
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   const {t} = useTranslation();
-  const state = useAppSelector((applicationState) => ({
-    participant: applicationState.participants!.self,
-  }));
+  const state = useAppSelector(
+    (applicationState) => ({
+      participant: applicationState.participants!.self,
+    }),
+    isEqual
+  );
 
   let initialState = state.participant.user.avatar;
   if (initialState === null || initialState === undefined) {
@@ -90,7 +94,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     <>
       <div className="avatar-settings__avatar">
         <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
-        <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))}>
+        <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
           <IconShuffle />
         </button>
       </div>

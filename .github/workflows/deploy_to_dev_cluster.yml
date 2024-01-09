@@ -37,7 +37,12 @@ jobs:
 
       - name: Replace template variables
         run: |
-          sed -i "s#PR_NUMBER#${{ github.event.pull_request.number }}#g" k8s/deployment.yaml
+          if [ -z "${{ github.event.pull_request.number }}" ]; then
+            echo "No pull request number found. This was triggered by the main branch. Using main instead of PR_NUMBER"
+            sed -i "s#PR_NUMBER#main#g" k8s/deployment.yaml
+          else
+            sed -i "s#PR_NUMBER#${{ github.event.pull_request.number }}#g" k8s/deployment.yaml
+          fi
           sed -i "s#POSTGRES_DEV_PASSWORD#${{ secrets.POSTGRES_DEV_PASSWORD }}#g" k8s/deployment.yaml
 
       - name: json_debug
@@ -48,6 +53,7 @@ jobs:
         uses: Azure/k8s-deploy@v4
         with:
           namespace: scrumlr-dev-deployments
+          force: true
           manifests: |
             k8s/deployment.yaml
           images: |
@@ -55,6 +61,7 @@ jobs:
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
 
       - name: send_github_message
+        if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |

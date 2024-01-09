@@ -6,8 +6,8 @@ import {useCallback, useEffect, useRef} from "react";
  * @param eventType The type of event to listen to.
  * @returns A `RefObject` from an `useRef` hook.
  */
-export const useOnBlur = (callback: () => unknown, eventType: keyof DocumentEventMap = "click") => {
-  const ref = useRef<HTMLDivElement>(null);
+export const useOnBlur = <RefElement extends HTMLElement = HTMLDivElement>(callback: () => unknown, eventType: keyof DocumentEventMap = "click") => {
+  const ref = useRef<RefElement | null>(null);
 
   const handleBlur = useCallback(
     (event: DocumentEventMap[typeof eventType]) => {
