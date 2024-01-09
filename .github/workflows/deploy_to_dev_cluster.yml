@@ -53,6 +53,7 @@ jobs:
         uses: Azure/k8s-deploy@v4
         with:
           namespace: scrumlr-dev-deployments
+          force: true
           manifests: |
             k8s/deployment.yaml
           images: |
@@ -60,6 +61,7 @@ jobs:
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
 
       - name: send_github_message
+        if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
