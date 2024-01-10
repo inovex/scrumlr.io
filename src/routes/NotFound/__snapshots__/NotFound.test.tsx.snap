@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NotFound should render correctly 1`] = `
+exports[`NotFound should match snapshot 1`] = `
 <div
   class="not-found__root"
 >
@@ -118,22 +118,22 @@ exports[`NotFound should render correctly 1`] = `
       <div
         class="not-found__title"
       >
-        Oh no! Error
+        NotFoundPage.title
       </div>
       <div
         class="not-found__description"
       >
         <div>
-          This page does not exist.
+          NotFoundPage.descriptionLine1
         </div>
         <div>
-          Go back to the Homepage.
+          NotFoundPage.descriptionLine2
         </div>
       </div>
       <button
         class="not-found__return-button"
       >
-        Back to Homepage
+        NotFoundPage.navigateHome
       </button>
     </div>
     <div
