@@ -118,17 +118,17 @@ exports[`RejectionPage should match snapshot 1`] = `
       <div
         class="rejection-page__title"
       >
-        Oops!
+        RejectionPage.title
       </div>
       <div
         class="rejection-page__description"
       >
-        It looks like the doors to this session remain closed for now. We appreciate your interest, but unfortunately, your request to join has been declined.
+        RejectionPage.description
       </div>
       <button
         class="rejection-page__return-button"
       >
-        Back to Homepage
+        RejectionPage.button
       </button>
     </div>
     <div
