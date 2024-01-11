@@ -61,18 +61,18 @@ exports[`<ConfirmationDialog /> snapshot test 1`] = `
                   class="confirmation-dialog__buttons"
                 >
                   <button
-                    aria-label="accept"
-                    class="confirmation-dialog__button confirmation-dialog__button--accept"
-                    type="button"
-                  >
-                    accept
-                  </button>
-                  <button
                     aria-label="decline"
                     class="confirmation-dialog__button confirmation-dialog__button--decline"
                     type="button"
                   >
                     decline
+                  </button>
+                  <button
+                    aria-label="accept"
+                    class="confirmation-dialog__button confirmation-dialog__button--accept"
+                    type="button"
+                  >
+                    accept
                   </button>
                 </div>
               </div>
