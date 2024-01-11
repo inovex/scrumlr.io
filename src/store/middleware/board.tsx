@@ -52,6 +52,11 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
           store.dispatch(Actions.deletedColumn(columnId));
         }
 
+        if (message.type === "NOTE_CREATED") {
+          const note = message.data;
+          store.dispatch(Actions.createdNote(note));
+        }
+
         if (message.type === "NOTES_UPDATED") {
           const notes = message.data;
           store.dispatch(Actions.updatedNotes(notes));
