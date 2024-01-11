@@ -7,7 +7,7 @@ import {Actions} from "store/action";
 import {useDebounce} from "utils/hooks/useDebounce";
 import {UserAvatar} from "components/BoardUsers";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
-import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
+import {ReactComponent as SearchIcon} from "assets/icon-search.svg";
 import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
 import "./Participants.scss";
 import _ from "underscore";
@@ -48,7 +48,7 @@ export const Participants = () => {
       </header>
       <div className="participants__search-input-wrapper">
         <input placeholder="Name..." className="participants__search-input" onChange={(e) => setQueryString(e.target.value)} />
-        <MagnifyingGlassIcon className="participants__search-icon" />
+        <SearchIcon className="participants__search-icon" />
       </div>
       <div className="participants__filter-buttons">
         <button
