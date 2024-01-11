@@ -199,7 +199,7 @@
     "hotkeysEnabled": "Hotkeys enabled!",
     "hotkeysDisabled": "Hotkeys disabled!",
     "hotkeyToggle": "Enable hotkeys",
-    "hotkeyTimerStarted": "A {{duration}} minute timer has been started",
+    "timerStarted": "A {{duration}} minute timer has been started",
     "cheatSheet": "Hotkey Cheat Sheet",
     "toggleColumnVisibility": {
       "hide": "Columns that are hidden are now hidden to you",
