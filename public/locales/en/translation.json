@@ -247,7 +247,9 @@
     "3min": "3 minutes",
     "5min": "5 minutes",
     "min": "minutes",
-    "customTime": "Custom time",
+    "customTime":"Custom Time",
+    "customTime_Prefix": "A timer with",
+    "customTime_Sufix" : "has been started",
     "cancelTimer": "Cancel timer"
   },
   "BoardReactionsMenu": {

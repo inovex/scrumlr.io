@@ -248,6 +248,8 @@
     "5min": "5 Minuten",
     "min": "Minuten",
     "customTime": "Manuelle Zeit",
+    "customTime_Prefix": "Ein Timer mit",
+    "customTime_Sufix" : "ist gewesen gestartet",
     "cancelTimer": "Alarm beenden"
   },
   "BoardReactionsMenu": {
