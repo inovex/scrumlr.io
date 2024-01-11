@@ -1,10 +1,6 @@
-<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-<g fill="none">
-<g transform="translate(6 4)">
-<rect y="2" width="24" height="24"/>
-<path d="m11.664 10.639c1.3787-0.63134 2.3364-2.0232 2.3364-3.6387 0-2.2091-1.7909-4-4-4s-4 1.7909-4 4c0 1.6276 0.97212 3.0282 2.3674 3.6528" opacity=".7" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-<path transform="translate(2)" d="m6.8443 17.651v-9.4683c0-0.65327 0.52958-1.1829 1.1829-1.1829s1.1829 0.52958 1.1829 1.1829v4.3167m-2.3066 9.8239-5.4894-5.7369c-0.14321-0.282-0.16752-0.6096-0.067504-0.90964s0.31603-0.54754 0.59979-0.68721c0.282-0.14321 0.6096-0.16752 0.90964-0.067504 0.30005 0.10002 0.38489 0.045613 0.52456 0.32938l3.4638 2.3996m2.3657-4.7369c0-0.65327 0.52958-1.1829 1.1829-1.1829 0.65327 0 1.1829 0.52958 1.1829 1.1829m0.029571 0c0-0.65327 0.50001-0.59143 1.1533-0.59143 0.65327 0 1.1829 0.52958 1.1829 1.1829m-7.038 8.8177c0.54396 0.88241 1.5065 1.4197 2.5431 1.4194h3.9034c1.6332 0 2.9571-1.324 2.9571-2.9571v-6.0971c0-0.65327-0.95953-1.4198-1.6128-1.4198" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-</g>
-<path d="m20 11c0-2.2091-1.7909-4-4-4s-4 1.7909-4 4" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".5" stroke-width="2" d="M16.375 13.639a4 4 0 1 0-3.297.014"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.71 10a4 4 0 1 0-8 0"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15.924 15.5v-4.317a1.183 1.183 0 1 0-2.365 0v9.468l-3.464-2.4c-.14-.283-.225-.229-.525-.329a1.18 1.18 0 0 0-.91.068 1.183 1.183 0 0 0-.532 1.597l5.49 5.736m2.306-9.409a1.183 1.183 0 1 1 2.366 0m.03 0c0-.653.5-.591 1.153-.591s1.183.53 1.183 1.183"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M13.617 25.32a2.987 2.987 0 0 0 2.543 1.42h3.904a2.957 2.957 0 0 0 2.957-2.957v-6.098c0-.653-.96-1.42-1.613-1.42"/>
 </svg>

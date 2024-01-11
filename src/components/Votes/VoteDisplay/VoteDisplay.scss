@@ -27,6 +27,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 .vote-display > svg {
   position: absolute;
   height: 100%;
+  width: auto;
   background-color: $color-dark-mode-note;
   color: $color-white;
   border-radius: 100%;
