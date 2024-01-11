@@ -1,9 +1,4 @@
-<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-<g transform="rotate(-90 18 12)" fill="none">
-<polygon points="0 0 24 0 24 24 0 24"/>
-<rect x="3" y="8" width="17" height="8" rx="1" stroke="currentColor" stroke-width="2"/>
-<path d="m20 2.1189v0.8811c0 0.55228-0.44772 1-1 1h-15c-0.55228 0-1-0.44772-1-1v-1.0879" fill="none" opacity=".7" stroke="currentColor" stroke-width="1.5"/>
-<path transform="matrix(1 0 0 -1 0 41.912)" d="m20 20.119v0.8811c0 0.55228-0.44772 1-1 1h-15c-0.55228 0-1-0.44772-1-1v-1.0879" fill="none" opacity=".7" stroke="currentColor" stroke-width="1.5"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+  <path stroke="currentColor" stroke-opacity=".5" stroke-width="1.5" d="M26 8h-1a1 1 0 0 0-1 1v15a1 1 0 0 0 1 1h1M6 8h1.088a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6"/>
+  <path stroke="currentColor" stroke-width="2" d="M12.086 9v15a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1Z"/>
 </svg>
-
