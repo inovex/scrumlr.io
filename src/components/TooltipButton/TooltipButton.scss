@@ -85,7 +85,6 @@ $tooltip-button-size: 46px;
   width: $tooltip-button-size;
   height: $tooltip-button-size;
   border-radius: $tooltip-button-size;
-  fill: var(--accent-color);
   color: var(--accent-color, $color-black);
 
   &:nth-of-type(1) {
@@ -205,7 +204,6 @@ $tooltip-button-size: 46px;
   .tooltip-button__icon {
     background: $menu-icon-background-color--dark;
     color: var(--accent-color--dark, $color-white);
-    fill: var(--accent-color--dark);
   }
 
   .tooltip-button__tooltip-text {
