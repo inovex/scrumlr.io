@@ -8,7 +8,7 @@ import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as BoardReactionIcon} from "assets/icon-add-board-reaction.svg";
+import {ReactComponent as BoardReactionIcon} from "assets/icon-add-reaction.svg";
 import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";

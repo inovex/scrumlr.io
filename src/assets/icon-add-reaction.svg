@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+  <path fill="currentColor" fill-opacity=".5" d="M14.078 9.75a.75.75 0 0 0 0-1.5v1.5Zm9.945 4.41a.75.75 0 0 0 1.5 0h-1.5Zm-6.407 12.59a.75.75 0 1 0 0-1.5v1.5ZM8.523 15.746v-.75h-1.5v.75h1.5Zm5.555-7.496h-.075v1.5h.075v-1.5Zm-.075 1.5h7.77v-1.5h-7.77v1.5Zm7.77 0a2.25 2.25 0 0 1 2.25 2.25h1.5a3.75 3.75 0 0 0-3.75-3.75v1.5Zm2.25 2.25v2.16h1.5V12h-1.5Zm-6.407 13.25h-6.843v1.5h6.843v-1.5Zm-6.843 0A2.25 2.25 0 0 1 8.523 23h-1.5a3.75 3.75 0 0 0 3.75 3.75v-1.5ZM8.523 23v-7.254h-1.5V23h1.5Z"/>
+  <path stroke="currentColor" stroke-linecap="square" stroke-width="2" d="M5 9h6M8 6v6"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 27a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M25 21.913c-.84 1.306-2.373 2.101-4.022 2.087-1.648-.014-3.164-.836-3.978-2.156m.5-2.923c0-.509.448-.921 1-.921s1 .412 1 .92m3 0c0-.508.448-.92 1-.92s1 .412 1 .92"/>
+</svg>
