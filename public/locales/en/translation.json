@@ -199,6 +199,7 @@
     "hotkeysEnabled": "Hotkeys enabled!",
     "hotkeysDisabled": "Hotkeys disabled!",
     "hotkeyToggle": "Enable hotkeys",
+    "hotkeyTimerStarted": "A {{duration}} minute timer has been started",
     "cheatSheet": "Hotkey Cheat Sheet",
     "toggleColumnVisibility": {
       "hide": "Columns that are hidden are now hidden to you",
@@ -248,8 +249,6 @@
     "5min": "5 minutes",
     "min": "minutes",
     "customTime":"Custom Time",
-    "customTime_Prefix": "A timer with",
-    "customTime_Sufix" : "has been started",
     "cancelTimer": "Cancel timer"
   },
   "BoardReactionsMenu": {

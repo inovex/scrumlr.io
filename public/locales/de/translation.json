@@ -200,6 +200,7 @@
     "hotkeysDisabled": "Hotkeys deaktiviert!",
     "hotkeyToggle": "Hotkeys aktivieren",
     "cheatSheet": "Hotkey Spickzettel",
+    "timerStarted": "Ein {{duration}}-minütiger Timer wurde gestartet",
     "toggleColumnVisibility": {
       "hide": "Ausgeblendete Spalten sind nun auch für dich ausgeblendet",
       "show": "Ausgeblendete Spalten sind nun für dich sichtbar"
@@ -248,8 +249,6 @@
     "5min": "5 Minuten",
     "min": "Minuten",
     "customTime": "Manuelle Zeit",
-    "customTime_Prefix": "Ein Timer mit",
-    "customTime_Sufix" : "ist gewesen gestartet",
     "cancelTimer": "Alarm beenden"
   },
   "BoardReactionsMenu": {

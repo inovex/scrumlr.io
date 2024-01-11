@@ -114,7 +114,7 @@ export const HotkeyAnchor = () => {
 
   const startTimer = (minutes: number) => {
     dispatch(Actions.setTimer(minutes));
-    Toast.info({title: `${t("TimerToggleButton.customTime_Prefix")} ${minutes} ${t("TimerToggleButton.min")} ${t("TimerToggleButton.customTime_Sufix")}`});
+    dispatchHotkeyNotification(t("Hotkeys.timerStarted", {duration: minutes}))
   };
 
   const showSettings = () => navigate("settings");
