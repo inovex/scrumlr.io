@@ -28,6 +28,7 @@
       align-items: center;
       justify-content: center;
       transition: all 0.08s ease-out;
+      color: var(--accent-color);
 
       &:hover {
         background-color: mix($color-white, $color-lean-lilac, 92%);

@@ -1,19 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="rgba(255,255,255,0)" />
-  <g transform="translate(-2.404 -0.08)" opacity="0.5">
-    <path d="M0,1H3" transform="translate(25.841 19.2) rotate(45)" fill="none" stroke="#c000ff" stroke-linecap="square"
-      stroke-width="2" />
-    <path d="M1,0V3" transform="translate(26.548 21.322) rotate(45)" fill="none" stroke="#c000ff"
-      stroke-linecap="square" stroke-width="2" />
-    <path d="M1188.351,445.024s-6.5.155-7.844-6.024-7.887-5.8-7.887-5.8" transform="translate(-1163.217 -422.995)"
-      fill="none" stroke="#c000ff" stroke-linecap="round" stroke-width="2" />
-  </g>
-  <g transform="translate(-0.896)">
-    <path d="M0,1H3" transform="translate(24.333 7.293) rotate(45)" fill="none" stroke="#c000ff" stroke-linecap="square"
-      stroke-width="2" />
-    <path d="M1,0V3" transform="translate(25.04 9.414) rotate(45)" fill="none" stroke="#c000ff" stroke-linecap="square"
-      stroke-width="2" />
-    <path d="M1188.351,433.2s-6.5-.156-7.844,6.073-7.887,5.846-7.887,5.846" transform="translate(-1164.725 -423.08)"
-      fill="none" stroke="#c000ff" stroke-linecap="round" stroke-width="2" />
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+  <path fill="currentColor" fill-opacity=".5" fill-rule="evenodd" d="M15.864 15.71c-.76-3.498-3.031-5.175-5.073-5.942a10.466 10.466 0 0 0-3.743-.649l-.072.003h-.022l-.007.001h-.003c-.001 0-.002 0 .056.999l-.058-.999a1 1 0 0 0 .113 1.997h.006a2.617 2.617 0 0 1 .213-.002 8.469 8.469 0 0 1 2.813.523c1.567.588 3.24 1.811 3.823 4.493.758 3.486 3.005 5.216 5.024 6.042a10.64 10.64 0 0 0 3.472.763l.037.002-.42.419-.706.707 1.414 1.414.707-.707 2.121-2.121.707-.707-.707-.708-2.121-2.121-.707-.707-1.414 1.414.707.707.407.407a8.64 8.64 0 0 1-2.74-.613c-1.566-.64-3.241-1.922-3.827-4.616Zm6.883 6.926-.016-.69.016.69Z" clip-rule="evenodd"/>
+  <path stroke="currentColor" stroke-linecap="square" stroke-width="2" d="m22.727 8 2.12 2.121m.005.004-2.122 2.121"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M22.731 10.117s-6.5-.155-7.844 6.073C13.543 22.42 7 22.037 7 22.037"/>
 </svg>
