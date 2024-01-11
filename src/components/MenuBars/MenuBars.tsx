@@ -60,7 +60,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [menuBarsMobileRef, fabIsExpanded, showBoardReactionsMenu]);
 
-  const {SHOW_TIMER_MENU, SHOW_VOTING_MENU, SHOW_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_BOARD_REACTION_MENU, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
+  const {TOGGLE_TIMER_MENU, TOGGLE_VOTING_MENU, TOGGLE_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_BOARD_REACTION_MENU, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 
   const state = useAppSelector(
     (rootState) => ({
@@ -101,8 +101,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     dispatch(Actions.setModerating(!state.moderation));
   };
 
-  const showTimerMenu = () => navigate("timer");
-  const showVotingMenu = () => navigate("voting");
+  const toggleTimerMenu = () => (window.location.pathname.includes("timer") ? navigate("") : navigate("timer"));
+  const toggleVotingMenu = () => (window.location.pathname.includes("voting") ? navigate("") : navigate("voting"));
   const showSettings = () => navigate("settings");
 
   // normal users
@@ -116,8 +116,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   };
 
   useHotkeys(TOGGLE_BOARD_REACTION_MENU, toggleBoardReactionsMenu, hotkeyOptionsUser, []);
-  useHotkeys(SHOW_TIMER_MENU, showTimerMenu, hotkeyOptionsAdmin, []);
-  useHotkeys(SHOW_VOTING_MENU, showVotingMenu, hotkeyOptionsAdmin, []);
+  useHotkeys(TOGGLE_TIMER_MENU, toggleTimerMenu, hotkeyOptionsAdmin, []);
+  useHotkeys(TOGGLE_VOTING_MENU, toggleVotingMenu, hotkeyOptionsAdmin, []);
 
   return (
     <>
@@ -157,7 +157,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               />
             </li>
             <li>
-              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={SHOW_SETTINGS.toUpperCase()} />
+              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={TOGGLE_SETTINGS.toUpperCase()} />
             </li>
           </ul>
 
@@ -171,10 +171,17 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={showTimerMenu} icon={TimerIcon} hotkeyKey={SHOW_TIMER_MENU.toUpperCase()} />
+                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
               </li>
               <li>
-                <TooltipButton active={state.activeVoting} direction="left" label="Voting" onClick={showVotingMenu} icon={VoteIcon} hotkeyKey={SHOW_VOTING_MENU.toUpperCase()} />
+                <TooltipButton
+                  active={state.activeVoting}
+                  direction="left"
+                  label="Voting"
+                  onClick={toggleVotingMenu}
+                  icon={VoteIcon}
+                  hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
+                />
               </li>
               <li>
                 <TooltipButton
@@ -273,10 +280,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             {fabIsExpanded && (
               <>
                 <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                  <TooltipButton direction="right" label="Timer" onClick={showTimerMenu} icon={TimerIcon} />
+                  <TooltipButton direction="right" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} />
                 </li>
                 <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                  <TooltipButton direction="right" label="Voting" onClick={showVotingMenu} icon={VoteIcon} />
+                  <TooltipButton direction="right" label="Voting" onClick={toggleVotingMenu} icon={VoteIcon} />
                 </li>
               </>
             )}
