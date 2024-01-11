@@ -1,5 +1,5 @@
-<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g fill="currentColor">
-<path d="m11.667 16.333c0.91667 0 1.6667-0.75 1.6667-1.6667 0-0.91667-0.75-1.6667-1.6667-1.6667-0.91667 0-1.6667 0.75-1.6667 1.6667 0 0.91667 0.75 1.6667 1.6667 1.6667zm5-7.5h-0.83333v-1.6667c0-2.3-1.8667-4.1667-4.1667-4.1667-2.3 0-4.1667 1.8667-4.1667 4.1667v1.6667h-0.83333c-0.91667 0-1.6667 0.75-1.6667 1.6667v8.3333c0 0.91667 0.75 1.6667 1.6667 1.6667h10c0.91667 0 1.6667-0.75 1.6667-1.6667v-8.3333c0-0.91667-0.75-1.6667-1.6667-1.6667zm-7.5833-1.6667c0-1.425 1.1583-2.5833 2.5833-2.5833s2.5833 1.1583 2.5833 2.5833v1.6667h-5.1667v-1.6667zm7.5833 11.667h-10v-8.3333h10v8.3333z"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+  <path stroke="currentColor" stroke-width="2" d="M22 12H10a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-9a3 3 0 0 0-3-3Z"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M20.558 11.7V9.551a4.561 4.561 0 0 0-9.12-.02v2.17"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-opacity=".5" stroke-width="1.5" d="M16 17.648v3.7"/>
 </svg>
