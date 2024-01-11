@@ -5,7 +5,7 @@ import {ReactComponent as ShowIcon} from "assets/icon-visible.svg";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
 import {ReactComponent as PreviousIcon} from "assets/icon-arrow-previous.svg";
 import {ReactComponent as NextIcon} from "assets/icon-arrow-next.svg";
-import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
+import {ReactComponent as TrashIcon} from "assets/icon-trash.svg";
 import {Color, getColorClassName, getColorForIndex} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";

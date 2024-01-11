@@ -9,7 +9,7 @@ import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
+import {ReactComponent as TrashIcon} from "assets/icon-trash.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {Toast} from "utils/Toast";
 import "./StackView.scss";

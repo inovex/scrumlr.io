@@ -4,7 +4,7 @@ import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
 import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
-import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
+import {ReactComponent as TrashIcon} from "assets/icon-trash.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
@@ -238,7 +238,7 @@ export const BoardSettings = () => {
                 className={classNames("board-settings__delete-button")}
                 label={t("BoardSettings.DeleteBoard")}
                 onClick={() => setShowConfirmationDialog(true)}
-                icon={DeleteIcon}
+                icon={TrashIcon}
               />
             </>
           )}
@@ -248,7 +248,7 @@ export const BoardSettings = () => {
               title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
               onDecline={() => setShowConfirmationDialog(false)}
-              icon={DeleteIcon}
+              icon={TrashIcon}
               warning
             />
           )}

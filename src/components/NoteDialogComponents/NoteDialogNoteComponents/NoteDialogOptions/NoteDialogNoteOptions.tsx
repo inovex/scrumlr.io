@@ -1,6 +1,6 @@
 import {FC, useState} from "react";
 import {Participant} from "types/participant";
-import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
+import {ReactComponent as TrashIcon} from "assets/icon-trash.svg";
 import {ReactComponent as UnstackIcon} from "assets/icon-unstack.svg";
 import "./NoteDialogNoteOptions.scss";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
@@ -76,7 +76,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
                 onDelete(props.noteId);
               }}
               label={props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
-              icon={DeleteIcon}
+              icon={TrashIcon}
             />
           </li>
         )}
@@ -88,7 +88,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           onAcceptLabel={t("ConfirmationDialog.deleteNoteButton")}
           onDecline={() => setShowChildDialog(false)}
           onDeclineLabel={t("ConfirmationDialog.cancel")}
-          icon={DeleteIcon}
+          icon={TrashIcon}
           warning
         />
       )}
@@ -101,7 +101,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           onDeclineLabel={t("ConfirmationDialog.cancel")}
           onExtraOption={() => onDelete(props.noteId, true)}
           onExtraOptionLabel={t("ConfirmationDialog.deleteStackButton")}
-          icon={DeleteIcon}
+          icon={TrashIcon}
           warning
         />
       )}

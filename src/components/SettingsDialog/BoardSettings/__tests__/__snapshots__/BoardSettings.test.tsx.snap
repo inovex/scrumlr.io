@@ -226,7 +226,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         <svg
           class="settings-option-button__icon"
         >
-          icon-delete.svg
+          icon-trash.svg
         </svg>
       </button>
     </div>
