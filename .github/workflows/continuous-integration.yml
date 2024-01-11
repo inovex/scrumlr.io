@@ -82,7 +82,4 @@ jobs:
         with:
           url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
           token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
-<<<<<<< HEAD
-=======
           testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
->>>>>>> main
