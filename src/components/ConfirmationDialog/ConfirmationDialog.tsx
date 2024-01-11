@@ -46,6 +46,14 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                   </div>
                   <div className="confirmation-dialog__buttons">
                     <button
+                      aria-label={props.onDeclineLabel ?? t("ConfirmationDialog.no")}
+                      className="confirmation-dialog__button confirmation-dialog__button--decline"
+                      onClick={() => props.onDecline()}
+                      type="button"
+                    >
+                      {props.onDeclineLabel ?? t("ConfirmationDialog.no")}
+                    </button>
+                    <button
                       aria-label={props.onAcceptLabel ?? t("ConfirmationDialog.yes")}
                       className="confirmation-dialog__button confirmation-dialog__button--accept"
                       onClick={() => props.onAccept()}
@@ -63,14 +71,6 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
                         {props.onExtraOptionLabel}
                       </button>
                     )}
-                    <button
-                      aria-label={props.onDeclineLabel ?? t("ConfirmationDialog.no")}
-                      className="confirmation-dialog__button confirmation-dialog__button--decline"
-                      onClick={() => props.onDecline()}
-                      type="button"
-                    >
-                      {props.onDeclineLabel ?? t("ConfirmationDialog.no")}
-                    </button>
                   </div>
                 </div>
               </div>
