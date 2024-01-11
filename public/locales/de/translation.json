@@ -199,8 +199,8 @@
     "hotkeysEnabled": "Hotkeys aktiviert!",
     "hotkeysDisabled": "Hotkeys deaktiviert!",
     "hotkeyToggle": "Hotkeys aktivieren",
-    "cheatSheet": "Hotkey Spickzettel",
     "timerStarted": "Ein {{duration}}-minütiger Timer wurde gestartet",
+    "cheatSheet": "Hotkey Spickzettel",
     "toggleColumnVisibility": {
       "hide": "Ausgeblendete Spalten sind nun auch für dich ausgeblendet",
       "show": "Ausgeblendete Spalten sind nun für dich sichtbar"
