@@ -633,7 +633,7 @@
   },
   "RejectionPage": {
     "title": "Oops!",
-    "description": "Es sieht so aus, als ob die Türen zu dieser Sitzung vorerst geschlossen bleiben. Wir freuen uns über Ihr Interesse, aber leider wurde Ihr Antrag auf Teilnahme abgelehnt.",
+    "description": "Es sieht so aus, als ob die Türen zu dieser Sitzung vorerst geschlossen bleiben. Wir freuen uns über dein Interesse, aber leider wurde dein Antrag auf Teilnahme abgelehnt.",
     "button": "Zurück zur Startseite"
   }
 }
