@@ -630,5 +630,10 @@
   "ToggleButton": {
     "active": "Active",
     "inactive": "Inactive"
+  },
+  "RejectionPage": {
+    "title": "Oops!",
+    "description": "It looks like the doors to this session remain closed for now. We appreciate your interest, but unfortunately, your request to join has been declined.",
+    "button": "Back to Homepage"
   }
 }
