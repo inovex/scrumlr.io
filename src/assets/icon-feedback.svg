@@ -1,9 +1,6 @@
-<svg id="ic_feedback_white" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect id="BG" width="32" height="32" fill="rgba(255,255,255,0)"/>
-  <path id="Pfad_3988" data-name="Pfad 3988" d="M9.145,17H3a3,3,0,0,1-3-3V3A3,3,0,0,1,3,0H14a3,3,0,0,1,3,3V5.036h0" transform="translate(6 7)" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.7"/>
-  <path id="Pfad_3983" data-name="Pfad 3983" d="M7,14A7,7,0,1,0,0,7,7,7,0,0,0,7,14Z" transform="translate(12.229 11)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path id="Pfad_3984" data-name="Pfad 3984" d="M8,3.913A4.721,4.721,0,0,1,3.978,6,4.7,4.7,0,0,1,0,3.844M.5.921A.963.963,0,0,1,1.5,0a.963.963,0,0,1,1,.921m3,0A.963.963,0,0,1,6.5,0a.963.963,0,0,1,1,.921" transform="translate(15.229 16)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
-  <path id="Pfad_3985" data-name="Pfad 3985" d="M.885.885h10" transform="translate(8.344 10.115)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path id="Pfad_3986" data-name="Pfad 3986" d="M.885.885h3" transform="translate(8.344 14.115)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path id="Pfad_3987" data-name="Pfad 3987" d="M.885.885h3" transform="translate(8.344 18.115)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" opacity="0.7"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+  <path stroke="currentColor" stroke-opacity=".5" stroke-width="1.5" d="M15.145 24H9a3 3 0 0 1-3-3V10a3 3 0 0 1 3-3h11a3 3 0 0 1 3 3v2.036"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.227 25a7 7 0 1 0 0-14 7 7 0 0 0 0 14Z"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M23.227 19.914A4.72 4.72 0 0 1 19.205 22a4.7 4.7 0 0 1-3.978-2.156m.5-2.923a.963.963 0 0 1 1-.921.963.963 0 0 1 1 .92m3 0a.963.963 0 0 1 1-.92.963.963 0 0 1 1 .92"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-opacity=".5" stroke-width="1.5" d="M9.227 11h10m-10 4h3m-3 4h3"/>
 </svg>
