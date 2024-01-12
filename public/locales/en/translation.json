@@ -163,6 +163,7 @@
   },
   "Timer": {
     "stopTimer": "Stop timer",
+    "addOneMinute": "Add one minute",
     "reduce": "Reduce time",
     "increase": "Increase time"
   },

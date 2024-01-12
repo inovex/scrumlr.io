@@ -29,6 +29,7 @@ export const BoardAction = {
   TooManyJoinRequests: "scrumlr.io/tooManyJoinRequests" as const,
   SetTimer: "scrumlr.io/setTimer" as const,
   CancelTimer: "scrumlr.io/cancelTimer" as const,
+  IncrementTimer: "scrumlr.io/incrementTimer" as const,
 };
 
 /** Factory or creator class of internal Redux board object specific actions. */
@@ -148,6 +149,9 @@ export const BoardActionFactory = {
   cancelTimer: () => ({
     type: BoardAction.CancelTimer,
   }),
+  incrementTimer: () => ({
+    type: BoardAction.IncrementTimer,
+  }),
 };
 
 export type BoardReduxAction =
@@ -163,5 +167,6 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
   | ReturnType<typeof BoardActionFactory.setTimer>
   | ReturnType<typeof BoardActionFactory.cancelTimer>
+  | ReturnType<typeof BoardActionFactory.incrementTimer>
   | ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>
   | ReturnType<typeof BoardActionFactory.tooManyJoinRequests>;
