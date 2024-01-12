@@ -107,15 +107,23 @@ export const Timer = (props: TimerProps) => {
       <span>
         {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
       </span>
-      <div className="timer__short-actions">
-        {isModerator ? (
+      {isModerator ? (
+        <div className="timer__short-actions">
           <div className="short-actions__short-action">
             <button aria-label={t("Timer.stopTimer")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
               <CancelIcon />
             </button>
             <span className="short-action__tooltip">{t("Timer.stopTimer")}</span>
           </div>
-        ) : (
+          <div className="short-actions__short-action">
+            <button aria-label={t("Timer.addOneMinute")} className="short-action__button" onClick={() => store.dispatch(Actions.incrementTimer())}>
+              +1
+            </button>
+            <span className="short-action__tooltip">{t("Timer.addOneMinute")}</span>
+          </div>
+        </div>
+      ) : (
+        <div className="timer__short-actions">
           <div className="short-actions__short-action">
             <button
               aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
@@ -127,8 +135,8 @@ export const Timer = (props: TimerProps) => {
             </button>
             <span className="short-action__tooltip">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
       <TimerIcon />
     </div>
   );
