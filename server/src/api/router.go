@@ -160,6 +160,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)
 			r.With(s.BoardParticipantContext).Post("/timer", s.setTimer)
 			r.With(s.BoardParticipantContext).Delete("/timer", s.deleteTimer)
+      r.With(s.BoardParticipantContext).Post("/timer/increment", s.incrementTimer)
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
 
