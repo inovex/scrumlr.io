@@ -56,11 +56,12 @@
 
 .settings-input__length {
   position: absolute;
-  margin: 0 $margin--medium;
   right: 0;
   top: 2px;
+  margin: 0 $margin--medium;
   opacity: 0;
   transition: opacity 100ms;
+  font-size: $text-size--small;
   line-height: $line-height--small;
 }
 
