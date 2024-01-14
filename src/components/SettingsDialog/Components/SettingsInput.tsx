@@ -32,7 +32,7 @@ export const SettingsInput: FC<PropsWithChildren<SettingsInputProps>> = ({label,
       autoComplete="off"
       maxLength={maxLength}
     />
-    {maxLength !== undefined && (
+    {maxLength !== undefined && value.length >= maxLength - 10 && (
       <small className="settings-input__length">
         {value.length}/{maxLength}
       </small>
