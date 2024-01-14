@@ -26,6 +26,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         <input
           autocomplete="off"
           id="boardSettingsBoardName"
+          maxlength="128"
           placeholder="scrumlr.io"
           type="text"
           value="test-board-name"

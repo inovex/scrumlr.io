@@ -1,6 +1,5 @@
 import {ChangeEvent, FC, PropsWithChildren} from "react";
 import "./SettingsInput.scss";
-import classNames from "classnames";
 
 export interface SettingsInputProps {
   label: string;
@@ -17,10 +16,7 @@ export interface SettingsInputProps {
 export const SettingsInput: FC<PropsWithChildren<SettingsInputProps>> = ({label, id, value, onChange, submit, disabled, type, placeholder, children, maxLength}) => (
   <div className="settings-input__container">
     <input
-      className={classNames({
-        "settings-input__hidden-placeholder": !placeholder,
-        "settings-input__has-max-length": maxLength !== undefined,
-      })}
+      className={!placeholder ? "settings-input__hidden-placeholder" : undefined}
       placeholder={placeholder ?? label}
       value={value}
       onChange={onChange}
