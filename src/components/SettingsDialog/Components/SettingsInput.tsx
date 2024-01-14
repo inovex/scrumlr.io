@@ -1,5 +1,6 @@
 import {ChangeEvent, FC, PropsWithChildren} from "react";
 import "./SettingsInput.scss";
+import classNames from "classnames";
 
 export interface SettingsInputProps {
   label: string;
@@ -10,12 +11,16 @@ export interface SettingsInputProps {
   disabled?: boolean;
   type?: "text" | "password";
   placeholder?: string;
+  maxLength?: number;
 }
 
-export const SettingsInput: FC<PropsWithChildren<SettingsInputProps>> = ({label, id, value, onChange, submit, disabled, type, placeholder, children}) => (
+export const SettingsInput: FC<PropsWithChildren<SettingsInputProps>> = ({label, id, value, onChange, submit, disabled, type, placeholder, children, maxLength}) => (
   <div className="settings-input__container">
     <input
-      className={!placeholder ? "settings-input__hidden-placeholder" : undefined}
+      className={classNames({
+        "settings-input__hidden-placeholder": !placeholder,
+        "settings-input__has-max-length": maxLength !== undefined,
+      })}
       placeholder={placeholder ?? label}
       value={value}
       onChange={onChange}
@@ -25,7 +30,13 @@ export const SettingsInput: FC<PropsWithChildren<SettingsInputProps>> = ({label,
       type={type ?? "text"}
       id={id}
       autoComplete="off"
+      maxLength={maxLength}
     />
+    {maxLength !== undefined && (
+      <small className="settings-input__length">
+        {value.length}/{maxLength}
+      </small>
+    )}
     <label htmlFor={id}>{label}</label>
     {children && (
       <button className="settings-input__children" onMouseDown={(e) => e.preventDefault()}>

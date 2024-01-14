@@ -34,6 +34,10 @@
       font-size: $text-size--small;
       line-height: $line-height--medium;
     }
+
+    &:focus ~ .settings-input__length {
+      opacity: 1;
+    }
   }
 
   label {
@@ -48,6 +52,16 @@
 .settings-input__hidden-placeholder::placeholder {
   visibility: hidden;
   color: transparent;
+}
+
+.settings-input__length {
+  position: absolute;
+  margin: 0 $margin--medium;
+  right: 0;
+  top: 2px;
+  opacity: 0;
+  transition: opacity 100ms;
+  line-height: $line-height--small;
 }
 
 .settings-input__children {
@@ -87,5 +101,9 @@
     label {
       color: $color-white;
     }
+  }
+
+  .settings-input__length {
+    color: $color-white;
   }
 }
