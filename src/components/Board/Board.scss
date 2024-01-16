@@ -39,9 +39,17 @@
 
 .board__spacer-left {
   @include inset-border($top: true, $left: true, $bottom: true);
+
+  &.board__spacer--moderation-isActive {
+    @include inset-border($top: true, $left: true, $bottom: true, $color: $color-goal-green);
+  }
 }
 .board__spacer-right {
   @include inset-border($top: true, $right: true, $bottom: true);
+
+  &.board__spacer--moderation-isActive {
+    @include inset-border($top: true, $right: true, $bottom: true, $color: $color-goal-green);
+  }
 }
 
 .board__spacer-left:nth-child(odd),
