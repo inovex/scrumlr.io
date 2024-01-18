@@ -161,13 +161,13 @@ func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSessio
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Scan(context.Background(), &sessions)
 
-    // send update to observers here, as bun .AfterScanRow() is triggered for each updated row
-    // see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
-    for _, observer := range d.observer {
-      if o, ok := observer.(BoardSessionsObserver); ok {
-        o.UpdatedSessions(update.Board, sessions)
-      }
-    }
+	// send update to observers here, as bun .AfterScanRow() is triggered for each updated row
+	// see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
+	for _, observer := range d.observer {
+		if o, ok := observer.(BoardSessionsObserver); ok {
+			o.UpdatedSessions(update.Board, sessions)
+		}
+	}
 
 	return sessions, err
 }
@@ -178,6 +178,10 @@ func (d *Database) BoardSessionExists(board, user uuid.UUID) (bool, error) {
 
 func (d *Database) BoardModeratorSessionExists(board, user uuid.UUID) (bool, error) {
 	return d.db.NewSelect().Table("board_sessions").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Where("role <> ?", types.SessionRoleParticipant).Exists(context.Background())
+}
+
+func (d *Database) ParticipantBanned(board, user uuid.UUID) (bool, error) {
+	return d.db.NewSelect().Table("board_sessions").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Where("\"user\" = ?", false).Exists(context.Background())
 }
 
 func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) {
