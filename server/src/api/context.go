@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -13,7 +12,6 @@ import (
 )
 
 func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
-	fmt.Println("is this what im clooking for?")
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
