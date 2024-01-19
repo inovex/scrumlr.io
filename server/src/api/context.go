@@ -72,9 +72,11 @@ func (s *Server) BoardEntryContext(next http.Handler) http.Handler {
 		if err != nil {
 			log.Errorw("unable to check participant session status", "err", err)
 			common.Throw(w, r, common.InternalServerError)
+			return
 		}
 		if banned {
 			common.Throw(w, r, common.ForbiddenError(errors.New("user is currently banned from this board")))
+			return
 		}
 
 		boardContext := context.WithValue(r.Context(), "Board", board)
