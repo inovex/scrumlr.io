@@ -27,7 +27,6 @@ func NewBoardService(db *database.Database, rt *realtime.Broker) services.Boards
 	b := new(BoardService)
 	b.database = db
 	b.realtime = rt
-	b.database.AttachObserver((database.BoardObserver)(b))
 	return b
 }
 
@@ -93,7 +92,12 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 }
 
 func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
-	return s.database.DeleteBoard(id)
+	err := s.database.DeleteBoard(id)
+	if err != nil {
+		return err
+	}
+	go s.DeletedBoard(id)
+	return err
 }
 
 func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) (*dto.Board, error) {
@@ -132,6 +136,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 	if err != nil {
 		return nil, err
 	}
+	go s.UpdatedBoard(board)
 	return new(dto.Board).From(board), err
 }
 
@@ -147,6 +152,7 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 	if err != nil {
 		return nil, err
 	}
+	go s.UpdatedBoardTimer(board)
 	return new(dto.Board).From(board), err
 }
 
@@ -160,6 +166,7 @@ func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board,
 	if err != nil {
 		return nil, err
 	}
+	go s.UpdatedBoardTimer(board)
 	return new(dto.Board).From(board), err
 }
 

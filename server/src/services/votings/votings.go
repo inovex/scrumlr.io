@@ -27,7 +27,6 @@ func NewVotingService(db *database.Database, rt *realtime.Broker) services.Votin
 	b := new(VotingService)
 	b.database = db
 	b.realtime = rt
-	b.database.AttachObserver((database.VotingObserver)(b))
 	return b
 }
 
@@ -58,7 +57,6 @@ func (s *VotingService) Create(ctx context.Context, body dto.VotingCreateRequest
 		ShowVotesOfOthers:  body.ShowVotesOfOthers,
 		Status:             types.VotingStatusOpen,
 	})
-
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, common.BadRequestError(errors.New("only one open voting session is allowed"))
@@ -66,7 +64,7 @@ func (s *VotingService) Create(ctx context.Context, body dto.VotingCreateRequest
 		log.Errorw("unable to create voting", "board", body.Board, "error", err)
 		return nil, common.InternalServerError
 	}
-
+	go s.CreatedVoting(body.Board, voting)
 	return new(dto.Voting).From(voting, nil), err
 }
 
@@ -89,6 +87,7 @@ func (s *VotingService) Update(ctx context.Context, body dto.VotingUpdateRequest
 
 	if voting.Status == types.VotingStatusClosed {
 		votes, _ := s.getVotes(ctx, body.Board, body.ID)
+		go s.UpdatedVoting(body.Board, voting)
 		return new(dto.Voting).From(voting, votes), err
 	}
 	return new(dto.Voting).From(voting, nil), err

@@ -27,7 +27,6 @@ func NewBoardSessionService(db *database.Database, rt *realtime.Broker) services
 	b := new(BoardSessionService)
 	b.database = db
 	b.realtime = rt
-	b.database.AttachObserver((database.BoardSessionsObserver)(b))
 	return b
 }
 
@@ -53,21 +52,23 @@ func (s *BoardSessionService) List(_ context.Context, boardID uuid.UUID, filter 
 
 func (s *BoardSessionService) Connect(_ context.Context, boardID, userID uuid.UUID) error {
 	var connected = true
-	_, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
+	session, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
 		Board:     boardID,
 		User:      userID,
 		Connected: &connected,
 	})
+	go s.UpdatedSession(boardID, session)
 	return err
 }
 
 func (s *BoardSessionService) Disconnect(_ context.Context, boardID, userID uuid.UUID) error {
 	var connected = false
-	_, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
+	session, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
 		Board:     boardID,
 		User:      userID,
 		Connected: &connected,
 	})
+	go s.UpdatedSession(boardID, session)
 	return err
 }
 
@@ -113,6 +114,7 @@ func (s *BoardSessionService) Update(_ context.Context, body dto.BoardSessionUpd
 		return nil, err
 
 	}
+	go s.UpdatedSession(body.Board, session)
 	return new(dto.BoardSession).From(session), err
 }
 
@@ -125,6 +127,7 @@ func (s *BoardSessionService) UpdateAll(_ context.Context, body dto.BoardSession
 	if err != nil {
 		return nil, err
 	}
+	go s.UpdatedSessions(body.Board, sessions)
 	return dto.BoardSessions(sessions), err
 }
 
@@ -137,6 +140,7 @@ func (s *BoardSessionService) Create(_ context.Context, boardID, userID uuid.UUI
 	if err != nil {
 		return nil, err
 	}
+	go s.CreatedSession(boardID, session)
 	return new(dto.BoardSession).From(session), err
 }
 
@@ -182,6 +186,7 @@ func (s *BoardSessionService) CreateSessionRequest(_ context.Context, boardID, u
 	if err != nil {
 		return nil, err
 	}
+	go s.CreatedSessionRequest(boardID, request)
 	return new(dto.BoardSessionRequest).From(request), err
 }
 
@@ -190,6 +195,7 @@ func (s *BoardSessionService) UpdateSessionRequest(_ context.Context, body dto.B
 	if err != nil {
 		return nil, err
 	}
+	go s.UpdatedSessionRequest(body.Board, request)
 	return new(dto.BoardSessionRequest).From(request), err
 }
 

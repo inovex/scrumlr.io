@@ -2,10 +2,12 @@ package notes
 
 import (
 	"context"
-	"scrumlr.io/server/common/dto"
 	"testing"
 
+	"scrumlr.io/server/common/dto"
+
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/database"
@@ -46,13 +48,13 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 		Text:   txt,
 	}).Return(database.Note{}, nil)
 
-	s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
 	})
-
+	assert.NoError(suite.T(), err, "No error in create function.")
 	mock.AssertExpectations(suite.T())
 
 }
