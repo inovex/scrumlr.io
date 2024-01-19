@@ -43,50 +43,8 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) BoardEntryContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log := logger.FromRequest(r)
-
-		boardParam := chi.URLParam(r, "id")
-		board, err := uuid.Parse(boardParam)
-		if err != nil {
-			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
-			return
-		}
-
-		user := r.Context().Value("User").(uuid.UUID)
-
-		exists, err := s.sessions.SessionExists(r.Context(), board, user)
-		if err != nil {
-			log.Errorw("unable to check board session", "err", err)
-			common.Throw(w, r, common.InternalServerError)
-			return
-		}
-
-		if !exists {
-			common.Throw(w, r, common.NotFoundError)
-			return
-		}
-
-		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
-		if err != nil {
-			log.Errorw("unable to check participant session status", "err", err)
-			common.Throw(w, r, common.InternalServerError)
-			return
-		}
-		if banned {
-			common.Throw(w, r, common.ForbiddenError(errors.New("user is currently banned from this board")))
-			return
-		}
-
-		boardContext := context.WithValue(r.Context(), "Board", board)
-		next.ServeHTTP(w, r.WithContext(boardContext))
-	})
-}
-
 func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Print("testsetst")
 		log := logger.FromRequest(r)
 
 		boardParam := chi.URLParam(r, "id")
@@ -133,7 +91,6 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
-		fmt.Println("Is the moderator currently banned? ", exists)
 
 		if !exists {
 			common.Throw(w, r, common.NotFoundError)

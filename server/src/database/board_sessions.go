@@ -26,6 +26,7 @@ type BoardSession struct {
 	Ready             bool
 	RaisedHand        bool
 	Role              types.SessionRole
+	Banned            bool
 	CreatedAt         time.Time
 }
 
@@ -45,6 +46,7 @@ type BoardSessionUpdate struct {
 	Ready             *bool
 	RaisedHand        *bool
 	Role              *types.SessionRole
+	Banned            *bool
 }
 
 func BoardSessionFilterTypeFromQueryString(query url.Values) filter.BoardSessionFilter {
@@ -118,6 +120,9 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 			updateQuery.Where("role = ?", types.SessionRoleOwner)
 		}
 	}
+	if update.Banned != nil {
+		updateQuery = updateQuery.Column("banned")
+	}
 
 	updateQuery.Where("\"board\" = ?", update.Board).Where("\"user\" = ?", update.User).Returning("*")
 
@@ -126,7 +131,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 		With("updateQuery", updateQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.board = ?", update.Board).
 		Where("s.user = ?", update.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -181,7 +186,7 @@ func (d *Database) BoardModeratorSessionExists(board, user uuid.UUID) (bool, err
 }
 
 func (d *Database) ParticipantBanned(board, user uuid.UUID) (bool, error) {
-	return d.db.NewSelect().Table("board_sessions").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Where("\"user\" = ?", false).Exists(context.Background())
+	return d.db.NewSelect().Table("board_sessions").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Where("\"banned\" = ?", true).Exists(context.Background())
 }
 
 func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) {

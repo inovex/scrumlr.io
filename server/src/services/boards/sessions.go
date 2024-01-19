@@ -112,6 +112,7 @@ func (s *BoardSessionService) Update(_ context.Context, body dto.BoardSessionUpd
 		RaisedHand:        body.RaisedHand,
 		ShowHiddenColumns: body.ShowHiddenColumns,
 		Role:              body.Role,
+		Banned:            body.Banned,
 	})
 	if err != nil {
 		return nil, err
