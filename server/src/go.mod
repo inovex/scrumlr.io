@@ -21,9 +21,9 @@ require (
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
-	github.com/uptrace/bun v1.1.16
+	github.com/uptrace/bun v1.1.17
 	github.com/uptrace/bun/dbfixture v1.1.16
-	github.com/uptrace/bun/dialect/pgdialect v1.1.16
+	github.com/uptrace/bun/dialect/pgdialect v1.1.17
 	github.com/uptrace/bun/extra/bundebug v1.1.16
 	github.com/urfave/cli/v2 v2.27.1
 	go.uber.org/zap v1.26.0
@@ -73,7 +73,7 @@ require (
 	github.com/lib/pq v1.10.9 // indirect
 	github.com/markbates/going v1.0.3 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
-	github.com/mattn/go-isatty v0.0.19 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/moby/term v0.5.0 // indirect
 	github.com/nats-io/nkeys v0.4.6 // indirect
@@ -87,7 +87,7 @@ require (
 	github.com/sirupsen/logrus v1.9.2 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
-	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
+	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
