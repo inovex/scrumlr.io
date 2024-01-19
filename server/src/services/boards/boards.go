@@ -163,6 +163,38 @@ func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board,
 	return new(dto.Board).From(board), err
 }
 
+func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Board, error) {
+	board, err := s.database.GetBoard(id)
+	if err != nil {
+		return nil, err
+	}
+
+  var timerStart time.Time
+  var timerEnd time.Time
+
+  currentTime := time.Now().Local()
+
+  if board.TimerEnd.After(currentTime) {
+    timerStart = *board.TimerStart
+    timerEnd = board.TimerEnd.Add(time.Minute * time.Duration(1))
+  } else {
+    timerStart = currentTime
+    timerEnd = currentTime.Add(time.Minute * time.Duration(1))
+  }
+
+  update := database.BoardTimerUpdate{
+    ID: board.ID,
+    TimerStart: &timerStart,
+    TimerEnd: &timerEnd,
+  }
+
+  board, err = s.database.UpdateBoardTimer(update)
+  if err != nil {
+    return nil, err
+  }
+  return new(dto.Board).From(board), nil
+}
+
 func (s *BoardService) UpdatedBoardTimer(board database.Board) {
 	err := s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardTimerUpdated,

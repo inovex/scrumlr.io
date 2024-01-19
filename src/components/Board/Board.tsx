@@ -176,12 +176,14 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <HotkeyAnchor />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div
-          className={`board__spacer-left ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[0])}`}
+          className={`board__spacer-left ${getColorClassName(columnColors[0])} ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""}`}
           {...leftSpacerOffset.bindings}
         />
         {children}
         <div
-          className={`board__spacer-right ${currentUserIsModerator && moderating ? "accent-color__goal-green" : getColorClassName(columnColors[columnColors.length - 1])}`}
+          className={`board__spacer-right  ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""} ${getColorClassName(
+            columnColors[columnColors.length - 1]
+          )}`}
           {...rightSpacerOffset.bindings}
         />
       </main>

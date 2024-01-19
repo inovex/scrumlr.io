@@ -30,8 +30,9 @@ export const HotkeyAnchor = () => {
     TOGGLE_MODERATION,
     TOGGLE_RAISED_HAND,
     TOGGLE_READY_STATE,
-    SHOW_SETTINGS,
+    TOGGLE_SETTINGS,
     TOGGLE_HOTKEYS,
+    OPEN_HOTKEY_CHEATSHEET,
     TOGGLE_SHOW_AUTHORS,
     TOGGLE_SHOW_OTHER_USERS_NOTES,
     TOGGLE_COLUMN_VISIBILITY,
@@ -78,6 +79,8 @@ export const HotkeyAnchor = () => {
     }
   };
 
+  const openHotkeyCheatsheet = () => window.open("/hotkeys.pdf", "_blank");
+
   const toggleModeration = () => {
     if (state.moderation) {
       dispatch(Actions.stopSharing());
@@ -117,13 +120,14 @@ export const HotkeyAnchor = () => {
     dispatchHotkeyNotification(t("Hotkeys.timerStarted", {duration: minutes}))
   };
 
-  const showSettings = () => navigate("settings");
+  const toggleSettings = () => (window.location.pathname.includes("settings") ? navigate("") : navigate("settings/board"));
 
   useHotkeys(TOGGLE_HOTKEYS, toggleHotkeys, [state.hotkeysAreActive, state.hotkeyNotificationsEnabled]);
+  useHotkeys(OPEN_HOTKEY_CHEATSHEET, openHotkeyCheatsheet, hotkeyOptions);
   useHotkeys(TOGGLE_MODERATION, toggleModeration, hotkeyOptions, [state.moderation, state.hotkeyNotificationsEnabled]);
   useHotkeys(TOGGLE_READY_STATE, toggleReadyState, hotkeyOptions, [isReady, state.hotkeyNotificationsEnabled]);
   useHotkeys(TOGGLE_RAISED_HAND, toggleRaiseHand, hotkeyOptions, [raisedHand, state.hotkeyNotificationsEnabled]);
-  useHotkeys(SHOW_SETTINGS, showSettings, hotkeyOptions);
+  useHotkeys(TOGGLE_SETTINGS, toggleSettings, hotkeyOptions);
   useHotkeys(
     TOGGLE_SHOW_AUTHORS,
     (e: KeyboardEvent) => {
