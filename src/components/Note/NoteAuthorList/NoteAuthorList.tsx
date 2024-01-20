@@ -3,7 +3,7 @@ import {Participant, ParticipantExtendedInfo} from "types/participant";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
 import "./NoteAuthorList.scss";
-import {NoteAuthorSkeleton} from "../NoteAuthorSkeleton/NoteAuthorSkeleton";
+import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
 
 type NoteAuthorListProps = {
   authors: Participant[];
