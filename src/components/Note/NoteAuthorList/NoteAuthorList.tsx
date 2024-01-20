@@ -62,7 +62,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const restUsersExist = restAuthors.length > 0;
   const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
 
-  const authorVisible = props.showAuthors || stackAuthor.isSelf;
+  const authorVisible = props.showAuthors || stackAuthor.user.id === props.viewer.user.id;
   if (!authorVisible) {
     return <NoteAuthorSkeleton />;
   }
