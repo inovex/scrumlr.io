@@ -115,7 +115,6 @@ func loadTestdata() error {
 		(*Note)(nil),
 		(*Voting)(nil),
 		(*Vote)(nil),
-		(*Assignment)(nil),
 		(*Reaction)(nil),
 	)
 	fixture = dbfixture.New(testDb.db)

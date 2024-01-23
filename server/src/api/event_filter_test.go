@@ -141,7 +141,6 @@ var (
 			Votes:       []*dto.Vote{},
 			Sessions:    boardSessions,
 			Requests:    []*dto.BoardSessionRequest{},
-			Assignments: []*dto.Assignment{},
 		},
 	}
 )
@@ -390,7 +389,6 @@ func testInitFilterAsParticipant(t *testing.T) {
 			Votes:       []*dto.Vote{},
 			Sessions:    boardSessions,
 			Requests:    []*dto.BoardSessionRequest{},
-			Assignments: []*dto.Assignment{},
 		},
 	}
 	returnedInitEvent := eventInitFilter(initEvent, participantBoardSession.User.ID)

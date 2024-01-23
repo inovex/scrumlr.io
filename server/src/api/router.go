@@ -34,7 +34,6 @@ type Server struct {
 	sessions       services.BoardSessions
 	health         services.Health
 	feedback       services.Feedback
-	assignments    services.Assignments
 	boardReactions services.BoardReactions
 
 	upgrader websocket.Upgrader
@@ -56,7 +55,6 @@ func New(
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,
-	assignments services.Assignments,
 	boardReactions services.BoardReactions,
 	verbose bool,
 	checkOrigin bool,
@@ -99,7 +97,6 @@ func New(
 		sessions:                         sessions,
 		health:                           health,
 		feedback:                         feedback,
-		assignments:                      assignments,
 		boardReactions:                   boardReactions,
 	}
 
@@ -171,7 +168,6 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			s.initReactionResources(r)
 			s.initVotingResources(r)
 			s.initVoteResources(r)
-			s.initAssignmentResources(r)
 			s.initBoardReactionResources(r)
 		})
 
@@ -185,9 +181,13 @@ func (s *Server) protectedRoutes(r chi.Router) {
 func (s *Server) initVoteResources(r chi.Router) {
 	r.Route("/votes", func(r chi.Router) {
 		r.Use(s.BoardParticipantContext)
-		r.Post("/", s.addVote)
-		r.Delete("/", s.removeVote)
 		r.Get("/", s.getVotes)
+
+		r.Group(func(r chi.Router) {
+			r.Use(s.BoardEditableContext)
+			r.Post("/", s.addVote)
+			r.Delete("/", s.removeVote)
+		})
 	})
 }
 
@@ -266,7 +266,7 @@ func (s *Server) initNoteResources(r chi.Router) {
 		r.Use(s.BoardParticipantContext)
 
 		r.Get("/", s.getNotes)
-		r.Post("/", s.createNote)
+		r.With(s.BoardEditableContext).Post("/", s.createNote)
 
 		r.Route("/{note}", func(r chi.Router) {
 			r.Use(s.NoteContext)
@@ -284,33 +284,21 @@ func (s *Server) initReactionResources(r chi.Router) {
 		r.Use(s.BoardParticipantContext)
 
 		r.Get("/", s.getReactions)
-		r.Post("/", s.createReaction)
+		r.With(s.BoardEditableContext).Post("/", s.createReaction)
 
 		r.Route("/{reaction}", func(r chi.Router) {
 			r.Use(s.ReactionContext)
 
 			r.Get("/", s.getReaction)
-			r.Delete("/", s.removeReaction)
-			r.Put("/", s.updateReaction)
-		})
-	})
-}
-
-func (s *Server) initAssignmentResources(r chi.Router) {
-	r.Route("/assignments", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
-
-		r.Post("/", s.createAssignment)
-		r.Route("/{assignment}", func(r chi.Router) {
-			r.Use(s.AssignmentContext)
-			r.Delete("/", s.deleteAssignment)
+			r.With(s.BoardEditableContext).Delete("/", s.removeReaction)
+			r.With(s.BoardEditableContext).Put("/", s.updateReaction)
 		})
 	})
 }
 
 func (s *Server) initBoardReactionResources(r chi.Router) {
 	r.Route("/board-reactions", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
+		r.Use(s.BoardEditableContext)
 
 		r.Post("/", s.createBoardReaction)
 	})

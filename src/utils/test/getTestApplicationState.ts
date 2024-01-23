@@ -174,7 +174,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     noteFocused: false,
     showBoardReactions: true,
   },
-  assignments: [],
   boardReactions: [],
   skinTone: {
     name: "default",

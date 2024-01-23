@@ -127,6 +127,38 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 	})
 }
 
+func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		board := r.Context().Value("Board").(uuid.UUID)
+		user := r.Context().Value("User").(uuid.UUID)
+
+		isMod, err := s.sessions.ModeratorSessionExists(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to verify board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		settings, err := s.boards.Get(r.Context(), board)
+		if err != nil {
+			log.Errorw("unable to verify board settings", "err", err)
+			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings")))
+			return
+		}
+
+		if !isMod && !settings.AllowEditing {
+			log.Errorw("not allowed to edit board", "err", err)
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board")))
+			return
+		}
+
+		boardEditable := context.WithValue(r.Context(), "BoardEditable", settings.AllowEditing)
+		next.ServeHTTP(w, r.WithContext(boardEditable))
+	})
+}
+
 func (s *Server) ColumnContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnParam := chi.URLParam(r, "column")
@@ -166,20 +198,6 @@ func (s *Server) ReactionContext(next http.Handler) http.Handler {
 
 		reactionContext := context.WithValue(r.Context(), "Reaction", reaction)
 		next.ServeHTTP(w, r.WithContext(reactionContext))
-	})
-}
-
-func (s *Server) AssignmentContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		assignmentParam := chi.URLParam(r, "assignment")
-		assignment, err := uuid.Parse(assignmentParam)
-		if err != nil {
-			common.Throw(w, r, common.BadRequestError(errors.New("invalid assignment id")))
-			return
-		}
-
-		assignmentContext := context.WithValue(r.Context(), "Assignment", assignment)
-		next.ServeHTTP(w, r.WithContext(assignmentContext))
 	})
 }
 
