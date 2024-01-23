@@ -1,0 +1,41 @@
+@import "src/constants/style.scss";
+@import "../NoteAuthorList.scss";
+
+$skeleton-name-width: 92px;
+
+.note-author-skeleton {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.note-author-skeleton__avatar {
+  width: $avatar-size;
+  height: $avatar-size;
+  border-radius: 100%;
+  overflow: hidden;
+  background-color: $color-lighter-gray;
+}
+
+.note-author-skeleton__name {
+  height: $text-size--small;
+  width: $skeleton-name-width;
+  border-radius: 4px;
+  background-color: $color-lighter-gray;
+}
+
+[theme="dark"] {
+  .note-author-skeleton__avatar {
+    background-color: $color-dark-one;
+
+    img {
+      background-blend-mode: luminosity;
+      opacity: 0.8;
+    }
+  }
+
+  .note-author-skeleton__name {
+    background-color: $color-dark-one;
+  }
+}
