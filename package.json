@@ -40,7 +40,7 @@
     "react-router-dom": "^6.21.1",
     "react-spring": "^9.7.3",
     "react-to-print": "^2.14.15",
-    "react-toastify": "^10.0.3",
+    "react-toastify": "^10.0.4",
     "react-tooltip": "^5.26.0",
     "sockette": "^2.0.6",
     "underscore": "^1.13.6",
