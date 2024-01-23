@@ -16,7 +16,6 @@ import (
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services/assignments"
 	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
@@ -304,7 +303,6 @@ func run(c *cli.Context) error {
 	reactionService := reactions.NewReactionService(dbConnection, rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
-	assignmentService := assignments.NewAssignmentService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
 
 	s := api.New(
@@ -319,7 +317,6 @@ func run(c *cli.Context) error {
 		boardSessionService,
 		healthService,
 		feedbackService,
-		assignmentService,
 		boardReactionService,
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
