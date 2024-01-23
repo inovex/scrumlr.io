@@ -2,8 +2,9 @@ package common
 
 import (
 	"errors"
-	"github.com/go-chi/render"
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
 type APIError struct {
@@ -36,6 +37,15 @@ func ForbiddenError(err error) *APIError {
 		Err:        err,
 		StatusCode: http.StatusForbidden,
 		StatusText: "Forbidden.",
+		ErrorText:  err.Error(),
+	}
+}
+
+func GoneError(err error) *APIError {
+	return &APIError{
+		Err:        err,
+		StatusCode: http.StatusGone,
+		StatusText: "Gone",
 		ErrorText:  err.Error(),
 	}
 }
