@@ -41,13 +41,16 @@ export const Note = (props: NoteProps) => {
 
   // all authors of a note, including its children if it's a stack.
   const authors = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.concat(state.participants?.self).find((p) => p.user.id === note?.author);
+    const allUsers = state.participants?.others.concat(state.participants?.self);
+    const noteAuthor = allUsers?.find((p) => p.user.id === note?.author);
     const childrenNoteAuthors = state.notes
       // get all notes which are in the same stack as the main note
       .filter((n) => n.position.stack === props.noteId)
-      // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
-      .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
-    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[]; // remove undefined values (which shouldn't exists, only for TS type assertion)
+      // find the corresponding author for the respective note in the list of other participants.
+      .map((c) => allUsers?.find((p) => p.user.id === c.author));
+
+    // remove undefined values (could exist if a author is not in the list of participants or hidden)
+    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[];
   }, isEqual);
 
   /* eslint-disable */
