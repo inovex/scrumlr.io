@@ -35,7 +35,6 @@ type EventData struct {
 	Votes       []*dto2.Vote                `json:"votes"`
 	Sessions    []*dto2.BoardSession        `json:"participants"`
 	Requests    []*dto2.BoardSessionRequest `json:"requests"`
-	Assignments []*dto2.Assignment          `json:"assignments"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +50,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	board, requests, sessions, columns, notes, reactions, votings, votes, assignments, err := s.boards.FullBoard(r.Context(), id)
+	board, requests, sessions, columns, notes, reactions, votings, votes, err := s.boards.FullBoard(r.Context(), id)
 	if err != nil {
 		logger.Get().Errorw("failed to prepare init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
@@ -67,7 +66,6 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		Votes:       votes,
 		Sessions:    sessions,
 		Requests:    requests,
-		Assignments: assignments,
 	}
 
 	initEvent := InitEvent{
