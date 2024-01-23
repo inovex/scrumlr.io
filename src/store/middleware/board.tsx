@@ -134,6 +134,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       showAuthors: action.board.showAuthors,
       showNotesOfOtherUsers: action.board.showNotesOfOtherUsers,
       showNoteReactions: action.board.showNoteReactions,
+      allowEditing: action.board.allowEditing,
       name: action.board.name == null ? currentState.name : action.board.name,
     }).catch(() => {
       i18n.on("loaded", () => {

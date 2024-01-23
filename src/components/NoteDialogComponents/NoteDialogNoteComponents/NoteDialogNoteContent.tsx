@@ -28,7 +28,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useDispatch();
   const {t} = useTranslation();
-  const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
+  const boardEditingAllowed = useAppSelector((state) => state.board.data?.allowEditing ?? true);
+  const editable = !((viewer.role === "PARTICIPANT" && !boardEditingAllowed) || (viewer.role === "PARTICIPANT" && viewer.user.id !== authorId));
 
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === authorId) ?? state.participants?.self;

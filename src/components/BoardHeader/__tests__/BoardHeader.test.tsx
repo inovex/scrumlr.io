@@ -68,6 +68,7 @@ describe("Board Header", () => {
               showAuthors: true,
               showNotesOfOtherUsers: true,
               allowStacking: true,
+              allowEditing: true,
               showNoteReactions: true,
             },
           },

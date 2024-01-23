@@ -23,6 +23,7 @@ const createBoardData = (overwrite?: Partial<BoardState["data"]> & Partial<Pick<
       showNoteReactions: overwrite?.showNoteReactions ?? true,
       showNotesOfOtherUsers: overwrite?.showNotesOfOtherUsers ?? true,
       allowStacking: overwrite?.allowStacking ?? true,
+      allowEditing: overwrite?.allowEditing ?? true,
     },
   };
 };

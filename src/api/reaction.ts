@@ -34,11 +34,12 @@ export const ReactionAPI = {
         return;
       }
 
-      throw new Error(`create reaction request resulted in status ${response.status}`);
+      throw new Error(`remove reaction request resulted in status ${response.status}`);
     } catch (error) {
       throw new Error(`unable to remove reaction with error: ${error}`);
     }
   },
+
   updateReaction: async (board: string, reaction: string, reactionType: ReactionType) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${board}/reactions/${reaction}`, {

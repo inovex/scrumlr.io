@@ -287,7 +287,8 @@
     "ready": "Bist du fertig?",
     "readyButton": "Fertig!",
     "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
-    "enable": "Aktivieren"
+    "enable": "Aktivieren",
+    "boardNotEditable": "Das Board ist derzeit durch die Moderatoren-Einstellung nicht bearbeitbar."
   },
   "Language": {
     "german": "Deutsch",
@@ -354,6 +355,7 @@
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
     "ShowNoteReactionsOptions": "Emoji-Reaktionen auf Karten anzeigen",
     "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
+    "AllowEditingOnBoardOption": "Änderungen am Board erlauben",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"
@@ -433,7 +435,10 @@
     "createVoting": "Es tut uns leid, aber wir haben ein Problem beim Starten der Abstimmung. Bitte versuche es erneut.",
     "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
     "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
-    "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
+    "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut.",
+    "addReaction": "Es tut uns leid, aber wir haben ein Problem beim Hinzufügen der Reaktion. Bitte versuche es erneut.",
+    "deleteReaction": "Es tut uns leid, aber wir haben ein Problem beim Löschen der Reaktion. Bitte versuche es erneut.",
+    "updateReaction": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Reaktion. Bitte versuche es erneut."
   },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",

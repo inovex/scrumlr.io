@@ -12,6 +12,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       showNotesOfOtherUsers: true,
       showNoteReactions: true,
       allowStacking: true,
+      allowEditing: true,
     },
   },
   requests: [

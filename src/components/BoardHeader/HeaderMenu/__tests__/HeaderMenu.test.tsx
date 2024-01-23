@@ -79,4 +79,15 @@ describe("<HeaderMenu/>", () => {
       });
     });
   });
+
+  describe("BoardOption.ShowNotesOfOtherUserOption", () => {
+    test("Toogle board editing has correct label", () => {
+      render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
+      expect(screen.getByTestId("editing-board")).not.toBeNull();
+
+      const label = screen.getByTestId("editing-board")!.querySelector("span")!;
+      expect(label).toHaveClass("board-option-button__label");
+      expect(label.innerHTML).toEqual("Allow changes on the board");
+    });
+  });
 });

@@ -232,6 +232,19 @@ export const BoardSettings = () => {
                     <Toggle active={state.board.allowStacking} />
                   </div>
                 </SettingsButton>
+                <hr className="settings-dialog__separator" />
+                <SettingsButton
+                  data-testid="editing-board"
+                  className="board-settings__allow-editing-board-button"
+                  label={t("BoardSettings.AllowEditingOnBoardOption")}
+                  onClick={() => store.dispatch(Actions.editBoard({allowEditing: !state.board.allowEditing}))}
+                  role="switch"
+                  aria-checked={state.board.allowEditing}
+                >
+                  <div className="board-settings__allow-editing-board-value">
+                    <Toggle active={state.board.allowEditing} />
+                  </div>
+                </SettingsButton>
               </div>
 
               <SettingsButton

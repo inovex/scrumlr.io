@@ -9,6 +9,7 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
+import {useAppSelector} from "store";
 import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "constants/hotkeys";
@@ -25,10 +26,21 @@ export interface NoteInputProps {
 
 export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
   const dispatch = useDispatch();
+  const boardEditingAllowed = useAppSelector((state) => state.board.data?.allowEditing ?? true);
+  const user = useAppSelector((state) => state.participants?.self);
+  const isMod = user?.role === "MODERATOR" || user?.role === "OWNER";
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
 
   const addNote = (content: string) => {
+    if (!boardEditingAllowed && !isMod) {
+      Toast.info({
+        title: t("Toast.boardNotEditable"),
+        firstButtonOnClick: toggleColumnVisibility,
+      });
+      setToastDisplayed(true);
+      return;
+    }
     if (!content.trim()) return;
     dispatch(Actions.addNote(columnId!, content));
     if (!columnIsVisible && !toastDisplayed) {

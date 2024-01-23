@@ -109,6 +109,27 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
             </li>
             <li
               class="board-option"
+              data-testid="editing-board"
+            >
+              <button
+                class="board-option-button"
+              >
+                <div
+                  class="board-option-toggle"
+                >
+                  <div
+                    class="board-option-toggle__switch board-option-toggle__switch--right"
+                  />
+                </div>
+                <span
+                  class="board-option-button__label"
+                >
+                  Allow changes on the board
+                </span>
+              </button>
+            </li>
+            <li
+              class="board-option"
               data-testid="allSettings"
             >
               <a

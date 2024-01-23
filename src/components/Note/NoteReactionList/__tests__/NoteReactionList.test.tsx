@@ -41,6 +41,7 @@ describe("NoteReactionList", () => {
             showNotesOfOtherUsers: true,
             showNoteReactions: false,
             allowStacking: true,
+            allowEditing: true,
           },
         },
       })

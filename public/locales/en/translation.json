@@ -287,7 +287,8 @@
     "ready": "Are you ready?",
     "readyButton": "Ready!",
     "boardReactionsDisabled": "Board reactions are disabled",
-    "enable": "Enable"
+    "enable": "Enable",
+    "boardNotEditable": "The board is currently not editable due to the moderator settings."
   },
   "Language": {
     "german": "German",
@@ -354,6 +355,7 @@
     "ShowOtherUsersNotesOption": "Show notes of other users",
     "ShowNoteReactionsOptions": "Show note reactions",
     "AllowNoteRepositioningOption": "Allow note repositioning",
+    "AllowEditingOnBoardOption": "Allow changes on the board",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
@@ -411,7 +413,7 @@
     "editColumn": "Sorry, but we're having trouble updating the column. Please try again.",
     "createColumn": "Sorry, but we're having trouble adding the column. Please try again.",
     "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",
-    "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
+    "addNote": "Sorry, but we're having trouble adding the note. Please try again.",
     "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
     "deleteNoteWhenShared": "Sorry, but you can not delete your card while it is shared.",
     "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
@@ -433,7 +435,10 @@
     "createVoting": "Sorry, but we're having trouble starting a new voting. Please try again.",
     "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
     "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
-    "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
+    "editSelf": "Sorry, but we're having trouble updating your information. Please try again.",
+    "addReaction": "Sorry, but we're having trouble adding the reaction. Please try again.",
+    "deleteReaction": "Sorry, but we're having trouble deleting the reaction. Please try again.",
+    "updateReaction": "Sorry, but we're having trouble updating the reaction. Please try again."
   },
   "Avatar": {
     "random": "Generate random avatar",
