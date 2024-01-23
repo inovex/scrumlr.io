@@ -3,11 +3,12 @@ package database
 import (
 	"context"
 	"errors"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
-	"time"
 )
 
 type Board struct {
@@ -21,6 +22,7 @@ type Board struct {
 	ShowNotesOfOtherUsers bool
 	ShowNoteReactions     bool
 	AllowStacking         bool
+	AllowEditing          bool
 	CreatedAt             time.Time
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
@@ -54,6 +56,7 @@ type BoardUpdate struct {
 	ShowNotesOfOtherUsers *bool
 	ShowNoteReactions     *bool
 	AllowStacking         *bool
+	AllowEditing          *bool
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
@@ -132,6 +135,9 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 	}
 	if update.AllowStacking != nil {
 		query.Column("allow_stacking")
+	}
+	if update.AllowEditing != nil {
+		query.Column("allow_editing")
 	}
 
 	var board Board
