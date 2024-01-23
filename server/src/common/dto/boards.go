@@ -1,11 +1,12 @@
 package dto
 
 import (
-	"github.com/google/uuid"
 	"net/http"
+	"time"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
-	"time"
 )
 
 // Board is the response for all board requests.
@@ -29,6 +30,8 @@ type Board struct {
 
 	AllowStacking bool `json:"allowStacking"`
 
+	AllowEditing bool `json:"allowEditing"`
+
 	TimerStart *time.Time `json:"timerStart,omitempty"`
 	TimerEnd   *time.Time `json:"timerEnd,omitempty"`
 
@@ -50,6 +53,7 @@ func (b *Board) From(board database.Board) *Board {
 	b.ShowNotesOfOtherUsers = board.ShowNotesOfOtherUsers
 	b.ShowNoteReactions = board.ShowNoteReactions
 	b.AllowStacking = board.AllowStacking
+	b.AllowEditing = board.AllowEditing
 	b.SharedNote = board.SharedNote
 	b.ShowVoting = board.ShowVoting
 	b.TimerStart = board.TimerStart
@@ -105,6 +109,9 @@ type BoardUpdateRequest struct {
 
 	// Set whether stacking should be allowed to all users or only moderators.
 	AllowStacking *bool `json:"allowStacking"`
+
+	// Set whether changes to board should be allowed to all users or only moderators.
+	AllowEditing *bool `json:"allowEditing"`
 
 	// Set the timer start.
 	TimerStart *time.Time `json:"timerStart"`

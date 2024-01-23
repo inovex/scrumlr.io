@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "5076b163-ae2a-4a14-b96a-774a8ad8cf58",
+		"_postman_id": "f8c3949e-0a5e-42f9-a0dc-93ed38f643f8",
 		"name": "scrumlr.io",
 		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the *User* section for more information.\n\n1.  A user signs into the application (see *Login* section)\n2.  The user creates a new board (`POST` on `/boards`, checkout *Boards* section)\n3.  Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout *Participants* section)\n    1.  If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2.  If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3.  If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section *Realtime* to see how you can open websockets and listen to live updates on the data.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "20032942"
+		"_exporter_id": "32423964"
 	},
 	"item": [
 		{
@@ -1109,6 +1109,72 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update Board Request",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sharedNote\":null,\n    \"showVoting\":null,\n    \"timerStart\":\"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\":\"2024-01-18T13:39:49.304Z\",\n    \"allowEditing\":true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"sharedNote\":null,\n    \"showVoting\":null,\n    \"timerStart\":\"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\":\"2024-01-18T13:39:49.304Z\",\n    \"allowEditing\":true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"name": "Content-Type",
+									"description": "",
+									"type": "text"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"{{board_id}}\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"showNoteReactions\": true,\n    \"allowStacking\": true,\n    \"allowEditing\": true,\n    \"timerStart\": \"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\": \"2024-01-18T13:39:49.304Z\",\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+						}
+					]
 				}
 			],
 			"auth": {

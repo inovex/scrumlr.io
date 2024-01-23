@@ -2,9 +2,10 @@ package database
 
 import (
 	"database/sql"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/database/types"
-	"testing"
 )
 
 func TestRunnerForBoards(t *testing.T) {
@@ -440,11 +441,13 @@ func testUpdateBoardSettings(t *testing.T) {
 
 	showAuthors := true
 	showNotesOfOtherUsers := true
-	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, ShowAuthors: &showAuthors, ShowNotesOfOtherUsers: &showNotesOfOtherUsers})
+	allowEditing := true
+	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, ShowAuthors: &showAuthors, ShowNotesOfOtherUsers: &showNotesOfOtherUsers, AllowEditing: &allowEditing})
 
 	assert.Nil(t, err)
 	assert.Equal(t, showAuthors, updatedBoard.ShowAuthors)
 	assert.Equal(t, showNotesOfOtherUsers, updatedBoard.ShowNotesOfOtherUsers)
+	assert.Equal(t, allowEditing, updatedBoard.AllowEditing)
 }
 
 func testGetBoard(t *testing.T) {
