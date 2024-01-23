@@ -111,18 +111,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
-	if err != nil {
-		log.Errorw("unable to check if current participant is banned", "err", err)
-		common.Throw(w, r, common.InternalServerError)
-		return
-	}
-
-	if banned {
-		common.Throw(w, r, common.ForbiddenError(errors.New("user is currently banned")))
-		return
-	}
-
 	if exists {
 		if s.basePath == "/" {
 			http.Redirect(w, r, fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user), http.StatusSeeOther)
