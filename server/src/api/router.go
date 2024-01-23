@@ -160,7 +160,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)
 			r.With(s.BoardParticipantContext).Post("/timer", s.setTimer)
 			r.With(s.BoardParticipantContext).Delete("/timer", s.deleteTimer)
-      r.With(s.BoardParticipantContext).Post("/timer/increment", s.incrementTimer)
+			r.With(s.BoardParticipantContext).Post("/timer/increment", s.incrementTimer)
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
 
@@ -185,9 +185,13 @@ func (s *Server) protectedRoutes(r chi.Router) {
 func (s *Server) initVoteResources(r chi.Router) {
 	r.Route("/votes", func(r chi.Router) {
 		r.Use(s.BoardParticipantContext)
-		r.Post("/", s.addVote)
-		r.Delete("/", s.removeVote)
 		r.Get("/", s.getVotes)
+
+		r.Group(func(r chi.Router) {
+			r.Use(s.BoardEditableContext)
+			r.Post("/", s.addVote)
+			r.Delete("/", s.removeVote)
+		})
 	})
 }
 
@@ -267,7 +271,7 @@ func (s *Server) initNoteResources(r chi.Router) {
 		r.Use(s.BoardParticipantContext)
 
 		r.Get("/", s.getNotes)
-		r.Post("/", s.createNote)
+		r.With(s.BoardEditableContext).Post("/", s.createNote)
 
 		r.Route("/{note}", func(r chi.Router) {
 			r.Use(s.NoteContext)
@@ -285,21 +289,21 @@ func (s *Server) initReactionResources(r chi.Router) {
 		r.Use(s.BoardParticipantContext)
 
 		r.Get("/", s.getReactions)
-		r.Post("/", s.createReaction)
+		r.With(s.BoardEditableContext).Post("/", s.createReaction)
 
 		r.Route("/{reaction}", func(r chi.Router) {
 			r.Use(s.ReactionContext)
 
 			r.Get("/", s.getReaction)
-			r.Delete("/", s.removeReaction)
-			r.Put("/", s.updateReaction)
+			r.With(s.BoardEditableContext).Delete("/", s.removeReaction)
+			r.With(s.BoardEditableContext).Put("/", s.updateReaction)
 		})
 	})
 }
 
 func (s *Server) initAssignmentResources(r chi.Router) {
 	r.Route("/assignments", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
+		r.Use(s.BoardEditableContext)
 
 		r.Post("/", s.createAssignment)
 		r.Route("/{assignment}", func(r chi.Router) {
@@ -311,7 +315,7 @@ func (s *Server) initAssignmentResources(r chi.Router) {
 
 func (s *Server) initBoardReactionResources(r chi.Router) {
 	r.Route("/board-reactions", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
+		r.Use(s.BoardEditableContext)
 
 		r.Post("/", s.createBoardReaction)
 	})
