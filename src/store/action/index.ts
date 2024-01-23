@@ -7,7 +7,6 @@ import {RequestActionFactory, RequestAction, RequestReduxAction} from "./request
 import {VotingActionFactory, VotingAction, VotingReduxAction} from "./votings";
 import {AuthActionFactory, AuthAction, AuthReduxAction} from "./auth";
 import {ViewAction, ViewActionFactory, ViewReduxAction} from "./view";
-import {AssignmentAction, AssignmentActionFactory, AssignmentReduxAction} from "./assignment";
 import {ReactionAction, ReactionActionFactory, ReactionReduxAction} from "./reaction";
 import {BoardReactionAction, BoardReactionActionFactory, BoardReactionReduxAction} from "./boardReaction";
 import {SkinToneAction, SkinToneActionFactory, SkinToneReduxAction} from "./skinTone";
@@ -24,7 +23,6 @@ export const Action = {
   ...VoteAction,
   ...VotingAction,
   ...ViewAction,
-  ...AssignmentAction,
   ...BoardReactionAction,
   ...SkinToneAction,
 };
@@ -42,7 +40,6 @@ export const Actions = {
   ...VoteActionFactory,
   ...VotingActionFactory,
   ...ViewActionFactory,
-  ...AssignmentActionFactory,
   ...BoardReactionActionFactory,
   ...SkinToneActionFactory,
 };
@@ -59,7 +56,6 @@ export type ReduxAction = {context: {board?: string; user?: string; voting?: str
   | VoteReduxAction
   | VotingReduxAction
   | ViewReduxAction
-  | AssignmentReduxAction
   | BoardReactionReduxAction
   | SkinToneReduxAction
 );
