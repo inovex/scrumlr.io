@@ -72,7 +72,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 	}
 	OverviewBoards := make([]*dto.BoardOverview, len(boards))
 	for i, board := range boards {
-		board, _, sessions, cols, _, _, _, _, _, err := s.boards.FullBoard(r.Context(), board.ID)
+		board, sessions, cols, err := s.boards.BoardOverview(r.Context(), board.ID)
 		participantNum := len(sessions)
 		columnNum := len(cols)
 		if err != nil {
@@ -87,7 +87,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 					Board:        board,
 					Participants: participantNum,
 					CreatedAt:    sessionCreated,
-					Columns:      cols,
+					Columns:      columnNum,
 				}
 			}
 		}
