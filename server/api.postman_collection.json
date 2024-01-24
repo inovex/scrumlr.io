@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "f8c3949e-0a5e-42f9-a0dc-93ed38f643f8",
-		"name": "scrumlr.io",
+		"_postman_id": "38b81f31-a828-44e3-b041-c73ebccf23b7",
+		"name": "api",
 		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the *User* section for more information.\n\n1.  A user signs into the application (see *Login* section)\n2.  The user creates a new board (`POST` on `/boards`, checkout *Boards* section)\n3.  Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout *Participants* section)\n    1.  If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2.  If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3.  If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section *Realtime* to see how you can open websockets and listen to live updates on the data.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "32423964"
+		"_exporter_id": "30145015"
 	},
 	"item": [
 		{
@@ -1173,6 +1173,159 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"id\": \"{{board_id}}\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"showNoteReactions\": true,\n    \"allowStacking\": true,\n    \"allowEditing\": true,\n    \"timerStart\": \"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\": \"2024-01-18T13:39:49.304Z\",\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Board Overviews",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "text/csv",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/boards",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/boards/{board}/export",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"boards",
+										"{board}",
+										"export"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 23 Jan 2022 14:42:09 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1030"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"board\": {\n        \"id\": \"85ec5a10-9788-4df2-9647-0c7260cb07f7\",\n        \"name\": \"My board\",\n        \"accessPolicy\": \"PUBLIC\",\n        \"showAuthors\": true,\n        \"showNotesOfOtherUsers\": true,\n        \"allowStacking\": true,\n        \"sharedNote\": null,\n        \"showVoting\": \"71c8556d-5148-41dd-ad50-f96930af2f83\"\n    },\n    \"participants\": [\n        {\n            \"user\": {\n                \"id\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n                \"name\": \"John Doe\"\n            },\n            \"connected\": false,\n            \"ready\": false,\n            \"raisedHand\": false,\n            \"role\": \"OWNER\"\n        }\n    ],\n    \"columns\": [\n        {\n            \"id\": \"851f600a-77f8-489a-a25b-4e3f8f9a25c3\",\n            \"name\": \"Lean coffee\",\n            \"color\": \"backlog-blue\",\n            \"visible\": true,\n            \"index\": 0\n        },\n        {\n            \"id\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n            \"name\": \"My new column\",\n            \"color\": \"online-orange\",\n            \"visible\": false,\n            \"index\": 1\n        },\n        {\n            \"id\": \"4ebae212-80c9-46e4-abd9-e56b320ce937\",\n            \"name\": \"Actions\",\n            \"color\": \"planning-pink\",\n            \"visible\": false,\n            \"index\": 2\n        }\n    ],\n    \"notes\": [\n        {\n            \"id\": \"fdbc5abe-01f1-4a7d-b41d-06cb9915c608\",\n            \"author\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n            \"text\": \"Just a note\",\n            \"position\": {\n                \"column\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n                \"stack\": null,\n                \"rank\": 0\n            }\n        }\n    ],\n    \"votings\": [\n        {\n            \"id\": \"71c8556d-5148-41dd-ad50-f96930af2f83\",\n            \"voteLimit\": 5,\n            \"allowMultipleVotes\": true,\n            \"showVotesOfOthers\": true,\n            \"status\": \"CLOSED\"\n        }\n    ]\n}"
+						},
+						{
+							"name": "Success (CSV)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "text/csv",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}/export",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}",
+										"export"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 23 Jan 2022 15:13:41 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "380"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								}
+							],
+							"cookie": [],
+							"body": "note_id,author_id,author,text,column_id,column,rank,stack,voting_0\n74b1905f-4d01-462f-a149-9f0ea76f9ccd,0d57fafe-76a4-4ae2-b643-a81af68fe487,John Doe,\"Just a, note\",b1391083-c333-4963-b6f1-af0b66e6826a,My new column,1,null,0\nfdbc5abe-01f1-4a7d-b41d-06cb9915c608,0d57fafe-76a4-4ae2-b643-a81af68fe487,John Doe,Just a note,b1391083-c333-4963-b6f1-af0b66e6826a,My new column,0,null,0\n"
+						},
+						{
+							"name": "Get Board Overviews (1 user, 1 board)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "text/csv",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/boards",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 24 Jan 2024 10:41:43 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "320"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"board\": {\n            \"id\": \"c9c96fa8-f80b-44a8-901b-8f55b4628c8f\",\n            \"name\": \"My board\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"showNotesOfOtherUsers\": true,\n            \"showNoteReactions\": true,\n            \"allowStacking\": true,\n            \"allowEditing\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columnsNumber\": 2,\n        \"createdAt\": \"0001-01-01T00:00:00Z\",\n        \"participants\": 1\n    }\n]"
 						}
 					]
 				}
@@ -2892,8 +3045,8 @@
 									]
 								}
 							},
-							"_postman_previewlanguage": null,
-							"header": null,
+							"_postman_previewlanguage": "Text",
+							"header": [],
 							"cookie": [],
 							"body": "{\n    \"user\": {\n        \"id\": \"{{user_id}}\",\n        \"name: \"\"\n    },\n    \"ready\": true,\n    \"raisedHand\": true,\n    \"banned\": true\n}"
 						}
