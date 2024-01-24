@@ -296,7 +296,6 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			Votes:       event.Data.Votes,
 			Sessions:    event.Data.Sessions,
 			Requests:    event.Data.Requests,
-			Assignments: event.Data.Assignments,
 		},
 	}
 	// Columns

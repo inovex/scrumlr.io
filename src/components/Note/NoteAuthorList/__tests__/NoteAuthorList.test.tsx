@@ -23,9 +23,16 @@ const createNoteAuthorList = (authors: Participant[], showAuthors: boolean, over
 
 describe("NoteAuthorList", () => {
   describe("display", () => {
-    it("should not display since it's deactivated", () => {
+    it("should display a skeleton when disabled", () => {
       const {container} = render(createNoteAuthorList([AUTHOR3], false));
       expect(container.querySelector(".note-author-list")).toBeNull();
+      expect(container.querySelector(".note-author-skeleton")).not.toBeNull();
+    });
+
+    it("should display a skeleton when no author is specified", () => {
+      const {container} = render(createNoteAuthorList([], true));
+      expect(container.querySelector(".note-author-list")).toBeNull();
+      expect(container.querySelector(".note-author-skeleton")).not.toBeNull();
     });
 
     it("should display even when deactivated when viewer equals note author", () => {
