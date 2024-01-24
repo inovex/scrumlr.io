@@ -15,6 +15,7 @@ import {Feedback} from "components/SettingsDialog/Feedback";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
 import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
+import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
@@ -23,6 +24,7 @@ const Router = () => (
   <BrowserRouter>
     <RouteChangeObserver />
     <Routes>
+      <Route path="/" element={<Homepage />} />
       <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
       <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
       <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
