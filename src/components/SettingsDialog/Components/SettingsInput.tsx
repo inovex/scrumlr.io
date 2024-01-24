@@ -10,9 +10,10 @@ export interface SettingsInputProps {
   disabled?: boolean;
   type?: "text" | "password";
   placeholder?: string;
+  maxLength?: number;
 }
 
-export const SettingsInput: FC<PropsWithChildren<SettingsInputProps>> = ({label, id, value, onChange, submit, disabled, type, placeholder, children}) => (
+export const SettingsInput: FC<PropsWithChildren<SettingsInputProps>> = ({label, id, value, onChange, submit, disabled, type, placeholder, children, maxLength}) => (
   <div className="settings-input__container">
     <input
       className={!placeholder ? "settings-input__hidden-placeholder" : undefined}
@@ -25,7 +26,13 @@ export const SettingsInput: FC<PropsWithChildren<SettingsInputProps>> = ({label,
       type={type ?? "text"}
       id={id}
       autoComplete="off"
+      maxLength={maxLength}
     />
+    {maxLength !== undefined && (
+      <small className="settings-input__length">
+        {value.length}/{maxLength}
+      </small>
+    )}
     <label htmlFor={id}>{label}</label>
     {children && (
       <button className="settings-input__children" onMouseDown={(e) => e.preventDefault()}>

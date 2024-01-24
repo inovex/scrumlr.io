@@ -148,6 +148,18 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if exists {
+		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to check if participant is banned", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if banned {
+			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
+			return
+		}
+
 		if s.basePath == "/" {
 			http.Redirect(w, r, fmt.Sprintf("%s://%s/boards/%s/participants/%s", common.GetProtocol(r), r.Host, board, user), http.StatusSeeOther)
 		} else {
@@ -293,12 +305,23 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, board)
 }
 
+func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
+	boardId := r.Context().Value("Board").(uuid.UUID)
+	board, err := s.boards.IncrementTimer(r.Context(), boardId)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, board)
+}
+
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
 	boardId := r.Context().Value("Board").(uuid.UUID)
 
-	board, _, sessions, columns, notes, _, votings, _, _, err := s.boards.FullBoard(r.Context(), boardId)
+	board, _, sessions, columns, notes, _, votings, _, err := s.boards.FullBoard(r.Context(), boardId)
 	if err != nil {
 		common.Throw(w, r, err)
 		return

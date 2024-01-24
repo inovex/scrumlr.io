@@ -199,6 +199,7 @@
     "hotkeysEnabled": "Hotkeys aktiviert!",
     "hotkeysDisabled": "Hotkeys deaktiviert!",
     "hotkeyToggle": "Hotkeys aktivieren",
+    "timerStarted": "Ein {{duration}}-minütiger Timer wurde gestartet",
     "cheatSheet": "Hotkey Spickzettel",
     "toggleColumnVisibility": {
       "hide": "Ausgeblendete Spalten sind nun auch für dich ausgeblendet",
@@ -629,5 +630,10 @@
   "ToggleButton": {
     "active": "Aktiv",
     "inactive": "Inaktiv"
+  },
+  "RejectionPage": {
+    "title": "Oops!",
+    "description": "Es sieht so aus, als ob die Türen zu dieser Sitzung vorerst geschlossen bleiben. Wir freuen uns über dein Interesse, aber leider wurde dein Antrag auf Teilnahme abgelehnt.",
+    "button": "Zurück zur Startseite"
   }
 }

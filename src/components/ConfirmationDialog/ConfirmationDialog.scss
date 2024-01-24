@@ -95,7 +95,9 @@
   font-weight: bold;
   min-height: 48px;
   cursor: pointer;
-  transition: transform 80ms linear, box-shadow 80ms linear;
+  transition:
+    transform 80ms linear,
+    box-shadow 80ms linear;
   &:hover {
     transform: scale(1.05);
     box-shadow: 0 4px 10px 0 rgba($color: $color-backlog-blue, $alpha: 0.2);
@@ -112,7 +114,7 @@
 .confirmation-dialog__buttons {
   display: flex;
   justify-content: flex-end;
-  gap: $margin--small;
+  gap: $margin--default;
 }
 
 .confirmation-dialog__close-button {
@@ -130,7 +132,9 @@
   padding: 0;
   background-color: $color-white;
   cursor: pointer;
-  transition: color 80ms linear, background-color 80ms linear;
+  transition:
+    color 80ms linear,
+    background-color 80ms linear;
   &:hover {
     color: $color-white;
     background-color: $color-backlog-blue;

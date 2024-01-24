@@ -39,7 +39,7 @@ jobs:
 
       - uses: actions/setup-go@v3
         with:
-          go-version: "^1.19"
+          go-version: "^1.20"
 
       - name: Build server
         working-directory: ./server
@@ -64,7 +64,7 @@ jobs:
 
   deploy_to_dev_cluster:
     needs: package
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main'}}
     uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@main
     secrets: inherit
     with:

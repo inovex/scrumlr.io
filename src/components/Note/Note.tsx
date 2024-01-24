@@ -27,9 +27,9 @@ export const Note = (props: NoteProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const noteRef = useRef<HTMLButtonElement>(null);
+  const noteRef = useRef<HTMLDivElement>(null);
 
-  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId), isEqual);
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === props.noteId));
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
@@ -41,13 +41,16 @@ export const Note = (props: NoteProps) => {
 
   // all authors of a note, including its children if it's a stack.
   const authors = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.concat(state.participants?.self).find((p) => p.user.id === note?.author);
+    const allUsers = state.participants?.others.concat(state.participants?.self);
+    const noteAuthor = allUsers?.find((p) => p.user.id === note?.author);
     const childrenNoteAuthors = state.notes
       // get all notes which are in the same stack as the main note
       .filter((n) => n.position.stack === props.noteId)
-      // find the corresponding author for the respective note in the list of other participants. if none is found, the author is therefore yourself
-      .map((c) => state.participants?.others.find((p) => p.user.id === c.author) ?? state.participants?.self);
-    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[]; // remove undefined values (which shouldn't exists, only for TS type assertion)
+      // find the corresponding author for the respective note in the list of other participants.
+      .map((c) => allUsers?.find((p) => p.user.id === c.author));
+
+    // remove undefined values (could exist if a author is not in the list of participants or hidden)
+    return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[];
   }, isEqual);
 
   /* eslint-disable */
@@ -99,7 +102,7 @@ export const Note = (props: NoteProps) => {
       className={classNames("note__root", props.colorClassName)}
       disabled={!(isModerator || allowStacking)}
     >
-      <button className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
+      <div tabIndex={0} role="button" className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
           <div className="note__author-container">
             <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
@@ -121,7 +124,7 @@ export const Note = (props: NoteProps) => {
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
           <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
         </footer>
-      </button>
+      </div>
       {isStack && <div className="note__in-stack" />}
     </Sortable>
   );

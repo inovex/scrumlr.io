@@ -38,10 +38,10 @@ export const StackView = () => {
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const prevNote = useRef<Note | undefined>(note);
-  const columns = useAppSelector((state) => state.columns, _.isEqual);
+  const columns = useAppSelector((state) => state.columns);
   const author = useAppSelector((state) => state.participants?.others.find((participant) => participant.user.id === note?.author) ?? state.participants?.self);
   const authorName = useAppSelector((state) => (author?.user.id === state.participants?.self.user.id ? t("Note.me") : author?.user.name));
-  const viewer = useAppSelector((state) => state.participants!.self, _.isEqual);
+  const viewer = useAppSelector((state) => state.participants!.self);
   const showNotesOfOtherUsers = useAppSelector((state) => state.board?.data?.showNotesOfOtherUsers);
   const stackedNotes = useAppSelector(
     (state) =>
@@ -126,7 +126,7 @@ export const StackView = () => {
     const authors = stack.map((n) => n.author);
     return authors.some((item) => item !== authors[0]);
   };
-  const entireStack = useAppSelector((state) => state.notes.filter((n) => n.id === note?.id || n.position.stack === note?.id));
+  const entireStack = useAppSelector((state) => state.notes.filter((n) => n.id === note?.id || n.position.stack === note?.id), _.isEqual);
   const stackHasMixedAuthors = hasMixedAuthors(entireStack);
 
   // update transition config when note changes so that the visible notes are updated without any animation

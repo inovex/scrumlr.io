@@ -39,6 +39,10 @@ func (s *BoardSessionService) ModeratorSessionExists(_ context.Context, boardID,
 	return s.database.BoardModeratorSessionExists(boardID, userID)
 }
 
+func (s *BoardSessionService) ParticipantBanned(_ context.Context, boardID, userID uuid.UUID) (bool, error) {
+	return s.database.ParticipantBanned(boardID, userID)
+}
+
 func (s *BoardSessionService) SessionRequestExists(_ context.Context, boardID, userID uuid.UUID) (bool, error) {
 	return s.database.BoardSessionRequestExists(boardID, userID)
 }
@@ -108,6 +112,7 @@ func (s *BoardSessionService) Update(_ context.Context, body dto.BoardSessionUpd
 		RaisedHand:        body.RaisedHand,
 		ShowHiddenColumns: body.ShowHiddenColumns,
 		Role:              body.Role,
+		Banned:            body.Banned,
 	})
 	if err != nil {
 		return nil, err

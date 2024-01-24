@@ -33,7 +33,10 @@ type BoardSession struct {
 	// start voting sessions etc.
 	Role types.SessionRole `json:"role"`
 
+  //Reference for when board_session has been created
 	CreatedAt time.Time `json:"CreatedAt"`
+	// Flag indicates whether the user is banned
+	Banned bool `json:"banned"`
 }
 
 func (b *BoardSession) From(session database.BoardSession) *BoardSession {
@@ -49,6 +52,7 @@ func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	b.ShowHiddenColumns = session.ShowHiddenColumns
 	b.Role = session.Role
 	b.CreatedAt = session.CreatedAt
+	b.Banned = session.Banned
 	return b
 }
 
@@ -86,6 +90,9 @@ type BoardSessionUpdateRequest struct {
 	// Only moderators and owners can promote other participants. A regular participant is not
 	// allowed to change the role.
 	Role *types.SessionRole `json:"role"`
+
+	// The banned state of the participant
+	Banned *bool `json:"banned"`
 
 	Board  uuid.UUID `json:"-"`
 	User   uuid.UUID `json:"-"`

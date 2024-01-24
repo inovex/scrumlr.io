@@ -3,6 +3,7 @@ import {Participant, ParticipantExtendedInfo} from "types/participant";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
 import "./NoteAuthorList.scss";
+import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
 
 type NoteAuthorListProps = {
   authors: Participant[];
@@ -13,7 +14,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const {t} = useTranslation();
 
   if (!props.authors[0] || props.authors.length === 0) {
-    return null;
+    return <NoteAuthorSkeleton />;
   }
 
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
@@ -60,7 +61,13 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const slicedAuthors = restAuthors.splice(0, authorExtendedInfo.length - 1 > SHOW_MAX_AUTHORS ? SHOW_MAX_AUTHORS - 1 : SHOW_MAX_AUTHORS); // max first n authors
   const restUsersExist = restAuthors.length > 0;
   const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
-  return props.showAuthors || props.viewer.user.id === stackAuthor.user!.id ? (
+
+  const authorVisible = props.showAuthors || stackAuthor.user.id === props.viewer.user.id;
+  if (!authorVisible) {
+    return <NoteAuthorSkeleton />;
+  }
+
+  return (
     <div className="note-author-list">
       <div className={classNames("note-author__container", {"note-author__container--self": stackAuthor.isSelf})}>
         <figure
@@ -96,5 +103,5 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
         )}
       </div>
     </div>
-  ) : null;
+  );
 };

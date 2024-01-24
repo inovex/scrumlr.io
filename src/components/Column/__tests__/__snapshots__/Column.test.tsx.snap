@@ -96,8 +96,10 @@ exports[`Column should have correct style show column with correct style 1`] = `
             style="opacity: 1;"
             tabindex="-1"
           >
-            <button
+            <div
               class="note note--stackBetween"
+              role="button"
+              tabindex="0"
             >
               <header
                 class="note__header"
@@ -647,7 +649,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   </div>
                 </div>
               </footer>
-            </button>
+            </div>
           </div>
         </li>
         <li>
@@ -660,8 +662,10 @@ exports[`Column should have correct style show column with correct style 1`] = `
             style="opacity: 1;"
             tabindex="-1"
           >
-            <button
+            <div
               class="note note--stackBetween"
+              role="button"
+              tabindex="0"
             >
               <header
                 class="note__header"
@@ -1178,7 +1182,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   </div>
                 </div>
               </footer>
-            </button>
+            </div>
           </div>
         </li>
       </ul>
