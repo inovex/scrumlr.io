@@ -220,7 +220,6 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 					w.Write([]byte(`{"error": "Too many requests"}`))
 				}),
 			))
-
 			r.Post("/", s.joinBoard)
 		})
 
