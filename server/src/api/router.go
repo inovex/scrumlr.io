@@ -291,19 +291,6 @@ func (s *Server) initReactionResources(r chi.Router) {
 			r.Use(s.ReactionContext)
 
 			r.Get("/", s.getReaction)
-			r.Delete("/", s.removeReaction)
-			r.Put("/", s.updateReaction)
-		})
-	})
-}
-
-func (s *Server) initAssignmentResources(r chi.Router) {
-	r.Route("/assignments", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
-		r.Post("/", s.createAssignment)
-		r.Route("/{assignment}", func(r chi.Router) {
-			r.Use(s.AssignmentContext)
-			r.Delete("/", s.deleteAssignment)
 			r.With(s.BoardEditableContext).Delete("/", s.removeReaction)
 			r.With(s.BoardEditableContext).Put("/", s.updateReaction)
 		})
