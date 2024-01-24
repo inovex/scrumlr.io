@@ -54,9 +54,9 @@ export const LoginBoard = () => {
       <div className="login-board__dialog">
         <div className="login-board__form-wrapper">
           <div className="login-board__form">
-            <Link to="/">
+            <a href="/">
               <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-            </Link>
+            </a>
 
             <h1>{t("LoginBoard.title")}</h1>
 

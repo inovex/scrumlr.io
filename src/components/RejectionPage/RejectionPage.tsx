@@ -1,5 +1,4 @@
 import {useTranslation} from "react-i18next";
-import {useNavigate} from "react-router";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as StanLight} from "assets/stan/Stan_Toilette_Light.svg";
 import {ReactComponent as StanDark} from "assets/stan/Stan_Toilette_Dark.svg";
@@ -10,7 +9,6 @@ import "./RejectionPage.scss";
 
 export const RejectionPage = () => {
   const {t} = useTranslation();
-  const navigate = useNavigate();
   return (
     <div className="rejection-page__root">
       <div className="rejection-page__background">
@@ -30,7 +28,7 @@ export const RejectionPage = () => {
         <div className="rejection-page__content">
           <div className="rejection-page__title">{t("RejectionPage.title")}</div>
           <div className="rejection-page__description">{t("RejectionPage.description")}</div>
-          <button className="rejection-page__return-button" onClick={() => navigate("/")}>
+          <button className="rejection-page__return-button" onClick={() => (window.location.pathname = "/")}>
             {t("RejectionPage.button")}
           </button>
         </div>

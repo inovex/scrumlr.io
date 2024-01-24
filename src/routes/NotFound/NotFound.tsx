@@ -10,12 +10,10 @@ import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Bac
 import {ReactComponent as BackgroundDetails} from "assets/pages/404/Details.svg";
 
 import {useTranslation} from "react-i18next";
-import {useNavigate} from "react-router";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
 
 export const NotFound = () => {
   const {t} = useTranslation();
-  const navigate = useNavigate();
   return (
     <div className="not-found__root">
       <div className="not-found__background">
@@ -35,7 +33,7 @@ export const NotFound = () => {
             <div>{t("NotFoundPage.descriptionLine1")}</div>
             <div>{t("NotFoundPage.descriptionLine2")}</div>
           </div>
-          <button className="not-found__return-button" onClick={() => navigate("/")}>
+          <button className="not-found__return-button" onClick={() => (window.location.pathname = "/")}>
             {t("NotFoundPage.navigateHome")}
           </button>
         </div>

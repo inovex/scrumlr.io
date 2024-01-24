@@ -5,7 +5,6 @@ import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
-import {Link} from "react-router-dom";
 import {columnTemplates} from "./columnTemplates";
 import {TextInputLabel} from "../../components/TextInputLabel";
 import {TextInput} from "../../components/TextInput";
@@ -48,9 +47,9 @@ export const NewBoard = () => {
     <div className="new-board__wrapper">
       <div className="new-board">
         <div>
-          <Link to="/">
+          <a href="/">
             <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-          </Link>
+          </a>
 
           {!extendedConfiguration && (
             <div>

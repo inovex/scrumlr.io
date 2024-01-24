@@ -2,7 +2,6 @@ import {FC, useState} from "react";
 import "./PassphraseDialog.scss";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useTranslation} from "react-i18next";
-import {Link} from "react-router-dom";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {TextInputLabel} from "../TextInputLabel";
@@ -31,9 +30,9 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
   return (
     <div className="passphrase-dialog__wrapper">
       <div className="passphrase-dialog">
-        <Link to="/">
+        <a href="/">
           <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-        </Link>
+        </a>
 
         <form className="passphrase-dialog__form" onSubmit={handleSubmit}>
           <TextInputLabel label={t("PassphraseDialog.passphraseInputLabel")} htmlFor="password-dialog__password" />
