@@ -1,4 +1,4 @@
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {getRandomName} from "constants/name";
 import {Auth} from "utils/auth";
 import {Toast} from "utils/Toast";
@@ -24,7 +24,6 @@ interface State {
 export const LoginBoard = () => {
   const {t} = useTranslation();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const [displayName, setDisplayName] = useState(getRandomName());
   const [termsAccepted, setTermsAccepted] = useState(!SHOW_LEGAL_DOCUMENTS);
@@ -40,7 +39,7 @@ export const LoginBoard = () => {
     if (termsAccepted) {
       try {
         await Auth.signInAnonymously(displayName);
-        navigate(redirectPath);
+        window.location.pathname = redirectPath;
       } catch (err) {
         Toast.error({title: t("LoginBoard.errorOnRedirect")});
       }
