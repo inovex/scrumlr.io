@@ -41,11 +41,11 @@ func ForbiddenError(err error) *APIError {
 	}
 }
 
-func GoneError(err error) *APIError {
+func UnauthorizedError(err error) *APIError {
 	return &APIError{
 		Err:        err,
-		StatusCode: http.StatusGone,
-		StatusText: "Gone",
+		StatusCode: http.StatusUnauthorized,
+		StatusText: "Unauthorized",
 		ErrorText:  err.Error(),
 	}
 }
