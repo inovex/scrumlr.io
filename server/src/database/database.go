@@ -34,7 +34,7 @@ func New(db *sql.DB, verbose bool) *Database {
 	return d
 }
 
-func (d *Database) Get(id uuid.UUID) (Board, []BoardSessionRequest, []BoardSession, []Column, []Note, []Reaction, []Voting, []Vote, []Assignment, error) {
+func (d *Database) Get(id uuid.UUID) (Board, []BoardSessionRequest, []BoardSession, []Column, []Note, []Reaction, []Voting, []Vote, error) {
 	var board Board
 	var sessions []BoardSession
 	var requests []BoardSessionRequest
@@ -43,48 +43,42 @@ func (d *Database) Get(id uuid.UUID) (Board, []BoardSessionRequest, []BoardSessi
 	var reactions []Reaction
 	var votings []Voting
 	var votes []Vote
-	var assignments []Assignment
 	var err error
 
 	board, err = d.GetBoard(id)
 	if err != nil {
-		return Board{}, nil, nil, nil, nil, nil, nil, nil, nil, err
+		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	requests, err = d.GetBoardSessionRequests(id)
 	if err != nil {
-		return Board{}, nil, nil, nil, nil, nil, nil, nil, nil, err
+		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	sessions, err = d.GetBoardSessions(id)
 	if err != nil {
-		return Board{}, nil, nil, nil, nil, nil, nil, nil, nil, err
+		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	columns, err = d.GetColumns(id)
 	if err != nil {
-		return Board{}, nil, nil, nil, nil, nil, nil, nil, nil, err
+		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	notes, err = d.GetNotes(id)
 	if err != nil {
-		return Board{}, nil, nil, nil, nil, nil, nil, nil, nil, err
+		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	reactions, err = d.GetReactions(id)
 	if err != nil {
-		return Board{}, nil, nil, nil, nil, nil, nil, nil, nil, err
+		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	votings, votes, err = d.GetVotings(id)
 	if err != nil {
-		return Board{}, nil, nil, nil, nil, nil, nil, nil, nil, err
+		return Board{}, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
-	assignments, err = d.GetAssignments(id)
-	if err != nil {
-		return Board{}, nil, nil, nil, nil, nil, nil, nil, nil, err
-	}
-
-	return board, requests, sessions, columns, notes, reactions, votings, votes, assignments, err
+	return board, requests, sessions, columns, notes, reactions, votings, votes, err
 }
