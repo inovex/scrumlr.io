@@ -8,6 +8,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
     class="passphrase-dialog"
   >
     <a
+      aria-label="Homepage"
       href="/"
     >
       <svg
