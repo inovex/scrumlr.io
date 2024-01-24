@@ -23,7 +23,6 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 		}
 
 		user := r.Context().Value("User").(uuid.UUID)
-
 		exists, err := s.sessions.SessionRequestExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
@@ -53,7 +52,6 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 		}
 
 		user := r.Context().Value("User").(uuid.UUID)
-
 		exists, err := s.sessions.SessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
@@ -63,6 +61,18 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 
 		if !exists {
 			common.Throw(w, r, common.ForbiddenError(errors.New("user board session not found")))
+			return
+		}
+
+		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to check if participant is banned", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if banned {
+			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
 			return
 		}
 

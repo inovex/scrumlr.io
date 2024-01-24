@@ -2844,7 +2844,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"ready\": true,\r\n    \"raisedHand\": true\r\n}",
+							"raw": "{\r\n    \"ready\": true,\r\n    \"raisedHand\": true,\r\n    \"banned\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2852,7 +2852,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/participants/{{owner_id}}",
+							"raw": "{{base_url}}/boards/{{board_id}}/participants/{{user_id}}",
 							"host": [
 								"{{base_url}}"
 							],
@@ -2860,11 +2860,44 @@
 								"boards",
 								"{{board_id}}",
 								"participants",
-								"{{owner_id}}"
+								"{{user_id}}"
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ready\": true,\r\n    \"raisedHand\": true,\r\n    \"banned\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}/participants/{{user_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}",
+										"participants",
+										"{{user_id}}"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"user\": {\n        \"id\": \"{{user_id}}\",\n        \"name: \"\"\n    },\n    \"ready\": true,\n    \"raisedHand\": true,\n    \"banned\": true\n}"
+						}
+					]
 				},
 				{
 					"name": "Update board participants",
