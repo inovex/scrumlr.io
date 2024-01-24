@@ -120,6 +120,18 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
+	if err != nil {
+		log.Errorw("unable to check if participant is banned", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+
+	if banned {
+		common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
+		return
+	}
+
 	b, err := s.boards.Get(r.Context(), board)
 
 	if err != nil {

@@ -40,35 +40,6 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) JoinBoardContext(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log := logger.FromRequest(r)
-
-		boardParam := chi.URLParam(r, "id")
-		board, err := uuid.Parse(boardParam)
-		if err != nil {
-			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
-			return
-		}
-
-		user := r.Context().Value("User").(uuid.UUID)
-		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
-		if err != nil {
-			log.Errorw("unable to check if participant is banned", "err", err)
-			common.Throw(w, r, common.InternalServerError)
-			return
-		}
-
-		if banned {
-			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
-			return
-		}
-
-		userBannedOnBoard := context.WithValue(r.Context(), "ParticipantBannedOnBoard", banned)
-		next.ServeHTTP(w, r.WithContext(userBannedOnBoard))
-	})
-}
-
 func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
@@ -90,6 +61,18 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 
 		if !exists {
 			common.Throw(w, r, common.ForbiddenError(errors.New("user board session not found")))
+			return
+		}
+
+		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to check if participant is banned", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if banned {
+			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
 			return
 		}
 

@@ -220,7 +220,7 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 					w.Write([]byte(`{"error": "Too many requests"}`))
 				}),
 			))
-			r.With(s.JoinBoardContext).Post("/", s.joinBoard)
+			r.Post("/", s.joinBoard)
 		})
 
 		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
