@@ -28,7 +28,12 @@ export const RejectionPage = () => {
         <div className="rejection-page__content">
           <div className="rejection-page__title">{t("RejectionPage.title")}</div>
           <div className="rejection-page__description">{t("RejectionPage.description")}</div>
-          <button className="rejection-page__return-button" onClick={() => (window.location.pathname = "/")}>
+          <button
+            className="rejection-page__return-button"
+            onClick={() => {
+              window.location.pathname = "/";
+            }}
+          >
             {t("RejectionPage.button")}
           </button>
         </div>

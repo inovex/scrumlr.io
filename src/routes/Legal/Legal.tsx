@@ -30,7 +30,7 @@ const LegalWithoutTranslation: FC<LegalProps> = ({document}) => {
 
   return (
     <div className="legal">
-      <a href="/">
+      <a href="/" aria-label="Homepage">
         <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
       </a>
 

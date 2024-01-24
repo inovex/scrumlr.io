@@ -33,7 +33,12 @@ export const NotFound = () => {
             <div>{t("NotFoundPage.descriptionLine1")}</div>
             <div>{t("NotFoundPage.descriptionLine2")}</div>
           </div>
-          <button className="not-found__return-button" onClick={() => (window.location.pathname = "/")}>
+          <button
+            className="not-found__return-button"
+            onClick={() => {
+              window.location.pathname = "/";
+            }}
+          >
             {t("NotFoundPage.navigateHome")}
           </button>
         </div>

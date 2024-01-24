@@ -47,7 +47,7 @@ export const NewBoard = () => {
     <div className="new-board__wrapper">
       <div className="new-board">
         <div>
-          <a href="/">
+          <a href="/" aria-label="Homepage">
             <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
           </a>
 
