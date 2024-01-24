@@ -33,7 +33,7 @@ type BoardSession struct {
 	// start voting sessions etc.
 	Role types.SessionRole `json:"role"`
 
-	//Reference for when board_session has been created
+  //Reference for when board_session has been created
 	CreatedAt time.Time `json:"CreatedAt"`
 	// Flag indicates whether the user is banned
 	Banned bool `json:"banned"`

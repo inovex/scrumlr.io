@@ -1330,6 +1330,77 @@
 					]
 				}
 			],
+					"name": "Get board overviews",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards"
+							]
+						},
+						"description": "Returns a overview of all boards the provided user is participating in."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/boards",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 02 Nov 2023 13:43:58 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1507"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"board\": {\n            \"id\": \"a9d300cf-31e4-4373-aa75-dd716da66eb6\",\n            \"name\": \"My board\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"showNotesOfOtherUsers\": true,\n            \"allowStacking\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columns\": [\n            {\n                \"id\": \"137b354c-5ac3-474b-bcb9-ba307fd6e028\",\n                \"name\": \"Lean coffee\",\n                \"color\": \"backlog-blue\",\n                \"visible\": true,\n                \"index\": 0\n            },\n            {\n                \"id\": \"5ebc7557-9811-4ad9-8297-0acfbb63cbd3\",\n                \"name\": \"Actions\",\n                \"color\": \"planning-pink\",\n                \"visible\": false,\n                \"index\": 1\n            }\n        ],\n        \"createdAt\": \"2023-10-16T18:43:12.443428Z\",\n        \"participants\": 1\n    },\n    {\n        \"board\": {\n            \"id\": \"a829e78d-e8e4-49ce-9d76-dac03aa43a95\",\n            \"name\": \"My board\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"showNotesOfOtherUsers\": true,\n            \"allowStacking\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columns\": [\n            {\n                \"id\": \"24689e14-5226-40c8-a2ec-7baa8b2c0b5e\",\n                \"name\": \"Lean coffee\",\n                \"color\": \"backlog-blue\",\n                \"visible\": true,\n                \"index\": 0\n            },\n            {\n                \"id\": \"ffbf8039-92e0-48fa-b694-ce9487d50b83\",\n                \"name\": \"Actions\",\n                \"color\": \"planning-pink\",\n                \"visible\": false,\n                \"index\": 1\n            }\n        ],\n        \"createdAt\": \"2023-10-16T18:43:19.97894Z\",\n        \"participants\": 1\n    },\n    {\n        \"board\": {\n            \"id\": \"307fd1e3-a150-4a65-84cf-bbf18b6e7604\",\n            \"name\": \"My board\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"showNotesOfOtherUsers\": true,\n            \"allowStacking\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columns\": [\n            {\n                \"id\": \"5835fe7a-11dd-44b4-9bdb-dea1f14f6cd5\",\n                \"name\": \"Lean coffee\",\n                \"color\": \"backlog-blue\",\n                \"visible\": true,\n                \"index\": 0\n            },\n            {\n                \"id\": \"69efa192-ecac-4cc8-a86f-07182c5fbcbe\",\n                \"name\": \"Actions\",\n                \"color\": \"planning-pink\",\n                \"visible\": false,\n                \"index\": 1\n            }\n        ],\n        \"createdAt\": \"2023-11-02T13:40:07.009434Z\",\n        \"participants\": 1\n    }\n]"
+						}
+					]
+				}
+			],
 			"auth": {
 				"type": "bearer",
 				"bearer": [
