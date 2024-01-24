@@ -135,6 +135,7 @@ export const BoardSettings = () => {
             submit={() => store.dispatch(Actions.editBoard({name: boardName}))}
             disabled={!state.currentUserIsModerator}
             placeholder={DEFAULT_BOARD_NAME}
+            maxLength={128}
           />
 
           <div className="board-settings__group-and-button">

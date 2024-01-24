@@ -38,6 +38,7 @@ export const ProfileSettings = () => {
             id="profileSettingsUserName"
             label={t("ProfileSettings.UserName")}
             value={userName}
+            maxLength={64}
             onChange={(e) => setUserName(e.target.value)}
             submit={() => store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
           />
