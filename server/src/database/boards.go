@@ -179,7 +179,7 @@ func (d *Database) GetBoard(id uuid.UUID) (Board, error) {
 	return board, err
 }
 
-func (d *Database) GetUserBoards(userID uuid.UUID) ([]Board, error) {
+func (d *Database) GetBoards(userID uuid.UUID) ([]Board, error) {
 	var boards []Board
 	err := d.db.NewSelect().
 		TableExpr("boards AS b").

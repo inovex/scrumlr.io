@@ -488,7 +488,7 @@ func testGetUserBoards(t *testing.T) {
 	assert.Nil(t, err)
 
 	// Retrieve the boards associated with the user
-	boards, err := testDb.GetUserBoards(user.ID)
+	boards, err := testDb.GetBoards(user.ID)
 	assert.Nil(t, err)
 
 	// Check that the correct boards were retrieved
