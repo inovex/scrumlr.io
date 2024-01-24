@@ -60,7 +60,7 @@ func (s *Server) JoinBoardContext(next http.Handler) http.Handler {
 		}
 
 		if banned {
-			common.Throw(w, r, common.UnauthorizedError(errors.New("participant is currently banned from this session")))
+			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
 			return
 		}
 
