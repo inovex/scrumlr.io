@@ -60,34 +60,30 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
-func (s *Server) getUserBoards(w http.ResponseWriter, r *http.Request) {
+func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	user := r.Context().Value("User").(uuid.UUID)
 
-	boards, err := s.boards.GetUserBoards(r.Context(), user)
+	boards, err := s.boards.GetBoards(r.Context(), user)
 	if err != nil {
 		log.Errorw("unable to get boards for this user", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
-	boardsWithDetails := make([]*dto.BoardWithDetails, len(boards))
+	OverviewBoards := make([]*dto.BoardOverview, len(boards))
 	for i, board := range boards {
 		board, _, sessions, cols, _, _, _, _, _, err := s.boards.FullBoard(r.Context(), board.ID)
 		participantNum := len(sessions)
+		columnNum := len(cols)
 		if err != nil {
-			log.Errorw("unable to get full board details", "err", err)
-			common.Throw(w, r, common.InternalServerError)
-			return
-		}
-		if err != nil {
-			log.Errorw("unable to get full board details", "err", err)
+			log.Errorw("unable to get board overview", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 		for _, session := range sessions {
 			if session.User.ID == user {
 				sessionCreated := session.CreatedAt
-				boardsWithDetails[i] = &dto.BoardWithDetails{
+				OverviewBoards[i] = &dto.BoardOverview{
 					Board:        board,
 					Participants: participantNum,
 					CreatedAt:    sessionCreated,
@@ -97,7 +93,7 @@ func (s *Server) getUserBoards(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	render.Status(r, http.StatusOK)
-	render.Respond(w, r, boardsWithDetails)
+	render.Respond(w, r, OverviewBoards)
 }
 
 // getBoard get a board

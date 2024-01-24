@@ -40,8 +40,8 @@ func (s *BoardService) Get(_ context.Context, id uuid.UUID) (*dto.Board, error) 
 }
 
 // get all associated boards of a given user
-func (s *BoardService) GetUserBoards(_ context.Context, userID uuid.UUID) ([]*dto.Board, error) {
-	boards, err := s.database.GetUserBoards(userID)
+func (s *BoardService) GetBoards(_ context.Context, userID uuid.UUID) ([]*dto.Board, error) {
+	boards, err := s.database.GetBoards(userID)
 	if err != nil {
 		return nil, err
 	}
@@ -103,6 +103,16 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 	}
 
 	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Reactions(reactions), dto.Votings(votings, votes), personalVotes, dto.Assignments(assignments), err
+}
+
+func (s *BoardService) BoardOverview(_ context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSession, []*dto.Column, error) {
+	board, sessions, columns, err := s.database.GetBoardOverview(boardID)
+	sessions, err = s.database.GetBoardSessions(boardID)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	return new(dto.Board).From(board), dto.BoardSessions(sessions), dto.Columns(columns), err
 }
 
 func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
