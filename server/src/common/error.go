@@ -2,8 +2,9 @@ package common
 
 import (
 	"errors"
-	"github.com/go-chi/render"
 	"net/http"
+
+	"github.com/go-chi/render"
 )
 
 type APIError struct {

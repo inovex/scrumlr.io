@@ -10,7 +10,6 @@ import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {useTranslation} from "react-i18next";
 import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
-import {useNavigate} from "react-router-dom";
 import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
@@ -31,8 +30,6 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
     shallowEqual
   );
 
-  const navigate = useNavigate();
-
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
 
@@ -43,7 +40,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           title={t("ConfirmationDialog.returnToHomepage")}
           onAccept={() => {
             store.dispatch(Actions.leaveBoard());
-            navigate("/");
+            window.location.pathname = "/";
           }}
           onDecline={() => setShowConfirmationDialog(false)}
           icon={LeaveIcon}

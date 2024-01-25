@@ -21,6 +21,7 @@ func TestRunnerForBoardSessions(t *testing.T) {
 	t.Run("Update=4", testUpdateOfParticipantToOwnerShouldFail)
 	t.Run("Update=5", testUpdateOfModeratorToOwnerShouldFail)
 	t.Run("Update=6", testUpdateBoardSessions)
+	t.Run("Update=7", testUpdateOfBannedState)
 
 	t.Run("Exists=0", testBoardSessionExistsForParticipant)
 	t.Run("Exists=1", testBoardSessionExistsForModerator)
@@ -162,6 +163,38 @@ func testUpdateOfRaisedHandState(t *testing.T) {
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, raisedHand, session.RaisedHand)
+}
+
+func testUpdateOfBannedState(t *testing.T) {
+	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
+	user := fixture.MustRow("User.jennifer").(*User)
+
+	banned := true
+
+	session, err := testDb.UpdateBoardSession(BoardSessionUpdate{
+		Board:      board.ID,
+		User:       user.ID,
+		Connected:  nil,
+		Ready:      nil,
+		RaisedHand: nil,
+		Role:       nil,
+		Banned:     &banned,
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, banned, session.Banned)
+
+	banned = false
+	session, err = testDb.UpdateBoardSession(BoardSessionUpdate{
+		Board:      board.ID,
+		User:       user.ID,
+		Connected:  nil,
+		Ready:      nil,
+		RaisedHand: nil,
+		Role:       nil,
+		Banned:     &banned,
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, banned, session.Banned)
 }
 
 func testUpdateOfParticipantToModerator(t *testing.T) {
