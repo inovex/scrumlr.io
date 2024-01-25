@@ -211,11 +211,11 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 		TimerEnd:   &timerEnd,
 	}
 
-  board, err = s.database.UpdateBoardTimer(update)
-  if err != nil {
-    return nil, err
-  }
-  return new(dto.Board).From(board), nil
+	board, err = s.database.UpdateBoardTimer(update)
+	if err != nil {
+		return nil, err
+	}
+	return new(dto.Board).From(board), nil
 }
 
 func (s *BoardService) UpdatedBoardTimer(board database.Board) {
