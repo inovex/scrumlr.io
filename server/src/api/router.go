@@ -298,6 +298,7 @@ func (s *Server) initReactionResources(r chi.Router) {
 
 func (s *Server) initBoardReactionResources(r chi.Router) {
 	r.Route("/board-reactions", func(r chi.Router) {
+    r.Use(s.BoardParticipantContext)
 		r.Use(s.BoardEditableContext)
 
 		r.Post("/", s.createBoardReaction)
