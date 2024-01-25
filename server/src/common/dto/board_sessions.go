@@ -34,7 +34,7 @@ type BoardSession struct {
 	Role types.SessionRole `json:"role"`
 
   //Reference for when board_session has been created
-	CreatedAt time.Time `json:"CreatedAt"`
+	CreatedAt time.Time `json:"createdAt"`
 	// Flag indicates whether the user is banned
 	Banned bool `json:"banned"`
 }
@@ -53,7 +53,6 @@ func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	b.Role = session.Role
 	b.CreatedAt = session.CreatedAt
 	b.Banned = session.Banned
-	b.CreatedAt = session.CreatedAt
 	return b
 }
 
