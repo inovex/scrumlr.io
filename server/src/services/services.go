@@ -32,7 +32,7 @@ type Boards interface {
 
 	SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error)
 	DeleteTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error)
-  IncrementTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error)
+	IncrementTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error)
 
 	CreateColumn(ctx context.Context, body dto.ColumnRequest) (*dto.Column, error)
 	DeleteColumn(ctx context.Context, board, column, user uuid.UUID) error
@@ -40,7 +40,7 @@ type Boards interface {
 	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error)
 	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
 
-	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, []*dto.Assignment, error)
+	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error)
 }
 
 type BoardSessions interface {
@@ -60,6 +60,7 @@ type BoardSessions interface {
 	SessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	SessionRequestExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
+	ParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 }
 
 type Notes interface {
@@ -92,11 +93,6 @@ type Votings interface {
 type Health interface {
 	IsDatabaseHealthy() bool
 	IsRealtimeHealthy() bool
-}
-
-type Assignments interface {
-	Create(ctx context.Context, body dto.AssignmentCreateRequest) (*dto.Assignment, error)
-	Delete(ctx context.Context, id uuid.UUID) error
 }
 
 type BoardReactions interface {
