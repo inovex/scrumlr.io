@@ -86,6 +86,10 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
             e.preventDefault();
             e.currentTarget.form?.requestSubmit();
           }
+
+          if (e.key === "Escape") {
+            e.currentTarget.blur();
+          }
         }}
       />
       <div className="note-input__emoji-suggestions">
