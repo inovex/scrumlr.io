@@ -6,6 +6,28 @@ $timer__short-actions-height: 28px;
 
 $timer__progress-bar-color: #6096ff;
 
+.timer__container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.timer__increment-button {
+  border: 2px solid $color-white;
+  background-color: $color-dark-mode-note;
+  box-shadow: $box-shadow--light;
+  border-radius: 999px;
+  height: 42px;
+  width: 42px;
+  color: white;
+  cursor: pointer;
+
+  > svg {
+    width: 100%;
+  }
+}
+
 .timer {
   height: 100%;
   width: $timer-display-width;
