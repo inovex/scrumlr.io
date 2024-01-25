@@ -64,15 +64,15 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	user := r.Context().Value("User").(uuid.UUID)
 
-	boards, err := s.boards.GetBoards(r.Context(), user)
+	boardIDs, err := s.boards.GetBoards(r.Context(), user)
 	if err != nil {
-		log.Errorw("unable to get boards for this user", "err", err)
+		log.Errorw("unable to get board ids for this user", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
-	OverviewBoards := make([]*dto.BoardOverview, len(boards))
-	for i, board := range boards {
-		board, sessions, cols, err := s.boards.BoardOverview(r.Context(), board.ID)
+	OverviewBoards := make([]*dto.BoardOverview, len(boardIDs))
+	for i, id := range boardIDs {
+		board, sessions, cols, err := s.boards.BoardOverview(r.Context(), id)
 		participantNum := len(sessions)
 		columnNum := len(cols)
 		if err != nil {

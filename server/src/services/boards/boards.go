@@ -40,14 +40,14 @@ func (s *BoardService) Get(_ context.Context, id uuid.UUID) (*dto.Board, error) 
 }
 
 // get all associated boards of a given user
-func (s *BoardService) GetBoards(_ context.Context, userID uuid.UUID) ([]*dto.Board, error) {
+func (s *BoardService) GetBoards(_ context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
 	boards, err := s.database.GetBoards(userID)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]*dto.Board, len(boards))
+	result := make([]uuid.UUID, len(boards))
 	for i, board := range boards {
-		result[i] = new(dto.Board).From(board)
+		result[i] = board.ID
 	}
 	return result, nil
 }
