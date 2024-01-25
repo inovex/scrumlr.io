@@ -89,10 +89,10 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	return new(dto.Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote,  error) {
-	board, requests, sessions, columns, notes, reactions, votings, votes,  err := s.database.Get(boardID)
+func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error) {
+	board, requests, sessions, columns, notes, reactions, votings, votes, err := s.database.Get(boardID)
 	if err != nil {
-		return nil, nil, nil, nil, nil, nil, nil, nil,  err
+		return nil, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	personalVotes := []*dto.Vote{}
@@ -107,7 +107,6 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 
 func (s *BoardService) BoardOverview(_ context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSession, []*dto.Column, error) {
 	board, sessions, columns, err := s.database.GetBoardOverview(boardID)
-	sessions, err = s.database.GetBoardSessions(boardID)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -193,24 +192,24 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 		return nil, err
 	}
 
-  var timerStart time.Time
-  var timerEnd time.Time
+	var timerStart time.Time
+	var timerEnd time.Time
 
-  currentTime := time.Now().Local()
+	currentTime := time.Now().Local()
 
-  if board.TimerEnd.After(currentTime) {
-    timerStart = *board.TimerStart
-    timerEnd = board.TimerEnd.Add(time.Minute * time.Duration(1))
-  } else {
-    timerStart = currentTime
-    timerEnd = currentTime.Add(time.Minute * time.Duration(1))
-  }
+	if board.TimerEnd.After(currentTime) {
+		timerStart = *board.TimerStart
+		timerEnd = board.TimerEnd.Add(time.Minute * time.Duration(1))
+	} else {
+		timerStart = currentTime
+		timerEnd = currentTime.Add(time.Minute * time.Duration(1))
+	}
 
-  update := database.BoardTimerUpdate{
-    ID: board.ID,
-    TimerStart: &timerStart,
-    TimerEnd: &timerEnd,
-  }
+	update := database.BoardTimerUpdate{
+		ID:         board.ID,
+		TimerStart: &timerStart,
+		TimerEnd:   &timerEnd,
+	}
 
   board, err = s.database.UpdateBoardTimer(update)
   if err != nil {
