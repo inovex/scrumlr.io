@@ -53,7 +53,6 @@ func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	b.Role = session.Role
 	b.CreatedAt = session.CreatedAt
 	b.Banned = session.Banned
-	b.CreatedAt = session.CreatedAt
 	return b
 }
 
