@@ -10,7 +10,7 @@ on:
         type: string
 
 jobs:
-  deploy:
+  run_tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -27,4 +27,4 @@ jobs:
       - name: Run Newman script
         working-directory: ./server
         run: |
-          newman run api.postman_collection.json --global-var "base_urls={{${{ inputs.base_url }}}}
+          newman run api.postman_collection.json --global-var "base_urls={{${{ inputs.base_url }}}}"
