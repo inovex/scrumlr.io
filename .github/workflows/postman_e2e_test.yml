@@ -27,4 +27,4 @@ jobs:
       - name: Run Newman script
         working-directory: ./server
         run: |
-          newman run api.postman_collection.json --global-var "base_urls={{${{ inputs.base_url }}}}"
+          newman run api.postman_collection.json --env-var "base_url=${{ inputs.base_url }}/api" --insecure --verbose
