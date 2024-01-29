@@ -73,7 +73,7 @@ jobs:
   
   run_postman_tests:
     needs: deploy_to_dev_cluster
-    uses: ./.github/workflows/postman_e2e_test.yml
+    uses: inovex/scrumlr.io/.github/workflows/postman_e2e_test.yml@main
     with: 
       base_url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
           

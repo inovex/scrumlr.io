@@ -10,7 +10,7 @@ on:
         type: string
 
 jobs:
-  run_tests:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
