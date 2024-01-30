@@ -157,7 +157,7 @@
     "create": "Create note"
   },
   "PassphraseDialog": {
-    "passphraseInputLabel": "Enter the passphrase to access this board",
+    "passphraseInputLabel": "Enter the password to access this board",
     "togglePassphraseVisibility": "Toggle passphrase visibility",
     "submit": "Submit"
   },

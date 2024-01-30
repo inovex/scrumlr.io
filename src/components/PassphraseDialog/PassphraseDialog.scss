@@ -1,28 +1,136 @@
 @import "constants/style";
 
-.passphrase-dialog__wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
+.passphrase-dialog {
   min-width: 100vw;
   min-height: 100vh;
+  display: grid;
+  place-content: center;
 }
+.passphrase-dialog__logo {
+  position: absolute;
+  inset: 16px auto auto 16px;
 
-.passphrase-dialog {
-  width: 100%;
-  max-width: 420px;
-
-  padding: $padding--default;
-  color: $color-black;
+  &:focus {
+    outline: 2px solid #5c8fff;
+  }
 }
 
 .passphrase-dialog__form {
-  margin-top: 1.5em;
+  background-color: $color-white;
+  border-radius: 24px;
+  box-shadow: 0px 4px 15px 0px rgba(0, 87, 255, 0.25);
+  margin: 0 auto;
+
+  padding: 32px 16px;
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 450px;
+
+  //padding: 48px 64px;
 }
 
-.passphrase-dialog__submit-button {
-  margin-top: 1em;
+.form__icon {
+  color: $color-backlog-blue;
+  opacity: 50%;
+  height: 32px;
+  width: 32px;
+  //height: 48px;
+  //width: 48px;
+}
+
+.form__label {
+  color: $color-black;
+  font-size: 20px;
+  //font-size: 24px;
+  font-weight: 700;
+}
+
+.form__password-input {
+  border: none;
+  border-radius: 999px;
+  background-color: rgba(0, 87, 255, 0.1);
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex-grow: 1;
+
+  &:focus-within {
+    outline: 2px solid #5c8fff;
+  }
+
+  > input {
+    border: 0;
+    background-color: transparent;
+    height: 100%;
+    padding: 0 16px;
+    font-size: 18px;
+    min-width: 0;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  > button {
+    height: 32px;
+    width: 32px;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    margin-right: 12px;
+    flex-shrink: 0;
+    padding: 4px;
+    border-radius: 999px;
+
+    &:focus {
+      outline: 2px solid #5c8fff;
+    }
+  }
+}
+
+.form__input-row {
+  display: flex;
+  gap: $margin--small;
+  min-width: 0;
+
+  > button {
+    height: 40px;
+    width: 40px;
+    padding: none;
+    border: none;
+    border-radius: 999px;
+    background-color: $color-backlog-blue;
+    color: $color-white;
+    cursor: pointer;
+    //box-shadow: 0px 3px 12px 0px rgba(0, 87, 255, 0.30);
+    flex-shrink: 0;
+
+    &:focus {
+      outline: 2px solid #5c8fff;
+    }
+
+    > svg {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 640px) {
+  .passphrase-dialog__form {
+    padding: 48px 64px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  .form__icon {
+    grid-column-start: 1;
+  }
+  .form__label,
+  .form__input-row {
+    grid-column-start: 2;
+  }
 }
 
 [theme="dark"] {

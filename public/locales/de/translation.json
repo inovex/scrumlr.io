@@ -157,7 +157,7 @@
     "create": "Kärtchen erstellen"
   },
   "PassphraseDialog": {
-    "passphraseInputLabel": "Gib das Passwort ein, um beizutreten",
+    "passphraseInputLabel": "Gib das Passwort ein um den Board beizutreten",
     "togglePassphraseVisibility": "Schalte Sichtbarkeit des Passworts um",
     "submit": "Absenden"
   },

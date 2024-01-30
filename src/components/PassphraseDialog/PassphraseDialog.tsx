@@ -1,59 +1,67 @@
-import {FC, useState} from "react";
+import {ChangeEvent, FC, MouseEvent, useState} from "react";
 import "./PassphraseDialog.scss";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
-import {useTranslation} from "react-i18next";
+import {Background} from "components/Background/Background";
+import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
-import {TextInputLabel} from "../TextInputLabel";
-import {TextInput} from "../TextInput";
-import {Button} from "../Button";
-import {TextInputAdornment} from "../TextInputAdornment";
+
+import {ReactComponent as ArrowRightIcon} from "assets/icon-arrow-right.svg";
 
 export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
 }
 
-export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}) => {
-  const {t} = useTranslation();
+export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: PassphraseDialogProps) => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passphrase, setPassphrase] = useState("");
 
-  const [passphrase, setPassphrase] = useState<string>("");
-  const [visiblePassphrase, setVisiblePassphrase] = useState(false);
-
-  const handleSubmit = async () => {
-    await onSubmit(passphrase);
+  const togglePasswordVisibility = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setPasswordVisible((currentValue) => !currentValue);
   };
 
-  const togglePassphraseVisibility = () => {
-    setVisiblePassphrase(!visiblePassphrase);
+  const changePassphrase = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassphrase(e.target.value);
+  };
+
+  const submitPassphraseForm = () => {
+    onSubmit(passphrase);
   };
 
   return (
-    <div className="passphrase-dialog__wrapper">
+    <Background>
       <div className="passphrase-dialog">
-        <a href="/" aria-label="Homepage">
+        <a className="passphrase-dialog__logo" href="/" aria-label="Homepage">
           <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </a>
 
-        <form className="passphrase-dialog__form" onSubmit={handleSubmit}>
-          <TextInputLabel label={t("PassphraseDialog.passphraseInputLabel")} htmlFor="password-dialog__password" />
-          <TextInput
-            id="password-dialog__password"
-            type={visiblePassphrase ? "text" : "password"}
-            rightAdornment={
-              <TextInputAdornment title={t("PassphraseDialog.togglePassphraseVisibility")} onClick={togglePassphraseVisibility}>
-                {visiblePassphrase ? <VisibleIcon /> : <HiddenIcon />}
-              </TextInputAdornment>
-            }
-            value={passphrase}
-            onChange={(e) => setPassphrase(e.target.value)}
-          />
+        <form className="passphrase-dialog__form" onSubmit={submitPassphraseForm}>
+          <KeyIcon className="form__icon" />
+          <label className="form__label">Enter the password to open this board</label>
 
-          <Button type="submit" color="primary" className="passphrase-dialog__submit-button" disabled={!passphrase}>
-            {t("PassphraseDialog.submit")}
-          </Button>
+          <div className="form__input-row">
+            <div className="form__password-input">
+              <input
+                className="password-input__input"
+                type={passwordVisible ? "text" : "password"}
+                onChange={changePassphrase}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") submitPassphraseForm();
+                }}
+                value={passphrase}
+              />
+              <button aria-label="Show Password" className="password-input__toggle" onClick={togglePasswordVisibility}>
+                {passwordVisible ? <HiddenIcon /> : <VisibleIcon />}
+              </button>
+            </div>
+            <button type="submit" className="form__submit-button">
+              <ArrowRightIcon />
+            </button>
+          </div>
         </form>
       </div>
-    </div>
+    </Background>
   );
 };
 

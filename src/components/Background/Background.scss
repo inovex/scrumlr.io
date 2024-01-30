@@ -1,0 +1,9 @@
+.background {
+  background-image: url("../../assets/backgrounds/bg.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+[theme="dark"] .background {
+  background-image: url("../../assets/backgrounds/bg--dark.svg");
+}
