@@ -22,6 +22,8 @@ $timer__progress-bar-color: #6096ff;
   width: 42px;
   color: white;
   cursor: pointer;
+  display: grid;
+  place-content: center;
 
   > svg {
     width: 100%;
