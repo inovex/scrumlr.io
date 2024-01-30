@@ -2,41 +2,86 @@
 
 exports[`Timer should render correctly 1`] = `
 <div
-  class="timer"
-  id="timer"
+  class="timer__container"
 >
   <div
-    class="vote-display__progress-bar"
-    style="right: calc(72px - NaN * 72px);"
-  />
-  <span>
-    02
-    :
-    59
-  </span>
-  <div
-    class="timer__short-actions"
+    class="timer"
+    id="timer"
   >
     <div
-      class="short-actions__short-action"
+      class="vote-display__progress-bar"
+      style="right: calc(72px - 0.6666666666666667 * 72px);"
+    />
+    <span>
+      02
+      :
+      00
+    </span>
+    <div
+      class="timer__short-actions"
     >
-      <button
-        aria-label="Stop timer"
-        class="short-action__button"
+      <div
+        class="short-actions__short-action"
       >
-        <svg>
-          icon-cancel.svg
-        </svg>
-      </button>
-      <span
-        class="short-action__tooltip"
+        <button
+          aria-label="End timer"
+          class="short-action__button"
+        >
+          <svg>
+            icon-flag.svg
+          </svg>
+        </button>
+        <span
+          class="short-action__tooltip"
+        >
+          End timer
+        </span>
+      </div>
+      <div
+        class="short-actions__short-action"
       >
-        Stop timer
-      </span>
+        <button
+          aria-label="Unmark me as done"
+          class="short-action__button short-action__button--ready"
+        >
+          <svg
+            class="short-action__check-icon"
+          >
+            icon-check.svg
+          </svg>
+          <svg
+            class="short-action__cancel-icon"
+          >
+            icon-cancel.svg
+          </svg>
+        </button>
+        <span
+          class="short-action__tooltip"
+        >
+          Unmark me as done
+        </span>
+      </div>
     </div>
+    <svg>
+      icon-timer.svg
+    </svg>
   </div>
-  <svg>
-    icon-timer.svg
-  </svg>
+  <div
+    class="timer__increment-button"
+  >
+    <button
+      aria-label="Increase timer by one minute"
+      class="increment-button__button"
+    >
+      <svg>
+        icon-plus-one.svg
+      </svg>
+    </button>
+    <span
+      class="increment-button__tooltip"
+    >
+      Increase timer by one minute
+    </span>
+  </div>
 </div>
 `;
