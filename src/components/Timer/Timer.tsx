@@ -5,6 +5,8 @@ import {Actions} from "store/action";
 import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as PlusOneIcon} from "assets/icon-plus-one.svg";
+import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
@@ -102,20 +104,21 @@ export const Timer = (props: TimerProps) => {
   }, [allParticipantsReady, isModerator]);
 
   return (
-    <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
-      <div className="vote-display__progress-bar" style={{right: `calc(72px - ${elapsedTimePercentage} * 72px)`}} />
-      <span>
-        {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
-      </span>
-      <div className="timer__short-actions">
-        {isModerator ? (
-          <div className="short-actions__short-action">
-            <button aria-label={t("Timer.stopTimer")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
-              <CancelIcon />
-            </button>
-            <span className="short-action__tooltip">{t("Timer.stopTimer")}</span>
-          </div>
-        ) : (
+    <div className="timer__container">
+      <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
+        <div className="vote-display__progress-bar" style={{right: `calc(72px - ${elapsedTimePercentage} * 72px)`}} />
+        <span>
+          {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
+        </span>
+        <div className="timer__short-actions">
+          {isModerator && (
+            <div className="short-actions__short-action">
+              <button aria-label={t("Timer.endTimer")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
+                <FlagIcon />
+              </button>
+              <span className="short-action__tooltip">{t("Timer.endTimer")}</span>
+            </div>
+          )}
           <div className="short-actions__short-action">
             <button
               aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
@@ -127,9 +130,17 @@ export const Timer = (props: TimerProps) => {
             </button>
             <span className="short-action__tooltip">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</span>
           </div>
-        )}
+        </div>
+        <TimerIcon />
       </div>
-      <TimerIcon />
+      {isModerator && (
+        <div className="timer__increment-button">
+          <button aria-label={t("Timer.addOneMinute")} className="increment-button__button" onClick={() => store.dispatch(Actions.incrementTimer())}>
+            <PlusOneIcon />
+          </button>
+          <span className="increment-button__tooltip">{t("Timer.addOneMinute")}</span>
+        </div>
+      )}
     </div>
   );
 };
