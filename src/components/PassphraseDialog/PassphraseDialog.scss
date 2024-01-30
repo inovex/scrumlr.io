@@ -29,10 +29,6 @@
   align-items: center;
   max-width: 460px;
 }
-[theme="dark"] .passphrase-dialog__form {
-  background-color: $color-dark-mode-note;
-  box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
-}
 
 .form__icon {
   color: $color-backlog-blue;
@@ -46,8 +42,11 @@
   font-size: 20px;
   font-weight: 700;
 }
-[theme="dark"] .form__label {
-  color: $color-white;
+
+.form__input-row {
+  display: flex;
+  gap: $margin--small;
+  min-width: 0;
 }
 
 .form__password-input {
@@ -66,79 +65,64 @@
   &:hover {
     box-shadow: 0px 4px 6px -1px rgba(0, 87, 255, 0.25);
   }
-
-  > input {
-    border: 0;
-    background-color: transparent;
-    height: 100%;
-    padding: 0 16px;
-    font-size: 18px;
-    min-width: 0;
-    color: inherit;
-
-    &:focus {
-      outline: 0;
-    }
-  }
-
-  > button {
-    height: 32px;
-    width: 32px;
-    background-color: transparent;
-    border: 0;
-    cursor: pointer;
-    margin-right: 12px;
-    flex-shrink: 0;
-    padding: 4px;
-    border-radius: 999px;
-    color: inherit;
-
-    &:focus {
-      outline: 2px solid #5c8fff;
-    }
-  }
 }
 
-[theme="dark"] .form__password-input {
-  background-color: rgba(#5c8fff, 0.15);
-  color: $color-white;
-}
-
-.form__input-row {
-  display: flex;
-  gap: $margin--small;
+.password-input__input {
+  border: 0;
+  background-color: transparent;
+  height: 100%;
+  padding: 0 16px;
+  font-size: 18px;
   min-width: 0;
+  color: inherit;
 
-  > button {
-    height: 40px;
-    width: 40px;
-    padding: none;
-    border: none;
-    border-radius: 999px;
-    background-color: $color-backlog-blue;
-    color: $color-white;
-    cursor: pointer;
-    //box-shadow: 0px 3px 12px 0px rgba(0, 87, 255, 0.30);
-    flex-shrink: 0;
-    overflow: hidden;
-
-    &:focus {
-      outline: 2px solid #5c8fff;
-    }
-    &:hover {
-      box-shadow: 0px 4px 6px -1px rgba(0, 87, 255, 0.25);
-      > svg {
-        animation: flyingArrow 500ms linear;
-      }
-    }
-
-    > svg {
-      width: 100%;
-    }
+  &:focus {
+    outline: 0;
   }
 }
-[theme="dark"] .form__submit-button {
-  background-color: #5c8fff;
+
+.password-input__toggle {
+  height: 32px;
+  width: 32px;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  margin-right: 8px;
+  flex-shrink: 0;
+  padding: 4px;
+  border-radius: 999px;
+  color: inherit;
+
+  &:focus {
+    outline: 2px solid #5c8fff;
+  }
+}
+
+.form__submit-button {
+  height: 40px;
+  width: 40px;
+  padding: none;
+  border: none;
+  border-radius: 999px;
+  background-color: $color-backlog-blue;
+  color: $color-white;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  &:focus {
+    outline: 2px solid #5c8fff;
+  }
+  &:hover {
+    box-shadow: 0px 4px 6px -1px rgba(0, 87, 255, 0.25);
+    > svg {
+      animation: flyingArrow 500ms linear;
+    }
+  }
+
+  > svg {
+    width: 100%;
+  }
 }
 
 @media (min-width: 640px) {
@@ -157,6 +141,23 @@
   .form__label,
   .form__input-row {
     grid-column-start: 2;
+  }
+}
+
+[theme="dark"] {
+  .passphrase-dialog__form {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
+  }
+  .form__label {
+    color: $color-white;
+  }
+  .form__password-input {
+    background-color: rgba(#5c8fff, 0.15);
+    color: $color-white;
+  }
+  .form__submit-button {
+    background-color: #5c8fff;
   }
 }
 
