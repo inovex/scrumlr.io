@@ -187,7 +187,7 @@ $note-dialog__emoji-suggestions-z-index: $note-dialog-z-index + $base-z-index-st
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 $request-z-index: $base-z-index + (9 * $base-z-index-step);
 $tooltip-z-index: $request-z-index;
-$board-reaction-z-index: $base-z-index + (9 * $base-z-index-step);
+$board-reaction-z-index: $backdrop-z-index + $base-z-index-step;
 
 // responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";
