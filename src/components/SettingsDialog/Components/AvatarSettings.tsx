@@ -1,4 +1,7 @@
 import {ReactComponent as IconShuffle} from "assets/icon-shuffle.svg";
+import {ReactComponent as IconEdit} from "assets/icon-edit.svg";
+import {ReactComponent as IconDone} from "assets/icon-done.svg";
+import {ReactComponent as IconClose} from "assets/icon-close.svg";
 import classNames from "classnames";
 import {AvataaarProps, Avatar, generateRandomProps} from "components/Avatar";
 import {
@@ -61,7 +64,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
-  const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: string[]}}[]} = {
+  const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: AvataaarProps[key][]}}[]} = {
     hair: [
       {values: AVATAR_TOP_TYPES, key: "topType"},
       {
@@ -137,6 +140,18 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
               {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
             </Fragment>
           ))}
+        </div>
+        <div className="avatar-settings__changed">
+          <div className="avatar-settings__changed-icon">
+            <IconEdit />
+          </div>
+          <p>Änderungen speichern</p>
+          <button className="avatar-settings__changed-button" title="discard" aria-label="Discard">
+            <IconClose />
+          </button>
+          <button className="avatar-settings__changed-button avatar-settings__changed-button--accept" title="accept" aria-label="Accept">
+            <IconDone />
+          </button>
         </div>
       </div>
     </>

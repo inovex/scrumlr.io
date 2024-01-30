@@ -41,6 +41,7 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__content {
+  position: relative;
   display: none;
   background: $color-white-one;
   width: 100%;

@@ -110,6 +110,77 @@
       }
     }
   }
+
+  &__changed {
+    z-index: 10;
+    position: absolute;
+    bottom: $padding--default;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #485064;
+    padding: $padding--small;
+    font-weight: 700;
+    border-radius: $rounded--full;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0px 5px 15px 4px rgba($color: #c000ff, $alpha: 0.2);
+
+    &-icon {
+      display: block;
+      padding: 4px;
+      // background-color: $color-dark-mode-note;
+      border-radius: $rounded--full;
+      line-height: 0;
+
+      svg {
+        width: $icon--large;
+        height: $icon--large;
+        color: #fff;
+      }
+    }
+
+    > p {
+      margin: 0;
+      color: #fff;
+      margin: 0 4px;
+      text-align: center;
+    }
+
+    &-button {
+      background: none;
+      border: none;
+      display: block;
+      padding: 0;
+      cursor: pointer;
+      border-radius: $rounded--full;
+      line-height: 0;
+      border: 2px solid #fff;
+      transition-duration: 200ms;
+      transition-property: color, background;
+      color: #fff;
+
+      svg {
+        width: $icon--large;
+        height: $icon--large;
+      }
+
+      &:hover {
+        background: #fff;
+        color: $color-dark-mode-note;
+      }
+
+      &--accept {
+        color: $color-dark-mode-note;
+        background: #fff;
+
+        &:hover {
+          color: #fff;
+          background: none;
+        }
+      }
+    }
+  }
 }
 
 [theme="dark"] {
