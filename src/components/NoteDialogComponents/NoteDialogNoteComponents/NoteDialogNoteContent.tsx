@@ -101,6 +101,11 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
                 e.preventDefault();
                 e.currentTarget.blur();
               }
+
+              if (e.key === "Escape") {
+                e.currentTarget.blur();
+                e.stopPropagation();
+              }
             }}
           />
 
