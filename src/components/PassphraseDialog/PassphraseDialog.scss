@@ -27,8 +27,10 @@
   flex-direction: column;
   align-items: center;
   max-width: 450px;
-
-  //padding: 48px 64px;
+}
+[theme="dark"] .passphrase-dialog__form {
+  background-color: $color-dark-mode-note;
+  box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
 }
 
 .form__icon {
@@ -36,15 +38,15 @@
   opacity: 50%;
   height: 32px;
   width: 32px;
-  //height: 48px;
-  //width: 48px;
 }
 
 .form__label {
   color: $color-black;
   font-size: 20px;
-  //font-size: 24px;
   font-weight: 700;
+}
+[theme="dark"] .form__label {
+  color: $color-white;
 }
 
 .form__password-input {
@@ -55,30 +57,13 @@
   align-items: center;
   min-width: 0;
   flex-grow: 1;
+  color: $color-black;
 
   &:focus-within {
     outline: 2px solid #5c8fff;
   }
   &:hover {
     box-shadow: 0px 4px 6px -1px rgba(0, 87, 255, 0.25);
-  }
-
-  @keyframes flyingArrow {
-    0% {
-      transform: translateX(0);
-    }
-    49% {
-      transform: translateX(34px);
-      opacity: 0;
-    }
-    50% {
-      transform: translateX(-30px);
-      opacity: 0;
-    }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
-    }
   }
 
   > input {
@@ -88,6 +73,7 @@
     padding: 0 16px;
     font-size: 18px;
     min-width: 0;
+    color: inherit;
 
     &:focus {
       outline: 0;
@@ -104,11 +90,17 @@
     flex-shrink: 0;
     padding: 4px;
     border-radius: 999px;
+    color: inherit;
 
     &:focus {
       outline: 2px solid #5c8fff;
     }
   }
+}
+
+[theme="dark"] .form__password-input {
+  background-color: rgba(#5c8fff, 0.15);
+  color: $color-white;
 }
 
 .form__input-row {
@@ -146,6 +138,9 @@
     }
   }
 }
+[theme="dark"] .form__submit-button {
+  background-color: #5c8fff;
+}
 
 @media (min-width: 640px) {
   .passphrase-dialog__form {
@@ -163,8 +158,20 @@
   }
 }
 
-[theme="dark"] {
-  .passphrase-dialog {
-    color: $color-white;
+@keyframes flyingArrow {
+  0% {
+    transform: translateX(0);
+  }
+  49% {
+    transform: translateX(34px);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
   }
 }
