@@ -169,7 +169,7 @@ $timer__progress-bar-color: #6096ff;
   font-size: $text--base;
   font-weight: bold;
   bottom: calc(100% + 6px);
-  box-shadow: $box-shadow--light;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.1)) drop-shadow(0 1px 1px rgb(0 0 0 / 0.06));
   // Increased the z-index to make sure the tooltip doesn't get overlapped by the absolute positioned icon
   z-index: calc($infobar-z-index + 50);
 }
@@ -189,7 +189,7 @@ $timer__progress-bar-color: #6096ff;
 .short-action__tooltip::after {
   content: "";
   position: absolute;
-  border: 4px solid;
+  border: 5px solid;
   border-color: $tooltip-background-color--light transparent transparent transparent;
   left: 50%;
   transform: translateX(-50%);
