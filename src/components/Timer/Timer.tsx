@@ -6,6 +6,7 @@ import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as PlusOneIcon} from "assets/icon-plus-one.svg";
+import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
@@ -113,7 +114,7 @@ export const Timer = (props: TimerProps) => {
           {isModerator && (
             <div className="short-actions__short-action">
               <button aria-label={t("Timer.stopTimer")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
-                <CancelIcon />
+                <FlagIcon />
               </button>
               <span className="short-action__tooltip">{t("Timer.stopTimer")}</span>
             </div>
