@@ -43,11 +43,6 @@ $timer__progress-bar-color: #6096ff;
   border: 2px solid $menu-icon-background-color--light;
   box-shadow: $box-shadow--light;
 }
-[theme="dark"] .timer {
-  color: $color-white;
-  background-color: $menu-icon-background-color--dark;
-  border-color: $menu-icon-background-color--dark;
-}
 .timer > svg {
   position: absolute;
   height: 100%;
@@ -195,6 +190,18 @@ $timer__progress-bar-color: #6096ff;
 }
 
 [theme="dark"] {
+  .timer {
+    color: $color-white;
+    background-color: $menu-icon-background-color--dark;
+    border-color: $menu-icon-background-color--dark;
+  }
+
+  .increment-button__button {
+    background-color: $color-white;
+    color: $color-dark-mode-note;
+    border-color: $menu-icon-background-color--dark;
+  }
+
   .short-action__tooltip,
   .increment-button__tooltip {
     background-color: $tooltip-background-color--dark;
