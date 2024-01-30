@@ -82,6 +82,7 @@ $timer__progress-bar-color: #6096ff;
   border-top-right-radius: $rounded--full;
   border-bottom-right-radius: $rounded--full;
   background-color: $timer__progress-bar-color;
+  transition: right 250ms linear;
 }
 
 .timer__short-actions {

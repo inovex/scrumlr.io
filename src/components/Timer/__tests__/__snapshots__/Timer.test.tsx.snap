@@ -9,7 +9,7 @@ exports[`Timer should render correctly 1`] = `
     id="timer"
   >
     <div
-      class="vote-display__progress-bar"
+      class="timer__progress-bar"
       style="right: calc(72px - 0.6666666666666667 * 72px);"
     />
     <span>
