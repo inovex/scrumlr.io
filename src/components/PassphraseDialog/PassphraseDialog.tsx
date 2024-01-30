@@ -7,6 +7,7 @@ import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 
 import {ReactComponent as ArrowRightIcon} from "assets/icon-arrow-right.svg";
+import {useTranslation} from "react-i18next";
 
 export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
@@ -15,6 +16,7 @@ export interface PassphraseDialogProps {
 export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: PassphraseDialogProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passphrase, setPassphrase] = useState("");
+  const {t} = useTranslation();
 
   const togglePasswordVisibility = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -38,7 +40,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: Passphra
 
         <form className="passphrase-dialog__form" onSubmit={submitPassphraseForm}>
           <KeyIcon className="form__icon" />
-          <label className="form__label">Enter the password to open this board</label>
+          <label className="form__label">{t("PassphraseDialog.label")}</label>
 
           <div className="form__input-row">
             <div className="form__password-input">
@@ -51,11 +53,15 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: Passphra
                 }}
                 value={passphrase}
               />
-              <button aria-label="Show Password" className="password-input__toggle" onClick={togglePasswordVisibility}>
+              <button
+                aria-label={t(`PassphraseDialog${passwordVisible ? ".hidePassword" : ".showPassword"}`)}
+                className="password-input__toggle"
+                onClick={togglePasswordVisibility}
+              >
                 {passwordVisible ? <HiddenIcon /> : <VisibleIcon />}
               </button>
             </div>
-            <button type="submit" className="form__submit-button">
+            <button aria-label={t("PassphraseDialog.submit")} className="form__submit-button" type="submit">
               <ArrowRightIcon />
             </button>
           </div>
