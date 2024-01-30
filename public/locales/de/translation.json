@@ -162,7 +162,8 @@
     "submit": "Absenden"
   },
   "Timer": {
-    "stopTimer": "Stoppe Timer",
+    "endTimer": "Timer beenden",
+    "addOneMinute": "Timer um eine Minute erhöhen",
     "reduce": "Reduziere Zeit",
     "increase": "Erhöhe Zeit"
   },

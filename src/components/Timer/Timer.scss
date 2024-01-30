@@ -6,6 +6,40 @@ $timer__short-actions-height: 28px;
 
 $timer__progress-bar-color: #6096ff;
 
+.timer__container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.timer__increment-button {
+  position: relative;
+  border-radius: 999px;
+
+  &:focus-within {
+    outline: 2px solid $color-backlog-blue;
+  }
+}
+
+.increment-button__button {
+  border: 2px solid $color-white;
+  background-color: $color-dark-mode-note;
+  box-shadow: $box-shadow--light;
+  border-radius: 999px;
+  height: 42px;
+  width: 42px;
+  color: white;
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  outline: none;
+
+  > svg {
+    width: 100%;
+  }
+}
+
 .timer {
   height: 100%;
   width: $timer-display-width;
@@ -15,11 +49,6 @@ $timer__progress-bar-color: #6096ff;
   position: relative;
   border: 2px solid $menu-icon-background-color--light;
   box-shadow: $box-shadow--light;
-}
-[theme="dark"] .timer {
-  color: $color-white;
-  background-color: $menu-icon-background-color--dark;
-  border-color: $menu-icon-background-color--dark;
 }
 .timer > svg {
   position: absolute;
@@ -124,7 +153,8 @@ $timer__progress-bar-color: #6096ff;
   color: $color-white;
 }
 
-.short-action__tooltip {
+.short-action__tooltip,
+.increment-button__tooltip {
   width: max-content;
   visibility: hidden;
   opacity: 0;
@@ -139,7 +169,9 @@ $timer__progress-bar-color: #6096ff;
   font-size: $text--base;
   font-weight: bold;
   bottom: calc(100% + 6px);
-  box-shadow: $box-shadow--light;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
   // Increased the z-index to make sure the tooltip doesn't get overlapped by the absolute positioned icon
   z-index: calc($infobar-z-index + 50);
 }
@@ -148,26 +180,50 @@ $timer__progress-bar-color: #6096ff;
     transition: none;
   }
 }
+
+.timer__increment-button:hover > .increment-button__tooltip,
 .short-actions__short-action:hover > .short-action__tooltip {
   visibility: visible;
   opacity: 1;
 }
-[theme="dark"] .short-action__tooltip {
-  background-color: $tooltip-background-color--dark;
-  color: $color-white;
-}
 
+.increment-button__tooltip::after,
 .short-action__tooltip::after {
   content: "";
   position: absolute;
-  border: 4px solid;
+  border: 5px solid;
   border-color: $tooltip-background-color--light transparent transparent transparent;
   left: 50%;
   transform: translateX(-50%);
   top: 100%;
 }
-[theme="dark"] .short-action__tooltip::after {
-  border-color: $tooltip-background-color--dark transparent transparent transparent;
+
+[theme="dark"] {
+  .timer {
+    color: $color-white;
+    background-color: $menu-icon-background-color--dark;
+    border-color: $menu-icon-background-color--dark;
+  }
+
+  .timer__increment-button:focus-within {
+    outline: 2px solid $color-planning-pink;
+  }
+
+  .increment-button__button {
+    background-color: $color-white;
+    color: $color-dark-mode-note;
+    border-color: $menu-icon-background-color--dark;
+  }
+
+  .short-action__tooltip,
+  .increment-button__tooltip {
+    background-color: $tooltip-background-color--dark;
+    color: $color-white;
+
+    &::after {
+      border-color: $tooltip-background-color--dark transparent transparent transparent;
+    }
+  }
 }
 
 // Shake animation on expired timer
