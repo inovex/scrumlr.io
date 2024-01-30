@@ -162,7 +162,7 @@
     "submit": "Submit"
   },
   "Timer": {
-    "stopTimer": "Stop timer",
+    "endTimer": "End timer",
     "addOneMinute": "Add one minute",
     "reduce": "Reduce time",
     "increase": "Increase time"
