@@ -133,9 +133,12 @@ export const Timer = (props: TimerProps) => {
         <TimerIcon />
       </div>
       {isModerator && (
-        <button aria-label={t("Timer.addOneMinute")} className="timer__increment-button" onClick={() => store.dispatch(Actions.incrementTimer())}>
-          <PlusOneIcon />
-        </button>
+        <div className="timer__increment-button">
+          <button aria-label={t("Timer.addOneMinute")} className="increment-button__button" onClick={() => store.dispatch(Actions.incrementTimer())}>
+            <PlusOneIcon />
+          </button>
+          <span className="increment-button__tooltip">{t("Timer.addOneMinute")}</span>
+        </div>
       )}
     </div>
   );
