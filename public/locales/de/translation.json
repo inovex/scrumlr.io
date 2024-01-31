@@ -159,8 +159,9 @@
   "PassphraseDialog": {
     "showPassword": "Zeige das Passwort",
     "hidePassword": "Verberge das Passwort",
-    "label": "Gib das Passwort ein um den Board beizutreten",
-    "submit": "Absenden"
+    "label": "Gib das Passwort ein, um dieses Board zu öffnen",
+    "submit": "Absenden",
+    "inputPlaceholder": "Passwort"
   },
   "Timer": {
     "endTimer": "Timer beenden",

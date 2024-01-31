@@ -52,6 +52,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: Passphra
                   if (e.key === "Enter") submitPassphraseForm();
                 }}
                 value={passphrase}
+                placeholder={t("PassphraseDialog.inputPlaceholder")}
               />
               <button
                 aria-label={t(`PassphraseDialog${passwordVisible ? ".hidePassword" : ".showPassword"}`)}
