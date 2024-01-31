@@ -30,7 +30,7 @@ $color-backlog-blue--dark: #5c8fff;
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 460px;
+  max-width: 480px;
 }
 
 .form__icon {
@@ -79,6 +79,7 @@ $color-backlog-blue--dark: #5c8fff;
   font-size: $text--base;
   min-width: 0;
   color: inherit;
+  flex-grow: 1;
 
   &:focus {
     outline: 0;
@@ -114,6 +115,8 @@ $color-backlog-blue--dark: #5c8fff;
   flex-shrink: 0;
   overflow: hidden;
   transition: box-shadow 80ms ease-in-out;
+  display: grid;
+  place-content: center;
 
   &:focus {
     outline: 2px solid #5c8fff;
