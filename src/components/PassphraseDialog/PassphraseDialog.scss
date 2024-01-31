@@ -1,5 +1,8 @@
 @import "constants/style";
 
+$color-backlog-blue--light: $color-backlog-blue;
+$color-backlog-blue--dark: #5c8fff;
+
 .passphrase-dialog {
   min-width: 100vw;
   min-height: 100vh;
@@ -9,21 +12,21 @@
 
 .passphrase-dialog__logo {
   position: absolute;
-  inset: 16px auto auto 16px;
+  inset: $margin--default auto auto $margin--default;
 
   &:focus {
-    outline: 2px solid #5c8fff;
+    outline: 2px solid $color-backlog-blue--dark;
   }
 }
 
 .passphrase-dialog__form {
   background-color: $color-white;
   border-radius: 24px;
-  box-shadow: 0px 4px 15px 0px rgba(0, 87, 255, 0.25);
+  box-shadow: 0px 4px 15px 0px rgba($color: $color-backlog-blue--light, $alpha: 0.25);
   margin: 0 auto;
 
-  padding: 32px 16px;
-  gap: 16px;
+  padding: $margin--large $margin--default;
+  gap: $margin--default;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -31,16 +34,16 @@
 }
 
 .form__icon {
-  color: $color-backlog-blue;
+  color: $color-backlog-blue--light;
   opacity: 50%;
-  height: 32px;
-  width: 32px;
+  height: $icon--large;
+  width: $icon--large;
 }
 
 .form__label {
   color: $color-black;
-  font-size: 20px;
-  font-weight: 700;
+  font-size: $text--md;
+  font-weight: bold;
 }
 
 .form__input-row {
@@ -50,20 +53,21 @@
 }
 
 .form__password-input {
-  border: none;
-  border-radius: 999px;
+  border: 0;
+  border-radius: $rounded--full;
   background-color: rgba(0, 87, 255, 0.1);
   display: flex;
   align-items: center;
   min-width: 0;
   flex-grow: 1;
   color: $color-black;
+  transition: box-shadow 80ms ease-in-out;
 
   &:focus-within {
-    outline: 2px solid #5c8fff;
+    outline: 2px solid $color-backlog-blue--dark;
   }
   &:hover {
-    box-shadow: 0px 4px 6px -1px rgba(0, 87, 255, 0.25);
+    box-shadow: 0px 4px 6px -1px rgba($color-backlog-blue--light, 0.25);
   }
 }
 
@@ -71,8 +75,8 @@
   border: 0;
   background-color: transparent;
   height: 100%;
-  padding: 0 16px;
-  font-size: 18px;
+  padding: 0 $margin--default;
+  font-size: $text--base;
   min-width: 0;
   color: inherit;
 
@@ -87,37 +91,35 @@
   background-color: transparent;
   border: 0;
   cursor: pointer;
-  margin-right: 8px;
+  margin-right: $margin--small;
   flex-shrink: 0;
   padding: 4px;
-  border-radius: 999px;
+  border-radius: $rounded--full;
   color: inherit;
 
   &:focus {
-    outline: 2px solid #5c8fff;
+    outline: 2px solid $color-backlog-blue--dark;
   }
 }
 
 .form__submit-button {
   height: 40px;
   width: 40px;
-  padding: none;
-  border: none;
-  border-radius: 999px;
-  background-color: $color-backlog-blue;
+  padding: 0;
+  border: 0;
+  border-radius: $rounded--full;
+  background-color: $color-backlog-blue--light;
   color: $color-white;
   cursor: pointer;
   flex-shrink: 0;
   overflow: hidden;
+  transition: box-shadow 80ms ease-in-out;
 
   &:focus {
     outline: 2px solid #5c8fff;
   }
   &:hover {
-    box-shadow: 0px 4px 6px -1px rgba(0, 87, 255, 0.25);
-    > svg {
-      animation: flyingArrow 500ms linear;
-    }
+    box-shadow: 0px 4px 6px -1px rgba($color-backlog-blue--light, 0.25);
   }
 
   > svg {
@@ -136,7 +138,7 @@
     grid-column-start: 1;
   }
   .form__label {
-    font-size: 24px;
+    font-size: $text--lg;
   }
   .form__label,
   .form__input-row {
@@ -149,32 +151,17 @@
     background-color: $color-dark-mode-note;
     box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
   }
+  .form__icon {
+    color: $color-backlog-blue--dark;
+  }
   .form__label {
     color: $color-white;
   }
   .form__password-input {
-    background-color: rgba(#5c8fff, 0.15);
+    background-color: rgba($color-backlog-blue--dark, 0.15);
     color: $color-white;
   }
   .form__submit-button {
-    background-color: #5c8fff;
-  }
-}
-
-@keyframes flyingArrow {
-  0% {
-    transform: translateX(0);
-  }
-  49% {
-    transform: translateX(34px);
-    opacity: 0;
-  }
-  50% {
-    transform: translateX(-30px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateX(0);
-    opacity: 1;
+    background-color: $color-backlog-blue--dark;
   }
 }
