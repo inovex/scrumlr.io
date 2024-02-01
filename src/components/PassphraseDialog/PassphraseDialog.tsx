@@ -32,7 +32,6 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: Passphra
       e.preventDefault();
       return;
     }
-    console.log("Submit");
     onSubmit(passphrase);
   };
 
