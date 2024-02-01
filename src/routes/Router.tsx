@@ -1,10 +1,10 @@
-import {BrowserRouter, Routes} from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 import {LoginBoard} from "routes/LoginBoard";
 import {NewBoard} from "routes/NewBoard";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
-import {Route} from "react-router";
+import {Route, createRoutesFromElements} from "react-router";
 import {SettingsDialog} from "components/SettingsDialog";
 import {ExportBoard} from "components/SettingsDialog/ExportBoard";
 import {ShareSession} from "components/SettingsDialog/ShareSession";
@@ -20,10 +20,9 @@ import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 
-const Router = () => (
-  <BrowserRouter>
-    <RouteChangeObserver />
-    <Routes>
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<RouteChangeObserver />}>
       <Route path="/" element={<Homepage />} />
       <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
       <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
@@ -67,8 +66,8 @@ const Router = () => (
         <Route path="note/:noteId/stack" element={<StackView />} />
       </Route>
       <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
+    </Route>
+  )
 );
 
-export default Router;
+export default router;

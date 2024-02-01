@@ -1,4 +1,4 @@
-import {useLocation} from "react-router";
+import {Outlet, useLocation} from "react-router-dom";
 import {useLayoutEffect} from "react";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
@@ -15,7 +15,7 @@ const RouteChangeObserver = () => {
     window.scrollTo(0, 0);
   }, [location.pathname, dispatch]);
 
-  return null;
+  return <Outlet />;
 };
 
 export default RouteChangeObserver;

@@ -1,10 +1,11 @@
 import React, {Suspense} from "react";
 import {createRoot} from "react-dom/client";
+import {RouterProvider} from "react-router-dom";
 import {Provider} from "react-redux";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import store from "store";
-import Router from "routes/Router";
+import router from "routes/router";
 import {I18nextProvider} from "react-i18next";
 import {ToastContainer} from "react-toastify";
 import i18n from "i18n";
@@ -55,7 +56,8 @@ root.render(
         <Html />
         <Suspense fallback={<LoadingScreen />}>
           <ToastContainer limit={2} />
-          <Router />
+
+          <RouterProvider router={router} />
           {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
         </Suspense>
       </Provider>
