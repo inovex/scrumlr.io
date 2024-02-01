@@ -8,11 +8,11 @@ $color-backlog-blue--dark: #5c8fff;
   min-height: 100vh;
   display: grid;
   place-content: center;
+  padding: 16px;
 }
 
 .passphrase-dialog__logo {
   position: absolute;
-  inset: $margin--default auto auto $margin--default;
 
   &:focus {
     outline: 2px solid $color-backlog-blue--dark;
@@ -25,15 +25,17 @@ $color-backlog-blue--dark: #5c8fff;
   box-shadow: 0px 4px 15px 0px rgba($color: $color-backlog-blue--light, $alpha: 0.25);
   margin: 0 auto;
 
-  padding: $margin--large $margin--default;
+  padding: $padding--large $padding--medium;
   gap: $margin--default;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   max-width: 480px;
 }
 
 .form__icon {
+  display: none;
   color: $color-backlog-blue--light;
   opacity: 50%;
   height: $icon--large;
@@ -44,12 +46,14 @@ $color-backlog-blue--dark: #5c8fff;
   color: $color-black;
   font-size: $text--md;
   font-weight: bold;
+  text-align: center;
 }
 
 .form__input-row {
   display: flex;
   gap: $margin--small;
   min-width: 0;
+  width: 100%;
 }
 
 .form__password-input {
@@ -75,7 +79,7 @@ $color-backlog-blue--dark: #5c8fff;
   border: 0;
   background-color: transparent;
   height: 100%;
-  padding: 0 $margin--default;
+  padding: 0 $padding--default;
   font-size: $text--base;
   min-width: 0;
   color: inherit;
@@ -83,6 +87,10 @@ $color-backlog-blue--dark: #5c8fff;
 
   &:focus {
     outline: 0;
+  }
+  &::placeholder {
+    color: inherit;
+    opacity: 0.5;
   }
 }
 
@@ -121,8 +129,13 @@ $color-backlog-blue--dark: #5c8fff;
   &:focus {
     outline: 2px solid #5c8fff;
   }
-  &:hover {
+  &:hover:not([aria-disabled="true"]) {
     box-shadow: 0px 4px 6px -1px rgba($color-backlog-blue--light, 0.25);
+  }
+
+  &[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 
   > svg {
@@ -130,7 +143,7 @@ $color-backlog-blue--dark: #5c8fff;
   }
 }
 
-@media (min-width: 640px) {
+@media (min-width: 460px) {
   .passphrase-dialog__form {
     padding: 48px 64px;
     display: grid;
@@ -138,10 +151,12 @@ $color-backlog-blue--dark: #5c8fff;
     grid-template-rows: auto auto;
   }
   .form__icon {
+    display: block;
     grid-column-start: 1;
   }
   .form__label {
     font-size: $text--lg;
+    text-align: left;
   }
   .form__label,
   .form__input-row {

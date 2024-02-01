@@ -1,4 +1,4 @@
-import {ChangeEvent, FC, MouseEvent, useState} from "react";
+import {ChangeEvent, FC, FormEvent, MouseEvent, useState} from "react";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
@@ -27,7 +27,12 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: Passphra
     setPassphrase(e.target.value);
   };
 
-  const submitPassphraseForm = () => {
+  const submitPassphraseForm = (e: FormEvent<HTMLFormElement>) => {
+    if (passphrase.length === 0) {
+      e.preventDefault();
+      return;
+    }
+    console.log("Submit");
     onSubmit(passphrase);
   };
 
@@ -48,9 +53,6 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: Passphra
                 className="password-input__input"
                 type={passwordVisible ? "text" : "password"}
                 onChange={changePassphrase}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") submitPassphraseForm();
-                }}
                 value={passphrase}
                 placeholder={t("PassphraseDialog.inputPlaceholder")}
               />
@@ -58,11 +60,12 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: Passphra
                 aria-label={t(`PassphraseDialog${passwordVisible ? ".hidePassword" : ".showPassword"}`)}
                 className="password-input__toggle"
                 onClick={togglePasswordVisibility}
+                type="button"
               >
                 {passwordVisible ? <HiddenIcon /> : <VisibleIcon />}
               </button>
             </div>
-            <button aria-label={t("PassphraseDialog.submit")} className="form__submit-button" type="submit">
+            <button aria-disabled={passphrase.length === 0} aria-label={t("PassphraseDialog.submit")} className="form__submit-button" type="submit">
               <ArrowRightIcon />
             </button>
           </div>
