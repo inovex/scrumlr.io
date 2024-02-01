@@ -18,12 +18,14 @@ import {
   AVATAR_SKIN_COLORS,
   AVATAR_TOP_TYPES,
 } from "components/Avatar/types";
-import {FC, Fragment, useState} from "react";
+import {FC, Fragment, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import "./AvatarSettings.scss";
 import {isEqual} from "underscore";
+import {useBlocker} from "react-router";
+import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 
@@ -37,6 +39,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
 
   const [currentProperties, setCurrentProperties] = useState<AvataaarProps>(participantSelf.user.avatar ?? generateRandomProps(id ?? ""));
   const [newProperties, setNewProperties] = useState<AvataaarProps>(currentProperties);
+  const havePropertiesChanged = useMemo(() => !isEqual(currentProperties, newProperties), [currentProperties, newProperties]);
 
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
@@ -55,6 +58,8 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     setCurrentProperties(newProperties);
     store.dispatch(Actions.editSelf({...participantSelf.user, avatar: newProperties}));
   };
+
+  const blocker = useBlocker(({currentLocation, nextLocation}) => havePropertiesChanged && currentLocation.pathname !== nextLocation.pathname);
 
   const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: AvataaarProps[key][]}}[]} = {
     hair: [
@@ -137,7 +142,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
             </Fragment>
           ))}
         </div>
-        <div className={`avatar-settings__changed${  isEqual(currentProperties, newProperties) ? " avatar-settings__changed--hidden" : ""}`}>
+        <div className={`avatar-settings__changed ${havePropertiesChanged ? "" : "avatar-settings__changed--hidden"}`}>
           <div className="avatar-settings__changed-icon">
             <IconEdit />
           </div>
@@ -149,6 +154,23 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
             <IconDone />
           </button>
         </div>
+        {blocker.state === "blocked" && (
+          <ConfirmationDialog
+            title="Dein Avatar hat ungespeicherte Änderungen!"
+            onAcceptLabel="Speichern"
+            onAccept={() => {
+              updateAvatarInStore();
+              blocker.proceed();
+            }}
+            onDeclineLabel="Zurück"
+            onDecline={() => blocker.reset()}
+            onExtraOptionLabel="Verwerfen"
+            onExtraOption={() => {
+              setNewProperties(currentProperties);
+              blocker.proceed();
+            }}
+          />
+        )}
       </div>
     </>
   );
