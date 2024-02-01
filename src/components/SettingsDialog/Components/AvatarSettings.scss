@@ -119,7 +119,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0px 5px 15px 4px rgba($color: #c000ff, $alpha: 0.2);
+  box-shadow: 0px 2px 12px 2px rgba($color-lean-lilac, 0.24);
   opacity: 1;
   transition-duration: 200ms;
   transition-property: opacity transfrom;
@@ -149,43 +149,34 @@
   }
 
   &-button {
-    background: none;
+    background-color: $color-white;
     border: none;
     display: block;
     padding: 0;
     cursor: pointer;
     border-radius: $rounded--full;
     line-height: 0;
-    border: 2px solid $color-black;
-    transition-duration: 200ms;
-    transition-property: color, background;
+    padding: 2px;
+    // border: 2px solid $color-lean-lilac;
+    transition-duration: 80ms;
+    transition-property: color, background, transform;
+    box-shadow: 0 2px 12px 2px rgba($color-lean-lilac, 0.24);
 
     svg {
       width: $icon--large;
       height: $icon--large;
+      color: $color-lean-lilac;
     }
 
     &:hover {
-      background: $color-black;
-
-      svg {
-        color: $color-white;
-      }
+      transform: scale(1.1);
     }
 
     &--accept {
-      background: $color-black;
+      background-color: $color-lean-lilac;
 
       svg {
         color: $color-white;
-      }
-
-      &:hover {
-        background: none;
-
-        svg {
-          color: $color-black;
-        }
       }
     }
   }
@@ -232,36 +223,15 @@
   }
 
   .avatar-settings__changed {
-    background-color: $color-dark-mode-note;
+    background-color: $color-dark-two;
     color: $color-white;
 
     &-button {
-      border-color: $color-white;
-      svg {
-        color: $color-white;
-      }
-
-      &:hover {
-        background-color: $color-white;
-        svg {
-          color: $color-dark-mode-note;
-        }
-      }
+      background-color: $color-dark-mode-note;
+      box-shadow: 0 2px 12px 2px rgba($color-darkest-gray, 0.8);
 
       &--accept {
-        background-color: $color-white;
-
-        svg {
-          color: $color-dark-mode-note;
-        }
-
-        &:hover {
-          background: none;
-
-          svg {
-            color: $color-white;
-          }
-        }
+        background-color: $color-lean-lilac;
       }
     }
   }
