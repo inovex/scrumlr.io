@@ -110,73 +110,79 @@
       }
     }
   }
+}
 
-  &__changed {
-    z-index: 10;
-    position: absolute;
-    bottom: $padding--default;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #485064;
-    padding: $padding--small;
-    font-weight: 700;
+.avatar-settings__changed {
+  z-index: 10;
+  position: absolute;
+  bottom: $padding--default;
+  left: 50%;
+  transform: translateX(-50%);
+  background: $color-lighter-gray;
+  padding: $padding--small;
+  font-weight: 700;
+  border-radius: $rounded--full;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0px 5px 15px 4px rgba($color: #c000ff, $alpha: 0.2);
+
+  &-icon {
+    display: block;
+    padding: 4px;
+    // background-color: $color-dark-mode-note;
     border-radius: $rounded--full;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0px 5px 15px 4px rgba($color: #c000ff, $alpha: 0.2);
+    line-height: 0;
 
-    &-icon {
-      display: block;
-      padding: 4px;
-      // background-color: $color-dark-mode-note;
-      border-radius: $rounded--full;
-      line-height: 0;
+    svg {
+      width: $icon--large;
+      height: $icon--large;
+    }
+  }
+
+  > p {
+    margin: 0;
+    margin: 0 4px;
+    text-align: center;
+  }
+
+  &-button {
+    background: none;
+    border: none;
+    display: block;
+    padding: 0;
+    cursor: pointer;
+    border-radius: $rounded--full;
+    line-height: 0;
+    border: 2px solid $color-black;
+    transition-duration: 200ms;
+    transition-property: color, background;
+
+    svg {
+      width: $icon--large;
+      height: $icon--large;
+    }
+
+    &:hover {
+      background: $color-black;
 
       svg {
-        width: $icon--large;
-        height: $icon--large;
-        color: #fff;
+        color: $color-white;
       }
     }
 
-    > p {
-      margin: 0;
-      color: #fff;
-      margin: 0 4px;
-      text-align: center;
-    }
-
-    &-button {
-      background: none;
-      border: none;
-      display: block;
-      padding: 0;
-      cursor: pointer;
-      border-radius: $rounded--full;
-      line-height: 0;
-      border: 2px solid #fff;
-      transition-duration: 200ms;
-      transition-property: color, background;
-      color: #fff;
+    &--accept {
+      background: $color-black;
 
       svg {
-        width: $icon--large;
-        height: $icon--large;
+        color: $color-white;
       }
 
       &:hover {
-        background: #fff;
-        color: $color-dark-mode-note;
-      }
+        background: none;
 
-      &--accept {
-        color: $color-dark-mode-note;
-        background: #fff;
-
-        &:hover {
-          color: #fff;
-          background: none;
+        svg {
+          color: $color-black;
         }
       }
     }
@@ -218,6 +224,41 @@
 
         &-seperator {
           border-top: 0.5px solid $color-dark-one;
+        }
+      }
+    }
+  }
+
+  .avatar-settings__changed {
+    background-color: $color-dark-mode-note;
+    color: $color-white;
+
+    &-button {
+      border-color: $color-white;
+      svg {
+        color: $color-white;
+      }
+
+      &:hover {
+        background-color: $color-white;
+        svg {
+          color: $color-dark-mode-note;
+        }
+      }
+
+      &--accept {
+        background-color: $color-white;
+
+        svg {
+          color: $color-dark-mode-note;
+        }
+
+        &:hover {
+          background: none;
+
+          svg {
+            color: $color-white;
+          }
         }
       }
     }

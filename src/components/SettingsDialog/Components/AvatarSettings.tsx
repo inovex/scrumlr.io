@@ -146,10 +146,10 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
             <IconEdit />
           </div>
           <p>Änderungen speichern</p>
-          <button className="avatar-settings__changed-button" title="discard" aria-label="Discard">
+          <button className="avatar-settings__changed-button" aria-label="Discard">
             <IconClose />
           </button>
-          <button className="avatar-settings__changed-button avatar-settings__changed-button--accept" title="accept" aria-label="Accept">
+          <button className="avatar-settings__changed-button avatar-settings__changed-button--accept" aria-label="Accept">
             <IconDone />
           </button>
         </div>
