@@ -2,13 +2,14 @@
 
 exports[`<PassphraseDialog /> snapshot test 1`] = `
 <div
-  class="passphrase-dialog__wrapper"
+  class="background"
 >
   <div
     class="passphrase-dialog"
   >
     <a
       aria-label="Homepage"
+      class="passphrase-dialog__logo"
       href="/"
     >
       <svg
@@ -93,54 +94,49 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
     <form
       class="passphrase-dialog__form"
     >
-      <label
-        class="text-input-label"
-        for="password-dialog__password"
+      <svg
+        class="form__icon"
       >
-        <span
-          class="text-input-label__label"
-        >
-          Enter the passphrase to access this board
-        </span>
+        icon-key.svg
+      </svg>
+      <label
+        class="form__label"
+      >
+        Enter the password to open this board
       </label>
       <div
-        class="text-input__container"
+        class="form__input-row"
       >
         <div
-          class="text-input__input-wrapper"
+          class="form__password-input"
         >
           <input
-            class="text-input text-input--adornment-right"
-            id="password-dialog__password"
+            class="password-input__input"
+            placeholder="Password"
             type="password"
             value=""
           />
           <button
-            aria-label="Toggle passphrase visibility"
-            class="text-input-adornment text-input__adornment text-input__adornment--right"
-            title="Toggle passphrase visibility"
+            aria-label="Show password"
+            class="password-input__toggle"
             type="button"
           >
             <svg>
-              icon-hidden.svg
+              icon-visible.svg
             </svg>
           </button>
         </div>
-        <div
-          class="text-input__actions"
-        />
-      </div>
-      <button
-        class="button button--primary button--contained button__label--shown passphrase-dialog__submit-button"
-        disabled=""
-        type="submit"
-      >
-        <span
-          class="button__label"
+        <button
+          aria-disabled="true"
+          aria-label="Submit"
+          class="form__submit-button"
+          type="submit"
         >
-          Submit
-        </span>
-      </button>
+          <svg>
+            icon-arrow-right.svg
+          </svg>
+        </button>
+      </div>
     </form>
   </div>
 </div>
