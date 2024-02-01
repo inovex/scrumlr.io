@@ -18,7 +18,7 @@ import {
   AVATAR_SKIN_COLORS,
   AVATAR_TOP_TYPES,
 } from "components/Avatar/types";
-import {FC, Fragment, useEffect, useState} from "react";
+import {FC, Fragment, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
@@ -33,24 +33,16 @@ export interface AvatarSettingsProps {
 
 export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   const {t} = useTranslation();
-  const state = useAppSelector(
-    (applicationState) => ({
-      participant: applicationState.participants!.self,
-    }),
-    isEqual
-  );
+  const participantSelf = useAppSelector((applicationState) => applicationState.participants!.self);
 
-  let initialState = state.participant.user.avatar;
-  if (initialState === null || initialState === undefined) {
-    initialState = generateRandomProps(id ?? "");
-  }
+  const [currentProperties, setCurrentProperties] = useState<AvataaarProps>(participantSelf.user.avatar ?? generateRandomProps(id ?? ""));
+  const [newProperties, setNewProperties] = useState<AvataaarProps>(currentProperties);
 
-  const [properties, setProperties] = useState<AvataaarProps>(initialState!);
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
   const updateAvatar = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
-    if (properties && properties[key] !== value) {
-      setProperties({...properties, [key]: value});
+    if (newProperties && newProperties[key] !== value) {
+      setNewProperties({...newProperties, [key]: value});
     }
   };
 
@@ -59,10 +51,10 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     else setOpenAccordionIndex(index);
   };
 
-  useEffect(() => {
-    store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties}));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [properties]);
+  const updateAvatarInStore = () => {
+    setCurrentProperties(newProperties);
+    store.dispatch(Actions.editSelf({...participantSelf.user, avatar: newProperties}));
+  };
 
   const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: AvataaarProps[key][]}}[]} = {
     hair: [
@@ -96,8 +88,12 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   return (
     <>
       <div className="avatar-settings__avatar">
-        <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
-        <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
+        <Avatar seed={id ?? ""} avatar={newProperties} className="avatar-settings__avatar-icon" />
+        <button
+          className="avatar-settings__avatar-shuffle"
+          onClick={() => setNewProperties(generateRandomProps(Math.random().toString(36).slice(2)))}
+          aria-label={t("Avatar.random")}
+        >
           <IconShuffle />
         </button>
       </div>
@@ -117,14 +113,14 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                     const isDisabled =
                       element.disabledOn &&
                       Object.entries(element.disabledOn)
-                        .map(([key, value]) => Object.hasOwnProperty.call(properties, key) && value.some((val) => properties[key].indexOf(val) >= 0))
+                        .map(([key, value]) => Object.hasOwnProperty.call(newProperties, key) && value.some((val) => newProperties[key].indexOf(val) >= 0))
                         .some((val) => val);
 
                     return (
                       <Fragment key={element.key}>
                         <SettingsCarousel
                           carouselItems={element.values}
-                          currentValue={properties[element.key]}
+                          currentValue={newProperties[element.key]}
                           onValueChange={(value) => updateAvatar(element.key, value as (typeof element.values)[number])}
                           disabled={isDisabled}
                           localizationPath={`Avatar.${element.key}.`}
@@ -141,15 +137,15 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
             </Fragment>
           ))}
         </div>
-        <div className="avatar-settings__changed">
+        <div className={`avatar-settings__changed${  isEqual(currentProperties, newProperties) ? " avatar-settings__changed--hidden" : ""}`}>
           <div className="avatar-settings__changed-icon">
             <IconEdit />
           </div>
           <p>Änderungen speichern</p>
-          <button className="avatar-settings__changed-button" aria-label="Discard">
+          <button className="avatar-settings__changed-button" aria-label="Discard" onClick={() => setNewProperties(currentProperties)}>
             <IconClose />
           </button>
-          <button className="avatar-settings__changed-button avatar-settings__changed-button--accept" aria-label="Accept">
+          <button className="avatar-settings__changed-button avatar-settings__changed-button--accept" aria-label="Accept" onClick={updateAvatarInStore}>
             <IconDone />
           </button>
         </div>

@@ -49,16 +49,11 @@
   &__settings {
     background-color: $color-white;
     border-radius: 8px;
-    max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
 
     &-wrapper {
-      padding-right: $padding--small;
-      margin-right: calc(-1 * (#{$padding--small} + 10px));
-
-      @media screen and (min-width: 920px) {
-        padding-right: $padding--medium;
-        margin-right: calc(-1 * (#{$padding--medium} + 10px));
-      }
+      display: flex;
+      flex-direction: column;
+      place-items: stretch;
     }
 
     &-group {
@@ -114,10 +109,9 @@
 
 .avatar-settings__changed {
   z-index: 10;
+  place-self: center;
   position: absolute;
   bottom: $padding--default;
-  left: 50%;
-  transform: translateX(-50%);
   background: $color-lighter-gray;
   padding: $padding--small;
   font-weight: 700;
@@ -126,6 +120,14 @@
   align-items: center;
   gap: 8px;
   box-shadow: 0px 5px 15px 4px rgba($color: #c000ff, $alpha: 0.2);
+  opacity: 1;
+  transition-duration: 200ms;
+  transition-property: opacity transfrom;
+
+  &--hidden {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 
   &-icon {
     display: block;
