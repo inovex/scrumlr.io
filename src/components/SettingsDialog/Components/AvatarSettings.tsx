@@ -146,7 +146,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
           <div className="avatar-settings__changed-icon">
             <IconEdit />
           </div>
-          <p>Änderungen speichern</p>
+          <p>{t("Avatar.saveChanges")}</p>
           <button className="avatar-settings__changed-button" aria-label="Discard" onClick={() => setNewProperties(currentProperties)}>
             <IconClose />
           </button>
@@ -156,15 +156,15 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
         </div>
         {blocker.state === "blocked" && (
           <ConfirmationDialog
-            title="Dein Avatar hat ungespeicherte Änderungen!"
-            onAcceptLabel="Speichern"
+            title={t("Avatar.confirmation.title")}
+            onAcceptLabel={t("Avatar.confirmation.save")}
             onAccept={() => {
               updateAvatarInStore();
               blocker.proceed();
             }}
-            onDeclineLabel="Zurück"
+            onDeclineLabel={t("Avatar.confirmation.cancel")}
             onDecline={() => blocker.reset()}
-            onExtraOptionLabel="Verwerfen"
+            onExtraOptionLabel={t("Avatar.confirmation.discard")}
             onExtraOption={() => {
               setNewProperties(currentProperties);
               blocker.proceed();

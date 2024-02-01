@@ -626,6 +626,13 @@
       "Bear": "Bär",
       "SkullOutline": "Totenkopf Kontur",
       "Skull": "Totenkopf"
+    },
+    "saveChanges": "Änderungen speichern",
+    "confirmation": {
+      "title": "Dein Avatar hat ungespeicherte Änderungen!",
+      "save": "Speichern",
+      "discard": "Verwerfen",
+      "cancel": "Zurück"
     }
   },
   "ToggleButton": {

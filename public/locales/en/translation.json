@@ -249,7 +249,7 @@
     "3min": "3 minutes",
     "5min": "5 minutes",
     "min": "minutes",
-    "customTime":"Custom time",
+    "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
   "BoardReactionsMenu": {
@@ -626,6 +626,13 @@
       "Bear": "Bear",
       "SkullOutline": "Outlined skull",
       "Skull": "Skull"
+    },
+    "saveChanges": "Save changes",
+    "confirmation": {
+      "title": "Your avatar has unsaved changes!",
+      "save": "Save",
+      "discard": "Discard",
+      "cancel": "Cancel"
     }
   },
   "ToggleButton": {
