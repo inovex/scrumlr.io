@@ -1,13 +1,12 @@
 import {ChangeEvent, FC, FormEvent, MouseEvent, useState} from "react";
+import {useTranslation} from "react-i18next";
+import {ReactComponent as ArrowRightIcon} from "assets/icon-arrow-right.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
 import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
 import {Background} from "components/Background";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./PassphraseDialog.scss";
-
-import {ReactComponent as ArrowRightIcon} from "assets/icon-arrow-right.svg";
-import {useTranslation} from "react-i18next";
 
 export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
