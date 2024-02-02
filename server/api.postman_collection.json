@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f8c3949e-0a5e-42f9-a0dc-93ed38f643f8",
+		"_postman_id": "12ba4b2a-5873-4d53-ab82-a909d1db5c11",
 		"name": "scrumlr.io",
 		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the *User* section for more information.\n\n1.  A user signs into the application (see *Login* section)\n2.  The user creates a new board (`POST` on `/boards`, checkout *Boards* section)\n3.  Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout *Participants* section)\n    1.  If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2.  If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3.  If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section *Realtime* to see how you can open websockets and listen to live updates on the data.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -25,7 +25,7 @@
 									"pm.collectionVariables.set(\"bearer_token\", pm.cookies.get(\"jwt\"));\r",
 									"\r",
 									"pm.test(\"Successful POST request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.equal(201);\r",
+									"    pm.expect(pm.response).to.have.status(201);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Check id is included\", function () {\r",
@@ -273,7 +273,7 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Successful PUT request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.equal(200);\r",
+									"    pm.expect(pm.response).to.have.status(200);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Check id is included\", function () {\r",
@@ -297,7 +297,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Jane Doe\"\r\n}",
+							"raw": "{\r\n    \"name\": \" Jane Doe \"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -372,12 +372,12 @@
 							"script": {
 								"exec": [
 									"pm.test(\"Successful GET request\", function () {\r",
-									"    pm.expect(pm.response.code).to.be.equal(200);\r",
+									"    pm.expect(pm.response).to.have.status(200);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Check id is included\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.exist;\r",
+									"    var id = pm.response.json().id;\r",
+									"    pm.expect(id).to.exist;\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Check name is included\", function () {\r",
@@ -486,8 +486,24 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response).to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check id is included\", function () {\r",
+									"    var id = pm.response.json().id;\r",
+									"    pm.expect(id).to.exist;\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check name is included\", function () {\r",
+									"    var boardName = pm.response.json().name;\r",
+									"    pm.expect(boardName).to.exist;\r",
+									"})\r",
+									"\r",
 									"var jsonData = JSON.parse(responseBody);\r",
-									"pm.collectionVariables.set(\"board_id\", jsonData.id);"
+									"pm.collectionVariables.set(\"board_id\", jsonData.id);\r",
+									"\r",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -670,7 +686,158 @@
 					]
 				},
 				{
+					"name": "Delete board",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var body = {",
+									"    \"name\": \"Board to delete\",",
+									"    \"accessPolicy\": \"PUBLIC\",",
+									"    \"columns\": [",
+									"        {",
+									"            \"name\": \"Lean coffee\",",
+									"            \"visible\": true,",
+									"            \"color\": \"backlog-blue\"",
+									"        },",
+									"        {",
+									"            \"name\": \"Actions\",",
+									"            \"visible\": false,",
+									"            \"color\": \"planning-pink\"",
+									"        }",
+									"    ]",
+									"}",
+									"body = JSON.stringify(body)",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"base_url\") + \"/boards\",",
+									"    method: 'POST',",
+									"    header: {",
+									"        \"Content-Type\": \"application/json; charset=utf-8\",",
+									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
+									"    },",
+									"    body: body,",
+									"",
+									"}, function (err, response) {",
+									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", function () {",
+									"        pm.expect(response.code).to.be.equal(201);",
+									"    });",
+									"    ",
+									"    res =  response.json();",
+									"    pm.test(\"PreRequestScript – Check id is included\", function () {",
+									"        var id = res.id;",
+									"        pm.expect(id).to.exist;",
+									"        pm.collectionVariables.set(\"board_to_delete_id\", res.id); ",
+									"    })",
+									"",
+									"    pm.test(\"PreRequestScript – Check name is included\", function () {",
+									"        var boardName = res.name;",
+									"        pm.expect(boardName).to.exist;",
+									"    })",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response).to.have.status(204);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_to_delete_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_to_delete_id}}"
+							]
+						},
+						"description": "Deleting a board will just return status `204` and all related resources will be deleted as well (... except for the users cause that seems cruel)."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/boards/{board}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"boards",
+										"{board}"
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 16 Jan 2022 16:50:23 GMT"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
 					"name": "Update name of a board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", function () {",
+									"    var id = pm.response.json().id;",
+									"    pm.expect(id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check name is included\", function () {",
+									"    var boardName = pm.response.json().name;",
+									"    pm.expect(boardName).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check updated Name\", function () {",
+									"    var boardName = pm.response.json().name;",
+									"    pm.expect(boardName).to.equal(\"Update to new name\")",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -747,6 +914,30 @@
 				},
 				{
 					"name": "Update access policy of board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", function () {",
+									"    var id = pm.response.json().id;",
+									"    pm.expect(id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check accessPolicy is included\", function () {",
+									"    var boardName = pm.response.json().accessPolicy;",
+									"    pm.expect(boardName).to.exist;",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -823,6 +1014,30 @@
 				},
 				{
 					"name": "Get a board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", function () {",
+									"    var id = pm.response.json().id;",
+									"    pm.expect(id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check name is included\", function () {",
+									"    var boardName = pm.response.json().name;",
+									"    pm.expect(boardName).to.exist;",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -880,61 +1095,58 @@
 					]
 				},
 				{
-					"name": "Delete board",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}"
-							]
-						},
-						"description": "Deleting a board will just return status `204` and all related resources will be deleted as well (... except for the users cause that seems cruel)."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "DELETE",
-								"header": [],
-								"url": {
-									"raw": "http://localhost:8080/boards/{board}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"boards",
-										"{board}"
-									]
-								}
-							},
-							"status": "No Content",
-							"code": 204,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 16 Jan 2022 16:50:23 GMT"
-								}
-							],
-							"cookie": [],
-							"body": ""
-						}
-					]
-				},
-				{
 					"name": "Export board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check board id is included\", function () {",
+									"    var id = pm.response.json().board.id;",
+									"    pm.expect(id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check board name included\", function () {",
+									"    var name = pm.response.json().board.name;",
+									"    pm.expect(name).to.equal(\"Update to new name\");",
+									"})",
+									"",
+									"pm.test(\"Check colums\", function () {",
+									"    var responseBody = pm.response.json();",
+									"",
+									"    pm.expect(responseBody).to.have.property('columns');",
+									"    pm.expect(responseBody.columns).to.be.an('array');",
+									"    pm.expect(responseBody.columns.length).to.equal(1);",
+									"})",
+									"",
+									"pm.test(\"Check paricipants\", function () {",
+									"    var responseBody = pm.response.json();",
+									"",
+									"    pm.expect(responseBody).to.have.property('participants');",
+									"    pm.expect(responseBody.participants).to.be.an('array');",
+									"    pm.expect(responseBody.participants.length).to.equal(1);",
+									"",
+									"    //Check for right participant",
+									"    pm.expect(responseBody.participants[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
+									"})",
+									"",
+									"pm.test(\"Check notes\", function () {",
+									"    var responseBody = pm.response.json();",
+									"",
+									"    pm.expect(responseBody).to.have.property('notes');",
+									"    pm.expect(responseBody.notes).to.be.an('array');",
+									"    pm.expect(responseBody.notes.length).to.equal(0);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [
@@ -1045,6 +1257,30 @@
 				},
 				{
 					"name": "Start a 5 minute timer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check timer start/end – 5 minutes appart\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    var timerStart = new Date(res.timerStart);",
+									"    var timerEnd = new Date(res.timerEnd);",
+									"    var timeDifference = timerEnd - timerStart;",
+									"    var timeDifferenceInMinutes = timeDifference / (1000 * 60);",
+									"",
+									"    pm.expect(timeDifferenceInMinutes).to.eql(5);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -1072,26 +1308,67 @@
 					"response": []
 				},
 				{
-					"name": "Stop timer",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/timer",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"timer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "Increment timer by 1 minute",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"base_url\") + \"/boards/\" + pm.collectionVariables.get(\"board_id\"),",
+									"    method: 'GET',",
+									"    header: {",
+									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
+									"    },",
+									"",
+									"}, function (err, response) {",
+									"",
+									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", function () {",
+									"        pm.expect(response.code).to.be.equal(200);",
+									"    });",
+									"    ",
+									"    res =  response.json();",
+									"    pm.test(\"PreRequestScript – Check id\", function () {",
+									"        var id = res.id;",
+									"        pm.expect(id).to.exist;",
+									"        pm.expect(id).to.be.equal(pm.collectionVariables.get(\"board_id\"))",
+									"    })",
+									"",
+									"    pm.test(\"PreRequestScript – Check timer end\", function () {",
+									"        var res = response.json()",
+									"        pm.expect(res.timerEnd).to.exist;",
+									"        pm.collectionVariables.set(\"timer_end\", res.timerEnd)",
+									"    })",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check timer incremented by 1 minute\", function () {",
+									"    var res = pm.response.json();",
+									"    var timerEnd = new Date(res.timerEnd);",
+									"    var prevTimerEnd = new Date(pm.collectionVariables.get(\"timer_end\"));",
+									"",
+									"    var timeDifference = timerEnd - prevTimerEnd;",
+									"    var timeDifferenceInMinutes = timeDifference / (1000 * 60);",
+									"",
+									"    pm.test(\"Check if time difference is 1 minute\", function () {",
+									"        pm.expect(timeDifferenceInMinutes).to.eql(1);",
+									"});",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -1111,13 +1388,98 @@
 					"response": []
 				},
 				{
+					"name": "Stop timer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check timer timestampz not present\", function () {",
+									"    var res = pm.response.json();",
+									"    ",
+									"    pm.expect(res).to.not.have.property(\"timerStart\");",
+									"    pm.expect(res).to.not.have.property(\"timerEnd\");",
+									"    ",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/timer",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"timer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update Board Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", function () {",
+									"    var id = pm.response.json().id;",
+									"    pm.expect(id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check showAuthors changed\", function () {",
+									"    var showAuthors = pm.response.json().showAuthors;",
+									"    pm.expect(showAuthors).to.eql(false);",
+									"})",
+									"",
+									"pm.test(\"Check showNotesOfOtherUsers changed\", function () {",
+									"    var showNotesOfOtherUsers = pm.response.json().showNotesOfOtherUsers;",
+									"    pm.expect(showNotesOfOtherUsers).to.eql(false);",
+									"})",
+									"",
+									"pm.test(\"Check showNoteReactions changed\", function () {",
+									"    var showNoteReactions = pm.response.json().showNoteReactions;",
+									"    pm.expect(showNoteReactions).to.eql(false);",
+									"})",
+									"",
+									"pm.test(\"Check allowStacking changed\", function () {",
+									"    var allowStacking = pm.response.json().allowStacking;",
+									"    pm.expect(allowStacking).to.eql(false);",
+									"})",
+									"",
+									"",
+									"pm.test(\"Check allowEditing changed\", function () {",
+									"    var allowEditing = pm.response.json().allowEditing;",
+									"    pm.expect(allowEditing).to.eql(false);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"sharedNote\":null,\n    \"showVoting\":null,\n    \"timerStart\":\"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\":\"2024-01-18T13:39:49.304Z\",\n    \"allowEditing\":true\n}",
+							"raw": "{\n    \"sharedNote\": null,\n    \"showVoting\": null,\n    \"timerStart\": \"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\": \"2024-01-18T13:39:49.304Z\",\n    \"showAuthors\": false,\n    \"showNotesOfOtherUsers\": false,\n    \"showNoteReactions\": false,\n    \"allowStacking\": false,\n    \"allowEditing\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1218,8 +1580,27 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var jsonData = JSON.parse(responseBody);\r",
-									"pm.collectionVariables.set(\"column_id\", jsonData.id);"
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response).to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check id is included\", function () {\r",
+									"    var id = pm.response.json().id;\r",
+									"\r",
+									"    pm.expect(id).to.exist;\r",
+									"    pm.expect(id).to.be.not.empty;\r",
+									"    pm.collectionVariables.set(\"column_id\", id);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check column name to be right\", function () {\r",
+									"    var name = pm.response.json().name;\r",
+									"    pm.expect(name).to.equal(\"My new column\");\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check if column is correctly not visible\", function () {\r",
+									"    var visible = pm.response.json().visible;\r",
+									"    pm.expect(visible).to.eql(false);\r",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -1307,6 +1688,26 @@
 				},
 				{
 					"name": "Get columns",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check length of coumns array\", function () {",
+									"    var res = pm.response.json();",
+									"    pm.expect(res).to.be.an(\"array\");",
+									"    pm.expect(res.length).to.be.equal(3);",
+									"})",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1366,6 +1767,28 @@
 				},
 				{
 					"name": "Get column",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check column\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"column_id\"));",
+									"    pm.expect(res.name).to.equal(\"My new column\");",
+									"    pm.expect(res.visible).to.eql(false);",
+									"    pm.expect(res.index).to.equal(1);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1427,6 +1850,28 @@
 				},
 				{
 					"name": "Update a column",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check updated values\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.name).to.equal(\"Updated column name\");",
+									"    pm.expect(res.color).to.equal(\"online-orange\");",
+									"    pm.expect(res.visible).to.equal(true);",
+									"    pm.expect(res.index).to.equal(0);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -1506,11 +1951,52 @@
 				},
 				{
 					"name": "Delete column",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"base_url\") + \"/boards/\" + pm.collectionVariables.get(\"board_id\") + \"/columns\",",
+									"    method: 'GET',",
+									"    header: {",
+									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
+									"    },",
+									"}, function (err, response) {",
+									"    pm.test(\"PreRequestScript – Successful GET request (get columns)\", function () {",
+									"        pm.expect(response.code).to.be.equal(200);",
+									"    });",
+									"    ",
+									"    pm.test(\"PreRequestScript – save last column to delete\", function () {",
+									"     var res =  response.json();",
+									"",
+									"     pm.expect(res[res.length - 1].id).to.exists;",
+									"     var lastColumnId = res[res.length - 1].id;",
+									"",
+									"     pm.collectionVariables.set(\"column_to_delete_id\", lastColumnId);",
+									"    })",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/columns/{{column_id}}",
+							"raw": "{{base_url}}/boards/{{board_id}}/columns/{{column_to_delete_id}}",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1518,7 +2004,7 @@
 								"boards",
 								"{{board_id}}",
 								"columns",
-								"{{column_id}}"
+								"{{column_to_delete_id}}"
 							]
 						},
 						"description": "Deletes the column and all associated resources (e.g. notes). The `index` value of the remaining columns will automatically be adjusted.\n\nIf the column was deleted the status `204` will be returned without any content."
@@ -1605,8 +2091,46 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var jsonData = JSON.parse(responseBody);\r",
-									"pm.collectionVariables.set(\"note_id\", jsonData.id);"
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response).to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check note id\", function () {\r",
+									"    var res = pm.response.json();\r",
+									"\r",
+									"    pm.expect(res.id).to.exist;\r",
+									"    pm.expect(res.id).to.not.be.empty;\r",
+									"    pm.collectionVariables.set(\"note_id\", res.id);\r",
+									"})   \r",
+									"\r",
+									"pm.test(\"Check author\", function () {\r",
+									"    var res = pm.response.json();\r",
+									"\r",
+									"    pm.expect(res.author).to.exist;\r",
+									"    pm.expect(res.author).to.not.be.empty;\r",
+									"    pm.expect(res.author).to.equal(pm.collectionVariables.get(\"user_id\"));\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check note text\", function () {\r",
+									"    var res = pm.response.json();\r",
+									"\r",
+									"    pm.expect(res.text).to.equal(\"Just a note\");\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check note position\", function () {\r",
+									"    var pos = pm.response.json().position;\r",
+									"\r",
+									"    // column\r",
+									"    pm.expect(pos.column).to.exist;\r",
+									"    pm.expect(pos.column).to.equal(pm.collectionVariables.get(\"column_id\"));\r",
+									"\r",
+									"    // stack\r",
+									"    pm.expect(pos).to.have.property(\"stack\");\r",
+									"\r",
+									"    // rank\r",
+									"    pm.expect(pos.rank).to.exist;\r",
+									"    pm.expect(pos.rank).to.equal(0);\r",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -1694,6 +2218,26 @@
 				},
 				{
 					"name": "Get notes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check note array\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res).to.be.an(\"array\");",
+									"    pm.expect(res.length).to.equal(1);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1751,6 +2295,35 @@
 				},
 				{
 					"name": "Get note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check note \", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"note_id\"));",
+									"    pm.expect(res.author).to.equal(pm.collectionVariables.get(\"user_id\"));",
+									"",
+									"    pm.expect(res.text).to.equal(\"Just a note\");",
+									"",
+									"    pm.expect(res).to.have.property('position').and.to.be.an('object');",
+									"",
+									"    pm.expect(res.position).to.have.property(\"column\");",
+									"    pm.expect(res.position).to.have.property(\"rank\");",
+									"    pm.expect(res.position).to.have.property(\"stack\");",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1810,6 +2383,25 @@
 				},
 				{
 					"name": "Update note text",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check updated text\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.text).to.equal(\"Updated text\");",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -1839,12 +2431,37 @@
 				},
 				{
 					"name": "Update note position",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"})",
+									"",
+									"pm.test(\"Check updated position\", function () {",
+									"    var pos = pm.response.json().position;",
+									"",
+									"    pm.expect(pos).to.have.property(\"column\");",
+									"    pm.expect(pos.column).to.equal(pm.collectionVariables.get(\"column_id\"));",
+									"    pm.expect(pos).to.have.property(\"rank\");",
+									"    pm.expect(pos).to.have.property(\"stack\");",
+									"    ",
+									"    // This is currently not testable, since our db always calulates the position. You can not simply set a rank.",
+									"    // pm.expect(pos.rank).to.equal(1998);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"position\": {\r\n        \"column\": \"{{column_id}}\",\r\n        \"rank\": 1996\r\n    }\r\n}",
+							"raw": "{\r\n    \"position\": {\r\n        \"column\": \"{{column_id}}\",\r\n        \"rank\": 1998\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1916,11 +2533,70 @@
 				},
 				{
 					"name": "Delete note",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response).to.have.status(204);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var body = {",
+									"    \"column\": pm.collectionVariables.get(\"column_id\"),",
+									"    \"text\": \"Just a note\"",
+									"}",
+									"body = JSON.stringify(body)",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"base_url\") + \"/boards/\" + pm.collectionVariables.get(\"board_id\") + \"/notes\",",
+									"    method: 'POST',",
+									"    header: {",
+									"        \"Content-Type\": \"application/json; charset=utf-8\",",
+									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
+									"    },",
+									"    body: body,",
+									"",
+									"}, function (err, response) {",
+									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", function () {",
+									"        pm.expect(response).to.have.status(201);",
+									"    });",
+									"    ",
+									"    pm.test(\"PreRequestScript – safe note to delete\", function () {",
+									"        res =  response.json();",
+									"        pm.expect(res.id).to.exist;",
+									"        pm.collectionVariables.set(\"note_to_delete_id\", res.id); ",
+									"    })",
+									"",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"deleteStack\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/notes/{{note_id}}",
+							"raw": "{{base_url}}/boards/{{board_id}}/notes/{{note_to_delete_id}}",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1928,7 +2604,7 @@
 								"boards",
 								"{{board_id}}",
 								"notes",
-								"{{note_id}}"
+								"{{note_to_delete_id}}"
 							]
 						}
 					},
@@ -2011,8 +2687,22 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var jsonData = JSON.parse(responseBody);\r",
-									"pm.collectionVariables.set(\"voting_id\", jsonData.id);"
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response).to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check voting parameters\", function () {\r",
+									"    var res = pm.response.json();\r",
+									"\r",
+									"    pm.expect(res.id).to.exist;\r",
+									"    pm.collectionVariables.set(\"voting_id\", res.id);\r",
+									"\r",
+									"    pm.expect(res.voteLimit).to.equal(5);\r",
+									"    pm.expect(res.allowMultipleVotes).to.equal(true);\r",
+									"    pm.expect(res.showVotesOfOthers).to.equal(true);\r",
+									"    pm.expect(res.status).to.equal(\"OPEN\");\r",
+									"\r",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -2097,6 +2787,26 @@
 				},
 				{
 					"name": "Get votings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check voting parameters\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res).to.be.an(\"array\");",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -2154,6 +2864,31 @@
 				},
 				{
 					"name": "Get voting",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check voting parameters\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.id).to.exist;",
+									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"voting_id\"));",
+									"",
+									"    pm.expect(res.voteLimit).to.equal(5);",
+									"    pm.expect(res.allowMultipleVotes).to.equal(true);",
+									"    pm.expect(res.showVotesOfOthers).to.equal(true);",
+									"    pm.expect(res.status).to.equal(\"OPEN\");",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -2213,6 +2948,25 @@
 				},
 				{
 					"name": "Close voting",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check voting parameters\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.status).to.equal(\"CLOSED\");",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -2337,6 +3091,61 @@
 				},
 				{
 					"name": "Abort voting",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check voting parameters\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.status).to.equal(\"ABORTED\");",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var body = {",
+									"    \"voteLimit\": 5,",
+									"    \"allowMultipleVotes\": true,",
+									"    \"showVotesOfOthers\": true",
+									"}",
+									"body = JSON.stringify(body)",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"base_url\") + \"/boards/\" + pm.collectionVariables.get(\"board_id\") + \"/votings\",",
+									"    method: 'POST',",
+									"    header: {",
+									"        \"Content-Type\": \"application/json; charset=utf-8\",",
+									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
+									"    },",
+									"    body: body,",
+									"",
+									"}, function (err, response) {",
+									"    pm.test(\"PreRequestScript – Successful POST request (createVoting)\", function () {",
+									"        pm.expect(response).to.have.status(201);",
+									"    });",
+									"    ",
+									"    pm.test(\"PreRequestScript – Check voting generated (then save id)\", function () {",
+									"        var res = response.json();",
+									"        ",
+									"        pm.expect(res.id).to.exist;",
+									"        pm.collectionVariables.set(\"voting_id\", res.id);",
+									"    })",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -2450,6 +3259,61 @@
 			"item": [
 				{
 					"name": "Add vote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response).to.have.status(201);",
+									"});",
+									"pm.test(\"Check response content\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.voting).to.equal(pm.collectionVariables.get(\"voting_id\"));",
+									"    pm.expect(res.note).to.equal(pm.collectionVariables.get(\"note_id\"));",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var body = {",
+									"    \"voteLimit\": 5,",
+									"    \"allowMultipleVotes\": true,",
+									"    \"showVotesOfOthers\": true",
+									"}",
+									"body = JSON.stringify(body)",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"base_url\") + \"/boards/\" + pm.collectionVariables.get(\"board_id\") + \"/votings\",",
+									"    method: 'POST',",
+									"    header: {",
+									"        \"Content-Type\": \"application/json; charset=utf-8\",",
+									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
+									"    },",
+									"    body: body,",
+									"",
+									"}, function (err, response) {",
+									"    pm.test(\"PreRequestScript – Successful POST request (createVoting)\", function () {",
+									"        pm.expect(response).to.have.status(201);",
+									"    });",
+									"    ",
+									"    pm.test(\"PreRequestScript – Check voting generated (if then save id)\", function () {",
+									"        var res = response.json();",
+									"        ",
+									"        pm.expect(res.id).to.exist;",
+									"        pm.collectionVariables.set(\"voting_id\", res.id);",
+									"    })",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -2570,7 +3434,98 @@
 					]
 				},
 				{
+					"name": "Get votes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check response content\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res).to.be.an(\"array\");",
+									"    pm.expect(res.length).to.equal(1);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/votes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"votes"
+							]
+						},
+						"description": "Returns all votes for the currently authenticated user."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}/votes",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}",
+										"votes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 16 Jan 2022 18:18:49 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "962"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    }\n]"
+						}
+					]
+				},
+				{
 					"name": "Remove vote",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response).to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -2639,312 +3594,6 @@
 							"body": ""
 						}
 					]
-				},
-				{
-					"name": "Get votes",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/votes",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"votes"
-							]
-						},
-						"description": "Returns all votes for the currently authenticated user."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/boards/{{board_id}}/votes",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"boards",
-										"{{board_id}}",
-										"votes"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 16 Jan 2022 18:18:49 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "962"
-								}
-							],
-							"cookie": [],
-							"body": "[\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    },\n    {\n        \"voting\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"note\": \"3ab898f7-01d7-477a-93ef-c023074849f5\"\n    }\n]"
-						}
-					]
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{bearer_token}}",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "Participants",
-			"item": [
-				{
-					"name": "Get board participants",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);\r",
-									"pm.collectionVariables.set(\"owner_id\", jsonData[0].user.id);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/participants",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"participants"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get board participants filter",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"var jsonData = JSON.parse(responseBody);\r",
-									"pm.collectionVariables.set(\"owner_id\", jsonData[0].user.id);"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/participants?role=OWNER&connected=false&raisedHand=true&ready=true",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"participants"
-							],
-							"query": [
-								{
-									"key": "role",
-									"value": "OWNER",
-									"description": "role of participants to filter, can be one of `PARTCIPANT`, `MODERATOR` or `OWNER`"
-								},
-								{
-									"key": "connected",
-									"value": "false",
-									"description": "connected state of the participants, where `true` means the users are online and active"
-								},
-								{
-									"key": "raisedHand",
-									"value": "true",
-									"description": "raised hand state of the participants to filter"
-								},
-								{
-									"key": "ready",
-									"value": "true",
-									"description": "ready state of the participants to filter"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get board participant",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/participants/{{owner_id}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"participants",
-								"{{owner_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update board participant",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"ready\": true,\r\n    \"raisedHand\": true,\r\n    \"banned\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/participants/{{user_id}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"participants",
-								"{{user_id}}"
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"ready\": true,\r\n    \"raisedHand\": true,\r\n    \"banned\": true\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/boards/{{board_id}}/participants/{{user_id}}",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"boards",
-										"{{board_id}}",
-										"participants",
-										"{{user_id}}"
-									]
-								}
-							},
-							"_postman_previewlanguage": null,
-							"header": null,
-							"cookie": [],
-							"body": "{\n    \"user\": {\n        \"id\": \"{{user_id}}\",\n        \"name: \"\"\n    },\n    \"ready\": true,\n    \"raisedHand\": true,\n    \"banned\": true\n}"
-						}
-					]
-				},
-				{
-					"name": "Update board participants",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"ready\": false,\r\n    \"raisedHand\": false\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/participants",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"participants"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Join Board",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/participants",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"participants"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"auth": {
@@ -3016,8 +3665,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 204\", function () {\r",
-									"    pm.response.to.have.status(204);\r",
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response).to.have.status(204);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -3117,77 +3766,26 @@
 			"name": "Reactions",
 			"item": [
 				{
-					"name": "Get reactions",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/reactions/",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"reactions",
-								""
-							]
-						}
-					},
-					"response": [
-						{
-							"name": "Get reactions",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/boards/{{board_id}}/reactions/",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"boards",
-										"{{board_id}}",
-										"reactions",
-										""
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Vary",
-									"value": "Origin"
-								},
-								{
-									"key": "Date",
-									"value": "Thu, 13 Jul 2023 15:52:53 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "323"
-								}
-							],
-							"cookie": [],
-							"body": "[\n    {\n        \"id\": \"58562099-099e-4436-ac4b-bfbde912c042\",\n        \"note\": \"69711746-baf2-42f5-bcaa-ce1bdcf45d75\",\n        \"user\": \"29358bed-2933-46c9-8fd3-6597d500493c\",\n        \"reactionType\": \"heart\"\n    },\n    {\n        \"id\": \"34dd8e86-42dc-46ad-8ee4-f0d301839ae4\",\n        \"note\": \"69711746-baf2-42f5-bcaa-ce1bdcf45d75\",\n        \"user\": \"29358bed-2933-46c9-8fd3-6597d500493c\",\n        \"reactionType\": \"like\"\n    }\n]"
-						}
-					]
-				},
-				{
 					"name": "Create reaction",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"pm.collectionVariables.set(\"reaction_id\", jsonData.id);"
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response).to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Check response\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.id).to.exist;",
+									"    pm.collectionVariables.set(\"reaction_id\", res.id);",
+									"",
+									"    pm.expect(res.note).to.equal(pm.collectionVariables.get(\"note_id\"));",
+									"    pm.expect(res.user).to.equal(pm.collectionVariables.get(\"user_id\"));",
+									"    pm.expect(res.reactionType).to.equal(\"like\");",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -3273,14 +3871,110 @@
 					]
 				},
 				{
+					"name": "Get reactions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check response\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res).to.be.an(\"array\");",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/reactions/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"reactions",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get reactions",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}/reactions/",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}",
+										"reactions",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 13 Jul 2023 15:52:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "323"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"58562099-099e-4436-ac4b-bfbde912c042\",\n        \"note\": \"69711746-baf2-42f5-bcaa-ce1bdcf45d75\",\n        \"user\": \"29358bed-2933-46c9-8fd3-6597d500493c\",\n        \"reactionType\": \"heart\"\n    },\n    {\n        \"id\": \"34dd8e86-42dc-46ad-8ee4-f0d301839ae4\",\n        \"note\": \"69711746-baf2-42f5-bcaa-ce1bdcf45d75\",\n        \"user\": \"29358bed-2933-46c9-8fd3-6597d500493c\",\n        \"reactionType\": \"like\"\n    }\n]"
+						}
+					]
+				},
+				{
 					"name": "Get reaction",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"var jsonData = JSON.parse(responseBody);",
-									"pm.collectionVariables.set(\"reaction_id\", jsonData.id);"
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check response\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.id).to.exist;",
+									"    pm.collectionVariables.set(\"reaction_id\", res.id)",
+									"    pm.expect(res.note).to.equal(pm.collectionVariables.get(\"note_id\"));",
+									"    pm.expect(res.user).to.equal(pm.collectionVariables.get(\"user_id\"));",
+									"    pm.expect(res.reactionType).to.equal(\"like\");",
+									"    ",
+									"",
+									"})"
 								],
 								"type": "text/javascript"
 							}
@@ -3349,12 +4043,31 @@
 				},
 				{
 					"name": "Update reaction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check response\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.reactionType).to.equal(\"heart\");",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"reactionType\": \"laughing\"}",
+							"raw": "{\"reactionType\": \"heart\"}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3383,7 +4096,9 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									""
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response).to.have.status(204);",
+									"});"
 								],
 								"type": "text/javascript"
 							}
@@ -3406,6 +4121,371 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "Participants",
+			"item": [
+				{
+					"name": "Join Board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check response content\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.user).to.be.an(\"object\");",
+									"    pm.expect(res.user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/participants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"participants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get board participants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response).to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check response content\", function () {\r",
+									"    var res = pm.response.json();\r",
+									"\r",
+									"    pm.expect(res).to.be.an(\"array\");\r",
+									"    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));\r",
+									"\r",
+									"    pm.collectionVariables.set(\"owner_id\", res[0].user.id);\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/participants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"participants"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get board participants filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {\r",
+									"    pm.expect(pm.response).to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check response content\", function () {\r",
+									"    var res = pm.response.json();\r",
+									"\r",
+									"    pm.expect(res).to.be.an(\"array\");\r",
+									"    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));\r",
+									"\r",
+									"    pm.collectionVariables.set(\"owner_id\", res[0].user.id);\r",
+									"\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/participants?role=OWNER&connected=false&raisedHand=false&ready=false",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"participants"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "OWNER",
+									"description": "role of participants to filter, can be one of `PARTCIPANT`, `MODERATOR` or `OWNER`"
+								},
+								{
+									"key": "connected",
+									"value": "false",
+									"description": "connected state of the participants, where `true` means the users are online and active"
+								},
+								{
+									"key": "raisedHand",
+									"value": "false",
+									"description": "raised hand state of the participants to filter"
+								},
+								{
+									"key": "ready",
+									"value": "false",
+									"description": "ready state of the participants to filter"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get board participant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check response content\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.user).to.be.an(\"object\");",
+									"    pm.expect(res.user.id).to.equal(pm.collectionVariables.get(\"owner_id\"));",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/participants/{{owner_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"participants",
+								"{{owner_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update board participant",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check response content\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res.user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
+									"",
+									"    pm.expect(res.ready).to.equal(true);",
+									"    pm.expect(res.raisedHand).to.equal(true);",
+									"    pm.expect(res.banned).to.equal(true);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ready\": true,\r\n    \"raisedHand\": true,\r\n    \"banned\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/participants/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"participants",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"ready\": true,\r\n    \"raisedHand\": true,\r\n    \"banned\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/boards/{{board_id}}/participants/{{user_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards",
+										"{{board_id}}",
+										"participants",
+										"{{user_id}}"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": "{\n    \"user\": {\n        \"id\": \"{{user_id}}\",\n        \"name: \"\"\n    },\n    \"ready\": true,\n    \"raisedHand\": true,\n    \"banned\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Update board participants",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check response content\", function () {",
+									"    var res = pm.response.json();",
+									"",
+									"    pm.expect(res).to.be.an(\"array\");",
+									"    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
+									"",
+									"    pm.expect(res[0].ready).to.equal(false);",
+									"    pm.expect(res[0].raisedHand).to.equal(false);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ready\": false,\r\n    \"raisedHand\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards/{{board_id}}/participants",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards",
+								"{{board_id}}",
+								"participants"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{bearer_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		}
@@ -3467,6 +4547,28 @@
 		{
 			"key": "reaction_id",
 			"value": "{reaction}"
+		},
+		{
+			"key": "board_name",
+			"value": "{board_name}"
+		},
+		{
+			"key": "board_to_delete_id",
+			"value": "{board_to_delete_id}",
+			"type": "string"
+		},
+		{
+			"key": "timer_end",
+			"value": "{timer_end}"
+		},
+		{
+			"key": "column_to_delete_id",
+			"value": "{column_to_delete_id}"
+		},
+		{
+			"key": "note_to_delete_id",
+			"value": "{note_to_delete_id}",
+			"type": "string"
 		}
 	]
 }

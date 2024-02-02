@@ -1,0 +1,30 @@
+# running postman tests against dev-deployment
+
+name: Run Postman E2E Tests
+on:
+  workflow_call:
+    inputs:
+      base_url:
+        required: true
+        description: "Base URL to test against"
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21'
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Newman script
+        working-directory: ./server
+        run: |
+          newman run api.postman_collection.json --env-var "base_url=${{ inputs.base_url }}/api" --insecure --verbose
