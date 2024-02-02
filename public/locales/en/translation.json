@@ -157,9 +157,11 @@
     "create": "Create note"
   },
   "PassphraseDialog": {
-    "passphraseInputLabel": "Enter the passphrase to access this board",
-    "togglePassphraseVisibility": "Toggle passphrase visibility",
-    "submit": "Submit"
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "label": "Enter the password to open this board",
+    "submit": "Open board",
+    "inputPlaceholder": "Password"
   },
   "Timer": {
     "endTimer": "End timer",
