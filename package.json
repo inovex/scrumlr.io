@@ -63,7 +63,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.11.16",
     "@types/qrcode.react": "^1.0.5",
-    "@types/react": "^18.2.50",
+    "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
     "@types/react-helmet": "^6.1.11",
     "@types/redux-mock-store": "^1.0.6",
