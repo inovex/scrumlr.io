@@ -1,9 +1,9 @@
-.background {
+.scrumlr-background {
   background-image: url("../../assets/backgrounds/bg--light.svg");
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-[theme="dark"] .background {
+[theme="dark"] .scrumlr-background {
   background-image: url("../../assets/backgrounds/bg--dark.svg");
 }
