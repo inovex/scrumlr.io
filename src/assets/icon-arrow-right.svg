@@ -1,8 +1,4 @@
-<svg viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
-<g fill="none" stroke-linecap="square">
-<g stroke="currentColor" stroke-width="3">
-<line x1="2.5" x2="25.5" y1="17.5" y2="17.5"/>
-<path d="m19.033 10.025 7.3223 6.7365c0.40644 0.37393 0.4328 1.0065 0.058877 1.413-0.018299 0.019891-0.037397 0.039031-0.057247 0.057374l-7.324 6.7681"/>
-</g>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 32 32">
+  <path stroke="currentColor" stroke-linecap="square" stroke-width="2" d="M19.219 11 24 16m0 0-4.782 5"/>
+  <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M7 16.078h14.642"/>
 </svg>

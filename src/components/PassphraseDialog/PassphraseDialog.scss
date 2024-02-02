@@ -1,32 +1,185 @@
 @import "constants/style";
 
-.passphrase-dialog__wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  min-width: 100vw;
-  min-height: 100vh;
-}
+$color-backlog-blue--light: $color-backlog-blue;
+$color-backlog-blue--dark: #5c8fff;
 
 .passphrase-dialog {
-  width: 100%;
-  max-width: 420px;
+  min-width: 100vw;
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  padding: 16px;
+}
 
-  padding: $padding--default;
-  color: $color-black;
+.passphrase-dialog__logo {
+  position: absolute;
+
+  &:focus {
+    outline: 2px solid $color-backlog-blue--dark;
+  }
 }
 
 .passphrase-dialog__form {
-  margin-top: 1.5em;
+  background-color: $color-white;
+  border-radius: 24px;
+  box-shadow: 0px 4px 15px 0px rgba($color: $color-backlog-blue--light, $alpha: 0.25);
+  margin: 0 auto;
+
+  padding: $padding--large $padding--medium;
+  gap: $margin--default;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 480px;
 }
 
-.passphrase-dialog__submit-button {
-  margin-top: 1em;
+.form__icon {
+  display: none;
+  color: $color-backlog-blue--light;
+  opacity: 50%;
+  height: $icon--large;
+  width: $icon--large;
+}
+
+.form__label {
+  color: $color-black;
+  font-size: $text--md;
+  font-weight: bold;
+  text-align: center;
+}
+
+.form__input-row {
+  display: flex;
+  gap: $margin--small;
+  min-width: 0;
+  width: 100%;
+}
+
+.form__password-input {
+  border: 0;
+  border-radius: $rounded--full;
+  background-color: rgba(0, 87, 255, 0.1);
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  flex-grow: 1;
+  color: $color-black;
+  transition: box-shadow 80ms ease-in-out;
+
+  &:focus-within {
+    outline: 2px solid $color-backlog-blue--dark;
+  }
+  &:hover {
+    box-shadow: 0px 4px 6px -1px rgba($color-backlog-blue--light, 0.25);
+  }
+}
+
+.password-input__input {
+  border: 0;
+  background-color: transparent;
+  height: 100%;
+  padding: 0 $padding--default;
+  font-size: $text--base;
+  min-width: 0;
+  color: inherit;
+  flex-grow: 1;
+
+  &:focus {
+    outline: 0;
+  }
+  &::placeholder {
+    color: inherit;
+    opacity: 0.5;
+  }
+}
+
+.password-input__toggle {
+  height: 32px;
+  width: 32px;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  margin-right: $margin--small;
+  flex-shrink: 0;
+  padding: 4px;
+  border-radius: $rounded--full;
+  color: inherit;
+
+  &:focus {
+    outline: 2px solid $color-backlog-blue--dark;
+  }
+}
+
+.form__submit-button {
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: $rounded--full;
+  background-color: $color-backlog-blue--light;
+  color: $color-white;
+  cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: box-shadow 80ms ease-in-out;
+  display: grid;
+  place-content: center;
+
+  &:focus {
+    outline: 2px solid #5c8fff;
+  }
+  &:hover:not([aria-disabled="true"]) {
+    box-shadow: 0px 4px 6px -1px rgba($color-backlog-blue--light, 0.25);
+  }
+
+  &[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  > svg {
+    width: 100%;
+  }
+}
+
+@media (min-width: 460px) {
+  .passphrase-dialog__form {
+    padding: 48px 64px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  .form__icon {
+    display: block;
+    grid-column-start: 1;
+  }
+  .form__label {
+    font-size: $text--lg;
+    text-align: left;
+  }
+  .form__label,
+  .form__input-row {
+    grid-column-start: 2;
+  }
 }
 
 [theme="dark"] {
-  .passphrase-dialog {
+  .passphrase-dialog__form {
+    background-color: $color-dark-mode-note;
+    box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
+  }
+  .form__icon {
+    color: $color-backlog-blue--dark;
+  }
+  .form__label {
     color: $color-white;
+  }
+  .form__password-input {
+    background-color: rgba($color-backlog-blue--dark, 0.15);
+    color: $color-white;
+  }
+  .form__submit-button {
+    background-color: $color-backlog-blue--dark;
   }
 }

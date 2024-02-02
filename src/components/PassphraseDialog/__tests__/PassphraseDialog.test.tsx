@@ -1,6 +1,7 @@
-import {fireEvent, waitFor} from "@testing-library/react";
+import {fireEvent} from "@testing-library/react";
 import {render} from "testUtils";
 import {PassphraseDialog} from "../PassphraseDialog";
+import {t} from "i18next";
 
 describe("<PassphraseDialog />", () => {
   test("snapshot test", () => {
@@ -8,46 +9,38 @@ describe("<PassphraseDialog />", () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  describe("passphrase input", () => {
-    test("submit is disabled while passphrase is empty", () => {
-      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      expect(container.querySelector(".passphrase-dialog__submit-button")!.hasAttribute("disabled")).toBeTruthy();
-    });
-
-    test("submit is available if passphrase is set", async () => {
-      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      fireEvent.change(container.querySelector("#password-dialog__password")!, {target: {value: "1234"}});
-
-      await waitFor(() => {
-        expect(container.querySelector(".passphrase-dialog__submit-button")!.hasAttribute("disabled")).toBeFalsy();
-      });
-    });
+  test("should disable submit button if no passphrase has been entered", () => {
+    const {getByLabelText} = render(<PassphraseDialog onSubmit={jest.fn()} />);
+    const submitButton = getByLabelText(t("PassphraseDialog.submit"));
+    expect(submitButton).toHaveAttribute("aria-disabled", "true");
   });
 
-  describe("visibility toggle", () => {
-    test("passphrase is not visible in default state", () => {
-      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      expect(container.querySelector("#password-dialog__password")!.getAttribute("type")).toEqual("password");
-    });
-
-    test("passphrase is visible on visibility toggle", async () => {
-      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      fireEvent.click(container.querySelector('button[aria-label="Toggle passphrase visibility"]')!);
-      await waitFor(() => {
-        expect(container.querySelector("#password-dialog__password")!.getAttribute("type")).toEqual("text");
-      });
-    });
+  test("should not submit if no passphrase has been entered", () => {
+    const onSubmit = jest.fn();
+    const {getByLabelText} = render(<PassphraseDialog onSubmit={onSubmit} />);
+    const submitButton = getByLabelText(t("PassphraseDialog.submit"));
+    fireEvent.click(submitButton);
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  describe("manual verification hint", () => {
-    test("manual verification is visible", () => {
-      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      expect(container.querySelector(".passphrase-dialog__manual-verification")).toBeNull();
-    });
+  test("should submit with correct passphrase if passphrase has been entered", () => {
+    const onSubmit = jest.fn();
+    const {getByLabelText, getByPlaceholderText} = render(<PassphraseDialog onSubmit={onSubmit} />);
+    const submitButton = getByLabelText(t("PassphraseDialog.submit"));
+    const passwordInput = getByPlaceholderText(t("PassphraseDialog.inputPlaceholder"));
+    fireEvent.change(passwordInput, {target: {value: "Passphrase"}});
+    fireEvent.click(submitButton);
+    expect(onSubmit).toHaveBeenCalled();
+    expect(onSubmit).toHaveBeenCalledWith("Passphrase");
+  });
 
-    test("manual verification is not visible", () => {
-      const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
-      expect(container.querySelector(".passphrase-dialog__manual-verification")).toBeDefined();
-    });
+  test("should toggle the password visibility", () => {
+    const {getByDisplayValue, getByLabelText, getByPlaceholderText} = render(<PassphraseDialog onSubmit={jest.fn()} />);
+    const passwordInput = getByPlaceholderText(t("PassphraseDialog.inputPlaceholder"));
+    fireEvent.change(passwordInput, {target: {value: "Passphrase"}});
+    expect(getByDisplayValue("Passphrase")).toHaveProperty("type", "password");
+    let toggleButton = getByLabelText(t("PassphraseDialog.showPassword"));
+    fireEvent.click(toggleButton);
+    expect(getByDisplayValue("Passphrase")).toHaveProperty("type", "text");
   });
 });
