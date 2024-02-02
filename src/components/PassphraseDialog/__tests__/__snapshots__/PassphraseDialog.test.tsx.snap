@@ -2,7 +2,7 @@
 
 exports[`<PassphraseDialog /> snapshot test 1`] = `
 <div
-  class="background"
+  class="scrumlr-background"
 >
   <div
     class="passphrase-dialog"
@@ -128,7 +128,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
         </div>
         <button
           aria-disabled="true"
-          aria-label="Submit"
+          aria-label="Open board"
           class="form__submit-button"
           type="submit"
         >
