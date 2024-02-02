@@ -160,7 +160,7 @@
     "showPassword": "Zeige das Passwort",
     "hidePassword": "Verberge das Passwort",
     "label": "Gib das Passwort ein, um dieses Board zu öffnen",
-    "submit": "Absenden",
+    "submit": "Board öffnen",
     "inputPlaceholder": "Passwort"
   },
   "Timer": {

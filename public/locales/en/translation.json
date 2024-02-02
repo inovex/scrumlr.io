@@ -160,7 +160,7 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "label": "Enter the password to open this board",
-    "submit": "Submit",
+    "submit": "Open board",
     "inputPlaceholder": "Password"
   },
   "Timer": {
