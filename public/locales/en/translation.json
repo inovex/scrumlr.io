@@ -443,7 +443,8 @@
     "groups": {
       "hair": "Hats and hairstyle",
       "facialFeatures": "Facial features",
-      "clothing": "Clothing"
+      "clothing": "Clothing",
+      "background": "Background"
     },
     "hairColor": {
       "label": "Hair color",
@@ -626,6 +627,16 @@
       "Bear": "Bear",
       "SkullOutline": "Outlined skull",
       "Skull": "Skull"
+    },
+    "accentColorClass": {
+      "label": "Accent color",
+      "accent-color__backlog-blue": "Backlog blue",
+      "accent-color__lean-lilac": "Lean lilac",
+      "accent-color__planning-pink": "Planning pink",
+      "accent-color__retro-red": "Retro red",
+      "accent-color__grooming-green": "Grooming green",
+      "accent-color__poker-purple": "Poker purple",
+      "accent-color__online-orange": "Online orange"
     },
     "saveChanges": "Save changes",
     "confirmation": {
