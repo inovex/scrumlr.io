@@ -48,6 +48,16 @@ In addition to local testing, we utilize GitHub Actions to automate the testing 
 We strongly encourage contributors to write new tests when introducing new features or modifying existing functionality. These tests help validate the behavior and correctness of the code, making it easier to identify and fix issues early on.
 
 ## Translating
+
+### Translations with Fink Editor
+
+[![inlang status badge](https://badge.inlang.com/?url=github.com/inovex/scrumlr.io)](https://fink.inlang.com/github.com/inovex/scrumlr.io?ref=badge)
+
+-> Need help? Check out this [Guide](https://inlang.com/g/6ddyhpoi).
+
+
+### Manual translation updates
+
 If you want to add support for another language, just copy the base configuration `public/locales/en/translation.json` into a new directory with your language code `public/locales/{language code}/translation.json` and translate all values of the JSON properly. Once you're done you can open a pull request, and we will try to review your translation by a few samples.
 
 ## Definition of Done
