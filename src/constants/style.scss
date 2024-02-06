@@ -137,15 +137,16 @@ $rounded--medium: 24px;
 $rounded--large: 32px;
 $rounded--full: 9999px;
 
-// margin and padding
-$margin--small: 8px;
-$margin--default: 16px;
-$margin--medium: 24px;
-$margin--large: 32px;
-$padding--small: 8px;
-$padding--default: 16px;
-$padding--medium: 24px;
-$padding--large: 32px;
+// New spacing constants for flex gap, margin and padding
+$spacing--xxs: 4px;
+$spacing--xs: 8px;
+$spacing--sm: 12px;
+$spacing--base: 16px;
+$spacing--md: 20px;
+$spacing--lg: 24px;
+$spacing--xl: 32px;
+$spacing--2xl: 48px;
+$spacing--3xl: 64px;
 
 // font
 $letter-spacing--small: 0.25px;

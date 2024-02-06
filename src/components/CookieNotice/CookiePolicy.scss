@@ -12,7 +12,7 @@
 .cookie-policy__title {
   color: $color-black;
   background-color: $color-white;
-  padding: $padding--small $padding--default $padding--small $padding--default;
+  padding: $spacing--xs $spacing--base $spacing--xs $spacing--base;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -20,14 +20,14 @@
 .cookie-policy__body {
   color: $color-black;
   background-color: $color-white;
-  padding: $padding--default;
+  padding: $spacing--base;
   height: 375px;
   overflow: auto;
 }
 
 .cookie-policy__footer {
   background-color: $color-white;
-  padding: $padding--default;
+  padding: $spacing--base;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   display: flex;
@@ -35,7 +35,7 @@
 
 .cookie-policy__button {
   border: none;
-  padding: $padding--small $padding--default;
+  padding: $spacing--xs $spacing--base;
   border-radius: 5px;
   font-size: $text-size--medium;
   cursor: pointer;
@@ -44,14 +44,14 @@
     @extend .cookie-policy__button;
     background: $color-backlog-blue;
     color: $color-white;
-    margin: 0 0 $margin--default $margin--default;
+    margin: 0 0 $spacing--base $spacing--base;
   }
 
   &-decline {
     @extend .cookie-policy__button;
     background: $color-lighter-gray;
     color: $color-darkest-gray;
-    margin: 0 0 $margin--default auto;
+    margin: 0 0 $spacing--base auto;
   }
 }
 
