@@ -2,14 +2,14 @@
 
 .appearance-settings__theme-container {
   background-color: $color-white;
-  padding: $padding--default $padding--medium;
+  padding: $spacing--base $spacing--lg;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
 }
 
 .appearance-settings__theme-title {
-  margin-bottom: $margin--default;
+  margin-bottom: $spacing--base;
 }
 
 .appearance-settings__theme-options {
@@ -73,7 +73,7 @@
 
   > p {
     margin-bottom: 0;
-    margin-top: $margin--small;
+    margin-top: $spacing--xs;
     display: flex;
     max-width: 100%;
     line-height: $line-height--medium;
