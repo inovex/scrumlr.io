@@ -22,7 +22,7 @@
 .participants__search-input {
   height: 40px;
   width: 100%;
-  padding: 0 calc($padding--default + $icon--medium + $padding--small) 0 $padding--default;
+  padding: 0 calc($spacing--base + $icon--medium + $spacing--xs) 0 $spacing--base;
   font-size: 14px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
@@ -38,11 +38,11 @@
   height: 100%;
   width: $icon--medium;
   color: $color-black;
-  right: $padding--default;
+  right: $spacing--base;
 }
 
 .participants__filter-buttons {
-  margin-top: $margin--small;
+  margin-top: $spacing--xs;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -76,7 +76,7 @@
 }
 @media screen and (min-width: 920px) {
   .participants__permisson-filter-button {
-    padding: 0 $padding--default;
+    padding: 0 $spacing--base;
   }
 }
 
@@ -111,7 +111,7 @@
 
 .participants__list-wrapper {
   overflow: auto;
-  margin: $margin--default 0px;
+  margin: $spacing--base 0px;
   border-radius: $rounded--default;
 
   @include scrollbar();
@@ -126,17 +126,17 @@
 }
 
 .participants__list-scrollable {
-  padding-right: $padding--medium;
+  padding-right: $spacing--lg;
 }
 
 .participants__list-item {
   height: 55px;
   background-color: $color-white;
-  padding: $margin--small;
+  padding: $spacing--xs;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $margin--small;
+  gap: $spacing--xs;
 
   &:not(:last-child) {
     border-bottom: 1px solid $color-lighter-gray;
@@ -170,7 +170,7 @@
   height: 16px;
   font-size: $text-size--small;
   border-radius: $rounded--full;
-  padding: 0 $padding--small;
+  padding: 0 $spacing--xs;
   font-weight: 500;
   letter-spacing: $letter-spacing--medium;
   background-color: var(--accent-color);
@@ -202,13 +202,13 @@
 .participant__role-buttons {
   display: flex;
   flex-direction: row;
-  gap: $margin--small;
+  gap: $spacing--xs;
 }
 
 .participants-reset-state-banner__container {
   margin-top: auto; // position at the very bottom
   margin-left: -$settings-dialog-container--sides-small;
-  padding: $padding--small $padding--medium; // create some space
+  padding: $spacing--xs $spacing--lg; // create some space
 
   display: flex;
   flex-direction: row;
@@ -249,7 +249,7 @@
 }
 
 .participants-reset-state-banner__button {
-  padding: 0 $padding--medium;
+  padding: 0 $spacing--lg;
 
   height: 36px;
   background-color: $menu-icon-background-color--dark;

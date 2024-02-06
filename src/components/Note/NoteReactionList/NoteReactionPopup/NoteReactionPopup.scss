@@ -9,7 +9,7 @@
 
   transform: translateX(-50%); // show on whole screen
 
-  padding: $padding--small $padding--default $padding--large * 2 $padding--default;
+  padding: $spacing--xs $spacing--base $spacing--xl * 2 $spacing--base;
 
   background-color: $color-white;
 
@@ -32,7 +32,7 @@
   height: 4px;
   background-color: $color-lighter-gray;
   border-radius: $rounded--default;
-  margin-bottom: $margin--default;
+  margin-bottom: $spacing--base;
 }
 
 .note-reaction-popup__tab-bar {
@@ -82,8 +82,8 @@
   width: 100%;
   height: 100%;
 
-  margin-top: $margin--medium;
-  padding-bottom: $padding--small;
+  margin-top: $spacing--lg;
+  padding-bottom: $spacing--xs;
 
   overflow: scroll;
   scroll-snap-type: x mandatory;

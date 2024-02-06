@@ -10,7 +10,7 @@
   transform: translateX(-50%);
   height: $info-bar__height;
   justify-content: center;
-  gap: $margin--small;
+  gap: $spacing--xs;
   z-index: $infobar-z-index;
 }
 
