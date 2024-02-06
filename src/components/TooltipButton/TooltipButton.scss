@@ -65,7 +65,7 @@ $tooltip-button-size: 46px;
 
 .tooltip-button__tooltip-text {
   width: 100%;
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
   white-space: nowrap;
   font-size: 14px;
   font-weight: bold;
@@ -161,8 +161,8 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      padding-right: $tooltip-button-size + $padding--small;
-      padding-left: $padding--default;
+      padding-right: $tooltip-button-size + $spacing--xs;
+      padding-left: $spacing--base;
       transform: translateX(100%);
       transform-origin: right;
     }
@@ -174,8 +174,8 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      padding-left: $tooltip-button-size + $padding--small;
-      padding-right: $padding--default;
+      padding-left: $tooltip-button-size + $spacing--xs;
+      padding-right: $spacing--base;
       transform: translateX(-100%);
       transform-origin: left;
     }

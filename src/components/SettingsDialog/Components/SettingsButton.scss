@@ -8,12 +8,12 @@ $header-menu-border-bottom-color: #efefef;
 .settings-option-button {
   display: flex;
   align-items: center;
-  gap: $padding--default;
+  gap: $spacing--base;
 
   background-color: $color-white;
   border-radius: 8px;
   border: none;
-  padding: 0 $padding--medium;
+  padding: 0 $spacing--lg;
   height: $settings__item-height;
   width: 100%;
   text-align: left;
