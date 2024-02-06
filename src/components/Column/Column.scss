@@ -51,7 +51,7 @@
 .column__header {
   display: flex;
   flex-direction: column;
-  padding: 0 $padding--large;
+  padding: 0 $spacing--xl;
 }
 
 .column__header-title {
@@ -150,7 +150,7 @@
 .column__note-list {
   margin: 0;
   // padding-top of 4px to display note outline focus correctly
-  padding: 4px $padding--large $spacing--base $padding--large;
+  padding: 4px $spacing--xl $spacing--base $spacing--xl;
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 20px;

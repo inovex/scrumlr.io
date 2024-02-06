@@ -57,7 +57,7 @@
   min-width: 100%;
   min-height: 100vh;
   padding-top: 86px;
-  padding-bottom: $padding--large;
+  padding-bottom: $spacing--xl;
 }
 
 .homepage__hero-content {
@@ -130,7 +130,7 @@
   text-align: left;
   max-width: 1280px;
   margin: 0 auto;
-  padding: $padding--large;
+  padding: $spacing--xl;
 }
 
 .homepage__footer > * {
@@ -210,7 +210,7 @@
 
 @media #{$tablet} {
   .homepage__header {
-    padding: $padding--large;
+    padding: $spacing--xl;
   }
 
   .homepage__hero {
