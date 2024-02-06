@@ -104,7 +104,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   display: flex;
   align-items: center;
   gap: $spacing--base;
-  margin-bottom: $margin--large;
+  margin-bottom: $spacing--xl;
 }
 
 .print-view__title-text {

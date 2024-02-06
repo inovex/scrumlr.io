@@ -101,7 +101,7 @@
   left: 0;
   width: 100%;
   max-height: min(300px, calc(100svh - $note-dialog-emoji-suggestions__approx-top-distance));
-  margin-bottom: $margin--large;
+  margin-bottom: $spacing--xl;
 
   z-index: $note-dialog__emoji-suggestions-z-index;
   border-radius: $rounded--default;
