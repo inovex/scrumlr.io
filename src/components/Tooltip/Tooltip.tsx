@@ -1,9 +1,17 @@
 import classNames from "classnames";
+import {ReactNode} from "react";
 import "./Tooltip.scss";
 
 type TooltipProps = {
+  anchorSelect?: string;
+  children?: ReactNode;
   className?: string;
-  text: string;
+  content?: string;
+  id?: string;
 };
 
-export const Tooltip = ({className, text}: TooltipProps) => <div className={classNames("tooltip", className)}>{text}</div>;
+export const Tooltip = (props: TooltipProps) => (
+    <div id={props.id} className={classNames("tooltip", props.className)}>
+      {props.content}
+    </div>
+  );

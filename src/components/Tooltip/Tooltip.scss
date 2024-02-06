@@ -6,7 +6,7 @@
   color: $color-black;
   font-size: $text--sm;
   font-weight: 600;
-  padding: 12px $padding--default;
+  padding: $spacing--sm $spacing--base;
 }
 
 [theme="dark"] .tooltip {
