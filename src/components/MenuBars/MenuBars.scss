@@ -144,8 +144,8 @@ $tooltip-gap: 12px;
     display: grid;
     grid-template-columns: 0 $action-bar__width;
     grid-template-rows: 0 $action-bar__width;
-    bottom: $margin--medium;
-    right: $margin--medium;
+    bottom: $spacing--lg;
+    right: $spacing--lg;
   }
 }
 

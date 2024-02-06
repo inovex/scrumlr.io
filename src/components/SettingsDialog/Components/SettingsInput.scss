@@ -29,7 +29,7 @@
     &:focus-visible ~ label,
     &:not(.settings-input__hidden-placeholder) ~ label,
     &:not(:placeholder-shown) ~ label {
-      margin: 0 $margin--medium;
+      margin: 0 $spacing--lg;
       top: 2px;
       font-size: $text-size--small;
       line-height: $line-height--medium;
@@ -41,7 +41,7 @@
   }
 
   label {
-    margin: $spacing--base $margin--medium;
+    margin: $spacing--base $spacing--lg;
     position: absolute;
     transition: all 0.08s ease-out;
     cursor: text;
@@ -58,7 +58,7 @@
   position: absolute;
   right: 0;
   top: 2px;
-  margin: 0 $margin--medium;
+  margin: 0 $spacing--lg;
   opacity: 0;
   transition: opacity 100ms;
   font-size: $text-size--small;

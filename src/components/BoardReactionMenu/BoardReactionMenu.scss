@@ -83,7 +83,7 @@ $reaction-size: 54px;
 
 @media #{$smartphone} {
   .board-reactions__root {
-    bottom: $column__border-width + $margin--medium + 32px;
+    bottom: $column__border-width + $spacing--lg + 32px;
   }
 
   .board-reactions__close {
