@@ -82,7 +82,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   align-items: flex-start;
   height: auto;
   gap: $spacing--xs;
-  padding: $padding--default $padding--medium;
+  padding: $spacing--base $padding--medium;
 }
 .feedback-form__settings-button > span {
   padding-bottom: 0;

@@ -48,7 +48,7 @@
   flex-direction: column;
   align-items: center;
 
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
 
   z-index: $base-z-index; // layer content over background, using any z-index works
 }
@@ -69,7 +69,7 @@
 .not-found__return-button {
   margin-top: $spacing--base;
 
-  padding: $padding--default $padding--large;
+  padding: $spacing--base $padding--large;
   color: $color-white;
   background: #ff0069;
 
@@ -108,7 +108,7 @@
 
 @media screen and (min-width: 450px) {
   .not-found__root {
-    padding: $padding--default;
+    padding: $spacing--base;
   }
 
   .not-found__background-form {

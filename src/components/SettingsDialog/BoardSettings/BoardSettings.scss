@@ -55,7 +55,7 @@
 .board-settings__board-name-button_input {
   background-color: transparent;
   border: none;
-  padding: $padding--default $padding--medium $padding--default $padding--default;
+  padding: $spacing--base $padding--medium $spacing--base $spacing--base;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;
@@ -109,7 +109,7 @@
 }
 
 .board-settings__policy-button_value span {
-  padding: $padding--default $padding--medium $padding--default 4px;
+  padding: $spacing--base $padding--medium $spacing--base 4px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;
@@ -192,7 +192,7 @@
 .board-settings__password-button_value-input {
   background-color: transparent;
   border: none;
-  padding: $padding--default;
+  padding: $spacing--base;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;

@@ -28,7 +28,7 @@ $note__footer-gap: 42px;
   box-shadow: 0 6px 9px 0 $note__box-shadow-color;
   transition: all 0.1s ease-in-out;
   z-index: $note-z-index;
-  padding: $padding--default $padding--medium 12px $padding--default;
+  padding: $spacing--base $padding--medium 12px $spacing--base;
   width: 100%;
   text-align: start;
   border: 2px solid transparent;
@@ -212,7 +212,7 @@ $note__footer-gap: 42px;
 // change note padding based on note size
 @container #{$container__note} {
   .note {
-    padding: 10px $padding--default 5px 10px;
+    padding: 10px $spacing--base 5px 10px;
   }
 
   .note__text {

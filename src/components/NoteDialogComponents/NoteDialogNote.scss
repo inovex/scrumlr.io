@@ -16,7 +16,7 @@ $row-gap: 3px;
   grid-template-rows: 1fr 4fr 1fr;
   row-gap: $row-gap;
 
-  padding: $padding--default $padding--medium;
+  padding: $spacing--base $padding--medium;
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;
@@ -62,7 +62,7 @@ $row-gap: 3px;
 
 @media #{$mini-smartphone} {
   .note-dialog__note {
-    padding: $padding--default $padding--default $padding--default $spacing--xs;
+    padding: $spacing--base $spacing--base $spacing--base $spacing--xs;
   }
 }
 

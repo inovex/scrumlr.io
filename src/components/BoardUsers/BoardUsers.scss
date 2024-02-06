@@ -19,7 +19,7 @@
 
   &--others {
     flex-direction: row-reverse;
-    padding-left: $padding--default;
+    padding-left: $spacing--base;
   }
 
   &:focus-visible {

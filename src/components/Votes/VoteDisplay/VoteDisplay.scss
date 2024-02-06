@@ -151,7 +151,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   left: 50%;
   transform: translateX(-50%);
   border-radius: $rounded--full;
-  padding: $spacing--xs $padding--default;
+  padding: $spacing--xs $spacing--base;
   background-color: $tooltip-background-color--light;
   color: $color-dark-mode-note;
   font-size: $text--base;

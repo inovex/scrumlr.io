@@ -7,7 +7,7 @@
   bottom: 0;
   right: 0;
   left: 0;
-  padding: $padding--default;
+  padding: $spacing--base;
   box-shadow: 0 -4px 16px rgba($color-backlog-blue, 0.16);
 }
 
@@ -17,7 +17,7 @@
 
 .cookie-notice__button {
   border: none;
-  padding: $spacing--xs $padding--default;
+  padding: $spacing--xs $spacing--base;
   border-radius: 5px;
   font-size: $text-size--medium;
   cursor: pointer;

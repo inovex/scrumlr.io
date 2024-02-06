@@ -13,7 +13,7 @@
 .new-board {
   position: relative;
   color: $color-black;
-  padding: $padding--default;
+  padding: $spacing--base;
 
   a {
     outline: none;
@@ -86,7 +86,7 @@
   transition: all 0.08s ease-out;
   min-height: 76px;
 
-  padding: $padding--default;
+  padding: $spacing--base;
 
   text-overflow: ellipsis;
   overflow: hidden;
@@ -118,7 +118,7 @@
   justify-content: center;
   width: 100%;
   bottom: 0;
-  padding: $padding--default;
+  padding: $spacing--base;
   background: linear-gradient(0deg, $color-white 0%, $color-white 80%, rgba(0, 0, 0, 0) 100%);
 }
 

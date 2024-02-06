@@ -24,8 +24,8 @@ $header-menu-button-width: 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: $padding--default;
-  padding-right: $padding--default;
+  padding-left: $spacing--base;
+  padding-right: $spacing--base;
 }
 
 .board-settings__board-name {

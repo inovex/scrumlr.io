@@ -14,7 +14,7 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: $padding--default;
+  padding: $spacing--base;
 
   display: flex;
   justify-content: space-between;
@@ -67,7 +67,7 @@
   align-items: center;
   gap: 0;
   max-width: 1080px;
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
   margin-top: 48px;
   margin-bottom: 48px;
 }

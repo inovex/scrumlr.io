@@ -150,7 +150,7 @@
 .column__note-list {
   margin: 0;
   // padding-top of 4px to display note outline focus correctly
-  padding: 4px $padding--large $padding--default $padding--large;
+  padding: 4px $padding--large $spacing--base $padding--large;
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 20px;

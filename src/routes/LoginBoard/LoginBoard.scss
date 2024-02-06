@@ -10,7 +10,7 @@
 }
 
 .login-board__form-wrapper {
-  padding: $padding--default;
+  padding: $spacing--base;
 }
 
 .login-board__form a {
@@ -57,7 +57,7 @@
   display: inline-block;
   position: relative;
   top: -0.625em;
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
   background: $color-white;
 }
 

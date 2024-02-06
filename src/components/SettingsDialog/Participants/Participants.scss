@@ -22,7 +22,7 @@
 .participants__search-input {
   height: 40px;
   width: 100%;
-  padding: 0 calc($padding--default + $icon--medium + $spacing--xs) 0 $padding--default;
+  padding: 0 calc($spacing--base + $icon--medium + $spacing--xs) 0 $spacing--base;
   font-size: 14px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
@@ -38,7 +38,7 @@
   height: 100%;
   width: $icon--medium;
   color: $color-black;
-  right: $padding--default;
+  right: $spacing--base;
 }
 
 .participants__filter-buttons {
@@ -76,7 +76,7 @@
 }
 @media screen and (min-width: 920px) {
   .participants__permisson-filter-button {
-    padding: 0 $padding--default;
+    padding: 0 $spacing--base;
   }
 }
 
