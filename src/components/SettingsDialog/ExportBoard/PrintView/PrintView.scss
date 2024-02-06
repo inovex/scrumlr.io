@@ -170,7 +170,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__note-stack-wrapper {
   border-radius: $note__border-radius;
-  padding: $padding--small $padding--small 0 $padding--small;
+  padding: $spacing--xs $spacing--xs 0 $spacing--xs;
   border: 2px solid rgba(var(--accent-color-rgb), 0.25);
   width: 100%;
   margin-bottom: $margin--default;
@@ -181,7 +181,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   display: block;
   width: 100%;
   margin-bottom: $margin--default;
-  padding: calc(#{$padding--small} + 4px);
+  padding: calc(#{$spacing--xs} + 4px);
   border: 2px solid rgba(var(--accent-color-rgb), 0.25);
   border-radius: $note__border-radius;
   background: $color-white;

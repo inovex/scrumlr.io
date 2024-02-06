@@ -4,7 +4,7 @@
 .not-found__root {
   height: 100%;
   width: 100%;
-  padding: $padding--small 0 0 $padding--medium;
+  padding: $spacing--xs 0 0 $padding--medium;
   overflow-x: hidden;
   background: linear-gradient(320deg, color.change($color-backlog-blue, $alpha: 0.2), color.change($color-white, $alpha: 0.3));
 }

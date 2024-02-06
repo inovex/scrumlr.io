@@ -52,8 +52,8 @@
     max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
 
     &-wrapper {
-      padding-right: $padding--small;
-      margin-right: calc(-1 * (#{$padding--small} + 10px));
+      padding-right: $spacing--xs;
+      margin-right: calc(-1 * (#{$spacing--xs} + 10px));
 
       @media screen and (min-width: 920px) {
         padding-right: $padding--medium;
@@ -63,7 +63,7 @@
 
     &-group {
       &:last-child {
-        padding: calc(#{$padding--small} / 2) 0;
+        padding: calc(#{$spacing--xs} / 2) 0;
       }
 
       &-header {
@@ -76,7 +76,7 @@
       }
 
       &-item {
-        padding: $padding--small 0;
+        padding: $spacing--xs 0;
         width: 90%;
         margin: 0 auto;
 

@@ -9,7 +9,7 @@
 
   transform: translateX(-50%); // show on whole screen
 
-  padding: $padding--small $padding--default $padding--large * 2 $padding--default;
+  padding: $spacing--xs $padding--default $padding--large * 2 $padding--default;
 
   background-color: $color-white;
 
@@ -83,7 +83,7 @@
   height: 100%;
 
   margin-top: $margin--medium;
-  padding-bottom: $padding--small;
+  padding-bottom: $spacing--xs;
 
   overflow: scroll;
   scroll-snap-type: x mandatory;

@@ -164,7 +164,7 @@ $timer__progress-bar-color: #6096ff;
   left: 50%;
   transform: translateX(-50%);
   border-radius: $rounded--full;
-  padding: $padding--small $padding--default;
+  padding: $spacing--xs $padding--default;
   background-color: $tooltip-background-color--light;
   color: $menu-icon-background-color--dark;
   font-size: $text--base;

@@ -62,7 +62,7 @@ $row-gap: 3px;
 
 @media #{$mini-smartphone} {
   .note-dialog__note {
-    padding: $padding--default $padding--default $padding--default $padding--small;
+    padding: $padding--default $padding--default $padding--default $spacing--xs;
   }
 }
 

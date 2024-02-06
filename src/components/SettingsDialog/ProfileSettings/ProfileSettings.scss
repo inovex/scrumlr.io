@@ -23,8 +23,8 @@ $settings__item-height: 48px;
     &-wrapper {
       overflow-y: auto;
       overflow-x: hidden;
-      padding-right: $padding--small;
-      margin-right: calc(-1 * (#{$padding--small} + 10px));
+      padding-right: $spacing--xs;
+      margin-right: calc(-1 * (#{$spacing--xs} + 10px));
       padding-bottom: $settings-dialog-container--bottom;
 
       @media screen and (min-width: 920px) {
@@ -68,7 +68,7 @@ $settings__item-height: 48px;
   color: $color-dark-gray;
   gap: $spacing--xs;
   margin: $spacing--xs;
-  padding: $padding--small;
+  padding: $spacing--xs;
   transition: transform 0.08s ease-in-out;
 
   > svg {

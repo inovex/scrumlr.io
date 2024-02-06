@@ -22,7 +22,7 @@
 .participants__search-input {
   height: 40px;
   width: 100%;
-  padding: 0 calc($padding--default + $icon--medium + $padding--small) 0 $padding--default;
+  padding: 0 calc($padding--default + $icon--medium + $spacing--xs) 0 $padding--default;
   font-size: 14px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
@@ -170,7 +170,7 @@
   height: 16px;
   font-size: $text-size--small;
   border-radius: $rounded--full;
-  padding: 0 $padding--small;
+  padding: 0 $spacing--xs;
   font-weight: 500;
   letter-spacing: $letter-spacing--medium;
   background-color: var(--accent-color);
@@ -208,7 +208,7 @@
 .participants-reset-state-banner__container {
   margin-top: auto; // position at the very bottom
   margin-left: -$settings-dialog-container--sides-small;
-  padding: $padding--small $padding--medium; // create some space
+  padding: $spacing--xs $padding--medium; // create some space
 
   display: flex;
   flex-direction: row;

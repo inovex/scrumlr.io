@@ -137,13 +137,13 @@ $menu-item-size: 42px;
     transition: transform 150ms linear 0ms;
   }
   .menu-item.menu-item--left .tooltip__text {
-    padding-right: $menu-item-size + $padding--small;
+    padding-right: $menu-item-size + $spacing--xs;
     padding-left: $padding--default;
     transform: translateX(100%);
     transform-origin: right;
   }
   .menu-item.menu-item--right .tooltip__text {
-    padding-left: $menu-item-size + $padding--small;
+    padding-left: $menu-item-size + $spacing--xs;
     padding-right: $padding--default;
     transform: translateX(-100%);
     transform-origin: left;

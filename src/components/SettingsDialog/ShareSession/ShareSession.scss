@@ -26,7 +26,7 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 .share-qr-code-option__copy-to-clipboard {
-  padding: $padding--small $padding--medium;
+  padding: $spacing--xs $padding--medium;
   margin-top: $margin--large;
   width: 260px;
   border: solid 2px var(--accent-color);

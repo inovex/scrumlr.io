@@ -31,7 +31,7 @@ $note-input__input-right: 40px;
   line-height: 24px;
   max-height: 70vh;
   letter-spacing: $letter-spacing--small;
-  padding: $padding--small 0;
+  padding: $spacing--xs 0;
   font-family: Raleway, sans-serif;
   background-color: transparent;
   border: none;
@@ -51,7 +51,7 @@ $note-input__input-right: 40px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  padding: $padding--small 0;
+  padding: $spacing--xs 0;
 
   &:hover > .note-input__icon {
     filter: brightness(1.2);
@@ -115,7 +115,7 @@ $note-input__input-right: 40px;
 
 .note-input__emoji-suggestions {
   position: absolute;
-  top: calc(100% + $padding--small);
+  top: calc(100% + $spacing--xs);
   left: 0;
   width: 100%;
   background-color: $color-lighter-gray;

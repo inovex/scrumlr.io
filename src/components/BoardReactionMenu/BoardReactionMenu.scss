@@ -113,7 +113,7 @@ $reaction-size: 54px;
 
 @media screen and (max-width: 400px) {
   .board-reactions__container {
-    padding: 0 $padding--small;
+    padding: 0 $spacing--xs;
     gap: 2px;
   }
 }

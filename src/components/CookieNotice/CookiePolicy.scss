@@ -12,7 +12,7 @@
 .cookie-policy__title {
   color: $color-black;
   background-color: $color-white;
-  padding: $padding--small $padding--default $padding--small $padding--default;
+  padding: $spacing--xs $padding--default $spacing--xs $padding--default;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
@@ -35,7 +35,7 @@
 
 .cookie-policy__button {
   border: none;
-  padding: $padding--small $padding--default;
+  padding: $spacing--xs $padding--default;
   border-radius: 5px;
   font-size: $text-size--medium;
   cursor: pointer;

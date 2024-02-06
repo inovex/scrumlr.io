@@ -1,7 +1,7 @@
 @import "constants/style";
 
 .emoji-suggestions {
-  padding: $padding--small;
+  padding: $spacing--xs;
   border-radius: $rounded--default;
   background-color: $color-lighter-gray;
   list-style: none;
@@ -14,7 +14,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    padding: $padding--small;
+    padding: $spacing--xs;
     border-radius: $rounded--small;
     line-height: $line-height--medium;
   }

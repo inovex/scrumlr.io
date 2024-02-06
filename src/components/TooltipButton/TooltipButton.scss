@@ -161,7 +161,7 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      padding-right: $tooltip-button-size + $padding--small;
+      padding-right: $tooltip-button-size + $spacing--xs;
       padding-left: $padding--default;
       transform: translateX(100%);
       transform-origin: right;
@@ -174,7 +174,7 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      padding-left: $tooltip-button-size + $padding--small;
+      padding-left: $tooltip-button-size + $spacing--xs;
       padding-right: $padding--default;
       transform: translateX(-100%);
       transform-origin: left;
