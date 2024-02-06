@@ -8,7 +8,6 @@ import {Actions} from "store/action";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
 import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
-import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
@@ -49,7 +48,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
   const [columnName, setColumnName] = useState(name);
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
-  const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
   const [isTemporary, setIsTemporary] = useState(id === "TEMP_ID");
 
   const inputRef = useRef<HTMLInputElement>();
@@ -158,11 +156,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <CloseIcon className="column__header-edit-button-icon" />
         </button>
       )}
-      {!isTemporary && (
-        <button title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
-          {openedColumnSettings ? <CloseIcon className="column__header-edit-button-icon" /> : <DotsIcon className="column__header-edit-button-icon" />}
-        </button>
-      )}
     </>
   );
 
@@ -198,17 +191,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
               </span>
             )}
             {isModerator && renderColumnModifiers()}
-            {openedColumnSettings && (
-              <ColumnSettings
-                id={id}
-                name={name}
-                color={color}
-                visible={visible}
-                index={index}
-                onClose={() => setOpenedColumnSettings(false)}
-                onNameEdit={() => setColumnNameMode("EDIT")}
-              />
-            )}
+            <ColumnSettings id={id} name={name} color={color} visible={visible} index={index} onNameEdit={() => setColumnNameMode("EDIT")} />
           </div>
           <NoteInput
             columnIndex={index}

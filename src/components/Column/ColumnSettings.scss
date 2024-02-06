@@ -1,106 +1,51 @@
 @import "src/constants/style";
 
-.column__header-menu-dropdown {
-  position: absolute;
-  right: 0;
-  top: 75%;
-  width: 180px;
+.column-settings {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  border-radius: $rounded--full;
   background-color: $color-white;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  z-index: 150;
-}
-
-.column__header-menu-dropdown > ul {
   list-style: none;
-  padding: $padding--small 0;
-  margin: 0;
-}
-
-.column__header-menu-dropdown > ul > li {
-  height: 32px;
-  padding: 0 16px;
-  background-color: $color-white;
-
-  &:hover {
-    filter: $darken--slightly;
-  }
-
-  &:focus-within {
-    background-color: $color-white-two;
-  }
-}
-
-.column__header-menu-dropdown > ul > li > button {
-  cursor: pointer;
-  border: 0;
-  outline: none;
-  background-color: transparent;
   padding: 0;
   margin: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: $text-size--small;
-}
+  height: 48px;
+  background-color: #edeff2;
+  gap: 16px;
+  padding: 0 8px;
+  width: 48px;
+  overflow-x: hidden;
 
-.column__header-menu-dropdown > ul > li > button > svg {
-  height: $icon--medium;
-  width: $icon--medium;
-}
-
-.column__header-menu-dropdown > ul > li:last-of-type {
-  height: auto;
-  padding: $padding--small $padding--default;
-  display: flex;
-  justify-content: space-between;
-}
-
-.column__header-menu-dropdown > ul > li:last-child > button {
-  height: 18px;
-  width: 18px;
-  border-radius: 4px;
-  background-color: var(--accent-color);
-  transition: all 0.08s ease-out;
-
-  &:hover {
-    transform: scale(1.1);
+  &--active,
+  &:hover,
+  &:focus-within {
+    width: auto;
   }
 
-  &:focus-visible {
-    box-shadow: 0 0 0 2px $color-darker-gray;
-  }
-}
+  > li {
+    height: 32px;
+    width: 32px;
+    flex-shrink: 0;
 
-// Hacky way to not show delete column button if it's the last column
-.column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(5) {
-  display: none;
-}
-
-[theme="dark"] {
-  .column__header-menu-dropdown {
-    background-color: $color-dark-mode-note;
-  }
-
-  .column__header-menu-dropdown > ul > li {
-    background-color: $color-dark-mode-note;
-
-    &:hover {
-      filter: $brighten--slightly;
-    }
-
-    &:focus-within {
-      background-color: $color-dark-mode-note--hover;
+    :focus-within {
+      outline: 2px solid #5c8fff;
     }
   }
 
-  .column__header-menu-dropdown > ul > li > button {
-    color: $color-white;
+  > li > button {
+    padding: 0;
+    border-radius: $rounded--full;
+    height: 100%;
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+    display: grid;
+    place-content: center;
+    cursor: pointer;
   }
 
-  .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
-    box-shadow: 0 0 0 2px $color-white;
+  > li > button > svg {
+    height: 24px;
+    width: 24px;
   }
 }
