@@ -16,7 +16,10 @@
   width: 48px;
   overflow-x: hidden;
 
-  &--active,
+  &--active:not(:hover) {
+    width: auto;
+  }
+
   &:hover,
   &:focus-within {
     width: auto;
