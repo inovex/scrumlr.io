@@ -7,13 +7,15 @@
   width: 180px;
   background-color: $color-white;
   border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
   z-index: 150;
 }
 
 .column__header-menu-dropdown > ul {
   list-style: none;
-  padding: $padding--small 0;
+  padding: $spacing--xs 0;
   margin: 0;
 }
 
@@ -53,7 +55,7 @@
 
 .column__header-menu-dropdown > ul > li:last-of-type {
   height: auto;
-  padding: $padding--small $padding--default;
+  padding: $spacing--xs $spacing--base;
   display: flex;
   justify-content: space-between;
 }

@@ -11,9 +11,9 @@ $list-style-type: "– ";
   display: grid;
   align-items: center;
 
-  grid-gap: $margin--small $margin--default;
-  margin-top: $margin--medium;
-  padding: 0 $padding--default;
+  grid-gap: $spacing--xs $spacing--base;
+  margin-top: $spacing--lg;
+  padding: 0 $spacing--base;
 }
 
 .hint-hidden-columns__info-icon {
@@ -32,7 +32,7 @@ $list-style-type: "– ";
 
 .hint-hidden-columns__columns-list {
   margin: 0;
-  padding-left: $padding--medium;
+  padding-left: $spacing--lg;
   list-style-type: $list-style-type;
 }
 
