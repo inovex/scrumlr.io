@@ -8748,10 +8748,10 @@ react-hotkeys-hook@^4.4.4:
   resolved "https://registry.yarnpkg.com/react-hotkeys-hook/-/react-hotkeys-hook-4.4.4.tgz#5f055f39113218fe5e23f8723db68ccf99d155ab"
   integrity sha512-wzZmqb/Obr0ds9Myc1sIFPJ52GA/Eeg/vXBWV0HA1LvHlVAW5Va3KB0q6EZNlNSHQWscWZ2K8+6w0GYSie2o7A==
 
-react-i18next@^14.0.2:
-  version "14.0.2"
-  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.0.2.tgz#eb775bc0febb737629ec2c1c28493d712a9360ba"
-  integrity sha512-YOB/H1IgXveEWeTsCHez18QjDXImzVZOcF9/JroSbjYoN1LOfCoARFJUQQ8VNow0TnGOtHq9SwTmismm78CTTA==
+react-i18next@^14.0.3:
+  version "14.0.3"
+  resolved "https://registry.yarnpkg.com/react-i18next/-/react-i18next-14.0.3.tgz#831b07d0f633a3db316ad0f85be7cb578bb4d2b3"
+  integrity sha512-Zav2EEnrQNmCawnzj0l7xitj7jipC7kBNG3o6Cl75NwGndvdp/wu3LSVwJpyAc3eSWMwRFYZ5uNi43CtFUDf/g==
   dependencies:
     "@babel/runtime" "^7.23.9"
     html-parse-stringify "^3.0.1"
