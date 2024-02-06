@@ -147,6 +147,16 @@ $padding--default: 16px;
 $padding--medium: 24px;
 $padding--large: 32px;
 
+// New spacing constants for flex gap, margin and padding
+$spacing--xxs: 4px;
+$spacing--xs: 8px;
+$spacing--sm: 12px;
+$spacing--base: 16px;
+$spacing--md: 20px;
+$spacing--lg: 32px;
+$spacing--xl: 48px;
+$spacing--xxl: 64px;
+
 // font
 $letter-spacing--small: 0.25px;
 $letter-spacing--medium: 0.35px;
