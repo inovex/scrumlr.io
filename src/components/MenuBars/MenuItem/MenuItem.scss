@@ -117,7 +117,7 @@ $menu-item-size: 42px;
 
 .tooltip__text {
   width: 100%;
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
   white-space: nowrap;
   font-size: 14px;
   font-weight: bold;
@@ -137,14 +137,14 @@ $menu-item-size: 42px;
     transition: transform 150ms linear 0ms;
   }
   .menu-item.menu-item--left .tooltip__text {
-    padding-right: $menu-item-size + $padding--small;
-    padding-left: $padding--default;
+    padding-right: $menu-item-size + $spacing--xs;
+    padding-left: $spacing--base;
     transform: translateX(100%);
     transform-origin: right;
   }
   .menu-item.menu-item--right .tooltip__text {
-    padding-left: $menu-item-size + $padding--small;
-    padding-right: $padding--default;
+    padding-left: $menu-item-size + $spacing--xs;
+    padding-right: $spacing--base;
     transform: translateX(-100%);
     transform-origin: left;
   }

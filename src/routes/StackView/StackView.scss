@@ -56,7 +56,7 @@ $stack-view__min-height: 82px;
   position: absolute;
   top: 0;
   right: 0;
-  margin: $margin--default;
+  margin: $spacing--base;
   cursor: pointer;
   width: 42px;
   color: $color-white;
@@ -91,7 +91,7 @@ $stack-view__min-height: 82px;
   }
 
   .vote-button-add {
-    margin: 0 0 0 $margin--small;
+    margin: 0 0 0 $spacing--xs;
   }
 }
 
