@@ -16,7 +16,7 @@ $row-gap: 3px;
   grid-template-rows: 1fr 4fr 1fr;
   row-gap: $row-gap;
 
-  padding: $spacing--base $padding--medium;
+  padding: $spacing--base $spacing--lg;
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;

@@ -126,7 +126,7 @@
 }
 
 .participants__list-scrollable {
-  padding-right: $padding--medium;
+  padding-right: $spacing--lg;
 }
 
 .participants__list-item {
@@ -208,7 +208,7 @@
 .participants-reset-state-banner__container {
   margin-top: auto; // position at the very bottom
   margin-left: -$settings-dialog-container--sides-small;
-  padding: $spacing--xs $padding--medium; // create some space
+  padding: $spacing--xs $spacing--lg; // create some space
 
   display: flex;
   flex-direction: row;
@@ -249,7 +249,7 @@
 }
 
 .participants-reset-state-banner__button {
-  padding: 0 $padding--medium;
+  padding: 0 $spacing--lg;
 
   height: 36px;
   background-color: $menu-icon-background-color--dark;

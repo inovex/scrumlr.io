@@ -175,8 +175,8 @@ $tooltip-gap: 12px;
   border-radius: calc($action-bar__width / 2);
   background-color: $color-white;
   box-shadow: $box-shadow--light;
-  padding-left: $padding--medium;
-  padding-right: $padding--medium;
+  padding-left: $spacing--lg;
+  padding-right: $spacing--lg;
   height: $action-bar__width;
   width: auto;
   visibility: hidden;
@@ -223,7 +223,7 @@ $tooltip-gap: 12px;
     bottom: auto;
   }
   .menu-bars .menu {
-    padding: $padding--medium 0;
+    padding: $spacing--lg 0;
     width: $action-bar__width;
     height: auto;
     position: fixed;

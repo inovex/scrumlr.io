@@ -56,8 +56,8 @@
       margin-right: calc(-1 * (#{$spacing--xs} + 10px));
 
       @media screen and (min-width: 920px) {
-        padding-right: $padding--medium;
-        margin-right: calc(-1 * (#{$padding--medium} + 10px));
+        padding-right: $spacing--lg;
+        margin-right: calc(-1 * (#{$spacing--lg} + 10px));
       }
     }
 

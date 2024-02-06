@@ -17,8 +17,8 @@
 
 @media screen and (min-width: 920px) {
   .board-settings__container-wrapper {
-    padding-right: $padding--medium;
-    margin-right: calc(-1 * ($padding--medium + 10px));
+    padding-right: $spacing--lg;
+    margin-right: calc(-1 * ($spacing--lg + 10px));
   }
 }
 
@@ -55,7 +55,7 @@
 .board-settings__board-name-button_input {
   background-color: transparent;
   border: none;
-  padding: $spacing--base $padding--medium $spacing--base $spacing--base;
+  padding: $spacing--base $spacing--lg $spacing--base $spacing--base;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;
@@ -109,7 +109,7 @@
 }
 
 .board-settings__policy-button_value span {
-  padding: $spacing--base $padding--medium $spacing--base 4px;
+  padding: $spacing--base $spacing--lg $spacing--base 4px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;
@@ -214,7 +214,7 @@
 .board-settings__password-input-hint {
   display: flex;
   align-items: center;
-  padding: 0 $padding--medium;
+  padding: 0 $spacing--lg;
   height: 30px;
   border: none;
   background-color: inherit;

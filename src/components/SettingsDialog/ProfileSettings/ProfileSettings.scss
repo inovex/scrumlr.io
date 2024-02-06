@@ -28,8 +28,8 @@ $settings__item-height: 48px;
       padding-bottom: $settings-dialog-container--bottom;
 
       @media screen and (min-width: 920px) {
-        padding-right: $padding--medium;
-        margin-right: calc(-1 * (#{$padding--medium} + 10px));
+        padding-right: $spacing--lg;
+        margin-right: calc(-1 * (#{$spacing--lg} + 10px));
       }
 
       @include scrollbar();
@@ -57,7 +57,7 @@ $settings__item-height: 48px;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding-right: $padding--medium;
+  padding-right: $spacing--lg;
 }
 
 .profile-settings__open-cheat-sheet-button {

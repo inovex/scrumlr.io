@@ -7,7 +7,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: $padding--medium;
+  gap: $spacing--lg;
   height: $FEEDBACK_OPTION_HEIGHT;
 }
 
@@ -55,11 +55,11 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $padding--medium;
+  gap: $spacing--lg;
 }
 
 .feedback-form__submit-button {
-  padding: $spacing--xs $padding--medium;
+  padding: $spacing--xs $spacing--lg;
   border-radius: 32px;
   background-color: var(--accent-color);
   color: $color-white;
@@ -82,7 +82,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   align-items: flex-start;
   height: auto;
   gap: $spacing--xs;
-  padding: $spacing--base $padding--medium;
+  padding: $spacing--base $spacing--lg;
 }
 .feedback-form__settings-button > span {
   padding-bottom: 0;
