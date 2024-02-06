@@ -51,7 +51,7 @@ $color-backlog-blue--dark: #5c8fff;
 
 .form__input-row {
   display: flex;
-  gap: $margin--small;
+  gap: $spacing--xs;
   min-width: 0;
   width: 100%;
 }
@@ -100,7 +100,7 @@ $color-backlog-blue--dark: #5c8fff;
   background-color: transparent;
   border: 0;
   cursor: pointer;
-  margin-right: $margin--small;
+  margin-right: $spacing--xs;
   flex-shrink: 0;
   padding: 4px;
   border-radius: $rounded--full;

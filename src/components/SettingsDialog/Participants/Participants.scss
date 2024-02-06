@@ -42,7 +42,7 @@
 }
 
 .participants__filter-buttons {
-  margin-top: $margin--small;
+  margin-top: $spacing--xs;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -132,11 +132,11 @@
 .participants__list-item {
   height: 55px;
   background-color: $color-white;
-  padding: $margin--small;
+  padding: $spacing--xs;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $margin--small;
+  gap: $spacing--xs;
 
   &:not(:last-child) {
     border-bottom: 1px solid $color-lighter-gray;
@@ -202,7 +202,7 @@
 .participant__role-buttons {
   display: flex;
   flex-direction: row;
-  gap: $margin--small;
+  gap: $spacing--xs;
 }
 
 .participants-reset-state-banner__container {

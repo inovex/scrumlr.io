@@ -78,7 +78,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   display: none;
   justify-content: end;
   align-items: center;
-  gap: $margin--small;
+  gap: $spacing--xs;
   padding-right: 4px;
 }
 [theme="dark"] .vote-display__short-actions {

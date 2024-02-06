@@ -94,7 +94,7 @@ $timer__progress-bar-color: #6096ff;
   display: none;
   justify-content: end;
   align-items: center;
-  gap: $margin--small;
+  gap: $spacing--xs;
   padding-right: 4px;
 }
 [theme="dark"] .timer__short-actions {

@@ -29,7 +29,7 @@ $fly-in-time: 0.5s;
 
   &:hover {
     padding-right: $padding--small;
-    margin-right: $margin--small;
+    margin-right: $spacing--xs;
 
     .request__info-container {
       opacity: 0;

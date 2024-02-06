@@ -47,7 +47,7 @@
 }
 
 .homepage__logout-button {
-  margin-left: $margin--small;
+  margin-left: $spacing--xs;
 }
 
 .homepage__hero-content-wrapper {
@@ -258,7 +258,7 @@
 
   .homepage__footer-link + .homepage__footer-link::before {
     content: "|";
-    margin-left: $margin--small;
-    margin-right: $margin--small;
+    margin-left: $spacing--xs;
+    margin-right: $spacing--xs;
   }
 }

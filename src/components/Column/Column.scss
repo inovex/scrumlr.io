@@ -71,7 +71,7 @@
   width: auto;
   height: auto;
   border-bottom: solid 3px var(--accent-color);
-  margin: 0 $margin--small 0 0;
+  margin: 0 $spacing--xs 0 0;
   overflow: hidden;
 }
 
@@ -178,7 +178,7 @@
   width: $icon--medium;
   min-width: $icon--medium;
   min-height: $icon--medium;
-  margin: 0 $margin--small 0 0;
+  margin: 0 $spacing--xs 0 0;
   color: $color-warning-red;
   cursor: pointer;
   transition: all 0.08s ease-out;

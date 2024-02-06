@@ -46,12 +46,12 @@
     }
 
     &-icon {
-      margin-right: $margin--small;
+      margin-right: $spacing--xs;
       width: $icon--medium;
       height: $icon--medium;
 
       &--dropdown {
-        margin-left: $margin--small;
+        margin-left: $spacing--xs;
         transform: rotate(0.25turn);
         transition: transform 200ms;
       }

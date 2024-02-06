@@ -114,7 +114,7 @@ $note__footer-gap: 42px;
 }
 
 .note__text {
-  margin: $note__text-margin-top 0 $margin--small;
+  margin: $note__text-margin-top 0 $spacing--xs;
   min-height: 3 * $line-height--medium;
   width: 100%;
   color: $color-black;

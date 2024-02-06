@@ -151,8 +151,8 @@ $tooltip-gap: 12px;
 
 @media #{$mini-smartphone} {
   .menu-bars-mobile {
-    bottom: $margin--small;
-    right: $margin--small;
+    bottom: $spacing--xs;
+    right: $spacing--xs;
   }
 }
 
@@ -161,7 +161,7 @@ $tooltip-gap: 12px;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: $margin--small;
+  bottom: $spacing--xs;
 }
 
 @media print {

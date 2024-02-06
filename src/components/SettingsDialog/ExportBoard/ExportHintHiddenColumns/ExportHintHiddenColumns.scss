@@ -11,7 +11,7 @@ $list-style-type: "– ";
   display: grid;
   align-items: center;
 
-  grid-gap: $margin--small $margin--default;
+  grid-gap: $spacing--xs $margin--default;
   margin-top: $margin--medium;
   padding: 0 $padding--default;
 }
