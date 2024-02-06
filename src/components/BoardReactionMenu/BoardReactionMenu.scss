@@ -24,7 +24,7 @@ $reaction-size: 54px;
   border-radius: $rounded--large;
   box-shadow: $box-shadow--light;
 
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
 
   user-select: none;
 
@@ -83,7 +83,7 @@ $reaction-size: 54px;
 
 @media #{$smartphone} {
   .board-reactions__root {
-    bottom: $column__border-width + $margin--medium + 32px;
+    bottom: $column__border-width + $spacing--lg + 32px;
   }
 
   .board-reactions__close {
@@ -113,7 +113,7 @@ $reaction-size: 54px;
 
 @media screen and (max-width: 400px) {
   .board-reactions__container {
-    padding: 0 $padding--small;
+    padding: 0 $spacing--xs;
     gap: 2px;
   }
 }
