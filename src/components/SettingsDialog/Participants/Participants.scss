@@ -111,7 +111,7 @@
 
 .participants__list-wrapper {
   overflow: auto;
-  margin: $margin--default 0px;
+  margin: $spacing--base 0px;
   border-radius: $rounded--default;
 
   @include scrollbar();

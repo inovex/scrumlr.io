@@ -63,7 +63,7 @@ $header-menu-button-width: 24px;
 }
 
 .board-settings__edit-button {
-  margin-left: $margin--default;
+  margin-left: $spacing--base;
   height: $header-menu-button-height;
   box-shadow: 0 0 0 0.1em $color-white;
   border-color: transparent;

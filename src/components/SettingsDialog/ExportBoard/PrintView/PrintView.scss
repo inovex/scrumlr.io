@@ -78,7 +78,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   width: 100%;
   min-height: 29cm;
   max-width: 21cm;
-  margin: $margin--default auto;
+  margin: $spacing--base auto;
   box-shadow:
     0 20px 25px -5px rgb(0 0 0 / 0.1),
     0 8px 10px -6px rgb(0 0 0 / 0.1);
@@ -103,7 +103,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   width: 100%;
   display: flex;
   align-items: center;
-  gap: $margin--default;
+  gap: $spacing--base;
   margin-bottom: $margin--large;
 }
 
@@ -133,7 +133,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__column-list {
   display: block;
   width: 100%;
-  gap: $margin--default;
+  gap: $spacing--base;
 }
 
 .print-view__column {
@@ -149,7 +149,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   justify-content: space-between;
   width: 100%;
   padding: 0;
-  margin: $spacing--xs 0 $margin--default 0;
+  margin: $spacing--xs 0 $spacing--base 0;
 }
 
 .print-view__column-header-text {
@@ -173,14 +173,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   padding: $spacing--xs $spacing--xs 0 $spacing--xs;
   border: 2px solid rgba(var(--accent-color-rgb), 0.25);
   width: 100%;
-  margin-bottom: $margin--default;
+  margin-bottom: $spacing--base;
   background: rgba(var(--accent-color-rgb), 0.05);
 }
 
 .print-view__note {
   display: block;
   width: 100%;
-  margin-bottom: $margin--default;
+  margin-bottom: $spacing--base;
   padding: calc(#{$spacing--xs} + 4px);
   border: 2px solid rgba(var(--accent-color-rgb), 0.25);
   border-radius: $note__border-radius;

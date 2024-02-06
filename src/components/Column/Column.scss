@@ -59,7 +59,7 @@
   word-break: break-word;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $margin--default;
+  margin-bottom: $spacing--base;
   height: 48px;
   position: relative;
 }
@@ -120,7 +120,7 @@
 }
 
 .column__header-card-number {
-  margin-bottom: $margin--default;
+  margin-bottom: $spacing--base;
   font-size: $text-size--medium;
   color: $color-middle-gray;
   font-weight: 600;
@@ -204,7 +204,7 @@
   padding: 0;
   transition: all 0.08s ease-out;
   flex: 0 0 24px;
-  margin: auto calc(#{$margin--default} - 2px) auto $margin--default;
+  margin: auto calc(#{$spacing--base} - 2px) auto $spacing--base;
 
   &:hover > svg,
   &:focus-visible > svg {

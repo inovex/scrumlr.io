@@ -44,14 +44,14 @@
     @extend .cookie-policy__button;
     background: $color-backlog-blue;
     color: $color-white;
-    margin: 0 0 $margin--default $margin--default;
+    margin: 0 0 $spacing--base $spacing--base;
   }
 
   &-decline {
     @extend .cookie-policy__button;
     background: $color-lighter-gray;
     color: $color-darkest-gray;
-    margin: 0 0 $margin--default auto;
+    margin: 0 0 $spacing--base auto;
   }
 }
 

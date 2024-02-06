@@ -114,7 +114,7 @@
 .confirmation-dialog__buttons {
   display: flex;
   justify-content: flex-end;
-  gap: $margin--default;
+  gap: $spacing--base;
 }
 
 .confirmation-dialog__close-button {

@@ -3,7 +3,7 @@
 .board-users {
   display: flex;
   flex-direction: row;
-  gap: $margin--default;
+  gap: $spacing--base;
 }
 
 .board-users__button {
@@ -86,7 +86,9 @@
       --dasharray: 20;
       stroke-dasharray: var(--dasharray);
       stroke-dashoffset: 0;
-      animation: draw 0.6s ease-in-out, scale 0.3s ease-out;
+      animation:
+        draw 0.6s ease-in-out,
+        scale 0.3s ease-out;
       transform-origin: 37% 40%;
     }
   }
