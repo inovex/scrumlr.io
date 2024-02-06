@@ -14,7 +14,7 @@
 .board-header__link {
   position: absolute;
   left: 0;
-  padding: $padding--small $padding--large;
+  padding: $spacing--xs $spacing--xl;
   border-radius: 16px;
   width: max-content;
   cursor: pointer;
@@ -47,7 +47,7 @@
 .board-header__users {
   position: absolute;
   right: 0;
-  padding: $padding--small;
+  padding: $spacing--xs;
 
   display: flex;
   flex-direction: row;
@@ -63,7 +63,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
-  padding: $padding--small $padding--large;
+  padding: $spacing--xs $spacing--xl;
   border-radius: 16px;
   transition: background-color 0.2s ease-in-out;
 
@@ -163,6 +163,6 @@
   }
 
   .board-header__link {
-    padding: $padding--small;
+    padding: $spacing--xs;
   }
 }

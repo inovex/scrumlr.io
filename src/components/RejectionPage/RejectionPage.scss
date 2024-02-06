@@ -4,7 +4,7 @@
 .rejection-page__root {
   height: 100%;
   width: 100%;
-  padding: $padding--small 0 0 $padding--medium;
+  padding: $spacing--xs 0 0 $spacing--lg;
   overflow-x: hidden;
   background: linear-gradient(320deg, color.change($color-backlog-blue, $alpha: 0.2), color.change($color-white, $alpha: 0.3));
 }
@@ -48,7 +48,7 @@
   flex-direction: column;
   align-items: center;
 
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
 
   z-index: $base-z-index; // layer content over background, using any z-index works
 }
@@ -67,9 +67,9 @@
 }
 
 .rejection-page__return-button {
-  margin-top: $margin--default;
+  margin-top: $spacing--base;
 
-  padding: $padding--default $padding--large;
+  padding: $spacing--base $spacing--xl;
   color: $color-white;
   background: #ff0069;
 
@@ -87,17 +87,17 @@
 // default look is for very small screens and works its way up to match larger screen sizes (could theoretically do it the other way around)
 @media screen and (min-height: 600px) {
   .rejection-page__description {
-    margin-top: $margin--default;
+    margin-top: $spacing--base;
   }
 
   .rejection-page__return-button {
-    margin-top: $margin--large + $margin--small; // 40px
+    margin-top: $spacing--xl + $spacing--xs; // 40px
   }
 }
 
 @media screen and (min-width: 450px) {
   .rejection-page__root {
-    padding: $padding--default;
+    padding: $spacing--base;
   }
 
   .rejection-page__background-form {
@@ -106,7 +106,7 @@
   }
 
   .rejection-page__main {
-    gap: $margin--medium;
+    gap: $spacing--lg;
   }
 
   .rejection-page__title {

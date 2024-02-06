@@ -25,8 +25,8 @@ $color-backlog-blue--dark: #5c8fff;
   box-shadow: 0px 4px 15px 0px rgba($color: $color-backlog-blue--light, $alpha: 0.25);
   margin: 0 auto;
 
-  padding: $padding--large $padding--medium;
-  gap: $margin--default;
+  padding: $spacing--xl $spacing--lg;
+  gap: $spacing--base;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,7 +51,7 @@ $color-backlog-blue--dark: #5c8fff;
 
 .form__input-row {
   display: flex;
-  gap: $margin--small;
+  gap: $spacing--xs;
   min-width: 0;
   width: 100%;
 }
@@ -79,7 +79,7 @@ $color-backlog-blue--dark: #5c8fff;
   border: 0;
   background-color: transparent;
   height: 100%;
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
   font-size: $text--base;
   min-width: 0;
   color: inherit;
@@ -100,7 +100,7 @@ $color-backlog-blue--dark: #5c8fff;
   background-color: transparent;
   border: 0;
   cursor: pointer;
-  margin-right: $margin--small;
+  margin-right: $spacing--xs;
   flex-shrink: 0;
   padding: 4px;
   border-radius: $rounded--full;

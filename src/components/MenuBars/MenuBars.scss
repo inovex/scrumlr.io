@@ -144,15 +144,15 @@ $tooltip-gap: 12px;
     display: grid;
     grid-template-columns: 0 $action-bar__width;
     grid-template-rows: 0 $action-bar__width;
-    bottom: $margin--medium;
-    right: $margin--medium;
+    bottom: $spacing--lg;
+    right: $spacing--lg;
   }
 }
 
 @media #{$mini-smartphone} {
   .menu-bars-mobile {
-    bottom: $margin--small;
-    right: $margin--small;
+    bottom: $spacing--xs;
+    right: $spacing--xs;
   }
 }
 
@@ -161,7 +161,7 @@ $tooltip-gap: 12px;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
-  bottom: $margin--small;
+  bottom: $spacing--xs;
 }
 
 @media print {
@@ -175,8 +175,8 @@ $tooltip-gap: 12px;
   border-radius: calc($action-bar__width / 2);
   background-color: $color-white;
   box-shadow: $box-shadow--light;
-  padding-left: $padding--medium;
-  padding-right: $padding--medium;
+  padding-left: $spacing--lg;
+  padding-right: $spacing--lg;
   height: $action-bar__width;
   width: auto;
   visibility: hidden;
@@ -209,7 +209,7 @@ $tooltip-gap: 12px;
   display: flex;
   align-items: center;
   flex-direction: row;
-  gap: $padding--default;
+  gap: $spacing--base;
   height: 100%;
   padding: 0;
   margin: 0;
@@ -223,7 +223,7 @@ $tooltip-gap: 12px;
     bottom: auto;
   }
   .menu-bars .menu {
-    padding: $padding--medium 0;
+    padding: $spacing--lg 0;
     width: $action-bar__width;
     height: auto;
     position: fixed;
