@@ -2476,10 +2476,10 @@
     "@types/mime" "*"
     "@types/node" "*"
 
-"@types/smoothscroll-polyfill@^0.3.3":
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/@types/smoothscroll-polyfill/-/smoothscroll-polyfill-0.3.3.tgz#60dcd0acfdb62a9df5e3d4d935436be089c43adb"
-  integrity sha512-VBcuyevh5N80XlrUz8a2GWgP9MnIVctdUgxWj8YdD+tN2OMptZTEUKYo8wXly8MR91HisJ9CaX8utF9zbMU8yA==
+"@types/smoothscroll-polyfill@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@types/smoothscroll-polyfill/-/smoothscroll-polyfill-0.3.4.tgz#80cbce8f1abe740d450288550fce07fd42e4eae8"
+  integrity sha512-w1krF+TJh7Azz/2/bEN1tmyKoNt3B6bLCn6SfJErzhKAr1w1b06ePx79NXA+3lTw+DbqXN12nk/Ce1UQDVY8yA==
 
 "@types/sockjs@^0.3.33":
   version "0.3.33"
