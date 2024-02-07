@@ -9,6 +9,7 @@ export interface Participant {
   raisedHand: boolean;
   showHiddenColumns: boolean;
   role: ParticipantRole;
+  banned?: boolean;
 }
 
 export type ParticipantsState = null | {
