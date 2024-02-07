@@ -27,30 +27,31 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
       <span title={t("VoteDisplay.tooltip", {remaining: possibleVotes - usedVotes, total: possibleVotes})}>
         {usedVotes} / {possibleVotes}
       </span>
+      <Tooltip id="vote-display__tooltip" />
       <div className="vote-display__short-actions">
         {isAdmin && (
           <>
             <div className="short-actions__short-action">
               <button
-                aria-label={t("VoteDisplay.abortActionTooltip")}
+                data-tooltip-id="vote-display__tooltip"
+                data-tooltip-content={t("VoteDisplay.abortActionTooltip")}
                 className="short-action__button"
                 id="vote-display__abort-short-action"
                 onClick={() => store.dispatch(Actions.abortVoting(voting!))}
               >
                 <CancelIcon />
               </button>
-              <Tooltip anchorSelect="#vote-display__abort-short-action" content={t("VoteDisplay.abortActionTooltip")} />
             </div>
             <div className="short-actions__short-action">
               <button
-                aria-label={t("VoteDisplay.finishActionTooltip")}
+                data-tooltip-id="vote-display__tooltip"
+                data-tooltip-content={t("VoteDisplay.finishActionTooltip")}
                 className="short-action__button"
                 id="vote-display__finish-short-action"
                 onClick={() => store.dispatch(Actions.closeVoting(voting!))}
               >
                 <FlagIcon />
               </button>
-              <Tooltip anchorSelect="#vote-display__finish-short-action" content={t("VoteDisplay.finishActionTooltip")} />
             </div>
           </>
         )}
