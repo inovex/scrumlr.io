@@ -1,4 +1,5 @@
 import {useEffect, useRef, useState} from "react";
+import _ from "underscore";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import classNames from "classnames";
@@ -7,13 +8,13 @@ import {Actions} from "store/action";
 import {useDebounce} from "utils/hooks/useDebounce";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {Participant} from "types/participant";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as KickIcon} from "assets/icon-close.svg";
 import {ReactComponent as RemoveParticipant} from "assets/icon-kick-participant.svg";
 import "./Participants.scss";
-import _ from "underscore";
 
 export const Participants = () => {
   const {t} = useTranslation();
@@ -31,6 +32,7 @@ export const Participants = () => {
   const existsAtLeastOneReadyUser = participants.some((p) => p.ready);
 
   const [showKickParticipantConfirmation, setShowKickParticipantConfirmation] = useState(false);
+  const [selectedParticipant, setSelectedParticipant] = useState<Participant>();
 
   useEffect(() => {
     const listWrapperHeight = listWrapperRef.current?.offsetWidth;
@@ -44,6 +46,21 @@ export const Participants = () => {
 
   const resetReadyStateOfAllUsers = () => {
     participants.forEach((p) => dispatch(Actions.setUserReadyStatus(p.user.id, false)));
+  };
+
+  const askToBanUser = (participant: Participant) => {
+    setSelectedParticipant(participant);
+    setShowKickParticipantConfirmation(true);
+  };
+
+  const denyToBanUser = () => {
+    setSelectedParticipant(undefined);
+    setShowKickParticipantConfirmation(false);
+  };
+
+  // not asking but actually doing it
+  const confirmToBanUser = (participant: Participant) => {
+    dispatch(Actions.setUserBanned(participant.user.id, true));
   };
 
   return (
@@ -131,7 +148,7 @@ export const Participants = () => {
                   )}
                 </div>
                 {isModerator && // only allow kicking when self is mod and the other is not
-                  participant.role === "PARTICIPANT" && <KickIcon className="participant__kick-icon" onClick={() => setShowKickParticipantConfirmation(true)} />}
+                  participant.role === "PARTICIPANT" && <KickIcon className="participant__kick-icon" onClick={() => askToBanUser(participant)} />}
               </li>
             ))}
         </ul>
@@ -150,9 +167,9 @@ export const Participants = () => {
 
       {showKickParticipantConfirmation && (
         <ConfirmationDialog
-          title={t("ConfirmationDialog.kickParticipant")}
-          onAccept={() => console.log("kick")}
-          onDecline={() => setShowKickParticipantConfirmation(false)}
+          title={t("ConfirmationDialog.kickParticipant", {user: selectedParticipant?.user.name})}
+          onAccept={() => confirmToBanUser(selectedParticipant!)} // assertion: selectedParticipant is set
+          onDecline={() => denyToBanUser()}
           icon={RemoveParticipant}
           warning
         />
