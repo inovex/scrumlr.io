@@ -423,6 +423,7 @@
     "unstackNote": "Es tut uns leid, aber wir haben ein Problem beim Entstapeln des Kärtchens. Bitte versuche es erneut.",
     "setRaiseHand": "Es tut uns leid, aber wir haben ein Problem beim Heben deiner Hand. Bitte versuche es erneut.",
     "setUserReady": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deines Statuses. Bitte versuche es erneut.",
+    "setUserBanned": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren dieses Nutzerstatus. Bitte versuche es erneut.",
     "setShowHiddenColumns": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spaltensichtbarkeit. Bitte versuche es erneut.",
     "changePermission": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Berechtigungen. Bitte versuche es erneut.",
     "logout": "Es tut uns leid, aber wir haben Probleme dich abzumelden.",

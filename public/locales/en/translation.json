@@ -423,6 +423,7 @@
     "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
     "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",
     "setUserReady": "Sorry, but we're having trouble setting you ready. Please try again.",
+    "setUserBanned": "Sorry, but we're having trouble banning/unbanning this user. Please try again.",
     "setShowHiddenColumns": "Sorry, but we're having trouble changing the column visibility. Please try again.",
     "changePermission": "Sorry, but we're having trouble updating the permissions. Please try again.",
     "logout": "Sorry, but we're having trouble signing you out.",
