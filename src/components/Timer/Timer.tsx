@@ -106,23 +106,30 @@ export const Timer = (props: TimerProps) => {
 
   return (
     <div className="timer__container">
+      <Tooltip id="timer__tooltip" />
       <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
         <div className="timer__progress-bar" style={{right: `calc(72px - ${elapsedTimePercentage} * 72px)`}} />
         <span>
           {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
         </span>
-        <div className="timer__short-actions">
+        <ul className="timer__short-actions">
           {isModerator && (
-            <div className="short-actions__short-action">
-              <button id="timer-short-action__end-button" aria-label={t("Timer.endTimer")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
+            <li className="short-actions__short-action">
+              <button
+                data-tooltip-id="timer__tooltip"
+                data-tooltip-content={t("Timer.endTimer")}
+                aria-label={t("Timer.endTimer")}
+                className="short-action__button"
+                onClick={() => store.dispatch(Actions.cancelTimer())}
+              >
                 <FlagIcon />
               </button>
-              <Tooltip anchorSelect="#timer-short-action__end-button" content={t("Timer.endTimer")} />
-            </div>
+            </li>
           )}
-          <div className="short-actions__short-action">
+          <li className="short-actions__short-action">
             <button
-              id="timer-short-action__ready-button"
+              data-tooltip-id="timer__tooltip"
+              data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
               onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
@@ -130,17 +137,22 @@ export const Timer = (props: TimerProps) => {
               <CheckIcon className="short-action__check-icon" />
               <CancelIcon className="short-action__cancel-icon" />
             </button>
-            <Tooltip anchorSelect="#timer-short-action__ready-button" content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")} />
-          </div>
-        </div>
+          </li>
+        </ul>
         <TimerIcon />
       </div>
       {isModerator && (
         <div className="timer__increment-button">
-          <button aria-label={t("Timer.addOneMinute")} className="increment-button__button" id="timer__increment-button" onClick={() => store.dispatch(Actions.incrementTimer())}>
+          <button
+            data-tooltip-id="timer__tooltip"
+            data-tooltip-content={t("Timer.addOneMinute")}
+            aria-label={t("Timer.addOneMinute")}
+            className="increment-button__button"
+            id="timer__increment-button"
+            onClick={() => store.dispatch(Actions.incrementTimer())}
+          >
             <PlusOneIcon />
           </button>
-          <Tooltip anchorSelect="#timer__increment-button" content={t("Timer.addOneMinute")} />
         </div>
       )}
     </div>

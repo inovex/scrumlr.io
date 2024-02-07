@@ -80,6 +80,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   align-items: center;
   gap: $spacing--xs;
   padding-right: 4px;
+  list-style: none;
+  margin: 0;
 }
 [theme="dark"] .vote-display__short-actions {
   background-color: $menu-icon-background-color--dark;

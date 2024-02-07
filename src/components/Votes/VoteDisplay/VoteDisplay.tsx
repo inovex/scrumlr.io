@@ -28,47 +28,32 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
         {usedVotes} / {possibleVotes}
       </span>
       <Tooltip id="vote-display__tooltip" />
-      <div className="vote-display__short-actions">
+      <ul className="vote-display__short-actions">
         {isAdmin && (
-          <>
-            <div className="short-actions__short-action">
-              <button
-                data-tooltip-id="vote-display__tooltip"
-                data-tooltip-content={t("VoteDisplay.abortActionTooltip")}
-                className="short-action__button"
-                id="vote-display__abort-short-action"
-                onClick={() => store.dispatch(Actions.abortVoting(voting!))}
-              >
-                <CancelIcon />
-              </button>
-            </div>
-            <div className="short-actions__short-action">
-              <button
-                data-tooltip-id="vote-display__tooltip"
-                data-tooltip-content={t("VoteDisplay.finishActionTooltip")}
-                className="short-action__button"
-                id="vote-display__finish-short-action"
-                onClick={() => store.dispatch(Actions.closeVoting(voting!))}
-              >
-                <FlagIcon />
-              </button>
-            </div>
-          </>
-        )}
-        {!isAdmin && (
-          <div className="short-actions__short-action">
+          <li className="short-actions__short-action">
             <button
-              aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-              className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
-              onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
+              data-tooltip-id="vote-display__tooltip"
+              data-tooltip-content={t("VoteDisplay.finishActionTooltip")}
+              className="short-action__button"
+              id="vote-display__finish-short-action"
+              onClick={() => store.dispatch(Actions.closeVoting(voting!))}
             >
-              <CheckIcon className="short-action__check-icon" />
-              <CancelIcon className="short-action__cancel-icon" />
+              <FlagIcon />
             </button>
-            <Tooltip content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")} />
-          </div>
+          </li>
         )}
-      </div>
+        <li className="short-action__short-actions">
+          <button
+            data-tooltip-id="vote-display__tooltip"
+            data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+            className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
+            onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
+          >
+            <CheckIcon className="short-action__check-icon" />
+            <CancelIcon className="short-action__cancel-icon" />
+          </button>
+        </li>
+      </ul>
       <VoteIcon />
     </div>
   );
