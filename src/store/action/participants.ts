@@ -13,6 +13,9 @@ export const ParticipantAction = {
   CreatedParticipant: "scrumlr.io/createdParticipant" as const,
   UpdatedParticipant: "scrumlr.io/updatedParticipant" as const,
 
+  SetUserBanned: "scrumlr.io/setUserBanned" as const,
+  RemovedParticipant: "scrumlr.io/removedParticipant" as const, // TODO
+
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
   SetShowHiddenColumns: "scrumlr.io/setShowHiddenColumns" as const,
@@ -75,6 +78,21 @@ export const ParticipantActionFactory = {
   }),
 
   /**
+   * Remove a participant from a board session.
+   */
+  setUserBanned: (user: string, banned: boolean) => ({
+    type: ParticipantAction.SetUserBanned,
+    user,
+    banned,
+  }),
+
+  // TODO do something when backend returns
+  /* removedParticipant: (participant: Participant) => ({
+    type: ParticipantAction.RemovedParticipant,
+    participant,
+  }), */
+
+  /**
    * Edits a user. It will be applied immediately on the local client and send to the server via the middleware and an API request.
    * @param user
    */
@@ -112,6 +130,7 @@ export type ParticipantReduxAction =
   | ReturnType<typeof ParticipantActionFactory.setUserReadyStatus>
   | ReturnType<typeof ParticipantActionFactory.setRaisedHand>
   | ReturnType<typeof ParticipantActionFactory.setShowHiddenColumns>
+  | ReturnType<typeof ParticipantActionFactory.setUserBanned>
   | ReturnType<typeof ParticipantActionFactory.editSelf>
   | ReturnType<typeof ParticipantActionFactory.changePermission>
   | ReturnType<typeof ParticipantActionFactory.setFocusInitiator>
