@@ -9,6 +9,7 @@ import {UserAvatar} from "components/BoardUsers";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as KickIcon} from "assets/icon-close.svg";
 import "./Participants.scss";
 import _ from "underscore";
 
@@ -125,6 +126,7 @@ export const Participants = () => {
                     </div>
                   )}
                 </div>
+                <KickIcon className="participant__kick-icon" />
               </li>
             ))}
         </ul>

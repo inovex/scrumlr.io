@@ -340,3 +340,11 @@
     }
   }
 }
+
+.participant__kick-icon {
+  width: $icon--large;
+  height: $icon--large;
+  margin-left: auto; // align to the very right
+
+  cursor: pointer;
+}
