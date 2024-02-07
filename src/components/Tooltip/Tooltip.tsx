@@ -1,17 +1,15 @@
+import {Tooltip as ReactTooltip} from "react-tooltip";
 import classNames from "classnames";
-import {ReactNode} from "react";
 import "./Tooltip.scss";
 
 type TooltipProps = {
   anchorSelect?: string;
-  children?: ReactNode;
   className?: string;
   content?: string;
-  id?: string;
 };
 
 export const Tooltip = (props: TooltipProps) => (
-    <div id={props.id} className={classNames("tooltip", props.className)}>
-      {props.content}
+    <div className="tooltip-container">
+      <ReactTooltip anchorSelect={props.anchorSelect} className={classNames("tooltip", props.className)} content={props.content} role="tooltip" />
     </div>
   );

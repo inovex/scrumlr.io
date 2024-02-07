@@ -89,13 +89,6 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   display: flex;
 }
 
-.short-actions__short-action {
-  position: relative;
-  height: $vote-display__short-actions-height;
-  width: $vote-display__short-actions-height;
-  border-radius: $rounded--full;
-}
-
 .short-action__button {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
@@ -140,86 +133,4 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 .short-action__button:hover {
   background-color: $vote-display__progress-bar-color;
   color: $color-white;
-}
-
-.short-action__tooltip {
-  max-width: max-content;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 150ms linear;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: $rounded--full;
-  padding: $spacing--xs $spacing--base;
-  background-color: $tooltip-background-color--light;
-  color: $color-dark-mode-note;
-  font-size: $text--base;
-  font-weight: bold;
-  bottom: calc(100% + 6px);
-  box-shadow: $box-shadow--light;
-  // Increased the z-index to make sure the tooltip doesn't get overlapped by the absolute positioned icon
-  z-index: calc($infobar-z-index + 50);
-}
-@media (prefers-reduced-motion) {
-  .short-action__tooltip {
-    transition: none;
-  }
-}
-.short-actions__short-action:hover > .short-action__tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-[theme="dark"] .short-action__tooltip {
-  background-color: $tooltip-background-color--dark;
-  color: $color-white;
-}
-
-.short-action__tooltip::after {
-  content: "";
-  position: absolute;
-  border: 4px solid;
-  border-color: $tooltip-background-color--light transparent transparent transparent;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 100%;
-}
-[theme="dark"] .short-action__tooltip::after {
-  border-color: $tooltip-background-color--dark transparent transparent transparent;
-}
-
-@keyframes shake {
-  0% {
-    transform: translate(1px, 1px) rotate(0deg);
-  }
-  10% {
-    transform: translate(-1px, -2px) rotate(-1deg);
-  }
-  20% {
-    transform: translate(-3px, 0px) rotate(1deg);
-  }
-  30% {
-    transform: translate(3px, 2px) rotate(0deg);
-  }
-  40% {
-    transform: translate(1px, -1px) rotate(1deg);
-  }
-  50% {
-    transform: translate(-1px, 2px) rotate(-1deg);
-  }
-  60% {
-    transform: translate(-3px, 1px) rotate(0deg);
-  }
-  70% {
-    transform: translate(3px, 1px) rotate(-1deg);
-  }
-  80% {
-    transform: translate(-1px, -1px) rotate(1deg);
-  }
-  90% {
-    transform: translate(1px, 2px) rotate(0deg);
-  }
-  100% {
-    transform: translate(1px, -2px) rotate(-1deg);
-  }
 }

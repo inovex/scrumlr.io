@@ -1,15 +1,16 @@
 @import "constants/style.scss";
 
-.tooltip {
+.tooltip-container .tooltip {
   background-color: #e4e8f6;
   border-radius: $rounded--full;
   color: $color-black;
-  font-size: $text--sm;
+  font-size: $text--base;
   font-weight: 600;
-  padding: $spacing--sm $spacing--base;
+  padding: $spacing--xs $spacing--base;
+  color: red;
 }
 
-[theme="dark"] .tooltip {
+[theme="dark"] .tooltip-container .tooltip {
   background-color: #5a647d;
   color: $color-white;
 }

@@ -7,6 +7,7 @@ import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import "./VoteDisplay.scss";
+import {Tooltip} from "components/Tooltip/Tooltip";
 
 type VoteDisplayProps = {
   usedVotes: number;
@@ -30,16 +31,26 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
         {isAdmin && (
           <>
             <div className="short-actions__short-action">
-              <button aria-label={t("VoteDisplay.abortActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.abortVoting(voting!))}>
+              <button
+                aria-label={t("VoteDisplay.abortActionTooltip")}
+                className="short-action__button"
+                id="vote-display__abort-short-action"
+                onClick={() => store.dispatch(Actions.abortVoting(voting!))}
+              >
                 <CancelIcon />
               </button>
-              <span className="short-action__tooltip">{t("VoteDisplay.abortActionTooltip")}</span>
+              <Tooltip anchorSelect="#vote-display__abort-short-action" content={t("VoteDisplay.abortActionTooltip")} />
             </div>
             <div className="short-actions__short-action">
-              <button aria-label={t("VoteDisplay.finishActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.closeVoting(voting!))}>
+              <button
+                aria-label={t("VoteDisplay.finishActionTooltip")}
+                className="short-action__button"
+                id="vote-display__finish-short-action"
+                onClick={() => store.dispatch(Actions.closeVoting(voting!))}
+              >
                 <FlagIcon />
               </button>
-              <span className="short-action__tooltip">{t("VoteDisplay.finishActionTooltip")}</span>
+              <Tooltip anchorSelect="#vote-display__finish-short-action" content={t("VoteDisplay.finishActionTooltip")} />
             </div>
           </>
         )}
@@ -53,7 +64,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
               <CheckIcon className="short-action__check-icon" />
               <CancelIcon className="short-action__cancel-icon" />
             </button>
-            <span className="short-action__tooltip">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</span>
+            <Tooltip content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")} />
           </div>
         )}
       </div>
