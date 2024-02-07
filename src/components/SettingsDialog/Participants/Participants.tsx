@@ -6,10 +6,12 @@ import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {useDebounce} from "utils/hooks/useDebounce";
 import {UserAvatar} from "components/BoardUsers";
+import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
 import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as KickIcon} from "assets/icon-close.svg";
+import {ReactComponent as RemoveParticipant} from "assets/icon-kick-participant.svg";
 import "./Participants.scss";
 import _ from "underscore";
 
@@ -27,6 +29,8 @@ export const Participants = () => {
   const self = useAppSelector((state) => state.participants!.self);
   const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])], _.isEqual);
   const existsAtLeastOneReadyUser = participants.some((p) => p.ready);
+
+  const [showKickParticipantConfirmation, setShowKickParticipantConfirmation] = useState(false);
 
   useEffect(() => {
     const listWrapperHeight = listWrapperRef.current?.offsetWidth;
@@ -126,7 +130,8 @@ export const Participants = () => {
                     </div>
                   )}
                 </div>
-                <KickIcon className="participant__kick-icon" />
+                {isModerator && // only allow kicking when self is mod and the other is not
+                  participant.role === "PARTICIPANT" && <KickIcon className="participant__kick-icon" onClick={() => setShowKickParticipantConfirmation(true)} />}
               </li>
             ))}
         </ul>
@@ -141,6 +146,16 @@ export const Participants = () => {
             {t("Participants.ResetBannerButton")}
           </button>
         </footer>
+      )}
+
+      {showKickParticipantConfirmation && (
+        <ConfirmationDialog
+          title={t("ConfirmationDialog.kickParticipant")}
+          onAccept={() => console.log("kick")}
+          onDecline={() => setShowKickParticipantConfirmation(false)}
+          icon={RemoveParticipant}
+          warning
+        />
       )}
     </section>
   );
