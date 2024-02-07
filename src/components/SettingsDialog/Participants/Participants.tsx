@@ -31,7 +31,7 @@ export const Participants = () => {
   const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])], _.isEqual);
   const existsAtLeastOneReadyUser = participants.some((p) => p.ready);
 
-  const [showKickParticipantConfirmation, setShowKickParticipantConfirmation] = useState(false);
+  const [showBanParticipantConfirmation, setShowBanParticipantConfirmation] = useState(false);
   const [selectedParticipant, setSelectedParticipant] = useState<Participant>();
 
   useEffect(() => {
@@ -50,12 +50,12 @@ export const Participants = () => {
 
   const askToBanUser = (participant: Participant) => {
     setSelectedParticipant(participant);
-    setShowKickParticipantConfirmation(true);
+    setShowBanParticipantConfirmation(true);
   };
 
   const denyToBanUser = () => {
     setSelectedParticipant(undefined);
-    setShowKickParticipantConfirmation(false);
+    setShowBanParticipantConfirmation(false);
   };
 
   // not asking but actually doing it
@@ -165,9 +165,9 @@ export const Participants = () => {
         </footer>
       )}
 
-      {showKickParticipantConfirmation && (
+      {showBanParticipantConfirmation && (
         <ConfirmationDialog
-          title={t("ConfirmationDialog.kickParticipant", {user: selectedParticipant?.user.name})}
+          title={t("ConfirmationDialog.banParticipant", {user: selectedParticipant?.user.name})}
           onAccept={() => confirmToBanUser(selectedParticipant!)} // assertion: selectedParticipant is set
           onDecline={() => denyToBanUser()}
           icon={RemoveParticipant}
