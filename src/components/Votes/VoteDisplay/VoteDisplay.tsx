@@ -7,7 +7,6 @@ import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import "./VoteDisplay.scss";
-import {Tooltip} from "components/Tooltip";
 
 type VoteDisplayProps = {
   usedVotes: number;
@@ -27,13 +26,12 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
       <span title={t("VoteDisplay.tooltip", {remaining: possibleVotes - usedVotes, total: possibleVotes})}>
         {usedVotes} / {possibleVotes}
       </span>
-      <Tooltip id="vote-display__tooltip" />
       <ul className="vote-display__short-actions">
         {isAdmin && (
           <li className="short-actions__short-action">
             <button
               aria-label={t("VoteDisplay.finishActionTooltip")}
-              data-tooltip-id="vote-display__tooltip"
+              data-tooltip-id="info-bar__tooltip"
               data-tooltip-content={t("VoteDisplay.finishActionTooltip")}
               className="short-action__button"
               id="vote-display__finish-short-action"
@@ -46,7 +44,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
         <li className="short-action__short-actions">
           <button
             aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-            data-tooltip-id="vote-display__tooltip"
+            data-tooltip-id="info-bar__tooltip"
             data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
             className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
             onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}

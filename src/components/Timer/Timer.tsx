@@ -12,9 +12,8 @@ import {Toast} from "utils/Toast";
 import useSound from "use-sound";
 import {API} from "api";
 import {Timer as TimerUtils} from "utils/timer";
-import "./Timer.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
-import {Tooltip} from "components/Tooltip";
+import "./Timer.scss";
 
 type TimerProps = {
   startTime: Date;
@@ -106,7 +105,6 @@ export const Timer = (props: TimerProps) => {
 
   return (
     <div className="timer__container">
-      <Tooltip id="timer__tooltip" />
       <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
         <div className="timer__progress-bar" style={{right: `calc(72px - ${elapsedTimePercentage} * 72px)`}} />
         <span>
@@ -116,7 +114,7 @@ export const Timer = (props: TimerProps) => {
           {isModerator && (
             <li className="short-actions__short-action">
               <button
-                data-tooltip-id="timer__tooltip"
+                data-tooltip-id="info-bar__tooltip"
                 data-tooltip-content={t("Timer.endTimer")}
                 aria-label={t("Timer.endTimer")}
                 className="short-action__button"
@@ -128,7 +126,7 @@ export const Timer = (props: TimerProps) => {
           )}
           <li className="short-actions__short-action">
             <button
-              data-tooltip-id="timer__tooltip"
+              data-tooltip-id="info-bar__tooltip"
               data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
@@ -144,7 +142,7 @@ export const Timer = (props: TimerProps) => {
       {isModerator && (
         <div className="timer__increment-button">
           <button
-            data-tooltip-id="timer__tooltip"
+            data-tooltip-id="info-bar__tooltip"
             data-tooltip-content={t("Timer.addOneMinute")}
             aria-label={t("Timer.addOneMinute")}
             className="increment-button__button"
