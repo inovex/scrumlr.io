@@ -40,13 +40,18 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
   if (action.type === Action.SetUserBanned) {
     API.editParticipant(action.context.board!, action.user, {
       banned: action.banned,
-    }).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.setUserBanned"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.setUserBanned(action.user, action.banned)),
-      });
-    });
+    }).then(
+      () => {
+        Toast.info({title: i18n.t("Toast.bannedParticipant", {user: action.userName})});
+      },
+      () => {
+        Toast.error({
+          title: i18n.t("Error.setUserBanned"),
+          buttons: [i18n.t("Error.retry")],
+          firstButtonOnClick: () => store.dispatch(Actions.setUserBanned(action.user, action.userName, action.banned)),
+        });
+      }
+    );
   }
 
   if (action.type === Action.ChangePermission) {

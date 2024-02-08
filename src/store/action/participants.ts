@@ -14,7 +14,6 @@ export const ParticipantAction = {
   UpdatedParticipant: "scrumlr.io/updatedParticipant" as const,
 
   SetUserBanned: "scrumlr.io/setUserBanned" as const,
-  RemovedParticipant: "scrumlr.io/removedParticipant" as const, // TODO
 
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
@@ -80,17 +79,12 @@ export const ParticipantActionFactory = {
   /**
    * Remove a participant from a board session.
    */
-  setUserBanned: (user: string, banned: boolean) => ({
+  setUserBanned: (user: string, userName: string, banned: boolean) => ({
     type: ParticipantAction.SetUserBanned,
     user,
+    userName,
     banned,
   }),
-
-  // TODO do something when backend returns
-  /* removedParticipant: (participant: Participant) => ({
-    type: ParticipantAction.RemovedParticipant,
-    participant,
-  }), */
 
   /**
    * Edits a user. It will be applied immediately on the local client and send to the server via the middleware and an API request.

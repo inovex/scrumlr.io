@@ -54,6 +54,11 @@ export const Board = () => {
 
   const currentUserIsModerator = state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR";
 
+  if (state.participants?.self.banned) {
+    window.location.reload();
+    return <LoadingScreen />; // fallback
+  }
+
   if (state.board.status === "pending") {
     return <LoadingScreen />;
   }

@@ -59,8 +59,8 @@ export const Participants = () => {
   };
 
   // not asking but actually doing it
-  const confirmToBanUser = (participant: Participant) => {
-    dispatch(Actions.setUserBanned(participant.user.id, true));
+  const confirmToBanUser = ({user}: Participant) => {
+    dispatch(Actions.setUserBanned(user.id, user.name, true));
   };
 
   return (
@@ -147,8 +147,16 @@ export const Participants = () => {
                     </div>
                   )}
                 </div>
-                {isModerator && // only allow kicking when self is mod and the other is not
-                  participant.role === "PARTICIPANT" && <KickIcon className="participant__kick-icon" onClick={() => askToBanUser(participant)} />}
+                {isModerator && participant.user.id !== self.user.id && ["PARTICIPANT", "MODERATOR"].includes(participant.role) && (
+                  <button
+                    aria-label={t("Participants.BanParticipantTooltip")}
+                    title={t("Participants.BanParticipantTooltip")}
+                    className="participant__kick-icon"
+                    onClick={() => askToBanUser(participant)}
+                  >
+                    <KickIcon />
+                  </button>
+                )}
               </li>
             ))}
         </ul>

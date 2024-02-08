@@ -252,7 +252,7 @@
     "3min": "3 minutes",
     "5min": "5 minutes",
     "min": "minutes",
-    "customTime":"Custom time",
+    "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
   "BoardReactionsMenu": {
@@ -372,7 +372,8 @@
     "ChangeRoleToParticipantTooltip": "Change role to participant",
     "ChangeRoleToModeratorTooltip": "Change role to moderator",
     "ResetBannerText": "Reset ready states of all users.",
-    "ResetBannerButton": "Reset"
+    "ResetBannerButton": "Reset",
+    "BanParticipantTooltip": "Ban this participant"
   },
   "UserRole": {
     "Owner": "Owner",

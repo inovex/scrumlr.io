@@ -266,6 +266,32 @@
   }
 }
 
+.participant__kick-icon {
+  width: $icon--large;
+  height: $icon--large;
+  padding: 0;
+  margin-left: auto; // align to the very right
+  border-radius: $note__border-radius;
+  border: none;
+  background-color: $color-white;
+  width: $icon--large;
+  height: $icon--large;
+
+  cursor: pointer;
+
+  &--active {
+    background-color: var(--accent-color);
+    color: $color-white;
+  }
+  &:focus {
+    outline: 2px solid var(--accent-color);
+  }
+
+  &:hover {
+    background-color: var(--accent-color--desaturated-light);
+  }
+}
+
 @media screen and (min-width: 920px) {
   // SettingsDialog changes margin here, so we have to do the same
   .participants-reset-state-banner__container {
@@ -339,12 +365,13 @@
       background-color: $color-dark-one;
     }
   }
-}
 
-.participant__kick-icon {
-  width: $icon--large;
-  height: $icon--large;
-  margin-left: auto; // align to the very right
+  .participant__kick-icon {
+    color: $color-white;
+    background-color: $color-dark-mode-note;
 
-  cursor: pointer;
+    &:hover {
+      background-color: var(--accent-color--desaturated-dark);
+    }
+  }
 }
