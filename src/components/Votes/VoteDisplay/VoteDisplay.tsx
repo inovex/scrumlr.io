@@ -7,7 +7,7 @@ import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
 import "./VoteDisplay.scss";
-import {Tooltip} from "components/Tooltip/Tooltip";
+import {Tooltip} from "components/Tooltip";
 
 type VoteDisplayProps = {
   usedVotes: number;

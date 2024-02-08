@@ -14,7 +14,7 @@ import {API} from "api";
 import {Timer as TimerUtils} from "utils/timer";
 import "./Timer.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
-import {Tooltip} from "components/Tooltip/Tooltip";
+import {Tooltip} from "components/Tooltip";
 
 type TimerProps = {
   startTime: Date;
