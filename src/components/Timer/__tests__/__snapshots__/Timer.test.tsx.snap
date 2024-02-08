@@ -5,9 +5,6 @@ exports[`Timer should render correctly 1`] = `
   class="timer__container"
 >
   <div
-    class="tooltip-container"
-  />
-  <div
     class="timer"
     id="timer"
   >
@@ -30,7 +27,7 @@ exports[`Timer should render correctly 1`] = `
           aria-label="End timer"
           class="short-action__button"
           data-tooltip-content="End timer"
-          data-tooltip-id="timer__tooltip"
+          data-tooltip-id="info-bar__tooltip"
         >
           <svg>
             icon-flag.svg
@@ -44,7 +41,7 @@ exports[`Timer should render correctly 1`] = `
           aria-label="Unmark me as done"
           class="short-action__button short-action__button--ready"
           data-tooltip-content="Unmark me as done"
-          data-tooltip-id="timer__tooltip"
+          data-tooltip-id="info-bar__tooltip"
         >
           <svg
             class="short-action__check-icon"
@@ -70,7 +67,7 @@ exports[`Timer should render correctly 1`] = `
       aria-label="Increase timer by one minute"
       class="increment-button__button"
       data-tooltip-content="Increase timer by one minute"
-      data-tooltip-id="timer__tooltip"
+      data-tooltip-id="info-bar__tooltip"
       id="timer__increment-button"
     >
       <svg>
