@@ -5,6 +5,9 @@ exports[`Timer should render correctly 1`] = `
   class="timer__container"
 >
   <div
+    class="tooltip-container"
+  />
+  <div
     class="timer"
     id="timer"
   >
@@ -17,32 +20,31 @@ exports[`Timer should render correctly 1`] = `
       :
       00
     </span>
-    <div
+    <ul
       class="timer__short-actions"
     >
-      <div
+      <li
         class="short-actions__short-action"
       >
         <button
           aria-label="End timer"
           class="short-action__button"
+          data-tooltip-content="End timer"
+          data-tooltip-id="timer__tooltip"
         >
           <svg>
             icon-flag.svg
           </svg>
         </button>
-        <span
-          class="short-action__tooltip"
-        >
-          End timer
-        </span>
-      </div>
-      <div
+      </li>
+      <li
         class="short-actions__short-action"
       >
         <button
           aria-label="Unmark me as done"
           class="short-action__button short-action__button--ready"
+          data-tooltip-content="Unmark me as done"
+          data-tooltip-id="timer__tooltip"
         >
           <svg
             class="short-action__check-icon"
@@ -55,13 +57,8 @@ exports[`Timer should render correctly 1`] = `
             icon-cancel.svg
           </svg>
         </button>
-        <span
-          class="short-action__tooltip"
-        >
-          Unmark me as done
-        </span>
-      </div>
-    </div>
+      </li>
+    </ul>
     <svg>
       icon-timer.svg
     </svg>
@@ -72,16 +69,14 @@ exports[`Timer should render correctly 1`] = `
     <button
       aria-label="Increase timer by one minute"
       class="increment-button__button"
+      data-tooltip-content="Increase timer by one minute"
+      data-tooltip-id="timer__tooltip"
+      id="timer__increment-button"
     >
       <svg>
         icon-plus-one.svg
       </svg>
     </button>
-    <span
-      class="increment-button__tooltip"
-    >
-      Increase timer by one minute
-    </span>
   </div>
 </div>
 `;
