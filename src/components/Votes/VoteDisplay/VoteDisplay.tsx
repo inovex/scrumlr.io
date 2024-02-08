@@ -32,6 +32,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
         {isAdmin && (
           <li className="short-actions__short-action">
             <button
+              aria-label={t("VoteDisplay.finishActionTooltip")}
               data-tooltip-id="vote-display__tooltip"
               data-tooltip-content={t("VoteDisplay.finishActionTooltip")}
               className="short-action__button"
@@ -44,6 +45,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
         )}
         <li className="short-action__short-actions">
           <button
+            aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
             data-tooltip-id="vote-display__tooltip"
             data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
             className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
