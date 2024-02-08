@@ -14,11 +14,19 @@
   z-index: $infobar-z-index;
 }
 
-.info-bar__return-to-presented-note-button > svg {
+.info-bar__return-to-shared-note-button {
+  border-radius: $rounded--full;
+  height: $info-bar__height;
+  width: $info-bar__height;
+  border: 2px solid $color-white;
   background-color: $menu-icon-background-color--dark;
   color: $color-white;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  box-shadow: $box-shadow--light;
 }
-[theme="dark"] .info-bar__return-to-presented-note-button > svg {
+[theme="dark"] .info-bar__return-to-shared-note-button {
   background-color: $color-white;
   color: $menu-icon-background-color--dark;
 }
