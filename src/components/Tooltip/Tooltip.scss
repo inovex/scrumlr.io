@@ -1,7 +1,7 @@
 @import "constants/style.scss";
 
 .tooltip-container .tooltip {
-  background-color: #e4e8f6;
+  background-color: $hover-background-light;
   border-radius: $rounded--full;
   color: $color-black;
   font-size: $text--sm;
@@ -10,6 +10,6 @@
 }
 
 [theme="dark"] .tooltip-container .tooltip {
-  background-color: #5a647d;
+  background-color: $hover-background-dark;
   color: $color-white;
 }
