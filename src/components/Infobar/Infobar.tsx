@@ -1,6 +1,6 @@
 import {useTranslation} from "react-i18next";
-import _ from "underscore";
 import {Link} from "react-router-dom";
+import _ from "underscore";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
 import {Timer} from "components/Timer";
 import {Tooltip} from "components/Tooltip";
