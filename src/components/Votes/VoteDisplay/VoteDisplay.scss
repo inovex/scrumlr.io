@@ -75,20 +75,21 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: absolute;
   border-radius: $rounded--full;
   background-color: $menu-icon-background-color--light;
-  display: none;
+  display: flex;
   justify-content: end;
   align-items: center;
   gap: $spacing--xs;
   padding-right: 4px;
   list-style: none;
   margin: 0;
+  visibility: hidden;
 }
 [theme="dark"] .vote-display__short-actions {
   background-color: $menu-icon-background-color--dark;
 }
 
 .vote-display:hover > .vote-display__short-actions {
-  display: flex;
+  visibility: visible;
 }
 
 .short-action__button {
