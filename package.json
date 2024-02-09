@@ -31,7 +31,7 @@
     "react": "^18.0.0-rc.3",
     "react-autosize-textarea": "^7.1.0",
     "react-dom": "^18.0.0-rc.3",
-    "react-focus-lock": "^2.9.7",
+    "react-focus-lock": "^2.9.8",
     "react-helmet": "^6.1.0",
     "react-hotkeys-hook": "^4.5.0",
     "react-i18next": "^14.0.5",
