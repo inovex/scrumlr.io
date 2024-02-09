@@ -102,10 +102,6 @@ $timer__progress-bar-color: #6096ff;
   list-style: none;
   margin: 0;
   opacity: 0;
-
-  &:not(:hover) {
-    display: none;
-  }
 }
 [theme="dark"] .timer__short-actions {
   background-color: $menu-icon-background-color--dark;
@@ -233,5 +229,11 @@ $timer__progress-bar-color: #6096ff;
   }
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+@media (hover: none) {
+  .timer__short-actions {
+    display: none;
   }
 }

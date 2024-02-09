@@ -87,10 +87,6 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   list-style: none;
   margin: 0;
   opacity: 0;
-
-  &:not(:hover) {
-    display: none;
-  }
 }
 [theme="dark"] .vote-display__short-actions {
   background-color: $menu-icon-background-color--dark;
@@ -184,5 +180,11 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+@media (hover: none) {
+  .vote-display__short-actions {
+    display: none;
   }
 }
