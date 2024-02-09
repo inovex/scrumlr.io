@@ -156,51 +156,6 @@ $timer__progress-bar-color: #6096ff;
   color: $color-white;
 }
 
-.short-action__tooltip,
-.increment-button__tooltip {
-  width: max-content;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 150ms linear;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: $rounded--full;
-  padding: $spacing--xs $spacing--base;
-  background-color: $tooltip-background-color--light;
-  color: $menu-icon-background-color--dark;
-  font-size: $text--base;
-  font-weight: bold;
-  bottom: calc(100% + 6px);
-  box-shadow:
-    0 1px 3px 0 rgb(0 0 0 / 0.1),
-    0 1px 2px -1px rgb(0 0 0 / 0.1);
-  // Increased the z-index to make sure the tooltip doesn't get overlapped by the absolute positioned icon
-  z-index: calc($infobar-z-index + 50);
-}
-@media (prefers-reduced-motion) {
-  .short-action__tooltip {
-    transition: none;
-  }
-}
-
-.timer__increment-button:hover > .increment-button__tooltip,
-.short-actions__short-action:hover > .short-action__tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-
-.increment-button__tooltip::after,
-.short-action__tooltip::after {
-  content: "";
-  position: absolute;
-  border: 5px solid;
-  border-color: $tooltip-background-color--light transparent transparent transparent;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 100%;
-}
-
 [theme="dark"] {
   .timer {
     color: $color-white;
@@ -216,16 +171,6 @@ $timer__progress-bar-color: #6096ff;
     background-color: $color-white;
     color: $color-dark-mode-note;
     border-color: $menu-icon-background-color--dark;
-  }
-
-  .short-action__tooltip,
-  .increment-button__tooltip {
-    background-color: $tooltip-background-color--dark;
-    color: $color-white;
-
-    &::after {
-      border-color: $tooltip-background-color--dark transparent transparent transparent;
-    }
   }
 }
 
