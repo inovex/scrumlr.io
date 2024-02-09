@@ -1,3 +1,4 @@
+@use "sass:color";
 @import "constants/style.scss";
 
 .info-bar {
@@ -15,18 +16,34 @@
 }
 
 .info-bar__return-to-shared-note-button {
+  position: relative;
+  border: 0;
+  background-color: $color-white;
+  box-shadow: $box-shadow--light;
   border-radius: $rounded--full;
-  height: $info-bar__height;
-  width: $info-bar__height;
-  border: 2px solid $color-white;
-  background-color: $menu-icon-background-color--dark;
-  color: $color-white;
+  height: 42px;
+  width: 42px;
+  color: white;
+  cursor: pointer;
   display: grid;
   place-content: center;
-  cursor: pointer;
-  box-shadow: $box-shadow--light;
+  outline: none;
+  transition: background-color 150ms linear;
+  color: $color-black;
+
+  &:hover {
+    background-color: color.scale($color-white, $lightness: -10%);
+  }
+
+  &:focus {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
 [theme="dark"] .info-bar__return-to-shared-note-button {
-  background-color: $color-white;
-  color: $menu-icon-background-color--dark;
+  color: $color-white;
+  background-color: $menu-icon-background-color--dark;
+
+  &:hover {
+    background-color: color.scale($menu-icon-background-color--dark, $lightness: 10%);
+  }
 }

@@ -28,14 +28,10 @@ $timer__progress-bar-color: #6096ff;
   place-content: center;
   outline: none;
   transition: background-color 200ms linear;
-
-  > svg {
-    width: 100%;
-    color: $color-black;
-  }
+  color: $color-black;
 
   &:hover {
-    background-color: color.adjust($color-white, $lightness: -10%);
+    background-color: color.scale($color-white, $lightness: -10%);
   }
 
   &:focus {
@@ -170,10 +166,13 @@ $timer__progress-bar-color: #6096ff;
     outline: 2px solid $color-planning-pink;
   }
 
-  .increment-button__button {
-    background-color: $color-white;
-    color: $color-dark-mode-note;
-    border-color: $menu-icon-background-color--dark;
+  .timer__increment-button {
+    color: $color-white;
+    background-color: $menu-icon-background-color--dark;
+
+    &:hover {
+      background-color: color.scale($menu-icon-background-color--dark, $lightness: 10%);
+    }
   }
 }
 
