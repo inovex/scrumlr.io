@@ -60,20 +60,16 @@ exports[`Timer should render correctly 1`] = `
       icon-timer.svg
     </svg>
   </div>
-  <div
+  <button
+    aria-label="Increase timer by one minute"
     class="timer__increment-button"
+    data-tooltip-content="Increase timer by one minute"
+    data-tooltip-id="info-bar__tooltip"
+    id="timer__increment-button"
   >
-    <button
-      aria-label="Increase timer by one minute"
-      class="increment-button__button"
-      data-tooltip-content="Increase timer by one minute"
-      data-tooltip-id="info-bar__tooltip"
-      id="timer__increment-button"
-    >
-      <svg>
-        icon-plus-one.svg
-      </svg>
-    </button>
-  </div>
+    <svg>
+      icon-plus-one.svg
+    </svg>
+  </button>
 </div>
 `;
