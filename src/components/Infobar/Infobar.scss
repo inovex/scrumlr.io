@@ -11,7 +11,7 @@
   transform: translateX(-50%);
   height: $info-bar__height;
   justify-content: center;
-  gap: $spacing--base;
+  gap: $spacing--xs;
   z-index: $infobar-z-index;
 }
 
@@ -45,5 +45,11 @@
 
   &:hover {
     background-color: color.scale($menu-icon-background-color--dark, $lightness: 10%);
+  }
+}
+
+@media (min-width: 400px) {
+  .info-bar {
+    gap: $spacing--base;
   }
 }
