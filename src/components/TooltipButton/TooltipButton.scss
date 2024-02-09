@@ -183,6 +183,36 @@ $tooltip-button-size: 46px;
 }
 
 @media #{$smartphone} {
+  $clickable-area-size: 64px;
+
+  .tooltip-button {
+    height: $clickable-area-size;
+    width: $clickable-area-size;
+
+    &--active {
+      &:enabled:active {
+        .tooltip-button__icon {
+          &:nth-of-type(1) {
+            visibility: hidden;
+          }
+          &:nth-of-type(2) {
+            visibility: visible;
+          }
+        }
+      }
+
+      .tooltip-button__icon {
+        background-color: $menu-icon-background-color--dark;
+        color: $color-white;
+      }
+    }
+  }
+
+  .tooltip-button__icon {
+    top: calc(($clickable-area-size - $tooltip-button-size) / 2);
+    left: calc(($clickable-area-size - $tooltip-button-size) / 2);
+  }
+
   .tooltip-button .tooltip-button__tooltip {
     display: none;
   }

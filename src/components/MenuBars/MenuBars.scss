@@ -2,20 +2,6 @@
 
 $tooltip-gap: 12px;
 
-@keyframes expandHorizontally {
-  to {
-    margin-right: $tooltip-gap;
-    opacity: 1;
-  }
-}
-
-@keyframes expandVertically {
-  to {
-    margin-bottom: $tooltip-gap;
-    opacity: 1;
-  }
-}
-
 .menu-bars-mobile {
   display: none;
   z-index: $menu-z-index;
@@ -72,18 +58,10 @@ $tooltip-gap: 12px;
   }
 }
 
-.menu-bars-mobile__fab-option {
+.menu-bars-mobile__fab-option .tooltip-button__icon {
   box-shadow: $box-shadow--light;
   border-radius: $rounded--full;
   margin: 0;
-
-  &--vertical {
-    animation: expandVertically 0.25s ease forwards;
-  }
-
-  &--horizontal {
-    animation: expandHorizontally 0.25s ease forwards;
-  }
 
   &--active {
     background-color: $menu-icon-background-color--dark;
@@ -96,7 +74,7 @@ $tooltip-gap: 12px;
     box-shadow: $box-shadow--dark;
   }
 
-  .menu-bars-mobile__fab-option {
+  .menu-bars-mobile__fab-option .tooltip-button__icon {
     box-shadow: $box-shadow--dark;
 
     &--active {
