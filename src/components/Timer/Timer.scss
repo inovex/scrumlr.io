@@ -48,6 +48,10 @@ $timer__progress-bar-color: #6096ff;
   position: relative;
   border: 2px solid $menu-icon-background-color--light;
   box-shadow: $box-shadow--light;
+
+  &:focus-within {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
 .timer > svg {
   position: absolute;
@@ -90,20 +94,22 @@ $timer__progress-bar-color: #6096ff;
   position: absolute;
   border-radius: $rounded--full;
   background-color: $menu-icon-background-color--light;
-  display: none;
+  display: flex;
   justify-content: end;
   align-items: center;
   gap: $spacing--xs;
   padding-right: 4px;
   list-style: none;
   margin: 0;
+  opacity: 0;
 }
 [theme="dark"] .timer__short-actions {
   background-color: $menu-icon-background-color--dark;
 }
 
+.timer:focus-within > .timer__short-actions,
 .timer:hover > .timer__short-actions {
-  display: flex;
+  opacity: 1;
 }
 
 .short-actions__short-action {
@@ -125,6 +131,15 @@ $timer__progress-bar-color: #6096ff;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    background-color: $timer__progress-bar-color;
+    color: $color-white;
+  }
+
+  &:focus {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
 [theme="dark"] .short-action__button {
   background-color: $color-dark-one;
@@ -148,11 +163,6 @@ $timer__progress-bar-color: #6096ff;
 .short-action__button > .short-action__check-icon {
   height: $timer__short-actions-height;
   width: $timer__short-actions-height;
-}
-
-.short-action__button:hover {
-  background-color: $timer__progress-bar-color;
-  color: $color-white;
 }
 
 [theme="dark"] {

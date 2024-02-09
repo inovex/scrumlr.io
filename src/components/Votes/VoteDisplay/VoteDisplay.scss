@@ -17,6 +17,10 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: relative;
   border: 2px solid $menu-icon-background-color--light;
   box-shadow: $box-shadow--light;
+
+  &:focus-within {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
 [theme="dark"] .vote-display {
   color: $color-white;
@@ -82,14 +86,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   padding-right: 4px;
   list-style: none;
   margin: 0;
-  visibility: hidden;
+  opacity: 0;
 }
 [theme="dark"] .vote-display__short-actions {
   background-color: $menu-icon-background-color--dark;
 }
 
+.vote-display:focus-within > .vote-display__short-actions,
 .vote-display:hover > .vote-display__short-actions {
-  visibility: visible;
+  opacity: 1;
 }
 
 .short-action__button {
@@ -104,6 +109,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    background-color: $vote-display__progress-bar-color;
+    color: $color-white;
+  }
+
+  &:focus {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
 [theme="dark"] .short-action__button {
   background-color: $color-dark-one;
@@ -131,11 +145,6 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 .short-action__button > .short-action__check-icon {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
-}
-
-.short-action__button:hover {
-  background-color: $vote-display__progress-bar-color;
-  color: $color-white;
 }
 
 @keyframes shake {
