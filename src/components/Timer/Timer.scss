@@ -1,3 +1,4 @@
+@use "sass:color";
 @import "constants/style.scss";
 
 $timer-display-width: 114px;
@@ -15,18 +16,10 @@ $timer__progress-bar-color: #6096ff;
 
 .timer__increment-button {
   position: relative;
-  border-radius: 999px;
-
-  &:focus-within {
-    outline: 2px solid $color-backlog-blue;
-  }
-}
-
-.increment-button__button {
-  border: 2px solid $color-white;
-  background-color: $color-dark-mode-note;
+  border: 0;
+  background-color: $color-white;
   box-shadow: $box-shadow--light;
-  border-radius: 999px;
+  border-radius: $rounded--full;
   height: 42px;
   width: 42px;
   color: white;
@@ -34,9 +27,19 @@ $timer__progress-bar-color: #6096ff;
   display: grid;
   place-content: center;
   outline: none;
+  transition: background-color 200ms linear;
 
   > svg {
     width: 100%;
+    color: $color-black;
+  }
+
+  &:hover {
+    background-color: color.adjust($color-white, $lightness: -10%);
+  }
+
+  &:focus {
+    outline: 2px solid $color-backlog-blue;
   }
 }
 
