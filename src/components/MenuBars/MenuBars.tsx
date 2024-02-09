@@ -66,9 +66,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     (rootState) => ({
       currentUser: rootState.participants!.self,
       moderation: rootState.view.moderating,
-      showAuthors: rootState.board.data?.showAuthors,
-      showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
-      showHiddenColumns: rootState.participants!.self.showHiddenColumns,
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
@@ -249,22 +246,24 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               </li>
             )}
             {fabIsExpanded && (
-              <li
-                className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": showBoardReactionsMenu})}
-              >
-                <TooltipButton
-                  active={showBoardReactionsMenu}
-                  direction="left"
-                  label={t("MenuBars.openBoardReactionMenu")}
-                  icon={BoardReactionIcon}
-                  onClick={toggleBoardReactionsMenu}
-                />
-              </li>
-            )}
-            {fabIsExpanded && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                <TooltipButton direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
-              </li>
+              <>
+                <li
+                  className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {
+                    "menu-bars-mobile__fab-option--active": showBoardReactionsMenu,
+                  })}
+                >
+                  <TooltipButton
+                    active={showBoardReactionsMenu}
+                    direction="left"
+                    label={t("MenuBars.openBoardReactionMenu")}
+                    icon={BoardReactionIcon}
+                    onClick={toggleBoardReactionsMenu}
+                  />
+                </li>
+                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
+                  <TooltipButton direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+                </li>
+              </>
             )}
           </ul>
         )}
