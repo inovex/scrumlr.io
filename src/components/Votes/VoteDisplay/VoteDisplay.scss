@@ -18,7 +18,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   border: 2px solid $menu-icon-background-color--light;
   box-shadow: $box-shadow--light;
 
-  &:focus-within {
+  &:has(:focus-visible) {
     outline: 2px solid $color-backlog-blue;
   }
 }
@@ -92,7 +92,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   background-color: $menu-icon-background-color--dark;
 }
 
-.vote-display:focus-within > .vote-display__short-actions,
+.vote-display:has(:focus-visible) > .vote-display__short-actions,
 .vote-display:hover > .vote-display__short-actions {
   opacity: 1;
 }
@@ -115,7 +115,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
     color: $color-white;
   }
 
-  &:focus {
+  &:focus-visible {
     outline: 2px solid $color-backlog-blue;
   }
 }
