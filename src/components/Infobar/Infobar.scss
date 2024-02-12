@@ -46,6 +46,10 @@
   &:hover {
     background-color: color.scale($menu-icon-background-color--dark, $lightness: 10%);
   }
+
+  &:focus-visible {
+    outline: 2px solid $color-planning-pink;
+  }
 }
 
 @media (min-width: 400px) {

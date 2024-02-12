@@ -27,6 +27,10 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   color: $color-white;
   background-color: $menu-icon-background-color--dark;
   border-color: $menu-icon-background-color--dark;
+
+  &:has(:focus-visible) {
+    outline: 2px solid $color-planning-pink;
+  }
 }
 
 .vote-display > svg {
@@ -126,6 +130,10 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
   &:hover {
     background-color: color.scale($color-dark-one, $lightness: 10%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-planning-pink;
   }
 }
 .short-action__button > svg {

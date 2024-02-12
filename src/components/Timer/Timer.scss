@@ -148,6 +148,10 @@ $timer__progress-bar-color: #6096ff;
   &:hover {
     background-color: color.scale($color-dark-one, $lightness: 10%);
   }
+
+  &:focus-visible {
+    outline: 2px solid $color-planning-pink;
+  }
 }
 .short-action__button > svg {
   position: absolute;
@@ -174,10 +178,10 @@ $timer__progress-bar-color: #6096ff;
     color: $color-white;
     background-color: $menu-icon-background-color--dark;
     border-color: $menu-icon-background-color--dark;
-  }
 
-  .timer__increment-button:focus-within {
-    outline: 2px solid $color-planning-pink;
+    &:has(:focus-visible) {
+      outline: 2px solid $color-planning-pink;
+    }
   }
 
   .timer__increment-button {
@@ -186,6 +190,10 @@ $timer__progress-bar-color: #6096ff;
 
     &:hover {
       background-color: color.scale($menu-icon-background-color--dark, $lightness: 10%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-planning-pink;
     }
   }
 }
