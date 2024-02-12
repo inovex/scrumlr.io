@@ -63,6 +63,7 @@
     "deleteStackButton": "Delete Stack",
     "deleteOptions": "What do you want to delete?",
     "banParticipant": "Are you sure you want to remove {{user}} from the session?",
+    "unbanParticipant": "Are you sure you want to allow {{user}} to join the session again?",
     "warning": "This action cannot be undone.",
     "yes": "Yes",
     "no": "No",
@@ -284,6 +285,7 @@
     "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
     "moderatorResetReadyStatesButton": "Reset!",
     "bannedParticipant": "Participant {{user}} was removed",
+    "unbannedParticipant": "Participant {{user}}'s ban was revoked",
     "noteToHiddenColumn": "You just added a note to a hidden column!",
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
@@ -373,7 +375,8 @@
     "ChangeRoleToModeratorTooltip": "Change role to moderator",
     "ResetBannerText": "Reset ready states of all users.",
     "ResetBannerButton": "Reset",
-    "BanParticipantTooltip": "Ban this participant"
+    "BanParticipantTooltip": "Ban this participant",
+    "UnbanParticipantTooltip": "Revoke the ban on this participant"
   },
   "UserRole": {
     "Owner": "Owner",
