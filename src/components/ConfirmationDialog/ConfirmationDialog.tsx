@@ -5,6 +5,7 @@ import {dialogTransitionConfig} from "utils/transitionConfig";
 import {Portal} from "components/Portal";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {ReactComponent as WarningIcon} from "assets/icon-warning.svg";
+import classNames from "classnames";
 import "./ConfirmationDialog.scss";
 
 type ConfirmationDialogProps = {
@@ -17,6 +18,7 @@ type ConfirmationDialogProps = {
   onExtraOptionLabel?: string;
   icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
   warning?: boolean;
+  className?: string;
 };
 
 export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
@@ -25,10 +27,10 @@ export const ConfirmationDialog: FC<ConfirmationDialogProps> = (props) => {
   return (
     <Portal onClose={props.onDecline}>
       <div className="confirmation-dialog__background" />
-      <div className="confirmation-dialog__wrapper">
+      <div className={classNames("confirmation-dialog__wrapper", props.className)}>
         <Transition {...dialogTransitionConfig}>
           {(styles) => (
-            <animated.aside aria-modal="true" aria-label={props.title} className="confirmation-dialog" role="dialog" style={styles}>
+            <animated.aside aria-modal="true" aria-label={props.title} className="confirmation-dialog" role="dialog" style={styles} onClick={(e) => e.stopPropagation()}>
               <button aria-label="Close dialog" className="confirmation-dialog__close-button" onClick={() => props.onDecline()} type="button">
                 <CloseIcon className="dialog__close-icon" />
               </button>
