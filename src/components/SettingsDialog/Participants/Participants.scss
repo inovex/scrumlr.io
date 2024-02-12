@@ -266,6 +266,7 @@
   }
 }
 
+.participant__join-icon,
 .participant__kick-icon {
   width: $icon--large;
   height: $icon--large;
@@ -290,6 +291,11 @@
   &:hover {
     background-color: var(--accent-color--desaturated-light);
   }
+}
+
+.participants__ban-dialog .confirmation-dialog__icon {
+  width: 77px;
+  height: 77px;
 }
 
 @media screen and (min-width: 920px) {
@@ -366,6 +372,7 @@
     }
   }
 
+  .participant__join-icon,
   .participant__kick-icon {
     color: $color-white;
     background-color: $color-dark-mode-note;

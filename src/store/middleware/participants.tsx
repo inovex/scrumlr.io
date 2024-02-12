@@ -42,7 +42,7 @@ export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, App
       banned: action.banned,
     }).then(
       () => {
-        Toast.info({title: i18n.t("Toast.bannedParticipant", {user: action.userName})});
+        Toast.info({title: i18n.t(action.banned ? "Toast.bannedParticipant" : "Toast.unbannedParticipant", {user: action.userName})});
       },
       () => {
         Toast.error({

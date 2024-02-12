@@ -1,19 +1,19 @@
-import {useEffect, useRef, useState} from "react";
-import _ from "underscore";
-import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
+import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as UnbanIcon} from "assets/icon-join.svg";
+import {ReactComponent as BanIcon} from "assets/icon-kick-participant.svg";
+import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
+import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
 import classNames from "classnames";
-import {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {useDebounce} from "utils/hooks/useDebounce";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {useEffect, useRef, useState} from "react";
+import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "store";
+import {Actions} from "store/action";
 import {Participant} from "types/participant";
-import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
-import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
-import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as KickIcon} from "assets/icon-close.svg";
-import {ReactComponent as RemoveParticipant} from "assets/icon-kick-participant.svg";
+import _ from "underscore";
+import {useDebounce} from "utils/hooks/useDebounce";
 import "./Participants.scss";
 
 export const Participants = () => {
@@ -32,7 +32,7 @@ export const Participants = () => {
   const existsAtLeastOneReadyUser = participants.some((p) => p.ready);
 
   const [showBanParticipantConfirmation, setShowBanParticipantConfirmation] = useState(false);
-  const [selectedParticipant, setSelectedParticipant] = useState<Participant>();
+  const [selectedParticipant, setSelectedParticipant] = useState<{participant: Participant; banned: boolean}>();
 
   useEffect(() => {
     const listWrapperHeight = listWrapperRef.current?.offsetWidth;
@@ -48,19 +48,19 @@ export const Participants = () => {
     participants.forEach((p) => dispatch(Actions.setUserReadyStatus(p.user.id, false)));
   };
 
-  const askToBanUser = (participant: Participant) => {
-    setSelectedParticipant(participant);
+  const banParticipant = (participant: Participant, banned: boolean) => {
+    setSelectedParticipant({participant, banned});
     setShowBanParticipantConfirmation(true);
   };
 
-  const denyToBanUser = () => {
+  const resetBanProcess = () => {
     setSelectedParticipant(undefined);
     setShowBanParticipantConfirmation(false);
   };
 
-  // not asking but actually doing it
-  const confirmToBanUser = ({user}: Participant) => {
-    dispatch(Actions.setUserBanned(user.id, user.name, true));
+  const confirmBan = ({user}: Participant, banned: boolean) => {
+    dispatch(Actions.setUserBanned(user.id, user.name, banned));
+    resetBanProcess();
   };
 
   return (
@@ -147,16 +147,28 @@ export const Participants = () => {
                     </div>
                   )}
                 </div>
-                {isModerator && participant.user.id !== self.user.id && ["PARTICIPANT", "MODERATOR"].includes(participant.role) && (
-                  <button
-                    aria-label={t("Participants.BanParticipantTooltip")}
-                    title={t("Participants.BanParticipantTooltip")}
-                    className="participant__kick-icon"
-                    onClick={() => askToBanUser(participant)}
-                  >
-                    <KickIcon />
-                  </button>
-                )}
+                {isModerator &&
+                  self.user.id !== participant.user.id &&
+                  ["PARTICIPANT", "MODERATOR"].includes(participant.role) &&
+                  (participant.banned ? (
+                    <button
+                      aria-label={t("Participants.UnbanParticipantTooltip")}
+                      title={t("Participants.UnbanParticipantTooltip")}
+                      className="participant__join-icon"
+                      onClick={() => banParticipant(participant, false)}
+                    >
+                      <UnbanIcon />
+                    </button>
+                  ) : (
+                    <button
+                      aria-label={t("Participants.BanParticipantTooltip")}
+                      title={t("Participants.BanParticipantTooltip")}
+                      className="participant__kick-icon"
+                      onClick={() => banParticipant(participant, true)}
+                    >
+                      <BanIcon />
+                    </button>
+                  ))}
               </li>
             ))}
         </ul>
@@ -173,13 +185,13 @@ export const Participants = () => {
         </footer>
       )}
 
-      {showBanParticipantConfirmation && (
+      {showBanParticipantConfirmation && selectedParticipant && (
         <ConfirmationDialog
-          title={t("ConfirmationDialog.banParticipant", {user: selectedParticipant?.user.name})}
-          onAccept={() => confirmToBanUser(selectedParticipant!)} // assertion: selectedParticipant is set
-          onDecline={() => denyToBanUser()}
-          icon={RemoveParticipant}
-          warning
+          title={t(selectedParticipant.banned ? "ConfirmationDialog.banParticipant" : "ConfirmationDialog.unbanParticipant", {user: selectedParticipant.participant.user.name})}
+          onAccept={() => confirmBan(selectedParticipant.participant, selectedParticipant.banned)} // assertion: selectedParticipant is set
+          onDecline={() => resetBanProcess()}
+          icon={BanIcon}
+          className="participants__ban-dialog"
         />
       )}
     </section>
