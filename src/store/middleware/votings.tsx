@@ -29,16 +29,4 @@ export const passVotingMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicati
     });
     API.updateReadyStates(action.context.board!, false);
   }
-
-  if (action.type === Action.AbortVoting) {
-    API.changeVotingStatus(action.context.board!, action.voting, "ABORTED").catch(() => {
-      Toast.error({
-        title: i18n.t("Error.abortVoting"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.abortVoting(action.voting)),
-        autoClose: false,
-      });
-    });
-    API.updateReadyStates(action.context.board!, false);
-  }
 };

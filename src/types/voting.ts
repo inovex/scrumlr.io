@@ -1,4 +1,4 @@
-export type VotingStatus = "OPEN" | "CLOSED" | "ABORTED";
+export type VotingStatus = "OPEN" | "CLOSED";
 
 /**
  * The representation of a vote configuration on the server.

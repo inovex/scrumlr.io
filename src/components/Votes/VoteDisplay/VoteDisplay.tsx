@@ -28,20 +28,12 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
       </span>
       <div className="vote-display__short-actions">
         {isAdmin && (
-          <>
-            <div className="short-actions__short-action">
-              <button aria-label={t("VoteDisplay.abortActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.abortVoting(voting!))}>
-                <CancelIcon />
-              </button>
-              <span className="short-action__tooltip">{t("VoteDisplay.abortActionTooltip")}</span>
-            </div>
-            <div className="short-actions__short-action">
+          <div className="short-actions__short-action">
               <button aria-label={t("VoteDisplay.finishActionTooltip")} className="short-action__button" onClick={() => store.dispatch(Actions.closeVoting(voting!))}>
                 <FlagIcon />
               </button>
               <span className="short-action__tooltip">{t("VoteDisplay.finishActionTooltip")}</span>
             </div>
-          </>
         )}
         {!isAdmin && (
           <div className="short-actions__short-action">
