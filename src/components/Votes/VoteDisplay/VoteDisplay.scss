@@ -23,15 +23,6 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
     outline: 2px solid $color-backlog-blue;
   }
 }
-[theme="dark"] .vote-display {
-  color: $color-white;
-  background-color: $menu-icon-background-color--dark;
-  border-color: $menu-icon-background-color--dark;
-
-  &:has(:focus-visible) {
-    outline: 2px solid $color-planning-pink;
-  }
-}
 
 .vote-display > svg {
   position: absolute;
@@ -39,10 +30,6 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   background-color: $color-dark-mode-note;
   color: $color-white;
   border-radius: 100%;
-}
-[theme="dark"] .vote-display > svg {
-  background-color: $color-white;
-  color: $color-dark-mode-note;
 }
 
 .vote-display > span {
@@ -93,9 +80,6 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   margin: 0;
   opacity: 0;
 }
-[theme="dark"] .vote-display__short-actions {
-  background-color: $menu-icon-background-color--dark;
-}
 
 .vote-display:has(:focus-visible) > .vote-display__short-actions,
 .vote-display:hover > .vote-display__short-actions {
@@ -124,18 +108,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
     outline: 2px solid $color-backlog-blue;
   }
 }
-[theme="dark"] .short-action__button {
-  background-color: $color-dark-one;
-  color: $color-white;
 
-  &:hover {
-    background-color: color.scale($color-dark-one, $lightness: 10%);
-  }
-
-  &:focus-visible {
-    outline: 2px solid $color-planning-pink;
-  }
-}
 .short-action__button > svg {
   position: absolute;
   height: $icon--small;
@@ -158,6 +131,44 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 .short-action__button > .short-action__check-icon {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
+}
+
+[theme="dark"] {
+  .vote-display {
+    color: $color-white;
+    background-color: $menu-icon-background-color--dark;
+    border-color: $menu-icon-background-color--dark;
+
+    &:has(:focus-visible) {
+      outline: 2px solid $color-planning-pink;
+    }
+  }
+
+  .vote-display > svg {
+    background-color: $color-white;
+    color: $color-dark-mode-note;
+  }
+
+  .vote-display__short-actions {
+    background-color: $menu-icon-background-color--dark;
+  }
+
+  .vote-display--votes-depleted .vote-display__progress-bar {
+    background-color: $vote-display__progress-bar-color--depleted-dark;
+  }
+
+  .short-action__button {
+    background-color: $color-dark-one;
+    color: $color-white;
+
+    &:hover {
+      background-color: color.scale($color-dark-one, $lightness: 10%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-planning-pink;
+    }
+  }
 }
 
 @keyframes shake {
