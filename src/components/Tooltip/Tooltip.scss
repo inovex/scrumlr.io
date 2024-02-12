@@ -1,5 +1,9 @@
 @import "constants/style.scss";
 
+.tooltip-container {
+  position: absolute;
+}
+
 .tooltip-container .tooltip {
   background-color: $hover-background-light;
   border-radius: $rounded--full;
