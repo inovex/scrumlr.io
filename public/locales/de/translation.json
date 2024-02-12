@@ -375,8 +375,8 @@
     "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator",
     "ResetBannerText": "Fertige Teilnehmer zurücksetzen.",
     "ResetBannerButton": "Zurücksetzen",
-    "BanParticipantTooltip": "Diesen Teilnehmer bannen",
-    "UnbanParticipantTooltip": "Diesen Teilnehmer entbannen"
+    "BanParticipantTooltip": "{{user}} bannen",
+    "UnbanParticipantTooltip": "{{user}} entbannen"
   },
   "UserRole": {
     "Owner": "Besitzer",

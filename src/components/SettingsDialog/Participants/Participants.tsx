@@ -158,8 +158,8 @@ export const Participants = () => {
                   ["PARTICIPANT", "MODERATOR"].includes(participant.role) &&
                   (participant.banned ? (
                     <button
-                      aria-label={t("Participants.UnbanParticipantTooltip")}
-                      title={t("Participants.UnbanParticipantTooltip")}
+                      aria-label={t("Participants.UnbanParticipantTooltip", {user: participant.user.name})}
+                      title={t("Participants.UnbanParticipantTooltip", {user: participant.user.name})}
                       className="participant__join-icon"
                       onClick={() => banParticipant(participant, false)}
                     >
@@ -167,8 +167,8 @@ export const Participants = () => {
                     </button>
                   ) : (
                     <button
-                      aria-label={t("Participants.BanParticipantTooltip")}
-                      title={t("Participants.BanParticipantTooltip")}
+                      aria-label={t("Participants.BanParticipantTooltip", {user: participant.user.name})}
+                      title={t("Participants.BanParticipantTooltip", {user: participant.user.name})}
                       className="participant__kick-icon"
                       onClick={() => banParticipant(participant, true)}
                     >

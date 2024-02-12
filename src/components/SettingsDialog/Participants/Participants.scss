@@ -187,6 +187,7 @@
 
   &.banned {
     opacity: 0.2;
+    cursor: default;
   }
 
   &:is(button) {

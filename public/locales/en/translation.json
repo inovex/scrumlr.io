@@ -375,8 +375,8 @@
     "ChangeRoleToModeratorTooltip": "Change role to moderator",
     "ResetBannerText": "Reset ready states of all users.",
     "ResetBannerButton": "Reset",
-    "BanParticipantTooltip": "Ban this participant",
-    "UnbanParticipantTooltip": "Revoke the ban on this participant"
+    "BanParticipantTooltip": "Ban {{user}}",
+    "UnbanParticipantTooltip": "Revoke the ban on {{user}}"
   },
   "UserRole": {
     "Owner": "Owner",
