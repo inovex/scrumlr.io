@@ -60,10 +60,6 @@ $timer__progress-bar-color: #6096ff;
   color: $color-white;
   border-radius: 100%;
 }
-[theme="dark"] .timer > svg {
-  background-color: $color-white;
-  color: $color-dark-mode-note;
-}
 
 .timer > span {
   position: absolute;
@@ -103,9 +99,6 @@ $timer__progress-bar-color: #6096ff;
   margin: 0;
   opacity: 0;
 }
-[theme="dark"] .timer__short-actions {
-  background-color: $menu-icon-background-color--dark;
-}
 
 .timer:has(:focus-visible) > .timer__short-actions,
 .timer:hover > .timer__short-actions {
@@ -141,18 +134,7 @@ $timer__progress-bar-color: #6096ff;
     outline: 2px solid $color-backlog-blue;
   }
 }
-[theme="dark"] .short-action__button {
-  background-color: $color-dark-one;
-  color: $color-white;
 
-  &:hover {
-    background-color: color.scale($color-dark-one, $lightness: 10%);
-  }
-
-  &:focus-visible {
-    outline: 2px solid $color-planning-pink;
-  }
-}
 .short-action__button > svg {
   position: absolute;
   height: $icon--small;
@@ -183,6 +165,10 @@ $timer__progress-bar-color: #6096ff;
       outline: 2px solid $color-planning-pink;
     }
   }
+  .timer > svg {
+    background-color: $color-white;
+    color: $color-dark-mode-note;
+  }
 
   .timer__increment-button {
     color: $color-white;
@@ -190,6 +176,23 @@ $timer__progress-bar-color: #6096ff;
 
     &:hover {
       background-color: color.scale($menu-icon-background-color--dark, $lightness: 10%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-planning-pink;
+    }
+  }
+
+  .timer__short-actions {
+    background-color: $menu-icon-background-color--dark;
+  }
+
+  .short-action__button {
+    background-color: $color-dark-one;
+    color: $color-white;
+
+    &:hover {
+      background-color: color.scale($color-dark-one, $lightness: 10%);
     }
 
     &:focus-visible {
