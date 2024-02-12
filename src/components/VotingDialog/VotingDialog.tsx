@@ -1,4 +1,4 @@
-import {VFC, useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
 import {useNavigate} from "react-router-dom";
@@ -7,11 +7,11 @@ import {Toggle} from "components/Toggle";
 import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
 import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
 import {Actions} from "store/action";
-import "./VotingDialog.scss";
 import {getNumberFromStorage, saveToStorage, getFromStorage} from "utils/storage";
 import {CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY} from "constants/storage";
+import "./VotingDialog.scss";
 
-export const VotingDialog: VFC = () => {
+export const VotingDialog = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
@@ -63,22 +63,13 @@ export const VotingDialog: VFC = () => {
     store.dispatch(Actions.closeVoting(voting!));
     navigate("..");
   };
-  const cancelVoting = () => {
-    store.dispatch(Actions.abortVoting(voting!));
-    navigate("..");
-  };
 
   return (
     <Dialog className="voting-dialog accent-color__planning-pink" title={t("VoteConfigurationButton.label")} onClose={() => navigate("..")}>
       {voting ? (
-        <>
-          <button className="voting-dialog__start-button" data-testid="voting-dialog__cancel-button" onClick={() => cancelVoting()}>
-            <label>{t("VoteConfigurationButton.cancelVoting")}</label>
-          </button>
-          <button className="voting-dialog__start-button" data-testid="voting-dialog__stop-button" onClick={() => stopVoting()}>
-            <label>{t("VoteConfigurationButton.stopVoting")}</label>
-          </button>
-        </>
+        <button className="voting-dialog__start-button" data-testid="voting-dialog__stop-button" onClick={() => stopVoting()}>
+          <label>{t("VoteConfigurationButton.stopVoting")}</label>
+        </button>
       ) : (
         <>
           <button className="dialog__button" data-testid="voting-dialog__cumulative-voting-button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
