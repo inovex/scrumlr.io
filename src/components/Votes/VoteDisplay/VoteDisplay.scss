@@ -1,3 +1,4 @@
+@use "sass:color";
 @import "src/constants/style.scss";
 
 $vote-display-width: 114px;
@@ -109,10 +110,10 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 150ms linear;
 
   &:hover {
-    background-color: $vote-display__progress-bar-color;
-    color: $color-white;
+    background-color: color.scale($color-lighter-gray, $lightness: -10%);
   }
 
   &:focus-visible {
@@ -122,6 +123,10 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 [theme="dark"] .short-action__button {
   background-color: $color-dark-one;
   color: $color-white;
+
+  &:hover {
+    background-color: color.scale($color-dark-one, $lightness: 10%);
+  }
 }
 .short-action__button > svg {
   position: absolute;
