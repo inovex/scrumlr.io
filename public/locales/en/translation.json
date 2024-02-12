@@ -242,7 +242,6 @@
   },
   "VoteDisplay": {
     "finishActionTooltip": "Conclude voting",
-    "abortActionTooltip": "Cancel voting",
     "tooltip": "{{remaining}} of {{total}} votes remaining"
   },
   "TimerToggleButton": {
@@ -435,7 +434,6 @@
     "deleteVote": "Sorry, but we're having trouble deleting the vote. Please try again.",
     "createVoting": "Sorry, but we're having trouble starting a new voting. Please try again.",
     "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
-    "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
     "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
   },
   "Avatar": {
