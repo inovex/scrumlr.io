@@ -145,6 +145,10 @@
 
 .participant__avatar {
   flex-shrink: 0;
+
+  &.banned {
+    opacity: 0.2;
+  }
 }
 
 .participant__name-role-wrapper {
@@ -164,6 +168,10 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+
+  &.banned {
+    opacity: 0.2;
+  }
 }
 
 .participant__role {
@@ -177,6 +185,10 @@
   color: $color-white;
   width: fit-content;
 
+  &.banned {
+    opacity: 0.2;
+  }
+
   &:is(button) {
     line-height: 12px;
     background-color: $color-white;
@@ -184,14 +196,14 @@
     color: $color-black;
     cursor: pointer;
   }
-  &:is(button):hover,
-  &:is(button):focus {
+  &:is(button):hover:not(.banned),
+  &:is(button):focus:not(.banned) {
     outline: none;
     border-color: var(--accent-color--desaturated-light);
     background-color: var(--accent-color--desaturated-light);
   }
   &--active:is(button),
-  &--active:is(button):hover {
+  &--active:is(button):hover:not(.banned) {
     cursor: default;
     border-color: var(--accent-color);
     background-color: var(--accent-color);

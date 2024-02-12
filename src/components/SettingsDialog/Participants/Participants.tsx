@@ -117,9 +117,15 @@ export const Participants = () => {
             .filter((participant) => participant.connected === onlineFilter)
             .map((participant) => (
               <li key={participant.user.id} className="participants__list-item">
-                <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} ready={participant.ready} title={participant.user.name} />
-                <div className="participant__name-role-wrapper">
-                  <span className="participant__name">{participant.user.name}</span>
+                <UserAvatar
+                  avatar={participant.user.avatar}
+                  className={classNames("participant__avatar", {banned: participant.banned})}
+                  id={participant.user.id}
+                  ready={participant.ready}
+                  title={participant.user.name}
+                />
+                <div className={classNames("participant__name-role-wrapper")}>
+                  <span className={classNames("participant__name", {banned: participant.banned})}>{participant.user.name}</span>
                   {participant.role === "OWNER" || !isModerator || participant.user.id === self.user.id ? (
                     <span className="participant__role">
                       {participant.role === "OWNER" && t("UserRole.Owner")}
@@ -129,16 +135,16 @@ export const Participants = () => {
                   ) : (
                     <div className="participant__role-buttons">
                       <button
-                        className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR"})}
-                        disabled={participant.role === "MODERATOR"}
+                        className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR", banned: participant.banned})}
+                        disabled={participant.role === "MODERATOR" || participant.banned}
                         onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}
                         title={t("Participants.ChangeRoleToModeratorTooltip")}
                       >
                         {t("UserRole.Moderator")}
                       </button>
                       <button
-                        className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT"})}
-                        disabled={participant.role === "PARTICIPANT"}
+                        className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT", banned: participant.banned})}
+                        disabled={participant.role === "PARTICIPANT" || participant.banned}
                         onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}
                         title={t("Participants.ChangeRoleToParticipantTooltip")}
                       >
