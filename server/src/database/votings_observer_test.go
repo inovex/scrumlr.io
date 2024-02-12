@@ -37,8 +37,6 @@ func TestBoardVotingObserver(t *testing.T) {
 	t.Run("Test=1", testVotingObserverOnCreate)
 	votingObserver.Reset()
 	t.Run("Test=2", testVotingOnUpdateClosed)
-	votingObserver.Reset()
-	t.Run("Test=3", testVotingOnUpdateAborted)
 
 	_, _ = testDb.DetachObserver(votingObserver)
 }
@@ -81,32 +79,4 @@ func testVotingOnUpdateClosed(t *testing.T) {
 
 	assert.Equal(t, board.ID, votingObserver.voting.Board)
 	assert.Equal(t, types.VotingStatusClosed, votingObserver.voting.Status)
-}
-
-func testVotingOnUpdateAborted(t *testing.T) {
-	board := fixture.MustRow("Board.votingObserverTestBoard").(*Board)
-
-	voting, err := testDb.CreateVoting(VotingInsert{
-		Board:              board.ID,
-		VoteLimit:          5,
-		AllowMultipleVotes: false,
-		ShowVotesOfOthers:  false,
-		Status:             "OPEN",
-	})
-	assert.Nil(t, err)
-	votingObserver.Reset()
-
-	_, err = testDb.UpdateVoting(VotingUpdate{
-		ID:     voting.ID,
-		Board:  voting.Board,
-		Status: types.VotingStatusAborted,
-	})
-
-	assert.Nil(t, err)
-
-	assert.NotNil(t, votingObserver.board)
-	assert.NotNil(t, votingObserver.voting)
-
-	assert.Equal(t, board.ID, votingObserver.voting.Board)
-	assert.Equal(t, types.VotingStatusAborted, votingObserver.voting.Status)
 }

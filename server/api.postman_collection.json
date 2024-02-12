@@ -2858,7 +2858,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"id\": \"3c3b64f1-5132-44c0-880d-82f545067cf3\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": false,\n        \"showVotesOfOthers\": true,\n        \"status\": \"OPEN\"\n    },\n    {\n        \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": true,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5,\n                    \"userVotes\": [\n                        {\n                            \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                            \"total\": 5\n                        }\n                    ]\n                }\n            }\n        }\n    },\n    {\n        \"id\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": false,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5\n                }\n            }\n        }\n    },\n    {\n        \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": false,\n        \"status\": \"ABORTED\"\n    }\n]"
+							"body": "[\n    {\n        \"id\": \"3c3b64f1-5132-44c0-880d-82f545067cf3\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": false,\n        \"showVotesOfOthers\": true,\n        \"status\": \"OPEN\"\n    },\n    {\n        \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": true,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5,\n                    \"userVotes\": [\n                        {\n                            \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                            \"total\": 5\n                        }\n                    ]\n                }\n            }\n        }\n    },\n    {\n        \"id\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": false,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5\n                }\n            }\n        }\n    }\n]"
 						}
 					]
 				},
@@ -3086,139 +3086,6 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": true,\n    \"status\": \"CLOSED\",\n    \"votes\": {\n        \"total\": 5,\n        \"votesPerNote\": {\n            \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                \"total\": 5,\n                \"userVotes\": [\n                    {\n                        \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                        \"total\": 5\n                    }\n                ]\n            }\n        }\n    }\n}"
-						}
-					]
-				},
-				{
-					"name": "Abort voting",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
-									"    pm.expect(pm.response).to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Check voting parameters\", function () {",
-									"    var res = pm.response.json();",
-									"",
-									"    pm.expect(res.status).to.equal(\"ABORTED\");",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"var body = {",
-									"    \"voteLimit\": 5,",
-									"    \"allowMultipleVotes\": true,",
-									"    \"showVotesOfOthers\": true",
-									"}",
-									"body = JSON.stringify(body)",
-									"",
-									"pm.sendRequest({",
-									"    url: pm.variables.get(\"base_url\") + \"/boards/\" + pm.collectionVariables.get(\"board_id\") + \"/votings\",",
-									"    method: 'POST',",
-									"    header: {",
-									"        \"Content-Type\": \"application/json; charset=utf-8\",",
-									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
-									"    },",
-									"    body: body,",
-									"",
-									"}, function (err, response) {",
-									"    pm.test(\"PreRequestScript – Successful POST request (createVoting)\", function () {",
-									"        pm.expect(response).to.have.status(201);",
-									"    });",
-									"    ",
-									"    pm.test(\"PreRequestScript – Check voting generated (then save id)\", function () {",
-									"        var res = response.json();",
-									"        ",
-									"        pm.expect(res.id).to.exist;",
-									"        pm.collectionVariables.set(\"voting_id\", res.id);",
-									"    })",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"ABORTED\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/boards/{{board_id}}/votings/{{voting_id}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"boards",
-								"{{board_id}}",
-								"votings",
-								"{{voting_id}}"
-							]
-						},
-						"description": "If the state will be set to `ABORTED` all associated votes will be deleted and the voting session, while still listed in all votings, will be no longer available."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"status\": \"ABORTED\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/boards/{{board_id}}/votings/{{voting_id}}",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"boards",
-										"{{board_id}}",
-										"votings",
-										"{{voting_id}}"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "Date",
-									"value": "Sun, 16 Jan 2022 18:12:02 GMT"
-								},
-								{
-									"key": "Content-Length",
-									"value": "131"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"ABORTED\"\n}"
 						}
 					]
 				}

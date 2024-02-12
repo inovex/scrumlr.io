@@ -77,7 +77,7 @@ func (d *Database) CreateVoting(insert VotingInsert) (Voting, error) {
 
 func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 	if update.Status == types.VotingStatusOpen {
-		return Voting{}, errors.New("only allowed to close or a abort a voting")
+		return Voting{}, errors.New("only allowed to close a voting")
 	}
 
 	updateQuery := d.db.NewUpdate().
@@ -97,19 +97,6 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 			With("updateQuery", updateQuery).
 			With("updateBoard", updateBoard).
 			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
-			Model((*Voting)(nil)).
-			ModelTableExpr("\"updateQuery\" AS voting").
-			Scan(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
-	}
-
-	if update.Status == types.VotingStatusAborted {
-		deleteVotes := d.db.NewDelete().
-			Model((*Vote)(nil)).
-			Where("voting = (SELECT id FROM \"updateQuery\")")
-
-		err = d.db.NewSelect().
-			With("updateQuery", updateQuery).
-			With("deleteVotes", deleteVotes).
 			Model((*Voting)(nil)).
 			ModelTableExpr("\"updateQuery\" AS voting").
 			Scan(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
@@ -156,7 +143,7 @@ func (d *Database) GetVotings(board uuid.UUID) ([]Voting, []Vote, error) {
 	err := d.db.NewSelect().
 		Model(&votings).
 		Where("board = ?", board).
-		OrderExpr("array_position(array['OPEN', 'CLOSED', 'ABORTED']::voting_status[], status) ASC, created_at DESC").
+		OrderExpr("array_position(array['OPEN', 'CLOSED']::voting_status[], status) ASC, created_at DESC").
 		Scan(context.Background())
 
 	if err != nil {

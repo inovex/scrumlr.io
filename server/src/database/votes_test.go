@@ -8,13 +8,11 @@ import (
 func TestRunnerForVotes(t *testing.T) {
 	t.Run("Add=0", testAddVote)
 	t.Run("Add=1", testAddVoteOnClosedSessionShouldFailed)
-	t.Run("Add=2", testAddVoteOnAbortedSessionShouldFailed)
-	t.Run("Add=3", testAddVoteAboveLimit)
-	t.Run("Add=4", testAddMultipleVotesWhenNotAllowedShouldFail)
+	t.Run("Add=2", testAddVoteAboveLimit)
+	t.Run("Add=3", testAddMultipleVotesWhenNotAllowedShouldFail)
 
 	t.Run("Remove=0", testRemoveVote)
 	t.Run("Remove=1", testRemoveVoteOnClosedSessionShouldFail)
-	t.Run("Remove=2", testRemoveVoteOnAbortedSessionShouldFail)
 }
 
 func testAddVote(t *testing.T) {
@@ -34,15 +32,6 @@ func testAddVoteOnClosedSessionShouldFailed(t *testing.T) {
 	board := fixture.MustRow("Board.closedVotesTestBoard").(*Board)
 	user := fixture.MustRow("User.jack").(*User)
 	note := fixture.MustRow("Note.closedVotesTestBoardNote").(*Note)
-
-	_, err := testDb.AddVote(board.ID, user.ID, note.ID)
-	assert.NotNil(t, err)
-}
-
-func testAddVoteOnAbortedSessionShouldFailed(t *testing.T) {
-	board := fixture.MustRow("Board.abortedVotesTestBoard").(*Board)
-	user := fixture.MustRow("User.jack").(*User)
-	note := fixture.MustRow("Note.abortedVotesTestBoardNote").(*Note)
 
 	_, err := testDb.AddVote(board.ID, user.ID, note.ID)
 	assert.NotNil(t, err)
@@ -85,15 +74,6 @@ func testRemoveVoteOnClosedSessionShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.closedVotesTestBoard").(*Board)
 	user := fixture.MustRow("User.jack").(*User)
 	note := fixture.MustRow("Note.closedVotesTestBoardNote").(*Note)
-
-	err := testDb.RemoveVote(board.ID, user.ID, note.ID)
-	assert.Nil(t, err)
-}
-
-func testRemoveVoteOnAbortedSessionShouldFail(t *testing.T) {
-	board := fixture.MustRow("Board.abortedVotesTestBoard").(*Board)
-	user := fixture.MustRow("User.jack").(*User)
-	note := fixture.MustRow("Note.abortedVotesTestBoardNote").(*Note)
 
 	err := testDb.RemoveVote(board.ID, user.ID, note.ID)
 	assert.Nil(t, err)

@@ -82,13 +82,6 @@
       show_authors: true
       show_notes_of_other_users: true
       created_at: '{{ now }}'
-    - _id: abortedVotesTestBoard
-      id: "7313b096-986c-4e23-adf7-c3fa19224bd4"
-      name: Votes test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
     - _id: votingTestBoard
       id: "6113b096-986c-4e23-adf7-c3fa19224bd4"
       name: Voting test
@@ -186,10 +179,6 @@
       board: '{{ $.Board.closedVotesTestBoard.ID }}'
       user: '{{ $.User.jack.ID }}'
       role: OWNER
-    - _id: johnsSessionOnAbortedVotesTestBoard
-      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
-      role: OWNER
     - _id: jacksSessionOnVotingTestBoard
       board: '{{ $.Board.votingTestBoard.ID }}'
       user: '{{ $.User.jack.ID }}'
@@ -259,13 +248,6 @@
     - _id: closedVotesColumn
       id: "2813b000-0005-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.closedVotesTestBoard.ID }}'
-      name: Vote here
-      color: backlog-blue
-      visible: true
-      index: 0
-    - _id: abortedVotesColumn
-      id: "2813b000-0006-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
@@ -350,14 +332,6 @@
       board: '{{ $.Board.closedVotesTestBoard.ID }}'
       author: '{{ $.User.jack.ID }}'
       column: '{{ $.Column.closedVotesColumn.ID }}'
-      text: "Just some text"
-      stack: null
-      rank: 0
-    - _id: abortedVotesTestBoardNote
-      id: "3113b899-986c-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.abortedVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
@@ -585,20 +559,6 @@
       allow_multiple_votes: true
       show_votes_of_others: true
       status: CLOSED
-    - _id: votingForAbortedVotesTestBoard
-      id: "3113b396-2310-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
-      vote_limit: 2
-      allow_multiple_votes: true
-      show_votes_of_others: true
-      status: ABORTED
-    - _id: votingTestBoardAbortedVoting
-      id: "3113b396-1110-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      vote_limit: 5
-      allow_multiple_votes: true
-      show_votes_of_others: true
-      status: ABORTED
     - _id: votingTestBoardClosedVoting
       id: "3113b396-1113-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.votingTestBoard.ID }}'
