@@ -58,13 +58,15 @@ $tooltip-gap: 12px;
   }
 }
 
-.menu-bars-mobile__fab-option .tooltip-button__icon {
-  box-shadow: $box-shadow--light;
-  border-radius: $rounded--full;
-  margin: 0;
+.menu-bars-mobile__fab-option {
+  .tooltip-button__icon {
+    box-shadow: $box-shadow--light;
+    border-radius: $rounded--full;
+    margin: 0;
 
-  &--active {
-    background-color: $menu-icon-background-color--dark;
+    &--active {
+      background-color: $menu-icon-background-color--dark;
+    }
   }
 }
 

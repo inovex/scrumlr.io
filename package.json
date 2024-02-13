@@ -16,6 +16,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@fontsource/raleway": "^5.0.16",
     "@react-hook/resize-observer": "^1.2.6",
+    "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^1.9.7",
     "avataaars": "^2.0.0",
     "classnames": "^2.5.1",
