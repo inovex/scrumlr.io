@@ -238,11 +238,10 @@
     "decreaseVotes": "Anzahl Stimmen verringern",
     "startVoting": "Abstimmung starten",
     "cancelVoting": "Abstimmung abbrechen",
-    "stopVoting": "Abstimmung beenden"
+    "stopVoting": "Abstimmung abschließen"
   },
   "VoteDisplay": {
-    "finishActionTooltip": "Abstimmung beenden",
-    "abortActionTooltip": "Abstimmung abbrechen",
+    "finishActionTooltip": "Abstimmung abschließen",
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
   },
   "TimerToggleButton": {
