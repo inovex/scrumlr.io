@@ -1,3 +1,4 @@
+@use "sass:color";
 @import "constants/style.scss";
 
 .info-bar {
@@ -14,11 +15,45 @@
   z-index: $infobar-z-index;
 }
 
-.info-bar__return-to-presented-note-button > svg {
-  background-color: $menu-icon-background-color--dark;
-  color: $color-white;
-}
-[theme="dark"] .info-bar__return-to-presented-note-button > svg {
+.info-bar__return-to-shared-note-button {
+  position: relative;
+  border: 0;
   background-color: $color-white;
-  color: $menu-icon-background-color--dark;
+  box-shadow: $box-shadow--light;
+  border-radius: $rounded--full;
+  height: 42px;
+  width: 42px;
+  color: white;
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  outline: none;
+  transition: background-color 150ms linear;
+  color: $color-black;
+
+  &:hover {
+    background-color: getLightHoverBackground($color-white);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-backlog-blue;
+  }
+}
+[theme="dark"] .info-bar__return-to-shared-note-button {
+  color: $color-white;
+  background-color: $menu-icon-background-color--dark;
+
+  &:hover {
+    background-color: getDarkHoverBackground($menu-icon-background-color--dark);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-planning-pink;
+  }
+}
+
+@media (min-width: 400px) {
+  .info-bar {
+    gap: $spacing--base;
+  }
 }

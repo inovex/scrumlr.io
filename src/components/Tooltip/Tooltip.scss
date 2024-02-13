@@ -1,0 +1,19 @@
+@import "constants/style.scss";
+
+.tooltip-container {
+  position: absolute;
+}
+
+.tooltip-container .tooltip {
+  background-color: $hover-background-light;
+  border-radius: $rounded--full;
+  color: $color-black;
+  font-size: $text--sm;
+  font-weight: 600;
+  padding: $spacing--xs $spacing--base;
+}
+
+[theme="dark"] .tooltip-container .tooltip {
+  background-color: $hover-background-dark;
+  color: $color-white;
+}
