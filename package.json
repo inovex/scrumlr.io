@@ -41,7 +41,7 @@
     "react-spring": "^9.7.3",
     "react-to-print": "^2.15.0",
     "react-toastify": "^10.0.4",
-    "react-tooltip": "^5.26.1",
+    "react-tooltip": "^5.26.2",
     "sockette": "^2.0.6",
     "underscore": "^1.13.6",
     "use-long-press": "^3.2.0",
