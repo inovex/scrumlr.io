@@ -101,7 +101,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: color.scale($color-lighter-gray, $lightness: -10%);
+    background-color: getLightHoverBackground($color-lighter-gray);
   }
 
   &:focus-visible {
@@ -162,7 +162,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
     color: $color-white;
 
     &:hover {
-      background-color: color.scale($color-dark-one, $lightness: 10%);
+      background-color: getDarkHoverBackground($color-dark-one);
     }
 
     &:focus-visible {

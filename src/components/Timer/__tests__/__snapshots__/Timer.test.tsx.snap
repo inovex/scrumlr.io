@@ -65,7 +65,6 @@ exports[`Timer should render correctly 1`] = `
     class="timer__increment-button"
     data-tooltip-content="Increase timer by one minute"
     data-tooltip-id="info-bar__tooltip"
-    id="timer__increment-button"
   >
     <svg>
       icon-plus-one.svg

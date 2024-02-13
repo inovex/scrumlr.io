@@ -34,7 +34,6 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
               data-tooltip-id="info-bar__tooltip"
               data-tooltip-content={t("VoteDisplay.finishActionTooltip")}
               className="short-action__button"
-              id="vote-display__finish-short-action"
               onClick={() => store.dispatch(Actions.closeVoting(voting!))}
             >
               <FlagIcon />
@@ -47,7 +46,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
             data-tooltip-id="info-bar__tooltip"
             data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
             className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
-            onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
+            onClick={() => store.dispatch(Actions.setUserReadyStatus(me.user.id, !isReady))}
           >
             <CheckIcon className="short-action__check-icon" />
             <CancelIcon className="short-action__cancel-icon" />

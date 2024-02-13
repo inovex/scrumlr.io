@@ -145,7 +145,6 @@ export const Timer = (props: TimerProps) => {
           data-tooltip-content={t("Timer.addOneMinute")}
           aria-label={t("Timer.addOneMinute")}
           className="timer__increment-button"
-          id="timer__increment-button"
           onClick={() => store.dispatch(Actions.incrementTimer())}
         >
           <PlusOneIcon />

@@ -232,6 +232,13 @@ $column-stripes--dark: repeating-linear-gradient(
   @return $props;
 }
 
+@function getLightHoverBackground($backgroundColor) {
+  @return color.scale($backgroundColor, $lightness: -10%);
+}
+@function getDarkHoverBackground($backgroundColor) {
+  @return color.scale($backgroundColor, $lightness: 10%);
+}
+
 @mixin inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {
   box-shadow: inset-border($left, $right, $top, $bottom, $color);
 }

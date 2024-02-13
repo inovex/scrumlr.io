@@ -32,7 +32,7 @@
   color: $color-black;
 
   &:hover {
-    background-color: color.scale($color-white, $lightness: -10%);
+    background-color: getLightHoverBackground($color-white);
   }
 
   &:focus-visible {
@@ -44,7 +44,7 @@
   background-color: $menu-icon-background-color--dark;
 
   &:hover {
-    background-color: color.scale($menu-icon-background-color--dark, $lightness: 10%);
+    background-color: getDarkHoverBackground($menu-icon-background-color--dark);
   }
 
   &:focus-visible {

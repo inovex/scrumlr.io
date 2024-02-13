@@ -31,7 +31,7 @@ $timer__progress-bar-color: #6096ff;
   color: $color-black;
 
   &:hover {
-    background-color: color.scale($color-white, $lightness: -10%);
+    background-color: getLightHoverBackground($color-white);
   }
 
   &:focus-visible {
@@ -94,7 +94,7 @@ $timer__progress-bar-color: #6096ff;
   justify-content: end;
   align-items: center;
   gap: $spacing--xs;
-  padding-right: 4px;
+  padding-right: $spacing--xxs;
   list-style: none;
   margin: 0;
   opacity: 0;
@@ -127,7 +127,7 @@ $timer__progress-bar-color: #6096ff;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: color.scale($color-lighter-gray, $lightness: -10%);
+    background-color: getLightHoverBackground($color-lighter-gray);
   }
 
   &:focus-visible {
@@ -175,7 +175,7 @@ $timer__progress-bar-color: #6096ff;
     background-color: $menu-icon-background-color--dark;
 
     &:hover {
-      background-color: color.scale($menu-icon-background-color--dark, $lightness: 10%);
+      background-color: getDarkHoverBackground($menu-icon-background-color--dark);
     }
 
     &:focus-visible {
@@ -192,7 +192,7 @@ $timer__progress-bar-color: #6096ff;
     color: $color-white;
 
     &:hover {
-      background-color: color.scale($color-dark-one, $lightness: 10%);
+      background-color: getDarkHoverBackground($color-dark-one);
     }
 
     &:focus-visible {
