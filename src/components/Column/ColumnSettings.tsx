@@ -43,7 +43,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
   };
 
   return (
-    <ul className={classNames("column-settings", {"column-settings--active": isActive})}>
+    <ul className={classNames("column-settings", {"column-settings--open": isActive})}>
       <li>
         <button aria-label={t("Column.editName")} onClick={() => setIsActive((curr) => !curr)}>
           <DotsIcon />

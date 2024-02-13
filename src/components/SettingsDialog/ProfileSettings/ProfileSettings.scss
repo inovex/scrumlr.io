@@ -7,7 +7,7 @@ $settings__item-height: 48px;
   &__container {
     display: flex;
     flex-direction: column;
-    gap: $margin--large;
+    gap: $spacing--xl;
     height: 100%;
     width: 100%;
     max-width: calc(100vw - (2 * #{$settings-dialog-container--sides-small}));
@@ -23,13 +23,13 @@ $settings__item-height: 48px;
     &-wrapper {
       overflow-y: auto;
       overflow-x: hidden;
-      padding-right: $padding--small;
-      margin-right: calc(-1 * (#{$padding--small} + 10px));
+      padding-right: $spacing--xs;
+      margin-right: calc(-1 * (#{$spacing--xs} + 10px));
       padding-bottom: $settings-dialog-container--bottom;
 
       @media screen and (min-width: 920px) {
-        padding-right: $padding--medium;
-        margin-right: calc(-1 * (#{$padding--medium} + 10px));
+        padding-right: $spacing--lg;
+        margin-right: calc(-1 * (#{$spacing--lg} + 10px));
       }
 
       @include scrollbar();
@@ -57,7 +57,7 @@ $settings__item-height: 48px;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding-right: $padding--medium;
+  padding-right: $spacing--lg;
 }
 
 .profile-settings__open-cheat-sheet-button {
@@ -66,9 +66,9 @@ $settings__item-height: 48px;
   align-items: center;
   text-decoration: none;
   color: $color-dark-gray;
-  gap: $margin--small;
-  margin: $margin--small;
-  padding: $padding--small;
+  gap: $spacing--xs;
+  margin: $spacing--xs;
+  padding: $spacing--xs;
   transition: transform 0.08s ease-in-out;
 
   > svg {

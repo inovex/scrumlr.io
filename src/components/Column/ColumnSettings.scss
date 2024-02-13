@@ -1,38 +1,36 @@
+@use "sass:color";
 @import "src/constants/style";
 
 .column-settings {
+  position: absolute;
+  right: 0;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
   border-radius: $rounded--full;
-  background-color: $color-white;
   list-style: none;
   padding: 0;
   margin: 0;
-  height: 48px;
-  background-color: #edeff2;
-  gap: 16px;
-  padding: 0 8px;
-  width: 48px;
+  height: 40px;
+  gap: $spacing--sm;
+  padding: $spacing--xxs;
+  width: 40px;
   overflow-x: hidden;
+  flex-shrink: 0;
+  background-color: #edeff2;
 
-  &--active:not(:hover) {
+  &--open {
     width: auto;
   }
 
-  &:hover,
-  &:focus-within {
-    width: auto;
+  &:has(:focus-visible) {
+    outline: 2px solid $color-backlog-blue;
   }
 
   > li {
     height: 32px;
     width: 32px;
     flex-shrink: 0;
-
-    :focus-within {
-      outline: 2px solid #5c8fff;
-    }
   }
 
   > li > button {
@@ -45,10 +43,26 @@
     display: grid;
     place-content: center;
     cursor: pointer;
+    background-color: #edeff2;
+    transition: background-color 150ms linear;
+
+    &:hover {
+      background-color: color.scale(#edeff2, $lightness: -10%);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-backlog-blue;
+    }
   }
 
   > li > button > svg {
     height: 24px;
     width: 24px;
+  }
+}
+
+[theme="dark"] {
+  .column-settings {
+    background-color: red;
   }
 }
