@@ -1,15 +1,14 @@
-import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
-import {Timer} from "components/Timer";
-import {VoteDisplay} from "components/Votes/VoteDisplay";
+import {Link} from "react-router-dom";
 import _ from "underscore";
-import {useAppSelector} from "store";
-import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
+import {Timer} from "components/Timer";
+import {Tooltip} from "components/Tooltip";
+import {VoteDisplay} from "components/Votes/VoteDisplay";
+import {useAppSelector} from "store";
 import "./Infobar.scss";
 
 export const InfoBar = () => {
-  const navigate = useNavigate();
   const {t} = useTranslation();
   const viewer = useAppSelector((state) => state.participants!.self);
   const focusInitiator = useAppSelector((state) => state.participants?.focusInitiator);
@@ -31,14 +30,17 @@ export const InfoBar = () => {
       {state.startTime && state.endTime && <Timer startTime={state.startTime} endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
       {state.sharedNote && viewer.user.id !== focusInitiator?.user.id && (
-        <TooltipButton
-          className="info-bar__return-to-presented-note-button"
-          icon={ShareIcon}
-          direction="right"
-          label={t("InfoBar.ReturnToPresentedNote")}
-          onClick={() => navigate(`note/${state.sharedNote}/stack`)}
-        />
+        <Link
+          aria-label={t("InfoBar.ReturnToPresentedNote")}
+          className="info-bar__return-to-shared-note-button"
+          data-tooltip-id="info-bar__tooltip"
+          data-tooltip-content={t("InfoBar.ReturnToPresentedNote")}
+          to={`note/${state.sharedNote}/stack`}
+        >
+          <ShareIcon />
+        </Link>
       )}
+      <Tooltip id="info-bar__tooltip" />
     </aside>
   );
 };

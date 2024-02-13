@@ -1,3 +1,4 @@
+@use "sass:color";
 @import "constants/style.scss";
 
 $timer-display-width: 114px;
@@ -15,18 +16,10 @@ $timer__progress-bar-color: #6096ff;
 
 .timer__increment-button {
   position: relative;
-  border-radius: 999px;
-
-  &:focus-within {
-    outline: 2px solid $color-backlog-blue;
-  }
-}
-
-.increment-button__button {
-  border: 2px solid $color-white;
-  background-color: $color-dark-mode-note;
+  border: 0;
+  background-color: $color-white;
   box-shadow: $box-shadow--light;
-  border-radius: 999px;
+  border-radius: $rounded--full;
   height: 42px;
   width: 42px;
   color: white;
@@ -34,9 +27,15 @@ $timer__progress-bar-color: #6096ff;
   display: grid;
   place-content: center;
   outline: none;
+  transition: background-color 150ms linear;
+  color: $color-black;
 
-  > svg {
-    width: 100%;
+  &:hover {
+    background-color: getLightHoverBackground($color-white);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-backlog-blue;
   }
 }
 
@@ -49,6 +48,10 @@ $timer__progress-bar-color: #6096ff;
   position: relative;
   border: 2px solid $menu-icon-background-color--light;
   box-shadow: $box-shadow--light;
+
+  &:has(:focus-visible) {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
 .timer > svg {
   position: absolute;
@@ -56,10 +59,6 @@ $timer__progress-bar-color: #6096ff;
   background-color: $color-dark-mode-note;
   color: $color-white;
   border-radius: 100%;
-}
-[theme="dark"] .timer > svg {
-  background-color: $color-white;
-  color: $color-dark-mode-note;
 }
 
 .timer > span {
@@ -91,18 +90,19 @@ $timer__progress-bar-color: #6096ff;
   position: absolute;
   border-radius: $rounded--full;
   background-color: $menu-icon-background-color--light;
-  display: none;
+  display: flex;
   justify-content: end;
   align-items: center;
   gap: $spacing--xs;
-  padding-right: 4px;
-}
-[theme="dark"] .timer__short-actions {
-  background-color: $menu-icon-background-color--dark;
+  padding-right: $spacing--xxs;
+  list-style: none;
+  margin: 0;
+  opacity: 0;
 }
 
+.timer:has(:focus-visible) > .timer__short-actions,
 .timer:hover > .timer__short-actions {
-  display: flex;
+  opacity: 1;
 }
 
 .short-actions__short-action {
@@ -124,79 +124,36 @@ $timer__progress-bar-color: #6096ff;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 150ms linear;
+
+  &:hover {
+    background-color: getLightHoverBackground($color-lighter-gray);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
-[theme="dark"] .short-action__button {
-  background-color: $color-dark-one;
-  color: $color-white;
-}
+
 .short-action__button > svg {
   position: absolute;
   height: $icon--small;
   width: $icon--small;
 }
-.short-action__button--ready > .short-action__cancel-icon,
-.short-action__button--unready > .short-action__cancel-icon {
-  visibility: hidden;
-}
-.short-action__button--ready:hover > .short-action__check-icon {
-  visibility: hidden;
-}
-.short-action__button--ready:hover > .short-action__cancel-icon {
-  visibility: visible;
-}
-.short-action__button > .short-action__check-icon {
+.short-action__check-icon {
   height: $timer__short-actions-height;
   width: $timer__short-actions-height;
 }
-
-.short-action__button:hover {
-  background-color: $timer__progress-bar-color;
-  color: $color-white;
-}
-
-.short-action__tooltip,
-.increment-button__tooltip {
-  width: max-content;
+.short-action__cancel-icon {
   visibility: hidden;
-  opacity: 0;
-  transition: opacity 150ms linear;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: $rounded--full;
-  padding: $spacing--xs $spacing--base;
-  background-color: $tooltip-background-color--light;
-  color: $menu-icon-background-color--dark;
-  font-size: $text--base;
-  font-weight: bold;
-  bottom: calc(100% + 6px);
-  box-shadow:
-    0 1px 3px 0 rgb(0 0 0 / 0.1),
-    0 1px 2px -1px rgb(0 0 0 / 0.1);
-  // Increased the z-index to make sure the tooltip doesn't get overlapped by the absolute positioned icon
-  z-index: calc($infobar-z-index + 50);
 }
-@media (prefers-reduced-motion) {
-  .short-action__tooltip {
-    transition: none;
+.short-action__button--ready:hover {
+  > .short-action__check-icon {
+    visibility: hidden;
   }
-}
-
-.timer__increment-button:hover > .increment-button__tooltip,
-.short-actions__short-action:hover > .short-action__tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-
-.increment-button__tooltip::after,
-.short-action__tooltip::after {
-  content: "";
-  position: absolute;
-  border: 5px solid;
-  border-color: $tooltip-background-color--light transparent transparent transparent;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 100%;
+  > .short-action__cancel-icon {
+    visibility: visible;
+  }
 }
 
 [theme="dark"] {
@@ -204,25 +161,43 @@ $timer__progress-bar-color: #6096ff;
     color: $color-white;
     background-color: $menu-icon-background-color--dark;
     border-color: $menu-icon-background-color--dark;
-  }
 
-  .timer__increment-button:focus-within {
-    outline: 2px solid $color-planning-pink;
+    &:has(:focus-visible) {
+      outline: 2px solid $color-planning-pink;
+    }
   }
-
-  .increment-button__button {
+  .timer > svg {
     background-color: $color-white;
     color: $color-dark-mode-note;
-    border-color: $menu-icon-background-color--dark;
   }
 
-  .short-action__tooltip,
-  .increment-button__tooltip {
-    background-color: $tooltip-background-color--dark;
+  .timer__increment-button {
+    color: $color-white;
+    background-color: $menu-icon-background-color--dark;
+
+    &:hover {
+      background-color: getDarkHoverBackground($menu-icon-background-color--dark);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-planning-pink;
+    }
+  }
+
+  .timer__short-actions {
+    background-color: $menu-icon-background-color--dark;
+  }
+
+  .short-action__button {
+    background-color: $color-dark-one;
     color: $color-white;
 
-    &::after {
-      border-color: $tooltip-background-color--dark transparent transparent transparent;
+    &:hover {
+      background-color: getDarkHoverBackground($color-dark-one);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-planning-pink;
     }
   }
 }
@@ -270,5 +245,11 @@ $timer__progress-bar-color: #6096ff;
   }
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+@media (hover: none) {
+  .timer__short-actions {
+    display: none;
   }
 }
