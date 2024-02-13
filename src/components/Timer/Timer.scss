@@ -140,19 +140,20 @@ $timer__progress-bar-color: #6096ff;
   height: $icon--small;
   width: $icon--small;
 }
-.short-action__button--ready > .short-action__cancel-icon,
-.short-action__button--unready > .short-action__cancel-icon {
-  visibility: hidden;
-}
-.short-action__button--ready:hover > .short-action__check-icon {
-  visibility: hidden;
-}
-.short-action__button--ready:hover > .short-action__cancel-icon {
-  visibility: visible;
-}
-.short-action__button > .short-action__check-icon {
+.short-action__check-icon {
   height: $timer__short-actions-height;
   width: $timer__short-actions-height;
+}
+.short-action__cancel-icon {
+  visibility: hidden;
+}
+.short-action__button--ready:hover {
+  > .short-action__check-icon {
+    visibility: hidden;
+  }
+  > .short-action__cancel-icon {
+    visibility: visible;
+  }
 }
 
 [theme="dark"] {

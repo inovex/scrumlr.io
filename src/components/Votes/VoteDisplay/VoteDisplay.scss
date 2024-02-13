@@ -114,23 +114,20 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: $icon--small;
   width: $icon--small;
 }
-.short-action__button--ready > .short-action__cancel-icon,
-.short-action__button--unready > .short-action__cancel-icon {
-  visibility: hidden;
-}
-.short-action__button--ready:hover > .short-action__check-icon {
-  visibility: hidden;
-}
-.short-action__button--ready:hover > .short-action__cancel-icon {
-  visibility: visible;
-}
-.short-actions__button-wrapper > button > .short-actions-button__check-icon {
-  width: 100%;
-  height: 100%;
-}
 .short-action__button > .short-action__check-icon {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
+}
+.short-action__cancel-icon {
+  visibility: hidden;
+}
+.short-action__button--ready:hover {
+  > .short-action__check-icon {
+    visibility: hidden;
+  }
+  > .short-action__cancel-icon {
+    visibility: visible;
+  }
 }
 
 [theme="dark"] {

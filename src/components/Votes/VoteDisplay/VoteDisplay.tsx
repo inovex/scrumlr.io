@@ -45,7 +45,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
             aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
             data-tooltip-id="info-bar__tooltip"
             data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-            className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
+            className={classNames("short-action__button", {"short-action__button--ready": isReady})}
             onClick={() => store.dispatch(Actions.setUserReadyStatus(me.user.id, !isReady))}
           >
             <CheckIcon className="short-action__check-icon" />
