@@ -1,5 +1,7 @@
+import classNames from "classnames";
+import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
 import {FC, useState} from "react";
-import {Actions} from "store/action";
 import {ReactComponent as HideIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as ShowIcon} from "assets/icon-visible.svg";
 import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
@@ -7,13 +9,12 @@ import {ReactComponent as PreviousIcon} from "assets/icon-arrow-previous.svg";
 import {ReactComponent as NextIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
 import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {Color, getColorForIndex} from "constants/colors";
-import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
+import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "constants/misc";
 import {useAppSelector} from "store";
-import classNames from "classnames";
-import {Toast} from "../../utils/Toast";
-import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
+import {Actions} from "store/action";
+import {Toast} from "utils/Toast";
 import "./ColumnSettings.scss";
 
 type ColumnSettingsProps = {
@@ -46,7 +47,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
     <ul className={classNames("column-settings", {"column-settings--open": isActive})}>
       <li>
         <button aria-label={t("Column.editName")} onClick={() => setIsActive((curr) => !curr)}>
-          <DotsIcon />
+          {isActive ? <CloseIcon /> : <DotsIcon />}
         </button>
       </li>
       <li>
