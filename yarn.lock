@@ -8871,10 +8871,10 @@ react-spring@^9.7.3:
     "@react-spring/web" "~9.7.3"
     "@react-spring/zdog" "~9.7.3"
 
-react-to-print@^2.15.0:
-  version "2.15.0"
-  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.15.0.tgz#2f2cca67965cefcc54956d4269b1b5da42857771"
-  integrity sha512-B5M2F2Mit1+glO64x9vCcNL2TiAmZ6iegybVvDs6NhNyTo1MXYlODoNky8vboWFnkcO5R/wz6XlTUK9HFIlWiQ==
+react-to-print@^2.15.1:
+  version "2.15.1"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.15.1.tgz#c9a6732cadf1118fc90d886b54a9388c419561b9"
+  integrity sha512-1foogIFbCpzAVxydkhBiDfMiFYhIMphiagDOfcG4X/EcQ+fBPqJ0rby9Wv/emzY1YLkIQy/rEgOrWQT+rBKhjw==
 
 react-toastify@^10.0.4:
   version "10.0.4"
