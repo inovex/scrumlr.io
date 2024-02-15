@@ -1,3 +1,4 @@
+@use "sass:color";
 @import "src/constants/style.scss";
 
 $vote-display-width: 114px;
@@ -17,11 +18,10 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: relative;
   border: 2px solid $menu-icon-background-color--light;
   box-shadow: $box-shadow--light;
-}
-[theme="dark"] .vote-display {
-  color: $color-white;
-  background-color: $menu-icon-background-color--dark;
-  border-color: $menu-icon-background-color--dark;
+
+  &:has(:focus-visible) {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
 
 .vote-display > svg {
@@ -30,10 +30,6 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   background-color: $color-dark-mode-note;
   color: $color-white;
   border-radius: 100%;
-}
-[theme="dark"] .vote-display > svg {
-  background-color: $color-white;
-  color: $color-dark-mode-note;
 }
 
 .vote-display > span {
@@ -75,25 +71,19 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: absolute;
   border-radius: $rounded--full;
   background-color: $menu-icon-background-color--light;
-  display: none;
+  display: flex;
   justify-content: end;
   align-items: center;
   gap: $spacing--xs;
   padding-right: 4px;
-}
-[theme="dark"] .vote-display__short-actions {
-  background-color: $menu-icon-background-color--dark;
+  list-style: none;
+  margin: 0;
+  opacity: 0;
 }
 
+.vote-display:has(:focus-visible) > .vote-display__short-actions,
 .vote-display:hover > .vote-display__short-actions {
-  display: flex;
-}
-
-.short-actions__short-action {
-  position: relative;
-  height: $vote-display__short-actions-height;
-  width: $vote-display__short-actions-height;
-  border-radius: $rounded--full;
+  opacity: 1;
 }
 
 .short-action__button {
@@ -108,84 +98,74 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: background-color 150ms linear;
+
+  &:hover {
+    background-color: getLightHoverBackground($color-lighter-gray);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
-[theme="dark"] .short-action__button {
-  background-color: $color-dark-one;
-  color: $color-white;
-}
+
 .short-action__button > svg {
   position: absolute;
   height: $icon--small;
   width: $icon--small;
 }
-.short-action__button--ready > .short-action__cancel-icon,
-.short-action__button--unready > .short-action__cancel-icon {
-  visibility: hidden;
-}
-.short-action__button--ready:hover > .short-action__check-icon {
-  visibility: hidden;
-}
-.short-action__button--ready:hover > .short-action__cancel-icon {
-  visibility: visible;
-}
-.short-actions__button-wrapper > button > .short-actions-button__check-icon {
-  width: 100%;
-  height: 100%;
-}
 .short-action__button > .short-action__check-icon {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
 }
-
-.short-action__button:hover {
-  background-color: $vote-display__progress-bar-color;
-  color: $color-white;
-}
-
-.short-action__tooltip {
-  max-width: max-content;
+.short-action__cancel-icon {
   visibility: hidden;
-  opacity: 0;
-  transition: opacity 150ms linear;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: $rounded--full;
-  padding: $spacing--xs $spacing--base;
-  background-color: $tooltip-background-color--light;
-  color: $color-dark-mode-note;
-  font-size: $text--base;
-  font-weight: bold;
-  bottom: calc(100% + 6px);
-  box-shadow: $box-shadow--light;
-  // Increased the z-index to make sure the tooltip doesn't get overlapped by the absolute positioned icon
-  z-index: calc($infobar-z-index + 50);
 }
-@media (prefers-reduced-motion) {
-  .short-action__tooltip {
-    transition: none;
+.short-action__button--ready:hover {
+  > .short-action__check-icon {
+    visibility: hidden;
+  }
+  > .short-action__cancel-icon {
+    visibility: visible;
   }
 }
-.short-actions__short-action:hover > .short-action__tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-[theme="dark"] .short-action__tooltip {
-  background-color: $tooltip-background-color--dark;
-  color: $color-white;
-}
 
-.short-action__tooltip::after {
-  content: "";
-  position: absolute;
-  border: 4px solid;
-  border-color: $tooltip-background-color--light transparent transparent transparent;
-  left: 50%;
-  transform: translateX(-50%);
-  top: 100%;
-}
-[theme="dark"] .short-action__tooltip::after {
-  border-color: $tooltip-background-color--dark transparent transparent transparent;
+[theme="dark"] {
+  .vote-display {
+    color: $color-white;
+    background-color: $menu-icon-background-color--dark;
+    border-color: $menu-icon-background-color--dark;
+
+    &:has(:focus-visible) {
+      outline: 2px solid $color-planning-pink;
+    }
+  }
+
+  .vote-display > svg {
+    background-color: $color-white;
+    color: $color-dark-mode-note;
+  }
+
+  .vote-display__short-actions {
+    background-color: $menu-icon-background-color--dark;
+  }
+
+  .vote-display--votes-depleted .vote-display__progress-bar {
+    background-color: $vote-display__progress-bar-color--depleted-dark;
+  }
+
+  .short-action__button {
+    background-color: $color-dark-one;
+    color: $color-white;
+
+    &:hover {
+      background-color: getDarkHoverBackground($color-dark-one);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-planning-pink;
+    }
+  }
 }
 
 @keyframes shake {
@@ -221,5 +201,11 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
   100% {
     transform: translate(1px, -2px) rotate(-1deg);
+  }
+}
+
+@media (hover: none) {
+  .vote-display__short-actions {
+    display: none;
   }
 }

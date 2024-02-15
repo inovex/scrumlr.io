@@ -29,7 +29,7 @@ describe("Timer", () => {
 
   test("should have increment button if user is moderator", () => {
     mockedUseAppSelector.mockResolvedValue({} as never);
-    const {getByText} = render(<Timer startTime={new Date(0)} endTime={new Date(60000)} />, {container: document.getElementById("root")!});
-    expect(getByText(t("Timer.addOneMinute"))).toBeDefined();
+    const {findByLabelText} = render(<Timer startTime={new Date(0)} endTime={new Date(60000)} />, {container: document.getElementById("root")!});
+    expect(findByLabelText(t("Timer.addOneMinute"))).toBeDefined();
   });
 });
