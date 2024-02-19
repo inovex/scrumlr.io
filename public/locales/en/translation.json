@@ -242,7 +242,6 @@
   },
   "VoteDisplay": {
     "finishActionTooltip": "Conclude voting",
-    "abortActionTooltip": "Cancel voting",
     "tooltip": "{{remaining}} of {{total}} votes remaining"
   },
   "TimerToggleButton": {
