@@ -36,6 +36,8 @@ $row-gap: 3px;
 
 .note-dialog-note__main {
   grid-area: content;
+  min-height: 100%;
+  min-width: 100%;
   overflow: visible;
 }
 
