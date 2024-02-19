@@ -70,23 +70,30 @@ jobs:
     with:
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
-  
+
   run_postman_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deploy_to_dev_cluster
     uses: ./.github/workflows/postman_e2e_test.yml
-    with: 
+    with:
       base_url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          
+
   end_to_end_test:
+    timeout-minutes: 60
     name: End to End Test
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deploy_to_dev_cluster
     runs-on: ubuntu-latest
     steps:
-      - name: run tests
-        uses: OctoMind-dev/automagically-action-execute@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
-          testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+        PLAYWRIGHT_TEST_BASE_URL: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
