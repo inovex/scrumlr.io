@@ -37,3 +37,7 @@ server/.env
 
 # script output
 scripts/out
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

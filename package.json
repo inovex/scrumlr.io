@@ -51,6 +51,7 @@
     "workbox-routing": "^7.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.41.2",
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
