@@ -96,4 +96,4 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
         env:
-        PLAYWRIGHT_TEST_BASE_URL: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
+          PLAYWRIGHT_TEST_BASE_URL: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
