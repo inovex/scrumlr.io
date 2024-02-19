@@ -59,3 +59,24 @@ jobs:
           images: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
+
+      - name: send_github_message
+        if: github.event_name == 'pull_request'
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            The deployment to the dev cluster was successful. You can find the deployment here: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
+            This deployment is only for testing purposes and will be deleted after 1 week.
+            To redeploy rerun the workflow.
+            <strong>DO NOT STORE IMPORTANT DATA ON THIS DEPLOYMENT</strong>
+
+            <details>
+            <summary>Deployed Images</summary>
+
+            - ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ inputs.frontend_image_tag }}
+
+            - ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ inputs.server_image_tag }}
+
+            </details>
+          comment_tag: dev-deployment
+          mode: recreate
