@@ -105,7 +105,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const showSettings = () => navigate("settings");
 
   // Mobile Transitions
-  const springConfig = {/* duration: 250, */ mass: 1, friction: 20, tension: 240};
+  const springConfig = {mass: 1, friction: 20, tension: 240};
 
   const horizontalTransitionsConfig = {
     from: {opacity: 0, transform: "translateX(100%)"},
@@ -235,6 +235,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         <button
           className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
           onClick={() => {
+            if (fabIsExpanded) setShowBoardReactionsMenu(false);
             setFabIsExpanded(!fabIsExpanded);
           }}
           aria-label={t("MenuBars.openMenu")}
@@ -352,11 +353,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       </aside>
 
       {/* should this be inside a Portal instead? */}
-      {showBoardReactionsMenu && (
-        <div ref={boardReactionRef}>
-          <BoardReactionMenu close={toggleBoardReactionsMenu} />
-        </div>
-      )}
+      <div ref={boardReactionRef}>
+        <BoardReactionMenu showMenu={showBoardReactionsMenu} close={toggleBoardReactionsMenu} />
+      </div>
     </>
   );
 };

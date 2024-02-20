@@ -11,8 +11,10 @@ import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {useDelayedReset} from "utils/hooks/useDelayedReset";
 import "./BoardReactionMenu.scss";
+import {animated, useTransition} from "@react-spring/web";
 
 type BoardReactionMenuProps = {
+  showMenu: boolean;
   close: () => void;
 };
 
@@ -47,26 +49,36 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   // hotkey is converted to a number which is then used as the index for the reaction type
   useHotkeys(["1", "2", "3", "4", "5"], (e, k) => onClickReaction(e, boardReactions[+k.keys![0] - 1][0]));
 
-  return (
-    <div className="board-reactions__root">
-      <div className="board-reactions__container">
-        {boardReactions.map(([reactionType, emoji], index) => (
-          <button
-            key={reactionType}
-            className={classNames("board-reactions__item board-reactions__reaction", {"board-reactions__reaction--disabled": !showBoardReactions})}
-            aria-disabled={!showBoardReactions}
-            aria-label={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
-            title={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
-            onClick={(e) => onClickReaction(e, reactionType)}
-          >
-            <span>{emoji}</span>
-          </button>
-        ))}
+  const menuTransition = useTransition(props.showMenu, {
+    from: {opacity: 0, transform: "scale(0.4, 0.7) translateY(100%)"},
+    enter: {opacity: 1, transform: "scale(1, 1) translateY(0%)"},
+    leave: {opacity: 0, transform: "scale(0.4, 0.7) translateY(100%)"},
+    config: {mass: 1, friction: 20, tension: 240},
+  });
 
-        <button className="board-reactions__item board-reactions__close" onClick={props.close} tabIndex={0} aria-hidden>
-          <CloseIcon />
-        </button>
-      </div>
-    </div>
+  return menuTransition(
+    (style, item) =>
+      item && (
+        <animated.div className="board-reactions__root" style={style}>
+          <div className="board-reactions__container">
+            {boardReactions.map(([reactionType, emoji], index) => (
+              <button
+                key={reactionType}
+                className={classNames("board-reactions__item board-reactions__reaction", {"board-reactions__reaction--disabled": !showBoardReactions})}
+                aria-disabled={!showBoardReactions}
+                aria-label={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
+                title={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
+                onClick={(e) => onClickReaction(e, reactionType)}
+              >
+                <span>{emoji}</span>
+              </button>
+            ))}
+
+            <button className="board-reactions__item board-reactions__close" onClick={props.close} tabIndex={0} aria-hidden>
+              <CloseIcon />
+            </button>
+          </div>
+        </animated.div>
+      )
   );
 };

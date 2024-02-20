@@ -1,14 +1,19 @@
 @import "src/constants/style";
 
 $container-height: 64px;
-$reaction-size: 54px;
+$reaction-size: 64px;
 
 .board-reactions__root {
   position: absolute;
   display: flex;
   justify-content: center;
-  width: 100%;
+  left: 0;
+  right: 0;
   bottom: $column__border-width;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  z-index: $menu-item-z-index;
 }
 
 .board-reactions__container {
@@ -44,7 +49,7 @@ $reaction-size: 54px;
   cursor: pointer;
 
   width: $reaction-size;
-  height: $reaction-size;
+  height: 100%;
 
   font-size: $text--xl;
 
@@ -81,19 +86,10 @@ $reaction-size: 54px;
   }
 }
 
-@media #{$smartphone} {
-  .board-reactions__root {
-    bottom: $column__border-width + $spacing--lg + 32px;
-  }
-
-  .board-reactions__close {
-    display: none;
-  }
-}
-
 [theme="dark"] {
   .board-reactions__container {
     background-color: $color-dark-mode-note;
+    box-shadow: $box-shadow--dark;
   }
 
   .board-reactions__reaction {
@@ -111,9 +107,40 @@ $reaction-size: 54px;
   }
 }
 
+@media #{$smartphone} {
+  .board-reactions__root {
+    right: 24px;
+    bottom: $column__border-width + $spacing--lg + 60px;
+    margin-left: unset;
+    margin-right: unset;
+    left: unset;
+  }
+
+  .board-reactions__close {
+    display: none;
+  }
+}
+
+@media #{$mini-smartphone} {
+  .board-reactions__root {
+    right: 12px;
+    bottom: $column__border-width + $spacing--lg + 42px;
+  }
+
+  .board-reactions__close {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 400px) {
   .board-reactions__container {
     padding: 0 $spacing--xs;
     gap: 2px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .board-reactions__reaction {
+    width: 48px;
   }
 }
