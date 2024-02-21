@@ -50,10 +50,10 @@ export const BoardReactionMenu = (props: BoardReactionMenuProps) => {
   useHotkeys(["1", "2", "3", "4", "5"], (e, k) => onClickReaction(e, boardReactions[+k.keys![0] - 1][0]));
 
   const menuTransition = useTransition(props.showMenu, {
-    from: {opacity: 0, transform: "scale(0.4, 0.7) translateY(100%)"},
+    from: {opacity: 0, transform: "scale(0.3, 0.9) translateY(100%)"},
     enter: {opacity: 1, transform: "scale(1, 1) translateY(0%)"},
-    leave: {opacity: 0, transform: "scale(0.4, 0.7) translateY(100%)"},
-    config: {mass: 1, friction: 20, tension: 240},
+    leave: {opacity: 0, transform: "scale(0.3, 0.9) translateY(100%)"},
+    config: {mass: 1, friction: 20, tension: 380},
   });
 
   return menuTransition(

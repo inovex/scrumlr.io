@@ -88,6 +88,8 @@ $tooltip-button-size: 46px;
   fill: var(--accent-color);
   color: var(--accent-color, $color-black);
 
+  transition: background-color 0.2s ease-out;
+
   &:nth-of-type(1) {
     visibility: visible;
   }
