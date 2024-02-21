@@ -12,15 +12,12 @@ export const ParticipantAction = {
   SetParticipants: "scrumlr.io/setParticipants" as const,
   CreatedParticipant: "scrumlr.io/createdParticipant" as const,
   UpdatedParticipant: "scrumlr.io/updatedParticipant" as const,
-
   SetUserBanned: "scrumlr.io/setUserBanned" as const,
-
   SetUserReadyStatus: "scrumlr.io/setUserReadyStatus" as const,
   SetRaisedHandStatus: "scrumlr.io/setRaisedHandStatus" as const,
   SetShowHiddenColumns: "scrumlr.io/setShowHiddenColumns" as const,
   EditSelf: "scrumlr.io/editSelf" as const,
   ChangePermission: "scrumlr.io/changePermission" as const,
-
   SetFocusInitiator: "scrumlr.io/setFocusInitiator" as const,
   ClearFocusInitiator: "scrumlr.io/clearFocusInitiator" as const,
 };
@@ -77,7 +74,7 @@ export const ParticipantActionFactory = {
   }),
 
   /**
-   * Remove a participant from a board session.
+   * Set the ban status of a participant from a board session.
    */
   setUserBanned: (user: string, userName: string, banned: boolean) => ({
     type: ParticipantAction.SetUserBanned,
