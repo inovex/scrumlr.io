@@ -1,3 +1,5 @@
+import {within} from "@testing-library/react";
+import {t} from "i18next";
 import {Provider} from "react-redux";
 import {MockStoreEnhanced} from "redux-mock-store";
 import {render} from "testUtils";
@@ -20,14 +22,14 @@ describe("Participants", () => {
   describe("Ban Feature", () => {
     test("ban button not available on self", () => {
       const {container} = render(createParticipants(getTestStore()));
-      const participants = container.getElementsByClassName("participants__list")[0].childNodes;
-      expect(participants[0].lastChild).not.toHaveClass("participant__kick-icon");
+      const participants = container.getElementsByClassName("participants__list-item");
+      expect(within(participants[0]).queryByLabelText(t("Participants.BanParticipantTooltip"))).not.toBeInTheDocument();
     });
 
     test("ban button available on moderator", () => {
       const {container} = render(createParticipants(getTestStore()));
-      const participants = container.getElementsByClassName("participants__list")[0].childNodes;
-      expect(participants[1].lastChild).toHaveClass("participant__kick-icon");
+      const participants = container.getElementsByClassName("participants__list-item");
+      expect(within(participants[1]).getByLabelText(t("Participants.BanParticipantTooltip"))).toBeInTheDocument();
     });
   });
 });
