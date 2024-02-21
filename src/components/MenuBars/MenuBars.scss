@@ -131,8 +131,8 @@ $tooltip-gap: 12px;
 
 @media #{$mini-smartphone} {
   .menu-bars-mobile {
-    bottom: $spacing--xs;
-    right: $spacing--xs;
+    bottom: $spacing--base;
+    right: $spacing--base;
   }
 }
 

@@ -22,7 +22,7 @@ import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
-import {useTransition, animated} from "@react-spring/web";
+import {animated, useSpring} from "@react-spring/web";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -30,6 +30,15 @@ export interface MenuBarsProps {
   onPreviousColumn: () => void;
   onNextColumn: () => void;
 }
+
+// Mobile Transitions
+const springConfig = {mass: 1, friction: 20, tension: 240};
+
+const defaultVerticalStart = {opacity: 0, transform: "translateY(100%)", config: springConfig};
+const defaultVerticalStop = {opacity: 1, transform: "translateY(0%)"};
+
+const defaultHorizontalStart = {opacity: 0, transform: "translateX(100%)", config: springConfig};
+const defaultHorizontalStop = {opacity: 1, transform: "translateX(0%)"};
 
 export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();
@@ -105,28 +114,62 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const showSettings = () => navigate("settings");
 
   // Mobile Transitions
-  const springConfig = {mass: 1, friction: 20, tension: 240};
+  // vertical
+  const [timerAnimation, timerApi] = useSpring(() => defaultVerticalStart);
+  const [votingAnimation, votingApi] = useSpring(() => defaultVerticalStart);
+  const [moderationAnimation, moderationApi] = useSpring(() => defaultVerticalStart);
 
-  const horizontalTransitionsConfig = {
-    from: {opacity: 0, transform: "translateX(100%)"},
-    enter: {opacity: 1, transform: "translateX(0%)"},
-    leave: {opacity: 0, transform: "translateX(100%)"},
-    config: springConfig,
-  };
+  // horizontal
+  const [reactionsAnimation, reactionsApi] = useSpring(() => defaultHorizontalStart);
+  const [settingsAnimation, settingsApi] = useSpring(() => defaultHorizontalStart);
+  const [raisedHandAnimation, raisedHandApi] = useSpring(() => defaultHorizontalStart);
+  const [readyStateAnimation, readyStateApi] = useSpring(() => defaultHorizontalStart);
 
-  const horizontalTransitions = useTransition(fabIsExpanded, horizontalTransitionsConfig);
-  const raisedHandTransition = useTransition(fabIsExpanded || raisedHand, horizontalTransitionsConfig);
-  const readyTransition = useTransition(fabIsExpanded || isReady, horizontalTransitionsConfig);
+  useEffect(() => {
+    const getReadyStateTransform = () => {
+      if (isReady) {
+        if (raisedHand) {
+          return "translateX(200%)";
+        }
+        return "translateX(300%)";
+      }
+      return "translateX(400%)";
+    };
 
-  const verticalTransitionsConfig = {
-    from: {opacity: 0, transform: "translateY(100%)"},
-    enter: {opacity: 1, transform: "translateY(0%)"},
-    leave: {opacity: 0, transform: "translateY(100%)"},
-    config: springConfig,
-  };
+    const closeMenuTransforms = {
+      timer: "translateY(300%)",
+      voting: "translateY(200%)",
+      moderation: state.moderation ? "translateY(0%)" : "translateY(100%)",
+      reactions: "translateX(200%)",
+      settings: "translateX(100%)",
+      raisedHand: raisedHand ? "translateX(200%)" : "translateX(300%)",
+      readyState: getReadyStateTransform(),
+    };
 
-  const verticalTransitions = useTransition(fabIsExpanded, verticalTransitionsConfig);
-  const moderationTransition = useTransition(fabIsExpanded || state.moderation, verticalTransitionsConfig);
+    if (fabIsExpanded) {
+      if (isAdmin) {
+        timerApi.start(defaultVerticalStop);
+        votingApi.start(defaultVerticalStop);
+        moderationApi.start(defaultVerticalStop);
+      }
+
+      reactionsApi.start(defaultHorizontalStop);
+      settingsApi.start(defaultHorizontalStop);
+      raisedHandApi.start(defaultHorizontalStop);
+      readyStateApi.start(defaultHorizontalStop);
+    } else {
+      if (isAdmin) {
+        timerApi.start({...defaultVerticalStop, transform: closeMenuTransforms.timer});
+        votingApi.start({...defaultVerticalStop, transform: closeMenuTransforms.voting});
+        moderationApi.start({...defaultVerticalStop, transform: closeMenuTransforms.moderation});
+      }
+
+      reactionsApi.start({...defaultHorizontalStop, transform: closeMenuTransforms.reactions});
+      settingsApi.start({...defaultHorizontalStop, transform: closeMenuTransforms.settings});
+      raisedHandApi.start({...defaultHorizontalStop, transform: closeMenuTransforms.raisedHand});
+      readyStateApi.start({...defaultHorizontalStop, transform: closeMenuTransforms.readyState});
+    }
+  }, [fabIsExpanded, raisedHand, isReady, reactionsApi, settingsApi, raisedHandApi, readyStateApi, timerApi, votingApi, moderationApi, state.moderation, isAdmin]);
 
   // Hotkeys
   // normal users
@@ -250,64 +293,35 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             "menu-bars-mobile__options--hasActiveButton": isReady || raisedHand,
           })}
         >
-          {horizontalTransitions(
-            (style, item) =>
-              item && (
-                <>
-                  <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal" style={style}>
-                    <TooltipButton direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
-                  </animated.li>
-                  <animated.li
-                    className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {
-                      "menu-bars-mobile__fab-option--active": showBoardReactionsMenu,
-                    })}
-                    style={style}
-                  >
-                    <TooltipButton
-                      active={showBoardReactionsMenu}
-                      direction="left"
-                      label={t("MenuBars.openBoardReactionMenu")}
-                      icon={BoardReactionIcon}
-                      onClick={toggleBoardReactionsMenu}
-                    />
-                  </animated.li>
-                </>
-              )
-          )}
-          {raisedHandTransition(
-            (style, item) =>
-              item && (
-                <animated.li
-                  className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": raisedHand})}
-                  style={style}
-                >
-                  <TooltipButton
-                    active={raisedHand}
-                    direction="left"
-                    label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
-                    icon={RaiseHand}
-                    onClick={toggleRaiseHand}
-                  />
-                </animated.li>
-              )
-          )}
-          {readyTransition(
-            (style, item) =>
-              item && (
-                <animated.li
-                  className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": isReady})}
-                  style={style}
-                >
-                  <TooltipButton
-                    active={isReady}
-                    direction="left"
-                    label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                    icon={CheckIcon}
-                    onClick={toggleReadyState}
-                  />
-                </animated.li>
-              )
-          )}
+          <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal" style={settingsAnimation}>
+            <TooltipButton direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+          </animated.li>
+          <animated.li
+            className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {
+              "menu-bars-mobile__fab-option--active": showBoardReactionsMenu,
+            })}
+            style={reactionsAnimation}
+          >
+            <TooltipButton
+              active={showBoardReactionsMenu}
+              direction="left"
+              label={t("MenuBars.openBoardReactionMenu")}
+              icon={BoardReactionIcon}
+              onClick={toggleBoardReactionsMenu}
+            />
+          </animated.li>
+          <animated.li
+            className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": raisedHand})}
+            style={raisedHandAnimation}
+          >
+            <TooltipButton active={raisedHand} direction="left" label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")} icon={RaiseHand} onClick={toggleRaiseHand} />
+          </animated.li>
+          <animated.li
+            className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": isReady})}
+            style={readyStateAnimation}
+          >
+            <TooltipButton active={isReady} direction="left" label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")} icon={CheckIcon} onClick={toggleReadyState} />
+          </animated.li>
         </ul>
 
         {/* role=moderator: timer, votes, presenter mode */}
@@ -318,36 +332,24 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               "menu-bars-mobile__options--hasActiveButton": state.moderation,
             })}
           >
-            {moderationTransition(
-              (style, item) =>
-                item && (
-                  <animated.li
-                    className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--vertical", {"menu-bars-mobile__fab-option--active": state.moderation})}
-                    style={style}
-                  >
-                    <TooltipButton
-                      active={state.moderation}
-                      direction="right"
-                      label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
-                      icon={FocusIcon}
-                      onClick={toggleModeration}
-                    />
-                  </animated.li>
-                )
-            )}
-            {verticalTransitions(
-              (style, item) =>
-                item && (
-                  <>
-                    <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={style}>
-                      <TooltipButton direction="right" label="Voting" onClick={toggleVotingMenu} icon={VoteIcon} />
-                    </animated.li>
-                    <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={style}>
-                      <TooltipButton direction="right" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} />
-                    </animated.li>
-                  </>
-                )
-            )}
+            <animated.li
+              className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--vertical", {"menu-bars-mobile__fab-option--active": state.moderation})}
+              style={moderationAnimation}
+            >
+              <TooltipButton
+                active={state.moderation}
+                direction="right"
+                label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
+                icon={FocusIcon}
+                onClick={toggleModeration}
+              />
+            </animated.li>
+            <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={votingAnimation}>
+              <TooltipButton direction="right" label="Voting" onClick={toggleVotingMenu} icon={VoteIcon} />
+            </animated.li>
+            <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={timerAnimation}>
+              <TooltipButton direction="right" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} />
+            </animated.li>
           </ul>
         )}
       </aside>
