@@ -47,7 +47,7 @@ $tooltip-gap: 12px;
   height: $action-bar__width;
   border: none;
   box-shadow: $box-shadow--light;
-  z-index: $menu-item-z-index;
+  z-index: $menu-item-z-index + $base-z-index-step;
 
   svg {
     width: $icon--medium;
@@ -67,6 +67,22 @@ $tooltip-gap: 12px;
     &--active {
       background-color: $menu-icon-background-color--dark;
     }
+  }
+
+  &:nth-child(1) {
+    z-index: $menu-item-z-index;
+  }
+
+  &:nth-child(1) {
+    z-index: $menu-item-z-index - 1 * $base-z-index-step;
+  }
+
+  &:nth-child(2) {
+    z-index: $menu-item-z-index - 2 * $base-z-index-step;
+  }
+
+  &:nth-child(3) {
+    z-index: $menu-item-z-index - 3 * $base-z-index-step;
   }
 }
 

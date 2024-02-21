@@ -295,7 +295,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           })}
         >
           <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal" style={settingsAnimation}>
-            <TooltipButton direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+            <TooltipButton disabled={!fabIsExpanded} direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
           </animated.li>
           <animated.li
             className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {
@@ -304,6 +304,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             style={reactionsAnimation}
           >
             <TooltipButton
+              disabled={!fabIsExpanded}
               active={showBoardReactionsMenu}
               direction="left"
               label={t("MenuBars.openBoardReactionMenu")}
@@ -315,13 +316,27 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": raisedHand})}
             style={raisedHandAnimation}
           >
-            <TooltipButton active={raisedHand} direction="left" label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")} icon={RaiseHand} onClick={toggleRaiseHand} />
+            <TooltipButton
+              disabled={!fabIsExpanded && !raisedHand}
+              active={raisedHand}
+              direction="left"
+              label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
+              icon={RaiseHand}
+              onClick={toggleRaiseHand}
+            />
           </animated.li>
           <animated.li
             className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": isReady})}
             style={readyStateAnimation}
           >
-            <TooltipButton active={isReady} direction="left" label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")} icon={CheckIcon} onClick={toggleReadyState} />
+            <TooltipButton
+              disabled={!fabIsExpanded && !isReady}
+              active={isReady}
+              direction="left"
+              label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+              icon={CheckIcon}
+              onClick={toggleReadyState}
+            />
           </animated.li>
         </ul>
 
@@ -338,6 +353,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               style={moderationAnimation}
             >
               <TooltipButton
+                disabled={!fabIsExpanded && !state.moderation}
                 active={state.moderation}
                 direction="right"
                 label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
@@ -346,10 +362,10 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               />
             </animated.li>
             <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={votingAnimation}>
-              <TooltipButton direction="right" label="Voting" onClick={toggleVotingMenu} icon={VoteIcon} />
+              <TooltipButton disabled={!fabIsExpanded} direction="right" label="Voting" onClick={toggleVotingMenu} icon={VoteIcon} />
             </animated.li>
             <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={timerAnimation}>
-              <TooltipButton direction="right" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} />
+              <TooltipButton disabled={!fabIsExpanded} direction="right" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} />
             </animated.li>
           </ul>
         )}
