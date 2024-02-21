@@ -103,7 +103,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         style={{zIndex: 999}}
       />
       {isImage && (
-        <div className="note-input__image-info" title={t("NoteInput.imageInfo")}>
+        <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
           <ImageIcon className="note-input__icon--image" />
           <StarIcon className="note-input__icon--star star-1" />
           <StarIcon className="note-input__icon--star star-2" />

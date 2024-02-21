@@ -46,7 +46,7 @@ $note-input__input-right: 40px;
   }
 }
 
-.note-input__image-info,
+.note-input__image-indicator,
 .note-input__add-button {
   all: unset;
   position: relative;
@@ -60,8 +60,6 @@ $note-input__input-right: 40px;
 
   &:hover > .note-input__icon--add {
     filter: $brighten--slightly;
-    transform: scale(1.2);
-    transition: transform 80ms ease-in-out;
   }
 }
 
