@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
@@ -31,14 +31,14 @@ export interface MenuBarsProps {
   onNextColumn: () => void;
 }
 
-// Mobile Transitions
-const springConfig = {mass: 1, friction: 20, tension: 240};
+// Mobile Transitions Configs
+const springConfig = {mass: 0.75, friction: 20, tension: 280};
 
 const defaultVerticalStart = {opacity: 0, transform: "translateY(100%)", config: springConfig};
-const defaultVerticalStop = {opacity: 1, transform: "translateY(0%)"};
+const defaultVerticalStop = {opacity: 1, transform: "translateY(0%)", config: springConfig};
 
 const defaultHorizontalStart = {opacity: 0, transform: "translateX(100%)", config: springConfig};
-const defaultHorizontalStop = {opacity: 1, transform: "translateX(0%)"};
+const defaultHorizontalStop = {opacity: 1, transform: "translateX(0%)", config: springConfig};
 
 export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();
@@ -125,7 +125,8 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const [raisedHandAnimation, raisedHandApi] = useSpring(() => defaultHorizontalStart);
   const [readyStateAnimation, readyStateApi] = useSpring(() => defaultHorizontalStart);
 
-  useEffect(() => {
+  // trigger animations before browser paints
+  useLayoutEffect(() => {
     const getReadyStateTransform = () => {
       if (isReady) {
         if (raisedHand) {
