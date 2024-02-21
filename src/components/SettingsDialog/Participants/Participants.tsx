@@ -59,7 +59,7 @@ export const Participants = () => {
   };
 
   const confirmBan = ({user}: Participant, banned: boolean) => {
-    dispatch(Actions.setUserBanned(user.id, user.name, banned));
+    dispatch(Actions.setUserBanned(user, banned));
     resetBanProcess();
   };
 

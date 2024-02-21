@@ -76,10 +76,9 @@ export const ParticipantActionFactory = {
   /**
    * Set the ban status of a participant from a board session.
    */
-  setUserBanned: (user: string, userName: string, banned: boolean) => ({
+  setUserBanned: (user: Auth, banned: boolean) => ({
     type: ParticipantAction.SetUserBanned,
     user,
-    userName,
     banned,
   }),
 
