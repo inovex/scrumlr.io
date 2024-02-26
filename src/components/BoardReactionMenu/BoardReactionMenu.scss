@@ -110,7 +110,7 @@ $reaction-size: 64px;
 @media #{$smartphone} {
   .board-reactions__root {
     right: 24px;
-    bottom: $column__border-width + $spacing--lg + 60px;
+    bottom: $column__border-width + $spacing--lg + 68px;
     margin-left: unset;
     margin-right: unset;
     left: unset;
@@ -124,7 +124,7 @@ $reaction-size: 64px;
 @media #{$mini-smartphone} {
   .board-reactions__root {
     right: 12px;
-    bottom: $column__border-width + $spacing--lg + 42px;
+    bottom: $column__border-width + $spacing--lg + 48px;
   }
 
   .board-reactions__close {
