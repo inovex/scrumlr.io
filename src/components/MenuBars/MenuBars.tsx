@@ -32,7 +32,7 @@ export interface MenuBarsProps {
 }
 
 // Mobile Transitions Configs
-const springConfig = {mass: 0.75, friction: 20, tension: 280};
+const springConfig = {mass: 1.25, friction: 20, tension: 240};
 
 const defaultVerticalStart = {opacity: 0, transform: "translateY(100%)", config: springConfig};
 const defaultVerticalStop = {opacity: 1, transform: "translateY(0%)", config: springConfig};

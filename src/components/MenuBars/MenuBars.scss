@@ -146,6 +146,13 @@ $menu-mobile__width: 72px;
 
 @media #{$mini-smartphone} {
   .menu-bars-mobile {
+    bottom: $spacing--base;
+    right: $spacing--base;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .menu-bars-mobile {
     bottom: 1vw;
     right: 1vw;
   }
