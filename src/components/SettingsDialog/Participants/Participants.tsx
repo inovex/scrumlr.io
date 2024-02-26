@@ -124,18 +124,19 @@ export const Participants = () => {
                   ready={participant.ready}
                   title={participant.user.name}
                 />
-                <div className={classNames("participant__name-role-wrapper")}>
-                  <span className={classNames("participant__name", {banned: participant.banned})}>{participant.user.name}</span>
-                  {participant.role === "OWNER" || !isModerator || participant.user.id === self.user.id ? (
+                <div className={classNames("participant__name-role-wrapper", {banned: participant.banned})}>
+                  <span className={classNames("participant__name")}>{participant.user.name}</span>
+                  {(participant.role === "OWNER" || !isModerator || participant.user.id === self.user.id) && (
                     <span className="participant__role">
                       {participant.role === "OWNER" && t("UserRole.Owner")}
                       {participant.role === "MODERATOR" && t("UserRole.Moderator")}
                       {participant.role === "PARTICIPANT" && t("UserRole.Participant")}
                     </span>
-                  ) : (
+                  )}
+                  {participant.role !== "OWNER" && isModerator && participant.user.id !== self.user.id && !participant.banned && (
                     <div className="participant__role-buttons">
                       <button
-                        className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR", banned: participant.banned})}
+                        className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR"})}
                         disabled={participant.role === "MODERATOR" || participant.banned}
                         onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}
                         title={t("Participants.ChangeRoleToModeratorTooltip")}
@@ -143,7 +144,7 @@ export const Participants = () => {
                         {t("UserRole.Moderator")}
                       </button>
                       <button
-                        className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT", banned: participant.banned})}
+                        className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT"})}
                         disabled={participant.role === "PARTICIPANT" || participant.banned}
                         onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}
                         title={t("Participants.ChangeRoleToParticipantTooltip")}

@@ -147,7 +147,7 @@
   flex-shrink: 0;
 
   &.banned {
-    opacity: 0.2;
+    opacity: 0.4;
   }
 }
 
@@ -157,6 +157,11 @@
   flex-direction: column;
   gap: 4px;
   overflow: hidden;
+  justify-content: center;
+
+  &.banned {
+    opacity: 0.4;
+  }
 }
 
 .participant__name {
@@ -168,10 +173,6 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-
-  &.banned {
-    opacity: 0.2;
-  }
 }
 
 .participant__role {
@@ -185,11 +186,6 @@
   color: $color-white;
   width: fit-content;
 
-  &.banned {
-    opacity: 0.2;
-    cursor: default;
-  }
-
   &:is(button) {
     line-height: 12px;
     background-color: $color-white;
@@ -197,14 +193,14 @@
     color: $color-black;
     cursor: pointer;
   }
-  &:is(button):hover:not(.banned),
-  &:is(button):focus:not(.banned) {
+  &:is(button):hover,
+  &:is(button):focus {
     outline: none;
     border-color: var(--accent-color--desaturated-light);
     background-color: var(--accent-color--desaturated-light);
   }
   &--active:is(button),
-  &--active:is(button):hover:not(.banned) {
+  &--active:is(button):hover {
     cursor: default;
     border-color: var(--accent-color);
     background-color: var(--accent-color);
