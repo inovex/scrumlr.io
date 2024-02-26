@@ -1,6 +1,7 @@
 @import "constants/style.scss";
 
 $tooltip-gap: 12px;
+$menu-mobile__width: 72px;
 
 .menu-bars-mobile {
   display: none;
@@ -43,8 +44,8 @@ $tooltip-gap: 12px;
   background: $menu-icon-background-color--light;
   border-radius: $rounded--full;
   cursor: pointer;
-  width: $action-bar__width;
-  height: $action-bar__width;
+  width: $menu-mobile__width;
+  height: $menu-mobile__width;
   border: none;
   box-shadow: $box-shadow--light;
   z-index: $menu-item-z-index + $base-z-index-step;
@@ -62,7 +63,6 @@ $tooltip-gap: 12px;
 
 .menu-bars-mobile__fab-option {
   .tooltip-button__icon {
-    box-shadow: $box-shadow--light;
     border-radius: $rounded--full;
     margin: 0;
 
@@ -91,12 +91,9 @@ $tooltip-gap: 12px;
 [theme="dark"] {
   .menu-bars-mobile__fab {
     background: $menu-icon-background-color--dark;
-    box-shadow: $box-shadow--dark;
   }
 
   .menu-bars-mobile__fab-option .tooltip-button__icon {
-    box-shadow: $box-shadow--dark;
-
     &--active {
       background-color: $color-white;
     }
@@ -140,8 +137,8 @@ $tooltip-gap: 12px;
   }
   .menu-bars-mobile {
     display: grid;
-    grid-template-columns: 0 $action-bar__width;
-    grid-template-rows: 0 $action-bar__width;
+    grid-template-columns: 0 $menu-mobile__width;
+    grid-template-rows: 0 $menu-mobile__width;
     bottom: $spacing--lg;
     right: $spacing--lg;
   }
@@ -149,8 +146,8 @@ $tooltip-gap: 12px;
 
 @media #{$mini-smartphone} {
   .menu-bars-mobile {
-    bottom: $spacing--base;
-    right: $spacing--base;
+    bottom: 1vw;
+    right: 1vw;
   }
 }
 
@@ -170,12 +167,12 @@ $tooltip-gap: 12px;
 
 .menu {
   z-index: $menu-z-index;
-  border-radius: calc($action-bar__width / 2);
+  border-radius: calc($menu-mobile__width / 2);
   background-color: $color-white;
   box-shadow: $box-shadow--light;
   padding-left: $spacing--lg;
   padding-right: $spacing--lg;
-  height: $action-bar__width;
+  height: $menu-mobile__width;
   width: auto;
   visibility: hidden;
   opacity: 0;
@@ -188,11 +185,11 @@ $tooltip-gap: 12px;
 }
 
 .user-menu {
-  transform: translateY(-$action-bar__width);
+  transform: translateY(-$menu-mobile__width);
 }
 
 .admin-menu {
-  transform: translateY($action-bar__width);
+  transform: translateY($menu-mobile__width);
 }
 
 .admin-menu.admin-menu--empty {

@@ -75,9 +75,16 @@ $tooltip-button-size: 46px;
   color: var(--accent-color);
 }
 
+.tooltip-button__icon-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: $rounded--full;
+  background: $menu-icon-background-color--light;
+  transition: background-color 0.2s ease-out;
+}
+
 .tooltip-button__icon {
-  background-clip: content-box !important;
-  background-color: $menu-icon-background-color--light;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
@@ -87,8 +94,6 @@ $tooltip-button-size: 46px;
   border-radius: $tooltip-button-size;
   fill: var(--accent-color);
   color: var(--accent-color, $color-black);
-
-  transition: background-color 0.2s ease-out;
 
   &:nth-of-type(1) {
     visibility: visible;
@@ -185,15 +190,26 @@ $tooltip-button-size: 46px;
 }
 
 @media #{$smartphone} {
-  $clickable-area-size: 64px;
+  $tooltip-button-size--mobile: 52px;
+  $tooltip-button-icon-size--mobile: 36px;
+  $tooltip-buttons-gap--mobile: 16px;
+
+  .tooltip-button__icon-container {
+    position: static;
+    box-shadow: $box-shadow--light;
+  }
 
   .tooltip-button {
+    $clickable-area-size: calc($tooltip-button-size--mobile + $tooltip-buttons-gap--mobile);
     height: $clickable-area-size;
     width: $clickable-area-size;
+    padding: 8px;
+    background: none;
 
     &--active {
       &:enabled:active {
         .tooltip-button__icon {
+          background: none;
           &:nth-of-type(1) {
             visibility: hidden;
           }
@@ -203,16 +219,25 @@ $tooltip-button-size: 46px;
         }
       }
 
-      .tooltip-button__icon {
+      .tooltip-button__icon-container {
         background-color: $menu-icon-background-color--dark;
+      }
+
+      .tooltip-button__icon {
         color: $color-white;
       }
     }
   }
 
   .tooltip-button__icon {
-    top: calc(($clickable-area-size - $tooltip-button-size) / 2);
-    left: calc(($clickable-area-size - $tooltip-button-size) / 2);
+    $padding: calc(($tooltip-button-size--mobile - $tooltip-button-icon-size--mobile) / 2);
+    background: none;
+    height: $tooltip-button-size--mobile;
+    width: $tooltip-button-size--mobile;
+    padding: $padding;
+    top: $padding;
+    left: $padding;
+    box-sizing: border-box;
   }
 
   .tooltip-button .tooltip-button__tooltip {
@@ -225,6 +250,7 @@ $tooltip-button-size: 46px;
     &:focus-visible,
     &:hover {
       .tooltip-button__icon {
+        background: none;
         border-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
       }
     }
@@ -232,10 +258,19 @@ $tooltip-button-size: 46px;
     &:focus-visible .tooltip-button__icon {
       outline: 2px solid rgba($color-white, 0.5);
     }
+
+    &--active {
+      .tooltip-button__icon-container {
+        background-color: $menu-icon-background-color--light;
+      }
+    }
+  }
+
+  .tooltip-button__icon-container {
+    background: $menu-icon-background-color--dark;
   }
 
   .tooltip-button__icon {
-    background: $menu-icon-background-color--dark;
     color: var(--accent-color--dark, $color-white);
     fill: var(--accent-color--dark);
   }
