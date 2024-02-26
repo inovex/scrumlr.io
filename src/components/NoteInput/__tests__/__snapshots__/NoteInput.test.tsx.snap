@@ -19,6 +19,7 @@ exports[`Note Input should render correctly 1`] = `
     aria-label="Create note"
     class="note-input__add-button"
     tabindex="-1"
+    title="Create note"
     type="submit"
   >
     <svg
