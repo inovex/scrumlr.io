@@ -286,6 +286,7 @@
   background-color: $color-white;
   width: $icon--large;
   height: $icon--large;
+  flex-shrink: 0;
 
   cursor: pointer;
 
