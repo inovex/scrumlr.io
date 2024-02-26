@@ -103,7 +103,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         style={{zIndex: 999}}
       />
       {isImage && (
-        <div className="note-input__isImage" title={t("NoteInput.imageInfo")}>
+        <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
           <ImageIcon className="note-input__icon--image" />
           <StarIcon className="note-input__icon--star star-1" />
           <StarIcon className="note-input__icon--star star-2" />
@@ -115,6 +115,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         tabIndex={-1} // skip focus
         className="note-input__add-button"
         aria-label={t("NoteInput.create")}
+        title={t("NoteInput.create")}
       >
         <PlusIcon className="note-input__icon--add" />
       </button>
