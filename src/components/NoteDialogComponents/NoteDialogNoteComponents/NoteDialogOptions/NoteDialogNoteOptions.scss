@@ -13,3 +13,27 @@
 .note-dialog__note-option {
   padding-top: 0;
 }
+
+.note-option__button {
+  height: 36px;
+  width: 36px;
+  padding: 0;
+  border: 0;
+  color: var(--accent-color);
+  background-color: var(--accent-color--desaturated-light);
+  border-radius: $rounded--full;
+  cursor: pointer;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+  > svg {
+    height: 100%;
+    width: 100%;
+  }
+
+  &:hover {
+    background-color: var(--accent-color);
+    color: $color-white;
+  }
+}

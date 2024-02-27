@@ -3,7 +3,6 @@ import {Participant} from "types/participant";
 import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
 import {ReactComponent as UnstackIcon} from "assets/icon-unstack.svg";
 import "./NoteDialogNoteOptions.scss";
-import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
@@ -59,25 +58,29 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
       <ul className="note-dialog__note-options">
         {props.isStackedNote && (
           <li className="note-dialog__note-option">
-            <TooltipButton
+            <button
+              aria-label={t("NoteDialogUnstackNoteButton.title")}
+              className="note-option__button"
               onClick={() => {
                 onUnstack(props.noteId);
                 props.onClose();
               }}
-              label={t("NoteDialogUnstackNoteButton.title")}
-              icon={UnstackIcon}
-            />
+            >
+              <UnstackIcon />
+            </button>
           </li>
         )}
         {showDeleteButton && (
           <li className="note-dialog__note-option">
-            <TooltipButton
+            <button
+              aria-label={props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
+              className="note-option__button"
               onClick={() => {
                 onDelete(props.noteId);
               }}
-              label={props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
-              icon={DeleteIcon}
-            />
+            >
+              <DeleteIcon />
+            </button>
           </li>
         )}
       </ul>
