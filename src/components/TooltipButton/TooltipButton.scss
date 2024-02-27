@@ -191,7 +191,6 @@ $tooltip-button-size: 46px;
 
 @media #{$smartphone} {
   $tooltip-button-size--mobile: 52px;
-  $tooltip-button-icon-size--mobile: 36px;
   $tooltip-buttons-gap--mobile: 16px;
 
   .tooltip-button__icon-container {
@@ -230,13 +229,12 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button__icon {
-    $padding: calc(($tooltip-button-size--mobile - $tooltip-button-icon-size--mobile) / 2);
     background: none;
     height: $tooltip-button-size--mobile;
     width: $tooltip-button-size--mobile;
-    padding: $padding;
-    top: $padding;
-    left: $padding;
+    padding: $spacing--xxs;
+    top: $spacing--xs;
+    left: $spacing--xs;
     box-sizing: border-box;
   }
 

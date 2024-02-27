@@ -86,6 +86,14 @@ $menu-mobile__width: 72px;
   &:nth-child(3) {
     z-index: $menu-item-z-index - 3 * $base-z-index-step;
   }
+
+  &--vertical:first-child {
+    margin-bottom: $spacing--xs;
+  }
+
+  &--horizontal:first-child {
+    margin-right: $spacing--xs;
+  }
 }
 
 [theme="dark"] {
