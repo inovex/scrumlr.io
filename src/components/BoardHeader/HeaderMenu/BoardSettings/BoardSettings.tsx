@@ -4,7 +4,7 @@ import store, {useAppSelector} from "store";
 import {ApplicationState} from "types";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
-import {DEFAULT_BOARD_NAME} from "../../../../constants/misc";
+import {DEFAULT_BOARD_NAME} from "constants/misc";
 
 export type BoardSettingsProps = {
   activeEditMode: boolean;
