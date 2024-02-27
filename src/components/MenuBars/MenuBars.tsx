@@ -53,14 +53,14 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
-      if (boardReactionRef.current?.contains(target as Node)) {
-        return;
-      }
-
+      // don't close if we're on the board reactions menu
+      if (boardReactionRef.current?.contains(target as Node)) return;
+      // don't close if we're on the settings, voting or timer page
+      if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) return;
+      // close if we click outside the menu
       if (!menuBarsMobileRef.current?.contains(target as Node)) {
         setFabIsExpanded(false);
       }
-
       // only hide if menu wasn't clicked to avoid double onClick toggle
       if (!(menuBarsDesktopRef.current?.contains(target as Node) || menuBarsMobileRef.current?.contains(target as Node))) {
         setShowBoardReactionsMenu(false);
