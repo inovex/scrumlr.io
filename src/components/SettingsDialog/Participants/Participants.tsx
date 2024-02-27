@@ -116,16 +116,10 @@ export const Participants = () => {
             .filter((participant) => participant.role === permissionFilter || permissionFilter === "ALL")
             .filter((participant) => participant.connected === onlineFilter)
             .map((participant) => (
-              <li key={participant.user.id} className="participants__list-item">
-                <UserAvatar
-                  avatar={participant.user.avatar}
-                  className={classNames("participant__avatar", {banned: participant.banned})}
-                  id={participant.user.id}
-                  ready={participant.ready}
-                  title={participant.user.name}
-                />
-                <div className={classNames("participant__name-role-wrapper", {banned: participant.banned})}>
-                  <span className={classNames("participant__name")}>{participant.user.name}</span>
+              <li key={participant.user.id} className={classNames("participants__list-item", {banned: participant.banned})}>
+                <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} ready={participant.ready} title={participant.user.name} />
+                <div className="participant__name-role-wrapper">
+                  <span className="participant__name">{participant.user.name}</span>
                   {(participant.role === "OWNER" || !isModerator || participant.user.id === self.user.id) && (
                     <span className="participant__role">
                       {participant.role === "OWNER" && t("UserRole.Owner")}
@@ -137,7 +131,7 @@ export const Participants = () => {
                     <div className="participant__role-buttons">
                       <button
                         className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR"})}
-                        disabled={participant.role === "MODERATOR" || participant.banned}
+                        disabled={participant.role === "MODERATOR"}
                         onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}
                         title={t("Participants.ChangeRoleToModeratorTooltip")}
                       >
@@ -145,7 +139,7 @@ export const Participants = () => {
                       </button>
                       <button
                         className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT"})}
-                        disabled={participant.role === "PARTICIPANT" || participant.banned}
+                        disabled={participant.role === "PARTICIPANT"}
                         onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}
                         title={t("Participants.ChangeRoleToParticipantTooltip")}
                       >

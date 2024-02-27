@@ -141,14 +141,14 @@
   &:not(:last-child) {
     border-bottom: 1px solid $color-lighter-gray;
   }
+
+  &.banned > *:not(.participant__join-icon) {
+    opacity: 0.6;
+  }
 }
 
 .participant__avatar {
   flex-shrink: 0;
-
-  &.banned {
-    opacity: 0.6;
-  }
 }
 
 .participant__name-role-wrapper {
@@ -158,10 +158,6 @@
   gap: 4px;
   overflow: hidden;
   justify-content: center;
-
-  &.banned {
-    opacity: 0.6;
-  }
 }
 
 .participant__name {
@@ -281,11 +277,9 @@
   height: $icon--large;
   padding: 0;
   margin-left: auto; // align to the very right
-  border-radius: $note__border-radius;
+  border-radius: $rounded--default;
   border: none;
   background-color: $color-white;
-  width: $icon--large;
-  height: $icon--large;
   flex-shrink: 0;
 
   cursor: pointer;
