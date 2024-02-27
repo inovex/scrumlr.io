@@ -62,6 +62,8 @@
     "deleteNoteButton": "Kärtchen löschen",
     "deleteStackButton": "Stapel löschen",
     "deleteOptions": "Was möchtest du löschen?",
+    "banParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" aus der Session entfernen möchtest?",
+    "unbanParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" wieder zur Session zulassen möchtest?",
     "warning": "Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
     "no": "Nein",
@@ -281,6 +283,8 @@
     "allParticipantsDone": "Alle Teilnehmer sind fertig!",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
+    "bannedParticipant": "Teilnehmer \"{{user}}\" wurde entfernt",
+    "unbannedParticipant": "Teilnehmer \"{{user}}\" wird wieder zur Session zugelassen",
     "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
@@ -369,7 +373,9 @@
     "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
     "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator",
     "ResetBannerText": "Fertige Teilnehmer zurücksetzen.",
-    "ResetBannerButton": "Zurücksetzen"
+    "ResetBannerButton": "Zurücksetzen",
+    "BanParticipantTooltip": "Teilnehmer \"{{user}}\" bannen",
+    "UnbanParticipantTooltip": "Teilnehmer \"{{user}}\" entbannen"
   },
   "UserRole": {
     "Owner": "Besitzer",
@@ -420,6 +426,7 @@
     "unstackNote": "Es tut uns leid, aber wir haben ein Problem beim Entstapeln des Kärtchens. Bitte versuche es erneut.",
     "setRaiseHand": "Es tut uns leid, aber wir haben ein Problem beim Heben deiner Hand. Bitte versuche es erneut.",
     "setUserReady": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deines Statuses. Bitte versuche es erneut.",
+    "setUserBanned": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren dieses Nutzerstatus. Bitte versuche es erneut.",
     "setShowHiddenColumns": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spaltensichtbarkeit. Bitte versuche es erneut.",
     "changePermission": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Berechtigungen. Bitte versuche es erneut.",
     "logout": "Es tut uns leid, aber wir haben Probleme dich abzumelden.",

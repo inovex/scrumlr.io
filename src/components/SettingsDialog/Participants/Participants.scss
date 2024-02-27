@@ -141,6 +141,10 @@
   &:not(:last-child) {
     border-bottom: 1px solid $color-lighter-gray;
   }
+
+  &.banned > *:not(.participant__join-icon) {
+    opacity: 0.6;
+  }
 }
 
 .participant__avatar {
@@ -153,6 +157,7 @@
   flex-direction: column;
   gap: 4px;
   overflow: hidden;
+  justify-content: center;
 }
 
 .participant__name {
@@ -266,6 +271,37 @@
   }
 }
 
+.participant__join-icon,
+.participant__kick-icon {
+  width: $icon--large;
+  height: $icon--large;
+  padding: 0;
+  margin-left: auto; // align to the very right
+  border-radius: $rounded--default;
+  border: none;
+  background-color: $color-white;
+  flex-shrink: 0;
+
+  cursor: pointer;
+
+  &--active {
+    background-color: var(--accent-color);
+    color: $color-white;
+  }
+  &:focus {
+    outline: 2px solid var(--accent-color);
+  }
+
+  &:hover {
+    background-color: var(--accent-color--desaturated-light);
+  }
+}
+
+.participants__ban-dialog .confirmation-dialog__icon {
+  width: 77px;
+  height: 77px;
+}
+
 @media screen and (min-width: 920px) {
   // SettingsDialog changes margin here, so we have to do the same
   .participants-reset-state-banner__container {
@@ -337,6 +373,16 @@
 
     &:hover {
       background-color: $color-dark-one;
+    }
+  }
+
+  .participant__join-icon,
+  .participant__kick-icon {
+    color: $color-white;
+    background-color: $color-dark-mode-note;
+
+    &:hover {
+      background-color: var(--accent-color--desaturated-dark);
     }
   }
 }
