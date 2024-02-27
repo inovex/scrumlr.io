@@ -104,7 +104,7 @@ $reaction-size: 64px;
 
 @media #{$smartphone} {
   .board-reactions__container {
-    bottom: $column__border-width + $spacing--lg + 62px;
+    bottom: $column__border-width + $spacing--lg + 72px;
   }
 
   .board-reactions__close {
@@ -112,18 +112,15 @@ $reaction-size: 64px;
   }
 }
 
-@media screen and (max-width: 400px) {
+@media #{$mini-smartphone} {
   .board-reactions__container {
+    bottom: $column__border-width + $spacing--lg + 48px;
     padding: 0 $spacing--xs;
     gap: 2px;
   }
 }
 
 @media screen and (max-width: 350px) {
-  .board-reactions__container {
-    bottom: $column__border-width + $spacing--base + 52px;
-  }
-
   .board-reactions__reaction {
     width: 48px;
   }

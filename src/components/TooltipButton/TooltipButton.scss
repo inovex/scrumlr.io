@@ -224,6 +224,7 @@ $tooltip-button-size: 46px;
 
       .tooltip-button__icon {
         color: $color-white;
+        background: none;
       }
     }
   }
@@ -240,6 +241,24 @@ $tooltip-button-size: 46px;
 
   .tooltip-button .tooltip-button__tooltip {
     display: none;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  $tooltip-button-size--mobile: 52px;
+  $tooltip-buttons-gap--mobile: 8px;
+
+  .tooltip-button {
+    $clickable-area-size: calc($tooltip-button-size--mobile + $tooltip-buttons-gap--mobile);
+    height: $clickable-area-size;
+    width: $clickable-area-size;
+  }
+
+  .tooltip-button__icon {
+    height: $tooltip-button-size--mobile;
+    width: $tooltip-button-size--mobile;
+    top: $spacing--xxs;
+    left: $spacing--xxs;
   }
 }
 
