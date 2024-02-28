@@ -1,5 +1,4 @@
 import classNames from "classnames";
-import {VFC} from "react";
 import {useTranslation} from "react-i18next";
 import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
 import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
@@ -10,11 +9,11 @@ import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
 import {TOAST_TIMER_SHORT} from "constants/misc";
 import {SettingsButton} from "../Components/SettingsButton";
-import {ExportHintHiddenColumns} from "./ExportHintHiddenColumns";
 import "./ExportBoard.scss";
 import "../SettingsDialog.scss";
+import ExportHintHiddenContent from "./ExportHintHiddenContent/ExportHintHiddenContent";
 
-export const ExportBoard: VFC = () => {
+export const ExportBoard = () => {
   const {t} = useTranslation();
 
   const boardId = useAppSelector((state) => state.board.data!.id);
@@ -72,7 +71,7 @@ export const ExportBoard: VFC = () => {
         />
       </div>
 
-      <ExportHintHiddenColumns columns={columns} />
+      <ExportHintHiddenContent columns={columns} />
     </div>
   );
 };
