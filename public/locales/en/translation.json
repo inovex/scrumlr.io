@@ -82,7 +82,8 @@
     "openPrintView": "Open print view",
     "exportToClipboard": "Copy Markdown to Clipboard",
     "copyToClipboardSuccess": "Markdown copied!",
-    "hintHiddenColumns": "The following columns are hidden and will not be exported:"
+    "hintHiddenColumns": "The following columns are hidden and will not be exported:",
+    "hintHiddenNotes": "The notes of other participants are hidden and will not be exported."
   },
   "PrintView": {
     "Participants": "Participants",
