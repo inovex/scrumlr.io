@@ -17,6 +17,7 @@ import {register} from "serviceWorkerRegistration";
 import Plausible from "plausible-tracker";
 import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "./config";
 import "react-tooltip/dist/react-tooltip.css";
+import {Tooltip} from "components/Tooltip";
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
 if (APP_VERSION) {
@@ -51,6 +52,7 @@ const root = createRoot(document.getElementById("root") as HTMLDivElement);
 root.render(
   <React.StrictMode>
     <I18nextProvider i18n={i18n}>
+      <Tooltip id="scrumlr-tooltip" />
       <Provider store={store}>
         <Html />
         <Suspense fallback={<LoadingScreen />}>

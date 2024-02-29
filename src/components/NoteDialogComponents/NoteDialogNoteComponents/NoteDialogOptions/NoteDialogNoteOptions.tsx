@@ -59,6 +59,8 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
         {props.isStackedNote && (
           <li className="note-dialog__note-option">
             <button
+              data-tooltip-id="scrumlr-tooltip"
+              data-tooltip-content={t("NoteDialogUnstackNoteButton.title")}
               aria-label={t("NoteDialogUnstackNoteButton.title")}
               className="note-option__button"
               onClick={() => {
@@ -73,6 +75,10 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
         {showDeleteButton && (
           <li className="note-dialog__note-option">
             <button
+              data-tooltip-id="scrumlr-tooltip"
+              data-tooltip-content={
+                props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")
+              }
               aria-label={props.isStackedNote || !props.hasStackedNotes || !allowedToDeleteStack ? t("NoteDialogDeleteNoteButton.title") : t("NoteDialogDeleteStackButton.title")}
               className="note-option__button"
               onClick={() => {

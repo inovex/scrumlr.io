@@ -23,6 +23,8 @@
   background-color: var(--accent-color--desaturated-light);
   border-radius: $rounded--full;
   cursor: pointer;
+  // TODO: Box shadow with accent color
+  // TODO: Maybe use style constant?
   box-shadow:
     0 1px 3px 0 rgb(0 0 0 / 0.1),
     0 1px 2px -1px rgb(0 0 0 / 0.1);
@@ -35,5 +37,12 @@
   &:hover {
     background-color: var(--accent-color);
     color: $color-white;
+  }
+}
+
+[theme="dark"] {
+  .note-option__button {
+    background-color: var(--accent-color--desaturated-dark);
+    color: var(--accent-color--dark);
   }
 }

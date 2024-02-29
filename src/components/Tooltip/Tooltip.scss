@@ -1,7 +1,8 @@
 @import "constants/style.scss";
 
 .tooltip-container {
-  position: absolute;
+  position: fixed;
+  z-index: 9999;
 }
 
 .tooltip-container .tooltip {
