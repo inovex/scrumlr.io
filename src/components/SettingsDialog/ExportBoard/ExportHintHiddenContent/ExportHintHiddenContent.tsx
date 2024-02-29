@@ -1,17 +1,12 @@
 import {useTranslation} from "react-i18next";
 import {ReactComponent as InfoIcon} from "assets/icon-warning.svg";
 import {useAppSelector} from "store";
-import {Column} from "../../../../types/column";
 import "./ExportHintHiddenContent.scss";
 
-export interface ExportHintHiddenContentProps {
-  columns: Column[];
-}
-
-const ExportHintHiddenContent = ({columns}: ExportHintHiddenContentProps) => {
+const ExportHintHiddenContent = () => {
   const {t} = useTranslation();
 
-  const hiddenColumns = columns.filter((col) => !col.visible);
+  const hiddenColumns = useAppSelector((state) => state.columns.filter((col) => !col.visible));
   const showNotesOfOtherParticipants = useAppSelector((state) => state.board.data?.showNotesOfOtherUsers);
 
   if (hiddenColumns.length || !showNotesOfOtherParticipants) {
