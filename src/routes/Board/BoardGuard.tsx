@@ -6,7 +6,6 @@ import "./BoardGuard.scss";
 import {PassphraseDialog} from "components/PassphraseDialog";
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
-import {Button} from "components/Button";
 import {PrintView} from "components/SettingsDialog/ExportBoard/PrintView";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 import {RejectionPage} from "components/RejectionPage";
@@ -43,22 +42,14 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
     );
   }
 
-  if (boardStatus === "passphrase_required") {
+  if (boardStatus === "passphrase_required" || boardStatus === "incorrect_passphrase") {
     return (
       <PassphraseDialog
         onSubmit={(passphrase: string) => {
           store.dispatch(Actions.joinBoard(boardId!, passphrase));
         }}
+        incorrectPassphrase={boardStatus === "incorrect_passphrase"}
       />
-    );
-  }
-
-  if (boardStatus === "incorrect_passphrase") {
-    return (
-      <div className="board-guard">
-        <p className="board-guard__info">{t("BoardGuard.incorrectPassphrase")}</p>
-        <Button href="/">{t("BoardGuard.returnToHomepage")}</Button>
-      </div>
     );
   }
 

@@ -163,7 +163,8 @@
     "hidePassword": "Verberge das Passwort",
     "label": "Gib das Passwort ein, um dieses Board zu öffnen",
     "submit": "Board öffnen",
-    "inputPlaceholder": "Passwort"
+    "inputPlaceholder": "Passwort",
+    "incorrectPassphrase": "Ups, das war das falsche Passwort. Versuch's nochmal!"
   },
   "Timer": {
     "endTimer": "Timer beenden",

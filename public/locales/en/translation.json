@@ -163,7 +163,8 @@
     "hidePassword": "Hide password",
     "label": "Enter the password to open this board",
     "submit": "Open board",
-    "inputPlaceholder": "Password"
+    "inputPlaceholder": "Password",
+    "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
   },
   "Timer": {
     "endTimer": "End timer",

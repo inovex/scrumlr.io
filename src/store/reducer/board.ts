@@ -54,6 +54,11 @@ export const boardReducer = (state: BoardState = {status: "unknown"}, action: Re
         status: "passphrase_required",
       };
     }
+    case Action.IncorrectPassphrase: {
+      return {
+        status: "incorrect_passphrase",
+      };
+    }
     case Action.TooManyJoinRequests: {
       return {
         status: "too_many_join_requests",

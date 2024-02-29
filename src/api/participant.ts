@@ -36,8 +36,15 @@ export const ParticipantsAPI = {
       };
     }
 
-    // wrong passphrase
     if (response.status === 403) {
+      // board is protected by a passphrase
+      if (passphrase === undefined) {
+        return {
+          status: "PASSPHRASE_REQUIRED",
+        };
+      }
+
+      // wrong passphrase
       return {
         status: "WRONG_PASSPHRASE",
       };

@@ -143,6 +143,14 @@ $color-backlog-blue--dark: #5c8fff;
   }
 }
 
+.form__error-message {
+  $color-darkmode-pink: #ff529a;
+  grid-column-start: 2;
+  color: $color-darkmode-pink;
+  font-size: $text--sm;
+  line-height: $line-height--medium;
+}
+
 @media (min-width: 460px) {
   .passphrase-dialog__form {
     padding: 48px 64px;
