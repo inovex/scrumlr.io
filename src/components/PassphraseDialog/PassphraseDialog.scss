@@ -2,6 +2,8 @@
 
 $color-backlog-blue--light: $color-backlog-blue;
 $color-backlog-blue--dark: #5c8fff;
+$color-planning-pink--light: #ff0069;
+$color-planning-pink--dark: #ff529a;
 
 .passphrase-dialog {
   min-width: 100vw;
@@ -21,12 +23,12 @@ $color-backlog-blue--dark: #5c8fff;
 
 .passphrase-dialog__form {
   background-color: $color-white;
+  color: $color-dark-mode-note;
   border-radius: 24px;
   box-shadow: 0px 4px 15px 0px rgba($color: $color-backlog-blue--light, $alpha: 0.25);
   margin: 0 auto;
 
   padding: $spacing--xl $spacing--lg;
-  gap: $spacing--base;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,17 +38,18 @@ $color-backlog-blue--dark: #5c8fff;
 
 .form__icon {
   display: none;
-  color: $color-backlog-blue--light;
-  opacity: 50%;
-  height: $icon--large;
-  width: $icon--large;
+  color: $color-backlog-blue--dark;
+  height: $icon--huge;
+  width: $icon--huge;
+  margin-right: $spacing--lg;
+  margin-bottom: auto;
 }
 
 .form__label {
-  color: $color-black;
   font-size: $text--md;
   font-weight: bold;
   text-align: center;
+  margin-bottom: $spacing--lg;
 }
 
 .form__input-row {
@@ -84,6 +87,7 @@ $color-backlog-blue--dark: #5c8fff;
   min-width: 0;
   color: inherit;
   flex-grow: 1;
+  caret-color: $color-backlog-blue--dark;
 
   &:focus {
     outline: 0;
@@ -122,14 +126,19 @@ $color-backlog-blue--dark: #5c8fff;
   cursor: pointer;
   flex-shrink: 0;
   overflow: hidden;
-  transition: box-shadow 80ms ease-in-out;
+  transition:
+    box-shadow 80ms ease-in-out,
+    opacity 80ms ease-in-out;
   display: grid;
   place-content: center;
+  opacity: 1;
+  box-shadow: 0px 3px 12px -1px rgba($color-backlog-blue--light, 0.25);
 
   &:focus {
     outline: 2px solid #5c8fff;
   }
   &:hover:not([aria-disabled="true"]) {
+    opacity: 0.9;
     box-shadow: 0px 4px 6px -1px rgba($color-backlog-blue--light, 0.25);
   }
 
@@ -144,9 +153,8 @@ $color-backlog-blue--dark: #5c8fff;
 }
 
 .form__error-message {
-  $color-darkmode-pink: #ff529a;
   grid-column-start: 2;
-  color: $color-darkmode-pink;
+  color: $color-planning-pink--light;
   font-size: $text--sm;
   line-height: $line-height--medium;
 }
@@ -174,14 +182,9 @@ $color-backlog-blue--dark: #5c8fff;
 
 [theme="dark"] {
   .passphrase-dialog__form {
-    background-color: $color-dark-mode-note;
+    background-color: $color-dark-two;
+    color: $color-lighter-gray;
     box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
-  }
-  .form__icon {
-    color: $color-backlog-blue--dark;
-  }
-  .form__label {
-    color: $color-white;
   }
   .form__password-input {
     background-color: rgba($color-backlog-blue--dark, 0.15);
@@ -189,5 +192,8 @@ $color-backlog-blue--dark: #5c8fff;
   }
   .form__submit-button {
     background-color: $color-backlog-blue--dark;
+  }
+  .form__error-message {
+    color: $color-planning-pink--dark;
   }
 }
