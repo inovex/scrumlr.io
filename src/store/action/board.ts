@@ -27,6 +27,7 @@ export const BoardAction = {
   PassphraseChallengeRequired: "scrumlr.io/passphraseChallengeRequired" as const,
   IncorrectPassphrase: "scrumlr.io/incorrectPassphrase" as const,
   TooManyJoinRequests: "scrumlr.io/tooManyJoinRequests" as const,
+  BannedFromBoard: "scrumlr.io/bannedFromBoard" as const,
   SetTimer: "scrumlr.io/setTimer" as const,
   CancelTimer: "scrumlr.io/cancelTimer" as const,
   IncrementTimer: "scrumlr.io/incrementTimer" as const,
@@ -131,6 +132,9 @@ export const BoardActionFactory = {
   tooManyJoinRequests: () => ({
     type: BoardAction.TooManyJoinRequests,
   }),
+  bannedFromBoard: () => ({
+    type: BoardAction.BannedFromBoard,
+  }),
   setTimer: (minutes: number) => ({
     type: BoardAction.SetTimer,
     minutes,
@@ -162,4 +166,5 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.incrementTimer>
   | ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>
   | ReturnType<typeof BoardActionFactory.incorrectPassphrase>
-  | ReturnType<typeof BoardActionFactory.tooManyJoinRequests>;
+  | ReturnType<typeof BoardActionFactory.tooManyJoinRequests>
+  | ReturnType<typeof BoardActionFactory.bannedFromBoard>;

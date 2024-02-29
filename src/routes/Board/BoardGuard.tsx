@@ -53,8 +53,8 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
     );
   }
 
-  if (boardStatus === "rejected" || boardStatus === "too_many_join_requests") {
-    return <RejectionPage />;
+  if (boardStatus === "rejected" || boardStatus === "too_many_join_requests" || boardStatus === "banned") {
+    return <RejectionPage status={boardStatus} />;
   }
 
   return (
