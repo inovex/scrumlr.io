@@ -40,7 +40,6 @@ export const ParticipantsAPI = {
     // - user tried to join a protected board without a passphrase (first join request to check if board is protected)
     // - user tried to join a protected board with a wrong passphrase
     // - user tried to join a board where they are currently banned
-    // - user tried to join a board too often in a short time
     // TODO: doing this with proper error codes would be better, especially the check for the banned status
     if (response.status === 403) {
       const body = (await response.json()) as {status: string; error: string};
