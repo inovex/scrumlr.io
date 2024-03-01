@@ -4,6 +4,7 @@ $color-backlog-blue--light: $color-backlog-blue;
 $color-backlog-blue--dark: #5c8fff;
 $color-planning-pink--light: #ff0069;
 $color-planning-pink--dark: #ff529a;
+$color-form-background--dark: #292f3b;
 
 .passphrase-dialog {
   min-width: 100vw;
@@ -128,18 +129,22 @@ $color-planning-pink--dark: #ff529a;
   overflow: hidden;
   transition:
     box-shadow 80ms ease-in-out,
-    opacity 80ms ease-in-out;
+    transform 80ms ease-in-out;
   display: grid;
   place-content: center;
   opacity: 1;
-  box-shadow: 0px 3px 12px -1px rgba($color-backlog-blue--light, 0.25);
+  box-shadow:
+    0 4px 6px -1px rgba($color-backlog-blue--light, 0.2),
+    0 2px 4px -2px rgba($color-backlog-blue--light, 0.2);
 
   &:focus {
     outline: 2px solid #5c8fff;
   }
   &:hover:not([aria-disabled="true"]) {
-    opacity: 0.9;
-    box-shadow: 0px 4px 6px -1px rgba($color-backlog-blue--light, 0.25);
+    box-shadow:
+      0 6px 8px -1px rgba($color-backlog-blue--light, 0.2),
+      0 4px 6px -2px rgba($color-backlog-blue--light, 0.2);
+    transform: scale(1.05);
   }
 
   &[aria-disabled="true"] {
@@ -182,7 +187,7 @@ $color-planning-pink--dark: #ff529a;
 
 [theme="dark"] {
   .passphrase-dialog__form {
-    background-color: $color-dark-two;
+    background-color: $color-form-background--dark;
     color: $color-lighter-gray;
     box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
   }
