@@ -2,7 +2,6 @@
 
 $stack-view__header-height: 14vh;
 $stack-view__navigation-height: 14vh;
-$stack-view__parent-note-height: 22vh;
 $stack-view__min-height: 82px;
 
 .stack-view__portal {
@@ -77,7 +76,6 @@ $stack-view__min-height: 82px;
 
 .stack-view__parent-note {
   margin: 0;
-  height: $stack-view__parent-note-height;
   min-height: calc($stack-view__min-height * 2);
   width: calc(100vw - 3 * $column__border-width);
   max-width: 700px;
