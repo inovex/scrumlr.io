@@ -191,7 +191,6 @@ $tooltip-button-size: 46px;
 
 @media #{$smartphone} {
   $tooltip-button-size--mobile: 52px;
-  $tooltip-buttons-gap--mobile: 16px;
 
   .tooltip-button__icon-container {
     position: static;
@@ -199,10 +198,10 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button {
-    $clickable-area-size: calc($tooltip-button-size--mobile + $tooltip-buttons-gap--mobile);
+    $clickable-area-size: calc($tooltip-button-size--mobile + $spacing--base);
     height: $clickable-area-size;
     width: $clickable-area-size;
-    padding: 8px;
+    padding: $spacing--xs;
     background: none;
 
     &--active {
@@ -221,11 +220,6 @@ $tooltip-button-size: 46px;
       .tooltip-button__icon-container {
         background-color: $menu-icon-background-color--dark;
       }
-
-      .tooltip-button__icon {
-        color: $color-white;
-        background: none;
-      }
     }
   }
 
@@ -236,7 +230,6 @@ $tooltip-button-size: 46px;
     padding: $spacing--xxs;
     top: $spacing--xs;
     left: $spacing--xs;
-    box-sizing: border-box;
   }
 
   .tooltip-button .tooltip-button__tooltip {
@@ -246,10 +239,9 @@ $tooltip-button-size: 46px;
 
 @media screen and (max-width: 350px) {
   $tooltip-button-size--mobile: 52px;
-  $tooltip-buttons-gap--mobile: 8px;
 
   .tooltip-button {
-    $clickable-area-size: calc($tooltip-button-size--mobile + $tooltip-buttons-gap--mobile);
+    $clickable-area-size: calc($tooltip-button-size--mobile + $spacing--xs);
     height: $clickable-area-size;
     width: $clickable-area-size;
   }
