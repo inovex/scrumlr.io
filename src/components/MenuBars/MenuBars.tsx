@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
@@ -22,6 +22,7 @@ import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
+import {animated, useSpring} from "@react-spring/web";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -29,6 +30,15 @@ export interface MenuBarsProps {
   onPreviousColumn: () => void;
   onNextColumn: () => void;
 }
+
+// Mobile Transitions Configs
+const springConfig = {mass: 1.25, friction: 20, tension: 240};
+
+const defaultVerticalStart = {opacity: 0, transform: "translateY(100%)", config: springConfig};
+const defaultVerticalStop = {opacity: 1, transform: "translateY(0%)", config: springConfig};
+
+const defaultHorizontalStart = {opacity: 0, transform: "translateX(100%)", config: springConfig};
+const defaultHorizontalStop = {opacity: 1, transform: "translateX(0%)", config: springConfig};
 
 export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();
@@ -43,14 +53,14 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
-      if (boardReactionRef.current?.contains(target as Node)) {
-        return;
-      }
-
+      // don't close if we're on the board reactions menu
+      if (boardReactionRef.current?.contains(target as Node)) return;
+      // don't close if we're on the settings, voting or timer page
+      if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) return;
+      // close if we click outside the menu
       if (!menuBarsMobileRef.current?.contains(target as Node)) {
         setFabIsExpanded(false);
       }
-
       // only hide if menu wasn't clicked to avoid double onClick toggle
       if (!(menuBarsDesktopRef.current?.contains(target as Node) || menuBarsMobileRef.current?.contains(target as Node))) {
         setShowBoardReactionsMenu(false);
@@ -62,13 +72,11 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   const {TOGGLE_TIMER_MENU, TOGGLE_VOTING_MENU, TOGGLE_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_BOARD_REACTION_MENU, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 
+  // State & Functions
   const state = useAppSelector(
     (rootState) => ({
       currentUser: rootState.participants!.self,
       moderation: rootState.view.moderating,
-      showAuthors: rootState.board.data?.showAuthors,
-      showNotesOfOtherUsers: rootState.board.data?.showNotesOfOtherUsers,
-      showHiddenColumns: rootState.participants!.self.showHiddenColumns,
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
@@ -105,6 +113,66 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const toggleVotingMenu = () => (window.location.pathname.includes("voting") ? navigate("") : navigate("voting"));
   const showSettings = () => navigate("settings");
 
+  // Mobile Transitions
+  // vertical
+  const [timerAnimation, timerApi] = useSpring(() => defaultVerticalStart);
+  const [votingAnimation, votingApi] = useSpring(() => defaultVerticalStart);
+  const [moderationAnimation, moderationApi] = useSpring(() => defaultVerticalStart);
+
+  // horizontal
+  const [reactionsAnimation, reactionsApi] = useSpring(() => defaultHorizontalStart);
+  const [settingsAnimation, settingsApi] = useSpring(() => defaultHorizontalStart);
+  const [raisedHandAnimation, raisedHandApi] = useSpring(() => defaultHorizontalStart);
+  const [readyStateAnimation, readyStateApi] = useSpring(() => defaultHorizontalStart);
+
+  // trigger animations before browser paints
+  useLayoutEffect(() => {
+    const getReadyStateTransform = () => {
+      if (isReady) {
+        if (raisedHand) {
+          return "translateX(200%)";
+        }
+        return "translateX(300%)";
+      }
+      return "translateX(400%)";
+    };
+
+    const closeMenuTransforms = {
+      timer: "translateY(300%)",
+      voting: "translateY(200%)",
+      moderation: state.moderation ? "translateY(0%)" : "translateY(100%)",
+      reactions: "translateX(200%)",
+      settings: "translateX(100%)",
+      raisedHand: raisedHand ? "translateX(200%)" : "translateX(300%)",
+      readyState: getReadyStateTransform(),
+    };
+
+    if (fabIsExpanded) {
+      if (isAdmin) {
+        timerApi.start(defaultVerticalStop);
+        votingApi.start(defaultVerticalStop);
+        moderationApi.start(defaultVerticalStop);
+      }
+
+      reactionsApi.start(defaultHorizontalStop);
+      settingsApi.start(defaultHorizontalStop);
+      raisedHandApi.start(defaultHorizontalStop);
+      readyStateApi.start(defaultHorizontalStop);
+    } else {
+      if (isAdmin) {
+        timerApi.start({...defaultVerticalStop, transform: closeMenuTransforms.timer});
+        votingApi.start({...defaultVerticalStop, transform: closeMenuTransforms.voting});
+        moderationApi.start({...defaultVerticalStop, transform: closeMenuTransforms.moderation});
+      }
+
+      reactionsApi.start({...defaultHorizontalStop, transform: closeMenuTransforms.reactions});
+      settingsApi.start({...defaultHorizontalStop, transform: closeMenuTransforms.settings});
+      raisedHandApi.start({...defaultHorizontalStop, transform: closeMenuTransforms.raisedHand});
+      readyStateApi.start({...defaultHorizontalStop, transform: closeMenuTransforms.readyState});
+    }
+  }, [fabIsExpanded, raisedHand, isReady, reactionsApi, settingsApi, raisedHandApi, readyStateApi, timerApi, votingApi, moderationApi, state.moderation, isAdmin]);
+
+  // Hotkeys
   // normal users
   const hotkeyOptionsUser = {
     enabled: state.hotkeysAreActive,
@@ -211,6 +279,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         <button
           className={classNames("menu-bars-mobile__fab menu-bars-mobile__fab-main", {"menu-bars-mobile__fab-main--isExpanded": fabIsExpanded})}
           onClick={() => {
+            if (fabIsExpanded) setShowBoardReactionsMenu(false);
             setFabIsExpanded(!fabIsExpanded);
           }}
           aria-label={t("MenuBars.openMenu")}
@@ -219,95 +288,91 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
         </button>
 
         {/* role=any: toggle ready, toggle raise hand, options */}
-        {(fabIsExpanded || isReady || raisedHand) && (
-          <ul
-            className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {
-              "menu-bars-mobile__options--isExpanded": fabIsExpanded,
-              "menu-bars-mobile__options--hasActiveButton": isReady || raisedHand,
+        <ul
+          className={classNames("menu-bars-mobile__options menu-bars-mobile__options--horizontal", {
+            "menu-bars-mobile__options--isExpanded": fabIsExpanded,
+            "menu-bars-mobile__options--hasActiveButton": isReady || raisedHand,
+          })}
+        >
+          <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal" style={settingsAnimation}>
+            <TooltipButton disabled={!fabIsExpanded} direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
+          </animated.li>
+          <animated.li
+            className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {
+              "menu-bars-mobile__fab-option--active": showBoardReactionsMenu,
             })}
+            style={reactionsAnimation}
           >
-            {(fabIsExpanded || isReady) && (
-              <li className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": isReady})}>
-                <TooltipButton
-                  active={isReady}
-                  direction="left"
-                  label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                  icon={CheckIcon}
-                  onClick={toggleReadyState}
-                />
-              </li>
-            )}
-            {(fabIsExpanded || raisedHand) && (
-              <li className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": raisedHand})}>
-                <TooltipButton
-                  active={raisedHand}
-                  direction="left"
-                  label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
-                  icon={RaiseHand}
-                  onClick={toggleRaiseHand}
-                />
-              </li>
-            )}
-            {fabIsExpanded && (
-              <li
-                className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": showBoardReactionsMenu})}
-              >
-                <TooltipButton
-                  active={showBoardReactionsMenu}
-                  direction="left"
-                  label={t("MenuBars.openBoardReactionMenu")}
-                  icon={BoardReactionIcon}
-                  onClick={toggleBoardReactionsMenu}
-                />
-              </li>
-            )}
-            {fabIsExpanded && (
-              <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal">
-                <TooltipButton direction="left" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} />
-              </li>
-            )}
-          </ul>
-        )}
+            <TooltipButton
+              disabled={!fabIsExpanded}
+              active={showBoardReactionsMenu}
+              direction="left"
+              label={t("MenuBars.openBoardReactionMenu")}
+              icon={BoardReactionIcon}
+              onClick={toggleBoardReactionsMenu}
+            />
+          </animated.li>
+          <animated.li
+            className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": raisedHand})}
+            style={raisedHandAnimation}
+          >
+            <TooltipButton
+              disabled={!fabIsExpanded && !raisedHand}
+              active={raisedHand}
+              direction="left"
+              label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
+              icon={RaiseHand}
+              onClick={toggleRaiseHand}
+            />
+          </animated.li>
+          <animated.li
+            className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--horizontal", {"menu-bars-mobile__fab-option--active": isReady})}
+            style={readyStateAnimation}
+          >
+            <TooltipButton
+              disabled={!fabIsExpanded && !isReady}
+              active={isReady}
+              direction="left"
+              label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+              icon={CheckIcon}
+              onClick={toggleReadyState}
+            />
+          </animated.li>
+        </ul>
 
         {/* role=moderator: timer, votes, presenter mode */}
-        {isAdmin && (fabIsExpanded || state.moderation) && (
+        {isAdmin && (
           <ul
             className={classNames("menu-bars-mobile__options menu-bars-mobile__options--vertical", {
               "menu-bars-mobile__options--isExpanded": fabIsExpanded,
               "menu-bars-mobile__options--hasActiveButton": state.moderation,
             })}
           >
-            {fabIsExpanded && (
-              <>
-                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                  <TooltipButton direction="right" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} />
-                </li>
-                <li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical">
-                  <TooltipButton direction="right" label="Voting" onClick={toggleVotingMenu} icon={VoteIcon} />
-                </li>
-              </>
-            )}
-            {(fabIsExpanded || state.moderation) && (
-              <li className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--vertical", {"menu-bars-mobile__fab-option--active": state.moderation})}>
-                <TooltipButton
-                  active={state.moderation}
-                  direction="right"
-                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
-                  icon={FocusIcon}
-                  onClick={toggleModeration}
-                />
-              </li>
-            )}
+            <animated.li
+              className={classNames("menu-bars-mobile__fab-option", "menu-bars-mobile__fab-option--vertical", {"menu-bars-mobile__fab-option--active": state.moderation})}
+              style={moderationAnimation}
+            >
+              <TooltipButton
+                disabled={!fabIsExpanded && !state.moderation}
+                active={state.moderation}
+                direction="right"
+                label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
+                icon={FocusIcon}
+                onClick={toggleModeration}
+              />
+            </animated.li>
+            <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={votingAnimation}>
+              <TooltipButton disabled={!fabIsExpanded} direction="right" label="Voting" onClick={toggleVotingMenu} icon={VoteIcon} />
+            </animated.li>
+            <animated.li className="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--vertical" style={timerAnimation}>
+              <TooltipButton disabled={!fabIsExpanded} direction="right" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} />
+            </animated.li>
           </ul>
         )}
       </aside>
 
       {/* should this be inside a Portal instead? */}
-      {showBoardReactionsMenu && (
-        <div ref={boardReactionRef}>
-          <BoardReactionMenu close={toggleBoardReactionsMenu} />
-        </div>
-      )}
+      <BoardReactionMenu ref={boardReactionRef} showMenu={showBoardReactionsMenu} close={toggleBoardReactionsMenu} />
     </>
   );
 };

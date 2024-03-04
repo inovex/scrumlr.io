@@ -1,6 +1,6 @@
 import {FC} from "react";
 import {useTranslation} from "react-i18next";
-import {animated, Transition} from "react-spring";
+import {animated, Transition} from "@react-spring/web";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {Portal} from "components/Portal";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
