@@ -127,9 +127,7 @@ $color-form-background--dark: #292f3b;
   cursor: pointer;
   flex-shrink: 0;
   overflow: hidden;
-  transition:
-    box-shadow 80ms ease-in-out,
-    transform 80ms ease-in-out;
+  transition: all 80ms ease-in-out;
   display: grid;
   place-content: center;
   opacity: 1;
@@ -145,6 +143,7 @@ $color-form-background--dark: #292f3b;
       0 6px 8px -1px rgba($color-backlog-blue--light, 0.2),
       0 4px 6px -2px rgba($color-backlog-blue--light, 0.2);
     transform: scale(1.05);
+    background-color: getLightHoverBackground($color-backlog-blue--light);
   }
 
   &[aria-disabled="true"] {
@@ -197,6 +196,10 @@ $color-form-background--dark: #292f3b;
   }
   .form__submit-button {
     background-color: $color-backlog-blue--dark;
+
+    &:hover:not([aria-disabled="true"]) {
+      background-color: getDarkHoverBackground($color-backlog-blue--dark);
+    }
   }
   .form__error-message {
     color: $color-planning-pink--dark;
