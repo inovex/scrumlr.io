@@ -3,7 +3,7 @@ import {useDispatch} from "react-redux";
 import {useParams, useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import _ from "underscore";
-import {animated, Transition} from "react-spring";
+import {animated, Transition} from "@react-spring/web";
 import {Color, getColorClassName} from "constants/colors";
 import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";

@@ -30,18 +30,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-check.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-check.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
@@ -64,18 +68,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-hand.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-hand.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
@@ -98,18 +106,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-add-board-reaction.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-add-board-reaction.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
@@ -132,18 +144,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-settings.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-settings.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
     </ul>
@@ -184,18 +200,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-timer.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-timer.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
@@ -218,18 +238,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-vote.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-vote.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
@@ -252,18 +276,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-focus.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-focus.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
     </ul>
