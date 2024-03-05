@@ -118,22 +118,22 @@ exports[`NotFound should match snapshot 1`] = `
       <div
         class="not-found__title"
       >
-        NotFoundPage.title
+        Oh no! Error
       </div>
       <div
         class="not-found__description"
       >
         <div>
-          NotFoundPage.descriptionLine1
+          This page does not exist.
         </div>
         <div>
-          NotFoundPage.descriptionLine2
+          Go back to the Homepage.
         </div>
       </div>
       <button
         class="not-found__return-button"
       >
-        NotFoundPage.navigateHome
+        Back to Homepage
       </button>
     </div>
     <div
