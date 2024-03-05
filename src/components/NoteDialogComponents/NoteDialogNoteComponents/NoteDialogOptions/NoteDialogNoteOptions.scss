@@ -23,6 +23,9 @@
   background-color: var(--accent-color--desaturated-light);
   border-radius: $rounded--full;
   cursor: pointer;
+  transition:
+    background-color 80ms ease-in-out,
+    color 80ms ease-in-out;
   // TODO: Box shadow with accent color
   // TODO: Maybe use style constant?
   box-shadow:
