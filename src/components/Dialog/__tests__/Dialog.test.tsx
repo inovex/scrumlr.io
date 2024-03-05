@@ -1,4 +1,5 @@
-import {fireEvent, render} from "@testing-library/react";
+import {render} from "testUtils";
+import {fireEvent} from "@testing-library/react";
 import {Dialog} from "..";
 
 describe("Dialog", () => {
