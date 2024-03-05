@@ -4,7 +4,6 @@ import {Note} from "../../types/note";
 export const VotingAction = {
   CreateVoting: "scrumlr.io/createVoting" as const,
   CloseVoting: "scrumlr.io/closeVoting" as const,
-  AbortVoting: "scrumlr.io/abortVoting" as const,
   CreatedVoting: "scrumlr.io/createdVoting" as const,
   UpdatedVoting: "scrumlr.io/updatedVoting" as const,
 };
@@ -22,11 +21,6 @@ export const VotingActionFactory = {
 
   closeVoting: (voting: string) => ({
     type: VotingAction.CloseVoting,
-    voting,
-  }),
-
-  abortVoting: (voting: string) => ({
-    type: VotingAction.AbortVoting,
     voting,
   }),
 
@@ -54,6 +48,5 @@ export const VotingActionFactory = {
 export type VotingReduxAction =
   | ReturnType<typeof VotingActionFactory.createVoting>
   | ReturnType<typeof VotingActionFactory.closeVoting>
-  | ReturnType<typeof VotingActionFactory.abortVoting>
   | ReturnType<typeof VotingActionFactory.createdVoting>
   | ReturnType<typeof VotingActionFactory.updatedVoting>;

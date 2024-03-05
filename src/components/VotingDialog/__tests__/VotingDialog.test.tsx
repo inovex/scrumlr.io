@@ -66,12 +66,6 @@ describe("VotingDialog", () => {
     expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.createVoting({voteLimit: 6, showVotesOfOthers: false, allowMultipleVotes: true}));
   });
 
-  it("should dispatch to store correctly on cancel voting button click", () => {
-    render(createVotingDialog(), {container: global.document.querySelector("#portal")!});
-    fireEvent.click(screen.getByTestId("voting-dialog__cancel-button"));
-    expect(storeDispatchSpy).toHaveBeenCalledWith(Actions.abortVoting(getTestApplicationState().votings.open!.id));
-  });
-
   it("should dispatch to store correctly on stop voting button click", () => {
     render(createVotingDialog(), {container: global.document.querySelector("#portal")!});
     fireEvent.click(screen.getByTestId("voting-dialog__stop-button"));
