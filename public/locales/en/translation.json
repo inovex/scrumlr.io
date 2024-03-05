@@ -82,7 +82,8 @@
     "openPrintView": "Open print view",
     "exportToClipboard": "Copy Markdown to Clipboard",
     "copyToClipboardSuccess": "Markdown copied!",
-    "hintHiddenColumns": "The following columns are hidden and will not be exported:"
+    "hintHiddenColumns": "The following columns are hidden and will not be exported:",
+    "hintHiddenNotes": "The notes of other participants are hidden and will not be exported."
   },
   "PrintView": {
     "Participants": "Participants",
@@ -163,7 +164,8 @@
     "hidePassword": "Hide password",
     "label": "Enter the password to open this board",
     "submit": "Open board",
-    "inputPlaceholder": "Password"
+    "inputPlaceholder": "Password",
+    "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
   },
   "Timer": {
     "endTimer": "End timer",
@@ -643,6 +645,7 @@
   "RejectionPage": {
     "title": "Oops!",
     "description": "It looks like the doors to this session remain closed for now. We appreciate your interest, but unfortunately, your request to join has been declined.",
+    "banned": "We're sorry, but it looks like you have been excluded from this session.",
     "button": "Back to Homepage"
   }
 }

@@ -20,14 +20,14 @@ require (
 	github.com/nats-io/nats.go v1.33.1
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/uptrace/bun v1.1.17
 	github.com/uptrace/bun/dbfixture v1.1.17
 	github.com/uptrace/bun/dialect/pgdialect v1.1.17
 	github.com/uptrace/bun/extra/bundebug v1.1.17
 	github.com/urfave/cli/v2 v2.27.1
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.20.0
+	golang.org/x/crypto v0.21.0
 )
 
 require (
@@ -85,7 +85,7 @@ require (
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.9.2 // indirect
-	github.com/stretchr/objx v0.5.0 // indirect
+	github.com/stretchr/objx v0.5.2 // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
@@ -98,7 +98,7 @@ require (
 	golang.org/x/mod v0.11.0 // indirect
 	golang.org/x/net v0.21.0 // indirect
 	golang.org/x/oauth2 v0.17.0 // indirect
-	golang.org/x/sys v0.17.0 // indirect
+	golang.org/x/sys v0.18.0 // indirect
 	golang.org/x/tools v0.10.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect

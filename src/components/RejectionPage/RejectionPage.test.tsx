@@ -6,7 +6,7 @@ describe("RejectionPage", () => {
   it("should match snapshot", () => {
     const {container} = render(
       <BrowserRouter>
-        <RejectionPage />
+        <RejectionPage status="rejected" />
       </BrowserRouter>
     );
     expect(container.firstChild).toMatchSnapshot();

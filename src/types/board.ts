@@ -22,7 +22,7 @@ export interface Board {
 
 export type EditBoardRequest = Partial<Omit<Board, "id">> & {passphrase?: string};
 
-export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase" | "too_many_join_requests";
+export type BoardStatus = "unknown" | "pending" | "ready" | "rejected" | "accepted" | "passphrase_required" | "incorrect_passphrase" | "too_many_join_requests" | "banned";
 
 export interface BoardState {
   status: BoardStatus;

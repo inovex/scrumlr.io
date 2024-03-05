@@ -82,7 +82,8 @@
     "openPrintView": "Druckansicht öffnen",
     "exportToClipboard": "Markdown in die Zwischenablage kopieren",
     "copyToClipboardSuccess": "Markdown kopiert!",
-    "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
+    "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:",
+    "hintHiddenNotes": "Die Kärtchen der anderen Teilnehmenden sind ausgeblendet und werden nicht exportiert."
   },
   "PrintView": {
     "Participants": "Teilnehmer",
@@ -163,7 +164,8 @@
     "hidePassword": "Verberge das Passwort",
     "label": "Gib das Passwort ein, um dieses Board zu öffnen",
     "submit": "Board öffnen",
-    "inputPlaceholder": "Passwort"
+    "inputPlaceholder": "Passwort",
+    "incorrectPassphrase": "Ups, das war das falsche Passwort. Versuch's nochmal!"
   },
   "Timer": {
     "endTimer": "Timer beenden",
@@ -641,8 +643,9 @@
     "inactive": "Inaktiv"
   },
   "RejectionPage": {
-    "title": "Oops!",
+    "title": "Ups!",
     "description": "Es sieht so aus, als ob die Türen zu dieser Sitzung vorerst geschlossen bleiben. Wir freuen uns über dein Interesse, aber leider wurde dein Antrag auf Teilnahme abgelehnt.",
+    "banned": "Es tut uns Leid, aber es sieht so aus, als ob du von dieser Sitzung ausgeschlossen wurdest.",
     "button": "Zurück zur Startseite"
   }
 }
