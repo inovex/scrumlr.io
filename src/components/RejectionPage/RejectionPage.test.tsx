@@ -1,14 +1,9 @@
-import {render} from "@testing-library/react";
-import {BrowserRouter} from "react-router-dom";
+import {render} from "testUtils";
 import {RejectionPage} from "./RejectionPage";
 
 describe("RejectionPage", () => {
   it("should match snapshot", () => {
-    const {container} = render(
-      <BrowserRouter>
-        <RejectionPage status="rejected" />
-      </BrowserRouter>
-    );
+    const {container} = render(<RejectionPage status="rejected" />);
     expect(container.firstChild).toMatchSnapshot();
   });
 });
