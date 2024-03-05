@@ -11,9 +11,10 @@ import {useTranslation} from "react-i18next";
 
 export interface PassphraseDialogProps {
   onSubmit: (passphrase: string) => void;
+  incorrectPassphrase: boolean;
 }
 
-export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: PassphraseDialogProps) => {
+export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit, incorrectPassphrase}: PassphraseDialogProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [passphrase, setPassphrase] = useState("");
   const {t} = useTranslation();
@@ -68,6 +69,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit}: Passphra
               <ArrowRightIcon />
             </button>
           </div>
+          {incorrectPassphrase && <p className="form__error-message">{t("PassphraseDialog.incorrectPassphrase")}</p>}
         </form>
       </div>
     </Background>

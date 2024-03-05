@@ -7,7 +7,11 @@ import {ReactComponent as BackgroundFreeFormDark} from "assets/pages/404/404_Bac
 import {ReactComponent as BackgroundDetails} from "assets/pages/404/Details.svg";
 import "./RejectionPage.scss";
 
-export const RejectionPage = () => {
+type RejectionPageProps = {
+  status: "rejected" | "too_many_join_requests" | "banned";
+};
+
+export const RejectionPage = ({status}: RejectionPageProps) => {
   const {t} = useTranslation();
   return (
     <div className="rejection-page__root">
@@ -27,7 +31,7 @@ export const RejectionPage = () => {
       <main className="rejection-page__main">
         <div className="rejection-page__content">
           <div className="rejection-page__title">{t("RejectionPage.title")}</div>
-          <div className="rejection-page__description">{t("RejectionPage.description")}</div>
+          <div className="rejection-page__description">{status === "banned" ? t("RejectionPage.banned") : t("RejectionPage.description")}</div>
           <button
             className="rejection-page__return-button"
             onClick={() => {
