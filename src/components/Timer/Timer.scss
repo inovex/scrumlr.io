@@ -92,7 +92,7 @@ $timer__progress-bar-color: #6096ff;
   border-radius: $rounded--full;
   background-color: $menu-icon-background-color--light;
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   gap: $spacing--xs;
   padding-right: $spacing--xxs;
