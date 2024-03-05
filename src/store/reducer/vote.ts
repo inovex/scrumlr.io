@@ -20,10 +20,6 @@ export const voteReducer = (state: VotesState = [], action: ReduxAction): VotesS
     }
   }
 
-  if (action.type === Action.AbortVoting) {
-    return state.filter((v) => v.voting !== action.voting);
-  }
-
   if (action.type === Action.UpdatedVotes) {
     return action.votes;
   }
