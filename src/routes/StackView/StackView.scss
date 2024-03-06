@@ -35,8 +35,10 @@ $stack-view__min-height: 82px;
 }
 
 .stack-view__content {
-  height: 72vh;
+  height: auto;
   position: relative;
+  flex-grow: 1;
+  overflow-x: scroll;
 }
 
 .stack-view__animation-wrapper {

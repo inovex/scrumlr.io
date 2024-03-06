@@ -10,6 +10,7 @@
   align-items: center;
   justify-content: center;
   gap: min(4vw, 48px);
+  flex-shrink: 0;
 }
 
 .stack-view__navigation-button {
