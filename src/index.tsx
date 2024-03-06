@@ -11,6 +11,7 @@ import i18n from "i18n";
 import {LoadingScreen} from "components/LoadingScreen";
 import {Actions} from "store/action";
 import {Html} from "components/Html";
+import {Tooltip} from "components/Tooltip";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import {register} from "serviceWorkerRegistration";
@@ -54,6 +55,7 @@ root.render(
       <Provider store={store}>
         <Html />
         <Suspense fallback={<LoadingScreen />}>
+          <Tooltip id="scrumlr-tooltip" />
           <ToastContainer limit={2} />
           <Router />
           {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}

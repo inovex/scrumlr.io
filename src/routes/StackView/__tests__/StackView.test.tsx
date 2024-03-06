@@ -10,6 +10,10 @@ import {StackView} from "../StackView";
 import {ApplicationState} from "types";
 import getTestStore from "utils/test/getTestStore";
 
+jest.mock("utils/hooks/useImageChecker.ts", () => ({
+  useImageChecker: () => false,
+}));
+
 const BOARD_ID = "test-board-id";
 const NOTE_ID = "test-notes-id-1";
 

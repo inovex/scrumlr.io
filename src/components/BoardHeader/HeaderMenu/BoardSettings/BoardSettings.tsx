@@ -1,5 +1,5 @@
 import "./BoardSettings.scss";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import store, {useAppSelector} from "store";
 import {ApplicationState} from "types";
 import {Actions} from "store/action";
@@ -14,18 +14,12 @@ export type BoardSettingsProps = {
 
 export const BoardSettings = (props: BoardSettingsProps) => {
   const {t} = useTranslation();
-  const state = useAppSelector((applicationState: ApplicationState) => ({
-    board: applicationState.board.data!,
-  }));
+  const name = useAppSelector((state: ApplicationState) => state.board.data!.name) ?? "";
 
-  const [boardName, setBoardName] = useState(state.board.name ?? "");
-
-  useEffect(() => {
-    setBoardName(state.board.name ?? "");
-  }, [state.board.name]);
+  const [boardName, setBoardName] = useState(name);
 
   const onSubmit = () => {
-    if (props.activeEditMode && state.board!.name !== boardName) {
+    if (props.activeEditMode && name !== boardName) {
       store.dispatch(Actions.editBoard({name: boardName}));
     }
     props.setActiveEditMode(!props.activeEditMode);
