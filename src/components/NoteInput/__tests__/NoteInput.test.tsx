@@ -5,6 +5,10 @@ import i18nTest from "i18nTest";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 
+jest.mock("utils/hooks/useImageChecker.ts", () => ({
+  useImageChecker: () => false,
+}));
+
 const createNoteInput = (columnId: string, maxNoteLength: number) => (
   <I18nextProvider i18n={i18nTest}>
     <Provider store={getTestStore()}>
