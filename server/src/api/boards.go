@@ -70,27 +70,11 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
-	OverviewBoards := make([]*dto.BoardOverview, len(boardIDs))
-	for i, id := range boardIDs {
-		board, sessions, cols, err := s.boards.BoardOverview(r.Context(), id)
-		participantNum := len(sessions)
-		columnNum := len(cols)
-		if err != nil {
-			log.Errorw("unable to get board overview", "err", err)
-			common.Throw(w, r, common.InternalServerError)
-			return
-		}
-		for _, session := range sessions {
-			if session.User.ID == user {
-				sessionCreated := session.CreatedAt
-				OverviewBoards[i] = &dto.BoardOverview{
-					Board:        board,
-					Participants: participantNum,
-					CreatedAt:    sessionCreated,
-					Columns:      columnNum,
-				}
-			}
-		}
+	OverviewBoards, err := s.boards.BoardOverview(r.Context(), boardIDs, user)
+	if err != nil {
+		log.Errorw("unable to get board overview", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
 	}
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, OverviewBoards)

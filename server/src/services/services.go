@@ -41,7 +41,7 @@ type Boards interface {
 	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
 
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error)
-	BoardOverview(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSession, []*dto.Column, error)
+	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error)
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
 }
 

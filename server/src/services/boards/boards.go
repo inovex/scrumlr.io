@@ -105,13 +105,29 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Reactions(reactions), dto.Votings(votings, votes), personalVotes, err
 }
 
-func (s *BoardService) BoardOverview(_ context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSession, []*dto.Column, error) {
-	board, sessions, columns, err := s.database.GetBoardOverview(boardID)
-	if err != nil {
-		return nil, nil, nil, err
+func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error) {
+	OverviewBoards := make([]*dto.BoardOverview, len(boardIDs))
+	for i, id := range boardIDs {
+		board, sessions, columns, err := s.database.GetBoardOverview(id)
+		if err != nil {
+			return nil, err
+		}
+		participantNum := len(sessions)
+		columnNum := len(columns)
+		dtoBoard := new(dto.Board).From(board)
+		for _, session := range sessions {
+			if session.User == user {
+				sessionCreated := session.CreatedAt
+				OverviewBoards[i] = &dto.BoardOverview{
+					Board:        dtoBoard,
+					Participants: participantNum,
+					CreatedAt:    sessionCreated,
+					Columns:      columnNum,
+				}
+			}
+		}
 	}
-
-	return new(dto.Board).From(board), dto.BoardSessions(sessions), dto.Columns(columns), err
+	return OverviewBoards, nil
 }
 
 func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
