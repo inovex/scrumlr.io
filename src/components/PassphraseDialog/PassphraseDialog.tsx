@@ -29,8 +29,8 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit, incorrect
   };
 
   const submitPassphraseForm = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (passphrase.length === 0) {
-      e.preventDefault();
       return;
     }
     onSubmit(passphrase);

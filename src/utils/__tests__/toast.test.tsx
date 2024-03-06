@@ -1,4 +1,4 @@
-import {render, screen} from "@testing-library/react";
+import {act, render, screen} from "@testing-library/react";
 import {ToastContainer} from "react-toastify";
 import {Toast, Options} from "utils/Toast";
 
@@ -18,7 +18,10 @@ describe("Toast", () => {
     // arrange
     render(<ToastContainer />);
     // act
-    const toastId = Toast.success(testOptions);
+    let toastId;
+    act(() => {
+      toastId = Toast.success(testOptions);
+    });
     // assert
     expect(toastId).toBe("1");
     const toastElement = await screen.findByText(testOptions.title);

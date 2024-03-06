@@ -17,6 +17,7 @@ import {register} from "serviceWorkerRegistration";
 import Plausible from "plausible-tracker";
 import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "./config";
 import "react-tooltip/dist/react-tooltip.css";
+import {Tooltip} from "components/Tooltip";
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
 if (APP_VERSION) {
@@ -54,6 +55,7 @@ root.render(
       <Provider store={store}>
         <Html />
         <Suspense fallback={<LoadingScreen />}>
+          <Tooltip id="scrumlr-tooltip" />
           <ToastContainer limit={2} />
           <Router />
           {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}

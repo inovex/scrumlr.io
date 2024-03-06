@@ -1,9 +1,5 @@
 @import "constants/style.scss";
 
-.tooltip-container {
-  position: absolute;
-}
-
 .tooltip-container .tooltip {
   background-color: $hover-background-light;
   border-radius: $rounded--full;
@@ -11,6 +7,7 @@
   font-size: $text--sm;
   font-weight: 600;
   padding: $spacing--xs $spacing--base;
+  z-index: 9999;
 }
 
 [theme="dark"] .tooltip-container .tooltip {
