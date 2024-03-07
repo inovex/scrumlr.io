@@ -60,6 +60,26 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
+func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
+	user := r.Context().Value("User").(uuid.UUID)
+
+	boardIDs, err := s.boards.GetBoards(r.Context(), user)
+	if err != nil {
+		log.Errorw("unable to get board ids for this user", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+	OverviewBoards, err := s.boards.BoardOverview(r.Context(), boardIDs, user)
+	if err != nil {
+		log.Errorw("unable to get board overview", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, OverviewBoards)
+}
+
 // getBoard get a board
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
