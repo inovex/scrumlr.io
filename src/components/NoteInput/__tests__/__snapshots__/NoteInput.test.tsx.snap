@@ -6,9 +6,6 @@ exports[`Note Input should render correctly 1`] = `
 >
   <textarea
     class="note-input__input"
-    data-tooltip-delay-show="500"
-    data-tooltip-float="true"
-    data-tooltip-id="scrumlr-tooltip"
     maxlength="1024"
     placeholder="Add your note..."
     rows="1"
