@@ -72,10 +72,6 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
-        data-tooltip-id="scrumlr-tooltip"
-        data-tooltip-content={hotkeyKey}
-        data-tooltip-delay-show={500}
-        data-tooltip-float
         {...emoji.inputBindings}
         onKeyDown={(e) => {
           // handle emoji input
