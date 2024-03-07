@@ -179,7 +179,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusCreated)
 			return
 		} else {
-			common.Throw(w, r, common.ForbiddenError(errors.New("wrong passphrase")))
+			common.Throw(w, r, common.BadRequestError(errors.New("wrong passphrase")))
 			return
 		}
 	}
