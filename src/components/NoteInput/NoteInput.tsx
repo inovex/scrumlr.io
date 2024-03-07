@@ -22,7 +22,7 @@ export interface NoteInputProps {
   hotkeyKey?: string;
 }
 
-export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility}: NoteInputProps) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
