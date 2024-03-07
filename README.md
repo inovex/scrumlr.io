@@ -74,6 +74,7 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
 [<img src="https://avatars.githubusercontent.com/u/39419411?v=4" width="48" height="48" alt="MarvinRoth">](https://github.com/MarvinRoth)
 [<img src="https://avatars.githubusercontent.com/u/71148001?v=4" width="48" height="48" alt="blxckOxymoron">](https://github.com/blxckOxymoron)
 [<img src="https://avatars.githubusercontent.com/u/54246641?v=4" width="48" height="48" alt="Quasilius-Starlord">](https://github.com/Quasilius-Starlord)
+[<img src="https://avatars.githubusercontent.com/u/52677920?v=4" width="48" height="48" alt="mateo-ivc">](https://github.com/mateo-ivc)
 
 ... and many more!
 
