@@ -51,10 +51,6 @@ exports[`Column should have correct style show column with correct style 1`] = `
       >
         <textarea
           class="note-input__input"
-          data-tooltip-content="OPTION/ALT + 1"
-          data-tooltip-delay-show="500"
-          data-tooltip-float="true"
-          data-tooltip-id="scrumlr-tooltip"
           maxlength="1024"
           placeholder="Add your note..."
           rows="1"
