@@ -151,6 +151,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(auth.AuthContext)
 
 		r.Post("/boards", s.createBoard)
+		r.Get("/boards", s.getBoards)
 
 		r.Route("/boards/{id}", func(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/", s.getBoard)

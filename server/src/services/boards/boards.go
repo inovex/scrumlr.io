@@ -39,6 +39,19 @@ func (s *BoardService) Get(_ context.Context, id uuid.UUID) (*dto.Board, error) 
 	return new(dto.Board).From(board), err
 }
 
+// get all associated boards of a given user
+func (s *BoardService) GetBoards(_ context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
+	boards, err := s.database.GetBoards(userID)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]uuid.UUID, len(boards))
+	for i, board := range boards {
+		result[i] = board.ID
+	}
+	return result, nil
+}
+
 func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) (*dto.Board, error) {
 	log := logger.FromContext(ctx)
 	// map request on board object to insert into database
@@ -76,10 +89,10 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	return new(dto.Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote,  error) {
-	board, requests, sessions, columns, notes, reactions, votings, votes,  err := s.database.Get(boardID)
+func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error) {
+	board, requests, sessions, columns, notes, reactions, votings, votes, err := s.database.Get(boardID)
 	if err != nil {
-		return nil, nil, nil, nil, nil, nil, nil, nil,  err
+		return nil, nil, nil, nil, nil, nil, nil, nil, err
 	}
 
 	personalVotes := []*dto.Vote{}
@@ -90,6 +103,31 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 	}
 
 	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Reactions(reactions), dto.Votings(votings, votes), personalVotes, err
+}
+
+func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error) {
+	OverviewBoards := make([]*dto.BoardOverview, len(boardIDs))
+	for i, id := range boardIDs {
+		board, sessions, columns, err := s.database.GetBoardOverview(id)
+		if err != nil {
+			return nil, err
+		}
+		participantNum := len(sessions)
+		columnNum := len(columns)
+		dtoBoard := new(dto.Board).From(board)
+		for _, session := range sessions {
+			if session.User == user {
+				sessionCreated := session.CreatedAt
+				OverviewBoards[i] = &dto.BoardOverview{
+					Board:        dtoBoard,
+					Participants: participantNum,
+					CreatedAt:    sessionCreated,
+					Columns:      columnNum,
+				}
+			}
+		}
+	}
+	return OverviewBoards, nil
 }
 
 func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
@@ -170,30 +208,30 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 		return nil, err
 	}
 
-  var timerStart time.Time
-  var timerEnd time.Time
+	var timerStart time.Time
+	var timerEnd time.Time
 
-  currentTime := time.Now().Local()
+	currentTime := time.Now().Local()
 
-  if board.TimerEnd.After(currentTime) {
-    timerStart = *board.TimerStart
-    timerEnd = board.TimerEnd.Add(time.Minute * time.Duration(1))
-  } else {
-    timerStart = currentTime
-    timerEnd = currentTime.Add(time.Minute * time.Duration(1))
-  }
+	if board.TimerEnd.After(currentTime) {
+		timerStart = *board.TimerStart
+		timerEnd = board.TimerEnd.Add(time.Minute * time.Duration(1))
+	} else {
+		timerStart = currentTime
+		timerEnd = currentTime.Add(time.Minute * time.Duration(1))
+	}
 
-  update := database.BoardTimerUpdate{
-    ID: board.ID,
-    TimerStart: &timerStart,
-    TimerEnd: &timerEnd,
-  }
+	update := database.BoardTimerUpdate{
+		ID:         board.ID,
+		TimerStart: &timerStart,
+		TimerEnd:   &timerEnd,
+	}
 
-  board, err = s.database.UpdateBoardTimer(update)
-  if err != nil {
-    return nil, err
-  }
-  return new(dto.Board).From(board), nil
+	board, err = s.database.UpdateBoardTimer(update)
+	if err != nil {
+		return nil, err
+	}
+	return new(dto.Board).From(board), nil
 }
 
 func (s *BoardService) UpdatedBoardTimer(board database.Board) {
