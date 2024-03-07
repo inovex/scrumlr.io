@@ -162,7 +162,10 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "unable to parse request body", http.StatusBadRequest)
 			return
 		}
-
+		if body.Passphrase == "" {
+			http.Error(w, "unable to parse request body, missing password", http.StatusBadRequest)
+			return
+		}
 		encodedPassphrase := common.Sha512BySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
 			_, err := s.sessions.Create(r.Context(), board, user)
