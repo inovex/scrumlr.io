@@ -9,11 +9,11 @@
   background-color: var(--accent-color--desaturated-light);
   color: var(--accent-color);
   transition:
-    background-color 150ms ease-in-out,
-    color 150ms ease-in-out;
+    background-color 80ms ease-in-out,
+    color 80ms ease-in-out;
   box-shadow:
-    0 1px 3px 0 rgb(0 0 0 / 0.1),
-    0 1px 2px -1px rgb(0 0 0 / 0.1);
+    0 1px 3px 0 rgba(var(--accent-color-rgb), 0.1),
+    0 1px 2px -1px rgba(var(--accent-color-rgb), 0.1);
 }
 
 .vote-button-remove:disabled {
