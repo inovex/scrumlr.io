@@ -11,7 +11,7 @@
     background-color: $color-white;
     border: none;
     outline: none;
-    padding: 0 $padding--medium;
+    padding: 0 $spacing--lg;
     font-size: $text-size--medium;
     font-weight: bold;
     padding-top: 10px;
@@ -29,7 +29,7 @@
     &:focus-visible ~ label,
     &:not(.settings-input__hidden-placeholder) ~ label,
     &:not(:placeholder-shown) ~ label {
-      margin: 0 $margin--medium;
+      margin: 0 $spacing--lg;
       top: 2px;
       font-size: $text-size--small;
       line-height: $line-height--medium;
@@ -41,7 +41,7 @@
   }
 
   label {
-    margin: $margin--default $margin--medium;
+    margin: $spacing--base $spacing--lg;
     position: absolute;
     transition: all 0.08s ease-out;
     cursor: text;
@@ -58,7 +58,7 @@
   position: absolute;
   right: 0;
   top: 2px;
-  margin: 0 $margin--medium;
+  margin: 0 $spacing--lg;
   opacity: 0;
   transition: opacity 100ms;
   font-size: $text-size--small;
@@ -71,7 +71,7 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
-  padding: $padding--small $padding--medium;
+  padding: $spacing--xs $spacing--lg;
   pointer-events: none;
 
   * {

@@ -90,7 +90,7 @@
 .confirmation-dialog__button {
   border: 2px solid $color-backlog-blue;
   border-radius: $rounded--full;
-  padding: $padding--small $padding--medium;
+  padding: $spacing--xs $spacing--lg;
   font-size: $text-size--medium;
   font-weight: bold;
   min-height: 48px;
@@ -114,7 +114,7 @@
 .confirmation-dialog__buttons {
   display: flex;
   justify-content: flex-end;
-  gap: $margin--default;
+  gap: $spacing--base;
 }
 
 .confirmation-dialog__close-button {

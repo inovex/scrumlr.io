@@ -29,8 +29,10 @@ export const TooltipButton = (props: TooltipButtonProps) => {
           {props.hotkeyKey !== undefined && <span className="tooltip-button__hotkey">{` [${props.hotkeyKey}]`}</span>}
         </span>
       </div>
-      <Icon className="tooltip-button__icon" aria-hidden />
-      <CloseIcon className="tooltip-button__icon" aria-hidden />
+      <div className="tooltip-button__icon-container">
+        <Icon className="tooltip-button__icon" aria-hidden />
+        <CloseIcon className="tooltip-button__icon" aria-hidden />
+      </div>
     </button>
   );
 };

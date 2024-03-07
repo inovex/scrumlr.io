@@ -14,7 +14,7 @@
   top: 0;
   left: 0;
   right: 0;
-  padding: $padding--default;
+  padding: $spacing--base;
 
   display: flex;
   justify-content: space-between;
@@ -47,7 +47,7 @@
 }
 
 .homepage__logout-button {
-  margin-left: $margin--small;
+  margin-left: $spacing--xs;
 }
 
 .homepage__hero-content-wrapper {
@@ -57,7 +57,7 @@
   min-width: 100%;
   min-height: 100vh;
   padding-top: 86px;
-  padding-bottom: $padding--large;
+  padding-bottom: $spacing--xl;
 }
 
 .homepage__hero-content {
@@ -67,7 +67,7 @@
   align-items: center;
   gap: 0;
   max-width: 1080px;
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
   margin-top: 48px;
   margin-bottom: 48px;
 }
@@ -115,7 +115,7 @@
 }
 
 .homepage__proceed-icon {
-  margin-left: $margin--default;
+  margin-left: $spacing--base;
 }
 
 .homepage__illustration {
@@ -130,7 +130,7 @@
   text-align: left;
   max-width: 1280px;
   margin: 0 auto;
-  padding: $padding--large;
+  padding: $spacing--xl;
 }
 
 .homepage__footer > * {
@@ -210,7 +210,7 @@
 
 @media #{$tablet} {
   .homepage__header {
-    padding: $padding--large;
+    padding: $spacing--xl;
   }
 
   .homepage__hero {
@@ -258,7 +258,7 @@
 
   .homepage__footer-link + .homepage__footer-link::before {
     content: "|";
-    margin-left: $margin--small;
-    margin-right: $margin--small;
+    margin-left: $spacing--xs;
+    margin-right: $spacing--xs;
   }
 }

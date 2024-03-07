@@ -65,7 +65,7 @@ $tooltip-button-size: 46px;
 
 .tooltip-button__tooltip-text {
   width: 100%;
-  padding: 0 $padding--default;
+  padding: 0 $spacing--base;
   white-space: nowrap;
   font-size: 14px;
   font-weight: bold;
@@ -75,9 +75,16 @@ $tooltip-button-size: 46px;
   color: var(--accent-color);
 }
 
+.tooltip-button__icon-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: $rounded--full;
+  background: $menu-icon-background-color--light;
+  transition: background-color 0.2s ease-out;
+}
+
 .tooltip-button__icon {
-  background-clip: content-box !important;
-  background-color: $menu-icon-background-color--light;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
@@ -161,8 +168,8 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      padding-right: $tooltip-button-size + $padding--small;
-      padding-left: $padding--default;
+      padding-right: $tooltip-button-size + $spacing--xs;
+      padding-left: $spacing--base;
       transform: translateX(100%);
       transform-origin: right;
     }
@@ -174,8 +181,8 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      padding-left: $tooltip-button-size + $padding--small;
-      padding-right: $padding--default;
+      padding-left: $tooltip-button-size + $spacing--xs;
+      padding-right: $spacing--base;
       transform: translateX(-100%);
       transform-origin: left;
     }
@@ -183,8 +190,67 @@ $tooltip-button-size: 46px;
 }
 
 @media #{$smartphone} {
+  $tooltip-button-size--mobile: 52px;
+
+  .tooltip-button__icon-container {
+    position: static;
+    box-shadow: $box-shadow--light;
+  }
+
+  .tooltip-button {
+    $clickable-area-size: calc($tooltip-button-size--mobile + $spacing--base);
+    height: $clickable-area-size;
+    width: $clickable-area-size;
+    padding: $spacing--xs;
+    background: none;
+
+    &--active {
+      &:enabled:active {
+        .tooltip-button__icon {
+          background: none;
+          &:nth-of-type(1) {
+            visibility: hidden;
+          }
+          &:nth-of-type(2) {
+            visibility: visible;
+          }
+        }
+      }
+
+      .tooltip-button__icon-container {
+        background-color: $menu-icon-background-color--dark;
+      }
+    }
+  }
+
+  .tooltip-button__icon {
+    background: none;
+    height: $tooltip-button-size--mobile;
+    width: $tooltip-button-size--mobile;
+    padding: $spacing--xxs;
+    top: $spacing--xs;
+    left: $spacing--xs;
+  }
+
   .tooltip-button .tooltip-button__tooltip {
     display: none;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  $tooltip-button-size--mobile: 52px;
+
+  .tooltip-button {
+    $clickable-area-size: calc($tooltip-button-size--mobile + $spacing--xs);
+    height: $clickable-area-size;
+    width: $clickable-area-size;
+  }
+
+  .tooltip-button__icon {
+    height: $tooltip-button-size--mobile;
+    width: $tooltip-button-size--mobile;
+    top: $spacing--xxs;
+    left: $spacing--xxs;
   }
 }
 
@@ -193,6 +259,7 @@ $tooltip-button-size: 46px;
     &:focus-visible,
     &:hover {
       .tooltip-button__icon {
+        background: none;
         border-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
       }
     }
@@ -200,10 +267,19 @@ $tooltip-button-size: 46px;
     &:focus-visible .tooltip-button__icon {
       outline: 2px solid rgba($color-white, 0.5);
     }
+
+    &--active {
+      .tooltip-button__icon-container {
+        background-color: $menu-icon-background-color--light;
+      }
+    }
+  }
+
+  .tooltip-button__icon-container {
+    background: $menu-icon-background-color--dark;
   }
 
   .tooltip-button__icon {
-    background: $menu-icon-background-color--dark;
     color: var(--accent-color--dark, $color-white);
     fill: var(--accent-color--dark);
   }

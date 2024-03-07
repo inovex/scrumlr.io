@@ -51,7 +51,7 @@
 .column__header {
   display: flex;
   flex-direction: column;
-  padding: 0 $padding--large;
+  padding: 0 $spacing--xl;
 }
 
 .column__header-title {
@@ -59,7 +59,7 @@
   word-break: break-word;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: $margin--default;
+  margin-bottom: $spacing--base;
   height: 48px;
   position: relative;
 }
@@ -71,7 +71,7 @@
   width: auto;
   height: auto;
   border-bottom: solid 3px var(--accent-color);
-  margin: 0 $margin--small 0 0;
+  margin: 0 $spacing--xs 0 0;
   overflow: hidden;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .column__header-card-number {
-  margin-bottom: $margin--default;
+  margin-bottom: $spacing--base;
   font-size: $text-size--medium;
   color: $color-middle-gray;
   font-weight: 600;
@@ -150,7 +150,7 @@
 .column__note-list {
   margin: 0;
   // padding-top of 4px to display note outline focus correctly
-  padding: 4px $padding--large $padding--default $padding--large;
+  padding: 4px $spacing--xl $spacing--base $spacing--xl;
   display: grid;
   grid-auto-flow: row;
   grid-row-gap: 20px;
@@ -178,7 +178,7 @@
   width: $icon--medium;
   min-width: $icon--medium;
   min-height: $icon--medium;
-  margin: 0 $margin--small 0 0;
+  margin: 0 $spacing--xs 0 0;
   color: $color-warning-red;
   cursor: pointer;
   transition: all 0.08s ease-out;
@@ -204,7 +204,7 @@
   padding: 0;
   transition: all 0.08s ease-out;
   flex: 0 0 24px;
-  margin: auto calc(#{$margin--default} - 2px) auto $margin--default;
+  margin: auto calc(#{$spacing--base} - 2px) auto $spacing--base;
 
   &:hover > svg,
   &:focus-visible > svg {

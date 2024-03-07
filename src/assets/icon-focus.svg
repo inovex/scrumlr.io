@@ -1,13 +1,7 @@
-<svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-<g fill="none" stroke="currentColor">
-<g transform="translate(7 11)">
-<line x1="16" x2="11" y1="4.011" y2="9" stroke-linejoin="round" stroke-width="1.5"/>
-<polyline points="13 4 15.989 4 16 4.011 16 7" stroke-linecap="square" stroke-width="1.5"/>
-<g stroke-linejoin="round">
-<path d="m0.8878 2.0618c0-1.0855 0.71916-1.9737 1.5981-1.9737h15.804c0.87898 0 1.5981 0.88817 1.5981 1.9737v12.053c0 1.0855-0.71916 1.9737-1.5981 1.9737h-15.804c-0.87898 0-1.5981-0.88817-1.5981-1.9737v-12.053z" stroke-width="2"/>
-<line x1="3.5" x2="17.348" y1="13" y2="12.773" opacity=".7" stroke-linecap="round" stroke-width="1.5"/>
-</g>
-</g>
-<path d="m24.525 7.5339h-0.48163 1.4129c2.2471 0 5.0687 2.7513 5.0687 4.9117v1.0883 0.42694" opacity=".7" stroke-width="1.5"/>
-</g>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M5 11.5284C5 10.4429 5.71916 9.55469 6.59814 9.55469H22.4019C23.2808 9.55469 24 10.4429 24 11.5284V23.581C24 24.6665 23.2808 25.5547 22.4019 25.5547H6.59814C5.71916 25.5547 5 24.6665 5 23.581V11.5284Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" fill="none"/>
+<path d="M20.1094 13.4766L15.1094 18.4656" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+<path d="M17.1094 13.4688H20.0981L20.1094 13.4797V16.4688" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" fill="none"/>
+<path d="M7.60938 22.4695L21.4574 22.2422" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<path d="M22.5703 6C24.8174 6 27.639 8.75131 27.639 10.9117V12" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round" fill="none"/>
 </svg>

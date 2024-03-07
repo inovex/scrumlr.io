@@ -62,6 +62,8 @@
     "deleteNoteButton": "Kärtchen löschen",
     "deleteStackButton": "Stapel löschen",
     "deleteOptions": "Was möchtest du löschen?",
+    "banParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" aus der Session entfernen möchtest?",
+    "unbanParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" wieder zur Session zulassen möchtest?",
     "warning": "Die Aktion ist nicht umkehrbar.",
     "yes": "Ja",
     "no": "Nein",
@@ -80,7 +82,8 @@
     "openPrintView": "Druckansicht öffnen",
     "exportToClipboard": "Markdown in die Zwischenablage kopieren",
     "copyToClipboardSuccess": "Markdown kopiert!",
-    "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:"
+    "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:",
+    "hintHiddenNotes": "Die Kärtchen der anderen Teilnehmenden sind ausgeblendet und werden nicht exportiert."
   },
   "PrintView": {
     "Participants": "Teilnehmer",
@@ -157,12 +160,16 @@
     "create": "Kärtchen erstellen"
   },
   "PassphraseDialog": {
-    "passphraseInputLabel": "Gib das Passwort ein, um beizutreten",
-    "togglePassphraseVisibility": "Schalte Sichtbarkeit des Passworts um",
-    "submit": "Absenden"
+    "showPassword": "Zeige das Passwort",
+    "hidePassword": "Verberge das Passwort",
+    "label": "Gib das Passwort ein, um dieses Board zu öffnen",
+    "submit": "Board öffnen",
+    "inputPlaceholder": "Passwort",
+    "incorrectPassphrase": "Ups, das war das falsche Passwort. Versuch's nochmal!"
   },
   "Timer": {
-    "stopTimer": "Stoppe Timer",
+    "endTimer": "Timer beenden",
+    "addOneMinute": "Timer um eine Minute erhöhen",
     "reduce": "Reduziere Zeit",
     "increase": "Erhöhe Zeit"
   },
@@ -235,11 +242,10 @@
     "decreaseVotes": "Anzahl Stimmen verringern",
     "startVoting": "Abstimmung starten",
     "cancelVoting": "Abstimmung abbrechen",
-    "stopVoting": "Abstimmung beenden"
+    "stopVoting": "Abstimmung abschließen"
   },
   "VoteDisplay": {
-    "finishActionTooltip": "Abstimmung beenden",
-    "abortActionTooltip": "Abstimmung abbrechen",
+    "finishActionTooltip": "Abstimmung abschließen",
     "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
   },
   "TimerToggleButton": {
@@ -279,6 +285,8 @@
     "allParticipantsDone": "Alle Teilnehmer sind fertig!",
     "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
+    "bannedParticipant": "Teilnehmer \"{{user}}\" wurde entfernt",
+    "unbannedParticipant": "Teilnehmer \"{{user}}\" wird wieder zur Session zugelassen",
     "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
@@ -367,7 +375,9 @@
     "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
     "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator",
     "ResetBannerText": "Fertige Teilnehmer zurücksetzen.",
-    "ResetBannerButton": "Zurücksetzen"
+    "ResetBannerButton": "Zurücksetzen",
+    "BanParticipantTooltip": "Teilnehmer \"{{user}}\" bannen",
+    "UnbanParticipantTooltip": "Teilnehmer \"{{user}}\" entbannen"
   },
   "UserRole": {
     "Owner": "Besitzer",
@@ -418,6 +428,7 @@
     "unstackNote": "Es tut uns leid, aber wir haben ein Problem beim Entstapeln des Kärtchens. Bitte versuche es erneut.",
     "setRaiseHand": "Es tut uns leid, aber wir haben ein Problem beim Heben deiner Hand. Bitte versuche es erneut.",
     "setUserReady": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deines Statuses. Bitte versuche es erneut.",
+    "setUserBanned": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren dieses Nutzerstatus. Bitte versuche es erneut.",
     "setShowHiddenColumns": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spaltensichtbarkeit. Bitte versuche es erneut.",
     "changePermission": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Berechtigungen. Bitte versuche es erneut.",
     "logout": "Es tut uns leid, aber wir haben Probleme dich abzumelden.",
@@ -632,8 +643,9 @@
     "inactive": "Inaktiv"
   },
   "RejectionPage": {
-    "title": "Oops!",
+    "title": "Ups!",
     "description": "Es sieht so aus, als ob die Türen zu dieser Sitzung vorerst geschlossen bleiben. Wir freuen uns über dein Interesse, aber leider wurde dein Antrag auf Teilnahme abgelehnt.",
+    "banned": "Es tut uns Leid, aber es sieht so aus, als ob du von dieser Sitzung ausgeschlossen wurdest.",
     "button": "Zurück zur Startseite"
   }
 }

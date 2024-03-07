@@ -13,7 +13,7 @@
   justify-content: center;
 
   &:has(&--image) {
-    padding: $padding--small;
+    padding: $spacing--xs;
   }
   &:has(&--image-zoom) {
     overflow: visible;
@@ -97,11 +97,11 @@
 
 .note-dialog__note-content--emoji-suggestions {
   position: absolute;
-  top: calc(100% + $padding--small);
+  top: calc(100% + $spacing--xs);
   left: 0;
   width: 100%;
   max-height: min(300px, calc(100svh - $note-dialog-emoji-suggestions__approx-top-distance));
-  margin-bottom: $margin--large;
+  margin-bottom: $spacing--xl;
 
   z-index: $note-dialog__emoji-suggestions-z-index;
   border-radius: $rounded--default;

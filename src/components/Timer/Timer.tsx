@@ -5,13 +5,15 @@ import {Actions} from "store/action";
 import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {ReactComponent as PlusOneIcon} from "assets/icon-plus-one.svg";
+import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
 import {API} from "api";
 import {Timer as TimerUtils} from "utils/timer";
-import "./Timer.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
+import "./Timer.scss";
 
 type TimerProps = {
   startTime: Date;
@@ -102,34 +104,52 @@ export const Timer = (props: TimerProps) => {
   }, [allParticipantsReady, isModerator]);
 
   return (
-    <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
-      <div className="vote-display__progress-bar" style={{right: `calc(72px - ${elapsedTimePercentage} * 72px)`}} />
-      <span>
-        {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
-      </span>
-      <div className="timer__short-actions">
-        {isModerator ? (
-          <div className="short-actions__short-action">
-            <button aria-label={t("Timer.stopTimer")} className="short-action__button" onClick={() => store.dispatch(Actions.cancelTimer())}>
-              <CancelIcon />
-            </button>
-            <span className="short-action__tooltip">{t("Timer.stopTimer")}</span>
-          </div>
-        ) : (
-          <div className="short-actions__short-action">
+    <div className="timer__container">
+      <div id="timer" className={classNames("timer", {"timer--expired": timeLeft.m === 0 && timeLeft.s === 0})}>
+        <div className="timer__progress-bar" style={{right: `calc(72px - ${elapsedTimePercentage} * 72px)`}} />
+        <span>
+          {String(timeLeft!.m).padStart(2, "0")}:{String(timeLeft!.s).padStart(2, "0")}
+        </span>
+        <ul className="timer__short-actions">
+          {isModerator && (
+            <li className="short-actions__short-action">
+              <button
+                data-tooltip-id="info-bar__tooltip"
+                data-tooltip-content={t("Timer.endTimer")}
+                aria-label={t("Timer.endTimer")}
+                className="short-action__button"
+                onClick={() => store.dispatch(Actions.cancelTimer())}
+              >
+                <FlagIcon />
+              </button>
+            </li>
+          )}
+          <li className="short-actions__short-action">
             <button
+              data-tooltip-id="info-bar__tooltip"
+              data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-              className={classNames("short-action__button", {"short-action__button--ready": isReady}, {"short-action__button--unready": !isReady})}
+              className={classNames("short-action__button", {"short-action__button--ready": isReady})}
               onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
             >
               <CheckIcon className="short-action__check-icon" />
               <CancelIcon className="short-action__cancel-icon" />
             </button>
-            <span className="short-action__tooltip">{isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}</span>
-          </div>
-        )}
+          </li>
+        </ul>
+        <TimerIcon />
       </div>
-      <TimerIcon />
+      {isModerator && (
+        <button
+          data-tooltip-id="info-bar__tooltip"
+          data-tooltip-content={t("Timer.addOneMinute")}
+          aria-label={t("Timer.addOneMinute")}
+          className="timer__increment-button"
+          onClick={() => store.dispatch(Actions.incrementTimer())}
+        >
+          <PlusOneIcon />
+        </button>
+      )}
     </div>
   );
 };

@@ -27,7 +27,7 @@ $max-name-length: 112px;
 
 .note-author__container--self {
   background: var(--accent-color--desaturated-light);
-  padding-right: $padding--default;
+  padding-right: $spacing--base;
   width: max-content;
 }
 

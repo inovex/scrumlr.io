@@ -7,7 +7,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: $padding--medium;
+  gap: $spacing--lg;
   height: $FEEDBACK_OPTION_HEIGHT;
 }
 
@@ -25,7 +25,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   gap: 4px;
   height: $FEEDBACK_OPTION_HEIGHT;
   width: $FEEDBACK_OPTION_WIDTH;
-  padding: $padding--small;
+  padding: $spacing--xs;
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
@@ -55,11 +55,11 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: $padding--medium;
+  gap: $spacing--lg;
 }
 
 .feedback-form__submit-button {
-  padding: $padding--small $padding--medium;
+  padding: $spacing--xs $spacing--lg;
   border-radius: 32px;
   background-color: var(--accent-color);
   color: $color-white;
@@ -81,8 +81,8 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   flex-direction: column;
   align-items: flex-start;
   height: auto;
-  gap: $padding--small;
-  padding: $padding--default $padding--medium;
+  gap: $spacing--xs;
+  padding: $spacing--base $spacing--lg;
 }
 .feedback-form__settings-button > span {
   padding-bottom: 0;
@@ -114,7 +114,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
 }
 
 .settings-dialog__error-message {
-  margin-top: $margin--default;
+  margin-top: $spacing--base;
   color: $color-warning-red;
   width: 100%;
   text-align: center;

@@ -3,7 +3,6 @@ import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
-import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
 Object.assign(navigator, {
   clipboard: {

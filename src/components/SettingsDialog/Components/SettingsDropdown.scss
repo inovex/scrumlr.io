@@ -10,7 +10,7 @@
     background-color: $color-white;
     border: none;
     border-radius: 8px;
-    padding: $padding--default $padding--medium;
+    padding: $spacing--base $spacing--lg;
     margin: 0;
     display: flex;
     justify-content: space-between;
@@ -46,12 +46,12 @@
     }
 
     &-icon {
-      margin-right: $margin--small;
+      margin-right: $spacing--xs;
       width: $icon--medium;
       height: $icon--medium;
 
       &--dropdown {
-        margin-left: $margin--small;
+        margin-left: $spacing--xs;
         transform: rotate(0.25turn);
         transition: transform 200ms;
       }
@@ -64,7 +64,7 @@
     position: absolute;
     width: fit-content;
     right: 0;
-    margin: 0 $margin--default 0 0;
+    margin: 0 $spacing--base 0 0;
     padding: 0;
     background-color: $color-white;
     border-radius: 0 0 8px 8px;

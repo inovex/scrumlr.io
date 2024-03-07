@@ -1013,6 +1013,15 @@ exports[`Participants should render filter and participants correctly 1`] = `
             </button>
           </div>
         </div>
+        <button
+          aria-label="Participants.BanParticipantTooltip"
+          class="participant__kick-icon"
+          title="Participants.BanParticipantTooltip"
+        >
+          <svg>
+            icon-kick-participant.svg
+          </svg>
+        </button>
       </li>
     </ul>
   </div>

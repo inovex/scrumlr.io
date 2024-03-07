@@ -12,7 +12,6 @@ describe("Timer", () => {
 
   describe("calculateTimeLeft", () => {
     it("should return the correct time left", () => {
-      console.log(new Date());
       const endTime = new Date(2022, 0, 1, 14, 5, 10);
       const timeLeft = Timer.calculateTimeLeft(endTime);
       expect(timeLeft).toEqual({h: 1, m: 5, s: 10});

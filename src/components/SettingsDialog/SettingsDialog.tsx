@@ -1,5 +1,5 @@
 import {useEffect, FC} from "react";
-import {animated, Transition} from "react-spring";
+import {animated, Transition} from "@react-spring/web";
 import {Outlet, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
 import classNames from "classnames";

@@ -10,8 +10,8 @@ $header-menu-toggle-height: 3px;
 $header-menu-toggle-background-color: #c8c8c8;
 
 .board-option-toggle {
-  margin-left: $margin--default;
-  margin-right: $margin--default;
+  margin-left: $spacing--base;
+  margin-right: $spacing--base;
   height: $header-menu__item-height;
   display: inline-flex;
   justify-content: center;
@@ -36,7 +36,9 @@ $header-menu-toggle-background-color: #c8c8c8;
   position: absolute;
   border-radius: 100%;
   top: calc(50% - #{$header-menu-toggle-button-height} / 2);
-  transition: all 0.16s ease-out, transform 0.08s ease-out;
+  transition:
+    all 0.16s ease-out,
+    transform 0.08s ease-out;
 }
 .board-option-toggle__switch::before {
   content: "";

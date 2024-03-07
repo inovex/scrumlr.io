@@ -148,6 +148,11 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
     API.deleteTimer(currentState.id);
   }
 
+  if (action.type === Action.IncrementTimer) {
+    const currentState = stateAPI.getState().board.data!;
+    API.incrementTimer(currentState.id);
+  }
+
   if (action.type === Action.ShareNote) {
     const currentState = stateAPI.getState().board.data!;
     const note = stateAPI.getState().notes.find((n) => n.id === action.note);

@@ -137,15 +137,16 @@ $rounded--medium: 24px;
 $rounded--large: 32px;
 $rounded--full: 9999px;
 
-// margin and padding
-$margin--small: 8px;
-$margin--default: 16px;
-$margin--medium: 24px;
-$margin--large: 32px;
-$padding--small: 8px;
-$padding--default: 16px;
-$padding--medium: 24px;
-$padding--large: 32px;
+// New spacing constants for flex gap, margin and padding
+$spacing--xxs: 4px;
+$spacing--xs: 8px;
+$spacing--sm: 12px;
+$spacing--base: 16px;
+$spacing--md: 20px;
+$spacing--lg: 24px;
+$spacing--xl: 32px;
+$spacing--2xl: 48px;
+$spacing--3xl: 64px;
 
 // font
 $letter-spacing--small: 0.25px;
@@ -187,7 +188,7 @@ $note-dialog__emoji-suggestions-z-index: $note-dialog-z-index + $base-z-index-st
 $infobar-z-index: $base-z-index + (5 * $base-z-index-step);
 $request-z-index: $base-z-index + (9 * $base-z-index-step);
 $tooltip-z-index: $request-z-index;
-$board-reaction-z-index: $base-z-index + (9 * $base-z-index-step);
+$board-reaction-z-index: $backdrop-z-index + $base-z-index-step;
 
 // responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";
@@ -229,6 +230,13 @@ $column-stripes--dark: repeating-linear-gradient(
   $props: append($props, if($top, inset 0 #{2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
   $props: append($props, if($bottom, inset 0 #{-2 * $column__border-width} 0 #{-$column__border-width} #{$color}, null), comma);
   @return $props;
+}
+
+@function getLightHoverBackground($backgroundColor) {
+  @return color.scale($backgroundColor, $lightness: -10%);
+}
+@function getDarkHoverBackground($backgroundColor) {
+  @return color.scale($backgroundColor, $lightness: 10%);
 }
 
 @mixin inset-border($left: false, $right: false, $top: false, $bottom: false, $color: var(--accent-color)) {

@@ -17,7 +17,16 @@ describe("users", () => {
   test("correct number of online users & count of rest users", () => {
     const boardUsers = render(
       createBoardUsers({
-        participants: {self: getTestParticipant(), others: [getTestParticipant({connected: false}), getTestParticipant(), getTestParticipant(), getTestParticipant()]},
+        participants: {
+          self: getTestParticipant(),
+          others: [
+            getTestParticipant({user: {id: "other-1", name: "other-1"}, connected: false}),
+            getTestParticipant({user: {id: "other-2", name: "other-2"}}),
+            getTestParticipant({user: {id: "other-3", name: "other-3"}}),
+            getTestParticipant({user: {id: "other-4", name: "other-4"}}),
+          ],
+          focusInitiator: null,
+        },
       })
     );
     expect(boardUsers.container.querySelectorAll(".user-avatar")).toHaveLength(4);
@@ -27,7 +36,13 @@ describe("users", () => {
       createBoardUsers({
         participants: {
           self: getTestParticipant(),
-          others: [getTestParticipant({connected: false}), getTestParticipant(), getTestParticipant(), getTestParticipant(), getTestParticipant()],
+          others: [
+            getTestParticipant({user: {id: "other-1", name: "other-1"}}),
+            getTestParticipant({user: {id: "other-2", name: "other-2"}}),
+            getTestParticipant({user: {id: "other-3", name: "other-3"}}),
+            getTestParticipant({user: {id: "other-4", name: "other-4"}}),
+          ],
+          focusInitiator: null,
         },
       })
     );
@@ -38,7 +53,14 @@ describe("users", () => {
       createBoardUsers({
         participants: {
           self: getTestParticipant(),
-          others: [getTestParticipant({connected: false}), getTestParticipant(), getTestParticipant(), getTestParticipant(), getTestParticipant(), getTestParticipant()],
+          others: [
+            getTestParticipant({user: {id: "other-1", name: "other-1"}}),
+            getTestParticipant({user: {id: "other-2", name: "other-2"}}),
+            getTestParticipant({user: {id: "other-3", name: "other-3"}}),
+            getTestParticipant({user: {id: "other-4", name: "other-4"}}),
+            getTestParticipant({user: {id: "other-5", name: "other-5"}}),
+          ],
+          focusInitiator: null,
         },
       })
     );

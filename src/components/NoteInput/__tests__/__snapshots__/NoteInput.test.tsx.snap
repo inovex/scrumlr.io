@@ -6,7 +6,9 @@ exports[`Note Input should render correctly 1`] = `
 >
   <textarea
     class="note-input__input"
-    id="note-input-TestID"
+    data-tooltip-delay-show="500"
+    data-tooltip-float="true"
+    data-tooltip-id="scrumlr-tooltip"
     maxlength="1024"
     placeholder="Add your note..."
     rows="1"
@@ -19,6 +21,7 @@ exports[`Note Input should render correctly 1`] = `
     aria-label="Create note"
     class="note-input__add-button"
     tabindex="-1"
+    title="Create note"
     type="submit"
   >
     <svg

@@ -25,9 +25,12 @@ export const BoardAction = {
   RejectedBoardAccess: "scrumlr.io/rejectedBoardAccess" as const,
   PendingBoardAccessConfirmation: "scrumlr.io/pendingBoardAccessConfirmation" as const,
   PassphraseChallengeRequired: "scrumlr.io/passphraseChallengeRequired" as const,
+  IncorrectPassphrase: "scrumlr.io/incorrectPassphrase" as const,
   TooManyJoinRequests: "scrumlr.io/tooManyJoinRequests" as const,
+  BannedFromBoard: "scrumlr.io/bannedFromBoard" as const,
   SetTimer: "scrumlr.io/setTimer" as const,
   CancelTimer: "scrumlr.io/cancelTimer" as const,
+  IncrementTimer: "scrumlr.io/incrementTimer" as const,
 };
 
 /** Factory or creator class of internal Redux board object specific actions. */
@@ -123,8 +126,14 @@ export const BoardActionFactory = {
   requirePassphraseChallenge: () => ({
     type: BoardAction.PassphraseChallengeRequired,
   }),
+  incorrectPassphrase: () => ({
+    type: BoardAction.IncorrectPassphrase,
+  }),
   tooManyJoinRequests: () => ({
     type: BoardAction.TooManyJoinRequests,
+  }),
+  bannedFromBoard: () => ({
+    type: BoardAction.BannedFromBoard,
   }),
   setTimer: (minutes: number) => ({
     type: BoardAction.SetTimer,
@@ -135,6 +144,9 @@ export const BoardActionFactory = {
    */
   cancelTimer: () => ({
     type: BoardAction.CancelTimer,
+  }),
+  incrementTimer: () => ({
+    type: BoardAction.IncrementTimer,
   }),
 };
 
@@ -151,5 +163,8 @@ export type BoardReduxAction =
   | ReturnType<typeof BoardActionFactory.pendingBoardAccessConfirmation>
   | ReturnType<typeof BoardActionFactory.setTimer>
   | ReturnType<typeof BoardActionFactory.cancelTimer>
+  | ReturnType<typeof BoardActionFactory.incrementTimer>
   | ReturnType<typeof BoardActionFactory.requirePassphraseChallenge>
-  | ReturnType<typeof BoardActionFactory.tooManyJoinRequests>;
+  | ReturnType<typeof BoardActionFactory.incorrectPassphrase>
+  | ReturnType<typeof BoardActionFactory.tooManyJoinRequests>
+  | ReturnType<typeof BoardActionFactory.bannedFromBoard>;
