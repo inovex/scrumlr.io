@@ -123,7 +123,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
                 <span
                   class="board-option-button__label"
                 >
-                  Allow changes
+                  Allow participant changes
                 </span>
               </button>
             </li>

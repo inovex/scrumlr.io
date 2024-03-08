@@ -129,7 +129,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         </button>
         <button
           aria-checked="true"
-          aria-label="Allow board editing"
+          aria-label="BoardSettings.AllowEditing"
           class="settings-option-button board-settings__allow-board-editing"
           role="switch"
           type="button"
@@ -137,7 +137,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            Allow board editing
+            BoardSettings.AllowEditing
           </span>
           <div
             class="board-settings__allow-board-editing-value"
