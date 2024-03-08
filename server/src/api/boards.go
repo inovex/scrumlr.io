@@ -179,10 +179,13 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		var body JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
-			http.Error(w, "unable to parse request body", http.StatusBadRequest)
+			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
 		}
-
+		if body.Passphrase == "" {
+			common.Throw(w, r, common.BadRequestError(errors.New("missing passphrase")))
+			return
+		}
 		encodedPassphrase := common.Sha512BySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
 			_, err := s.sessions.Create(r.Context(), board, user)
@@ -199,7 +202,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusCreated)
 			return
 		} else {
-			common.Throw(w, r, common.ForbiddenError(errors.New("wrong passphrase")))
+			common.Throw(w, r, common.BadRequestError(errors.New("wrong passphrase")))
 			return
 		}
 	}
