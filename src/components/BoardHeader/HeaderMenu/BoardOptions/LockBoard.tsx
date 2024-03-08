@@ -2,7 +2,8 @@ import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
 import "../BoardSettings/BoardSettings.scss";
-import {useAppSelector} from "store";
+import store, {useAppSelector} from "store";
+import {Actions} from "store/action";
 
 export const LockBoard = () => {
   // const {t} = useTranslation();
@@ -10,7 +11,7 @@ export const LockBoard = () => {
 
   return (
     <BoardOption>
-      <BoardOptionButton label="Allow changes" onClick={() => {}}>
+      <BoardOptionButton label="Allow changes" onClick={() => store.dispatch(Actions.editBoard({allowEditing: !allowEditing}))}>
         <BoardOptionToggle active={allowEditing} />
       </BoardOptionButton>
     </BoardOption>
