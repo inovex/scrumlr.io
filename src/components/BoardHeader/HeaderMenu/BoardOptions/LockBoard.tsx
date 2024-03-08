@@ -1,10 +1,10 @@
+import store, {useAppSelector} from "store";
+import {useTranslation} from "react-i18next";
+import {Actions} from "store/action";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
 import "../BoardSettings/BoardSettings.scss";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {useTranslation} from "react-i18next";
 
 export const LockBoard = () => {
   const {t} = useTranslation();
