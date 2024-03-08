@@ -151,6 +151,9 @@ exports[`BoardSettings should match snapshot 1`] = `
             />
           </div>
         </button>
+        <hr
+          class="settings-dialog__separator"
+        />
         <button
           aria-checked="true"
           aria-label="BoardSettings.ShowNoteReactionsOptions"
