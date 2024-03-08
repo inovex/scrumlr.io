@@ -195,6 +195,7 @@ export const BoardSettings = () => {
                     <Toggle active={state.board.showNotesOfOtherUsers} />
                   </div>
                 </SettingsButton>
+                <hr className="settings-dialog__separator" />
                 <SettingsButton
                   data-testid="reactions"
                   className="board-settings__show-reactions-button"
