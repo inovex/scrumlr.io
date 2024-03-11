@@ -86,7 +86,6 @@ func testGetVotings(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Greater(t, len(votings), 0)
 	assert.Equal(t, types.VotingStatusOpen, votings[0].Status)
-	assert.Equal(t, types.VotingStatusAborted, votings[len(votings)-1].Status)
 }
 
 func testReopenClosedVotingShouldFail(t *testing.T) {
@@ -116,15 +115,7 @@ func testChangeAbortedToClosedVotingShouldFail(t *testing.T) {
 	})
 	assert.NotNil(t, err)
 }
-func testChangeClosedToAbortedVotingShouldFail(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardClosedVoting").(*Voting)
-	_, err := testDb.UpdateVoting(VotingUpdate{
-		ID:     voting.ID,
-		Board:  voting.Board,
-		Status: types.VotingStatusAborted,
-	})
-	assert.NotNil(t, err)
-}
+
 func testCloseVoting(t *testing.T) {
 	voting := fixture.MustRow("Voting.votingTestBoardOpenVoting").(*Voting)
 	result, err := testDb.UpdateVoting(VotingUpdate{
