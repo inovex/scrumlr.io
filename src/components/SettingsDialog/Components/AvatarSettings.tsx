@@ -103,7 +103,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
           {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
             <Fragment key={label}>
               <SettingsAccordion
-                label={t(`Avatar.groups.${label}`)}
+                label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing"}`)}
                 isOpen={groupIndex === openAccordionIndex}
                 onClick={() => handleAccordionOpen(groupIndex)}
                 headerClassName="avatar-settings__settings-group-header"
@@ -125,6 +125,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                           onValueChange={(value) => updateAvatar(element.key, value as (typeof element.values)[number])}
                           disabled={isDisabled}
                           localizationPath={`Avatar.${element.key}.`}
+                          /** @ts-ignore */
                           label={t(`Avatar.${element.key}.label`)}
                           className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
                         />

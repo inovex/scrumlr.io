@@ -1,4 +1,4 @@
-import {VFC} from "react";
+import {FC} from "react";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
 import "./SettingsCarousel.scss";
@@ -15,7 +15,7 @@ export interface SettingsCarouselProps<T> {
   className?: string;
 }
 
-export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselItems, currentValue, onValueChange, localizationPath, label, className, disabled}) => {
+export const SettingsCarousel: FC<SettingsCarouselProps<string>> = ({carouselItems, currentValue, onValueChange, localizationPath, label, className, disabled}) => {
   const {t} = useTranslation();
 
   const handleClick = (left = false) => {
@@ -28,6 +28,8 @@ export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselIt
     else onValueChange(carouselItems[currentIndex + 1]);
   };
 
+  console.log(localizationPath, currentValue);
+
   return (
     <div className={classNames("settings-carousel", className)}>
       <button className="settings-carousel__button settings-carousel__button--left" disabled={disabled} onClick={() => handleClick(true)} aria-label={t("Avatar.prevOption")}>
@@ -35,6 +37,7 @@ export const SettingsCarousel: VFC<SettingsCarouselProps<string>> = ({carouselIt
       </button>
       <div className="settings-carousel__text">
         {label && <span className="settings-carousel__text-label">{label}</span>}
+        {/** @ts-ignore */}
         <span className="settings-carousel__text-value">{localizationPath !== undefined ? t(`${localizationPath}${currentValue}`) : currentValue}</span>
       </div>
       <button className="settings-carousel__button settings-carousel__button--right" disabled={disabled} onClick={() => handleClick()} aria-label={t("Avatar.nextOption")}>

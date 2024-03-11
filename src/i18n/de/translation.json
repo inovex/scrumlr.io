@@ -1,0 +1,651 @@
+{
+  "InfoBar": {
+    "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
+  },
+  "NewBoard": {
+    "boardName": "Sitzungsname",
+    "createNewBoard": "Erstelle eine Sitzung",
+    "extendedConfigurationButton": "Erweiterte Einstellungen",
+    "basicConfigurationButton": "Vorlagenauswahl",
+    "extendedConfigurationTitle": "Erweiterte Einstellungen",
+    "basicConfigurationTitle": "Wähle eine Vorlage"
+  },
+  "LoginBoard": {
+    "title": "Login bei scrumlr.io",
+    "anonymousLogin": "Nehme anonym an der Sitzung teil",
+    "usernameValidationError": "Der Benutzername darf nicht leer sein",
+    "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
+    "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
+    "login": "Jetzt loslegen",
+    "acceptTerms": "Ich stimme den <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu",
+    "generateRandomName": "Zufälligen Namen erstellen",
+    "username": "Benutzername"
+  },
+  "AccessPolicy": {
+    "PUBLIC": "Offen",
+    "BY_PASSPHRASE": "Passwortgeschützt",
+    "BY_INVITE": "Geschlossen"
+  },
+  "BoardGuard": {
+    "incorrectPassphrase": "Falsches Passwort.",
+    "reject": "Du wurdest zu der Sitzung nicht zugelassen.",
+    "returnToHomepage": "Zur Homepage zurückkehren.",
+    "waitingForApproval": "Warte auf Bestätigung zur Teilnahme."
+  },
+  "AuthRedirect": {
+    "error": "Oops! Der Login hat nicht funktioniert. Bitte versuche es nochmal."
+  },
+  "AccessPolicySelection": {
+    "title": "Zugriffseinstellung",
+    "publicTitle": "Offen",
+    "byPassphraseTitle": "Mit Passwort",
+    "manualVerificationTitle": "Mit Zustimmung",
+    "passphrase": "Passwort",
+    "public": "Zugriff für alle Teilnehmer über die URL möglich. Dies sollte in den meisten Fällen sicher genug sein, da die URLs schwer zu erraten sind.",
+    "byPassphrase": "Zugriff über die URL wird mit einem Passwort geschützt. Dies ist gut geeignet, wenn man mit einer Gruppe nicht gleichzeitig zusammenarbeitet und Benutzer jederzeit beitreten können.",
+    "manualVerification": "Moderatoren können Teilnehmer akzeptieren und ablehnen, ehe sie einer Sitzung beitreten. Dies ist die sicherste Variante, da ein Zugriff nur mit Zustimmung erfolgen kann.",
+    "generatePassphrase": "Erstelle zufälliges Passwort",
+    "copyPassphraseToClipboard": "Kopiere Passwort in Zwischenablage",
+    "passphraseValidationError": "Ein Passwort muss gesetzt sein!",
+    "togglePassphraseVisibility": "Passwort Sichtbarkeit umschalten"
+  },
+  "BoardHeader": {
+    "returnToHomepage": "Zur Homepage zurückkehren.",
+    "showParticipants": "Zeige Teilnehmer",
+    "showAllBoardSettings": "Zeige alle Einstellungen",
+    "showProfileSettings": "Zeige Profileinstellungen"
+  },
+  "ConfirmationDialog": {
+    "returnToHomepage": "Bist du dir sicher, dass du die Sitzung verlassen und zur Homepage zurückkehren möchtest?",
+    "deleteBoard": "Bist du dir absolut sicher, dass du die Sitzung löschen möchtest?",
+    "deleteNote": "Bist du dir sicher, dass du das Kärtchen löschen möchtest?",
+    "deleteNoteButton": "Kärtchen löschen",
+    "deleteStackButton": "Stapel löschen",
+    "deleteOptions": "Was möchtest du löschen?",
+    "banParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" aus der Session entfernen möchtest?",
+    "unbanParticipant": "Bist du dir sicher, dass du den Teilnehmer \"{{user}}\" wieder zur Session zulassen möchtest?",
+    "warning": "Die Aktion ist nicht umkehrbar.",
+    "yes": "Ja",
+    "no": "Nein",
+    "cancel": "Abbrechen",
+    "close": "Schließen"
+  },
+  "DeleteBoardOption": {
+    "warning": "Bist du dir sicher, dass du die Sitzung löschen möchtest? Die Aktion ist nicht umkehrbar.",
+    "button": "Sitzung löschen"
+  },
+  "ExportBoardOption": {
+    "title": "Sitzung exportieren",
+    "button": "Sitzung exportieren",
+    "exportAsJson": "JSON exportieren",
+    "exportAsCSV": "CSV exportieren",
+    "openPrintView": "Druckansicht öffnen",
+    "exportToClipboard": "Markdown in die Zwischenablage kopieren",
+    "copyToClipboardSuccess": "Markdown kopiert!",
+    "hintHiddenColumns": "Die folgenden Spalten sind ausgeblendet und werden nicht exportiert:",
+    "hintHiddenNotes": "Die Kärtchen der anderen Teilnehmenden sind ausgeblendet und werden nicht exportiert."
+  },
+  "PrintView": {
+    "Participants": "Teilnehmer",
+    "GeneratedOn": "Erstellt auf",
+    "ProvidedBy": "Bereitgestellt mit ♥️ von",
+    "Notes": "Kärtchen",
+    "Votes": "Stimmen",
+    "Print": "Drucken",
+    "Close": "Schließen"
+  },
+  "MarkdownExport": {
+    "columns": "Spalten",
+    "note": "Kärtchen",
+    "notes": "Kärtchen",
+    "participants": "Teilnehmer",
+    "linkToBoard": "Link zum Board",
+    "vote": "Stimme",
+    "votes": "Stimmen",
+    "stackSize": "Stapelgröße",
+    "showAuthorsDisabled": "Kartenautoren werden nicht angezeigt"
+  },
+  "ShareQrCodeOption": {
+    "title": "Sitzung teilen",
+    "button": "Sitzung teilen",
+    "copyInviteURL": "URL kopieren",
+    "inviteUrlCopied": "URL wurde kopiert"
+  },
+  "Column": {
+    "settings": "Einstellungen",
+    "editName": "Name ändern",
+    "submitName": "Name bestätigen",
+    "resetName": "Abbrechen",
+    "hideColumn": "Ausblenden",
+    "showColumn": "Einblenden",
+    "deleteColumn": "Löschen",
+    "addColumnLeft": "Links einfügen",
+    "addColumnRight": "Rechts einfügen",
+    "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
+    "notes_one": "{{count}} Kärtchen",
+    "notes_other": "{{count}} Kärtchen"
+  },
+  "ErrorPage": {
+    "navigateHome": "Startseite",
+    "navigateBack": "Gehe zurück"
+  },
+  "NotFoundPage": {
+    "title": "Och nö! Fehler",
+    "descriptionLine1": "Diese Seite existiert nicht.",
+    "descriptionLine2": "Geh zur Startseite zurück.",
+    "navigateHome": "Zurück zur Startseite"
+  },
+  "JoinRequest": {
+    "title": "Möchte der Sitzung beitreten",
+    "accept": "Akzeptieren",
+    "reject": "Ablehnen"
+  },
+  "RaiseRequest": {
+    "title": "Hat sich gemeldet",
+    "lower": "Hand senken"
+  },
+  "Request": {
+    "title": "Jemand möchte der Sitzung beitreten/hebt die Hand"
+  },
+  "LoginProviders": {
+    "signInWithGoogle": "Einloggen mit Google",
+    "signInWithGitHub": "Einloggen mit Github",
+    "signInWithMicrosoft": "Einloggen mit Microsoft",
+    "signInWithAzureAd": "Einloggen mit Azure AD",
+    "signInWithApple": "Einloggen mit Apple"
+  },
+  "NoteInput": {
+    "placeholder": "Füge ein Kärtchen hinzu...",
+    "imageInfo": "Dieser Link wird als Bild eingefügt!",
+    "create": "Kärtchen erstellen"
+  },
+  "PassphraseDialog": {
+    "showPassword": "Zeige das Passwort",
+    "hidePassword": "Verberge das Passwort",
+    "label": "Gib das Passwort ein, um dieses Board zu öffnen",
+    "submit": "Board öffnen",
+    "inputPlaceholder": "Passwort",
+    "incorrectPassphrase": "Ups, das war das falsche Passwort. Versuch's nochmal!"
+  },
+  "Timer": {
+    "endTimer": "Timer beenden",
+    "addOneMinute": "Timer um eine Minute erhöhen",
+    "reduce": "Reduziere Zeit",
+    "increase": "Erhöhe Zeit"
+  },
+  "CookieNotice": {
+    "description": "Wir und ausgewählte Partner verwenden Cookies oder ähnliche Technologien, wie in der Cookie-Richtlinie angegeben. Sie können der Verwendung solcher Technologien zustimmen, indem Sie diesen Hinweis schließen, mit einem Link oder einer Schaltfläche außerhalb dieses Hinweises interagieren oder auf andere Weise weitersurfen.",
+    "learnMore": "Erfahre mehr über die Datenschutzrichtlinien",
+    "decline": "Ablehnen",
+    "accept": "Akzeptieren"
+  },
+  "CookiePolicy": {
+    "title": "Cookie Richtlinien von scrumlr.io",
+    "decline": "Ablehnen",
+    "accept": "Akzeptieren",
+    "body": "Dieses Dokument informiert die Nutzer über die Technologien, die scrumlr.io helfen, die unten beschriebenen Zwecke zu erreichen.\nDiese Technologien ermöglichen es dem Eigentümer, auf Informationen zuzugreifen und diese zu speichern (z.B. durch die Verwendung eines Cookies) oder Ressourcen auf dem Gerät eines Nutzers zu nutzen\n(z.B. durch die Ausführung eines Skripts), wenn dieser mit scrumlr.io interagiert.\n\nDer Einfachheit halber werden alle diese Technologien in diesem Dokument als \"Tracker\" definiert - es sei denn, es gibt einen\nGrund zur Unterscheidung. Zum Beispiel können Cookies sowohl in Web- als auch in mobilen Browsern verwendet werden, aber es wäre ungenau\nvon Cookies im Zusammenhang mit mobilen Anwendungen zu sprechen, da es sich um einen browserbasierten Tracker handelt. Aus diesem Grund wird der Begriff Cookies in diesem Dokument nur dann verwendet, wenn er speziell für diese Art von Tracker gedacht ist.\nArt von Tracker.\n\nEinige der Zwecke, für die Tracker verwendet werden, können auch die Zustimmung des Nutzers erfordern. Wenn die Zustimmung erteilt wird,\nkann sie jederzeit frei widerrufen werden, indem die in diesem Dokument enthaltenen Anweisungen befolgt werden.\n\nScrumlr.io verwendet nur Tracker, die direkt vom Eigentümer verwaltet werden (sogenannte \"First-Party\"-Tracker). Die Gültigkeits- und Ablaufzeiten von First-Party-Cookies und anderen ähnlichen Trackern können je nach der vom Eigentümer festgelegten Lebensdauer variieren.\nEigentümer. Einige von ihnen verfallen bei Beendigung der Browsersitzung des Nutzers.\n\n## Aktivitäten, die für den Betrieb von scrumlr.io und die Bereitstellung des Dienstes unbedingt erforderlich sind\n\nScrumlr.io verwendet sogenannte \"technische\" Cookies und andere ähnliche Tracker, um Aktivitäten durchzuführen, die für den Betrieb oder die Bereitstellung des Dienstes unbedingt erforderlich sind.\n\n## Wie Sie Ihre Einstellungen verwalten und Ihre Zustimmung erteilen oder widerrufen können\n\nEs gibt verschiedene Möglichkeiten, Präferenzen in Bezug auf Tracker zu verwalten und ggf. die Zustimmung zu erteilen oder zu widerrufen:\nDie Nutzer können ihre Präferenzen in Bezug auf Tracker direkt in ihren eigenen Geräteeinstellungen verwalten, indem sie zum Beispiel\ndie Verwendung oder Speicherung von Trackern verhindern. Wenn die Verwendung von Trackern auf einer Einwilligung beruht, können die Nutzer außerdem\neine solche Einwilligung erteilen oder widerrufen, indem sie ihre Präferenzen im Cookie-Hinweis festlegen oder diese Präferenzen aktualisieren\nüber das entsprechende Widget für die Einwilligungseinstellungen, falls vorhanden.\n\nEs ist auch möglich, über entsprechende Browser- oder Gerätefunktionen zuvor gespeicherte Tracker zu löschen, einschließlich derer\ndie zur Erinnerung an die ursprüngliche Einwilligung des Nutzers verwendet wurden. Andere Tracker im lokalen Speicher des Browsers können durch Löschen des\ndes Browserverlaufs gelöscht werden.\n\n## Auffinden von Tracker-Einstellungen\n\nInformationen über die Verwaltung von Cookies in den gebräuchlichsten Browsern finden die Nutzer beispielsweise unter folgenden Adressen\nAdressen:\n\n- Google Chrome\n- Mozilla Firefox\n- Apple Safari\n- Microsoft Internet Explorer\n- Microsoft Edge\n- Mutig\n- Opera\n\nBenutzer können auch bestimmte Kategorien von Trackern, die in mobilen Anwendungen verwendet werden, verwalten, indem sie sich über die entsprechenden Geräteeinstellungen abmelden,\nwie z. B. die Einstellungen für die Gerätewerbung für mobile Geräte oder die Tracking-Einstellungen im Allgemeinen (Nutzer können die Geräteeinstellungen\nEinstellungen öffnen und nach der entsprechenden Einstellung suchen).\n\nEigentümer und Datenverantwortlicher\ninovex GmbH\n\nKarlsruher Straße 71\n\n75179 Pforzheim\n\nDeutschland\n\nKontakt-E-Mail des Inhabers: info@scrumlr.io\n\nIn Anbetracht der objektiven Komplexität, die Tracking-Technologien umgeben, werden die Nutzer aufgefordert, den Eigentümer zu kontaktieren, wenn sie\nden Eigentümer zu kontaktieren, wenn sie weitere Informationen über die Verwendung solcher Technologien durch scrumlr.io erhalten möchten."
+  },
+  "MenuBars": {
+    "markAsDone": "Als fertig markieren",
+    "unmarkAsDone": "Als nicht fertig markieren",
+    "addImage": "Füge Bild hinzu",
+    "addSticker": "Füge Sticker hinzu",
+    "themeToggle": "Ändere Farbschema",
+    "editColumns": "Bearbeite Spalten",
+    "stopEditingColumns": "Beende Spaltenbearbeitung",
+    "startPresenterMode": "Präsentiermodus starten",
+    "stopPresenterMode": "Präsentiermodus beenden",
+    "returnToHomepage": "Kehre zur Homepage zurück",
+    "raiseHand": "Hebe deine Hand",
+    "lowerHand": "Senke deine Hand",
+    "openBoardReactionMenu": "Reagieren",
+    "settings": "Einstellungen",
+    "openMenu": "Öffne das Benutzermenü"
+  },
+  "Hotkeys": {
+    "hotkeysEnabled": "Hotkeys aktiviert!",
+    "hotkeysDisabled": "Hotkeys deaktiviert!",
+    "hotkeyToggle": "Hotkeys aktivieren",
+    "timerStarted": "Ein {{duration}}-minütiger Timer wurde gestartet",
+    "cheatSheet": "Hotkey Spickzettel",
+    "toggleColumnVisibility": {
+      "hide": "Ausgeblendete Spalten sind nun auch für dich ausgeblendet",
+      "show": "Ausgeblendete Spalten sind nun für dich sichtbar"
+    },
+    "toggleShowOtherUsersNotes": {
+      "hide": "Die Kärtchen anderer Teilnehmer sind nun ausgeblendet",
+      "show": "Die Kärtchen anderer Teilnehmer sind nun sichtbar"
+    },
+    "toggleShowAuthors": {
+      "hide": "Die Autoren der Kärtchen sind  nun ausgeblendet",
+      "show": "Die Autoren der Kärtchen sind nun sichtbar"
+    },
+    "toggleRaisedHand": {
+      "raise": "Du hast deine Hand gehoben",
+      "lower": "Du hast deine Hand gesenkt"
+    },
+    "toggleReadyState": {
+      "ready": "Du hast dich als bereit markiert",
+      "notReady": "Du hast dich als nicht bereit markiert"
+    },
+    "togglePresentationMode": {
+      "startPresenting": "Du hast den Präsentiermodus gestartet",
+      "endPresenting": "Du hast den Präsentiermodus beendet"
+    }
+  },
+  "VoteConfigurationButton": {
+    "label": "Abstimmung",
+    "showVotesOfOthers": "Anonyme Abstimmung",
+    "allowMultipleVotesPerNote": "Erlaube Stimmhäufung",
+    "numberOfVotes": "Anzahl Stimmen",
+    "increaseVotes": "Anzahl Stimmen erhöhen",
+    "decreaseVotes": "Anzahl Stimmen verringern",
+    "startVoting": "Abstimmung starten",
+    "cancelVoting": "Abstimmung abbrechen",
+    "stopVoting": "Abstimmung abschließen"
+  },
+  "VoteDisplay": {
+    "finishActionTooltip": "Abstimmung abschließen",
+    "tooltip": "{{remaining}} von {{total}} Stimmen verbleiben"
+  },
+  "TimerToggleButton": {
+    "label": "Alarm",
+    "1min": "1 Minute",
+    "3min": "3 Minuten",
+    "5min": "5 Minuten",
+    "min": "Minuten",
+    "customTime": "Manuelle Zeit",
+    "cancelTimer": "Alarm beenden"
+  },
+  "BoardReactionsMenu": {
+    "react": "Reagiere mit {{reaction}} [{{shortcut}}]"
+  },
+  "BoardReaction": {
+    "me": "Ich"
+  },
+  "AppInfo": {
+    "version": "Link zur Übersicht über alle Anwendungsversionen auf GitHub"
+  },
+  "Toast": {
+    "authenticationError": "Ein Fehler trat beim Einloggen auf",
+    "votingStarted": "Du hast eine Abstimmung gestartet!",
+    "votingFinished": "Du hast die Abstimmung beendet!",
+    "focusModeStart": "Du hast die Moderation gestartet! Die von dir ausgewählten Karten werden jedem Nutzer präsentiert",
+    "focusModeFinished": "Du hast die Moderation beendet!",
+    "votingPhaseStarted": "Eine Abstimmung wurde gestartet und du kannst jetzt deine Stimmen vergeben!",
+    "votingPhaseEnded": "Die Abstimmung wurde beendet und keine weiteren Stimmen werden gezählt!",
+    "moderationStarted": "Der Moderator wird nun Inhalte teilen!",
+    "moderationEnded": "Die Moderation wurde beendet!",
+    "timerStarted": "Ein Alarm wurde gesetzt!",
+    "timerEnded": "Der Alarm ist beendet!",
+    "timerCancelled": "Der Alarm wurde abgebrochen!",
+    "hiddenColumnsVisible": "Ausgeblendete Spalten werden dir nun angezeigt!",
+    "passwordCopied": "Board geschützt und Passwort kopiert!",
+    "boardMadePublic": "Das Board ist nun öffentlich!",
+    "allParticipantsDone": "Alle Teilnehmer sind fertig!",
+    "moderatorResetReadyStates": "Markierung der Teilnehmer als fertig zurücksetzen?",
+    "moderatorResetReadyStatesButton": "Zurücksetzen!",
+    "bannedParticipant": "Teilnehmer \"{{user}}\" wurde entfernt",
+    "unbannedParticipant": "Teilnehmer \"{{user}}\" wird wieder zur Session zugelassen",
+    "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
+    "noteToHiddenColumnButton": "Spalte für alle anzeigen",
+    "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
+    "noteDeleted": "Die Karte wurde gelöscht!",
+    "emptyNoteDialog": "Die Karte muss Text enthalten.",
+    "ready": "Bist du fertig?",
+    "readyButton": "Fertig!",
+    "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
+    "enable": "Aktivieren"
+  },
+  "Language": {
+    "german": "Deutsch",
+    "english": "Englisch"
+  },
+  "Homepage": {
+    "developers": "© 2021-2023, mit ❤️ von <inovex>inovex</inovex>",
+    "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
+    "teaserText": "Starte in kürzester Zeit deine Retrospektive – es ist keine Registrierung notwendig und komplett kostenlos.",
+    "startButton": "Jetzt loslegen",
+    "privacyPolicy": "Datenschutzerklärung",
+    "cookiePolicy": "Cookie Richtlinien",
+    "terms": "AGB"
+  },
+  "Note": {
+    "me": "Ich",
+    "you": "dir",
+    "userImageAlt": "Von {{user}} hochgeladenes Bild"
+  },
+  "StackView": {
+    "prevNote": "Vorheriges Kärtchen",
+    "nextNote": "Nächstes Kärtchen",
+    "close": "Schließen"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Diesen Stapel löschen"
+  },
+  "NoteDialogDeleteNoteButton": {
+    "title": "Diese Notiz löschen"
+  },
+  "NoteDialogUnstackNoteButton": {
+    "title": "Diese Notiz aus dem Stapel herausnehmen"
+  },
+  "NoteReactionList": {
+    "toggleBarLabel": "Emojiliste umschalten"
+  },
+  "NoteReactionsPopup": {
+    "allReactionsTab": "Alle"
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Board Einstellungen",
+    "BoardSettingsDescription": "Name, Zugriffseinstellungen",
+    "Participants": "Teilnehmer",
+    "ParticipantsDescription": "Teilnehmerliste, Moderation",
+    "Appearance": "Darstellung",
+    "AppearanceDescription": "Mitteilungen, Sprache, UI",
+    "ShareSession": "Sitzung teilen",
+    "ShareSessionDescription": "QR-Code, URL",
+    "ExportBoard": "Sitzung exportieren",
+    "ExportBoardDescription": "Exportiere das Board",
+    "Feedback": "Feedback",
+    "FeedbackDescription": "Wir würden gerne von dir hören",
+    "ProfileDescription": "Profil bearbeiten"
+  },
+  "BoardSettings": {
+    "BoardName": "Sitzungsname",
+    "AccessPolicy": "Zugriff",
+    "Password": "Passwort",
+    "SetAccessPolicyOpen": "Passwortschutz entfernen",
+    "SecurePasswordHint": "Bitte sicheres Passwort eingeben",
+    "DeleteBoard": "Sitzung löschen",
+    "ShowAuthorOption": "Kartenautoren anzeigen",
+    "ShowHiddenColumnsOption": "Ausgeblendete Spalten für mich anzeigen",
+    "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
+    "ShowNoteReactionsOptions": "Emoji-Reaktionen auf Karten anzeigen",
+    "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
+    "generatePassword": "Passwort erstellen und absichern",
+    "save": "speichern",
+    "edit": "bearbeiten"
+  },
+  "Participants": {
+    "Title": "Teilnehmer",
+    "OwnerFilterTooltip": "Zeige nur den Besitzer",
+    "ModeratorFilterTooltip": "Zeige nur Moderatoren",
+    "ParticipantFilterTooltip": "Zeige nur Teilnehmer",
+    "OnlineFilterTooltip": "Zeige nicht verbundene Teilnehmer",
+    "ChangeRoleToParticipantTooltip": "Ändere Rolle zu Teilnehmer",
+    "ChangeRoleToModeratorTooltip": "Ändere Rolle zu Moderator",
+    "ResetBannerText": "Fertige Teilnehmer zurücksetzen.",
+    "ResetBannerButton": "Zurücksetzen",
+    "BanParticipantTooltip": "Teilnehmer \"{{user}}\" bannen",
+    "UnbanParticipantTooltip": "Teilnehmer \"{{user}}\" entbannen"
+  },
+  "UserRole": {
+    "Owner": "Besitzer",
+    "Moderator": "Moderator",
+    "Participant": "Teilnehmer"
+  },
+  "Appearance": {
+    "SyncMode": "Synchronisiere den Darstellungsmodus mit deinem System",
+    "SyncModeDescription": "Scrumlr passt den Darstellungsmodus (Dunkel oder Hell) deinen aktuellen Systemeinstellungen an",
+    "AllowNotifications": "Erlaube Notifikationen",
+    "Language": "Sprache",
+    "EmojiSkinTone": "Emoji Hautfarbe",
+    "colorScheme": "Farbschema",
+    "colorSchemeLight": "Hell",
+    "colorSchemeDark": "Dunkel",
+    "showHotkeyNotifications": "Zeige Hotkey-Notifikationen",
+    "showBoardReactions": "Zeige Board-Reaktionen"
+  },
+  "Feedback": {
+    "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",
+    "BugReportInputLabel": "Welchen Bug möchtest Du uns melden?",
+    "FeatureRequestInputLabel": "Welches Feature hättest Du gerne?",
+    "FeedbackInputPlaceholder": "Schreibe alles Zusätzliche hier auf!",
+    "ContactInputLabel": "Wenn du möchtest, dass wir dich kontaktieren, hinterlasse deine E-Mail! (Optional)",
+    "SubmitButton": "Feedback abschicken",
+    "ErrorUndefinedType": "Bitte wähle die Kategorie deines Feedbacks aus!",
+    "ErrorInvalidEmail": "Bitte gib eine gültige E-Mail-Adresse an!",
+    "ErrorMissingFeatureRequestText": "Bitte gib an, welches Feature du dir wünschst!",
+    "ErrorMissingBugReportText": "Bitte gib an, welchen Bug du melden möchtest!",
+    "SubmitNotification": "Vielen Dank für dein Feedback!"
+  },
+  "ProfileSettings": {
+    "Profile": "Profil",
+    "UserName": "Nutzername"
+  },
+  "Error": {
+    "editBoard": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Boards. Bitte versuche es erneut.",
+    "shareNote": "Es tut uns leid, aber wir haben ein Problem beim Teilen des Kärtchens. Bitte versuche es erneut.",
+    "unshareNote": "Es tut uns leid, aber wir haben ein Problem das Teilen des Kärtchens zu stoppen. Bitte versuche es erneut.",
+    "deleteBoard": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Boards. Bitte versuche es erneut.",
+    "editColumn": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spalte. Bitte versuche es erneut.",
+    "createColumn": "Es tut uns leid, aber wir haben ein Problem beim Anlegen der Spalte. Bitte versuche es erneut.",
+    "deleteColumn": "Es tut uns leid, aber wir haben ein Problem beim Löschen der Spalte. Bitte versuche es erneut.",
+    "addNote": "Es tut uns leid, aber wir haben ein Problem beim Hinzufügen des Kärtchens. Bitte versuche es erneut.",
+    "deleteNote": "Es tut uns leid, aber wir haben ein Problem beim Löschen des Kärtchens. Bitte versuche es erneut.",
+    "deleteNoteWhenShared": "Das Kärtchen kann, während es geteilt wird, nicht von dir gelöscht werden.",
+    "editNote": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren des Kärtchens. Bitte versuche es erneut.",
+    "unstackNote": "Es tut uns leid, aber wir haben ein Problem beim Entstapeln des Kärtchens. Bitte versuche es erneut.",
+    "setRaiseHand": "Es tut uns leid, aber wir haben ein Problem beim Heben deiner Hand. Bitte versuche es erneut.",
+    "setUserReady": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deines Statuses. Bitte versuche es erneut.",
+    "setUserBanned": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren dieses Nutzerstatus. Bitte versuche es erneut.",
+    "setShowHiddenColumns": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Spaltensichtbarkeit. Bitte versuche es erneut.",
+    "changePermission": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren der Berechtigungen. Bitte versuche es erneut.",
+    "logout": "Es tut uns leid, aber wir haben Probleme dich abzumelden.",
+    "serverConnection": "Der Server ist leider nicht erreichbar. Bitte versuche die Seite neu zu laden.",
+    "retry": "Wiederholen",
+    "joinBoard": "Es tut uns leid, aber wir haben ein Problem beim Beitreten des Boards. Bitte versuche es erneut.",
+    "boardDeleted": "Das Board wurde gelöscht! Du wurdest zur Startseite weitergeleitet.",
+    "acceptJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Akzeptieren der Beitrittsanfragen. Bitte versuche es erneut.",
+    "rejectJoinRequests": "Es tut uns leid, aber wir haben ein Problem beim Ablehnen der Beitrittsanfragen. Bitte versuche es erneut.",
+    "initApplication": "Es tut uns leid, aber wir haben ein Problem beim Erreichen des Servers. Bitte versuche die Seite neu zu laden.",
+    "addVote": "Es tut uns leid, aber wir haben ein Problem beim Hinzufügen der Stimme. Bitte versuche es erneut.",
+    "deleteVote": "Es tut uns leid, aber wir haben ein Problem beim Entfernen der Stimme. Bitte versuche es erneut.",
+    "createVoting": "Es tut uns leid, aber wir haben ein Problem beim Starten der Abstimmung. Bitte versuche es erneut.",
+    "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
+    "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
+    "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
+  },
+  "Avatar": {
+    "random": "Zufälligen Avatar generieren",
+    "prevOption": "Vorherige Option",
+    "nextOption": "Nächste Option",
+    "groups": {
+      "hair": "Hüte und Haare",
+      "facialFeatures": "Rund ums Gesicht",
+      "clothing": "Bekleidung und Accessoires"
+    },
+    "hairColor": {
+      "label": "Haarfarbe",
+      "Auburn": "Rotbraun",
+      "Black": "Schwarz",
+      "Blonde": "Blond",
+      "BlondeGolden": "Goldblond",
+      "Brown": "Braun",
+      "BrownDark": "Dunkelbraun",
+      "PastelPink": "Pastellpink",
+      "Blue": "Blau",
+      "Platinum": "Platin",
+      "Red": "Rot",
+      "SilverGray": "Grausilber"
+    },
+    "eyebrowType": {
+      "label": "Augenbrauen",
+      "Angry": "Wütend #1",
+      "AngryNatural": "Wütend #2",
+      "Default": "Normal #1",
+      "DefaultNatural": "Normal #2",
+      "FlatNatural": "Flach",
+      "FrownNatural": "Keine Augenbrauen",
+      "RaisedExcited": "Erstaunt #1",
+      "RaisedExcitedNatural": "Erstaunt #2",
+      "SadConcerned": "Traurig",
+      "SadConcernedNatural": "Traurig #2",
+      "UnibrowNatural": "Monobraue",
+      "UpDown": "Hochgezogen #1",
+      "UpDownNatural": "Hochgezogen #2"
+    },
+    "facialHairColor": {
+      "label": "Barthaarfarbe",
+      "Auburn": "Rotbraun",
+      "Black": "Schwarz",
+      "Blonde": "Blond",
+      "BlondeGolden": "Goldblond",
+      "Brown": "Braun",
+      "BrownDark": "Dunkelbraun",
+      "Platinum": "Platin",
+      "Red": "Rot"
+    },
+    "facialHairType": {
+      "label": "Bart",
+      "Blank": "Ohne Bart",
+      "BeardMedium": "Viel Bart",
+      "BeardLight": "Wenig Bart",
+      "BeardMajestic": "Vollbart",
+      "MoustacheFancy": "Schnurrbart",
+      "MoustacheMagnum": "Schnauzer"
+    },
+    "skinColor": {
+      "label": "Hauttyp",
+      "Tanned": "Gebräunt",
+      "Yellow": "Gelb",
+      "Pale": "Blass",
+      "Light": "Hell",
+      "Brown": "Braun",
+      "DarkBrown": "Dunkelbraun",
+      "Black": "Schwarz"
+    },
+    "eyeType": {
+      "label": "Augen",
+      "Close": "Geschlossen",
+      "Cry": "Weinend",
+      "Default": "Normal",
+      "Dizzy": "Schwindelig",
+      "EyeRoll": "Augenrollen",
+      "Happy": "Glücklich",
+      "Hearts": "Verliebt",
+      "Side": "Zur Seite",
+      "Squint": "Zusammengekniffen",
+      "Surprised": "Erstaunt",
+      "Wink": "Zwinkern #1",
+      "WinkWacky": "Zwinkern #2"
+    },
+    "mouthType": {
+      "label": "Mund",
+      "Concerned": "Besorgt",
+      "Default": "Normal",
+      "Disbelief": "Ungläubig",
+      "Eating": "Essend",
+      "Grimace": "Grimasse",
+      "Sad": "Traurig",
+      "ScreamOpen": "Entsetzt",
+      "Serious": "Ernst",
+      "Smile": "Grinsen",
+      "Tongue": "Zunge rausstrecken",
+      "Twinkle": "Lächeln",
+      "Vomit": "Kotzen"
+    },
+    "topType": {
+      "label": "Frisur/Kopfbedeckung",
+      "Eyepatch": "Augenklappe",
+      "Hat": "Hut",
+      "Hijab": "Hijab",
+      "LongHairBigHair": "Langes, gewelltes Haar",
+      "LongHairBob": "Bob",
+      "LongHairBun": "Bun",
+      "LongHairCurly": "Gelocktes Haar",
+      "LongHairCurvy": "Gewelltes Haar",
+      "LongHairDreads": "Dreads",
+      "LongHairFrida": "Frida Kahlo",
+      "LongHairFro": "Afro",
+      "LongHairFroBand": "Afro mit Haarband",
+      "LongHairMiaWallace": "Mia Wallace",
+      "LongHairNotTooLong": "Mittellanges Haar",
+      "LongHairShavedSides": "Langes Haar mit Sidecut",
+      "LongHairStraight": "Langes, geglättetes Haar",
+      "LongHairStraight2": "Langes Haar #1",
+      "LongHairStraightStrand": "Langes Haar #2",
+      "NoHair": "Glatze",
+      "ShortHairDreads01": "Kurze Dreads",
+      "ShortHairDreads02": "Ausgewachsene Dreads",
+      "ShortHairFrizzle": "Undercut",
+      "ShortHairShaggyMullet": "Shaggy Mullet",
+      "ShortHairShortCurly": "Kurze Locken",
+      "ShortHairShortFlat": "Kurzes, glattes Haar",
+      "ShortHairShortRound": "Kurzes Haar",
+      "ShortHairShortWaved": "Kurzes, gewelltes Haar",
+      "ShortHairSides": "Halbglatze",
+      "ShortHairTheCaesar": "Caesar Schnitt #1",
+      "ShortHairTheCaesarSidePart": "Caesar Schnitt #2",
+      "Turban": "Turban",
+      "WinterHat1": "Wintermütze #1",
+      "WinterHat2": "Wintermütze #2",
+      "WinterHat3": "Weihnachtsmütze",
+      "WinterHat4": "Elfenmütze"
+    },
+    "accessoriesType": {
+      "label": "Brille",
+      "Blank": "Keine Brille",
+      "Kurt": "Kurt",
+      "Prescription01": "Brille #1",
+      "Prescription02": "Brille #2",
+      "Round": "Runde Brille",
+      "Sunglasses": "Sonnenbrille",
+      "Wayfarers": "Wayfarer"
+    },
+    "clotheColor": {
+      "label": "Kleiderfarbe",
+      "Black": "Schwarz",
+      "Blue01": "Blau #1",
+      "Blue02": "Blau #2",
+      "Blue03": "Blau #3",
+      "Gray01": "Grau #1",
+      "Gray02": "Grau #2",
+      "Heather": "Heide",
+      "PastelBlue": "Pastellblau",
+      "PastelGreen": "Pastellgrün",
+      "PastelOrange": "Pastellorange",
+      "PastelRed": "Pastellrot",
+      "PastelYellow": "Pastellgelb",
+      "Pink": "Pink",
+      "Red": "Rot",
+      "White": "Weiß"
+    },
+    "clotheType": {
+      "label": "Kleidung",
+      "BlazerShirt": "Blazer mit Shirt",
+      "BlazerSweater": "Blazer mit Sweatshirt",
+      "CollarSweater": "Sweatshirt mit Kragen",
+      "GraphicShirt": "Shirt mit Aufdruck",
+      "Hoodie": "Hoodie",
+      "Overall": "Latzhose",
+      "ShirtCrewNeck": "Shirt",
+      "ShirtScoopNeck": "Shirt mit U-Ausschnitt",
+      "ShirtVNeck": "Shirt mit V-Ausschnitt"
+    },
+    "graphicType": {
+      "label": "Shirtaufdruck",
+      "Bat": "Fledermaus",
+      "Cumbia": "Cumbia!",
+      "Deer": "Reh",
+      "Diamond": "Diamant",
+      "Hola": "Hola!",
+      "Pizza": "Pizza",
+      "Resist": "Resist!",
+      "Selena": "Selena",
+      "Bear": "Bär",
+      "SkullOutline": "Totenkopf Kontur",
+      "Skull": "Totenkopf"
+    }
+  },
+  "ToggleButton": {
+    "active": "Aktiv",
+    "inactive": "Inaktiv"
+  },
+  "RejectionPage": {
+    "title": "Ups!",
+    "description": "Es sieht so aus, als ob die Türen zu dieser Sitzung vorerst geschlossen bleiben. Wir freuen uns über dein Interesse, aber leider wurde dein Antrag auf Teilnahme abgelehnt.",
+    "banned": "Es tut uns Leid, aber es sieht so aus, als ob du von dieser Sitzung ausgeschlossen wurdest.",
+    "button": "Zurück zur Startseite"
+  }
+}

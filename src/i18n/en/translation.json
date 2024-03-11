@@ -1,0 +1,651 @@
+{
+  "InfoBar": {
+    "ReturnToPresentedNote": "Return to presented note"
+  },
+  "NewBoard": {
+    "boardName": "Board name",
+    "createNewBoard": "Create new Board",
+    "extendedConfigurationButton": "Extended configuration",
+    "basicConfigurationButton": "Template selection",
+    "extendedConfigurationTitle": "Extended configuration",
+    "basicConfigurationTitle": "Choose a template"
+  },
+  "LoginBoard": {
+    "title": "Sign in to scrumlr.io",
+    "anonymousLogin": "Join board anonymously",
+    "usernameValidationError": "Username may not be empty",
+    "termsValidationError": "You must accept the terms and privacy policy",
+    "errorOnRedirect": "An error occurred while redirecting you",
+    "login": "Sign in",
+    "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>",
+    "generateRandomName": "Generate random name",
+    "username": "Username"
+  },
+  "AccessPolicy": {
+    "PUBLIC": "Open",
+    "BY_PASSPHRASE": "Password protected",
+    "BY_INVITE": "Closed"
+  },
+  "BoardGuard": {
+    "incorrectPassphrase": "Incorrect passphrase used.",
+    "reject": "You have been rejected.",
+    "returnToHomepage": "Return to homepage",
+    "waitingForApproval": "Waiting for approval."
+  },
+  "AuthRedirect": {
+    "error": "Oops! Sign-in failed, please try again."
+  },
+  "AccessPolicySelection": {
+    "title": "Access policy",
+    "publicTitle": "Open",
+    "byPassphraseTitle": "Protected",
+    "manualVerificationTitle": "Manual approval",
+    "passphrase": "Passphrase",
+    "public": "Access by URL without further verification. The URLs are hard to guess, so this should be sufficient for most sessions.",
+    "byPassphrase": "Access by URL and passphrase. If you intend to write sensitive data and you won't collaborate simultaneously this will fit the best.",
+    "manualVerification": "Admins of board can manually verify or reject each user access request individually. This policy is the safest, since the admin can deny any unapproved access.",
+    "generatePassphrase": "Generate random passphrase",
+    "copyPassphraseToClipboard": "Copy passphrase to clipboard",
+    "passphraseValidationError": "A passphrase must be set",
+    "togglePassphraseVisibility": "Toggle passphrase visibility"
+  },
+  "BoardHeader": {
+    "returnToHomepage": "Return to homepage",
+    "showParticipants": "Show participants",
+    "showAllBoardSettings": "Show all board settings",
+    "showProfileSettings": "Show profile settings"
+  },
+  "ConfirmationDialog": {
+    "returnToHomepage": "Are you sure that you want to leave this session and return to the homepage?",
+    "deleteBoard": "Are you absolutely sure that you want to delete this board?",
+    "deleteNote": "Are you sure that you want to delete this note?",
+    "deleteNoteButton": "Delete Note",
+    "deleteStackButton": "Delete Stack",
+    "deleteOptions": "What do you want to delete?",
+    "banParticipant": "Are you sure you want to remove participant '{{user}}' from the session?",
+    "unbanParticipant": "Are you sure you want to allow participant '{{user}}' to join the session again?",
+    "warning": "This action cannot be undone.",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "close": "Close"
+  },
+  "DeleteBoardOption": {
+    "warning": "Are you absolutely sure that you want to delete the board? This action cannot be undone.",
+    "button": "Delete board"
+  },
+  "ExportBoardOption": {
+    "title": "Export board",
+    "button": "Export board",
+    "exportAsJson": "Export as JSON",
+    "exportAsCSV": "Export as CSV",
+    "openPrintView": "Open print view",
+    "exportToClipboard": "Copy Markdown to Clipboard",
+    "copyToClipboardSuccess": "Markdown copied!",
+    "hintHiddenColumns": "The following columns are hidden and will not be exported:",
+    "hintHiddenNotes": "The notes of other participants are hidden and will not be exported."
+  },
+  "PrintView": {
+    "Participants": "Participants",
+    "GeneratedOn": "Generated on",
+    "ProvidedBy": "Provided with ♥️ by",
+    "Notes": "Notes",
+    "Votes": "Votes",
+    "Print": "Print",
+    "Close": "Close"
+  },
+  "MarkdownExport": {
+    "columns": "Columns",
+    "note": "Note",
+    "notes": "Notes",
+    "participants": "Participants",
+    "linkToBoard": "Link to board",
+    "vote": "Vote",
+    "votes": "Votes",
+    "stackSize": "Stack size",
+    "showAuthorsDisabled": "Note authors are hidden"
+  },
+  "ShareQrCodeOption": {
+    "title": "Share Session",
+    "button": "Share board",
+    "copyInviteURL": "Copy Invite URL",
+    "inviteUrlCopied": "Invite URL copied"
+  },
+  "Column": {
+    "settings": "Settings",
+    "editName": "Change the name",
+    "submitName": "Confirm name",
+    "resetName": "Abort",
+    "hideColumn": "Hide the column",
+    "showColumn": "Show the column",
+    "deleteColumn": "Delete column",
+    "addColumnLeft": "Add column left",
+    "addColumnRight": "Add column right",
+    "hiddenColumn": "Column is hidden for all participants",
+    "notes_one": "{{count}} note",
+    "notes_other": "{{count}} notes"
+  },
+  "ErrorPage": {
+    "navigateHome": "Home",
+    "navigateBack": "Go back"
+  },
+  "NotFoundPage": {
+    "title": "Oh no! Error",
+    "descriptionLine1": "This page does not exist.",
+    "descriptionLine2": "Go back to the Homepage.",
+    "navigateHome": "Back to Homepage"
+  },
+  "JoinRequest": {
+    "title": "Is requesting to participate",
+    "accept": "Accept",
+    "reject": "Reject"
+  },
+  "RaiseRequest": {
+    "title": "Is raising their hand",
+    "lower": "Lower hand"
+  },
+  "Request": {
+    "title": "Someone requests to participate/raised their hand"
+  },
+  "LoginProviders": {
+    "signInWithGoogle": "Sign in with Google",
+    "signInWithGitHub": "Sign in with Github",
+    "signInWithMicrosoft": "Sign in with Microsoft",
+    "signInWithAzureAd": "Sign in with Azure AD",
+    "signInWithApple": "Sign in with Apple"
+  },
+  "NoteInput": {
+    "placeholder": "Add your note...",
+    "imageInfo": "This link will be added as an image!",
+    "create": "Create note"
+  },
+  "PassphraseDialog": {
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "label": "Enter the password to open this board",
+    "submit": "Open board",
+    "inputPlaceholder": "Password",
+    "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
+  },
+  "Timer": {
+    "endTimer": "End timer",
+    "addOneMinute": "Increase timer by one minute",
+    "reduce": "Reduce time",
+    "increase": "Increase time"
+  },
+  "CookieNotice": {
+    "description": "We and selected partners use cookies or similar technologies as specified in the cookie policy. You can consent to the use of such technologies by closing this notice,\n            by interacting with any link or button outside of this notice or by continuing to browse otherwise.",
+    "learnMore": "Learn more about our Cookie Policy",
+    "decline": "Decline",
+    "accept": "Accept"
+  },
+  "CookiePolicy": {
+    "title": "Cookie Policy of scrumlr.io",
+    "decline": "Decline",
+    "accept": "Accept",
+    "body": "This document informs Users about the technologies that help scrumlr.io to achieve the purposes described below.\nSuch technologies allow the Owner to access and store information (for example by using a Cookie) or use resources\n(for example by running a script) on a User’s device as they interact with scrumlr.io.\n\nFor simplicity, all such technologies are defined as &quot;Trackers&quot; within this document – unless there is a\nreason to differentiate. For example, while Cookies can be used on both web and mobile browsers, it would be inaccurate\nto talk about Cookies in the context of mobile apps as they are a browser-based Tracker. For this\nreason, within this document, the term Cookies is only used where it is specifically meant to indicate that particular\ntype of Tracker.\n\nSome of the purposes for which Trackers are used may also require the User&apos;s consent. Whenever consent is given,\nit can be freely withdrawn at any time following the instructions provided in this document.\n\nScrumlr.io only uses Trackers managed directly by the Owner (so-called &quot;first-party&quot; Trackers). The validity\nand expiration periods of first-party Cookies and other similar Trackers may vary depending on the lifetime set by the\nOwner. Some of them expire upon termination of the User’s browsing session.\n\n## Activities strictly necessary for the operation of scrumlr.io and delivery of the Service\n\nScrumlr.io uses so-called “technical” Cookies and other similar Trackers to carry out activities that are strictly\nnecessary for the operation or delivery of the Service.\n\n## How to manage preferences and provide or withdraw consent\n\nThere are various ways to manage Tracker related preferences and to provide and withdraw consent, where relevant:\nUsers can manage preferences related to Trackers from directly within their own device settings, for example, by\npreventing the use or storage of Trackers. Additionally, whenever the use of Trackers is based on consent, Users can\nprovide or withdraw such consent by setting their preferences within the cookie notice or by updating such preferences\naccordingly via the relevant consent-preferences widget, if available.\n\nIt is also possible, via relevant browser or device features, to delete previously stored Trackers, including those\nused to remember the User’s initial consent. Other Trackers in the browser’s local memory may be cleared by deleting\nthe browsing history.\n\n## Locating Tracker Settings\n\nUsers can, for example, find information about how to manage Cookies in the most commonly used browsers at the following\naddresses:\n\n- Google Chrome\n- Mozilla Firefox\n- Apple Safari\n- Microsoft Internet Explorer\n- Microsoft Edge\n- Brave\n- Opera\n\nUsers may also manage certain categories of Trackers used on mobile apps by opting out through relevant device settings,\nsuch as the device advertising settings for mobile devices, or tracking settings in general (Users may open the device\nsettings, view and look for the relevant setting).\n\nOwner and Data Controller\ninovex GmbH\n\nKarlsruher Straße 71\n\n75179 Pforzheim\n\nGermany\n\nOwner contact email: info@scrumlr.io\n\nGiven the objective complexity surrounding tracking technologies, Users are encouraged to contact the Owner should they\nwish to receive any further information on the use of such technologies by scrumlr.io."
+  },
+  "MenuBars": {
+    "markAsDone": "Mark me as done",
+    "unmarkAsDone": "Unmark me as done",
+    "addImage": "Add image or giphy",
+    "addSticker": "Add sticker",
+    "themeToggle": "Change color scheme",
+    "editColumns": "Start column mode",
+    "stopEditingColumns": "End column mode",
+    "startPresenterMode": "Start presenter mode",
+    "stopPresenterMode": "End presenter mode",
+    "returnToHomepage": "Return to Homepage",
+    "raiseHand": "Raise your hand",
+    "lowerHand": "Lower your hand",
+    "openBoardReactionMenu": "React",
+    "settings": "Settings",
+    "openMenu": "Open user menu"
+  },
+  "Hotkeys": {
+    "hotkeysEnabled": "Hotkeys enabled!",
+    "hotkeysDisabled": "Hotkeys disabled!",
+    "hotkeyToggle": "Enable hotkeys",
+    "timerStarted": "A {{duration}} minute timer has been started",
+    "cheatSheet": "Hotkey Cheat Sheet",
+    "toggleColumnVisibility": {
+      "hide": "Columns that are hidden are now hidden to you",
+      "show": "Columns that are hidden are now visible to you"
+    },
+    "toggleShowOtherUsersNotes": {
+      "hide": "The notes of other participants are now hidden",
+      "show": "The notes of other participants are now visible"
+    },
+    "toggleShowAuthors": {
+      "hide": "The authors of the notes are now hidden",
+      "show": "The authors of the notes are now visible"
+    },
+    "toggleRaisedHand": {
+      "raise": "You have raised your hand",
+      "lower": "You have lowered your hand"
+    },
+    "toggleReadyState": {
+      "ready": "You have marked yourself as ready",
+      "notReady": "You have marked yourself as not ready"
+    },
+    "togglePresentationMode": {
+      "startPresenting": "You have started the presenter mode",
+      "endPresenting": "You have ended the presenter mode"
+    }
+  },
+  "VoteConfigurationButton": {
+    "label": "Voting",
+    "showVotesOfOthers": "Anonymous voting",
+    "allowMultipleVotesPerNote": "Allow cumulative voting",
+    "numberOfVotes": "Number of votes",
+    "increaseVotes": "Increase number of votes",
+    "decreaseVotes": "Decrease number of votes",
+    "startVoting": "Start voting phase",
+    "cancelVoting": "Cancel voting phase",
+    "stopVoting": "End voting phase"
+  },
+  "VoteDisplay": {
+    "finishActionTooltip": "Conclude voting",
+    "tooltip": "{{remaining}} of {{total}} votes remaining"
+  },
+  "TimerToggleButton": {
+    "label": "Timer",
+    "1min": "1 minute",
+    "3min": "3 minutes",
+    "5min": "5 minutes",
+    "min": "minutes",
+    "customTime": "Custom time",
+    "cancelTimer": "Cancel timer"
+  },
+  "BoardReactionsMenu": {
+    "react": "React with {{reaction}} [{{shortcut}}]"
+  },
+  "BoardReaction": {
+    "me": "Me"
+  },
+  "AppInfo": {
+    "version": "Link to list of releases on GitHub"
+  },
+  "Toast": {
+    "authenticationError": "There occurred a problem while signing you in",
+    "votingStarted": "You started the voting phase!",
+    "votingFinished": "You ended the voting phase!",
+    "focusModeStart": "You started the moderation phase! The notes you select will be presented to all users",
+    "focusModeFinished": "You ended the moderation phase",
+    "votingPhaseStarted": "Voting phase started! You can vote now!",
+    "votingPhaseEnded": "Voting phase ended! You can't vote anymore!",
+    "moderationStarted": "Moderation phase started!",
+    "moderationEnded": "Moderation phase ended!",
+    "timerStarted": "Timer started!",
+    "timerEnded": "Timer ended!",
+    "timerCancelled": "Timer cancelled!",
+    "hiddenColumnsVisible": "Hidden columns are now visible to you!",
+    "passwordCopied": "Board protected and password copied!",
+    "boardMadePublic": "The board is now public!",
+    "allParticipantsDone": "All participants are ready!",
+    "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
+    "moderatorResetReadyStatesButton": "Reset!",
+    "bannedParticipant": "Participant '{{user}}' was removed",
+    "unbannedParticipant": "The ban for participant '{{user}}' was revoked",
+    "noteToHiddenColumn": "You just added a note to a hidden column!",
+    "noteToHiddenColumnButton": "Reveal column",
+    "noteMovedToStack": "The note was moved to a stack!",
+    "noteDeleted": "The note has been deleted!",
+    "emptyNoteDialog": "The note must contain text.",
+    "ready": "Are you ready?",
+    "readyButton": "Ready!",
+    "boardReactionsDisabled": "Board reactions are disabled",
+    "enable": "Enable"
+  },
+  "Language": {
+    "german": "German",
+    "english": "English"
+  },
+  "Homepage": {
+    "developers": "© 2021-2023, provided by <inovex>inovex</inovex> with ❤️",
+    "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
+    "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
+    "startButton": "Start now",
+    "privacyPolicy": "Privacy policy",
+    "cookiePolicy": "Cookie policy",
+    "terms": "Terms & conditions"
+  },
+  "Note": {
+    "me": "Me",
+    "you": "you",
+    "userImageAlt": "media provided by {{user}}"
+  },
+  "StackView": {
+    "prevNote": "Previous note",
+    "nextNote": "Next note",
+    "close": "Close"
+  },
+  "NoteDialogDeleteStackButton": {
+    "title": "Delete this stack"
+  },
+  "NoteDialogDeleteNoteButton": {
+    "title": "Delete this note"
+  },
+  "NoteDialogUnstackNoteButton": {
+    "title": "Remove this note from stack"
+  },
+  "NoteReactionList": {
+    "toggleBarLabel": "toggle the reaction bar"
+  },
+  "NoteReactionsPopup": {
+    "allReactionsTab": "All"
+  },
+  "SettingsDialog": {
+    "BoardSettings": "Board Settings",
+    "BoardSettingsDescription": "Name, Access Policy",
+    "Participants": "Participants",
+    "ParticipantsDescription": "User List, User Role",
+    "Appearance": "Appearance",
+    "AppearanceDescription": "Notifications, Language, UI",
+    "ShareSession": "Share Session",
+    "ShareSessionDescription": "QR Code, URL",
+    "ExportBoard": "Export Board",
+    "ExportBoardDescription": "Share the board",
+    "Feedback": "Feedback",
+    "FeedbackDescription": "We love to hear from you",
+    "ProfileDescription": "Edit profile"
+  },
+  "BoardSettings": {
+    "BoardName": "Board Name",
+    "AccessPolicy": "Access Policy",
+    "Password": "Password",
+    "SetAccessPolicyOpen": "Remove password protection",
+    "SecurePasswordHint": "Please enter a secure password",
+    "DeleteBoard": "Delete Board",
+    "ShowAuthorOption": "Show authors of notes",
+    "ShowHiddenColumnsOption": "Show hidden columns for me",
+    "ShowOtherUsersNotesOption": "Show notes of other users",
+    "ShowNoteReactionsOptions": "Show note reactions",
+    "AllowNoteRepositioningOption": "Allow note repositioning",
+    "generatePassword": "Generate password and protect",
+    "save": "save",
+    "edit": "edit"
+  },
+  "Participants": {
+    "Title": "Participants",
+    "OwnerFilterTooltip": "Show only the owner",
+    "ModeratorFilterTooltip": "Show only moderators",
+    "ParticipantFilterTooltip": "Show only participants",
+    "OnlineFilterTooltip": "Show disconnected participants",
+    "ChangeRoleToParticipantTooltip": "Change role to participant",
+    "ChangeRoleToModeratorTooltip": "Change role to moderator",
+    "ResetBannerText": "Reset ready states of all users.",
+    "ResetBannerButton": "Reset",
+    "BanParticipantTooltip": "Ban participant '{{user}}'",
+    "UnbanParticipantTooltip": "Revoke the ban on participant '{{user}}'"
+  },
+  "UserRole": {
+    "Owner": "Owner",
+    "Moderator": "Moderator",
+    "Participant": "Participant"
+  },
+  "Appearance": {
+    "SyncMode": "Sync Appearance Mode with System",
+    "SyncModeDescription": "Scrumlr will match the appearance mode (dark or light) with your active system settings",
+    "AllowNotifications": "Allow Notifications",
+    "Language": "Language",
+    "EmojiSkinTone": "Emoji skin tone",
+    "colorScheme": "Color scheme",
+    "colorSchemeLight": "Light",
+    "colorSchemeDark": "Dark",
+    "showHotkeyNotifications": "Show hotkey notifications",
+    "showBoardReactions": "Show board reactions"
+  },
+  "Feedback": {
+    "PraiseInputLabel": "Anything else you want to tell us?",
+    "BugReportInputLabel": "What bug would you like to report?",
+    "FeatureRequestInputLabel": "What feature would you like to have?",
+    "FeedbackInputPlaceholder": "Type anything additional here!",
+    "ContactInputLabel": "If you would like us to contact you, leave your email! (Optional)",
+    "SubmitButton": "Send Feedback",
+    "ErrorUndefinedType": "Please select the type of your feedback!",
+    "ErrorInvalidEmail": "Please enter a valid email!",
+    "ErrorMissingFeatureRequestText": "Please specify the feature you want to request!",
+    "ErrorMissingBugReportText": "Please specify the bug you want to report!",
+    "SubmitNotification": "Thank you for your feedback!"
+  },
+  "ProfileSettings": {
+    "Profile": "Profile",
+    "UserName": "User Name"
+  },
+  "Error": {
+    "editBoard": "Sorry, but we're having trouble updating the board. Please try again.",
+    "shareNote": "Sorry, but we're having trouble sharing the note. Please try again.",
+    "unshareNote": "Sorry, but we're having trouble to stop sharing the note. Please try again.",
+    "deleteBoard": "Sorry, but we're having trouble deleting the board. Please try again.",
+    "editColumn": "Sorry, but we're having trouble updating the column. Please try again.",
+    "createColumn": "Sorry, but we're having trouble adding the column. Please try again.",
+    "deleteColumn": "Sorry, but we're having trouble deleting the column. Please try again.",
+    "addNote": "Sorry, but we're having trouble adding the  note. Please try again.",
+    "deleteNote": "Sorry, but we're having trouble deleting the note. Please try again.",
+    "deleteNoteWhenShared": "Sorry, but you can not delete your card while it is shared.",
+    "editNote": "Sorry, but we're having trouble updating the note. Please try again.",
+    "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
+    "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",
+    "setUserReady": "Sorry, but we're having trouble setting you ready. Please try again.",
+    "setUserBanned": "Sorry, but we're having trouble banning/unbanning this user. Please try again.",
+    "setShowHiddenColumns": "Sorry, but we're having trouble changing the column visibility. Please try again.",
+    "changePermission": "Sorry, but we're having trouble updating the permissions. Please try again.",
+    "logout": "Sorry, but we're having trouble signing you out.",
+    "serverConnection": "The connection to the server could not be established. Please try to reload the page.",
+    "retry": "Retry",
+    "joinBoard": "Sorry, but we're having trouble joining the board. Please try again.",
+    "boardDeleted": "The board has been deleted! You've been redirected to the homepage.",
+    "acceptJoinRequests": "Sorry, but we're having trouble accepting the requests. Please try again.",
+    "rejectJoinRequests": "Sorry, but we're having trouble rejecting the requests. Please try again.",
+    "initApplication": "Sorry, but we're having trouble reaching the server for information. Please try to reload the page.",
+    "addVote": "Sorry, but we're having trouble adding the vote. Please try again.",
+    "deleteVote": "Sorry, but we're having trouble deleting the vote. Please try again.",
+    "createVoting": "Sorry, but we're having trouble starting a new voting. Please try again.",
+    "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
+    "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
+    "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
+  },
+  "Avatar": {
+    "random": "Generate random avatar",
+    "prevOption": "Previous option",
+    "nextOption": "Next option",
+    "groups": {
+      "hair": "Hats and hairstyle",
+      "facialFeatures": "Facial features",
+      "clothing": "Clothing"
+    },
+    "hairColor": {
+      "label": "Hair color",
+      "Auburn": "Auburn",
+      "Black": "Black",
+      "Blonde": "Blonde",
+      "BlondeGolden": "Golden blonde",
+      "Brown": "Brown",
+      "BrownDark": "Dark brown",
+      "PastelPink": "Pastel pink",
+      "Blue": "Blue",
+      "Platinum": "Platinum",
+      "Red": "Red",
+      "SilverGray": "Silver gray"
+    },
+    "eyebrowType": {
+      "label": "Eyebrow type",
+      "Angry": "Angry #1",
+      "AngryNatural": "Angry #2",
+      "Default": "Default #1",
+      "DefaultNatural": "Default #2",
+      "FlatNatural": "Flat",
+      "FrownNatural": "Frown",
+      "RaisedExcited": "Excited #1",
+      "RaisedExcitedNatural": "Excited #2",
+      "SadConcerned": "Concerned #1",
+      "SadConcernedNatural": "Concerned #2",
+      "UnibrowNatural": "Unibrow",
+      "UpDown": "Raised #1",
+      "UpDownNatural": "Raised #2"
+    },
+    "facialHairColor": {
+      "label": "Facial hair color",
+      "Auburn": "Auburn",
+      "Black": "Black",
+      "Blonde": "Blonde",
+      "BlondeGolden": "Golden blonde",
+      "Brown": "Brown",
+      "BrownDark": "Dark brown",
+      "Platinum": "Platinum",
+      "Red": "Red"
+    },
+    "facialHairType": {
+      "label": "Facial hair type",
+      "Blank": "Blank",
+      "BeardMedium": "Medium beard",
+      "BeardLight": "Light beard",
+      "BeardMajestic": "Majestic beard",
+      "MoustacheFancy": "Fancy moustache",
+      "MoustacheMagnum": "Magnum moustache"
+    },
+    "skinColor": {
+      "label": "Skin color",
+      "Tanned": "Tanned",
+      "Yellow": "Yellow",
+      "Pale": "Pale",
+      "Light": "Light",
+      "Brown": "Brown",
+      "DarkBrown": "Dark brown",
+      "Black": "Black"
+    },
+    "eyeType": {
+      "label": "Eye type",
+      "Close": "Closed",
+      "Cry": "Crying",
+      "Default": "Default",
+      "Dizzy": "Dizzy",
+      "EyeRoll": "Rolling eyes",
+      "Happy": "Happy",
+      "Hearts": "Hearts",
+      "Side": "Look sideways",
+      "Squint": "Squint",
+      "Surprised": "Surprised",
+      "Wink": "Wink",
+      "WinkWacky": "Wacky wink"
+    },
+    "mouthType": {
+      "label": "Mouth type",
+      "Concerned": "Concerned",
+      "Default": "Default",
+      "Disbelief": "Disbelief",
+      "Eating": "Eating",
+      "Grimace": "Grimace",
+      "Sad": "Sad",
+      "ScreamOpen": "Screaming",
+      "Serious": "Serious",
+      "Smile": "Smile",
+      "Tongue": "Tongue out",
+      "Twinkle": "Twinkle",
+      "Vomit": "Vomit"
+    },
+    "topType": {
+      "label": "Top type",
+      "Eyepatch": "Eyepatch",
+      "Hat": "Hat",
+      "Hijab": "Hijab",
+      "LongHairBigHair": "Long, wavy hair",
+      "LongHairBob": "Bob",
+      "LongHairBun": "Bun",
+      "LongHairCurly": "Long, curly hair",
+      "LongHairCurvy": "Long, curvy hair",
+      "LongHairDreads": "Dreadlocks",
+      "LongHairFrida": "Frida Kahlo",
+      "LongHairFro": "Afro",
+      "LongHairFroBand": "Afro with headband",
+      "LongHairMiaWallace": "Mia Wallace",
+      "LongHairNotTooLong": "Medium length hair",
+      "LongHairShavedSides": "Long hair with sidecut",
+      "LongHairStraight": "Straight, long hair #1",
+      "LongHairStraight2": "Straight, long hair #2",
+      "LongHairStraightStrand": "Straight, long hair #3",
+      "NoHair": "No hair",
+      "ShortHairDreads01": "Short dreads #1",
+      "ShortHairDreads02": "Short dreads #2",
+      "ShortHairFrizzle": "Frizzle",
+      "ShortHairShaggyMullet": "Shaggy Mullet",
+      "ShortHairShortCurly": "Short, curly hair",
+      "ShortHairShortFlat": "Short, flat hair",
+      "ShortHairShortRound": "Short, round hair",
+      "ShortHairShortWaved": "Short, wavy hair",
+      "ShortHairSides": "Half-bald",
+      "ShortHairTheCaesar": "The Caesar #1",
+      "ShortHairTheCaesarSidePart": "The Caesar #2",
+      "Turban": "Turban",
+      "WinterHat1": "Winter hat #1",
+      "WinterHat2": "Winter hat #2",
+      "WinterHat3": "Winter hat #3",
+      "WinterHat4": "Winter hat #4"
+    },
+    "accessoriesType": {
+      "label": "Glasses",
+      "Blank": "Blank",
+      "Kurt": "Kurt",
+      "Prescription01": "Prescription #1",
+      "Prescription02": "Prescription #2",
+      "Round": "Round glasses",
+      "Sunglasses": "Sunglasses",
+      "Wayfarers": "Wayfarers"
+    },
+    "clotheColor": {
+      "label": "Clothe color",
+      "Black": "Black",
+      "Blue01": "Blue #1",
+      "Blue02": "Blue #2",
+      "Blue03": "Blue #3",
+      "Gray01": "Gray #1",
+      "Gray02": "Gray #2",
+      "Heather": "Heather",
+      "PastelBlue": "Pastel blue",
+      "PastelGreen": "Pastel green",
+      "PastelOrange": "Pastel orange",
+      "PastelRed": "Pastel red",
+      "PastelYellow": "Pastel yellow",
+      "Pink": "Pink",
+      "Red": "Red",
+      "White": "White"
+    },
+    "clotheType": {
+      "label": "Clothe type",
+      "BlazerShirt": "Blazer with shirt",
+      "BlazerSweater": "Blazer with sweater",
+      "CollarSweater": "Collar sweater",
+      "GraphicShirt": "Graphic shirt",
+      "Hoodie": "Hoodie",
+      "Overall": "Overall",
+      "ShirtCrewNeck": "Crew neck shirt",
+      "ShirtScoopNeck": "Scoop neck shirt",
+      "ShirtVNeck": "V-neck shirt"
+    },
+    "graphicType": {
+      "label": "Graphic type",
+      "Bat": "Bat",
+      "Cumbia": "Cumbia!",
+      "Deer": "Deer",
+      "Diamond": "Diamond",
+      "Hola": "Hola!",
+      "Pizza": "Pizza",
+      "Resist": "Resist!",
+      "Selena": "Selena",
+      "Bear": "Bear",
+      "SkullOutline": "Outlined skull",
+      "Skull": "Skull"
+    }
+  },
+  "ToggleButton": {
+    "active": "Active",
+    "inactive": "Inactive"
+  },
+  "RejectionPage": {
+    "title": "Oops!",
+    "description": "It looks like the doors to this session remain closed for now. We appreciate your interest, but unfortunately, your request to join has been declined.",
+    "banned": "We're sorry, but it looks like you have been excluded from this session.",
+    "button": "Back to Homepage"
+  }
+}

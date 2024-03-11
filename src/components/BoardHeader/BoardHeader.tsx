@@ -25,7 +25,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const state = useAppSelector(
     (rootState) => ({
       name: rootState.board.data?.name,
-      accessPolicy: rootState.board.data?.accessPolicy,
+      accessPolicy: rootState.board.data!.accessPolicy,
     }),
     shallowEqual
   );
