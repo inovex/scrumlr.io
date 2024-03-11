@@ -6,6 +6,7 @@ $note-input__input-right: 40px;
 .note-input {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   min-height: 36px;
   width: 100%;
   position: relative;
@@ -20,6 +21,12 @@ $note-input__input-right: 40px;
     border-color: rgba(var(--accent-color-rgb), 0.5);
     box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.16);
   }
+}
+
+.note-input__lock-icon {
+  width: 32px;
+  height: 32px;
+  color: $color-dark-gray;
 }
 
 .note-input__input {

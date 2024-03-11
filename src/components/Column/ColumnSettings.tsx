@@ -31,6 +31,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
   const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
+  const boardIsLocked = useAppSelector((state) => !state.board.data!.allowEditing);
 
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
@@ -46,6 +47,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
       <ul>
         <li>
           <button
+            disabled={boardIsLocked}
             onClick={() => {
               onClose?.();
               dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
@@ -57,6 +59,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button
+            disabled={boardIsLocked}
             onClick={() => {
               onNameEdit?.();
               onClose?.();
@@ -68,6 +71,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button
+            disabled={boardIsLocked}
             onClick={() => {
               onClose?.();
               handleAddColumn(index);
@@ -79,6 +83,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button
+            disabled={boardIsLocked}
             onClick={() => {
               onClose?.();
               handleAddColumn(index + 1);
@@ -90,6 +95,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button
+            disabled={boardIsLocked}
             onClick={() => {
               onClose?.();
               dispatch(Actions.deleteColumn(id));
@@ -101,42 +107,49 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button
+            disabled={boardIsLocked}
             aria-label="Backlog Blue"
             title="Backlog Blue"
             className={classNames(getColorClassName("backlog-blue"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}))}
           />
           <button
+            disabled={boardIsLocked}
             aria-label="Grooming Green"
             title="Grooming Green"
             className={classNames(getColorClassName("grooming-green"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "grooming-green", index, visible}))}
           />
           <button
+            disabled={boardIsLocked}
             aria-label="Lean Lilac"
             title="Lean Lilac"
             className={classNames(getColorClassName("lean-lilac"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "lean-lilac", index, visible}))}
           />
           <button
+            disabled={boardIsLocked}
             aria-label="Online Orange"
             title="Online Orange"
             className={classNames(getColorClassName("online-orange"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}))}
           />
           <button
+            disabled={boardIsLocked}
             aria-label="Planning Pink"
             title="Planning Pink"
             className={classNames(getColorClassName("planning-pink"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
           />
           <button
+            disabled={boardIsLocked}
             aria-label="Poker Purple"
             title="Poker Purple"
             className={classNames(getColorClassName("poker-purple"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "poker-purple", index, visible}))}
           />
           <button
+            disabled={boardIsLocked}
             aria-label="Retro Red"
             title="Retro Red"
             className={classNames(getColorClassName("retro-red"), "column__color-button")}

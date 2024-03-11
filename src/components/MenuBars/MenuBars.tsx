@@ -50,6 +50,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
   const [showBoardReactionsMenu, setShowBoardReactionsMenu] = useState(false);
+  const boardIsLocked = useAppSelector((state) => !state.board.data!.allowEditing);
 
   useEffect(() => {
     const handleClickOutside = ({target}: MouseEvent) => {
@@ -202,6 +203,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 icon={CheckIcon}
                 active={isReady}
                 hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
+                disabled={boardIsLocked}
               />
             </li>
             <li>
@@ -212,6 +214,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 onClick={toggleRaiseHand}
                 active={raisedHand}
                 hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
+                disabled={boardIsLocked}
               />
             </li>
             <li>
@@ -222,6 +225,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 onClick={toggleBoardReactionsMenu}
                 active={showBoardReactionsMenu}
                 hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
+                disabled={boardIsLocked}
               />
             </li>
             <li>
@@ -239,7 +243,15 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
+                <TooltipButton
+                  active={state.activeTimer}
+                  direction="left"
+                  label="Timer"
+                  onClick={toggleTimerMenu}
+                  icon={TimerIcon}
+                  hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()}
+                  disabled={boardIsLocked}
+                />
               </li>
               <li>
                 <TooltipButton
@@ -249,6 +261,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   onClick={toggleVotingMenu}
                   icon={VoteIcon}
                   hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
+                  disabled={boardIsLocked}
                 />
               </li>
               <li>
@@ -259,6 +272,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   icon={FocusIcon}
                   onClick={toggleModeration}
                   hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
+                  disabled={boardIsLocked}
                 />
               </li>
             </ul>
