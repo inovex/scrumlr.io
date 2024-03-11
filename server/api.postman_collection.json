@@ -1145,13 +1145,7 @@
           ],
           "request": {
             "method": "GET",
-            "header": [
-              {
-                "key": "Accept",
-                "value": "text/csv",
-                "type": "text"
-              }
-            ],
+            "header": [],
             "url": {
               "raw": "{{base_url}}/boards/{{board_id}}/export",
               "host": [
