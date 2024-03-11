@@ -123,7 +123,7 @@ export const Note = (props: NoteProps) => {
           <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>{note.text}</main>
         )}
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
-          <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
+          {(isModerator || !boardIsLocked) && <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />}
         </footer>
       </div>
       {isStack && <div className="note__in-stack" />}
