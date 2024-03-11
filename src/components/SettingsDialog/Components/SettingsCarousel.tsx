@@ -28,8 +28,6 @@ export const SettingsCarousel: FC<SettingsCarouselProps<string>> = ({carouselIte
     else onValueChange(carouselItems[currentIndex + 1]);
   };
 
-  console.log(localizationPath, currentValue);
-
   return (
     <div className={classNames("settings-carousel", className)}>
       <button className="settings-carousel__button settings-carousel__button--left" disabled={disabled} onClick={() => handleClick(true)} aria-label={t("Avatar.prevOption")}>
