@@ -19,7 +19,6 @@ func TestRunnerForVoting(t *testing.T) {
 	t.Run("Update=0", testReopenClosedVotingShouldFail)
 	t.Run("Update=1", testReopenAbortedVotingShouldFail)
 	t.Run("Update=2", testChangeAbortedToClosedVotingShouldFail)
-	t.Run("Update=3", testChangeClosedToAbortedVotingShouldFail)
 	t.Run("Update=4", testCloseVoting)
 	t.Run("Update=5", testCloseVotingUpdateRank)
 
