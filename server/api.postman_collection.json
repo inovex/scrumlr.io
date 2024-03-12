@@ -1502,13 +1502,15 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}",
+                  "raw": "http://localhost:8080/boards/{board}",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}"
+                    "{board}"
                   ]
                 }
               },
@@ -2249,13 +2251,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/notes",
+                  "raw": "http://localhost:8080/boards/{board}/notes",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "notes"
                   ]
                 }
@@ -2336,15 +2340,17 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/notes/{{note_id}}",
+                  "raw": "http://localhost:8080/boards/{board}/notes/{note}",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "notes",
-                    "{{note_id}}"
+                    "{note}"
                   ]
                 }
               },
@@ -2478,7 +2484,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"position\": {\r\n        \"column\": \"{{column_id}}\",\r\n        \"rank\": 1996\r\n    }\r\n}",
+                  "raw": "{\r\n    \"position\": {\r\n        \"column\": \"{column}\",\r\n        \"rank\": 1996\r\n    }\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2486,15 +2492,17 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/notes/{{note_id}}",
+                  "raw": "http://localhost:8080/boards/{board}/notes/{note}",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "notes",
-                    "{{note_id}}"
+                    "{note}"
                   ]
                 }
               },
@@ -2604,15 +2612,17 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/notes/{{note_id}}",
+                  "raw": "http://localhost:8080/boards/{board}/notes/{note}",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "notes",
-                    "{{note_id}}"
+                    "{note}"
                   ]
                 }
               },
@@ -2737,13 +2747,15 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/votings",
+                  "raw": "http://localhost:8080/boards/{board}/votings",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "votings"
                   ]
                 }
@@ -2818,13 +2830,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/votings",
+                  "raw": "http://localhost:8080/boards/{board}/votings",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "votings"
                   ]
                 }
@@ -2847,7 +2861,7 @@
                 }
               ],
               "cookie": [],
-              "body": "[\n    {\n        \"id\": \"3c3b64f1-5132-44c0-880d-82f545067cf3\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": false,\n        \"showVotesOfOthers\": true,\n        \"status\": \"OPEN\"\n    },\n    {\n        \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": true,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5,\n                    \"userVotes\": [\n                        {\n                            \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                            \"total\": 5\n                        }\n                    ]\n                }\n            }\n        }\n    },\n    {\n        \"id\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": false,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5\n                }\n            }\n        }\n    },\n    {\n        \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": false,\n        \"status\": \"ABORTED\"\n    }\n]"
+              "body": "[\n    {\n        \"id\": \"3c3b64f1-5132-44c0-880d-82f545067cf3\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": false,\n        \"showVotesOfOthers\": true,\n        \"status\": \"OPEN\"\n    },\n    {\n        \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": true,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5,\n                    \"userVotes\": [\n                        {\n                            \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                            \"total\": 5\n                        }\n                    ]\n                }\n            }\n        }\n    },\n    {\n        \"id\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": false,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5\n                }\n            }\n        }\n    }\n]"
             }
           ]
         },
@@ -2901,15 +2915,17 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/votings/{{voting_id}}",
+                  "raw": "http://localhost:8080/boards/{board}/votings/{voting}",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "votings",
-                    "{{voting_id}}"
+                    "{voting}"
                   ]
                 }
               },
@@ -2997,15 +3013,17 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/votings/{{voting_id}}",
+                  "raw": "http://localhost:8080/boards/{board}/votings/{voting}",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "votings",
-                    "{{voting_id}}"
+                    "{voting}"
                   ]
                 }
               },
@@ -3075,139 +3093,6 @@
               ],
               "cookie": [],
               "body": "{\n    \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": true,\n    \"status\": \"CLOSED\",\n    \"votes\": {\n        \"total\": 5,\n        \"votesPerNote\": {\n            \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                \"total\": 5,\n                \"userVotes\": [\n                    {\n                        \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                        \"total\": 5\n                    }\n                ]\n            }\n        }\n    }\n}"
-            }
-          ]
-        },
-        {
-          "name": "Abort voting",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Successful PUT request\", function () {",
-                  "    pm.expect(pm.response).to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test(\"Check voting parameters\", function () {",
-                  "    var res = pm.response.json();",
-                  "",
-                  "    pm.expect(res.status).to.equal(\"ABORTED\");",
-                  "})"
-                ],
-                "type": "text/javascript"
-              }
-            },
-            {
-              "listen": "prerequest",
-              "script": {
-                "exec": [
-                  "var body = {",
-                  "    \"voteLimit\": 5,",
-                  "    \"allowMultipleVotes\": true,",
-                  "    \"showVotesOfOthers\": true",
-                  "}",
-                  "body = JSON.stringify(body)",
-                  "",
-                  "pm.sendRequest({",
-                  "    url: pm.variables.get(\"base_url\") + \"/boards/\" + pm.collectionVariables.get(\"board_id\") + \"/votings\",",
-                  "    method: 'POST',",
-                  "    header: {",
-                  "        \"Content-Type\": \"application/json; charset=utf-8\",",
-                  "        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
-                  "    },",
-                  "    body: body,",
-                  "",
-                  "}, function (err, response) {",
-                  "    pm.test(\"PreRequestScript – Successful POST request (createVoting)\", function () {",
-                  "        pm.expect(response).to.have.status(201);",
-                  "    });",
-                  "    ",
-                  "    pm.test(\"PreRequestScript – Check voting generated (then save id)\", function () {",
-                  "        var res = response.json();",
-                  "        ",
-                  "        pm.expect(res.id).to.exist;",
-                  "        pm.collectionVariables.set(\"voting_id\", res.id);",
-                  "    })",
-                  "});"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"status\": \"ABORTED\"\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/boards/{{board_id}}/votings/{{voting_id}}",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "boards",
-                "{{board_id}}",
-                "votings",
-                "{{voting_id}}"
-              ]
-            },
-            "description": "If the state will be set to `ABORTED` all associated votes will be deleted and the voting session, while still listed in all votings, will be no longer available."
-          },
-          "response": [
-            {
-              "name": "Success",
-              "originalRequest": {
-                "method": "PUT",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\r\n    \"status\": \"ABORTED\"\r\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                },
-                "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/votings/{{voting_id}}",
-                  "host": [
-                    "{{base_url}}"
-                  ],
-                  "path": [
-                    "boards",
-                    "{{board_id}}",
-                    "votings",
-                    "{{voting_id}}"
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json; charset=utf-8"
-                },
-                {
-                  "key": "Date",
-                  "value": "Sun, 16 Jan 2022 18:12:02 GMT"
-                },
-                {
-                  "key": "Content-Length",
-                  "value": "131"
-                }
-              ],
-              "cookie": [],
-              "body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"ABORTED\"\n}"
             }
           ]
         }
@@ -3335,7 +3220,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"note\": \"{{note_id}}\"\r\n}",
+                  "raw": "{\r\n    \"note\": \"{note}\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3343,13 +3228,15 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/votes",
+                  "raw": "http://localhost:8080/boards/{board}/votes",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "votes"
                   ]
                 }
@@ -3467,13 +3354,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/votes",
+                  "raw": "http://localhost:8080/boards/{board}/votes",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "votes"
                   ]
                 }
@@ -3547,7 +3436,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"note\": \"{{note_id}}\"\r\n}",
+                  "raw": "{\r\n    \"note\": \"{note}\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3555,13 +3444,15 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/votes",
+                  "raw": "http://localhost:8080/boards/{board}/votes",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "votes"
                   ]
                 }
@@ -3619,7 +3510,7 @@
     {
       "name": "Realtime",
       "item": [],
-      "description": "There are two types of realtime socket connections you can establish.\n\n*   **GET /boards/{board}:** Receive updates on all changes related to a specific board\n*   **GET /boards/{board}/requests/{user}:** Get updates on status changes for a `PENDING` board session request\n    \n\n## Receiving board updates\n\nIf you have a valid board session you can subscribe to realtime updates for all changes. The message you'll receive will all have a type and the associated data to the type.\n\n``` json\n{\n  // the message type\n  \"type\": \"INIT\"\n  // the data associated with the specified type\n  \"data\": {\n    // ...\n  }\n}\n\n```\n\nThere are several event types you'll receive upon subscription.\n\n| **type** | **description** |\n| --- | --- |\n| **INIT** | This event will be called once the connection is established and basically includes all data associated with the board. |\n| **BOARD_UPDATED** | You'll receive this message once some board configuration is changed. The data has the same format as the scheme defined in the board response. |\n| **BOARD_DELETED** | You'll receive this message if a board was deleted. The connection will be closed by the server automatically afterwards. |\n| **COLUMNS_UPDATED** | This event will send an array of all columns and will be triggered if any column configuration changes. |\n| **NOTES_UPDATED** | Once a note is created or a note is changed (e.g. the text, the rank or the stack etc.) you'll receive an array of all notes. |\n| **REQUEST_CREATED** | Fired when someone wants to gain access to a board. |\n| **REQUEST_UPDATED** | If a join request was accepted or rejected this event will be fired. |\n| **PARTICIPANT_CREATED** | This event will include a new participant of a board. |\n| **PARTICIPANT_UPDATED** | If a participant changes the `ready` state or goes on or offline (the `connected` attribute changes) this event will be fired. |\n| **PARTICIPANTS_UPDATED** | Since moderators can change settings of all participants at once (e.g. the `ready` state) this message will include an array of all participants with their latest settings. |\n| **VOTING_CREATED** | Fired once a new voting iteration is created. The data includes the voting settings. |\n| **VOTING_UPDATED** | Fired once a voting iteration is closed or aborted. In the first case the data will also include the voting results according to the settings of the voting. |",
+      "description": "There are two types of realtime socket connections you can establish.\n\n- **GET /boards/{board}:** Receive updates on all changes related to a specific board\n- **GET /boards/{board}/requests/{user}:** Get updates on status changes for a `PENDING` board session request\n    \n\n## Receiving board updates\n\nIf you have a valid board session you can subscribe to realtime updates for all changes. The message you'll receive will all have a type and the associated data to the type.\n\n``` json\n{\n  // the message type\n  \"type\": \"INIT\"\n  // the data associated with the specified type\n  \"data\": {\n    // ...\n  }\n}\n\n ```\n\nThere are several event types you'll receive upon subscription.\n\n| **type** | **description** |\n| --- | --- |\n| **INIT** | This event will be called once the connection is established and basically includes all data associated with the board. |\n| **BOARD_UPDATED** | You'll receive this message once some board configuration is changed. The data has the same format as the scheme defined in the board response. |\n| **BOARD_DELETED** | You'll receive this message if a board was deleted. The connection will be closed by the server automatically afterwards. |\n| **COLUMNS_UPDATED** | This event will send an array of all columns and will be triggered if any column configuration changes. |\n| **NOTES_UPDATED** | Once a note is created or a note is changed (e.g. the text, the rank or the stack etc.) you'll receive an array of all notes. |\n| **REQUEST_CREATED** | Fired when someone wants to gain access to a board. |\n| **REQUEST_UPDATED** | If a join request was accepted or rejected this event will be fired. |\n| **PARTICIPANT_CREATED** | This event will include a new participant of a board. |\n| **PARTICIPANT_UPDATED** | If a participant changes the `ready` state or goes on or offline (the `connected` attribute changes) this event will be fired. |\n| **PARTICIPANTS_UPDATED** | Since moderators can change settings of all participants at once (e.g. the `ready` state) this message will include an array of all participants with their latest settings. |\n| **VOTING_CREATED** | Fired once a new voting iteration is created. The data includes the voting settings. |\n| **VOTING_UPDATED** | Fired once a voting iteration is closed. In the first case the data will also include the voting results according to the settings of the voting. |",
       "auth": {
         "type": "noauth"
       },
@@ -3813,7 +3704,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"note\": \"{{note_id}}\",\n    \"reactionType\": \"like\"\n}",
+                  "raw": "{\n    \"note\": \"{note}\",\n    \"reactionType\": \"like\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3821,13 +3712,15 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/reactions/",
+                  "raw": "http://localhost:8080/boards/{board}/reactions/",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "reactions",
                     ""
                   ]
@@ -3904,13 +3797,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/reactions/",
+                  "raw": "http://localhost:8080/boards/{board}/reactions/",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "reactions",
                     ""
                   ]
@@ -3992,15 +3887,17 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/reactions/{{reaction_id}}",
+                  "raw": "http://localhost:8080/boards/{board}/reactions/{reaction}",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "reactions",
-                    "{{reaction_id}}"
+                    "{reaction}"
                   ]
                 }
               },
@@ -4376,15 +4273,17 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/participants/{{user_id}}",
+                  "raw": "http://localhost:8080/boards/{board}/participants/{user}",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "participants",
-                    "{{user_id}}"
+                    "{user}"
                   ]
                 }
               },
