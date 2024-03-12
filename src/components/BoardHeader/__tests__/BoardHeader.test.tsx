@@ -3,6 +3,7 @@ import {Provider} from "react-redux";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
 import getTestStore from "utils/test/getTestStore";
 import {ApplicationState} from "types";
+import i18n from "i18nTest";
 
 const createBoardHeader = (overwrite?: Partial<ApplicationState>) => {
   return (
@@ -53,7 +54,7 @@ describe("Board Header", () => {
 
     test("show access policy public", () => {
       const {container} = render(createBoardHeader());
-      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("AccessPolicy.PUBLIC");
+      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent(i18n.t("AccessPolicy.PUBLIC"));
     });
 
     test("show access policy private", () => {
@@ -73,7 +74,7 @@ describe("Board Header", () => {
           },
         })
       );
-      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent("AccessPolicy.BY_PASSPHRASE");
+      expect(container.querySelector(".board-header__access-policy-status")?.childNodes[1]).toHaveTextContent(i18n.t("AccessPolicy.BY_PASSPHRASE"));
     });
   });
 });

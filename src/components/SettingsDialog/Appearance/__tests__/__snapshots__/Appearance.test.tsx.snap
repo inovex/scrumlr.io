@@ -10,7 +10,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
     <h2
       class="settings-dialog__header-text"
     >
-      SettingsDialog.Appearance
+      Appearance
     </h2>
   </header>
   <div
@@ -22,7 +22,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
       <span
         class="appearance-settings__theme-title"
       >
-        Appearance.colorScheme
+        Color scheme
       </span>
       <form
         class="appearance-settings__theme-options"
@@ -30,7 +30,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
         <label
           class="appearence-settings__theme-option"
           for="auto"
-          title="Appearance.SyncModeDescription"
+          title="Scrumlr will match the appearance mode (dark or light) with your active system settings"
         >
           <input
             checked=""
@@ -40,11 +40,11 @@ exports[`Appearance should render all Settings correctly 1`] = `
             value="auto"
           />
           <img
-            alt="Appearance.colorScheme Auto"
+            alt="Color scheme Auto"
             src="theme-preview-light.svg"
           />
           <img
-            alt="Appearance.colorScheme Auto"
+            alt="Color scheme Auto"
             src="theme-preview-dark.svg"
           />
           <p>
@@ -69,7 +69,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
             value="light"
           />
           <img
-            alt="Appearance.colorScheme Appearance.colorSchemeLight"
+            alt="Color scheme Light"
             src="theme-preview-light.svg"
           />
           <p>
@@ -79,7 +79,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
               icon-lightmode.svg
             </svg>
             <span>
-              Appearance.colorSchemeLight
+              Light
             </span>
           </p>
         </label>
@@ -94,7 +94,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
             value="dark"
           />
           <img
-            alt="Appearance.colorScheme Appearance.colorSchemeDark"
+            alt="Color scheme Dark"
             src="theme-preview-dark.svg"
           />
           <p>
@@ -104,7 +104,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
               icon-darkmode.svg
             </svg>
             <span>
-              Appearance.colorSchemeDark
+              Dark
             </span>
           </p>
         </label>
@@ -113,7 +113,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
     <section>
       <button
         aria-checked="true"
-        aria-label="Appearance.showHotkeyNotifications"
+        aria-label="Show hotkey notifications"
         class="settings-option-button"
         role="switch"
         type="button"
@@ -121,7 +121,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
         <span
           class="settings-option-button__label"
         >
-          Appearance.showHotkeyNotifications
+          Show hotkey notifications
         </span>
         <div
           class="toggle toggle--active"
@@ -131,7 +131,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
     <section>
       <button
         aria-checked="true"
-        aria-label="Appearance.showBoardReactions"
+        aria-label="Show board reactions"
         class="settings-option-button"
         role="switch"
         type="button"
@@ -139,7 +139,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
         <span
           class="settings-option-button__label"
         >
-          Appearance.showBoardReactions
+          Show board reactions
         </span>
         <div
           class="toggle toggle--active"
@@ -156,7 +156,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
         role="combobox"
       >
         <span>
-          Appearance.EmojiSkinTone
+          Emoji skin tone
         </span>
         <p
           class="settings-dropdown__item--current"
@@ -254,7 +254,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
         role="combobox"
       >
         <span>
-          Appearance.Language
+          Language
         </span>
         <p
           class="settings-dropdown__item--current"
@@ -265,7 +265,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
             US.svg
           </svg>
           <span>
-            Language.english
+            English
           </span>
           <svg
             class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
@@ -291,7 +291,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
               DE.svg
             </svg>
             <span>
-              Language.german
+              German
             </span>
           </button>
         </li>
