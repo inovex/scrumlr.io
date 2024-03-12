@@ -1,8 +1,8 @@
 import {FC} from "react";
-import {ReactComponent as GitHubIcon} from "assets/icon-github.svg";
-import "./AppInfo.scss";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
+import {ReactComponent as GitHubIcon} from "assets/icon-github.svg";
+import "./AppInfo.scss";
 
 export interface AppInfoProps {
   className?: string;

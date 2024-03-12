@@ -124,9 +124,10 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                           currentValue={properties[element.key]}
                           onValueChange={(value) => updateAvatar(element.key, value as (typeof element.values)[number])}
                           disabled={isDisabled}
-                          localizationPath={`Avatar.${element.key}.`}
+                          // eslint-disable-next-line
                           /** @ts-ignore */
-                          label={t(`Avatar.${element.key}.label`)}
+                          localizationPath={`Avatar.${element.key}.`}
+                          label={t(`Avatar.${element.key as keyof Omit<AvataaarProps, "accentColorClass">}.label`)}
                           className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
                         />
                         {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
