@@ -12,7 +12,7 @@ exports[`MenuBars should match snapshot 1`] = `
     >
       <li>
         <button
-          aria-label="MenuBars.markAsDone"
+          aria-label="Mark me as done"
           class="tooltip-button tooltip-button--right"
         >
           <div
@@ -22,7 +22,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.markAsDone
+              Mark me as done
               <span
                 class="tooltip-button__hotkey"
               >
@@ -50,7 +50,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </li>
       <li>
         <button
-          aria-label="MenuBars.raiseHand"
+          aria-label="Raise your hand"
           class="tooltip-button tooltip-button--right"
         >
           <div
@@ -60,7 +60,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.raiseHand
+              Raise your hand
               <span
                 class="tooltip-button__hotkey"
               >
@@ -88,7 +88,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </li>
       <li>
         <button
-          aria-label="MenuBars.openBoardReactionMenu"
+          aria-label="React"
           class="tooltip-button tooltip-button--right"
         >
           <div
@@ -98,7 +98,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.openBoardReactionMenu
+              React
               <span
                 class="tooltip-button__hotkey"
               >
@@ -126,7 +126,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </li>
       <li>
         <button
-          aria-label="MenuBars.settings"
+          aria-label="Settings"
           class="tooltip-button tooltip-button--right"
         >
           <div
@@ -136,7 +136,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.settings
+              Settings
               <span
                 class="tooltip-button__hotkey"
               >
@@ -258,7 +258,7 @@ exports[`MenuBars should match snapshot 1`] = `
       </li>
       <li>
         <button
-          aria-label="MenuBars.startPresenterMode"
+          aria-label="Start presenter mode"
           class="tooltip-button tooltip-button--left"
         >
           <div
@@ -268,7 +268,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.startPresenterMode
+              Start presenter mode
               <span
                 class="tooltip-button__hotkey"
               >
