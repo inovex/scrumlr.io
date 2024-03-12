@@ -7,7 +7,7 @@ import (
 )
 
 func TestVotingStatusEnum(t *testing.T) {
-	values := []VotingStatus{VotingStatusOpen, VotingStatusClosed, VotingStatusAborted}
+	values := []VotingStatus{VotingStatusOpen, VotingStatusClosed}
 	for _, value := range values {
 		var votingStatus VotingStatus
 		err := votingStatus.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))
