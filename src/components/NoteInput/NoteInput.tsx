@@ -29,6 +29,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
   const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
 
   const addNote = (content: string) => {
     if (!content.trim()) return;
@@ -71,9 +72,9 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       }}
       ref={emoji.containerRef}
     >
-      {boardLocked && <LockIcon className="note-input__lock-icon" />}
+      {!isModerator && boardLocked && <LockIcon className="note-input__lock-icon" />}
       <TextareaAutosize
-        disabled={boardLocked}
+        disabled={!isModerator && boardLocked}
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
