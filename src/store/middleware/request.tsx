@@ -83,7 +83,7 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
     action.userIds.forEach((userId) => {
       API.rejectJoinRequest(action.context.board!, userId).catch(() => {
         Toast.error({
-          title: i18n.t("Error.rejectJoinRequest"),
+          title: i18n.t("Error.rejectJoinRequests"),
           buttons: [i18n.t("Error.retry")],
           firstButtonOnClick: () => store.dispatch(Actions.rejectJoinRequests(action.userIds)),
           autoClose: false,

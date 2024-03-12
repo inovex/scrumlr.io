@@ -38,9 +38,9 @@ exports[`Timer should render correctly 1`] = `
         class="short-actions__short-action"
       >
         <button
-          aria-label="Unmark me as done"
-          class="short-action__button short-action__button--ready"
-          data-tooltip-content="Unmark me as done"
+          aria-label="Mark me as done"
+          class="short-action__button"
+          data-tooltip-content="Mark me as done"
           data-tooltip-id="info-bar__tooltip"
         >
           <svg

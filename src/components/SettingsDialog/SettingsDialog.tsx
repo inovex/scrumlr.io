@@ -53,7 +53,6 @@ export const SettingsDialog: FC = () => {
         <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
           {(styles) => (
             <animated.aside
-              aria-label={t("settings-dialog.title")}
               aria-modal="true"
               className={classNames("settings-dialog", {"settings-dialog--selected": !window.location.pathname.endsWith("/settings")})}
               onClick={(e) => e.stopPropagation()}

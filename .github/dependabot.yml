@@ -15,6 +15,18 @@ updates:
     commit-message:
       prefix: "yarn"
       include: "scope"
+    groups:
+      prod-dependencies:
+        applies-to: version-updates        
+        dependency-type: "production"
+        update-types:
+        - "patch"
+        - "minor"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+        - "patch"
+        - "minor"
 
   # Server
   - package-ecosystem: "gomod"
