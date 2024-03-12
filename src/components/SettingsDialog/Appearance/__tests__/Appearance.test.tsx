@@ -4,6 +4,7 @@ import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import {Appearance} from "../Appearance";
 import {getByLabelText} from "@testing-library/dom";
+import i18n from "i18nTest";
 
 const createAppearance = () => (
   <Provider store={getTestStore()}>
@@ -19,6 +20,6 @@ describe("Appearance", () => {
 
   test("should have a notifications toggle", () => {
     const {container} = render(createAppearance());
-    expect(getByLabelText(container, "Appearance.showHotkeyNotifications")).toBeInTheDocument();
+    expect(getByLabelText(container, i18n.t("Appearance.showHotkeyNotifications"))).toBeInTheDocument();
   });
 });

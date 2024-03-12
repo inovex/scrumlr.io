@@ -30,7 +30,6 @@ exports[`SettingsDialog should render correctly 1`] = `
             class="settings-dialog__wrapper"
           >
             <aside
-              aria-label="settings-dialog.title"
               aria-modal="true"
               class="settings-dialog settings-dialog--selected"
               role="dialog"
@@ -66,12 +65,12 @@ exports[`SettingsDialog should render correctly 1`] = `
                       <p
                         class="navigation-item__name"
                       >
-                        SettingsDialog.BoardSettings
+                        Board Settings
                       </p>
                       <p
                         class="navigation-item__description"
                       >
-                        SettingsDialog.BoardSettingsDescription
+                        Name, Access Policy
                       </p>
                     </div>
                   </a>
@@ -90,12 +89,12 @@ exports[`SettingsDialog should render correctly 1`] = `
                       <p
                         class="navigation-item__name"
                       >
-                        SettingsDialog.Participants
+                        Participants
                       </p>
                       <p
                         class="navigation-item__description"
                       >
-                        SettingsDialog.ParticipantsDescription
+                        User List, User Role
                       </p>
                     </div>
                   </a>
@@ -114,12 +113,12 @@ exports[`SettingsDialog should render correctly 1`] = `
                       <p
                         class="navigation-item__name"
                       >
-                        SettingsDialog.Appearance
+                        Appearance
                       </p>
                       <p
                         class="navigation-item__description"
                       >
-                        SettingsDialog.AppearanceDescription
+                        Notifications, Language, UI
                       </p>
                     </div>
                   </a>
@@ -138,12 +137,12 @@ exports[`SettingsDialog should render correctly 1`] = `
                       <p
                         class="navigation-item__name"
                       >
-                        SettingsDialog.ShareSession
+                        Share Session
                       </p>
                       <p
                         class="navigation-item__description"
                       >
-                        SettingsDialog.ShareSessionDescription
+                        QR Code, URL
                       </p>
                     </div>
                   </a>
@@ -162,12 +161,12 @@ exports[`SettingsDialog should render correctly 1`] = `
                       <p
                         class="navigation-item__name"
                       >
-                        SettingsDialog.ExportBoard
+                        Export Board
                       </p>
                       <p
                         class="navigation-item__description"
                       >
-                        SettingsDialog.ExportBoardDescription
+                        Share the board
                       </p>
                     </div>
                   </a>
@@ -658,7 +657,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                       <p
                         class="navigation-item__description"
                       >
-                        SettingsDialog.ProfileDescription
+                        Edit profile
                       </p>
                     </div>
                   </a>

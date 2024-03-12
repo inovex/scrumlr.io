@@ -2,10 +2,10 @@ import fs from "fs";
 import {join} from "path";
 
 describe("locales", () => {
-  const translation = JSON.parse(fs.readFileSync(join(__dirname, "../../public/locales/en/translation.json")).toString());
+  const translation = JSON.parse(fs.readFileSync(join(__dirname, "../i18n/en/translation.json")).toString());
 
-  fs.readdirSync(join(__dirname, "../../public/locales/")).forEach((languageCode) => {
-    const languageFolderPath = join(__dirname, "../../public/locales/", languageCode);
+  fs.readdirSync(join(__dirname, "../i18n/")).forEach((languageCode) => {
+    const languageFolderPath = join(__dirname, "../i18n/", languageCode);
 
     // bugfix for filtering unwanted files, e.g., .DS_Store on macOS
     const isDirectory = fs.statSync(languageFolderPath).isDirectory();

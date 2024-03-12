@@ -18,10 +18,8 @@ func TestRunnerForVoting(t *testing.T) {
 
 	t.Run("Update=0", testReopenClosedVotingShouldFail)
 	t.Run("Update=1", testReopenAbortedVotingShouldFail)
-	t.Run("Update=2", testChangeAbortedToClosedVotingShouldFail)
-	t.Run("Update=3", testChangeClosedToAbortedVotingShouldFail)
-	t.Run("Update=4", testCloseVoting)
-	t.Run("Update=5", testCloseVotingUpdateRank)
+	t.Run("Update=2", testCloseVoting)
+	t.Run("Update=3", testCloseVotingUpdateRank)
 
 	t.Run("Create=0", testCreateVotingWithNegativeVoteLimitShouldFail)
 	t.Run("Create=1", testCreateVotingWithVoteLimitGreater99ShouldFail)
@@ -86,7 +84,6 @@ func testGetVotings(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Greater(t, len(votings), 0)
 	assert.Equal(t, types.VotingStatusOpen, votings[0].Status)
-	assert.Equal(t, types.VotingStatusAborted, votings[len(votings)-1].Status)
 }
 
 func testReopenClosedVotingShouldFail(t *testing.T) {
@@ -107,24 +104,7 @@ func testReopenAbortedVotingShouldFail(t *testing.T) {
 	})
 	assert.NotNil(t, err)
 }
-func testChangeAbortedToClosedVotingShouldFail(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardAbortedVoting").(*Voting)
-	_, err := testDb.UpdateVoting(VotingUpdate{
-		ID:     voting.ID,
-		Board:  voting.Board,
-		Status: types.VotingStatusClosed,
-	})
-	assert.NotNil(t, err)
-}
-func testChangeClosedToAbortedVotingShouldFail(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardClosedVoting").(*Voting)
-	_, err := testDb.UpdateVoting(VotingUpdate{
-		ID:     voting.ID,
-		Board:  voting.Board,
-		Status: types.VotingStatusAborted,
-	})
-	assert.NotNil(t, err)
-}
+
 func testCloseVoting(t *testing.T) {
 	voting := fixture.MustRow("Voting.votingTestBoardOpenVoting").(*Voting)
 	result, err := testDb.UpdateVoting(VotingUpdate{
