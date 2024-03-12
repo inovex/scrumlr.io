@@ -203,7 +203,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 icon={CheckIcon}
                 active={isReady}
                 hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
-                disabled={boardIsLocked}
+                disabled={boardIsLocked && !isAdmin}
               />
             </li>
             <li>
@@ -214,7 +214,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 onClick={toggleRaiseHand}
                 active={raisedHand}
                 hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
-                disabled={boardIsLocked}
+                disabled={boardIsLocked && !isAdmin}
               />
             </li>
             <li>
@@ -225,7 +225,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 onClick={toggleBoardReactionsMenu}
                 active={showBoardReactionsMenu}
                 hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
-                disabled={boardIsLocked}
+                disabled={boardIsLocked && !isAdmin}
               />
             </li>
             <li>
@@ -250,7 +250,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   onClick={toggleTimerMenu}
                   icon={TimerIcon}
                   hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()}
-                  disabled={boardIsLocked}
+                  disabled={boardIsLocked && !isAdmin}
                 />
               </li>
               <li>
@@ -261,7 +261,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   onClick={toggleVotingMenu}
                   icon={VoteIcon}
                   hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
-                  disabled={boardIsLocked}
+                  disabled={boardIsLocked && !isAdmin}
                 />
               </li>
               <li>
@@ -272,7 +272,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   icon={FocusIcon}
                   onClick={toggleModeration}
                   hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
-                  disabled={boardIsLocked}
+                  disabled={boardIsLocked && !isAdmin}
                 />
               </li>
             </ul>
