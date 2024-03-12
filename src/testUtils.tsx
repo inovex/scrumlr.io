@@ -9,9 +9,9 @@ import i18n from "./i18nTest";
 export type AssertTypeEqual<T, Expected> = T extends Expected ? (Expected extends T ? true : never) : never;
 
 const AllTheProvidersWithoutRouter: FC<PropsWithChildren> = ({children}) => (
-  <I18nextProvider i18n={i18n}>
-    <Provider store={getTestStore()}>{children}</Provider>
-  </I18nextProvider>
+  <Provider store={getTestStore()}>
+    <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+  </Provider>
 );
 
 const AllTheProviders: FC<PropsWithChildren> = ({children}) => (
