@@ -17,7 +17,7 @@ i18n.use(initReactI18next).init({
   resources,
   initImmediate: false,
   lng: "en",
-  debug: true,
+  debug: false,
   react: {
     useSuspense: false,
   },
