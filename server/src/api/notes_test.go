@@ -176,7 +176,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 		allowEditing bool
 	}{
 		{
-			name:         "Delete Note when board is not locked",
+			name:         "Delete Note when board is unlocked",
 			expectedCode: http.StatusNoContent,
 			allowEditing: true,
 		},
