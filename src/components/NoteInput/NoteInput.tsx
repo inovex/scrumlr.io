@@ -107,6 +107,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         </div>
       )}
       <button
+        disabled={!isModerator && boardLocked}
         type="submit"
         tabIndex={-1} // skip focus
         className="note-input__add-button"

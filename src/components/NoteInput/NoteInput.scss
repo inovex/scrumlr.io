@@ -53,15 +53,6 @@ $note-input__input-right: 40px;
   }
 }
 
-.note-input__image-indicator,
-.note-input__add-button {
-  all: unset;
-  position: relative;
-  display: flex;
-  align-self: flex-start;
-  padding: $spacing--xs 0;
-}
-
 .note-input__add-button {
   cursor: pointer;
 
@@ -70,11 +61,25 @@ $note-input__input-right: 40px;
   }
 }
 
+.note-input__image-indicator,
+.note-input__add-button {
+  all: unset;
+  position: relative;
+  display: flex;
+  align-self: flex-start;
+  padding: $spacing--xs 0;
+  color: var(--accent-color);
+
+  &:disabled {
+    color: $color-dark-gray;
+    cursor: default;
+  }
+}
+
 .note-input__icon--image,
 .note-input__icon--add {
   width: $icon--medium;
   height: $icon--medium;
-  color: var(--accent-color);
   align-self: center;
   transition: all 0.08s ease-out;
 }
