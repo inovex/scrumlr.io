@@ -203,7 +203,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 icon={CheckIcon}
                 active={isReady}
                 hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
-                disabled={boardIsLocked && !isAdmin}
               />
             </li>
             <li>
@@ -214,7 +213,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 onClick={toggleRaiseHand}
                 active={raisedHand}
                 hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
-                disabled={boardIsLocked && !isAdmin}
               />
             </li>
             <li>
@@ -243,15 +241,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           {isAdmin && (
             <ul className="menu__items">
               <li>
-                <TooltipButton
-                  active={state.activeTimer}
-                  direction="left"
-                  label="Timer"
-                  onClick={toggleTimerMenu}
-                  icon={TimerIcon}
-                  hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()}
-                  disabled={boardIsLocked && !isAdmin}
-                />
+                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
               </li>
               <li>
                 <TooltipButton
@@ -261,7 +251,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   onClick={toggleVotingMenu}
                   icon={VoteIcon}
                   hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
-                  disabled={boardIsLocked && !isAdmin}
                 />
               </li>
               <li>
@@ -272,7 +261,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   icon={FocusIcon}
                   onClick={toggleModeration}
                   hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
-                  disabled={boardIsLocked && !isAdmin}
                 />
               </li>
             </ul>
