@@ -71,7 +71,6 @@ func (d *Database) CreateVoting(insert VotingInsert) (Voting, error) {
 		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status").
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
-
 	return voting, err
 }
 
@@ -97,19 +96,6 @@ func (d *Database) UpdateVoting(update VotingUpdate) (Voting, error) {
 			With("updateQuery", updateQuery).
 			With("updateBoard", updateBoard).
 			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
-			Model((*Voting)(nil)).
-			ModelTableExpr("\"updateQuery\" AS voting").
-			Scan(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
-	}
-
-	if update.Status == types.VotingStatusAborted {
-		deleteVotes := d.db.NewDelete().
-			Model((*Vote)(nil)).
-			Where("voting = (SELECT id FROM \"updateQuery\")")
-
-		err = d.db.NewSelect().
-			With("updateQuery", updateQuery).
-			With("deleteVotes", deleteVotes).
 			Model((*Voting)(nil)).
 			ModelTableExpr("\"updateQuery\" AS voting").
 			Scan(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)

@@ -12,11 +12,6 @@ const (
 	// VotingStatusOpen is the state for an open voting session, meaning that votes are allowed.
 	VotingStatusOpen VotingStatus = "OPEN"
 
-	// VotingStatusAborted is the state for an aborted voting session.
-	//
-	// All votes will be deleted if a voting session is aborted.
-	VotingStatusAborted VotingStatus = "ABORTED"
-
 	// VotingStatusClosed is the state for a closed voting session.
 	//
 	// The results of the voting session are available to all participants of a board.
@@ -28,7 +23,7 @@ func (votingStatus *VotingStatus) UnmarshalJSON(b []byte) error {
 	json.Unmarshal(b, &s)
 	unmarshalledVotingStatus := VotingStatus(s)
 	switch unmarshalledVotingStatus {
-	case VotingStatusOpen, VotingStatusAborted, VotingStatusClosed:
+	case VotingStatusOpen, VotingStatusClosed:
 		*votingStatus = unmarshalledVotingStatus
 		return nil
 	}
