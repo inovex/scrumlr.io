@@ -1,11 +1,11 @@
 package api
 
 import (
+	"errors"
 	"fmt"
-	"net/http"
-
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 )
@@ -43,6 +43,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 	id := r.Context().Value("Note").(uuid.UUID)
 
 	note, err := s.notes.Get(r.Context(), id)
+
 	if err != nil {
 		common.Throw(w, r, err)
 		return
@@ -92,27 +93,30 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
-	//todo: check if board is locked
 
 	boardId := r.Context().Value("Board").(uuid.UUID)
 	board, err := s.boards.Get(r.Context(), boardId)
 	if err != nil {
 		common.Throw(w, r, common.NotFoundError)
 	}
-	if board.AllowEditing {
-		note := r.Context().Value("Note").(uuid.UUID)
-		var body dto.NoteDeleteRequest
-		if err := render.Decode(r, &body); err != nil {
-			common.Throw(w, r, common.BadRequestError(err))
-			return
-		}
 
-		if err := s.notes.Delete(r.Context(), body, note); err != nil {
-			common.Throw(w, r, err)
-			return
-		}
-
-		render.Status(r, http.StatusNoContent)
-		render.Respond(w, r, nil)
+	if !board.AllowEditing {
+		common.Throw(w, r, common.BadRequestError(errors.New("not allowed to edit a locked board")))
+		return
 	}
+
+	note := r.Context().Value("Note").(uuid.UUID)
+	var body dto.NoteDeleteRequest
+	if err := render.Decode(r, &body); err != nil {
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+	if err := s.notes.Delete(r.Context(), body, note); err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusNoContent)
+	render.Respond(w, r, nil)
+
 }
