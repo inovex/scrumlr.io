@@ -2,9 +2,11 @@ package api
 
 import (
 	"fmt"
+	"log"
+	"net/http"
+
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 )
@@ -94,7 +96,9 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("test")
 	note := r.Context().Value("Note").(uuid.UUID)
 	var body dto.NoteDeleteRequest
+	log.Printf("Note: %v, Body: %v", note, body)
 	if err := render.Decode(r, &body); err != nil {
+		log.Printf("Error decoding request: %v", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}

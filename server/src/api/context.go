@@ -44,21 +44,55 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
+		var board uuid.UUID
 		boardParam := chi.URLParam(r, "id")
-		board, err := uuid.Parse(boardParam)
-		if err != nil {
-			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+		if boardParam != "" {
+			var err error
+			board, err = uuid.Parse(boardParam)
+			if err != nil {
+				common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+				return
+			}
+		} else {
+			// board id is not defined in the url but maybe in the context
+			boardValue := r.Context().Value("Board")
+			log.Debugw("board id not found in url, using context", "board", boardValue)
+			if boardValue == nil {
+				common.Throw(w, r, common.BadRequestError(errors.New("board id not found")))
+				return
+			}
+			var ok bool
+			board, ok = boardValue.(uuid.UUID)
+			if !ok {
+				common.Throw(w, r, common.BadRequestError(errors.New("invalid board id type")))
+				return
+			}
+		}
+
+		userValue := r.Context().Value("User")
+		if userValue == nil {
+			log.Error("User value not found in the context")
+			common.Throw(w, r, common.BadRequestError(errors.New("user not found in the context")))
 			return
 		}
 
-		user := r.Context().Value("User").(uuid.UUID)
+		user, ok := userValue.(uuid.UUID)
+		if !ok {
+			log.Error("Invalid user type in the context")
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid user type in the context")))
+			return
+		}
+		if s.sessions == nil {
+			log.Error("s.sessions is nil")
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
 		exists, err := s.sessions.SessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
-
 		if !exists {
 			common.Throw(w, r, common.ForbiddenError(errors.New("user board session not found")))
 			return
@@ -70,7 +104,6 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
-
 		if banned {
 			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
 			return
@@ -80,7 +113,6 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
 }
-
 func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
