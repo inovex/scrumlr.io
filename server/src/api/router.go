@@ -275,7 +275,7 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Get("/", s.getNote)
 			r.Put("/", s.updateNote)
 
-			r.Delete("/", s.deleteNote)
+			r.With(s.BoardEditableContext).Delete("/", s.deleteNote)
 		})
 	})
 }
@@ -299,7 +299,7 @@ func (s *Server) initReactionResources(r chi.Router) {
 
 func (s *Server) initBoardReactionResources(r chi.Router) {
 	r.Route("/board-reactions", func(r chi.Router) {
-    r.Use(s.BoardParticipantContext)
+		r.Use(s.BoardParticipantContext)
 		r.Use(s.BoardEditableContext)
 
 		r.Post("/", s.createBoardReaction)

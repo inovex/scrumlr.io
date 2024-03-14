@@ -1,7 +1,6 @@
 package api
 
 import (
-	"errors"
 	"fmt"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -14,13 +13,12 @@ import (
 func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value("Board").(uuid.UUID)
 	user := r.Context().Value("User").(uuid.UUID)
-
 	var body dto.NoteCreateRequest
+
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
-
 	body.Board = board
 	body.User = user
 
@@ -93,18 +91,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
-
-	boardId := r.Context().Value("Board").(uuid.UUID)
-	board, err := s.boards.Get(r.Context(), boardId)
-	if err != nil {
-		common.Throw(w, r, common.NotFoundError)
-	}
-
-	if !board.AllowEditing {
-		common.Throw(w, r, common.BadRequestError(errors.New("not allowed to edit a locked board")))
-		return
-	}
-
+	fmt.Println("test")
 	note := r.Context().Value("Note").(uuid.UUID)
 	var body dto.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
