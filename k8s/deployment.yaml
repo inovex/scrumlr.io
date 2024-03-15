@@ -153,7 +153,7 @@ metadata:
   labels:
     app: landing-page-PR_NUMBER
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: landing-page-PR_NUMBER
