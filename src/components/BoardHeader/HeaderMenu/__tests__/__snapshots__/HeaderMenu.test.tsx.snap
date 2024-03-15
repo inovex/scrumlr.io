@@ -111,7 +111,9 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
               class="board-option"
             >
               <button
+                aria-checked="true"
                 class="board-option-button"
+                role="switch"
               >
                 <div
                   class="board-option-toggle"
