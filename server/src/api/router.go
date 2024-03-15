@@ -154,11 +154,12 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Get("/boards", s.getBoards)
 
 		r.Route("/boards/{id}", func(r chi.Router) {
-			r.With(s.BoardParticipantContext).Get("/", s.getBoard)
-			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)
-			r.With(s.BoardParticipantContext).Post("/timer", s.setTimer)
-			r.With(s.BoardParticipantContext).Delete("/timer", s.deleteTimer)
-			r.With(s.BoardParticipantContext).Post("/timer/increment", s.incrementTimer)
+			r.Use(s.BoardParticipantContext)
+			r.Get("/", s.getBoard)
+			r.Get("/export", s.exportBoard)
+			r.With(s.BoardModeratorContext).Post("/timer", s.setTimer)
+			r.With(s.BoardModeratorContext).Delete("/timer", s.deleteTimer)
+			r.With(s.BoardModeratorContext).Post("/timer/increment", s.incrementTimer)
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
 
@@ -299,7 +300,7 @@ func (s *Server) initReactionResources(r chi.Router) {
 
 func (s *Server) initBoardReactionResources(r chi.Router) {
 	r.Route("/board-reactions", func(r chi.Router) {
-    r.Use(s.BoardParticipantContext)
+		r.Use(s.BoardParticipantContext)
 		r.Use(s.BoardEditableContext)
 
 		r.Post("/", s.createBoardReaction)
