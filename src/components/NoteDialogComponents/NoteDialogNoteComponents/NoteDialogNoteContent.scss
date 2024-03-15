@@ -27,7 +27,7 @@
 .note-dialog__note-content--text {
   background: none;
   margin: 0;
-  overflow-y: scroll;
+  overflow-y: auto;
   @include scrollbar();
   width: 100%;
   color: $color-black;
