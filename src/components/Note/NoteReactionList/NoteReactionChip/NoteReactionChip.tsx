@@ -3,10 +3,10 @@ import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
 import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
+import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
-import {useAppSelector} from "store";
 
 interface NoteReactionChipProps {
   reaction: ReactionModeled;

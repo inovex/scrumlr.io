@@ -2,9 +2,9 @@ import classNames from "classnames";
 import {FC} from "react";
 import {AvataaarProps} from "components/Avatar";
 import {Participant} from "types/participant";
+import {useAppSelector} from "store";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
-import {useAppSelector} from "store";
 
 export type NoteDialogNoteProps = {
   noteId: string;
@@ -28,7 +28,7 @@ export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNotePro
   const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self.role));
 
-  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+  /* eslint-disable jsx-a11y/no-static-element-interactions */
   return (
     <div
       className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId}, props.className)}
@@ -50,4 +50,5 @@ export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNotePro
       </footer>
     </div>
   );
+  /* eslint-enable jsx-a11y/no-static-element-interactions */
 };
