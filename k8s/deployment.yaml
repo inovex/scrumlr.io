@@ -138,7 +138,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: scrumlr
   name: scrumlr-landing-page-PR_NUMBER
 spec:
   selector:
@@ -150,7 +149,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: scrumlr
   name: landing-page-PR_NUMBER
   labels:
     app: landing-page-PR_NUMBER
@@ -180,7 +178,6 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  namespace: scrumlr
   name: scrumlr-ingressroute
   annotations:
     external-dns.alpha.kubernetes.io/target: ingress.dev.scrumlr.fra.ics.inovex.io.
