@@ -4,6 +4,7 @@ import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import "./AddVoteButton.scss";
+import {useTranslation} from "react-i18next";
 
 type AddVoteProps = {
   noteId: string;
@@ -12,13 +13,14 @@ type AddVoteProps = {
 
 export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled}) => {
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const addVote = () => {
     dispatch(Actions.addVote(noteId));
   };
 
   return (
-    <DotButton className="vote-button-add" onClick={addVote} disabled={disabled}>
+    <DotButton title={t("Votes.AddVote")} className="vote-button-add" onClick={addVote} disabled={disabled}>
       <PlusIcon className="vote-button-add__icon" />
     </DotButton>
   );

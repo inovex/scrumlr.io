@@ -648,5 +648,9 @@
     "description": "It looks like the doors to this session remain closed for now. We appreciate your interest, but unfortunately, your request to join has been declined.",
     "banned": "We're sorry, but it looks like you have been excluded from this session.",
     "button": "Back to Homepage"
+  },
+  "Votes": {
+    "AddVote": "Add vote",
+    "RemoveVote": "Remove vote"
   }
 }
