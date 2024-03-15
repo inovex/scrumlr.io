@@ -12,7 +12,12 @@ export const LockBoard = () => {
 
   return (
     <BoardOption>
-      <BoardOptionButton label={t("BoardSettings.AllowEditing")} onClick={() => store.dispatch(Actions.editBoard({allowEditing: !allowEditing}))}>
+      <BoardOptionButton
+        aria-checked={allowEditing}
+        role="switch"
+        label={t("BoardSettings.AllowEditing")}
+        onClick={() => store.dispatch(Actions.editBoard({allowEditing: !allowEditing}))}
+      >
         <BoardOptionToggle active={allowEditing} />
       </BoardOptionButton>
     </BoardOption>
