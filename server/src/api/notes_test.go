@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -320,11 +319,6 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 
 			rr := httptest.NewRecorder()
 			r.ServeHTTP(rr, req.Request())
-
-			log.Println(req.Request().URL)
-			log.Println(rr.Result())
-			log.Println(rr.Body.String())
-			log.Println(rr.Body.String())
 
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
 			noteMock.AssertExpectations(suite.T())
