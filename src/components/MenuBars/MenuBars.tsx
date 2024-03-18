@@ -1,9 +1,13 @@
+import {animated, useSpring} from "@react-spring/web";
+import classNames from "classnames";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useHotkeys} from "react-hotkeys-hook";
+import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
+import _ from "underscore";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
-import _ from "underscore";
-import classNames from "classnames";
 import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
 import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
 import {ReactComponent as RaiseHand} from "assets/icon-hand.svg";
@@ -13,16 +17,12 @@ import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
 import {ReactComponent as FocusIcon} from "assets/icon-focus.svg";
 import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
 import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
 import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
-import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
-import {animated, useSpring} from "@react-spring/web";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
