@@ -196,7 +196,7 @@ spec:
       services:
         - name: scrumlr-landing-page-PR_NUMBER
           port: 80
-    - match: Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`)  || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`))
+    - match: Host(`PR_NUMBER.development.scrumlr.fra.ics.inovex.io`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`)  || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`) || PathPrefix(`/legal/`))
       kind: Rule
       services:
         - name: scrumlr-frontend-PR_NUMBER
