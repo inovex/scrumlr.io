@@ -89,6 +89,12 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const isReady = state.currentUser.ready;
   const {raisedHand} = state.currentUser;
 
+  useEffect(() => {
+    if (!isAdmin && boardIsLocked) {
+      setShowBoardReactionsMenu(false);
+    }
+  }, [boardIsLocked, isAdmin]);
+
   const toggleReadyState = () => {
     dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
   };
@@ -374,7 +380,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       </aside>
 
       {/* should this be inside a Portal instead? */}
-      <BoardReactionMenu ref={boardReactionRef} showMenu={showBoardReactionsMenu && (isAdmin || !boardIsLocked)} close={toggleBoardReactionsMenu} />
+      <BoardReactionMenu ref={boardReactionRef} showMenu={showBoardReactionsMenu} close={toggleBoardReactionsMenu} />
     </>
   );
 };
