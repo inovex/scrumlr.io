@@ -1,4 +1,4 @@
-import {FC, PropsWithChildren, useEffect, useRef, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
@@ -10,9 +10,10 @@ import "./RemoveVoteButton.scss";
 type RemoveVoteProps = {
   noteId: string;
   disabled?: boolean;
+  numberOfVotes: number;
 };
 
-export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId, disabled, children}) => {
+export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes}) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
 
@@ -29,7 +30,7 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
       return;
     }
     setDoBump(true);
-  }, [children]);
+  }, [numberOfVotes]);
 
   return (
     <DotButton
@@ -43,7 +44,7 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
     >
       <span className="vote-button-remove__folded-corner" />
       <RemoveIcon className="vote-button-remove__icon" />
-      <span className="vote-button-remove__count">{children}</span>
+      <span className="vote-button-remove__count">{numberOfVotes}</span>
     </DotButton>
   );
 };
