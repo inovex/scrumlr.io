@@ -4181,6 +4181,57 @@
           "response": []
         },
         {
+          "name": "Update board participants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Successful PUT request\", function () {",
+                  "    pm.expect(pm.response).to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Check response content\", function () {",
+                  "    var res = pm.response.json();",
+                  "",
+                  "    pm.expect(res).to.be.an(\"array\");",
+                  "    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
+                  "",
+                  "    pm.expect(res[0].ready).to.equal(false);",
+                  "    pm.expect(res[0].raisedHand).to.equal(false);",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ready\": false,\r\n    \"raisedHand\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/boards/{{board_id}}/participants",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "boards",
+                "{{board_id}}",
+                "participants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Update board participant",
           "event": [
             {
@@ -4275,57 +4326,6 @@
               "body": "{\n    \"user\": {\n        \"id\": \"{{user_id}}\",\n        \"name: \"\"\n    },\n    \"ready\": true,\n    \"raisedHand\": true,\n    \"banned\": true\n}"
             }
           ]
-        },
-        {
-          "name": "Update board participants",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Successful PUT request\", function () {",
-                  "    pm.expect(pm.response).to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test(\"Check response content\", function () {",
-                  "    var res = pm.response.json();",
-                  "",
-                  "    pm.expect(res).to.be.an(\"array\");",
-                  "    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
-                  "",
-                  "    pm.expect(res[0].ready).to.equal(false);",
-                  "    pm.expect(res[0].raisedHand).to.equal(false);",
-                  "})"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"ready\": false,\r\n    \"raisedHand\": false\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/boards/{{board_id}}/participants",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "boards",
-                "{{board_id}}",
-                "participants"
-              ]
-            }
-          },
-          "response": []
         }
       ],
       "auth": {
