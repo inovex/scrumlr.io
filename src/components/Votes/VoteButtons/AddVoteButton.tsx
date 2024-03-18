@@ -1,10 +1,10 @@
 import {FC} from "react";
 import {useDispatch} from "react-redux";
+import {useTranslation} from "react-i18next";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
 import "./AddVoteButton.scss";
-import {useTranslation} from "react-i18next";
 
 type AddVoteProps = {
   noteId: string;

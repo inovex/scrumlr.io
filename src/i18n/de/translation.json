@@ -651,6 +651,7 @@
   },
   "Votes": {
     "AddVote": "Stimme hinzufügen",
-    "RemoveVote": "Stimme entfernen"
+    "RemoveVote": "Stimme entfernen",
+    "VotesOnNote": "{{votes}} Stimme(n)"
   }
 }

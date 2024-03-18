@@ -89,10 +89,12 @@ describe("Votes", () => {
     );
 
     expect(screen.queryByTitle(i18n.t("Votes.AddVote"))).not.toBeInTheDocument();
-    expect(screen.queryByTitle(i18n.t("Votes.RemoveVote"))).toBeDisabled();
+    expect(screen.queryByTitle(i18n.t("Votes.RemoveVote"))).not.toBeInTheDocument();
+    expect(screen.queryByTitle(i18n.t("Votes.VotesOnNote", {votes: 1}))).toBeInTheDocument();
+    expect(screen.queryByTitle(i18n.t("Votes.VotesOnNote", {votes: 1}))).toBeDisabled();
   });
 
-  it("add vote button should be visiable and remove vote button not disabled on locked board if participant is moderator", () => {
+  it("add vote button should be visible and remove vote button not disabled on locked board if participant is moderator", () => {
     render(
       createVotes({
         board: {
@@ -117,6 +119,8 @@ describe("Votes", () => {
     );
 
     expect(screen.getByTitle(i18n.t("Votes.AddVote"))).toBeInTheDocument();
+    expect(screen.queryByTitle(i18n.t("Votes.RemoveVote"))).toBeInTheDocument();
     expect(screen.queryByTitle(i18n.t("Votes.RemoveVote"))).not.toBeDisabled();
+    expect(screen.queryByTitle(i18n.t("Votes.VotesOnNote", {votes: 1}))).not.toBeInTheDocument();
   });
 });

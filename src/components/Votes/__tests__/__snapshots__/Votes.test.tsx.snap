@@ -70,7 +70,7 @@ exports[`Votes should render correctly with votes and disabled voting 1`] = `
     <button
       class="dot-button vote-button-remove"
       disabled=""
-      title="Remove vote"
+      title="1 vote(s)"
     >
       <span
         class="vote-button-remove__folded-corner"
