@@ -34,7 +34,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
 
   return (
     <DotButton
-      title={disabled ? "" : t("Votes.RemoveVote")}
+      title={disabled ? t("Votes.VotesOnNote", {votes: numberOfVotes}) : t("Votes.RemoveVote")}
       className={classNames("vote-button-remove", {bump: doBump})}
       disabled={disabled}
       onClick={deleteVote}

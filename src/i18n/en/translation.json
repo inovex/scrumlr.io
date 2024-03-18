@@ -650,6 +650,7 @@
   },
   "Votes": {
     "AddVote": "Add vote",
-    "RemoveVote": "Remove vote"
+    "RemoveVote": "Remove vote",
+    "VotesOnNote": "{{votes}} vote(s)"
   }
 }
