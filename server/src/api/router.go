@@ -154,9 +154,8 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Get("/boards", s.getBoards)
 
 		r.Route("/boards/{id}", func(r chi.Router) {
-			r.Use(s.BoardParticipantContext)
-			r.Get("/", s.getBoard)
-			r.Get("/export", s.exportBoard)
+			r.With(s.BoardParticipantContext).Get("/", s.getBoard)
+			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)
 			r.With(s.BoardModeratorContext).Post("/timer", s.setTimer)
 			r.With(s.BoardModeratorContext).Delete("/timer", s.deleteTimer)
 			r.With(s.BoardModeratorContext).Post("/timer/increment", s.incrementTimer)
