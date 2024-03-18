@@ -51,7 +51,9 @@ $note__footer-gap: 42px;
   left: 8px;
   opacity: 0.95;
   border-radius: $note__border-radius;
-  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
+  box-shadow:
+    0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
+    0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
   background-color: $color-white;
   z-index: $note-z-index - $base-z-index-step;
   transition: all 0.1s ease-in-out;
