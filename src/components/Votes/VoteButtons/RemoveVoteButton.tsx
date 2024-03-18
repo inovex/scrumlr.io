@@ -1,10 +1,11 @@
 import {FC, PropsWithChildren, useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
+import {useTranslation} from "react-i18next";
+import classNames from "classnames";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
-import "./RemoveVoteButton.scss";
-import classNames from "classnames";
 import {ReactComponent as RemoveIcon} from "assets/icon-remove.svg";
+import "./RemoveVoteButton.scss";
 
 type RemoveVoteProps = {
   noteId: string;
@@ -13,6 +14,7 @@ type RemoveVoteProps = {
 
 export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId, disabled, children}) => {
   const dispatch = useDispatch();
+  const {t} = useTranslation();
 
   const deleteVote = () => {
     dispatch(Actions.deleteVote(noteId));
@@ -31,6 +33,7 @@ export const RemoveVoteButton: FC<PropsWithChildren<RemoveVoteProps>> = ({noteId
 
   return (
     <DotButton
+      title={disabled ? "" : t("Votes.RemoveVote")}
       className={classNames("vote-button-remove", {bump: doBump})}
       disabled={disabled}
       onClick={deleteVote}
