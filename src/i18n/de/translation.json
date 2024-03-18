@@ -647,5 +647,9 @@
     "description": "Es sieht so aus, als ob die Türen zu dieser Sitzung vorerst geschlossen bleiben. Wir freuen uns über dein Interesse, aber leider wurde dein Antrag auf Teilnahme abgelehnt.",
     "banned": "Es tut uns Leid, aber es sieht so aus, als ob du von dieser Sitzung ausgeschlossen wurdest.",
     "button": "Zurück zur Startseite"
+  },
+  "Votes": {
+    "AddVote": "Stimme hinzufügen",
+    "RemoveVote": "Stimme entfernen"
   }
 }
