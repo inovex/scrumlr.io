@@ -1472,7 +1472,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"allowEditing\": false\n}",
+              "raw": "{\n    \"sharedNote\": null,\n    \"showVoting\": null,\n    \"timerStart\": \"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\": \"2024-01-18T13:39:49.304Z\",\n    \"showAuthors\": false,\n    \"showNotesOfOtherUsers\": false,\n    \"showNoteReactions\": false,\n    \"allowStacking\": false,\n    \"allowEditing\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
