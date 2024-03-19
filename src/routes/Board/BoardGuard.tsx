@@ -1,15 +1,16 @@
 import {useEffect} from "react";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {LoadingIndicator} from "components/LoadingIndicator";
-import "./BoardGuard.scss";
-import {PassphraseDialog} from "components/PassphraseDialog";
-import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
+import {useParams} from "react-router";
+import {LoadingIndicator} from "components/LoadingIndicator";
+import {PassphraseDialog} from "components/PassphraseDialog";
 import {PrintView} from "components/SettingsDialog/ExportBoard/PrintView";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 import {RejectionPage} from "components/RejectionPage";
+import {LoadingScreen} from "components/LoadingScreen";
+import store, {useAppSelector} from "store";
+import {Actions} from "store/action";
 import {Board} from "./Board";
+import "./BoardGuard.scss";
 
 interface BoardGuardProps {
   printViewEnabled: boolean;
@@ -34,7 +35,11 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
     return <PrintView boardId={boardId} boardName={boardName ?? "scrumlr.io"} />;
   }
 
-  if (boardStatus === "accepted" || boardStatus === "ready") {
+  if (boardStatus === "pending") {
+    return <LoadingScreen />;
+  }
+
+  if (boardStatus === "ready") {
     return (
       <CustomDndContext>
         <Board />
