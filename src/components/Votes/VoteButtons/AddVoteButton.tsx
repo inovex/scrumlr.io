@@ -2,7 +2,7 @@ import {FC} from "react";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
-import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
+import {Plus} from "components/Icon";
 import "./AddVoteButton.scss";
 
 type AddVoteProps = {
@@ -19,7 +19,7 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled}) => {
 
   return (
     <DotButton className="vote-button-add" onClick={addVote} disabled={disabled}>
-      <PlusIcon className="vote-button-add__icon" />
+      <Plus className="vote-button-add__icon" />
     </DotButton>
   );
 };

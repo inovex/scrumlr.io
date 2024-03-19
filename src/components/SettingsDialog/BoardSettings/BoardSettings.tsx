@@ -3,10 +3,7 @@ import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
-import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
-import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
-import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
-import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
+import {LockClosed, Trash, Visible, Hidden} from "components/Icon";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
@@ -70,7 +67,7 @@ export const BoardSettings = () => {
             handleSetPassword("");
           }}
         >
-          <SetPolicyIcon />
+          <LockClosed />
           <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
         </button>
       );
@@ -94,9 +91,9 @@ export const BoardSettings = () => {
 
   const getPasswordVisibilityButton = () =>
     showPassword ? (
-      <VisibleIcon className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(false)} />
+      <Visible className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(false)} />
     ) : (
-      <HiddenIcon
+      <Hidden
         className={password ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
         onClick={() => password && setShowPassword(true)}
       />
@@ -107,7 +104,7 @@ export const BoardSettings = () => {
       return (
         <>
           <span>{t("AccessPolicySelection.manualVerificationTitle")}</span>
-          <SetPolicyIcon />
+          <LockClosed />
         </>
       );
     return !isProtected ? (
@@ -115,7 +112,7 @@ export const BoardSettings = () => {
     ) : (
       <>
         <span>{t("AccessPolicySelection.byPassphraseTitle")}</span>
-        <SetPolicyIcon />
+        <LockClosed />
       </>
     );
   };
@@ -240,7 +237,7 @@ export const BoardSettings = () => {
                 className={classNames("board-settings__delete-button")}
                 label={t("BoardSettings.DeleteBoard")}
                 onClick={() => setShowConfirmationDialog(true)}
-                icon={DeleteIcon}
+                icon={Trash}
               />
             </>
           )}
@@ -250,7 +247,7 @@ export const BoardSettings = () => {
               title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
               onDecline={() => setShowConfirmationDialog(false)}
-              icon={DeleteIcon}
+              icon={Trash}
               warning
             />
           )}

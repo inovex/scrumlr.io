@@ -2,10 +2,7 @@ import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as VoteIcon} from "assets/icon-vote.svg";
-import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
-import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
-import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
+import {Voting, Close, FlagFinish, MarkAsDone} from "components/Icon";
 import "./VoteDisplay.scss";
 
 type VoteDisplayProps = {
@@ -36,7 +33,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
               className="short-action__button"
               onClick={() => store.dispatch(Actions.closeVoting(voting!))}
             >
-              <FlagIcon />
+              <FlagFinish />
             </button>
           </li>
         )}
@@ -48,12 +45,12 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
             className={classNames("short-action__button", {"short-action__button--ready": isReady})}
             onClick={() => store.dispatch(Actions.setUserReadyStatus(me.user.id, !isReady))}
           >
-            <CheckIcon className="short-action__check-icon" />
-            <CancelIcon className="short-action__cancel-icon" />
+            <MarkAsDone className="short-action__check-icon" />
+            <Close className="short-action__cancel-icon" />
           </button>
         </li>
       </ul>
-      <VoteIcon />
+      <Voting />
     </div>
   );
 };

@@ -1,7 +1,0 @@
-<svg id="ic_partipants_white" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect id="BG" width="32" height="32" fill="rgba(255,255,255,0)"/>
-  <path id="Pfad_3976" data-name="Pfad 3976" d="M2.725,5.449A2.725,2.725,0,1,0,0,2.725,2.725,2.725,0,0,0,2.725,5.449Z" transform="translate(13.276 13.038)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path id="Pfad_3977" data-name="Pfad 3977" d="M0,4.954V4.72H0V4.706a4.706,4.706,0,0,1,9.412,0v.053h0v.194" transform="translate(11.379 21.046)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-  <path id="Pfad_3978" data-name="Pfad 3978" d="M11.993,9.876A6.478,6.478,0,1,0,1.04,10" transform="translate(9.522 9.385)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.5" opacity="0.702"/>
-  <path id="Pfad_3979" data-name="Pfad 3979" d="M17.554,15.5a9.727,9.727,0,1,0-15.564.119" transform="translate(6.273 6)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="1.5" opacity="0.702"/>
-</svg>

@@ -1,9 +1,0 @@
-<svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-<g fill="none" opacity=".8">
-<rect width="20" height="20"/>
-<g transform="translate(4.752 5)" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-<circle cx="4" cy="4" r="4"/>
-<path transform="translate(-10.744 -9.838)" d="m17.47 16.887 3.77 3.81"/>
-</g>
-</g>
-</svg>
