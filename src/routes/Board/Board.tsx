@@ -49,7 +49,7 @@ export const Board = () => {
       <Outlet />
       <BoardComponent currentUserIsModerator={clientIsModerator} moderating={clientIsPresenting}>
         {visibleColums.map((column) => (
-          <Column id={column.id} />
+          <Column id={column.id} key={column.id} name={column.name} color={column.color} index={column.index} visible={column.visible} />
         ))}
       </BoardComponent>
       <BoardReactionContainer />
