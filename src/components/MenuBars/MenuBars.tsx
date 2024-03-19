@@ -23,6 +23,7 @@ import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
 import {animated, useSpring} from "@react-spring/web";
+import {CheckDone} from "components/Icon";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -193,13 +194,14 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       <aside className="menu-bars" ref={menuBarsDesktopRef}>
         {/* role=any: toggle ready, toggle raise hand, options */}
         <section className="menu user-menu">
+          <CheckDone />
           <ul className="menu__items">
             <li>
               <TooltipButton
                 direction="right"
                 onClick={toggleReadyState}
                 label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                icon={CheckIcon}
+                icon={CheckDone}
                 active={isReady}
                 hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
               />
@@ -228,7 +230,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
               <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={TOGGLE_SETTINGS.toUpperCase()} />
             </li>
           </ul>
-
           <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn} aria-hidden>
             <LeftArrowIcon className="menu-bars__navigation-icon" />
           </button>

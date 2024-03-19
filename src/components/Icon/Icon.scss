@@ -1,0 +1,11 @@
+@import "constants/style";
+
+.icon {
+  color: $color-icon;
+}
+
+[theme="dark"] {
+  .icon {
+    color: $color-white;
+  }
+}
