@@ -35,7 +35,7 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
     return <PrintView boardId={boardId} boardName={boardName ?? "scrumlr.io"} />;
   }
 
-  if (boardStatus === "pending") {
+  if (boardStatus === "pending" || boardStatus === "accepted") {
     return <LoadingScreen />;
   }
 

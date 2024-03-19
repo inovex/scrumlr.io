@@ -5,10 +5,11 @@ import {MenuBars} from "components/MenuBars";
 import {InfoBar} from "components/Infobar";
 import {BoardHeader} from "components/BoardHeader";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
-import "./Board.scss";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
+import "./Board.scss";
+import {useAppSelector} from "store";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -154,7 +155,9 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   }
 
   const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
-  const columnColors = React.Children.map(children, (child) => child.props.color);
+
+  const firstColumnColor = useAppSelector((state) => state.columns.at(0)?.color);
+  const lastColumnColor = useAppSelector((state) => state.columns.at(-1)?.color);
 
   const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
   const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
@@ -176,14 +179,12 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <HotkeyAnchor />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div
-          className={`board__spacer-left ${getColorClassName(columnColors[0])} ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""}`}
+          className={`board__spacer-left ${getColorClassName(firstColumnColor)} ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""}`}
           {...leftSpacerOffset.bindings}
         />
         {children}
         <div
-          className={`board__spacer-right  ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""} ${getColorClassName(
-            columnColors[columnColors.length - 1]
-          )}`}
+          className={`board__spacer-right  ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""} ${getColorClassName(lastColumnColor)}`}
           {...rightSpacerOffset.bindings}
         />
       </main>

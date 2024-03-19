@@ -41,7 +41,7 @@ export const Board = () => {
   const hiddenColumnsDisplayed = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const raisedHandParticpants = useAppSelector((state) => state.participants?.others.filter((participant) => participant.raisedHand)) ?? [];
   const pendingJoinRequests = useAppSelector((state) => state.requests.filter((request) => request.status === "PENDING"));
-  const visibleColums = useAppSelector((state) => state.columns.filter((column) => column.visible || (clientIsModerator && hiddenColumnsDisplayed)));
+  const visibleColums = useAppSelector((state) => state.columns.filter((column) => column.visible || (clientIsModerator && hiddenColumnsDisplayed)).map((column) => column.id));
 
   return (
     <>
@@ -49,7 +49,7 @@ export const Board = () => {
       <Outlet />
       <BoardComponent currentUserIsModerator={clientIsModerator} moderating={clientIsPresenting}>
         {visibleColums.map((column) => (
-          <Column id={column.id} key={column.id} name={column.name} color={column.color} index={column.index} visible={column.visible} />
+          <Column id={column} />
         ))}
       </BoardComponent>
       <BoardReactionContainer />

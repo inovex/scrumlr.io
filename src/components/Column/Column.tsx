@@ -1,5 +1,5 @@
 import "./Column.scss";
-import {Color, getColorClassName} from "constants/colors";
+import {getColorClassName} from "constants/colors";
 import {NoteInput} from "components/NoteInput";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
@@ -22,15 +22,13 @@ const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
 
 export interface ColumnProps {
   id: string;
-  name: string;
-  color: Color;
-  visible: boolean;
-  index: number;
 }
 
-export const Column = ({id, name, color, visible, index}: ColumnProps) => {
+export const Column = ({id}: ColumnProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
+
+  const {name, color, visible, index} = useAppSelector((state) => state.columns.find((column) => column.id === id)!);
 
   const notes = useAppSelector(
     (state) =>
