@@ -1,6 +1,8 @@
 @import "constants/style.scss";
 @import "routes/StackView/StackView.scss";
 
+// TODO check icon styling
+
 .stack-view__navigation {
   height: $stack-view__navigation-height;
   min-height: $stack-view__min-height;
