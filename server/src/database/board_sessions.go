@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/url"
 	"strconv"
 	"time"
@@ -223,6 +224,19 @@ func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessi
 			query = query.Where("s.role = ?", *f.Role)
 		}
 	}
+
+	var sessions []BoardSession
+	err := query.Scan(context.Background(), &sessions)
+	return sessions, err
+}
+
+func (d *Database) GetSessionsOlderThan(olderThan time.Time, filter ...filter.BoardSessionFilter) ([]BoardSession, error) {
+	query := d.db.NewSelect().
+		TableExpr("board_sessions AS s").
+		ColumnExpr("s.board").
+		Where("s.created_at < ?", olderThan).GroupExpr("s.board").Having("COUNT(*)<2")
+
+	fmt.Println(query)
 
 	var sessions []BoardSession
 	err := query.Scan(context.Background(), &sessions)

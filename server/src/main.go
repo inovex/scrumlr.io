@@ -21,6 +21,7 @@ import (
 	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/reactions"
+	"scrumlr.io/server/services/scheduler"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
 
@@ -304,6 +305,8 @@ func run(c *cli.Context) error {
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
+
+	_, _ = scheduler.Init(dbConnection)
 
 	s := api.New(
 		basePath,
