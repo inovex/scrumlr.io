@@ -125,3 +125,10 @@ type BoardUpdateRequest struct {
 
 	ID uuid.UUID `json:"-"`
 }
+
+type BoardOverview struct {
+	Board        *Board    `json:"board"`
+	Columns      int       `json:"columnsNumber"`
+	CreatedAt    time.Time `json:"createdAt"`
+	Participants int       `json:"participants"`
+}

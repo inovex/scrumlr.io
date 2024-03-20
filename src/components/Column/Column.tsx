@@ -54,6 +54,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const toggleVisibilityHandler = () => {
     dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
@@ -126,6 +127,9 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           inputRef.current = ref!;
         }}
         onFocus={(e) => e.target.select()}
+        onBlur={(e) => {
+          if (e.relatedTarget !== closeButtonRef.current) handleEditColumnName((e.target as HTMLInputElement).value);
+        }}
       />
     );
 
@@ -147,6 +151,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         <button
           title={t("Column.resetName")}
           className="column__header-edit-button"
+          ref={closeButtonRef}
           onClick={() => {
             if (isTemporary) {
               dispatch(Actions.deleteColumnOptimistically(id));

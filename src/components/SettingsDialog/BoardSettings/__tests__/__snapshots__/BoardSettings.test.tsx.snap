@@ -11,7 +11,7 @@ exports[`BoardSettings should match snapshot 1`] = `
       class="settings-dialog__header-text"
     >
        
-      SettingsDialog.BoardSettings
+      Board Settings
     </h2>
   </header>
   <div
@@ -41,7 +41,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         <label
           for="boardSettingsBoardName"
         >
-          BoardSettings.BoardName
+          Board Name
         </label>
       </div>
       <div
@@ -51,7 +51,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           class="settings-dialog__group"
         >
           <button
-            aria-label="BoardSettings.AccessPolicy"
+            aria-label="Access Policy"
             class="settings-option-button settings-option-button--disabled board-settings__policy-button"
             disabled=""
             type="button"
@@ -59,13 +59,13 @@ exports[`BoardSettings should match snapshot 1`] = `
             <span
               class="settings-option-button__label"
             >
-              BoardSettings.AccessPolicy
+              Access Policy
             </span>
             <div
               class="board-settings__policy-button_value"
             >
               <span>
-                AccessPolicySelection.publicTitle
+                Open
               </span>
             </div>
           </button>
@@ -79,14 +79,14 @@ exports[`BoardSettings should match snapshot 1`] = `
               autocomplete="off"
               class="settings-input__hidden-placeholder"
               id="boardSettingsPassword"
-              placeholder="BoardSettings.Password"
+              placeholder="Password"
               type="password"
               value=""
             />
             <label
               for="boardSettingsPassword"
             >
-              BoardSettings.Password
+              Password
             </label>
           </div>
         </div>
@@ -99,7 +99,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="board-settings__password-management-text"
           >
-            BoardSettings.generatePassword
+            Generate password and protect
           </span>
         </button>
       </div>
@@ -108,7 +108,7 @@ exports[`BoardSettings should match snapshot 1`] = `
       >
         <button
           aria-checked="true"
-          aria-label="BoardSettings.ShowAuthorOption"
+          aria-label="Show authors of notes"
           class="settings-option-button board-settings__show-author-button"
           data-testid="author"
           role="switch"
@@ -117,7 +117,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            BoardSettings.ShowAuthorOption
+            Show authors of notes
           </span>
           <div
             class="board-settings__show-author-value"
@@ -132,7 +132,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         />
         <button
           aria-checked="true"
-          aria-label="BoardSettings.ShowOtherUsersNotesOption"
+          aria-label="Show notes of other users"
           class="settings-option-button board-settings__show-notes-button"
           data-testid="notes"
           role="switch"
@@ -141,7 +141,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            BoardSettings.ShowOtherUsersNotesOption
+            Show notes of other users
           </span>
           <div
             class="board-settings__show-notes-value"
@@ -151,9 +151,12 @@ exports[`BoardSettings should match snapshot 1`] = `
             />
           </div>
         </button>
+        <hr
+          class="settings-dialog__separator"
+        />
         <button
           aria-checked="true"
-          aria-label="BoardSettings.ShowNoteReactionsOptions"
+          aria-label="Show note reactions"
           class="settings-option-button board-settings__show-reactions-button"
           data-testid="reactions"
           role="switch"
@@ -162,7 +165,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            BoardSettings.ShowNoteReactionsOptions
+            Show note reactions
           </span>
           <div
             class="board-settings__show-reactions-value"
@@ -177,7 +180,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         />
         <button
           aria-checked="false"
-          aria-label="BoardSettings.ShowHiddenColumnsOption"
+          aria-label="Show hidden columns for me"
           class="settings-option-button board-settings__show-columns-button"
           data-testid="columns"
           role="switch"
@@ -186,7 +189,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            BoardSettings.ShowHiddenColumnsOption
+            Show hidden columns for me
           </span>
           <div
             class="board-settings__show-columns-value"
@@ -201,7 +204,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         />
         <button
           aria-checked="true"
-          aria-label="BoardSettings.AllowNoteRepositioningOption"
+          aria-label="Allow note repositioning"
           class="settings-option-button board-settings__allow-note-repositioning-button"
           data-testid="note-repositioning"
           role="switch"
@@ -210,7 +213,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           <span
             class="settings-option-button__label"
           >
-            BoardSettings.AllowNoteRepositioningOption
+            Allow note repositioning
           </span>
           <div
             class="board-settings__allow-note-repositioning-value"
@@ -222,14 +225,14 @@ exports[`BoardSettings should match snapshot 1`] = `
         </button>
       </div>
       <button
-        aria-label="BoardSettings.DeleteBoard"
+        aria-label="Delete Board"
         class="settings-option-button board-settings__delete-button"
         type="button"
       >
         <span
           class="settings-option-button__label"
         >
-          BoardSettings.DeleteBoard
+          Delete Board
         </span>
         <svg
           class="settings-option-button__icon"

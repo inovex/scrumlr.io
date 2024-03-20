@@ -19,6 +19,7 @@ export const Tooltip = (props: TooltipProps) => (
       className={classNames("tooltip", props.className)}
       content={props.content}
       role="tooltip"
+      positionStrategy="fixed"
     />
   </div>
 );

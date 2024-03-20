@@ -62,6 +62,8 @@
     "deleteNoteButton": "Delete Note",
     "deleteStackButton": "Delete Stack",
     "deleteOptions": "What do you want to delete?",
+    "banParticipant": "Are you sure you want to remove participant '{{user}}' from the session?",
+    "unbanParticipant": "Are you sure you want to allow participant '{{user}}' to join the session again?",
     "warning": "This action cannot be undone.",
     "yes": "Yes",
     "no": "No",
@@ -80,7 +82,8 @@
     "openPrintView": "Open print view",
     "exportToClipboard": "Copy Markdown to Clipboard",
     "copyToClipboardSuccess": "Markdown copied!",
-    "hintHiddenColumns": "The following columns are hidden and will not be exported:"
+    "hintHiddenColumns": "The following columns are hidden and will not be exported:",
+    "hintHiddenNotes": "The notes of other participants are hidden and will not be exported."
   },
   "PrintView": {
     "Participants": "Participants",
@@ -161,7 +164,8 @@
     "hidePassword": "Hide password",
     "label": "Enter the password to open this board",
     "submit": "Open board",
-    "inputPlaceholder": "Password"
+    "inputPlaceholder": "Password",
+    "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
   },
   "Timer": {
     "endTimer": "End timer",
@@ -250,7 +254,7 @@
     "3min": "3 minutes",
     "5min": "5 minutes",
     "min": "minutes",
-    "customTime":"Custom time",
+    "customTime": "Custom time",
     "cancelTimer": "Cancel timer"
   },
   "BoardReactionsMenu": {
@@ -281,6 +285,8 @@
     "allParticipantsDone": "All participants are ready!",
     "moderatorResetReadyStates": "Do you want to reset the readiness of the participants?",
     "moderatorResetReadyStatesButton": "Reset!",
+    "bannedParticipant": "Participant '{{user}}' was removed",
+    "unbannedParticipant": "The ban for participant '{{user}}' was revoked",
     "noteToHiddenColumn": "You just added a note to a hidden column!",
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
@@ -369,7 +375,9 @@
     "ChangeRoleToParticipantTooltip": "Change role to participant",
     "ChangeRoleToModeratorTooltip": "Change role to moderator",
     "ResetBannerText": "Reset ready states of all users.",
-    "ResetBannerButton": "Reset"
+    "ResetBannerButton": "Reset",
+    "BanParticipantTooltip": "Ban participant '{{user}}'",
+    "UnbanParticipantTooltip": "Revoke the ban on participant '{{user}}'"
   },
   "UserRole": {
     "Owner": "Owner",
@@ -420,6 +428,7 @@
     "unstackNote": "Sorry, but we're having trouble unstacking the note. Please try again.",
     "setRaiseHand": "Sorry, but we're having trouble raising your hand. Please try again.",
     "setUserReady": "Sorry, but we're having trouble setting you ready. Please try again.",
+    "setUserBanned": "Sorry, but we're having trouble banning/unbanning this user. Please try again.",
     "setShowHiddenColumns": "Sorry, but we're having trouble changing the column visibility. Please try again.",
     "changePermission": "Sorry, but we're having trouble updating the permissions. Please try again.",
     "logout": "Sorry, but we're having trouble signing you out.",
@@ -636,6 +645,12 @@
   "RejectionPage": {
     "title": "Oops!",
     "description": "It looks like the doors to this session remain closed for now. We appreciate your interest, but unfortunately, your request to join has been declined.",
+    "banned": "We're sorry, but it looks like you have been excluded from this session.",
     "button": "Back to Homepage"
+  },
+  "Votes": {
+    "AddVote": "Add vote",
+    "RemoveVote": "Remove vote",
+    "VotesOnNote": "{{votes}} vote(s)"
   }
 }

@@ -1,8 +1,6 @@
 @import "src/constants/style";
 @import "src/components/Note/Note.scss";
 
-$row-gap: 3px;
-
 .note-dialog__note {
   --note-footer-height: 28px;
 
@@ -14,9 +12,9 @@ $row-gap: 3px;
     "foot options";
   grid-template-columns: 11fr 1fr;
   grid-template-rows: 1fr 4fr 1fr;
-  row-gap: $row-gap;
+  gap: $spacing--sm;
 
-  padding: $spacing--base $spacing--lg;
+  padding: $spacing--base;
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;
@@ -36,6 +34,8 @@ $row-gap: 3px;
 
 .note-dialog-note__main {
   grid-area: content;
+  min-height: 100%;
+  min-width: 100%;
   overflow: visible;
 }
 

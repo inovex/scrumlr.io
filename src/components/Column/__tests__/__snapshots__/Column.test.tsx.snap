@@ -51,8 +51,6 @@ exports[`Column should have correct style show column with correct style 1`] = `
       >
         <textarea
           class="note-input__input"
-          data-tooltip-content="OPTION/ALT + 1"
-          id="note-input-test-columns-id-1"
           maxlength="1024"
           placeholder="Add your note..."
           rows="1"
@@ -65,6 +63,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           aria-label="Create note"
           class="note-input__add-button"
           tabindex="-1"
+          title="Create note"
           type="submit"
         >
           <svg
@@ -561,6 +560,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                 >
                   <button
                     class="dot-button vote-button-remove"
+                    title="Remove vote"
                   >
                     <span
                       class="vote-button-remove__folded-corner"
@@ -579,6 +579,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   <button
                     class="dot-button vote-button-add"
                     disabled=""
+                    title="Add vote"
                   >
                     <svg
                       class="vote-button-add__icon"
@@ -1127,6 +1128,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                 >
                   <button
                     class="dot-button vote-button-add"
+                    title="Add vote"
                   >
                     <svg
                       class="vote-button-add__icon"

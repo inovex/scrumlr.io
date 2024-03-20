@@ -18,12 +18,16 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
           store.dispatch(Actions.permittedBoardAccess(action.boardId));
         } else if (r.status === "REJECTED") {
           store.dispatch(Actions.rejectedBoardAccess());
-        } else if (r.status === "WRONG_PASSPHRASE") {
+        } else if (r.status === "PASSPHRASE_REQUIRED") {
           store.dispatch(Actions.requirePassphraseChallenge());
+        } else if (r.status === "WRONG_PASSPHRASE") {
+          store.dispatch(Actions.incorrectPassphrase());
         } else if (r.status === "PENDING") {
           store.dispatch(Actions.pendingBoardAccessConfirmation(action.boardId, r.joinRequestReference!));
         } else if (r.status === "TOO_MANY_JOIN_REQUESTS") {
           store.dispatch(Actions.tooManyJoinRequests());
+        } else if (r.status === "BANNED") {
+          store.dispatch(Actions.bannedFromBoard());
         }
       })
       .catch(() => {
@@ -79,7 +83,7 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
     action.userIds.forEach((userId) => {
       API.rejectJoinRequest(action.context.board!, userId).catch(() => {
         Toast.error({
-          title: i18n.t("Error.rejectJoinRequest"),
+          title: i18n.t("Error.rejectJoinRequests"),
           buttons: [i18n.t("Error.retry")],
           firstButtonOnClick: () => store.dispatch(Actions.rejectJoinRequests(action.userIds)),
           autoClose: false,

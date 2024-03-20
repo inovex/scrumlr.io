@@ -10,7 +10,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
     <h2
       class="settings-dialog__header-text"
     >
-      Participants.Title
+      Participants
     </h2>
   </header>
   <div
@@ -31,26 +31,26 @@ exports[`Participants should render filter and participants correctly 1`] = `
   >
     <button
       class="participants__permisson-filter-button"
-      title="Participants.OwnerFilterTooltip"
+      title="Show only the owner"
     >
-      UserRole.Owner
+      Owner
     </button>
     <button
       class="participants__permisson-filter-button"
-      title="Participants.ModeratorFilterTooltip"
+      title="Show only moderators"
     >
-      UserRole.Moderator
+      Moderator
     </button>
     <button
       class="participants__permisson-filter-button"
-      title="Participants.ParticipantFilterTooltip"
+      title="Show only participants"
     >
-      UserRole.Participant
+      Participant
     </button>
     <button
-      aria-label="Participants.OnlineFilterTooltip"
+      aria-label="Show disconnected participants"
       class="participant__status-filter-button"
-      title="Participants.OnlineFilterTooltip"
+      title="Show disconnected participants"
     >
       <svg>
         icon-wifi-disabled.svg
@@ -554,7 +554,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
           <span
             class="participant__role"
           >
-            UserRole.Owner
+            Owner
           </span>
         </div>
       </li>
@@ -1001,18 +1001,27 @@ exports[`Participants should render filter and participants correctly 1`] = `
             <button
               class="participant__role participant__role--active"
               disabled=""
-              title="Participants.ChangeRoleToModeratorTooltip"
+              title="Change role to moderator"
             >
-              UserRole.Moderator
+              Moderator
             </button>
             <button
               class="participant__role"
-              title="Participants.ChangeRoleToParticipantTooltip"
+              title="Change role to participant"
             >
-              UserRole.Participant
+              Participant
             </button>
           </div>
         </div>
+        <button
+          aria-label="Ban participant 'test-participants-others-user-name-1'"
+          class="participant__kick-icon"
+          title="Ban participant 'test-participants-others-user-name-1'"
+        >
+          <svg>
+            icon-kick-participant.svg
+          </svg>
+        </button>
       </li>
     </ul>
   </div>
@@ -1030,13 +1039,13 @@ exports[`Participants should render filter and participants correctly 1`] = `
       <div
         class="participants-reset-state-banner__text"
       >
-        Participants.ResetBannerText
+        Reset ready states of all users.
       </div>
     </div>
     <button
       class="participants-reset-state-banner__button"
     >
-      Participants.ResetBannerButton
+      Reset
     </button>
   </footer>
 </section>

@@ -423,7 +423,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         <span
           class="request__info-text"
         >
-          JoinRequest.title
+          Is requesting to participate
         </span>
       </div>
       <div
@@ -432,12 +432,12 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         <button
           class="request__button"
         >
-          JoinRequest.reject
+          Reject
         </button>
         <button
           class="request__button"
         >
-          JoinRequest.accept
+          Accept
         </button>
       </div>
     </div>
@@ -872,7 +872,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         <span
           class="request__info-text"
         >
-          JoinRequest.title
+          Is requesting to participate
         </span>
       </div>
       <div
@@ -881,12 +881,12 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         <button
           class="request__button"
         >
-          JoinRequest.reject
+          Reject
         </button>
         <button
           class="request__button"
         >
-          JoinRequest.accept
+          Accept
         </button>
       </div>
     </div>
@@ -1352,7 +1352,7 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         <span
           class="request__info-text"
         >
-          JoinRequest.title
+          Is requesting to participate
         </span>
       </div>
       <div
@@ -1361,12 +1361,12 @@ exports[`JoinRequest should render correctly on multiple join requests 1`] = `
         <button
           class="request__button"
         >
-          JoinRequest.reject
+          Reject
         </button>
         <button
           class="request__button"
         >
-          JoinRequest.accept
+          Accept
         </button>
       </div>
     </div>
@@ -1806,7 +1806,7 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
         <span
           class="request__info-text"
         >
-          JoinRequest.title
+          Is requesting to participate
         </span>
       </div>
       <div
@@ -1815,12 +1815,12 @@ exports[`JoinRequest should render correctly on single join request 1`] = `
         <button
           class="request__button"
         >
-          JoinRequest.reject
+          Reject
         </button>
         <button
           class="request__button"
         >
-          JoinRequest.accept
+          Accept
         </button>
       </div>
     </div>

@@ -9,7 +9,6 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useDispatch} from "react-redux";
-import {Tooltip} from "react-tooltip";
 import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
@@ -23,7 +22,7 @@ export interface NoteInputProps {
   hotkeyKey?: string;
 }
 
-export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility, hotkeyKey}: NoteInputProps) => {
+export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility}: NoteInputProps) => {
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
@@ -73,8 +72,6 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
-        id={`note-input-${columnId}`}
-        data-tooltip-content={hotkeyKey}
         {...emoji.inputBindings}
         onKeyDown={(e) => {
           // handle emoji input
@@ -95,15 +92,8 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       <div className="note-input__emoji-suggestions">
         <EmojiSuggestions {...emoji.suggestionsProps} />
       </div>
-      <Tooltip
-        anchorSelect={`#note-input-${columnId}`}
-        place="bottom"
-        variant={document.documentElement.getAttribute("theme") === "dark" ? "dark" : "light"}
-        delayShow={500}
-        style={{zIndex: 999}}
-      />
       {isImage && (
-        <div className="note-input__isImage" title={t("NoteInput.imageInfo")}>
+        <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
           <ImageIcon className="note-input__icon--image" />
           <StarIcon className="note-input__icon--star star-1" />
           <StarIcon className="note-input__icon--star star-2" />
@@ -115,6 +105,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         tabIndex={-1} // skip focus
         className="note-input__add-button"
         aria-label={t("NoteInput.create")}
+        title={t("NoteInput.create")}
       >
         <PlusIcon className="note-input__icon--add" />
       </button>

@@ -5,6 +5,10 @@ import getTestStore from "utils/test/getTestStore";
 import {ApplicationState} from "types";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
+jest.mock("utils/hooks/useImageChecker.ts", () => ({
+  useImageChecker: () => false,
+}));
+
 const createColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>

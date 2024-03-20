@@ -36,8 +36,27 @@ export const ParticipantsAPI = {
       };
     }
 
-    // wrong passphrase
-    if (response.status === 403) {
+    // 403 is currently returned in multiple cases:
+    // - user tried to join a protected board without a passphrase (first join request to check if board is protected)
+    // - user tried to join a protected board with a wrong passphrase
+    // - user tried to join a board where they are currently banned
+    // TODO: doing this with proper error codes would be better, especially the check for the banned status
+    if (response.status === 403 || response.status === 400) {
+      const body = (await response.json()) as {status: string; error: string};
+      if (body.error === "participant is currently banned from this session") {
+        return {
+          status: "BANNED",
+        };
+      }
+
+      if (passphrase === undefined) {
+        // board is protected by a passphrase
+        return {
+          status: "PASSPHRASE_REQUIRED",
+        };
+      }
+
+      // wrong passphrase
       return {
         status: "WRONG_PASSPHRASE",
       };

@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"math"
 	"net/http"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/logger"
 	"strings"
 	"time"
+
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/logger"
 
 	"github.com/go-chi/render"
 	"github.com/markbates/goth/gothic"
@@ -76,9 +77,11 @@ func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Re
 
 // verifyAuthProviderCallback will verify the auth provider call, create or update a user and redirect to the page provider with the state
 func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	externalUser, err := gothic.CompleteUserAuth(w, r)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("could not complete user auth", "err", err)
 		return
 	}
 
@@ -98,6 +101,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("could not create user", "err", err)
 		return
 	}
 

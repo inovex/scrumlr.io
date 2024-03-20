@@ -18,7 +18,7 @@ export const RequireAuthentication: FC<PropsWithChildren> = ({children}) => {
 
   // show error if initialization did fail
   if (!initializationSucceeded) {
-    return <ErrorPage errorMessage={t("Homepage.errorServerConnection")} originURL={location.pathname} />;
+    return <ErrorPage errorMessage={t("Error.serverConnection")} originURL={location.pathname} />;
   }
 
   if (user) {

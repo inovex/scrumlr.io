@@ -46,21 +46,20 @@ $note-input__input-right: 40px;
   }
 }
 
+.note-input__image-indicator,
 .note-input__add-button {
   all: unset;
-  cursor: pointer;
+  position: relative;
   display: flex;
-  flex-direction: column;
+  align-self: flex-start;
   padding: $spacing--xs 0;
+}
 
-  &:hover > .note-input__icon {
-    filter: brightness(1.2);
-    transform: scale(1.2);
-  }
+.note-input__add-button {
+  cursor: pointer;
 
-  &:focus > .note-input__icon {
-    border-radius: 100%;
-    outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+  &:hover > .note-input__icon--add {
+    filter: $brighten--slightly;
   }
 }
 
@@ -78,13 +77,8 @@ $note-input__input-right: 40px;
 }
 
 .note-input__icon--image {
-  margin: 0 $spacing--xs 4px $spacing--xs;
+  margin: 0 $spacing--xs $spacing--xxs $spacing--xs;
   animation: fade-in 0.2s ease-in-out;
-}
-
-.note-input__isImage {
-  display: flex;
-  position: relative;
 }
 
 .note-input__icon--star {

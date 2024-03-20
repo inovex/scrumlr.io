@@ -12,7 +12,7 @@ exports[`MenuBars should match snapshot 1`] = `
     >
       <li>
         <button
-          aria-label="MenuBars.markAsDone"
+          aria-label="Mark me as done"
           class="tooltip-button tooltip-button--right"
         >
           <div
@@ -22,7 +22,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.markAsDone
+              Mark me as done
               <span
                 class="tooltip-button__hotkey"
               >
@@ -30,23 +30,27 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-check.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-check.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
         <button
-          aria-label="MenuBars.raiseHand"
+          aria-label="Raise your hand"
           class="tooltip-button tooltip-button--right"
         >
           <div
@@ -56,7 +60,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.raiseHand
+              Raise your hand
               <span
                 class="tooltip-button__hotkey"
               >
@@ -64,23 +68,27 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-hand.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-hand.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
         <button
-          aria-label="MenuBars.openBoardReactionMenu"
+          aria-label="React"
           class="tooltip-button tooltip-button--right"
         >
           <div
@@ -90,7 +98,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.openBoardReactionMenu
+              React
               <span
                 class="tooltip-button__hotkey"
               >
@@ -98,23 +106,27 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-add-board-reaction.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-add-board-reaction.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
         <button
-          aria-label="MenuBars.settings"
+          aria-label="Settings"
           class="tooltip-button tooltip-button--right"
         >
           <div
@@ -124,7 +136,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.settings
+              Settings
               <span
                 class="tooltip-button__hotkey"
               >
@@ -132,18 +144,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-settings.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-settings.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
     </ul>
@@ -184,18 +200,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-timer.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-timer.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
@@ -218,23 +238,27 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-vote.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-vote.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
       <li>
         <button
-          aria-label="MenuBars.startPresenterMode"
+          aria-label="Start presenter mode"
           class="tooltip-button tooltip-button--left"
         >
           <div
@@ -244,7 +268,7 @@ exports[`MenuBars should match snapshot 1`] = `
             <span
               class="tooltip-button__tooltip-text"
             >
-              MenuBars.startPresenterMode
+              Start presenter mode
               <span
                 class="tooltip-button__hotkey"
               >
@@ -252,18 +276,22 @@ exports[`MenuBars should match snapshot 1`] = `
               </span>
             </span>
           </div>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
+          <div
+            class="tooltip-button__icon-container"
           >
-            icon-focus.svg
-          </svg>
-          <svg
-            aria-hidden="true"
-            class="tooltip-button__icon"
-          >
-            icon-close.svg
-          </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-focus.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              icon-close.svg
+            </svg>
+          </div>
         </button>
       </li>
     </ul>

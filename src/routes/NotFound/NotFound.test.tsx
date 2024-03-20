@@ -1,14 +1,9 @@
-import {render} from "@testing-library/react";
-import {BrowserRouter} from "react-router-dom";
+import {render} from "testUtils";
 import {NotFound} from "./NotFound";
 
 describe("NotFound", () => {
   it("should match snapshot", () => {
-    const {container} = render(
-      <BrowserRouter>
-        <NotFound />
-      </BrowserRouter>
-    );
+    const {container} = render(<NotFound />);
     expect(container.firstChild).toMatchSnapshot();
   });
 });

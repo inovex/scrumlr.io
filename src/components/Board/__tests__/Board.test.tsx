@@ -7,6 +7,10 @@ import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
+jest.mock("utils/hooks/useImageChecker.ts", () => ({
+  useImageChecker: () => false,
+}));
+
 const createBoardWithColumns = (...colors: Color[]) => {
   return (
     <Provider store={getTestStore()}>

@@ -5,19 +5,19 @@ import {t} from "i18next";
 
 describe("<PassphraseDialog />", () => {
   test("snapshot test", () => {
-    const {container} = render(<PassphraseDialog onSubmit={jest.fn()} />);
+    const {container} = render(<PassphraseDialog onSubmit={jest.fn()} incorrectPassphrase={false} />);
     expect(container.firstChild).toMatchSnapshot();
   });
 
   test("should disable submit button if no passphrase has been entered", () => {
-    const {getByLabelText} = render(<PassphraseDialog onSubmit={jest.fn()} />);
+    const {getByLabelText} = render(<PassphraseDialog onSubmit={jest.fn()} incorrectPassphrase={false} />);
     const submitButton = getByLabelText(t("PassphraseDialog.submit"));
     expect(submitButton).toHaveAttribute("aria-disabled", "true");
   });
 
   test("should not submit if no passphrase has been entered", () => {
     const onSubmit = jest.fn();
-    const {getByLabelText} = render(<PassphraseDialog onSubmit={onSubmit} />);
+    const {getByLabelText} = render(<PassphraseDialog onSubmit={onSubmit} incorrectPassphrase={false} />);
     const submitButton = getByLabelText(t("PassphraseDialog.submit"));
     fireEvent.click(submitButton);
     expect(onSubmit).not.toHaveBeenCalled();
@@ -25,7 +25,7 @@ describe("<PassphraseDialog />", () => {
 
   test("should submit with correct passphrase if passphrase has been entered", () => {
     const onSubmit = jest.fn();
-    const {getByLabelText, getByPlaceholderText} = render(<PassphraseDialog onSubmit={onSubmit} />);
+    const {getByLabelText, getByPlaceholderText} = render(<PassphraseDialog onSubmit={onSubmit} incorrectPassphrase={false} />);
     const submitButton = getByLabelText(t("PassphraseDialog.submit"));
     const passwordInput = getByPlaceholderText(t("PassphraseDialog.inputPlaceholder"));
     fireEvent.change(passwordInput, {target: {value: "Passphrase"}});
@@ -35,7 +35,7 @@ describe("<PassphraseDialog />", () => {
   });
 
   test("should toggle the password visibility", () => {
-    const {getByDisplayValue, getByLabelText, getByPlaceholderText} = render(<PassphraseDialog onSubmit={jest.fn()} />);
+    const {getByDisplayValue, getByLabelText, getByPlaceholderText} = render(<PassphraseDialog onSubmit={jest.fn()} incorrectPassphrase={false} />);
     const passwordInput = getByPlaceholderText(t("PassphraseDialog.inputPlaceholder"));
     fireEvent.change(passwordInput, {target: {value: "Passphrase"}});
     expect(getByDisplayValue("Passphrase")).toHaveProperty("type", "password");

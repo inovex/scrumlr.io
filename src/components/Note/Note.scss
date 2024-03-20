@@ -1,7 +1,7 @@
 @import "src/constants/style.scss";
 
-$note__box-shadow-color: rgba(0, 87, 255, 0.16);
-$note__box-shadow-color-dark-mode: rgba(0, 0, 0, 0.2);
+$note__box-shadow-color: rgb(0, 87, 255);
+$note__box-shadow-color-dark-mode: rgb(0, 0, 0);
 
 $note__indicator-height: 34px;
 $note__indicator-width: 3px;
@@ -25,14 +25,16 @@ $note__footer-gap: 42px;
   position: relative;
   border-radius: $note__border-radius;
   background-color: $color-white;
-  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
+  box-shadow:
+    0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
+    0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
   transition: all 0.1s ease-in-out;
   z-index: $note-z-index;
   padding: $spacing--base $spacing--lg 12px $spacing--base;
   width: 100%;
   text-align: start;
   border: 2px solid transparent;
-  overflow: visible;
+  overflow: hidden;
 }
 
 .note .note__user-avatar {
@@ -49,7 +51,9 @@ $note__footer-gap: 42px;
   left: 8px;
   opacity: 0.95;
   border-radius: $note__border-radius;
-  box-shadow: 0 6px 9px 0 $note__box-shadow-color;
+  box-shadow:
+    0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
+    0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
   background-color: $color-white;
   z-index: $note-z-index - $base-z-index-step;
   transition: all 0.1s ease-in-out;
@@ -224,7 +228,9 @@ $note__footer-gap: 42px;
   .note,
   .note__in-stack {
     background-color: $color-dark-mode-note;
-    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
+    box-shadow:
+      0 4px 6px -1px rgba($note__box-shadow-color-dark-mode, 0.1),
+      0 2px 4px -2px rgba($note__box-shadow-color-dark-mode, 0.1);
   }
 
   .note__text {

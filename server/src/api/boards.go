@@ -60,6 +60,26 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, nil)
 }
 
+func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
+	user := r.Context().Value("User").(uuid.UUID)
+
+	boardIDs, err := s.boards.GetBoards(r.Context(), user)
+	if err != nil {
+		log.Errorw("unable to get board ids for this user", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+	OverviewBoards, err := s.boards.BoardOverview(r.Context(), boardIDs, user)
+	if err != nil {
+		log.Errorw("unable to get board overview", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, OverviewBoards)
+}
+
 // getBoard get a board
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
@@ -159,10 +179,13 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		var body JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
-			http.Error(w, "unable to parse request body", http.StatusBadRequest)
+			common.Throw(w, r, common.BadRequestError(errors.New("unable to parse request body")))
 			return
 		}
-
+		if body.Passphrase == "" {
+			common.Throw(w, r, common.BadRequestError(errors.New("missing passphrase")))
+			return
+		}
 		encodedPassphrase := common.Sha512BySalt(body.Passphrase, *b.Salt)
 		if encodedPassphrase == *b.Passphrase {
 			_, err := s.sessions.Create(r.Context(), board, user)
@@ -179,7 +202,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusCreated)
 			return
 		} else {
-			common.Throw(w, r, common.ForbiddenError(errors.New("wrong passphrase")))
+			common.Throw(w, r, common.BadRequestError(errors.New("wrong passphrase")))
 			return
 		}
 	}
