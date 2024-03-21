@@ -4,7 +4,7 @@ import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
-import {Voting, Timer, RaiseHand, MarkAsDone, CheckDone, AddStickerReaction, GeneralSettings, PresenterMode, Close, ArrowRight, ArrowLeft} from "components/Icon";
+import {Voting, Timer, RaiseHand, MarkAsDone, AddStickerReaction, GeneralSettings, PresenterMode, Close, ArrowRight, ArrowLeft} from "components/Icon";
 import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
@@ -190,7 +190,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                 direction="right"
                 onClick={toggleReadyState}
                 label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                icon={CheckDone}
+                icon={MarkAsDone}
                 active={isReady}
                 hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
               />

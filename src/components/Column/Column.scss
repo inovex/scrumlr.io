@@ -1,7 +1,5 @@
 @import "src/constants/style";
 
-// TODO check icon styling
-
 .column {
   min-width: $column__min-width;
   width: 100%;
@@ -219,6 +217,7 @@
 .column__header-edit-button-icon {
   color: $color-black;
   height: 24px;
+  width: 24px;
   transition: all 0.08s ease-out;
 }
 
