@@ -1,8 +1,6 @@
 @import "src/constants/style";
 @import "../SettingsDialog";
 
-// TODO check icon styling
-
 .board-settings__container-wrapper {
   overflow-y: auto;
   padding-right: $spacing--xs;
@@ -250,6 +248,7 @@
 }
 
 .board-settings__generate-password-button svg {
+  // TODO remove margin when icon gets updated
   width: $icon--small;
   height: $icon--small;
   margin: 0 4px 2px 3px;
