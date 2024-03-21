@@ -1,8 +1,6 @@
 @import "constants/style";
 @import "../SettingsDialog";
 
-// TODO check icon styling
-
 .avatar-settings {
   &__avatar {
     position: relative;
@@ -44,6 +42,7 @@
       > svg {
         width: $icon--large;
         height: $icon--large;
+        color: $color-lean-lilac;
       }
     }
   }

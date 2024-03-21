@@ -1,24 +1,14 @@
 @import "src/constants/style.scss";
 
-// TODO check icon styling
-
 .export-board__button-reverse-order {
   flex-direction: row-reverse;
   justify-content: flex-end;
 }
 
 .export-board__button-print-view {
+  // adds some padding to the print icon since the svg doesn't include any
+  // TODO: remove this class once the icon gets updated
   svg {
-    height: $icon--medium;
-  }
-}
-
-[theme="dark"] {
-  .export-board__button-reverse-order svg g g {
-    opacity: 1;
-  }
-  .export-board__button-reverse-order svg text {
-    fill: $color-white;
-    stroke: $color-white;
+    padding: 4px;
   }
 }
