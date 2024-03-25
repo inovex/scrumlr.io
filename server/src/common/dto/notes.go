@@ -76,7 +76,6 @@ type NoteCreateRequest struct {
 
 // NoteUpdateRequest represents the request to update a note.
 type NoteUpdateRequest struct {
-
 	// The text of the note.
 	Text *string `json:"text"`
 
@@ -89,7 +88,9 @@ type NoteUpdateRequest struct {
 
 // NoteDeleteRequest represents the request to delete a note.
 type NoteDeleteRequest struct {
+	ID uuid.UUID `json:"-"`
 
 	// Delete note or the complete stack.
-	DeleteStack bool `json:"deleteStack"`
+	DeleteStack bool      `json:"deleteStack"`
+	Board       uuid.UUID `json:"-"`
 }
