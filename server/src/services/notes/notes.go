@@ -31,7 +31,7 @@ type DB interface {
 	GetNote(id uuid.UUID) (database.Note, error)
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
-	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
+	DeleteNote(caller uuid.UUID, delete database.NoteDelete) error
 }
 
 func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
@@ -95,8 +95,12 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 	return new(dto.Note).From(note), err
 }
 
-func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
-	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), ctx.Value("Board").(uuid.UUID), id, body.DeleteStack)
+func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest) error {
+	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), database.NoteDelete{
+		ID:          body.ID,
+		DeleteStack: body.DeleteStack,
+		Board:       body.Board,
+	})
 }
 
 func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
