@@ -14,13 +14,12 @@ import (
 func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value("Board").(uuid.UUID)
 	user := r.Context().Value("User").(uuid.UUID)
-
 	var body dto.NoteCreateRequest
+
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
-
 	body.Board = board
 	body.User = user
 
@@ -43,6 +42,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 	id := r.Context().Value("Note").(uuid.UUID)
 
 	note, err := s.notes.Get(r.Context(), id)
+
 	if err != nil {
 		common.Throw(w, r, err)
 		return
@@ -93,13 +93,11 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	note := r.Context().Value("Note").(uuid.UUID)
-
 	var body dto.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
-
 	if err := s.notes.Delete(r.Context(), body, note); err != nil {
 		common.Throw(w, r, err)
 		return
@@ -107,4 +105,5 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusNoContent)
 	render.Respond(w, r, nil)
+
 }
