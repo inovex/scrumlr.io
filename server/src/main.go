@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-co-op/gocron/v2"
 	"log"
 	"net/http"
 	"os"
-	"strings"
-
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/services/health"
+	"scrumlr.io/server/services/scheduler"
+	"strings"
 
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/database"
@@ -21,7 +22,6 @@ import (
 	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/reactions"
-	"scrumlr.io/server/services/scheduler"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
 
@@ -305,8 +305,8 @@ func run(c *cli.Context) error {
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
-
-	_, _ = scheduler.Init(dbConnection)
+	sched, _ := gocron.NewScheduler()
+	scheduler.StartScheduler(sched, dbConnection)
 
 	s := api.New(
 		basePath,
