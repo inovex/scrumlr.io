@@ -91,7 +91,11 @@ func testNotesObserverOnUpdate(t *testing.T) {
 func testNotesObserverOnDelete(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 	deleteStack = false
-	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID, deleteStack)
+	err := testDb.DeleteNote(user.ID, NoteDelete{
+		ID:          notesObserverForTestNote.ID,
+		DeleteStack: deleteStack,
+		Board:       notesObserverForTestNote.Board,
+	})
 	assert.Nil(t, err)
 	assert.NotNil(t, notesObserver.board)
 	assert.NotNil(t, notesObserver.deletedNote)
@@ -99,7 +103,11 @@ func testNotesObserverOnDelete(t *testing.T) {
 func testNotesObserverOnDeleteNotExisting(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 	deleteStack = false
-	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID, deleteStack)
+	err := testDb.DeleteNote(user.ID, NoteDelete{
+		ID:          notesObserverForTestNote.ID,
+		DeleteStack: deleteStack,
+		Board:       notesObserverForTestNote.Board,
+	})
 	assert.Nil(t, err)
 	assert.Nil(t, notesObserver.board)
 	assert.Nil(t, notesObserver.deletedNote)

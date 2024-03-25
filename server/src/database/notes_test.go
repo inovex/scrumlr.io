@@ -465,7 +465,11 @@ func testOrderWhenChangeStackParent(t *testing.T) {
 }
 
 func testDeleteNote(t *testing.T) {
-	err := testDb.DeleteNote(author.ID, notesTestBoard.ID, noteB1.ID, deleteStack)
+	err := testDb.DeleteNote(author.ID, NoteDelete{
+		ID:          noteB1.ID,
+		DeleteStack: deleteStack,
+		Board:       notesTestBoard.ID,
+	})
 	assert.Nil(t, err)
 
 	notes, _ := testDb.GetNotes(notesTestBoard.ID, columnB.ID)
@@ -486,7 +490,11 @@ func testDeleteSharedNote(t *testing.T) {
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: noteC1.ID, Valid: true})
 
-	deleteNoteError := testDb.DeleteNote(author.ID, notesTestBoard.ID, noteC1.ID, deleteStack)
+	deleteNoteError := testDb.DeleteNote(author.ID, NoteDelete{
+		ID:          noteC1.ID,
+		DeleteStack: deleteStack,
+		Board:       notesTestBoard.ID,
+	})
 	assert.Nil(t, deleteNoteError)
 
 	updatedBoard, getUpdatedBoardError := testDb.GetBoard(notesTestBoard.ID)
@@ -511,7 +519,11 @@ func testDeleteStackParent(t *testing.T) {
 	   H: Rank 2, Stack E
 	*/
 
-	err := testDb.DeleteNote(stackUser.ID, stackTestBoard.ID, stackE.ID, deleteStack)
+	err := testDb.DeleteNote(stackUser.ID, NoteDelete{
+		ID:          stackE.ID,
+		DeleteStack: deleteStack,
+		Board:       stackTestBoard.ID,
+	})
 	assert.Nil(t, err)
 
 	stackNotes, _ := testDb.GetNotes(stackTestBoard.ID, stackTestColumnB.ID)
@@ -551,7 +563,11 @@ func testDeleteStack(t *testing.T) {
 	assert.Equal(t, 3, len(notesInStack))
 
 	deleteStack = true
-	err := testDb.DeleteNote(stackUser.ID, stackTestBoard.ID, stackH.ID, deleteStack)
+	err := testDb.DeleteNote(stackUser.ID, NoteDelete{
+		ID:          stackH.ID,
+		DeleteStack: deleteStack,
+		Board:       stackTestBoard.ID,
+	})
 	assert.Nil(t, err)
 
 	notesInStack, _ = testDb.GetNotes(stackTestBoard.ID, stackTestColumnB.ID)
