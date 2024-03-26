@@ -42,6 +42,9 @@
   &:hover {
     background-color: $hover-background-light;
   }
+  &:focus-visible {
+    outline: 2px solid $color-backlog-blue;
+  }
 }
 
 .note-reaction-list__add-reaction-sticker {
