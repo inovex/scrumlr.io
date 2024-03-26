@@ -3,7 +3,7 @@ FROM node:lts-hydrogen as build-stage
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --network-timeout 240000
 
 COPY src/ src/
 COPY public/ public/
