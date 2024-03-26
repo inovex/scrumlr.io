@@ -60,14 +60,6 @@ func New(
 	checkOrigin bool,
 ) chi.Router {
 	r := chi.NewRouter()
-	r.Use(func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			// Print the route of the incoming request
-			println("Route:", r.RequestURI)
-
-			next.ServeHTTP(w, r)
-		})
-	})
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
@@ -251,7 +243,6 @@ func (s *Server) initBoardSessionRequestResources(r chi.Router) {
 
 func (s *Server) initColumnResources(r chi.Router) {
 	r.Route("/columns", func(r chi.Router) {
-		r.Use(middleware.Logger)
 		r.With(s.BoardParticipantContext).Get("/", s.getColumns)
 
 		r.With(s.BoardModeratorContext).Post("/", s.createColumn)
