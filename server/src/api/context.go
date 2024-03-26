@@ -14,7 +14,6 @@ import (
 func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
-
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
@@ -44,7 +43,6 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 		boardParam := chi.URLParam(r, "id")
-
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
@@ -58,19 +56,7 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 			return
 		}
 
-		user, ok := userValue.(uuid.UUID)
-		if !ok {
-			log.Error("Invalid user type in the context")
-			common.Throw(w, r, common.BadRequestError(errors.New("invalid user type in the context")))
-			return
-		}
-		if s.sessions == nil {
-			log.Error("s.sessions is nil")
-			common.Throw(w, r, common.InternalServerError)
-			return
-		}
-
-		user = r.Context().Value("User").(uuid.UUID)
+		user := r.Context().Value("User").(uuid.UUID)
 		exists, err := s.sessions.SessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
@@ -154,7 +140,6 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 		if !isMod && !settings.AllowEditing {
 			log.Errorw("not allowed to edit board", "err", err)
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board")))
-
 			return
 		}
 

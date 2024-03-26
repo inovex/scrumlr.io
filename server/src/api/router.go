@@ -139,7 +139,6 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 			})
 		})
 	})
-
 }
 
 func (s *Server) protectedRoutes(r chi.Router) {
@@ -192,7 +191,6 @@ func (s *Server) initVoteResources(r chi.Router) {
 func (s *Server) initVotingResources(r chi.Router) {
 	r.Route("/votings", func(r chi.Router) {
 		r.With(s.BoardParticipantContext).Get("/", s.getVotings)
-
 		r.With(s.BoardModeratorContext).Post("/", s.createVoting)
 		r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
 
@@ -207,7 +205,6 @@ func (s *Server) initVotingResources(r chi.Router) {
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
-
 			r.Use(httprate.Limit(
 				3,
 				5*time.Second,
@@ -218,11 +215,10 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 					w.Write([]byte(`{"error": "Too many requests"}`))
 				}),
 			))
+
 			r.Post("/", s.joinBoard)
 		})
-
 		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
-
 		r.With(s.BoardModeratorContext).Put("/", s.updateBoardSessions)
 
 		r.Route("/{session}", func(r chi.Router) {
@@ -244,23 +240,19 @@ func (s *Server) initBoardSessionRequestResources(r chi.Router) {
 func (s *Server) initColumnResources(r chi.Router) {
 	r.Route("/columns", func(r chi.Router) {
 		r.With(s.BoardParticipantContext).Get("/", s.getColumns)
-
 		r.With(s.BoardModeratorContext).Post("/", s.createColumn)
 
 		r.Route("/{column}", func(r chi.Router) {
 			r.Use(s.ColumnContext)
 
 			r.With(s.BoardParticipantContext).Get("/", s.getColumn)
-
 			r.With(s.BoardModeratorContext).Put("/", s.updateColumn)
-
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteColumn)
 		})
 	})
 }
 
 func (s *Server) initNoteResources(r chi.Router) {
-
 	r.Route("/notes", func(r chi.Router) {
 		r.Use(s.BoardParticipantContext)
 
