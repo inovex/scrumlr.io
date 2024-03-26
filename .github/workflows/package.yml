@@ -34,13 +34,13 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -48,7 +48,7 @@ jobs:
 
       - name: scrumlr.io - Frontend image meta information
         id: meta-frontend
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend
@@ -68,7 +68,7 @@ jobs:
             org.opencontainers.image.description=The web client for scrumlr.io
 
       - name: Build and push frontend images
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
@@ -96,13 +96,13 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub container registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -110,7 +110,7 @@ jobs:
 
       - name: scrumlr.io - Server image meta information
         id: meta-server
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: |
             ghcr.io/inovex/scrumlr.io/scrumlr-server
@@ -130,7 +130,7 @@ jobs:
             org.opencontainers.image.description=The server for scrumlr.io
 
       - name: Build and push server images
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ./server/src
           file: ./server/src/Dockerfile
