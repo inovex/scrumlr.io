@@ -62,8 +62,8 @@ jobs:
           push: true
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache
+          cache-to: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache,mode=max
 
       - name: Set outputs
         id: outputs

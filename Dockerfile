@@ -6,8 +6,7 @@ WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 
 # Install dependencies with caching
-RUN --mount=type=cache,target=/usr/src/app/.yarn-cache \
-    yarn install --network-timeout 240000 --cache-folder /usr/src/app/.yarn-cache
+RUN yarn install --network-timeout 240000
 
 # Copy the necessary files for building the frontend
 COPY src/ src/
