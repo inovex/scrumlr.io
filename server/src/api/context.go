@@ -122,7 +122,6 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 		board := r.Context().Value("Board").(uuid.UUID)
 		user := r.Context().Value("User").(uuid.UUID)
 		isMod, err := s.sessions.ModeratorSessionExists(r.Context(), board, user)
-
 		if err != nil {
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
