@@ -4,7 +4,7 @@ $container-height: 64px;
 $reaction-size: 64px;
 
 .board-reactions__container {
-  position: absolute;
+  position: fixed;
   height: $container-height;
   left: 0;
   right: 0;
