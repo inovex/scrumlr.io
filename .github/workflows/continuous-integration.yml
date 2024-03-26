@@ -60,7 +60,8 @@ jobs:
 
   package:
     needs: test
-    uses: inovex/scrumlr.io/.github/workflows/package.yml@main
+    # TODO change to main before merging
+    uses: inovex/scrumlr.io/.github/workflows/package.yml@feat/multi_arch_images
 
   deploy_to_dev_cluster:
     needs: package
