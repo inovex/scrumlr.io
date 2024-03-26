@@ -118,6 +118,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     // remove focus to avoid bar from opening when going to another tab and back because of the focus event
     (document.activeElement as HTMLButtonElement).blur();
     setShowReactionBar(false);
+    buttonRef.current?.focus();
   };
 
   // on clicking anywhere but the note, close the reaction bar
@@ -144,24 +145,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     document.addEventListener("click", handleClickButton, true);
     return () => document.removeEventListener("click", handleClickButton, true);
   }, [buttonRef, listRef]);
-
-  // the bar opens when in active focus
-  // this happens when initially clicking on a button before it is focused,
-  // or when cycling through the note using Tab
-  useEffect(() => {
-    const handleFocus = (e: FocusEvent) => {
-      if (rootRef.current?.contains(e.target as Node) && !listRef.current?.contains(e.target as Node)) {
-        // active focus on the bar
-        setShowReactionBar(true);
-      } else {
-        // lost focus
-        setShowReactionBar(false);
-      }
-    };
-
-    document.addEventListener("focus", handleFocus, true);
-    return () => document.removeEventListener("focus", handleFocus, true);
-  }, [rootRef, listRef]);
 
   const addReaction = (noteId: string, reactionType: ReactionType) => {
     dispatch(Actions.addReaction(noteId, reactionType));
@@ -218,7 +201,17 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   return (
     <div className="note-reaction-list__root" ref={rootRef}>
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
-        <button ref={buttonRef} className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")}>
+        <button
+          ref={buttonRef}
+          className="note-reaction-list__add-reaction-sticker-container"
+          aria-label={t("NoteReactionList.toggleBarLabel")}
+          onKeyDown={(e) => {
+            e.stopPropagation();
+            if (e.key === "Enter" || e.key === "Space") {
+              setShowReactionBar((show) => !show);
+            }
+          }}
+        >
           {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
         {showReactionBar && <NoteReactionBar isOpen={showReactionBar} closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
