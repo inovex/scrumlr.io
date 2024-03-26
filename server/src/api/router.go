@@ -60,7 +60,14 @@ func New(
 	checkOrigin bool,
 ) chi.Router {
 	r := chi.NewRouter()
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Print the route of the incoming request
+			println("Route:", r.RequestURI)
 
+			next.ServeHTTP(w, r)
+		})
+	})
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
@@ -113,7 +120,6 @@ func New(
 			return true
 		}
 	}
-
 	if s.basePath == "/" {
 		s.publicRoutes(r)
 		s.protectedRoutes(r)
@@ -123,7 +129,6 @@ func New(
 			s.protectedRoutes(router)
 		})
 	}
-
 	return r
 }
 
@@ -142,6 +147,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 			})
 		})
 	})
+
 }
 
 func (s *Server) protectedRoutes(r chi.Router) {
@@ -149,7 +155,6 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Verifier())
 		r.Use(jwtauth.Authenticator)
 		r.Use(auth.AuthContext)
-
 		r.Post("/boards", s.createBoard)
 		r.Get("/boards", s.getBoards)
 
@@ -246,6 +251,7 @@ func (s *Server) initBoardSessionRequestResources(r chi.Router) {
 
 func (s *Server) initColumnResources(r chi.Router) {
 	r.Route("/columns", func(r chi.Router) {
+		r.Use(middleware.Logger)
 		r.With(s.BoardParticipantContext).Get("/", s.getColumns)
 
 		r.With(s.BoardModeratorContext).Post("/", s.createColumn)
@@ -263,6 +269,7 @@ func (s *Server) initColumnResources(r chi.Router) {
 }
 
 func (s *Server) initNoteResources(r chi.Router) {
+
 	r.Route("/notes", func(r chi.Router) {
 		r.Use(s.BoardParticipantContext)
 
@@ -273,9 +280,8 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Use(s.NoteContext)
 
 			r.Get("/", s.getNote)
-			r.Put("/", s.updateNote)
-
-			r.Delete("/", s.deleteNote)
+			r.With(s.BoardEditableContext).Put("/", s.updateNote)
+			r.With(s.BoardEditableContext).Delete("/", s.deleteNote)
 		})
 	})
 }

@@ -43,15 +43,34 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
-
 		boardParam := chi.URLParam(r, "id")
+
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
 
-		user := r.Context().Value("User").(uuid.UUID)
+		userValue := r.Context().Value("User")
+		if userValue == nil {
+			log.Error("User value not found in the context")
+			common.Throw(w, r, common.BadRequestError(errors.New("user not found in the context")))
+			return
+		}
+
+		user, ok := userValue.(uuid.UUID)
+		if !ok {
+			log.Error("Invalid user type in the context")
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid user type in the context")))
+			return
+		}
+		if s.sessions == nil {
+			log.Error("s.sessions is nil")
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		user = r.Context().Value("User").(uuid.UUID)
 		exists, err := s.sessions.SessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
@@ -116,8 +135,8 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 
 		board := r.Context().Value("Board").(uuid.UUID)
 		user := r.Context().Value("User").(uuid.UUID)
-
 		isMod, err := s.sessions.ModeratorSessionExists(r.Context(), board, user)
+
 		if err != nil {
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -126,6 +145,7 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 
 		settings, err := s.boards.Get(r.Context(), board)
 		if err != nil {
+
 			log.Errorw("unable to verify board settings", "err", err)
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings")))
 			return
@@ -134,6 +154,7 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 		if !isMod && !settings.AllowEditing {
 			log.Errorw("not allowed to edit board", "err", err)
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board")))
+
 			return
 		}
 
