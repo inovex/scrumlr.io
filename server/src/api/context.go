@@ -49,13 +49,6 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 			return
 		}
 
-		userValue := r.Context().Value("User")
-		if userValue == nil {
-			log.Error("User value not found in the context")
-			common.Throw(w, r, common.BadRequestError(errors.New("user not found in the context")))
-			return
-		}
-
 		user := r.Context().Value("User").(uuid.UUID)
 		exists, err := s.sessions.SessionExists(r.Context(), board, user)
 		if err != nil {
