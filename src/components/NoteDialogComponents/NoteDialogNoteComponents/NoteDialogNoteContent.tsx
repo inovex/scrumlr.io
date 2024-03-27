@@ -29,6 +29,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
+  const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+  const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
 
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === authorId) ?? state.participants?.self;
@@ -89,7 +91,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         <>
           <textarea
             className="note-dialog__note-content--text"
-            disabled={!editable}
+            disabled={!editable || (!isModerator && boardLocked)}
             onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
             onFocus={onFocus}
             {...emoji.inputBindings}

@@ -33,6 +33,7 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const boardIsLocked = useAppSelector((state) => !state.board.data!.allowEditing);
   const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const me = useAppSelector((state) => state.participants?.self);
@@ -100,7 +101,7 @@ export const Note = (props: NoteProps) => {
       id={props.noteId}
       columnId={note.position.column}
       className={classNames("note__root", props.colorClassName)}
-      disabled={!(isModerator || allowStacking)}
+      disabled={!isModerator && (!allowStacking || boardIsLocked)}
     >
       <div tabIndex={0} role="button" className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">

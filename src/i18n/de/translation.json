@@ -362,6 +362,7 @@
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
     "ShowNoteReactionsOptions": "Emoji-Reaktionen auf Karten anzeigen",
     "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
+    "AllowEditing": "Teilnehmer-Änderungen erlauben",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"

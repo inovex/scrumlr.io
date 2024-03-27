@@ -31,6 +31,7 @@ const HeaderMenu = (props: HeaderMenuProps) => {
             <BoardOption.ShowAuthorOption />
             <BoardOption.ShowOtherUsersNotesOption />
             <BoardOption.ShowHiddenColumnsOption />
+            <BoardOption.LockBoard />
           </>
         )}
         <BoardOption.ShowAllBoardSettings onClose={props.onClose} />

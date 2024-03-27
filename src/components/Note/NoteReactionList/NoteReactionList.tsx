@@ -45,6 +45,9 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
 
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
+  const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
     // get the participant who issued that reaction
@@ -217,12 +220,16 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   return (
     <div className="note-reaction-list__root" ref={rootRef}>
-      <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
-        <button ref={buttonRef} className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")}>
-          {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
-        </button>
-        {showReactionBar && <NoteReactionBar isOpen={showReactionBar} closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
-      </div>
+      {(isModerator || !boardLocked) && (
+        <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
+          <button ref={buttonRef} className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")}>
+            {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
+          </button>
+          {showReactionBar && (
+            <NoteReactionBar isOpen={showReactionBar} closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />
+          )}
+        </div>
+      )}
       <div className="note-reaction-list__reaction-chips-container" ref={listRef}>
         {!showReactionBar &&
           // show either condensed or normal reaction chips

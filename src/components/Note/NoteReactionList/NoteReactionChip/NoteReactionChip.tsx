@@ -3,6 +3,7 @@ import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
 import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
+import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
@@ -20,6 +21,8 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const reactionUsers = props.reaction.users.map((u) => u.user.name).join(", ");
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);
+  const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
@@ -30,6 +33,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   return (
     <>
       <button
+        disabled={!isModerator && boardLocked}
         id={anchorId} // unique identifier
         className={classNames("note-reaction-chip__root", {
           "note-reaction-chip__root--self": props.reaction.myReactionId && props.overrideActive === undefined, // highlight chips that yourself reacted to (if no override)
