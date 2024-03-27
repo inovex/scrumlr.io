@@ -72,7 +72,7 @@
   margin-bottom: 48px;
 }
 
-.homepage__hero-content > * {
+.homepage__hero-content>* {
   flex: 1 1 0;
 }
 
@@ -133,7 +133,7 @@
   padding: $spacing--xl;
 }
 
-.homepage__footer > * {
+.homepage__footer>* {
   flex: 1 1 auto;
 }
 
@@ -256,7 +256,7 @@
     display: inline;
   }
 
-  .homepage__footer-link + .homepage__footer-link::before {
+  .homepage__footer-link+.homepage__footer-link::before {
     content: "|";
     margin-left: $spacing--xs;
     margin-right: $spacing--xs;
