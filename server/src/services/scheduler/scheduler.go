@@ -1,61 +1,66 @@
 package scheduler
 
 import (
+	"context"
+	"fmt"
 	"github.com/go-co-op/gocron/v2"
+	"github.com/google/uuid"
 	"scrumlr.io/server/database"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/services"
 	"time"
 )
 
-func StartScheduler(s gocron.Scheduler, db *database.Database) {
+type DB interface {
+	DeleteBoard(id uuid.UUID) error
+	GetSessionsOlderThan(t time.Time, interactions int) ([]database.BoardSession, error)
+}
 
-	defer func() { _ = s.Shutdown() }()
+// NewSchedulerService Questsion: kann ich mehrere DB typen zusammenfuehren? Also teil davon und teil davon implementieren
+type SchedulerService struct {
+	database  DB
+	scheduler gocron.Scheduler
+}
+
+func NewSchedulerService(db DB, scheduler gocron.Scheduler) services.Scheduler {
+	s := new(SchedulerService)
+	s.database = db
+	s.scheduler = scheduler
+	return s
+}
+
+func StartScheduler(s gocron.Scheduler, db DB) {
+
+	//defer func() { _ = s.Shutdown() }()
 
 	_, _ = s.NewJob(
 		gocron.CronJob("*/20 * * * * *", true),
 		gocron.NewTask(deleteUnusedBoards, db),
 	)
+	s.Start()
 }
 
-//	func (s *BoardService) initScheduler(ctx context.Context) {
-//		log := logger.FromContext(ctx)
-//		scheduler, err := gocron.NewScheduler(gocron.WithLogger(slog.Default()))
-//
-//		if err != nil {
-//			log.Errorw("Could no create scheduler", err)
-//		}
-//		defer func() { _ = scheduler.Shutdown() }()
-//
-//		//Use https://cron.help/ to decode
-//		//crontab := fmt.Sprintf("%d 3 * * *", rand.Intn(60))
-//		_, err = scheduler.NewJob(
-//
-//			//gocron.CronJob(crontab, false),
-//			gocron.CronJob("*/20 * * * * *", true),
-//			gocron.NewTask(deleteUnusedBoards, s, log),
-//		)
-//		if err != nil {
-//			log.Errorw("Could no create new CronJob", err)
-//		}
-//
-//		scheduler.Start()
-//		select {
-//		case <-ctx.Done():
-//
-//		}
-//
-// }
-func deleteUnusedBoards(db *database.Database) {
-	//todo: insert correct date before
-	sessions, err := db.GetSessionsOlderThan(time.Now().AddDate(0, 0, -12).Add(time.Hour*-5), 5)
+func (s SchedulerService) GetOldSessions(ctx context.Context, t time.Time, interactions int) ([]database.BoardSession, error) {
+	log := logger.FromContext(ctx)
+	sessions, err := s.database.GetSessionsOlderThan(t, interactions)
 	if err != nil {
-		//log.Errorw("Could not get sessions older ")
-
+		log.Errorw("Could not fetch sessions", "error", err)
+		return nil, err
 	}
-	for _, session := range sessions {
-		err := db.DeleteBoard(session.Board)
-		if err != nil {
-			//log.Errorw("unable to delete board", "board", session.Board, "error", err)
+	return sessions, err
+}
 
-		}
+func (s SchedulerService) Delete(ctx context.Context, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	err := s.database.DeleteBoard(id)
+	if err != nil {
+		log.Errorw("Unable to delete Board", "error", err)
+		return err
 	}
+	return nil
+}
+
+func deleteUnusedBoards(db DB) {
+	sessions, _ := db.GetSessionsOlderThan(time.Now(), 10)
+	fmt.Println(sessions)
 }

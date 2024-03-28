@@ -305,7 +305,10 @@ func run(c *cli.Context) error {
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
+
+	//todo: add flag to cli and if flag is set, then allow automated deletion of boards
 	sched, _ := gocron.NewScheduler()
+	scheduler.NewSchedulerService(dbConnection, sched)
 	scheduler.StartScheduler(sched, dbConnection)
 
 	s := api.New(
