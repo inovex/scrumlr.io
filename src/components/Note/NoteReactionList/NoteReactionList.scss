@@ -25,9 +25,8 @@
 .note-reaction-list__add-reaction-sticker-container {
   all: unset; // button reset
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-content: center;
 
   width: $reaction__inner-size;
   height: $reaction__inner-size;
@@ -43,7 +42,7 @@
     background-color: $hover-background-light;
   }
   &:focus-visible {
-    outline: 2px solid $color-backlog-blue;
+    outline: 2px solid var(--accent-color--dark);
   }
 }
 

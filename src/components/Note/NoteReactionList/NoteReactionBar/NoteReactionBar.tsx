@@ -14,6 +14,7 @@ interface NoteReactionBarProps {
 
 export const NoteReactionBar = (props: NoteReactionBarProps) => {
   const handleClickBar = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
+    console.log(e);
     e.preventDefault();
     props.closeReactionBar();
     props.handleClickReaction(e, reactionType);
@@ -39,7 +40,7 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
 
   return (
     <div className="note-reaction-bar__root">
-      <ReactFocusLock returnFocus>
+      <ReactFocusLock>
         {[...REACTION_EMOJI_MAP.entries()].map(([type, emoji]) => {
           // highlight reaction made by yourself
           const active = !!props.reactions.find((r) => r.reactionType === type && !!r.myReactionId);
