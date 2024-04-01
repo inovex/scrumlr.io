@@ -100,7 +100,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.72.0",
     "ts-jest": "^29.1.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.3"
   },
   "scripts": {
     "start": "react-scripts start",
