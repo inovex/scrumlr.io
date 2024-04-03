@@ -3,49 +3,55 @@
   height: 48px;
   position: relative;
   display: flex;
+  gap: $spacing--xs;
+  align-items: center;
+  background-color: $color-white;
+  color: $color-black;
+  border-radius: $rounded--small;
+  padding: 0 $spacing--lg;
 
-  input {
-    height: 48px;
-    width: 100%;
-    border-radius: 8px;
-    background-color: $color-white;
-    border: none;
-    outline: none;
-    padding: 0 $spacing--lg;
-    font-size: $text-size--medium;
-    font-weight: bold;
-    padding-top: 10px;
-
-    &:focus-visible,
-    &:hover {
-      background-color: rgba(var(--accent-color-rgb), 0.1);
-    }
-
-    &:disabled {
-      cursor: default;
-      background-color: $color-white;
-    }
-
-    &:focus-visible ~ label,
-    &:not(.settings-input__hidden-placeholder) ~ label,
-    &:not(:placeholder-shown) ~ label {
-      margin: 0 $spacing--lg;
-      top: 2px;
-      font-size: $text-size--small;
-      line-height: $line-height--medium;
-    }
-
-    &:focus ~ .settings-input__length {
-      opacity: 1;
-    }
+  &:has(:focus-visible),
+  &:hover {
+    background-color: rgba(var(--accent-color-rgb), 0.1);
   }
 
   label {
-    margin: $spacing--base $spacing--lg;
+    margin: $spacing--base 0;
     position: absolute;
     transition: all 0.08s ease-out;
     cursor: text;
     line-height: $line-height--small;
+  }
+}
+
+.settings-input__input {
+  height: 48px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: $text-size--medium;
+  font-weight: bold;
+  padding-top: 10px;
+  flex-grow: 1;
+  background-color: transparent;
+  color: inherit;
+
+  &:disabled {
+    cursor: default;
+    background-color: $color-white;
+  }
+
+  &:focus-visible ~ label,
+  &:not(.settings-input__hidden-placeholder) ~ label,
+  &:not(:placeholder-shown) ~ label {
+    margin: 0;
+    top: 2px;
+    font-size: $text-size--small;
+    line-height: $line-height--medium;
+  }
+
+  &:focus ~ .settings-input__length {
+    opacity: 1;
   }
 }
 
@@ -65,46 +71,29 @@
   line-height: $line-height--small;
 }
 
-.settings-input__children {
-  all: unset;
-  z-index: 1;
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  padding: $spacing--xs $spacing--lg;
-  pointer-events: none;
-
-  * {
-    pointer-events: initial;
-    height: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 100%;
-    padding: 2px;
-    box-sizing: border-box;
-  }
+.settings-input__password-toggle {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+  color: inherit;
+  border-radius: $rounded--full;
+  cursor: pointer;
 
   &:focus-visible * {
-    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.5);
+    outline: 2px solid var(--accent-color-rgb);
   }
 }
 
 [theme="dark"] {
   .settings-input__container {
-    input {
-      background-color: $color-dark-mode-note;
-      color: $color-white;
-
-      &:disabled {
-        color: $color-placeholder-dark;
-      }
-    }
-
-    label {
-      color: $color-white;
-    }
+    background-color: $color-dark-mode-note;
+    color: $color-white;
   }
 
-  .settings-input__length {
-    color: $color-white;
+  .settings-input__input:disabled {
+    color: $color-placeholder-dark;
   }
 }
