@@ -14,14 +14,14 @@
   &:hover {
     background-color: rgba(var(--accent-color-rgb), 0.1);
   }
+}
 
-  label {
-    margin: $spacing--base 0;
-    position: absolute;
-    transition: all 0.08s ease-out;
-    cursor: text;
-    line-height: $line-height--small;
-  }
+.settings-input__label {
+  margin: $spacing--base 0;
+  position: absolute;
+  transition: all 0.08s ease-out;
+  cursor: text;
+  line-height: $line-height--small;
 }
 
 .settings-input__input {

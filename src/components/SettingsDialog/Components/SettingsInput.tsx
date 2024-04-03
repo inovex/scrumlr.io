@@ -62,7 +62,9 @@ export const SettingsInput: FC<SettingsInputProps> = ({
           {value.length}/{maxLength}
         </small>
       )}
-      <label htmlFor={id}>{label}</label>
+      <label className="settings-input__label" htmlFor={id}>
+        {label}
+      </label>
       {type === "password" && passwordToggle && value && (
         <button className="settings-input__password-toggle" onClick={togglePasswordVisibility}>
           {showPassword ? <VisibleIcon /> : <HiddenIcon />}
