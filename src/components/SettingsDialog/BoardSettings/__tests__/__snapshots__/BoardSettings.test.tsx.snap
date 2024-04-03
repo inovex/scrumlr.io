@@ -40,6 +40,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           128
         </small>
         <label
+          class="settings-input__label"
           for="boardSettingsBoardName"
         >
           Board Name
@@ -85,6 +86,7 @@ exports[`BoardSettings should match snapshot 1`] = `
               value=""
             />
             <label
+              class="settings-input__label"
               for="boardSettingsPassword"
             >
               Password
