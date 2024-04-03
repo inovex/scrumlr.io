@@ -40,8 +40,6 @@ export const SettingsInput: FC<SettingsInputProps> = ({
     setShowPassword((curr) => !curr);
   };
 
-  console.log(value);
-
   return (
     <div className={classNames("settings-input__container", containerClassName)}>
       <input
@@ -52,7 +50,7 @@ export const SettingsInput: FC<SettingsInputProps> = ({
         onBlur={() => value && submit()}
         onKeyDown={(e) => e.key === "Enter" && value && submit()}
         disabled={disabled}
-        type={type === "text" ? "text" : showPassword ? "text" : "password"}
+        type={type === "text" || showPassword ? "text" : "password"}
         id={id}
         autoComplete="off"
         maxLength={maxLength}
