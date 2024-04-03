@@ -68,7 +68,7 @@ jobs:
             org.opencontainers.image.description=The web client for scrumlr.io
 
       - name: Build and push frontend images
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
@@ -130,7 +130,7 @@ jobs:
             org.opencontainers.image.description=The server for scrumlr.io
 
       - name: Build and push server images
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v4
         with:
           context: ./server/src
           file: ./server/src/Dockerfile
