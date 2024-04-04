@@ -1,6 +1,6 @@
 import {useEffect, useState, useRef} from "react";
 import classNames from "classnames";
-import {MarkAsDone, RaiseHand} from "components/Icon";
+import {CheckDone, RaiseHand} from "components/Icon";
 import {AvataaarProps, Avatar} from "../Avatar";
 import {Badge} from "../Badge";
 import "./UserAvatar.scss";
@@ -31,7 +31,7 @@ export const UserAvatar = ({title, badgeText, id, ready, raisedHand, avatar, cla
 
   return (
     <div className={classNames("user-avatar", className, ready && "user-ready", {"user-avatar--ready-animated": readyAnimation})} title={title}>
-      {ready && <MarkAsDone className="user-avatar__ready" />}
+      {ready && <CheckDone className="user-avatar__ready" />}
       {raisedHand && <RaiseHand className="user-avatar__raised-hand" />}
       <Avatar seed={id} avatar={avatar} className={avatarClassName} />
       {badgeText && <Badge text={badgeText} />}

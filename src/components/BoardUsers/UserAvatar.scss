@@ -1,8 +1,6 @@
 @use "sass:color";
 @import "constants/style.scss";
 
-// TODO check icon styling
-
 .user-avatar {
   box-sizing: border-box;
   height: 48px;
@@ -24,7 +22,7 @@
 
   color: #1bd47e;
 
-  .check {
+  path {
     --dasharray: 20;
     stroke-dasharray: var(--dasharray);
     stroke-dashoffset: 0;
@@ -62,7 +60,7 @@
     animation: draw 0.45s ease-in-out;
   }
 
-  > .user-avatar__ready .check {
+  > .user-avatar__ready path {
     animation:
       draw 0.6s ease-in-out,
       scale 0.3s ease-in-out;
@@ -111,7 +109,7 @@
       fill: color.change($color-grooming-green, $lightness: 20%, $saturation: 70%, $alpha: 0.6);
     }
 
-    .check {
+    path {
       filter: drop-shadow(0 0 3px $color-dark-one);
     }
 

@@ -1,7 +1,5 @@
 @import "constants/style";
 
-// TODO check icon styling
-
 // The namings "single" and "mutli" refer to the two types of toasts.
 // The single line toast or a toast that spans multiple lines of content
 
@@ -61,6 +59,7 @@ $color-close-icon: #bfc1c5;
 }
 
 // Toast icons
+// TODO check icon styling
 .toast__icon {
   display: flex;
   justify-content: center;
@@ -81,28 +80,11 @@ $color-close-icon: #bfc1c5;
     width: 38px;
   }
 }
-.toast__icon-single-info {
-  svg {
-    height: 30px;
-    width: 30px;
-    path {
-      stroke: rgba($color-white, 0.7);
-    }
-  }
-}
 .toast__icon-single-success {
   background-color: $color-success;
-  svg {
-    height: 22px;
-    width: 22px;
-  }
 }
 .toast__icon-single-error {
   background-color: $color-error;
-  svg {
-    height: 32px;
-    width: 32px;
-  }
 }
 .toast__icon-multi {
   position: absolute;
@@ -112,28 +94,11 @@ $color-close-icon: #bfc1c5;
   width: 64px;
   height: 64px;
 }
-.toast__icon-multi-info {
-  svg {
-    height: 38px;
-    width: 38px;
-    path {
-      stroke: rgba($color-white, 0.7);
-    }
-  }
-}
 .toast__icon-multi-success {
   background-color: $color-success;
-  svg {
-    height: 32px;
-    width: 32px;
-  }
 }
 .toast__icon-multi-error {
   background-color: $color-error;
-  svg {
-    height: 42px;
-    width: 42px;
-  }
 }
 
 // Toast close icon
@@ -319,8 +284,8 @@ input[type="checkbox"]:checked::before {
   }
   .toast__icon-single-info,
   .toast__icon-multi-info {
-    svg path {
-      stroke: $menu-icon-background-color--dark;
+    svg {
+      color: $menu-icon-background-color--dark;
     }
   }
   .toast__icon-single-success,

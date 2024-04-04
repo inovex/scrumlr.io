@@ -1,8 +1,6 @@
 @import "constants/style.scss";
 @import "routes/StackView/StackView.scss";
 
-// TODO check icon styling
-
 .stack-view__navigation {
   height: $stack-view__navigation-height;
   min-height: $stack-view__min-height;
@@ -33,8 +31,8 @@
   transition: all 0.08s ease-out;
 
   > svg {
-    height: $icon--small;
-    width: $icon--small;
+    height: $icon--medium;
+    width: $icon--medium;
   }
 
   &:enabled {

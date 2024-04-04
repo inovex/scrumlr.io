@@ -1,7 +1,5 @@
 @import "constants/style";
 
-// TODO check icon styling
-
 .homepage {
   background: $color-lighter-gray;
 }
@@ -111,9 +109,9 @@
 }
 
 .homepage__start-button .homepage__proceed-icon {
-  flex: 0 0 20px;
-  height: 20px;
-  width: 20px;
+  flex: 0 0 $icon--medium;
+  height: $icon--medium;
+  width: $icon--medium;
 }
 
 .homepage__proceed-icon {
