@@ -30,7 +30,7 @@ exports[`Timer should render correctly 1`] = `
           data-tooltip-id="info-bar__tooltip"
         >
           <svg>
-            icon-flag.svg
+            flag-finish.svg
           </svg>
         </button>
       </li>
@@ -46,18 +46,18 @@ exports[`Timer should render correctly 1`] = `
           <svg
             class="short-action__check-icon"
           >
-            icon-check.svg
+            mark-as-done.svg
           </svg>
           <svg
             class="short-action__cancel-icon"
           >
-            icon-cancel.svg
+            close.svg
           </svg>
         </button>
       </li>
     </ul>
     <svg>
-      icon-timer.svg
+      timer.svg
     </svg>
   </div>
   <button

@@ -47,7 +47,7 @@ exports[`VotingDialog should match the snapshot with active voting 1`] = `
             <svg
               class="dialog__close-icon"
             >
-              icon-close.svg
+              close.svg
             </svg>
           </button>
         </aside>
@@ -150,7 +150,7 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
             <svg
               class="dialog__close-icon"
             >
-              icon-close.svg
+              close.svg
             </svg>
           </button>
         </aside>

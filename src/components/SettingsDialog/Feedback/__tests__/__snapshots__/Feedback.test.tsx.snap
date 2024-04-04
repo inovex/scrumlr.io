@@ -57,7 +57,7 @@ exports[`Feedback should match snapshot 1`] = `
           for="feedbackTypeFeatureRequest"
         >
           <svg>
-            icon-add-feature.svg
+            template-gallery.svg
           </svg>
           <span>
             Feature Request

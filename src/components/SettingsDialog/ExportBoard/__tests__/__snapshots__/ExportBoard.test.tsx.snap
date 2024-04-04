@@ -36,7 +36,7 @@ Object {
             <svg
               class="settings-option-button__icon"
             >
-              icon-export-json.svg
+              file-json.svg
             </svg>
           </button>
           <hr
@@ -56,7 +56,7 @@ Object {
             <svg
               class="settings-option-button__icon"
             >
-              icon-export-csv.svg
+              file-csv.svg
             </svg>
           </button>
           <hr
@@ -134,7 +134,7 @@ Object {
           <svg
             class="settings-option-button__icon"
           >
-            icon-export-json.svg
+            file-json.svg
           </svg>
         </button>
         <hr
@@ -154,7 +154,7 @@ Object {
           <svg
             class="settings-option-button__icon"
           >
-            icon-export-csv.svg
+            file-csv.svg
           </svg>
         </button>
         <hr

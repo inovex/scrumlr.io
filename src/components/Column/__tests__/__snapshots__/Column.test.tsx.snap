@@ -21,7 +21,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
             class="column__header-hidden-icon"
             title="Column is hidden for all participants"
           >
-            icon-hidden.svg
+            hidden.svg
           </svg>
           <h2
             class="column__header-text column__header-text--hidden"
@@ -69,7 +69,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           <svg
             class="note-input__icon--add"
           >
-            icon-add.svg
+            plus.svg
           </svg>
         </button>
       </form>
@@ -582,7 +582,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <svg
                       class="vote-button-add__icon"
                     >
-                      icon-add.svg
+                      plus.svg
                     </svg>
                   </button>
                 </div>
@@ -1130,7 +1130,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <svg
                       class="vote-button-add__icon"
                     >
-                      icon-add.svg
+                      plus.svg
                     </svg>
                   </button>
                 </div>
