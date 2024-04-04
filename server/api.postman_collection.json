@@ -1459,10 +1459,14 @@
                   "})",
                   ""
                 ],
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {}
               }
             }
           ],
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {}
+          },
           "request": {
             "method": "PUT",
             "header": [],
@@ -1502,15 +1506,13 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}"
+                    "{{board_id}}"
                   ]
                 }
               },
@@ -2251,15 +2253,13 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/notes",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/notes",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "notes"
                   ]
                 }
@@ -2340,17 +2340,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/notes/{note}",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/notes/{{note_id}}",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "notes",
-                    "{note}"
+                    "{{note_id}}"
                   ]
                 }
               },
@@ -2484,7 +2482,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"position\": {\r\n        \"column\": \"{column}\",\r\n        \"rank\": 1996\r\n    }\r\n}",
+                  "raw": "{\r\n    \"position\": {\r\n        \"column\": \"{{column_id}}\",\r\n        \"rank\": 1996\r\n    }\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -2492,17 +2490,15 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/notes/{note}",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/notes/{{note_id}}",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "notes",
-                    "{note}"
+                    "{{note_id}}"
                   ]
                 }
               },
@@ -2612,17 +2608,15 @@
                 "method": "DELETE",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/notes/{note}",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/notes/{{note_id}}",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "notes",
-                    "{note}"
+                    "{{note_id}}"
                   ]
                 }
               },
@@ -2747,15 +2741,13 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/votings",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/votings",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "votings"
                   ]
                 }
@@ -2915,17 +2907,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/votings/{voting}",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/votings/{{voting_id}}",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "votings",
-                    "{voting}"
+                    "{{voting_id}}"
                   ]
                 }
               },
@@ -3013,17 +3003,15 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/votings/{voting}",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/votings/{{voting_id}}",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "votings",
-                    "{voting}"
+                    "{{voting_id}}"
                   ]
                 }
               },
@@ -3220,7 +3208,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"note\": \"{note}\"\r\n}",
+                  "raw": "{\r\n    \"note\": \"{{note_id}}\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3228,15 +3216,13 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/votes",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/votes",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "votes"
                   ]
                 }
@@ -3354,15 +3340,13 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/votes",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/votes",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "votes"
                   ]
                 }
@@ -3436,7 +3420,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"note\": \"{note}\"\r\n}",
+                  "raw": "{\r\n    \"note\": \"{{note_id}}\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3444,15 +3428,13 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/votes",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/votes",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "votes"
                   ]
                 }
@@ -4199,6 +4181,57 @@
           "response": []
         },
         {
+          "name": "Update board participants",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Successful PUT request\", function () {",
+                  "    pm.expect(pm.response).to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Check response content\", function () {",
+                  "    var res = pm.response.json();",
+                  "",
+                  "    pm.expect(res).to.be.an(\"array\");",
+                  "    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
+                  "",
+                  "    pm.expect(res[0].ready).to.equal(false);",
+                  "    pm.expect(res[0].raisedHand).to.equal(false);",
+                  "})"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ready\": false,\r\n    \"raisedHand\": false\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/boards/{{board_id}}/participants",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "boards",
+                "{{board_id}}",
+                "participants"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Update board participant",
           "event": [
             {
@@ -4293,57 +4326,6 @@
               "body": "{\n    \"user\": {\n        \"id\": \"{{user_id}}\",\n        \"name: \"\"\n    },\n    \"ready\": true,\n    \"raisedHand\": true,\n    \"banned\": true\n}"
             }
           ]
-        },
-        {
-          "name": "Update board participants",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "pm.test(\"Successful PUT request\", function () {",
-                  "    pm.expect(pm.response).to.have.status(200);",
-                  "});",
-                  "",
-                  "pm.test(\"Check response content\", function () {",
-                  "    var res = pm.response.json();",
-                  "",
-                  "    pm.expect(res).to.be.an(\"array\");",
-                  "    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
-                  "",
-                  "    pm.expect(res[0].ready).to.equal(false);",
-                  "    pm.expect(res[0].raisedHand).to.equal(false);",
-                  "})"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "PUT",
-            "header": [],
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"ready\": false,\r\n    \"raisedHand\": false\r\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            },
-            "url": {
-              "raw": "{{base_url}}/boards/{{board_id}}/participants",
-              "host": [
-                "{{base_url}}"
-              ],
-              "path": [
-                "boards",
-                "{{board_id}}",
-                "participants"
-              ]
-            }
-          },
-          "response": []
         }
       ],
       "auth": {

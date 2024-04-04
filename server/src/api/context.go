@@ -14,7 +14,6 @@ import (
 func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
-
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
@@ -43,7 +42,6 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
-
 		boardParam := chi.URLParam(r, "id")
 		board, err := uuid.Parse(boardParam)
 		if err != nil {
@@ -116,7 +114,6 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 
 		board := r.Context().Value("Board").(uuid.UUID)
 		user := r.Context().Value("User").(uuid.UUID)
-
 		isMod, err := s.sessions.ModeratorSessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to verify board session", "err", err)
@@ -126,6 +123,7 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 
 		settings, err := s.boards.Get(r.Context(), board)
 		if err != nil {
+
 			log.Errorw("unable to verify board settings", "err", err)
 			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings")))
 			return
