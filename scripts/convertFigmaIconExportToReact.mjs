@@ -21,6 +21,8 @@ function iconNameToComponentName(/** @type {string} */ iconName) {
   return iconName.split('-').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join('');
 }
 
+const inputColors = /white/g;
+
 const allowedResultColors = ["none", "currentColor"];
 
 /**
@@ -70,7 +72,7 @@ async function main() {
   await mkdir(dirname(indexFile), { recursive: true });
   await writeFile(indexFile, "");
 
-  await appendFile(indexFile, `// This file was generated in generateIcons.mjs
+  await appendFile(indexFile, `// This file was generated in convertFigmaIconExportToReact.mjs
 
 import "./Icon.scss";
 
@@ -90,7 +92,7 @@ import "./Icon.scss";
     const iconFile = await readFile(lightVariantFile).then(f => f.toString());
 
     // change the color of the icon to currentColor and add a class "Icon"
-    const iconComponentSVG = iconFile.replace(/white/g, "currentColor").replace("<svg", `<svg class="icon"`);
+    const iconComponentSVG = iconFile.replace(inputColors, "currentColor").replace("<svg", `<svg class="icon"`);
 
     // check for inconsistent colors
     checkForInconsistentColors(iconComponentSVG, lightVariantFile);
