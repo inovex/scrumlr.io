@@ -14,7 +14,6 @@ import {Html} from "components/Html";
 import {Tooltip} from "components/Tooltip";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
-import {register} from "serviceWorkerRegistration";
 import Plausible from "plausible-tracker";
 import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "./config";
 import "react-tooltip/dist/react-tooltip.css";
@@ -65,5 +64,3 @@ root.render(
   </React.StrictMode>
 );
 store.dispatch(Actions.initApplication());
-
-register();

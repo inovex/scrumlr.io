@@ -3,3 +3,4 @@ build/**/*
 server/**/*
 **/__tests__/*
 scripts/**/*
+service-worker.js
