@@ -199,10 +199,15 @@ func main() {
 				Usage:    "TOML `filepath` to be loaded ",
 				Required: false,
 			},
+			&cli.StringFlag{
+				Name:     "scheduler-config",
+				EnvVars:  []string{""},
+				Usage:    "Load configuration from `filepath`",
+				Required: false,
+			},
 		},
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
-
 	// check if process is executed within docker environment
 	if _, err := os.Stat("/.dockerenv"); err != nil {
 		logger.EnableDevelopmentLogger()
@@ -306,10 +311,10 @@ func run(c *cli.Context) error {
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
 
-	//todo: add flag to cli and if flag is set, then allow automated deletion of boards
-	sched, _ := gocron.NewScheduler()
-	scheduler.NewSchedulerService(dbConnection, sched)
-	scheduler.StartScheduler(sched, dbConnection)
+	if c.String("scheduler-config") != "" {
+		sched, _ := gocron.NewScheduler()
+		scheduler.NewSchedulerService(dbConnection, sched, c.String("scheduler-config"))
+	}
 
 	s := api.New(
 		basePath,
