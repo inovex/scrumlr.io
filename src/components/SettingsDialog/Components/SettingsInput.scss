@@ -1,14 +1,15 @@
 @import "constants/style";
+
 .settings-input__container {
-  height: 48px;
   position: relative;
   display: flex;
-  gap: $spacing--xs;
   align-items: center;
+  gap: $spacing--xs;
+  height: 48px;
+  padding: 0 $spacing--lg;
+  border-radius: $rounded--small;
   background-color: $color-white;
   color: $color-black;
-  border-radius: $rounded--small;
-  padding: 0 $spacing--lg;
 
   &:has(:focus-visible),
   &:hover {
@@ -17,23 +18,23 @@
 }
 
 .settings-input__label {
-  margin: $spacing--base 0;
   position: absolute;
-  transition: all 0.08s ease-out;
-  cursor: text;
+  margin: $spacing--base 0;
   line-height: $line-height--small;
+  cursor: text;
+  transition: all 0.08s ease-out;
 }
 
 .settings-input__input {
+  flex-grow: 1;
   height: 48px;
   border-radius: 8px;
   border: none;
   outline: none;
+  padding-top: 10px;
+  background-color: transparent;
   font-size: $text-size--medium;
   font-weight: bold;
-  padding-top: 10px;
-  flex-grow: 1;
-  background-color: transparent;
   color: inherit;
 
   &:disabled {
@@ -44,8 +45,8 @@
   &:focus-visible ~ label,
   &:not(.settings-input__hidden-placeholder) ~ label,
   &:not(:placeholder-shown) ~ label {
-    margin: 0;
     top: 2px;
+    margin: 0;
     font-size: $text-size--small;
     line-height: $line-height--medium;
   }
@@ -65,10 +66,10 @@
   right: 0;
   top: 2px;
   margin: 0 $spacing--lg;
-  opacity: 0;
-  transition: opacity 100ms;
   font-size: $text-size--small;
   line-height: $line-height--small;
+  opacity: 0;
+  transition: opacity 100ms;
 }
 
 .settings-input__password-toggle {
@@ -76,10 +77,10 @@
   width: 28px;
   height: 28px;
   padding: 0;
-  background-color: transparent;
   border: 0;
-  color: inherit;
   border-radius: $rounded--full;
+  background-color: transparent;
+  color: inherit;
   cursor: pointer;
 
   &:focus-visible * {
