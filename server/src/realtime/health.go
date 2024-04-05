@@ -2,10 +2,10 @@ package realtime
 
 // IsHealthy returns true if the Broker is in a healthy state
 func (b *Broker) IsHealthy() bool {
-	if b == nil || b.con == nil {
+	if b == nil || b.Con == nil {
 		return false
 	}
-	err := b.con.Publish("health", "test")
+	err := b.Con.Publish("health", "test")
 	if err != nil {
 		return false
 	}

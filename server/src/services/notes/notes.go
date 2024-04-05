@@ -99,7 +99,7 @@ func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id
 	if err != nil {
 		return err
 	}
-	go s.DeletedNote(user, board, id, body.DeleteStack)
+	s.DeletedNote(user, board, id, body.DeleteStack)
 	return err
 }
 
