@@ -10,7 +10,7 @@ import (
 )
 
 func NewRedis(server RedisServer) (*Broker, error) {
-	return &Broker{con: connectRedis(server)}, nil
+	return &Broker{Con: connectRedis(server)}, nil
 }
 
 type redisClient struct {

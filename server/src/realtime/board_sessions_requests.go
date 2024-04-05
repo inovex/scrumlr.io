@@ -17,11 +17,11 @@ const (
 
 func (b *Broker) BroadcastUpdateOnBoardSessionRequest(board, user uuid.UUID, msg BoardSessionRequestEventType) error {
 	logger.Get().Debugw("broadcasting to board session request", "board", board, "user", user, "msg", msg)
-	return b.con.Publish(requestSubject(board, user), msg)
+	return b.Con.Publish(requestSubject(board, user), msg)
 }
 
 func (b *Broker) GetBoardSessionRequestChannel(board, user uuid.UUID) chan *BoardSessionRequestEventType {
-	c, err := b.con.SubscribeToBoardSessionEvents(requestSubject(board, user))
+	c, err := b.Con.SubscribeToBoardSessionEvents(requestSubject(board, user))
 	if err != nil {
 		// TODO: Bubble up this error, so the caller can retry to establish this subscription
 		logger.Get().Errorw("failed to subscribe to BoardSessionRequestChannel", "err", err)
