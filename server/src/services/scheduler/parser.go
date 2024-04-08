@@ -2,24 +2,28 @@ package scheduler
 
 import (
 	"context"
+	"errors"
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v3"
 	"os"
 	"scrumlr.io/server/logger"
 )
 
-func parse(path string, ctx context.Context) Config {
-	log := logger.FromContext(ctx)
+func parseFile(path string) (Config, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
-		log.Errorw("Failed to reading file", "error", err)
+		return Config{}, errors.New("failed reading file")
 	}
+	return parseToObject(file)
+}
+
+func parseToObject(data []byte) (Config, error) {
 	config := &Config{}
-	err = yaml.Unmarshal(file, config)
+	err := yaml.Unmarshal(data, config)
 	if err != nil {
-		log.Errorw("Failed to parse file")
+		return Config{}, errors.New("failed to parse file")
 	}
-	return *config
+	return *config, nil
 }
 
 func parseTaskParameters(ctx context.Context, parameters map[string]interface{}, task Task) []any {

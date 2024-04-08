@@ -45,16 +45,6 @@ func (t DeleteBoards) GetParams() []any {
 	return []any{t.TimeToExpire, t.Interactions}
 }
 
-type Test struct {
-	Param1 string
-	Param2 int
-	Param3 bool
-}
-
-func (t Test) GetParams() []any {
-	return []any{t.Param1, t.Param2, t.Param3}
-}
-
 /*
 	deleteUnusedBoards
 

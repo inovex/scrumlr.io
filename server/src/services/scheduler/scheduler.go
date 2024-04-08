@@ -37,7 +37,10 @@ When adding a new job to the scheduler, extend the switch case with the job's me
 func (s *SchedulerService) StartScheduler(path string) {
 	ctx := context.Background()
 	log := logger.FromContext(ctx)
-	conf := parse(path, ctx)
+	conf, err := parseFile(path)
+	if err != nil {
+		log.Error("Failed to parse file", "error", err)
+	}
 
 	for _, job := range conf.Jobs {
 		var task interface{}
@@ -47,10 +50,6 @@ func (s *SchedulerService) StartScheduler(path string) {
 			params = append(params, ctx)
 			task = s.deleteUnusedBoards
 			params = append(params, parseTaskParameters(ctx, job.Task, new(DeleteBoards))...)
-		case "Test":
-			task = s.tmpTask
-			params = append(params, parseTaskParameters(ctx, job.Task, new(Test))...)
-
 		}
 		_, err := s.scheduler.NewJob(gocron.CronJob(job.Schedule, job.WithSeconds), gocron.NewTask(task, params...))
 		if err != nil {
