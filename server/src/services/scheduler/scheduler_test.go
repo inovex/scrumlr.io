@@ -1,6 +1,7 @@
 package scheduler
 
 import (
+	"fmt"
 	"github.com/go-co-op/gocron/v2"
 	"github.com/golang/mock/gomock"
 	"github.com/google/uuid"
@@ -35,12 +36,14 @@ func (suite *SchedulerTestSuite) TestInitialization() {
 	s := new(SchedulerService)
 	ctrl := gomock.NewController(suite.T())
 	sched := mocks.NewMockScheduler(ctrl)
+
 	s.database = mockDB
 	s.scheduler = sched
 
 	sched.EXPECT().Start().Times(1)
-	sched.EXPECT().NewJob(gocron.CronJob("*/20 * * * * *", true), gomock.Any())
-	s.StartScheduler("./config.yaml")
+	sched.EXPECT().NewJob(gocron.CronJob(fmt.Sprintf("0 3 * * *"), false), gomock.Any())
+	s.StartScheduler("./config.yaml", "0")
+
 	mockDB.AssertExpectations(suite.T())
 }
 
@@ -60,19 +63,18 @@ func (suite *SchedulerTestSuite) TestCheckMultipleIntervals() {
 		User:      uuid.New(),
 		Name:      "TestBoard",
 	}
-	expected := 6
-
+	expected :=
+		6
 	mockDB.On("GetSessionsOlderThan", mock.Anything, mock.Anything).
 		Return([]database.BoardSession{testBoard}, nil)
-
 	mockDB.On("DeleteBoard", testBoard.Board).Return(nil)
 
-	s.StartScheduler("./config.yaml")
+	s.StartScheduler("./config.yaml", "0")
 
 	for i := 0; i < expected; i++ {
 		mockDB.wg.Add(1)
 		fakeClock.BlockUntil(1)
-		fakeClock.Advance(time.Second * 20)
+		fakeClock.Advance(time.Hour * 24)
 		mockDB.wg.Wait()
 	}
 

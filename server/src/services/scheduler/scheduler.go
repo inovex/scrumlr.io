@@ -26,7 +26,8 @@ func NewSchedulerService(db DB, scheduler gocron.Scheduler, path string) *Schedu
 	s := new(SchedulerService)
 	s.database = db
 	s.scheduler = scheduler
-	s.StartScheduler(path)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	s.StartScheduler(path, strconv.Itoa(r.Intn(60)))
 	return s
 }
 
@@ -37,7 +38,7 @@ This methode initializes and starts the scheduler.
 When adding a new job to the scheduler, extend the switch case with the job's methode
 */
 
-func (s *SchedulerService) StartScheduler(path string) {
+func (s *SchedulerService) StartScheduler(path string, delay string) {
 	ctx := context.Background()
 	log := logger.FromContext(ctx)
 	conf, err := parseFile(path)
@@ -51,7 +52,6 @@ func (s *SchedulerService) StartScheduler(path string) {
 		case "Delete Unused Boards":
 			params = append(params, ctx)
 			task = s.deleteUnusedBoards
-			delay := strconv.Itoa(rand.Intn(60))
 			job.Schedule = strings.Replace(job.Schedule, "$", delay, -1)
 			params = append(params, parseTaskParameters(ctx, job.Task, new(DeleteBoards))...)
 		}
