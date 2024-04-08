@@ -4,8 +4,11 @@ import (
 	"context"
 	"github.com/go-co-op/gocron/v2"
 	"github.com/google/uuid"
+	"math/rand"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/logger"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -41,7 +44,6 @@ func (s *SchedulerService) StartScheduler(path string) {
 	if err != nil {
 		log.Error("Failed to parse file", "error", err)
 	}
-
 	for _, job := range conf.Jobs {
 		var task interface{}
 		var params []any
@@ -49,6 +51,8 @@ func (s *SchedulerService) StartScheduler(path string) {
 		case "Delete Unused Boards":
 			params = append(params, ctx)
 			task = s.deleteUnusedBoards
+			delay := strconv.Itoa(rand.Intn(60))
+			job.Schedule = strings.Replace(job.Schedule, "$", delay, -1)
 			params = append(params, parseTaskParameters(ctx, job.Task, new(DeleteBoards))...)
 		}
 		_, err := s.scheduler.NewJob(gocron.CronJob(job.Schedule, job.WithSeconds), gocron.NewTask(task, params...))

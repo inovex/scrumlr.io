@@ -2,7 +2,6 @@ package scheduler
 
 import (
 	"context"
-	"fmt"
 	"scrumlr.io/server/logger"
 	"time"
 )
@@ -69,8 +68,4 @@ func (s *SchedulerService) deleteUnusedBoards(ctx context.Context, t string, int
 			log.Errorw("Failed to delete board", "error", err)
 		}
 	}
-}
-
-func (s *SchedulerService) tmpTask(string2 string, int2 int, bool2 bool) {
-	fmt.Printf("string: %s, int: %d, bool: %v\n", string2, int2, bool2)
 }
