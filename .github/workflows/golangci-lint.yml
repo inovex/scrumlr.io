@@ -30,7 +30,7 @@ jobs:
           version: v1.54
 
           # Optional: working directory, useful for monorepos
-
+           working-directory: ./server/src/
 
           # Optional: golangci-lint command line arguments.
           #
