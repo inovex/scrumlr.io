@@ -70,7 +70,6 @@ func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value("Board").(uuid.UUID)
 	noteId := r.Context().Value("Note").(uuid.UUID)
-
 	var body dto.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
@@ -93,7 +92,6 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	note := r.Context().Value("Note").(uuid.UUID)
-
 	var body dto.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
