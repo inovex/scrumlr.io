@@ -33,8 +33,6 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.boards.Create(r.Context(), body)
 	if err := err.(*pq.Error); err != nil {
-		if err.Code == pq.ErrorCode(rune(22001)) {
-		}
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
