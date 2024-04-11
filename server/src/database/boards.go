@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
@@ -106,6 +107,7 @@ func (d *Database) UpdateBoardTimer(update BoardTimerUpdate) (Board, error) {
 }
 
 func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
+	fmt.Println(update)
 	query := d.db.NewUpdate().Model(&update).Column("timer_start", "timer_end", "shared_note")
 
 	if update.Name != nil {
