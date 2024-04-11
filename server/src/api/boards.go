@@ -5,7 +5,6 @@ import (
 	"encoding/csv"
 	"errors"
 	"fmt"
-	"github.com/lib/pq"
 	"net/http"
 	"strconv"
 
@@ -32,7 +31,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	body.Owner = owner
 
 	b, err := s.boards.Create(r.Context(), body)
-	if err := err.(*pq.Error); err != nil {
+	if err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
