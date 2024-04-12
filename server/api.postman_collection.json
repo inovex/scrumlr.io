@@ -505,7 +505,8 @@
                   "\r",
                   ""
                 ],
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {}
               }
             }
           ],
@@ -514,7 +515,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"My board\",\r\n    \"accessPolicy\": \"PUBLIC\",\r\n    \"columns\": [ \r\n        { \"name\": \"Lean coffee\", \"visible\": true, \"color\": \"backlog-blue\" },\r\n        { \"name\": \"Actions\", \"visible\": false, \"color\": \"planning-pink\" }\r\n    ]\r\n}",
+              "raw": "{\r\n    \"name\": \"My board\",\r\n    \"description\": \"description\",\r\n    \"accessPolicy\": \"PUBLIC\",\r\n    \"columns\": [ \r\n        { \"name\": \"Lean coffee\", \"visible\": true, \"color\": \"backlog-blue\" },\r\n        { \"name\": \"Actions\", \"visible\": false, \"color\": \"planning-pink\" }\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1371,6 +1372,48 @@
                 "{{board_id}}",
                 "timer",
                 "increment"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create board reaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"reactionType\": \"tada\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/boards/{{board_id}}/board-reactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "boards",
+                "{{board_id}}",
+                "board-reactions"
               ]
             }
           },
@@ -2537,7 +2580,8 @@
                   "",
                   ""
                 ],
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {}
               }
             },
             {
@@ -2572,7 +2616,8 @@
                   "",
                   "});"
                 ],
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {}
               }
             }
           ],
@@ -2581,7 +2626,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"deleteStack\": false\n}",
+              "raw": "",
               "options": {
                 "raw": {
                   "language": "json"
@@ -3686,7 +3731,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n    \"note\": \"{note}\",\n    \"reactionType\": \"like\"\n}",
+                  "raw": "{\n    \"note\": \"{{note_id}}\",\n    \"reactionType\": \"like\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -3694,15 +3739,13 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/reactions/",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/reactions/",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "reactions",
                     ""
                   ]
@@ -3779,15 +3822,13 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/reactions/",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/reactions/",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "reactions",
                     ""
                   ]
@@ -3869,17 +3910,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}/reactions/{reaction}",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/reactions/{{reaction_id}}",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}",
+                    "{{board_id}}",
                     "reactions",
-                    "{reaction}"
+                    "{{reaction_id}}"
                   ]
                 }
               },
