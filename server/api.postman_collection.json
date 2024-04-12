@@ -515,7 +515,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"My board\",\r\n    \"description\": \"description\",\r\n    \"accessPolicy\": \"PUBLIC\",\r\n    \"columns\": [ \r\n        { \"name\": \"Lean coffee\", \"visible\": true, \"color\": \"backlog-blue\" },\r\n        { \"name\": \"Actions\", \"visible\": false, \"color\": \"planning-pink\" }\r\n    ]\r\n}",
+              "raw": "{\r\n    \"name\": \"My board\",\r\n    \"accessPolicy\": \"PUBLIC\",\r\n    \"columns\": [ \r\n        { \"name\": \"Lean coffee\", \"visible\": true, \"color\": \"backlog-blue\" },\r\n        { \"name\": \"Actions\", \"visible\": false, \"color\": \"planning-pink\" }\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
