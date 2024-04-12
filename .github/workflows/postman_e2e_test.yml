@@ -24,6 +24,27 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
 
+      - name: Check Cluster Health
+        id: check_health
+        run: |
+          retries=0
+          until [ $retries -ge 3 ]
+          do
+            response=$(curl -s -o /dev/null -w "%{http_code}" "${{ inputs.base_url }}/health")
+            if [ "$response" = "204" ]; then
+              echo "Cluster is healthy! Continuing with postman tests!"
+              break
+            else
+              echo "Cluster is not responding. Retrying in $((5 * $retries)) seconds..."
+              sleep $((5 * $retries))
+              retries=$((retries + 1))
+            fi
+          done
+          if [ "$response" != "204" ]; then
+            echo "Cluster is still not responding after retries. Exiting..."
+            exit 1
+          fi
+          
       - name: Run Newman script
         working-directory: ./server
         run: |
