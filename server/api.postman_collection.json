@@ -2626,7 +2626,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "",
+              "raw": "{\n    \"deleteStack\": false\n}",
               "options": {
                 "raw": {
                   "language": "json"
