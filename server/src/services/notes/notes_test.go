@@ -1,14 +1,14 @@
 package notes
 
 import (
-	"context"
-	"scrumlr.io/server/common/dto"
-	"testing"
-
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/suite"
-	"scrumlr.io/server/database"
+  "context"
+  "github.com/google/uuid"
+  "github.com/stretchr/testify/assert"
+  "github.com/stretchr/testify/mock"
+  "github.com/stretchr/testify/suite"
+  "scrumlr.io/server/common/dto"
+  "scrumlr.io/server/database"
+  "testing"
 )
 
 type NoteServiceTestSuite struct {
@@ -46,13 +46,14 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 		Text:   txt,
 	}).Return(database.Note{}, nil)
 
-	s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
 	})
 
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 
 }
