@@ -30,7 +30,7 @@ jobs:
           retries=0
           until [ $retries -ge 3 ]
           do
-            response=$(curl -s -o /dev/null -w "%{http_code}" "${{ inputs.base_url }}/health")
+            response=$(curl -s -o /dev/null -w "%{http_code}" "${{ inputs.base_url }}/api/health")
             if [ "$response" = "204" ]; then
               echo "Cluster is healthy! Continuing with postman tests!"
               break
