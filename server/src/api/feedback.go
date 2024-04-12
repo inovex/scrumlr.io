@@ -48,15 +48,14 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		str := "/"
 		body.Text = &str
 	}
-  if body.Type == FeedbackTypeFeatureRequest && *body.Text == "/" {
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
-  if body.Type == FeedbackTypeBugReport && *body.Text == "/" {
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
+	if body.Type == FeedbackTypeFeatureRequest && *body.Text == "/" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	if body.Type == FeedbackTypeBugReport && *body.Text == "/" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	s.feedback.Create(r.Context(), fmt.Sprintf("%s", body.Type), *body.Contact, *body.Text)
 	w.WriteHeader(http.StatusCreated)
-	return
 }
