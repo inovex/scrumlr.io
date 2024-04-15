@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"time"
 
@@ -53,10 +52,6 @@ func (d *Database) CreateBoardSessionRequest(request BoardSessionRequestInsert) 
 			"Board", request.Board,
 			"Result", &r,
 		), &r)
-
-	if err == sql.ErrNoRows {
-
-	}
 
 	return r, err
 }

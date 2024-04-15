@@ -18,7 +18,9 @@ const (
 
 func (feedbackType *FeedbackType) UnmarshalJSON(b []byte) error {
 	var s string
-	json.Unmarshal(b, &s)
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
 	unmarshalledFeedbackType := FeedbackType(s)
 	switch unmarshalledFeedbackType {
 	case FeedbackTypePraise, FeedbackTypeBugReport, FeedbackTypeFeatureRequest:
@@ -56,6 +58,10 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	s.feedback.Create(r.Context(), fmt.Sprintf("%s", body.Type), *body.Contact, *body.Text)
+	err := s.feedback.Create(r.Context(), fmt.Sprintf("%s", body.Type), *body.Contact, *body.Text)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
 }

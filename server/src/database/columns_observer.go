@@ -66,6 +66,9 @@ func notifyColumnDeleted(ctx context.Context) error {
 		board := ctx.Value("Board").(uuid.UUID)
 		column := ctx.Value("Column").(uuid.UUID)
 		notes, err := d.GetNotes(board)
+		if err != nil {
+			return err
+		}
 		votes, err := d.GetVotes(filter.VoteFilter{Board: board})
 		if err != nil {
 			return err
