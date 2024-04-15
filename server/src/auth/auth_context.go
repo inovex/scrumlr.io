@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"net/http"
+	"scrumlr.io/server/identifiers"
 
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
@@ -19,7 +20,7 @@ func AuthContext(next http.Handler) http.Handler {
 			http.Error(w, "invalid user id", http.StatusBadRequest)
 			return
 		}
-		newContext := context.WithValue(r.Context(), "User", user)
+		newContext := context.WithValue(r.Context(), identifiers.KeyUserIdentifier{}, user)
 		next.ServeHTTP(w, r.WithContext(newContext))
 	})
 }

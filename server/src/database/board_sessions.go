@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/url"
+	"scrumlr.io/server/identifiers"
 	"strconv"
 	"time"
 
@@ -93,7 +94,7 @@ func (d *Database) CreateBoardSession(boardSession BoardSessionInsert) (BoardSes
 		Scan(common.ContextWithValues(context.Background(),
 			"Database", d,
 			"Operation", "INSERT",
-			"Board", boardSession.Board,
+			identifiers.KeyBoardIdentifier{}, boardSession.Board,
 			"Result", &s,
 		), &s)
 
@@ -138,7 +139,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 		Scan(common.ContextWithValues(context.Background(),
 			"Database", d,
 			"Operation", "UPDATE",
-			"Board", update.Board,
+			identifiers.KeyBoardIdentifier{}, update.Board,
 			"Result", &session,
 		), &session)
 

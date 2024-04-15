@@ -71,8 +71,8 @@ func (suite *VoteTestSuite) TestAddVote() {
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"note": "%s"
 				}`, noteId.String()))).
-				AddToContext("Board", boardId).
-				AddToContext("User", userId)
+				AddToContext(keyBoardIdentifier{}, boardId).
+				AddToContext(keyUserIdentifier{}, userId)
 
 			rr := httptest.NewRecorder()
 			s.addVote(rr, req.Request())

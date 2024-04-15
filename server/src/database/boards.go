@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+	"scrumlr.io/server/identifiers"
 	"time"
 
 	"github.com/google/uuid"
@@ -169,7 +170,7 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 }
 
 func (d *Database) DeleteBoard(id uuid.UUID) error {
-	_, err := d.db.NewDelete().Model((*Board)(nil)).Where("id = ?", id).Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", id))
+	_, err := d.db.NewDelete().Model((*Board)(nil)).Where("id = ?", id).Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier{}, id))
 	return err
 }
 

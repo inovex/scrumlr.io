@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"scrumlr.io/server/identifiers"
 	"time"
 
 	"github.com/google/uuid"
@@ -97,7 +98,7 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 
 	personalVotes := []*dto.Vote{}
 	for _, vote := range votes {
-		if vote.User == ctx.Value("User").(uuid.UUID) {
+		if vote.User == ctx.Value(identifiers.KeyUserIdentifier{}).(uuid.UUID) {
 			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
 		}
 	}

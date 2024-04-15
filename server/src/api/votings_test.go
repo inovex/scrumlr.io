@@ -105,7 +105,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 				"voteLimit": 4,
 				"allowMultipleVotes": false,
 				"showVotesOfOthers": false
-				}`)).AddToContext("Board", boardId)
+				}`)).AddToContext(keyBoardIdentifier{}, boardId)
 
 			rr := httptest.NewRecorder()
 			s.createVoting(rr, req.Request())
@@ -155,8 +155,8 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 			req := NewTestRequestBuilder("PUT", "/", strings.NewReader(`{
 				"status": "CLOSED"
 				}`)).
-				AddToContext("Board", boardId).
-				AddToContext("Voting", votingId)
+				AddToContext(keyBoardIdentifier{}, boardId).
+				AddToContext(keyVotingIdentifier{}, votingId)
 			rr := httptest.NewRecorder()
 
 			s.updateVoting(rr, req.Request())
@@ -181,8 +181,8 @@ func (suite *VotingTestSuite) TestGetVoting() {
 	}, nil)
 
 	req := NewTestRequestBuilder("GET", "/", nil).
-		AddToContext("Board", boardId).
-		AddToContext("Voting", votingId)
+		AddToContext(keyBoardIdentifier{}, boardId).
+		AddToContext(keyVotingIdentifier{}, votingId)
 	rr := httptest.NewRecorder()
 
 	s.getVoting(rr, req.Request())

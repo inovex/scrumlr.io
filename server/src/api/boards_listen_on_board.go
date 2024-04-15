@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"net/http"
+	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -27,19 +28,19 @@ type InitEvent struct {
 }
 
 type EventData struct {
-	Board       *dto2.Board                 `json:"board"`
-	Columns     []*dto2.Column              `json:"columns"`
-	Notes       []*dto2.Note                `json:"notes"`
-	Reactions   []*dto2.Reaction            `json:"reactions"`
-	Votings     []*dto2.Voting              `json:"votings"`
-	Votes       []*dto2.Vote                `json:"votes"`
-	Sessions    []*dto2.BoardSession        `json:"participants"`
-	Requests    []*dto2.BoardSessionRequest `json:"requests"`
+	Board     *dto2.Board                 `json:"board"`
+	Columns   []*dto2.Column              `json:"columns"`
+	Notes     []*dto2.Note                `json:"notes"`
+	Reactions []*dto2.Reaction            `json:"reactions"`
+	Votings   []*dto2.Voting              `json:"votings"`
+	Votes     []*dto2.Vote                `json:"votes"`
+	Sessions  []*dto2.BoardSession        `json:"participants"`
+	Requests  []*dto2.BoardSessionRequest `json:"requests"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
-	id := r.Context().Value("Board").(uuid.UUID)
-	userID := r.Context().Value("User").(uuid.UUID)
+	id := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	userID := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
 
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -58,14 +59,14 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	initEventData := EventData{
-		Board:       board,
-		Columns:     columns,
-		Notes:       notes,
-		Reactions:   reactions,
-		Votings:     votings,
-		Votes:       votes,
-		Sessions:    sessions,
-		Requests:    requests,
+		Board:     board,
+		Columns:   columns,
+		Notes:     notes,
+		Reactions: reactions,
+		Votings:   votings,
+		Votes:     votes,
+		Sessions:  sessions,
+		Requests:  requests,
 	}
 
 	initEvent := InitEvent{
