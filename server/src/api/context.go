@@ -3,7 +3,9 @@ package api
 import (
 	"context"
 	"errors"
+	"github.com/go-chi/httprate"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -192,5 +194,27 @@ func (s *Server) VotingContext(next http.Handler) http.Handler {
 		}
 		votingContext := context.WithValue(r.Context(), "Voting", voting)
 		next.ServeHTTP(w, r.WithContext(votingContext))
+	})
+}
+
+func (s *Server) RateLimitContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Rate limit logic
+		limiter := httprate.Limit(
+			3,
+			5*time.Second,
+			httprate.WithKeyFuncs(httprate.KeyByIP),
+			httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusTooManyRequests)
+				_, err := w.Write([]byte(`{"error": "Too many requests"}`))
+				if err != nil {
+					log := logger.FromRequest(r)
+					log.Errorw("Could not write error", "error", err)
+					return
+				}
+			}),
+		)
+		limiter(next).ServeHTTP(w, r)
 	})
 }

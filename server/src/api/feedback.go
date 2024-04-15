@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/go-chi/render"
 	"net/http"
 )
@@ -58,7 +57,7 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	err := s.feedback.Create(r.Context(), fmt.Sprintf("%s", body.Type), *body.Contact, *body.Text)
+	err := s.feedback.Create(r.Context(), string(body.Type), *body.Contact, *body.Text)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
