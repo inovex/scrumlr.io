@@ -2,11 +2,13 @@ package api
 
 import (
 	"github.com/go-chi/cors"
+	"github.com/go-chi/httprate"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"net/http"
+	"time"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
@@ -202,7 +204,21 @@ func (s *Server) initVotingResources(r chi.Router) {
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
-			r.Use(s.RateLimitContext)
+			r.Use(httprate.Limit(
+				3,
+				5*time.Second,
+				httprate.WithKeyFuncs(httprate.KeyByIP),
+				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(http.StatusTooManyRequests)
+					_, err := w.Write([]byte(`{"error": "Too many requests"}`))
+					if err != nil {
+						log := logger.FromRequest(r)
+						log.Errorw("Could not write error", "error", err)
+						return
+					}
+				}),
+			))
 
 			r.Post("/", s.joinBoard)
 		})
