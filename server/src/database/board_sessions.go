@@ -228,3 +228,14 @@ func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessi
 	err := query.Scan(context.Background(), &sessions)
 	return sessions, err
 }
+
+func (d *Database) GetSessionsOlderThan(t time.Time, interactions int) ([]BoardSession, error) {
+	query := d.db.NewSelect().
+		TableExpr("board_sessions AS s").
+		ColumnExpr("s.board").
+		Where("s.created_at < ?", t).GroupExpr("s.board").Having("COUNT(*) < ?", interactions)
+
+	var sessions []BoardSession
+	err := query.Scan(context.Background(), &sessions)
+	return sessions, err
+}

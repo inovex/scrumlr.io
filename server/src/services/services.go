@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"scrumlr.io/server/database"
+	"time"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
@@ -99,4 +101,9 @@ type Health interface {
 
 type BoardReactions interface {
 	Create(ctx context.Context, board uuid.UUID, body dto.BoardReactionCreateRequest)
+}
+
+type Scheduler interface {
+	Delete(ctx context.Context, id uuid.UUID) error
+	GetOldSessions(ctx context.Context, t time.Time, interactions int) ([]database.BoardSession, error)
 }

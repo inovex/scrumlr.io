@@ -1,0 +1,7 @@
+jobs:
+  - name: "Delete Unused Boards"
+    schedule: "$ 3 * * *"
+    withSeconds: false
+    task:
+      timeToExpiry: "720h"
+      interactions: 4

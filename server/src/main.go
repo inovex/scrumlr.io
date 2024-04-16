@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-co-op/gocron/v2"
 	"log"
 	"net/http"
 	"os"
-	"strings"
-
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/services/health"
+	"scrumlr.io/server/services/scheduler"
+	"strings"
 
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/database"
@@ -198,10 +199,15 @@ func main() {
 				Usage:    "TOML `filepath` to be loaded ",
 				Required: false,
 			},
+			&cli.StringFlag{
+				Name:     "scheduler-config",
+				EnvVars:  []string{""},
+				Usage:    "Load configuration from `filepath`",
+				Required: false,
+			},
 		},
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
-
 	// check if process is executed within docker environment
 	if _, err := os.Stat("/.dockerenv"); err != nil {
 		logger.EnableDevelopmentLogger()
@@ -304,6 +310,11 @@ func run(c *cli.Context) error {
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
+
+	if c.String("scheduler-config") != "" {
+		sched, _ := gocron.NewScheduler()
+		scheduler.NewSchedulerService(dbConnection, sched, c.String("scheduler-config"))
+	}
 
 	s := api.New(
 		basePath,
