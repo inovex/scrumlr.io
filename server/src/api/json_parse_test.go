@@ -82,11 +82,11 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(`{
 				"id": %s
 				}`)).
-				AddToContext(identifiers.KeyBoardIdentifier{}, mockUUID).
-				AddToContext(identifiers.KeyUserIdentifier{}, mockUUID).
-				AddToContext(identifiers.KeyNoteIdentifier{}, mockUUID).
-				AddToContext(identifiers.KeyColumnIdentifier{}, mockUUID).
-				AddToContext(identifiers.KeyVotingIdentifier{}, mockUUID)
+				AddToContext(identifiers.KeyBoardIdentifier, mockUUID).
+				AddToContext(identifiers.KeyUserIdentifier, mockUUID).
+				AddToContext(identifiers.KeyNoteIdentifier, mockUUID).
+				AddToContext(identifiers.KeyColumnIdentifier, mockUUID).
+				AddToContext(identifiers.KeyVotingIdentifier, mockUUID)
 
 			rr := httptest.NewRecorder()
 			tt.handler(s)(rr, req.Request())

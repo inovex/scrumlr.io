@@ -11,8 +11,8 @@ import (
 
 // createBoardReaction creates a new board reaction
 func (s *Server) createBoardReaction(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
-	user := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 
 	var body dto.BoardReactionCreateRequest
 	if err := render.Decode(r, &body); err != nil {

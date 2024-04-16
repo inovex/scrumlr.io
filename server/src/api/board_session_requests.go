@@ -14,7 +14,7 @@ import (
 )
 
 func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 	userParam := chi.URLParam(r, "user")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
@@ -23,7 +23,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	}
 
 	// user should only be allowed to get own session request
-	if user != r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID) {
+	if user != r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID) {
 		common.Throw(w, r, common.ForbiddenError(errors.New("not allowed")))
 		return
 	}
@@ -44,7 +44,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 }
 
 func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 	statusQuery := r.URL.Query().Get("status")
 
 	requests, err := s.sessions.ListSessionRequest(r.Context(), board, statusQuery)
@@ -60,7 +60,7 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	userParam := chi.URLParam(r, "user")
 	user, err := uuid.Parse(userParam)

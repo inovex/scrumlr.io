@@ -10,7 +10,7 @@ import (
 )
 
 func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
-	id := r.Context().Value(identifiers.KeyReactionIdentifier{}).(uuid.UUID)
+	id := r.Context().Value(identifiers.KeyReactionIdentifier).(uuid.UUID)
 
 	reaction, err := s.reactions.Get(r.Context(), id)
 	if err != nil {
@@ -23,7 +23,7 @@ func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	reactions, err := s.reactions.List(r.Context(), board)
 	if err != nil {
@@ -36,8 +36,8 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
-	user := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 
 	var body dto.ReactionCreateRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -59,9 +59,9 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
-	user := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
-	id := r.Context().Value(identifiers.KeyReactionIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
+	id := r.Context().Value(identifiers.KeyReactionIdentifier).(uuid.UUID)
 
 	if err := s.reactions.Delete(r.Context(), board, user, id); err != nil {
 		common.Throw(w, r, err)
@@ -73,9 +73,9 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
-	user := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
-	id := r.Context().Value(identifiers.KeyReactionIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
+	id := r.Context().Value(identifiers.KeyReactionIdentifier).(uuid.UUID)
 	var body dto.ReactionUpdateTypeRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))

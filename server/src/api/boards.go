@@ -20,7 +20,7 @@ import (
 
 // createBoard creates a new board
 func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
-	owner := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	owner := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 
 	// parse request
 	var body dto.CreateBoardRequest
@@ -49,7 +49,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 // deleteBoard deletes a board
 func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	err := s.boards.Delete(r.Context(), board)
 	if err != nil {
@@ -63,7 +63,7 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-	user := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 
 	boardIDs, err := s.boards.GetBoards(r.Context(), user)
 	if err != nil {
@@ -84,7 +84,7 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 // getBoard get a board
 func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-	boardId := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	boardId := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	if len(r.Header["Upgrade"]) > 0 && r.Header["Upgrade"][0] == "websocket" {
 		s.openBoardSocket(w, r)
@@ -123,7 +123,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
-	user := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 
 	exists, err := s.sessions.SessionExists(r.Context(), board, user)
 	if err != nil {
@@ -244,7 +244,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 // updateBoard updates a board
 func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
-	boardId := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	boardId := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	var body dto.BoardUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -264,7 +264,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
-	boardId := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	boardId := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	var body dto.SetTimerRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -283,7 +283,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
-	boardId := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	boardId := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 	board, err := s.boards.DeleteTimer(r.Context(), boardId)
 	if err != nil {
 		common.Throw(w, r, err)
@@ -294,7 +294,7 @@ func (s *Server) deleteTimer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
-	boardId := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	boardId := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 	board, err := s.boards.IncrementTimer(r.Context(), boardId)
 	if err != nil {
 		common.Throw(w, r, err)
@@ -307,7 +307,7 @@ func (s *Server) incrementTimer(w http.ResponseWriter, r *http.Request) {
 func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
-	boardId := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	boardId := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	board, _, sessions, columns, notes, _, votings, _, err := s.boards.FullBoard(r.Context(), boardId)
 	if err != nil {

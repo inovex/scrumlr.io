@@ -94,7 +94,7 @@ func (d *Database) CreateBoardSession(boardSession BoardSessionInsert) (BoardSes
 		Scan(common.ContextWithValues(context.Background(),
 			"Database", d,
 			"Operation", "INSERT",
-			identifiers.KeyBoardIdentifier{}, boardSession.Board,
+			identifiers.KeyBoardIdentifier, boardSession.Board,
 			"Result", &s,
 		), &s)
 
@@ -139,7 +139,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 		Scan(common.ContextWithValues(context.Background(),
 			"Database", d,
 			"Operation", "UPDATE",
-			identifiers.KeyBoardIdentifier{}, update.Board,
+			identifiers.KeyBoardIdentifier, update.Board,
 			"Result", &session,
 		), &session)
 

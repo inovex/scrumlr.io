@@ -188,8 +188,8 @@ func (suite *NotesTestSuite) TestCreateNote() {
 				"column": "%s",
 				"text" : "%s"
 				}`, colId.String(), testText))).
-				AddToContext(identifiers.KeyBoardIdentifier{}, boardId).
-				AddToContext(identifiers.KeyUserIdentifier{}, userId)
+				AddToContext(identifiers.KeyBoardIdentifier, boardId).
+				AddToContext(identifiers.KeyUserIdentifier, userId)
 			rr := httptest.NewRecorder()
 
 			s.createNote(rr, req.Request())
@@ -239,7 +239,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 			}, tt.err)
 
 			req := NewTestRequestBuilder("GET", "/", nil).
-				AddToContext(identifiers.KeyNoteIdentifier{}, noteID)
+				AddToContext(identifiers.KeyNoteIdentifier, noteID)
 
 			rr := httptest.NewRecorder()
 
@@ -316,7 +316,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			rctx := chi.NewRouteContext()
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)
-			req.AddToContext(identifiers.KeyUserIdentifier{}, userID)
+			req.AddToContext(identifiers.KeyUserIdentifier, userID)
 
 			rr := httptest.NewRecorder()
 			r.ServeHTTP(rr, req.Request())

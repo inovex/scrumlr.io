@@ -17,7 +17,7 @@ import (
 func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	filter := database.BoardSessionFilterTypeFromQueryString(r.URL.Query())
 	sessions, err := s.sessions.List(r.Context(), board, filter)
@@ -33,7 +33,7 @@ func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 
 // getBoardSession get a participant
 func (s *Server) getBoardSession(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 	userParam := chi.URLParam(r, "session")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
@@ -53,8 +53,8 @@ func (s *Server) getBoardSession(w http.ResponseWriter, r *http.Request) {
 
 // updateBoardSession updates a participant
 func (s *Server) updateBoardSession(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
-	caller := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+	caller := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 	userParam := chi.URLParam(r, "session")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
@@ -84,7 +84,7 @@ func (s *Server) updateBoardSession(w http.ResponseWriter, r *http.Request) {
 
 // updateBoardSessions updates all participants
 func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 
 	var body dto.BoardSessionsUpdateRequest
 	if err := render.Decode(r, &body); err != nil {

@@ -42,7 +42,7 @@ func notifyColumnsUpdated(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		board := ctx.Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
+		board := ctx.Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
 		columns, err := d.GetColumns(board)
 		if err != nil {
 			return err
@@ -63,9 +63,9 @@ func notifyColumnDeleted(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		user := ctx.Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
-		board := ctx.Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
-		column := ctx.Value(identifiers.KeyColumnIdentifier{}).(uuid.UUID)
+		user := ctx.Value(identifiers.KeyUserIdentifier).(uuid.UUID)
+		board := ctx.Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+		column := ctx.Value(identifiers.KeyColumnIdentifier).(uuid.UUID)
 		notes, err := d.GetNotes(board)
 		if err != nil {
 			return err

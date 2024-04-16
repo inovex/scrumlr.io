@@ -50,7 +50,7 @@ func (d *Database) CreateBoardSessionRequest(request BoardSessionRequestInsert) 
 		Scan(common.ContextWithValues(context.Background(),
 			"Database", d,
 			"Operation", "INSERT",
-			identifiers.KeyBoardIdentifier{}, request.Board,
+			identifiers.KeyBoardIdentifier, request.Board,
 			"Result", &r,
 		), &r)
 
@@ -82,7 +82,7 @@ func (d *Database) UpdateBoardSessionRequest(update BoardSessionRequestUpdate) (
 		Scan(common.ContextWithValues(context.Background(),
 			"Database", d,
 			"Operation", "UPDATE",
-			identifiers.KeyBoardIdentifier{}, update.Board,
+			identifiers.KeyBoardIdentifier, update.Board,
 			"Result", &r,
 		), &r)
 

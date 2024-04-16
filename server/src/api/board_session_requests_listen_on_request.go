@@ -16,8 +16,8 @@ type BoardSessionRequestSubscription struct {
 }
 
 func (s *Server) openBoardSessionRequestSocket(w http.ResponseWriter, r *http.Request) {
-	id := r.Context().Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
-	userID := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	id := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+	userID := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {

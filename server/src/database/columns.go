@@ -69,7 +69,7 @@ func (d *Database) CreateColumn(column ColumnInsert) (Column, error) {
 		Model(&column).
 		Value("index", fmt.Sprintf("LEAST(coalesce((SELECT index FROM \"maxIndexSelect\"),0), %d)", newIndex)).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier{}, column.Board), &c)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier, column.Board), &c)
 
 	return c, err
 }
@@ -110,7 +110,7 @@ func (d *Database) UpdateColumn(column ColumnUpdate) (Column, error) {
 		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
 		Where("id = ?", column.ID).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier{}, column.Board), &c)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier, column.Board), &c)
 
 	return c, err
 }
@@ -134,7 +134,7 @@ func (d *Database) DeleteColumn(board, column, user uuid.UUID) error {
 		Model((*Column)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier{}, board, identifiers.KeyColumnIdentifier{}, column, identifiers.KeyUserIdentifier{}, user, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier, board, identifiers.KeyColumnIdentifier, column, identifiers.KeyUserIdentifier, user, "Result", &columns), &columns)
 
 	return err
 }

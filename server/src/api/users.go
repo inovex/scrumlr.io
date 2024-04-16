@@ -12,7 +12,7 @@ import (
 
 // getUser get a user
 func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
-	userId := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	userId := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 
 	user, err := s.users.Get(r.Context(), userId)
 	if err != nil {
@@ -27,7 +27,7 @@ func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
-	user := r.Context().Value(identifiers.KeyUserIdentifier{}).(uuid.UUID)
+	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
 
 	var body dto.UserUpdateRequest
 	if err := render.Decode(r, &body); err != nil {

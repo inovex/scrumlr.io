@@ -35,8 +35,8 @@ func notifyReactionDeleted(ctx context.Context) error {
 	d := ctx.Value("Database").(*Database)
 
 	if len(d.observer) > 0 {
-		board := ctx.Value(identifiers.KeyBoardIdentifier{}).(uuid.UUID)
-		reaction := ctx.Value(identifiers.KeyReactionIdentifier{}).(uuid.UUID)
+		board := ctx.Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+		reaction := ctx.Value(identifiers.KeyReactionIdentifier).(uuid.UUID)
 
 		for _, observer := range d.observer {
 			if o, ok := observer.(ReactionsObserver); ok {
