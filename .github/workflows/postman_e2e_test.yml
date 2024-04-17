@@ -24,6 +24,7 @@ jobs:
       - name: Change DNS
         run: |
           echo "nameserver ns2.fra.cloud.inovex.io" | sudo tee /etc/resolv.conf > /dev/null
+          dig +short github.com
 
       - name: Install Newman
         run: npm install -g newman
