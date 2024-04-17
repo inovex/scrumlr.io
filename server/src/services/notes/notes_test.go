@@ -107,6 +107,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 
 	mock.AssertExpectations(suite.T())
 }
+
 func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	s := new(NoteService)
 	mock := new(DBMock)
