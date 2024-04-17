@@ -21,6 +21,14 @@ jobs:
         with:
           node-version: '21'
 
+      - name: Change DNS
+        run: |
+          sudo sed -i 's/#DNS=/DNS=ns2.fra.cloud.inovex.io/' /etc/systemd/resolved.conf
+          sudo systemctl daemon-reload
+          sudo systemctl restart systemd-networkd
+          sudo systemctl restart systemd-resolved
+          dig +short github.com
+
       - name: Install Newman
         run: npm install -g newman
 
