@@ -176,7 +176,7 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: scrumlr-ingressroute
+  name: scrumlr-ingressroute-PR_NUMBER
   annotations:
     external-dns.alpha.kubernetes.io/target: ingress.dev.scrumlr.fra.ics.inovex.io.
     kubernetes.io/ingress.class: traefik
