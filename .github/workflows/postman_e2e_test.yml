@@ -23,7 +23,10 @@ jobs:
 
       - name: Change DNS
         run: |
-          echo "nameserver ns2.fra.cloud.inovex.io" | sudo tee /etc/resolv.conf > /dev/null
+          sudo sed -i 's/#DNS=/DNS=ns2.fra.cloud.inovex.io/' /etc/systemd/resolved.conf
+          sudo systemctl daemon-reload
+          sudo systemctl restart systemd-networkd
+          sudo systemctl restart systemd-resolved
           dig +short github.com
 
       - name: Install Newman
