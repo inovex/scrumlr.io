@@ -2,7 +2,9 @@ import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
+// TODO Later on replace site with docs.scrumlr.io
 export default defineConfig({
+  site: "https://inovex.github.io",
   integrations: [
     starlight({
       title: 'Scrumlr Docs',

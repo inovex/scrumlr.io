@@ -70,6 +70,15 @@ jobs:
     with:
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
+
+  deploy_github_pages:
+    name: Deploy to GitHub Pages
+    # if: ${{ github.event_name == 'push' && github.ref == 'main' }}
+    # for now always deploy to github pages
+    if: true
+    runs-on: ubuntu-latest
+    uses: inovex/scrumlr.io/.github/workflows/deploy_docs.yml@feat/documentation
+    secrets: inherit
   
   run_postman_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
