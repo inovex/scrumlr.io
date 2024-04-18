@@ -5,6 +5,7 @@ import starlight from '@astrojs/starlight';
 // TODO Later on replace site with docs.scrumlr.io
 export default defineConfig({
   site: "https://inovex.github.io",
+  base: "/scrumlr.io/",
   integrations: [
     starlight({
       title: 'Scrumlr Docs',
