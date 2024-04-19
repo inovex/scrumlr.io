@@ -17,7 +17,10 @@
     "@fontsource/raleway": "^5.0.17",
     "@react-hook/resize-observer": "^1.2.6",
     "@react-spring/web": "^9.7.3",
+    "@react-three/fiber": "^8.16.2",
+    "@react-three/xr": "^5.7.1",
     "@reduxjs/toolkit": "^1.9.7",
+    "@types/three": "^0.163.0",
     "avataaars": "^2.0.0",
     "classnames": "^2.5.1",
     "file-saver": "^2.0.5",
@@ -42,6 +45,7 @@
     "react-toastify": "^10.0.5",
     "react-tooltip": "^5.26.3",
     "sockette": "^2.0.6",
+    "three": "^0.163.0",
     "underscore": "^1.13.6",
     "use-long-press": "^3.2.0",
     "use-sound": "^4.0.1"

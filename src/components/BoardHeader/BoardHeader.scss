@@ -32,6 +32,11 @@
   }
 }
 
+.board-header_xr-button {
+  position: absolute;
+  left: 25%;
+}
+
 [theme="dark"] {
   .board-header__link {
     &:focus-visible {

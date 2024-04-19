@@ -9,6 +9,7 @@ import "./Board.scss";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
+import SpatialCanvas from "components/SpatialCanvas/SpatialCanvas";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -174,6 +175,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <InfoBar />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
+      <SpatialCanvas />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div
           className={`board__spacer-left ${getColorClassName(columnColors[0])} ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""}`}

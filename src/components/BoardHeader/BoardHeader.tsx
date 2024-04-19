@@ -14,6 +14,7 @@ import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
+import {XRButton} from "@react-three/xr";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -50,6 +51,8 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         <button className="board-header__link" onClick={() => setShowConfirmationDialog(true)} aria-label={t("BoardHeader.returnToHomepage")}>
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </button>
+
+        <XRButton mode="AR" className="board-header_xr-button" onError={(error) => console.error(error)} />
 
         <button
           className="board-header_name-and-settings"
