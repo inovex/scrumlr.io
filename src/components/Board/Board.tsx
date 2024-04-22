@@ -9,7 +9,7 @@ import "./Board.scss";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
-import SpatialCanvas from "components/SpatialCanvas/SpatialCanvas";
+import SpatialCanvas from "components/XR/SpatialCanvas";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
