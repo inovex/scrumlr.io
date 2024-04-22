@@ -1,7 +1,9 @@
-import {RootContainer, Container} from "@coconut-xr/koestlich";
+import {RootContainer, Container, FontFamilyProvider} from "@coconut-xr/koestlich";
 import {makeBorderMaterial} from "@coconut-xr/xmaterials";
 import {RayGrab} from "@react-three/xr";
 import {MeshPhongMaterial} from "three";
+import {Suspense} from "react";
+import XRBoardHeader from "../XRBoardHeader/XRBoardHeader";
 
 // TODO: make semi transparent glass material
 const GlassMaterial = makeBorderMaterial(MeshPhongMaterial, {
@@ -12,21 +14,36 @@ const GlassMaterial = makeBorderMaterial(MeshPhongMaterial, {
 
 const XRContainer = () => (
   <RayGrab>
-    <RootContainer
-      backgroundColor="white"
-      material={GlassMaterial}
-      sizeX={2}
-      sizeY={1}
-      borderRadius={32}
-      borderBend={0.3}
-      border={8}
-      borderColor="white"
-      flexDirection="row"
-      position={[0, -0.2, -1.2]}
-    >
-      <Container flexGrow={1} margin={48} backgroundColor="green" />
-      <Container flexGrow={1} margin={48} backgroundColor="blue" />
-    </RootContainer>
+    <Suspense>
+      <FontFamilyProvider
+        fontFamilies={{
+          medium: ["https://coconut-xr.github.io/msdf-fonts/", "inter.json"],
+          bold: ["https://coconut-xr.github.io/msdf-fonts/", "inter-bold.json"],
+        }}
+        defaultFontFamily="medium"
+      >
+        <RootContainer
+          backgroundColor="#888"
+          backgroundOpacity={0.8}
+          material={GlassMaterial}
+          sizeX={2}
+          sizeY={1}
+          borderRadius={32}
+          borderBend={0.3}
+          border={4}
+          borderColor="#888"
+          borderOpacity={0.3}
+          flexDirection="column"
+          position={[0, -0.2, -1.2]}
+        >
+          <XRBoardHeader />
+          <Suspense>
+            <Container flexGrow={1} margin={48} backgroundColor="green" />
+            <Container flexGrow={1} margin={48} backgroundColor="blue" />
+          </Suspense>
+        </RootContainer>
+      </FontFamilyProvider>
+    </Suspense>
   </RayGrab>
 );
 
