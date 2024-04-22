@@ -3,6 +3,7 @@ import {Controllers, Hands, XR} from "@react-three/xr";
 import "./SpatialCanvas.scss";
 import {useAppSelector} from "store";
 import XRContainer from "./XRUI/XRContainer/XRContainer";
+import XRLight from "./XRUI/XRLight/XRLight";
 
 const SpatialCanvas = () => {
   const {xrActive} = useAppSelector((state) => ({
@@ -16,6 +17,7 @@ const SpatialCanvas = () => {
         <XR referenceSpace="local" onSessionStart={(event) => console.log(event)} onSessionEnd={(event) => console.log(event)}>
           <Controllers />
           <Hands />
+          <XRLight />
           <XRContainer />
         </XR>
       </Canvas>
