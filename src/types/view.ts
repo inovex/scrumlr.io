@@ -22,6 +22,8 @@ export interface View {
   readonly hotkeyNotificationsEnabled: boolean;
 
   readonly showBoardReactions: boolean;
+
+  readonly xrActive: boolean;
 }
 
 export type ViewState = View;

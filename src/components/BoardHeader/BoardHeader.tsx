@@ -27,6 +27,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
     (rootState) => ({
       name: rootState.board.data?.name,
       accessPolicy: rootState.board.data!.accessPolicy,
+      xrActive: rootState.view.xrActive,
     }),
     shallowEqual
   );
@@ -52,7 +53,15 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </button>
 
-        <XRButton mode="AR" className="board-header_xr-button" onError={(error) => console.error(error)} />
+        <XRButton
+          mode="AR"
+          className="board-header_xr-button"
+          onClick={() => store.dispatch(Actions.setXRActive(!state.xrActive))}
+          onError={(error) => {
+            console.error(error);
+            store.dispatch(Actions.setXRActive(false));
+          }}
+        />
 
         <button
           className="board-header_name-and-settings"

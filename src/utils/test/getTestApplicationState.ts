@@ -173,6 +173,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeysAreActive: true,
     noteFocused: false,
     showBoardReactions: true,
+    xrActive: false,
   },
   boardReactions: [],
   skinTone: {
