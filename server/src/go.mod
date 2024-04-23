@@ -12,7 +12,7 @@ require (
 	github.com/go-chi/jwtauth/v5 v5.1.1
 	github.com/go-chi/render v1.0.3
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/golang-migrate/migrate/v4 v4.17.0
+	github.com/golang-migrate/migrate/v4 v4.17.1
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.1
 	github.com/lestrrat-go/jwx/v2 v2.0.21
@@ -27,7 +27,7 @@ require (
 	github.com/uptrace/bun/extra/bundebug v1.1.17
 	github.com/urfave/cli/v2 v2.27.1
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.21.0
+	golang.org/x/crypto v0.22.0
 )
 
 require (
@@ -96,9 +96,9 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/mod v0.11.0 // indirect
-	golang.org/x/net v0.21.0 // indirect
+	golang.org/x/net v0.23.0 // indirect
 	golang.org/x/oauth2 v0.17.0 // indirect
-	golang.org/x/sys v0.18.0 // indirect
+	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/tools v0.10.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect
 	google.golang.org/protobuf v1.33.0 // indirect

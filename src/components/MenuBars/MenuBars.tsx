@@ -183,78 +183,85 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       {/* desktop view */}
       <aside className="menu-bars" ref={menuBarsDesktopRef}>
         {/* role=any: toggle ready, toggle raise hand, options */}
-        <section className="menu user-menu">
-          <ul className="menu__items">
-            <li>
-              <TooltipButton
-                direction="right"
-                onClick={toggleReadyState}
-                label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                icon={MarkAsDone}
-                active={isReady}
-                hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
-              />
-            </li>
-            <li>
-              <TooltipButton
-                direction="right"
-                label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
-                icon={RaiseHand}
-                onClick={toggleRaiseHand}
-                active={raisedHand}
-                hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
-              />
-            </li>
-            <li>
-              <TooltipButton
-                direction="right"
-                label={t("MenuBars.openBoardReactionMenu")}
-                icon={AddStickerReaction}
-                onClick={toggleBoardReactionsMenu}
-                active={showBoardReactionsMenu}
-                hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
-              />
-            </li>
-            <li>
-              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={GeneralSettings} hotkeyKey={TOGGLE_SETTINGS.toUpperCase()} />
-            </li>
-          </ul>
-          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn} aria-hidden>
-            <ArrowLeft className="menu-bars__navigation-icon" />
-          </button>
-        </section>
-
-        {/* role=moderator: timer, votes, presenter mode */}
-        <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin})}>
-          {isAdmin && (
+        <div className="menu__container">
+          <section className="menu user-menu">
             <ul className="menu__items">
               <li>
-                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={Timer} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
-              </li>
-              <li>
-                <TooltipButton active={state.activeVoting} direction="left" label="Voting" onClick={toggleVotingMenu} icon={Voting} hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()} />
+                <TooltipButton
+                  direction="right"
+                  onClick={toggleReadyState}
+                  label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+                  icon={MarkAsDone}
+                  active={isReady}
+                  hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
+                />
               </li>
               <li>
                 <TooltipButton
-                  active={state.moderation}
-                  direction="left"
-                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
-                  icon={PresenterMode}
-                  onClick={toggleModeration}
-                  hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
+                  direction="right"
+                  label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
+                  icon={RaiseHand}
+                  onClick={toggleRaiseHand}
+                  active={raisedHand}
+                  hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
                 />
               </li>
+              <li>
+                <TooltipButton
+                  direction="right"
+                  label={t("MenuBars.openBoardReactionMenu")}
+                  icon={AddStickerReaction}
+                  onClick={toggleBoardReactionsMenu}
+                  active={showBoardReactionsMenu}
+                  hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
+                />
+              </li>
+              <li>
+                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={GeneralSettings} hotkeyKey={TOGGLE_SETTINGS.toUpperCase()} />
+              </li>
             </ul>
-          )}
+          </section>
 
-          <button
-            className={classNames("menu-bars__navigation", {"menu-bars__navigation--empty": !isAdmin, "menu-bars__navigation--visible": showNextColumn})}
-            onClick={onNextColumn}
-            aria-hidden
-          >
+          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn} aria-hidden>
+            <ArrowLeft className="menu-bars__navigation-icon" />
+          </button>
+        </div>
+
+        {/* role=moderator: timer, votes, presenter mode */}
+        <div className="menu__container">
+          <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin})}>
+            {isAdmin && (
+              <ul className="menu__items">
+                <li>
+                  <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={Timer} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
+                </li>
+                <li>
+                  <TooltipButton
+                    active={state.activeVoting}
+                    direction="left"
+                    label="Voting"
+                    onClick={toggleVotingMenu}
+                    icon={Voting}
+                    hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
+                  />
+                </li>
+                <li>
+                  <TooltipButton
+                    active={state.moderation}
+                    direction="left"
+                    label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
+                    icon={PresenterMode}
+                    onClick={toggleModeration}
+                    hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
+                  />
+                </li>
+              </ul>
+            )}
+          </section>
+          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showNextColumn})} onClick={onNextColumn} aria-hidden>
             <ArrowRight className="menu-bars__navigation-icon" />
           </button>
-        </section>
+        </div>
       </aside>
 
       {/* mobile view */}

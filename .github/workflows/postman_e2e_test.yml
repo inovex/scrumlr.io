@@ -21,9 +21,40 @@ jobs:
         with:
           node-version: '21'
 
+      - name: Change DNS
+        run: |
+          sudo sed -i 's/#DNS=/DNS=ns2.fra.cloud.inovex.io/' /etc/systemd/resolved.conf
+          sudo systemctl daemon-reload
+          sudo systemctl restart systemd-networkd
+          sudo systemctl restart systemd-resolved
+          dig +short github.com
+
       - name: Install Newman
         run: npm install -g newman
 
+      - name: Wait for cluster to become healthy
+        id: wait-for-cluster
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+        run: |
+          retries=0
+          until [ $retries -ge 3 ]
+          do
+            response=$(curl -s -k -o /dev/null -w "%{http_code}" "$BASE_URL/api/health")
+            if [ "$response" = "204" ]; then
+              echo "Cluster is healthy! Continuing with postman tests!"
+              break
+            else
+              echo "Cluster is not responding. Retrying in $((5 * retries)) seconds..."
+              sleep $((5 * retries))
+            fi
+            retries=$((retries + 1))
+          done
+          if [ "$response" != "204" ]; then
+            echo "Cluster is still not responding after retries. Exiting..."
+            exit 1
+          fi
+          
       - name: Run Newman script
         working-directory: ./server
         run: |

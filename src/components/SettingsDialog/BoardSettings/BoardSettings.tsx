@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
-import {LockClosed, Trash, Visible, Hidden} from "components/Icon";
+import {LockClosed, Trash} from "components/Icon";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
@@ -29,7 +29,6 @@ export const BoardSettings = () => {
 
   const [boardName, setBoardName] = useState<string>(state.board.name ?? "");
   const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
   const [isProtectedOnInitialSettingsOpen, setIsProtectedOnInitialSettingsOpen] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
   const [isProtected, setIsProtected] = useState(state.board.accessPolicy === "BY_PASSPHRASE");
@@ -89,16 +88,6 @@ export const BoardSettings = () => {
     return <span className="board-settings__password-input-hint board-settings__password-management-text">{t("BoardSettings.SecurePasswordHint")}</span>;
   };
 
-  const getPasswordVisibilityButton = () =>
-    showPassword ? (
-      <Visible className="board-settings__show-password-button--enabled" onClick={() => setShowPassword(false)} />
-    ) : (
-      <Hidden
-        className={password ? "board-settings__show-password-button--enabled" : "board-settings__show-password-button--disabled"}
-        onClick={() => password && setShowPassword(true)}
-      />
-    );
-
   const getAccessPolicyTitle = () => {
     if (isByInvite)
       return (
@@ -151,11 +140,10 @@ export const BoardSettings = () => {
                       setPassword(e.target.value);
                     }}
                     submit={() => handleSetPassword(password)}
-                    type={showPassword ? "text" : "password"}
+                    type="password"
                     placeholder={!password && !isProtected ? undefined : PLACEHOLDER_PASSWORD}
-                  >
-                    {password && getPasswordVisibilityButton()}
-                  </SettingsInput>
+                    passwordToggle
+                  />
                 </>
               )}
             </div>
