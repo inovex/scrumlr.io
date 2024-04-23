@@ -36,9 +36,11 @@ const XRColumn = (props: ColumnProps) => {
       <Text color={FONT_COLOR} marginBottom={16} borderBottom={4} borderColor={getColorFromName(props.color)}>
         {props.name}
       </Text>
-      {notes.map((note) => (
-        <XRNote noteId={note} viewer={viewer} />
-      ))}
+      <Container width="100%" height="auto" flexDirection="column" gapRow={8}>
+        {notes.map((note) => (
+          <XRNote key={note} noteId={note} viewer={viewer} />
+        ))}
+      </Container>
     </Container>
   );
 };

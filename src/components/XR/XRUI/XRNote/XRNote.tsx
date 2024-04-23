@@ -32,7 +32,16 @@ const XRNote = (props: NoteProps) => {
 
   return (
     <Suspense>
-      <Container flexDirection="column" backgroundColor={BG_COLOR_LIGHT} width="100%" margin={0} padding={16} backgroundOpacity={0.8} borderRadius={8}>
+      <Container
+        flexDirection="column"
+        index={note.position.rank * -1}
+        backgroundColor={BG_COLOR_LIGHT}
+        width="100%"
+        margin={0}
+        padding={16}
+        backgroundOpacity={0.8}
+        borderRadius={8}
+      >
         <Text fontSize={12} color={FONT_COLOR}>
           {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
         </Text>
