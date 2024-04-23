@@ -16,7 +16,7 @@ import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import "./Note.scss";
 
-interface NoteProps {
+export interface NoteProps {
   noteId: string;
   viewer: Participant;
   setItems?: (items: string[]) => void;

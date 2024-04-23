@@ -3,6 +3,7 @@ import {makeBorderMaterial} from "@coconut-xr/xmaterials";
 import {RayGrab} from "@react-three/xr";
 import {MeshPhongMaterial} from "three";
 import {Suspense} from "react";
+import {BG_COLOR_DEFAULT} from "components/XR/xr-constants";
 import XRBoardHeader from "../XRBoardHeader/XRBoardHeader";
 import XRBoard from "../XRBoard/XRBoard";
 
@@ -24,7 +25,7 @@ const XRContainer = () => (
         defaultFontFamily="medium"
       >
         <RootContainer
-          backgroundColor="#888"
+          backgroundColor={BG_COLOR_DEFAULT}
           backgroundOpacity={0.8}
           material={GlassMaterial}
           sizeX={2}

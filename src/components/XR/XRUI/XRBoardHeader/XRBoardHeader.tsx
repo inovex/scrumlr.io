@@ -18,7 +18,17 @@ const XRBoardHeader = () => {
 
   return (
     <Suspense>
-      <Container flexDirection="row" index={0} justifyContent="space-between" alignItems="center">
+      <Container
+        positionType="absolute"
+        width="100%"
+        positionTop={0}
+        positionLeft={0}
+        flexDirection="row"
+        index={0}
+        justifyContent="space-between"
+        alignItems="center"
+        height={128}
+      >
         <Image url={ScrumlrLogo} index={0} margin={32} marginLeft={32} width={128} />
         <Text fontSize={24} index={1} margin={32} marginLeft={16} color={FONT_COLOR}>
           {boardName || DEFAULT_BOARD_NAME}

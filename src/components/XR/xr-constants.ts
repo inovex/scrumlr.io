@@ -2,6 +2,9 @@ import {Color} from "constants/colors";
 
 export const FONT_COLOR = "#f9fafb";
 
+export const BG_COLOR_DEFAULT = "#888888";
+export const BG_COLOR_LIGHT = "#666666";
+
 export const getColorFromName = (name: Color): string => {
   switch (name) {
     case "grooming-green": {
