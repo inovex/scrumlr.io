@@ -1,9 +1,10 @@
-import {RootContainer, Container, FontFamilyProvider} from "@coconut-xr/koestlich";
+import {RootContainer, FontFamilyProvider} from "@coconut-xr/koestlich";
 import {makeBorderMaterial} from "@coconut-xr/xmaterials";
 import {RayGrab} from "@react-three/xr";
 import {MeshPhongMaterial} from "three";
 import {Suspense} from "react";
 import XRBoardHeader from "../XRBoardHeader/XRBoardHeader";
+import XRBoard from "../XRBoard/XRBoard";
 
 // TODO: make semi transparent glass material
 const GlassMaterial = makeBorderMaterial(MeshPhongMaterial, {
@@ -37,10 +38,7 @@ const XRContainer = () => (
           position={[0, -0.2, -1.2]}
         >
           <XRBoardHeader />
-          <Suspense>
-            <Container index={1} flexGrow={1} margin={48} backgroundColor="green" />
-            <Container index={2} flexGrow={1} margin={48} backgroundColor="blue" />
-          </Suspense>
+          <XRBoard />
         </RootContainer>
       </FontFamilyProvider>
     </Suspense>
