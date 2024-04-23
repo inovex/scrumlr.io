@@ -38,8 +38,8 @@ const XRContainer = () => (
         >
           <XRBoardHeader />
           <Suspense>
-            <Container flexGrow={1} margin={48} backgroundColor="green" />
-            <Container flexGrow={1} margin={48} backgroundColor="blue" />
+            <Container index={1} flexGrow={1} margin={48} backgroundColor="green" />
+            <Container index={2} flexGrow={1} margin={48} backgroundColor="blue" />
           </Suspense>
         </RootContainer>
       </FontFamilyProvider>
