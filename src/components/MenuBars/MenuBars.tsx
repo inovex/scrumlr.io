@@ -52,14 +52,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const [showBoardReactionsMenu, setShowBoardReactionsMenu] = useState(false);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-
-      // note that the menus aren't necessarily closed, but only if the conditions are met
-      closeMenuBar(target);
-      closeBoardReactionMenu(target);
-    };
-
     const closeMenuBar = (target: HTMLElement) => {
       // don't close if we're on the settings, voting or timer page
       if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) {
@@ -82,6 +74,14 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       if (!clickedIgnoredComponent) {
         setShowBoardReactionsMenu(false);
       }
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      // note that the menus aren't necessarily closed, but only if the conditions are met
+      closeMenuBar(target);
+      closeBoardReactionMenu(target);
     };
 
     document.addEventListener("click", handleClickOutside, true);
