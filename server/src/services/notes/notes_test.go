@@ -2,6 +2,7 @@ package notes
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"net/http"
 	"testing"
@@ -206,6 +207,21 @@ func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
 		Column: colID,
 		Text:   txt,
 	})
+
+	assert.Error(suite.T(), err)
+	assert.Equal(suite.T(), expectedAPIError, err)
+}
+
+func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
+	s := new(NoteService)
+	mock := new(DBMock)
+	s.database = mock
+
+	boardID, _ := uuid.NewRandom()
+	expectedAPIError := &common.APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
+	mock.On("GetNote", boardID).Return(database.Note{}, sql.ErrNoRows)
+
+	_, err := s.Get(context.Background(), boardID)
 
 	assert.Error(suite.T(), err)
 	assert.Equal(suite.T(), expectedAPIError, err)
