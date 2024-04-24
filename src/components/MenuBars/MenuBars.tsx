@@ -53,25 +53,37 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Node;
-      // don't close if we're on the board reactions menu
-      if (boardReactionRef.current?.contains(target)) return;
+      const target = e.target as HTMLElement;
+
+      // note that the menus aren't necessarily closed, but only if the conditions are met
+      closeMenuBar(target);
+      closeBoardReactionMenu(target);
+    };
+
+    const closeMenuBar = (target: HTMLElement) => {
       // don't close if we're on the settings, voting or timer page
-      if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) return;
-      // close if we click outside the menu
+      if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) {
+        return;
+      }
+
+      // close menu fab if we click outside the menu (only relevant for mobile since that one isn't always visible)
       if (!menuBarsMobileRef.current?.contains(target)) {
         setFabIsExpanded(false);
       }
-      // only hide if menu wasn't clicked to avoid double onClick toggle
-      if (!(menuBarsDesktopRef.current?.contains(target) || menuBarsMobileRef.current?.contains(target))) {
-        if (target instanceof HTMLElement) {
-          console.log(target.classList);
-          const classList = [...target.classList];
-          if (classList.some((c) => c.startsWith("note"))) return;
-        }
+    };
+
+    const closeBoardReactionMenu = (target: HTMLElement) => {
+      // if clicking any element where itself or any parent contains one of the classes,
+      // the board reaction menu is not closed.
+      // not using refs to keep it more flexible
+      const ignoreComponentClasses = ["menu-bars", "menu-bars-mobile", "board-reactions__container", "note"];
+      const clickedIgnoredComponent = ignoreComponentClasses.some((className) => target.closest(`.${className}`));
+
+      if (!clickedIgnoredComponent) {
         setShowBoardReactionsMenu(false);
       }
     };
+
     document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [menuBarsMobileRef, fabIsExpanded, showBoardReactionsMenu]);
