@@ -2,11 +2,15 @@ package notes
 
 import (
 	"context"
+	"errors"
+	"net/http"
 	"testing"
 
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/database"
@@ -171,4 +175,38 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	s.Delete(ctx, body, noteID)
 
 	mock.AssertExpectations(suite.T())
+}
+
+func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
+	s := new(NoteService)
+	mock := new(DBMock)
+	s.database = mock
+
+	authorID, _ := uuid.NewRandom()
+	boardID, _ := uuid.NewRandom()
+	colID, _ := uuid.NewRandom()
+	txt := "Text of my new note!"
+
+	aDBError := errors.New("no sql connection")
+	expectedAPIError := &common.APIError{
+		StatusCode: http.StatusInternalServerError,
+		StatusText: "Internal server error.",
+	}
+
+	mock.On("CreateNote", database.NoteInsert{
+		Author: authorID,
+		Board:  boardID,
+		Column: colID,
+		Text:   txt,
+	}).Return(database.Note{}, aDBError)
+
+	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
+		User:   authorID,
+		Board:  boardID,
+		Column: colID,
+		Text:   txt,
+	})
+
+	assert.Error(suite.T(), err)
+	assert.Equal(suite.T(), expectedAPIError, err)
 }
