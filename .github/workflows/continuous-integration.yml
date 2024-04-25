@@ -84,7 +84,7 @@ jobs:
     needs: deploy_to_dev_cluster
     runs-on: ubuntu-latest
     steps:
-      - name: Chance DNS
+      - name: Change DNS Server
         run: |
           sudo sed -i 's/#DNS=/DNS=ns2.fra.cloud.inovex.io/' /etc/systemd/resolved.conf
           sudo systemctl daemon-reload
