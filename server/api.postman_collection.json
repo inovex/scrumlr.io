@@ -1278,12 +1278,10 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{{board_id}}/export",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/export",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
                     "{{board_id}}",
@@ -1323,12 +1321,10 @@
                   }
                 ],
                 "url": {
-                  "raw": "http://localhost:8080/boards/{{board_id}}/export",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}/export",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
                     "{{board_id}}",
