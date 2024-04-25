@@ -13,8 +13,8 @@ import (
 
 // createNote creates a new note
 func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
-	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.NoteCreateRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -41,7 +41,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 // getNote get a note
 func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
-	id := r.Context().Value(identifiers.KeyNoteIdentifier).(uuid.UUID)
+	id := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 
 	note, err := s.notes.Get(r.Context(), id)
 	if err != nil {
@@ -55,7 +55,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 
 // getNotes get all notes
 func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	notes, err := s.notes.List(r.Context(), board)
 	if err != nil {
@@ -69,8 +69,8 @@ func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 
 // updateNote updates a note
 func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
-	noteId := r.Context().Value(identifiers.KeyNoteIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	noteId := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 	var body dto.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
@@ -92,7 +92,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
-	note := r.Context().Value(identifiers.KeyNoteIdentifier).(uuid.UUID)
+	note := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 	var body dto.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))

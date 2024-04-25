@@ -20,7 +20,7 @@ func AuthContext(next http.Handler) http.Handler {
 			http.Error(w, "invalid user id", http.StatusBadRequest)
 			return
 		}
-		newContext := context.WithValue(r.Context(), identifiers.KeyUserIdentifier, user)
+		newContext := context.WithValue(r.Context(), identifiers.UserIdentifier, user)
 		next.ServeHTTP(w, r.WithContext(newContext))
 	})
 }

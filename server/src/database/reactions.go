@@ -84,7 +84,7 @@ func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (React
 	_, err = d.db.NewInsert().
 		Model(&insert).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier, board), &reaction)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board), &reaction)
 
 	return reaction, err
 }
@@ -101,7 +101,7 @@ func (d *Database) RemoveReaction(board, user, id uuid.UUID) error {
 	_, err = d.db.NewDelete().
 		Model((*Reaction)(nil)).
 		Where("id = ?", id).
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier, board, identifiers.KeyReactionIdentifier, id))
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.ReactionIdentifier, id))
 
 	return err
 }
@@ -123,7 +123,7 @@ func (d *Database) UpdateReaction(board, user, id uuid.UUID, update ReactionUpda
 		Set("reaction_type = ?", update.ReactionType).
 		Where("id = ?", id).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.KeyBoardIdentifier, board, identifiers.KeyReactionIdentifier, reaction))
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.ReactionIdentifier, reaction))
 
 	return reaction, err
 }

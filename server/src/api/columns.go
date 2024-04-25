@@ -15,8 +15,8 @@ import (
 func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
-	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
-	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.ColumnRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -43,9 +43,9 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 // deleteColumn deletes a column
 func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
-	column := r.Context().Value(identifiers.KeyColumnIdentifier).(uuid.UUID)
-	user := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	column := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	if err := s.boards.DeleteColumn(r.Context(), board, column, user); err != nil {
 		http.Error(w, "unable to delete column", http.StatusInternalServerError)
@@ -58,8 +58,8 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 
 // updateColumn updates a column
 func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
-	columnId := r.Context().Value(identifiers.KeyColumnIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	columnId := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
 
 	var body dto.ColumnUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -82,8 +82,8 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 
 // getColumn get a column
 func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
-	id := r.Context().Value(identifiers.KeyColumnIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	id := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
 
 	column, err := s.boards.GetColumn(r.Context(), board, id)
 	if err != nil {
@@ -99,7 +99,7 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
-	board := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	columns, err := s.boards.ListColumns(r.Context(), board)
 	if err != nil {

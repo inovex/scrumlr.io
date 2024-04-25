@@ -64,7 +64,7 @@ func (*Board) AfterDelete(ctx context.Context, _ *bun.DeleteQuery) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		board := ctx.Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
+		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 		for _, observer := range d.observer {
 			if o, ok := observer.(BoardObserver); ok {
 				o.DeletedBoard(board)

@@ -98,7 +98,7 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 
 	personalVotes := []*dto.Vote{}
 	for _, vote := range votes {
-		if vote.User == ctx.Value(identifiers.KeyUserIdentifier).(uuid.UUID) {
+		if vote.User == ctx.Value(identifiers.UserIdentifier).(uuid.UUID) {
 			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
 		}
 	}

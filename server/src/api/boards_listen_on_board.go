@@ -39,8 +39,8 @@ type EventData struct {
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
-	id := r.Context().Value(identifiers.KeyBoardIdentifier).(uuid.UUID)
-	userID := r.Context().Value(identifiers.KeyUserIdentifier).(uuid.UUID)
+	id := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {

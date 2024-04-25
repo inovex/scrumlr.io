@@ -1,28 +1,28 @@
 package identifiers
 
 //
-//type KeyBoardIdentifier struct{}
-//type KeyUserIdentifier struct{}
-//type KeyNoteIdentifier struct{}
-//type KeyColumnIdentifier struct{}
-//type KeyReactionIdentifier struct{}
-//type KeyVotingIdentifier struct{}
-//type KeyBoardEditableIdentifier struct{}
+//type BoardIdentifier struct{}
+//type UserIdentifier struct{}
+//type NoteIdentifier struct{}
+//type ColumnIdentifier struct{}
+//type ReactionIdentifier struct{}
+//type VotingIdentifier struct{}
+//type BoardEditableIdentifier struct{}
 
-type keyBoardIdentifier string
-type keyUserIdentifier string
-type keyNoteIdentifier string
-type keyColumnIdentifier string
-type keyReactionIdentifier string
-type keyVotingIdentifier string
-type keyBoardEditableIdentifier string
+type boardIdentifier string
+type userIdentifier string
+type noteIdentifier string
+type columnIdentifier string
+type reactionIdentifier string
+type votingIdentifier string
+type boardEditableIdentifier string
 
 const (
-	KeyBoardIdentifier         keyBoardIdentifier         = "Board"
-	KeyUserIdentifier          keyUserIdentifier          = "User"
-	KeyNoteIdentifier          keyNoteIdentifier          = "Note"
-	KeyColumnIdentifier        keyColumnIdentifier        = "Column"
-	KeyReactionIdentifier      keyReactionIdentifier      = "Reaction"
-	KeyVotingIdentifier        keyVotingIdentifier        = "Voting"
-	KeyBoardEditableIdentifier keyBoardEditableIdentifier = "BoardEditable"
+	BoardIdentifier         boardIdentifier         = "Board"
+	UserIdentifier          userIdentifier          = "User"
+	NoteIdentifier          noteIdentifier          = "Note"
+	ColumnIdentifier        columnIdentifier        = "Column"
+	ReactionIdentifier      reactionIdentifier      = "Reaction"
+	VotingIdentifier        votingIdentifier        = "Voting"
+	BoardEditableIdentifier boardEditableIdentifier = "BoardEditable"
 )

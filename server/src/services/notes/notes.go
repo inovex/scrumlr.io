@@ -82,7 +82,7 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 			Stack:  body.Position.Stack,
 		}
 	}
-	note, err := s.database.UpdateNote(ctx.Value(identifiers.KeyUserIdentifier).(uuid.UUID), database.NoteUpdate{
+	note, err := s.database.UpdateNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), database.NoteUpdate{
 		ID:       body.ID,
 		Board:    body.Board,
 		Text:     body.Text,
@@ -97,7 +97,7 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 }
 
 func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
-	return s.database.DeleteNote(ctx.Value(identifiers.KeyUserIdentifier).(uuid.UUID), ctx.Value(identifiers.KeyBoardIdentifier).(uuid.UUID), id, body.DeleteStack)
+	return s.database.DeleteNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), ctx.Value(identifiers.BoardIdentifier).(uuid.UUID), id, body.DeleteStack)
 }
 
 func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
