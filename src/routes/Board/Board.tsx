@@ -42,6 +42,7 @@ export const Board = () => {
       board: {
         id: applicationState.board.data?.id,
         status: applicationState.board.status,
+        locked: !applicationState.board.data?.allowEditing,
       },
       columns: applicationState.columns,
       requests: applicationState.requests,
@@ -73,7 +74,7 @@ export const Board = () => {
           />
         )}
         <Outlet />
-        <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating}>
+        <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating} locked={state.board.locked}>
           {state.columns
             .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
             .map((column) => (

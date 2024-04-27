@@ -9,11 +9,13 @@ import "./Board.scss";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
+import {Toast} from "utils/Toast";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
   currentUserIsModerator: boolean;
   moderating: boolean;
+  locked: boolean;
 }
 
 export interface BoardState {
@@ -26,7 +28,7 @@ export interface ColumnState {
   lastVisibleColumnIndex: number;
 }
 
-export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
+export const BoardComponent = ({children, currentUserIsModerator, moderating, locked}: BoardProps) => {
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
@@ -134,6 +136,12 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnState]);
+
+  useEffect(() => {
+    if (locked) {
+      Toast.info({title: "board is locked"});
+    }
+  }, [locked]);
 
   if (!children || columnsCount === 0) {
     // Empty board
