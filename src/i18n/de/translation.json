@@ -287,6 +287,7 @@
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
     "bannedParticipant": "Teilnehmer \"{{user}}\" wurde entfernt",
     "unbannedParticipant": "Teilnehmer \"{{user}}\" wird wieder zur Session zugelassen",
+    "lockedBoard": "Das Board ist derzeit gesperrt; Änderungen sind nicht möglich.",
     "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",

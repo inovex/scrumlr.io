@@ -10,6 +10,7 @@ import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {Toast} from "utils/Toast";
+import {useTranslation} from "react-i18next";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -29,6 +30,7 @@ export interface ColumnState {
 }
 
 export const BoardComponent = ({children, currentUserIsModerator, moderating, locked}: BoardProps) => {
+  const {t} = useTranslation();
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
@@ -139,7 +141,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
 
   useEffect(() => {
     if (locked) {
-      Toast.info({title: "board is locked"});
+      Toast.info({title: t("Toast.lockedBoard")});
     }
   }, [locked]);
 
