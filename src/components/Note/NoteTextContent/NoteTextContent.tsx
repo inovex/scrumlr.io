@@ -6,23 +6,20 @@ type NoteTextContentProps = {
   text: string;
 };
 
-export const NoteTextContent = ({text}: NoteTextContentProps) => {
-  const linkProps = {
-    onClick: (event: React.MouseEvent<HTMLAnchorElement>) => {
-      console.log("click", event.type);
-    },
-  };
-
-  return (
-    <Linkify
-      options={{
-        target: "_blank",
-        className: "note-text-content--url",
-        defaultProtocol: "https",
-        attributes: linkProps,
-      }}
-    >
-      {text}
-    </Linkify>
-  );
-};
+export const NoteTextContent = ({text}: NoteTextContentProps) => (
+  <Linkify
+    options={{
+      target: "_blank",
+      className: "note-text-content--url",
+      defaultProtocol: "https",
+      attributes: {
+        onClick: (event: React.MouseEvent<HTMLAnchorElement>) => {
+          event.stopPropagation();
+        },
+      },
+      rel: "noopener noreferrer",
+    }}
+  >
+    {text}
+  </Linkify>
+);
