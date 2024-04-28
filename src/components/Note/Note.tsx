@@ -121,7 +121,7 @@ export const Note = (props: NoteProps) => {
           </div>
         ) : (
           <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
-            <NoteTextContent text={note.text} />
+            <NoteTextContent text={note.text} truncate />
           </main>
         )}
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
