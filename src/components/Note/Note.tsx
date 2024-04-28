@@ -15,6 +15,7 @@ import {Sortable} from "components/DragAndDrop/Sortable";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import "./Note.scss";
+import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
 
 interface NoteProps {
   noteId: string;
@@ -119,7 +120,9 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>{note.text}</main>
+          <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
+            <NoteTextContent text={note.text} />
+          </main>
         )}
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
           <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
