@@ -927,14 +927,14 @@
                   "    pm.expect(id).to.exist;",
                   "})",
                   "",
-                  "pm.test(\"Check name is included\", function () {",
-                  "    var boardName = pm.response.json().name;",
-                  "    pm.expect(boardName).to.exist;",
+                  "pm.test(\"Check description is included\", function () {",
+                  "    var boardDescription = pm.response.json().description;",
+                  "    pm.expect(boardDescription).to.exist;",
                   "})",
                   "",
-                  "pm.test(\"Check updated Name\", function () {",
-                  "    var boardName = pm.response.json().name;",
-                  "    pm.expect(boardName).to.equal(\"Update to new name\")",
+                  "pm.test(\"Check updated description\", function () {",
+                  "    var boardDescription = pm.response.json().description;",
+                  "    pm.expect(boardDescription).to.equal(\"Updated to new description\")",
                   "})",
                   "",
                   ""
@@ -966,7 +966,7 @@
                 "{{board_id}}"
               ]
             },
-            "description": "All attributes of the board may be updated partially. Checkout the board body response scheme to see a list of all available attributes that you can also override.\n\n  \nHere's an example how you can update the board name."
+            "description": "All attributes of the board may be updated partially. Checkout the board body response scheme to see a list of all available attributes that you can also override.\n\nHere's an example how you can update the board name."
           },
           "response": [
             {
@@ -1223,7 +1223,7 @@
                   "",
                   "pm.test(\"Check board description included\", function () {",
                   "    var name = pm.response.json().board.description;",
-                  "    pm.expect(name).to.equal(\"Update to new description\");",
+                  "    pm.expect(name).to.equal(\"Updated to new description\");",
                   "})",
                   "",
                   "pm.test('Check colums', function () {",
