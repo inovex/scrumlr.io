@@ -949,7 +949,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"description\": \"Update to new description\"\r\n}",
+              "raw": "{\r\n    \"description\": \"Updated to new description\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -976,7 +976,7 @@
                 "header": [],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\r\n    \"name\": \"Update to new name\"\r\n}",
+                  "raw": "{\r\n    \"name\": \"Updated to new description\"\r\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1014,7 +1014,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": \"4051a56d-71c4-4d82-baff-d1b36f2925cb\",\n    \"name\": \"Update to new name\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+              "body": "{\n    \"id\": \"4051a56d-71c4-4d82-baff-d1b36f2925cb\",\n    \"name\": \"Update to new name\",\n    \"discription\": \"Updated to new description\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
             }
           ]
         },
@@ -1278,13 +1278,15 @@
                 "method": "GET",
                 "header": [],
                 "url": {
-                  "raw": "{{base_url}}/boards/{{board_id}}/export",
+                  "raw": "http://localhost:8080/boards/{board}/export",
+                  "protocol": "http",
                   "host": [
-                    "{{base_url}}"
+                    "localhost"
                   ],
+                  "port": "8080",
                   "path": [
                     "boards",
-                    "{{board_id}}",
+                    "{board}",
                     "export"
                   ]
                 }
@@ -1658,15 +1660,13 @@
                   }
                 },
                 "url": {
-                  "raw": "http://localhost:8080/boards/{board}",
-                  "protocol": "http",
+                  "raw": "{{base_url}}/boards/{{board_id}}",
                   "host": [
-                    "localhost"
+                    "{{base_url}}"
                   ],
-                  "port": "8080",
                   "path": [
                     "boards",
-                    "{board}"
+                    "{{board_id}}"
                   ]
                 }
               },
