@@ -6,7 +6,7 @@ import _ from "underscore";
 import XRNote from "../XRNote/XRNote";
 
 const XRColumn = (props: ColumnProps) => {
-  const {notes, viewer} = useAppSelector(
+  const {notes, viewer, numberOfColumns} = useAppSelector(
     (state) => ({
       notes: state.notes
         ? state.notes
@@ -15,9 +15,13 @@ const XRColumn = (props: ColumnProps) => {
             .map((note) => note.id)
         : [],
       viewer: state.participants!.self,
+      numberOfColumns: state.columns.length,
     }),
     _.isEqual
   );
+
+  const isFirstColumn = props.index === 0;
+  const isLastColumn = props.index === numberOfColumns - 1;
 
   return (
     <Container
@@ -27,8 +31,13 @@ const XRColumn = (props: ColumnProps) => {
       alignItems="flex-start"
       margin={0}
       padding={32}
-      paddingTop={128}
+      paddingTop={96}
       border={4}
+      borderRight={!isLastColumn ? 0 : 4}
+      borderLeft={!isFirstColumn ? 0 : 4}
+      borderRadiusLeft={isFirstColumn ? 26 : 0}
+      borderRadiusRight={isLastColumn ? 26 : 0}
+      borderBend={32}
       minWidth="30%"
       flexBasis={1}
       borderColor={getColorFromName(props.color)}

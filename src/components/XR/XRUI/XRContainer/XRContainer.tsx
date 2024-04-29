@@ -37,6 +37,7 @@ const XRContainer = () => (
         flexDirection="column"
         position={[0, 0, -0.6]}
         positionType="relative"
+        padding={6}
       >
         <XRBoardHeader />
         <XRBoard />

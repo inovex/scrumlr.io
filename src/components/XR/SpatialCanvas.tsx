@@ -1,6 +1,6 @@
 import "./SpatialCanvas.scss";
 import {useAppSelector} from "store";
-import {PointerController, PointerHand} from "@coconut-xr/natuerlich/defaults";
+import {PointerController, TouchHand} from "@coconut-xr/natuerlich/defaults";
 import {clippingEvents} from "@coconut-xr/koestlich";
 import {useInputSources} from "@coconut-xr/natuerlich/react";
 import {Canvas} from "@react-three/fiber";
@@ -46,7 +46,7 @@ const SpatialCanvas = () => {
           <XRContainer />
           {inputSources.map((inputSource) =>
             inputSource.hand != null ? (
-              <PointerHand id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} hand={inputSource.hand} childrenAtJoint="wrist" />
+              <TouchHand id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} hand={inputSource.hand} childrenAtJoint="wrist" />
             ) : (
               <PointerController id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} />
             )

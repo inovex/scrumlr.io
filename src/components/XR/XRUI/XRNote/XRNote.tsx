@@ -38,9 +38,10 @@ const XRNote = (props: NoteProps) => {
         backgroundColor={BG_COLOR_LIGHT}
         width="100%"
         margin={0}
-        padding={16}
+        padding={12}
         backgroundOpacity={0.8}
         borderRadius={8}
+        overflow="scroll"
       >
         <Text fontSize={12} color={FONT_COLOR}>
           {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
