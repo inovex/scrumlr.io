@@ -91,6 +91,7 @@ func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (React
 // RemoveReaction deletes a reaction
 func (d *Database) RemoveReaction(board, user, id uuid.UUID) error {
 	var r, err = d.GetReaction(id)
+
 	if err != nil {
 		return err
 	}

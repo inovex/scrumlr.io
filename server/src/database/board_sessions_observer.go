@@ -13,7 +13,7 @@ type BoardSessionsObserver interface {
 	CreatedSession(board uuid.UUID, session BoardSession)
 
 	// UpdatedSession will be called if a session of the board with the specified id was updated.
-	UpdatedSession(board uuid.UUID, session BoardSession)
+	UpdatedSession(board uuid.UUID, session BoardSession, columns []Column, note []Note)
 
 	// UpdatedSessions will be called if multiple sessions of the board with the specified id were updated.
 	UpdatedSessions(board uuid.UUID, sessions []BoardSession)
@@ -41,9 +41,14 @@ func (*BoardSession) AfterScanRow(ctx context.Context) error {
 			}
 		case "UPDATE":
 			session := ctx.Value("Result").(*BoardSession)
+			columns, err := d.GetColumns(board)
+			notes, err := d.GetNotes(board)
+			if err != nil {
+				return err
+			}
 			for _, observer := range d.observer {
 				if o, ok := observer.(BoardSessionsObserver); ok {
-					o.UpdatedSession(board, *session)
+					o.UpdatedSession(board, *session, columns, notes)
 					return nil
 				}
 			}
@@ -77,10 +82,11 @@ func (*UserUpdate) AfterUpdate(ctx context.Context, q *bun.UpdateQuery) error {
 		if err != nil {
 			return err
 		}
-
+		columns, err := d.GetColumns(board)
+		notes, err := d.GetNotes(board)
 		for _, observer := range d.observer {
 			if o, ok := observer.(BoardSessionsObserver); ok {
-				o.UpdatedSession(board, session)
+				o.UpdatedSession(board, session, columns, notes)
 				return nil
 			}
 		}

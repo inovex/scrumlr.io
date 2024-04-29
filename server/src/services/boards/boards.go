@@ -234,8 +234,10 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 	return new(dto.Board).From(board), nil
 }
 
+// UpdatedBoardTimer broadcast to everyone
 func (s *BoardService) UpdatedBoardTimer(board database.Board) {
-	err := s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+	channels := []string{"participant", "moderator"}
+	err := s.realtime.BroadcastToBoard(board.ID, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardTimerUpdated,
 		Data: new(dto.Board).From(board),
 	})
@@ -244,8 +246,10 @@ func (s *BoardService) UpdatedBoardTimer(board database.Board) {
 	}
 }
 
+// UpdatedBoard broadcast to everyone
 func (s *BoardService) UpdatedBoard(board database.Board) {
-	err := s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+	channels := []string{"participant", "moderator"}
+	err := s.realtime.BroadcastToBoard(board.ID, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardUpdated,
 		Data: new(dto.Board).From(board),
 	})
@@ -260,7 +264,9 @@ func (s *BoardService) UpdatedBoard(board database.Board) {
 	}
 }
 
+// SyncBoardSettingChange broadcast to everyone
 func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
+	channels := []string{"participant", "moderator"}
 	var err_msg string
 	columns, err := s.database.GetColumns(boardID)
 	if err != nil {
@@ -278,7 +284,7 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 		return err_msg, err
 	}
 
-	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+	err = s.realtime.BroadcastToBoard(boardID, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
 		Data: dto.Notes(notes),
 	})
@@ -289,8 +295,10 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 	return "", err
 }
 
-func (s *BoardService) DeletedBoard(board uuid.UUID) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+// DeletedBoard broadcast to everyone
+func (s *BoardService) DeletedBoard(boardID uuid.UUID) {
+	channels := []string{"participant", "moderator"}
+	err := s.realtime.BroadcastToBoard(boardID, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardDeleted,
 	})
 	if err != nil {

@@ -198,8 +198,10 @@ func (s *BoardSessionService) UpdateSessionRequest(_ context.Context, body dto.B
 	return new(dto.BoardSessionRequest).From(request), err
 }
 
+// CreatedSessionRequest broadcast to everyone
 func (s *BoardSessionService) CreatedSessionRequest(board uuid.UUID, request database.BoardSessionRequest) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	channels := []string{"participant", "moderator"}
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestCreated,
 		Data: new(dto.BoardSessionRequest).From(request),
 	})
@@ -208,7 +210,9 @@ func (s *BoardSessionService) CreatedSessionRequest(board uuid.UUID, request dat
 	}
 }
 
+// UpdatedSessionRequest broadcast to everyone
 func (s *BoardSessionService) UpdatedSessionRequest(board uuid.UUID, request database.BoardSessionRequest) {
+	channels := []string{"participant", "moderator"}
 	var status realtime.BoardSessionRequestEventType
 	if request.Status == types.BoardSessionRequestStatusAccepted {
 		status = realtime.RequestAccepted
@@ -223,7 +227,7 @@ func (s *BoardSessionService) UpdatedSessionRequest(board uuid.UUID, request dat
 		}
 	}
 
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestUpdated,
 		Data: new(dto.BoardSessionRequest).From(request),
 	})
@@ -233,8 +237,10 @@ func (s *BoardSessionService) UpdatedSessionRequest(board uuid.UUID, request dat
 	}
 }
 
+// CreatedSession broadcast to everyone
 func (s *BoardSessionService) CreatedSession(board uuid.UUID, session database.BoardSession) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	channels := []string{"participant", "moderator"}
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantCreated,
 		Data: new(dto.BoardSession).From(session),
 	})
@@ -243,22 +249,37 @@ func (s *BoardSessionService) CreatedSession(board uuid.UUID, session database.B
 	}
 }
 
-func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.BoardSession) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+// UpdatedSession broadcast to everyone
+func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.BoardSession, columns []database.Column, notes []database.Note) {
+	channels := []string{"participant", "moderator"}
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantUpdated,
 		Data: new(dto.BoardSession).From(session),
 	})
+
+	err = s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
+		Type: realtime.BoardEventColumnsUpdated,
+		Data: dto.Columns(columns),
+	})
+
+	err = s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: dto.Notes(notes),
+	})
+
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast updated board session", "err", err)
 	}
 }
 
+// UpdatedSessions broadcast to everyone
 func (s *BoardSessionService) UpdatedSessions(board uuid.UUID, sessions []database.BoardSession) {
+	channels := []string{"participant", "moderator"}
 	eventSessions := make([]dto.BoardSession, len(sessions))
 	for index, session := range sessions {
 		eventSessions[index] = *new(dto.BoardSession).From(session)
 	}
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantsUpdated,
 		Data: eventSessions,
 	})

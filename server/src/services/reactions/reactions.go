@@ -91,10 +91,12 @@ func (s *ReactionService) Update(ctx context.Context, board, user, id uuid.UUID,
 	return new(dto.Reaction).From(reaction), err
 }
 
+// AddedReaction broadcast to everyone if note not in hidden column
 func (s *ReactionService) AddedReaction(board uuid.UUID, reaction database.Reaction) {
+	channels := []string{"participant", "moderator"}
 	eventReaction := *new(dto.Reaction).From(reaction)
 
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventReactionAdded,
 		Data: eventReaction,
 	})
@@ -104,8 +106,10 @@ func (s *ReactionService) AddedReaction(board uuid.UUID, reaction database.React
 	}
 }
 
+// DeletedReaction broadcast to everyone if note not in hidden column
 func (s *ReactionService) DeletedReaction(board, reaction uuid.UUID) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	channels := []string{"participant", "moderator"}
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventReactionDeleted,
 		Data: reaction,
 	})
@@ -115,10 +119,12 @@ func (s *ReactionService) DeletedReaction(board, reaction uuid.UUID) {
 	}
 }
 
+// UpdatedReaction broadcast to everyone if note not in hidden column
 func (s *ReactionService) UpdatedReaction(board uuid.UUID, reaction database.Reaction) {
+	channels := []string{"participant", "moderator"}
 	eventReaction := *new(dto.Reaction).From(reaction)
 
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventReactionUpdated,
 		Data: eventReaction,
 	})

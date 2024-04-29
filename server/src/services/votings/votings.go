@@ -103,8 +103,10 @@ func (s *VotingService) getVotes(_ context.Context, boardID, id uuid.UUID) ([]da
 	return s.database.GetVotes(filter.VoteFilter{Board: boardID, Voting: &id})
 }
 
+// CreatedVoting broadcast to everyone
 func (s *VotingService) CreatedVoting(board uuid.UUID, voting database.Voting) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	channels := []string{"participant", "moderator"}
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingCreated,
 		Data: new(dto.Voting).From(voting, nil),
 	})
@@ -113,7 +115,9 @@ func (s *VotingService) CreatedVoting(board uuid.UUID, voting database.Voting) {
 	}
 }
 
+// UpdatedVoting broadcast to everyone
 func (s *VotingService) UpdatedVoting(board uuid.UUID, voting database.Voting) {
+	channels := []string{"participant", "moderator"}
 	var notes []database.Note
 	var votes []database.Vote
 	if voting.Status == types.VotingStatusClosed {
@@ -121,7 +125,7 @@ func (s *VotingService) UpdatedVoting(board uuid.UUID, voting database.Voting) {
 		votes, _ = s.getVotes(context.Background(), board, voting.ID)
 	}
 
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: struct {
 			Voting *dto.Voting `json:"voting"`

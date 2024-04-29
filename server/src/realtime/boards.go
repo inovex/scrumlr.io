@@ -39,13 +39,17 @@ type BoardEvent struct {
 	Data interface{}    `json:"data,omitempty"`
 }
 
-func (b *Broker) BroadcastToBoard(boardID uuid.UUID, msg BoardEvent) error {
+func (b *Broker) BroadcastToBoard(boardID uuid.UUID, channels []string, msg BoardEvent) error {
 	logger.Get().Debugw("broadcasting to board", "board", boardID, "msg", msg.Type)
-	return b.con.Publish(boardsSubject(boardID), msg)
+	var err error
+	for _, channel := range channels {
+		err = b.con.Publish(boardsSubject(boardID, channel), msg)
+	}
+	return err
 }
 
-func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
-	c, err := b.con.SubscribeToBoardEvents(boardsSubject(boardID))
+func (b *Broker) GetBoardChannel(boardID uuid.UUID, channel string) chan *BoardEvent {
+	c, err := b.con.SubscribeToBoardEvents(boardsSubject(boardID, channel))
 	if err != nil {
 		// TODO: Bubble up this error, so the caller can retry to establish this subscription
 		logger.Get().Errorw("failed to subscribe to BoardChannel", "err", err)
@@ -53,6 +57,6 @@ func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
 	return c
 }
 
-func boardsSubject(boardID uuid.UUID) string {
-	return fmt.Sprintf("board.%s", boardID)
+func boardsSubject(boardID uuid.UUID, channel string) string {
+	return fmt.Sprintf("board.%s.%s", boardID, channel)
 }

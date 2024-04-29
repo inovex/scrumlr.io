@@ -304,13 +304,16 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
 	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
-
+	deletedNote, err := d.GetNote(id)
+	if err != nil {
+		return err
+	}
 	var precondition struct {
 		StackingAllowed bool
 		CallerRole      types.SessionRole
 		Author          uuid.UUID
 	}
-	err := d.db.NewSelect().
+	err = d.db.NewSelect().
 		ColumnExpr("(?) AS caller_role", sessionSelect).
 		ColumnExpr("(?) as author", noteSelect).
 		Scan(context.Background(), &precondition)
@@ -367,7 +370,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 				With("update_board", updateBoard).
 				With("update_ranks", updateRanks).
 				Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "DeletedNote", deletedNote, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
 
 			return err
 		}
@@ -394,7 +397,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 			With("update_stackrefs", updateStackRefs).
 			With("update_parentStackId", updateNextParentStackId).
 			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "DeletedNote", deletedNote, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
 
 		return err
 	}
