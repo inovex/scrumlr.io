@@ -7,7 +7,7 @@ import XRBoardHeader from "../XRBoardHeader/XRBoardHeader";
 import XRBoard from "../XRBoard/XRBoard";
 
 // TODO: make semi transparent glass material
-const GlassMaterial = makeBorderMaterial(MeshPhongMaterial, {
+export const GlassMaterial = makeBorderMaterial(MeshPhongMaterial, {
   specular: 0xffffff,
   shininess: 100,
   transparent: true,
