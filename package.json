@@ -21,7 +21,7 @@
     "avataaars": "^2.0.0",
     "classnames": "^2.5.1",
     "file-saver": "^2.0.5",
-    "i18next": "^23.11.2",
+    "i18next": "^23.11.3",
     "i18next-browser-languagedetector": "^7.2.1",
     "js-cookie": "^3.0.5",
     "marked": "12.0.2",
