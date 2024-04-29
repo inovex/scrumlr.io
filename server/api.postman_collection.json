@@ -912,7 +912,7 @@
           ]
         },
         {
-          "name": "Update descrription of a board",
+          "name": "Update description of a board",
           "event": [
             {
               "listen": "test",
@@ -1014,7 +1014,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": \"4051a56d-71c4-4d82-baff-d1b36f2925cb\",\n    \"name\": \"Update to new name\",\n    \"discription\": \"Updated to new description\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+              "body": "{\n    \"id\": \"4051a56d-71c4-4d82-baff-d1b36f2925cb\",\n    \"name\": \"Update to new name\",\n    \"description\": \"Updated to new description\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
             }
           ]
         },
