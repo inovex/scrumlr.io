@@ -15,6 +15,7 @@ import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
 import {XRButton} from "@react-three/xr";
+import {toast} from "react-toastify";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -34,6 +35,11 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
 
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
+
+  const sessionOptions: XRSessionInit = {
+    requiredFeatures: ["local-floor"],
+    optionalFeatures: ["hand-tracking"],
+  };
 
   return (
     <>
@@ -56,9 +62,10 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         <XRButton
           mode="AR"
           className="board-header_xr-button"
+          sessionInit={sessionOptions}
           onClick={() => store.dispatch(Actions.setXRActive(!state.xrActive))}
           onError={(error) => {
-            console.error(error);
+            toast.error(error.message);
             store.dispatch(Actions.setXRActive(false));
           }}
         />

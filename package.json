@@ -11,7 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@coconut-xr/koestlich": "^0.3.12",
-    "@coconut-xr/natuerlich": "^0.0.33",
+    "@coconut-xr/natuerlich": "^0.0.51",
     "@coconut-xr/xmaterials": "^0.0.3",
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/modifiers": "^7.0.0",

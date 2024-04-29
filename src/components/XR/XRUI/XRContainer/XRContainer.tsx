@@ -1,6 +1,5 @@
 import {RootContainer, FontFamilyProvider} from "@coconut-xr/koestlich";
 import {makeBorderMaterial} from "@coconut-xr/xmaterials";
-import {RayGrab} from "@react-three/xr";
 import {MeshPhongMaterial} from "three";
 import {Suspense} from "react";
 import {BG_COLOR_DEFAULT} from "components/XR/xr-constants";
@@ -15,35 +14,35 @@ const GlassMaterial = makeBorderMaterial(MeshPhongMaterial, {
 });
 
 const XRContainer = () => (
-  <RayGrab>
-    <Suspense>
-      <FontFamilyProvider
-        fontFamilies={{
-          medium: ["https://coconut-xr.github.io/msdf-fonts/", "inter.json"],
-          bold: ["https://coconut-xr.github.io/msdf-fonts/", "inter-bold.json"],
-        }}
-        defaultFontFamily="medium"
+  <Suspense>
+    <FontFamilyProvider
+      fontFamilies={{
+        medium: ["https://coconut-xr.github.io/msdf-fonts/", "inter.json"],
+        bold: ["https://coconut-xr.github.io/msdf-fonts/", "inter-bold.json"],
+      }}
+      defaultFontFamily="medium"
+    >
+      <RootContainer
+        backgroundColor={BG_COLOR_DEFAULT}
+        backgroundOpacity={0.8}
+        material={GlassMaterial}
+        sizeX={2}
+        sizeY={1}
+        borderRadius={32}
+        borderBend={0.3}
+        border={4}
+        borderColor="#888"
+        borderOpacity={0.3}
+        display="flex"
+        flexDirection="column"
+        position={[0, 0, -0.6]}
+        positionType="relative"
       >
-        <RootContainer
-          backgroundColor={BG_COLOR_DEFAULT}
-          backgroundOpacity={0.8}
-          material={GlassMaterial}
-          sizeX={2}
-          sizeY={1}
-          borderRadius={32}
-          borderBend={0.3}
-          border={4}
-          borderColor="#888"
-          borderOpacity={0.3}
-          flexDirection="column"
-          position={[0, -0.2, -1.2]}
-        >
-          <XRBoardHeader />
-          <XRBoard />
-        </RootContainer>
-      </FontFamilyProvider>
-    </Suspense>
-  </RayGrab>
+        <XRBoardHeader />
+        <XRBoard />
+      </RootContainer>
+    </FontFamilyProvider>
+  </Suspense>
 );
 
 export default XRContainer;

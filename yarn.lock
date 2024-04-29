@@ -1184,21 +1184,21 @@
     suspend-react "*"
     yoga-wasm-web "*"
 
-"@coconut-xr/natuerlich@^0.0.33":
-  version "0.0.33"
-  resolved "https://registry.npmjs.org/@coconut-xr/natuerlich/-/natuerlich-0.0.33.tgz"
-  integrity sha512-GIOTGcmrGW1BG56bf/qyPzt7vroLRnyoahDoELsTMx7b84MUXQRYvJEFIQLbydFLtXDbDzoSJFSzl43JezfSvw==
+"@coconut-xr/natuerlich@^0.0.51":
+  version "0.0.51"
+  resolved "https://registry.yarnpkg.com/@coconut-xr/natuerlich/-/natuerlich-0.0.51.tgz#11ea742aea239c4b11e116ab393e033d2d93f101"
+  integrity sha512-zAyzzrW6Vq9cxBuDxVwJKEJ9wAmDssBE1KBGR+wkzRwT2ZJyooxqtn4V10XD/mj5B4aFhnULU8f6yExKUJoxZw==
   dependencies:
-    "@coconut-xr/xinteraction" "*"
+    "@coconut-xr/xinteraction" "^0.1.12"
     "@coconut-xr/xmaterials" "*"
     "@webxr-input-profiles/motion-controllers" "^1.0.0"
     meshline "3.1.6"
     suspend-react "^0.0.9"
     zustand ">=4.0.0"
 
-"@coconut-xr/xinteraction@*":
+"@coconut-xr/xinteraction@^0.1.12":
   version "0.1.12"
-  resolved "https://registry.npmjs.org/@coconut-xr/xinteraction/-/xinteraction-0.1.12.tgz"
+  resolved "https://registry.yarnpkg.com/@coconut-xr/xinteraction/-/xinteraction-0.1.12.tgz#58da4a4076f79d92c2461db1ba531d6495c4b1e8"
   integrity sha512-nuKWTDz9qx1HRw7MASvqhxO7i676FVWdh+vITFhQYpQem7QLyJqSaU/gw3l7Qh7QYZENmvvte4X83D1oih/htA==
 
 "@coconut-xr/xmaterials@*", "@coconut-xr/xmaterials@^0.0.3":
