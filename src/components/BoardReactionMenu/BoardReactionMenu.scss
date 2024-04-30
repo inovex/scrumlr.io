@@ -12,7 +12,6 @@ $reaction-size: 64px;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  z-index: $menu-item-z-index;
 
   display: flex;
   flex-direction: row;
@@ -35,8 +34,6 @@ $reaction-size: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  cursor: pointer;
 }
 
 .board-reactions__reaction {
@@ -75,6 +72,8 @@ $reaction-size: 64px;
   height: $icon--large;
   color: $color-dark-mode-note;
   border-radius: $rounded--full;
+
+  cursor: pointer;
 
   &:hover,
   &:focus {
