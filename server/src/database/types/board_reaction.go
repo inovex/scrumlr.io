@@ -13,7 +13,6 @@ const (
 	BoardReactionHeart    BoardReaction = "heart"
 	BoardReactionLike     BoardReaction = "like"
 	BoardReactionDislike  BoardReaction = "dislike"
-	BoardReactionStan     BoardReaction = "stan"
 )
 
 func (reaction *BoardReaction) UnmarshalJSON(b []byte) error {
@@ -24,7 +23,7 @@ func (reaction *BoardReaction) UnmarshalJSON(b []byte) error {
 	}
 	unmarshalledReaction := BoardReaction(s)
 	switch unmarshalledReaction {
-	case BoardReactionTada, BoardReactionApplause, BoardReactionHeart, BoardReactionLike, BoardReactionDislike, BoardReactionStan:
+	case BoardReactionTada, BoardReactionApplause, BoardReactionHeart, BoardReactionLike, BoardReactionDislike:
 		*reaction = unmarshalledReaction
 		return nil
 	}
