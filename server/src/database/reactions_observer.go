@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 )
@@ -36,8 +35,6 @@ func notifyReactionDeleted(ctx context.Context) error {
 	if len(d.observer) > 0 {
 		board := ctx.Value("Board").(uuid.UUID)
 		reaction := ctx.Value("Reaction").(uuid.UUID)
-		fmt.Println("=============================")
-		fmt.Println(ctx.Value("Note"))
 		for _, observer := range d.observer {
 			if o, ok := observer.(ReactionsObserver); ok {
 				o.DeletedReaction(board, reaction)

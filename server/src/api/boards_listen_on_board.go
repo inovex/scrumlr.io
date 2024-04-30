@@ -167,17 +167,11 @@ func (b *BoardSubscription) startListeningOnBoard(channel realtime.SessionChanne
 			targetedSession := parseBoardSession(msg.Data)
 			logger.Get().Debugw("message received", "message", msg)
 			clients := b.clients[channel]
+
 			for id, conn := range clients {
 				filteredMsg := b.eventFilter(msg, id)
-
 				if msg.Type == realtime.BoardEventParticipantUpdated && id == targetedSession.User.ID {
-
-					for _, participant := range b.boardParticipants {
-						if participant.User.ID == id {
-							b.changeChannel(channel, participant)
-						}
-					}
-
+					b.changeChannel(channel, targetedSession)
 				}
 				b.Lock()
 				err := conn.WriteJSON(filteredMsg)
@@ -188,19 +182,6 @@ func (b *BoardSubscription) startListeningOnBoard(channel realtime.SessionChanne
 			}
 		}
 	}
-}
-
-func parseBoardSession(data interface{}) *dto.BoardSession {
-	session := new(dto.BoardSession)
-	b, err := json.Marshal(data)
-	if err != nil {
-		return nil
-	}
-	err = json.Unmarshal(b, session)
-	if err != nil {
-		return nil
-	}
-	return session
 }
 
 func (b *BoardSubscription) changeChannel(channel realtime.SessionChannel, oldSession *dto.BoardSession) {
@@ -225,4 +206,17 @@ func (s *Server) closeBoardSocket(board, user uuid.UUID, conn *websocket.Conn) {
 	if err != nil {
 		logger.Get().Warnw("failed to disconnected session", "board", board, "user", user, "err", err)
 	}
+}
+
+func parseBoardSession(data interface{}) *dto.BoardSession {
+	session := new(dto.BoardSession)
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil
+	}
+	err = json.Unmarshal(b, session)
+	if err != nil {
+		return nil
+	}
+	return session
 }
