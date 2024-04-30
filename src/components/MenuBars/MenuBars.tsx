@@ -64,24 +64,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       }
     };
 
-    const closeBoardReactionMenu = (target: HTMLElement) => {
-      // if clicking any element where itself or any parent contains one of the classes,
-      // the board reaction menu is not closed.
-      // not using refs to keep it more flexible
-      const ignoreComponentClasses = ["menu-bars", "menu-bars-mobile", "board-reactions__container", "note"];
-      const clickedIgnoredComponent = ignoreComponentClasses.some((className) => target.closest(`.${className}`));
-
-      if (!clickedIgnoredComponent) {
-        setShowBoardReactionsMenu(false);
-      }
-    };
-
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-
-      // note that the menus aren't necessarily closed, but only if the conditions are met
       closeMenuBar(target);
-      closeBoardReactionMenu(target);
     };
 
     document.addEventListener("click", handleClickOutside, true);
