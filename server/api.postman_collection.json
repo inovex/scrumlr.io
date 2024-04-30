@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "8c4ace8c-faa1-4a85-8a99-e14508efe8a0",
+    "_postman_id": "2f9f80be-4912-46fc-9693-39ff94240d08",
     "name": "scrumlr.io",
     "description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](https://info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the _User_ section for more information.\n\n1. A user signs into the application (see _Login_ section)\n2. The user creates a new board (`POST` on `/boards`, checkout _Boards_ section)\n3. Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout _Participants_ section)\n    1. If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2. If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3. If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section _Realtime_ to see how you can open websockets and listen to live updates on the data.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -486,24 +486,22 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Successful POST request\", function () {\r",
-                  "    pm.expect(pm.response).to.have.status(201);\r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Check id is included\", function () {\r",
-                  "    var id = pm.response.json().id;\r",
-                  "    pm.expect(id).to.exist;\r",
-                  "})\r",
-                  "\r",
-                  "pm.test(\"Check name is included\", function () {\r",
-                  "    var boardName = pm.response.json().name;\r",
-                  "    pm.expect(boardName).to.exist;\r",
-                  "})\r",
-                  "\r",
-                  "var jsonData = JSON.parse(responseBody);\r",
-                  "pm.collectionVariables.set(\"board_id\", jsonData.id);\r",
-                  "\r",
-                  ""
+                  "pm.test(\"Successful POST request\", function () {",
+                  "    pm.expect(pm.response).to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Check id is included\", function () {",
+                  "    var id = pm.response.json().id;",
+                  "    pm.expect(id).to.exist;",
+                  "})",
+                  "",
+                  "pm.test(\"Check name is included\", function () {",
+                  "    var boardName = pm.response.json().name;",
+                  "    pm.expect(boardName).to.exist;",
+                  "})",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "pm.collectionVariables.set(\"board_id\", jsonData.id);"
                 ],
                 "type": "text/javascript",
                 "packages": {}
@@ -515,7 +513,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"name\": \"My board\",\r\n    \"accessPolicy\": \"PUBLIC\",\r\n    \"columns\": [ \r\n        { \"name\": \"Lean coffee\", \"visible\": true, \"color\": \"backlog-blue\" },\r\n        { \"name\": \"Actions\", \"visible\": false, \"color\": \"planning-pink\" }\r\n    ]\r\n}",
+              "raw": "{\r\n    \"name\": \"My board\",\r\n    \"description\": \"This is a test description\",\r\n    \"accessPolicy\": \"PUBLIC\",\r\n    \"columns\": [ \r\n        { \"name\": \"Lean coffee\", \"visible\": true, \"color\": \"backlog-blue\" },\r\n        { \"name\": \"Actions\", \"visible\": false, \"color\": \"planning-pink\" }\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -531,7 +529,7 @@
                 "boards"
               ]
             },
-            "description": "Create a new board with an initial set of columns. A board session for the calling user will automatically be created on creation of a board.\n\nThe access policy can be set to\n\n*   `PUBLIC` if the board should be accessible to everyone by the URL only\n*   `BY_PASSPHRASE` if the board should be protected by a passphrase and a challenge before someone is able to join and create a session. If this policy is selected a `passphrase` must be sent as part of the request\n*   `BY_INVITE` if the moderators want to manually verify each join request\n    \n\nCurrently following color are available for the column accent color:\n\n*   `backlog-blue`\n*   `grooming-green`\n*   `lean-lilac`\n*   `online-orange`\n*   `planning-pink`\n*   `poker-purple`\n*   `retro-red`\n    \n\n**Request body scheme**\n\n``` json\n{\n  // (optional) board name\n  \"name\": \"Awesome collaborative session\",\n  // the access policy of the board\n  \"accessPolicy\": \"BY_PASSPHRASE\",\n  // (optional) passphrase if the access policy is set as 'BY_PASSPHRASE'\n  \"passphrase\": \"***\"\n  // (optional) array of columns that should be set up initially.\n  // The index of the respective columns will be defined by the array position\n  \"columns\": [\n    {\n      // the name of the column\n      \"name\": \"My column name\",\n      // the visibility state of the column\n      \"visible\": true,\n      // the color of the column\n      \"color\": \"backlog-blue\"\n    }\n  ]\n}\n\n```\n\n**Response body scheme**\n\n``` json\n{\n  // the uuid (v4) of the created board   \n  \"id\": \"a4c93f30-a5ce-4d15-aa5a-92a0ae0831f1\",\n  // (optional) name of the baord  \n  \"name\": \"My board\",\n  // the access policy of the board\n  \"accessPolicy\": \"PUBLIC\",\n  // flag indicating whether the authors of notes are visible to others\n  \"showAuthors\": true,\n  // flag indicating whether the notes are visible between each other\n  \"showNotesOfOtherUsers\": true,\n  // flag indicating whether everyone or only moderators allowed to stack cards\n  \"allowStacking\": true,\n  // (optional) uuid (v4) of a note which is highlighted to everyone  \n  \"sharedNote\": null,\n  // (optional) uuid (v4) of the voting session which results are displayed to everyone\n  \"showVoting\": null\n}\n\n```"
+            "description": "Create a new board with an initial set of columns. A board session for the calling user will automatically be created on creation of a board.\n\nThe access policy can be set to\n\n- `PUBLIC` if the board should be accessible to everyone by the URL only\n- `BY_PASSPHRASE` if the board should be protected by a passphrase and a challenge before someone is able to join and create a session. If this policy is selected a `passphrase` must be sent as part of the request\n- `BY_INVITE` if the moderators want to manually verify each join request\n    \n\nCurrently following color are available for the column accent color:\n\n- `backlog-blue`\n- `grooming-green`\n- `lean-lilac`\n- `online-orange`\n- `planning-pink`\n- `poker-purple`\n- `retro-red`\n    \n\n**Request body scheme**\n\n``` json\n{\n  // (optional) board name\n  \"name\": \"Awesome collaborative session\",\n  // (optional) board description\n  \"description\": \"Looking back on our awsome sprint!\",\n  // the access policy of the board\n  \"accessPolicy\": \"BY_PASSPHRASE\",\n  // (optional) passphrase if the access policy is set as 'BY_PASSPHRASE'\n  \"passphrase\": \"***\"\n  // (optional) array of columns that should be set up initially.\n  // The index of the respective columns will be defined by the array position\n  \"columns\": [\n    {\n      // the name of the column\n      \"name\": \"My column name\",\n      // the visibility state of the column\n      \"visible\": true,\n      // the color of the column\n      \"color\": \"backlog-blue\"\n    }\n  ]\n}\n\n ```\n\n**Response body scheme**\n\n``` json\n{\n  // the uuid (v4) of the created board   \n  \"id\": \"a4c93f30-a5ce-4d15-aa5a-92a0ae0831f1\",\n  // (optional) name of the baord  \n  \"name\": \"My board\",\n  // (optional) description of the board\n  \"description\": \"This is a test description\",\n  // the access policy of the board\n  \"accessPolicy\": \"PUBLIC\",\n  // flag indicating whether the authors of notes are visible to others\n  \"showAuthors\": true,\n  // flag indicating whether the notes are visible between each other\n  \"showNotesOfOtherUsers\": true,\n  // flag indicating whether everyone or only moderators allowed to stack cards\n  \"allowStacking\": true,\n  // (optional) uuid (v4) of a note which is highlighted to everyone  \n  \"sharedNote\": null,\n  // (optional) uuid (v4) of the voting session which results are displayed to everyone\n  \"showVoting\": null\n}\n\n ```"
           },
           "response": [
             {
@@ -582,7 +580,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": \"a4c93f30-a5ce-4d15-aa5a-92a0ae0831f1\",\n    \"name\": \"My board\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+              "body": "{\n    \"id\": \"a4c93f30-a5ce-4d15-aa5a-92a0ae0831f1\",\n    \"name\": \"My board\",\n    \"description\": \"This is a test description\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
             },
             {
               "name": "Success BY_PASSPHRASE",
@@ -632,7 +630,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": \"57523db5-39e0-4f9a-9557-9b6fb5330fa3\",\n    \"name\": \"My board\",\n    \"accessPolicy\": \"BY_PASSPHRASE\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+              "body": "{\n    \"id\": \"57523db5-39e0-4f9a-9557-9b6fb5330fa3\",\n    \"name\": \"My board\",\n    \"description\": \"This is a test description\",\n    \"accessPolicy\": \"BY_PASSPHRASE\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
             },
             {
               "name": "Sucess BY_INVITE",
@@ -682,7 +680,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": \"2f1fd73e-8f0a-44d7-9aa9-e61e2df2732f\",\n    \"name\": \"My board\",\n    \"accessPolicy\": \"BY_INVITE\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+              "body": "{\n    \"id\": \"2f1fd73e-8f0a-44d7-9aa9-e61e2df2732f\",\n    \"name\": \"My board\",\n    \"description\": \"This is a test description\",\n    \"accessPolicy\": \"BY_INVITE\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
             }
           ]
         },
@@ -914,6 +912,113 @@
           ]
         },
         {
+          "name": "Update description of a board",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Successful PUT request\", function () {",
+                  "    pm.expect(pm.response).to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Check id is included\", function () {",
+                  "    var id = pm.response.json().id;",
+                  "    pm.expect(id).to.exist;",
+                  "})",
+                  "",
+                  "pm.test(\"Check description is included\", function () {",
+                  "    var boardDescription = pm.response.json().description;",
+                  "    pm.expect(boardDescription).to.exist;",
+                  "})",
+                  "",
+                  "pm.test(\"Check updated description\", function () {",
+                  "    var boardDescription = pm.response.json().description;",
+                  "    pm.expect(boardDescription).to.equal(\"Updated to new description\")",
+                  "})",
+                  "",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"description\": \"Updated to new description\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/boards/{{board_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "boards",
+                "{{board_id}}"
+              ]
+            },
+            "description": "All attributes of the board may be updated partially. Checkout the board body response scheme to see a list of all available attributes that you can also override.\n\nHere's an example how you can update the board name."
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Updated to new description\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/boards/{board}",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "boards",
+                    "{board}"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Date",
+                  "value": "Sun, 16 Jan 2022 17:02:03 GMT"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "203"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": \"4051a56d-71c4-4d82-baff-d1b36f2925cb\",\n    \"name\": \"Update to new name\",\n    \"description\": \"Updated to new description\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+            }
+          ]
+        },
+        {
           "name": "Update access policy of board",
           "event": [
             {
@@ -1091,7 +1196,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": \"2be6697e-ec73-4165-ad25-dab12de2a30b\",\n    \"accessPolicy\": \"BY_PASSPHRASE\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"allowStacking\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+              "body": "{\n    \"id\": \"ac21c194-3067-4710-92e6-b33bbb40fb4a\",\n    \"name\": \"My board\",\n    \"description\": \"Updated to new description\",\n    \"accessPolicy\": \"BY_PASSPHRASE\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"showNoteReactions\": true,\n    \"allowStacking\": true,\n    \"allowEditing\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
             }
           ]
         },
@@ -1114,6 +1219,11 @@
                   "pm.test(\"Check board name included\", function () {",
                   "    var name = pm.response.json().board.name;",
                   "    pm.expect(name).to.equal(\"Update to new name\");",
+                  "})",
+                  "",
+                  "pm.test(\"Check board description included\", function () {",
+                  "    var name = pm.response.json().board.description;",
+                  "    pm.expect(name).to.equal(\"Updated to new description\");",
                   "})",
                   "",
                   "pm.test('Check colums', function () {",
@@ -1140,7 +1250,8 @@
                   "",
                   ""
                 ],
-                "type": "text/javascript"
+                "type": "text/javascript",
+                "packages": {}
               }
             }
           ],
@@ -1198,7 +1309,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"board\": {\n        \"id\": \"85ec5a10-9788-4df2-9647-0c7260cb07f7\",\n        \"name\": \"My board\",\n        \"accessPolicy\": \"PUBLIC\",\n        \"showAuthors\": true,\n        \"showNotesOfOtherUsers\": true,\n        \"allowStacking\": true,\n        \"sharedNote\": null,\n        \"showVoting\": \"71c8556d-5148-41dd-ad50-f96930af2f83\"\n    },\n    \"participants\": [\n        {\n            \"user\": {\n                \"id\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n                \"name\": \"John Doe\"\n            },\n            \"connected\": false,\n            \"ready\": false,\n            \"raisedHand\": false,\n            \"role\": \"OWNER\"\n        }\n    ],\n    \"columns\": [\n        {\n            \"id\": \"851f600a-77f8-489a-a25b-4e3f8f9a25c3\",\n            \"name\": \"Lean coffee\",\n            \"color\": \"backlog-blue\",\n            \"visible\": true,\n            \"index\": 0\n        },\n        {\n            \"id\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n            \"name\": \"My new column\",\n            \"color\": \"online-orange\",\n            \"visible\": false,\n            \"index\": 1\n        },\n        {\n            \"id\": \"4ebae212-80c9-46e4-abd9-e56b320ce937\",\n            \"name\": \"Actions\",\n            \"color\": \"planning-pink\",\n            \"visible\": false,\n            \"index\": 2\n        }\n    ],\n    \"notes\": [\n        {\n            \"id\": \"fdbc5abe-01f1-4a7d-b41d-06cb9915c608\",\n            \"author\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n            \"text\": \"Just a note\",\n            \"position\": {\n                \"column\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n                \"stack\": null,\n                \"rank\": 0\n            }\n        }\n    ],\n    \"votings\": [\n        {\n            \"id\": \"71c8556d-5148-41dd-ad50-f96930af2f83\",\n            \"voteLimit\": 5,\n            \"allowMultipleVotes\": true,\n            \"showVotesOfOthers\": true,\n            \"status\": \"CLOSED\"\n        }\n    ]\n}"
+              "body": "{\n    \"board\": {\n        \"id\": \"85ec5a10-9788-4df2-9647-0c7260cb07f7\",\n        \"name\": \"My board\",\n        \"description\": \"This is a test description\",\n        \"accessPolicy\": \"PUBLIC\",\n        \"showAuthors\": true,\n        \"showNotesOfOtherUsers\": true,\n        \"allowStacking\": true,\n        \"sharedNote\": null,\n        \"showVoting\": \"71c8556d-5148-41dd-ad50-f96930af2f83\"\n    },\n    \"participants\": [\n        {\n            \"user\": {\n                \"id\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n                \"name\": \"John Doe\"\n            },\n            \"connected\": false,\n            \"ready\": false,\n            \"raisedHand\": false,\n            \"role\": \"OWNER\"\n        }\n    ],\n    \"columns\": [\n        {\n            \"id\": \"851f600a-77f8-489a-a25b-4e3f8f9a25c3\",\n            \"name\": \"Lean coffee\",\n            \"color\": \"backlog-blue\",\n            \"visible\": true,\n            \"index\": 0\n        },\n        {\n            \"id\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n            \"name\": \"My new column\",\n            \"color\": \"online-orange\",\n            \"visible\": false,\n            \"index\": 1\n        },\n        {\n            \"id\": \"4ebae212-80c9-46e4-abd9-e56b320ce937\",\n            \"name\": \"Actions\",\n            \"color\": \"planning-pink\",\n            \"visible\": false,\n            \"index\": 2\n        }\n    ],\n    \"notes\": [\n        {\n            \"id\": \"fdbc5abe-01f1-4a7d-b41d-06cb9915c608\",\n            \"author\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n            \"text\": \"Just a note\",\n            \"position\": {\n                \"column\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n                \"stack\": null,\n                \"rank\": 0\n            }\n        }\n    ],\n    \"votings\": [\n        {\n            \"id\": \"71c8556d-5148-41dd-ad50-f96930af2f83\",\n            \"voteLimit\": 5,\n            \"allowMultipleVotes\": true,\n            \"showVotesOfOthers\": true,\n            \"status\": \"CLOSED\"\n        }\n    ]\n}"
             },
             {
               "name": "Success (CSV)",
@@ -1570,7 +1681,7 @@
                 }
               ],
               "cookie": [],
-              "body": "{\n    \"id\": \"{{board_id}}\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"showNoteReactions\": true,\n    \"allowStacking\": true,\n    \"allowEditing\": true,\n    \"timerStart\": \"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\": \"2024-01-18T13:39:49.304Z\",\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+              "body": "{\n    \"id\": \"{{board_id}}\",\n    \"name\": \"My board\",\n    \"description\": \"Updated to new description\",\n    \"accessPolicy\": \"BY_PASSPHRASE\",\n    \"showAuthors\": false,\n    \"showNotesOfOtherUsers\": false,\n    \"showNoteReactions\": false,\n    \"allowStacking\": false,\n    \"allowEditing\": false,\n    \"timerStart\": \"2024-01-18T13:38:49.304Z\",\n    \"timerEnd\": \"2024-01-18T13:39:49.304Z\",\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
             }
           ]
         }
