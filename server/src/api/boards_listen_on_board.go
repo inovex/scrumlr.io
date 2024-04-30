@@ -161,7 +161,6 @@ func (s *Server) listenOnBoard(boardID uuid.UUID, userSession *dto.BoardSession,
 }
 
 func (b *BoardSubscription) startListeningOnBoard(channel realtime.SessionChannel) {
-	//Bug? event wird geschickt, bevor ws connection aufgebaut wurde.
 	for {
 		select {
 		case msg := <-b.subscription[channel]:
@@ -172,14 +171,17 @@ func (b *BoardSubscription) startListeningOnBoard(channel realtime.SessionChanne
 				filteredMsg := b.eventFilter(msg, id)
 
 				if msg.Type == realtime.BoardEventParticipantUpdated && id == targetedSession.User.ID {
+
 					for _, participant := range b.boardParticipants {
 						if participant.User.ID == id {
 							b.changeChannel(channel, participant)
 						}
 					}
-				}
 
+				}
+				b.Lock()
 				err := conn.WriteJSON(filteredMsg)
+				b.Unlock()
 				if err != nil {
 					logger.Get().Warnw("failed to send message", "message", filteredMsg, "err", err)
 				}
@@ -189,16 +191,16 @@ func (b *BoardSubscription) startListeningOnBoard(channel realtime.SessionChanne
 }
 
 func parseBoardSession(data interface{}) *dto.BoardSession {
-	sesh := new(dto.BoardSession)
+	session := new(dto.BoardSession)
 	b, err := json.Marshal(data)
 	if err != nil {
 		return nil
 	}
-	err = json.Unmarshal(b, sesh)
+	err = json.Unmarshal(b, session)
 	if err != nil {
 		return nil
 	}
-	return sesh
+	return session
 }
 
 func (b *BoardSubscription) changeChannel(channel realtime.SessionChannel, oldSession *dto.BoardSession) {
