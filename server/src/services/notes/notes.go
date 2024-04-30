@@ -102,7 +102,7 @@ func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id
 // UpdatedNotes broadcast to everyone if not in visible column
 // Since we update all notes on the board it's okay to broadcast to everyone
 func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	eventNotes := make([]dto.Note, len(notes))
 	for index, note := range notes {
 		eventNotes[index] = *new(dto.Note).From(note)
@@ -119,7 +119,7 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 
 // DeletedNote broadcast to everyone if not in visible column
 func (s *NoteService) DeletedNote(user, board uuid.UUID, note database.Note, columns []database.Column, votes []database.Vote, deleteStack bool) {
-	channels := []string{"moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelModerator}
 	for _, column := range columns {
 		if column.Visible && note.Column == column.ID {
 			channels = append(channels, "participant")

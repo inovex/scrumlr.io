@@ -236,7 +236,7 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 
 // UpdatedBoardTimer broadcast to everyone
 func (s *BoardService) UpdatedBoardTimer(board database.Board) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelModerator, realtime.SessionChannelParticipant}
 	err := s.realtime.BroadcastToBoard(board.ID, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardTimerUpdated,
 		Data: new(dto.Board).From(board),
@@ -248,7 +248,7 @@ func (s *BoardService) UpdatedBoardTimer(board database.Board) {
 
 // UpdatedBoard broadcast to everyone
 func (s *BoardService) UpdatedBoard(board database.Board) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelModerator, realtime.SessionChannelParticipant}
 	err := s.realtime.BroadcastToBoard(board.ID, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardUpdated,
 		Data: new(dto.Board).From(board),
@@ -266,7 +266,7 @@ func (s *BoardService) UpdatedBoard(board database.Board) {
 
 // SyncBoardSettingChange broadcast to everyone
 func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelModerator, realtime.SessionChannelParticipant}
 	var err_msg string
 	columns, err := s.database.GetColumns(boardID)
 	if err != nil {
@@ -297,7 +297,7 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 
 // DeletedBoard broadcast to everyone
 func (s *BoardService) DeletedBoard(boardID uuid.UUID) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelModerator, realtime.SessionChannelParticipant}
 	err := s.realtime.BroadcastToBoard(boardID, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardDeleted,
 	})

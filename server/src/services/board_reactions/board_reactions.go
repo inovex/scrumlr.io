@@ -42,7 +42,7 @@ func (s *BoardReactionService) Create(_ context.Context, board uuid.UUID, body d
 
 // AddedReaction creates a broadcast for all connected boards with the added reaction as payload
 func (s *BoardReactionService) AddedReaction(board uuid.UUID, reaction dto.BoardReaction) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardReactionAdded,
 		Data: reaction,

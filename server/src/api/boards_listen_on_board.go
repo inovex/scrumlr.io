@@ -14,8 +14,8 @@ import (
 )
 
 type BoardSubscription struct {
-	subscription      map[string]chan *realtime.BoardEvent
-	clients           map[string]map[uuid.UUID]*websocket.Conn
+	subscription      map[realtime.SessionChannel]chan *realtime.BoardEvent
+	clients           map[realtime.SessionChannel]map[uuid.UUID]*websocket.Conn
 	boardParticipants []*dto.BoardSession
 	boardSettings     *dto.Board
 	boardColumns      []*dto.Column
@@ -51,13 +51,6 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 	isMod := !(userSession.Role == types.SessionRoleParticipant)
 
-	if err != nil {
-		logger.FromRequest(r).Errorw("unable to fetch user",
-			"err", err,
-			"board", boardID,
-			"user", userID)
-		return
-	}
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		logger.FromRequest(r).Errorw("unable to upgrade websocket",
@@ -108,13 +101,13 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 
 	boardSubscription := s.boardSubscriptions[boardID]
 	if isMod {
-		removeClosedConnection(boardSubscription, "moderator", conn, boardID, userID, s, r)
+		removeClosedConnection(boardSubscription, realtime.SessionChannelModerator, conn, boardID, userID, s, r)
 	} else {
-		removeClosedConnection(boardSubscription, "participant", conn, boardID, userID, s, r)
+		removeClosedConnection(boardSubscription, realtime.SessionChannelParticipant, conn, boardID, userID, s, r)
 	}
 }
 
-func removeClosedConnection(b *BoardSubscription, channel string, conn *websocket.Conn, boardID, userID uuid.UUID, s *Server, r *http.Request) {
+func removeClosedConnection(b *BoardSubscription, channel realtime.SessionChannel, conn *websocket.Conn, boardID, userID uuid.UUID, s *Server, r *http.Request) {
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
@@ -135,18 +128,18 @@ func removeClosedConnection(b *BoardSubscription, channel string, conn *websocke
 func (s *Server) listenOnBoard(boardID uuid.UUID, userSession *dto.BoardSession, conn *websocket.Conn, initEventData EventData, isMod bool) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
-			clients: make(map[string]map[uuid.UUID]*websocket.Conn),
+			clients: make(map[realtime.SessionChannel]map[uuid.UUID]*websocket.Conn),
 		}
-		s.boardSubscriptions[boardID].clients["moderator"] = make(map[uuid.UUID]*websocket.Conn)
-		s.boardSubscriptions[boardID].clients["participant"] = make(map[uuid.UUID]*websocket.Conn)
-		s.boardSubscriptions[boardID].subscription = make(map[string]chan *realtime.BoardEvent)
+		s.boardSubscriptions[boardID].clients[realtime.SessionChannelModerator] = make(map[uuid.UUID]*websocket.Conn)
+		s.boardSubscriptions[boardID].clients[realtime.SessionChannelParticipant] = make(map[uuid.UUID]*websocket.Conn)
+		s.boardSubscriptions[boardID].subscription = make(map[realtime.SessionChannel]chan *realtime.BoardEvent)
 	}
 
 	b := s.boardSubscriptions[boardID]
 	if isMod {
-		b.clients["moderator"][userSession.User.ID] = conn
+		b.clients[realtime.SessionChannelModerator][userSession.User.ID] = conn
 	} else {
-		b.clients["participant"][userSession.User.ID] = conn
+		b.clients[realtime.SessionChannelParticipant][userSession.User.ID] = conn
 	}
 
 	b.boardParticipants = initEventData.Sessions
@@ -155,19 +148,19 @@ func (s *Server) listenOnBoard(boardID uuid.UUID, userSession *dto.BoardSession,
 	b.boardNotes = initEventData.Notes
 	b.boardReactions = initEventData.Reactions
 
-	if b.subscription["moderator"] == nil {
-		b.subscription["moderator"] = s.realtime.GetBoardChannel(boardID, "moderator")
-		go b.startListeningOnBoard("moderator")
+	if b.subscription[realtime.SessionChannelModerator] == nil {
+		b.subscription[realtime.SessionChannelModerator] = s.realtime.GetBoardChannel(boardID, realtime.SessionChannelModerator)
+		go b.startListeningOnBoard(realtime.SessionChannelModerator)
 	}
 
-	if b.subscription["participant"] == nil {
-		b.subscription["participant"] = s.realtime.GetBoardChannel(boardID, "participant")
-		go b.startListeningOnBoard("participant")
+	if b.subscription[realtime.SessionChannelParticipant] == nil {
+		b.subscription[realtime.SessionChannelParticipant] = s.realtime.GetBoardChannel(boardID, realtime.SessionChannelParticipant)
+		go b.startListeningOnBoard(realtime.SessionChannelParticipant)
 	}
 
 }
 
-func (b *BoardSubscription) startListeningOnBoard(channel string) {
+func (b *BoardSubscription) startListeningOnBoard(channel realtime.SessionChannel) {
 	//Bug? event wird geschickt, bevor ws connection aufgebaut wurde.
 	for {
 		select {
@@ -208,18 +201,18 @@ func parseBoardSession(data interface{}) *dto.BoardSession {
 	return sesh
 }
 
-func (b *BoardSubscription) changeChannel(channel string, oldSession *dto.BoardSession) {
-	if oldSession.Role == types.SessionRoleModerator && channel == "moderator" || oldSession.Role == types.SessionRoleParticipant && channel == "participant" || oldSession.Role == types.SessionRoleOwner && channel == "moderator" {
+func (b *BoardSubscription) changeChannel(channel realtime.SessionChannel, oldSession *dto.BoardSession) {
+	if oldSession.Role == types.SessionRoleModerator && channel == realtime.SessionChannelModerator || oldSession.Role == types.SessionRoleParticipant && channel == realtime.SessionChannelParticipant || oldSession.Role == types.SessionRoleOwner && channel == realtime.SessionChannelModerator {
 		return
 	}
 
 	conn := b.clients[channel][oldSession.User.ID]
 	delete(b.clients[channel], oldSession.User.ID)
-	if channel == "moderator" {
-		b.clients["participant"][oldSession.User.ID] = conn
+	if channel == realtime.SessionChannelModerator {
+		b.clients[realtime.SessionChannelParticipant][oldSession.User.ID] = conn
 		return
 	} else {
-		b.clients["moderator"][oldSession.User.ID] = conn
+		b.clients[realtime.SessionChannelModerator][oldSession.User.ID] = conn
 		return
 	}
 }

@@ -53,7 +53,7 @@ func (s *BoardService) ListColumns(ctx context.Context, boardID uuid.UUID) ([]*d
 
 // UpdatedColumns broadcast to everyone if visible column in array
 func (s *BoardService) UpdatedColumns(board uuid.UUID, columns []database.Column) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: dto.Columns(columns),
@@ -71,7 +71,7 @@ func (s *BoardService) UpdatedColumns(board uuid.UUID, columns []database.Column
 
 // SyncNotesOnColumnChange broadcast to everyone if visible column in array
 func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 
 	var err_msg string
 	columns, err := s.database.GetColumns(boardID)
@@ -103,10 +103,10 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 
 // DeletedColumn broadcast to everyone if column not hidden
 func (s *BoardService) DeletedColumn(user, board uuid.UUID, column database.Column, notes []database.Note, votes []database.Vote) {
-	channels := []string{"moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelModerator}
 
 	if column.Visible {
-		channels = append(channels, "participant")
+		channels = append(channels, realtime.SessionChannelParticipant)
 	}
 
 	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{

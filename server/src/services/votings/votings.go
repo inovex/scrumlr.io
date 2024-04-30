@@ -105,7 +105,7 @@ func (s *VotingService) getVotes(_ context.Context, boardID, id uuid.UUID) ([]da
 
 // CreatedVoting broadcast to everyone
 func (s *VotingService) CreatedVoting(board uuid.UUID, voting database.Voting) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingCreated,
 		Data: new(dto.Voting).From(voting, nil),
@@ -117,7 +117,7 @@ func (s *VotingService) CreatedVoting(board uuid.UUID, voting database.Voting) {
 
 // UpdatedVoting broadcast to everyone
 func (s *VotingService) UpdatedVoting(board uuid.UUID, voting database.Voting) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	var notes []database.Note
 	var votes []database.Vote
 	if voting.Status == types.VotingStatusClosed {

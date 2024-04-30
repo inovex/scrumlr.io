@@ -200,7 +200,7 @@ func (s *BoardSessionService) UpdateSessionRequest(_ context.Context, body dto.B
 
 // CreatedSessionRequest broadcast to everyone
 func (s *BoardSessionService) CreatedSessionRequest(board uuid.UUID, request database.BoardSessionRequest) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestCreated,
 		Data: new(dto.BoardSessionRequest).From(request),
@@ -212,7 +212,7 @@ func (s *BoardSessionService) CreatedSessionRequest(board uuid.UUID, request dat
 
 // UpdatedSessionRequest broadcast to everyone
 func (s *BoardSessionService) UpdatedSessionRequest(board uuid.UUID, request database.BoardSessionRequest) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	var status realtime.BoardSessionRequestEventType
 	if request.Status == types.BoardSessionRequestStatusAccepted {
 		status = realtime.RequestAccepted
@@ -239,7 +239,7 @@ func (s *BoardSessionService) UpdatedSessionRequest(board uuid.UUID, request dat
 
 // CreatedSession broadcast to everyone
 func (s *BoardSessionService) CreatedSession(board uuid.UUID, session database.BoardSession) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantCreated,
 		Data: new(dto.BoardSession).From(session),
@@ -251,7 +251,7 @@ func (s *BoardSessionService) CreatedSession(board uuid.UUID, session database.B
 
 // UpdatedSession broadcast to everyone
 func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.BoardSession, columns []database.Column, notes []database.Note) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantUpdated,
 		Data: new(dto.BoardSession).From(session),
@@ -274,7 +274,7 @@ func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.B
 
 // UpdatedSessions broadcast to everyone
 func (s *BoardSessionService) UpdatedSessions(board uuid.UUID, sessions []database.BoardSession) {
-	channels := []string{"participant", "moderator"}
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	eventSessions := make([]dto.BoardSession, len(sessions))
 	for index, session := range sessions {
 		eventSessions[index] = *new(dto.BoardSession).From(session)
