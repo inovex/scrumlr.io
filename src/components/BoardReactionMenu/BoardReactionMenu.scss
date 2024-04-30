@@ -76,6 +76,7 @@ $reaction-size: 64px;
   color: $color-dark-mode-note;
   border-radius: $rounded--full;
 
+  &:hover,
   &:focus {
     background-color: $color-icon-light-blue;
   }
