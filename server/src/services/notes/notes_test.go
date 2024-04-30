@@ -2,8 +2,9 @@ package notes
 
 import (
 	"context"
+
 	"scrumlr.io/server/realtime"
-  
+
 	"database/sql"
 	"errors"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/common/filter"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -70,6 +72,11 @@ func (m *DBMock) UpdateNote(caller uuid.UUID, update database.NoteUpdate) (datab
 func (m *DBMock) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
 	args := m.Called(caller, board, id, deleteStack)
 	return args.Error(0)
+}
+
+func (m *DBMock) GetVotes(f filter.VoteFilter) ([]database.Vote, error) {
+	args := m.Called(f)
+	return args.Get(0).([]database.Vote), args.Error(1)
 }
 
 func TestNoteServiceTestSuite(t *testing.T) {
@@ -153,6 +160,11 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	s := new(NoteService)
 	mock := new(DBMock)
 	s.database = mock
+	clientMock := &mockClient{}
+	rtMock := &realtime.Broker{
+		Con: clientMock,
+	}
+	s.realtime = rtMock
 
 	callerID, _ := uuid.NewRandom()
 	noteID, _ := uuid.NewRandom()
@@ -170,6 +182,16 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		Rank:   0,
 		Stack:  stackID,
 	}
+	// Mocks for realtime
+	publishSubject := "board." + boardID.String()
+	publishEvent := realtime.BoardEvent{
+		Type: realtime.BoardEventNotesUpdated,
+		Data: []dto.Note{},
+	}
+	clientMock.On("Publish", publishSubject, publishEvent).Return(nil)
+	// Mock for the updatedNotes call, which internally calls GetNotes
+	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
+
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, "User", callerID)
 
@@ -195,6 +217,12 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	mock := new(DBMock)
 	s.database = mock
 
+	clientMock := &mockClient{}
+	rtMock := &realtime.Broker{
+		Con: clientMock,
+	}
+	s.realtime = rtMock
+
 	callerID, _ := uuid.NewRandom()
 	boardID, _ := uuid.NewRandom()
 	noteID, _ := uuid.NewRandom()
@@ -202,11 +230,35 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	body := dto.NoteDeleteRequest{
 		DeleteStack: deleteStack,
 	}
+	voteFilter := filter.VoteFilter{
+		User:  &callerID,
+		Board: boardID,
+		Note:  &noteID,
+	}
+
+	// Mocks only for the realtime stuff
+	publishSubject := "board." + boardID.String()
+	deletedNoteRealTimeUpdate := map[string]interface{}{
+		"note":        noteID,
+		"deleteStack": deleteStack,
+	}
+	publishEventNoteDeleted := realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDeleted,
+		Data: deletedNoteRealTimeUpdate,
+	}
+	publishEventVotesUpdated := realtime.BoardEvent{
+		Type: realtime.BoardEventVotesUpdated,
+		Data: []*dto.Vote{},
+	}
+	clientMock.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
+	clientMock.On("Publish", publishSubject, publishEventVotesUpdated).Return(nil)
 
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, "User", callerID)
 	ctx = context.WithValue(ctx, "Board", boardID)
+	ctx = context.WithValue(ctx, "Note", noteID)
 
+	mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
 
 	s.Delete(ctx, body, noteID)
