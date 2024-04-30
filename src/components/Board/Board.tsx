@@ -141,7 +141,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
 
   useEffect(() => {
     if (locked) {
-      Toast.info({title: t("Toast.lockedBoard")});
+      Toast.info({title: t("Toast.lockedBoard"), autoClose: 10_000});
     }
   }, [locked]);
 
