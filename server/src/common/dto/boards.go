@@ -16,6 +16,9 @@ type Board struct {
 	// The board name
 	Name *string `json:"name,omitempty"`
 
+	// Description of the board
+	Description *string `json:"description"`
+
 	// The access policy
 	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
 
@@ -48,6 +51,7 @@ type Board struct {
 func (b *Board) From(board database.Board) *Board {
 	b.ID = board.ID
 	b.Name = board.Name
+	b.Description = board.Description
 	b.AccessPolicy = board.AccessPolicy
 	b.ShowAuthors = board.ShowAuthors
 	b.ShowNotesOfOtherUsers = board.ShowNotesOfOtherUsers
@@ -72,6 +76,9 @@ type CreateBoardRequest struct {
 	// The name of the board.
 	Name *string `json:"name"`
 
+	// Description of the board
+	Description *string `json:"description"`
+
 	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
 
 	// The passphrase must be set if access policy is defined as by passphrase.
@@ -91,6 +98,9 @@ type SetTimerRequest struct {
 type BoardUpdateRequest struct {
 	// The name of the board.
 	Name *string `json:"name"`
+
+	//Description of the board
+	Description *string `json:"description"`
 
 	// The new access policy of the board.
 	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
