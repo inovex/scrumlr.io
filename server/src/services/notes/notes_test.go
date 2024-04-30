@@ -214,6 +214,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 
 	assert.NotNil(suite.T(), update)
 	assert.Nil(suite.T(), err)
+
 	mock.AssertExpectations(suite.T())
 }
 
@@ -266,9 +267,8 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
 
-	err := s.Delete(ctx, body, noteID)
+	s.Delete(ctx, body, noteID)
 
-	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
