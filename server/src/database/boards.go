@@ -1,20 +1,20 @@
 package database
 
 import (
-	"context"
-	"errors"
-	"time"
-
-	"github.com/google/uuid"
-	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
+  "context"
+  "errors"
+  "github.com/google/uuid"
+  "github.com/uptrace/bun"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/database/types"
+  "time"
 )
 
 type Board struct {
 	bun.BaseModel         `bun:"table:boards"`
 	ID                    uuid.UUID
 	Name                  *string
+	Description           *string
 	AccessPolicy          types.AccessPolicy
 	Passphrase            *string
 	Salt                  *string
@@ -33,6 +33,7 @@ type Board struct {
 type BoardInsert struct {
 	bun.BaseModel `bun:"table:boards"`
 	Name          *string
+	Description   *string
 	AccessPolicy  types.AccessPolicy
 	Passphrase    *string
 	Salt          *string
@@ -49,6 +50,7 @@ type BoardUpdate struct {
 	bun.BaseModel         `bun:"table:boards"`
 	ID                    uuid.UUID
 	Name                  *string
+	Description           *string
 	AccessPolicy          *types.AccessPolicy
 	Passphrase            *string
 	Salt                  *string
@@ -108,6 +110,9 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 
 	if update.Name != nil {
 		query.Column("name")
+	}
+	if update.Description != nil {
+		query.Column("description")
 	}
 	if update.AccessPolicy != nil {
 		if *update.AccessPolicy == types.AccessPolicyByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
