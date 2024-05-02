@@ -63,7 +63,7 @@ func testRealtimeGetBoardChannelWithBroker(t *testing.T, rt *realtime.Broker) {
 	const clients = 10
 	eventChannels := [clients]chan *realtime.BoardEvent{}
 	for i := range eventChannels {
-		eventChannels[i] = rt.GetBoardChannel(testBoard, "moderator")
+		eventChannels[i] = rt.GetBoardChannel(testBoard, realtime.SessionChannelModerator)
 	}
 	readEvents := [clients][]realtime.BoardEvent{}
 	wg := sync.WaitGroup{}
@@ -86,7 +86,7 @@ func testRealtimeGetBoardChannelWithBroker(t *testing.T, rt *realtime.Broker) {
 
 	for _, ev := range testEvents {
 		wg.Add(1 * clients)
-		err := rt.BroadcastToBoard(testBoard, []string{"moderator"}, ev)
+		err := rt.BroadcastToBoard(testBoard, []realtime.SessionChannel{realtime.SessionChannelModerator}, ev)
 		assert.Nil(t, err)
 	}
 
