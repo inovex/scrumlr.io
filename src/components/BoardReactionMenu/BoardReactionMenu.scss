@@ -3,7 +3,7 @@
 $container-height: 64px;
 $reaction-size: 64px;
 
-.board-reactions__container {
+.board-reactions-menu {
   position: fixed;
   height: $container-height;
   left: 0;
@@ -30,13 +30,13 @@ $reaction-size: 64px;
   z-index: $board-reaction-z-index;
 }
 
-.board-reactions__item {
+.board-reactions-menu__item {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.board-reactions__reaction {
+.board-reactions-menu__reaction {
   all: unset; // reset button
   cursor: pointer;
 
@@ -66,7 +66,7 @@ $reaction-size: 64px;
   }
 }
 
-.board-reactions__close {
+.board-reactions-menu__close {
   all: unset;
   width: $icon--large;
   height: $icon--large;
@@ -82,12 +82,12 @@ $reaction-size: 64px;
 }
 
 [theme="dark"] {
-  .board-reactions__container {
+  .board-reactions-menu {
     background-color: $color-dark-mode-note;
     box-shadow: $box-shadow--dark;
   }
 
-  .board-reactions__reaction {
+  .board-reactions-menu__reaction {
     &:hover {
       background-color: $hover-background-dark;
     }
@@ -97,13 +97,13 @@ $reaction-size: 64px;
     }
   }
 
-  .board-reactions__close {
+  .board-reactions-menu__close {
     color: $color-white;
   }
 }
 
 @media #{$smartphone} {
-  .board-reactions__container {
+  .board-reactions-menu {
     bottom: $column__border-width + $spacing--lg + 72px;
   }
 
@@ -113,7 +113,7 @@ $reaction-size: 64px;
 }
 
 @media #{$mini-smartphone} {
-  .board-reactions__container {
+  .board-reactions-menu {
     bottom: $column__border-width + $spacing--lg + 48px;
     padding: 0 $spacing--xs;
     gap: 2px;
@@ -121,7 +121,7 @@ $reaction-size: 64px;
 }
 
 @media screen and (max-width: 350px) {
-  .board-reactions__reaction {
+  .board-reactions-menu__reaction {
     width: 48px;
   }
 }
