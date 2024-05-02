@@ -1,12 +1,12 @@
 package api
 
 import (
-  "encoding/json"
-  "github.com/google/uuid"
-  "scrumlr.io/server/common/dto"
-  "scrumlr.io/server/database/types"
-  "scrumlr.io/server/logger"
-  "scrumlr.io/server/realtime"
+	"encoding/json"
+	"github.com/google/uuid"
+	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/realtime"
 )
 
 func isModerator(clientID uuid.UUID, sessions []*dto.BoardSession) bool {
