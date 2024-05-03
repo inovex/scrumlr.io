@@ -21,7 +21,9 @@ const (
 
 func (boardSessionRequestStatus *BoardSessionRequestStatus) UnmarshalJSON(b []byte) error {
 	var s string
-	json.Unmarshal(b, &s)
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
 	unmarshalledBoardSessionRequestStatus := BoardSessionRequestStatus(s)
 	switch unmarshalledBoardSessionRequestStatus {
 	case BoardSessionRequestStatusPending, BoardSessionRequestStatusAccepted, BoardSessionRequestStatusRejected:
