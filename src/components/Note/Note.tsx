@@ -14,8 +14,8 @@ import {useSize} from "utils/hooks/useSize";
 import {Sortable} from "components/DragAndDrop/Sortable";
 import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
-import "./Note.scss";
 import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
+import "./Note.scss";
 
 interface NoteProps {
   noteId: string;
