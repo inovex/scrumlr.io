@@ -10,8 +10,8 @@ import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {useDelayedReset} from "utils/hooks/useDelayedReset";
-import "./BoardReactionMenu.scss";
 import {animated, useTransition} from "@react-spring/web";
+import "./BoardReactionMenu.scss";
 
 type BoardReactionMenuProps = {
   showMenu: boolean;
@@ -59,11 +59,11 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
   return menuTransition(
     (style, item) =>
       item && (
-        <animated.div className="board-reactions__container" ref={ref} style={style}>
+        <animated.div className="board-reactions-menu" ref={ref} style={style}>
           {boardReactions.map(([reactionType, emoji], index) => (
             <button
               key={reactionType}
-              className={classNames("board-reactions__item board-reactions__reaction", {"board-reactions__reaction--disabled": !showBoardReactions})}
+              className={classNames("board-reactions-menu__item board-reactions-menu__reaction", {"board-reactions-menu__reaction--disabled": !showBoardReactions})}
               aria-disabled={!showBoardReactions}
               aria-label={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
               title={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
@@ -73,7 +73,7 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
             </button>
           ))}
 
-          <button className="board-reactions__item board-reactions__close" onClick={props.close} tabIndex={0} aria-hidden>
+          <button className="board-reactions-menu__item board-reactions-menu__close" onClick={props.close} tabIndex={0} aria-hidden>
             <CloseIcon />
           </button>
         </animated.div>
