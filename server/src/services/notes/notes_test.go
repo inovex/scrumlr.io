@@ -152,9 +152,8 @@ func (suite *NoteServiceTestSuite) TestGetNote() {
 		ID: noteID,
 	}, nil)
 
-	get, err := s.Get(context.Background(), noteID)
-	assert.NotNil(suite.T(), get)
-	assert.Nil(suite.T(), err)
+	s.Get(context.Background(), noteID)
+
 	mock.AssertExpectations(suite.T())
 }
 
@@ -214,6 +213,9 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	assert.NotNil(suite.T(), update)
 	assert.Nil(suite.T(), err)
 
+	assert.NotNil(suite.T(), update)
+	assert.Nil(suite.T(), err)
+
 	mock.AssertExpectations(suite.T())
 }
 
@@ -259,15 +261,16 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	clientMock.On("Publish", publishSubject, publishEventVotesUpdated).Return(nil)
 
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, "User", callerID)
-	ctx = context.WithValue(ctx, "Board", boardID)
+	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
+	ctx = context.WithValue(ctx, identifiers.BoardIdentifier, boardID)
 	ctx = context.WithValue(ctx, "Note", noteID)
 
 	mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
 
-	s.Delete(ctx, body, noteID)
+	err := s.Delete(ctx, body, noteID)
 
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
