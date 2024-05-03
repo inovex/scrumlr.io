@@ -9,6 +9,8 @@ import (
 
 	"scrumlr.io/server/identifiers"
 
+	"scrumlr.io/server/identifiers"
+
 	"scrumlr.io/server/common"
 
 	"scrumlr.io/server/common/dto"
@@ -152,8 +154,9 @@ func (suite *NoteServiceTestSuite) TestGetNote() {
 		ID: noteID,
 	}, nil)
 
-	s.Get(context.Background(), noteID)
-
+	get, err := s.Get(context.Background(), noteID)
+	assert.NotNil(suite.T(), get)
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -212,10 +215,6 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 
 	assert.NotNil(suite.T(), update)
 	assert.Nil(suite.T(), err)
-
-	assert.NotNil(suite.T(), update)
-	assert.Nil(suite.T(), err)
-
 	mock.AssertExpectations(suite.T())
 }
 
