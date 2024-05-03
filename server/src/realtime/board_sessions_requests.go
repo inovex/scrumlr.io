@@ -12,7 +12,7 @@ type BoardSessionRequestEventType string
 
 const (
 	RequestAccepted BoardSessionRequestEventType = "SESSION_ACCEPTED"
-	RequestRejected                              = "SESSION_REJECTED"
+	RequestRejected BoardSessionRequestEventType = "SESSION_REJECTED"
 )
 
 func (b *Broker) BroadcastUpdateOnBoardSessionRequest(board, user uuid.UUID, msg BoardSessionRequestEventType) error {

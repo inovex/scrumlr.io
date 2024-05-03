@@ -6,8 +6,5 @@ func (b *Broker) IsHealthy() bool {
 		return false
 	}
 	err := b.con.Publish("health", "test")
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }

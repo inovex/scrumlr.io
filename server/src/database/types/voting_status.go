@@ -20,7 +20,9 @@ const (
 
 func (votingStatus *VotingStatus) UnmarshalJSON(b []byte) error {
 	var s string
-	json.Unmarshal(b, &s)
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
 	unmarshalledVotingStatus := VotingStatus(s)
 	switch unmarshalledVotingStatus {
 	case VotingStatusOpen, VotingStatusClosed:
