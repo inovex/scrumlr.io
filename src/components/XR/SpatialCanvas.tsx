@@ -1,11 +1,9 @@
 import "./SpatialCanvas.scss";
-import {useAppSelector} from "store";
-import {PointerController, TouchHand} from "@coconut-xr/natuerlich/defaults";
-import {clippingEvents} from "@coconut-xr/koestlich";
-import {useInputSources} from "@coconut-xr/natuerlich/react";
-import {Canvas} from "@react-three/fiber";
-import {XR} from "@react-three/xr";
-import {useState} from "react";
+import store, {useAppSelector} from "store";
+import {PointerController, TouchHand, XRCanvas} from "@coconut-xr/natuerlich/defaults";
+import {ImmersiveSessionOrigin, useHeighestAvailableFrameRate, useInputSources, useNativeFramebufferScaling, useXR} from "@coconut-xr/natuerlich/react";
+import {useEffect} from "react";
+import {Actions} from "store/action";
 import XRLight from "./XRUI/XRLight/XRLight";
 import XRContainer from "./XRUI/XRContainer/XRContainer";
 
@@ -20,40 +18,40 @@ export function getInputSourceId(inputSource: XRInputSource): number {
 }
 
 const SpatialCanvas = () => {
-  const initialInputSources = useInputSources();
-  const [inputSources, setInputSources] = useState(initialInputSources);
+  const inputSources = useInputSources();
+  const {mode} = useXR.getState();
 
   const {xrActive} = useAppSelector((state) => ({
     xrActive: state.view.xrActive,
   }));
 
+  const frameBufferScaling = useNativeFramebufferScaling();
+  const heighestAvailableFramerate = useHeighestAvailableFrameRate();
+
+  useEffect(() => {
+    store.dispatch(Actions.setXRActive(mode !== "none"));
+  }, [mode]);
+
   return (
-    /* TODO: There must be a better way to make the canvas only visible when active... */
-    <div className="spatial-canvas_wrapper" style={{height: !xrActive ? "0" : "100vh", width: !xrActive ? "0" : "100vw"}}>
-      <Canvas className="spatial-canvas" events={clippingEvents} gl={{localClippingEnabled: true}}>
-        <XR
-          referenceSpace="local"
-          onSessionStart={(event) => console.log(event)}
-          onSessionEnd={(event) => console.log(event)}
-          onInputSourcesChange={(event) => {
-            const session = event.target as XRSession;
-            const sources = session?.inputSources;
-            const sourcesArray = Object.keys(sources).map((key) => sources[key]);
-            setInputSources(sourcesArray);
-          }}
-        >
-          <XRLight />
-          <XRContainer />
-          {inputSources.map((inputSource) =>
-            inputSource.hand != null ? (
-              <TouchHand id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} hand={inputSource.hand} childrenAtJoint="wrist" />
-            ) : (
-              <PointerController id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} />
-            )
-          )}
-        </XR>
-      </Canvas>
-    </div>
+    <XRCanvas
+      dpr={window.devicePixelRatio}
+      gl={{localClippingEnabled: true}}
+      frameBufferScaling={frameBufferScaling}
+      frameRate={heighestAvailableFramerate}
+      style={{position: "absolute", inset: 0, visibility: xrActive ? "visible" : "hidden"}}
+    >
+      <XRLight />
+      <XRContainer />
+      <ImmersiveSessionOrigin>
+        {inputSources.map((inputSource) =>
+          inputSource.hand != null ? (
+            <TouchHand id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} hand={inputSource.hand} childrenAtJoint="wrist" />
+          ) : (
+            <PointerController id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} />
+          )
+        )}
+      </ImmersiveSessionOrigin>
+    </XRCanvas>
   );
 };
 

@@ -14,8 +14,7 @@ import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
-import {XRButton} from "@react-three/xr";
-import {toast} from "react-toastify";
+import {useEnterXR} from "@coconut-xr/natuerlich/react";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -41,6 +40,8 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
     optionalFeatures: ["hand-tracking"],
   };
 
+  const enterAR = useEnterXR("immersive-ar", sessionOptions);
+
   return (
     <>
       {showConfirmationDialog && (
@@ -59,16 +60,15 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </button>
 
-        <XRButton
-          mode="AR"
+        <button
           className="board-header_xr-button"
-          sessionInit={sessionOptions}
-          onClick={() => store.dispatch(Actions.setXRActive(!state.xrActive))}
-          onError={(error) => {
-            toast.error(error.message);
-            store.dispatch(Actions.setXRActive(false));
+          onClick={() => {
+            store.dispatch(Actions.setXRActive(!state.xrActive));
+            return enterAR();
           }}
-        />
+        >
+          useEnterAR
+        </button>
 
         <button
           className="board-header_name-and-settings"

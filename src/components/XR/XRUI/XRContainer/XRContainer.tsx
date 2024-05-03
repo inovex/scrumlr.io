@@ -35,7 +35,7 @@ const XRContainer = () => (
         borderOpacity={0.3}
         display="flex"
         flexDirection="column"
-        position={[0, 0, -0.6]}
+        position={[0, 1.5, -0.64]}
         positionType="relative"
         padding={6}
       >
