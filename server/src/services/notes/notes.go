@@ -107,7 +107,7 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
-	note := ctx.Value("Note").(uuid.UUID)
+	note := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
 	voteFilter := filter.VoteFilter{
 		User:  &user,
 		Board: board,

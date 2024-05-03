@@ -9,8 +9,6 @@ import (
 
 	"scrumlr.io/server/identifiers"
 
-	"scrumlr.io/server/identifiers"
-
 	"scrumlr.io/server/common"
 
 	"scrumlr.io/server/common/dto"
@@ -262,7 +260,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 	ctx = context.WithValue(ctx, identifiers.BoardIdentifier, boardID)
-	ctx = context.WithValue(ctx, "Note", noteID)
+	ctx = context.WithValue(ctx, identifiers.NoteIdentifier, noteID)
 
 	mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
