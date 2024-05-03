@@ -2,8 +2,8 @@ package database
 
 import (
 	"context"
-	"database/sql"
 	"errors"
+	"scrumlr.io/server/identifiers"
 	"time"
 
 	"github.com/google/uuid"
@@ -50,13 +50,9 @@ func (d *Database) CreateBoardSessionRequest(request BoardSessionRequestInsert) 
 		Scan(common.ContextWithValues(context.Background(),
 			"Database", d,
 			"Operation", "INSERT",
-			"Board", request.Board,
+			identifiers.BoardIdentifier, request.Board,
 			"Result", &r,
 		), &r)
-
-	if err == sql.ErrNoRows {
-
-	}
 
 	return r, err
 }
@@ -86,7 +82,7 @@ func (d *Database) UpdateBoardSessionRequest(update BoardSessionRequestUpdate) (
 		Scan(common.ContextWithValues(context.Background(),
 			"Database", d,
 			"Operation", "UPDATE",
-			"Board", update.Board,
+			identifiers.BoardIdentifier, update.Board,
 			"Result", &r,
 		), &r)
 

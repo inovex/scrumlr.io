@@ -13,6 +13,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/services"
 	"strings"
 	"testing"
@@ -187,8 +188,8 @@ func (suite *NotesTestSuite) TestCreateNote() {
 				"column": "%s",
 				"text" : "%s"
 				}`, colId.String(), testText))).
-				AddToContext("Board", boardId).
-				AddToContext("User", userId)
+				AddToContext(identifiers.BoardIdentifier, boardId).
+				AddToContext(identifiers.UserIdentifier, userId)
 			rr := httptest.NewRecorder()
 
 			s.createNote(rr, req.Request())
@@ -238,7 +239,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 			}, tt.err)
 
 			req := NewTestRequestBuilder("GET", "/", nil).
-				AddToContext("Note", noteID)
+				AddToContext(identifiers.NoteIdentifier, noteID)
 
 			rr := httptest.NewRecorder()
 
@@ -315,7 +316,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			rctx := chi.NewRouteContext()
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)
-			req.AddToContext("User", userID)
+			req.AddToContext(identifiers.UserIdentifier, userID)
 
 			rr := httptest.NewRecorder()
 			r.ServeHTTP(rr, req.Request())

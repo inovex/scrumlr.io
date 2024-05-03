@@ -3,11 +3,11 @@ package api
 import (
 	"context"
 	"errors"
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+	"net/http"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
 
@@ -21,7 +21,7 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 			return
 		}
 
-		user := r.Context().Value("User").(uuid.UUID)
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 		exists, err := s.sessions.SessionRequestExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
@@ -34,7 +34,7 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 			return
 		}
 
-		boardContext := context.WithValue(r.Context(), "Board", board)
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
 		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
 }
@@ -49,7 +49,7 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 			return
 		}
 
-		user := r.Context().Value("User").(uuid.UUID)
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 		exists, err := s.sessions.SessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
@@ -74,7 +74,7 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 			return
 		}
 
-		boardContext := context.WithValue(r.Context(), "Board", board)
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
 		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
 }
@@ -89,7 +89,7 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
 			return
 		}
-		user := r.Context().Value("User").(uuid.UUID)
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 		exists, err := s.sessions.ModeratorSessionExists(r.Context(), board, user)
 		if err != nil {
@@ -103,7 +103,7 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 			return
 		}
 
-		boardContext := context.WithValue(r.Context(), "Board", board)
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
 		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
 }
@@ -112,8 +112,8 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
-		board := r.Context().Value("Board").(uuid.UUID)
-		user := r.Context().Value("User").(uuid.UUID)
+		board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 		isMod, err := s.sessions.ModeratorSessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to verify board session", "err", err)
@@ -135,7 +135,7 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 			return
 		}
 
-		boardEditable := context.WithValue(r.Context(), "BoardEditable", settings.AllowEditing)
+		boardEditable := context.WithValue(r.Context(), identifiers.BoardEditableIdentifier, settings.AllowEditing)
 		next.ServeHTTP(w, r.WithContext(boardEditable))
 	})
 }
@@ -149,7 +149,7 @@ func (s *Server) ColumnContext(next http.Handler) http.Handler {
 			return
 		}
 
-		columnContext := context.WithValue(r.Context(), "Column", column)
+		columnContext := context.WithValue(r.Context(), identifiers.ColumnIdentifier, column)
 		next.ServeHTTP(w, r.WithContext(columnContext))
 	})
 }
@@ -163,7 +163,7 @@ func (s *Server) NoteContext(next http.Handler) http.Handler {
 			return
 		}
 
-		columnContext := context.WithValue(r.Context(), "Note", note)
+		columnContext := context.WithValue(r.Context(), identifiers.NoteIdentifier, note)
 		next.ServeHTTP(w, r.WithContext(columnContext))
 	})
 }
@@ -177,7 +177,7 @@ func (s *Server) ReactionContext(next http.Handler) http.Handler {
 			return
 		}
 
-		reactionContext := context.WithValue(r.Context(), "Reaction", reaction)
+		reactionContext := context.WithValue(r.Context(), identifiers.ReactionIdentifier, reaction)
 		next.ServeHTTP(w, r.WithContext(reactionContext))
 	})
 }
@@ -190,7 +190,7 @@ func (s *Server) VotingContext(next http.Handler) http.Handler {
 			common.Throw(w, r, common.BadRequestError(errors.New("invalid voting id")))
 			return
 		}
-		votingContext := context.WithValue(r.Context(), "Voting", voting)
+		votingContext := context.WithValue(r.Context(), identifiers.VotingIdentifier, voting)
 		next.ServeHTTP(w, r.WithContext(votingContext))
 	})
 }
