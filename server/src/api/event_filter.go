@@ -81,7 +81,7 @@ func parseVotingUpdated(data interface{}) (*VotingUpdated, error) {
 	return ret, nil
 }
 
-func parseParticipent(data interface{}) (*dto.BoardSession, error) {
+func parseParticipant(data interface{}) (*dto.BoardSession, error) {
 	var ret *dto.BoardSession
 
 	b, err := json.Marshal(data)
@@ -268,7 +268,7 @@ func (b *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.
 		return &ret
 
 	case realtime.BoardEventParticipantUpdated:
-		eventParticipant, err := parseParticipent(event.Data)
+		eventParticipant, err := parseParticipant(event.Data)
 		if err != nil {
 			return nil
 		}
