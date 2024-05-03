@@ -8,6 +8,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/services"
 	"strings"
 	"testing"
@@ -105,7 +106,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 				"voteLimit": 4,
 				"allowMultipleVotes": false,
 				"showVotesOfOthers": false
-				}`)).AddToContext("Board", boardId)
+				}`)).AddToContext(identifiers.BoardIdentifier, boardId)
 
 			rr := httptest.NewRecorder()
 			s.createVoting(rr, req.Request())
@@ -155,8 +156,8 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 			req := NewTestRequestBuilder("PUT", "/", strings.NewReader(`{
 				"status": "CLOSED"
 				}`)).
-				AddToContext("Board", boardId).
-				AddToContext("Voting", votingId)
+				AddToContext(identifiers.BoardIdentifier, boardId).
+				AddToContext(identifiers.VotingIdentifier, votingId)
 			rr := httptest.NewRecorder()
 
 			s.updateVoting(rr, req.Request())
@@ -181,8 +182,8 @@ func (suite *VotingTestSuite) TestGetVoting() {
 	}, nil)
 
 	req := NewTestRequestBuilder("GET", "/", nil).
-		AddToContext("Board", boardId).
-		AddToContext("Voting", votingId)
+		AddToContext(identifiers.BoardIdentifier, boardId).
+		AddToContext(identifiers.VotingIdentifier, votingId)
 	rr := httptest.NewRecorder()
 
 	s.getVoting(rr, req.Request())

@@ -70,10 +70,10 @@ func (r *redisClient) SubscribeToBoardSessionEvents(subject string) (chan *Board
 	if err != nil {
 		return nil, fmt.Errorf("failed to subscribe: %w", err)
 	}
-	switch event.(type) {
+	switch event := event.(type) {
 	case *redis.Message:
 		var boardEvent BoardSessionRequestEventType
-		err := decodeEvent(event.(*redis.Message).Payload, &boardEvent)
+		err := decodeEvent(event.Payload, &boardEvent)
 		if err == nil {
 			retChannel <- &boardEvent
 		}
@@ -107,10 +107,10 @@ func (r *redisClient) SubscribeToBoardEvents(subject string) (chan *BoardEvent, 
 	if err != nil {
 		return nil, fmt.Errorf("failed to subscribe: %w", err)
 	}
-	switch event.(type) {
+	switch event := event.(type) {
 	case *redis.Message:
 		var boardEvent BoardEvent
-		err := decodeEvent(event.(*redis.Message).Payload, &boardEvent)
+		err := decodeEvent(event.Payload, &boardEvent)
 		if err == nil {
 			retChannel <- &boardEvent
 		}

@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"testing"
 
+	"scrumlr.io/server/identifiers"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
@@ -114,13 +116,14 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 
 	clientMock.On("Publish", publishSubject, publishEvent).Return(nil)
 
-	s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
 	})
 
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 	clientMock.AssertExpectations(suite.T())
 
@@ -137,8 +140,9 @@ func (suite *NoteServiceTestSuite) TestGetNote() {
 		ID: noteID,
 	}, nil)
 
-	s.Get(context.Background(), noteID)
-
+	get, err := s.Get(context.Background(), noteID)
+	assert.NotNil(suite.T(), get)
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -151,8 +155,9 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 
 	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
 
-	s.List(context.Background(), boardID)
-
+	get, err := s.List(context.Background(), boardID)
+	assert.NotNil(suite.T(), get)
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -193,7 +198,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
 
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, "User", callerID)
+	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 
 	mock.On("UpdateNote", callerID, database.NoteUpdate{
 		ID:       noteID,
@@ -202,13 +207,15 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		Position: &posUpdate,
 	}).Return(database.Note{}, nil)
 
-	s.Update(ctx, dto.NoteUpdateRequest{
+	update, err := s.Update(ctx, dto.NoteUpdateRequest{
 		Text:     &txt,
 		ID:       noteID,
 		Board:    boardID,
 		Position: &pos,
 	})
 
+	assert.NotNil(suite.T(), update)
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -254,15 +261,16 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	clientMock.On("Publish", publishSubject, publishEventVotesUpdated).Return(nil)
 
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, "User", callerID)
-	ctx = context.WithValue(ctx, "Board", boardID)
+	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
+	ctx = context.WithValue(ctx, identifiers.BoardIdentifier, boardID)
 	ctx = context.WithValue(ctx, "Note", noteID)
 
 	mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
 
-	s.Delete(ctx, body, noteID)
+	err := s.Delete(ctx, body, noteID)
 
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 

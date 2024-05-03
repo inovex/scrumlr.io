@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/identifiers"
 )
 
 type ReactionsObserver interface {
@@ -34,8 +35,8 @@ func notifyReactionDeleted(ctx context.Context) error {
 	d := ctx.Value("Database").(*Database)
 
 	if len(d.observer) > 0 {
-		board := ctx.Value("Board").(uuid.UUID)
-		reaction := ctx.Value("Reaction").(uuid.UUID)
+		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+		reaction := ctx.Value(identifiers.ReactionIdentifier).(uuid.UUID)
 
 		for _, observer := range d.observer {
 			if o, ok := observer.(ReactionsObserver); ok {

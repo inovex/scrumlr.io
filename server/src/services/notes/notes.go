@@ -4,6 +4,8 @@ import (
 	"context"
 	"database/sql"
 
+	"scrumlr.io/server/identifiers"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/services"
 
@@ -88,7 +90,7 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 			Stack:  body.Position.Stack,
 		}
 	}
-	note, err := s.database.UpdateNote(ctx.Value("User").(uuid.UUID), database.NoteUpdate{
+	note, err := s.database.UpdateNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), database.NoteUpdate{
 		ID:       body.ID,
 		Board:    body.Board,
 		Text:     body.Text,
@@ -103,8 +105,8 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 }
 
 func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
-	user := ctx.Value("User").(uuid.UUID)
-	board := ctx.Value("Board").(uuid.UUID)
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	note := ctx.Value("Note").(uuid.UUID)
 	voteFilter := filter.VoteFilter{
 		User:  &user,
