@@ -12,6 +12,8 @@ import (
 
 	"scrumlr.io/server/identifiers"
 
+	"scrumlr.io/server/identifiers"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
