@@ -5,7 +5,7 @@ import "./NoteTextContent.scss";
 
 type NoteTextContentProps = {
   text: string;
-  truncate: boolean;
+  truncate?: boolean;
 };
 
 export const NoteTextContent = (props: NoteTextContentProps) => {
