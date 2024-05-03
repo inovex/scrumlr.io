@@ -9,6 +9,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     vertical-align: top; /* align with the rest of the text */
-    color: $color-board-reaction-name-self--light;
+    color: var(--accent-color);
   }
 }
