@@ -63,13 +63,12 @@ func (s *Server) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *we
 }
 
 func (b *BoardSessionRequestSubscription) startListeningOnBoardSessionRequest(userId uuid.UUID) {
-	for msg := range b.subscriptions[userId] {
-		logger.Get().Debugw("message received", "message", msg)
-		conn := b.clients[userId]
-		err := conn.WriteJSON(msg)
-		if err != nil {
-			logger.Get().Warnw("failed to send message", "message", msg, "err", err)
-		}
+	msg := <-b.subscriptions[userId]
+	logger.Get().Debugw("message received", "message", msg)
+	conn := b.clients[userId]
+	err := conn.WriteJSON(msg)
+	if err != nil {
+		logger.Get().Warnw("failed to send message", "message", msg, "err", err)
 	}
 }
 
