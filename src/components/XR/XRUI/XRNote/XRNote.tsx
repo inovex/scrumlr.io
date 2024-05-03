@@ -47,16 +47,18 @@ const XRNote = (props: NoteProps) => {
 
   return (
     <Suspense>
-      <Object depth={4} object={mesh1} opacity={0.3}>
-        <Container flexDirection="column" index={note.position.rank * -1} backgroundColor={undefined} width="100%" margin={0} padding={12} overflow="scroll">
-          <Text fontSize={10} color={FONT_COLOR}>
-            {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
-          </Text>
-          <Text color={FONT_COLOR} fontSize={12} height={64}>
-            {note.text}
-          </Text>
-        </Container>
-      </Object>
+      <Container>
+        <Object depth={4} object={mesh1} opacity={0.3} marginBottom={8} index={note.position.rank * -1}>
+          <Container flexDirection="column" backgroundColor={undefined} width="100%" margin={0} padding={12} overflow="scroll">
+            <Text fontSize={10} color={FONT_COLOR}>
+              {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
+            </Text>
+            <Text color={FONT_COLOR} fontSize={12} height={64}>
+              {note.text}
+            </Text>
+          </Container>
+        </Object>
+      </Container>
     </Suspense>
   );
 };

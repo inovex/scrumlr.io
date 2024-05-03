@@ -45,7 +45,7 @@ const XRColumn = (props: ColumnProps) => {
       <Text color={FONT_COLOR} marginBottom={16} borderBottom={4} borderColor={getColorFromName(props.color)}>
         {props.name}
       </Text>
-      <Container width="100%" height="100%" flexDirection="column" gapRow={8} overflow="scroll" paddingBottom={32}>
+      <Container width="100%" height="100%" flexDirection="column" overflow="scroll" paddingBottom={32}>
         {notes.map((note) => (
           <XRNote key={note} noteId={note} viewer={viewer} />
         ))}
