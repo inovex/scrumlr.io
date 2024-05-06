@@ -13,7 +13,6 @@ interface NoteReactionBarProps {
 
 export const NoteReactionBar = (props: NoteReactionBarProps) => {
   const handleClickBar = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
-    console.log(e);
     e.preventDefault();
     props.closeReactionBar();
     props.handleClickReaction(e, reactionType);
