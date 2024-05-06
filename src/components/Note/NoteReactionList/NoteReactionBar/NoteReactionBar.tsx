@@ -23,6 +23,9 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
   // by preventing the note from being opened if it's active
   useEffect(() => {
     const handlePressEnter = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.stopPropagation();
+      }
       if (e.key === "Escape") {
         props.closeReactionBar();
       }
