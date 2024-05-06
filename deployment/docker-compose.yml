@@ -2,8 +2,6 @@ version: '3.8'
 
 services:
   scrumlr-backend:
-    # needed until we have a multi-arch image
-    # platform: linux/amd64
     restart: always
     build:
       context: ../server/src/
@@ -12,18 +10,29 @@ services:
       - "/app/main"
       - "-disable-check-origin"
     environment:
-      SCRUMLR_SERVER_PORT: "8080"
-      SCRUMLR_SERVER_URL: "http://localhost:8080"
-      SCRUMLR_SERVER_NATS_URL: "nats://nats:4222"
-      SCRUMLR_AUTH_CALLBACK_HOST: "http://localhost:8080"
+      SCRUMLR_SERVER_PORT: "${SCRUMLR_SERVER_PORT}"
+      SCRUMLR_SERVER_NATS_URL: "${SCRUMLR_SERVER_NATS_URL}"
       SCRUMLR_PRIVATE_KEY: "${SCRUMLR_PRIVATE_KEY}"
       SCRUMLR_SERVER_DATABASE_URL: "postgres://scrumlr:${POSTGRES_PASSWORD}@postgres:5432/scrumlr?sslmode=disable"
-      # SCRUMLR_AUTH_GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
-      # SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
-      # SCRUMLR_AUTH_MICROSOFT_CLIENT_ID: "${MICROSOFT_CLIENT_ID}"
-      # SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET: "${MICROSOFT_CLIENT_SECRET}"
-      # SCRUMLR_FEEDBACK_WEBHOOK_URL: "${WEBHOOK_URL}"
-      SCRUMLR_BASE_PATH: "/api"
+      SCRUMLR_AUTH_GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
+      SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
+      SCRUMLR_AUTH_MICROSOFT_CLIENT_ID: "${MICROSOFT_CLIENT_ID}"
+      SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET: "${MICROSOFT_CLIENT_SECRET}"
+      SCRUMLR_FEEDBACK_WEBHOOK_URL: "${WEBHOOK_URL}"
+      SCRUMLR_BASE_PATH: "${SCRUMLR_BASE_PATH}"
+      SCRUMLR_INSECURE: "${SCRUMLR_INSECURE}"
+      SCRUMLR_AUTH_GITHUB_CLIENT_ID: "${GITHUB_CLIENT_ID}"
+      SCRUMLR_AUTH_GITHUB_CLIENT_SECRET: "${GITHUB_CLIENT_SECRET}"
+      SCRUMLR_AUTH_AZURE_AD_TENANT_ID: "${AZURE_AD_TENANT_ID}"
+      SCRUMLR_AUTH_AZURE_AD_CLIENT_ID: "${AZURE_AD_CLIENT_ID}"
+      SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET: "${AZURE_AD_CLIENT_SECRET}"
+      SCRUMLR_AUTH_APPLE_CLIENT_ID: "${APPLE_CLIENT_ID}"
+      SCRUMLR_AUTH_APPLE_CLIENT_SECRET: "${APPLE_CLIENT_SECRET}"
+      # SCRUMLR_CONFIG_PATH: "${SCRUMRL_CONFIG_PATH}"
+      # Redis variables (if you decide to use Redis instead of NATS)
+      SCRUMLR_SERVER_REDIS_HOST: "${REDIS_HOST}"
+      SCRUMLR_SERVER_REDIS_USERNAME: "${REDIS_USERNAME}"
+      SCRUMLR_SERVER_REDIS_PASSWORD: "${REDIS_PASSWORD}"
     ports:
       - "8080:8080"
     depends_on:
@@ -32,15 +41,17 @@ services:
 
   scrumlr-frontend:
     restart: always
-    # needed until we have a multi-arch image
-    # platform: linux/amd64
     build:
       context: ../.
       dockerfile: Dockerfile
     environment:
-      SCRUMLR_SERVER_URL: "http://localhost:8080/api"
-      SCRUMLR_WEBSOCKET_URL: "ws://localhost:8080/api"
-      SCRUMLR_SHOW_LEGAL_DOCUMENTS: "true"
+      SCRUMLR_SERVER_URL: "${SCRUMLR_SERVER_URL}"
+      SCRUMLR_WEBSOCKET_URL: "${SCRUMLR_WEBSOCKET_URL}"
+      SCRUMLR_SHOW_LEGAL_DOCUMENTS: "${SCRUMLR_SHOW_LEGAL_DOCUMENTS}"
+      # Add missing frontend environment variables here
+      SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT}"
+      SCRUMLR_ANALYTICS_DATA_DOMAIN: "${ANALYTICS_DATA_DOMAIN}"
+      SCRUMLR_ANALYTICS_SRC: "${ANALYTICS_SRC}"
     ports:
       - "9090:8080"
 

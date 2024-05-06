@@ -15,6 +15,11 @@ git clone https://github.com/inovex/scrumlr.io
 cd scrumlr.io/deployment/
 ```
 
+Copy the `.env.example` file to `.env` and adjust the variables to your needs.
+```sh
+cp .env.example .env
+```
+
 ## Generating needed secrets
 
 ### Postgres Password
