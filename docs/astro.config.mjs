@@ -9,6 +9,10 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Scrumlr Docs',
+      customCss: [
+        // Relative path to your custom CSS file
+        './src/styles/custom.css',
+      ],
       social: {
         github: 'https://github.com/inovex/scrumlr.io',
       },
@@ -25,7 +29,7 @@ export default defineConfig({
         },
         {
           label: 'Self-Hosted',
-          autogenerate: { directory: 'self-hosted' },
+          autogenerate: { directory: 'self-hosting' },
         },
       ],
     }),

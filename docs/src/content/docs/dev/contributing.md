@@ -121,7 +121,7 @@ Additionally, you can use the issue tracker for reporting bugs. Our team activel
 We value your input, feedback, and contributions, and we're here to support you throughout your journey with Scrumlr. Don't hesitate to engage in discussions, propose ideas, or raise questions – together, we can shape the future of Scrumlr!
 
 ## Code of Conduct
-See the [Code of Conduct](./CODE_OF_CONDUCT.md) file.
+See the [Code of Conduct](CODE_OF_CONDUCT) file.
 
 ## License
 Scrumlr is released under the [MIT License](https://github.com/inovex/scrumlr.io/blob/11c88f8601020a2f946873ab6997a56b7abf57d8/LICENSE).

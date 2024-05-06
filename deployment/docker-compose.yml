@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  scrumlr-backend:
+    # needed until we have a multi-arch image
+    # platform: linux/amd64
+    restart: always
+    build:
+      context: ../server/src/
+      dockerfile: Dockerfile
+    command:
+      - "/app/main"
+      - "-disable-check-origin"
+    environment:
+      SCRUMLR_SERVER_PORT: "8080"
+      SCRUMLR_SERVER_URL: "http://localhost:8080"
+      SCRUMLR_SERVER_NATS_URL: "nats://nats:4222"
+      SCRUMLR_AUTH_CALLBACK_HOST: "http://localhost:8080"
+      SCRUMLR_PRIVATE_KEY: "${SCRUMLR_PRIVATE_KEY}"
+      SCRUMLR_SERVER_DATABASE_URL: "postgres://scrumlr:${POSTGRES_PASSWORD}@postgres:5432/scrumlr?sslmode=disable"
+      # SCRUMLR_AUTH_GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
+      # SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
+      # SCRUMLR_AUTH_MICROSOFT_CLIENT_ID: "${MICROSOFT_CLIENT_ID}"
+      # SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET: "${MICROSOFT_CLIENT_SECRET}"
+      # SCRUMLR_FEEDBACK_WEBHOOK_URL: "${WEBHOOK_URL}"
+      SCRUMLR_BASE_PATH: "/api"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - nats
+
+  scrumlr-frontend:
+    restart: always
+    # needed until we have a multi-arch image
+    # platform: linux/amd64
+    build:
+      context: ../.
+      dockerfile: Dockerfile
+    environment:
+      SCRUMLR_SERVER_URL: "http://localhost:8080/api"
+      SCRUMLR_WEBSOCKET_URL: "ws://localhost:8080/api"
+      SCRUMLR_SHOW_LEGAL_DOCUMENTS: "true"
+    ports:
+      - "9090:8080"
+
+  postgres:
+    restart: always
+    image: postgres:15.1
+    environment:
+      POSTGRES_DB: scrumlr
+      POSTGRES_USER: scrumlr
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  nats:
+    restart: always
+    image: nats:2.8.4
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+
+volumes:
+  postgres_data:
