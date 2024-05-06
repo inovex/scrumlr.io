@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"net/http/httptest"
+	"scrumlr.io/server/identifiers"
 	"strings"
 	"testing"
 
@@ -81,11 +82,11 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(`{
 				"id": %s
 				}`)).
-				AddToContext("Board", mockUUID).
-				AddToContext("User", mockUUID).
-				AddToContext("Note", mockUUID).
-				AddToContext("Column", mockUUID).
-				AddToContext("Voting", mockUUID)
+				AddToContext(identifiers.BoardIdentifier, mockUUID).
+				AddToContext(identifiers.UserIdentifier, mockUUID).
+				AddToContext(identifiers.NoteIdentifier, mockUUID).
+				AddToContext(identifiers.ColumnIdentifier, mockUUID).
+				AddToContext(identifiers.VotingIdentifier, mockUUID)
 
 			rr := httptest.NewRecorder()
 			tt.handler(s)(rr, req.Request())
