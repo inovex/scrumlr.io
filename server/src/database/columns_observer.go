@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/identifiers"
 )
 
 type ColumnsObserver interface {
@@ -41,7 +42,7 @@ func notifyColumnsUpdated(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		board := ctx.Value("Board").(uuid.UUID)
+		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 		columns, err := d.GetColumns(board)
 		if err != nil {
 			return err
@@ -62,11 +63,15 @@ func notifyColumnDeleted(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		user := ctx.Value("User").(uuid.UUID)
-		board := ctx.Value("Board").(uuid.UUID)
+		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 		_ = ctx.Value("Column").(uuid.UUID)
 		deletedColumn := ctx.Value("deletedColumn").(Column)
+
 		notes, err := d.GetNotes(board)
+		if err != nil {
+			return err
+		}
 		votes, err := d.GetVotes(filter.VoteFilter{Board: board})
 		if err != nil {
 			return err

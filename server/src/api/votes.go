@@ -5,6 +5,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 
 	"github.com/go-chi/render"
@@ -15,8 +16,8 @@ import (
 func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
-	board := r.Context().Value("Board").(uuid.UUID)
-	user := r.Context().Value("User").(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -42,8 +43,8 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 
-	board := r.Context().Value("Board").(uuid.UUID)
-	user := r.Context().Value("User").(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -66,8 +67,8 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value("Board").(uuid.UUID)
-	user := r.Context().Value("User").(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	requestFilter := filter.VoteFilter{
 		Board: board,

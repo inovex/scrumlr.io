@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"scrumlr.io/server/identifiers"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common/filter"
@@ -43,7 +44,7 @@ func notifyNotesUpdated(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		board := ctx.Value("Board").(uuid.UUID)
+		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 		notes, err := d.GetNotes(board)
 		if err != nil {
 			return err
@@ -64,11 +65,12 @@ func notifyNoteDeleted(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		userID := ctx.Value("User").(uuid.UUID)
-		boardID := ctx.Value("Board").(uuid.UUID)
+		userID := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+		boardID := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 		_ = ctx.Value("Note").(uuid.UUID)
 		note := ctx.Value("DeletedNote").(Note)
 		columns, err := d.GetColumns(boardID)
+
 		deleteStack := ctx.Value("DeleteStack").(bool)
 		votes, err := d.GetVotes(filter.VoteFilter{Board: boardID})
 		if err != nil {

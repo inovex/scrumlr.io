@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -15,8 +16,8 @@ type BoardSessionRequestSubscription struct {
 }
 
 func (s *Server) openBoardSessionRequestSocket(w http.ResponseWriter, r *http.Request) {
-	id := r.Context().Value("Board").(uuid.UUID)
-	userID := r.Context().Value("User").(uuid.UUID)
+	id := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -62,16 +63,12 @@ func (s *Server) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *we
 }
 
 func (b *BoardSessionRequestSubscription) startListeningOnBoardSessionRequest(userId uuid.UUID) {
-	for {
-		select {
-		case msg := <-b.subscriptions[userId]:
-			logger.Get().Debugw("message received", "message", msg)
-			conn := b.clients[userId]
-			err := conn.WriteJSON(msg)
-			if err != nil {
-				logger.Get().Warnw("failed to send message", "message", msg, "err", err)
-			}
-		}
+	msg := <-b.subscriptions[userId]
+	logger.Get().Debugw("message received", "message", msg)
+	conn := b.clients[userId]
+	err := conn.WriteJSON(msg)
+	if err != nil {
+		logger.Get().Warnw("failed to send message", "message", msg, "err", err)
 	}
 }
 

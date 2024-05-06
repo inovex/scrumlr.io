@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+	"scrumlr.io/server/identifiers"
 	"time"
 
 	"github.com/google/uuid"
@@ -51,7 +52,7 @@ func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
 		Model(&insert).
 		Value("rank", "coalesce((SELECT COUNT(*) as rank FROM notes WHERE board = ? AND \"column\" = ? AND stack IS NULL), 0)", insert.Board, insert.Column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", insert.Board), &note)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
 	return note, err
 }
 
@@ -122,7 +123,7 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 
 func (d *Database) updateNoteText(update NoteUpdate) (Note, error) {
 	var note Note
-	_, err := d.db.NewUpdate().Model(&update).Column("text").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", update.Board), &note)
+	_, err := d.db.NewUpdate().Model(&update).Column("text").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 	if err != nil {
 		return note, err
 	}
@@ -175,7 +176,7 @@ func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 	}
 
 	var note []Note
-	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", update.Board), &note)
+	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 	return note[0], err
 }
 
@@ -297,7 +298,7 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 	}
 
 	var note []Note
-	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", update.Board), &note)
+	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 	return note[0], err
 }
 
@@ -370,7 +371,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 				With("update_board", updateBoard).
 				With("update_ranks", updateRanks).
 				Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-				Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "DeletedNote", deletedNote, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+				Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.NoteIdentifier, id, identifiers.UserIdentifier, caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
 
 			return err
 		}
@@ -397,7 +398,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 			With("update_stackrefs", updateStackRefs).
 			With("update_parentStackId", updateNextParentStackId).
 			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", board, "Note", id, "DeletedNote", deletedNote, "User", caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+			Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.NoteIdentifier, id, identifiers.UserIdentifier, caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
 
 		return err
 	}
