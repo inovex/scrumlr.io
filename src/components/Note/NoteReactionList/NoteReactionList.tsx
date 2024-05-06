@@ -118,7 +118,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     // remove focus to avoid bar from opening when going to another tab and back because of the focus event
     (document.activeElement as HTMLButtonElement).blur();
     setShowReactionBar(false);
-    buttonRef.current?.focus();
   };
 
   // on clicking anywhere but the note, close the reaction bar
