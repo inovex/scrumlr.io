@@ -207,8 +207,13 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           aria-label={t("NoteReactionList.toggleBarLabel")}
           onKeyDown={(e) => {
             if (e.code === "Enter" || e.code === "Space") {
+              // Stop the default, because it will dispatch a click event on
+              // the first reaction
               e.preventDefault();
+              // Stop propagation of the event so that it does not bubble up
+              // to the note component and opens the stack view
               e.stopPropagation();
+              // Open the reaction bar
               setShowReactionBar((show) => !show);
             }
           }}
