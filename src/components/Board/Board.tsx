@@ -143,7 +143,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
     if (locked) {
       Toast.info({title: t("Toast.lockedBoard"), autoClose: 10_000});
     }
-  }, [locked]);
+  }, [t, locked]);
 
   if (!children || columnsCount === 0) {
     // Empty board
