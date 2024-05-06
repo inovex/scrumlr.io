@@ -18,4 +18,4 @@ Scrumlr is an online collaboration tool that helps teams reach new heights. Star
 Read our [Contributing Guidelines](/dev/contributing/) to learn how you can contribute to Scrumlr. We welcome all contributions, big or small!
 
 ## Self-hosting
-Since Scrumlr is completely free and open-source, you can self-host it on your own server for yourself, your team or even as an organization. Check out our [self-hosting guide](/docs/self-hosted/intro/) to get started.
+Since Scrumlr is completely free and open-source, you can self-host it on your own server for yourself, your team or even as an organization. Check out our [self-hosting guide](/self-hosting/intro/) to get started.
