@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
+import ReactFocusLock from "react-focus-lock";
 import classNames from "classnames";
 import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionBar.scss";
-import ReactFocusLock from "react-focus-lock";
 
 interface NoteReactionBarProps {
   closeReactionBar: () => void;
@@ -32,7 +32,7 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
 
     document.addEventListener("keydown", handlePressEnter, true);
     return () => document.removeEventListener("keydown", handlePressEnter, true);
-  }, []);
+  }, [props]);
 
   return (
     <div className="note-reaction-bar__root">

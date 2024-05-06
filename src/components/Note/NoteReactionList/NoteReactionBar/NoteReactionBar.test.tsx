@@ -7,9 +7,9 @@ describe("NoteReactionBar", () => {
   it("renders the reaction buttons correctly", () => {
     render(<NoteReactionBar closeReactionBar={() => {}} reactions={[]} handleClickReaction={() => {}} />);
 
-    for (const [_, emoji] of REACTION_EMOJI_MAP.entries()) {
+    REACTION_EMOJI_MAP.forEach((emoji) => {
       expect(screen.getByText(emoji)).toBeInTheDocument();
-    }
+    });
   });
 
   it("calls handleClickBar when a reaction button is clicked", () => {
