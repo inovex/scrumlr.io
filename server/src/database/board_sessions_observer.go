@@ -43,6 +43,9 @@ func (*BoardSession) AfterScanRow(ctx context.Context) error {
 		case "UPDATE":
 			session := ctx.Value("Result").(*BoardSession)
 			columns, err := d.GetColumns(board)
+			if err != nil {
+				return err
+			}
 			notes, err := d.GetNotes(board)
 			if err != nil {
 				return err
@@ -84,7 +87,13 @@ func (*UserUpdate) AfterUpdate(ctx context.Context, q *bun.UpdateQuery) error {
 			return err
 		}
 		columns, err := d.GetColumns(board)
+		if err != nil {
+			return err
+		}
 		notes, err := d.GetNotes(board)
+		if err != nil {
+			return err
+		}
 		for _, observer := range d.observer {
 			if o, ok := observer.(BoardSessionsObserver); ok {
 				o.UpdatedSession(board, session, columns, notes)

@@ -371,7 +371,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 				With("update_board", updateBoard).
 				With("update_ranks", updateRanks).
 				Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-				Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.NoteIdentifier, id, identifiers.UserIdentifier, caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+				Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.NoteIdentifier, id, identifiers.UserIdentifier, caller, "DeleteStack", deleteStack, "deletedNote", deletedNote, "Result", &notes), &notes)
 
 			return err
 		}
@@ -398,7 +398,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 			With("update_stackrefs", updateStackRefs).
 			With("update_parentStackId", updateNextParentStackId).
 			Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board).Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.NoteIdentifier, id, identifiers.UserIdentifier, caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
+			Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.NoteIdentifier, id, identifiers.UserIdentifier, caller, "DeleteStack", deleteStack, "deletedNote", deletedNote, "Result", &notes), &notes)
 
 		return err
 	}

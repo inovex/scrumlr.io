@@ -65,7 +65,7 @@ func notifyColumnDeleted(ctx context.Context) error {
 	if len(d.observer) > 0 {
 		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
-		_ = ctx.Value("Column").(uuid.UUID)
+		_ = ctx.Value(identifiers.ColumnIdentifier).(uuid.UUID)
 		deletedColumn := ctx.Value("deletedColumn").(Column)
 
 		notes, err := d.GetNotes(board)

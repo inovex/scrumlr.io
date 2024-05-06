@@ -138,7 +138,7 @@ func (d *Database) DeleteColumn(board, column, user uuid.UUID) error {
 		Model((*Column)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.ColumnIdentifier, column, identifiers.UserIdentifier, user, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.ColumnIdentifier, column, identifiers.UserIdentifier, user, "deletedColumn", colToDelete, "Result", &columns), &columns)
 
 	return err
 }

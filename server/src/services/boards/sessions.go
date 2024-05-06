@@ -256,19 +256,23 @@ func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.B
 		Type: realtime.BoardEventParticipantUpdated,
 		Data: new(dto.BoardSession).From(session),
 	})
-
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated board session", "err", err)
+	}
 	err = s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: dto.Columns(columns),
 	})
-
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast updated columns event", "err", err)
+	}
 	err = s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
 		Data: dto.Notes(notes),
 	})
 
 	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated board session", "err", err)
+		logger.Get().Errorw("unable to broadcast notes sync event", "err", err)
 	}
 }
 

@@ -2,10 +2,10 @@ package database
 
 import (
 	"context"
-	"scrumlr.io/server/identifiers"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/identifiers"
 )
 
 type NotesObserver interface {
@@ -67,10 +67,11 @@ func notifyNoteDeleted(ctx context.Context) error {
 	if len(d.observer) > 0 {
 		userID := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 		boardID := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
-		_ = ctx.Value("Note").(uuid.UUID)
-		note := ctx.Value("DeletedNote").(Note)
+		note := ctx.Value("deletedNote").(Note)
 		columns, err := d.GetColumns(boardID)
-
+		if err != nil {
+			return err
+		}
 		deleteStack := ctx.Value("DeleteStack").(bool)
 		votes, err := d.GetVotes(filter.VoteFilter{Board: boardID})
 		if err != nil {

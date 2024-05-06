@@ -3,12 +3,12 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"scrumlr.io/server/identifiers"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"sync"
@@ -42,8 +42,8 @@ type EventData struct {
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
-	boardID := r.Context().Value("Board").(uuid.UUID)
-	userID := r.Context().Value("User").(uuid.UUID)
+	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	userSession, err := s.sessions.Get(context.Background(), boardID, userID)
 	if err != nil {
@@ -185,6 +185,9 @@ func (b *BoardSubscription) startListeningOnBoard(channel realtime.SessionChanne
 }
 
 func (b *BoardSubscription) changeChannel(channel realtime.SessionChannel, oldSession *dto.BoardSession) {
+	if oldSession.Role == types.SessionRoleOwner {
+		return
+	}
 	if oldSession.Role == types.SessionRoleModerator && channel == realtime.SessionChannelModerator || oldSession.Role == types.SessionRoleParticipant && channel == realtime.SessionChannelParticipant {
 		return
 	}

@@ -128,10 +128,10 @@ func (s *NoteService) DeletedNote(user, board uuid.UUID, note database.Note, col
 	channels := []realtime.SessionChannel{realtime.SessionChannelModerator}
 	for _, column := range columns {
 		if column.Visible && note.Column == column.ID {
-			channels = append(channels, "participant")
+			channels = append(channels, realtime.SessionChannelParticipant)
 		}
 	}
-  
+
 	noteData := map[string]interface{}{
 		"note":        note.ID,
 		"deleteStack": deleteStack,
