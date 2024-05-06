@@ -6,7 +6,6 @@ import "./NoteReactionBar.scss";
 import ReactFocusLock from "react-focus-lock";
 
 interface NoteReactionBarProps {
-  isOpen: boolean;
   closeReactionBar: () => void;
   reactions: ReactionModeled[];
   handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
@@ -24,19 +23,14 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
   // by preventing the note from being opened if it's active
   useEffect(() => {
     const handlePressEnter = (e: KeyboardEvent) => {
-      if (e.key === "Enter" && props.isOpen) {
-        // only stop bubbling if the bar is open to prevent unintended behaviour
-        e.stopPropagation();
-      }
-
-      if (e.key === "Escape" && props.isOpen) {
+      if (e.key === "Escape") {
         props.closeReactionBar();
       }
     };
 
     document.addEventListener("keydown", handlePressEnter, true);
     return () => document.removeEventListener("keydown", handlePressEnter, true);
-  }, [props.isOpen]);
+  }, []);
 
   return (
     <div className="note-reaction-bar__root">
