@@ -28,7 +28,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 
 	var body AnonymousSignUpRequest
 	if err := render.Decode(r, &body); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
@@ -80,8 +80,8 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	log := logger.FromRequest(r)
 	externalUser, err := gothic.CompleteUserAuth(w, r)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("could not complete user auth", "err", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 

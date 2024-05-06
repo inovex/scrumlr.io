@@ -29,8 +29,8 @@ func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 
 	vote, err := s.votings.AddVote(r.Context(), body)
 	if err != nil {
-		log.Warnw("unable to add vote", "err", err)
-		common.Throw(w, r, err)
+		log.Errorw("unable to add vote", "err", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
@@ -56,8 +56,8 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 
 	err := s.votings.RemoveVote(r.Context(), body)
 	if err != nil {
-		log.Warnw("unable to remove vote", "err", err)
-		common.Throw(w, r, err)
+		log.Errorw("unable to remove vote", "err", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
@@ -66,6 +66,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value("Board").(uuid.UUID)
 	user := r.Context().Value("User").(uuid.UUID)
 
@@ -96,7 +97,8 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 
 	votes, err := s.votings.GetVotes(r.Context(), requestFilter)
 	if err != nil {
-		common.Throw(w, r, err)
+		log.Errorw("unable to get votes", "err", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 

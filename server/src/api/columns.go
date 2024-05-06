@@ -19,7 +19,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 	var body dto.ColumnRequest
 	if err := render.Decode(r, &body); err != nil {
-		http.Error(w, "unable to parse request body", http.StatusBadRequest)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
@@ -42,12 +42,14 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 // deleteColumn deletes a column
 func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value("Board").(uuid.UUID)
 	column := r.Context().Value("Column").(uuid.UUID)
 	user := r.Context().Value("User").(uuid.UUID)
 
 	if err := s.boards.DeleteColumn(r.Context(), board, column, user); err != nil {
-		http.Error(w, "unable to delete column", http.StatusInternalServerError)
+		log.Errorw("unable to delete column", "error", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
@@ -57,12 +59,13 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 
 // updateColumn updates a column
 func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value("Board").(uuid.UUID)
 	columnId := r.Context().Value("Column").(uuid.UUID)
 
 	var body dto.ColumnUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		http.Error(w, "unable to parse request body", http.StatusBadRequest)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
@@ -71,7 +74,8 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 
 	column, err := s.boards.UpdateColumn(r.Context(), body)
 	if err != nil {
-		http.Error(w, "unable to update column", http.StatusInternalServerError)
+		log.Errorw("unable to update column", "error", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
@@ -81,12 +85,14 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 
 // getColumn get a column
 func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value("Board").(uuid.UUID)
 	id := r.Context().Value("Column").(uuid.UUID)
 
 	column, err := s.boards.GetColumn(r.Context(), board, id)
 	if err != nil {
-		common.Throw(w, r, err)
+		log.Errorw("unable to get column", "error", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 

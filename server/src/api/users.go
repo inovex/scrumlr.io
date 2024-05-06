@@ -11,11 +11,13 @@ import (
 
 // getUser get a user
 func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	userId := r.Context().Value("User").(uuid.UUID)
 
 	user, err := s.users.Get(r.Context(), userId)
 	if err != nil {
-		common.Throw(w, r, err)
+		log.Errorw("unable to get user", "error", err)
+		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
@@ -25,7 +27,6 @@ func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-
 	user := r.Context().Value("User").(uuid.UUID)
 
 	var body dto.UserUpdateRequest

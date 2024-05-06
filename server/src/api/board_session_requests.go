@@ -17,7 +17,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	userParam := chi.URLParam(r, "user")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
-		common.Throw(w, r, err)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 

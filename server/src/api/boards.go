@@ -32,7 +32,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.boards.Create(r.Context(), body)
 	if err != nil {
-		common.Throw(w, r, common.BadRequestError(err))
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -52,7 +52,8 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 
 	err := s.boards.Delete(r.Context(), board)
 	if err != nil {
-		http.Error(w, "failed to delete board", http.StatusInternalServerError)
+		logger.Get().Errorw("unable to delete board", "board", board, "err", err)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
