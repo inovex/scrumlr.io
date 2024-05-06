@@ -6,12 +6,13 @@ import (
 	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/identifiers"
 )
 
 // createBoardReaction creates a new board reaction
 func (s *Server) createBoardReaction(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value("Board").(uuid.UUID)
-	user := r.Context().Value("User").(uuid.UUID)
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.BoardReactionCreateRequest
 	if err := render.Decode(r, &body); err != nil {

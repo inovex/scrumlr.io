@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
+	"scrumlr.io/server/identifiers"
 	"testing"
 
 	"scrumlr.io/server/common"
@@ -72,13 +73,14 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 		Text:   txt,
 	}).Return(database.Note{}, nil)
 
-	s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
 	})
 
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 
 }
@@ -94,8 +96,9 @@ func (suite *NoteServiceTestSuite) TestGetNote() {
 		ID: noteID,
 	}, nil)
 
-	s.Get(context.Background(), noteID)
-
+	get, err := s.Get(context.Background(), noteID)
+	assert.NotNil(suite.T(), get)
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -108,8 +111,9 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 
 	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
 
-	s.List(context.Background(), boardID)
-
+	get, err := s.List(context.Background(), boardID)
+	assert.NotNil(suite.T(), get)
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -135,7 +139,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		Stack:  stackID,
 	}
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, "User", callerID)
+	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 
 	mock.On("UpdateNote", callerID, database.NoteUpdate{
 		ID:       noteID,
@@ -144,13 +148,15 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		Position: &posUpdate,
 	}).Return(database.Note{}, nil)
 
-	s.Update(ctx, dto.NoteUpdateRequest{
+	update, err := s.Update(ctx, dto.NoteUpdateRequest{
 		Text:     &txt,
 		ID:       noteID,
 		Board:    boardID,
 		Position: &pos,
 	})
 
+	assert.NotNil(suite.T(), update)
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -168,13 +174,14 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	}
 
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, "User", callerID)
-	ctx = context.WithValue(ctx, "Board", boardID)
+	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
+	ctx = context.WithValue(ctx, identifiers.BoardIdentifier, boardID)
 
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
 
-	s.Delete(ctx, body, noteID)
+	err := s.Delete(ctx, body, noteID)
 
+	assert.Nil(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 

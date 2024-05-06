@@ -6,13 +6,14 @@ import (
 	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
 
 // getUser get a user
 func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-	userId := r.Context().Value("User").(uuid.UUID)
+	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	user, err := s.users.Get(r.Context(), userId)
 	if err != nil {
@@ -27,7 +28,7 @@ func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-	user := r.Context().Value("User").(uuid.UUID)
+	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.UserUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
