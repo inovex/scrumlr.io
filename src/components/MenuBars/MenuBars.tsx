@@ -4,7 +4,7 @@ import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import _ from "underscore";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
@@ -43,6 +43,7 @@ const defaultHorizontalStop = {opacity: 1, transform: "translateX(0%)", config: 
 export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
   const menuBarsMobileRef = useRef<HTMLElement>(null);
   const menuBarsDesktopRef = useRef<HTMLElement>(null);
@@ -53,23 +54,33 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const boardIsLocked = useAppSelector((state) => !state.board.data!.allowEditing);
 
   useEffect(() => {
-    const handleClickOutside = ({target}: MouseEvent) => {
-      // don't close if we're on the board reactions menu
-      if (boardReactionRef.current?.contains(target as Node)) return;
+    const closeMenuBar = (target: HTMLElement) => {
       // don't close if we're on the settings, voting or timer page
-      if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) return;
-      // close if we click outside the menu
-      if (!menuBarsMobileRef.current?.contains(target as Node)) {
+      if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) {
+        return;
+      }
+
+      // close menu fab if we click outside the menu (only relevant for mobile since that one isn't always visible)
+      if (!menuBarsMobileRef.current?.contains(target)) {
         setFabIsExpanded(false);
       }
-      // only hide if menu wasn't clicked to avoid double onClick toggle
-      if (!(menuBarsDesktopRef.current?.contains(target as Node) || menuBarsMobileRef.current?.contains(target as Node))) {
-        setShowBoardReactionsMenu(false);
-      }
     };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      closeMenuBar(target);
+    };
+
     document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [menuBarsMobileRef, fabIsExpanded, showBoardReactionsMenu]);
+
+  // close board reaction menu when going into settings menu
+  useEffect(() => {
+    if (location.pathname.includes("settings")) {
+      setShowBoardReactionsMenu(false);
+    }
+  }, [location]);
 
   const {TOGGLE_TIMER_MENU, TOGGLE_VOTING_MENU, TOGGLE_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_BOARD_REACTION_MENU, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 
@@ -199,87 +210,86 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       {/* desktop view */}
       <aside className="menu-bars" ref={menuBarsDesktopRef}>
         {/* role=any: toggle ready, toggle raise hand, options */}
-        <section className="menu user-menu">
-          <ul className="menu__items">
-            <li>
-              <TooltipButton
-                direction="right"
-                onClick={toggleReadyState}
-                label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
-                icon={CheckIcon}
-                active={isReady}
-                hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
-              />
-            </li>
-            <li>
-              <TooltipButton
-                direction="right"
-                label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
-                icon={RaiseHand}
-                onClick={toggleRaiseHand}
-                active={raisedHand}
-                hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
-              />
-            </li>
-            <li>
-              <TooltipButton
-                direction="right"
-                label={t("MenuBars.openBoardReactionMenu")}
-                icon={BoardReactionIcon}
-                onClick={toggleBoardReactionsMenu}
-                active={showBoardReactionsMenu}
-                hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
-                disabled={boardIsLocked && !isAdmin}
-              />
-            </li>
-            <li>
-              <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={TOGGLE_SETTINGS.toUpperCase()} />
-            </li>
-          </ul>
+        <div className="menu__container">
+          <section className="menu user-menu">
+            <ul className="menu__items">
+              <li>
+                <TooltipButton
+                  direction="right"
+                  onClick={toggleReadyState}
+                  label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
+                  icon={CheckIcon}
+                  active={isReady}
+                  hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
+                />
+              </li>
+              <li>
+                <TooltipButton
+                  direction="right"
+                  label={raisedHand ? t("MenuBars.lowerHand") : t("MenuBars.raiseHand")}
+                  icon={RaiseHand}
+                  onClick={toggleRaiseHand}
+                  active={raisedHand}
+                  hotkeyKey={TOGGLE_RAISED_HAND.toUpperCase()}
+                />
+              </li>
+              <li>
+                <TooltipButton
+                  direction="right"
+                  label={t("MenuBars.openBoardReactionMenu")}
+                  icon={BoardReactionIcon}
+                  onClick={toggleBoardReactionsMenu}
+                  active={showBoardReactionsMenu}
+                  hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
+                  disabled={boardIsLocked && !isAdmin}
+                />
+              </li>
+              <li>
+                <TooltipButton direction="right" label={t("MenuBars.settings")} onClick={showSettings} icon={SettingsIcon} hotkeyKey={TOGGLE_SETTINGS.toUpperCase()} />
+              </li>
+            </ul>
+          </section>
 
           <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showPreviousColumn})} onClick={onPreviousColumn} aria-hidden>
             <LeftArrowIcon className="menu-bars__navigation-icon" />
           </button>
-        </section>
+        </div>
 
         {/* role=moderator: timer, votes, presenter mode */}
-        <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin})}>
-          {isAdmin && (
-            <ul className="menu__items">
-              <li>
-                <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
-              </li>
-              <li>
-                <TooltipButton
-                  active={state.activeVoting}
-                  direction="left"
-                  label="Voting"
-                  onClick={toggleVotingMenu}
-                  icon={VoteIcon}
-                  hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
-                />
-              </li>
-              <li>
-                <TooltipButton
-                  active={state.moderation}
-                  direction="left"
-                  label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
-                  icon={FocusIcon}
-                  onClick={toggleModeration}
-                  hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
-                />
-              </li>
-            </ul>
-          )}
-
-          <button
-            className={classNames("menu-bars__navigation", {"menu-bars__navigation--empty": !isAdmin, "menu-bars__navigation--visible": showNextColumn})}
-            onClick={onNextColumn}
-            aria-hidden
-          >
+        <div className="menu__container">
+          <section className={classNames("menu", "admin-menu", {"admin-menu--empty": !isAdmin})}>
+            {isAdmin && (
+              <ul className="menu__items">
+                <li>
+                  <TooltipButton active={state.activeTimer} direction="left" label="Timer" onClick={toggleTimerMenu} icon={TimerIcon} hotkeyKey={TOGGLE_TIMER_MENU.toUpperCase()} />
+                </li>
+                <li>
+                  <TooltipButton
+                    active={state.activeVoting}
+                    direction="left"
+                    label="Voting"
+                    onClick={toggleVotingMenu}
+                    icon={VoteIcon}
+                    hotkeyKey={TOGGLE_VOTING_MENU.toUpperCase()}
+                  />
+                </li>
+                <li>
+                  <TooltipButton
+                    active={state.moderation}
+                    direction="left"
+                    label={state.moderation ? t("MenuBars.stopPresenterMode") : t("MenuBars.startPresenterMode")}
+                    icon={FocusIcon}
+                    onClick={toggleModeration}
+                    hotkeyKey={TOGGLE_MODERATION.toUpperCase()}
+                  />
+                </li>
+              </ul>
+            )}
+          </section>
+          <button className={classNames("menu-bars__navigation", {"menu-bars__navigation--visible": showNextColumn})} onClick={onNextColumn} aria-hidden>
             <RightArrowIcon className="menu-bars__navigation-icon" />
           </button>
-        </section>
+        </div>
       </aside>
 
       {/* mobile view */}

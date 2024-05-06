@@ -1,14 +1,14 @@
 package api
 
 import (
-	"net/http"
-	"time"
-
 	"github.com/go-chi/cors"
+	"github.com/go-chi/httprate"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"net/http"
+	"time"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
@@ -17,7 +17,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/go-chi/httprate"
 )
 
 type Server struct {
@@ -60,7 +59,6 @@ func New(
 	checkOrigin bool,
 ) chi.Router {
 	r := chi.NewRouter()
-
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
@@ -113,7 +111,6 @@ func New(
 			return true
 		}
 	}
-
 	if s.basePath == "/" {
 		s.publicRoutes(r)
 		s.protectedRoutes(r)
@@ -123,7 +120,6 @@ func New(
 			s.protectedRoutes(router)
 		})
 	}
-
 	return r
 }
 
@@ -149,7 +145,6 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Verifier())
 		r.Use(jwtauth.Authenticator)
 		r.Use(auth.AuthContext)
-
 		r.Post("/boards", s.createBoard)
 		r.Get("/boards", s.getBoards)
 
@@ -195,7 +190,6 @@ func (s *Server) initVoteResources(r chi.Router) {
 func (s *Server) initVotingResources(r chi.Router) {
 	r.Route("/votings", func(r chi.Router) {
 		r.With(s.BoardParticipantContext).Get("/", s.getVotings)
-
 		r.With(s.BoardModeratorContext).Post("/", s.createVoting)
 		r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
 
@@ -210,7 +204,6 @@ func (s *Server) initVotingResources(r chi.Router) {
 func (s *Server) initBoardSessionResources(r chi.Router) {
 	r.Route("/participants", func(r chi.Router) {
 		r.Group(func(r chi.Router) {
-
 			r.Use(httprate.Limit(
 				3,
 				5*time.Second,
@@ -218,14 +211,18 @@ func (s *Server) initBoardSessionResources(r chi.Router) {
 				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
 					w.Header().Set("Content-Type", "application/json")
 					w.WriteHeader(http.StatusTooManyRequests)
-					w.Write([]byte(`{"error": "Too many requests"}`))
+					_, err := w.Write([]byte(`{"error": "Too many requests"}`))
+					if err != nil {
+						log := logger.FromRequest(r)
+						log.Errorw("Could not write error", "error", err)
+						return
+					}
 				}),
 			))
+
 			r.Post("/", s.joinBoard)
 		})
-
 		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
-
 		r.With(s.BoardModeratorContext).Put("/", s.updateBoardSessions)
 
 		r.Route("/{session}", func(r chi.Router) {
@@ -247,16 +244,13 @@ func (s *Server) initBoardSessionRequestResources(r chi.Router) {
 func (s *Server) initColumnResources(r chi.Router) {
 	r.Route("/columns", func(r chi.Router) {
 		r.With(s.BoardParticipantContext).Get("/", s.getColumns)
-
 		r.With(s.BoardModeratorContext).Post("/", s.createColumn)
 
 		r.Route("/{column}", func(r chi.Router) {
 			r.Use(s.ColumnContext)
 
 			r.With(s.BoardParticipantContext).Get("/", s.getColumn)
-
 			r.With(s.BoardModeratorContext).Put("/", s.updateColumn)
-
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteColumn)
 		})
 	})
@@ -273,9 +267,8 @@ func (s *Server) initNoteResources(r chi.Router) {
 			r.Use(s.NoteContext)
 
 			r.Get("/", s.getNote)
-			r.Put("/", s.updateNote)
-
-			r.Delete("/", s.deleteNote)
+			r.With(s.BoardEditableContext).Put("/", s.updateNote)
+			r.With(s.BoardEditableContext).Delete("/", s.deleteNote)
 		})
 	})
 }

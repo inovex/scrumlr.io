@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NoteTextContent should render correctly 1`] = `
+<div>
+  hello 
+  <a
+    class="note-text-content-url"
+    href="https://scrumlr.io"
+    rel="noopener noreferrer"
+    target="_blank"
+    title="https://scrumlr.io"
+  >
+    https://scrumlr.io
+  </a>
+</div>
+`;

@@ -3,6 +3,7 @@ package notes
 import (
 	"context"
 	"database/sql"
+	"scrumlr.io/server/identifiers"
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/services"
@@ -65,14 +66,20 @@ func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) 
 	return new(dto.Note).From(note), err
 }
 
-func (s *NoteService) List(_ context.Context, boardID uuid.UUID) ([]*dto.Note, error) {
+func (s *NoteService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Note, error) {
+	log := logger.FromContext(ctx)
 	notes, err := s.database.GetNotes(boardID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, common.NotFoundError
+		}
+		log.Errorw("unable to get notes", "board", boardID, "error", err)
+	}
 	return dto.Notes(notes), err
 }
 
 func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error) {
 	log := logger.FromContext(ctx)
-
 	var positionUpdate *database.NoteUpdatePosition
 	if body.Position != nil {
 		positionUpdate = &database.NoteUpdatePosition{
@@ -81,7 +88,7 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 			Stack:  body.Position.Stack,
 		}
 	}
-	note, err := s.database.UpdateNote(ctx.Value("User").(uuid.UUID), database.NoteUpdate{
+	note, err := s.database.UpdateNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), database.NoteUpdate{
 		ID:       body.ID,
 		Board:    body.Board,
 		Text:     body.Text,
@@ -91,12 +98,11 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 		log.Errorw("unable to update note", "error", err, "note", body.ID)
 		return nil, common.InternalServerError
 	}
-
 	return new(dto.Note).From(note), err
 }
 
 func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
-	return s.database.DeleteNote(ctx.Value("User").(uuid.UUID), ctx.Value("Board").(uuid.UUID), id, body.DeleteStack)
+	return s.database.DeleteNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), ctx.Value(identifiers.BoardIdentifier).(uuid.UUID), id, body.DeleteStack)
 }
 
 func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
@@ -112,6 +118,7 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
 	}
 }
+
 func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,

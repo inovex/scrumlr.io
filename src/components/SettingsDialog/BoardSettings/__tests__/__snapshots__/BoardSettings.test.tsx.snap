@@ -25,6 +25,7 @@ exports[`BoardSettings should match snapshot 1`] = `
       >
         <input
           autocomplete="off"
+          class="settings-input__input"
           id="boardSettingsBoardName"
           maxlength="128"
           placeholder="scrumlr.io"
@@ -39,6 +40,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           128
         </small>
         <label
+          class="settings-input__label"
           for="boardSettingsBoardName"
         >
           Board Name
@@ -77,13 +79,14 @@ exports[`BoardSettings should match snapshot 1`] = `
           >
             <input
               autocomplete="off"
-              class="settings-input__hidden-placeholder"
+              class="settings-input__input settings-input__hidden-placeholder"
               id="boardSettingsPassword"
               placeholder="Password"
               type="password"
               value=""
             />
             <label
+              class="settings-input__label"
               for="boardSettingsPassword"
             >
               Password
