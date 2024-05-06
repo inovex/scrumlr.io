@@ -26,8 +26,8 @@ $note-input__input-right: 40px;
 }
 
 .note-input__lock-icon {
-  width: 32px;
-  height: 32px;
+  width: $icon--large;
+  height: $icon--large;
   color: $color-dark-gray;
 }
 
@@ -144,7 +144,7 @@ $note-input__input-right: 40px;
 
     &:not(:has(.note-input__input:disabled)):hover,
     &:not(:has(.note-input__input:disabled)):focus-within {
-      box-shadow: 0 6px 9px 0 #232323;
+      box-shadow: 0 6px 9px 0 $color-darkest-gray;
     }
   }
 
