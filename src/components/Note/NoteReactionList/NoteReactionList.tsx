@@ -206,8 +206,9 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           className="note-reaction-list__add-reaction-sticker-container"
           aria-label={t("NoteReactionList.toggleBarLabel")}
           onKeyDown={(e) => {
-            e.stopPropagation();
             if (e.key === "Enter" || e.key === "Space") {
+              e.preventDefault();
+              e.stopPropagation();
               setShowReactionBar((show) => !show);
             }
           }}
