@@ -35,14 +35,14 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 	user, err := s.users.LoginAnonymous(r.Context(), body.Name)
 	if err != nil {
 		log.Errorw("could not create user", "req", body, "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
 	tokenString, err := s.auth.Sign(map[string]interface{}{"id": user.ID})
 	if err != nil {
 		log.Errorw("unable to generate token string", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -81,7 +81,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 	externalUser, err := gothic.CompleteUserAuth(w, r)
 	if err != nil {
 		log.Errorw("could not complete user auth", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 

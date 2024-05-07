@@ -23,7 +23,7 @@ func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 	sessions, err := s.sessions.List(r.Context(), board, filter)
 	if err != nil {
 		log.Errorw("unable to get board sessions", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 

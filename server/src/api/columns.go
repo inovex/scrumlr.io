@@ -29,7 +29,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 	column, err := s.boards.CreateColumn(r.Context(), body)
 	if err != nil {
 		log.Errorw("unable to create column", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 	if s.basePath == "/" {
@@ -50,7 +50,7 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 
 	if err := s.boards.DeleteColumn(r.Context(), board, column, user); err != nil {
 		log.Errorw("unable to delete column", "error", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -76,7 +76,7 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 	column, err := s.boards.UpdateColumn(r.Context(), body)
 	if err != nil {
 		log.Errorw("unable to update column", "error", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -93,7 +93,7 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 	column, err := s.boards.GetColumn(r.Context(), board, id)
 	if err != nil {
 		log.Errorw("unable to get column", "error", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -110,7 +110,7 @@ func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
 	columns, err := s.boards.ListColumns(r.Context(), board)
 	if err != nil {
 		log.Errorw("unable to get columns", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 

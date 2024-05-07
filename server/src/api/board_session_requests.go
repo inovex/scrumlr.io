@@ -81,7 +81,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 	request, err := s.sessions.UpdateSessionRequest(r.Context(), body)
 	if err != nil {
 		log.Errorw("failed to update board session request", "request", body, "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 

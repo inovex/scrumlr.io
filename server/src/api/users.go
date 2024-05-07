@@ -18,7 +18,7 @@ func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 	user, err := s.users.Get(r.Context(), userId)
 	if err != nil {
 		log.Errorw("unable to get user", "error", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -41,7 +41,7 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	updatedUser, err := s.users.Update(r.Context(), body)
 	if err != nil {
 		log.Errorw("failed to update user", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 

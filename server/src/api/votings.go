@@ -2,13 +2,13 @@ package api
 
 import (
 	"fmt"
+	"github.com/go-chi/render"
+	"github.com/google/uuid"
 	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/logger"
 	"scrumlr.io/server/identifiers"
-	"github.com/go-chi/render"
-	"github.com/google/uuid"
+	"scrumlr.io/server/logger"
 )
 
 // createVoting creates a new voting session
@@ -26,7 +26,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	voting, err := s.votings.Create(r.Context(), body)
 	if err != nil {
 		log.Errorw("unable to create voting", "error", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 	if s.basePath == "/" {
@@ -57,7 +57,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	voting, err := s.votings.Update(r.Context(), body)
 	if err != nil {
 		log.Errorw("unable to update voting", "error", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -74,7 +74,7 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 	voting, err := s.votings.Get(r.Context(), board, id)
 	if err != nil {
 		log.Errorw("unable to get voting", "error", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -90,7 +90,7 @@ func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
 	votings, err := s.votings.List(r.Context(), board)
 	if err != nil {
 		log.Errorw("unable to get votings", "error", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
