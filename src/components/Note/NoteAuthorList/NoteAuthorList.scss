@@ -13,7 +13,11 @@ $max-name-length: 112px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $stack-author-rest-author-gap;
+
+  // If there's at least one additional author in the stack, apply the gap
+  &:has(> .note-rest-authors__container > *) {
+    gap: $stack-author-rest-author-gap;
+  }
 }
 
 .note-author__container {
