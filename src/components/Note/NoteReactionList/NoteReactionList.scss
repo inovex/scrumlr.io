@@ -42,14 +42,13 @@
     background-color: $hover-background-light;
   }
   &:focus-visible {
-    outline: 2px solid var(--accent-color--dark);
+    outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
   }
 }
 
 .note-reaction-list__add-reaction-sticker {
   width: $icon--medium;
   height: $icon--medium;
-
   color: $color-black;
 }
 
