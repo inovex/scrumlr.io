@@ -21,17 +21,16 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
   // this allows the selection of an emoji using the enter key
   // by preventing the note from being opened if it's active
   useEffect(() => {
-    const handlePressEnter = (e: KeyboardEvent) => {
+    const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === "Enter") {
         e.stopPropagation();
-      }
-      if (e.key === "Escape") {
+      } else if (e.key === "Escape") {
         props.closeReactionBar();
       }
     };
 
-    document.addEventListener("keydown", handlePressEnter, true);
-    return () => document.removeEventListener("keydown", handlePressEnter, true);
+    document.addEventListener("keydown", handleKeyPress, true);
+    return () => document.removeEventListener("keydown", handleKeyPress, true);
   }, [props]);
 
   return (
