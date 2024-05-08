@@ -270,7 +270,7 @@ export const StackView = () => {
                       className="stack-view__parent-note"
                       colorClassName={colorClassName}
                     />
-                    <NoteDialogComponents.Wrapper>
+                    {/* <NoteDialogComponents.Wrapper>
                       {item.stack?.map((n: StackedNote) => (
                         <NoteDialogComponents.Note
                           key={n.id}
@@ -288,7 +288,7 @@ export const StackView = () => {
                           colorClassName={colorClassName}
                         />
                       ))}
-                    </NoteDialogComponents.Wrapper>
+                    </NoteDialogComponents.Wrapper> */}
                   </>
                 )}
               </animated.div>
