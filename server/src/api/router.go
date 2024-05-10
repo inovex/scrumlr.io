@@ -1,14 +1,16 @@
 package api
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"net/http"
-	"time"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
@@ -34,6 +36,7 @@ type Server struct {
 	health         services.Health
 	feedback       services.Feedback
 	boardReactions services.BoardReactions
+	customMetrics  services.CustomMetrics
 
 	upgrader websocket.Upgrader
 
@@ -55,6 +58,7 @@ func New(
 	health services.Health,
 	feedback services.Feedback,
 	boardReactions services.BoardReactions,
+	customMetrics services.CustomMetrics,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -96,6 +100,7 @@ func New(
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
+		customMetrics:                    customMetrics,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -125,6 +130,7 @@ func New(
 
 func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
+		r.Use(metricMeasureLatency)
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
 		r.Post("/feedback", s.createFeedback)
@@ -137,6 +143,11 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 				r.Get("/callback", s.verifyAuthProviderCallback)
 			})
 		})
+		r.Handle("/metrics", promhttp.HandlerFor(
+			s.customMetrics.Registry(),
+			promhttp.HandlerOpts{Registry: s.customMetrics.Registry()},
+		))
+		s.initPublicMetrics()
 	})
 }
 
@@ -297,4 +308,8 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 		r.Post("/", s.createBoardReaction)
 	})
+}
+
+func (s *Server) initPublicMetrics() {
+	s.initPublicRouteMetrics()
 }

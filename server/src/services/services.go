@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/prometheus/client_golang/prometheus"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 )
@@ -99,4 +100,10 @@ type Health interface {
 
 type BoardReactions interface {
 	Create(ctx context.Context, board uuid.UUID, body dto.BoardReactionCreateRequest)
+}
+
+type CustomMetrics interface {
+	RegisterHistogram(hist *prometheus.HistogramVec)
+	RegisterCounter(ctr *prometheus.Counter)
+	Registry() *prometheus.Registry
 }
