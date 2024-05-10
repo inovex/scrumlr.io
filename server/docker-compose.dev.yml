@@ -16,3 +16,21 @@ services:
       - POSTGRES_PASSWORD=supersecret
       - POSTGRES_DB=scrumlr
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+
+  prometheus: 
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command: --config.file=/etc/prometheus/prometheus.yml
+  
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3001:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=test
+      - GF_SECURITY_ADMIN_PASSWORD=test
+    volumes:
+      - ./grafana.yml:/etc/grafana/provisioning/datasources/datasources.yml
