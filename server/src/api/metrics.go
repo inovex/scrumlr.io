@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"net/http"
 	"strconv"
 	"strings"
@@ -8,6 +9,7 @@ import (
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/prometheus/client_golang/prometheus"
+	"scrumlr.io/server/logger"
 )
 
 var (
@@ -27,9 +29,16 @@ var (
 	)
 )
 
-func (s *Server) initPublicRouteMetrics() {
-	s.customMetrics.RegisterHistogramVec(endpointLatency)
-	s.customMetrics.RegisterCounterVec(requestCounter)
+func (s *Server) initMetrics() {
+	log := logger.FromContext(context.Background())
+	err := s.customMetrics.RegisterCounterVec(requestCounter)
+	if err != nil {
+		log.Errorw("unable to register counter for custom metrics", err)
+	}
+	err = s.customMetrics.RegisterHistogramVec(endpointLatency)
+	if err != nil {
+		log.Errorw("unable to register histogram for custom metrics", err)
+	}
 }
 
 func metricCounterMiddleware(next http.Handler) http.Handler {

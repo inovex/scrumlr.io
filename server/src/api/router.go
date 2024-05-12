@@ -67,6 +67,8 @@ func New(
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+	r.Use(metricCounterMiddleware)
+	r.Use(metricMeasureLatencyMiddleware)
 
 	if !checkOrigin {
 		r.Use(cors.Handler(cors.Options{
@@ -109,6 +111,9 @@ func New(
 		WriteBufferSize: 1024,
 	}
 
+	// Registers needed metrics for prometheus
+	s.initMetrics()
+
 	if checkOrigin {
 		s.upgrader.CheckOrigin = nil
 	} else {
@@ -117,13 +122,9 @@ func New(
 		}
 	}
 	if s.basePath == "/" {
-		r.Use(metricCounterMiddleware)
-		r.Use(metricMeasureLatencyMiddleware)
 		s.publicRoutes(r)
 		s.protectedRoutes(r)
 	} else {
-		r.Use(metricCounterMiddleware)
-		r.Use(metricMeasureLatencyMiddleware)
 		r.Route(s.basePath, func(router chi.Router) {
 			s.publicRoutes(router)
 			s.protectedRoutes(router)
@@ -150,7 +151,6 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 			s.customMetrics.Registry(),
 			promhttp.HandlerOpts{Registry: s.customMetrics.Registry()},
 		))
-		s.initPublicMetrics()
 	})
 }
 
@@ -311,8 +311,4 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 		r.Post("/", s.createBoardReaction)
 	})
-}
-
-func (s *Server) initPublicMetrics() {
-	s.initPublicRouteMetrics()
 }

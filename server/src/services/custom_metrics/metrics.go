@@ -17,12 +17,12 @@ func NewCustomMetricService() services.CustomMetrics {
 	return m
 }
 
-func (cms *CustomMetricService) RegisterHistogramVec(histo *prometheus.HistogramVec) {
-	cms.registry.Register(histo)
+func (cms *CustomMetricService) RegisterHistogramVec(histo *prometheus.HistogramVec) error {
+	return cms.registry.Register(histo)
 }
 
-func (cms *CustomMetricService) RegisterCounterVec(ctr *prometheus.CounterVec) {
-	cms.registry.Register(ctr)
+func (cms *CustomMetricService) RegisterCounterVec(ctr *prometheus.CounterVec) error {
+	return cms.registry.Register(ctr)
 }
 
 func (cms *CustomMetricService) Registry() *prometheus.Registry {
