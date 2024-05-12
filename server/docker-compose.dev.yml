@@ -18,7 +18,7 @@ services:
       - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
 
   prometheus: 
-    image: prom/prometheus
+    image: prom/prometheus:v2.52.0
     ports:
       - 9090:9090
     volumes:
@@ -26,7 +26,7 @@ services:
     command: --config.file=/etc/prometheus/prometheus.yml
   
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:10.4.2
     ports:
       - 3001:3000
     environment:
