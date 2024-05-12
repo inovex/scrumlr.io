@@ -117,9 +117,13 @@ func New(
 		}
 	}
 	if s.basePath == "/" {
+		r.Use(metricCounterMiddleware)
+		r.Use(metricMeasureLatencyMiddleware)
 		s.publicRoutes(r)
 		s.protectedRoutes(r)
 	} else {
+		r.Use(metricCounterMiddleware)
+		r.Use(metricMeasureLatencyMiddleware)
 		r.Route(s.basePath, func(router chi.Router) {
 			s.publicRoutes(router)
 			s.protectedRoutes(router)
@@ -130,7 +134,6 @@ func New(
 
 func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
-		r.Use(metricMeasureLatency)
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
 		r.Post("/feedback", s.createFeedback)

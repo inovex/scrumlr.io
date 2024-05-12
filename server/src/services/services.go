@@ -103,7 +103,7 @@ type BoardReactions interface {
 }
 
 type CustomMetrics interface {
-	RegisterHistogram(hist *prometheus.HistogramVec)
-	RegisterCounter(ctr *prometheus.Counter)
+	RegisterHistogramVec(hist *prometheus.HistogramVec)
+	RegisterCounterVec(ctr *prometheus.CounterVec)
 	Registry() *prometheus.Registry
 }

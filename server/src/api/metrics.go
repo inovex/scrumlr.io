@@ -2,8 +2,11 @@ package api
 
 import (
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
+	"github.com/go-chi/chi/middleware"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -12,30 +15,55 @@ var (
 		prometheus.HistogramOpts{
 			Name:    "http_request_duration_seconds",
 			Help:    "HTTP request latency per endpoint.",
-			Buckets: []float64{.00001, .0002, .002, 5, 10, 100},
+			Buckets: []float64{0.1, 0.2, 0.5, 1, 3, 5, 10},
 		},
-		[]string{"endpoint"},
+		[]string{"method", "route", "status"},
 	)
-	requestCounter = prometheus.NewCounter(
+	requestCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "http_request_counter",
 			Help: "Counter of HTTP requests",
-		},
+		}, []string{"method", "route", "status"},
 	)
 )
 
 func (s *Server) initPublicRouteMetrics() {
-	s.customMetrics.RegisterHistogram(endpointLatency)
-	s.customMetrics.RegisterCounter(&requestCounter)
+	s.customMetrics.RegisterHistogramVec(endpointLatency)
+	s.customMetrics.RegisterCounterVec(requestCounter)
 }
 
-func metricMeasureLatency(next http.Handler) http.Handler {
+func metricCounterMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
+		defer func() {
+			urlPath := generalizeURLPath(r.URL.Path)
+			requestCounter.WithLabelValues(r.Method, urlPath, strconv.Itoa(ww.Status())).Inc()
+		}()
+		next.ServeHTTP(ww, r)
+
+	})
+}
+func metricMeasureLatencyMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
-		next.ServeHTTP(w, r)
-		duration := time.Since(start).Seconds()
-		requestCounter.Inc()
-		// endpoint := chi.RouteContext(r.Context()).RoutePattern()
-		endpointLatency.WithLabelValues("public_routes").Observe(duration)
+		ww := middleware.NewWrapResponseWriter(w, r.ProtoMajor)
+		defer func() {
+			duration := time.Since(start).Seconds()
+			urlPath := generalizeURLPath(r.URL.Path)
+			endpointLatency.WithLabelValues(r.Method, urlPath, strconv.Itoa(ww.Status())).Observe(duration)
+		}()
+		next.ServeHTTP(ww, r)
+
 	})
+}
+
+// Replaces UUID-like segments with a wildcard placeholder
+func generalizeURLPath(path string) string {
+	segments := strings.Split(path, "/")
+	for i, segment := range segments {
+		if len(segment) == 36 && strings.Contains(segment, "-") {
+			segments[i] = "*"
+		}
+	}
+	return strings.Join(segments, "/")
 }
