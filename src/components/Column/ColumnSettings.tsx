@@ -13,6 +13,7 @@ import "./ColumnSettings.scss";
 import {useAppSelector} from "store";
 import classNames from "classnames";
 import {useOnBlur} from "utils/hooks/useOnBlur";
+import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 
@@ -46,57 +47,96 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
       <ul>
         <li>
           <button
-            onClick={() => {
-              onClose?.();
-              dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
-            }}
-          >
-            {visible ? <HideIcon /> : <ShowIcon />}
-            {visible ? t("Column.hideColumn") : t("Column.showColumn")}
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => {
-              onNameEdit?.();
-              onClose?.();
-            }}
-          >
-            <EditIcon />
-            {t("Column.editName")}
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => {
-              onClose?.();
-              handleAddColumn(index);
-            }}
-          >
-            <PreviousIcon />
-            {t("Column.addColumnLeft")}
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => {
-              onClose?.();
-              handleAddColumn(index + 1);
-            }}
-          >
-            <NextIcon />
-            {t("Column.addColumnRight")}
-          </button>
-        </li>
-        <li>
-          <button
+            title={t("Column.deleteColumn")}
             onClick={() => {
               onClose?.();
               dispatch(Actions.deleteColumn(id));
             }}
           >
             <TrashIcon />
-            {t("Column.deleteColumn")}
+            {/* {t("Column.deleteColumn")} */}
+          </button>
+        </li>
+        <li>
+          <button aria-label="Pick a color">
+            <span className="column__header-color-option" />
+            <ul className="column__header-color-picker-dropdown">
+              <li>
+                <button aria-label="Pick a color">
+                  <span className="column__header-color-option" />
+                </button>
+                <button aria-label="Pick a color">
+                  <span className="column__header-color-option" />
+                </button>
+                <button aria-label="Pick a color">
+                  <span className="column__header-color-option" />
+                </button>
+                <button aria-label="Pick a color">
+                  <span className="column__header-color-option" />
+                </button>
+              </li>
+            </ul>
+          </button>
+        </li>
+
+        <li>
+          <button
+            title={t("Column.addColumnLeft")}
+            onClick={() => {
+              onClose?.();
+              handleAddColumn(index);
+            }}
+          >
+            <PreviousIcon />
+            {/* {t("Column.addColumnLeft")} */}
+          </button>
+        </li>
+        <li>
+          {/* nur einen zu machen sieht man nicht? man muss zwei column right elemente haben um eins zu sehen */}
+          <button
+            title={t("Column.addColumnRight")}
+            onClick={() => {
+              onClose?.();
+              handleAddColumn(index + 1);
+            }}
+          >
+            <NextIcon />
+            {/* {t("Column.addColumnRight")} */}
+          </button>
+        </li>
+        <li>
+          <button
+            title={t("Column.addColumnRight")}
+            onClick={() => {
+              onClose?.();
+              handleAddColumn(index + 1);
+            }}
+          >
+            <NextIcon />
+            {/* {t("Column.addColumnRight")} */}
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+            }}
+          >
+            {visible ? <HideIcon title={t("Column.hideColumn")} /> : <ShowIcon title={t("Column.showColumn")} />}
+            {/* {visible ? t("Column.hideColumn") : t("Column.showColumn")} */}
+          </button>
+        </li>
+        <li>
+          <button
+            title={t("Column.editName")}
+            onClick={() => {
+              onNameEdit?.();
+              onClose?.();
+            }}
+          >
+            <EditIcon />
+            {/* {t("Column.editName")} */}
           </button>
         </li>
         <li>
@@ -142,6 +182,9 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             className={classNames(getColorClassName("retro-red"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "retro-red", index, visible}))}
           />
+        </li>
+        <li>
+          <CloseIcon className="column__header-edit-button-icon" />
         </li>
       </ul>
     </div>
