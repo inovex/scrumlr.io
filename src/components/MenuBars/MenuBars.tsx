@@ -51,7 +51,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   const [fabIsExpanded, setFabIsExpanded] = useState(false);
   const [showBoardReactionsMenu, setShowBoardReactionsMenu] = useState(false);
-  const boardIsLocked = useAppSelector((state) => !state.board.data!.allowEditing);
 
   useEffect(() => {
     const closeMenuBar = (target: HTMLElement) => {
