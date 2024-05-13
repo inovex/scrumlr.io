@@ -383,7 +383,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       </aside>
 
       {/* should this be inside a Portal instead? */}
-      <BoardReactionMenu ref={boardReactionRef} showMenu={showBoardReactionsMenu && (isAdmin || !boardIsLocked)} close={toggleBoardReactionsMenu} />
+      <BoardReactionMenu ref={boardReactionRef} showMenu={showBoardReactionsMenu} close={toggleBoardReactionsMenu} />
     </>
   );
 };
