@@ -235,7 +235,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   onClick={toggleBoardReactionsMenu}
                   active={showBoardReactionsMenu}
                   hotkeyKey={TOGGLE_BOARD_REACTION_MENU.toUpperCase()}
-                  disabled={boardIsLocked && !isAdmin}
                 />
               </li>
               <li>
