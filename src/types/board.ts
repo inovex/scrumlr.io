@@ -13,7 +13,7 @@ export interface Board {
   showNotesOfOtherUsers: boolean;
   showNoteReactions: boolean;
   allowStacking: boolean;
-  allowEditing: boolean;
+  isLocked: boolean;
   timerStart?: Date;
   timerEnd?: Date;
 
