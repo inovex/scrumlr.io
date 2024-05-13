@@ -289,8 +289,8 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			r := chi.NewRouter()
 			s.initNoteResources(r)
 			boardMock.On("Get", boardID).Return(&dto.Board{
-				ID:           boardID,
-				AllowEditing: tt.allowEditing,
+				ID:       boardID,
+				IsLocked: tt.allowEditing,
 			}, nil)
 
 			// Mock the SessionExists method
@@ -306,8 +306,8 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 				noteMock.On("Delete", mock.Anything, mock.Anything).Return(nil)
 			} else {
 				boardMock.On("Get", boardID).Return(&dto.Board{
-					ID:           boardID,
-					AllowEditing: tt.allowEditing,
+					ID:       boardID,
+					IsLocked: tt.allowEditing,
 				}, tt.err)
 				noteMock.On("Delete", mock.Anything, mock.Anything).Return(tt.err)
 			}
