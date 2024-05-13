@@ -33,7 +33,7 @@ type Board struct {
 
 	AllowStacking bool `json:"allowStacking"`
 
-	IsLocked bool `json:"allowEditing"`
+	IsLocked bool `json:"isLocked"`
 
 	TimerStart *time.Time `json:"timerStart,omitempty"`
 	TimerEnd   *time.Time `json:"timerEnd,omitempty"`
@@ -121,7 +121,7 @@ type BoardUpdateRequest struct {
 	AllowStacking *bool `json:"allowStacking"`
 
 	// Set whether changes to board should be allowed to all users or only moderators.
-	IsLocked *bool `json:"is_locked"`
+	IsLocked *bool `json:"isLocked"`
 
 	// Set the timer start.
 	TimerStart *time.Time `json:"timerStart"`
