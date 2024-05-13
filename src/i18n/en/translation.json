@@ -363,7 +363,7 @@
     "ShowOtherUsersNotesOption": "Show notes of other users",
     "ShowNoteReactionsOptions": "Show note reactions",
     "AllowNoteRepositioningOption": "Allow note repositioning",
-    "AllowEditing": "Allow participant changes",
+    "IsLocked": "Lock Board",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"

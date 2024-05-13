@@ -168,7 +168,7 @@ export const BoardSettings = () => {
                 </SettingsButton>
                 <SettingsButton
                   className="board-settings__allow-board-editing"
-                  label={t("BoardSettings.AllowEditing")}
+                  label={t("BoardSettings.IsLocked")}
                   onClick={() => store.dispatch(Actions.editBoard({isLocked: !state.board.isLocked}))}
                   role="switch"
                   aria-checked={state.board.isLocked}
