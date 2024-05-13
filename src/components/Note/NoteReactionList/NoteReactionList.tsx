@@ -46,7 +46,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const participants = [me, ...others];
 
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
-  const boardLocked = useAppSelector((state) => !state.board.data!.isLocked);
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
