@@ -25,7 +25,7 @@ export type NoteDialogNoteProps = {
 };
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => {
-  const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+  const boardLocked = useAppSelector((state) => !state.board.data!.isLocked);
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self.role));
 
   /* eslint-disable jsx-a11y/no-static-element-interactions */

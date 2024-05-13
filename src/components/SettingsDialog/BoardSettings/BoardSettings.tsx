@@ -169,12 +169,12 @@ export const BoardSettings = () => {
                 <SettingsButton
                   className="board-settings__allow-board-editing"
                   label={t("BoardSettings.AllowEditing")}
-                  onClick={() => store.dispatch(Actions.editBoard({allowEditing: !state.board.allowEditing}))}
+                  onClick={() => store.dispatch(Actions.editBoard({isLocked: !state.board.isLocked}))}
                   role="switch"
-                  aria-checked={state.board.allowEditing}
+                  aria-checked={state.board.isLocked}
                 >
                   <div className="board-settings__allow-board-editing-value">
-                    <Toggle active={state.board.allowEditing} />
+                    <Toggle active={state.board.isLocked} />
                   </div>
                 </SettingsButton>
               </div>

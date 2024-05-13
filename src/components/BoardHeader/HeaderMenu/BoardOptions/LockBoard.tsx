@@ -8,7 +8,7 @@ import "../BoardSettings/BoardSettings.scss";
 
 export const LockBoard = () => {
   const {t} = useTranslation();
-  const allowEditing = useAppSelector((state) => state.board.data!.allowEditing);
+  const allowEditing = useAppSelector((state) => state.board.data!.isLocked);
 
   return (
     <BoardOption>
@@ -16,7 +16,7 @@ export const LockBoard = () => {
         aria-checked={allowEditing}
         role="switch"
         label={t("BoardSettings.AllowEditing")}
-        onClick={() => store.dispatch(Actions.editBoard({allowEditing: !allowEditing}))}
+        onClick={() => store.dispatch(Actions.editBoard({isLocked: !allowEditing}))}
       >
         <BoardOptionToggle active={allowEditing} />
       </BoardOptionButton>

@@ -127,7 +127,7 @@ export const passBoardMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicatio
       showNotesOfOtherUsers: action.board.showNotesOfOtherUsers,
       showNoteReactions: action.board.showNoteReactions,
       name: action.board.name == null ? currentState.name : action.board.name,
-      allowEditing: action.board.allowEditing,
+      isLocked: action.board.isLocked,
     }).catch(() => {
       i18n.on("loaded", () => {
         Toast.error({

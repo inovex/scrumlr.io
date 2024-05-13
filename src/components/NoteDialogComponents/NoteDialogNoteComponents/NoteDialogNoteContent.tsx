@@ -29,7 +29,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
-  const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+  const boardLocked = useAppSelector((state) => !state.board.data!.isLocked);
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
 
   const author = useAppSelector((state) => {

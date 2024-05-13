@@ -42,7 +42,7 @@ export const Board = () => {
       board: {
         id: applicationState.board.data?.id,
         status: applicationState.board.status,
-        locked: !applicationState.board.data?.allowEditing,
+        locked: !applicationState.board.data?.isLocked,
       },
       columns: applicationState.columns,
       requests: applicationState.requests,

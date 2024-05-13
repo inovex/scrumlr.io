@@ -34,7 +34,7 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
-  const boardIsLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+  const boardIsLocked = useAppSelector((state) => !state.board.data!.isLocked);
   const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const me = useAppSelector((state) => state.participants?.self);
