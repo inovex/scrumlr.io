@@ -1,6 +1,7 @@
 package database
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/google/uuid"
@@ -19,9 +20,9 @@ func (o *NotesObserverForTests) UpdatedNotes(board uuid.UUID, notes []Note) {
 	o.notes = &notes
 }
 
-func (o *NotesObserverForTests) DeletedNote(user, board, note uuid.UUID, votes []Vote, deleteStack bool) {
+func (o *NotesObserverForTests) DeletedNote(user, board uuid.UUID, note Note, columns []Column, votes []Vote, deleteStack bool) {
 	o.board = &board
-	o.deletedNote = &note
+	o.deletedNote = &note.ID
 }
 
 func (o *NotesObserverForTests) Reset() {
@@ -99,8 +100,9 @@ func testNotesObserverOnDelete(t *testing.T) {
 func testNotesObserverOnDeleteNotExisting(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 	deleteStack = false
+	fmt.Println(notesObserverForTestNote.ID)
 	err := testDb.DeleteNote(user.ID, notesObserverForTestNote.Board, notesObserverForTestNote.ID, deleteStack)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
 	assert.Nil(t, notesObserver.board)
 	assert.Nil(t, notesObserver.deletedNote)
 }

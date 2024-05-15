@@ -18,9 +18,9 @@ func (o *ColumnsObserverForTests) UpdatedColumns(board uuid.UUID, columns []Colu
 	o.columns = &columns
 }
 
-func (o *ColumnsObserverForTests) DeletedColumn(user, board, column uuid.UUID, notes []Note, votes []Vote) {
+func (o *ColumnsObserverForTests) DeletedColumn(user, board uuid.UUID, column Column, notes []Note, votes []Vote) {
 	o.board = &board
-	o.deletedColumn = &column
+	o.deletedColumn = &column.ID
 }
 
 func (o *ColumnsObserverForTests) Reset() {
@@ -89,7 +89,7 @@ func testColumnsObserverOnDelete(t *testing.T) {
 func testColumnsObserverOnDeleteNotExisting(t *testing.T) {
 	columnsObserverTestUser := fixture.MustRow("User.john").(*User)
 	err := testDb.DeleteColumn(columnsObserverTestColumn.Board, columnsObserverTestColumn.ID, columnsObserverTestUser.ID)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
 	assert.Nil(t, columnsObserver.board)
 	assert.Nil(t, columnsObserver.deletedColumn)
 }

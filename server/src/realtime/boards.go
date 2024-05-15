@@ -9,6 +9,7 @@ import (
 )
 
 type BoardEventType string
+type SessionChannel string
 
 const (
 	BoardEventInit                  BoardEventType = "INIT"
@@ -32,6 +33,9 @@ const (
 	BoardEventVotingUpdated         BoardEventType = "VOTING_UPDATED"
 	BoardEventBoardTimerUpdated     BoardEventType = "BOARD_TIMER_UPDATED"
 	BoardEventBoardReactionAdded    BoardEventType = "BOARD_REACTION_ADDED"
+
+	SessionChannelModerator   SessionChannel = "moderator"
+	SessionChannelParticipant SessionChannel = "participant"
 )
 
 type BoardEvent struct {
@@ -39,13 +43,17 @@ type BoardEvent struct {
 	Data interface{}    `json:"data,omitempty"`
 }
 
-func (b *Broker) BroadcastToBoard(boardID uuid.UUID, msg BoardEvent) error {
+func (b *Broker) BroadcastToBoard(boardID uuid.UUID, channels []SessionChannel, msg BoardEvent) error {
 	logger.Get().Debugw("broadcasting to board", "board", boardID, "msg", msg.Type)
-	return b.con.Publish(boardsSubject(boardID), msg)
+	var err error
+	for _, channel := range channels {
+		err = b.con.Publish(boardsSubject(boardID, channel), msg)
+	}
+	return err
 }
 
-func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
-	c, err := b.con.SubscribeToBoardEvents(boardsSubject(boardID))
+func (b *Broker) GetBoardChannel(boardID uuid.UUID, channel SessionChannel) chan *BoardEvent {
+	c, err := b.con.SubscribeToBoardEvents(boardsSubject(boardID, channel))
 	if err != nil {
 		// TODO: Bubble up this error, so the caller can retry to establish this subscription
 		logger.Get().Errorw("failed to subscribe to BoardChannel", "err", err)
@@ -53,6 +61,6 @@ func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
 	return c
 }
 
-func boardsSubject(boardID uuid.UUID) string {
-	return fmt.Sprintf("board.%s", boardID)
+func boardsSubject(boardID uuid.UUID, channel SessionChannel) string {
+	return fmt.Sprintf("board.%s.%s", boardID, channel)
 }

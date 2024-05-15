@@ -13,7 +13,7 @@ type ColumnsObserver interface {
 
 	// UpdatedColumns will be called if the columns of the board with the specified id were updated.
 	UpdatedColumns(board uuid.UUID, columns []Column)
-	DeletedColumn(user, board, column uuid.UUID, notes []Note, votes []Vote)
+	DeletedColumn(user, board uuid.UUID, column Column, notes []Note, votes []Vote)
 }
 
 var _ bun.AfterInsertHook = (*ColumnInsert)(nil)
@@ -65,7 +65,9 @@ func notifyColumnDeleted(ctx context.Context) error {
 	if len(d.observer) > 0 {
 		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
-		column := ctx.Value(identifiers.ColumnIdentifier).(uuid.UUID)
+		_ = ctx.Value(identifiers.ColumnIdentifier).(uuid.UUID)
+		deletedColumn := ctx.Value("deletedColumn").(Column)
+
 		notes, err := d.GetNotes(board)
 		if err != nil {
 			return err
@@ -76,7 +78,7 @@ func notifyColumnDeleted(ctx context.Context) error {
 		}
 		for _, observer := range d.observer {
 			if o, ok := observer.(ColumnsObserver); ok {
-				o.DeletedColumn(user, board, column, notes, votes)
+				o.DeletedColumn(user, board, deletedColumn, notes, votes)
 				return nil
 			}
 		}

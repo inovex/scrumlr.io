@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
@@ -70,6 +69,20 @@ type VotingUpdated struct {
 
 func parseVotingUpdated(data interface{}) (*VotingUpdated, error) {
 	var ret *VotingUpdated
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
+func parseParticipant(data interface{}) (*dto.BoardSession, error) {
+	var ret *dto.BoardSession
 
 	b, err := json.Marshal(data)
 	if err != nil {
@@ -181,16 +194,18 @@ func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUI
 	return filteredVoting
 }
 
-func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
-	isMod := isModerator(userID, boardSubscription.boardParticipants)
-	if event.Type == realtime.BoardEventColumnsUpdated {
+func (b *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
+	isMod := isModerator(userID, b.boardParticipants)
+
+	switch event.Type {
+	case realtime.BoardEventColumnsUpdated:
 		columns, err := parseColumnUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", b.boardSettings.ID, "session", userID, "error", err)
 		}
 		// Cache the incoming changes, mod only since they receive all changes
 		if isMod {
-			boardSubscription.boardColumns = columns
+			b.boardColumns = columns
 			return event
 		}
 
@@ -201,45 +216,42 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 
 		return &ret // after this event, a syncNotes event is triggered from the board service
-	}
 
-	if event.Type == realtime.BoardEventNotesUpdated {
+	case realtime.BoardEventNotesUpdated:
 		notes, err := parseNotesUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", b.boardSettings.ID, "session", userID, "error", err)
 		}
 
 		if isMod {
-			boardSubscription.boardNotes = notes
+			b.boardNotes = notes
 			return event
 		}
 
-		filteredNotes := filterNotes(notes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+		filteredNotes := filterNotes(notes, userID, b.boardSettings, b.boardColumns)
 		ret := realtime.BoardEvent{
 			Type: event.Type,
 			Data: filteredNotes,
 		}
 
 		return &ret
-	}
 
-	if event.Type == realtime.BoardEventBoardUpdated {
+	case realtime.BoardEventBoardUpdated:
 		boardSettings, err := parseBoardUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", b.boardSettings.ID, "session", userID, "error", err)
 		}
 		if isMod {
-			boardSubscription.boardSettings = boardSettings
+			b.boardSettings = boardSettings
 			event.Data = boardSettings
 			return event
 		}
 		return event // after this event, a syncNotes event is triggered from the board service
-	}
 
-	if event.Type == realtime.BoardEventVotingUpdated {
+	case realtime.BoardEventVotingUpdated:
 		voting, err := parseVotingUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", b.boardSettings.ID, "session", userID, "error", err)
 		}
 		if isMod {
 			return event
@@ -248,26 +260,36 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 			return event
 		}
 
-		filteredVoting := filterVotingUpdated(voting, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+		filteredVoting := filterVotingUpdated(voting, userID, b.boardSettings, b.boardColumns)
 		ret := realtime.BoardEvent{
 			Type: event.Type,
 			Data: filteredVoting,
 		}
 		return &ret
-	}
 
-	if event.Type == realtime.BoardEventNotesSync {
+	case realtime.BoardEventParticipantUpdated:
+		eventParticipant, err := parseParticipant(event.Data)
+		if err != nil {
+			return nil
+		}
+		for index, participant := range b.boardParticipants {
+			if participant.User.ID == eventParticipant.User.ID {
+				b.boardParticipants[index] = eventParticipant
+			}
+		}
+
+	case realtime.BoardEventNotesSync:
 		notes, err := parseNotesUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", b.boardSettings.ID, "session", userID, "error", err)
 		}
 
 		if isMod {
-			boardSubscription.boardNotes = notes
+			b.boardNotes = notes
 			return event
 		}
 
-		filteredNotes := filterNotes(notes, userID, boardSubscription.boardSettings, boardSubscription.boardColumns)
+		filteredNotes := filterNotes(notes, userID, b.boardSettings, b.boardColumns)
 		ret := realtime.BoardEvent{
 			Type: event.Type,
 			Data: filteredNotes,
@@ -275,6 +297,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 		return &ret
 	}
+
 	// returns, if no filter match occured
 	return event
 }
@@ -288,14 +311,14 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	retEvent := InitEvent{
 		Type: event.Type,
 		Data: EventData{
-			Board:       event.Data.Board,
-			Notes:       nil,
-			Reactions:   event.Data.Reactions,
-			Columns:     nil,
-			Votings:     event.Data.Votings,
-			Votes:       event.Data.Votes,
-			Sessions:    event.Data.Sessions,
-			Requests:    event.Data.Requests,
+			Board:     event.Data.Board,
+			Notes:     nil,
+			Reactions: event.Data.Reactions,
+			Columns:   nil,
+			Votings:   event.Data.Votings,
+			Votes:     event.Data.Votes,
+			Sessions:  event.Data.Sessions,
+			Requests:  event.Data.Requests,
 		},
 	}
 	// Columns

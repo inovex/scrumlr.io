@@ -2,11 +2,10 @@ package database
 
 import (
 	"context"
-	"scrumlr.io/server/identifiers"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/identifiers"
 )
 
 type NotesObserver interface {
@@ -16,7 +15,7 @@ type NotesObserver interface {
 	UpdatedNotes(board uuid.UUID, notes []Note)
 
 	// DeletedNote will be called if a note has been deleted.
-	DeletedNote(user, board, note uuid.UUID, votes []Vote, deleteStack bool)
+	DeletedNote(user, board uuid.UUID, note Note, columns []Column, votes []Vote, deleteStack bool)
 }
 
 var _ bun.AfterInsertHook = (*NoteInsert)(nil)
@@ -66,17 +65,21 @@ func notifyNoteDeleted(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
-		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
-		note := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
+		userID := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+		boardID := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+		note := ctx.Value("deletedNote").(Note)
+		columns, err := d.GetColumns(boardID)
+		if err != nil {
+			return err
+		}
 		deleteStack := ctx.Value("DeleteStack").(bool)
-		votes, err := d.GetVotes(filter.VoteFilter{Board: board})
+		votes, err := d.GetVotes(filter.VoteFilter{Board: boardID})
 		if err != nil {
 			return err
 		}
 		for _, observer := range d.observer {
 			if o, ok := observer.(NotesObserver); ok {
-				o.DeletedNote(user, board, note, votes, deleteStack)
+				o.DeletedNote(userID, boardID, note, columns, votes, deleteStack)
 				return nil
 			}
 		}

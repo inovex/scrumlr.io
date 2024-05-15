@@ -33,7 +33,6 @@ func notifyReactionDeleted(ctx context.Context) error {
 		return nil
 	}
 	d := ctx.Value("Database").(*Database)
-
 	if len(d.observer) > 0 {
 		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 		reaction := ctx.Value(identifiers.ReactionIdentifier).(uuid.UUID)

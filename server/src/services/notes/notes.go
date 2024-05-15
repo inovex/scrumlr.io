@@ -105,12 +105,16 @@ func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id
 	return s.database.DeleteNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), ctx.Value(identifiers.BoardIdentifier).(uuid.UUID), id, body.DeleteStack)
 }
 
+// UpdatedNotes broadcast to everyone if not in visible column
+// Since we update all notes on the board it's okay to broadcast to everyone
 func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
+	channels := []realtime.SessionChannel{realtime.SessionChannelParticipant, realtime.SessionChannelModerator}
 	eventNotes := make([]dto.Note, len(notes))
 	for index, note := range notes {
 		eventNotes[index] = *new(dto.Note).From(note)
 	}
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})
@@ -119,12 +123,20 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID, notes []database.Note) {
 	}
 }
 
-func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote, deleteStack bool) {
+// DeletedNote broadcast to everyone if not in visible column
+func (s *NoteService) DeletedNote(user, board uuid.UUID, note database.Note, columns []database.Column, votes []database.Vote, deleteStack bool) {
+	channels := []realtime.SessionChannel{realtime.SessionChannelModerator}
+	for _, column := range columns {
+		if column.Visible && note.Column == column.ID {
+			channels = append(channels, realtime.SessionChannelParticipant)
+		}
+	}
+
 	noteData := map[string]interface{}{
-		"note":        note,
+		"note":        note.ID,
 		"deleteStack": deleteStack,
 	}
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	err := s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventNoteDeleted,
 		Data: noteData,
 	})
@@ -138,7 +150,7 @@ func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.
 			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
 		}
 	}
-	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	err = s.realtime.BroadcastToBoard(board, channels, realtime.BoardEvent{
 		Type: realtime.BoardEventVotesUpdated,
 		Data: personalVotes,
 	})
