@@ -34,21 +34,21 @@ const XRColumn = (props: ColumnProps) => {
       margin={0}
       padding={16}
       paddingTop={64}
-      border={4}
-      borderRight={!isLastColumn ? 0 : 4}
-      borderLeft={!isFirstColumn ? 0 : 4}
-      borderRadiusLeft={isFirstColumn ? 26 : 0}
-      borderRadiusRight={isLastColumn ? 26 : 0}
-      borderBend={32}
       minWidth="30%"
       flexBasis={1}
       borderColor={getColorFromName(props.color)}
+      borderOpacity={0.8}
+      borderWidth={4}
+      borderRightWidth={!isLastColumn ? 0 : 4}
+      borderLeftWidth={!isFirstColumn ? 0 : 4}
+      borderLeftRadius={isFirstColumn ? 26 : 0}
+      borderRightRadius={isLastColumn ? 26 : 0}
     >
       <Text ref={columnNameRef} color={FONT_COLOR} marginBottom={4} borderBottom={4} borderColor={getColorFromName(props.color)}>
         {props.name}
       </Text>
-      <Container height={4} width={columnNameRef.current?.size.v[0] ?? "50%"} marginBottom={16} backgroundColor={getColorFromName(props.color)} />
-      <Container width="100%" height="100%" flexDirection="column" gap={8} overflow="scroll" paddingBottom={32}>
+      <Container height={4} width={columnNameRef.current?.size?.v?.[0] ?? "50%"} marginBottom={16} backgroundColor={getColorFromName(props.color)} />
+      <Container width="100%" height="90%" flexDirection="column" gap={8} overflow="scroll" paddingBottom={32} scrollbarWidth={0}>
         {notes.map((note) => (
           <XRNote key={note} noteId={note} viewer={viewer} />
         ))}
