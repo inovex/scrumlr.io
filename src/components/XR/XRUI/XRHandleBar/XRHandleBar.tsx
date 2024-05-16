@@ -15,7 +15,7 @@ const XRHandleBar = ({containerRef}: XRHandleBarProps) => {
 
   return (
     <mesh
-      position={[0, 0.95, -0.64]}
+      position={[0, -0.6, 0]}
       rotation={new Euler(0, 0, 0.5 * Math.PI)}
       onPointerDown={(e) => {
         if (containerRef.current && !downState.current && isXIntersection(e)) {

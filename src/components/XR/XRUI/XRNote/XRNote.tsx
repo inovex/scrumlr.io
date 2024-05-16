@@ -1,34 +1,14 @@
-import {Container, Text, Object} from "@coconut-xr/koestlich";
 import {NoteProps} from "components/Note";
 import {FONT_COLOR} from "components/XR/xr-constants";
-import {Suspense, useMemo} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppSelector} from "store";
 import {Participant} from "types/participant";
 import {isEqual} from "underscore";
-import {ExtrudeGeometry, Mesh, Shape} from "three";
-import {GlassMaterial} from "../XRContainer/XRContainer";
-
-class CardGeometry extends ExtrudeGeometry {
-  constructor(width: number, height: number, radius: number) {
-    const roundedRectShape = new Shape();
-    roundedRectShape.moveTo(0, radius);
-    roundedRectShape.lineTo(0, height - radius);
-    roundedRectShape.quadraticCurveTo(0, height, radius, height);
-    roundedRectShape.lineTo(width - radius, height);
-    roundedRectShape.quadraticCurveTo(width, height, width, height - radius);
-    roundedRectShape.lineTo(width, radius);
-    roundedRectShape.quadraticCurveTo(width, 0, width - radius, 0);
-    roundedRectShape.lineTo(radius, 0);
-    roundedRectShape.quadraticCurveTo(0, 0, 0, radius);
-    super(roundedRectShape, {depth: 1, bevelEnabled: false});
-  }
-}
+import {Text} from "@react-three/uikit";
+import {Card} from "components/apfel/card";
 
 const XRNote = (props: NoteProps) => {
   const {t} = useTranslation();
-
-  const mesh1 = useMemo(() => new Mesh(new CardGeometry(1, 1, 0.08), new GlassMaterial()), []);
 
   const {note, me} = useAppSelector((state) => ({
     note: state.notes.find((n) => n.id === props.noteId),
@@ -46,20 +26,14 @@ const XRNote = (props: NoteProps) => {
   if (!note) return null;
 
   return (
-    <Suspense>
-      <Container>
-        <Object translateZ={1} depth={4} object={mesh1} opacity={0.3} marginBottom={8} index={note.position.rank * -1}>
-          <Container flexDirection="column" backgroundColor={undefined} width="100%" margin={0} padding={12} overflow="scroll">
-            <Text fontSize={10} color={FONT_COLOR}>
-              {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
-            </Text>
-            <Text color={FONT_COLOR} fontSize={12} height={64}>
-              {note.text}
-            </Text>
-          </Container>
-        </Object>
-      </Container>
-    </Suspense>
+    <Card borderRadius={16} transformTranslateZ={8} flexDirection="column" width="100%" height={96} padding={12} overflow="scroll" gap={4} scrollbarWidth={0}>
+      <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
+        {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
+      </Text>
+      <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top">
+        {note.text}
+      </Text>
+    </Card>
   );
 };
 
