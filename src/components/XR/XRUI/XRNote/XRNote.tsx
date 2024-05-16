@@ -48,7 +48,7 @@ const XRNote = (props: NoteProps) => {
   return (
     <Suspense>
       <Container>
-        <Object depth={4} object={mesh1} opacity={0.3} marginBottom={8} index={note.position.rank * -1}>
+        <Object translateZ={1} depth={4} object={mesh1} opacity={0.3} marginBottom={8} index={note.position.rank * -1}>
           <Container flexDirection="column" backgroundColor={undefined} width="100%" margin={0} padding={12} overflow="scroll">
             <Text fontSize={10} color={FONT_COLOR}>
               {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
