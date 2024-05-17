@@ -1,4 +1,4 @@
-import {Container, Text} from "@react-three/uikit";
+import {Container, Text, TextProperties} from "@react-three/uikit";
 import {ColumnProps} from "components/Column";
 import {FONT_COLOR, getColorFromName} from "components/XR/xr-constants";
 import {useAppSelector} from "store";
@@ -7,7 +7,7 @@ import {useRef} from "react";
 import XRNote from "../XRNote/XRNote";
 
 const XRColumn = (props: ColumnProps) => {
-  const columnNameRef = useRef<any>(null!);
+  const columnNameRef = useRef<TextProperties>(null!);
 
   const {notes, viewer, numberOfColumns} = useAppSelector(
     (state) => ({
