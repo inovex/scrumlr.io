@@ -17,7 +17,7 @@ const XRContainer = () => {
 
   return (
     <group ref={containerRef} position={[0, 1.5, -0.64]}>
-      <Root sizeX={2} sizeY={1} display="flex" flexDirection="column" positionType="relative" pixelSize={0.0025}>
+      <Root sizeX={2} sizeY={1} display="flex" flexDirection="column" positionType="relative" pixelSize={0.002}>
         <XRMenuBarLeft />
         <Card>
           <XRBoardHeader />

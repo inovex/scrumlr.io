@@ -9,6 +9,8 @@ import {useDispatch} from "react-redux";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import {useState} from "react";
+import {FONT_COLOR, getColorFromName} from "components/XR/xr-constants";
+import XRReactionsMenu from "../XRReactionsMenu/XRReactionsMenu";
 
 const XRMenuBarLeft = () => {
   const dispatch = useDispatch();
@@ -41,20 +43,23 @@ const XRMenuBarLeft = () => {
   };
 
   return (
-    <TabBar positionType="absolute" positionLeft={-72} positionTop="25%" zIndexOffset={16} transformTranslateZ={16}>
-      <TabBarItem value="1" icon={<Svg src={CheckIcon} />} onClick={toggleReadyState}>
-        <Text>{!isReady ? "Mark me as done" : "Unmark me as done"}</Text>
-      </TabBarItem>
-      <TabBarItem value="2" icon={<Svg src={RaiseHand} />} onClick={toggleRaiseHand}>
-        <Text>{!raisedHand ? "Raise your hand" : "Lower your hand"}</Text>
-      </TabBarItem>
-      <TabBarItem value="3" icon={<Svg src={BoardReactionIcon} />} onClick={toggleBoardReactionsMenu}>
-        <Text>React</Text>
-      </TabBarItem>
-      <TabBarItem value="4" icon={<Svg src={SettingsIcon} />}>
-        <Text>Settings</Text>
-      </TabBarItem>
-    </TabBar>
+    <>
+      <TabBar positionType="absolute" positionLeft={-72} positionTop="25%" zIndexOffset={16} transformTranslateZ={16}>
+        <TabBarItem value="1" icon={<Svg src={CheckIcon} color={!isReady ? FONT_COLOR : getColorFromName("grooming-green")} />} onClick={toggleReadyState}>
+          <Text>{!isReady ? "Mark me as done" : "Unmark me as done"}</Text>
+        </TabBarItem>
+        <TabBarItem value="2" icon={<Svg src={RaiseHand} color={!raisedHand ? FONT_COLOR : getColorFromName("poker-purple")} />} onClick={toggleRaiseHand}>
+          <Text>{!raisedHand ? "Raise your hand" : "Lower your hand"}</Text>
+        </TabBarItem>
+        <TabBarItem value="3" icon={<Svg src={BoardReactionIcon} />} onClick={toggleBoardReactionsMenu}>
+          <Text>React</Text>
+        </TabBarItem>
+        <TabBarItem value="4" icon={<Svg src={SettingsIcon} />}>
+          <Text>Settings</Text>
+        </TabBarItem>
+      </TabBar>
+      {showBoardReactionsMenu && <XRReactionsMenu />}
+    </>
   );
 };
 
