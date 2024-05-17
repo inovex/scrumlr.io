@@ -15,6 +15,12 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
+      - name: Test
+        run: |
+          max_retries=3
+          response=418
+          echo "::error ::Cluster is not reachable after $max_retries attempts. Status: $response"
+
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
