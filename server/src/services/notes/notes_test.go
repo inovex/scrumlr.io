@@ -115,13 +115,13 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 
 	clientMock.On("Publish", publishSubject, publishEvent).Return(nil)
 
-	s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
 	})
-
+	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 	clientMock.AssertExpectations(suite.T())
 
@@ -138,8 +138,9 @@ func (suite *NoteServiceTestSuite) TestGetNote() {
 		ID: noteID,
 	}, nil)
 
-	s.Get(context.Background(), noteID)
+	_, err := s.Get(context.Background(), noteID)
 
+	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -152,8 +153,9 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 
 	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
 
-	s.List(context.Background(), boardID)
+	_, err := s.List(context.Background(), boardID)
 
+	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -202,13 +204,13 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		Position: &posUpdate,
 	}).Return(database.Note{}, nil)
 
-	s.Update(ctx, dto.NoteUpdateRequest{
+	_, err := s.Update(ctx, dto.NoteUpdateRequest{
 		Text:     &txt,
 		ID:       noteID,
 		Board:    boardID,
 		Position: &pos,
 	})
-
+	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
@@ -261,8 +263,8 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
 
-	s.Delete(ctx, body, noteID)
-
+	err := s.Delete(ctx, body, noteID)
+	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
 }
 
