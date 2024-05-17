@@ -29,9 +29,6 @@ jobs:
           sudo systemctl restart systemd-resolved
           dig +short github.com
 
-      - name: Install Newman
-        run: npm install -g newman
-
       - name: Wait for cluster to become healthy
         id: wait-for-cluster
         env:
@@ -52,9 +49,13 @@ jobs:
           done
           if [ "$response" != "204" ]; then
             echo "Cluster is still not responding after retries. Exiting..."
+            echo "::error file=github.workflow::Cluster is not reachable. Status: $response"
             exit 1
           fi
-          
+
+      - name: Install Newman
+        run: npm install -g newman
+
       - name: Run Newman script
         working-directory: ./server
         run: |
