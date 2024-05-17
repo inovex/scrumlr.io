@@ -45,7 +45,7 @@ jobs:
           done
           if [ "$response" != "204" ]; then
             echo "Cluster is still not responding after retries. Exiting..."
-            echo "::error::Cluster is not reachable after $max_retries attempts. Status: $response"
+            echo "::error ::Cluster is not responding after $max_retries attempts. Status: $response"
             exit 1
           fi
 
