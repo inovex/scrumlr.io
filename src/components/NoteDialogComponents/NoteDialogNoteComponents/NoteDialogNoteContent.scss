@@ -27,24 +27,28 @@ $note-content-text-max-height: 566px;
 }
 
 .note-dialog__note-content--text {
-  background: none;
-  margin: 0;
-  overflow-y: auto;
-  @include scrollbar(14px, 8px, var(--accent-color), var(--accent-color--dark));
   width: 100%;
   height: auto;
   max-height: min(40vh, $note-content-text-max-height); // limit height
+  margin: 0;
+  padding: 0 4px;
+  overflow-y: auto;
+  resize: none;
+  word-wrap: break-word;
+
   color: $color-black;
   letter-spacing: $letter-spacing--medium;
+  font-size: $text--md;
+  line-height: 1.5rem;
+
+  background: none;
+  outline: none;
+
   border: 2px dashed transparent;
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;
-  outline: none;
-  resize: none;
-  word-wrap: break-word;
-  padding: 0 4px;
-  font-size: $text--md;
-  line-height: 1.5rem;
+
+  @include scrollbar(14px, 8px, var(--accent-color), var(--accent-color--dark));
 
   &:not(:disabled) {
     &:hover,
