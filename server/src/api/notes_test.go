@@ -254,12 +254,12 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 		name         string
 		expectedCode int
 		err          error
-		allowEditing bool
+		isLocked     bool
 	}{
 		{
 			name:         "Delete Note when board is unlocked",
 			expectedCode: http.StatusNoContent,
-			allowEditing: true,
+			isLocked:     true,
 		},
 		{
 			name:         "Delete Note when board is locked",
@@ -270,7 +270,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 				StatusText: "Bad request",
 				ErrorText:  "something",
 			},
-			allowEditing: false,
+			isLocked: false,
 		},
 	}
 	for _, tt := range tests {
@@ -290,7 +290,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			s.initNoteResources(r)
 			boardMock.On("Get", boardID).Return(&dto.Board{
 				ID:       boardID,
-				IsLocked: tt.allowEditing,
+				IsLocked: tt.isLocked,
 			}, nil)
 
 			// Mock the SessionExists method
@@ -302,12 +302,12 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			// Mock the ParticipantBanned method
 			sessionMock.On("ParticipantBanned", mock.Anything, boardID, userID).Return(false, nil)
 
-			if tt.allowEditing {
+			if tt.isLocked {
 				noteMock.On("Delete", mock.Anything, mock.Anything).Return(nil)
 			} else {
 				boardMock.On("Get", boardID).Return(&dto.Board{
 					ID:       boardID,
-					IsLocked: tt.allowEditing,
+					IsLocked: tt.isLocked,
 				}, tt.err)
 				noteMock.On("Delete", mock.Anything, mock.Anything).Return(tt.err)
 			}
