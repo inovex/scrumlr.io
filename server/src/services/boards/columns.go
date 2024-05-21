@@ -15,7 +15,7 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.Column, error) {
+func (s BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.Column, error) {
 	column, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible, Index: body.Index})
 	if err != nil {
 		logger.Get().Errorw("unable to create column", "err", err)
