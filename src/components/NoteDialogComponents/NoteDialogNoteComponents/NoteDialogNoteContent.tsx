@@ -1,4 +1,4 @@
-import {FC, useRef, useState} from "react";
+import {FC, useState} from "react";
 import {Actions} from "store/action";
 import "./NoteDialogNoteContent.scss";
 import {useDispatch} from "react-redux";
@@ -12,7 +12,6 @@ import classNames from "classnames";
 import {createPortal} from "react-dom";
 import {Toast} from "utils/Toast";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
-import useTextAreaSize from "utils/hooks/useTextAreaSize";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import i18n from "../../../i18n";
 
@@ -26,7 +25,6 @@ type NoteDialogNoteContentProps = {
 };
 
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, showNoteReactions, isStackedNote}: NoteDialogNoteContentProps) => {
-  const ref = useRef<HTMLTextAreaElement | null>(null);
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useDispatch();
   const {t} = useTranslation();
@@ -62,8 +60,6 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({initialValue: text, suggestionsHidden: isStackedNote});
 
-  useTextAreaSize(ref, value);
-
   return (
     <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})} ref={emoji.containerRef}>
       {isImage ? (
@@ -92,9 +88,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       ) : (
         <>
           <textarea
-            ref={ref}
             className="note-dialog__note-content--text"
-            rows={1}
             disabled={!editable}
             onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
             onFocus={onFocus}
