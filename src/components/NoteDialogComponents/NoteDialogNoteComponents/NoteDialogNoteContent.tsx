@@ -1,6 +1,5 @@
 import {FC, useState} from "react";
 import {Actions} from "store/action";
-import "./NoteDialogNoteContent.scss";
 import {useDispatch} from "react-redux";
 import {Participant} from "types/participant";
 import {useImageChecker} from "utils/hooks/useImageChecker";
@@ -13,7 +12,9 @@ import {createPortal} from "react-dom";
 import {Toast} from "utils/Toast";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import TextareaAutosize from "react-autosize-textarea";
 import i18n from "../../../i18n";
+import "./NoteDialogNoteContent.scss";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
@@ -87,7 +88,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         </>
       ) : (
         <>
-          <textarea
+          <TextareaAutosize
             className="note-dialog__note-content--text"
             disabled={!editable}
             onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
