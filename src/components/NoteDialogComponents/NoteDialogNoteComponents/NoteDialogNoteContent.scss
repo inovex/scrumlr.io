@@ -2,6 +2,8 @@
 @import "components/Note/Note.scss";
 @import "routes/StackView/StackView.scss";
 
+$note-content-text-max-height: 566px;
+
 .note-dialog__note-content {
   position: relative;
   display: flex;
@@ -30,7 +32,8 @@
   overflow-y: auto;
   @include scrollbar(14px, 8px, var(--accent-color), var(--accent-color--dark));
   width: 100%;
-  max-height: 500px;
+  height: auto;
+  max-height: min(40vh, $note-content-text-max-height); // limit height
   color: $color-black;
   letter-spacing: $letter-spacing--medium;
   border: 2px dashed transparent;
