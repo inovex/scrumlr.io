@@ -28,7 +28,7 @@
   background: none;
   margin: 0;
   overflow-y: auto;
-  @include scrollbar();
+  @include scrollbar(14px, 8px, var(--accent-color), var(--accent-color--dark));
   width: 100%;
   max-height: 500px;
   color: $color-black;
@@ -110,7 +110,7 @@
   box-shadow: $box-shadow--light;
   background-color: $color-lighter-gray;
 
-  @include scrollbar();
+  @include scrollbar($color: var(--accent-color), $color-dark: var(--acccent-color--dark));
 }
 
 [theme="dark"] {

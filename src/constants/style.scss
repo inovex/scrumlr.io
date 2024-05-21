@@ -244,23 +244,27 @@ $column-stripes--dark: repeating-linear-gradient(
 }
 
 // scrollbar
-@mixin scrollbar($width: 10px, $border-radius: 8px) {
+@mixin scrollbar($width: 10px, $border-radius: 8px, $color: $color-light-gray, $color-dark: $color-black) {
   &::-webkit-scrollbar {
     width: #{$width};
   }
 
   &::-webkit-scrollbar-track {
     border-radius: #{$border-radius};
+    background-color: $color;
+    opacity: 9%;
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: #{$border-radius};
-    background-color: rgba($color-light-gray, 0.3);
+    background-color: $color;
+    opacity: 15%;
   }
 
   [theme="dark"] & {
     &::-webkit-scrollbar-thumb {
-      background-color: rgba($color-black, 0.3);
+      background-color: $color-dark;
+      opacity: 30%;
     }
   }
 }
