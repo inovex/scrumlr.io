@@ -63,7 +63,7 @@ describe("Note Input", () => {
           showNotesOfOtherUsers: true,
           showNoteReactions: true,
           allowStacking: true,
-          isLocked: false,
+          isLocked: true,
         },
       },
       participants: {
@@ -95,7 +95,7 @@ describe("Note Input", () => {
           showNotesOfOtherUsers: true,
           showNoteReactions: true,
           allowStacking: true,
-          isLocked: false,
+          isLocked: true,
         },
       },
       participants: {
