@@ -11,10 +11,10 @@ jest.mock("utils/hooks/useImageChecker.ts", () => ({
   useImageChecker: () => false,
 }));
 
-const createNoteInput = (columnId: string, maxNoteLength: number) => (
+const createNoteInput = (columnId: string) => (
   <I18nextProvider i18n={i18nTest}>
     <Provider store={getTestStore()}>
-      <NoteInput columnId={columnId} maxNoteLength={maxNoteLength} columnIndex={1} columnIsVisible toggleColumnVisibility={() => undefined} />
+      <NoteInput columnId={columnId} columnIndex={1} columnIsVisible toggleColumnVisibility={() => undefined} />
     </Provider>
   </I18nextProvider>
 );
@@ -31,12 +31,12 @@ describe("Note Input", () => {
   });
 
   test("should render correctly", () => {
-    const {container} = render(createNoteInput("TestID", 1024));
+    const {container} = render(createNoteInput("TestID"));
     expect(container.firstChild).toMatchSnapshot();
   });
 
   test("note length", () => {
-    const {container} = render(createNoteInput("TestID", 5));
+    const {container} = render(createNoteInput("TestID"));
 
     // less works as expected
     fireEvent.change(container.querySelector(".note-input__input")!, {target: {value: "1234"}});
