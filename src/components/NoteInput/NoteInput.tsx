@@ -71,6 +71,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       <TextareaAutosize
         ref={noteInputRef}
         className="note-input__input"
+        id={`note-input-${columnIndex}`} // needed for spatial UI (XRInputField.tsx)
         placeholder={t("NoteInput.placeholder")}
         {...emoji.inputBindings}
         onKeyDown={(e) => {

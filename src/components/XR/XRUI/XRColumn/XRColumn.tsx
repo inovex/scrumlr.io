@@ -5,6 +5,7 @@ import {useAppSelector} from "store";
 import _ from "underscore";
 import {useRef} from "react";
 import XRNote from "../XRNote/XRNote";
+import XRInputField from "../XRInputField/XRInputField";
 
 const XRColumn = (props: ColumnProps) => {
   const columnNameRef = useRef<TextProperties>(null!);
@@ -47,8 +48,9 @@ const XRColumn = (props: ColumnProps) => {
       <Text ref={columnNameRef} color={FONT_COLOR} marginBottom={4} borderBottom={4} borderColor={getColorFromName(props.color)}>
         {props.name}
       </Text>
-      <Container height={4} width={columnNameRef.current?.size?.v?.[0] ?? "50%"} marginBottom={16} backgroundColor={getColorFromName(props.color)} />
-      <Container width="100%" height="90%" flexDirection="column" gap={8} overflow="scroll" paddingBottom={32} scrollbarWidth={0}>
+      <Container height={4} width={columnNameRef.current?.size?.v?.[0] ?? "50%"} marginBottom={8} backgroundColor={getColorFromName(props.color)} />
+      <XRInputField columnIndex={props.index} columnId={props.id} columnColor={props.color} />
+      <Container width="100%" height="80%" marginTop={16} flexDirection="column" gap={8} overflow="scroll" paddingBottom={32} scrollbarWidth={0}>
         {notes.map((note) => (
           <XRNote key={note} noteId={note} viewer={viewer} />
         ))}
