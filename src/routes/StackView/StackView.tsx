@@ -17,6 +17,7 @@ import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
 import "./StackView.scss";
+import {useSize} from "../../utils/hooks/useSize";
 
 type StackedNote = Note & {
   authorName: string;
@@ -35,6 +36,9 @@ export const StackView = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {t} = useTranslation();
+
+  const parentRef = useRef<HTMLDivElement>(null);
+  const parentNoteDimensions = useSize(parentRef);
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
   const prevNote = useRef<Note | undefined>(note);
@@ -254,6 +258,7 @@ export const StackView = () => {
                 {item.parent && item.parent.position.column === column?.id && (
                   <>
                     <NoteDialogComponents.Note
+                      ref={parentRef}
                       key={item.parent.id}
                       noteId={item.parent.id}
                       text={item.parent.text}
@@ -271,7 +276,7 @@ export const StackView = () => {
                       colorClassName={colorClassName}
                     />
                     {item.stack.length ? (
-                      <NoteDialogComponents.Wrapper>
+                      <NoteDialogComponents.Wrapper dimensions={parentNoteDimensions}>
                         {item.stack?.map((n: StackedNote) => (
                           <NoteDialogComponents.Note
                             key={n.id}
