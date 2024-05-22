@@ -179,8 +179,8 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		log.Errorw("unable to update board", "err", err)
 		return nil, err
 	}
-
 	s.UpdatedBoard(board)
+
 	return new(dto.Board).From(board), err
 }
 
