@@ -1,4 +1,4 @@
-import {useState, VFC} from "react";
+import {useEffect, useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
@@ -42,6 +42,11 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
 
   const enterAR = useEnterXR("immersive-ar", sessionOptions);
 
+  useEffect(() => {
+    if (state.xrActive) enterAR();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.xrActive]);
+
   return (
     <>
       {showConfirmationDialog && (
@@ -64,7 +69,6 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           className="board-header_xr-button"
           onClick={() => {
             store.dispatch(Actions.setXRActive(!state.xrActive));
-            return enterAR();
           }}
         >
           useEnterAR

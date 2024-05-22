@@ -10,6 +10,8 @@ import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import SpatialCanvas from "components/XR/SpatialCanvas";
+import {useAppSelector} from "store";
+import {shallowEqual} from "react-redux";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -28,6 +30,13 @@ export interface ColumnState {
 }
 
 export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
+  const {xrActive} = useAppSelector(
+    (rootState) => ({
+      xrActive: rootState.view.xrActive,
+    }),
+    shallowEqual
+  );
+
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
     lastVisibleColumnIndex: React.Children.count(children),
@@ -175,7 +184,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <InfoBar />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
-      <SpatialCanvas />
+      {xrActive && <SpatialCanvas />}
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div
           className={`board__spacer-left ${getColorClassName(columnColors[0])} ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""}`}
