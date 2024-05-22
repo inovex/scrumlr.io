@@ -8,6 +8,7 @@
 
   flex-grow: 1;
   overflow: hidden scroll;
+  @include scrollbar($color: var(--accent-color)); // TODO scrollbar visibility
 }
 
 .note-dialog__note-wrapper {
