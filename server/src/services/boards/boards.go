@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"scrumlr.io/server/identifiers"
 	"time"
+
+	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 
@@ -28,7 +29,6 @@ func NewBoardService(db *database.Database, rt *realtime.Broker) services.Boards
 	b := new(BoardService)
 	b.database = db
 	b.realtime = rt
-	b.database.AttachObserver((database.BoardObserver)(b))
 	return b
 }
 
@@ -133,7 +133,11 @@ func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, us
 }
 
 func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
-	return s.database.DeleteBoard(id)
+	err := s.database.DeleteBoard(id)
+	if err != nil {
+		logger.Get().Errorw("unable to delete board", "err", err)
+	}
+	return err
 }
 
 func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) (*dto.Board, error) {
@@ -172,8 +176,11 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 
 	board, err := s.database.UpdateBoard(update)
 	if err != nil {
+		log.Errorw("unable to update board", "err", err)
 		return nil, err
 	}
+
+	s.UpdatedBoard(board)
 	return new(dto.Board).From(board), err
 }
 
@@ -187,8 +194,11 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
+		logger.Get().Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+	s.UpdatedBoardTimer(board)
+
 	return new(dto.Board).From(board), err
 }
 
@@ -200,8 +210,11 @@ func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
+		logger.Get().Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+	s.UpdatedBoardTimer(board)
+
 	return new(dto.Board).From(board), err
 }
 
@@ -232,8 +245,11 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 
 	board, err = s.database.UpdateBoardTimer(update)
 	if err != nil {
+		logger.Get().Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+	s.UpdatedBoardTimer(board)
+
 	return new(dto.Board).From(board), nil
 }
 
