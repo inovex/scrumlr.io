@@ -44,8 +44,8 @@ $stack-view__min-height: 82px;
 .stack-view__animation-wrapper {
   width: fit-content;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
 .stack-view__disabled-click {
@@ -78,10 +78,13 @@ $stack-view__min-height: 82px;
 
 .stack-view__parent-note {
   margin: 0;
+  height: fit-content;
   min-height: calc($stack-view__min-height * 2);
   width: calc(100vw - 3 * $column__border-width);
   max-width: 700px;
   font-size: $text-size--large;
+
+  align-self: flex-start;
 
   z-index: $request-z-index;
   --note-footer-height: 36px;

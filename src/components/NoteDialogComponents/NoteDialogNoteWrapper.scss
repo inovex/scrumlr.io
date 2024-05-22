@@ -3,20 +3,18 @@
 @import "routes/StackView/StackView.scss";
 
 .note-dialog__scrollbar {
-  width: calc(100vw - (2 * $column__border-width));
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-color: $color-middle-gray $color-white;
-  margin-bottom: $column__border-width;
-  padding-top: $spacing--xl;
+  // TODO right container height
   padding-left: 10px;
   box-sizing: border-box;
 
-  @include scrollbar();
+  flex-grow: 1;
+  // height: 471px; // TODO same height as left
+  // height: fit-content;
+  overflow: hidden scroll;
 }
 
 .note-dialog__note-wrapper {
-  margin: 0 $spacing--base $spacing--xl 0;
+  margin: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -32,6 +30,6 @@
 
 [theme="dark"] {
   .note-dialog__scrollbar {
-    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+    // scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
 }

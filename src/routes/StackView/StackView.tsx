@@ -12,11 +12,11 @@ import {Actions} from "store/action";
 import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
 import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
 import {Toast} from "utils/Toast";
-import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Note} from "types/note";
 import {AvataaarProps} from "components/Avatar";
+import "./StackView.scss";
 
 type StackedNote = Note & {
   authorName: string;
@@ -270,25 +270,27 @@ export const StackView = () => {
                       className="stack-view__parent-note"
                       colorClassName={colorClassName}
                     />
-                    {/* <NoteDialogComponents.Wrapper>
-                      {item.stack?.map((n: StackedNote) => (
-                        <NoteDialogComponents.Note
-                          key={n.id}
-                          noteId={n.id}
-                          text={n.text}
-                          authorId={n.author}
-                          avatar={n.avatar}
-                          authorName={n.authorName}
-                          showAuthors={showAuthors}
-                          showNoteReactions={showNoteReactions}
-                          onClose={handleClose}
-                          isStackedNote
-                          viewer={viewer}
-                          className="stack-view__child-note"
-                          colorClassName={colorClassName}
-                        />
-                      ))}
-                    </NoteDialogComponents.Wrapper> */}
+                    {item.stack.length ? (
+                      <NoteDialogComponents.Wrapper>
+                        {item.stack?.map((n: StackedNote) => (
+                          <NoteDialogComponents.Note
+                            key={n.id}
+                            noteId={n.id}
+                            text={n.text}
+                            authorId={n.author}
+                            avatar={n.avatar}
+                            authorName={n.authorName}
+                            showAuthors={showAuthors}
+                            showNoteReactions={showNoteReactions}
+                            onClose={handleClose}
+                            isStackedNote
+                            viewer={viewer}
+                            className="stack-view__child-note"
+                            colorClassName={colorClassName}
+                          />
+                        ))}
+                      </NoteDialogComponents.Wrapper>
+                    ) : null}
                   </>
                 )}
               </animated.div>
