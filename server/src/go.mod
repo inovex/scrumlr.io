@@ -16,7 +16,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.1
 	github.com/lestrrat-go/jwx/v2 v2.0.21
-	github.com/markbates/goth v1.79.0
+	github.com/markbates/goth v1.80.0
 	github.com/nats-io/nats.go v1.35.0
 	github.com/ory/dockertest/v3 v3.10.0
 	github.com/pkg/errors v0.9.1
