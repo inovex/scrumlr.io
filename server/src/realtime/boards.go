@@ -41,11 +41,11 @@ type BoardEvent struct {
 
 func (b *Broker) BroadcastToBoard(boardID uuid.UUID, msg BoardEvent) error {
 	logger.Get().Debugw("broadcasting to board", "board", boardID, "msg", msg.Type)
-	return b.con.Publish(boardsSubject(boardID), msg)
+	return b.Con.Publish(boardsSubject(boardID), msg)
 }
 
 func (b *Broker) GetBoardChannel(boardID uuid.UUID) chan *BoardEvent {
-	c, err := b.con.SubscribeToBoardEvents(boardsSubject(boardID))
+	c, err := b.Con.SubscribeToBoardEvents(boardsSubject(boardID))
 	if err != nil {
 		// TODO: Bubble up this error, so the caller can retry to establish this subscription
 		logger.Get().Errorw("failed to subscribe to BoardChannel", "err", err)
