@@ -1,6 +1,8 @@
 import "./SpatialCanvas.scss";
 import {PointerController, TouchHand, XRCanvas} from "@coconut-xr/natuerlich/defaults";
 import {ImmersiveSessionOrigin, useHeighestAvailableFrameRate, useInputSources, useNativeFramebufferScaling} from "@coconut-xr/natuerlich/react";
+import {shallowEqual} from "react-redux";
+import {useAppSelector} from "store";
 import XRLight from "./XRUI/XRLight/XRLight";
 import XRContainer from "./XRUI/XRContainer/XRContainer";
 
@@ -15,6 +17,13 @@ export function getInputSourceId(inputSource: XRInputSource): number {
 }
 
 const SpatialCanvas = () => {
+  const {xrActive} = useAppSelector(
+    (rootState) => ({
+      xrActive: rootState.view.xrActive,
+    }),
+    shallowEqual
+  );
+
   const inputSources = useInputSources();
 
   const frameBufferScaling = useNativeFramebufferScaling();
@@ -26,19 +35,23 @@ const SpatialCanvas = () => {
       gl={{localClippingEnabled: true}}
       frameBufferScaling={frameBufferScaling}
       frameRate={heighestAvailableFramerate}
-      style={{position: "absolute", inset: 0}}
+      style={{position: "absolute", inset: 0, pointerEvents: "none"}}
     >
-      <XRLight />
-      <XRContainer />
-      <ImmersiveSessionOrigin>
-        {inputSources.map((inputSource) =>
-          inputSource.hand != null ? (
-            <TouchHand id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} hand={inputSource.hand} childrenAtJoint="wrist" />
-          ) : (
-            <PointerController id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} />
-          )
-        )}
-      </ImmersiveSessionOrigin>
+      {xrActive && (
+        <>
+          <XRLight />
+          <XRContainer />
+          <ImmersiveSessionOrigin>
+            {inputSources.map((inputSource) =>
+              inputSource.hand != null ? (
+                <TouchHand id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} hand={inputSource.hand} childrenAtJoint="wrist" />
+              ) : (
+                <PointerController id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} />
+              )
+            )}
+          </ImmersiveSessionOrigin>
+        </>
+      )}
     </XRCanvas>
   );
 };

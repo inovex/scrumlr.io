@@ -1,4 +1,4 @@
-import {useEffect, useState, VFC} from "react";
+import {useState, VFC} from "react";
 import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
 import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
@@ -14,7 +14,6 @@ import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
-import {useEnterXR} from "@coconut-xr/natuerlich/react";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -34,18 +33,6 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
 
   const [showMenu, setShowMenu] = useState(false);
   const [showConfirmationDialog, setShowConfirmationDialog] = useState(false);
-
-  const sessionOptions: XRSessionInit = {
-    requiredFeatures: ["local-floor"],
-    optionalFeatures: ["hand-tracking"],
-  };
-
-  const enterAR = useEnterXR("immersive-ar", sessionOptions);
-
-  useEffect(() => {
-    if (state.xrActive) enterAR();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state.xrActive]);
 
   return (
     <>

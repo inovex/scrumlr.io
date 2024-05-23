@@ -12,6 +12,7 @@ import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import SpatialCanvas from "components/XR/SpatialCanvas";
 import {useAppSelector} from "store";
 import {shallowEqual} from "react-redux";
+import {useEnterXR} from "@coconut-xr/natuerlich/react";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -29,6 +30,11 @@ export interface ColumnState {
   lastVisibleColumnIndex: number;
 }
 
+const sessionOptions: XRSessionInit = {
+  requiredFeatures: ["local-floor"],
+  optionalFeatures: ["hand-tracking"],
+};
+
 export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
   const {xrActive} = useAppSelector(
     (rootState) => ({
@@ -36,6 +42,8 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
     }),
     shallowEqual
   );
+
+  const enterAR = useEnterXR("immersive-ar", sessionOptions);
 
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
@@ -145,6 +153,11 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnState]);
 
+  useEffect(() => {
+    if (xrActive) enterAR();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [xrActive]);
+
   if (!children || columnsCount === 0) {
     // Empty board
     return (
@@ -184,7 +197,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <InfoBar />
       <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
-      {xrActive && <SpatialCanvas />}
+      <SpatialCanvas />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div
           className={`board__spacer-left ${getColorClassName(columnColors[0])} ${currentUserIsModerator && moderating ? "board__spacer--moderation-isActive" : ""}`}
