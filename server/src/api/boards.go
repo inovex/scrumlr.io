@@ -33,7 +33,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.boards.Create(r.Context(), body)
 	if err != nil {
-		common.Throw(w, r, common.BadRequestError(err))
+		common.Throw(w, r, err)
 		return
 	}
 
