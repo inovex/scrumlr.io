@@ -1,0 +1,14 @@
+@import "src/constants/style.scss";
+
+.note-text-content-url {
+  display: inline-block;
+
+  &--truncate {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top; /* align with the rest of the text */
+    color: var(--accent-color);
+  }
+}

@@ -20,7 +20,7 @@ func NewFeedbackService(webhookUrl string) services.Feedback {
 	return b
 }
 
-func (s *FeedbackService) Create(ctx context.Context, feedbackType string, contact string, text string) {
+func (s *FeedbackService) Create(ctx context.Context, feedbackType string, contact string, text string) error {
 	log := logger.FromContext(ctx)
 	log.Info("Webhook URL", s.webhookUrl)
 	var jsonData = []byte(fmt.Sprintf(`{
@@ -42,7 +42,8 @@ func (s *FeedbackService) Create(ctx context.Context, feedbackType string, conta
       }
     ]
   }`, feedbackType, time.Now().Format("02.01.2006 15:04"), contact, text))
-	http.Post(s.webhookUrl, "application/json", bytes.NewBuffer(jsonData))
+	_, err := http.Post(s.webhookUrl, "application/json", bytes.NewBuffer(jsonData))
+	return err
 }
 
 func (s *FeedbackService) Enabled() bool {

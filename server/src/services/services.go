@@ -20,7 +20,7 @@ type Users interface {
 }
 
 type Feedback interface {
-	Create(ctx context.Context, feedbackType string, contact string, text string)
+	Create(ctx context.Context, feedbackType string, contact string, text string) error
 	Enabled() bool
 }
 

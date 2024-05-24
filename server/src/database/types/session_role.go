@@ -21,7 +21,9 @@ const (
 
 func (sessionRole *SessionRole) UnmarshalJSON(b []byte) error {
 	var s string
-	json.Unmarshal(b, &s)
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
 	unmarshalledSessionRole := SessionRole(s)
 	switch unmarshalledSessionRole {
 	case SessionRoleParticipant, SessionRoleModerator, SessionRoleOwner:
