@@ -1,5 +1,5 @@
 import "./SpatialCanvas.scss";
-import {PointerController, TouchHand, XRCanvas} from "@coconut-xr/natuerlich/defaults";
+import {Controllers, Hands, XRCanvas} from "@coconut-xr/natuerlich/defaults";
 import {ImmersiveSessionOrigin, useHeighestAvailableFrameRate, useInputSources, useNativeFramebufferScaling} from "@coconut-xr/natuerlich/react";
 import {shallowEqual} from "react-redux";
 import {useAppSelector} from "store";
@@ -43,11 +43,7 @@ const SpatialCanvas = () => {
           <XRContainer />
           <ImmersiveSessionOrigin>
             {inputSources.map((inputSource) =>
-              inputSource.hand != null ? (
-                <TouchHand id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} hand={inputSource.hand} childrenAtJoint="wrist" />
-              ) : (
-                <PointerController id={getInputSourceId(inputSource)} key={getInputSourceId(inputSource)} inputSource={inputSource} />
-              )
+              inputSource.hand != null ? <Hands type="pointer" key={getInputSourceId(inputSource)} /> : <Controllers type="pointer" key={getInputSourceId(inputSource)} />
             )}
           </ImmersiveSessionOrigin>
         </>
