@@ -15,10 +15,11 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-func (s BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.Column, error) {
+func (s *BoardService) CreateColumn(_ context.Context, body dto.ColumnRequest) (*dto.Column, error) {
 	column, err := s.database.CreateColumn(database.ColumnInsert{Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible, Index: body.Index})
 	if err != nil {
 		logger.Get().Errorw("unable to create column", "err", err)
+		return nil, err
 	}
 	s.UpdatedColumns(body.Board)
 	return new(dto.Column).From(column), err
@@ -28,6 +29,7 @@ func (s *BoardService) DeleteColumn(_ context.Context, board, column, user uuid.
 	err := s.database.DeleteColumn(board, column, user)
 	if err != nil {
 		logger.Get().Errorw("unable to delete column", "err", err)
+		return err
 	}
 	s.DeletedColumn(user, board, column)
 	return err
@@ -37,6 +39,7 @@ func (s *BoardService) UpdateColumn(_ context.Context, body dto.ColumnUpdateRequ
 	column, err := s.database.UpdateColumn(database.ColumnUpdate{ID: body.ID, Board: body.Board, Name: body.Name, Color: body.Color, Visible: body.Visible, Index: body.Index})
 	if err != nil {
 		logger.Get().Errorw("unable to update column", "err", err)
+		return nil, err
 	}
 	s.UpdatedColumns(body.Board)
 	return new(dto.Column).From(column), err
@@ -69,6 +72,7 @@ func (s *BoardService) UpdatedColumns(board uuid.UUID) {
 	dbColumns, err := s.database.GetColumns(board)
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve columns in updated notes", "err", err)
+		return
 	}
 	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
@@ -125,6 +129,7 @@ func (s *BoardService) DeletedColumn(user, board, column uuid.UUID) {
 	dbNotes, err := s.database.GetNotes(board)
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve notes in deleted column", "err", err)
+		return
 	}
 	eventNotes := make([]dto.Note, len(dbNotes))
 	for index, note := range dbNotes {
@@ -141,6 +146,7 @@ func (s *BoardService) DeletedColumn(user, board, column uuid.UUID) {
 	boardVotes, err := s.database.GetVotes(filter.VoteFilter{Board: board})
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err)
+		return
 	}
 	personalVotes := []*dto.Vote{}
 	for _, vote := range boardVotes {
