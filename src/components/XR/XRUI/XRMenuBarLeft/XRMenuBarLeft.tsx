@@ -5,11 +5,13 @@ import CheckIcon from "assets/icon-check.svg";
 import RaiseHand from "assets/icon-hand.svg";
 import BoardReactionIcon from "assets/icon-add-board-reaction.svg";
 import SettingsIcon from "assets/icon-settings.svg";
+import ExitIcon from "assets/icon-logout.svg";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import {useState} from "react";
+import {useXR} from "@coconut-xr/natuerlich/react";
 import XRReactionsMenu from "../XRReactionsMenu/XRReactionsMenu";
 
 const XRMenuBarLeft = () => {
@@ -29,6 +31,11 @@ const XRMenuBarLeft = () => {
 
   const isReady = state.currentUser.ready;
   const {raisedHand} = state.currentUser;
+  const {session} = useXR();
+
+  const exitAR = () => {
+    session?.end().then(() => dispatch(Actions.setXRActive(false)));
+  };
 
   const toggleReadyState = () => {
     dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
@@ -87,6 +94,17 @@ const XRMenuBarLeft = () => {
           }
         >
           <Text>Settings</Text>
+        </TabBarItem>
+        <TabBarItem
+          value="5"
+          icon={
+            <Content>
+              <Svg src={ExitIcon} />
+            </Content>
+          }
+          onClick={exitAR}
+        >
+          <Text>Exit</Text>
         </TabBarItem>
       </TabBar>
       {showBoardReactionsMenu && <XRReactionsMenu close={() => setShowBoardReactionsMenu(false)} />}
