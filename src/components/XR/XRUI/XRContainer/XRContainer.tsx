@@ -14,7 +14,7 @@ export const GlassMaterial = MeshPhongMaterial;
 
 const cameraDirection = new Vector3();
 const WebXRExtensionCamPosition = new Vector3(0, 0, 5); // workaround to fix initial position set by the WebXR Browser Extension
-const currentLookAt = new Vector3();
+/* const currentLookAt = new Vector3(); */
 const targetLookAt = new Vector3();
 
 const XRContainer = () => {
@@ -23,22 +23,23 @@ const XRContainer = () => {
 
   useFrame((state) => {
     if (containerRef.current) {
-      // on session startup, set the initial position of the UI based on the device's position
+      // on session startup, set the initial position and rotation of the UI based on the device's position
       if (!isPositionSet && !state.camera.position.equals(WebXRExtensionCamPosition)) {
         state.camera.getWorldDirection(cameraDirection);
         cameraDirection.multiplyScalar(1.4); // 1.4 meters in front of the camera
         const newPosition = state.camera.position.clone().add(cameraDirection);
         containerRef.current.position.copy(newPosition);
         containerRef.current.lookAt(state.camera.position);
+        targetLookAt.copy(state.camera.position);
         setIsPositionSet(true);
       }
 
-      const distance = containerRef.current.position.distanceTo(state.camera.position);
+      /* const distance = containerRef.current.position.distanceTo(state.camera.position);
       if (distance > 1) {
         // Smooth the look-at using linear interpolation
         targetLookAt.copy(state.camera.position);
         containerRef.current.lookAt(currentLookAt.lerp(targetLookAt, 0.0025 * distance ** 8));
-      }
+      } */
     }
   });
 

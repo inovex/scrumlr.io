@@ -12,7 +12,7 @@ import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import SpatialCanvas from "components/XR/SpatialCanvas";
 import {useAppSelector} from "store";
 import {shallowEqual} from "react-redux";
-import {useEnterXR} from "@coconut-xr/natuerlich/react";
+import {useEnterXR, useXR} from "@coconut-xr/natuerlich/react";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -44,6 +44,12 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   );
 
   const enterAR = useEnterXR("immersive-ar", sessionOptions);
+  const {session} = useXR();
+
+  useEffect(() => {
+    if (xrActive && !session) enterAR();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [xrActive]);
 
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
@@ -152,11 +158,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnState]);
-
-  useEffect(() => {
-    if (xrActive) enterAR();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [xrActive]);
 
   if (!children || columnsCount === 0) {
     // Empty board
