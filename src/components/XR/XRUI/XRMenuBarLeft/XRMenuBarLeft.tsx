@@ -10,7 +10,7 @@ import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "store";
 import _ from "underscore";
-import {useState} from "react";
+import {memo, useState} from "react";
 import {useXR} from "@coconut-xr/natuerlich/react";
 import XRReactionsMenu from "../XRReactionsMenu/XRReactionsMenu";
 
@@ -34,7 +34,7 @@ const XRMenuBarLeft = () => {
   const {session} = useXR();
 
   const exitAR = () => {
-    session?.end().then(() => dispatch(Actions.setXRActive(false)));
+    if (session?.frameRate) session.end().then(() => dispatch(Actions.setXRActive(false)));
   };
 
   const toggleReadyState = () => {
@@ -102,7 +102,7 @@ const XRMenuBarLeft = () => {
               <Svg src={ExitIcon} />
             </Content>
           }
-          onClick={exitAR}
+          onClick={() => session && exitAR()}
         >
           <Text>Exit</Text>
         </TabBarItem>
@@ -112,4 +112,4 @@ const XRMenuBarLeft = () => {
   );
 };
 
-export default XRMenuBarLeft;
+export default memo(XRMenuBarLeft);
