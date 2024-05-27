@@ -27,7 +27,7 @@
     "linkify-react": "^4.1.3",
     "linkifyjs": "^4.1.3",
     "marked": "12.0.2",
-    "plausible-tracker": "^0.3.8",
+    "plausible-tracker": "^0.3.9",
     "qrcode.react": "^3.1.0",
     "query-string": "^9.0.0",
     "react": "^18.0.0-rc.3",
