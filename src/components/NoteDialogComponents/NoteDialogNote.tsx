@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {forwardRef} from "react";
+import {FC} from "react";
 import {AvataaarProps} from "components/Avatar";
 import {Participant} from "types/participant";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
@@ -23,23 +23,20 @@ export type NoteDialogNoteProps = {
   viewer: Participant;
 };
 
-export const NoteDialogNote = forwardRef<HTMLDivElement, NoteDialogNoteProps>((props: NoteDialogNoteProps, ref) => (
-    <div
-      ref={ref}
-      className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId}, props.className)}
-      onClick={(e) => e.stopPropagation()}
-    >
-      <header className="note-dialog-note__header">
-        <NoteDialogNoteComponents.Header {...props} />
-      </header>
-      <main className="note-dialog-note__main">
-        <NoteDialogNoteComponents.Content {...props} />
-      </main>
-      <aside className="note-dialog-note__options">
-        <NoteDialogNoteComponents.Options {...props} />
-      </aside>
-      <footer className="note-dialog-note__footer">
-        <NoteDialogNoteComponents.Footer {...props} />
-      </footer>
-    </div>
-  ));
+export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => (
+  // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+  <div className={classNames("note-dialog__note", {"note-dialog__note--own-card": props.viewer.user.id === props.authorId}, props.className)} onClick={(e) => e.stopPropagation()}>
+    <header className="note-dialog-note__header">
+      <NoteDialogNoteComponents.Header {...props} />
+    </header>
+    <main className="note-dialog-note__main">
+      <NoteDialogNoteComponents.Content {...props} />
+    </main>
+    <aside className="note-dialog-note__options">
+      <NoteDialogNoteComponents.Options {...props} />
+    </aside>
+    <footer className="note-dialog-note__footer">
+      <NoteDialogNoteComponents.Footer {...props} />
+    </footer>
+  </div>
+);

@@ -1,15 +1,8 @@
 import classNames from "classnames";
-import {ReactNode, useEffect, useState} from "react";
+import {FC, PropsWithChildren, useEffect} from "react";
 import "./NoteDialogNoteWrapper.scss";
 
-type NoteDialogNoteWrapperProps = {
-  children: ReactNode;
-  dimensions?: DOMRect;
-};
-
-export const NoteDialogNoteWrapper = (props: NoteDialogNoteWrapperProps) => {
-  const [height, setHeight] = useState(0);
-
+export const NoteDialogNoteWrapper: FC<PropsWithChildren> = ({children}) => {
   const handleScroll = (scrollbar: Element) => {
     const notes = scrollbar.querySelectorAll(".note-dialog__note");
     const scrollbarHeight = scrollbar.clientHeight;
@@ -45,18 +38,10 @@ export const NoteDialogNoteWrapper = (props: NoteDialogNoteWrapperProps) => {
   useEffect(() => {
     const scrollbar = document.querySelector(".note-dialog__scrollbar")!;
     scrollbar.addEventListener("scroll", () => handleScroll(scrollbar));
-  }, [props.children]);
-
-  // this sets the height of the scrollbar container to be same as the parent note, because I couldn't get it to work just using CSS
-  useEffect(() => {
-    let newHeight = props.dimensions ? props.dimensions.height : 0;
-    newHeight += 2 * 16; // add paddings manually // TODO get computed style or find better solution
-    setHeight(newHeight);
-  }, [props.dimensions]);
-
+  }, [children]);
   return (
-    <div className={classNames("note-dialog__scrollbar")} style={{height: `${height}px`}}>
-      <div className={classNames("note-dialog__note-wrapper")}>{props.children}</div>
+    <div className={classNames("note-dialog__scrollbar")}>
+      <div className={classNames("note-dialog__note-wrapper")}>{children}</div>
     </div>
   );
 };

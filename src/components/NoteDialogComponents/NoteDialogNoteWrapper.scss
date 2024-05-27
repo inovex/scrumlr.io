@@ -3,10 +3,13 @@
 @import "routes/StackView/StackView.scss";
 
 .note-dialog__scrollbar {
+  // TODO right container height
   padding-left: 10px;
   box-sizing: border-box;
 
   flex-grow: 1;
+  // height: 471px; // TODO same height as left
+  // height: fit-content;
   overflow: hidden scroll;
   @include scrollbar($color: var(--accent-color)); // TODO scrollbar visibility
 }
