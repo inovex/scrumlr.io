@@ -102,6 +102,13 @@ func main() {
 				Required: false,
 				Value:    "/",
 			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "enable-anonymous-login",
+				EnvVars:  []string{"ENABLE_SCRUMLR_ANONYMOUS_LOGIN"},
+				Usage:    "enables/disables the login of anonymous clients",
+				Required: false,
+				Value:    true,
+			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-callback-host",
 				Aliases:  []string{"c"},
