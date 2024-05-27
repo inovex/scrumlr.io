@@ -8,19 +8,20 @@
   box-sizing: border-box;
 
   flex-grow: 1;
-  // height: 471px; // TODO same height as left
-  // height: fit-content;
   overflow: hidden scroll;
+  max-height: 650px;
   @include scrollbar($color: var(--accent-color)); // TODO scrollbar visibility
 }
 
 .note-dialog__note-wrapper {
   margin: 0;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: $spacing--base;
+  overflow-y: hidden;
 }
 
 @media #{$smartphone} {
