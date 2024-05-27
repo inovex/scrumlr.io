@@ -14,18 +14,19 @@ import (
 )
 
 type UserService struct {
-	database *database.Database
+	database              *database.Database
+	anonymousLoginEnabled bool
 }
 
-func NewUserService(db *database.Database) services.Users {
+func NewUserService(db *database.Database, anonymousLoginEnabled bool) services.Users {
 	b := new(UserService)
 	b.database = db
+	b.anonymousLoginEnabled = anonymousLoginEnabled
 	return b
 }
 
 func (s *UserService) AnonymousLoginEnabled() bool {
-	// TODO implement me
-	panic("implement me")
+	return s.anonymousLoginEnabled
 }
 
 func (s *UserService) Get(ctx context.Context, userID uuid.UUID) (*dto.User, error) {
