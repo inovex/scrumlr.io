@@ -1,6 +1,7 @@
 import {SERVER_HTTP_URL} from "../config";
 
 interface ServerInformation {
+  anonymousLoginEnabled: boolean;
   authProvider: string[];
   serverTime: string;
   feedbackEnabled: boolean;

@@ -7,6 +7,8 @@ export interface View {
    */
   readonly serverTimeOffset: number;
 
+  readonly anonymousLoginEnabled: boolean;
+
   readonly enabledAuthProvider: string[];
 
   readonly feedbackEnabled: boolean;

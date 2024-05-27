@@ -25,8 +25,9 @@ export const ViewActionFactory = {
     language,
   }),
 
-  setServerInfo: (enabledAuthProvider: string[], serverTime: number, feedbackEnabled: boolean) => ({
+  setServerInfo: (anonymousLoginEnabled: boolean, enabledAuthProvider: string[], serverTime: number, feedbackEnabled: boolean) => ({
     type: ViewAction.SetServerInfo,
+    anonymousLoginEnabled,
     enabledAuthProvider,
     serverTime,
     feedbackEnabled,

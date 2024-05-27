@@ -168,6 +168,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeyNotificationsEnabled: true,
     moderating: false,
     serverTimeOffset: 0,
+    anonymousLoginEnabled: true,
     enabledAuthProvider: [],
     feedbackEnabled: false,
     hotkeysAreActive: true,
