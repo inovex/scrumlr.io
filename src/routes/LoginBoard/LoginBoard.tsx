@@ -9,19 +9,22 @@ import {useLocation} from "react-router";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
-import "./LoginBoard.scss";
 import {TextInputAction} from "components/TextInputAction";
 import {Button} from "components/Button";
 import {TextInput} from "components/TextInput";
 import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
+import {useAppSelector} from "store";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
+import "./LoginBoard.scss";
 
 interface State {
   from: {pathname: string};
 }
 
 export const LoginBoard = () => {
+  const anonymousLoginEnabled = useAppSelector((state) => state.view.anonymousLoginEnabled);
+
   const {t} = useTranslation();
   const location = useLocation();
 
@@ -63,7 +66,7 @@ export const LoginBoard = () => {
 
             <hr className="login-board__divider" data-label="or" />
 
-            <fieldset className="login-board__fieldset">
+            <fieldset className="login-board__fieldset" disabled={!anonymousLoginEnabled}>
               <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
 
               <div className="login-board__username">
@@ -90,7 +93,13 @@ export const LoginBoard = () => {
 
               {SHOW_LEGAL_DOCUMENTS && (
                 <label className="login-board__form-element login-board__terms">
-                  <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
+                  <input
+                    type="checkbox"
+                    className="login-board__checkbox"
+                    defaultChecked={termsAccepted}
+                    disabled={!anonymousLoginEnabled}
+                    onChange={() => setTermsAccepted(!termsAccepted)}
+                  />
                   <span className="login-board__terms-label">
                     <Trans
                       i18nKey="LoginBoard.acceptTerms"
@@ -105,7 +114,7 @@ export const LoginBoard = () => {
             </fieldset>
             {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
 
-            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin}>
+            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={!anonymousLoginEnabled}>
               {t("LoginBoard.login")}
             </Button>
           </div>
