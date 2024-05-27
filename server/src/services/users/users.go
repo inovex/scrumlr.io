@@ -23,6 +23,11 @@ func NewUserService(db *database.Database) services.Users {
 	return b
 }
 
+func (s *UserService) AnonymousLoginEnabled() bool {
+	// TODO implement me
+	panic("implement me")
+}
+
 func (s *UserService) Get(ctx context.Context, userID uuid.UUID) (*dto.User, error) {
 	log := logger.FromContext(ctx)
 	user, err := s.database.GetUser(userID)
