@@ -2,8 +2,6 @@
 @import "components/Note/Note.scss";
 @import "routes/StackView/StackView.scss";
 
-$note-content-text-max-height: 566px;
-
 .note-dialog__note-content {
   position: relative;
   display: flex;
@@ -29,9 +27,10 @@ $note-content-text-max-height: 566px;
 .note-dialog__note-content--text {
   width: 100%;
   height: auto;
-  max-height: min(40vh, $note-content-text-max-height); // limit height
+  // since the note height limit is defined here, the sibling elements are subtracted (header, footer, margins, and gap)
+  max-height: calc($stack-content-max-height - 36px - 36px - 2 * ($spacing--base + $spacing--sm));
   margin: 0;
-  padding: 0 4px;
+  padding: 0 $spacing--xxs;
   overflow-y: auto;
   resize: none;
   word-wrap: break-word;

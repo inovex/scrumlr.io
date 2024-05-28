@@ -3,7 +3,6 @@
 $stack-view__header-height: 14vh;
 $stack-view__navigation-height: 14vh;
 $stack-view__min-height: 82px;
-// $wrapper-max-height: 670px;
 
 .stack-view__portal {
   backdrop-filter: blur(10px) brightness(0.76) saturate(0);
@@ -45,7 +44,7 @@ $stack-view__min-height: 82px;
   width: fit-content;
   display: flex;
   flex-direction: row;
-  max-height: 60vh;
+  max-height: $stack-content-max-height;
   gap: $spacing--sm;
 }
 
