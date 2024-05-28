@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import QRCode from "qrcode.react";
 import {useTranslation} from "react-i18next";
-import "./ShareSession.scss";
-import {useState, VFC} from "react";
+import {useState} from "react";
 import {useAppSelector} from "store";
+import "./ShareSession.scss";
 
-export const ShareSession: VFC = () => {
+export const ShareSession = () => {
   const {t} = useTranslation();
   const boardId = useAppSelector((state) => state.board.data?.id);
 
@@ -23,7 +23,8 @@ export const ShareSession: VFC = () => {
       </div>
       <div className={classNames("share-session__container", "accent-color__planning-pink")}>
         <div className="share-session__background">
-          <QRCode value={`${window.location.origin}/board/${boardId}`} renderAs="svg" className="share-qr-code-option__qrcode" />
+          {/* using an upscaled canvas instead of svg to make it a savable image */}
+          <QRCode value={`${window.location.origin}/board/${boardId}`} renderAs="canvas" className="share-qr-code-option__qrcode" size={1024} />
         </div>
         <button className={classNames("share-qr-code-option__copy-to-clipboard", {"--copied": urlInClipBoard})} onClick={handleCopyToClipboard} disabled={urlInClipBoard}>
           {urlInClipBoard ? t("ShareQrCodeOption.inviteUrlCopied") : t("ShareQrCodeOption.copyInviteURL")}
