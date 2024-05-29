@@ -18,12 +18,16 @@ type User struct {
 
 	// The user's avatar configuration
 	Avatar *types.Avatar `json:"avatar,omitempty"`
+
+	// The user's account type configuration
+	AccountType types.AccountType `json:"accountType"`
 }
 
 func (u *User) From(user database.User) *User {
 	u.ID = user.ID
 	u.Name = user.Name
 	u.Avatar = user.Avatar
+	u.AccountType = user.AccountType
 	return u
 }
 
