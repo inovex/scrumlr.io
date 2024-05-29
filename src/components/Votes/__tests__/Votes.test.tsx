@@ -77,7 +77,7 @@ describe("Votes", () => {
             showNotesOfOtherUsers: true,
             showNoteReactions: true,
             allowStacking: true,
-            allowEditing: false,
+            isLocked: true,
           },
         },
         participants: {
@@ -107,7 +107,7 @@ describe("Votes", () => {
             showNotesOfOtherUsers: true,
             showNoteReactions: true,
             allowStacking: true,
-            allowEditing: false,
+            isLocked: true,
           },
         },
         participants: {

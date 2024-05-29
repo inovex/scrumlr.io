@@ -29,7 +29,7 @@ export const Votes: FC<VotesProps> = (props) => {
         : 0)
   );
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self.role));
-  const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 
   /**
    * If there's no active voting going on and there are no casted votes for

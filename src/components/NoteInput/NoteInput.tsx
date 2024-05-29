@@ -28,7 +28,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
-  const boardLocked = useAppSelector((state) => !state.board.data!.allowEditing);
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
 
   const addNote = (content: string) => {
