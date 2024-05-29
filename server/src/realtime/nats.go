@@ -49,6 +49,6 @@ func NewNats(url string) (*Broker, error) {
 	}
 
 	return &Broker{
-		con: &natsClient{con: c},
+		Con: &natsClient{con: c},
 	}, nil
 }
