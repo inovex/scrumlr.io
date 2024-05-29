@@ -6,7 +6,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-
   min-height: 0;
   overflow: hidden scroll;
 
@@ -28,6 +27,12 @@
 @media #{$smartphone} {
   .note-dialog__scrollbar {
     padding-left: 0;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .note-dialog__scrollbar {
+    padding-bottom: $spacing--xl;
   }
 }
 

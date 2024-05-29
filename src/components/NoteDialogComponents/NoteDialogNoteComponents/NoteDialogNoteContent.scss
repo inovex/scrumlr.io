@@ -31,7 +31,7 @@
   max-height: calc($stack-content-max-height - 36px - 36px - 2 * ($spacing--base + $spacing--sm));
   margin: 0;
   padding: 0 $spacing--xxs;
-  overflow-y: auto;
+  overflow-y: scroll;
   resize: none;
   word-wrap: break-word;
 

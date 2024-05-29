@@ -98,6 +98,21 @@ $stack-view__min-height: 82px;
   }
 }
 
+@media screen and (max-width: 1280px) {
+  .stack-view__animation-wrapper {
+    flex-direction: column;
+    max-height: initial;
+  }
+
+  .stack-view__parent-note .note-dialog__note-content--text {
+    max-height: $stack-content-max-height--mobile; // initial for full height
+  }
+
+  .stack-view__child-note .note-dialog__note-content--text {
+    max-height: $stack-content-max-height--mobile; // initital for full height
+  }
+}
+
 [theme="dark"] {
   .stack-view__portal {
     backdrop-filter: blur(10px) brightness(0.24) saturate(0);
