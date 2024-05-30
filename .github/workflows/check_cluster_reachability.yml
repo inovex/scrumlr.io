@@ -13,7 +13,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - name: Check if deployed dev cluster is reachable
+      - name: Check reachability of deployed dev cluster
         id: wait-for-cluster
         env:
           BASE_URL: ${{ inputs.base_url }}
@@ -36,6 +36,6 @@ jobs:
           done
           if [ success = false ]; then
             echo "Cluster is still not responding after retries. Exiting..."
-            echo "::error::Cluster is not responding after $max_retries attempts. HTTP-Code: $response"
+            echo "::error title=ClusterNotReachable::Cluster is not responding after $max_retries attempts. HTTP-Code: $response"
             exit 1
           fi
