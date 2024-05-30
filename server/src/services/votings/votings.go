@@ -42,24 +42,6 @@ func NewVotingService(db DB, rt *realtime.Broker) services.Votings {
 	return b
 }
 
-func (s *VotingService) Get(ctx context.Context, boardID, id uuid.UUID) (*dto.Voting, error) {
-	log := logger.FromContext(ctx)
-	voting, _, err := s.database.GetVoting(boardID, id)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, common.NotFoundError
-		}
-		log.Errorw("unable to get voting session", "voting", id, "error", err)
-		return nil, common.InternalServerError
-	}
-
-	if voting.Status == types.VotingStatusClosed {
-		votes, _ := s.getVotes(ctx, boardID, id)
-		return new(dto.Voting).From(voting, votes), err
-	}
-	return new(dto.Voting).From(voting, nil), err
-}
-
 func (s *VotingService) Create(ctx context.Context, body dto.VotingCreateRequest) (*dto.Voting, error) {
 	log := logger.FromContext(ctx)
 	voting, err := s.database.CreateVoting(database.VotingInsert{
@@ -107,6 +89,24 @@ func (s *VotingService) Update(ctx context.Context, body dto.VotingUpdateRequest
 		return new(dto.Voting).From(voting, votes), err
 	}
 	s.UpdatedVoting(body.Board, voting.ID)
+	return new(dto.Voting).From(voting, nil), err
+}
+
+func (s *VotingService) Get(ctx context.Context, boardID, id uuid.UUID) (*dto.Voting, error) {
+	log := logger.FromContext(ctx)
+	voting, _, err := s.database.GetVoting(boardID, id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, common.NotFoundError
+		}
+		log.Errorw("unable to get voting session", "voting", id, "error", err)
+		return nil, common.InternalServerError
+	}
+
+	if voting.Status == types.VotingStatusClosed {
+		votes, _ := s.getVotes(ctx, boardID, id)
+		return new(dto.Voting).From(voting, votes), err
+	}
 	return new(dto.Voting).From(voting, nil), err
 }
 
