@@ -36,4 +36,5 @@ jobs:
           done
           if [ success = false ]; then
             echo "Cluster is still not responding after retries. Exiting..."
+            ::error title=DevClusterNotReachable ::Cluster is not responding after $max_retries attempts. HTTP-Code: $response
           fi
