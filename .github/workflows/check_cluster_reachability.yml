@@ -13,7 +13,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for cluster to become healthy
+      - name: Check if deployed dev cluster is reachable
         id: wait-for-cluster
         env:
           BASE_URL: ${{ inputs.base_url }}
