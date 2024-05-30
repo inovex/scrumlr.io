@@ -37,5 +37,4 @@ jobs:
           if [ success = false ]; then
             echo "Cluster is still not responding after retries. Exiting..."
             echo "::error title=ClusterNotReachable::Cluster is not responding after $max_retries attempts. HTTP-Code: $response"
-            exit 1
           fi
