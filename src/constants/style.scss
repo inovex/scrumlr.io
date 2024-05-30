@@ -268,7 +268,7 @@ $column-stripes--dark: repeating-linear-gradient(
     opacity: 15%;
   }
 
-  [theme="dark"] & {
+  [theme="dark"] {
     &::-webkit-scrollbar-thumb {
       background-color: $color-dark;
       opacity: 30%;
