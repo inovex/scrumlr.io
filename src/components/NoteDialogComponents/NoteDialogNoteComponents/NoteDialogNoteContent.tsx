@@ -108,6 +108,9 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
                 e.stopPropagation();
               }
             }}
+            // required for some reason
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           />
 
           {!isStackedNote && (
