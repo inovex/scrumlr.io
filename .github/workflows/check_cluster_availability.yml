@@ -1,0 +1,39 @@
+# Checks if deployed dev-cluster is reachable from public users
+
+name: Check PR dev cluster reachability
+on:
+  workflow_call:
+    inputs:
+      base_url:
+        required: true
+        description: "Base URL to test against"
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for cluster to become healthy
+        id: wait-for-cluster
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+        run: |
+          retries=0
+          max_retries=3
+          until [ $retries -ge $max_retries ]
+          do
+            response=$(curl -s -k -o /dev/null -w "%{http_code}" "$BASE_URL/api/health")
+            if [ "$response" = "204" ]; then
+              echo "Cluster is healthy! Continuing with postman tests!"
+              break
+            else
+              echo "Cluster is not responding. Retrying in $((5 * retries)) seconds..."
+              sleep $((5 * retries))
+            fi
+            retries=$((retries + 1))
+          done
+          if [ "$response" != "204" ]; then
+            echo "Cluster is still not responding after retries. Exiting..."
+            echo "::error ::Cluster is not responding after $max_retries attempts. Status: $response . CLI returned code $?"
+            exit 1
+          fi
