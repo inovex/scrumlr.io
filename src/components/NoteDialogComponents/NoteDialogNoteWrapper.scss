@@ -5,8 +5,6 @@
 .note-dialog__scrollbar {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-height: 0;
   overflow: hidden scroll;
 
   box-sizing: border-box;
@@ -16,11 +14,10 @@
 }
 
 .note-dialog__note-wrapper {
-  margin: 0;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   gap: $spacing--base;
 }
 
@@ -33,11 +30,5 @@
 @media screen and (max-width: $breakpoint--desktop) {
   .note-dialog__scrollbar {
     padding-bottom: $spacing--xl;
-  }
-}
-
-[theme="dark"] {
-  .note-dialog__scrollbar {
-    // scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
 }
