@@ -36,6 +36,7 @@ describe("Column", () => {
         ({
           observe: jest.fn(),
           disconnect: jest.fn(),
+          unobserve: jest.fn(),
         }) as unknown as ResizeObserver
     );
   });
