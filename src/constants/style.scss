@@ -194,6 +194,9 @@ $request-z-index: $base-z-index + (9 * $base-z-index-step);
 $tooltip-z-index: $request-z-index;
 $board-reaction-z-index: $backdrop-z-index + $base-z-index-step;
 
+// breakpoints
+$breakpoint--desktop: 1280px;
+
 // responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";
 $smartphone: "screen and (max-width: 767px)";

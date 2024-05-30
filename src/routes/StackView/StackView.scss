@@ -98,7 +98,7 @@ $stack-view__min-height: 82px;
   }
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: $breakpoint--desktop) {
   .stack-view__animation-wrapper {
     flex-direction: column;
     max-height: initial;

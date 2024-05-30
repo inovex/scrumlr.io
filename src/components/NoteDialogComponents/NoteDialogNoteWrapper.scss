@@ -30,7 +30,7 @@
   }
 }
 
-@media screen and (max-width: 1280px) {
+@media screen and (max-width: $breakpoint--desktop) {
   .note-dialog__scrollbar {
     padding-bottom: $spacing--xl;
   }
