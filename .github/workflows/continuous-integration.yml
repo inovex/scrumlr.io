@@ -73,8 +73,8 @@ jobs:
     
   check_dev_cluster_reachability:
     name: Check Cluster Reachability
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deploy_to_dev_cluster
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     uses: ./.github/workflows/check_cluster_reachability.yml
     with: 
       base_url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io

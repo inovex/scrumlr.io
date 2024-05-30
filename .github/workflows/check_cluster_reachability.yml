@@ -44,3 +44,4 @@ jobs:
         if: steps.wait-for-cluster.outcome != 'success'
         run: |
            echo "::error title=DevClusterNotReachable::Cluster is not responding after ${{ steps.wait-for-cluster.outputs.max_retries }} attempts. Last HTTP-Code: ${{ steps.wait-for-cluster.outputs.response_code }}"
+           exit 1
