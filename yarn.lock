@@ -8192,10 +8192,10 @@ pkg-up@^3.1.0:
   dependencies:
     find-up "^3.0.0"
 
-plausible-tracker@^0.3.8:
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/plausible-tracker/-/plausible-tracker-0.3.8.tgz#9b8b322cc41e0e1d6473869ef234deea365a5a40"
-  integrity sha512-lmOWYQ7s9KOUJ1R+YTOR3HrjdbxIS2Z4de0P/Jx2dQPteznJl2eX3tXxKClpvbfyGP59B5bbhW8ftN59HbbFSg==
+plausible-tracker@^0.3.9:
+  version "0.3.9"
+  resolved "https://registry.yarnpkg.com/plausible-tracker/-/plausible-tracker-0.3.9.tgz#81f3083822492564a8cb69a168f9241435b47ff2"
+  integrity sha512-hMhneYm3GCPyQon88SZrVJx+LlqhM1kZFQbuAgXPoh/Az2YvO1B6bitT9qlhpiTdJlsT5lsr3gPmzoVjb5CDXA==
 
 possible-typed-array-names@^1.0.0:
   version "1.0.0"
