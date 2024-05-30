@@ -36,6 +36,7 @@ $stack-view__min-height: 82px;
   height: auto;
   position: relative;
   overflow: scroll;
+  @include scrollbar($color: var(--accent-color), $color-dark: var(--accent-color--dark));
 }
 
 .stack-view__animation-wrapper {
