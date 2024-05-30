@@ -18,23 +18,23 @@ jobs:
         env:
           BASE_URL: ${{ inputs.base_url }}
         run: |
-          retries=0
-          success=false
+          retry=1
+          reachable=false
           max_retries=3
-          until [ $retries -ge $max_retries ]
+          until [ $retry -gt $max_retries ]
           do
             response=$(curl -s -k -o /dev/null -w "%{http_code}" "$BASE_URL/api/health")
-            if [ "$response" = "204" ]; then
+            if [ $response = "204" ]; then
               echo "Cluster is healthy! Continuing..."
-              success=true
+              reachable=true
               break
             else
-              echo "Cluster is not responding. Retrying in $((5 * retries)) seconds..."
-              sleep $((5 * retries))
+              echo "Cluster is not responding. Retrying in $((5 * retry)) seconds..."
+              sleep $((5 * retry))
             fi
-            retries=$((retries + 1))
+            retry=$((retry + 1))
           done
-          if [ $success == false ]; then
-            echo "Cluster is still not responding after retries. Exiting..."
-            ::error title=DevClusterNotReachable ::Cluster is not responding after $max_retries attempts. HTTP-Code: $response
+          if [ $reachable == false ]; then
+            echo "Cluster is not responding after $max_retries attempts. HTTP-Code: $response"
+            echo ::error title=DevClusterNotReachable ::Cluster is not responding after $max_retries attempts. HTTP-Code: $response
           fi
