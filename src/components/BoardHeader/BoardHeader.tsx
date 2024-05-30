@@ -69,7 +69,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
                 PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
               }[state.accessPolicy!]
             }
-            <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
+            <span>{t(`AccessPolicy.${state.accessPolicy!}`)}</span>
           </div>
           <div className="board-header__name-container">
             <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
