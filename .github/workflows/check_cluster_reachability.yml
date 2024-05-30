@@ -10,7 +10,7 @@ on:
         type: string
 
 jobs:
-  test:
+  check:
     runs-on: ubuntu-latest
     steps:
       - name: Check if deployed dev cluster is reachable
@@ -24,7 +24,7 @@ jobs:
           do
             response=$(curl -s -k -o /dev/null -w "%{http_code}" "$BASE_URL/api/health")
             if [ "$response" = "204" ]; then
-              echo "Cluster is healthy! Continuing with postman tests!"
+              echo "Cluster is healthy! Continuing..."
               break
             else
               echo "Cluster is not responding. Retrying in $((5 * retries)) seconds..."
