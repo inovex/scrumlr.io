@@ -88,6 +88,9 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
             e.currentTarget.blur();
           }
         }}
+        // required for some reason
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
       />
       <div className="note-input__emoji-suggestions">
         <EmojiSuggestions {...emoji.suggestionsProps} />
