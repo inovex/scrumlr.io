@@ -122,7 +122,8 @@ func (s *VotingService) getVotes(_ context.Context, boardID, id uuid.UUID) ([]da
 func (s *VotingService) CreatedVoting(board, voting uuid.UUID) {
 	dbVoting, _, err := s.database.GetVoting(board, voting)
 	if err != nil {
-		panic("help me")
+		logger.Get().Errorw("unable to get voting in created voting", "err", err)
+		return
 	}
 
 	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
