@@ -35,13 +35,6 @@ jobs:
             retry=$((retry + 1))
           done
           if [ $reachable == false ]; then
-            echo "max_retries=$max_retries" >> $GITHUB_OUTPUT
-            echo "response_code=$response" >> $GITHUB_OUTPUT
-          fi
-        continue-on-error: true
-
-      - name: Set annotation when cluster not reachable
-        if: steps.wait-for-cluster.outcome != 'success'
-        run: |
-           echo "::error title=DevClusterNotReachable::Cluster is not responding after ${{ steps.wait-for-cluster.outputs.max_retries }} attempts. Last HTTP-Code: ${{ steps.wait-for-cluster.outputs.response_code }}"
-           exit 1
+            echo "Cluster is not responding after $max_retires attempts."
+            exit 1 
+          fi   
