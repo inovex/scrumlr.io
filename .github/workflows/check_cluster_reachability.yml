@@ -35,6 +35,6 @@ jobs:
             retry=$((retry + 1))
           done
           if [ $reachable == false ]; then
-            echo "Cluster is not responding after $max_retires attempts."
+            echo "::error title=DevClusterNotReachable::Cluster is not responding after $max_retries attempts."
             exit 1 
           fi   
