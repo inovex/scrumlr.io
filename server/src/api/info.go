@@ -18,7 +18,7 @@ func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
 	info := Info{}
 	info.AuthProvider = []types.AccountType{}
 
-	info.AnonymousLoginEnabled = s.users.AnonymousLoginEnabled()
+	info.AnonymousLoginEnabled = s.anonymousLoginEnabled
 
 	if s.auth.Exists(types.AccountTypeGoogle) {
 		info.AuthProvider = append(info.AuthProvider, types.AccountTypeGoogle)
