@@ -104,7 +104,7 @@ func main() {
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:     "enable-anonymous-login",
-				EnvVars:  []string{"ENABLE_SCRUMLR_ANONYMOUS_LOGIN"},
+				EnvVars:  []string{"SCRUMLR_ENABLE_ANONYMOUS_LOGIN"},
 				Usage:    "enables/disables the login of anonymous clients",
 				Required: false,
 				Value:    true,
