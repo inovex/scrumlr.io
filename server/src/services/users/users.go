@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/services"
@@ -45,14 +44,7 @@ func (s *UserService) Get(ctx context.Context, userID uuid.UUID) (*dto.User, err
 	return new(dto.User).From(user), err
 }
 
-func (s *UserService) LoginAnonymous(ctx context.Context, name string) (*dto.User, error) {
-	log := logger.FromContext(ctx)
-
-	if !s.AnonymousLoginEnabled() {
-		log.Warnw("user tried to login anonymously, but it is disabled", "user", name)
-		return nil, common.ForbiddenError(errors.New("anonymous login is disabled"))
-	}
-
+func (s *UserService) LoginAnonymous(_ context.Context, name string) (*dto.User, error) {
 	user, err := s.database.CreateAnonymousUser(name)
 	return new(dto.User).From(user), err
 }
