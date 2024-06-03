@@ -137,10 +137,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 		r.Post("/feedback", s.createFeedback)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
-
-			if s.anonymousLoginEnabled {
-				r.Post("/anonymous", s.signInAnonymously)
-			}
+			r.With(s.AnonymousLoginEnabledContext).Post("/anonymous", s.signInAnonymously)
 
 			r.Route("/{provider}", func(r chi.Router) {
 				r.Get("/", s.beginAuthProviderVerification)

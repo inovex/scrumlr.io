@@ -140,6 +140,20 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 	})
 }
 
+func (s *Server) AnonymousLoginEnabledContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		if !s.anonymousLoginEnabled {
+			log.Errorw("not allowed to login anonymously")
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to login anonymously")))
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func (s *Server) ColumnContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnParam := chi.URLParam(r, "column")
