@@ -40,12 +40,15 @@ type Server struct {
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
+
+	anonymousLoginEnabled bool
 }
 
 func New(
 	basePath string,
 	rt *realtime.Broker,
 	auth auth.Auth,
+
 	boards services.Boards,
 	votings services.Votings,
 	users services.Users,
@@ -55,8 +58,10 @@ func New(
 	health services.Health,
 	feedback services.Feedback,
 	boardReactions services.BoardReactions,
+
 	verbose bool,
 	checkOrigin bool,
+	anonymousLoginEnabled bool,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -96,6 +101,8 @@ func New(
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
+
+		anonymousLoginEnabled: anonymousLoginEnabled,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -130,7 +137,10 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 		r.Post("/feedback", s.createFeedback)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
-			r.Post("/anonymous", s.signInAnonymously)
+
+			if s.anonymousLoginEnabled {
+				r.Post("/anonymous", s.signInAnonymously)
+			}
 
 			r.Route("/{provider}", func(r chi.Router) {
 				r.Get("/", s.beginAuthProviderVerification)

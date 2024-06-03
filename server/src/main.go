@@ -316,6 +316,7 @@ func run(c *cli.Context) error {
 		basePath,
 		rt,
 		authConfig,
+
 		boardService,
 		votingService,
 		userService,
@@ -325,8 +326,10 @@ func run(c *cli.Context) error {
 		healthService,
 		feedbackService,
 		boardReactionService,
+
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
+		c.Bool("enable-anonymous-login"),
 	)
 
 	port := fmt.Sprintf(":%d", c.Int("port"))
