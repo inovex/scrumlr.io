@@ -3,12 +3,17 @@ import {ColumnProps} from "components/Column";
 import {FONT_COLOR, getColorFromName} from "components/XR/xr-constants";
 import {useAppSelector} from "store";
 import _ from "underscore";
-import {useRef} from "react";
+import {useContext, useLayoutEffect, useRef} from "react";
+import {Group} from "three";
 import XRNote from "../XRNote/XRNote";
 import XRInputField from "../XRInputField/XRInputField";
+import {DragContext} from "../XRBoard/XRBoard";
 
 const XRColumn = (props: ColumnProps) => {
+  const columnRef = useRef<Group>(null!);
   const columnNameRef = useRef<TextProperties>(null!);
+
+  const dragContext = useContext(DragContext);
 
   const {notes, viewer, numberOfColumns} = useAppSelector(
     (state) => ({
@@ -23,6 +28,10 @@ const XRColumn = (props: ColumnProps) => {
     }),
     _.isEqual
   );
+
+  useLayoutEffect(() => {
+    dragContext.columns[props.index] = {ref: columnRef.current, props};
+  }, [dragContext.columns, numberOfColumns, props]);
 
   const isFirstColumn = props.index === 0;
   const isLastColumn = props.index === numberOfColumns - 1;
@@ -50,7 +59,18 @@ const XRColumn = (props: ColumnProps) => {
       </Text>
       <Container height={4} width={columnNameRef.current?.size?.v?.[0] ?? "50%"} marginBottom={8} backgroundColor={getColorFromName(props.color)} />
       <XRInputField columnIndex={props.index} columnId={props.id} columnColor={props.color} />
-      <Container width="100%" height="80%" marginTop={16} flexDirection="column" gap={8} overflow="scroll" paddingBottom={32} scrollbarWidth={0}>
+      <Container
+        width="100%"
+        height="80%"
+        marginTop={16}
+        flexDirection="column"
+        gap={8}
+        overflow="scroll"
+        paddingBottom={32}
+        scrollbarWidth={0}
+        positionType="relative"
+        ref={columnRef}
+      >
         {notes.map((note) => (
           <XRNote key={note} noteId={note} viewer={viewer} />
         ))}
