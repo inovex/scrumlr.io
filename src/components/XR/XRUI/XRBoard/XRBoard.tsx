@@ -1,27 +1,30 @@
-import {Container} from "@react-three/uikit";
+import {Container, ContainerProperties} from "@react-three/uikit";
 import {shallowEqual} from "react-redux";
 import {useAppSelector} from "store";
 import {createContext} from "react";
 import {ColumnProps} from "components/Column";
+import {Object3D} from "three";
 import XRColumn from "../XRColumn/XRColumn";
 
 export type DragContextColumnType = {
-  ref: any;
+  ref: ContainerProperties;
   props: ColumnProps;
 };
 
 type DragContextType = {
-  dragging: boolean;
+  note?: Object3D;
   columns: DragContextColumnType[];
+  over?: string;
 };
 
 export const DragContext = createContext<DragContextType>({
-  dragging: false,
+  note: undefined,
   columns: [],
+  over: undefined,
 });
 
 const defaultDragValue = {
-  dragging: false,
+  note: undefined,
   columns: [],
 };
 

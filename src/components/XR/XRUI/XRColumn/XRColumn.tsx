@@ -1,16 +1,16 @@
-import {Container, Text, TextProperties} from "@react-three/uikit";
+import {Container, ContainerProperties, Text, TextProperties} from "@react-three/uikit";
 import {ColumnProps} from "components/Column";
 import {FONT_COLOR, getColorFromName} from "components/XR/xr-constants";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import {useContext, useLayoutEffect, useRef} from "react";
-import {Group} from "three";
+import {useFrame} from "@react-three/fiber";
 import XRNote from "../XRNote/XRNote";
 import XRInputField from "../XRInputField/XRInputField";
 import {DragContext} from "../XRBoard/XRBoard";
 
 const XRColumn = (props: ColumnProps) => {
-  const columnRef = useRef<Group>(null!);
+  const columnRef = useRef<ContainerProperties>(null!);
   const columnNameRef = useRef<TextProperties>(null!);
 
   const dragContext = useContext(DragContext);
@@ -32,6 +32,12 @@ const XRColumn = (props: ColumnProps) => {
   useLayoutEffect(() => {
     dragContext.columns[props.index] = {ref: columnRef.current, props};
   }, [dragContext.columns, numberOfColumns, props]);
+
+  useFrame(() => {
+    if (dragContext.over === props.id) {
+      columnRef.current.setStyle({borderOpacity: 0.4});
+    } else columnRef.current.setStyle({borderOpacity: 0});
+  });
 
   const isFirstColumn = props.index === 0;
   const isLastColumn = props.index === numberOfColumns - 1;
@@ -68,6 +74,10 @@ const XRColumn = (props: ColumnProps) => {
         overflow="scroll"
         paddingBottom={32}
         scrollbarWidth={0}
+        borderWidth={4}
+        borderRadius={16}
+        borderOpacity={0}
+        borderColor={getColorFromName(props.color)}
         positionType="relative"
         ref={columnRef}
       >

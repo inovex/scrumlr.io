@@ -11,6 +11,7 @@ import {Grabbable} from "@coconut-xr/natuerlich/defaults";
 import {useContext, useRef, useState} from "react";
 import {Object3D, Vector3} from "three";
 import {Actions} from "store/action";
+import {useFrame} from "@react-three/fiber";
 import {DragContext, DragContextColumnType} from "../XRBoard/XRBoard";
 
 const columnPosition = new Vector3();
@@ -36,6 +37,24 @@ const XRNote = (props: NoteProps) => {
     return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[];
   }, isEqual);
 
+  useFrame(() => {
+    if (dragContext.note === grabbableRef.current) {
+      const closestColumn = dragContext.columns.reduce(
+        (closest: {column: DragContextColumnType | null; distance: number}, column: DragContextColumnType) => {
+          columnPosition.setFromMatrixPosition(column.ref.interactionPanel.matrixWorld);
+          const distance = columnPosition.distanceTo(grabbablePositionVec.setFromMatrixPosition(grabbableRef.current.matrixWorld));
+
+          return distance < closest.distance ? {column, distance} : closest;
+        },
+        {column: null, distance: Infinity}
+      );
+
+      if (closestColumn.distance < 0.4) {
+        dragContext.over = closestColumn.column?.props.id;
+      } else dragContext.over = undefined;
+    }
+  });
+
   if (!note) return null;
 
   return (
@@ -54,11 +73,11 @@ const XRNote = (props: NoteProps) => {
       <Grabbable
         ref={grabbableRef}
         onGrabbed={(e) => {
-          dragContext.dragging = true;
+          dragContext.note = e;
           setDragging(true);
         }}
         onReleased={(e) => {
-          dragContext.dragging = false;
+          dragContext.note = undefined;
 
           if (grabbableRef.current) {
             const closestColumn = dragContext.columns.reduce(
@@ -71,10 +90,11 @@ const XRNote = (props: NoteProps) => {
               {column: null, distance: Infinity}
             );
 
-            if (closestColumn.distance < 0.4) {
+            if (closestColumn.distance < 0.4 && closestColumn.column?.props.id !== note.position.column) {
               store.dispatch(Actions.editNote(note.id, {position: {column: closestColumn.column!.props.id, stack: null, rank: 0}}));
             } else e.position.set(0, 0, 0);
 
+            dragContext.over = undefined;
             setDragging(false);
           }
         }}
