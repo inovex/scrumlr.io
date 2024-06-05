@@ -652,5 +652,8 @@
     "AddVote": "Add vote",
     "RemoveVote": "Remove vote",
     "VotesOnNote": "{{votes}} vote(s)"
+  },
+  "XR": {
+    "EnterAR": "Start AR"
   }
 }

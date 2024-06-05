@@ -652,5 +652,8 @@
     "AddVote": "Stimme hinzufügen",
     "RemoveVote": "Stimme entfernen",
     "VotesOnNote": "{{votes}} Stimme(n)"
+  },
+  "XR": {
+    "EnterAR": "AR Starten"
   }
 }

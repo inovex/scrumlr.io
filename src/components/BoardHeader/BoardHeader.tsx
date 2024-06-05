@@ -14,6 +14,7 @@ import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
+import XRSessionButton from "components/XR/XRSessionButton/XRSessionButton";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -52,14 +53,9 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
         </button>
 
-        <button
-          className="board-header_xr-button"
-          onClick={() => {
-            store.dispatch(Actions.setXRActive(!state.xrActive));
-          }}
-        >
-          useEnterAR
-        </button>
+        <div className="board-header_xr-button">
+          <XRSessionButton />
+        </div>
 
         <button
           className="board-header_name-and-settings"
