@@ -95,10 +95,10 @@ const XRNote = (props: NoteProps) => {
             } else {
               e.position.set(0, 0, 0);
               e.rotation.set(0, 0, 0);
+              setDragging(false);
             }
 
             dragContext.over = undefined;
-            setDragging(false);
           }
         }}
       >
