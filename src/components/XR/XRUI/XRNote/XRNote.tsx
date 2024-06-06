@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Participant} from "types/participant";
 import {isEqual} from "underscore";
-import {Container, Content, Root, Text} from "@react-three/uikit";
+import {Container, Root, Text} from "@react-three/uikit";
 import {Card} from "components/apfel/card";
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
 import {useContext, useRef, useState} from "react";
@@ -69,9 +69,9 @@ const XRNote = (props: NoteProps) => {
           </Text>
         </Card>
       )}
-      <Content />
       <Grabbable
         ref={grabbableRef}
+        maxGrabbers={1}
         onGrabbed={(e) => {
           dragContext.note = e;
           setDragging(true);
@@ -101,16 +101,14 @@ const XRNote = (props: NoteProps) => {
       >
         <Root pixelSize={0.002}>
           <Container width={256} height={96}>
-            {dragging && (
-              <Card borderRadius={16} transformTranslateZ={8} flexDirection="column" width={256} height={96} padding={12} overflow="scroll" gap={4} scrollbarWidth={0}>
-                <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
-                  {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
-                </Text>
-                <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top">
-                  {note.text}
-                </Text>
-              </Card>
-            )}
+            <Card borderRadius={16} transformTranslateZ={8} flexDirection="column" width={256} height={96} padding={12} overflow="scroll" gap={4} scrollbarWidth={0}>
+              <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
+                {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
+              </Text>
+              <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top">
+                {note.text}
+              </Text>
+            </Card>
           </Container>
         </Root>
       </Grabbable>
