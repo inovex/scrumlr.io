@@ -92,7 +92,10 @@ const XRNote = (props: NoteProps) => {
 
             if (closestColumn.distance < 0.4 && closestColumn.column?.props.id !== note.position.column) {
               store.dispatch(Actions.editNote(note.id, {position: {column: closestColumn.column!.props.id, stack: null, rank: 0}}));
-            } else e.position.set(0, 0, 0);
+            } else {
+              e.position.set(0, 0, 0);
+              e.rotation.set(0, 0, 0);
+            }
 
             dragContext.over = undefined;
             setDragging(false);
