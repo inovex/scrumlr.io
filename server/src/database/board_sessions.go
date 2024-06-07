@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"net/url"
-	"scrumlr.io/server/identifiers"
 	"strconv"
 	"time"
+
+	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -169,11 +170,11 @@ func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSessio
 
 	// send update to observers here, as bun .AfterScanRow() is triggered for each updated row
 	// see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
-	for _, observer := range d.observer {
-		if o, ok := observer.(BoardSessionsObserver); ok {
-			o.UpdatedSessions(update.Board, sessions)
-		}
-	}
+	// for _, observer := range d.observer {
+	// 	if o, ok := observer.(BoardSessionsObserver); ok {
+	// 		o.UpdatedSessions(update.Board, sessions)
+	// 	}
+	// }
 
 	return sessions, err
 }
@@ -228,4 +229,23 @@ func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessi
 	var sessions []BoardSession
 	err := query.Scan(context.Background(), &sessions)
 	return sessions, err
+}
+
+// Used to get all sessions of a single user who he is connected to, when updating his session
+func (d *Database) GetSingleUserConnectedBoards(user uuid.UUID) ([]BoardSession, error) {
+	var sessions []BoardSession
+	err := d.db.NewSelect().
+		TableExpr("board_sessions AS s").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		Where("s.user = ?", user).
+		Where("s.connected").
+		Join("INNER JOIN users AS u ON u.id = s.user").
+		Scan(context.Background(), &sessions)
+	if err != nil {
+		return nil, err
+	}
+
+	return sessions, err
+
+	// Next: test this function out
 }
