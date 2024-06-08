@@ -223,7 +223,7 @@ func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessi
 	return sessions, err
 }
 
-// Used to get all sessions of a single user who he is connected to, when updating his session
+// Gets all board sessions of a single user who he is currently connected to
 func (d *Database) GetSingleUserConnectedBoards(user uuid.UUID) ([]BoardSession, error) {
 	var sessions []BoardSession
 	err := d.db.NewSelect().
@@ -238,6 +238,4 @@ func (d *Database) GetSingleUserConnectedBoards(user uuid.UUID) ([]BoardSession,
 	}
 
 	return sessions, err
-
-	// Next: test this function out
 }

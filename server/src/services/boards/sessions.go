@@ -27,7 +27,6 @@ func NewBoardSessionService(db *database.Database, rt *realtime.Broker) services
 	b := new(BoardSessionService)
 	b.database = db
 	b.realtime = rt
-	// b.database.AttachObserver((database.BoardSessionsObserver)(b))
 	return b
 }
 
@@ -57,7 +56,6 @@ func (s *BoardSessionService) List(_ context.Context, boardID uuid.UUID, filter 
 
 func (s *BoardSessionService) Connect(ctx context.Context, boardID, userID uuid.UUID) error {
 	log := logger.FromContext(ctx)
-	fmt.Printf("Connected to session")
 	var connected = true
 	updatedSession, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
 		Board:     boardID,
@@ -87,6 +85,7 @@ func (s *BoardSessionService) Disconnect(ctx context.Context, boardID, userID uu
 		return err
 	}
 	s.UpdatedSession(boardID, updatedSession)
+
 	return err
 }
 
