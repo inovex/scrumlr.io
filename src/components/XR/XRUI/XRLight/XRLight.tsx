@@ -1,9 +1,8 @@
 /* eslint-disable react/no-unknown-property */
 const XRLight = () => (
-  // TODO: use webXR lighting estimation module
   <>
     <ambientLight />
-    <directionalLight intensity={5} />
+    <directionalLight intensity={3} />
   </>
 );
 export default XRLight;

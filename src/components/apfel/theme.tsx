@@ -17,8 +17,10 @@ function hsl(h: number, s: number, l: number) {
 export const colors = {
   foreground: hsl(0, 0, 100),
   background: hsl(0, 0, 0),
+  backgroundHover: hsl(0, 0, 10),
   card: hsl(0, 0, 53),
   cardForeground: hsl(0, 0, 100),
+  cardHover: hsl(0, 0, 60),
   accent: hsl(210, 100, 52),
   accentForeground: hsl(0, 0, 100),
 };

@@ -70,6 +70,7 @@ const XRInputField = ({columnIndex, columnId, columnColor}: XRInputFieldProps) =
       padding={4}
       paddingLeft={8}
       backgroundColor={colors.background}
+      hover={{backgroundColor: colors.backgroundHover}}
       backgroundOpacity={0.2}
       onClick={handleFocus} // TODO: right now only focusing the input is supported, no blur event
     >

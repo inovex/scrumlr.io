@@ -5,13 +5,14 @@ import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Participant} from "types/participant";
 import {isEqual} from "underscore";
-import {Container, ContainerProperties, Content, Root, Text} from "@react-three/uikit";
+import {Container, ContainerProperties, Content, Root, Text, TextProperties} from "@react-three/uikit";
 import {Card} from "components/apfel/card";
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
 import {useContext, useRef} from "react";
 import {Euler, Object3D, Quaternion, Vector3} from "three";
 import {Actions} from "store/action";
 import {useFrame} from "@react-three/fiber";
+import {colors} from "components/apfel/theme";
 import {DragContext, DragContextColumnType} from "../XRBoard/XRBoard";
 
 const columnPosition = new Vector3();
@@ -27,6 +28,8 @@ const XRNote = (props: NoteProps) => {
   const grabbableRef = useRef<Object3D<any>>(null!);
   const staticCardRef = useRef<ContainerProperties>(null!);
   const dragCardRef = useRef<ContainerProperties>(null!);
+  const dragTitleRef = useRef<TextProperties>(null!);
+  const dragContentRef = useRef<TextProperties>(null!);
   const drag = useRef(false);
 
   const dragContext = useContext(DragContext);
@@ -47,19 +50,37 @@ const XRNote = (props: NoteProps) => {
   const setDragging = (dragging: boolean) => {
     drag.current = dragging;
     dragCardRef.current.setStyle({visibility: dragging ? "visible" : "hidden"});
+    dragTitleRef.current.setStyle({visibility: dragging ? "visible" : "hidden"});
+    dragContentRef.current.setStyle({visibility: dragging ? "visible" : "hidden"});
     staticCardRef.current.setStyle({transformScaleX: dragging ? 0 : 1});
   };
 
   const handleRelease = () => {
     dragContext.note = undefined;
 
-    if (!note || dragContext.over === note.position.column || !grabbableRef.current || !dragContext.over) return;
+    if (!note || !grabbableRef.current || !dragContext.over) return;
+
+    if (dragContext.over === note.position.column) {
+      dragContext.over = undefined;
+      return;
+    }
 
     store.dispatch(Actions.editNote(note.id, {position: {column: dragContext.over, stack: null, rank: 0}}));
     dragContext.over = undefined;
   };
 
   useFrame(() => {
+    if (!dragContext.note && grabbableRef.current && grabbableRef.current.position.distanceTo(initialPosition) > 0.001) {
+      // TODO: lerp correctly if note is dragged to a new column
+      grabbableRef.current.position.lerp(initialPosition, lerpSpeed);
+      grabbableRef.current.quaternion.slerp(initialQuaternion, lerpSpeed);
+    }
+    if (!dragContext.note && grabbableRef.current && grabbableRef.current.position.distanceTo(initialPosition) <= 0.001 && drag.current) {
+      setDragging(false);
+    }
+
+    if (!dragContext.note) return;
+
     if (dragContext.note === grabbableRef.current) {
       const closestColumn = dragContext.columns.reduce(
         (closest: {column: DragContextColumnType | null; distance: number}, column: DragContextColumnType) => {
@@ -75,14 +96,6 @@ const XRNote = (props: NoteProps) => {
         dragContext.over = closestColumn.column?.props.id;
       } else dragContext.over = undefined;
     }
-    if (!dragContext.note && grabbableRef.current && grabbableRef.current.position.distanceTo(initialPosition) > 0.001) {
-      // TODO: lerp correctly if note is dragged to a new column
-      grabbableRef.current.position.lerp(initialPosition, lerpSpeed);
-      grabbableRef.current.quaternion.slerp(initialQuaternion, lerpSpeed);
-    }
-    if (!dragContext.note && grabbableRef.current && grabbableRef.current.position.distanceTo(initialPosition) <= 0.001 && drag.current) {
-      setDragging(false);
-    }
   });
 
   if (!note) return null;
@@ -94,12 +107,14 @@ const XRNote = (props: NoteProps) => {
         borderRadius={16}
         transformTranslateZ={8}
         flexDirection="column"
-        width={5120}
+        width={99999}
         height="100%"
         padding={12}
         overflow="scroll"
         gap={4}
         scrollbarWidth={0}
+        backgroundColor={colors.card}
+        hover={{backgroundColor: colors.cardHover}}
       >
         <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
           {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
@@ -132,11 +147,12 @@ const XRNote = (props: NoteProps) => {
               gap={4}
               scrollbarWidth={0}
               visibility="hidden"
+              backgroundColor={colors.cardHover}
             >
-              <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
+              <Text ref={dragTitleRef} fontSize={12} color={FONT_COLOR} marginBottom={0} visibility="hidden">
                 {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
               </Text>
-              <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top">
+              <Text ref={dragContentRef} color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top" visibility="hidden">
                 {note.text}
               </Text>
             </Card>
