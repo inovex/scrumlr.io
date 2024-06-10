@@ -9,7 +9,7 @@ import {Container, ContainerProperties, Content, Root, Text} from "@react-three/
 import {Card} from "components/apfel/card";
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
 import {useContext, useRef} from "react";
-import {Euler, Object3D, Object3DEventMap, Quaternion, Vector3} from "three";
+import {Euler, Object3D, Quaternion, Vector3} from "three";
 import {Actions} from "store/action";
 import {useFrame} from "@react-three/fiber";
 import {DragContext, DragContextColumnType} from "../XRBoard/XRBoard";
@@ -50,27 +50,13 @@ const XRNote = (props: NoteProps) => {
     staticCardRef.current.setStyle({transformScaleX: dragging ? 0 : 1});
   };
 
-  const handleRelease = (e: Object3D<Object3DEventMap>) => {
-    if (!note) return;
+  const handleRelease = () => {
     dragContext.note = undefined;
 
-    if (grabbableRef.current) {
-      const closestColumn = dragContext.columns.reduce(
-        (closest: {column: DragContextColumnType | null; distance: number}, column: DragContextColumnType) => {
-          columnPosition.setFromMatrixPosition(column.ref.interactionPanel.matrixWorld);
-          const distance = columnPosition.distanceTo(grabbablePositionVec.setFromMatrixPosition(e.matrixWorld));
+    if (!note || dragContext.over === note.position.column || !grabbableRef.current || !dragContext.over) return;
 
-          return distance < closest.distance ? {column, distance} : closest;
-        },
-        {column: null, distance: Infinity}
-      );
-
-      if (closestColumn.distance < 0.4 && closestColumn.column?.props.id !== note.position.column) {
-        store.dispatch(Actions.editNote(note.id, {position: {column: closestColumn.column!.props.id, stack: null, rank: 0}}));
-      }
-
-      dragContext.over = undefined;
-    }
+    store.dispatch(Actions.editNote(note.id, {position: {column: dragContext.over, stack: null, rank: 0}}));
+    dragContext.over = undefined;
   };
 
   useFrame(() => {
