@@ -77,7 +77,7 @@ export const LoginBoard = () => {
                       handleLogin();
                     }
                   }}
-                  maxLength={20}
+                  maxLength={64}
                   aria-invalid={!displayName}
                   actions={
                     <TextInputAction title={t("LoginBoard.generateRandomName")} onClick={() => setDisplayName(getRandomName())}>
