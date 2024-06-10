@@ -5,11 +5,11 @@ import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Participant} from "types/participant";
 import {isEqual} from "underscore";
-import {Container, Root, Text} from "@react-three/uikit";
+import {Container, ContainerProperties, Content, Root, Text} from "@react-three/uikit";
 import {Card} from "components/apfel/card";
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
-import {useContext, useRef, useState} from "react";
-import {Object3D, Vector3} from "three";
+import {useContext, useRef} from "react";
+import {Euler, Object3D, Object3DEventMap, Quaternion, Vector3} from "three";
 import {Actions} from "store/action";
 import {useFrame} from "@react-three/fiber";
 import {DragContext, DragContextColumnType} from "../XRBoard/XRBoard";
@@ -17,10 +17,17 @@ import {DragContext, DragContextColumnType} from "../XRBoard/XRBoard";
 const columnPosition = new Vector3();
 const grabbablePositionVec = new Vector3();
 
+const lerpSpeed = 0.1; // Adjust this value to control the speed of interpolation
+const initialPosition = new Vector3(0, 0, 0);
+const initialRotation = new Euler(0, 0, 0);
+const initialQuaternion = new Quaternion().setFromEuler(initialRotation);
+
 const XRNote = (props: NoteProps) => {
   const {t} = useTranslation();
-  const [dragging, setDragging] = useState(false);
   const grabbableRef = useRef<Object3D<any>>(null!);
+  const staticCardRef = useRef<ContainerProperties>(null!);
+  const dragCardRef = useRef<ContainerProperties>(null!);
+  const drag = useRef(false);
 
   const dragContext = useContext(DragContext);
 
@@ -36,6 +43,35 @@ const XRNote = (props: NoteProps) => {
 
     return [noteAuthor, ...childrenNoteAuthors].filter(Boolean) as Participant[];
   }, isEqual);
+
+  const setDragging = (dragging: boolean) => {
+    drag.current = dragging;
+    dragCardRef.current.setStyle({visibility: dragging ? "visible" : "hidden"});
+    staticCardRef.current.setStyle({transformScaleX: dragging ? 0 : 1});
+  };
+
+  const handleRelease = (e: Object3D<Object3DEventMap>) => {
+    if (!note) return;
+    dragContext.note = undefined;
+
+    if (grabbableRef.current) {
+      const closestColumn = dragContext.columns.reduce(
+        (closest: {column: DragContextColumnType | null; distance: number}, column: DragContextColumnType) => {
+          columnPosition.setFromMatrixPosition(column.ref.interactionPanel.matrixWorld);
+          const distance = columnPosition.distanceTo(grabbablePositionVec.setFromMatrixPosition(e.matrixWorld));
+
+          return distance < closest.distance ? {column, distance} : closest;
+        },
+        {column: null, distance: Infinity}
+      );
+
+      if (closestColumn.distance < 0.4 && closestColumn.column?.props.id !== note.position.column) {
+        store.dispatch(Actions.editNote(note.id, {position: {column: closestColumn.column!.props.id, stack: null, rank: 0}}));
+      }
+
+      dragContext.over = undefined;
+    }
+  };
 
   useFrame(() => {
     if (dragContext.note === grabbableRef.current) {
@@ -53,22 +89,40 @@ const XRNote = (props: NoteProps) => {
         dragContext.over = closestColumn.column?.props.id;
       } else dragContext.over = undefined;
     }
+    if (!dragContext.note && grabbableRef.current && grabbableRef.current.position.distanceTo(initialPosition) > 0.001) {
+      // TODO: lerp correctly if note is dragged to a new column
+      grabbableRef.current.position.lerp(initialPosition, lerpSpeed);
+      grabbableRef.current.quaternion.slerp(initialQuaternion, lerpSpeed);
+    }
+    if (!dragContext.note && grabbableRef.current && grabbableRef.current.position.distanceTo(initialPosition) <= 0.001 && drag.current) {
+      setDragging(false);
+    }
   });
 
   if (!note) return null;
 
   return (
     <Container height={96} width="100%">
-      {!dragging && (
-        <Card borderRadius={16} transformTranslateZ={8} flexDirection="column" width={5120} height="100%" padding={12} overflow="scroll" gap={4} scrollbarWidth={0}>
-          <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
-            {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
-          </Text>
-          <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top">
-            {note.text}
-          </Text>
-        </Card>
-      )}
+      <Card
+        ref={staticCardRef}
+        borderRadius={16}
+        transformTranslateZ={8}
+        flexDirection="column"
+        width={5120}
+        height="100%"
+        padding={12}
+        overflow="scroll"
+        gap={4}
+        scrollbarWidth={0}
+      >
+        <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
+          {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
+        </Text>
+        <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top">
+          {note.text}
+        </Text>
+      </Card>
+      <Content />
       <Grabbable
         ref={grabbableRef}
         maxGrabbers={1}
@@ -76,35 +130,23 @@ const XRNote = (props: NoteProps) => {
           dragContext.note = e;
           setDragging(true);
         }}
-        onReleased={(e) => {
-          dragContext.note = undefined;
-
-          if (grabbableRef.current) {
-            const closestColumn = dragContext.columns.reduce(
-              (closest: {column: DragContextColumnType | null; distance: number}, column: DragContextColumnType) => {
-                columnPosition.setFromMatrixPosition(column.ref.interactionPanel.matrixWorld);
-                const distance = columnPosition.distanceTo(grabbablePositionVec.setFromMatrixPosition(e.matrixWorld));
-
-                return distance < closest.distance ? {column, distance} : closest;
-              },
-              {column: null, distance: Infinity}
-            );
-
-            if (closestColumn.distance < 0.4 && closestColumn.column?.props.id !== note.position.column) {
-              store.dispatch(Actions.editNote(note.id, {position: {column: closestColumn.column!.props.id, stack: null, rank: 0}}));
-            } else {
-              e.position.set(0, 0, 0);
-              e.rotation.set(0, 0, 0);
-              setDragging(false);
-            }
-
-            dragContext.over = undefined;
-          }
-        }}
+        onReleased={handleRelease}
       >
         <Root pixelSize={0.002}>
           <Container width={256} height={96}>
-            <Card borderRadius={16} transformTranslateZ={8} flexDirection="column" width={256} height={96} padding={12} overflow="scroll" gap={4} scrollbarWidth={0}>
+            <Card
+              ref={dragCardRef}
+              borderRadius={16}
+              transformTranslateZ={8}
+              flexDirection="column"
+              width={256}
+              height={96}
+              padding={12}
+              overflow="scroll"
+              gap={4}
+              scrollbarWidth={0}
+              visibility="hidden"
+            >
               <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
                 {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
               </Text>
