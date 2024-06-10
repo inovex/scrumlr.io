@@ -84,9 +84,10 @@ jobs:
     needs: deploy_to_dev_cluster
     runs-on: ubuntu-latest
     steps:
-      - name: run tests
-        uses: OctoMind-dev/automagically-action-execute@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
         with:
-          url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
-          testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
+          browser: chrome
+          config: baseURL=https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
