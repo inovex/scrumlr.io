@@ -90,4 +90,6 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-          config: baseUrl=https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
+          start: docker-compose --profile build up
+          build: yarn run start
+          wait-on: 'http://localhost:3000'
