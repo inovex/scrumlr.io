@@ -9,12 +9,12 @@ describe("Navigation from landing page to board", () => {
         // go to homepage
         cy.visit("/")
 
-        // click CTA
-        cy.get("a").contains(translationEn.Homepage.startButton).click()
-
         // switch to english
         cy.changeLanguageToEnglish()
         cy.acceptCookies()
+
+        // click CTA
+        cy.get("a").contains(translationEn.Homepage.startButton).click()
 
         // navigates to /login
         cy.url().should("include", "/login")
