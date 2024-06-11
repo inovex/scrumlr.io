@@ -25,7 +25,10 @@ const (
 
 func (accessPolicy *AccessPolicy) UnmarshalJSON(b []byte) error {
 	var s string
-	json.Unmarshal(b, &s)
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
+
 	unmarshalledAccessPolicy := AccessPolicy(s)
 	switch unmarshalledAccessPolicy {
 	case AccessPolicyPublic, AccessPolicyByPassphrase, AccessPolicyByInvite:

@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+	"scrumlr.io/server/identifiers"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,6 +16,7 @@ type Board struct {
 	bun.BaseModel         `bun:"table:boards"`
 	ID                    uuid.UUID
 	Name                  *string
+	Description           *string
 	AccessPolicy          types.AccessPolicy
 	Passphrase            *string
 	Salt                  *string
@@ -33,6 +35,7 @@ type Board struct {
 type BoardInsert struct {
 	bun.BaseModel `bun:"table:boards"`
 	Name          *string
+	Description   *string
 	AccessPolicy  types.AccessPolicy
 	Passphrase    *string
 	Salt          *string
@@ -49,6 +52,7 @@ type BoardUpdate struct {
 	bun.BaseModel         `bun:"table:boards"`
 	ID                    uuid.UUID
 	Name                  *string
+	Description           *string
 	AccessPolicy          *types.AccessPolicy
 	Passphrase            *string
 	Salt                  *string
@@ -108,6 +112,9 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 
 	if update.Name != nil {
 		query.Column("name")
+	}
+	if update.Description != nil {
+		query.Column("description")
 	}
 	if update.AccessPolicy != nil {
 		if *update.AccessPolicy == types.AccessPolicyByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
@@ -169,7 +176,7 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 }
 
 func (d *Database) DeleteBoard(id uuid.UUID) error {
-	_, err := d.db.NewDelete().Model((*Board)(nil)).Where("id = ?", id).Exec(common.ContextWithValues(context.Background(), "Database", d, "Board", id))
+	_, err := d.db.NewDelete().Model((*Board)(nil)).Where("id = ?", id).Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, id))
 	return err
 }
 
