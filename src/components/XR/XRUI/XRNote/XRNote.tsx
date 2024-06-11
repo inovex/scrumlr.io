@@ -8,7 +8,7 @@ import {isEqual} from "underscore";
 import {Container, ContainerProperties, Content, Root, Text, TextProperties} from "@react-three/uikit";
 import {Card} from "components/apfel/card";
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
-import {useContext, useRef} from "react";
+import {useContext, useLayoutEffect, useRef} from "react";
 import {Euler, Object3D, Quaternion, Vector3} from "three";
 import {Actions} from "store/action";
 import {useFrame} from "@react-three/fiber";
@@ -53,6 +53,7 @@ const XRNote = (props: NoteProps) => {
     dragTitleRef.current.setStyle({visibility: dragging ? "visible" : "hidden"});
     dragContentRef.current.setStyle({visibility: dragging ? "visible" : "hidden"});
     staticCardRef.current.setStyle({transformScaleX: dragging ? 0 : 1});
+    initialPosition.set(0, 0, 0);
   };
 
   const handleRelease = () => {
@@ -64,10 +65,16 @@ const XRNote = (props: NoteProps) => {
       dragContext.over = undefined;
       return;
     }
+    const offset = grabbableRef.current.getWorldPosition(new Vector3()).sub(staticCardRef.current.interactionPanel.getWorldPosition(new Vector3()));
+    initialPosition.copy(offset);
 
     store.dispatch(Actions.editNote(note.id, {position: {column: dragContext.over, stack: null, rank: 0}}));
     dragContext.over = undefined;
   };
+
+  useLayoutEffect(() => {
+    setDragging(false);
+  }, [note?.position.column]);
 
   useFrame(() => {
     if (!dragContext.note && grabbableRef.current && grabbableRef.current.position.distanceTo(initialPosition) > 0.001) {
@@ -110,7 +117,7 @@ const XRNote = (props: NoteProps) => {
         width={99999}
         height="100%"
         padding={12}
-        overflow="scroll"
+        overflow="hidden"
         gap={4}
         scrollbarWidth={0}
         backgroundColor={colors.card}
