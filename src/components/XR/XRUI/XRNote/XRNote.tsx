@@ -8,7 +8,7 @@ import {isEqual} from "underscore";
 import {Container, ContainerProperties, Content, Root, Text, TextProperties} from "@react-three/uikit";
 import {Card} from "components/apfel/card";
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
-import {useContext, useLayoutEffect, useRef} from "react";
+import {useContext, useRef} from "react";
 import {Euler, Object3D, Quaternion, Vector3} from "three";
 import {Actions} from "store/action";
 import {useFrame} from "@react-three/fiber";
@@ -17,6 +17,7 @@ import {DragContext, DragContextColumnType} from "../XRBoard/XRBoard";
 
 const columnPosition = new Vector3();
 const grabbablePositionVec = new Vector3();
+const vec = new Vector3();
 
 const lerpSpeed = 0.1; // Adjust this value to control the speed of interpolation
 const initialPosition = new Vector3(0, 0, 0);
@@ -65,16 +66,13 @@ const XRNote = (props: NoteProps) => {
       dragContext.over = undefined;
       return;
     }
-    const offset = grabbableRef.current.getWorldPosition(new Vector3()).sub(staticCardRef.current.interactionPanel.getWorldPosition(new Vector3()));
+    const offset = grabbableRef.current.getWorldPosition(vec).sub(staticCardRef.current.interactionPanel.getWorldPosition(vec));
     initialPosition.copy(offset);
 
     store.dispatch(Actions.editNote(note.id, {position: {column: dragContext.over, stack: null, rank: 0}}));
     dragContext.over = undefined;
+    grabbableRef.current.matrixAutoUpdate = false;
   };
-
-  useLayoutEffect(() => {
-    setDragging(false);
-  }, [note?.position.column]);
 
   useFrame(() => {
     if (!dragContext.note && grabbableRef.current && grabbableRef.current.position.distanceTo(initialPosition) > 0.001) {
