@@ -4,16 +4,17 @@
 import { columnTemplates } from "../../src/routes/NewBoard/columnTemplates"
 import translationEn from "../../src/i18n/en/translation.json"
 
-describe("When clicking the CTA on the homepage", () => {
-    it("it should navigate to the next page", () => {
+describe("Navigation from landing page to board", () => {
+    it("should successfully navigate from the homepage to the board", () => {
         // go to homepage
         cy.visit("/")
-        // switch to english
-        cy.changeLanguageToEnglish()
-        cy.acceptCookies()
 
         // click CTA
         cy.get("a").contains(translationEn.Homepage.startButton).click()
+
+        // switch to english
+        cy.changeLanguageToEnglish()
+        cy.acceptCookies()
 
         // navigates to /login
         cy.url().should("include", "/login")
