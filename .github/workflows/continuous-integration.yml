@@ -91,4 +91,3 @@ jobs:
         with:
           browser: chrome
           config: baseUrl=https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          wait-on: 'https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io'
