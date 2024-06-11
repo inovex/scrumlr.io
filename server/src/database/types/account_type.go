@@ -30,7 +30,9 @@ const (
 
 func (accountType *AccountType) UnmarshalJSON(b []byte) error {
 	var s string
-	json.Unmarshal(b, &s)
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
 	unmarshalledAccountType := AccountType(s)
 	switch unmarshalledAccountType {
 	case AccountTypeAnonymous, AccountTypeGoogle, AccountTypeMicrosoft, AccountTypeAzureAd, AccountTypeGitHub, AccountTypeApple:

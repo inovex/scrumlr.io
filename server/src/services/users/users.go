@@ -44,7 +44,7 @@ func (s *UserService) LoginAnonymous(_ context.Context, name string) (*dto.User,
 }
 
 func (s *UserService) CreateGitHubUser(_ context.Context, id, name, avatarUrl string) (*dto.User, error) {
-	user, err := s.database.CreateGoogleUser(id, name, avatarUrl)
+	user, err := s.database.CreateGitHubUser(id, name, avatarUrl)
 	return new(dto.User).From(user), err
 }
 

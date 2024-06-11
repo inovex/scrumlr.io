@@ -3,7 +3,6 @@ package api
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"github.com/go-chi/render"
 	"net/http"
 )
@@ -18,7 +17,9 @@ const (
 
 func (feedbackType *FeedbackType) UnmarshalJSON(b []byte) error {
 	var s string
-	json.Unmarshal(b, &s)
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
 	unmarshalledFeedbackType := FeedbackType(s)
 	switch unmarshalledFeedbackType {
 	case FeedbackTypePraise, FeedbackTypeBugReport, FeedbackTypeFeatureRequest:
@@ -48,15 +49,18 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		str := "/"
 		body.Text = &str
 	}
-  if body.Type == FeedbackTypeFeatureRequest && *body.Text == "/" {
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
-  if body.Type == FeedbackTypeBugReport && *body.Text == "/" {
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
-	s.feedback.Create(r.Context(), fmt.Sprintf("%s", body.Type), *body.Contact, *body.Text)
+	if body.Type == FeedbackTypeFeatureRequest && *body.Text == "/" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	if body.Type == FeedbackTypeBugReport && *body.Text == "/" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+	err := s.feedback.Create(r.Context(), string(body.Type), *body.Contact, *body.Text)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusCreated)
-	return
 }
