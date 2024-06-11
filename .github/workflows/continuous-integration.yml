@@ -81,7 +81,6 @@ jobs:
   end_to_end_test:
     name: End to End Test
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    needs: deploy_to_dev_cluster
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -90,5 +89,6 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
-          start: docker-compose --profile build up, yarn run start
+          build: docker-compose --profile build up
+          start: yarn run start
           wait-on: 'http://localhost:3000'
