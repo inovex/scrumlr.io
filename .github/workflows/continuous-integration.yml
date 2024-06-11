@@ -85,10 +85,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Start server
+        run: docker-compose --profile build up
+        working-directory: server
+      - name: Start client
+        run: yarn run start
       - name: Cypress run
         uses: cypress-io/github-action@v6
-        with:
+        with: 
           browser: chrome
-          build: docker-compose --profile build up
-          start: yarn run start
           wait-on: 'http://localhost:3000'
