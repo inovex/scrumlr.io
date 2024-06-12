@@ -45,11 +45,18 @@ const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandl
       onReleased={() => {
         dragging.current = false;
       }}
+      maxGrabbers={1}
     >
-      <mesh position={[-0.6, 0, 0]}>
-        <cylinderGeometry args={[0.01, 0.01, 0.3]} />
-        <meshStandardMaterial transparent opacity={0.8} color="white" roughness={0.5} />
-      </mesh>
+      <group>
+        <mesh position={[-0.6, 0, 0]} visible={false}>
+          <cylinderGeometry args={[0.1, 0.1, 0.6]} />
+          <meshStandardMaterial transparent opacity={0.8} color="red" roughness={0.5} />
+        </mesh>
+        <mesh position={[-0.6, 0, 0]}>
+          <cylinderGeometry args={[0.01, 0.01, 0.3]} />
+          <meshStandardMaterial transparent opacity={0.8} color="white" roughness={0.5} />
+        </mesh>
+      </group>
     </Grabbable>
   );
 });

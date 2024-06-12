@@ -8,11 +8,15 @@ import {isEqual} from "underscore";
 import {Container, ContainerProperties, Content, Root, Text, TextProperties} from "@react-three/uikit";
 import {Card} from "components/apfel/card";
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
-import {useContext, useRef} from "react";
+import {useContext, useRef, useState} from "react";
 import {Euler, Object3D, Quaternion, Vector3} from "three";
 import {Actions} from "store/action";
 import {useFrame} from "@react-three/fiber";
 import {colors} from "components/apfel/theme";
+import {Button} from "components/apfel/button";
+import {Svg} from "@react-three/drei";
+import DeleteIcon from "assets/icon-delete.svg";
+import {useDispatch} from "react-redux";
 import {DragContext, DragContextColumnType} from "../XRBoard/XRBoard";
 
 const columnPosition = new Vector3();
@@ -32,6 +36,8 @@ const XRNote = (props: NoteProps) => {
   const dragTitleRef = useRef<TextProperties>(null!);
   const dragContentRef = useRef<TextProperties>(null!);
   const drag = useRef(false);
+  const dispatch = useDispatch();
+  const [grabbableVisible, setGrabbableVisible] = useState(true);
 
   const dragContext = useContext(DragContext);
 
@@ -72,6 +78,10 @@ const XRNote = (props: NoteProps) => {
     store.dispatch(Actions.editNote(note.id, {position: {column: dragContext.over, stack: null, rank: 0}}));
     dragContext.over = undefined;
     grabbableRef.current.matrixAutoUpdate = false;
+  };
+
+  const handleDelete = () => {
+    dispatch(Actions.deleteNote(props.noteId, true));
   };
 
   useFrame(() => {
@@ -127,43 +137,59 @@ const XRNote = (props: NoteProps) => {
         <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top">
           {note.text}
         </Text>
+        <Button
+          variant="icon"
+          size="sm"
+          positionType="absolute"
+          positionTop={0}
+          positionRight={0}
+          onClick={handleDelete}
+          onPointerEnter={() => setGrabbableVisible(false)}
+          onPointerLeave={() => setGrabbableVisible(true)}
+        >
+          <Content>
+            <Svg src={DeleteIcon} />
+          </Content>
+        </Button>
       </Card>
       <Content />
-      <Grabbable
-        ref={grabbableRef}
-        maxGrabbers={1}
-        onGrabbed={(e) => {
-          dragContext.note = e;
-          setDragging(true);
-        }}
-        onReleased={handleRelease}
-      >
-        <Root pixelSize={0.002}>
-          <Container width={256} height={96}>
-            <Card
-              ref={dragCardRef}
-              borderRadius={16}
-              transformTranslateZ={8}
-              flexDirection="column"
-              width={256}
-              height={96}
-              padding={12}
-              overflow="scroll"
-              gap={4}
-              scrollbarWidth={0}
-              visibility="hidden"
-              backgroundColor={colors.cardHover}
-            >
-              <Text ref={dragTitleRef} fontSize={12} color={FONT_COLOR} marginBottom={0} visibility="hidden">
-                {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
-              </Text>
-              <Text ref={dragContentRef} color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top" visibility="hidden">
-                {note.text}
-              </Text>
-            </Card>
-          </Container>
-        </Root>
-      </Grabbable>
+      {grabbableVisible && (
+        <Grabbable
+          ref={grabbableRef}
+          maxGrabbers={1}
+          onGrabbed={(e) => {
+            dragContext.note = e;
+            setDragging(true);
+          }}
+          onReleased={handleRelease}
+        >
+          <Root pixelSize={0.002}>
+            <Container width={286} height={96}>
+              <Card
+                ref={dragCardRef}
+                borderRadius={16}
+                transformTranslateZ={8}
+                flexDirection="column"
+                width={286}
+                height={96}
+                padding={12}
+                overflow="hidden"
+                gap={4}
+                scrollbarWidth={0}
+                visibility="hidden"
+                backgroundColor={colors.cardHover}
+              >
+                <Text ref={dragTitleRef} fontSize={12} color={FONT_COLOR} marginBottom={0} visibility="hidden">
+                  {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
+                </Text>
+                <Text ref={dragContentRef} color={FONT_COLOR} fontSize={14} wordBreak="break-all" verticalAlign="top" visibility="hidden">
+                  {note.text}
+                </Text>
+              </Card>
+            </Container>
+          </Root>
+        </Grabbable>
+      )}
     </Container>
   );
 };
