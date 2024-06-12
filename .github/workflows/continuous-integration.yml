@@ -70,10 +70,45 @@ jobs:
     with:
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
+
+  deployment_health_check:
+    needs: deploy_to_dev_cluster
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main'}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Change DNS Server
+        run: |
+          sudo sed -i 's/#DNS=/DNS=ns2.fra.cloud.inovex.io/' /etc/systemd/resolved.conf
+          sudo systemctl daemon-reload
+          sudo systemctl restart systemd-networkd
+          sudo systemctl restart systemd-resolved
+          dig +short github.com
+      - name: Wait for cluster to become healthy
+        id: wait-for-cluster
+        env:
+          BASE_URL: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
+        run: |
+          retries=0
+          until [ $retries -ge 3 ]
+          do
+            response=$(curl -s -k -o /dev/null -w "%{http_code}" "$BASE_URL/api/health")
+            if [ "$response" = "204" ]; then
+              echo "Cluster is healthy! Continuing with postman tests!"
+              break
+            else
+              echo "Cluster is not responding. Retrying in $((5 * retries)) seconds..."
+              sleep $((5 * retries))
+            fi
+            retries=$((retries + 1))
+          done
+          if [ "$response" != "204" ]; then
+            echo "Cluster is still not responding after retries. Exiting..."
+            exit 1
+          fi
   
   run_postman_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    needs: deploy_to_dev_cluster
+    needs: deployment_health_check
     uses: ./.github/workflows/postman_e2e_test.yml
     with: 
       base_url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
@@ -81,7 +116,7 @@ jobs:
   end_to_end_test:
     name: End to End Test
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    needs: deploy_to_dev_cluster
+    needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
       - name: run tests
