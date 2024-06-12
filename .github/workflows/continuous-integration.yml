@@ -133,4 +133,3 @@ jobs:
         uses: cypress-io/github-action@v6
         with: 
           browser: chrome
-          wait-on: 'http://localhost:3000'
