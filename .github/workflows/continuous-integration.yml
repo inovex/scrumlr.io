@@ -126,8 +126,8 @@ jobs:
         working-directory: server
       - name: Install dependencies and start client
         run: |
-          yarn install
-          yarn run start
+          yarn install -d
+          yarn run start -d
         working-directory: ./
       - name: Cypress run
         uses: cypress-io/github-action@v6
