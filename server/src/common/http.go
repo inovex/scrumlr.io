@@ -1,10 +1,12 @@
 package common
 
 import (
-	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"strings"
+
+	"golang.org/x/net/publicsuffix"
 )
 
 func GetProtocol(r *http.Request) string {
@@ -26,11 +28,11 @@ func SealCookie(r *http.Request, cookie *http.Cookie) {
 
 func GetTopLevelHost(r *http.Request) string {
 	hostname := GetHostWithoutPort(r)
-	hostWithSubdomain := strings.Split(hostname, ".")
-	if len(hostWithSubdomain) >= 2 {
-		return fmt.Sprintf("%s.%s", hostWithSubdomain[len(hostWithSubdomain)-2], hostWithSubdomain[len(hostWithSubdomain)-1])
+	eTLDPlusOne, err := publicsuffix.EffectiveTLDPlusOne(hostname)
+	if err == nil {
+		return eTLDPlusOne
 	}
-
+	log.Printf("Error getting top level domain for %s: %v", hostname, err)
 	return hostname
 }
 
