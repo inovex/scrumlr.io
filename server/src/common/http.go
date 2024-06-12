@@ -40,8 +40,8 @@ func GetTopLevelHost(r *http.Request) string {
 		return hostname
 	}
 
-	// Return the full hostname if it is a subdomain
-	return hostname
+	// Return only the top level domain
+	return eTLDPlusOne
 }
 
 func GetHostWithoutPort(r *http.Request) string {
