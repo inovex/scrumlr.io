@@ -122,7 +122,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Start server
-        run: docker-compose --profile build up
+        run: docker-compose --profile build up -d
         working-directory: server
       - name: Start client
         run: yarn run start
