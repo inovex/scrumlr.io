@@ -124,8 +124,10 @@ jobs:
       - name: Start server
         run: docker-compose --profile build up -d
         working-directory: server
-      - name: Start client
-        run: yarn run start
+      - name: Install dependencies and start client
+        run: |
+          npm install
+          yarn run start
         working-directory: ./
       - name: Cypress run
         uses: cypress-io/github-action@v6
