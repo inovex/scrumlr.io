@@ -29,10 +29,18 @@ func SealCookie(r *http.Request, cookie *http.Cookie) {
 func GetTopLevelHost(r *http.Request) string {
 	hostname := GetHostWithoutPort(r)
 	eTLDPlusOne, err := publicsuffix.EffectiveTLDPlusOne(hostname)
-	if err == nil {
-		return eTLDPlusOne
+	if err != nil {
+		log.Printf("Error getting top level domain for %s: %v", hostname, err)
+		return hostname
 	}
-	log.Printf("Error getting top level domain for %s: %v", hostname, err)
+
+	// Check if the hostname is exactly a public suffix
+	if hostname == eTLDPlusOne {
+		log.Printf("Error: Hostname %s is a public suffix", hostname)
+		return hostname
+	}
+
+	// Return the full hostname if it is a subdomain
 	return hostname
 }
 
