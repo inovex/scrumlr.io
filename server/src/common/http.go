@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"golang.org/x/net/publicsuffix"
+	"github.com/weppos/publicsuffix-go/publicsuffix"
 )
 
 func GetProtocol(r *http.Request) string {
@@ -28,20 +28,12 @@ func SealCookie(r *http.Request, cookie *http.Cookie) {
 
 func GetTopLevelHost(r *http.Request) string {
 	hostname := GetHostWithoutPort(r)
-	eTLDPlusOne, err := publicsuffix.EffectiveTLDPlusOne(hostname)
+	domain, err := publicsuffix.Domain(hostname)
 	if err != nil {
-		log.Printf("Error getting top level domain for %s: %v", hostname, err)
-		return hostname
+		log.Printf("Error getting domain for %s: %v", hostname, err)
+		return ""
 	}
-
-	// Check if the hostname is exactly a public suffix
-	if hostname == eTLDPlusOne {
-		log.Printf("Error: Hostname %s is a public suffix", hostname)
-		return hostname
-	}
-
-	// Return only the top level domain
-	return eTLDPlusOne
+	return domain
 }
 
 func GetHostWithoutPort(r *http.Request) string {
