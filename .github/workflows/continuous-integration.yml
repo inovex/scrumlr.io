@@ -119,16 +119,16 @@ jobs:
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Start server
         run: docker-compose --profile build up -d
         working-directory: server
       - name: Install dependencies and start client
         run: |
-          yarn install -d
-          yarn run start -d
+          yarn install
+          yarn run start
         working-directory: ./
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with: 
