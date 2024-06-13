@@ -1,4 +1,4 @@
-import {FC} from "react";
+import {Dispatch, FC, SetStateAction} from "react";
 import {Actions} from "store/action";
 import {ReactComponent as HideIcon} from "assets/icon-hidden.svg";
 import {ReactComponent as ShowIcon} from "assets/icon-visible.svg";
@@ -25,9 +25,10 @@ type ColumnSettingsProps = {
   index: number;
   onClose?: () => void;
   onNameEdit?: () => void;
+  setOpenColumnSet?: Dispatch<SetStateAction<boolean>>;
 };
 
-export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit}) => {
+export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit, setOpenColumnSet}) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
@@ -59,20 +60,26 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button aria-label="Pick a color">
-            <span className="column__header-color-option" />
+            <span className="column__header-color-option color_pink" />
             <ul className="column__header-color-picker-dropdown">
               <li>
                 <button aria-label="Pick a color">
-                  <span className="column__header-color-option" />
+                  <div className="column__header-color-option color_blue" />
                 </button>
                 <button aria-label="Pick a color">
-                  <span className="column__header-color-option" />
+                  <div className="column__header-color-option color_purple" />
                 </button>
                 <button aria-label="Pick a color">
-                  <span className="column__header-color-option" />
+                  <div className="column__header-color-option color_violet" />
                 </button>
                 <button aria-label="Pick a color">
-                  <span className="column__header-color-option" />
+                  <div className="column__header-color-option color_green" />
+                </button>
+                <button aria-label="Pick a color">
+                  <div className="column__header-color-option color_yellow" />
+                </button>
+                <button aria-label="Pick a color">
+                  <div className="column__header-color-option color_orange" />
                 </button>
               </li>
             </ul>
@@ -184,7 +191,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
           />
         </li>
         <li>
-          <CloseIcon className="column__header-edit-button-icon" />
+          <CloseIcon className="column__header-edit-button-icon" onClick={() => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {})} />
         </li>
       </ul>
     </div>

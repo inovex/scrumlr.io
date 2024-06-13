@@ -212,6 +212,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
                 index={index}
                 onClose={() => setOpenedColumnSettings(false)}
                 onNameEdit={() => setColumnNameMode("EDIT")}
+                setOpenColumnSet={setOpenedColumnSettings}
               />
             )}
           </div>

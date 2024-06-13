@@ -107,14 +107,83 @@
   .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
     box-shadow: 0 0 0 2px $color-white;
   }
+
+  .column__header-color-picker-dropdown {
+    background-color: $color-dark-mode-note;
+  }
+
+  .column__header-color-picker-dropdown > button {
+    background-color: $color-dark-mode-note;
+  }
 }
 
 .column__header-color-option {
   width: 23px;
   height: 23px;
-  background: $color-planning-pink;
   border-radius: 100px;
+}
+
+.color_pink {
+  background: #ff3387;
   border: 3px solid #ff99c3;
+}
+
+.color_pink:hover {
+  border: 3px solid #ffcce1;
+}
+
+.color_blue {
+  background: #3379ff;
+  border: 3px solid #99bcff;
+}
+
+.color_blue:hover {
+  border: 3px solid #ccddff;
+}
+
+.color_purple {
+  background: #d44fff;
+  border: 3px solid #e9a7ff;
+}
+
+.color_purple:hover {
+  border: 3px solid #f4d3ff;
+}
+
+.color_violet {
+  background: #7d33f8;
+  border: 3px solid #be99fb;
+}
+
+.color_violet:hover {
+  border: 3px solid #dfccfd;
+}
+
+.color_green {
+  background: #49dd98;
+  border: 3px solid #a4eecb;
+}
+
+.color_green:hover {
+  border: 3px solid #d1f6e5;
+}
+
+.color_yellow {
+  background: #fff733;
+  border: 3px solid #fffb99;
+}
+
+.color_yellow:hover {
+  border: 3px solid #fffdcc;
+}
+
+.color_orange {
+  background: #ffb933;
+  border: 3px solid #ffdc99;
+}
+
+.color_orange:hover {
+  border: 3px solid #ffeecc;
 }
 
 .column__header-color-picker-dropdown {
@@ -132,9 +201,17 @@
   z-index: 200;
 }
 
-.column__header-color-picker-dropdown > ul {
+.column__header-color-picker-dropdown > li > button {
+  width: inherit;
+}
+
+.column__header-color-picker-dropdown {
+  display: none;
+}
+.column__header-color-option:hover + .column__header-color-picker-dropdown {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 //.column__header-color-picker-dropdown > ul > li {
