@@ -146,6 +146,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(jwtauth.Authenticator)
 		r.Use(auth.AuthContext)
 		r.Post("/boards", s.createBoard)
+		r.Post("/import", s.importBoard)
 		r.Get("/boards", s.getBoards)
 
 		r.Route("/boards/{id}", func(r chi.Router) {

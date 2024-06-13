@@ -43,6 +43,8 @@ type Boards interface {
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error)
 	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error)
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
+
+	ImportBoard(ctx context.Context, body dto.ImportBoardRequest) (*dto.Board, error)
 }
 
 type BoardSessions interface {
