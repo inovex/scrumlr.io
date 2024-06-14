@@ -1,5 +1,5 @@
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import _ from "underscore";
@@ -34,6 +34,7 @@ const defaultHorizontalStop = {opacity: 1, transform: "translateX(0%)", config: 
 export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
   const menuBarsMobileRef = useRef<HTMLElement>(null);
   const menuBarsDesktopRef = useRef<HTMLElement>(null);
@@ -43,23 +44,33 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const [showBoardReactionsMenu, setShowBoardReactionsMenu] = useState(false);
 
   useEffect(() => {
-    const handleClickOutside = ({target}: MouseEvent) => {
-      // don't close if we're on the board reactions menu
-      if (boardReactionRef.current?.contains(target as Node)) return;
+    const closeMenuBar = (target: HTMLElement) => {
       // don't close if we're on the settings, voting or timer page
-      if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) return;
-      // close if we click outside the menu
-      if (!menuBarsMobileRef.current?.contains(target as Node)) {
+      if (["voting", "timer", "settings"].some((path) => window.location.pathname.includes(path))) {
+        return;
+      }
+
+      // close menu fab if we click outside the menu (only relevant for mobile since that one isn't always visible)
+      if (!menuBarsMobileRef.current?.contains(target)) {
         setFabIsExpanded(false);
       }
-      // only hide if menu wasn't clicked to avoid double onClick toggle
-      if (!(menuBarsDesktopRef.current?.contains(target as Node) || menuBarsMobileRef.current?.contains(target as Node))) {
-        setShowBoardReactionsMenu(false);
-      }
     };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      closeMenuBar(target);
+    };
+
     document.addEventListener("click", handleClickOutside, true);
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [menuBarsMobileRef, fabIsExpanded, showBoardReactionsMenu]);
+
+  // close board reaction menu when going into settings menu
+  useEffect(() => {
+    if (location.pathname.includes("settings")) {
+      setShowBoardReactionsMenu(false);
+    }
+  }, [location]);
 
   const {TOGGLE_TIMER_MENU, TOGGLE_VOTING_MENU, TOGGLE_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_BOARD_REACTION_MENU, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
 

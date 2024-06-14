@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"scrumlr.io/server/identifiers"
 	"time"
 
 	"github.com/google/uuid"
@@ -58,7 +59,7 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	var board database.BoardInsert
 	switch body.AccessPolicy {
 	case types.AccessPolicyPublic, types.AccessPolicyByInvite:
-		board = database.BoardInsert{Name: body.Name, AccessPolicy: body.AccessPolicy}
+		board = database.BoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
 	case types.AccessPolicyByPassphrase:
 		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
 			return nil, errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
@@ -67,6 +68,7 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 		encodedPassphrase, salt, _ := common.Sha512WithSalt(*body.Passphrase)
 		board = database.BoardInsert{
 			Name:         body.Name,
+			Description:  body.Description,
 			AccessPolicy: body.AccessPolicy,
 			Passphrase:   encodedPassphrase,
 			Salt:         salt,
@@ -97,7 +99,7 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.B
 
 	personalVotes := []*dto.Vote{}
 	for _, vote := range votes {
-		if vote.User == ctx.Value("User").(uuid.UUID) {
+		if vote.User == ctx.Value(identifiers.UserIdentifier).(uuid.UUID) {
 			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
 		}
 	}
@@ -139,6 +141,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 	update := database.BoardUpdate{
 		ID:                    body.ID,
 		Name:                  body.Name,
+		Description:           body.Description,
 		ShowAuthors:           body.ShowAuthors,
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
 		ShowNoteReactions:     body.ShowNoteReactions,

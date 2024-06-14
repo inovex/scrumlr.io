@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
@@ -25,7 +26,7 @@ func (*BoardSessionRequest) AfterScanRow(ctx context.Context) error {
 	}
 	d := ctx.Value("Database").(*Database)
 	if len(d.observer) > 0 {
-		board := ctx.Value("Board").(uuid.UUID)
+		board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 		operation := ctx.Value("Operation").(string)
 		switch operation {

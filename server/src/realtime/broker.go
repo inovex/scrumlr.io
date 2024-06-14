@@ -17,5 +17,5 @@ type Client interface {
 
 // The Broker enables a user to broadcast and receive events
 type Broker struct {
-	con Client
+	Con Client
 }
