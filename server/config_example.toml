@@ -72,3 +72,6 @@ disable-check-origin = true
 
 # Specify the URL for the feedback webhook.
 feedback-webhook-url = ""
+
+# Enable metrics for the backend server
+enable-metrics = true

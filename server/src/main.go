@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/services"
+	"scrumlr.io/server/services/custom_metrics"
 	"scrumlr.io/server/services/health"
 
 	"scrumlr.io/server/api"
@@ -18,7 +20,6 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/boards"
-	"scrumlr.io/server/services/custom_metrics"
 	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/reactions"
@@ -199,6 +200,13 @@ func main() {
 				Usage:    "TOML `filepath` to be loaded ",
 				Required: false,
 			},
+			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "enable-metrics",
+				Aliases:  []string{"m"},
+				EnvVars:  []string{"ENABLE_SCRUMLR_METRICS"},
+				Usage:    "enables metrics and its endpoint",
+				Required: false,
+			}),
 		},
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
@@ -289,6 +297,12 @@ func run(c *cli.Context) error {
 			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
+	var customMetricService services.CustomMetrics
+	if c.IsSet("enable-metrics") {
+		customMetricService = custom_metrics.NewCustomMetricService(true)
+	} else {
+		customMetricService = nil
+	}
 
 	dbConnection := database.New(db, c.Bool("verbose"))
 
@@ -305,7 +319,6 @@ func run(c *cli.Context) error {
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
-	customMetricService := custom_metrics.NewCustomMetricService()
 
 	s := api.New(
 		basePath,

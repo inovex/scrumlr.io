@@ -10,11 +10,15 @@ type CustomMetricService struct {
 	registry prometheus.Registry
 }
 
-func NewCustomMetricService() services.CustomMetrics {
-	m := &CustomMetricService{}
-	m.registry = *prometheus.NewRegistry()
-	m.registry.Unregister(collectors.NewGoCollector()) // Unregister the default bloat of metrics
-	return m
+func NewCustomMetricService(enabled bool) services.CustomMetrics {
+	if enabled {
+		m := &CustomMetricService{}
+		m.registry = *prometheus.NewRegistry()
+		m.registry.Unregister(collectors.NewGoCollector()) // Unregister the default bloat of metrics
+		return m
+	}
+
+	return nil
 }
 
 func (cms *CustomMetricService) RegisterHistogramVec(histo *prometheus.HistogramVec) error {

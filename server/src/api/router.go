@@ -112,7 +112,9 @@ func New(
 	}
 
 	// Registers needed metrics for prometheus
-	s.initMetrics()
+	if s.customMetrics != nil {
+		s.initMetrics()
+	}
 
 	if checkOrigin {
 		s.upgrader.CheckOrigin = nil
@@ -147,10 +149,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 				r.Get("/callback", s.verifyAuthProviderCallback)
 			})
 		})
-		r.Handle("/metrics", promhttp.HandlerFor(
-			s.customMetrics.Registry(),
-			promhttp.HandlerOpts{Registry: s.customMetrics.Registry()},
-		))
+		s.initCustomMetricResources(r)
 	})
 }
 
@@ -311,4 +310,13 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 		r.Post("/", s.createBoardReaction)
 	})
+}
+
+func (s *Server) initCustomMetricResources(r chi.Router) {
+	if s.customMetrics != nil {
+		r.Handle("/metrics", promhttp.HandlerFor(
+			s.customMetrics.Registry(),
+			promhttp.HandlerOpts{Registry: s.customMetrics.Registry()},
+		))
+	}
 }
