@@ -111,11 +111,11 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     uses: ./.github/workflows/postman_e2e_test.yml
-    with: 
+    with:
       base_url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          
-  end_to_end_test:
-    name: End to End Test
+
+  octomind_end_to_end_test:
+    name: Octomind End to End Test
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     runs-on: ubuntu-latest
@@ -126,3 +126,24 @@ jobs:
           url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
           token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
           testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
+
+  cypress_end_to_end_test:
+    name: Cypress End to End Test
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Start server
+        run: docker-compose --profile build up -d
+        working-directory: server
+      - name: Setup client and run tests
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          start: |
+            yarn install
+            yarn run start
+          working-directory: ./
+          wait-on: 'http://localhost:3000'
