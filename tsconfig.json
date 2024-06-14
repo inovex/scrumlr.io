@@ -20,7 +20,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "sourceMap": true,
+    "sourceMap": false,
     "rootDir": "src",
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -29,7 +29,8 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "experimentalDecorators": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "ignoreDeprecations": "5.0"
   },
   "include": ["src"]
 }
