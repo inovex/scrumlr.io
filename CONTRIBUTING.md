@@ -73,16 +73,17 @@ This section outlines the typical structure and guidelines followed for pull req
 
 ### Title
 Make sure the title starts with a semantic prefix:
--   **feat**: A new feature.
--   **fix**: A bug fix.
--   **docs**: Documentation only changes.
--   **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc).
--   **refactor**: A code change that neither fixes a bug nor adds a feature.
--   **perf**: A code change that improves performance.
--   **test**: Adding missing tests or correcting existing tests.
--   **build**: Changes that affect the build system.
--   **chore**: Other changes that don't modify src or test files.
--   **revert**: Reverts a previous commit.
+- **build**: Changes that affect the build system or external dependencies
+- **ci**: Changes to CI configuration files and scripts
+- **chore**: Changes which doesn't change source code or tests e.g. changes to the build process, auxiliary tools, libraries
+- **docs**: Documentation only changes
+- **feat**: A new feature
+- **fix**: A bug fix
+- **perf**: A code change that improves performance
+- **refactor**: A code change that neither fixes a bug nor adds a feature
+- **revert**: Revert something
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+- **test**: Adding missing tests or correcting existing tests
 
 ### Description
 The description section serves as a crucial component of a pull request, providing an overview of the changes made and explaining the purpose and context of the proposed modifications. It should clearly articulate the problem being addressed or the feature being added, along with a concise explanation of how the changes solve the issue. A well-written description is informative, organized, and easy to comprehend, allowing reviewers to assess the impact and significance of the proposed changes. It should be concise and to the point while still providing enough information to convey the purpose and significance of the pull request.
