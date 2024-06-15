@@ -1,8 +1,6 @@
-import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
 import {ReactComponent as UnbanIcon} from "assets/icon-join.svg";
 import {ReactComponent as BanIcon} from "assets/icon-kick-participant.svg";
-import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
-import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
+import {Search, Wifi, MarkAsDone} from "components/Icon";
 import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
@@ -70,7 +68,7 @@ export const Participants = () => {
       </header>
       <div className="participants__search-input-wrapper">
         <input placeholder="Name..." className="participants__search-input" onChange={(e) => setQueryString(e.target.value)} />
-        <MagnifyingGlassIcon className="participants__search-icon" />
+        <Search className="participants__search-icon" />
       </div>
       <div className="participants__filter-buttons">
         <button
@@ -101,7 +99,7 @@ export const Participants = () => {
           onClick={() => setOnlineFilter((o) => !o)}
           title={t("Participants.OnlineFilterTooltip")}
         >
-          <WifiIconDisabled />
+          <Wifi />
         </button>
       </div>
       <div className={classNames("participants__list-wrapper", {"participants__list-scrollable": isScrollable})} ref={listWrapperRef}>
@@ -177,7 +175,7 @@ export const Participants = () => {
       {isModerator && (
         <footer className={classNames("participants-reset-state-banner__container", {"participants-reset-state-banner__container--is-active": existsAtLeastOneReadyUser})}>
           <div className="participants-reset-state-banner__icon-and-text">
-            <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
+            <MarkAsDone className="participants-reset-state-banner__check-icon" />
             <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
           </div>
           <button className="participants-reset-state-banner__button" onClick={resetReadyStateOfAllUsers}>
