@@ -1,6 +1,6 @@
 import {useDispatch} from "react-redux";
 import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
-import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
+import {AddEmoji} from "components/Icon";
 import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
@@ -215,7 +215,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
             }
           }}
         >
-          {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
+          {showReactionBar ? <AddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
         {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
       </div>

@@ -189,8 +189,8 @@ $settings-dialog-container--bottom: 62px;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 32px;
-    height: 32px;
+    width: $icon--huge;
+    height: $icon--huge;
     border-radius: $rounded--full;
   }
   [theme="dark"] .settings-dialog__back-link > svg {

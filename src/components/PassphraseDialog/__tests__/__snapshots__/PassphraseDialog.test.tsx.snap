@@ -97,7 +97,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
       <svg
         class="form__icon"
       >
-        icon-key.svg
+        key-protected.svg
       </svg>
       <label
         class="form__label"
@@ -122,7 +122,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
             type="button"
           >
             <svg>
-              icon-visible.svg
+              visible.svg
             </svg>
           </button>
         </div>
@@ -133,7 +133,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
           type="submit"
         >
           <svg>
-            icon-arrow-right.svg
+            arrow-right.svg
           </svg>
         </button>
       </div>

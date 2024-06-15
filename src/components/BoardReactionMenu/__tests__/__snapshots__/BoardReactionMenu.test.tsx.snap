@@ -62,7 +62,7 @@ exports[`board reaction menu should render correctly 1`] = `
       tabindex="0"
     >
       <svg>
-        icon-close.svg
+        close.svg
       </svg>
     </button>
   </div>

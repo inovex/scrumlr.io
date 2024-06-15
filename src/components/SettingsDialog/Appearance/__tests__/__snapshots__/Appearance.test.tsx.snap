@@ -51,7 +51,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
             <svg
               class="appearance-settings__theme-icon"
             >
-              icon-settings.svg
+              general-settings.svg
             </svg>
             <span>
               Auto
@@ -76,7 +76,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
             <svg
               class="appearance-settings__theme-icon"
             >
-              icon-lightmode.svg
+              settings-light-mode.svg
             </svg>
             <span>
               Light
@@ -101,7 +101,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
             <svg
               class="appearance-settings__theme-icon"
             >
-              icon-darkmode.svg
+              settings-dark-mode.svg
             </svg>
             <span>
               Dark
@@ -167,7 +167,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
           <svg
             class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
           >
-            icon-arrow-next.svg
+            arrow-right.svg
           </svg>
         </p>
       </button>
@@ -270,7 +270,7 @@ exports[`Appearance should render all Settings correctly 1`] = `
           <svg
             class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
           >
-            icon-arrow-next.svg
+            arrow-right.svg
           </svg>
         </p>
       </button>
