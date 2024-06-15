@@ -80,8 +80,9 @@ jobs:
         uses: actions/checkout@v4
       - name: reachability check
         uses: ./.github/actions/deployment_health_check
-  
+
   postman_tests:
+    name: Postman Tests
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     uses: ./.github/workflows/postman_tests.yml
@@ -89,7 +90,7 @@ jobs:
       base_url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
 
   octomind_end_to_end_test:
-    name: Octomind End to End Test
+    name: Octomind E2E Tests
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     runs-on: ubuntu-latest
@@ -106,7 +107,7 @@ jobs:
           testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
 
   cypress_end_to_end_test:
-    name: Cypress End to End Test
+    name: Cypress E2E Tests
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     runs-on: ubuntu-latest
