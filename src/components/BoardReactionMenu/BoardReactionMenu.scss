@@ -12,21 +12,21 @@ $reaction-size: 48px;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-
+  padding: 0 $spacing--xs;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
-
   background-color: $color-white-one;
   border-radius: $rounded--large;
   box-shadow: $box-shadow--light;
-
-  padding: 0 $spacing--xs;
-
   user-select: none;
-
   z-index: $board-reaction-z-index;
+
+  [theme="dark"] {
+    background-color: $color-dark-mode-note;
+    box-shadow: $box-shadow--dark;
+  }
 }
 
 .board-reactions-menu__item {
@@ -43,9 +43,11 @@ $reaction-size: 48px;
   transition: backdrop-filter 80ms ease-in-out;
 
   &:hover {
-    backdrop-filter: brightness(85%);
+    backdrop-filter: brightness(90%);
   }
-
+  &:active {
+    transform: scale(0.95);
+  }
   &:focus-visible {
     // lose focus after click
     outline: 2px solid $color-backlog-blue;
@@ -87,11 +89,5 @@ $reaction-size: 48px;
     bottom: $column__border-width + $spacing--lg + 48px;
     padding: 0 $spacing--xs;
     gap: 2px;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .board-reactions-menu__reaction {
-    width: 48px;
   }
 }
