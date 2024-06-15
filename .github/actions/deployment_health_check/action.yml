@@ -6,7 +6,7 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@V4
+      uses: actions/checkout@v4
       
     - name: Change DNS Server
       run: |

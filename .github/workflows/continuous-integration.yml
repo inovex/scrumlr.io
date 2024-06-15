@@ -76,6 +76,9 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main'}}
     runs-on: ubuntu-latest
     steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
       - name: check reachability
         uses: ./.github/actions/deployment_health_check
   
