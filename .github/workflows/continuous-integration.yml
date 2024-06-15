@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check reachability
-        uses: ./.github/actions/health_check_deployment
+        uses: ./.github/actions/deployment_health_check
   
   postman_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check cluster reachability
-        uses: ./.github/actions/health_check_deployment
+        uses: ./.github/actions/deployment_health_check
       - name: run tests
         uses: OctoMind-dev/automagically-action-execute@v2
         with:
