@@ -1,5 +1,5 @@
 import {ElementType, useState, FocusEvent, FC, useRef, useEffect} from "react";
-import {ReactComponent as DropdownIcon} from "assets/icon-arrow-next.svg";
+import {ArrowRight} from "components/Icon";
 import "./SettingsDropdown.scss";
 import classNames from "classnames";
 
@@ -43,7 +43,7 @@ export const SettingsDropdown: FC<SettingsDropdownProps> = ({label, items, curre
         <p className="settings-dropdown__item--current">
           {current.icon && <current.icon className="settings-dropdown__item-icon" />}
           <span>{current.text}</span>
-          <DropdownIcon className="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown" />
+          <ArrowRight className="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown" />
         </p>
       </button>
       <ul id="dropdown-list" className={classNames({"settings-dropdown__list": true, active: isOpen})} role="listbox" ref={dropdownListRef}>

@@ -3,8 +3,7 @@ import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
-import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
-import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
+import {LockClosed, Trash} from "components/Icon";
 import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
@@ -67,7 +66,7 @@ export const BoardSettings = () => {
             handleSetPassword("");
           }}
         >
-          <SetPolicyIcon />
+          <LockClosed />
           <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
         </button>
       );
@@ -94,7 +93,7 @@ export const BoardSettings = () => {
       return (
         <>
           <span>{t("AccessPolicySelection.manualVerificationTitle")}</span>
-          <SetPolicyIcon />
+          <LockClosed />
         </>
       );
     return !isProtected ? (
@@ -102,7 +101,7 @@ export const BoardSettings = () => {
     ) : (
       <>
         <span>{t("AccessPolicySelection.byPassphraseTitle")}</span>
-        <SetPolicyIcon />
+        <LockClosed />
       </>
     );
   };
@@ -226,7 +225,7 @@ export const BoardSettings = () => {
                 className={classNames("board-settings__delete-button")}
                 label={t("BoardSettings.DeleteBoard")}
                 onClick={() => setShowConfirmationDialog(true)}
-                icon={DeleteIcon}
+                icon={Trash}
               />
             </>
           )}
@@ -236,7 +235,7 @@ export const BoardSettings = () => {
               title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
               onDecline={() => setShowConfirmationDialog(false)}
-              icon={DeleteIcon}
+              icon={Trash}
               warning
             />
           )}

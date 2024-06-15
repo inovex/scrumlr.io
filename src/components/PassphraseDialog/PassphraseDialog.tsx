@@ -1,12 +1,9 @@
 import {ChangeEvent, FC, FormEvent, MouseEvent, useState} from "react";
-import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
-import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
-import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
+import {Hidden, KeyProtected, Visible, ArrowRight} from "components/Icon";
 import {Background} from "components/Background";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./PassphraseDialog.scss";
 
-import {ReactComponent as ArrowRightIcon} from "assets/icon-arrow-right.svg";
 import {useTranslation} from "react-i18next";
 
 export interface PassphraseDialogProps {
@@ -44,7 +41,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit, incorrect
         </a>
 
         <form className="passphrase-dialog__form" onSubmit={submitPassphraseForm}>
-          <KeyIcon className="form__icon" />
+          <KeyProtected className="form__icon" />
           <label className="form__label">{t("PassphraseDialog.label")}</label>
 
           <div className="form__input-row">
@@ -62,11 +59,11 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit, incorrect
                 onClick={togglePasswordVisibility}
                 type="button"
               >
-                {passwordVisible ? <HiddenIcon /> : <VisibleIcon />}
+                {passwordVisible ? <Hidden /> : <Visible />}
               </button>
             </div>
             <button aria-disabled={passphrase.length === 0} aria-label={t("PassphraseDialog.submit")} className="form__submit-button" type="submit">
-              <ArrowRightIcon />
+              <ArrowRight />
             </button>
           </div>
           {incorrectPassphrase && <p className="form__error-message">{t("PassphraseDialog.incorrectPassphrase")}</p>}

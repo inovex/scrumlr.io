@@ -23,8 +23,6 @@ $note-input__input-right: 40px;
 }
 
 .note-input__input {
-  left: $note-input__input-left;
-  right: $note-input__input-right;
   color: $color-black;
   font-size: $text-size--medium;
   font-weight: bold;
@@ -52,7 +50,7 @@ $note-input__input-right: 40px;
   position: relative;
   display: flex;
   align-self: flex-start;
-  padding: $spacing--xs 0;
+  padding: $spacing--xxs 0;
 }
 
 .note-input__add-button {
@@ -65,15 +63,15 @@ $note-input__input-right: 40px;
 
 .note-input__icon--image,
 .note-input__icon--add {
-  width: $icon--medium;
-  height: $icon--medium;
+  width: $icon--large;
+  height: $icon--large;
   color: var(--accent-color);
   align-self: center;
   transition: all 0.08s ease-out;
 }
 
 .note-input__icon--add {
-  margin-right: $spacing--base;
+  margin-right: $spacing--sm;
 }
 
 .note-input__icon--image {

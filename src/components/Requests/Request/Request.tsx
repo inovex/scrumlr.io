@@ -1,5 +1,5 @@
 import "./Request.scss";
-import {ReactComponent as HandIcon} from "assets/icon-hand.svg";
+import {RaiseHand} from "components/Icon";
 import {ReactComponent as JoinIcon} from "assets/icon-join.svg";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
@@ -50,7 +50,7 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
         <div className="request__button-container">{renderButtons()}</div>
       </div>
 
-      <div className="request__icon-container">{type === "JOIN" ? <JoinIcon className="request-icon" /> : <HandIcon className="request-icon" />}</div>
+      <div className="request__icon-container">{type === "JOIN" ? <JoinIcon className="request-icon" /> : <RaiseHand className="request-icon" />}</div>
     </div>
   );
 };

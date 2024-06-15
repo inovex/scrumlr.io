@@ -1,9 +1,0 @@
-<svg id="icon_settings" data-name="icon/settings" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <path id="BG" d="M0,0H32V32H0Z" fill="rgba(255,255,255,0)"/>
-  <path id="Pfad_3991" data-name="Pfad 3991" d="M13.7,19.341H2.549a1.8,1.8,0,0,1-1.8-1.8V2.549a1.8,1.8,0,0,1,1.8-1.8h7.483a.931.931,0,0,1,.665.28l4.512,4.6a1.027,1.027,0,0,1,.294.719V17.543A1.8,1.8,0,0,1,13.7,19.341Z" transform="translate(7.873 6.035)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1.5" opacity="0.7"/>
-  <path id="Pfad_3992" data-name="Pfad 3992" d="M10.844,1.228v4.75A1.025,1.025,0,0,0,11.869,7h4.772" transform="translate(5.986 6.303)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1.5" opacity="0.7"/>
-  <path id="fad_3993" data-name="Pfad 3993" d="M0,1H3" transform="translate(25.841 17.372) rotate(45)" fill="none" stroke="#fff" stroke-linecap="square" stroke-width="2"/>
-  <path id="Pfad_3994" data-name="Pfad 3994" d="M1,0V3" transform="translate(26.548 19.494) rotate(45)" fill="none" stroke="#fff" stroke-linecap="square" stroke-width="2"/>
-  <path id="Pfad_3995" data-name="Pfad 3995" d="M0,1H7.989" transform="translate(17.981 19.244)" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="2"/>
-</svg>
-
