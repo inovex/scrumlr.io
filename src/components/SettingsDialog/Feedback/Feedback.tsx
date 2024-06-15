@@ -6,7 +6,7 @@ import {FeedbackAPI} from "api/feedback";
 import {useAppSelector} from "store";
 import {ReactComponent as BugIcon} from "assets/icon-bug.svg";
 import {ReactComponent as PraiseIcon} from "assets/icon-praise.svg";
-import {ReactComponent as AddFeatureIcon} from "assets/icon-add-feature.svg";
+import {TemplateGallery} from "components/Icon";
 import "./Feedback.scss";
 
 export const Feedback: React.FC = () => {
@@ -85,7 +85,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("FEATURE_REQUEST")}
         />
         <label htmlFor="feedbackTypeFeatureRequest" className="feedback-option__label">
-          <AddFeatureIcon />
+          <TemplateGallery />
           <span>Feature Request</span>
         </label>
       </div>
