@@ -117,7 +117,7 @@ export const Timer = (props: TimerProps) => {
                 className="short-action__button"
                 onClick={() => store.dispatch(Actions.cancelTimer())}
               >
-                <FlagFinish />
+                <FlagFinish className="short-action__flag-icon" />
               </button>
             </li>
           )}

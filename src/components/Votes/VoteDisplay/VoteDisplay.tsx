@@ -33,11 +33,11 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
               className="short-action__button"
               onClick={() => store.dispatch(Actions.closeVoting(voting!))}
             >
-              <FlagFinish />
+              <FlagFinish className="short-action__flag-icon" />
             </button>
           </li>
         )}
-        <li className="short-action__short-actions">
+        <li className="short-actions__short-action">
           <button
             aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
             data-tooltip-id="info-bar__tooltip"
