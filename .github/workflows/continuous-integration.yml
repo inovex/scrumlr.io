@@ -78,8 +78,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v4
-
-      - name: check reachability
+      - name: reachability check
         uses: ./.github/actions/deployment_health_check
   
   postman_tests:
@@ -95,7 +94,9 @@ jobs:
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
-      - name: check cluster reachability
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: reachability check
         uses: ./.github/actions/deployment_health_check
       - name: run tests
         uses: OctoMind-dev/automagically-action-execute@v2
