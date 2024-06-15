@@ -24,9 +24,11 @@ runs:
 
         retry=1
         max_retries=4
+        lastCurlExitCode=-1
         until [ $retry -gt $max_retries ]
         do
           response=$(curl -s -k -o /dev/null -w "%{http_code}" "$BASE_URL/api/health")
+          lastCurlExitCode=$?
           if [ $response = "204" ]; then
             echo "Cluster is healthy! Continuing..."
             break
@@ -40,6 +42,6 @@ runs:
         
         if [ $response != "204" ]; then
           echo "::error::Cluster is not responding after $max_retries attempts."
-          exit 1 
+          exit $((lastCurlExitCode))
         fi   
       shell: bash
