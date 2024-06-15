@@ -95,7 +95,7 @@ Object {
             <svg
               class="settings-option-button__icon"
             >
-              icon-clipboard.svg
+              duplicate.svg
             </svg>
           </button>
         </div>
@@ -193,7 +193,7 @@ Object {
           <svg
             class="settings-option-button__icon"
           >
-            icon-clipboard.svg
+            duplicate.svg
           </svg>
         </button>
       </div>
