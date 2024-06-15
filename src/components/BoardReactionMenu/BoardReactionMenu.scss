@@ -10,23 +10,16 @@ $reaction-size: 48px;
   right: 0;
   bottom: $column__border-width;
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
   padding: 0 $spacing--xs;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: $spacing--xs;
   background-color: $color-white-one;
   border-radius: $rounded--large;
   box-shadow: $box-shadow--light;
   user-select: none;
   z-index: $board-reaction-z-index;
-
-  [theme="dark"] {
-    background-color: $color-dark-mode-note;
-    box-shadow: $box-shadow--dark;
-  }
 }
 
 .board-reactions-menu__item {
@@ -41,11 +34,12 @@ $reaction-size: 48px;
   background-color: transparent;
   cursor: pointer;
   transition: backdrop-filter 80ms ease-in-out;
+  font-size: $text--lg;
 
-  &:hover {
+  &:enabled:hover {
     backdrop-filter: brightness(90%);
   }
-  &:active {
+  &:enabled:active {
     transform: scale(0.95);
   }
   &:focus-visible {
@@ -53,11 +47,7 @@ $reaction-size: 48px;
     outline: 2px solid $color-backlog-blue;
     outline-offset: 2px;
   }
-}
-
-.board-reactions-menu__reaction {
-  font-size: $text--lg;
-  &--disabled {
+  &:disabled {
     filter: grayscale(100%);
     cursor: not-allowed;
   }
@@ -78,16 +68,12 @@ $reaction-size: 48px;
   .board-reactions-menu {
     bottom: $column__border-width + $spacing--lg + 72px;
   }
-
-  .board-reactions__close {
-    display: none;
-  }
 }
 
 @media #{$mini-smartphone} {
   .board-reactions-menu {
     bottom: $column__border-width + $spacing--lg + 48px;
     padding: 0 $spacing--xs;
-    gap: 2px;
+    gap: $spacing--xxs;
   }
 }
