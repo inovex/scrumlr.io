@@ -1,7 +1,7 @@
 @import "src/constants/style";
 
 $container-height: 64px;
-$reaction-size: 64px;
+$reaction-size: 48px;
 
 .board-reactions-menu {
   position: fixed;
@@ -15,7 +15,6 @@ $reaction-size: 64px;
 
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
 
@@ -23,7 +22,7 @@ $reaction-size: 64px;
   border-radius: $rounded--large;
   box-shadow: $box-shadow--light;
 
-  padding: 0 $spacing--base;
+  padding: 0 $spacing--xs;
 
   user-select: none;
 
@@ -34,50 +33,31 @@ $reaction-size: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.board-reactions-menu__reaction {
-  all: unset; // reset button
-  cursor: pointer;
-
   width: $reaction-size;
-  height: 100%;
-
-  font-size: $text--xl;
-
+  height: $reaction-size;
+  padding: 0;
+  border: none;
   border-radius: $rounded--full;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: transparent;
+  cursor: pointer;
+  transition: backdrop-filter 80ms ease-in-out;
 
   &:hover {
-    background-color: $hover-background-light;
+    backdrop-filter: brightness(85%);
   }
 
   &:focus-visible {
     // lose focus after click
-    background-color: $color-icon-light-blue;
-  }
-
-  &--disabled {
-    filter: grayscale(100%);
-    cursor: not-allowed;
+    outline: 2px solid $color-backlog-blue;
+    outline-offset: 2px;
   }
 }
 
-.board-reactions-menu__close {
-  all: unset;
-  width: $icon--large;
-  height: $icon--large;
-  color: $color-dark-mode-note;
-  border-radius: $rounded--full;
-
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background-color: $color-icon-light-blue;
+.board-reactions-menu__reaction {
+  font-size: $text--lg;
+  &--disabled {
+    filter: grayscale(100%);
+    cursor: not-allowed;
   }
 }
 
@@ -85,16 +65,6 @@ $reaction-size: 64px;
   .board-reactions-menu {
     background-color: $color-dark-mode-note;
     box-shadow: $box-shadow--dark;
-  }
-
-  .board-reactions-menu__reaction {
-    &:hover {
-      background-color: $hover-background-dark;
-    }
-
-    &:focus-visible {
-      background-color: $tooltip-background-color--dark;
-    }
   }
 
   .board-reactions-menu__close {
