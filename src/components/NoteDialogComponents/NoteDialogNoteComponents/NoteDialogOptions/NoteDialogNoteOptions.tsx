@@ -1,7 +1,6 @@
 import {FC, useState} from "react";
 import {Participant} from "types/participant";
-import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
-import {ReactComponent as UnstackIcon} from "assets/icon-unstack.svg";
+import {Trash, Eject} from "components/Icon";
 import "./NoteDialogNoteOptions.scss";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
@@ -68,7 +67,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
                 props.onClose();
               }}
             >
-              <UnstackIcon />
+              <Eject />
             </button>
           </li>
         )}
@@ -85,7 +84,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
                 onDelete(props.noteId);
               }}
             >
-              <DeleteIcon />
+              <Trash />
             </button>
           </li>
         )}
@@ -97,7 +96,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           onAcceptLabel={t("ConfirmationDialog.deleteNoteButton")}
           onDecline={() => setShowChildDialog(false)}
           onDeclineLabel={t("ConfirmationDialog.cancel")}
-          icon={DeleteIcon}
+          icon={Trash}
           warning
         />
       )}
@@ -110,7 +109,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
           onDeclineLabel={t("ConfirmationDialog.cancel")}
           onExtraOption={() => onDelete(props.noteId, true)}
           onExtraOptionLabel={t("ConfirmationDialog.deleteStackButton")}
-          icon={DeleteIcon}
+          icon={Trash}
           warning
         />
       )}

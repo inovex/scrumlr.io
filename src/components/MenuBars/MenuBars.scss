@@ -272,7 +272,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars__navigation:enabled:hover {
-  border: 3px solid #d3daf0;
+  background-color: getLightHoverBackground($color-white);
 }
 
 .menu-bars__navigation:disabled {
@@ -290,7 +290,7 @@ $menu-mobile__width: 72px;
   }
 
   .menu-bars__navigation:enabled:hover {
-    border: 3px solid #485064;
+    background-color: getDarkHoverBackground($menu-icon-background-color--dark);
   }
 
   .menu-bars__navigation:disabled {
@@ -299,8 +299,8 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars__navigation-icon {
-  height: $icon--small;
-  width: $icon--small;
+  height: 100%;
+  width: 100%;
 }
 
 @media #{$tablet} {

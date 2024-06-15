@@ -74,9 +74,6 @@ $settings__item-height: 48px;
   > svg {
     width: $icon--medium;
     height: $icon--medium;
-    path {
-      stroke: $color-dark-gray;
-    }
   }
 
   > p {
@@ -100,9 +97,6 @@ $settings__item-height: 48px;
 [theme="dark"] {
   .profile-settings__open-cheat-sheet-button {
     color: $color-middle-gray;
-    svg {
-      stroke: $color-middle-gray;
-    }
 
     &:focus-visible {
       outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
