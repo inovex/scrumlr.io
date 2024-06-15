@@ -3,7 +3,11 @@ description: |
   "Changes the DNS to our own (since the DNS dev-cluster records are fastest available here) and performes a healthcheck"
 
 runs:
+  using: "composite"
   steps:
+    - name: Checkout
+      uses: actions/checkout@V4
+      
     - name: Change DNS Server
       run: |
         sudo sed -i 's/#DNS=/DNS=ns2.fra.cloud.inovex.io/' /etc/systemd/resolved.conf
@@ -11,6 +15,7 @@ runs:
         sudo systemctl restart systemd-networkd
         sudo systemctl restart systemd-resolved
         dig +short github.com
+      shell: bash
 
     - name: Wait for cluster to become healthy
       id: wait-for-cluster
@@ -40,3 +45,4 @@ runs:
           echo "::error::Cluster is not responding after $max_retries attempts."
           exit 1 
         fi   
+      shell: bash
