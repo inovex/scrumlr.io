@@ -29,7 +29,9 @@ exports[`Timer should render correctly 1`] = `
           data-tooltip-content="End timer"
           data-tooltip-id="info-bar__tooltip"
         >
-          <svg>
+          <svg
+            class="short-action__flag-icon"
+          >
             flag-finish.svg
           </svg>
         </button>
