@@ -39,25 +39,19 @@
 }
 
 .timer-dialog__time-button {
-  height: $icon--large;
-  width: $icon--large;
-  border: none;
-  border-radius: 16px;
+  height: $icon--medium;
+  width: $icon--medium;
+  border: 1px solid $color-planning-pink;
+  border-radius: $rounded--full;
   background-color: transparent;
   cursor: pointer;
-  position: absolute;
-  top: 8px;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
-
-  &:first-of-type {
-    right: 80px;
-  }
-
-  &:last-of-type {
-    right: 24px;
-  }
+  color: $color-planning-pink;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 24px;
 
   &:hover {
     filter: brightness(1.4);
@@ -74,22 +68,29 @@
 }
 
 .timer-dialog__time-label {
-  position: absolute;
-  top: 8px;
-  right: 56px;
-  height: 32px;
-  width: 24px;
   text-align: center;
-  line-height: 32px;
-  cursor: col-resize;
+  line-height: normal;
   font-size: $text-size--medium;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webit-user-select: none;
+  width: 20px;
+}
+[theme="dark"] .timer-dialog__time-label {
+  color: white;
 }
 
 .timer-dialog__button-icon {
-  position: absolute;
-  top: 8px;
-  right: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  width: 24px;
+  border: 1px solid $color-planning-pink;
+  border-radius: 999px;
+  color: $color-planning-pink;
+  font-size: 14px;
+}
+
+.timer-dialog__custom-time-controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing--xs;
 }

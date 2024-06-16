@@ -68,32 +68,20 @@
   cursor: pointer;
 }
 
-.voting-dialog__toggle {
-  position: absolute;
-  top: 12px;
-  right: 24px;
-}
-
 .voting-dialog__vote-button {
-  height: 32px;
-  width: 32px;
-  border: none;
-  border-radius: 16px;
+  height: $icon--medium;
+  width: $icon--medium;
+  border: 1px solid $color-planning-pink;
+  border-radius: $rounded--full;
   background-color: transparent;
   cursor: pointer;
-  position: absolute;
-  top: 8px;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
-
-  &:first-of-type {
-    right: 80px;
-  }
-
-  &:last-of-type {
-    right: 24px;
-  }
+  color: $color-planning-pink;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 24px;
 
   &:hover {
     filter: brightness(1.4);
@@ -110,18 +98,23 @@
 }
 
 .voting-dialog__vote-label {
-  position: absolute;
-  top: 8px;
-  right: 56px;
-  height: 32px;
-  width: 24px;
   text-align: center;
-  line-height: 32px;
+  line-height: normal;
   font-size: $text-size--medium;
-  cursor: col-resize;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webit-user-select: none;
+  width: 20px;
+}
+[theme="dark"] .voting-dialog__vote-label {
+  color: white;
+}
+
+.voting-dialog__votes-controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing--xs;
+}
+
+.dialog__button > label {
+  text-align: left;
 }
 
 [theme="dark"] {
