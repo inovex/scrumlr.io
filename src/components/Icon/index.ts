@@ -71,3 +71,4 @@ export {ReactComponent as Warning} from "assets/icons/warning.svg";
 export {ReactComponent as Refresh} from "assets/icons/refresh.svg";
 export {ReactComponent as Printer} from "assets/icons/printer.svg";
 export {ReactComponent as ThreeDots} from "assets/icons/three-dots.svg";
+export {ReactComponent as Menu} from "assets/icons/menu.svg";
