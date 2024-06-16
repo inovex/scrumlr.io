@@ -49,9 +49,11 @@
   transition: all 0.08s ease-out;
   outline: none;
   color: $color-planning-pink;
-  font-weight: normal;
-  font-size: 24px;
-  line-height: 24px;
+
+  > svg {
+    height: 100%;
+    width: 100%;
+  }
 
   &:hover {
     filter: brightness(1.4);

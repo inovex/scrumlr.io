@@ -6,6 +6,7 @@ import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {getNumberFromStorage, saveToStorage} from "utils/storage";
 import {CUSTOM_TIMER_STORAGE_KEY} from "constants/storage";
+import {Plus, Minus} from "components/Icon";
 import "./TimerDialog.scss";
 
 export const TimerDialog = () => {
@@ -56,7 +57,7 @@ export const TimerDialog = () => {
             data-testid="timer-dialog__minus-button"
             aria-label={t("Timer.reduce")}
           >
-            &#8722;
+            <Minus />
           </button>
           <label className="timer-dialog__time-label">{customTime}</label>
           <button
@@ -68,7 +69,7 @@ export const TimerDialog = () => {
             data-testid="timer-dialog__plus-button"
             aria-label={t("Timer.increase")}
           >
-            &#43;
+            <Plus />
           </button>
         </div>
       </button>

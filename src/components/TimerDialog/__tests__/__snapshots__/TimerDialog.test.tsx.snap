@@ -85,7 +85,9 @@ exports[`TimerDialog should match the snapshot 1`] = `
                   class="timer-dialog__time-button"
                   data-testid="timer-dialog__minus-button"
                 >
-                  −
+                  <svg>
+                    minus.svg
+                  </svg>
                 </button>
                 <label
                   class="timer-dialog__time-label"
@@ -97,7 +99,9 @@ exports[`TimerDialog should match the snapshot 1`] = `
                   class="timer-dialog__time-button"
                   data-testid="timer-dialog__plus-button"
                 >
-                  +
+                  <svg>
+                    plus.svg
+                  </svg>
                 </button>
               </div>
             </button>

@@ -568,7 +568,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <svg
                       class="vote-button-remove__icon"
                     >
-                      icon-remove.svg
+                      minus.svg
                     </svg>
                     <span
                       class="vote-button-remove__count"

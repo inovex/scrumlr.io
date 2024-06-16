@@ -7,6 +7,7 @@ import {Toggle} from "components/Toggle";
 import {Actions} from "store/action";
 import {getNumberFromStorage, saveToStorage, getFromStorage} from "utils/storage";
 import {CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY} from "constants/storage";
+import {Plus, Minus} from "components/Icon";
 import "./VotingDialog.scss";
 
 export const VotingDialog = () => {
@@ -63,7 +64,7 @@ export const VotingDialog = () => {
                 data-testid="voting-dialog__minus-button"
                 aria-label={t("VoteConfigurationButton.decreaseVotes")}
               >
-                &#8722;
+                <Minus />
               </button>
               <label className="voting-dialog__vote-label">{numberOfVotes}</label>
               <button
@@ -72,7 +73,7 @@ export const VotingDialog = () => {
                 data-testid="voting-dialog__plus-button"
                 aria-label={t("VoteConfigurationButton.increaseVotes")}
               >
-                &#43;
+                <Plus />
               </button>
             </div>
           </div>

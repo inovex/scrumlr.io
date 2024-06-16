@@ -118,7 +118,9 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
                   class="voting-dialog__vote-button"
                   data-testid="voting-dialog__minus-button"
                 >
-                  −
+                  <svg>
+                    minus.svg
+                  </svg>
                 </button>
                 <label
                   class="voting-dialog__vote-label"
@@ -130,7 +132,9 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
                   class="voting-dialog__vote-button"
                   data-testid="voting-dialog__plus-button"
                 >
-                  +
+                  <svg>
+                    plus.svg
+                  </svg>
                 </button>
               </div>
             </div>
