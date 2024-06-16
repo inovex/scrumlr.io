@@ -4,11 +4,3 @@
   flex-direction: row-reverse;
   justify-content: flex-end;
 }
-
-.export-board__button-print-view {
-  // adds some padding to the print icon since the svg doesn't include any
-  // TODO: remove this class once the icon gets updated
-  svg {
-    padding: 4px;
-  }
-}
