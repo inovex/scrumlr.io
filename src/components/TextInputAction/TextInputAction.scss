@@ -31,11 +31,6 @@
   box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.4);
 }
 
-.text-input-action > * {
-  width: 16px;
-  height: 16px;
-}
-
 [theme="dark"] {
   .text-input-action:focus-visible {
     box-shadow: 0 0 0 2px $color-white;

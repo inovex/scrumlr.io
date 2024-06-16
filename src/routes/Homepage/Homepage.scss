@@ -262,3 +262,9 @@
     margin-right: $spacing--xs;
   }
 }
+
+.homepage__logout-button-icon {
+  height: $icon--medium;
+  width: $icon--medium;
+  flex: 0 0 $icon--medium;
+}

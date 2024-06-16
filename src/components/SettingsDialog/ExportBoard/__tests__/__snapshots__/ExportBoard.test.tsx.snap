@@ -75,7 +75,7 @@ Object {
             <svg
               class="settings-option-button__icon"
             >
-              icon-print.svg
+              printer.svg
             </svg>
           </button>
           <hr
@@ -173,7 +173,7 @@ Object {
           <svg
             class="settings-option-button__icon"
           >
-            icon-print.svg
+            printer.svg
           </svg>
         </button>
         <hr

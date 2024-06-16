@@ -4,8 +4,7 @@ import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
-import {Voting, Timer, RaiseHand, MarkAsDone, AddStickerReaction, GeneralSettings, PresenterMode, Close, ArrowRight, ArrowLeft} from "components/Icon";
-import {ReactComponent as MenuIcon} from "assets/icon-menu.svg";
+import {Voting, Timer, RaiseHand, MarkAsDone, AddStickerReaction, GeneralSettings, PresenterMode, Close, ArrowRight, ArrowLeft, Menu} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";
@@ -285,7 +284,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
           }}
           aria-label={t("MenuBars.openMenu")}
         >
-          {fabIsExpanded ? <Close aria-hidden /> : <MenuIcon aria-hidden />}
+          {fabIsExpanded ? <Close aria-hidden /> : <Menu aria-hidden />}
         </button>
 
         {/* role=any: toggle ready, toggle raise hand, options */}
