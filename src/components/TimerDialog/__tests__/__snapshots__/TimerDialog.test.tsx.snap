@@ -38,11 +38,11 @@ exports[`TimerDialog should match the snapshot 1`] = `
               <label>
                 1 minute
               </label>
-              <svg
+              <span
                 class="timer-dialog__button-icon"
               >
-                icon-one.svg
-              </svg>
+                1
+              </span>
             </button>
             <button
               class="dialog__button"
@@ -51,11 +51,11 @@ exports[`TimerDialog should match the snapshot 1`] = `
               <label>
                 3 minutes
               </label>
-              <svg
+              <span
                 class="timer-dialog__button-icon"
               >
-                icon-three.svg
-              </svg>
+                3
+              </span>
             </button>
             <button
               class="dialog__button"
@@ -64,11 +64,11 @@ exports[`TimerDialog should match the snapshot 1`] = `
               <label>
                 5 minutes
               </label>
-              <svg
+              <span
                 class="timer-dialog__button-icon"
               >
-                icon-five.svg
-              </svg>
+                5
+              </span>
             </button>
             <button
               class="dialog__button"
@@ -77,29 +77,29 @@ exports[`TimerDialog should match the snapshot 1`] = `
               <label>
                 Custom time
               </label>
-              <button
-                aria-label="Reduce time"
-                class="timer-dialog__time-button"
-                data-testid="timer-dialog__minus-button"
+              <div
+                class="timer-dialog__custom-time-controls"
               >
-                <svg>
-                  icon-minus.svg
-                </svg>
-              </button>
-              <label
-                class="timer-dialog__time-label"
-              >
-                10
-              </label>
-              <button
-                aria-label="Increase time"
-                class="timer-dialog__time-button"
-                data-testid="timer-dialog__plus-button"
-              >
-                <svg>
-                  icon-plus.svg
-                </svg>
-              </button>
+                <button
+                  aria-label="Reduce time"
+                  class="timer-dialog__time-button"
+                  data-testid="timer-dialog__minus-button"
+                >
+                  −
+                </button>
+                <label
+                  class="timer-dialog__time-label"
+                >
+                  10
+                </label>
+                <button
+                  aria-label="Increase time"
+                  class="timer-dialog__time-button"
+                  data-testid="timer-dialog__plus-button"
+                >
+                  +
+                </button>
+              </div>
             </button>
           </article>
           <button
