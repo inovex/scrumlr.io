@@ -67,3 +67,4 @@ export {ReactComponent as Join} from "assets/icons/join.svg";
 export {ReactComponent as Kick} from "assets/icons/kick.svg";
 export {ReactComponent as PlusOne} from "assets/icons/plus-one.svg";
 export {ReactComponent as Logout} from "assets/icons/logout.svg";
+export {ReactComponent as Warning} from "assets/icons/warning.svg";
