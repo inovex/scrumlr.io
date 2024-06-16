@@ -42,7 +42,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           <svg
             class="column__header-edit-button-icon"
           >
-            icon-dots.svg
+            three-dots.svg
           </svg>
         </button>
       </div>
@@ -568,7 +568,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <svg
                       class="vote-button-remove__icon"
                     >
-                      icon-remove.svg
+                      minus.svg
                     </svg>
                     <span
                       class="vote-button-remove__count"
@@ -610,7 +610,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                       <svg
                         class="note-reaction-list__add-reaction-sticker"
                       >
-                        icon-emoji.svg
+                        add-emoji.svg
                       </svg>
                     </button>
                   </div>
@@ -1159,7 +1159,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                       <svg
                         class="note-reaction-list__add-reaction-sticker"
                       >
-                        icon-emoji.svg
+                        add-emoji.svg
                       </svg>
                     </button>
                   </div>

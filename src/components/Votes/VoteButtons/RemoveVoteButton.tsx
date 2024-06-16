@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
-import {ReactComponent as RemoveIcon} from "assets/icon-remove.svg";
+import {Minus} from "components/Icon";
 import "./RemoveVoteButton.scss";
 
 type RemoveVoteProps = {
@@ -43,7 +43,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
       }}
     >
       <span className="vote-button-remove__folded-corner" />
-      <RemoveIcon className="vote-button-remove__icon" />
+      <Minus className="vote-button-remove__icon" />
       <span className="vote-button-remove__count">{numberOfVotes}</span>
     </DotButton>
   );

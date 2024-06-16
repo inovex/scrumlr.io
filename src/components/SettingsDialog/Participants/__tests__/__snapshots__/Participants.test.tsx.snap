@@ -1019,7 +1019,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
           title="Ban participant 'test-participants-others-user-name-1'"
         >
           <svg>
-            icon-kick-participant.svg
+            kick.svg
           </svg>
         </button>
       </li>
