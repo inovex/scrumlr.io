@@ -610,7 +610,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                       <svg
                         class="note-reaction-list__add-reaction-sticker"
                       >
-                        icon-emoji.svg
+                        add-emoji.svg
                       </svg>
                     </button>
                   </div>
@@ -1159,7 +1159,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                       <svg
                         class="note-reaction-list__add-reaction-sticker"
                       >
-                        icon-emoji.svg
+                        add-emoji.svg
                       </svg>
                     </button>
                   </div>
