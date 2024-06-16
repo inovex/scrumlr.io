@@ -8,7 +8,6 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
-import classNames from "classnames";
 import {useDelayedReset} from "utils/hooks/useDelayedReset";
 import {animated, useTransition} from "@react-spring/web";
 import "./BoardReactionMenu.scss";
@@ -63,11 +62,11 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
           {boardReactions.map(([reactionType, emoji], index) => (
             <button
               key={reactionType}
-              className={classNames("board-reactions-menu__item board-reactions-menu__reaction", {"board-reactions-menu__reaction--disabled": !showBoardReactions})}
-              aria-disabled={!showBoardReactions}
+              className="board-reactions-menu__item"
               aria-label={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
               title={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
               onClick={(e) => onClickReaction(e, reactionType)}
+              disabled={!showBoardReactions}
             >
               <span>{emoji}</span>
             </button>
