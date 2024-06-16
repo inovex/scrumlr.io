@@ -42,7 +42,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           <svg
             class="column__header-edit-button-icon"
           >
-            icon-dots.svg
+            three-dots.svg
           </svg>
         </button>
       </div>
