@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {ReactComponent as InfoIcon} from "assets/icon-warning.svg";
+import {Warning} from "components/Icon";
 import {useAppSelector} from "store";
 import "./ExportHintHiddenContent.scss";
 import {isEqual} from "underscore";
@@ -13,7 +13,7 @@ const ExportHintHiddenContent = () => {
   if (hiddenColumns.length || !showNotesOfOtherParticipants) {
     return (
       <div className="hint-hidden-columns__grid-container">
-        <InfoIcon className="hint-hidden-columns__info-icon" />
+        <Warning className="hint-hidden-columns__info-icon" />
         {hiddenColumns.length > 0 && (
           <>
             <span className="hint-hidden-columns__info-text">{t("ExportBoardOption.hintHiddenColumns")}</span>

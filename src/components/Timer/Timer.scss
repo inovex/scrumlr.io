@@ -30,6 +30,11 @@ $timer__progress-bar-color: #6096ff;
   transition: background-color 150ms linear;
   color: $color-black;
 
+  > svg {
+    height: $icon--medium;
+    width: $icon--medium;
+  }
+
   &:hover {
     background-color: getLightHoverBackground($color-white);
   }

@@ -97,7 +97,7 @@ exports[`BoardSettings should match snapshot 1`] = `
           class="board-settings__password-management-button board-settings__generate-password-button"
         >
           <svg>
-            icon-refresh.svg
+            refresh.svg
           </svg>
           <span
             class="board-settings__password-management-text"

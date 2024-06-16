@@ -84,7 +84,10 @@
 }
 
 .dialog__button {
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
   border: none;
   border-radius: 8px;
   height: 48px;
@@ -106,9 +109,6 @@
     font-size: $text-size--medium;
     color: $color-black;
     letter-spacing: $letter-spacing--medium;
-    position: absolute;
-    left: 24px;
-    top: 16px;
     cursor: pointer;
   }
 }

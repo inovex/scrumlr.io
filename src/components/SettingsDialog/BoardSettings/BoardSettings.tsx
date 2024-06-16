@@ -3,8 +3,7 @@ import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
-import {LockClosed, Trash} from "components/Icon";
-import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
+import {LockClosed, Trash, Refresh} from "components/Icon";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
@@ -80,7 +79,7 @@ export const BoardSettings = () => {
             handleSetPassword(pw);
           }}
         >
-          <RefreshIcon />
+          <Refresh />
           <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
         </button>
       );
