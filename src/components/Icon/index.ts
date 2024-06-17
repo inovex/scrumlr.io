@@ -1,4 +1,4 @@
-// This file was generated in generateIcons.mjs
+/// <reference types="vite-plugin-svgr/client" />
 
 import "./Icon.scss";
 
