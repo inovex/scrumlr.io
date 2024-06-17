@@ -1,6 +1,6 @@
 resource "stackit_postgresflex_instance" "scrumlr-postgres" {
   project_id = var.project_id
-  name       = "scrumlr-01"
+  name       = "scrumlr"
   acl = [
 
     "193.148.160.0/19",

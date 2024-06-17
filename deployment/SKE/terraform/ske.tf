@@ -1,6 +1,6 @@
 resource "stackit_ske_cluster" "scrumlr-cluster" {
   project_id             = var.project_id
-  name                   = "scrumlr-01"
+  name                   = "scrumlr"
   kubernetes_version_min = "1.28"
   node_pools = [
     {
