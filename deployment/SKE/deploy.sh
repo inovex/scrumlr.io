@@ -95,7 +95,7 @@ if ! helm_release_exists nats scrumlr; then
   helm repo add nats https://nats-io.github.io/k8s/helm/charts/
   helm repo update
   helm install nats nats/nats --set cluster.enabled=true --set cluster.replicas=3 --namespace scrumlr
-  wait_for_deployment scrumlr nats
+  wait_for_deployment scrumlr nats-box
 else
   echo "NATS is already installed, skipping installation."
 fi
@@ -113,7 +113,7 @@ else
   echo "ECDSA key already exists, skipping key generation."
 fi
 
-export DB_URL_SCRUMLR="$DB_URL_SCRUMLR"
+export DB_URL="$DB_URL"
 # Apply the database creation job
 envsubst < create_db_job.yaml | kubectl apply -f -
 

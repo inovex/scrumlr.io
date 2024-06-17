@@ -36,11 +36,11 @@ spec:
             - "-disable-check-origin"
           resources:
             requests:
-              cpu: "500m"
-              memory: "500Mi"
+              cpu: "200m"
+              memory: "200Mi"
             limits:
-              cpu: "800m"
-              memory: "800Mi"
+              cpu: "400m"
+              memory: "400Mi"
           startupProbe:
             httpGet:
               path: /api/health

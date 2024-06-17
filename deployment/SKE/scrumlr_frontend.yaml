@@ -45,11 +45,11 @@ spec:
           image: ghcr.io/inovex/scrumlr.io-landing-page/image:sha-3db9234
           resources:
             requests:
-              cpu: "500m"
-              memory: "500Mi"
+              cpu: "200m"
+              memory: "200Mi"
             limits:
-              cpu: "800m"
-              memory: "800Mi"
+              cpu: "400m"
+              memory: "400Mi"
           ports:
             - containerPort: 8080
 ---
@@ -75,11 +75,11 @@ spec:
           image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:3.7.1
           resources:
             requests:
-              cpu: "500m"
-              memory: "500Mi"
+              cpu: "200m"
+              memory: "200Mi"
             limits:
-              cpu: "800m"
-              memory: "800Mi"
+              cpu: "400m"
+              memory: "400Mi"
           env:
             # - name: SCRUMLR_SERVER_PORT
             #   value: "80"
@@ -89,10 +89,6 @@ spec:
             #   value: /api
             - name: SCRUMLR_SHOW_LEGAL_DOCUMENTS
               value: "true"
-            # - name: SCRUMLR_ANALYTICS_DATA_DOMAIN
-            #   value: "scrumlr.io"
-            # - name: SCRUMLR_ANALYTICS_SRC
-            #   value: "https://analytics.prod.scrumlr.fra.ics.inovex.io"
           ports:
             - containerPort: 80
 ---
@@ -186,7 +182,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: HostRegexp(`{host:.*}`)
+    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`)
       kind: Rule
       middlewares:
         - name: redirect-to-https

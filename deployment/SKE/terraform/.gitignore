@@ -37,5 +37,3 @@ override.tf.json
 terraform.rc
 kubeconfig.yaml
 postgres_connection_url.txt
-postgres-creds.yaml
-scrumlr-ecdsa-key.yaml

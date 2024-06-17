@@ -44,8 +44,28 @@ If you used the terraform code above, we recommend using `kubecm`for managing yo
 You can install kubecm from [here](https://kubecm.cloud/en-us/install).
 ```sh
 cd ..
-kubecm add  -f kubeconfig.yaml
+kubecm add  -f terraform/kubeconfig.yaml
 ```
+Now you can deploy Scrumlr using the following command:
 ```sh
-./deploy.sh
+./deploy.sh <DB_URL>
 ```
+Make sure to replace `<DB_URL>` with the URL of your Postgres Flex instance.
+You can view the url by running the following command:
+```sh
+cat terrafrom/postgres_connection_url.txt
+```
+
+#### DNS Configuration
+During Execution the script will ask you to enter the domain you want to use for Scrumlr.
+This requires a DNS entry pointing to the LoadBalancer IP of the Ingress Controller.
+You can find the LoadBalancer IP by running the following command:
+```sh
+kubectl get svc -n scrumlr traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
+You can either use your own DNS provider or use the StackIT DNS service.
+Stackit provides free DNS subdomains you can use.
+You need to create the following A records:
+- `www.<your-domain>` pointing to the LoadBalancer IP
+- `<your-domain>` pointing to the LoadBalancer IP
+After creating the necessary A record simply enter <your-domain> when prompted by the script and press enter.
