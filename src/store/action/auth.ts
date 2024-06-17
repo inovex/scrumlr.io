@@ -7,11 +7,11 @@ export const AuthAction = {
 };
 
 export const AuthActionFactory = {
-  signIn: (id: string, name: string, anonymous: boolean, avatar?: AvataaarProps) => ({
+  signIn: (id: string, name: string, isAnonymous: boolean, avatar?: AvataaarProps) => ({
     type: AuthAction.SignIn,
     id,
     name,
-    anonymous,
+    isAnonymous,
     avatar,
   }),
 

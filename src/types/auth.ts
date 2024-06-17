@@ -1,5 +1,7 @@
 import {AvataaarProps} from "components/Avatar";
 
+export const ACCOUNT_TYPE_ANONYMOUS = "ANONYMOUS";
+
 // as retrieved from backend
 export interface AuthDto {
   id: string;
@@ -12,7 +14,7 @@ export interface AuthDto {
 export interface Auth {
   id: string;
   name: string;
-  anonymous: boolean;
+  isAnonymous: boolean;
   avatar?: AvataaarProps;
 }
 
