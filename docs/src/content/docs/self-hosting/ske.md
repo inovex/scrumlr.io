@@ -46,6 +46,11 @@ You can install kubecm from [here](https://kubecm.cloud/en-us/install).
 cd ..
 kubecm add  -f terraform/kubeconfig.yaml
 ```
+Switch to the external cluster context:
+```sh
+# Make sure to select the external cluster context
+kubecm sw
+```
 Now you can deploy Scrumlr using the following command:
 ```sh
 ./deploy.sh <DB_URL>
@@ -59,10 +64,6 @@ cat terrafrom/postgres_connection_url.txt
 #### DNS Configuration
 During Execution the script will ask you to enter the domain you want to use for Scrumlr.
 This requires a DNS entry pointing to the LoadBalancer IP of the Ingress Controller.
-You can find the LoadBalancer IP by running the following command:
-```sh
-kubectl get svc -n scrumlr traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
-```
 You can either use your own DNS provider or use the StackIT DNS service.
 Stackit provides free DNS subdomains you can use.
 You need to create the following A records:
