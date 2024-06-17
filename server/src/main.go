@@ -201,6 +201,7 @@ func main() {
 		},
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
+
 	// check if process is executed within docker environment
 	if _, err := os.Stat("/.dockerenv"); err != nil {
 		logger.EnableDevelopmentLogger()
@@ -209,10 +210,6 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func is_defined(c *cli.Context, key string) bool {
-	return c.IsSet(key) && c.String(key) != ""
 }
 
 func run(c *cli.Context) error {
@@ -243,7 +240,7 @@ func run(c *cli.Context) error {
 	}
 
 	basePath := "/"
-	if is_defined(c, "base-path") {
+	if c.IsSet("base-path") {
 		basePath = c.String("base-path")
 		if !strings.HasPrefix(basePath, "/") {
 			return errors.New("base path must start with '/'")
@@ -255,28 +252,28 @@ func run(c *cli.Context) error {
 	}
 
 	providersMap := make(map[string]auth.AuthProviderConfiguration)
-	if is_defined(c, "auth-google-client-id") && is_defined(c, "auth-google-client-secret") && is_defined(c, "auth-callback-host") {
+	if c.IsSet("auth-google-client-id") && c.IsSet("auth-google-client-secret") && c.IsSet("auth-callback-host") {
 		providersMap[(string)(types.AccountTypeGoogle)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-google-client-id"),
 			ClientSecret: c.String("auth-google-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if is_defined(c, "auth-github-client-id") && is_defined(c, "auth-github-client-secret") && is_defined(c, "auth-callback-host") {
+	if c.IsSet("auth-github-client-id") && c.IsSet("auth-github-client-secret") && c.IsSet("auth-callback-host") {
 		providersMap[(string)(types.AccountTypeGitHub)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-github-client-id"),
 			ClientSecret: c.String("auth-github-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if is_defined(c, "auth-microsoft-client-id") && is_defined(c, "auth-microsoft-client-secret") && is_defined(c, "auth-callback-host") {
+	if c.IsSet("auth-microsoft-client-id") && c.IsSet("auth-microsoft-client-secret") && c.IsSet("auth-callback-host") {
 		providersMap[(string)(types.AccountTypeMicrosoft)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-microsoft-client-id"),
 			ClientSecret: c.String("auth-microsoft-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if is_defined(c, "auth-azure-ad-tenant-id") && is_defined(c, "auth-azure-ad-client-id") && is_defined(c, "auth-azure-ad-client-secret") && is_defined(c, "auth-callback-host") {
+	if c.IsSet("auth-azure-ad-tenant-id") && c.IsSet("auth-azure-ad-client-id") && c.IsSet("auth-azure-ad-client-secret") && c.IsSet("auth-callback-host") {
 		providersMap[(string)(types.AccountTypeAzureAd)] = auth.AuthProviderConfiguration{
 			TenantId:     c.String("auth-azure-ad-tenant-id"),
 			ClientId:     c.String("auth-azure-ad-client-id"),
@@ -284,7 +281,7 @@ func run(c *cli.Context) error {
 			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if is_defined(c, "auth-apple-client-id") && is_defined(c, "auth-apple-client-secret") && is_defined(c, "auth-callback-host") {
+	if c.IsSet("auth-apple-client-id") && c.IsSet("auth-apple-client-secret") && c.IsSet("auth-callback-host") {
 		providersMap[(string)(types.AccountTypeApple)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-apple-client-id"),
 			ClientSecret: c.String("auth-apple-client-secret"),
