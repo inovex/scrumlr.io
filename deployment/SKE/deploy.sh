@@ -69,8 +69,20 @@ else
   echo "Traefik is already installed, skipping installation."
 fi
 
+# Wait for Traefik load balancer to get a public IP
+echo "Waiting for Traefik load balancer to get a public IP..."
+while true; do
+  LB_IP=$(kubectl get svc -n scrumlr traefik -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+  if [ -n "$LB_IP" ]; then
+    echo "Traefik load balancer IP: $LB_IP"
+    break
+  fi
+  echo "Still waiting for IP..."
+  sleep 10
+done
+
 # Prompt user to set up DNS records and input deployment domain
-echo "Please set up your DNS records to point to the Traefik load balancer."
+echo "Please set up your DNS records to point to the Traefik load balancer IP: $LB_IP"
 read -rp "Enter your deployment domain (e.g., scrumlr.stackit.rocks): " DEPLOYMENT_DOMAIN
 
 if [ -z "$DEPLOYMENT_DOMAIN" ]; then
