@@ -11,6 +11,8 @@ export const ShareSession = () => {
 
   const [urlInClipBoard, setUrlInClipBoard] = useState(false);
 
+  const isUsingDarkTheme = document.documentElement.getAttribute("theme") === "dark";
+
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(`${window.location.origin}/board/${boardId}`);
     setUrlInClipBoard(true);
@@ -24,7 +26,14 @@ export const ShareSession = () => {
       <div className={classNames("share-session__container", "accent-color__planning-pink")}>
         <div className="share-session__background">
           {/* using an upscaled canvas instead of svg to make it a savable image */}
-          <QRCode value={`${window.location.origin}/board/${boardId}`} renderAs="canvas" className="share-qr-code-option__qrcode" size={1024} />
+          <QRCode
+            value={`${window.location.origin}/board/${boardId}`}
+            renderAs="canvas"
+            size={1024}
+            fgColor={isUsingDarkTheme ? "#ffffff" : "#232323"}
+            bgColor={isUsingDarkTheme ? "#232323" : "#ffffff"}
+            className="share-qr-code-option__qrcode"
+          />
         </div>
         <button className={classNames("share-qr-code-option__copy-to-clipboard", {"--copied": urlInClipBoard})} onClick={handleCopyToClipboard} disabled={urlInClipBoard}>
           {urlInClipBoard ? t("ShareQrCodeOption.inviteUrlCopied") : t("ShareQrCodeOption.copyInviteURL")}

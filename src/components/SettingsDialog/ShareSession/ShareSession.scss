@@ -10,14 +10,6 @@ $header-menu-border-bottom-color: #efefef;
   max-width: 100%;
 }
 
-.share-qr-code-option__qrcode path:first-child {
-  fill: $color-white-one;
-}
-
-.share-qr-code-option__qrcode path:last-child {
-  fill: $color-darkest-gray;
-}
-
 .share-session__background {
   height: 100%;
   width: 100%;
@@ -71,14 +63,4 @@ $header-menu-border-bottom-color: #efefef;
   align-items: center;
   flex-direction: column;
   border-radius: 8px;
-}
-
-[theme="dark"] {
-  .share-qr-code-option__qrcode path:first-child {
-    fill: $color-dark-one;
-  }
-
-  .share-qr-code-option__qrcode path:last-child {
-    fill: $color-white-one;
-  }
 }
