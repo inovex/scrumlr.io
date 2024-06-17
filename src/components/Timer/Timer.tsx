@@ -2,11 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
-import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
-import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as PlusOneIcon} from "assets/icon-plus-one.svg";
-import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
+import {Close, Timer as TimerIcon, MarkAsDone, FlagFinish,PlusOne} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
@@ -120,7 +116,7 @@ export const Timer = (props: TimerProps) => {
                 className="short-action__button"
                 onClick={() => store.dispatch(Actions.cancelTimer())}
               >
-                <FlagIcon />
+                <FlagFinish className="short-action__flag-icon" />
               </button>
             </li>
           )}
@@ -132,8 +128,8 @@ export const Timer = (props: TimerProps) => {
               className={classNames("short-action__button", {"short-action__button--ready": isReady})}
               onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
             >
-              <CheckIcon className="short-action__check-icon" />
-              <CancelIcon className="short-action__cancel-icon" />
+              <MarkAsDone className="short-action__check-icon" />
+              <Close className="short-action__cancel-icon" />
             </button>
           </li>
         </ul>
@@ -147,7 +143,7 @@ export const Timer = (props: TimerProps) => {
           className="timer__increment-button"
           onClick={() => store.dispatch(Actions.incrementTimer())}
         >
-          <PlusOneIcon />
+          <PlusOne />
         </button>
       )}
     </div>

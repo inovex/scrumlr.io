@@ -3,9 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../components/CustomToast/CustomToast.scss";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import {CustomToast} from "components/CustomToast/CustomToast";
-import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
-import {ReactComponent as SuccessIcon} from "assets/icon-success.svg";
-import {ReactComponent as ErrorIcon} from "assets/icon-cancel.svg";
+import {Info, CheckDone, Close} from "components/Icon";
 
 const toastConfig: ToastOptions = {
   position: "bottom-right",
@@ -53,7 +51,7 @@ function success(options: Options) {
     firstButtonOnClick,
     secondButtonOnClick,
     autoClose = TOAST_TIMER_DEFAULT,
-    icon = SuccessIcon,
+    icon = CheckDone,
     iconName = "success",
   } = options;
   return toast(
@@ -89,18 +87,7 @@ function success(options: Options) {
  * @param options.iconName An optional icon Name. Needs to be set to a any different name than "success", "error", or "info" when an icon is passed aswell.
  */
 function error(options: Options) {
-  const {
-    title,
-    message,
-    hintMessage,
-    hintOnClick,
-    buttons,
-    firstButtonOnClick,
-    secondButtonOnClick,
-    autoClose = TOAST_TIMER_DEFAULT,
-    icon = ErrorIcon,
-    iconName = "error",
-  } = options;
+  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = Close, iconName = "error"} = options;
   toast(
     <CustomToast
       title={title}
@@ -134,7 +121,7 @@ function error(options: Options) {
  * @param options.iconName An optional icon Name. Needs to be set to a any different name than "success", "error", or "info" when an icon is passed aswell.
  */
 function info(options: Options) {
-  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = InfoIcon, iconName = "info"} = options;
+  const {title, message, hintMessage, hintOnClick, buttons, firstButtonOnClick, secondButtonOnClick, autoClose = TOAST_TIMER_DEFAULT, icon = Info, iconName = "info"} = options;
   toast(
     <CustomToast
       title={title}

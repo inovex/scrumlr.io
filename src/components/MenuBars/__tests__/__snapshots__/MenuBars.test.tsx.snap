@@ -40,13 +40,13 @@ exports[`MenuBars should match snapshot 1`] = `
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-check.svg
+                mark-as-done.svg
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-close.svg
+                close.svg
               </svg>
             </div>
           </button>
@@ -78,13 +78,13 @@ exports[`MenuBars should match snapshot 1`] = `
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-hand.svg
+                raise-hand.svg
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-close.svg
+                close.svg
               </svg>
             </div>
           </button>
@@ -116,13 +116,13 @@ exports[`MenuBars should match snapshot 1`] = `
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-add-board-reaction.svg
+                add-sticker-reaction.svg
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-close.svg
+                close.svg
               </svg>
             </div>
           </button>
@@ -154,13 +154,13 @@ exports[`MenuBars should match snapshot 1`] = `
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-settings.svg
+                general-settings.svg
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-close.svg
+                close.svg
               </svg>
             </div>
           </button>
@@ -174,7 +174,7 @@ exports[`MenuBars should match snapshot 1`] = `
       <svg
         class="menu-bars__navigation-icon"
       >
-        icon-arrow-previous.svg
+        arrow-left.svg
       </svg>
     </button>
   </div>
@@ -214,13 +214,13 @@ exports[`MenuBars should match snapshot 1`] = `
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-timer.svg
+                timer.svg
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-close.svg
+                close.svg
               </svg>
             </div>
           </button>
@@ -252,13 +252,13 @@ exports[`MenuBars should match snapshot 1`] = `
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-vote.svg
+                voting.svg
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-close.svg
+                close.svg
               </svg>
             </div>
           </button>
@@ -290,13 +290,13 @@ exports[`MenuBars should match snapshot 1`] = `
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-focus.svg
+                presenter-mode.svg
               </svg>
               <svg
                 aria-hidden="true"
                 class="tooltip-button__icon"
               >
-                icon-close.svg
+                close.svg
               </svg>
             </div>
           </button>
@@ -310,7 +310,7 @@ exports[`MenuBars should match snapshot 1`] = `
       <svg
         class="menu-bars__navigation-icon"
       >
-        icon-arrow-next.svg
+        arrow-right.svg
       </svg>
     </button>
   </div>

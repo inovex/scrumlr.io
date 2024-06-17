@@ -1,11 +1,6 @@
 import {FC} from "react";
 import {Actions} from "store/action";
-import {ReactComponent as HideIcon} from "assets/icon-hidden.svg";
-import {ReactComponent as ShowIcon} from "assets/icon-visible.svg";
-import {ReactComponent as EditIcon} from "assets/icon-edit.svg";
-import {ReactComponent as PreviousIcon} from "assets/icon-arrow-previous.svg";
-import {ReactComponent as NextIcon} from "assets/icon-arrow-next.svg";
-import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
+import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash} from "components/Icon";
 import {Color, getColorClassName, getColorForIndex} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
@@ -51,7 +46,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
               dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
             }}
           >
-            {visible ? <HideIcon /> : <ShowIcon />}
+            {visible ? <Hidden /> : <Visible />}
             {visible ? t("Column.hideColumn") : t("Column.showColumn")}
           </button>
         </li>
@@ -62,7 +57,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
               onClose?.();
             }}
           >
-            <EditIcon />
+            <Edit />
             {t("Column.editName")}
           </button>
         </li>
@@ -73,7 +68,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
               handleAddColumn(index);
             }}
           >
-            <PreviousIcon />
+            <ArrowLeft />
             {t("Column.addColumnLeft")}
           </button>
         </li>
@@ -84,7 +79,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
               handleAddColumn(index + 1);
             }}
           >
-            <NextIcon />
+            <ArrowRight />
             {t("Column.addColumnRight")}
           </button>
         </li>
@@ -95,7 +90,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
               dispatch(Actions.deleteColumn(id));
             }}
           >
-            <TrashIcon />
+            <Trash />
             {t("Column.deleteColumn")}
           </button>
         </li>

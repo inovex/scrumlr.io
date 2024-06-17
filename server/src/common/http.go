@@ -1,10 +1,12 @@
 package common
 
 import (
-	"fmt"
+	"log"
 	"net"
 	"net/http"
 	"strings"
+
+	"github.com/weppos/publicsuffix-go/publicsuffix"
 )
 
 func GetProtocol(r *http.Request) string {
@@ -26,12 +28,12 @@ func SealCookie(r *http.Request, cookie *http.Cookie) {
 
 func GetTopLevelHost(r *http.Request) string {
 	hostname := GetHostWithoutPort(r)
-	hostWithSubdomain := strings.Split(hostname, ".")
-	if len(hostWithSubdomain) >= 2 {
-		return fmt.Sprintf("%s.%s", hostWithSubdomain[len(hostWithSubdomain)-2], hostWithSubdomain[len(hostWithSubdomain)-1])
+	domain, err := publicsuffix.Domain(hostname)
+	if err != nil {
+		log.Printf("Error getting domain for %s: %v", hostname, err)
+		return ""
 	}
-
-	return hostname
+	return domain
 }
 
 func GetHostWithoutPort(r *http.Request) string {

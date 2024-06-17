@@ -61,6 +61,11 @@ $stack-view__min-height: 82px;
   color: $color-white;
   transition: all 0.08s ease-out;
 
+  > svg {
+    height: 100%;
+    width: 100%;
+  }
+
   &:hover {
     transform: scale(1.3);
   }
