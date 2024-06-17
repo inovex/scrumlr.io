@@ -13,9 +13,9 @@ if (window.location.protocol === "http:") {
 }
 
 export const SHOW_LEGAL_DOCUMENTS = showLegalDocuments !== undefined ? showLegalDocuments.toLowerCase() === "true" : true;
-export const SERVER_HTTP_URL = serverURL || process.env.REACT_APP_SERVER_HTTP_URL || `${window.location.origin.replace(window.location.protocol, httpProtocol)}/api`;
+export const SERVER_HTTP_URL = serverURL || import.meta.env.VITE_APP_SERVER_HTTP_URL || `${window.location.origin.replace(window.location.protocol, httpProtocol)}/api`;
 export const SERVER_WEBSOCKET_URL =
-  websocketURL || process.env.REACT_APP_SERVER_WEBSOCKET_URL || `${window.location.origin.replace(window.location.protocol, websocketProtocol)}/api`;
+  websocketURL || import.meta.env.VITE_APP_SERVER_WEBSOCKET_URL || `${window.location.origin.replace(window.location.protocol, websocketProtocol)}/api`;
 export const SERVER_WEBSOCKET_PROTOCOL = websocketProtocol;
 export const ANALYTICS_DATA_DOMAIN = Cookies.get("scrumlr__analytics_data_domain");
 export const ANALYTICS_SRC = Cookies.get("scrumlr__analytics_src");

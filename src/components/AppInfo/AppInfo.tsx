@@ -14,7 +14,7 @@ export const AppInfo: FC<AppInfoProps> = ({className}) => {
   return (
     <a target="_blank" href="https://github.com/inovex/scrumlr.io/releases" aria-label={t("AppInfo.version")} className={classNames("app-info", className)} rel="noreferrer">
       <GitHub className="app-info__icon" aria-hidden />
-      <span>{process.env.REACT_APP_VERSION}</span>
+      <span>{import.meta.env.VITE_APP_VERSION}</span>
     </a>
   );
 };

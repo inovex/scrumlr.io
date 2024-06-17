@@ -70,7 +70,7 @@ const rootReducer = combineReducers<ApplicationState>({
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(parseMiddleware),
-  devTools: process.env.NODE_ENV !== "production",
+  devTools: import.meta.env.NODE_ENV !== "production",
 });
 
 export default store;

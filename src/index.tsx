@@ -18,7 +18,7 @@ import Plausible from "plausible-tracker";
 import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "./config";
 import "react-tooltip/dist/react-tooltip.css";
 
-const APP_VERSION = process.env.REACT_APP_VERSION;
+const APP_VERSION = import.meta.env.VITE_APP_VERSION;
 if (APP_VERSION) {
   saveToStorage(APP_VERSION_STORAGE_KEY, APP_VERSION);
 }
