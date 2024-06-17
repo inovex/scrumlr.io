@@ -3,6 +3,7 @@ import {AvataaarProps} from "components/Avatar";
 export interface Auth {
   id: string;
   name: string;
+  anonymous: boolean;
   avatar?: AvataaarProps;
 }
 

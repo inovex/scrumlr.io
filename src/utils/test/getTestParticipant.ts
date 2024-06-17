@@ -4,6 +4,7 @@ export default (overwrite?: Partial<Participant>): Participant => ({
   user: {
     id: "test-participant-id",
     name: "test-participant-name",
+    anonymous: true,
   },
   connected: true,
   ready: false,
