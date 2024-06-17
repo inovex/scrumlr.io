@@ -49,6 +49,7 @@
     "use-sound": "^4.0.1"
   },
   "devDependencies": {
+    "@svgr/rollup": "^8.1.0",
     "@testing-library/dom": "^10.1.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
@@ -70,6 +71,7 @@
     "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "@vitejs/plugin-react": "^4.3.1",
     "cross-env": "^7.0.3",
     "cypress": "^13.11.0",
     "eslint": "^8.57.0",
@@ -92,18 +94,18 @@
     "prettier": "^3.3.2",
     "react-dnd-test-backend": "^15.1.2",
     "react-dnd-test-utils": "^15.1.2",
-    "react-scripts": "^5.0.1",
     "redux-mock-store": "^1.5.4",
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.77.5",
     "ts-jest": "^29.1.4",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1",
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "yarn run hash react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
