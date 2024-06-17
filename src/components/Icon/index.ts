@@ -1,5 +1,3 @@
-/// <reference types="vite-plugin-svgr/client" />
-
 import "./Icon.scss";
 
 export {ReactComponent as AddCard} from "assets/icons/add-card.svg";
