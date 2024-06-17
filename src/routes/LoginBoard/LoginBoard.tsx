@@ -66,7 +66,7 @@ export const LoginBoard = () => {
 
             <hr className="login-board__divider" data-label="or" />
 
-            <fieldset className="login-board__fieldset" disabled={!anonymousLoginEnabled}>
+            <fieldset className="login-board__fieldset">
               <legend className="login-board__fieldset-legend">{t("LoginBoard.anonymousLogin")}</legend>
 
               <div className="login-board__username">
@@ -93,13 +93,7 @@ export const LoginBoard = () => {
 
               {SHOW_LEGAL_DOCUMENTS && (
                 <label className="login-board__form-element login-board__terms">
-                  <input
-                    type="checkbox"
-                    className="login-board__checkbox"
-                    defaultChecked={termsAccepted}
-                    disabled={!anonymousLoginEnabled}
-                    onChange={() => setTermsAccepted(!termsAccepted)}
-                  />
+                  <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
                   <span className="login-board__terms-label">
                     <Trans
                       i18nKey="LoginBoard.acceptTerms"
@@ -117,6 +111,7 @@ export const LoginBoard = () => {
             <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={!anonymousLoginEnabled}>
               {t("LoginBoard.login")}
             </Button>
+            {!anonymousLoginEnabled && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
           </div>
         </div>
 
