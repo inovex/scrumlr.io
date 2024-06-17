@@ -1,5 +1,5 @@
-@import "constants/style";
-@import "routes/StackView/StackView.scss";
+@import "src/constants/style.scss";
+@import "src/routes/StackView/StackView.scss";
 
 .note-dialog__header {
   font-size: calc(24px + 0.8vw);

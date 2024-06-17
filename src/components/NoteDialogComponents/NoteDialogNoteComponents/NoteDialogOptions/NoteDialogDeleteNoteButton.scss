@@ -1,4 +1,4 @@
-@import "constants/style";
+@import "src/constants/style.scss";
 @import "./NoteDialogNoteOptions.scss";
 
 .note-dialog__note-option__remove {
@@ -9,7 +9,9 @@
   align-items: center;
   background-color: rgba(var(--accent-color-rgb), 0.2);
   color: var(--accent-color);
-  transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
+  transition:
+    background-color 150ms ease-in-out,
+    color 150ms ease-in-out;
 }
 .note-dialog__note-option__remove:hover {
   background-color: var(--accent-color);

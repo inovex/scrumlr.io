@@ -1,4 +1,4 @@
-@import "constants/style";
+@import "src/constants/style.scss";
 
 .toggle {
   position: relative;
@@ -28,7 +28,9 @@
   height: 24px;
   width: 24px;
   border-radius: 100%;
-  transition: all 0.16s ease-out, transform 0.08s ease-out;
+  transition:
+    all 0.16s ease-out,
+    transform 0.08s ease-out;
   top: 0;
 
   left: 0;

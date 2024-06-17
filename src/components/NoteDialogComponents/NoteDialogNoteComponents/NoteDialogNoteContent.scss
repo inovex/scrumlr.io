@@ -1,6 +1,6 @@
-@import "constants/style";
-@import "components/Note/Note.scss";
-@import "routes/StackView/StackView.scss";
+@import "src/constants/style.scss";
+@import "src/components/Note/Note.scss";
+@import "src/routes/StackView/StackView.scss";
 
 .note-dialog__note-content {
   position: relative;
