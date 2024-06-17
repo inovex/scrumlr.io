@@ -59,8 +59,8 @@
 }
 .confirmation-dialog__warning > svg {
   color: var(--accent-color);
-  min-width: 14px;
-  max-width: 18px;
+  height: $icon--medium;
+  width: $icon--medium;
   opacity: 0.8;
 }
 .confirmation-dialog__warning > p {
