@@ -1,5 +1,5 @@
 import {ForwardedRef, forwardRef, MouseEvent} from "react";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {Close} from "components/Icon";
 import {ReactionType} from "types/reaction";
 import {BOARD_REACTION_EMOJI_MAP} from "types/boardReaction";
 import {Actions} from "store/action";
@@ -72,9 +72,8 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
               <span>{emoji}</span>
             </button>
           ))}
-
           <button className="board-reactions-menu__item board-reactions-menu__close" onClick={props.close} tabIndex={0} aria-hidden>
-            <CloseIcon />
+            <Close />
           </button>
         </animated.div>
       )

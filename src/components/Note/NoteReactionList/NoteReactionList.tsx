@@ -1,6 +1,6 @@
 import {useDispatch} from "react-redux";
 import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
-import {ReactComponent as IconAddEmoji} from "assets/icon-add-emoji.svg";
+import {AddEmoji} from "components/Icon";
 import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
@@ -115,8 +115,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   // extra function because it is exported in a prop and passing the dispatch function directly seems wrong to me
   const closeReactionBar = () => {
-    // remove focus to avoid bar from opening when going to another tab and back because of the focus event
-    (document.activeElement as HTMLButtonElement).blur();
     setShowReactionBar(false);
   };
 
@@ -144,24 +142,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     document.addEventListener("click", handleClickButton, true);
     return () => document.removeEventListener("click", handleClickButton, true);
   }, [buttonRef, listRef]);
-
-  // the bar opens when in active focus
-  // this happens when initially clicking on a button before it is focused,
-  // or when cycling through the note using Tab
-  useEffect(() => {
-    const handleFocus = (e: FocusEvent) => {
-      if (rootRef.current?.contains(e.target as Node) && !listRef.current?.contains(e.target as Node)) {
-        // active focus on the bar
-        setShowReactionBar(true);
-      } else {
-        // lost focus
-        setShowReactionBar(false);
-      }
-    };
-
-    document.addEventListener("focus", handleFocus, true);
-    return () => document.removeEventListener("focus", handleFocus, true);
-  }, [rootRef, listRef]);
 
   const addReaction = (noteId: string, reactionType: ReactionType) => {
     dispatch(Actions.addReaction(noteId, reactionType));
@@ -218,10 +198,26 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   return (
     <div className="note-reaction-list__root" ref={rootRef}>
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
-        <button ref={buttonRef} className="note-reaction-list__add-reaction-sticker-container" aria-label={t("NoteReactionList.toggleBarLabel")}>
-          {showReactionBar ? <IconAddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
+        <button
+          ref={buttonRef}
+          className="note-reaction-list__add-reaction-sticker-container"
+          aria-label={t("NoteReactionList.toggleBarLabel")}
+          onKeyDown={(e) => {
+            if (e.code === "Enter" || e.code === "Space") {
+              // Stop the default, because it will dispatch a click event on
+              // the first reaction
+              e.preventDefault();
+              // Stop propagation of the event so that it does not bubble up
+              // to the note component and opens the stack view
+              e.stopPropagation();
+              // Open the reaction bar
+              setShowReactionBar((show) => !show);
+            }
+          }}
+        >
+          {showReactionBar ? <AddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
         </button>
-        {showReactionBar && <NoteReactionBar isOpen={showReactionBar} closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
+        {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
       </div>
       <div className="note-reaction-list__reaction-chips-container" ref={listRef}>
         {!showReactionBar &&
