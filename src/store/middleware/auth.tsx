@@ -13,7 +13,8 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
     API.getCurrentUser()
       .then((user) => {
         if (user) {
-          dispatch(Actions.signIn(user.id, user.name, user.anonymous, user.avatar));
+          const isAnonymous = user.accountType === "ANONYMOUS";
+          dispatch(Actions.signIn(user.id, user.name, isAnonymous, user.avatar));
         }
         dispatch(Actions.userCheckCompleted(true));
       })
