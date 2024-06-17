@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-db-job
+  namespace: scrumlr
+spec:
+  template:
+    spec:
+      containers:
+      - name: create-db
+        image: postgres:15-alpine
+        env:
+        - name: DB_URL
+          value: "$DB_URL_SCRUMLR"
+        command: ["sh", "-c", "psql $DB_URL_SCRUMLR -tc \"SELECT 1 FROM pg_database WHERE datname = 'scrumlr'\" | grep -q 1 || psql $DB_URL_SCRUMLR -c \"CREATE DATABASE scrumlr;\""]
+      restartPolicy: OnFailure
