@@ -13,7 +13,7 @@ exports[`Votes should render correctly with no votes and active voting 1`] = `
       <svg
         class="vote-button-add__icon"
       >
-        icon-add.svg
+        plus.svg
       </svg>
     </button>
   </div>
@@ -38,7 +38,7 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
       <svg
         class="vote-button-remove__icon"
       >
-        icon-remove.svg
+        minus.svg
       </svg>
       <span
         class="vote-button-remove__count"
@@ -54,7 +54,7 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
       <svg
         class="vote-button-add__icon"
       >
-        icon-add.svg
+        plus.svg
       </svg>
     </button>
   </div>
@@ -78,7 +78,7 @@ exports[`Votes should render correctly with votes and disabled voting 1`] = `
       <svg
         class="vote-button-remove__icon"
       >
-        icon-remove.svg
+        minus.svg
       </svg>
       <span
         class="vote-button-remove__count"

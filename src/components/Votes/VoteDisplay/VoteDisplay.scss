@@ -87,6 +87,13 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   opacity: 1;
 }
 
+.short-actions__short-action {
+  position: relative;
+  height: $vote-display__short-actions-height;
+  width: $vote-display__short-actions-height;
+  border-radius: $rounded--full;
+}
+
 .short-action__button {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
@@ -112,12 +119,12 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
 .short-action__button > svg {
   position: absolute;
-  height: $icon--small;
-  width: $icon--small;
+  height: 100%;
+  width: 100%;
 }
-.short-action__button > .short-action__check-icon {
-  height: $vote-display__short-actions-height;
-  width: $vote-display__short-actions-height;
+.short-action__button > .short-action__flag-icon {
+  height: $icon--medium;
+  width: $icon--medium;
 }
 .short-action__cancel-icon {
   visibility: hidden;

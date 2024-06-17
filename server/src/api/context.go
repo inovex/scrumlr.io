@@ -1,14 +1,15 @@
 package api
 
 import (
-	"context"
-	"errors"
-	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
-	"net/http"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
+  "context"
+  "errors"
+  "github.com/go-chi/chi/v5"
+  "github.com/google/uuid"
+  "net/http"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/database/types"
+  "scrumlr.io/server/identifiers"
+  "scrumlr.io/server/logger"
 )
 
 func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
@@ -137,6 +138,37 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 
 		boardEditable := context.WithValue(r.Context(), identifiers.BoardEditableIdentifier, settings.IsLocked)
 		next.ServeHTTP(w, r.WithContext(boardEditable))
+	})
+}
+
+func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+		userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+		user, err := s.users.Get(r.Context(), userID)
+
+		if err != nil {
+			log.Errorw("Could not fetch user", "error", err)
+			common.Throw(w, r, errors.New("could not fetch user"))
+			return
+		}
+
+		if user.AccountType == types.AccountTypeAnonymous {
+			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized")))
+			return
+		}
+
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
 	})
 }
 

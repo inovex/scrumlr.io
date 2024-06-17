@@ -39,7 +39,7 @@ exports[`Dialog should match snapshot 1`] = `
             <svg
               class="dialog__close-icon"
             >
-              icon-close.svg
+              close.svg
             </svg>
           </button>
         </aside>
