@@ -23,7 +23,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
     <svg
       class="participants__search-icon"
     >
-      icon-magnifying-glass.svg
+      search.svg
     </svg>
   </div>
   <div
@@ -53,7 +53,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
       title="Show disconnected participants"
     >
       <svg>
-        icon-wifi-disabled.svg
+        wifi.svg
       </svg>
     </button>
   </div>
@@ -1019,7 +1019,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
           title="Ban participant 'test-participants-others-user-name-1'"
         >
           <svg>
-            icon-kick-participant.svg
+            kick.svg
           </svg>
         </button>
       </li>
@@ -1034,7 +1034,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
       <svg
         class="participants-reset-state-banner__check-icon"
       >
-        icon-check.svg
+        mark-as-done.svg
       </svg>
       <div
         class="participants-reset-state-banner__text"

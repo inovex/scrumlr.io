@@ -248,9 +248,9 @@
 }
 
 .board-settings__generate-password-button svg {
-  width: $icon--small;
-  height: $icon--small;
-  margin: 0 4px 2px 3px;
+  // TODO remove margin when icon gets updated
+  width: $icon--medium;
+  height: $icon--medium;
   color: var(--accent-color);
 }
 

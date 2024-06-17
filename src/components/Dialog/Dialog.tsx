@@ -1,7 +1,7 @@
 import {FC, HTMLAttributes, PropsWithChildren} from "react";
 import classNames from "classnames";
 import {Portal} from "components/Portal";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {Close} from "components/Icon";
 import "./Dialog.scss";
 import {useTranslation} from "react-i18next";
 
@@ -21,7 +21,7 @@ export const Dialog: FC<PropsWithChildren<DialogProps>> = ({title, className, on
           {children}
         </article>
         <button onClick={() => onClose?.()} className="dialog__close-button" aria-label={t("ConfirmationDialog.close")}>
-          <CloseIcon className="dialog__close-icon" />
+          <Close className="dialog__close-icon" />
         </button>
       </aside>
     </Portal>
