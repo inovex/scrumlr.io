@@ -1,5 +1,5 @@
 import {useRef, useState} from "react";
-import {Plus, AddImage, Star} from "components/Icon";
+import {AddImage, LockClosed, Plus, Star} from "components/Icon";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
@@ -10,7 +10,6 @@ import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
-import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
 import {useAppSelector} from "store";
 import "./NoteInput.scss";
 
@@ -70,7 +69,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       }}
       ref={emoji.containerRef}
     >
-      {!isModerator && boardLocked && <LockIcon className="note-input__lock-icon" />}
+      {!isModerator && boardLocked && <LockClosed className="note-input__lock-icon" />}
       <TextareaAutosize
         disabled={!isModerator && boardLocked}
         ref={noteInputRef}
