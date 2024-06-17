@@ -1,5 +1,5 @@
 ---
-title: SKE (StackIT Kubernetes Engine)
+title: SKE (STACKIT Kubernetes Engine)
 description: Deploy Scrumlr using SKE
 sidebar:
     order: 5
@@ -7,8 +7,8 @@ sidebar:
 
 ## Pre-requisites
 The following pre-requisites are required to deploy Scrumlr using SKE:
-- StackIT Project
-- Service Account with a valid Token for the StackIT API
+- STACKIT Project
+- Service Account with a valid Token for the STACKIT API
 
 ## Deployment
 
@@ -64,8 +64,8 @@ cat terrafrom/postgres_connection_url.txt
 #### DNS Configuration
 During Execution the script will ask you to enter the domain you want to use for Scrumlr.
 This requires a DNS entry pointing to the LoadBalancer IP of the Ingress Controller.
-You can either use your own DNS provider or use the StackIT DNS service.
-Stackit provides free DNS subdomains you can use.
+You can either use your own DNS provider or use the STACKIT DNS service.
+STACKIT provides free DNS subdomains you can use.
 You need to create the following A records:
 - `www.<your-domain>` pointing to the LoadBalancer IP
 - `<your-domain>` pointing to the LoadBalancer IP

@@ -1,3 +1,5 @@
 postgres-creds.yaml
 scrumlr-ecdsa-key.yaml
 scrumlr-ecdsa-key.pem
+*.gif
+demo.yml
