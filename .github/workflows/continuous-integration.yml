@@ -85,10 +85,10 @@ jobs:
               - 'docs/**'
       - name: set-output
         id: set-output
-        run: echo ::set-output name=src::${{ steps.docs_changes.docs.src }}
+        run: echo "docs_changed= ${{ steps.docs_changes.docs.src }}" >> $GITHUB_OUTPUT
     
   deploy_github_pages:
-    if: ${{ needs.steps.docs_changes.outputs.src == 'true' }}
+    if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
     uses: inovex/scrumlr.io/.github/workflows/deploy_docs.yml@feat/documentation
     secrets: inherit
   deployment_health_check:
