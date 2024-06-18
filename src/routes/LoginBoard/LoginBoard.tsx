@@ -23,7 +23,7 @@ interface State {
 }
 
 export const LoginBoard = () => {
-  const anonymousLoginEnabled = useAppSelector((state) => state.view.anonymousLoginEnabled);
+  const anonymousLoginDisabled = useAppSelector((state) => state.view.anonymousLoginDisabled);
 
   const {t} = useTranslation();
   const location = useLocation();
@@ -108,10 +108,10 @@ export const LoginBoard = () => {
             </fieldset>
             {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
 
-            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={!anonymousLoginEnabled}>
+            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={anonymousLoginDisabled}>
               {t("LoginBoard.login")}
             </Button>
-            {!anonymousLoginEnabled && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
+            {anonymousLoginDisabled && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
           </div>
         </div>
 
