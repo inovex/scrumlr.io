@@ -27,7 +27,7 @@ cd terraform
 ```
 You need to create a `terraform.tfvars` file with the following variables:
 ```
-service_account_token = "YOUR_SERVICE_ACCOUNT_TOKEN
+service_account_token = "YOUR_SERVICE_ACCOUNT_TOKEN"
 project_id = "YOUR_PROJECT_ID"
 ```
 Now you can deploy SKE and Postgres Flex using Terraform.
