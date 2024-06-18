@@ -11,25 +11,36 @@
   flex-direction: column;
 }
 
-.new-board__header-top {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.new-board__header-center {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+.new-board__header-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-areas:
+    "logo title user"
+    ".    title .";
 }
 
 .new-board__header-bottom {
-  display: flex;
+  display: flex; // TODO maybe also align this using above grid
   flex-direction: row;
   justify-content: space-between;
 }
 
+.new-board__logo-wrapper {
+  grid-area: logo;
+  justify-self: flex-start;
+}
+
+.new-board__user-pill {
+  grid-area: user;
+  justify-self: flex-end;
+}
+
 .new-board__title {
+  grid-area: title;
+  align-self: center;
+  justify-self: center;
+
   font-size: $text--2xl;
   font-weight: 700;
   color: $color-black;
