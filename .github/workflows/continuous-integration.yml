@@ -90,6 +90,7 @@ jobs:
       docs_changed: ${{ steps.set-output.outputs.docs_changed }}
     
   deploy_github_pages:
+    needs: docs_changes
     if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
     uses: inovex/scrumlr.io/.github/workflows/deploy_docs.yml@feat/documentation
     secrets: inherit
