@@ -2,6 +2,11 @@ name: "Deployment health check"
 description: |
   "Changes the DNS to our own (since the DNS dev-cluster records are fastest available here) and performes a healthcheck"
 
+inputs:
+  HEALTH_URL: 
+    description: URL which the reachability check will run against
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -25,7 +30,7 @@ runs:
         lastCurlExitCode=-1
         until [ $retry -gt $max_retries ]
         do
-          response=$(curl -s -k -o /dev/null -w "%{http_code}" "$HEALTH_URL")
+          response=$(curl -s -k -o /dev/null -w "%{http_code}" "${{ inputs.HEALTH_URL }}")
           lastCurlExitCode=$?
           if [ $response = "204" ]; then
             echo "Cluster is healthy! Continuing..."
@@ -39,7 +44,7 @@ runs:
         set -e # re-enable cancelation on error
         
         if [ $response != "204" ]; then
-          echo "::error::Cluster is not responding after $max_retries attempts. URL: $HEALTH_URL"
+          echo "::error::Cluster is not responding after $max_retries attempts. URL: ${{ inputs.HEALTH_URL}}"
           exit $((lastCurlExitCode))
         fi   
       shell: bash

@@ -1,6 +1,11 @@
 name: Run Postman API Tests
 description: Runs postman tests
 
+inputs:
+  POSTMAN_URL: 
+    description: URL which postman will run its tests against
+    required: true
+
 runs:
   using: composite
   steps:
@@ -17,5 +22,5 @@ runs:
     - name: Run Newman script
       working-directory: ./server
       run: |
-        newman run api.postman_collection.json --env-var "base_url=$POSTMAN_URL" --insecure --verbose
+        newman run api.postman_collection.json --env-var "base_url=${{ inputs.POSTMAN_URL }}" --insecure --verbose
       shell: bash
