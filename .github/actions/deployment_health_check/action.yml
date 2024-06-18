@@ -47,7 +47,7 @@ runs:
           echo "::error::Cluster is not responding after $max_retries attempts. URL: ${{ inputs.HEALTH_URL }}"
           if [ $lastCurlExitCode == "0"] 
             exit 1 # when for some reason curl returned error code 0
-          if
+          fi
           exit $((lastCurlExitCode))
         fi   
       shell: bash
