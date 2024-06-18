@@ -1,6 +1,8 @@
 import {BrowserRouter, Routes} from "react-router-dom";
 import {LoginBoard} from "routes/LoginBoard";
 import {NewBoard} from "routes/NewBoard";
+import {Templates} from "routes/NewBoard/Templates";
+import {Sessions} from "routes/NewBoard/Sessions";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
@@ -35,7 +37,10 @@ const Router = () => (
             <NewBoard />
           </RequireAuthentication>
         }
-      />
+      >
+        <Route path="templates" element={<Templates />} />
+        <Route path="sessions" element={<Sessions />} />
+      </Route>
       <Route path="/login" element={<LoginBoard />} />
       <Route
         path="/board/:boardId/print"
