@@ -1,4 +1,4 @@
-import {BrowserRouter, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Routes} from "react-router-dom";
 import {LoginBoard} from "routes/LoginBoard";
 import {NewBoard} from "routes/NewBoard";
 import {Templates} from "routes/NewBoard/Templates";
@@ -38,6 +38,7 @@ const Router = () => (
           </RequireAuthentication>
         }
       >
+        <Route index element={<Navigate to="templates" />} />
         <Route path="templates" element={<Templates />} />
         <Route path="sessions" element={<Sessions />} />
       </Route>
