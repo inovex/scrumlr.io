@@ -72,14 +72,23 @@ jobs:
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
   
   docs_changes:
-    uses: dorny/paths-filter@v3
-    with:
-      filters: |
-        docs:
-          - 'docs/**'
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+      - name: paths-filter
+        id: docs_changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            docs:
+              - 'docs/**'
+      - name: set-output
+        id: set-output
+        run: echo ::set-output name=src::${{ steps.docs_changes.docs.src }}
     
   deploy_github_pages:
-    if: ${{ needs.steps.docs_changes.docs.src == 'true' }}
+    if: ${{ needs.steps.docs_changes.outputs.src == 'true' }}
     uses: inovex/scrumlr.io/.github/workflows/deploy_docs.yml@feat/documentation
     secrets: inherit
   deployment_health_check:
