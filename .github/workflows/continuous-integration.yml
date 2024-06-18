@@ -96,7 +96,7 @@ jobs:
       - name: reachability check
         uses: ./.github/actions/deployment_health_check
         with: 
-          TEST_URL: ${{ env.BASE_URL}}/api/health
+          HEALTH_URL: ${{ env.BASE_URL}}/api/health
   
   postman_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
@@ -108,7 +108,7 @@ jobs:
       - name: Reachability check
         uses: ./.github/actions/postman_run
         with: 
-          TEST_URL: ${{ env.BASE_URL}}/api/health
+          HEALTH_URL: ${{ env.BASE_URL}}/api/health
       - name: Postman run
         uses: ./.github/actions/postman_run
         with:
@@ -125,7 +125,7 @@ jobs:
       - name: reachability check
         uses: ./.github/actions/deployment_health_check
         with: 
-          TEST_URL: ${{ env.BASE_URL}}/api/health
+          HEALTH_URL: ${{ env.BASE_URL}}/api/health
       - name: run tests
         uses: OctoMind-dev/automagically-action-execute@v2
         with:
