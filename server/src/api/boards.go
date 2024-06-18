@@ -462,7 +462,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 					Column: cols[i].ID,
 					Text:   note.Text,
 					Board:  b.ID,
-					User:   note.Author,
+					User:   owner,
 				})
 				if errInside != nil {
 					s.boards.Delete(r.Context(), b.ID)

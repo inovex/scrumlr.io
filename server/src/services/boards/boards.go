@@ -88,8 +88,7 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
 		return nil, err
 	}
-	fmt.Println("==================++======================")
-	fmt.Println(b.ID)
+
 	return new(dto.Board).From(b), nil
 }
 
@@ -301,9 +300,4 @@ func (s *BoardService) DeletedBoard(board uuid.UUID) {
 	if err != nil {
 		logger.Get().Errorw("unable to broadcast deleted board", "err", err)
 	}
-}
-
-func (s *BoardService) ImportBoard(ctx context.Context, body dto.ImportBoardRequest) (*dto.Board, error) {
-
-	return nil, nil
 }
