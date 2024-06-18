@@ -18,7 +18,7 @@ export const NewBoard = () => {
           <UserPill className="new-board__user-pill" />
 
           {/* - - title - - */}
-          <div className="new-board__title">Title</div>
+          <div className="new-board__title">Choose a template</div>
         </div>
 
         {/* switch - - - search */}

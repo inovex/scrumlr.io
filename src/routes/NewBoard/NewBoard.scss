@@ -13,7 +13,7 @@
 
 .new-board__header-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: auto 1fr auto;
   grid-template-rows: repeat(2, 1fr);
   grid-template-areas:
     "logo title user"
