@@ -44,7 +44,7 @@ runs:
         set -e # re-enable cancelation on error
         
         if [ $response != "204" ]; then
-          echo "::error::Cluster is not responding after $max_retries attempts. URL: ${{ inputs.HEALTH_URL}}"
+          echo "::error::Cluster is not responding after $max_retries attempts. URL: ${{ inputs.HEALTH_URL }}"
           exit $((lastCurlExitCode))
         fi   
       shell: bash
