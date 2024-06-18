@@ -86,6 +86,8 @@ jobs:
       - name: set-output
         id: set-output
         run: echo "docs_changed=${{ steps.docs_changes.outputs.docs }}"
+      outputs:
+        docs_changed: ${{ steps.set-output.outputs.docs_changed }}
     
   deploy_github_pages:
     if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
