@@ -24,6 +24,7 @@ interface State {
 
 export const LoginBoard = () => {
   const anonymousLoginDisabled = useAppSelector((state) => state.view.anonymousLoginDisabled);
+  const providersAvailable = useAppSelector((state) => state.view.enabledAuthProvider).length > 0;
 
   const {t} = useTranslation();
   const location = useLocation();
@@ -111,7 +112,9 @@ export const LoginBoard = () => {
             <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={anonymousLoginDisabled}>
               {t("LoginBoard.login")}
             </Button>
-            {anonymousLoginDisabled && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
+            {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
+            {/* admin messed something up */}
+            {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
           </div>
         </div>
 
