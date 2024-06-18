@@ -7,8 +7,32 @@ $user-pill-height: 56px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-self: center;
+  align-items: center;
+  gap: $spacing--sm;
 
   width: $user-pill-width;
   height: $user-pill-height;
+  padding: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
+
+  background-color: $color-white;
+  border-radius: $rounded--large;
+}
+
+.user-pill__avatar-container {
+  width: $icon--huge;
+  height: $icon--huge;
+  border-radius: 100%;
+  background-color: #ccddff;
+}
+
+.user-pill__avatar {
+  width: $icon--huge;
+  height: $icon--huge;
+}
+
+.user-pill__name {
+  font-size: $text--base;
+  font-weight: 700;
+
+  color: #292f3b;
 }

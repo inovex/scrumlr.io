@@ -1,4 +1,5 @@
 import {useAppSelector} from "store";
+import StanAvatar from "assets/stan/Stan_Avatar.png";
 import "./UserPill.scss";
 
 export const UserPill = () => {
@@ -6,7 +7,9 @@ export const UserPill = () => {
 
   return (
     <div className="user-pill">
-      <div>avatar</div>
+      <div className="user-pill__avatar-container">
+        <img src={StanAvatar} className="user-pill__avatar" alt="Stan Avatar" />
+      </div>
       <div className="user-pill__name">{myName}</div>
     </div>
   );
