@@ -8,17 +8,17 @@ import (
 )
 
 type Info struct {
-	AuthProvider          []types.AccountType `json:"authProvider"`
-	AnonymousLoginEnabled bool                `json:"anonymousLoginEnabled"`
-	ServerTime            time.Time           `json:"serverTime"`
-	FeedbackEnabled       bool                `json:"feedbackEnabled"`
+	AuthProvider           []types.AccountType `json:"authProvider"`
+	AnonymousLoginDisabled bool                `json:"anonymousLoginDisabled"`
+	ServerTime             time.Time           `json:"serverTime"`
+	FeedbackEnabled        bool                `json:"feedbackEnabled"`
 }
 
 func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
 	info := Info{}
 	info.AuthProvider = []types.AccountType{}
 
-	info.AnonymousLoginEnabled = s.anonymousLoginEnabled
+	info.AnonymousLoginDisabled = s.anonymousLoginDisabled
 
 	if s.auth.Exists(types.AccountTypeGoogle) {
 		info.AuthProvider = append(info.AuthProvider, types.AccountTypeGoogle)

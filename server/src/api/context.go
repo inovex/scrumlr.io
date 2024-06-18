@@ -1,15 +1,15 @@
 package api
 
 import (
-  "context"
-  "errors"
-  "github.com/go-chi/chi/v5"
-  "github.com/google/uuid"
-  "net/http"
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/database/types"
-  "scrumlr.io/server/identifiers"
-  "scrumlr.io/server/logger"
+	"context"
+	"errors"
+	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
+	"net/http"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 )
 
 func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
@@ -172,11 +172,11 @@ func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) AnonymousLoginEnabledContext(next http.Handler) http.Handler {
+func (s *Server) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
-		if !s.anonymousLoginEnabled {
+		if s.anonymousLoginDisabled {
 			log.Errorw("not allowed to login anonymously")
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to login anonymously")))
 			return

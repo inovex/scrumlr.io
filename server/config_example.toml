@@ -29,7 +29,7 @@ database = "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable"
 base-path = "/"
 
 # Enable/Disable the login of anonymous clients
-enable-anonymous-login = true
+disable-anonymous-login = false
 
 # Set the protocol and host for the auth provider callbacks (e.g. https://scrumlr.io)
 auth-callback-host = ""
