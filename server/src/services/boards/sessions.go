@@ -289,6 +289,20 @@ func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.B
 			logger.Get().Errorw("unable to broadcast updated board session", "err", err)
 		}
 	}
+
+	columns, err := s.database.GetColumns(board)
+	if err != nil {
+		logger.Get().Errorw("unable to get columns on a updatedsession", "err", err)
+	}
+
+	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventColumnsUpdated,
+		Data: dto.Columns(columns),
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast update columns following a updatedsession", "err", err)
+	}
+
 }
 
 func (s *BoardSessionService) UpdatedSessions(board uuid.UUID, sessions []database.BoardSession) {
