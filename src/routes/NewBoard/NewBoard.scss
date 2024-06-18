@@ -28,3 +28,9 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.new-board__title {
+  font-size: $text--2xl;
+  font-weight: 700;
+  color: $color-black;
+}
