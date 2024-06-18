@@ -4,9 +4,13 @@ name: Run Postman API Tests
 on:
   workflow_call:
     inputs:
-      base_url:
+      TEST_URL:
         required: true
-        description: "Base URL to test against"
+        description: "URL to test health_check"
+        type: string
+      POSTMAN_URL:
+        required: true
+        description: "Base URL for postman tests"
         type: string
 
 jobs:
@@ -18,6 +22,8 @@ jobs:
 
       - name: check cluster reachability
         uses: ./.github/actions/deployment_health_check
+        with:
+          TEST_URL: ${{ inputs.TEST_URL }}
       
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -30,4 +36,4 @@ jobs:
       - name: Run Newman script
         working-directory: ./server
         run: |
-          newman run api.postman_collection.json --env-var "base_url=${{ inputs.base_url }}/api" --insecure --verbose
+          newman run api.postman_collection.json --env-var "base_url=${{ inputs.POSTMAN_URL }}" --insecure --verbose

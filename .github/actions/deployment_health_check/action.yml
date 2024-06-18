@@ -16,8 +16,6 @@ runs:
 
     - name: Wait for cluster to become healthy
       id: wait-for-cluster
-      env:
-        BASE_URL: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
       run: |
         # Disable cancelation of script on first error (since cluster might be not reachable -> curl would return error code != 0)
         set +e
@@ -27,7 +25,7 @@ runs:
         lastCurlExitCode=-1
         until [ $retry -gt $max_retries ]
         do
-          response=$(curl -s -k -o /dev/null -w "%{http_code}" "$BASE_URL/api/health")
+          response=$(curl -s -k -o /dev/null -w "%{http_code}" "$TEST_URL")
           lastCurlExitCode=$?
           if [ $response = "204" ]; then
             echo "Cluster is healthy! Continuing..."
@@ -41,7 +39,7 @@ runs:
         set -e # re-enable cancelation on error
         
         if [ $response != "204" ]; then
-          echo "::error::Cluster is not responding after $max_retries attempts."
+          echo "::error::Cluster is not responding after $max_retries attempts. URL: $TEST_URL"
           exit $((lastCurlExitCode))
         fi   
       shell: bash
