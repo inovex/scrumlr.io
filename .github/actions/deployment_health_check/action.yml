@@ -22,6 +22,7 @@ runs:
     - name: Wait for cluster to become healthy
       id: wait-for-cluster
       run: |
+        # Run cluster health check
         # Disable cancelation of script on first error (since cluster might be not reachable -> curl would return error code != 0)
         set +e
 
@@ -44,10 +45,7 @@ runs:
         set -e # re-enable cancelation on error
         
         if [ $response != "204" ]; then
-          echo "::error::Cluster is not responding after $max_retries attempts. URL: ${{ inputs.HEALTH_URL }}"
-          if [[ $lastCurlExtiCode -ne 0 ]]; then
-            exit 1
-          fi
-          exit $((lastCurlExitCode))
+          echo "::error::Cluster is not responding after $max_retries attempts. URL: ${{ inputs.HEALTH_URL }} (Status-Code: $response)"
+          exit 1
         fi   
       shell: bash

@@ -93,9 +93,9 @@ jobs:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main'}}
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: reachability check
+      - name: Reachability check
         uses: ./.github/actions/deployment_health_check
         with: 
           HEALTH_URL: ${{ env.BASE_URL}}/api/health
@@ -105,7 +105,7 @@ jobs:
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
       - name: Reachability check
         uses: ./.github/actions/postman_run
@@ -122,13 +122,13 @@ jobs:
     needs: deployment_health_check
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: reachability check
+      - name: Reachability check
         uses: ./.github/actions/deployment_health_check
         with: 
           HEALTH_URL: ${{ env.BASE_URL}}/api/health
-      - name: run tests
+      - name: Run tests
         uses: OctoMind-dev/automagically-action-execute@v2
         with:
           url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
