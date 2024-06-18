@@ -12,18 +12,20 @@ on:
     branches: [main]
     types:
       - completed
+env:
+  HEALTH_TEST_URL: https://${{ github.event.pull_request.number || 'main' }}.development.scrumlr.fra.ics.inovex.io/api/health
 
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Build and Test
+  test-frontend:
+    name: Build and Test – Frontend
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -37,16 +39,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - uses: actions/setup-go@v3
-        with:
-          go-version: "^1.20"
-
-      - name: Build server
-        working-directory: ./server
-        run: |
-          make test
-          make build-alpine
-
       - name: Build client
         run: |
           yarn install
@@ -57,9 +49,32 @@ jobs:
 
       - name: Test with coverage
         run: yarn test --coverage --watchAll=false --passWithNoTests
+    
+  test-backend:
+      name: Build and Test – Backend
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "^1.20"
+      
+      - name: Go lint 
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: v1.54
+          working-directory: ./server/src/
+
+      - name: Build server
+        working-directory: ./server
+        run: |
+          make test
+          make build-alpine
+        
   package:
-    needs: test
+    needs: [test-frontend, test-backend]
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
 
   deploy_to_dev_cluster:
@@ -80,13 +95,16 @@ jobs:
         uses: actions/checkout@v4
       - name: reachability check
         uses: ./.github/actions/deployment_health_check
+        with: 
+          TEST_URL: ${{ env.HEALTH_TEST_URL}}
   
   postman_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
     uses: ./.github/workflows/postman_tests.yml
-    with:
-      base_url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
+    with: # the below links are there, since you cannot access the .env when in another runner (this is the case with postman)
+      TEST_URL: https://${{ github.event.pull_request.number || 'main' }}.development.scrumlr.fra.ics.inovex.io/api/health
+      POSTMAN_URL: https://${{ github.event.pull_request.number || 'main' }}.development.scrumlr.fra.ics.inovex.io/api
 
   octomind_end_to_end_test:
     name: Octomind End to End Test
@@ -98,6 +116,8 @@ jobs:
         uses: actions/checkout@v4
       - name: reachability check
         uses: ./.github/actions/deployment_health_check
+        with: 
+          TEST_URL: ${{ env.HEALTH_TEST_URL}}
       - name: run tests
         uses: OctoMind-dev/automagically-action-execute@v2
         with:
