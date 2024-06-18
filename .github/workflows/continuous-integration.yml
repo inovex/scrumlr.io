@@ -85,7 +85,7 @@ jobs:
               - 'docs/**'
       - name: set-output
         id: set-output
-        run: echo "docs_changed=${{ steps.docs_changes.outputs.docs }}"
+        run: echo "docs_changed=${{ steps.docs_changes.outputs.docs }}" >> $GITHUB_OUTPUT
     outputs:
       docs_changed: ${{ steps.set-output.outputs.docs_changed }}
     
