@@ -1,5 +1,6 @@
 import {useTranslation} from "react-i18next";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
+import {UserPill} from "components/UserPill/UserPill";
 import "./NewBoard.scss";
 
 export const NewBoard = () => {
@@ -14,7 +15,7 @@ export const NewBoard = () => {
               <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
             </a>
           </div>
-          <div className="new-board__profile">P</div>
+          <UserPill />
         </div>
 
         {/* - - title - - */}

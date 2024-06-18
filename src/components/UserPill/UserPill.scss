@@ -1,0 +1,14 @@
+@import "constants/style";
+
+$user-pill-width: 188px;
+$user-pill-height: 56px;
+
+.user-pill {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-self: center;
+
+  width: $user-pill-width;
+  height: $user-pill-height;
+}
