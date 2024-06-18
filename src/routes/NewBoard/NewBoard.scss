@@ -1,1 +1,28 @@
 @import "constants/style";
+
+.new-board {
+  width: 100vw;
+}
+
+.new-board__header {
+  display: flex;
+  flex-direction: column;
+}
+
+.new-board__header-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.new-board__header-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.new-board__header-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
