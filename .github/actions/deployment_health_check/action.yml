@@ -45,7 +45,7 @@ runs:
         
         if [ $response != "204" ]; then
           echo "::error::Cluster is not responding after $max_retries attempts. URL: ${{ inputs.HEALTH_URL }}"
-          if [[ $lastCurlExtiCode -ne 0]]
+          if [[ $lastCurlExtiCode -ne 0 ]]
             exit 1
           fi
           exit $((lastCurlExitCode))
