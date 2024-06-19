@@ -1,0 +1,37 @@
+---
+title: Welcome to the documentation of Scrumlr.
+banner:
+  content: |
+    We are still working on the documentation. If you have any questions, feel free to reach out to us using GitHub Discussions.
+description: Get started with Scrumlr and take your retrospectives to the next level.
+template: splash
+hero:
+  tagline: Reach new heights with your team!
+  image:
+    alt: Stan Scrumlr
+    light: ../../assets/stan_light.webp
+    dark: ../../assets/stan_dark.webp
+
+  actions:
+    - text: Read the docs
+      link: /getting-started/intro
+      icon: right-arrow
+      variant: primary
+    - text: Try it out
+      link: https://scrumlr.io/
+      icon: external
+      
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Additional information
+
+<CardGrid stagger>
+	<Card title="Contribute to this site" icon="pencil">
+		Edit the Markdown files in `docs/src/content/docs` and open a PR to contribute.
+	</Card>
+	<Card title="Legal stuff" icon="information">
+    Read the [privacy policy](https://scrumlr.io/data-protection), [cookie policy](https://scrumlr.io/cookie-policy), and [legal notice](https://scrumlr.io/legal-notice).
+  </Card>
+</CardGrid>
