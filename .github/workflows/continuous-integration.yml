@@ -94,7 +94,7 @@ jobs:
   deploy_github_pages:
     needs: docs_changes
     if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
-    uses: inovex/scrumlr.io/.github/workflows/deploy_docs.yml@feat/documentation
+    uses: inovex/scrumlr.io/.github/workflows/deploy_docs.yml@main
     secrets: inherit
   deployment_health_check:
     needs: deploy_to_dev_cluster
