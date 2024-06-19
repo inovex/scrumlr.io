@@ -4,20 +4,32 @@ import "./Switch.scss";
 
 type SwitchDirection = "left" | "right";
 
-export const Switch = () => {
+type SwitchProps = {
+  leftText: string;
+  rightText: string;
+  onLeftSwitch: () => void;
+  onRightSwitch: () => void;
+};
+
+export const Switch = (props: SwitchProps) => {
   const [direction, setDirection] = useState<SwitchDirection>("left");
 
-  const handleSwitch = (section: SwitchDirection) => {
-    setDirection(section);
+  const handleSwitch = (direction: SwitchDirection) => {
+    setDirection(direction);
+    if (direction === "left") {
+      props.onLeftSwitch();
+    } else {
+      props.onRightSwitch();
+    }
   };
 
   return (
     <div className="switch-container">
       <div className={classNames("switch-item", {"switch-item--active": direction === "left"})} onClick={() => handleSwitch("left")}>
-        Templates
+        {props.leftText}
       </div>
       <div className={classNames("switch-item", {"switch-item--active": direction === "right"})} onClick={() => handleSwitch("right")}>
-        Sessions
+        {props.rightText}
       </div>
     </div>
   );

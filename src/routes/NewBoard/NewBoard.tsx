@@ -1,4 +1,5 @@
 import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
 import {Switch} from "components/Switch/Switch";
@@ -6,6 +7,11 @@ import "./NewBoard.scss";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
+
+  const switchView = (location: string) => {
+    navigate(location);
+  };
   return (
     <div className="new-board">
       <header className="new-board__header">
@@ -25,7 +31,7 @@ export const NewBoard = () => {
         {/* switch - - - search */}
         <div className="new-board__header-bottom">
           <label className="switch">
-            <Switch />
+            <Switch leftText="Templates" onLeftSwitch={() => switchView("templates")} rightText="Saved Sessions" onRightSwitch={() => switchView("sessions")} />
             <span className="slider round" />
           </label>
 
