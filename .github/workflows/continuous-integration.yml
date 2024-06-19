@@ -106,7 +106,31 @@ jobs:
     with:
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
-
+  
+  docs_changes:
+    if : ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+      - name: paths-filter
+        id: docs_changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            docs:
+              - 'docs/**'
+      - name: set-output
+        id: set-output
+        run: echo "docs_changed=${{ steps.docs_changes.outputs.docs }}" >> $GITHUB_OUTPUT
+    outputs:
+      docs_changed: ${{ steps.set-output.outputs.docs_changed }}
+    
+  deploy_github_pages:
+    needs: docs_changes
+    if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
+    uses: inovex/scrumlr.io/.github/workflows/deploy_docs.yml@feat/documentation
+    secrets: inherit
   deployment_health_check:
     needs: deploy_to_dev_cluster
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
