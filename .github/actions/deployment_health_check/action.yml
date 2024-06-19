@@ -2,6 +2,11 @@ name: "Deployment health check"
 description: |
   "Changes the DNS to our own (since the DNS dev-cluster records are fastest available here) and performes a healthcheck"
 
+inputs:
+  HEALTH_URL: 
+    description: URL which the reachability check will run against
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -16,9 +21,8 @@ runs:
 
     - name: Wait for cluster to become healthy
       id: wait-for-cluster
-      env:
-        BASE_URL: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
       run: |
+        # Run cluster health check
         # Disable cancelation of script on first error (since cluster might be not reachable -> curl would return error code != 0)
         set +e
 
@@ -27,7 +31,7 @@ runs:
         lastCurlExitCode=-1
         until [ $retry -gt $max_retries ]
         do
-          response=$(curl -s -k -o /dev/null -w "%{http_code}" "$BASE_URL/api/health")
+          response=$(curl -s -k -o /dev/null -w "%{http_code}" "${{ inputs.HEALTH_URL }}")
           lastCurlExitCode=$?
           if [ $response = "204" ]; then
             echo "Cluster is healthy! Continuing..."
@@ -41,7 +45,7 @@ runs:
         set -e # re-enable cancelation on error
         
         if [ $response != "204" ]; then
-          echo "::error::Cluster is not responding after $max_retries attempts."
-          exit $((lastCurlExitCode))
+          echo "::error::Cluster is not responding after $max_retries attempts. URL: ${{ inputs.HEALTH_URL }} (Status-Code: $response)"
+          exit 1
         fi   
       shell: bash
