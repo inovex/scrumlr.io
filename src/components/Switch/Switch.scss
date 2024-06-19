@@ -1,25 +1,35 @@
-/* src/Switch.css */
+@import "constants/style";
+
 .switch-container {
   display: flex;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  overflow: hidden;
+  flex-direction: row;
+  gap: 0;
+
   width: fit-content;
+
+  background-color: $color-white;
+
+  overflow: hidden;
 }
 
 .switch-item {
-  padding: 10px 20px;
-  cursor: pointer;
+  padding: $spacing--sm $spacing--base;
+  border-radius: $rounded--large;
+
+  font-size: $text--base;
+  font-weight: 600;
+
   transition:
     background-color 0.3s,
     color 0.3s;
 }
 
 .switch-item:not(.switch-item--active):hover {
-  background-color: #f0f0f0;
+  cursor: pointer;
+  // background-color: #f0f0f0;
 }
 
 .switch-item--active {
-  background-color: #007bff;
+  background-color: #292f3b;
   color: white;
 }
