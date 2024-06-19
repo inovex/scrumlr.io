@@ -36,3 +36,4 @@ ENV SCRUMLR_ANALYTICS_SRC=''
 
 COPY ./nginx.conf /etc/nginx/templates/scrumlr.io.conf.template
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
