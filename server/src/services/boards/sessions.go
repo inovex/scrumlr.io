@@ -290,19 +290,31 @@ func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.B
 		}
 	}
 
+	// Sync columns
 	columns, err := s.database.GetColumns(board)
 	if err != nil {
-		logger.Get().Errorw("unable to get columns on a updatedsession", "err", err)
+		logger.Get().Errorw("unable to get columns on a updatedsession call", "err", err)
 	}
-
 	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: dto.Columns(columns),
 	})
 	if err != nil {
-		logger.Get().Errorw("unable to broadcast update columns following a updatedsession", "err", err)
+		logger.Get().Errorw("unable to broadcast update columns following a updatedsession call", "err", err)
 	}
 
+	// Sync notes
+	notes, err := s.database.GetNotes(board)
+	if err != nil {
+		logger.Get().Errorw("unable to get notes on a updatedsession call", "err", err)
+	}
+	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: dto.Notes(notes),
+	})
+	if err != nil {
+		logger.Get().Errorw("unable to broadcast sync notes following a updatedsession call", "err", err)
+	}
 }
 
 func (s *BoardSessionService) UpdatedSessions(board uuid.UUID, sessions []database.BoardSession) {
