@@ -15,11 +15,11 @@
     color 0.3s;
 }
 
-.switch-item:not(.active):hover {
+.switch-item:not(.switch-item--active):hover {
   background-color: #f0f0f0;
 }
 
-.switch-item.active {
+.switch-item--active {
   background-color: #007bff;
   color: white;
 }

@@ -1,19 +1,22 @@
 import {useState} from "react";
+import classNames from "classnames";
 import "./Switch.scss";
 
-export const Switch = () => {
-  const [active, setActive] = useState("Templates");
+type SwitchDirection = "left" | "right";
 
-  const handleSwitch = (section: string) => {
-    setActive(section);
+export const Switch = () => {
+  const [direction, setDirection] = useState<SwitchDirection>("left");
+
+  const handleSwitch = (section: SwitchDirection) => {
+    setDirection(section);
   };
 
   return (
     <div className="switch-container">
-      <div className={`switch-item ${active === "Templates" ? "active" : ""}`} onClick={() => handleSwitch("Templates")}>
+      <div className={classNames("switch-item", {"switch-item--active": direction === "left"})} onClick={() => handleSwitch("left")}>
         Templates
       </div>
-      <div className={`switch-item ${active === "Sessions" ? "active" : ""}`} onClick={() => handleSwitch("Sessions")}>
+      <div className={classNames("switch-item", {"switch-item--active": direction === "right"})} onClick={() => handleSwitch("right")}>
         Sessions
       </div>
     </div>
