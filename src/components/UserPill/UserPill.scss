@@ -16,6 +16,20 @@ $user-pill-height: 56px;
 
   background-color: $color-white;
   border-radius: $rounded--large;
+
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 3px 12px 0 rgba(35, 39, 50, 0.12);
+  }
+
+  &:focus {
+    border: 1.5px solid #3379ff;
+  }
+
+  &:active {
+    border: 1.5px solid #373e4f;
+  }
 }
 
 .user-pill__avatar-container {
@@ -23,6 +37,8 @@ $user-pill-height: 56px;
   height: $icon--huge;
   border-radius: 100%;
   background-color: #ccddff;
+
+  user-select: none;
 }
 
 .user-pill__avatar {
