@@ -80,7 +80,7 @@ jobs:
       - name: Verify Go Modules
         working-directory: ./server/src
         run: go list -m all
-        
+
       - name: Go lint 
         uses: golangci/golangci-lint-action@v4
         with:
@@ -99,7 +99,7 @@ jobs:
 
   deploy_to_dev_cluster:
     needs: package
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main'}}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@main
     secrets: inherit
     with:
@@ -108,7 +108,7 @@ jobs:
 
   deployment_health_check:
     needs: deploy_to_dev_cluster
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main'}}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -116,7 +116,7 @@ jobs:
       - name: Reachability check
         uses: ./.github/actions/deployment_health_check
         with: 
-          HEALTH_URL: ${{ env.BASE_URL}}/api/health
+          HEALTH_URL: ${{ env.BASE_URL }}/api/health
   
   postman_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
@@ -128,11 +128,11 @@ jobs:
       - name: Reachability check
         uses: ./.github/actions/deployment_health_check
         with: 
-          HEALTH_URL: ${{ env.BASE_URL}}/api/health
+          HEALTH_URL: ${{ env.BASE_URL }}/api/health
       - name: Postman run
         uses: ./.github/actions/postman_run
         with:
-          POSTMAN_URL: ${{ env.BASE_URL}}/api
+          POSTMAN_URL: ${{ env.BASE_URL }}/api
 
   octomind_end_to_end_test:
     name: Octomind End to End Test
@@ -145,7 +145,7 @@ jobs:
       - name: Reachability check
         uses: ./.github/actions/deployment_health_check
         with: 
-          HEALTH_URL: ${{ env.BASE_URL}}/api/health
+          HEALTH_URL: ${{ env.BASE_URL }}/api/health
       - name: Run tests
         uses: OctoMind-dev/automagically-action-execute@v2
         with:
