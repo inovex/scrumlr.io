@@ -1,7 +1,7 @@
 import {useState} from "react";
-import "./SwitchButton.scss";
+import "./Switch.scss";
 
-export const SwitchButton = () => {
+export const Switch = () => {
   const [active, setActive] = useState("Templates");
 
   const handleSwitch = (section: string) => {
