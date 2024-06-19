@@ -2,9 +2,10 @@ import {useState} from "react";
 import classNames from "classnames";
 import "./Switch.scss";
 
-type SwitchDirection = "left" | "right";
+export type SwitchDirection = "left" | "right";
 
 type SwitchProps = {
+  initialize: () => SwitchDirection;
   leftText: string;
   rightText: string;
   onLeftSwitch: () => void;
@@ -12,7 +13,7 @@ type SwitchProps = {
 };
 
 export const Switch = (props: SwitchProps) => {
-  const [direction, setDirection] = useState<SwitchDirection>("left");
+  const [direction, setDirection] = useState<SwitchDirection>(props.initialize());
 
   const handleSwitch = (direction: SwitchDirection) => {
     setDirection(direction);
