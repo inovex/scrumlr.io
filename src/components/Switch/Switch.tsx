@@ -24,11 +24,11 @@ export const Switch = (props: SwitchProps) => {
   };
 
   return (
-    <div className="switch-container">
-      <div className={classNames("switch-item", {"switch-item--active": direction === "left"})} onClick={() => handleSwitch("left")}>
+    <div className="switch">
+      <div className={classNames("switch__item", {"switch__item--active": direction === "left"})} onClick={() => handleSwitch("left")}>
         {props.leftText}
       </div>
-      <div className={classNames("switch-item", {"switch-item--active": direction === "right"})} onClick={() => handleSwitch("right")}>
+      <div className={classNames("switch__item", {"switch__item--active": direction === "right"})} onClick={() => handleSwitch("right")}>
         {props.rightText}
       </div>
     </div>

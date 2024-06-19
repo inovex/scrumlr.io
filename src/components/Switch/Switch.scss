@@ -1,6 +1,6 @@
 @import "constants/style";
 
-.switch-container {
+.switch {
   display: flex;
   flex-direction: row;
   gap: 0;
@@ -8,11 +8,9 @@
   width: fit-content;
 
   background-color: $color-white;
-
-  overflow: hidden;
 }
 
-.switch-item {
+.switch__item {
   padding: $spacing--sm $spacing--base;
   border-radius: $rounded--large;
 
@@ -22,14 +20,13 @@
   transition:
     background-color 0.3s,
     color 0.3s;
-}
 
-.switch-item:not(.switch-item--active):hover {
-  cursor: pointer;
-  // background-color: #f0f0f0;
-}
+  &--active {
+    background-color: #292f3b;
+    color: white;
+  }
 
-.switch-item--active {
-  background-color: #292f3b;
-  color: white;
+  &:not(&--active) {
+    cursor: pointer;
+  }
 }
