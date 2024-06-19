@@ -1,6 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
+import {SwitchButton} from "components/SwitchButton/SwitchButton";
 import "./NewBoard.scss";
 
 export const NewBoard = () => {
@@ -24,7 +25,7 @@ export const NewBoard = () => {
         {/* switch - - - search */}
         <div className="new-board__header-bottom">
           <label className="switch">
-            <input type="checkbox" />
+            <SwitchButton />
             <span className="slider round" />
           </label>
 

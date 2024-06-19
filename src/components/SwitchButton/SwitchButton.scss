@@ -1,0 +1,25 @@
+/* src/Switch.css */
+.switch-container {
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.switch-item {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+.switch-item:not(.active):hover {
+  background-color: #f0f0f0;
+}
+
+.switch-item.active {
+  background-color: #007bff;
+  color: white;
+}
