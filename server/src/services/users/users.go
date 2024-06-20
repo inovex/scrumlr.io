@@ -86,18 +86,14 @@ func (s *UserService) Update(_ context.Context, body dto.UserUpdateRequest) (*dt
 func (s *UserService) UpdatedUser(user database.User) {
 	connectedBoards, err := s.database.GetSingleUserConnectedBoards(user.ID)
 	if err != nil {
+		logger.Get().Errorw("unable to retrieve all currently connected boards for single user in an updateduser call", "err", err)
 		return
 	}
 	for _, session := range connectedBoards {
-		userSession, err := s.database.GetBoardSession(session.Board, session.User)
-		if err != nil {
-			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID(), "err", err)
-		}
-		err = s.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
+		err = s.realtime.BroadcastToBoard(session, realtime.BoardEvent{
 			Type: realtime.BoardEventParticipantUpdated,
-			Data: new(dto.BoardSession).From(session),
+			Data: new(dto.User).From(user),
 		})
-
 		if err != nil {
 			logger.Get().Errorw("unable to broadcast updated user", "err", err)
 		}
