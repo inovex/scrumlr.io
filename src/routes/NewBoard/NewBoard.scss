@@ -9,14 +9,14 @@
 .new-board__grid {
   display: grid;
   grid-template-columns: auto auto 1fr auto auto;
-  grid-template-rows: repeat(2, 1fr) repeat(2, auto);
+  grid-template-rows: repeat(3, auto) 1fr; // TODO grid gaps / margins
   grid-template-areas:
     "logo title   title   title   user"
     ".    title   title   title   . "
     ".    switch  search  search  ."
     ".    main    main    main    .";
 
-  // padding: 0 10vw;
+  height: 100vh;
 }
 
 .new-board__logo-wrapper {
@@ -51,4 +51,6 @@
 
 .new-board__outlet {
   grid-area: main;
+  display: flex;
+  justify-content: stretch;
 }

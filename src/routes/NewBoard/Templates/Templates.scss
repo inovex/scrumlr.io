@@ -1,1 +1,21 @@
 @import "constants/style";
+
+.templates {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  gap: $spacing--md;
+}
+
+.templates__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: $spacing--lg;
+
+  padding: $spacing--xl $spacing--xl 0 $spacing--xl;
+  border-radius: $rounded--default;
+
+  // background-color: #DDE8FF;
+  background-color: mediumseagreen;
+}
