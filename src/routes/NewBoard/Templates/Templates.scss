@@ -1,10 +1,19 @@
 @import "constants/style";
 
+$stan-shrink-factor: 90%;
+
+// make sure that stan has a lower z-index than the container
+// to avoid ugly overlaps
+$stan-z-index: $base-z-index;
+$container-z-index: $stan-z-index + $base-z-index-step;
+
 .templates {
   display: flex;
   flex-direction: row;
   flex: 1;
   gap: $spacing--md;
+
+  position: relative;
 }
 
 .templates__container {
@@ -17,6 +26,8 @@
   border-radius: $rounded--default;
 
   background-color: #dde8ff;
+
+  z-index: $container-z-index;
 }
 
 .templates__container-title {
@@ -24,4 +35,16 @@
   font-weight: 700;
 
   color: #292f3b;
+}
+
+.templates__stan {
+  position: absolute;
+
+  width: auto;
+  height: $stan-shrink-factor;
+
+  // align right edge of stan to the left edge of the container, including some minor pixel correction
+  transform: translateX(calc(-#{$stan-shrink-factor} + $spacing--xs));
+
+  z-index: $stan-z-index;
 }
