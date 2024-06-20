@@ -5,6 +5,8 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, color.change($color-backlog-blue, $alpha: 0.075), color.change($color-white, $alpha: 0.2));
+
+  padding: $spacing--md 10vw 0 10vw;
 }
 
 .new-board__grid {
@@ -17,7 +19,7 @@
     ".    switch  search  search  ."
     ".    main    main    main    .";
 
-  height: 100vh;
+  height: 100%;
 }
 
 .new-board__logo-wrapper {
