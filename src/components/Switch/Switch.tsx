@@ -5,6 +5,7 @@ import "./Switch.scss";
 export type SwitchDirection = "left" | "right";
 
 type SwitchProps = {
+  className?: string;
   initialize?: () => SwitchDirection;
   leftText: string;
   rightText: string;
@@ -25,7 +26,7 @@ export const Switch = (props: SwitchProps) => {
   };
 
   return (
-    <div className="switch">
+    <div className={classNames("switch", props.className)}>
       <div className={classNames("switch__item", {"switch__item--active": direction === "left"})} onClick={() => handleSwitch("left")}>
         {props.leftText}
       </div>
