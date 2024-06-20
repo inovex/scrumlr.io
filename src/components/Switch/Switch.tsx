@@ -8,8 +8,8 @@ type SwitchProps = {
   initialize?: () => SwitchDirection;
   leftText: string;
   rightText: string;
-  onLeftSwitch: () => void;
-  onRightSwitch: () => void;
+  onLeftSwitch?: () => void;
+  onRightSwitch?: () => void;
 };
 
 export const Switch = (props: SwitchProps) => {
@@ -18,9 +18,9 @@ export const Switch = (props: SwitchProps) => {
   const handleSwitch = (direction: SwitchDirection) => {
     setDirection(direction);
     if (direction === "left") {
-      props.onLeftSwitch();
+      props.onLeftSwitch?.();
     } else {
-      props.onRightSwitch();
+      props.onRightSwitch?.();
     }
   };
 
