@@ -1,9 +1,10 @@
+@use "sass:color";
 @import "constants/style";
 
 .new-board {
   width: 100%;
   height: 100%;
-  background: linear-gradient(180deg, rgba(107, 156, 255, 30%) 4.6%, rgb(255, 255, 255, 10%) 100%); // TODO fix opacity
+  background: linear-gradient(180deg, color.change($color-backlog-blue, $alpha: 0.075), color.change($color-white, $alpha: 0.2));
 }
 
 .new-board__grid {
