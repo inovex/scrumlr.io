@@ -31,6 +31,7 @@ $container-z-index: $stan-z-index + $base-z-index-step;
 }
 
 .templates__container-title {
+  word-break: break-word; // because the word "Recommendations" is too long, TODO find better solution for this
   font-size: $text--lg;
   font-weight: 700;
 
