@@ -17,5 +17,12 @@
   border-radius: $rounded--default;
 
   // background-color: #DDE8FF;
-  background-color: mediumseagreen;
+  background-color: mediumseagreen; // better visibility until I get the screen background right
+}
+
+.templates__container-title {
+  font-size: $text--lg;
+  font-weight: 700;
+
+  color: #292f3b;
 }
