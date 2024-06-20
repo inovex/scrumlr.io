@@ -38,15 +38,15 @@ export const NewBoard = () => {
         <UserPill className="new-board__user-pill" />
 
         {/* - - title - - */}
-        <div className="new-board__title">Choose a template</div>
+        <div className="new-board__title">{boardView === "templates" ? t("Templates.title") : t("Sessions.title")}</div>
 
         {/* switch - - - search */}
         <Switch
           className="new-board__switch"
           activeDirection={boardView === "templates" ? "left" : "right"}
-          leftText="Templates"
+          leftText={t("Templates.switchTitle")}
           onLeftSwitch={() => switchView("templates")}
-          rightText="Saved Sessions"
+          rightText={t("Sessions.switchTitle")}
           onRightSwitch={() => switchView("sessions")}
         />
 

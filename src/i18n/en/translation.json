@@ -2,13 +2,16 @@
   "InfoBar": {
     "ReturnToPresentedNote": "Return to presented note"
   },
-  "NewBoard": {
-    "boardName": "Board name",
-    "createNewBoard": "Create new Board",
-    "extendedConfigurationButton": "Extended configuration",
-    "basicConfigurationButton": "Template selection",
-    "extendedConfigurationTitle": "Extended configuration",
-    "basicConfigurationTitle": "Choose a template"
+  "NewBoard": {},
+  "Templates": {
+    "switchTitle": "Templates",
+    "title": "Choose a template",
+    "savedTemplates": "Your Templates",
+    "recommendedTemplates": "Our Recommendations"
+  },
+  "Sessions": {
+    "switchTitle": "Sessions",
+    "title": "Choose a session"
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",

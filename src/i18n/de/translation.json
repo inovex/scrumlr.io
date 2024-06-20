@@ -2,13 +2,16 @@
   "InfoBar": {
     "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
   },
-  "NewBoard": {
-    "boardName": "Sitzungsname",
-    "createNewBoard": "Erstelle eine Sitzung",
-    "extendedConfigurationButton": "Erweiterte Einstellungen",
-    "basicConfigurationButton": "Vorlagenauswahl",
-    "extendedConfigurationTitle": "Erweiterte Einstellungen",
-    "basicConfigurationTitle": "Wähle eine Vorlage"
+  "NewBoard": {},
+  "Templates": {
+    "switchTitle": "Vorlagen",
+    "title": "Wähle eine Vorlage",
+    "savedTemplates": "Deine Vorlagen",
+    "recommendedTemplates": "Unsere Empfehlungen"
+  },
+  "Sessions": {
+    "switchTitle": "Sitzungen",
+    "title": "Wähle eine Sitzung"
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
