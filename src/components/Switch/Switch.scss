@@ -6,7 +6,6 @@
   gap: 0;
 
   width: fit-content;
-
   padding: $spacing--xxs;
   border-radius: $rounded--large;
 
@@ -14,6 +13,9 @@
 }
 
 .switch__item {
+  display: flex;
+  align-items: center;
+
   padding: $spacing--sm $spacing--base;
   border-radius: $rounded--large;
 
