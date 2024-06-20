@@ -3,6 +3,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
+import {SearchBar} from "components/SearchBar/SearchBar";
 import {Switch, SwitchDirection} from "components/Switch/Switch";
 import "./NewBoard.scss";
 
@@ -53,9 +54,7 @@ export const NewBoard = () => {
           onRightSwitch={() => switchView("sessions")}
         />
 
-        <div className="new-board__search-bar">
-          <input type="text" />
-        </div>
+        <SearchBar className="new-board__search-bar" />
       </div>
       {/* <Outlet /> */}
     </div>
