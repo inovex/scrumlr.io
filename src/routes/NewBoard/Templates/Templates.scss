@@ -11,7 +11,8 @@ $container-z-index: $stan-z-index + $base-z-index-step;
   display: flex;
   flex-direction: row;
   flex: 1;
-  gap: $spacing--md;
+  // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
+  // gap: $spacing--md;
 
   position: relative;
 }
@@ -28,6 +29,10 @@ $container-z-index: $stan-z-index + $base-z-index-step;
   background-color: #dde8ff;
 
   z-index: $container-z-index;
+
+  &--saved {
+    margin-right: $spacing--md; // instead of gap, see above
+  }
 }
 
 .templates__container-title {
@@ -44,7 +49,7 @@ $container-z-index: $stan-z-index + $base-z-index-step;
   width: auto;
   height: $stan-shrink-factor;
 
-  // align right edge of stan to the left edge of the container, including some minor pixel correction
+  // align right edge of stan to the left edge of the container, including some elbow room
   transform: translateX(calc(-#{$stan-shrink-factor} + $spacing--xs));
 
   z-index: $stan-z-index;
