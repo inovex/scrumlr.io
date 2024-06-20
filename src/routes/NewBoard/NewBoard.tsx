@@ -31,38 +31,32 @@ export const NewBoard = () => {
   };
   return (
     <div className="new-board">
-      <header className="new-board__header">
+      <div className="new-board__grid">
         {/* logo - - - profile */}
-        <div className="new-board__header-grid">
-          <div>
-            <a className="new-board__logo-wrapper" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
-              <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
-            </a>
-          </div>
-          <UserPill className="new-board__user-pill" />
-
-          {/* - - title - - */}
-          <div className="new-board__title">Choose a template</div>
+        <div>
+          <a className="new-board__logo-wrapper" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
+            <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+          </a>
         </div>
+        <UserPill className="new-board__user-pill" />
+
+        {/* - - title - - */}
+        <div className="new-board__title">Choose a template</div>
 
         {/* switch - - - search */}
-        <div className="new-board__header-bottom">
-          <label className="switch">
-            <Switch
-              initialize={initSwitch}
-              leftText="Templates"
-              onLeftSwitch={() => switchView("templates")}
-              rightText="Saved Sessions"
-              onRightSwitch={() => switchView("sessions")}
-            />
-            <span className="slider round" />
-          </label>
+        <Switch
+          className="new-board__switch"
+          initialize={initSwitch}
+          leftText="Templates"
+          onLeftSwitch={() => switchView("templates")}
+          rightText="Saved Sessions"
+          onRightSwitch={() => switchView("sessions")}
+        />
 
-          <label className="search">
-            <input type="text" />
-          </label>
+        <div className="new-board__search-bar">
+          <input type="text" />
         </div>
-      </header>
+      </div>
       {/* <Outlet /> */}
     </div>
   );

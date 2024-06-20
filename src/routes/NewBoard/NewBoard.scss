@@ -6,24 +6,16 @@
   background: linear-gradient(180deg, rgba(107, 156, 255, 30%) 4.6%, rgb(255, 255, 255, 10%) 100%); // TODO fix opacity
 }
 
-.new-board__header {
-  display: flex;
-  flex-direction: column;
-}
-
-.new-board__header-grid {
+.new-board__grid {
   display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: auto auto 1fr auto auto;
+  grid-template-rows: repeat(3, 1fr);
   grid-template-areas:
-    "logo title user"
-    ".    title .";
-}
+    "logo title   title   title   user"
+    ".    title   title   title   . "
+    ".    switch  search  search  .";
 
-.new-board__header-bottom {
-  display: flex; // TODO maybe also align this using above grid
-  flex-direction: row;
-  justify-content: space-between;
+  // padding: 0 10vw;
 }
 
 .new-board__logo-wrapper {
@@ -44,4 +36,13 @@
   font-size: $text--2xl;
   font-weight: 700;
   color: $color-black;
+}
+
+.new-board__switch {
+  grid-area: switch;
+}
+
+.new-board__search-bar {
+  grid-area: search;
+  justify-self: flex-end;
 }
