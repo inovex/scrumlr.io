@@ -338,6 +338,9 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "Alle"
   },
+  "SearchBar": {
+    "placeholder": "Suchen"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
     "BoardSettingsDescription": "Name, Zugriffseinstellungen",

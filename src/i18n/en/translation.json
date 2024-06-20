@@ -338,6 +338,9 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
   },
+  "SearchBar": {
+    "placeholder": "Search"
+  },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
     "BoardSettingsDescription": "Name, Access Policy",
