@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
 import {SearchBar} from "components/SearchBar/SearchBar";
-import {Switch, SwitchDirection} from "components/Switch/Switch";
+import {Switch} from "components/Switch/Switch";
 import "./NewBoard.scss";
 
 type BoardView = "templates" | "sessions";
@@ -14,13 +14,9 @@ export const NewBoard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [_, setBoardView] = useState<BoardView>("templates");
+  const [boardView, setBoardView] = useState<BoardView>("templates");
 
   const getCurrentLocation = (): BoardView => (location.pathname.endsWith("/templates") ? "templates" : "sessions");
-
-  // init switch is separated from boardView state because this function is called before the state is updated,
-  // so it can't be used as the input prop but has to be called independently
-  const initSwitch = (): SwitchDirection => (getCurrentLocation() === "templates" ? "left" : "right");
 
   useEffect(() => {
     const currentLocation = getCurrentLocation();
@@ -47,7 +43,7 @@ export const NewBoard = () => {
         {/* switch - - - search */}
         <Switch
           className="new-board__switch"
-          initialize={initSwitch}
+          activeDirection={boardView === "templates" ? "left" : "right"}
           leftText="Templates"
           onLeftSwitch={() => switchView("templates")}
           rightText="Saved Sessions"
