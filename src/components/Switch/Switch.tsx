@@ -5,7 +5,7 @@ import "./Switch.scss";
 export type SwitchDirection = "left" | "right";
 
 type SwitchProps = {
-  initialize: () => SwitchDirection;
+  initialize?: () => SwitchDirection;
   leftText: string;
   rightText: string;
   onLeftSwitch: () => void;
@@ -13,7 +13,7 @@ type SwitchProps = {
 };
 
 export const Switch = (props: SwitchProps) => {
-  const [direction, setDirection] = useState<SwitchDirection>(props.initialize());
+  const [direction, setDirection] = useState<SwitchDirection>(props.initialize?.() ?? "left");
 
   const handleSwitch = (direction: SwitchDirection) => {
     setDirection(direction);
