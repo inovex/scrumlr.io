@@ -50,7 +50,7 @@ $container-z-index: $stan-z-index + $base-z-index-step;
   height: $stan-shrink-factor;
 
   // align right edge of stan to the left edge of the container, including some elbow room
-  transform: translateX(calc(-#{$stan-shrink-factor} + $spacing--xs));
+  transform: translateX(calc(-#{$stan-shrink-factor} - 10%));
 
   z-index: $stan-z-index;
 }
