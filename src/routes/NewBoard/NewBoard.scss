@@ -10,7 +10,7 @@
 .new-board__grid {
   display: grid;
   grid-template-columns: auto auto 1fr auto auto;
-  grid-template-rows: repeat(3, auto) 1fr; // TODO grid gaps / margins
+  grid-template-rows: 56px 48px 64px 1fr; // using the actual component heights seems to yield the best results
   grid-template-areas:
     "logo title   title   title   user"
     ".    title   title   title   . "
@@ -35,6 +35,8 @@
   align-self: center;
   justify-self: center;
 
+  // margin-bottom: $spacing--md;
+
   font-size: $text--2xl;
   font-weight: 700;
   color: $color-black;
@@ -54,4 +56,6 @@
   grid-area: main;
   display: flex;
   justify-content: stretch;
+
+  margin-top: $spacing--xl;
 }
