@@ -9,11 +9,12 @@
 .new-board__grid {
   display: grid;
   grid-template-columns: auto auto 1fr auto auto;
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr) repeat(2, auto);
   grid-template-areas:
     "logo title   title   title   user"
     ".    title   title   title   . "
-    ".    switch  search  search  .";
+    ".    switch  search  search  ."
+    ".    main    main    main    .";
 
   // padding: 0 10vw;
 }
@@ -46,4 +47,8 @@
 .new-board__search-bar {
   grid-area: search;
   justify-self: flex-end;
+}
+
+.new-board__outlet {
+  grid-area: main;
 }

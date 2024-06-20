@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {useLocation, useNavigate} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
@@ -55,8 +55,11 @@ export const NewBoard = () => {
         />
 
         <SearchBar className="new-board__search-bar" />
+
+        <main className="new-board__outlet">
+          <Outlet />
+        </main>
       </div>
-      {/* <Outlet /> */}
     </div>
   );
 };
