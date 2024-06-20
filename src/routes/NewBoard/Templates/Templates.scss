@@ -1,12 +1,5 @@
 @import "constants/style";
 
-$stan-shrink-factor: 90%;
-
-// make sure that stan has a lower z-index than the container
-// to avoid ugly overlaps
-$stan-z-index: $base-z-index;
-$container-z-index: $stan-z-index + $base-z-index-step;
-
 .templates {
   display: flex;
   flex-direction: row;
@@ -28,8 +21,6 @@ $container-z-index: $stan-z-index + $base-z-index-step;
 
   background-color: #dde8ff;
 
-  z-index: $container-z-index;
-
   &--saved {
     margin-right: $spacing--md; // instead of gap, see above
   }
@@ -47,10 +38,8 @@ $container-z-index: $stan-z-index + $base-z-index-step;
   position: absolute;
 
   width: auto;
-  height: $stan-shrink-factor;
+  height: 100%;
 
-  // align right edge of stan to the left edge of the container, including some elbow room
-  transform: translateX(calc(-#{$stan-shrink-factor} - 10%));
-
-  z-index: $stan-z-index;
+  // align right edge of stan to the left edge of the container
+  transform: translateX(-100%);
 }
