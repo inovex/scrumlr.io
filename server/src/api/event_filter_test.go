@@ -12,15 +12,15 @@ import (
 
 var (
 	moderatorBoardSession = dto.BoardSession{
-		User: dto.User{ID: uuid.New()},
+		User: uuid.New(),
 		Role: types.SessionRoleModerator,
 	}
 	ownerBoardSession = dto.BoardSession{
-		User: dto.User{ID: uuid.New()},
+		User: uuid.New(),
 		Role: types.SessionRoleOwner,
 	}
 	participantBoardSession = dto.BoardSession{
-		User: dto.User{ID: uuid.New()},
+		User: uuid.New(),
 		Role: types.SessionRoleParticipant,
 	}
 	boardSessions = []*dto.BoardSession{
@@ -44,7 +44,7 @@ var (
 	}
 	aModeratorNote = dto.Note{
 		ID:     uuid.New(),
-		Author: moderatorBoardSession.User.ID,
+		Author: moderatorBoardSession.User,
 		Text:   "Moderator Text",
 		Position: dto.NotePosition{
 			Column: aSeeableColumn.ID,
@@ -54,7 +54,7 @@ var (
 	}
 	aParticipantNote = dto.Note{
 		ID:     uuid.New(),
-		Author: participantBoardSession.User.ID,
+		Author: participantBoardSession.User,
 		Text:   "User Text",
 		Position: dto.NotePosition{
 			Column: aSeeableColumn.ID,
@@ -71,7 +71,7 @@ var (
 	}
 	aOwnerNote = dto.Note{
 		ID:     uuid.New(),
-		Author: ownerBoardSession.User.ID,
+		Author: ownerBoardSession.User,
 		Text:   "Owner Text",
 		Position: dto.NotePosition{
 			Column: aHiddenColumn.ID,
@@ -134,13 +134,13 @@ var (
 	initEvent = InitEvent{
 		Type: realtime.BoardEventInit,
 		Data: EventData{
-			Board:       &dto.Board{},
-			Columns:     []*dto.Column{&aSeeableColumn, &aHiddenColumn},
-			Notes:       []*dto.Note{&aOwnerNote, &aModeratorNote, &aParticipantNote},
-			Votings:     []*dto.Voting{votingData.Voting},
-			Votes:       []*dto.Vote{},
-			Sessions:    boardSessions,
-			Requests:    []*dto.BoardSessionRequest{},
+			Board:    &dto.Board{},
+			Columns:  []*dto.Column{&aSeeableColumn, &aHiddenColumn},
+			Notes:    []*dto.Note{&aOwnerNote, &aModeratorNote, &aParticipantNote},
+			Votings:  []*dto.Voting{votingData.Voting},
+			Votes:    []*dto.Vote{},
+			Sessions: boardSessions,
+			Requests: []*dto.BoardSessionRequest{},
 		},
 	}
 )
@@ -170,7 +170,7 @@ func TestEventFilter(t *testing.T) {
 }
 
 func testIsModModerator(t *testing.T) {
-	isMod := isModerator(moderatorBoardSession.User.ID, boardSessions)
+	isMod := isModerator(moderatorBoardSession.User, boardSessions)
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
@@ -178,7 +178,7 @@ func testIsModModerator(t *testing.T) {
 }
 
 func testIsOwnerModerator(t *testing.T) {
-	isMod := isModerator(ownerBoardSession.User.ID, boardSessions)
+	isMod := isModerator(ownerBoardSession.User, boardSessions)
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
@@ -186,7 +186,7 @@ func testIsOwnerModerator(t *testing.T) {
 }
 
 func testIsParticipantModerator(t *testing.T) {
-	isMod := isModerator(participantBoardSession.User.ID, boardSessions)
+	isMod := isModerator(participantBoardSession.User, boardSessions)
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
@@ -240,7 +240,7 @@ func testColumnFilterAsParticipant(t *testing.T) {
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: []*dto.Column{&aSeeableColumn},
 	}
-	returnedColumnEvent := boardSub.eventFilter(columnEvent, participantBoardSession.User.ID)
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, participantBoardSession.User)
 
 	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
@@ -250,7 +250,7 @@ func testColumnFilterAsOwner(t *testing.T) {
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: []*dto.Column{&aSeeableColumn, &aHiddenColumn},
 	}
-	returnedColumnEvent := boardSub.eventFilter(columnEvent, ownerBoardSession.User.ID)
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, ownerBoardSession.User)
 
 	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
@@ -261,7 +261,7 @@ func testColumnFilterAsModerator(t *testing.T) {
 		Data: []*dto.Column{&aSeeableColumn, &aHiddenColumn},
 	}
 
-	returnedColumnEvent := boardSub.eventFilter(columnEvent, moderatorBoardSession.User.ID)
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, moderatorBoardSession.User)
 
 	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
@@ -271,7 +271,7 @@ func testNoteFilterAsParticipant(t *testing.T) {
 		Type: realtime.BoardEventNotesUpdated,
 		Data: []*dto.Note{&aParticipantNote},
 	}
-	returnedNoteEvent := boardSub.eventFilter(noteEvent, participantBoardSession.User.ID)
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, participantBoardSession.User)
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
@@ -281,7 +281,7 @@ func testNoteFilterAsOwner(t *testing.T) {
 		Type: realtime.BoardEventNotesUpdated,
 		Data: []*dto.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
 	}
-	returnedNoteEvent := boardSub.eventFilter(noteEvent, ownerBoardSession.User.ID)
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, ownerBoardSession.User)
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
@@ -291,7 +291,7 @@ func testNoteFilterAsModerator(t *testing.T) {
 		Type: realtime.BoardEventNotesUpdated,
 		Data: []*dto.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
 	}
-	returnedNoteEvent := boardSub.eventFilter(noteEvent, moderatorBoardSession.User.ID)
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, moderatorBoardSession.User)
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
@@ -301,7 +301,7 @@ func testFilterVotingUpdatedAsOwner(t *testing.T) {
 		Type: realtime.BoardEventVotingUpdated,
 		Data: votingData,
 	}
-	returnedVoteEvent := boardSub.eventFilter(votingEvent, ownerBoardSession.User.ID)
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, ownerBoardSession.User)
 
 	assert.NotNil(t, returnedVoteEvent)
 	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
@@ -312,7 +312,7 @@ func testFilterVotingUpdatedAsModerator(t *testing.T) {
 		Type: realtime.BoardEventVotingUpdated,
 		Data: votingData,
 	}
-	returnedVoteEvent := boardSub.eventFilter(votingEvent, moderatorBoardSession.User.ID)
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, moderatorBoardSession.User)
 
 	assert.NotNil(t, returnedVoteEvent)
 	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
@@ -342,7 +342,7 @@ func testFilterVotingUpdatedAsParticipant(t *testing.T) {
 		Type: realtime.BoardEventVotingUpdated,
 		Data: expectedVoting,
 	}
-	returnedVoteEvent := boardSub.eventFilter(votingEvent, participantBoardSession.User.ID)
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, participantBoardSession.User)
 
 	assert.NotNil(t, returnedVoteEvent)
 	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
@@ -350,14 +350,14 @@ func testFilterVotingUpdatedAsParticipant(t *testing.T) {
 
 func testInitFilterAsOwner(t *testing.T) {
 	expectedInitEvent := initEvent
-	returnedInitEvent := eventInitFilter(initEvent, ownerBoardSession.User.ID)
+	returnedInitEvent := eventInitFilter(initEvent, ownerBoardSession.User)
 
 	assert.Equal(t, expectedInitEvent, returnedInitEvent)
 }
 
 func testInitFilterAsModerator(t *testing.T) {
 	expectedInitEvent := initEvent
-	returnedInitEvent := eventInitFilter(initEvent, moderatorBoardSession.User.ID)
+	returnedInitEvent := eventInitFilter(initEvent, moderatorBoardSession.User)
 
 	assert.Equal(t, expectedInitEvent, returnedInitEvent)
 }
@@ -382,16 +382,16 @@ func testInitFilterAsParticipant(t *testing.T) {
 	expectedInitEvent := InitEvent{
 		Type: realtime.BoardEventInit,
 		Data: EventData{
-			Board:       &dto.Board{},
-			Columns:     []*dto.Column{&aSeeableColumn},
-			Notes:       []*dto.Note{&aParticipantNote},
-			Votings:     []*dto.Voting{&expectedVoting},
-			Votes:       []*dto.Vote{},
-			Sessions:    boardSessions,
-			Requests:    []*dto.BoardSessionRequest{},
+			Board:    &dto.Board{},
+			Columns:  []*dto.Column{&aSeeableColumn},
+			Notes:    []*dto.Note{&aParticipantNote},
+			Votings:  []*dto.Voting{&expectedVoting},
+			Votes:    []*dto.Vote{},
+			Sessions: boardSessions,
+			Requests: []*dto.BoardSessionRequest{},
 		},
 	}
-	returnedInitEvent := eventInitFilter(initEvent, participantBoardSession.User.ID)
+	returnedInitEvent := eventInitFilter(initEvent, participantBoardSession.User)
 
 	assert.Equal(t, expectedInitEvent, returnedInitEvent)
 }
