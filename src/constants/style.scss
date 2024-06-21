@@ -264,3 +264,35 @@ $column-stripes--dark: repeating-linear-gradient(
     }
   }
 }
+
+// this mixin is used to decrease an element's padding,
+// in order to keep it the same size if the borders change.
+@mixin compensate-padding($padding, $decrement) {
+  $new-padding: ();
+  @each $value in $padding {
+    $newPadding: append($new-padding, $value - $decrement);
+  }
+  padding: $new-padding;
+}
+
+// add some default css for hover, focus, and active states.
+@mixin default-states($border-size: 1.5px, $padding, $compensate-size: true) {
+  // TODO color names
+  &:hover {
+    box-shadow: 0 3px 12px 0 rgba(35, 39, 50, 0.12);
+  }
+
+  &:focus {
+    border: $border-size solid #3379ff;
+    @if $compensate-size == true {
+      @include compensate-padding($padding, $border-size);
+    }
+  }
+
+  &:active {
+    border: $border-size solid #373e4f;
+    @if $compensate-size == true {
+      @include compensate-padding($padding, $border-size);
+    }
+  }
+}
