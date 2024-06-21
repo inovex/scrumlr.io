@@ -3,7 +3,9 @@
 .column__header-menu-dropdown {
   position: absolute;
   right: 0;
-  top: 75%;
+  //top: 75%;
+  padding-left: 8px;
+  padding-right: 8px;
   background-color: $color-white;
   border-radius: $rounded--large;
   box-shadow:
@@ -66,7 +68,7 @@
   height: 18px;
   width: 18px;
   border-radius: 4px;
-  background-color: var(--accent-color);
+  //background-color: var(--accent-color);
   transition: all 0.08s ease-out;
 
   &:hover {
@@ -76,6 +78,19 @@
   &:focus-visible {
     box-shadow: 0 0 0 2px $color-darker-gray;
   }
+}
+
+.column__header-menu-dropdown-edit-button {
+  height: 24px;
+  // Align with note-input__icon
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  transition: all 0.08s ease-out;
+  flex: 0 0 24px;
+  margin: auto calc(#{$spacing--base} - 2px) auto $spacing--base;
 }
 
 // Hacky way to not show delete column button if it's the last column
@@ -202,17 +217,19 @@
 }
 
 .column__header-color-picker-dropdown > li > button {
-  width: inherit;
+  //width: inherit;
 }
 
 .column__header-color-picker-dropdown {
-  display: none;
+  //display: none;
 }
-.column__header-color-option:hover + .column__header-color-picker-dropdown {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+// **
+//.column__header-color-option:hover + .column__header-color-picker-dropdown { //.column__header-menu-dropdown:hover + .column__header-color-picker-dropdown {
+//  display: flex;
+//  flex-direction: column;
+//  justify-content: center;
+//  background-color: deeppink;
+//}
 
 //.column__header-color-picker-dropdown > ul > li {
 //  height: 32px;
