@@ -1,27 +1,27 @@
 @import "constants/style";
 
-$user-pill-width: 188px;
-$user-pill-height: 56px;
-
 $default-padding: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
 
 .user-pill {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: $spacing--sm;
+  all: unset;
+  display: inline-block;
 
-  width: $user-pill-width;
-  height: $user-pill-height;
   padding: $default-padding;
-
   background-color: $color-white;
   border-radius: $rounded--large;
 
   cursor: pointer;
+  user-select: none;
 
   @include default-states($padding: $default-padding);
+}
+
+.user-pill__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: $spacing--sm;
 }
 
 .user-pill__avatar-container {

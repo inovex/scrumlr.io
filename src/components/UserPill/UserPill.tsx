@@ -11,11 +11,13 @@ export const UserPill = ({className}: UserPillProps) => {
   const myName = useAppSelector((state) => state.auth.user?.name!);
 
   return (
-    <div className={classNames("user-pill", className)} tabIndex={0}>
-      <div className="user-pill__avatar-container">
-        <img src={StanAvatar} className="user-pill__avatar" alt="Stan Avatar" />
+    <button className={classNames("user-pill", className)} tabIndex={0}>
+      <div className="user-pill__container">
+        <div className="user-pill__avatar-container">
+          <img src={StanAvatar} className="user-pill__avatar" alt="Stan Avatar" />
+        </div>
+        <div className="user-pill__name">{myName}</div>
       </div>
-      <div className="user-pill__name">{myName}</div>
-    </div>
+    </button>
   );
 };
