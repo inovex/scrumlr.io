@@ -14,16 +14,25 @@ $default-padding: $spacing--base;
 
   background-color: $color-white;
 
-  @include default-states($padding: $default-padding);
+  &:not(&--disabled) {
+    @include default-states($padding: $default-padding);
 
-  &:hover {
-    .search-bar__logo {
-      color: #292f3b;
-    }
+    // alternatively, this could be split up and put in their respective classes,
+    // which might be more readable but also requires a little bit more code
+    &:hover,
+    &:focus-within {
+      .search-bar__logo {
+        color: #292f3b;
+      }
 
-    .search-bar__input {
-      color: #292f3b;
+      .search-bar__input {
+        color: #292f3b;
+      }
     }
+  }
+
+  &--disabled {
+    background-color: #eeeff1;
   }
 }
 
@@ -49,6 +58,7 @@ $default-padding: $spacing--base;
   font-weight: 600;
 
   color: #8f95a1;
+  background-color: $color-white;
 
   &:focus {
     outline: none;
@@ -58,5 +68,9 @@ $default-padding: $spacing--base;
 
   &::placeholder {
     opacity: 100%;
+  }
+
+  &:disabled {
+    background-color: #eeeff1;
   }
 }
