@@ -270,7 +270,7 @@ $column-stripes--dark: repeating-linear-gradient(
 @mixin compensate-padding($padding, $decrement) {
   $new-padding: ();
   @each $value in $padding {
-    $newPadding: append($new-padding, $value - $decrement);
+    $new-padding: append($new-padding, $value - $decrement);
   }
   padding: $new-padding;
 }
