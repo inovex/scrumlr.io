@@ -32,4 +32,15 @@ $default-padding: $spacing--base;
   padding: 0;
   margin: 0;
   border: none;
+
+  font-size: $text--base;
+  font-weight: 600;
+
+  color: #8f95a1;
+
+  &:focus {
+    outline: none;
+
+    color: #292f3b;
+  }
 }
