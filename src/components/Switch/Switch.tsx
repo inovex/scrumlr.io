@@ -29,10 +29,10 @@ export const Switch = (props: SwitchProps) => {
 
   return (
     <button className={classNames("switch", props.className)} disabled={props.disabled}>
-      <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "left"})} onClick={() => handleSwitch("left")}>
+      <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "left"})} role="button" tabIndex={0} onClick={() => handleSwitch("left")}>
         {props.leftText}
       </div>
-      <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "right"})} onClick={() => handleSwitch("right")}>
+      <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "right"})} role="button" tabIndex={0} onClick={() => handleSwitch("right")}>
         {props.rightText}
       </div>
     </button>

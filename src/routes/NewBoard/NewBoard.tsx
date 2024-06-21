@@ -16,15 +16,13 @@ export const NewBoard = () => {
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
 
-  const getCurrentLocation = (): BoardView => (location.pathname.endsWith("/templates") ? "templates" : "sessions");
-
   useEffect(() => {
-    const currentLocation = getCurrentLocation();
+    const currentLocation: BoardView = location.pathname.endsWith("/templates") ? "templates" : "sessions";
     setBoardView(currentLocation);
   }, [location]);
 
-  const switchView = (location: string) => {
-    navigate(location);
+  const switchView = (route: string) => {
+    navigate(route);
   };
   return (
     <div className="new-board">

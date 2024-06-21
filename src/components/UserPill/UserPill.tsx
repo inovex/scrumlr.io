@@ -9,7 +9,7 @@ type UserPillProps = {
 };
 
 export const UserPill = (props: UserPillProps) => {
-  const myName = useAppSelector((state) => state.auth.user?.name!);
+  const myName = useAppSelector((state) => state.auth.user?.name);
 
   return (
     <button className={classNames("user-pill", props.className)} disabled={props.disabled} tabIndex={0}>
