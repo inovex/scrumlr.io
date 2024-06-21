@@ -50,6 +50,8 @@ $default-padding: $spacing--xs;
   &--active {
     background-color: #292f3b;
     color: white;
+
+    font-weight: 700;
   }
 
   &:not(&--active) {
