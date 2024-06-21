@@ -1,15 +1,19 @@
 @import "constants/style";
 
+$default-padding: $spacing--xxs;
+
 .switch {
   display: flex;
   flex-direction: row;
   gap: 0;
 
   width: fit-content;
-  padding: $spacing--xxs;
+  padding: $default-padding;
   border-radius: $rounded--large;
 
   background-color: $color-white;
+
+  @include default-states($padding: $default-padding);
 }
 
 .switch__item {

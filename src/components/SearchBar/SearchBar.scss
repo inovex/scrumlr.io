@@ -1,5 +1,7 @@
 @import "constants/style";
 
+$default-padding: $spacing--base;
+
 .search-bar {
   display: flex;
   flex-direction: row;
@@ -7,10 +9,12 @@
   gap: $spacing--xs;
 
   width: 100%;
-  padding: $spacing--base;
+  padding: $default-padding;
   border-radius: $rounded--full;
 
   background-color: $color-white;
+
+  @include default-states($padding: $default-padding);
 }
 
 .search-bar__logo {

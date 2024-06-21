@@ -3,6 +3,8 @@
 $user-pill-width: 188px;
 $user-pill-height: 56px;
 
+$default-padding: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
+
 .user-pill {
   display: flex;
   flex-direction: row;
@@ -12,24 +14,14 @@ $user-pill-height: 56px;
 
   width: $user-pill-width;
   height: $user-pill-height;
-  padding: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
+  padding: $default-padding;
 
   background-color: $color-white;
   border-radius: $rounded--large;
 
   cursor: pointer;
 
-  &:hover {
-    box-shadow: 0 3px 12px 0 rgba(35, 39, 50, 0.12);
-  }
-
-  &:focus {
-    border: 1.5px solid #3379ff;
-  }
-
-  &:active {
-    border: 1.5px solid #373e4f;
-  }
+  @include default-states($padding: $default-padding);
 }
 
 .user-pill__avatar-container {
