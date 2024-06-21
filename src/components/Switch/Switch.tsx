@@ -6,6 +6,7 @@ type SwitchDirection = "left" | "right";
 type SwitchProps = {
   className?: string;
   activeDirection: SwitchDirection;
+  disabled?: boolean;
   leftText: string;
   rightText: string;
   onLeftSwitch?: () => void;
@@ -27,13 +28,13 @@ export const Switch = (props: SwitchProps) => {
   };
 
   return (
-    <div className={classNames("switch", props.className)}>
+    <button className={classNames("switch", props.className)} disabled={props.disabled}>
       <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "left"})} onClick={() => handleSwitch("left")}>
         {props.leftText}
       </div>
       <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "right"})} onClick={() => handleSwitch("right")}>
         {props.rightText}
       </div>
-    </div>
+    </button>
   );
 };

@@ -3,6 +3,8 @@
 $default-padding: $spacing--xxs;
 
 .switch {
+  all: unset;
+
   display: flex;
   flex-direction: row;
   gap: 0;
@@ -13,7 +15,22 @@ $default-padding: $spacing--xxs;
 
   background-color: $color-white;
 
-  @include default-states($padding: $default-padding);
+  &:enabled {
+    @include default-states($padding: $default-padding);
+  }
+
+  &:disabled {
+    background-color: #eeeff1;
+
+    .switch__item {
+      color: #8f95a1;
+      background-color: #eeeff1;
+
+      &--active {
+        background-color: #e9eaec;
+      }
+    }
+  }
 }
 
 .switch__item {
