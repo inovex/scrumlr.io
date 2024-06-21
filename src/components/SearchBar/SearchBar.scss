@@ -15,11 +15,23 @@ $default-padding: $spacing--base;
   background-color: $color-white;
 
   @include default-states($padding: $default-padding);
+
+  &:hover {
+    .search-bar__logo {
+      color: #292f3b;
+    }
+
+    .search-bar__input {
+      color: #292f3b;
+    }
+  }
 }
 
 .search-bar__logo {
   width: $icon--large;
   height: $icon--large;
+
+  color: #8f95a1;
 }
 
 .search-bar__logo-container {
@@ -42,5 +54,9 @@ $default-padding: $spacing--base;
     outline: none;
 
     color: #292f3b;
+  }
+
+  &::placeholder {
+    opacity: 100%;
   }
 }
