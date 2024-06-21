@@ -1,4 +1,5 @@
 import {useTranslation} from "react-i18next";
+// using a png instead of svg for now. reason being problems with layering
 import Stan from "assets/stan/Stan_Hanging_With_Coffee_Cropped.png";
 import "./Templates.scss";
 
