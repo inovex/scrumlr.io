@@ -4,6 +4,7 @@ $default-padding: $spacing--xs;
 
 .switch {
   all: unset;
+  user-select: none;
 
   display: flex;
   flex-direction: row;
@@ -17,6 +18,12 @@ $default-padding: $spacing--xs;
 
   &:enabled {
     @include default-states($padding: $default-padding);
+
+    .switch__item {
+      &:not(&--active) {
+        cursor: pointer;
+      }
+    }
   }
 
   &:disabled {
@@ -52,9 +59,5 @@ $default-padding: $spacing--xs;
     color: white;
 
     font-weight: 700;
-  }
-
-  &:not(&--active) {
-    cursor: pointer;
   }
 }
