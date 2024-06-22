@@ -198,6 +198,8 @@ $desktop: "screen and (min-width : 1280px)";
 $menu-mobile: "screen and (max-width: 1343px)";
 $menu-desktop: "screen and (min-width: 1344px)";
 
+$breakpoint--smartphone: 768px;
+
 // responsive: @container query
 $container__note: "note (max-width: 300px)";
 

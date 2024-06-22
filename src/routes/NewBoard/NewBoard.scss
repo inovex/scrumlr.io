@@ -61,3 +61,17 @@
 
   margin-top: $spacing--xl;
 }
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .new-board {
+    padding: $spacing--md 0 0 0;
+  }
+
+  .new-board__grid {
+    grid-template-areas:
+      "logo   .       .     .       user"
+      "title  title   title title   title"
+      ".      switch  .     search  ."
+      "main   main    main  main    main";
+  }
+}
