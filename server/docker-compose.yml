@@ -1,7 +1,7 @@
 version: "3.9"
 
+name: scrumlr
 services:
-
   nats:
     image: nats:2-alpine
     ports:
