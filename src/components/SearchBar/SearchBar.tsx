@@ -19,9 +19,9 @@ export const SearchBar = (props: SearchBarProps) => {
       <div className="search-bar__icon-container search-bar__icon-container--search-icon">
         <SearchIcon className="search-bar__icon" aria-label="logo of magnifying glass" />
       </div>
-      <input className="search-bar__input" type="text" placeholder={t("SearchBar.placeholder")} disabled={props.disabled} />
+      <input className="search-bar__input" type="text" placeholder={t("SearchBar.placeholder")} disabled={props.disabled} tabIndex={0} />
       {props.closable && (
-        <div className="search-bar__icon-container search-bar__icon-container--close-icon" role="button" onClick={() => props.onClose?.()}>
+        <div className="search-bar__icon-container search-bar__icon-container--close-icon" role="button" tabIndex={0} onClick={() => props.onClose?.()}>
           <CloseIcon className="search-bar__icon" aria-label="close button" />
         </div>
       )}
