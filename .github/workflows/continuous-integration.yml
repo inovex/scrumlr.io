@@ -187,7 +187,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Start server
-        run: docker-compose -f docker-compose.yml up
+        run: docker compose --profile build up -d
         working-directory: server
       - name: Setup client and run tests
         uses: cypress-io/github-action@v6
