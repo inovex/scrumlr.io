@@ -5,7 +5,7 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
 import {SearchBar} from "components/SearchBar/SearchBar";
 import {Switch} from "components/Switch/Switch";
-import {ReactComponent as SearchLogo} from "assets/icons/search.svg";
+import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import "./NewBoard.scss";
 
 type BoardView = "templates" | "sessions";
@@ -57,8 +57,8 @@ export const NewBoard = () => {
         <SearchBar className="new-board__search-bar" />
 
         <button className="new-board__search-button" onClick={toggleMobileSearchBar}>
-          <div className="new-board__search-button-logo-container">
-            <SearchLogo className="new-board__search-button-logo" aria-label="logo of magnifying glass" />
+          <div className="new-board__search-button-icon-container">
+            <SearchIcon className="new-board__search-button-icon" aria-label="icon of magnifying glass" />
           </div>
         </button>
         {showMobileSearchBar && <SearchBar className="new-board__mobile-search-bar" closable onClose={toggleMobileSearchBar} />}
