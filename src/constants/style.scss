@@ -284,7 +284,8 @@ $column-stripes--dark: repeating-linear-gradient(
     box-shadow: 0 3px 12px 0 rgba(35, 39, 50, 0.12);
   }
 
-  &:focus {
+  &:focus,
+  &:focus-within {
     border: $border-size solid #3379ff;
     @if $compensate-padding == true {
       @include compensate-padding($padding, $border-size);
