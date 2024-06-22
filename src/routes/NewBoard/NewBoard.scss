@@ -54,6 +54,32 @@
   justify-self: flex-end;
 }
 
+.new-board__search-button {
+  display: none;
+
+  all: unset;
+
+  grid-area: search;
+}
+
+.new-board__search-button-logo-container {
+  width: $icon--large;
+  height: $icon--large;
+  padding: $spacing--sm;
+  border-radius: 100%;
+
+  background-color: #1bd47e;
+}
+
+.new-board--search-button-logo {
+  width: $icon--large;
+  height: $icon--large;
+}
+
+.new-board__mobile-search-bar {
+  display: none;
+}
+
 .new-board__outlet {
   grid-area: main;
   display: flex;
@@ -68,10 +94,28 @@
   }
 
   .new-board__grid {
+    grid-template-columns: auto auto 1fr auto auto;
+    // adds a row where the mobile search bar resides
+    // TODO decrease mobile sizes according to design
+    grid-template-rows: 56px 48px 64px 64px 1fr;
     grid-template-areas:
-      "logo   .       .     .       user"
-      "title  title   title title   title"
-      ".      switch  .     search  ."
-      "main   main    main  main    main";
+      "logo   .       .       .       user"
+      "title  title   title   title   title"
+      ".      switch  .       search  ."
+      ".      search2 search2 search2 ."
+      "main   main    main    main    main";
+  }
+
+  .new-board__search-button {
+    display: inline-block;
+  }
+
+  .new-board__search-bar {
+    display: none;
+  }
+
+  .new-board__mobile-search-bar {
+    display: flex;
+    grid-area: search2;
   }
 }
