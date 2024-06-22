@@ -71,6 +71,11 @@
 
   color: #292f3b;
   background-color: $color-white;
+
+  &--active {
+    color: $color-white;
+    background-color: #292f3b;
+  }
 }
 
 .new-board--search-button-logo {

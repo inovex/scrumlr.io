@@ -6,6 +6,7 @@ import {UserPill} from "components/UserPill/UserPill";
 import {SearchBar} from "components/SearchBar/SearchBar";
 import {Switch} from "components/Switch/Switch";
 import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
+import classNames from "classnames";
 import "./NewBoard.scss";
 
 type BoardView = "templates" | "sessions";
@@ -57,7 +58,7 @@ export const NewBoard = () => {
         <SearchBar className="new-board__search-bar" />
 
         <button className="new-board__search-button" onClick={toggleMobileSearchBar}>
-          <div className="new-board__search-button-icon-container">
+          <div className={classNames("new-board__search-button-icon-container", {"new-board__search-button-icon-container--active": showMobileSearchBar})}>
             <SearchIcon className="new-board__search-button-icon" aria-label="icon of magnifying glass" />
           </div>
         </button>
