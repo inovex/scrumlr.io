@@ -21,7 +21,7 @@ $default-padding: $spacing--base;
     // which might be more readable but also requires a little bit more code
     &:hover,
     &:focus-within {
-      .search-bar__logo {
+      .search-bar__icon-container--search-icon {
         color: #292f3b;
       }
 
@@ -36,16 +36,13 @@ $default-padding: $spacing--base;
   }
 }
 
-.search-bar__logo {
+.search-bar__icon-container {
   width: $icon--large;
   height: $icon--large;
-
-  color: #8f95a1;
 }
 
-.search-bar__logo-container {
-  width: $icon--large;
-  height: $icon--large;
+.search-bar__icon-container--search-icon {
+  color: #8f95a1;
 }
 
 .search-bar__input {
