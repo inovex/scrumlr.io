@@ -44,3 +44,16 @@
   // align right edge of stan to the left edge of the container
   transform: translateX(-100%);
 }
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  // instead of the both containers sitting on one screen we want them to be full width each, and make the main container scrollable.
+  .templates {
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+  }
+
+  .templates__container {
+    flex: 0 0 100%; // no growing, no shrinking, and take up the whole width
+    scroll-snap-align: center;
+  }
+}
