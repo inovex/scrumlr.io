@@ -16,6 +16,11 @@ export const NewBoard = () => {
   const navigate = useNavigate();
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
+  const [showMobileSearchBar, setShowMobileSearchBar] = useState(false);
+
+  const toggleMobileSearchBar = () => {
+    setShowMobileSearchBar((open) => !open);
+  };
 
   useEffect(() => {
     const currentLocation: BoardView = location.pathname.endsWith("/templates") ? "templates" : "sessions";
@@ -51,12 +56,12 @@ export const NewBoard = () => {
 
         <SearchBar className="new-board__search-bar" />
 
-        <button className="new-board__search-button">
+        <button className="new-board__search-button" onClick={toggleMobileSearchBar}>
           <div className="new-board__search-button-logo-container">
             <SearchLogo className="new-board__search-button-logo" aria-label="logo of magnifying glass" />
           </div>
         </button>
-        <SearchBar className="new-board__mobile-search-bar" />
+        {showMobileSearchBar && <SearchBar className="new-board__mobile-search-bar" />}
 
         <main className="new-board__outlet">
           <Outlet />

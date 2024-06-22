@@ -59,6 +59,8 @@
   display: none;
 
   grid-area: search;
+
+  cursor: pointer;
 }
 
 .new-board__search-button-logo-container {
@@ -97,7 +99,7 @@
     grid-template-columns: auto auto 1fr auto auto;
     // adds a row where the mobile search bar resides
     // TODO decrease mobile sizes according to design
-    grid-template-rows: 56px 48px 64px 64px 1fr;
+    grid-template-rows: 56px 48px 64px auto 1fr;
     grid-template-areas:
       "logo   .       .       .       user"
       "title  title   title   title   title"
