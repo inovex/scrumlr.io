@@ -39,10 +39,14 @@ $default-padding: $spacing--base;
 .search-bar__icon-container {
   width: $icon--large;
   height: $icon--large;
-}
 
-.search-bar__icon-container--search-icon {
-  color: #8f95a1;
+  &--search-icon {
+    color: #8f95a1;
+  }
+
+  &--close-icon {
+    cursor: pointer;
+  }
 }
 
 .search-bar__input {
