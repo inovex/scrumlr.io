@@ -1,12 +1,16 @@
 @use "sass:color";
 @import "constants/style";
 
-$default-padding: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
+$padding--default: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
+$padding--mobile: 0 0 0 0;
+// if you want to include default states, use padding below and set compensate-padding to true
+// $padding--mobile: 1.5px 1.5px 1.5px 1.5px;
 
 .user-pill {
   all: unset;
 
-  padding: $default-padding;
+  height: $icon--huge;
+  padding: $padding--default;
   background-color: $color-white;
   border-radius: $rounded--large;
 
@@ -14,7 +18,6 @@ $default-padding: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
 
   &:enabled {
     cursor: pointer;
-    @include default-states($padding: $default-padding);
   }
 
   &:disabled {
@@ -71,4 +74,23 @@ $default-padding: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
   font-weight: 700;
 
   color: #292f3b;
+}
+
+// desktop only styles
+@media screen and (min-width: calc($breakpoint--smartphone + 1px)) {
+  .user-pill:enabled {
+    // this is moved here as a desktop only style because it can't be overwritten by the mobile media query below
+    @include default-states($padding: $padding--default);
+  }
+}
+
+// mobile only styles
+@media screen and (max-width: $breakpoint--smartphone) {
+  .user-pill {
+    padding: $padding--mobile;
+  }
+
+  .user-pill__name {
+    display: none;
+  }
 }
