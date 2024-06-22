@@ -15,7 +15,7 @@ export const Templates = () => {
       <div className="templates__container templates__container--saved">
         <div className="templates__container-title">{t("Templates.savedTemplates")}</div>
       </div>
-      <div className="templates__container templates__contaner--recommended">
+      <div className="templates__container templates__container--recommended">
         <div className="templates__container-title">{t("Templates.recommendedTemplates")}</div>
       </div>
     </div>
