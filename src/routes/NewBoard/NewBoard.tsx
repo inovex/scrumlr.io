@@ -61,7 +61,7 @@ export const NewBoard = () => {
             <SearchLogo className="new-board__search-button-logo" aria-label="logo of magnifying glass" />
           </div>
         </button>
-        {showMobileSearchBar && <SearchBar className="new-board__mobile-search-bar" closable />}
+        {showMobileSearchBar && <SearchBar className="new-board__mobile-search-bar" closable onClose={toggleMobileSearchBar} />}
 
         <main className="new-board__outlet">
           <Outlet />
