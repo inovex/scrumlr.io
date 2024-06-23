@@ -46,7 +46,7 @@ export const NewBoard = () => {
             <ScrumlrLogo className="board-header__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
           </a>
         </div>
-        <UserPill className="new-board__user-pill" />
+        <UserPill className="new-board__user-pill" locationPrefix={boardView} />
 
         {/* - - title - - */}
         <div className="new-board__title">{boardView === "templates" ? t("Templates.title") : t("Sessions.title")}</div>

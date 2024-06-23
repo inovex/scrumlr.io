@@ -1,4 +1,5 @@
 import {useAppSelector} from "store";
+import {useNavigate} from "react-router-dom";
 import StanAvatar from "assets/stan/Stan_Avatar.png";
 import classNames from "classnames";
 import "./UserPill.scss";
@@ -6,13 +7,19 @@ import "./UserPill.scss";
 type UserPillProps = {
   className?: string;
   disabled?: boolean;
+  locationPrefix?: string;
 };
 
 export const UserPill = (props: UserPillProps) => {
+  const navigate = useNavigate();
   const myName = useAppSelector((state) => state.auth.user?.name);
 
+  const openSettings = () => {
+    navigate(`${props.locationPrefix ?? ""}/settings/profile`);
+  };
+
   return (
-    <button className={classNames("user-pill", props.className)} disabled={props.disabled} tabIndex={0}>
+    <button className={classNames("user-pill", props.className)} disabled={props.disabled} tabIndex={0} onClick={openSettings}>
       <div className="user-pill__container">
         <div className="user-pill__avatar-container">
           <img src={StanAvatar} className="user-pill__avatar" alt="Stan Avatar" />
