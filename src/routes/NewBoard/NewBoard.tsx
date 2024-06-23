@@ -23,14 +23,20 @@ export const NewBoard = () => {
     setShowMobileSearchBar((open) => !open);
   };
 
+  // navigate to view that is currently not visible
+  const switchView = () => {
+    if (boardView === "templates") {
+      navigate("sessions");
+    } else {
+      navigate("templates");
+    }
+  };
+
   useEffect(() => {
     const currentLocation: BoardView = location.pathname.endsWith("/templates") ? "templates" : "sessions";
     setBoardView(currentLocation);
   }, [location]);
 
-  const switchView = (route: string) => {
-    navigate(route);
-  };
   return (
     <div className="new-board">
       <div className="new-board__grid">
@@ -50,9 +56,8 @@ export const NewBoard = () => {
           className="new-board__switch"
           activeDirection={boardView === "templates" ? "left" : "right"}
           leftText={t("Templates.switchTitle")}
-          onLeftSwitch={() => switchView("templates")}
           rightText={t("Sessions.switchTitle")}
-          onRightSwitch={() => switchView("sessions")}
+          toggle={switchView}
         />
 
         <SearchBar className="new-board__search-bar" />
