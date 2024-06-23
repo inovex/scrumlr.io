@@ -39,8 +39,21 @@ const Router = () => (
         }
       >
         <Route index element={<Navigate to="templates" />} />
-        <Route path="templates" element={<Templates />} />
-        <Route path="sessions" element={<Sessions />} />
+        <Route path="templates" element={<Templates />}>
+          {/* TODO extract settings routes no avoid repetition */}
+          <Route path="settings" element={<SettingsDialog />}>
+            <Route path="appearance" element={<Appearance />} />
+            <Route path="feedback" element={<Feedback />} />
+            <Route path="profile" element={<ProfileSettings />} />
+          </Route>
+        </Route>
+        <Route path="sessions" element={<Sessions />}>
+          <Route path="settings" element={<SettingsDialog />}>
+            <Route path="appearance" element={<Appearance />} />
+            <Route path="feedback" element={<Feedback />} />
+            <Route path="profile" element={<ProfileSettings />} />
+          </Route>
+        </Route>
       </Route>
       <Route path="/login" element={<LoginBoard />} />
       <Route
