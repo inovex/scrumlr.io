@@ -17,13 +17,9 @@ $default-padding: $spacing--xs;
   background-color: $color-white;
 
   &:enabled {
-    @include default-states($padding: $default-padding);
+    cursor: pointer;
 
-    .switch__item {
-      &:not(&--active) {
-        cursor: pointer;
-      }
-    }
+    @include default-states($padding: $default-padding);
   }
 
   &:disabled {
