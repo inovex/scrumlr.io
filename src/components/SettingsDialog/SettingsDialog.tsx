@@ -47,9 +47,9 @@ export const SettingsDialog: FC = () => {
           getColorClassName(menuItem.color)
         )}
       >
-        <Icon className="navigation-item__icon" />
+        {Icon === "profile" ? <Avatar seed={me?.id} avatar={me?.avatar} className="navigation-item__icon" /> : <Icon className="navigation-item__icon" />}
         <div className="navigation-item__content">
-          <p className="navigation-item__name">{t(`SettingsDialog.${menuItem.localizationKey}`)}</p>
+          <p className="navigation-item__name">{menuItem.localizationKey === "Profile" ? me?.name : t(`SettingsDialog.${menuItem.localizationKey}`)}</p>
           <p className="navigation-item__description">{t(`SettingsDialog.${menuItem.localizationKey}Description`)}</p>
         </div>
       </Link>
@@ -84,22 +84,7 @@ export const SettingsDialog: FC = () => {
               <div className="settings-dialog__sidebar">
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
                 <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
-                <nav className="settings-dialog__navigation">
-                  {Object.values(MENU_ITEMS).map((menuItem) => renderMenuItem(menuItem))}
-
-                  {me && (
-                    <Link
-                      to="profile"
-                      className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}
-                    >
-                      <Avatar seed={me.id} avatar={me.avatar} className="navigation-item__icon" />
-                      <div className="navigation-item__content">
-                        <p className="navigation-item__name">{me.name}</p>
-                        <p className="navigation-item__description">{t("SettingsDialog.ProfileDescription")}</p>
-                      </div>
-                    </Link>
-                  )}
-                </nav>
+                <nav className="settings-dialog__navigation">{Object.values(MENU_ITEMS).map((menuItem) => renderMenuItem(menuItem))}</nav>
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">
