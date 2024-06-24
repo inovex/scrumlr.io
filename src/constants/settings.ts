@@ -1,8 +1,8 @@
 import {ComponentType, SVGProps} from "react";
-import {GeneralSettings, Participants, SettingsAppearance, SettingsFeedback, Share} from "components/Icon";
+import {GeneralSettings, Participants, SettingsAppearance, SettingsFeedback, Share, FileDefault} from "components/Icon";
 import {Color} from "./colors";
 
-type LocalizationKey = "BoardSettings" | "Participants" | "Appearance" | "ShareSession" | "Feedback";
+type LocalizationKey = "BoardSettings" | "Participants" | "Appearance" | "ShareSession" | "ExportBoard" | "Feedback";
 
 export type MenuItem = {
   localizationKey: LocalizationKey;
@@ -40,6 +40,13 @@ export const MENU_ITEMS: Record<string, MenuItem> = {
     isModeratorOnly: false,
     color: "planning-pink",
     icon: Share,
+  },
+  exportBoard: {
+    localizationKey: "ExportBoard",
+    location: "export",
+    isModeratorOnly: false,
+    color: "backlog-blue",
+    icon: FileDefault,
   },
   feedback: {
     localizationKey: "Feedback",
