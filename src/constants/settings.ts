@@ -2,14 +2,14 @@ import {ComponentType, SVGProps} from "react";
 import {GeneralSettings, Participants, SettingsAppearance, SettingsFeedback, Share, FileDefault} from "components/Icon";
 import {Color} from "./colors";
 
-type LocalizationKey = "BoardSettings" | "Participants" | "Appearance" | "ShareSession" | "ExportBoard" | "Feedback";
+type LocalizationKey = "BoardSettings" | "Participants" | "Appearance" | "ShareSession" | "ExportBoard" | "Feedback" | "Profile";
 
 export type MenuItem = {
   localizationKey: LocalizationKey;
   location: string;
   isModeratorOnly: boolean;
   color: Color;
-  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  icon: ComponentType<SVGProps<SVGSVGElement>> | "profile"; // profile: special case
 };
 
 export const MENU_ITEMS: Record<string, MenuItem> = {
@@ -54,5 +54,12 @@ export const MENU_ITEMS: Record<string, MenuItem> = {
     isModeratorOnly: false,
     color: "poker-purple",
     icon: SettingsFeedback,
+  },
+  profile: {
+    localizationKey: "Profile",
+    location: "profile",
+    isModeratorOnly: false,
+    color: "lean-lilac",
+    icon: "profile",
   },
 };
