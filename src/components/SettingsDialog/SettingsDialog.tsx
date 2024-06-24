@@ -15,7 +15,18 @@ import {MENU_ITEMS, MenuItem} from "constants/settings";
 import "./SettingsDialog.scss";
 import {getColorClassName} from "../../constants/colors";
 
-export const SettingsDialog: FC = () => {
+/* type SettingsDialogProps = {
+  enabledMenuItems: {
+    board?: boolean;
+    participants?: boolean;
+    appearance?: boolean;
+    share?: boolean;
+    feedback?: boolean;
+    profile?: boolean;
+  }
+} */
+
+export const SettingsDialog = () => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,6 +47,9 @@ export const SettingsDialog: FC = () => {
     items: true,
   };
 
+  /* renders a menu item.
+   * special case: profile, where avatar is used instead of an icon
+   * and name instead of localization title */
   const renderMenuItem = (menuItem: MenuItem) => {
     if (menuItem.isModeratorOnly && !isBoardModerator) {
       return null;
@@ -85,6 +99,7 @@ export const SettingsDialog: FC = () => {
               <div className="settings-dialog__sidebar">
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
                 <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
+                {/* render all menu items */}
                 <nav className="settings-dialog__navigation">{Object.values(MENU_ITEMS).map((menuItem) => renderMenuItem(menuItem))}</nav>
               </div>
               <article className="settings-dialog__content">
