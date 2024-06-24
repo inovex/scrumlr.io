@@ -36,16 +36,28 @@ export const SettingsDialog = () => {
 
   const [activeMenuItem, setActiveMenuItem] = useState("");
 
-  useEffect(() => {
-    const pathEnd = location.pathname.split("/").at(-1)!;
-    setActiveMenuItem(pathEnd);
-  }, [location]);
-
   const transitionConfigMobile = {
     from: {},
     enter: {},
     items: true,
   };
+
+  useEffect(() => {
+    const pathEnd = location.pathname.split("/").at(-1)!;
+    setActiveMenuItem(pathEnd);
+  }, [location]);
+
+  useEffect(() => {
+    // If user is not a moderator of the board, he shouldn't see the board settings
+    if (!isBoardModerator && window.location.pathname.endsWith("/settings/board")) {
+      navigate(`/board/${boardId}/settings/participants`);
+    }
+    // If the window is large enough the show the whole dialog, automatically select the
+    // first navigation item to show
+    if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
+      navigate(isBoardModerator ? "board" : "participants");
+    }
+  }, [navigate, me, boardId, isBoardModerator]);
 
   /* renders a menu item.
    * special case: profile, where avatar is used instead of an icon
@@ -70,18 +82,6 @@ export const SettingsDialog = () => {
       </Link>
     );
   };
-
-  useEffect(() => {
-    // If user is not a moderator of the board, he shouldn't see the board settings
-    if (!isBoardModerator && window.location.pathname.endsWith("/settings/board")) {
-      navigate(`/board/${boardId}/settings/participants`);
-    }
-    // If the window is large enough the show the whole dialog, automatically select the
-    // first navigation item to show
-    if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
-      navigate(isBoardModerator ? "board" : "participants");
-    }
-  }, [navigate, me, boardId, isBoardModerator]);
 
   return (
     <Portal onClose={() => navigate(`/board/${boardId}`)}>
