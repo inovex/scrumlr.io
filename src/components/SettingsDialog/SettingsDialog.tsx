@@ -1,6 +1,6 @@
-import {useEffect, FC} from "react";
+import {useEffect, useState} from "react";
 import {animated, Transition} from "@react-spring/web";
-import {Outlet, useNavigate} from "react-router";
+import {Outlet, useLocation, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
@@ -17,11 +17,18 @@ import {getColorClassName} from "../../constants/colors";
 
 export const SettingsDialog: FC = () => {
   const {t} = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
-  const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
+
+  const [activeMenuItem, setActiveMenuItem] = useState("");
+
+  useEffect(() => {
+    const pathEnd = location.pathname.split("/").at(-1)!;
+    setActiveMenuItem(pathEnd);
+  }, [location]);
 
   const transitionConfigMobile = {
     from: {},
@@ -39,13 +46,7 @@ export const SettingsDialog: FC = () => {
     return (
       <Link
         to={menuItem.location}
-        className={classNames(
-          "navigation__item",
-          {
-            "navigation__item--active": window.location.pathname.endsWith(`/settings/${menuItem.location}`),
-          },
-          getColorClassName(menuItem.color)
-        )}
+        className={classNames("navigation__item", {"navigation__item--active": menuItem.location === activeMenuItem}, getColorClassName(menuItem.color))}
       >
         {Icon === "profile" ? <Avatar seed={me?.id} avatar={me?.avatar} className="navigation-item__icon" /> : <Icon className="navigation-item__icon" />}
         <div className="navigation-item__content">
