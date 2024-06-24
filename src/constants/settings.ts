@@ -2,6 +2,8 @@ import {ComponentType, SVGProps} from "react";
 import {GeneralSettings, Participants, SettingsAppearance, SettingsFeedback, Share, FileDefault} from "components/Icon";
 import {Color} from "./colors";
 
+export type MenuKey = "board" | "participants" | "appearance" | "share" | "exportBoard" | "feedback" | "profile";
+
 type LocalizationKey = "BoardSettings" | "Participants" | "Appearance" | "ShareSession" | "ExportBoard" | "Feedback" | "Profile";
 
 export type MenuItem = {
@@ -12,7 +14,7 @@ export type MenuItem = {
   icon: ComponentType<SVGProps<SVGSVGElement>> | "profile"; // profile: special case
 };
 
-export const MENU_ITEMS: Record<string, MenuItem> = {
+export const MENU_ITEMS: Record<MenuKey, MenuItem> = {
   board: {
     localizationKey: "BoardSettings",
     location: "board",
