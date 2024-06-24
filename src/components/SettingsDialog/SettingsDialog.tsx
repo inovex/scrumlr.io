@@ -85,72 +85,8 @@ export const SettingsDialog: FC = () => {
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
                 <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
                 <nav className="settings-dialog__navigation">
-                  {isBoardModerator && (
-                    <Link
-                      to="board"
-                      className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings/board")})}
-                    >
-                      <GeneralSettings className="navigation-item__icon" />
-                      <div className="navigation-item__content">
-                        <p className="navigation-item__name">{t("SettingsDialog.BoardSettings")}</p>
-                        <p className="navigation-item__description">{t("SettingsDialog.BoardSettingsDescription")}</p>
-                      </div>
-                    </Link>
-                  )}
-                  <Link
-                    to="participants"
-                    className={classNames("navigation__item", "accent-color__poker-purple", {
-                      "navigation__item--active": window.location.pathname.endsWith("/settings/participants"),
-                    })}
-                  >
-                    <Participants className="navigation-item__icon" />
-                    <div className="navigation-item__content">
-                      <p className="navigation-item__name">{t("SettingsDialog.Participants")}</p>
-                      <p className="navigation-item__description">{t("SettingsDialog.ParticipantsDescription")}</p>
-                    </div>
-                  </Link>
-                  <Link
-                    to="appearance"
-                    className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/appearance")})}
-                  >
-                    <SettingsAppearance className="navigation-item__icon" />
-                    <div className="navigation-item__content">
-                      <p className="navigation-item__name">{t("SettingsDialog.Appearance")}</p>
-                      <p className="navigation-item__description">{t("SettingsDialog.AppearanceDescription")}</p>
-                    </div>
-                  </Link>
-                  <Link
-                    to="share"
-                    className={classNames("navigation__item", "accent-color__planning-pink", {"navigation__item--active": window.location.pathname.endsWith("/share")})}
-                  >
-                    <Share className="navigation-item__icon" />
-                    <div className="navigation-item__content">
-                      <p className="navigation-item__name">{t("SettingsDialog.ShareSession")}</p>
-                      <p className="navigation-item__description">{t("SettingsDialog.ShareSessionDescription")}</p>
-                    </div>
-                  </Link>
-                  <Link
-                    to="export"
-                    className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/export")})}
-                  >
-                    <FileDefault className="navigation-item__icon" />
-                    <div className="navigation-item__content">
-                      <p className="navigation-item__name">{t("SettingsDialog.ExportBoard")}</p>
-                      <p className="navigation-item__description">{t("SettingsDialog.ExportBoardDescription")}</p>
-                    </div>
-                  </Link>
-                  {feedbackEnabled && (
-                    <Link
-                      to="feedback"
-                      className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
-                    >
-                      <SettingsFeedback className="navigation-item__icon" />
-                      <div className="navigation-item__content">
-                        <p className="navigation-item__name">{t("SettingsDialog.Feedback")}</p>
-                        <p className="navigation-item__description">{t("SettingsDialog.FeedbackDescription")}</p>
-                      </div>
-                    </Link>
-                  )}
+                  {Object.values(MENU_ITEMS).map((menuItem) => renderMenuItem(menuItem))}
+
                   {me && (
                     <Link
                       to="profile"
