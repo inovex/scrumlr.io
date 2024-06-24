@@ -10,8 +10,10 @@ import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
-import {Close, ArrowLeft, GeneralSettings, Share, Participants, SettingsAppearance, FileDefault, SettingsFeedback} from "components/Icon";
+import {ArrowLeft, Close} from "components/Icon";
+import {MENU_ITEMS, MenuItem} from "constants/settings";
 import "./SettingsDialog.scss";
+import {getColorClassName} from "../../constants/colors";
 
 export const SettingsDialog: FC = () => {
   const {t} = useTranslation();
@@ -25,6 +27,33 @@ export const SettingsDialog: FC = () => {
     from: {},
     enter: {},
     items: true,
+  };
+
+  const renderMenuItem = (menuItem: MenuItem) => {
+    if (menuItem.isModeratorOnly && !isBoardModerator) {
+      return null;
+    }
+
+    const Icon = menuItem.icon;
+
+    return (
+      <Link
+        to={menuItem.location}
+        className={classNames(
+          "navigation__item",
+          {
+            "navigation__item--active": window.location.pathname.endsWith(`/settings/${menuItem.location}`),
+          },
+          getColorClassName(menuItem.color)
+        )}
+      >
+        <Icon className="navigation-item__icon" />
+        <div className="navigation-item__content">
+          <p className="navigation-item__name">{t(`SettingsDialog.${menuItem.localizationKey}`)}</p>
+          <p className="navigation-item__description">{t(`SettingsDialog.${menuItem.localizationKey}Description`)}</p>
+        </div>
+      </Link>
+    );
   };
 
   useEffect(() => {
