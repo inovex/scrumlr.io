@@ -30,7 +30,7 @@ export interface AvataaarProps {
   mouthType: AvatarMouthType;
 }
 
-type DisabledOnType = Partial<Record<keyof AvataaarProps, string[]>>;
+export type DisabledOnType = Partial<{[K in keyof AvataaarProps]: AvataaarProps[K][]}>;
 
 type AvatarGroup = {
   values: ReadonlyArray<string>;
