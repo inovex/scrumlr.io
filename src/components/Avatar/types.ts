@@ -1,3 +1,15 @@
+import {AvataaarProps} from "./Avatar";
+
+type DisabledOnType = Partial<Record<keyof AvataaarProps, string[]>>;
+
+type InnerType = {
+  values: ReadonlyArray<string>;
+  key: keyof AvataaarProps;
+  disabledOn?: DisabledOnType;
+};
+
+export type SettingsGroup = Record<string, ReadonlyArray<InnerType>>;
+
 export const AVATAR_SKIN_COLORS = ["Tanned", "Yellow", "Pale", "Light", "Brown", "DarkBrown", "Black"] as const;
 export type AvatarSkinColor = (typeof AVATAR_SKIN_COLORS)[number];
 

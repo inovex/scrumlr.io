@@ -14,15 +14,16 @@ import {
   AVATAR_MOUTH_TYPES,
   AVATAR_SKIN_COLORS,
   AVATAR_TOP_TYPES,
+  SettingsGroup,
 } from "components/Avatar/types";
 import {FC, Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import "./AvatarSettings.scss";
 import {isEqual} from "underscore";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
+import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {
   id?: string;
@@ -61,7 +62,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
-  const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: string[]}}[]} = {
+  const settingGroups: SettingsGroup = {
     hair: [
       {values: AVATAR_TOP_TYPES, key: "topType"},
       {
