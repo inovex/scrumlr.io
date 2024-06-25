@@ -65,3 +65,14 @@ export const MENU_ITEMS: Record<MenuKey, MenuItem> = {
     icon: "profile",
   },
 };
+
+// shorthand to enable all menu items
+export const ENABLE_ALL: Record<MenuKey, boolean> = {
+  board: true,
+  participants: true,
+  appearance: true,
+  share: true,
+  exportBoard: true,
+  feedback: true,
+  profile: true,
+};
