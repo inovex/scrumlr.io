@@ -32,7 +32,7 @@ export interface AvataaarProps {
 
 export type DisabledOnType = Partial<{[K in keyof AvataaarProps]: AvataaarProps[K][]}>;
 
-type AvatarGroup = {
+export type AvatarGroup = {
   values: ReadonlyArray<string>;
   key: keyof Omit<AvataaarProps, "accentColorClass">;
   disabledOn?: DisabledOnType;

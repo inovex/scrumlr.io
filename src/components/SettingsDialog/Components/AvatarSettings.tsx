@@ -1,12 +1,13 @@
 import {Shuffle} from "components/Icon";
 import classNames from "classnames";
-import {AvataaarProps, Avatar, generateRandomProps} from "components/Avatar";
+import {Avatar, generateRandomProps} from "components/Avatar";
 import {FC, Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {isEqual} from "underscore";
 import {AVATAR_CONFIG} from "constants/avatar";
+import {AvataaarProps, AvatarGroup} from "types/avatar";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 import "./AvatarSettings.scss";
@@ -48,6 +49,32 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
+  const renderAvatarGroup = (group: AvatarGroup, index: number) => {
+    const isDisabled =
+      (group.disabledOn &&
+        Object.entries(group.disabledOn)
+          .map(([key, value]) => Object.hasOwnProperty.call(properties, key) && value.some((val) => properties[key].indexOf(val) >= 0))
+          .some((val) => val)) ??
+      false;
+
+    return (
+      <Fragment key={group.key}>
+        <SettingsCarousel
+          carouselItems={group.values}
+          // @ts-ignore
+          currentValue={properties[group.key]}
+          onValueChange={(value) => updateAvatar(group.key, value as (typeof group.values)[number])}
+          disabled={isDisabled}
+          localizationPath={`Avatar.${group.key}.`}
+          // @ts-ignore
+          label={t(`Avatar.${group.key}.label`)}
+          className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
+        />
+        {/* index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" /> TODO separator */}
+      </Fragment>
+    );
+  };
+
   return (
     <>
       <div className="avatar-settings__avatar">
@@ -67,30 +94,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                 headerClassName="avatar-settings__settings-group-header"
               >
                 <hr className="avatar-settings__settings-group-seperator" />
-                <div className="avatar-settings__settings-group">
-                  {props.map((element, index) => {
-                    const isDisabled =
-                      element.disabledOn &&
-                      Object.entries(element.disabledOn)
-                        .map(([key, value]) => Object.hasOwnProperty.call(properties, key) && value.some((val) => properties[key].indexOf(val) >= 0))
-                        .some((val) => val);
-
-                    return (
-                      <Fragment key={element.key}>
-                        <SettingsCarousel
-                          carouselItems={element.values}
-                          currentValue={properties[element.key]}
-                          onValueChange={(value) => updateAvatar(element.key, value as (typeof element.values)[number])}
-                          disabled={isDisabled}
-                          localizationPath={`Avatar.${element.key}.`}
-                          label={t(`Avatar.${element.key}.label`)}
-                          className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
-                        />
-                        {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
-                      </Fragment>
-                    );
-                  })}
-                </div>
+                <div className="avatar-settings__settings-group">{props.map((group, index) => renderAvatarGroup(group, index))}</div>
               </SettingsAccordion>
               {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
             </Fragment>
