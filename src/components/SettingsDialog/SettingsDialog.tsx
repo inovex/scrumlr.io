@@ -23,11 +23,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
-  const [activeMenuItem, setActiveMenuItem] = useState("");
+  const [activeMenuItem, setActiveMenuItem] = useState<MenuKey | "settings">("settings");
 
   const transitionConfigMobile = {
     from: {},
@@ -36,21 +35,30 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   };
 
   useEffect(() => {
-    const pathEnd = location.pathname.split("/").at(-1)!;
-    setActiveMenuItem(pathEnd);
-  }, [location]);
-
-  useEffect(() => {
-    // If user is not a moderator of the board, he shouldn't see the board settings
-    if (!isBoardModerator && window.location.pathname.endsWith("/settings/board")) {
-      navigate(`/board/${boardId}/settings/participants`);
+    // get last part of location. both /settings and /settings/ should have the same result.
+    let {pathname} = location;
+    if (pathname.slice(-1) === "/") {
+      pathname = pathname.slice(0, -1);
     }
+    const pathEnd = pathname.slice(pathname.lastIndexOf("/") + 1);
+
     // If the window is large enough the show the whole dialog, automatically select the
     // first navigation item to show
-    if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
+    if (pathEnd === "settings" && window.innerWidth > 920) {
       navigate(isBoardModerator ? "board" : "participants");
+    } else {
+      // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
+      const active = (Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd || item.location === `${pathEnd}/`)?.[0] ?? "settings") as MenuKey;
+      setActiveMenuItem(active);
     }
-  }, [navigate, me, boardId, isBoardModerator]);
+  }, [isBoardModerator, location, navigate]);
+
+  useEffect(() => {
+    // If user is not a moderator of the section, he shouldn't see it
+    if (activeMenuItem && activeMenuItem !== "settings" && MENU_ITEMS[activeMenuItem].isModeratorOnly && !isBoardModerator) {
+      navigate("..");
+    }
+  }, [navigate, isBoardModerator, activeMenuItem]);
 
   /* renders a menu item.
    * special case: profile, where avatar is used instead of an icon
@@ -81,7 +89,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   };
 
   return (
-    <Portal onClose={() => navigate(`/board/${boardId}`)}>
+    <Portal onClose={() => navigate(`..`)}>
       <div className="settings-dialog__background" />
       <div className="settings-dialog__wrapper">
         <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
@@ -105,7 +113,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
                 </Link>
                 <Outlet />
               </article>
-              <Link to={`/board/${boardId}`} className="settings-dialog__close-button">
+              <Link to=".." className="settings-dialog__close-button">
                 <Close className="close-button__icon" />
               </Link>
             </animated.aside>
