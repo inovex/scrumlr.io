@@ -6,8 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"scrumlr.io/server/identifiers"
 	"strconv"
+
+	"scrumlr.io/server/identifiers"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
@@ -364,8 +365,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 			author := note.Author.String()
 			for _, session := range sessions {
-				if session.User.ID == note.Author {
-					author = session.User.Name
+				if session.User == note.Author {
+					author = session.User.String()
 				}
 			}
 
