@@ -14,7 +14,7 @@ import {
   AVATAR_MOUTH_TYPES,
   AVATAR_SKIN_COLORS,
   AVATAR_TOP_TYPES,
-  SettingsGroup,
+  AvatarConfig,
 } from "components/Avatar/types";
 import {FC, Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -62,7 +62,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
-  const settingGroups: SettingsGroup = {
+  const settingGroups: AvatarConfig = {
     hair: [
       {values: AVATAR_TOP_TYPES, key: "topType"},
       {
