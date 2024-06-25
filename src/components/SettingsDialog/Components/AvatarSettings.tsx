@@ -1,26 +1,12 @@
 import {Shuffle} from "components/Icon";
 import classNames from "classnames";
 import {AvataaarProps, Avatar, generateRandomProps} from "components/Avatar";
-import {
-  AVATAR_ACCESSORIES_TYPES,
-  AVATAR_CLOTHE_COLORS,
-  AVATAR_CLOTHE_TYPES,
-  AVATAR_EYEBROW_TYPES,
-  AVATAR_EYE_TYPES,
-  AVATAR_FACIAL_HAIR_COLORS,
-  AVATAR_FACIAL_HAIR_TYPES,
-  AVATAR_GRAPHIC_TYPES,
-  AVATAR_HAIR_COLORS,
-  AVATAR_MOUTH_TYPES,
-  AVATAR_SKIN_COLORS,
-  AVATAR_TOP_TYPES,
-  AvatarConfig,
-} from "components/Avatar/types";
 import {FC, Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {isEqual} from "underscore";
+import {AVATAR_CONFIG} from "constants/avatar";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 import "./AvatarSettings.scss";
@@ -62,35 +48,6 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
-  const settingGroups: AvatarConfig = {
-    hair: [
-      {values: AVATAR_TOP_TYPES, key: "topType"},
-      {
-        values: AVATAR_HAIR_COLORS,
-        key: "hairColor",
-        disabledOn: {topType: ["NoHair", "Eyepatch", "Hat", "Hijab", "Turban", "WinterHat1", "WinterHat2", "WinterHat3", "WinterHat4", "LongHairFrida", "LongHairShavedSides"]},
-      },
-      {values: AVATAR_FACIAL_HAIR_TYPES, key: "facialHairType", disabledOn: {topType: ["Hijab"]}},
-      {values: AVATAR_FACIAL_HAIR_COLORS, key: "facialHairColor", disabledOn: {topType: ["Hijab"], facialHairType: ["Blank"]}},
-    ],
-    facialFeatures: [
-      {values: AVATAR_SKIN_COLORS, key: "skinColor"},
-      {values: AVATAR_EYEBROW_TYPES, key: "eyebrowType"},
-      {values: AVATAR_EYE_TYPES, key: "eyeType"},
-      {values: AVATAR_MOUTH_TYPES, key: "mouthType"},
-    ],
-    clothing: [
-      {values: AVATAR_ACCESSORIES_TYPES, key: "accessoriesType", disabledOn: {topType: ["Eyepatch"]}},
-      {values: AVATAR_CLOTHE_TYPES, key: "clotheType"},
-      {values: AVATAR_CLOTHE_COLORS, key: "clotheColor", disabledOn: {clotheType: ["BlazerShirt", "BlazerSweater"]}},
-      {
-        values: AVATAR_GRAPHIC_TYPES,
-        key: "graphicType",
-        disabledOn: {clotheType: ["BlazerShirt", "BlazerSweater", "CollarSweater", "Hoodie", "Overall", "ShirtCrewNeck", "ShirtScoopNeck", "ShirtVNeck"]},
-      },
-    ],
-  };
-
   return (
     <>
       <div className="avatar-settings__avatar">
@@ -101,7 +58,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
       </div>
       <div className="avatar-settings__settings-wrapper">
         <div className="avatar-settings__settings">
-          {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
+          {Object.entries(AVATAR_CONFIG).map(([label, props], groupIndex, array) => (
             <Fragment key={label}>
               <SettingsAccordion
                 label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing"}`)}
