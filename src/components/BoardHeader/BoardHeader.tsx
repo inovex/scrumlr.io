@@ -11,10 +11,11 @@ import {useTranslation} from "react-i18next";
 import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {shallowEqual} from "react-redux";
-import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
-import {DEFAULT_BOARD_NAME} from "../../constants/misc";
+import {DEFAULT_BOARD_NAME} from "constants/misc";
+import {AccessPolicy} from "types/board";
+import "./BoardHeader.scss";
 
 export interface BoardHeaderProps {
   currentUserIsModerator: boolean;
@@ -25,7 +26,8 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
   const state = useAppSelector(
     (rootState) => ({
       name: rootState.board.data?.name,
-      accessPolicy: rootState.board.data!.accessPolicy,
+      // manual cast because TS compiler doesn't do it right away
+      accessPolicy: rootState.board.data!.accessPolicy as keyof typeof AccessPolicy,
     }),
     shallowEqual
   );
