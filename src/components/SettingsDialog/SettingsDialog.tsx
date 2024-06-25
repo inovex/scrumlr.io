@@ -11,22 +11,15 @@ import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
 import {ArrowLeft, Close} from "components/Icon";
-import {MENU_ITEMS, MenuItem} from "constants/settings";
-import "./SettingsDialog.scss";
+import {MENU_ITEMS, MenuItem, MenuKey} from "constants/settings";
 import {getColorClassName} from "../../constants/colors";
+import "./SettingsDialog.scss";
 
-/* type SettingsDialogProps = {
-  enabledMenuItems: {
-    board?: boolean;
-    participants?: boolean;
-    appearance?: boolean;
-    share?: boolean;
-    feedback?: boolean;
-    profile?: boolean;
-  }
-} */
+type SettingsDialogProps = {
+  enabledMenuItems: Partial<Record<MenuKey, boolean>>;
+};
 
-export const SettingsDialog = () => {
+export const SettingsDialog = (props: SettingsDialogProps) => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
@@ -62,7 +55,11 @@ export const SettingsDialog = () => {
   /* renders a menu item.
    * special case: profile, where avatar is used instead of an icon
    * and name instead of localization title */
-  const renderMenuItem = (menuItem: MenuItem) => {
+  const renderMenuItem = (itemKey: MenuKey, menuItem: MenuItem) => {
+    if (!props.enabledMenuItems[itemKey]) {
+      return null;
+    }
+
     if (menuItem.isModeratorOnly && !isBoardModerator) {
       return null;
     }
@@ -100,7 +97,7 @@ export const SettingsDialog = () => {
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
                 <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
                 {/* render all menu items */}
-                <nav className="settings-dialog__navigation">{Object.values(MENU_ITEMS).map((menuItem) => renderMenuItem(menuItem))}</nav>
+                <nav className="settings-dialog__navigation">{Object.entries(MENU_ITEMS).map(([key, value]) => renderMenuItem(key as MenuKey, value))}</nav>
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">
