@@ -27,8 +27,7 @@ coverage:
 postman:
 	newman run api.postman_collection.json --env-var "base_url=localhost:8080" --verbose
 
-
-go-lint: 
+go-lint:
 	cd src && golangci-lint run --verbose
 
 go-all-tests: test go-lint postman
