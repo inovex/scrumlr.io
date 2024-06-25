@@ -83,7 +83,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                           onValueChange={(value) => updateAvatar(element.key, value as (typeof element.values)[number])}
                           disabled={isDisabled}
                           localizationPath={`Avatar.${element.key}.`}
-                          label={t(`Avatar.${element.key as keyof Omit<AvataaarProps, "accentColorClass">}.label`)}
+                          label={t(`Avatar.${element.key}.label`)}
                           className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
                         />
                         {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}

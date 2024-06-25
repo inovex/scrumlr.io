@@ -14,6 +14,7 @@ import {
 } from "constants/avatar";
 
 export interface AvataaarProps {
+  // TODO possibly separate color from rest
   accentColorClass: string;
   skinColor: AvatarSkinColor;
   topType: AvatarTopType;
@@ -33,7 +34,7 @@ type DisabledOnType = Partial<Record<keyof AvataaarProps, string[]>>;
 
 type AvatarGroup = {
   values: ReadonlyArray<string>;
-  key: keyof AvataaarProps;
+  key: keyof Omit<AvataaarProps, "accentColorClass">;
   disabledOn?: DisabledOnType;
 };
 
