@@ -34,6 +34,16 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     items: true,
   };
 
+  /* finds the first valid menu item a user can go to.
+   * the conditions for this are:
+   * 1. the menu item is enabled
+   * 2. if user is moderator, choose one that is moderator only
+   * 3. if user isn't moderator, choose one that isn't moderator only
+   * 2. and 3.: (P & Q) | (!P & !Q) simplifies to P <=> Q
+   *  */
+  const findFirstValidMenuItem = () =>
+    Object.entries(MENU_ITEMS).find(([key, menuItem]) => props.enabledMenuItems[key as MenuKey] && menuItem.isModeratorOnly === isBoardModerator)?.[1];
+
   useEffect(() => {
     const pathEnd = location.pathname.split("/").at(-1);
 
@@ -43,9 +53,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   }, [isBoardModerator, location, navigate]);
 
   useEffect(() => {
-    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show (not dynamically as of now)
+    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show
     if (activeMenuItem === "settings" && window.innerWidth >= MOBILE_BREAKPOINT) {
-      navigate(isBoardModerator ? "board" : "participants");
+      const section = findFirstValidMenuItem();
+      navigate(section?.location ?? "..");
     }
     // If user is not a moderator of the section, they shouldn't see it
     if (activeMenuItem && activeMenuItem !== "settings" && MENU_ITEMS[activeMenuItem].isModeratorOnly && !isBoardModerator) {
