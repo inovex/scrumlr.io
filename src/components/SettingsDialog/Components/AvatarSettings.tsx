@@ -49,24 +49,29 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
+  // a group is disabled if any property (stored in properties) is found within the disabledOn array of the group.
+  const checkDisabled = (group: AvatarGroup): boolean =>
+    (group.disabledOn &&
+      Object.entries(group.disabledOn)
+        .map(([key, value]) => {
+          const typedKey = key as keyof AvataaarProps;
+          const typedValue = value as AvataaarProps[keyof AvataaarProps][];
+          return Object.hasOwnProperty.call(properties, typedKey) && typedValue.some((val) => properties[typedKey] === val);
+        })
+        .some((val) => val)) ??
+    false;
+
   const renderAvatarGroup = (group: AvatarGroup, index: number) => {
-    const isDisabled =
-      (group.disabledOn &&
-        Object.entries(group.disabledOn)
-          .map(([key, value]) => Object.hasOwnProperty.call(properties, key) && value.some((val) => properties[key].indexOf(val) >= 0))
-          .some((val) => val)) ??
-      false;
+    const isDisabled = checkDisabled(group);
 
     return (
       <Fragment key={group.key}>
         <SettingsCarousel
           carouselItems={group.values}
-          // @ts-ignore
           currentValue={properties[group.key]}
           onValueChange={(value) => updateAvatar(group.key, value as (typeof group.values)[number])}
           disabled={isDisabled}
           localizationPath={`Avatar.${group.key}.`}
-          // @ts-ignore
           label={t(`Avatar.${group.key}.label`)}
           className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
         />
