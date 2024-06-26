@@ -2,7 +2,7 @@ import {ComponentType, SVGProps} from "react";
 import {GeneralSettings, Participants, SettingsAppearance, SettingsFeedback, Share, FileDefault} from "components/Icon";
 import {Color} from "./colors";
 
-export type MenuKey = "board" | "participants" | "appearance" | "share" | "exportBoard" | "feedback" | "profile";
+export type MenuKey = "board" | "participants" | "appearance" | "share" | "export" | "feedback" | "profile";
 
 type LocalizationKey = "BoardSettings" | "Participants" | "Appearance" | "ShareSession" | "ExportBoard" | "Feedback" | "Profile";
 
@@ -43,7 +43,7 @@ export const MENU_ITEMS: Record<MenuKey, MenuItem> = {
     color: "planning-pink",
     icon: Share,
   },
-  exportBoard: {
+  export: {
     localizationKey: "ExportBoard",
     location: "export",
     isModeratorOnly: false,
@@ -72,7 +72,7 @@ export const ENABLE_ALL: Record<MenuKey, boolean> = {
   participants: true,
   appearance: true,
   share: true,
-  exportBoard: true,
+  export: true,
   feedback: true,
   profile: true,
 };
