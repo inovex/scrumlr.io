@@ -37,17 +37,16 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   useEffect(() => {
     const pathEnd = location.pathname.split("/").at(-1);
 
-    // If the window is large enough the show the whole dialog, automatically select the
-    // first navigation item to show
-    if (pathEnd === "settings" && window.innerWidth > 920) {
-      navigate(isBoardModerator ? "board" : "participants");
-    }
     // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
     const active = (Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd)?.[0] ?? "settings") as MenuKey;
     setActiveMenuItem(active);
   }, [isBoardModerator, location, navigate]);
 
   useEffect(() => {
+    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show
+    if (activeMenuItem === "settings" && window.innerWidth > 920) {
+      navigate(isBoardModerator ? "board" : "participants");
+    }
     // If user is not a moderator of the section, he shouldn't see it
     if (activeMenuItem && activeMenuItem !== "settings" && MENU_ITEMS[activeMenuItem].isModeratorOnly && !isBoardModerator) {
       navigate("..");
