@@ -11,7 +11,7 @@ import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
 import {ArrowLeft, Close} from "components/Icon";
-import {MENU_ITEMS, MenuItem, MenuKey} from "constants/settings";
+import {MENU_ITEMS, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "../../constants/colors";
 import "./SettingsDialog.scss";
 
@@ -44,7 +44,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
   useEffect(() => {
     // If the window is large enough the show the whole dialog, automatically select the first navigation item to show
-    if (activeMenuItem === "settings" && window.innerWidth > 920) {
+    if (activeMenuItem === "settings" && window.innerWidth >= MOBILE_BREAKPOINT) {
       navigate(isBoardModerator ? "board" : "participants");
     }
     // If user is not a moderator of the section, he shouldn't see it

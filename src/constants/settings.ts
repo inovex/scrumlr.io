@@ -2,6 +2,8 @@ import {ComponentType, SVGProps} from "react";
 import {GeneralSettings, Participants, SettingsAppearance, SettingsFeedback, Share, FileDefault} from "components/Icon";
 import {Color} from "./colors";
 
+export const MOBILE_BREAKPOINT = 920;
+
 export type MenuKey = "board" | "participants" | "appearance" | "share" | "export" | "feedback" | "profile";
 
 type LocalizationKey = "BoardSettings" | "Participants" | "Appearance" | "ShareSession" | "ExportBoard" | "Feedback" | "Profile";
