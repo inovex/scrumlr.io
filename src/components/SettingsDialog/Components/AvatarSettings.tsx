@@ -1,7 +1,7 @@
 import {Shuffle} from "components/Icon";
 import classNames from "classnames";
 import {Avatar, generateRandomProps} from "components/Avatar";
-import {FC, Fragment, useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
@@ -16,7 +16,7 @@ export interface AvatarSettingsProps {
   id?: string;
 }
 
-export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
+export const AvatarSettings = (props: AvatarSettingsProps) => {
   const {t} = useTranslation();
   const state = useAppSelector(
     (applicationState) => ({
@@ -27,7 +27,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
 
   let initialState = state.participant.user.avatar;
   if (initialState === null || initialState === undefined) {
-    initialState = generateRandomProps(id ?? "");
+    initialState = generateRandomProps(props.id ?? "");
   }
 
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
@@ -83,7 +83,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   return (
     <>
       <div className="avatar-settings__avatar">
-        <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
+        <Avatar seed={props.id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
         <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
           <Shuffle />
         </button>
