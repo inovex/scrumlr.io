@@ -1,0 +1,218 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: scrumlr
+  name: scrumlr-frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: scrumlr
+  name: scrumlr-landing-page
+spec:
+  selector:
+    app: landing-page
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: scrumlr
+  name: landing-page
+  labels:
+    app: landing-page
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: landing-page
+  template:
+    metadata:
+      labels:
+        app: landing-page
+    spec:
+      containers:
+        - name: landing-page
+          image: ghcr.io/inovex/scrumlr.io-landing-page/image:sha-3db9234
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "200Mi"
+            limits:
+              cpu: "400m"
+              memory: "400Mi"
+          ports:
+            - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: scrumlr
+  name: frontend-deployment
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:3.7.1
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "200Mi"
+            limits:
+              cpu: "400m"
+              memory: "400Mi"
+          env:
+            # - name: SCRUMLR_SERVER_PORT
+            #   value: "80"
+            - name: SCRUMLR_SERVER_URL
+              value: /api
+            # - name: SCRUMLR_WEBSOCKET_URL
+            #   value: /api
+            - name: SCRUMLR_SHOW_LEGAL_DOCUMENTS
+              value: "true"
+          ports:
+            - containerPort: 80
+---
+apiVersion: traefik.io/v1alpha1 
+kind: IngressRoute
+metadata:
+  namespace: scrumlr
+  name: scrumlr-ingressroute
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`) && PathPrefix(`/api`)
+      kind: Rule
+      services:
+        - name: scrumlr-backend
+          port: 8080
+      middlewares:
+        - name: scrumlr-ratelimit
+    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`) && (PathPrefix(`/static`) || PathPrefix(`/locales`) || PathPrefix(`/login`) || PathPrefix(`/board`) || PathPrefix(`/new`) || PathPrefix(`/timer_finished.mp3`) || PathPrefix(`/hotkeys.pdf`) || PathPrefix(`/legal/`) || PathPrefix(`/manifest.json`) || PathPrefix(`/service-worker.js`))
+      kind: Rule
+      services:
+        - name: scrumlr-frontend
+          port: 80
+      middlewares:
+        - name: scrumlr-ratelimit
+    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`)
+      kind: Rule
+      services:
+        - name: scrumlr-landing-page
+          port: 80
+      middlewares:
+        - name: scrumlr-ratelimit
+
+  tls:
+    secretName: scrumlr-cert
+---
+apiVersion: traefik.io/v1alpha1 
+kind: IngressRoute
+metadata:
+  namespace: scrumlr
+  name: scrumlr-redirect-nonwww
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`www.${SCRUMLR_DEPLOYMENT_DOMAIN}`)
+      kind: Rule
+      services:
+        - name: scrumlr-landing-page
+          port: 80
+      middlewares:
+        - name: scrumlr-ratelimit
+        - name: redirect-to-nonwww
+---
+# redirect middleware
+
+apiVersion: traefik.io/v1alpha1 
+kind: Middleware
+metadata:
+  namespace: scrumlr
+  name: redirect-to-https
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+# redirect www to non-www
+apiVersion: traefik.io/v1alpha1 
+kind: Middleware
+metadata:
+  name: redirect-to-nonwww
+  namespace: scrumlr
+spec:
+  redirectRegex:
+    regex: "^https://www\\.(.*)"
+    replacement: "https://$1"
+    permanent: true
+---
+# redirect to https
+apiVersion: traefik.io/v1alpha1 
+kind: IngressRoute
+metadata:
+  namespace: scrumlr
+  name: scrumlr-http-redirect
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`${SCRUMLR_DEPLOYMENT_DOMAIN}`)
+      kind: Rule
+      middlewares:
+        - name: redirect-to-https
+        - name: scrumlr-ratelimit
+      services:
+        - name: noop@internal
+          kind: TraefikService
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  namespace: scrumlr
+  name: scrumlr-cert
+spec:
+  secretName: scrumlr-cert
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: ${SCRUMLR_DEPLOYMENT_DOMAIN}
+  dnsNames:
+    - ${SCRUMLR_DEPLOYMENT_DOMAIN}
+    - www.${SCRUMLR_DEPLOYMENT_DOMAIN}
+---
+# ratelimit middleware
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: scrumlr-ratelimit
+  namespace: scrumlr
+spec:
+  rateLimit:
+    average: 100
+    burst: 500
