@@ -14,7 +14,8 @@ import {
 } from "constants/avatar";
 
 export interface AvataaarProps {
-  // TODO possibly separate color from rest
+  // possibly look into separating accentColor from the other properties at some point
+  // otherwise don't forget to omit when needed
   accentColorClass: string;
   skinColor: AvatarSkinColor;
   topType: AvatarTopType;
