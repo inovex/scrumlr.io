@@ -51,7 +51,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   class="settings-dialog__navigation"
                 >
                   <a
-                    class="navigation__item accent-color__backlog-blue"
+                    class="navigation__item navigation__item--active accent-color__backlog-blue"
                     href="/board"
                   >
                     <svg
@@ -167,6 +167,30 @@ exports[`SettingsDialog should render correctly 1`] = `
                         class="navigation-item__description"
                       >
                         Share the board
+                      </p>
+                    </div>
+                  </a>
+                  <a
+                    class="navigation__item accent-color__poker-purple"
+                    href="/feedback"
+                  >
+                    <svg
+                      class="navigation-item__icon"
+                    >
+                      settings-feedback.svg
+                    </svg>
+                    <div
+                      class="navigation-item__content"
+                    >
+                      <p
+                        class="navigation-item__name"
+                      >
+                        Feedback
+                      </p>
+                      <p
+                        class="navigation-item__description"
+                      >
+                        We love to hear from you
                       </p>
                     </div>
                   </a>
@@ -677,7 +701,7 @@ exports[`SettingsDialog should render correctly 1`] = `
               </article>
               <a
                 class="settings-dialog__close-button"
-                href="/board/test-board-id"
+                href="/"
               >
                 <svg
                   class="close-button__icon"

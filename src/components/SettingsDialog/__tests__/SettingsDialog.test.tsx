@@ -2,10 +2,11 @@ import {Provider} from "react-redux";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import {SettingsDialog} from "..";
+import {ENABLE_ALL} from "constants/settings";
 
 const createSettingsDialog = () => (
   <Provider store={getTestStore()}>
-    <SettingsDialog />
+    <SettingsDialog enabledMenuItems={ENABLE_ALL} />
   </Provider>
 );
 
