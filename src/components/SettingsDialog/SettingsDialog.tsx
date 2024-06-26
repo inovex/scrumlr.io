@@ -26,7 +26,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
-  const [activeMenuItem, setActiveMenuItem] = useState<MenuKey | "settings">("settings");
+  const [activeMenuItem, setActiveMenuItem] = useState<MenuKey | "settings">();
 
   const transitionConfigMobile = {
     from: {},
