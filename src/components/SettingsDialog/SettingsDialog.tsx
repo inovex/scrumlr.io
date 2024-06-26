@@ -35,22 +35,16 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   };
 
   useEffect(() => {
-    // get last part of location. both /settings and /settings/ should have the same result.
-    let {pathname} = location;
-    if (pathname.slice(-1) === "/") {
-      pathname = pathname.slice(0, -1);
-    }
-    const pathEnd = pathname.slice(pathname.lastIndexOf("/") + 1);
+    const pathEnd = location.pathname.split("/").at(-1);
 
     // If the window is large enough the show the whole dialog, automatically select the
     // first navigation item to show
     if (pathEnd === "settings" && window.innerWidth > 920) {
       navigate(isBoardModerator ? "board" : "participants");
-    } else {
-      // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
-      const active = (Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd || item.location === `${pathEnd}/`)?.[0] ?? "settings") as MenuKey;
-      setActiveMenuItem(active);
     }
+    // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
+    const active = (Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd)?.[0] ?? "settings") as MenuKey;
+    setActiveMenuItem(active);
   }, [isBoardModerator, location, navigate]);
 
   useEffect(() => {
