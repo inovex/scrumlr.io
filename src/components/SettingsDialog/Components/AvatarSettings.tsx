@@ -61,7 +61,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
         .some((val) => val)) ??
     false;
 
-  const renderAvatarGroup = (group: AvatarGroup, index: number) => {
+  const renderAvatarGroup = (group: AvatarGroup) => {
     const isDisabled = checkDisabled(group);
 
     return (
@@ -89,7 +89,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
       </div>
       <div className="avatar-settings__settings-wrapper">
         <div className="avatar-settings__settings">
-          {Object.entries(AVATAR_CONFIG).map(([label, props], groupIndex, array) => (
+          {Object.entries(AVATAR_CONFIG).map(([label, groups], groupIndex, array) => (
             <Fragment key={label}>
               <SettingsAccordion
                 label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing"}`)}
@@ -98,7 +98,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
                 headerClassName="avatar-settings__settings-group-header"
               >
                 <hr className="avatar-settings__settings-group-seperator" />
-                <div className="avatar-settings__settings-group">{props.map((group, index) => renderAvatarGroup(group, index))}</div>
+                <div className="avatar-settings__settings-group">{groups.map((group) => renderAvatarGroup(group))}</div>
               </SettingsAccordion>
               {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
             </Fragment>
