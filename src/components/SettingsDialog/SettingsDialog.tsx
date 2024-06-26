@@ -12,7 +12,7 @@ import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
 import {ArrowLeft, Close} from "components/Icon";
 import {MENU_ITEMS, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
-import {getColorClassName} from "../../constants/colors";
+import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
 
 type SettingsDialogProps = {
