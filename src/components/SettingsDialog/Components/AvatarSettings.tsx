@@ -33,7 +33,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
-  const updateAvatar = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
+  const updateAvatar = (key: keyof AvataaarProps, value: AvataaarProps[keyof AvataaarProps]) => {
     if (properties && properties[key] !== value) {
       setProperties({...properties, [key]: value});
     }
@@ -69,7 +69,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
         <SettingsCarousel
           carouselItems={group.values}
           currentValue={properties[group.key]}
-          onValueChange={(value) => updateAvatar(group.key, value as (typeof group.values)[number])}
+          onValueChange={(value) => updateAvatar(group.key, value)}
           disabled={isDisabled}
           localizationPath={`Avatar.${group.key}.`}
           label={t(`Avatar.${group.key}.label`)}
