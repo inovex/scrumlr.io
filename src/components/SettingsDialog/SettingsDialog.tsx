@@ -34,16 +34,6 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     items: true,
   };
 
-  /* finds the first valid menu item a user can go to.
-   * the conditions for this are:
-   * 1. the menu item is enabled
-   * 2. if user is moderator, choose one that is moderator only
-   * 3. if user isn't moderator, choose one that isn't moderator only
-   * 2. and 3.: (P & Q) | (!P & !Q) simplifies to P <=> Q
-   *  */
-  const findFirstValidMenuItem = () =>
-    Object.entries(MENU_ITEMS).find(([key, menuItem]) => props.enabledMenuItems[key as MenuKey] && menuItem.isModeratorOnly === isBoardModerator)?.[1];
-
   useEffect(() => {
     const pathEnd = location.pathname.split("/").at(-1);
 
@@ -53,7 +43,17 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   }, [isBoardModerator, location, navigate]);
 
   useEffect(() => {
-    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show
+    /* finds the first valid menu item a user can go to.
+     * the conditions for this are:
+     * 1. the menu item is enabled
+     * 2. if user is moderator, choose one that is moderator only
+     * 3. if user isn't moderator, choose one that isn't moderator only
+     * 2. and 3.: (P & Q) | (!P & !Q) simplifies to P <=> Q */
+    const findFirstValidMenuItem = () =>
+      Object.entries(MENU_ITEMS).find(([key, menuItem]) => props.enabledMenuItems[key as MenuKey] && menuItem.isModeratorOnly === isBoardModerator)?.[1];
+
+    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show.
+    // if none is found, go back
     if (activeMenuItem === "settings" && window.innerWidth >= MOBILE_BREAKPOINT) {
       const section = findFirstValidMenuItem();
       navigate(section?.location ?? "..");
@@ -62,7 +62,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     if (activeMenuItem && activeMenuItem !== "settings" && MENU_ITEMS[activeMenuItem].isModeratorOnly && !isBoardModerator) {
       navigate("..");
     }
-  }, [navigate, isBoardModerator, activeMenuItem]);
+  }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems]);
 
   /* renders a menu item.
    * condition: menu item is enabled and user has authorization
