@@ -75,7 +75,6 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
           label={t(`Avatar.${group.key}.label`)}
           className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
         />
-        {/* index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" /> TODO separator */}
       </Fragment>
     );
   };
