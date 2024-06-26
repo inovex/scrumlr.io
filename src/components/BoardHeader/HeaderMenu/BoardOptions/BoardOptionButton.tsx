@@ -11,7 +11,7 @@ export interface BoardOptionButtonProps {
   [key: string]: unknown;
 }
 
-export const BoardOptionButton: FC<PropsWithChildren<BoardOptionButtonProps>> = ({label, icon, onClick, isExpandable = false, className, children, ...other}) => {
+export const BoardOptionButton: FC<PropsWithChildren<BoardOptionButtonProps>> = ({label, icon, onClick, isExpandable = false, children, ...other}) => {
   const Icon = icon!;
 
   return (
