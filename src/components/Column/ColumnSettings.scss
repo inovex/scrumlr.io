@@ -133,91 +133,133 @@
 }
 
 .column__header-color-option {
-  width: 23px;
-  height: 23px;
+  width: 20px;
+  height: 20px;
   border-radius: 100px;
 }
 
-.color_pink {
+.planning-pink {
+  background: #ff3387;
+}
+
+.planning-pink_selected {
   background: #ff3387;
   border: 3px solid #ff99c3;
 }
 
-.color_pink:hover {
+.planning-pink:hover {
   border: 3px solid #ffcce1;
 }
 
-.color_blue {
+.backlog-blue {
+  background: #3379ff;
+}
+
+.backlog-blue_selected {
   background: #3379ff;
   border: 3px solid #99bcff;
 }
 
-.color_blue:hover {
+.backlog-blue:hover {
   border: 3px solid #ccddff;
 }
 
-.color_purple {
+.lean-lilac {
+  background: #d44fff;
+}
+
+.lean-lilac_selected {
   background: #d44fff;
   border: 3px solid #e9a7ff;
 }
 
-.color_purple:hover {
+.lean-lilac:hover {
   border: 3px solid #f4d3ff;
 }
 
-.color_violet {
+.poker-purple {
+  background: #7d33f8;
+}
+
+.poker-purple_selected {
   background: #7d33f8;
   border: 3px solid #be99fb;
 }
 
-.color_violet:hover {
+.poker-purple:hover {
   border: 3px solid #dfccfd;
 }
 
-.color_green {
+.grooming-green {
+  background: #49dd98;
+}
+
+.grooming-green_selected {
   background: #49dd98;
   border: 3px solid #a4eecb;
 }
 
-.color_green:hover {
+.grooming-green:hover {
   border: 3px solid #d1f6e5;
 }
 
-.color_yellow {
+.retro-red {
+  background: #fff733;
+}
+
+.retro-red_selected {
   background: #fff733;
   border: 3px solid #fffb99;
 }
 
-.color_yellow:hover {
+.retro-red:hover {
   border: 3px solid #fffdcc;
 }
 
-.color_orange {
+.online-orange {
+  background: #ffb933;
+}
+
+.online-orange_selected {
   background: #ffb933;
   border: 3px solid #ffdc99;
 }
 
-.color_orange:hover {
+.online-orange:hover {
   border: 3px solid #ffeecc;
 }
 
 .column__header-color-picker-dropdown {
-  display: block;
-  position: absolute;
-  width: inherit;
+  //display: block;
+  position: relative;
 
-  right: 0;
-  top: 100%;
+  //display: flex;
+  //align-items: flex-start;
+  //width: 0px;
+  //position: absolute;
+  //right: 50px;
+  top: 82px;
+
+  //top: 100%;
   background-color: $color-white;
   border-radius: $rounded--large;
   box-shadow:
     0 4px 6px -1px rgb(0 0 0 / 0.1),
     0 2px 4px -2px rgb(0 0 0 / 0.1);
   z-index: 200;
+
+  list-style: none;
+  padding: 0;
+}
+
+.column__header-color-picker-dropdown > ul {
+  top: 0;
+  list-style: none;
 }
 
 .column__header-color-picker-dropdown > li > button {
-  //width: inherit;
+  background-color: transparent;
+  border: 0;
 }
 
 .column__header-color-picker-dropdown {
@@ -245,3 +287,9 @@
 //    background-color: $color-white-two;
 //  }
 //}
+
+.hihihi {
+  width: 0;
+  border-width: 1px;
+  border-color: deeppink;
+}
