@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {FC} from "react";
-import {AvataaarProps} from "components/Avatar";
+import {AvataaarProps} from "types/avatar";
 import {Participant} from "types/participant";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
