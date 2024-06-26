@@ -43,19 +43,19 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   }, [isBoardModerator, location, navigate]);
 
   useEffect(() => {
-    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show
+    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show (not dynamically as of now)
     if (activeMenuItem === "settings" && window.innerWidth >= MOBILE_BREAKPOINT) {
       navigate(isBoardModerator ? "board" : "participants");
     }
-    // If user is not a moderator of the section, he shouldn't see it
+    // If user is not a moderator of the section, they shouldn't see it
     if (activeMenuItem && activeMenuItem !== "settings" && MENU_ITEMS[activeMenuItem].isModeratorOnly && !isBoardModerator) {
       navigate("..");
     }
   }, [navigate, isBoardModerator, activeMenuItem]);
 
   /* renders a menu item.
-   * special case: profile, where avatar is used instead of an icon
-   * and name instead of localization title */
+   * condition: menu item is enabled and user has authorization
+   * special case: profile, where avatar is used instead of an icon and name instead of localization title */
   const renderMenuItem = (itemKey: MenuKey, menuItem: MenuItem) => {
     if (!props.enabledMenuItems[itemKey]) {
       return null;
