@@ -7,9 +7,8 @@ exports[`board reaction menu should render correctly 1`] = `
     style="opacity: 0; transform: scale(0.3, 0.9) translateY(100%); pointer-events: none;"
   >
     <button
-      aria-disabled="false"
       aria-label="React with tada [1]"
-      class="board-reactions-menu__item board-reactions-menu__reaction"
+      class="board-reactions-menu__item"
       title="React with tada [1]"
     >
       <span>
@@ -17,9 +16,8 @@ exports[`board reaction menu should render correctly 1`] = `
       </span>
     </button>
     <button
-      aria-disabled="false"
       aria-label="React with applause [2]"
-      class="board-reactions-menu__item board-reactions-menu__reaction"
+      class="board-reactions-menu__item"
       title="React with applause [2]"
     >
       <span>
@@ -27,9 +25,8 @@ exports[`board reaction menu should render correctly 1`] = `
       </span>
     </button>
     <button
-      aria-disabled="false"
       aria-label="React with heart [3]"
-      class="board-reactions-menu__item board-reactions-menu__reaction"
+      class="board-reactions-menu__item"
       title="React with heart [3]"
     >
       <span>
@@ -37,9 +34,8 @@ exports[`board reaction menu should render correctly 1`] = `
       </span>
     </button>
     <button
-      aria-disabled="false"
       aria-label="React with like [4]"
-      class="board-reactions-menu__item board-reactions-menu__reaction"
+      class="board-reactions-menu__item"
       title="React with like [4]"
     >
       <span>
@@ -47,9 +43,8 @@ exports[`board reaction menu should render correctly 1`] = `
       </span>
     </button>
     <button
-      aria-disabled="false"
       aria-label="React with dislike [5]"
-      class="board-reactions-menu__item board-reactions-menu__reaction"
+      class="board-reactions-menu__item"
       title="React with dislike [5]"
     >
       <span>
@@ -62,7 +57,7 @@ exports[`board reaction menu should render correctly 1`] = `
       tabindex="0"
     >
       <svg>
-        icon-close.svg
+        close.svg
       </svg>
     </button>
   </div>

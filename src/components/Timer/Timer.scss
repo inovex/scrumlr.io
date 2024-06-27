@@ -30,6 +30,11 @@ $timer__progress-bar-color: #6096ff;
   transition: background-color 150ms linear;
   color: $color-black;
 
+  > svg {
+    height: $icon--medium;
+    width: $icon--medium;
+  }
+
   &:hover {
     background-color: getLightHoverBackground($color-white);
   }
@@ -138,12 +143,12 @@ $timer__progress-bar-color: #6096ff;
 
 .short-action__button > svg {
   position: absolute;
-  height: $icon--small;
-  width: $icon--small;
+  height: 100%;
+  width: 100%;
 }
-.short-action__check-icon {
-  height: $timer__short-actions-height;
-  width: $timer__short-actions-height;
+.short-action__button > .short-action__flag-icon {
+  height: $icon--medium;
+  width: $icon--medium;
 }
 .short-action__cancel-icon {
   visibility: hidden;

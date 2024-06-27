@@ -1,6 +1,6 @@
 import "./CustomToast.scss";
 import {FC, useEffect, useRef, useState} from "react";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {Close} from "components/Icon";
 import {ToastTypes} from "utils/Toast";
 import classNames from "classnames";
 
@@ -136,7 +136,7 @@ export const CustomToast: FC<CustomToastProps> = ({title, message, buttons, hint
         </div>
       )}
       <div className={`toast__close-icon ${isSingleToast ? "toast__close-icon-single" : "toast__close-icon-multi"}`}>
-        <CloseIcon />
+        <Close />
       </div>
     </div>
   );
