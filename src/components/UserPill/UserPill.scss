@@ -6,6 +6,8 @@ $padding--mobile: 0 0 0 0;
 // if you want to include default states, use padding below and set compensate-padding to true
 // $padding--mobile: 1.5px 1.5px 1.5px 1.5px;
 
+$size-mobile: 56px;
+
 .user-pill {
   all: unset;
 
@@ -87,7 +89,14 @@ $padding--mobile: 0 0 0 0;
 // mobile only styles
 @media screen and (max-width: $breakpoint--smartphone) {
   .user-pill {
+    height: $size-mobile;
     padding: $padding--mobile;
+  }
+
+  .user-pill__avatar-container,
+  .user-pill__avatar {
+    width: $size-mobile;
+    height: $size-mobile;
   }
 
   .user-pill__name {
