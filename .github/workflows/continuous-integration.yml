@@ -49,7 +49,7 @@ jobs:
 
       - name: Test with coverage
         run: yarn test --coverage --watchAll=false --passWithNoTests
-    
+
   test-backend:
       name: Build and Test – Backend
       runs-on: ubuntu-latest
@@ -72,7 +72,7 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('server/src/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-    
+
       - name: Download Go Modules
         if: steps.cache-go-modules.outputs.cache-hit != 'true'
         working-directory: ./server/src
@@ -82,7 +82,7 @@ jobs:
         working-directory: ./server/src
         run: go list -m all
 
-      - name: Go lint 
+      - name: Go lint
         uses: golangci/golangci-lint-action@v4
         with:
           version: v1.54
@@ -93,7 +93,7 @@ jobs:
         run: |
           make test
           make build-alpine
-        
+
   package:
     needs: [test-frontend, test-backend]
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
@@ -106,7 +106,7 @@ jobs:
     with:
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
-  
+
   docs_changes:
     if : ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
@@ -125,7 +125,7 @@ jobs:
         run: echo "docs_changed=${{ steps.docs_changes.outputs.docs }}" >> $GITHUB_OUTPUT
     outputs:
       docs_changed: ${{ steps.set-output.outputs.docs_changed }}
-    
+
   deploy_github_pages:
     needs: docs_changes
     if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
@@ -140,9 +140,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Reachability check
         uses: ./.github/actions/deployment_health_check
-        with: 
+        with:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
-  
+
   postman_tests:
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
     needs: deployment_health_check
@@ -152,7 +152,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Reachability check
         uses: ./.github/actions/deployment_health_check
-        with: 
+        with:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
       - name: Postman run
         uses: ./.github/actions/postman_run
@@ -169,7 +169,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Reachability check
         uses: ./.github/actions/deployment_health_check
-        with: 
+        with:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
       - name: Run tests
         uses: OctoMind-dev/automagically-action-execute@v2
@@ -187,7 +187,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Start server
-        run: docker-compose --profile build up -d
+        run: docker compose --profile build up -d
         working-directory: server
       - name: Setup client and run tests
         uses: cypress-io/github-action@v6

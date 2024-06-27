@@ -2,6 +2,7 @@ import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Actions, ReduxAction} from "store/action";
 import {AuthAction} from "store/action/auth";
+import {ACCOUNT_TYPE_ANONYMOUS} from "types/auth";
 import {API} from "api";
 import {ViewAction} from "store/action/view";
 import {Toast} from "utils/Toast";
@@ -13,7 +14,8 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
     API.getCurrentUser()
       .then((user) => {
         if (user) {
-          dispatch(Actions.signIn(user.id, user.name, user.avatar));
+          const isAnonymous = user.accountType === ACCOUNT_TYPE_ANONYMOUS;
+          dispatch(Actions.signIn(user.id, user.name, isAnonymous, user.avatar));
         }
         dispatch(Actions.userCheckCompleted(true));
       })
