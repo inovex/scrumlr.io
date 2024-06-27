@@ -39,7 +39,7 @@ export const NewBoard = () => {
 
   return (
     <div className="new-board">
-      <div className="new-board__grid">
+      <header className="new-board__header">
         {/* logo - - - profile */}
         <div>
           <a className="new-board__logo-wrapper" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
@@ -68,11 +68,10 @@ export const NewBoard = () => {
           </div>
         </button>
         {showMobileSearchBar && <SearchBar className="new-board__mobile-search-bar" closable onClose={toggleMobileSearchBar} />}
-
-        <main className="new-board__outlet">
-          <Outlet />
-        </main>
-      </div>
+      </header>
+      <main className="new-board__outlet">
+        <Outlet />
+      </main>
     </div>
   );
 };
