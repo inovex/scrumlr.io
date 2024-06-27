@@ -96,7 +96,7 @@
 
 @media screen and (max-width: $breakpoint--smartphone) {
   .new-board {
-    padding: $spacing--md 0 0 0;
+    padding: $spacing--md $spacing--md 0 $spacing--md;
   }
 
   .new-board__grid {
@@ -107,8 +107,8 @@
     grid-template-areas:
       "logo   .       .       .       user"
       "title  title   title   title   title"
-      ".      switch  .       search  ."
-      ".      search2 search2 search2 ."
+      "switch      switch  .       search  search"
+      "search2      search2 search2 search2 search2"
       "main   main    main    main    main";
   }
 
@@ -119,6 +119,7 @@
 
   .new-board__search-button {
     display: inline-block;
+    margin-right: $spacing--sm;
   }
 
   .new-board__search-bar {

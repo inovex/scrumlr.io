@@ -63,6 +63,7 @@ $padding--mobile: 6px;
 @media screen and (max-width: $breakpoint--smartphone) {
   .switch {
     padding: $padding--mobile;
+    margin-left: $spacing--sm;
 
     &:enabled {
       @include default-states($padding: $padding--mobile);
