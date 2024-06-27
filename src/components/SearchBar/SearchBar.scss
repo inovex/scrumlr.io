@@ -1,6 +1,7 @@
 @import "constants/style";
 
-$default-padding: $spacing--base;
+$padding--default: $spacing--base;
+$padding--mobile: 12.5px $spacing--base;
 
 .search-bar {
   display: flex;
@@ -9,13 +10,13 @@ $default-padding: $spacing--base;
   gap: $spacing--xs;
 
   width: 100%;
-  padding: $default-padding;
+  padding: $padding--default;
   border-radius: $rounded--full;
 
   background-color: $color-white;
 
   &:not(&--disabled) {
-    @include default-states($padding: $default-padding);
+    @include default-states($padding: $padding--default);
 
     // alternatively, this could be split up and put in their respective classes,
     // which might be more readable but also requires a little bit more code
@@ -73,5 +74,15 @@ $default-padding: $spacing--base;
 
   &:disabled {
     background-color: #eeeff1;
+  }
+}
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .search-bar {
+    padding: $padding--mobile;
+
+    &:not(&--disabled) {
+      @include default-states($padding: $padding--mobile);
+    }
   }
 }
