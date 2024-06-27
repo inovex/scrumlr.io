@@ -82,6 +82,7 @@ func (s *NoteService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Note,
 func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error) {
 	log := logger.FromContext(ctx)
 	var positionUpdate *database.NoteUpdatePosition
+	edited := body.Text != nil
 	if body.Position != nil {
 		positionUpdate = &database.NoteUpdatePosition{
 			Column: body.Position.Column,
@@ -89,11 +90,13 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 			Stack:  body.Position.Stack,
 		}
 	}
+
 	note, err := s.database.UpdateNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), database.NoteUpdate{
 		ID:       body.ID,
 		Board:    body.Board,
 		Text:     body.Text,
 		Position: positionUpdate,
+		Edited:   edited,
 	})
 	if err != nil {
 		log.Errorw("unable to update note", "error", err, "note", body.ID)
