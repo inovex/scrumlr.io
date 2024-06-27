@@ -1,8 +1,8 @@
 import {NoteAuthorList} from "components/Note/NoteAuthorList/NoteAuthorList";
 import {Participant} from "types/participant";
 import {useAppSelector} from "store";
+import {AvataaarProps} from "types/avatar";
 import {Votes} from "../../Votes";
-import {AvataaarProps} from "../../Avatar";
 import "./NoteDialogNoteHeader.scss";
 
 interface NoteDialogNoteHeaderProps {

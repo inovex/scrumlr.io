@@ -15,7 +15,7 @@ import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Note} from "types/note";
-import {AvataaarProps} from "components/Avatar";
+import {AvataaarProps} from "types/avatar";
 
 type StackedNote = Note & {
   authorName: string;
