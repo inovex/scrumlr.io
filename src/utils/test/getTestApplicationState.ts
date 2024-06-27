@@ -1,7 +1,7 @@
 import {ApplicationState} from "../../types";
 
 export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
-  auth: {user: {id: "test-auth-user-id", name: "test-auth-user-name"}, initializationSucceeded: true},
+  auth: {user: {id: "test-auth-user-id", name: "test-auth-user-name", isAnonymous: true}, initializationSucceeded: true},
   board: {
     status: "ready",
     data: {
@@ -19,6 +19,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       user: {
         id: "test-requests-user-id-1",
         name: "test-requests-user-name-1",
+        isAnonymous: true,
       },
       status: "PENDING",
     },
@@ -28,6 +29,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       user: {
         id: "test-participants-self-user-id",
         name: "test-participants-self-user-name",
+        isAnonymous: true,
       },
       connected: true,
       ready: false,
@@ -40,6 +42,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         user: {
           id: "test-participants-others-user-id-1",
           name: "test-participants-others-user-name-1",
+          isAnonymous: true,
         },
         connected: true,
         ready: false,
@@ -51,6 +54,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         user: {
           id: "test-participants-others-user-id-2",
           name: "test-participants-others-user-name-2",
+          isAnonymous: true,
         },
         connected: false,
         ready: false,
