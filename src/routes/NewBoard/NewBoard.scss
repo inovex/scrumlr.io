@@ -103,13 +103,16 @@
     grid-template-columns: auto auto 1fr auto auto;
     // adds a row where the mobile search bar resides
     // TODO decrease mobile sizes according to design
-    grid-template-rows: 56px 32px 57px auto 1fr;
+    grid-template-rows: 56px $spacing--sm 32px $spacing--md 57px $spacing--sm auto 1fr;
     grid-template-areas:
-      "logo   .       .       .       user"
-      "title  title   title   title   title"
-      "switch      switch  .       search  search"
-      "search2      search2 search2 search2 search2"
-      "main   main    main    main    main";
+      "logo     .       .       .       user"
+      ".        .       .       .       ."
+      "title    title   title   title   title"
+      ".        .       .       .       ."
+      "switch   switch  .       search  search"
+      ".        .       .       .       ."
+      "search2  search2 search2 search2 search2"
+      "main     main    main    main    main";
   }
 
   .new-board__title {
