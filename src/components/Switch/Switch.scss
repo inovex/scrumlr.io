@@ -1,6 +1,7 @@
 @import "constants/style";
 
-$default-padding: $spacing--xs;
+$padding--default: $spacing--xs;
+$padding--mobile: 6px;
 
 .switch {
   all: unset;
@@ -8,10 +9,11 @@ $default-padding: $spacing--xs;
 
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 0;
 
   width: fit-content;
-  padding: $default-padding;
+  padding: $padding--default;
   border-radius: $rounded--large;
 
   background-color: $color-white;
@@ -19,7 +21,7 @@ $default-padding: $spacing--xs;
   &:enabled {
     cursor: pointer;
 
-    @include default-states($padding: $default-padding);
+    @include default-states($padding: $padding--default);
   }
 
   &:disabled {
@@ -40,7 +42,7 @@ $default-padding: $spacing--xs;
   display: flex;
   align-items: center;
 
-  padding: $spacing--sm $spacing--base;
+  padding: 14.5px $spacing--base;
   border-radius: $rounded--large;
 
   font-size: $text--base;
@@ -55,5 +57,19 @@ $default-padding: $spacing--xs;
     color: white;
 
     font-weight: 700;
+  }
+}
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .switch {
+    padding: $padding--mobile;
+
+    &:enabled {
+      @include default-states($padding: $padding--mobile);
+    }
+  }
+
+  .switch__item {
+    font-size: $text--sm;
   }
 }
