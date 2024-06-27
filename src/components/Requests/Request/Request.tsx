@@ -1,5 +1,5 @@
 import "./Request.scss";
-import {RaiseHand,Join} from "components/Icon";
+import {RaiseHand, Join} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
 import {Auth} from "../../../types/auth";

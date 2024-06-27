@@ -1,4 +1,4 @@
-import {Join, Kick,Search, Wifi, MarkAsDone} from "components/Icon";
+import {Join, Kick, Search, Wifi, MarkAsDone} from "components/Icon";
 import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
