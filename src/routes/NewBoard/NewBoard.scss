@@ -11,13 +11,13 @@
 
 .new-board__grid {
   display: grid;
-  grid-template-columns: auto auto 1fr auto auto;
+  grid-template-columns: auto auto $spacing--base 1fr auto auto;
   grid-template-rows: 56px 48px 64px 1fr; // using the actual component heights seems to yield the best results
   grid-template-areas:
-    "logo title   title   title   user"
-    ".    title   title   title   . "
-    ".    switch  search  search  ."
-    ".    main    main    main    .";
+    "logo title   title   title   title   user"
+    ".    title   title   title   title   . "
+    ".    switch  .       search  search  ."
+    ".    main    main    main    main    .";
 
   height: 100%;
 }
@@ -45,7 +45,6 @@
 
 .new-board__switch {
   grid-area: switch;
-  margin-right: $spacing--base;
 }
 
 .new-board__search-bar {
