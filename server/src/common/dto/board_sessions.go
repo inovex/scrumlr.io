@@ -33,7 +33,7 @@ type BoardSession struct {
 	// start voting sessions etc.
 	Role types.SessionRole `json:"role"`
 
-  //Reference for when board_session has been created
+	//Reference for when board_session has been created
 	CreatedAt time.Time `json:"createdAt"`
 	// Flag indicates whether the user is banned
 	Banned bool `json:"banned"`
@@ -41,9 +41,10 @@ type BoardSession struct {
 
 func (b *BoardSession) From(session database.BoardSession) *BoardSession {
 	user := User{
-		ID:     session.User,
-		Name:   session.Name,
-		Avatar: session.Avatar,
+		ID:          session.User,
+		Name:        session.Name,
+		Avatar:      session.Avatar,
+		AccountType: session.AccountType,
 	}
 	b.User = user
 	b.Connected = session.Connected

@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"net/url"
-	"scrumlr.io/server/identifiers"
 	"strconv"
 	"time"
+
+	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -28,6 +29,7 @@ type BoardSession struct {
 	RaisedHand        bool
 	Role              types.SessionRole
 	Banned            bool
+	AccountType       types.AccountType
 	CreatedAt         time.Time
 }
 
@@ -87,7 +89,7 @@ func (d *Database) CreateBoardSession(boardSession BoardSessionInsert) (BoardSes
 		With("insertQuery", insertQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"insertQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.board = ?", boardSession.Board).
 		Where("s.user = ?", boardSession.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -132,7 +134,7 @@ func (d *Database) UpdateBoardSession(update BoardSessionUpdate) (BoardSession, 
 		With("updateQuery", updateQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.board = ?", update.Board).
 		Where("s.user = ?", update.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -162,18 +164,10 @@ func (d *Database) UpdateBoardSessions(update BoardSessionUpdate) ([]BoardSessio
 		With("updateQuery", updateQuery).
 		Model((*BoardSession)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.board = ?", update.Board).
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Scan(context.Background(), &sessions)
-
-	// send update to observers here, as bun .AfterScanRow() is triggered for each updated row
-	// see more details in: https://github.com/inovex/scrumlr.io/pull/2071/files#r1026237100
-	for _, observer := range d.observer {
-		if o, ok := observer.(BoardSessionsObserver); ok {
-			o.UpdatedSessions(update.Board, sessions)
-		}
-	}
 
 	return sessions, err
 }
@@ -194,7 +188,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
 	var session BoardSession
 	err := d.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.board = ?", board).
 		Where("s.user = ?", user).
 		Join("INNER JOIN users AS u ON u.id = s.user").
@@ -205,7 +199,7 @@ func (d *Database) GetBoardSession(board, user uuid.UUID) (BoardSession, error) 
 func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessionFilter) ([]BoardSession, error) {
 	query := d.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.user, u.avatar, u.name, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		ColumnExpr("s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.board = ?", board).
 		Join("INNER JOIN users AS u ON u.id = s.user")
 
@@ -227,5 +221,22 @@ func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessi
 
 	var sessions []BoardSession
 	err := query.Scan(context.Background(), &sessions)
+	return sessions, err
+}
+
+// Gets all board sessions of a single user who he is currently connected to
+func (d *Database) GetSingleUserConnectedBoards(user uuid.UUID) ([]BoardSession, error) {
+	var sessions []BoardSession
+	err := d.db.NewSelect().
+		TableExpr("board_sessions AS s").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		Where("s.user = ?", user).
+		Where("s.connected").
+		Join("INNER JOIN users AS u ON u.id = s.user").
+		Scan(context.Background(), &sessions)
+	if err != nil {
+		return nil, err
+	}
+
 	return sessions, err
 }
