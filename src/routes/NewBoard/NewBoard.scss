@@ -37,10 +37,9 @@
   align-self: center;
   justify-self: center;
 
-  // margin-bottom: $spacing--md;
-
   font-size: $text--2xl;
   font-weight: 700;
+  line-height: 48px; // TODO use constant
   color: $color-black;
 }
 
@@ -111,6 +110,11 @@
       ".      switch  .       search  ."
       ".      search2 search2 search2 ."
       "main   main    main    main    main";
+  }
+
+  .new-board__title {
+    font-size: $text--lg;
+    line-height: 32px; // TODO use constant
   }
 
   .new-board__search-button {
