@@ -9,6 +9,8 @@
   width: 100vw;
   height: 100vh;
   background: linear-gradient(180deg, color.change($color-backlog-blue, $alpha: 0.075), color.change($color-white, $alpha: 0.2));
+
+  // padding: $spacing--md 5vw 0 5vw; // TODO find value for left/right padding
 }
 
 .new-board__header {
@@ -90,7 +92,6 @@
 
   width: 100%;
   height: 100%;
-  padding: 0 20vw; // TODO decide on padding
 }
 
 @media screen and (max-width: $breakpoint--smartphone) {
@@ -136,6 +137,5 @@
   }
 
   .new-board__outlet {
-    padding: 0;
   }
 }
