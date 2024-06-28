@@ -1,6 +1,6 @@
-import {useEffect, FC} from "react";
+import {useEffect, useState} from "react";
 import {animated, Transition} from "@react-spring/web";
-import {Outlet, useNavigate} from "react-router";
+import {Outlet, useLocation, useNavigate} from "react-router";
 import {Link} from "react-router-dom";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
@@ -10,16 +10,23 @@ import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
-import {Close, ArrowLeft, GeneralSettings, Share, Participants, SettingsAppearance, FileDefault, SettingsFeedback} from "components/Icon";
+import {ArrowLeft, Close} from "components/Icon";
+import {MENU_ITEMS, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
+import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
 
-export const SettingsDialog: FC = () => {
+type SettingsDialogProps = {
+  enabledMenuItems: Partial<Record<MenuKey, boolean>>;
+};
+
+export const SettingsDialog = (props: SettingsDialogProps) => {
   const {t} = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
-  const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
-  const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
+
+  const [activeMenuItem, setActiveMenuItem] = useState<MenuKey | "settings">();
 
   const transitionConfigMobile = {
     from: {},
@@ -28,19 +35,65 @@ export const SettingsDialog: FC = () => {
   };
 
   useEffect(() => {
-    // If user is not a moderator of the board, he shouldn't see the board settings
-    if (!isBoardModerator && window.location.pathname.endsWith("/settings/board")) {
-      navigate(`/board/${boardId}/settings/participants`);
+    const pathEnd = location.pathname.split("/").at(-1);
+
+    // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
+    const active = (Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd)?.[0] ?? "settings") as MenuKey;
+    setActiveMenuItem(active);
+  }, [isBoardModerator, location, navigate]);
+
+  useEffect(() => {
+    /* finds the first valid menu item a user can go to.
+     * the conditions for this are:
+     * 1. the menu item is enabled
+     * 2. if user is moderator, choose one that is moderator only
+     * 3. if user isn't moderator, choose one that isn't moderator only
+     * 2. and 3.: (P & Q) | (!P & !Q) simplifies to P <=> Q */
+    const findFirstValidMenuItem = () =>
+      Object.entries(MENU_ITEMS).find(([key, menuItem]) => props.enabledMenuItems[key as MenuKey] && menuItem.isModeratorOnly === isBoardModerator)?.[1];
+
+    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show.
+    // if none is found, go back
+    if (activeMenuItem === "settings" && window.innerWidth >= MOBILE_BREAKPOINT) {
+      const section = findFirstValidMenuItem();
+      navigate(section?.location ?? "..");
     }
-    // If the window is large enough the show the whole dialog, automatically select the
-    // first navigation item to show
-    if (window.location.pathname.endsWith("/settings") && window.innerWidth > 920) {
-      navigate(isBoardModerator ? "board" : "participants");
+    // If user is not a moderator of the section, they shouldn't see it
+    if (activeMenuItem && activeMenuItem !== "settings" && MENU_ITEMS[activeMenuItem].isModeratorOnly && !isBoardModerator) {
+      navigate("..");
     }
-  }, [navigate, me, boardId, isBoardModerator]);
+  }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems]);
+
+  /* renders a menu item.
+   * condition: menu item is enabled and user has authorization
+   * special case: profile, where avatar is used instead of an icon and name instead of localization title */
+  const renderMenuItem = (itemKey: MenuKey, menuItem: MenuItem) => {
+    if (!props.enabledMenuItems[itemKey]) {
+      return null;
+    }
+
+    if (menuItem.isModeratorOnly && !isBoardModerator) {
+      return null;
+    }
+
+    const Icon = menuItem.icon;
+
+    return (
+      <Link
+        to={menuItem.location}
+        className={classNames("navigation__item", {"navigation__item--active": menuItem.location === activeMenuItem}, getColorClassName(menuItem.color))}
+      >
+        {Icon === "profile" ? <Avatar seed={me?.id} avatar={me?.avatar} className="navigation-item__icon" /> : <Icon className="navigation-item__icon" />}
+        <div className="navigation-item__content">
+          <p className="navigation-item__name">{menuItem.localizationKey === "Profile" ? me?.name : t(`SettingsDialog.${menuItem.localizationKey}`)}</p>
+          <p className="navigation-item__description">{t(`SettingsDialog.${menuItem.localizationKey}Description`)}</p>
+        </div>
+      </Link>
+    );
+  };
 
   return (
-    <Portal onClose={() => navigate(`/board/${boardId}`)}>
+    <Portal onClose={() => navigate(`..`)}>
       <div className="settings-dialog__background" />
       <div className="settings-dialog__wrapper">
         <Transition {...(window.screen.width >= 450 ? dialogTransitionConfig : transitionConfigMobile)}>
@@ -55,86 +108,8 @@ export const SettingsDialog: FC = () => {
               <div className="settings-dialog__sidebar">
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
                 <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
-                <nav className="settings-dialog__navigation">
-                  {isBoardModerator && (
-                    <Link
-                      to="board"
-                      className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings/board")})}
-                    >
-                      <GeneralSettings className="navigation-item__icon" />
-                      <div className="navigation-item__content">
-                        <p className="navigation-item__name">{t("SettingsDialog.BoardSettings")}</p>
-                        <p className="navigation-item__description">{t("SettingsDialog.BoardSettingsDescription")}</p>
-                      </div>
-                    </Link>
-                  )}
-                  <Link
-                    to="participants"
-                    className={classNames("navigation__item", "accent-color__poker-purple", {
-                      "navigation__item--active": window.location.pathname.endsWith("/settings/participants"),
-                    })}
-                  >
-                    <Participants className="navigation-item__icon" />
-                    <div className="navigation-item__content">
-                      <p className="navigation-item__name">{t("SettingsDialog.Participants")}</p>
-                      <p className="navigation-item__description">{t("SettingsDialog.ParticipantsDescription")}</p>
-                    </div>
-                  </Link>
-                  <Link
-                    to="appearance"
-                    className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/appearance")})}
-                  >
-                    <SettingsAppearance className="navigation-item__icon" />
-                    <div className="navigation-item__content">
-                      <p className="navigation-item__name">{t("SettingsDialog.Appearance")}</p>
-                      <p className="navigation-item__description">{t("SettingsDialog.AppearanceDescription")}</p>
-                    </div>
-                  </Link>
-                  <Link
-                    to="share"
-                    className={classNames("navigation__item", "accent-color__planning-pink", {"navigation__item--active": window.location.pathname.endsWith("/share")})}
-                  >
-                    <Share className="navigation-item__icon" />
-                    <div className="navigation-item__content">
-                      <p className="navigation-item__name">{t("SettingsDialog.ShareSession")}</p>
-                      <p className="navigation-item__description">{t("SettingsDialog.ShareSessionDescription")}</p>
-                    </div>
-                  </Link>
-                  <Link
-                    to="export"
-                    className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/export")})}
-                  >
-                    <FileDefault className="navigation-item__icon" />
-                    <div className="navigation-item__content">
-                      <p className="navigation-item__name">{t("SettingsDialog.ExportBoard")}</p>
-                      <p className="navigation-item__description">{t("SettingsDialog.ExportBoardDescription")}</p>
-                    </div>
-                  </Link>
-                  {feedbackEnabled && (
-                    <Link
-                      to="feedback"
-                      className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
-                    >
-                      <SettingsFeedback className="navigation-item__icon" />
-                      <div className="navigation-item__content">
-                        <p className="navigation-item__name">{t("SettingsDialog.Feedback")}</p>
-                        <p className="navigation-item__description">{t("SettingsDialog.FeedbackDescription")}</p>
-                      </div>
-                    </Link>
-                  )}
-                  {me && (
-                    <Link
-                      to="profile"
-                      className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/profile")})}
-                    >
-                      <Avatar seed={me.id} avatar={me.avatar} className="navigation-item__icon" />
-                      <div className="navigation-item__content">
-                        <p className="navigation-item__name">{me.name}</p>
-                        <p className="navigation-item__description">{t("SettingsDialog.ProfileDescription")}</p>
-                      </div>
-                    </Link>
-                  )}
-                </nav>
+                {/* render all menu items */}
+                <nav className="settings-dialog__navigation">{Object.entries(MENU_ITEMS).map(([key, value]) => renderMenuItem(key as MenuKey, value))}</nav>
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">
@@ -142,7 +117,7 @@ export const SettingsDialog: FC = () => {
                 </Link>
                 <Outlet />
               </article>
-              <Link to={`/board/${boardId}`} className="settings-dialog__close-button">
+              <Link to=".." className="settings-dialog__close-button">
                 <Close className="close-button__icon" />
               </Link>
             </animated.aside>

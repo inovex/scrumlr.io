@@ -57,7 +57,8 @@
     "jsx-a11y/no-noninteractive-element-interactions": "off",
     "no-plusplus": "off",
     "no-param-reassign": "off",
-    "jsx-a11y/anchor-is-valid": "off"
+    "jsx-a11y/anchor-is-valid": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
   },
   "settings": {
     "import/resolver": {

@@ -58,7 +58,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(text);
 
-  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({initialValue: text, suggestionsHidden: isStackedNote});
+  const {...emoji} = useEmojiAutocomplete<HTMLDivElement>({initialValue: text, suggestionsHidden: isStackedNote});
 
   return (
     <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})} ref={emoji.containerRef}>
