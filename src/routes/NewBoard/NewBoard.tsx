@@ -60,8 +60,10 @@ export const NewBoard = () => {
           toggle={switchView}
         />
 
+        {/* desktop search  bar */}
         <SearchBar className="new-board__search-bar" />
 
+        {/* mobile search button + search bar (row below) */}
         <button className="new-board__search-button" onClick={toggleMobileSearchBar}>
           <div className={classNames("new-board__search-button-icon-container", {"new-board__search-button-icon-container--active": showMobileSearchBar})}>
             <SearchIcon className="new-board__search-button-icon" aria-label="icon of magnifying glass" />
