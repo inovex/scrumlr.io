@@ -2,6 +2,7 @@ import classNames from "classnames";
 import {Outlet} from "react-router-dom";
 import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
+import {useRef} from "react";
 // using a png instead of svg for now. reason being problems with layering
 import Stan from "assets/stan/Stan_Hanging_With_Coffee_Cropped.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
@@ -11,11 +12,14 @@ import "./Templates.scss";
 type Side = "left" | "right";
 
 export const Templates = () => {
+  const templatesRef = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
 
   const scrollToSide = (side: Side) => {
-    console.log("scroll to", side);
+    const screenWidth = document.documentElement.clientWidth;
+    const offset = screenWidth * (side === "left" ? -1 : 1);
+    templatesRef.current?.scroll({left: offset, behavior: "smooth"});
   };
 
   const renderContainerHeader = (renderSide: Side, title: string) => (
@@ -33,7 +37,7 @@ export const Templates = () => {
   return (
     <>
       <Outlet /> {/* settings */}
-      <div className="templates">
+      <div className="templates" ref={templatesRef}>
         <div className="templates__stan-container">
           <img className="templates__stan" src={Stan} alt="Stan just hanging there with a coffee" />
         </div>
