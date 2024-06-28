@@ -81,6 +81,20 @@ $padding--mobile: 6px;
 [theme="dark"] {
   .switch {
     background-color: #373e4f;
+
+    &:disabled {
+      background-color: #232b3c;
+
+      .switch__item {
+        color: #454e63;
+        background-color: #232b3c;
+
+        &--active {
+          color: #454e63;
+          background-color: #e9eaec;
+        }
+      }
+    }
   }
 
   .switch__item {
