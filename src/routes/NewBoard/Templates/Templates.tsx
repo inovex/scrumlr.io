@@ -23,21 +23,26 @@ export const Templates = () => {
     templatesRef.current?.scroll({left: offset, behavior: "smooth"});
   };
 
-  const renderContainerHeader = (renderSide: Side, title: string) => (
-    <header className="templates__container-header">
-      {!isAnonymous && (
+  const renderContainerHeader = (renderSide: Side, title: string) =>
+    isAnonymous ? (
+      <header className="templates__container-header">
+        <div className="templates__container-title">{title}</div>
+      </header>
+    ) : (
+      <header className="templates__container-header">
         <button className="templates__container-arrow-button" disabled={renderSide === "left"} onClick={() => scrollToSide("left")} aria-label="scroll left">
           <ArrowLeft className={classNames("templates__container-arrow", "templates__container-arrow--left", {"templates__container-arrow--disabled": renderSide === "left"})} />
         </button>
-      )}
-      <div className="templates__container-title">{title}</div>
-      {!isAnonymous && (
+        )
+        <div className="templates__container-title" role="button" tabIndex={0} onClick={() => scrollToSide(renderSide === "left" ? "right" : "left")}>
+          {title}
+        </div>
         <button className="templates__container-arrow-button" disabled={renderSide === "right"} onClick={() => scrollToSide("right")} aria-label="scroll right">
           <ArrowRight className={classNames("templates__container-arrow", "templates__container-arrow--right", {"templates__container-arrow--disabled": renderSide === "right"})} />
         </button>
-      )}
-    </header>
-  );
+        )
+      </header>
+    );
 
   return (
     <>
