@@ -5,26 +5,24 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(180deg, color.change($color-backlog-blue, $alpha: 0.075), color.change($color-white, $alpha: 0.2));
-
-  padding: $spacing--md 5vw 0 5vw; // TODO find value for left/right padding
 }
 
 .new-board__grid {
   display: grid;
-  grid-template-columns: auto auto $spacing--base 1fr auto auto;
-  grid-template-rows: 56px 48px 64px 1fr; // using the actual component heights seems to yield the best results
+  grid-template-columns: 5vw 114px auto $spacing--base 1fr auto auto 5vw;
+  grid-template-rows: $spacing--md 56px 48px 64px 1fr; // using the actual component heights seems to yield the best results
   grid-template-areas:
-    "logo title   title   title   title   user"
-    ".    title   title   title   title   . "
-    ".    switch  .       search  search  ."
-    ".    main    main    main    main    .";
+    ".  .    .       .       .       .       .      ."
+    ".  logo title   title   title   title   user   ."
+    ".  .    title   title   title   title   .      ."
+    ".  .    switch  .       search  search  .      ."
+    ".  .    main    main    main    main    .      .";
 
   height: 100%;
 }
 
 .new-board__scrumlr-logo-container {
   grid-area: logo;
-  justify-self: flex-start;
 }
 
 .new-board__user-pill {
