@@ -26,6 +26,12 @@
   }
 }
 
+.templates__container-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
 .templates__container-title {
   word-break: break-word; // because the word "Recommendations" is too long, TODO find better solution for this
   font-size: $text--lg;
@@ -55,5 +61,9 @@
   .templates__container {
     flex: 0 0 100%; // no growing, no shrinking, and take up the whole width
     scroll-snap-align: center;
+  }
+
+  .templates__container-header {
+    justify-content: center;
   }
 }

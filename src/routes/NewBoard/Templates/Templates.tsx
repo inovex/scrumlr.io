@@ -8,6 +8,13 @@ import "./Templates.scss";
 export const Templates = () => {
   const {t} = useTranslation();
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
+
+  const renderContainerHeader = (title: string) => (
+      <header className="templates__container-header">
+        <div className="templates__container-title">{title}</div>
+      </header>
+    );
+
   return (
     <>
       <Outlet /> {/* settings */}
@@ -15,14 +22,8 @@ export const Templates = () => {
         <div className="templates__stan-container">
           <img className="templates__stan" src={Stan} alt="Stan just hanging there with a coffee" />
         </div>
-        {!isAnonymous && (
-          <div className="templates__container templates__container--saved">
-            <div className="templates__container-title">{t("Templates.savedTemplates")}</div>
-          </div>
-        )}
-        <div className="templates__container templates__container--recommended">
-          <div className="templates__container-title">{t("Templates.recommendedTemplates")}</div>
-        </div>
+        {!isAnonymous && <div className="templates__container templates__container--saved">{renderContainerHeader(t("Templates.savedTemplates"))}</div>}
+        <div className="templates__container templates__container--recommended">{renderContainerHeader(t("Templates.recommendedTemplates"))}</div>
       </div>
     </>
   );
