@@ -43,6 +43,10 @@
   color: #292f3b;
 }
 
+.templates__container-arrow {
+  display: none;
+}
+
 .templates__stan {
   position: absolute;
 
@@ -76,6 +80,7 @@
   }
 
   .templates__container-arrow {
+    display: inline-block;
     width: 36px;
     height: 36px;
   }
