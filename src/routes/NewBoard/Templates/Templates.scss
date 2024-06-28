@@ -120,4 +120,12 @@
       display: initial;
     }
   }
+
+  .templates__container-arrow {
+    color: #dde8ff;
+
+    &--disabled {
+      color: #454e63;
+    }
+  }
 }
