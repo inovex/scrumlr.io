@@ -286,7 +286,7 @@ $column-stripes--dark: repeating-linear-gradient(
 
   &:focus,
   &:focus-within {
-    border: $border-size solid #3379ff;
+    border: $border-size solid #0057ff;
     @if $compensate-padding == true {
       @include compensate-padding($padding, $border-size);
     }
@@ -296,6 +296,23 @@ $column-stripes--dark: repeating-linear-gradient(
     border: $border-size solid #373e4f;
     @if $compensate-padding == true {
       @include compensate-padding($padding, $border-size);
+    }
+  }
+
+  [theme="dark"] & {
+    &:focus,
+    &:focus-within {
+      border: $border-size solid #3379ff;
+      @if $compensate-padding == true {
+        @include compensate-padding($padding, $border-size);
+      }
+    }
+
+    &:active {
+      border: $border-size solid $color-white;
+      @if $compensate-padding == true {
+        @include compensate-padding($padding, $border-size);
+      }
     }
   }
 }
