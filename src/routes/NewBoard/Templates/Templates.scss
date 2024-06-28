@@ -45,6 +45,10 @@
 
 .templates__container-arrow {
   display: none;
+
+  &--disabled {
+    color: #8f95a1;
+  }
 }
 
 .templates__stan {
