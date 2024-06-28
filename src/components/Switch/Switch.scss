@@ -48,13 +48,16 @@ $padding--mobile: 6px;
   font-size: $text--base;
   font-weight: 600;
 
+  color: #292f3b;
+  background-color: $color-white;
+
   transition:
     background-color 0.3s,
     color 0.3s;
 
   &--active {
     background-color: #292f3b;
-    color: white;
+    color: $color-white;
 
     font-weight: 700;
   }
@@ -72,5 +75,21 @@ $padding--mobile: 6px;
 
   .switch__item {
     font-size: $text--sm;
+  }
+}
+
+[theme="dark"] {
+  .switch {
+    background-color: #373e4f;
+  }
+
+  .switch__item {
+    color: $color-white;
+    background-color: #373e4f;
+
+    &--active {
+      background-color: $color-white;
+      color: #373e4f;
+    }
   }
 }
