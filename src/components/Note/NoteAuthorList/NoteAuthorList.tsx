@@ -4,17 +4,39 @@ import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
 import "./NoteAuthorList.scss";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
+import {generateRandomProps} from "../../Avatar";
+import {getRandomNameWithSeed} from "../../../constants/name";
 
 type NoteAuthorListProps = {
   authors: Participant[];
   showAuthors: boolean;
   viewer: Participant;
+  authorID: string;
 };
+
 export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const {t} = useTranslation();
 
   if (!props.authors[0] || props.authors.length === 0) {
-    return <NoteAuthorSkeleton />;
+    // return <NoteAuthorSkeleton />;
+
+    const avatarProps = generateRandomProps(props.authorID);
+    return (
+      <div className="note-author-list">
+        <div className={classNames("note-author__container", {"note-author__container--self": false})}>
+          <figure
+            className={classNames("note__author", {
+              "note__author--self": false,
+            })}
+            aria-roledescription="author"
+            key={props.authorID}
+          >
+            <UserAvatar id={props.authorID} avatar={avatarProps} title={getRandomNameWithSeed(props.authorID)} className="note__user-avatar" avatarClassName="note__user-avatar" />
+          </figure>
+          <div className={classNames("note__author-name", {"note__author-name--self": false})}>{getRandomNameWithSeed(props.authorID)}</div>
+        </div>
+      </div>
+    );
   }
 
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
@@ -47,6 +69,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
 
     return allAuthors;
   };
+
   const authorExtendedInfo = prepareAuthors(props.authors);
   // expected behaviour:
   // 1 => avatar1 name
@@ -85,7 +108,6 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
             avatarClassName="note__user-avatar"
           />
         </figure>
-
         <div className={classNames("note__author-name", {"note__author-name--self": stackAuthor.isSelf})}>{stackAuthor.displayName}</div>
       </div>
 

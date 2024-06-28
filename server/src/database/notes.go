@@ -32,6 +32,14 @@ type NoteInsert struct {
 	Text          string
 }
 
+type NoteImport struct {
+	bun.BaseModel `bun:"table:notes_imported"`
+	Author        uuid.UUID
+	Board         uuid.UUID
+	Column        uuid.UUID
+	Text          string
+}
+
 type NoteUpdatePosition struct {
 	Column uuid.UUID
 	Rank   int

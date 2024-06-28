@@ -16,6 +16,7 @@ import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
 import "./Note.scss";
+import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
 
 interface NoteProps {
   noteId: string;
@@ -60,7 +61,7 @@ export const Note = (props: NoteProps) => {
       navigate(`note/${note?.id}/stack`);
     }
   }, []);
-
+  1;
   useEffect(() => {
     if (isShared) {
       if (!document.location.pathname.endsWith(props.noteId + "/stack")) {
@@ -106,9 +107,10 @@ export const Note = (props: NoteProps) => {
       <div tabIndex={0} role="button" className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
           <div className="note__author-container">
-            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+            <NoteAuthorList authors={authors} authorID={note.author} showAuthors={showAuthors} viewer={props.viewer} />
           </div>
           <Votes noteId={props.noteId!} aggregateVotes />
+          <InfoIcon />
         </header>
         {isImage ? (
           <div className="note__image-wrapper">

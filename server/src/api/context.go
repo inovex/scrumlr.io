@@ -1,15 +1,15 @@
 package api
 
 import (
-  "context"
-  "errors"
-  "github.com/go-chi/chi/v5"
-  "github.com/google/uuid"
-  "net/http"
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/database/types"
-  "scrumlr.io/server/identifiers"
-  "scrumlr.io/server/logger"
+	"context"
+	"errors"
+	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
+	"net/http"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 )
 
 func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {

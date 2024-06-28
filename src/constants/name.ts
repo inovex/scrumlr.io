@@ -144,4 +144,46 @@ export const getRandomName = () => {
   return `${randomAdjective} ${randomCreature}`;
 };
 
+function seededRandom(seed: string) {
+  let value = hashString(seed);
+  return function () {
+    const a = 1664525;
+    const c = 1013904223;
+    const m = 2 ** 32;
+    value = (a * value + c) % m;
+    return value / m;
+  };
+}
+
+// Simple hash function (DJB2)
+function hashString(str: string) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 33) ^ str.charCodeAt(i);
+  }
+  return hash >>> 0;
+}
+
+export const getRandomNameWithSeed = (seed: string) => {
+  const rng = seededRandom(seed);
+
+  let randomCreature;
+  let randomAdjective;
+
+  const oneOrZero = rng() > 0.5 ? 1 : 0;
+  if (oneOrZero === 1) {
+    const keys = Object.keys(ANIMAL_NAMES);
+    const randomKey = keys[Math.floor(keys.length * rng())];
+    randomCreature = ANIMAL_NAMES[randomKey][Math.floor(ANIMAL_NAMES[randomKey].length * rng())];
+    randomAdjective = ADJECTIVES[randomKey][Math.floor(ADJECTIVES[randomKey].length * rng())];
+  } else {
+    const keys = Object.keys(MYTHICAL_CREATURES);
+    const randomKey = keys[Math.floor(keys.length * rng())];
+    randomCreature = MYTHICAL_CREATURES[randomKey][Math.floor(MYTHICAL_CREATURES[randomKey].length * rng())];
+    randomAdjective = ADJECTIVES[randomKey][Math.floor(ADJECTIVES[randomKey].length * rng())];
+  }
+
+  return `${randomAdjective} ${randomCreature}`;
+};
+
 export default getRandomName;

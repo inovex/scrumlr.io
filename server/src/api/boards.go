@@ -428,6 +428,8 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	body.Board.Owner = owner
 
 	columns := make([]dto.ColumnRequest, 0, len(body.Notes))
+
+	fmt.Println(owner)
 	for _, column := range body.Columns {
 		columns = append(columns, dto.ColumnRequest{
 			Name:    column.Name,
@@ -444,11 +446,13 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		Columns:      columns,
 		Owner:        owner,
 	})
+
 	if err != nil {
 		log.Errorw("Could not import board", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
+	fmt.Println(b.ID)
 
 	cols, err := s.boards.ListColumns(r.Context(), b.ID)
 	if err != nil {
@@ -462,7 +466,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 					Column: cols[i].ID,
 					Text:   note.Text,
 					Board:  b.ID,
-					User:   owner,
+					User:   note.Author,
 				})
 				if errInside != nil {
 					s.boards.Delete(r.Context(), b.ID)
