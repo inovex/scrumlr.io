@@ -30,6 +30,7 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
   gap: $spacing--md;
 }
 
@@ -72,5 +73,10 @@
   .templates__container-title {
     font-size: $text--md;
     line-height: 24px; // TODO use constant
+  }
+
+  .templates__container-arrow {
+    width: 36px;
+    height: 36px;
   }
 }
