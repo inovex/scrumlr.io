@@ -93,23 +93,23 @@
 
 @media screen and (max-width: $breakpoint--smartphone) {
   .new-board {
-    padding: $spacing--md $spacing--md 0 $spacing--md;
   }
 
   .new-board__grid {
-    grid-template-columns: auto auto 1fr auto auto;
-    // adds a row where the mobile search bar resides
-    // TODO decrease mobile sizes according to design
-    grid-template-rows: 56px $spacing--sm 32px $spacing--md 57px $spacing--sm auto 1fr;
+    // stretch main to full width
+    grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
+    // adds a row where the mobile search bar resides,
+    grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 57px $spacing--sm auto 1fr;
     grid-template-areas:
-      "logo     .       .       .       user"
-      ".        .       .       .       ."
-      "title    title   title   title   title"
-      ".        .       .       .       ."
-      "switch   switch  .       search  search"
-      ".        .       .       .       ."
-      "search2  search2 search2 search2 search2"
-      "main     main    main    main    main";
+      ".    .        .       .       .       .        ."
+      ".    logo     .       .       .       user     ."
+      ".    .        .       .       .       .        ."
+      ".    title    title   title   title   title    ."
+      ".    .        .       .       .       .        ."
+      ".    switch   switch  .       search  search   ."
+      ".    .        .       .       .       .        ."
+      ".    search2  search2 search2 search2 search2  ."
+      "main main     main    main    main    main     main";
   }
 
   .new-board__title {
