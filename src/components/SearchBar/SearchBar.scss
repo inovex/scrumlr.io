@@ -86,3 +86,34 @@ $padding--mobile: 12.5px $spacing--base;
     }
   }
 }
+
+[theme="dark"] {
+  .search-bar {
+    background-color: #373e4f;
+
+    &:not(&--disabled) {
+      &:hover,
+      &:focus-within {
+        .search-bar__icon-container--search-icon {
+          color: $color-white;
+        }
+
+        .search-bar__input {
+          color: $color-white;
+        }
+      }
+    }
+  }
+
+  .search-bar__input {
+    color: #dde8ff; // TODO correct color?
+    background-color: #373e4f;
+  }
+
+  .search-bar__icon-container {
+    &--search-icon,
+    &--close-icon {
+      color: #dde8ff;
+    }
+  }
+}
