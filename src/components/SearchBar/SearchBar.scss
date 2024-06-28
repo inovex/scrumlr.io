@@ -34,6 +34,13 @@ $padding--mobile: 12.5px $spacing--base;
 
   &--disabled {
     background-color: #eeeff1;
+
+    .search-bar__icon-container {
+      &--search-icon,
+      &--close-icon {
+        color: #8f95a1;
+      }
+    }
   }
 }
 
@@ -103,11 +110,27 @@ $padding--mobile: 12.5px $spacing--base;
         }
       }
     }
+
+    &--disabled {
+      background-color: #232b3c;
+
+      .search-bar__icon-container {
+        &--search-icon,
+        &--close-icon {
+          color: #454e63;
+        }
+      }
+    }
   }
 
   .search-bar__input {
-    color: #dde8ff; // TODO correct color?
+    color: #dde8ff;
     background-color: #373e4f;
+
+    &:disabled {
+      color: #454e63;
+      background-color: #232b3c;
+    }
   }
 
   .search-bar__icon-container {
