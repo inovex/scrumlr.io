@@ -25,13 +25,17 @@ export const Templates = () => {
 
   const renderContainerHeader = (renderSide: Side, title: string) => (
     <header className="templates__container-header">
-      <button className="templates__container-arrow-button" disabled={renderSide === "left"} onClick={() => scrollToSide("left")} aria-label="scroll left">
-        <ArrowLeft className={classNames("templates__container-arrow", "templates__container-arrow--left", {"templates__container-arrow--disabled": renderSide === "left"})} />
-      </button>
+      {!isAnonymous && (
+        <button className="templates__container-arrow-button" disabled={renderSide === "left"} onClick={() => scrollToSide("left")} aria-label="scroll left">
+          <ArrowLeft className={classNames("templates__container-arrow", "templates__container-arrow--left", {"templates__container-arrow--disabled": renderSide === "left"})} />
+        </button>
+      )}
       <div className="templates__container-title">{title}</div>
-      <button className="templates__container-arrow-button" disabled={renderSide === "right"} onClick={() => scrollToSide("right")} aria-label="scroll right">
-        <ArrowRight className={classNames("templates__container-arrow", "templates__container-arrow--right", {"templates__container-arrow--disabled": renderSide === "right"})} />
-      </button>
+      {!isAnonymous && (
+        <button className="templates__container-arrow-button" disabled={renderSide === "right"} onClick={() => scrollToSide("right")} aria-label="scroll right">
+          <ArrowRight className={classNames("templates__container-arrow", "templates__container-arrow--right", {"templates__container-arrow--disabled": renderSide === "right"})} />
+        </button>
+      )}
     </header>
   );
 
