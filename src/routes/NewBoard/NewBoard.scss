@@ -131,3 +131,19 @@
     grid-area: search2;
   }
 }
+
+[theme="dark"] {
+  .new-board__title {
+    color: $color-white;
+  }
+
+  .new-board__search-button-icon-container {
+    color: $color-white;
+    background-color: #373e4f;
+
+    &--active {
+      color: #373e4f;
+      background-color: $color-white;
+    }
+  }
+}
