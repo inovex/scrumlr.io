@@ -10,13 +10,13 @@ $size-mobile: 56px;
 
 .user-pill {
   all: unset;
+  user-select: none;
 
   height: $icon--huge;
   padding: $padding--default;
-  background-color: $color-white;
   border-radius: $rounded--large;
 
-  user-select: none;
+  background-color: $color-white;
 
   &:enabled {
     cursor: pointer;
@@ -101,5 +101,19 @@ $size-mobile: 56px;
 
   .user-pill__name {
     display: none;
+  }
+}
+
+[theme="dark"] {
+  .user-pill {
+    background-color: #373e4f;
+  }
+
+  .user-pill__avatar-container {
+    background-color: #232b3c;
+  }
+
+  .user-pill__name {
+    color: $color-white;
   }
 }
