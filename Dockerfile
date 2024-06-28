@@ -1,20 +1,21 @@
-FROM node:lts-hydrogen as build-stage
-
+# Build stage
+FROM node:hydrogen-alpine as build-stage
 WORKDIR /usr/src/app
 
+# Copy package.json and yarn.lock separately for better caching
 COPY package.json yarn.lock ./
-RUN yarn install
 
+# Install dependencies with caching
+RUN yarn install --network-timeout 240000
+
+# Copy the necessary files for building the frontend
 COPY src/ src/
 COPY public/ public/
-COPY tsconfig.json .
-COPY .prettierrc .
-COPY .eslintignore .
-COPY .eslintrc.json .
-COPY .env .
+COPY tsconfig.json .prettierrc .eslintignore .eslintrc.json .env ./
 
 RUN yarn build
 
+# Final stage
 FROM nginxinc/nginx-unprivileged:1.21-alpine
 
 # Toggle visibility of cookie policy, privacy policy, and terms & conditions
