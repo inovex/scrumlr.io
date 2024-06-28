@@ -52,8 +52,8 @@ export const Templates = () => {
           <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
           <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan just hanging there with a coffee" />
         </div>
-        {!isAnonymous && <div className="templates__container templates__container--saved">{renderContainerHeader("left", t("Templates.savedTemplates"))}</div>}
-        <div className="templates__container templates__container--recommended">{renderContainerHeader("right", t("Templates.recommendedTemplates"))}</div>
+        {!isAnonymous && <section className="templates__container templates__container--saved">{renderContainerHeader("left", t("Templates.savedTemplates"))}</section>}
+        <section className="templates__container templates__container--recommended">{renderContainerHeader("right", t("Templates.recommendedTemplates"))}</section>
       </div>
     </>
   );
