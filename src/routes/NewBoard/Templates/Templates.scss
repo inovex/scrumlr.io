@@ -64,6 +64,14 @@
 
   // align right edge of stan to the left edge of the container
   transform: translateX(-100%);
+
+  &--dark {
+    display: initial;
+  }
+
+  &--light {
+    display: none;
+  }
 }
 
 @media screen and (max-width: $breakpoint--smartphone) {
@@ -91,5 +99,25 @@
     display: inline-block;
     width: 36px;
     height: 36px;
+  }
+}
+
+[theme="dark"] {
+  .templates__container {
+    background-color: #232732;
+  }
+
+  .templates__container-title {
+    color: #dde8ff;
+  }
+
+  .templates__stan {
+    &--dark {
+      display: none;
+    }
+
+    &--light {
+      display: initial;
+    }
   }
 }

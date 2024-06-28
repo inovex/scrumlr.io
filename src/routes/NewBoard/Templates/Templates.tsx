@@ -4,7 +4,8 @@ import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {useRef} from "react";
 // using a png instead of svg for now. reason being problems with layering
-import Stan from "assets/stan/Stan_Hanging_With_Coffee_Cropped.png";
+import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
+import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
 import "./Templates.scss";
@@ -39,7 +40,8 @@ export const Templates = () => {
       <Outlet /> {/* settings */}
       <div className="templates" ref={templatesRef}>
         <div className="templates__stan-container">
-          <img className="templates__stan" src={Stan} alt="Stan just hanging there with a coffee" />
+          <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
+          <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan just hanging there with a coffee" />
         </div>
         {!isAnonymous && <div className="templates__container templates__container--saved">{renderContainerHeader("left", t("Templates.savedTemplates"))}</div>}
         <div className="templates__container templates__container--recommended">{renderContainerHeader("right", t("Templates.recommendedTemplates"))}</div>
