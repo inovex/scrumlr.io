@@ -37,6 +37,7 @@
   word-break: break-word; // because the word "Recommendations" is too long, TODO find better solution for this
   font-size: $text--lg;
   font-weight: 700;
+  line-height: 32px; // TODO use constant
 
   color: #292f3b;
 }
@@ -66,5 +67,10 @@
 
   .templates__container-header {
     justify-content: center;
+  }
+
+  .templates__container-title {
+    font-size: $text--md;
+    line-height: 24px; // TODO use constant
   }
 }
