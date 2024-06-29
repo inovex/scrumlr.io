@@ -1,5 +1,7 @@
 @import "constants/style";
 
+$stan-height-factor: 93%;
+
 .templates {
   display: flex;
   flex-direction: row;
@@ -112,6 +114,7 @@
   }
 
   .templates__stan {
+    height: $stan-height-factor;
     &--dark {
       display: none;
     }
