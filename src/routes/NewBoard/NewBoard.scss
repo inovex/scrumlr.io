@@ -1,6 +1,8 @@
 @use "sass:color";
 @import "constants/style";
 
+$side-padding--desktop: 14vw;
+
 .new-board {
   width: 100vw;
   height: 100vh;
@@ -9,7 +11,7 @@
 
 .new-board__grid {
   display: grid;
-  grid-template-columns: 5vw 114px auto $spacing--base 1fr auto auto 5vw;
+  grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
   grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
   grid-template-areas:
     ".  .    .       .       .       .       .      ."
