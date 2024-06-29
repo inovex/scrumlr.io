@@ -1,0 +1,109 @@
+@import "constants/style";
+
+$padding--default: $spacing--xs;
+$padding--mobile: 6px;
+
+.switch {
+  all: unset;
+  user-select: none;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+
+  width: fit-content;
+  padding: $padding--default;
+  border-radius: $rounded--large;
+
+  background-color: $color-white;
+
+  &:enabled {
+    cursor: pointer;
+
+    @include default-states($padding: $padding--default);
+  }
+
+  &:disabled {
+    background-color: #eeeff1;
+
+    .switch__item {
+      color: #8f95a1;
+      background-color: #eeeff1;
+
+      &--active {
+        background-color: #e9eaec;
+      }
+    }
+  }
+}
+
+.switch__item {
+  display: flex;
+  align-items: center;
+
+  padding: 14.5px $spacing--base;
+  border-radius: $rounded--large;
+
+  font-size: $text--base;
+  font-weight: 600;
+
+  color: #292f3b;
+  background-color: $color-white;
+
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+
+  &--active {
+    background-color: #292f3b;
+    color: $color-white;
+
+    font-weight: 700;
+  }
+}
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .switch {
+    padding: $padding--mobile;
+    margin-left: $spacing--sm;
+
+    &:enabled {
+      @include default-states($padding: $padding--mobile);
+    }
+  }
+
+  .switch__item {
+    font-size: $text--sm;
+  }
+}
+
+[theme="dark"] {
+  .switch {
+    background-color: #373e4f;
+
+    &:disabled {
+      background-color: #232b3c;
+
+      .switch__item {
+        color: #454e63;
+        background-color: #232b3c;
+
+        &--active {
+          color: #454e63;
+          background-color: #e9eaec;
+        }
+      }
+    }
+  }
+
+  .switch__item {
+    color: $color-white;
+    background-color: #373e4f;
+
+    &--active {
+      background-color: $color-white;
+      color: #373e4f;
+    }
+  }
+}

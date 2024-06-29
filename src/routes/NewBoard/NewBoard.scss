@@ -1,157 +1,156 @@
+@use "sass:color";
 @import "constants/style";
 
-.new-board__wrapper {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  min-height: 100vh;
-}
+$side-padding--desktop: 14vw;
 
 .new-board {
-  position: relative;
-  color: $color-black;
-  padding: $spacing--base;
-
-  a {
-    outline: none;
-
-    svg {
-      border-radius: 8px;
-      border: 1px solid transparent;
-      padding: 2px;
-    }
-
-    &:hover svg {
-      filter: $brighten--strongly;
-    }
-
-    &:focus-visible > svg {
-      border: 1px solid $color-backlog-blue;
-    }
-  }
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, color.change($color-backlog-blue, $alpha: 0.075), color.change($color-white, $alpha: 0.2));
 }
 
-.new-board__mode {
-  position: relative;
-  width: 100%;
-  max-width: 320px;
-}
-
-.new-board__mode-selection {
+.new-board__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto;
-  gap: 16px;
-  justify-items: center;
-  margin-top: 1em;
+  grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
+  grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
+  grid-template-areas:
+    ".  .    .       .       .       .       .      ."
+    ".  logo title   title   title   title   user   ."
+    ".  .    title   title   title   title   .      ."
+    ".  .    switch  .       search  search  .      ."
+    ".  .    main    main    main    main    .      ."
+    ".  .    .       .       .       .       .      .";
+
+  height: 100vh;
 }
 
-.new-board__mode-input {
-  position: absolute;
-  top: 0;
-  left: 0;
+.new-board__scrumlr-logo-container {
+  grid-area: logo;
+}
 
-  opacity: 0;
-  z-index: -1;
-  height: 1px;
-  width: 1px;
+.new-board__user-pill {
+  grid-area: user;
+  justify-self: flex-end;
+}
 
-  &:focus-visible + .new-board__mode-label {
-    box-shadow: 0 0 0 2px $color-middle-gray;
+.new-board__title {
+  grid-area: title;
+  align-self: center;
+  justify-self: center;
+
+  font-size: $text--2xl;
+  font-weight: 700;
+  line-height: 48px; // TODO use constant
+  color: $color-black;
+}
+
+.new-board__switch {
+  grid-area: switch;
+}
+
+.new-board__search-bar {
+  grid-area: search;
+  justify-self: flex-end;
+}
+
+.new-board__search-button {
+  all: unset;
+  display: none;
+
+  grid-area: search;
+
+  cursor: pointer;
+}
+
+.new-board__search-button-icon-container {
+  width: $icon--large;
+  height: $icon--large;
+  padding: $spacing--sm;
+  border-radius: 100%;
+
+  color: #292f3b;
+  background-color: $color-white;
+
+  &--active {
+    color: $color-white;
+    background-color: #292f3b;
   }
 }
 
-.new-board__mode-input:checked + .new-board__mode-label {
-  border: 1px solid $color-backlog-blue;
+.new-board--search-button-logo {
+  width: $icon--large;
+  height: $icon--large;
 }
 
-.new-board__mode-input + .new-board__mode-label:hover {
-  box-shadow: 0 4px 8px 2px rgba($color-backlog-blue, 0.3);
-  transform: scale(1.02);
+.new-board__mobile-search-bar {
+  display: none;
 }
 
-.new-board__mode-label {
+.new-board__outlet {
+  grid-area: main;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
+  justify-content: stretch;
 
-  color: $color-black;
-  background: $color-white;
-  border-radius: 16px;
-  border: 1px solid transparent;
-  transition: all 0.08s ease-out;
-  min-height: 76px;
-
-  padding: $spacing--base;
-
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-
-  box-shadow: 0 2px 6px 4px rgba($color-black, 0.1);
+  margin-top: $spacing--xl;
 }
 
-.new-board__mode-name {
-  font-weight: bold;
-  text-align: center;
-}
+@media screen and (max-width: $breakpoint--smartphone) {
+  .new-board {
+  }
 
-.new-board__mode-description {
-  margin-top: 0.4em;
+  .new-board__grid {
+    // stretch main to full width
+    grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
+    // adds a row where the mobile search bar resides,
+    grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 57px $spacing--sm auto 1fr;
+    grid-template-areas:
+      ".    .        .       .       .       .        ."
+      ".    logo     .       .       .       user     ."
+      ".    .        .       .       .       .        ."
+      ".    title    title   title   title   title    ."
+      ".    .        .       .       .       .        ."
+      ".    switch   switch  .       search  search   ."
+      ".    .        .       .       .       .        ."
+      ".    search2  search2 search2 search2 search2  ."
+      "main main     main    main    main    main     main";
+  }
 
-  font-size: $text-size--small;
-  text-align: center;
+  .new-board__title {
+    font-size: $text--lg;
+    line-height: 32px; // TODO use constant
+  }
 
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  max-width: 292px;
-}
+  .new-board__search-button {
+    display: inline-block;
+    margin-right: $spacing--sm;
+  }
 
-.new-board__actions {
-  display: flex;
-  position: sticky;
-  justify-content: center;
-  width: 100%;
-  bottom: 0;
-  padding: $spacing--base;
-  background: linear-gradient(0deg, $color-white 0%, $color-white 80%, rgba(0, 0, 0, 0) 100%);
-}
+  .new-board__search-bar {
+    display: none;
+  }
 
-.new-board__action + .new-board__action {
-  margin-left: $spacing--base;
+  .new-board__mobile-search-bar {
+    display: flex;
+    grid-area: search2;
+  }
 }
 
 [theme="dark"] {
   .new-board {
+    background: linear-gradient(161deg, #292f3b 16.78%, #232732 49.35%, #15171e 81.65%);
+  }
+
+  .new-board__title {
     color: $color-white;
   }
 
-  .new-board__mode-label {
+  .new-board__search-button-icon-container {
     color: $color-white;
-    background: $color-dark-mode-note;
-    box-shadow: 0 2px 6px 4px rgba($color-black, 0.2);
-  }
+    background-color: #373e4f;
 
-  .new-board__mode-input:focus-visible + .new-board__mode-label {
-    box-shadow: 0 0 0 2px $color-white;
-  }
-
-  .new-board__mode-input + .new-board__mode-label:hover {
-    box-shadow: 0 4px 8px 2px rgba($color-backlog-blue, 0.1);
-  }
-
-  .new-board__actions {
-    background: linear-gradient(0deg, $color-dark-mode 0%, $color-dark-mode 80%, rgba(0, 0, 0, 0) 100%);
-  }
-}
-
-@media #{$tablet} {
-  .new-board__mode-selection {
-    grid-template-columns: 1fr 1fr;
+    &--active {
+      color: #373e4f;
+      background-color: $color-white;
+    }
   }
 }

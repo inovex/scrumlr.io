@@ -1,110 +1,79 @@
-import {API} from "api";
-import "routes/NewBoard/NewBoard.scss";
-import {useState} from "react";
-import {AccessPolicySelection} from "components/AccessPolicySelection";
-import {AccessPolicy} from "types/board";
 import {useTranslation} from "react-i18next";
-import {useNavigate} from "react-router";
-import {columnTemplates} from "./columnTemplates";
-import {TextInputLabel} from "../../components/TextInputLabel";
-import {TextInput} from "../../components/TextInput";
-import {Button} from "../../components/Button";
-import {ScrumlrLogo} from "../../components/ScrumlrLogo";
+import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
+import {UserPill} from "components/UserPill/UserPill";
+import {SearchBar} from "components/SearchBar/SearchBar";
+import {Switch} from "components/Switch/Switch";
+import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
+import classNames from "classnames";
+import "./NewBoard.scss";
+
+type BoardView = "templates" | "sessions";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
-  const [boardName, setBoardName] = useState<string | undefined>();
-  const [columnTemplate, setColumnTemplate] = useState<string | undefined>(undefined);
-  const [accessPolicy, setAccessPolicy] = useState(0);
-  const [passphrase, setPassphrase] = useState("");
-  const [extendedConfiguration, setExtendedConfiguration] = useState(false);
 
-  async function onCreateBoard() {
-    let additionalAccessPolicyOptions = {};
-    if (accessPolicy === AccessPolicy.BY_PASSPHRASE && Boolean(passphrase)) {
-      additionalAccessPolicyOptions = {
-        passphrase,
-      };
+  const [boardView, setBoardView] = useState<BoardView>("templates");
+  const [showMobileSearchBar, setShowMobileSearchBar] = useState(false);
+
+  const toggleMobileSearchBar = () => {
+    setShowMobileSearchBar((open) => !open);
+  };
+
+  // navigate to view that is currently not visible
+  const switchView = () => {
+    if (boardView === "templates") {
+      navigate("sessions");
+    } else {
+      navigate("templates");
     }
+  };
 
-    if (columnTemplate) {
-      const boardId = await API.createBoard(
-        boardName,
-        {
-          type: AccessPolicy[accessPolicy],
-          ...additionalAccessPolicyOptions,
-        },
-        columnTemplates[columnTemplate].columns
-      );
-      navigate(`/board/${boardId}`);
-    }
-  }
-
-  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
+  useEffect(() => {
+    const currentLocation: BoardView = location.pathname.endsWith("/templates") ? "templates" : "sessions";
+    setBoardView(currentLocation);
+  }, [location]);
 
   return (
-    <div className="new-board__wrapper">
-      <div className="new-board">
-        <div>
-          <a href="/" aria-label="Homepage">
-            <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+    <div className="new-board">
+      <div className="new-board__grid">
+        {/* logo - - - profile */}
+        <div className="new-board__scrumlr-logo-container">
+          <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
+            <ScrumlrLogo className="new-board__scrumlr-logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
           </a>
-
-          {!extendedConfiguration && (
-            <div>
-              <h1>{t("NewBoard.basicConfigurationTitle")}</h1>
-
-              <div className="new-board__mode-selection">
-                {Object.keys(columnTemplates).map((key) => (
-                  <label key={key} className="new-board__mode">
-                    <input
-                      className="new-board__mode-input"
-                      type="radio"
-                      name="mode"
-                      value={key}
-                      onChange={(e) => setColumnTemplate(e.target.value)}
-                      checked={columnTemplate === key}
-                    />
-                    <div className="new-board__mode-label">
-                      <div>
-                        <div className="new-board__mode-name">{columnTemplates[key].name}</div>
-                        <div className="new-board__mode-description">{columnTemplates[key].description}</div>
-                      </div>
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {extendedConfiguration && (
-            <div>
-              <h1>{t("NewBoard.extendedConfigurationTitle")}</h1>
-
-              <TextInputLabel label={t("NewBoard.boardName")}>
-                <TextInput onChange={(e) => setBoardName(e.target.value)} />
-              </TextInputLabel>
-
-              <AccessPolicySelection accessPolicy={accessPolicy} onAccessPolicyChange={setAccessPolicy} passphrase={passphrase} onPassphraseChange={setPassphrase} />
-            </div>
-          )}
         </div>
-      </div>
-      <div className="new-board__actions">
-        <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
-          {t("NewBoard.createNewBoard")}
-        </Button>
-        {!extendedConfiguration && (
-          <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
-            {t("NewBoard.extendedConfigurationButton")}
-          </Button>
-        )}
-        {extendedConfiguration && (
-          <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
-            {t("NewBoard.basicConfigurationButton")}
-          </Button>
-        )}
+        <UserPill className="new-board__user-pill" locationPrefix={boardView} />
+
+        {/* - - title - - */}
+        <div className="new-board__title">{boardView === "templates" ? t("Templates.title") : t("Sessions.title")}</div>
+
+        {/* switch - - - search */}
+        <Switch
+          className="new-board__switch"
+          activeDirection={boardView === "templates" ? "left" : "right"}
+          leftText={t("Templates.switchTitle")}
+          rightText={t("Sessions.switchTitle")}
+          toggle={switchView}
+        />
+
+        {/* desktop search  bar */}
+        <SearchBar className="new-board__search-bar" />
+
+        {/* mobile search button + search bar (row below) */}
+        <button className="new-board__search-button" onClick={toggleMobileSearchBar}>
+          <div className={classNames("new-board__search-button-icon-container", {"new-board__search-button-icon-container--active": showMobileSearchBar})}>
+            <SearchIcon className="new-board__search-button-icon" aria-label="icon of magnifying glass" />
+          </div>
+        </button>
+        {showMobileSearchBar && <SearchBar className="new-board__mobile-search-bar" closable onClose={toggleMobileSearchBar} />}
+
+        <main className="new-board__outlet">
+          <Outlet />
+        </main>
       </div>
     </div>
   );
