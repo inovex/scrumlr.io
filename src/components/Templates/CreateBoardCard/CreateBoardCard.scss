@@ -16,6 +16,9 @@ $icon-size: 80px;
   border-radius: $rounded--default;
   border: 3px dashed #0057ff;
 
+  box-sizing: border-box; // don't overflow
+  padding: 0 40px 14px 40px; // non standard, I know
+
   background-color: #ccddff;
 
   cursor: pointer;
