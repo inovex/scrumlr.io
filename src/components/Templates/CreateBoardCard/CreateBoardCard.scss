@@ -32,7 +32,19 @@ $icon-size: 80px;
   }
 
   &:active {
-    background: #99bcff;
+    background-color: #99bcff;
+  }
+
+  &:disabled {
+    background-color: #eeeff1;
+    border-color: #8f95a1;
+    box-shadow: none;
+    cursor: unset;
+
+    .create-board-card__icon,
+    .create-board-card__title {
+      color: #8f95a1;
+    }
   }
 }
 
