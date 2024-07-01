@@ -96,7 +96,8 @@
   color: $color-middle-gray;
 }
 
-.column__tooltip {
+// tooltip requires parent selection because of specificity
+.column__header-text-wrapper .column__tooltip {
   @include tooltip--light;
 }
 
@@ -172,7 +173,7 @@
     color: $color-middle-gray;
   }
 
-  .column__tooltip {
+  .column__header-text-wrapper .column__tooltip {
     @include tooltip--dark;
   }
 
