@@ -142,11 +142,3 @@ type BoardOverview struct {
 	CreatedAt    time.Time `json:"createdAt"`
 	Participants int       `json:"participants"`
 }
-
-type ImportBoardRequest struct {
-	Board         *CreateBoardRequest `json:"board"`
-	Columns       []Column            `json:"columns"`
-	BoardSessions []BoardSession      `json:"participants"`
-	Notes         []Note              `json:"notes"`
-	Votings       []Voting            `json:"votings"`
-}

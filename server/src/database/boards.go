@@ -1,16 +1,15 @@
 package database
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"scrumlr.io/server/identifiers"
-	"time"
+  "context"
+  "errors"
+  "scrumlr.io/server/identifiers"
+  "time"
 
-	"github.com/google/uuid"
-	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
+  "github.com/google/uuid"
+  "github.com/uptrace/bun"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/database/types"
 )
 
 type Board struct {
@@ -223,46 +222,4 @@ func (d *Database) GetBoardOverview(id uuid.UUID) (Board, []BoardSession, []Colu
 
 	return board, sessions, columns, err
 
-}
-
-func (d *Database) ImportBoard(creator uuid.UUID, board BoardInsert, columns []ColumnInsert, notes [][]NoteInsert) (Board, error) {
-	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
-
-	if board.AccessPolicy == types.AccessPolicyByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
-		return Board{}, errors.New("passphrase or salt may not be empty")
-	} else if board.AccessPolicy != types.AccessPolicyByPassphrase && (board.Passphrase != nil || board.Salt != nil) {
-		return Board{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
-	}
-
-	session := BoardSessionInsert{User: creator, Role: types.SessionRoleOwner}
-
-	var b Board
-	query := d.db.NewSelect().With("createdBoard", boardInsert)
-	if len(columns) > 0 {
-		for index := range columns {
-			newColumnIndex := index
-			columns[index].Index = &newColumnIndex
-		}
-
-		query = query.With("createdColumns", d.db.NewInsert().
-			Model(&columns).
-			Value("board", "(SELECT id FROM \"createdBoard\")"))
-	}
-
-	if len(notes) > 0 {
-		for index := range columns {
-			query = query.With(fmt.Sprintf("createNoteIndex%d", index), d.db.NewInsert().
-				Model(&notes[index]).Value("column", "(SELECT id FROM \"createdColumns\" WHERE index = ?)", index))
-		}
-		// insert note value (id) select col index = 1
-	}
-	err := query.
-		With("createdSession", d.db.NewInsert().
-			Model(&session).
-			Value("board", "(SELECT id FROM \"createdBoard\")")).
-		Table("createdBoard").
-		Column("*").
-		Scan(context.Background(), &b)
-
-	return b, err
 }
