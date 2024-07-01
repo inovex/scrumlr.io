@@ -4,6 +4,8 @@ $card-height: 220px;
 $icon-size: 80px;
 
 .create-board-card {
+  all: unset;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -15,6 +17,20 @@ $icon-size: 80px;
   border: 3px dashed #0057ff;
 
   background-color: #ccddff;
+
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 6px 32px 0 rgba(0, 87, 255, 0.26);
+  }
+
+  &:focus {
+    background-color: $color-white;
+  }
+
+  &:active {
+    background: #99bcff;
+  }
 }
 
 .create-board-card__icon {
