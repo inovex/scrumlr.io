@@ -33,7 +33,7 @@ $stan-height-factor: 93%;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  gap: $spacing--md;
+  gap: 0;
 }
 
 .templates__container-title {
@@ -90,6 +90,7 @@ $stan-height-factor: 93%;
 
   .templates__container-header {
     justify-content: center;
+    gap: $spacing--md;
   }
 
   .templates__container-title {
