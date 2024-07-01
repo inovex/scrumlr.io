@@ -96,6 +96,10 @@
   color: $color-middle-gray;
 }
 
+.column__tooltip {
+  @include tooltip--light;
+}
+
 .column__header-input {
   display: flex;
   align-items: center;
@@ -166,6 +170,10 @@
 
   .column__header-text--hidden {
     color: $color-middle-gray;
+  }
+
+  .column__tooltip {
+    @include tooltip--dark;
   }
 
   .column__notes-wrapper {
