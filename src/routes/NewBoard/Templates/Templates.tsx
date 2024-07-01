@@ -3,6 +3,7 @@ import {Outlet} from "react-router-dom";
 import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {useRef} from "react";
+import {CreateBoardCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
 import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
@@ -50,7 +51,12 @@ export const Templates = () => {
           <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
           <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan just hanging there with a coffee" />
         </div>
-        {!isAnonymous && <section className="templates__container templates__container--saved">{renderContainerHeader("left", t("Templates.savedTemplates"))}</section>}
+        {!isAnonymous && (
+          <section className="templates__container templates__container--saved">
+            {renderContainerHeader("left", t("Templates.savedTemplates"))}
+            <CreateBoardCard />
+          </section>
+        )}
         <section className="templates__container templates__container--recommended">{renderContainerHeader("right", t("Templates.recommendedTemplates"))}</section>
       </div>
     </>
