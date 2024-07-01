@@ -1,0 +1,32 @@
+@import "constants/style";
+
+$card-height: 220px;
+$icon-size: 80px;
+
+.create-board-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: $card-height;
+  border-radius: $rounded--default;
+  border: 3px dashed #0057ff;
+
+  background-color: #ccddff;
+}
+
+.create-board-card__icon {
+  width: $icon-size;
+  height: $icon-size;
+  color: #0057ff;
+}
+
+.create-board-card__title {
+  font-size: $text--lg;
+  font-weight: 600;
+  line-height: 28px;
+
+  color: #0057ff;
+}
