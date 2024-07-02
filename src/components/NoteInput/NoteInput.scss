@@ -112,7 +112,7 @@ $note-input__input-right: 40px;
   width: 100%;
   background-color: $color-lighter-gray;
   // prevent overflow by approximating available space below the input box
-  max-height: min($column-emoji-suggestions__max-height, calc(100svh - $column-emoji-suggestions__approx-top-distance));
+  max-height: min($emoji-suggestions__max-height, calc(100svh - $column-emoji-suggestions__approx-top-distance));
 
   z-index: $note-input__emoji-suggestions-z-index;
   border-radius: $rounded--default;

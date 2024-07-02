@@ -12,6 +12,8 @@ import {useTranslation} from "react-i18next";
 import {hotkeyMap} from "constants/hotkeys";
 import {Droppable} from "components/DragAndDrop/Droppable";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
+import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
@@ -44,7 +46,9 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
   const colorClassName = getColorClassName(color);
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
-  const [columnName, setColumnName] = useState(name);
+  // const [columnName, setColumnName] = useState(name);
+  const {value: columnName, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({maxInputLength: 32, initialValue: name});
+
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
   const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
   const [isTemporary, setIsTemporary] = useState(id === "TEMP_ID");
@@ -104,30 +108,37 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         </h2>
       </div>
     ) : (
-      <input
-        maxLength={32}
-        className="column__header-input"
-        defaultValue={name}
-        onChange={() => setColumnName(inputRef.current?.value ?? "")}
-        onKeyDown={(e) => {
-          if (e.key === "Escape") {
-            if (isTemporary) {
-              dispatch(Actions.deleteColumnOptimistically(id));
+      <>
+        <input
+          {...emoji.inputBindings}
+          className="column__header-input"
+          type="text"
+          onKeyDown={(e) => {
+            emoji.inputBindings.onKeyDown(e);
+            if (e.defaultPrevented) return;
+
+            if (e.key === "Escape") {
+              if (isTemporary) {
+                dispatch(Actions.deleteColumnOptimistically(id));
+              }
+              setColumnNameMode("VIEW");
+            } else if (e.key === "Enter") {
+              handleEditColumnName((e.target as HTMLInputElement).value);
             }
-            setColumnNameMode("VIEW");
-          } else if (e.key === "Enter") {
-            handleEditColumnName((e.target as HTMLInputElement).value);
-          }
-        }}
-        ref={(ref) => {
-          ref?.focus();
-          inputRef.current = ref!;
-        }}
-        onFocus={(e) => e.target.select()}
-        onBlur={(e) => {
-          if (e.relatedTarget !== closeButtonRef.current) handleEditColumnName((e.target as HTMLInputElement).value);
-        }}
-      />
+          }}
+          ref={(ref) => {
+            ref?.focus();
+            inputRef.current = ref!;
+          }}
+          onFocus={(e) => e.target.select()}
+          onBlur={(e) => {
+            if (e.relatedTarget !== closeButtonRef.current) handleEditColumnName((e.target as HTMLInputElement).value);
+          }}
+        />
+        <div className="column__header-emoji-suggestions">
+          <EmojiSuggestions {...emoji.suggestionsProps} />
+        </div>
+      </>
     );
 
   const renderColumnModifiers = () => (
@@ -192,7 +203,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     >
       <div className="column__content">
         <div className="column__header">
-          <div className="column__header-title">
+          <div className="column__header-title" ref={emoji.containerRef}>
             {renderColumnName()}
             {columnNameMode === "VIEW" && notes.length > 0 && (
               <span className="column__header-card-number" title={t("Column.notes", {count: notes.length})}>
