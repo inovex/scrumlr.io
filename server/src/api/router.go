@@ -1,14 +1,16 @@
 package api
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"net/http"
-	"time"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
@@ -34,6 +36,7 @@ type Server struct {
 	health         services.Health
 	feedback       services.Feedback
 	boardReactions services.BoardReactions
+	customMetrics  services.CustomMetrics
 
 	upgrader websocket.Upgrader
 
@@ -55,6 +58,7 @@ func New(
 	health services.Health,
 	feedback services.Feedback,
 	boardReactions services.BoardReactions,
+	customMetrics services.CustomMetrics,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -63,6 +67,8 @@ func New(
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+	r.Use(metricCounterMiddleware)
+	r.Use(metricMeasureLatencyMiddleware)
 
 	if !checkOrigin {
 		r.Use(cors.Handler(cors.Options{
@@ -96,12 +102,18 @@ func New(
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
+		customMetrics:                    customMetrics,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
 	s.upgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
+	}
+
+	// Registers needed metrics for prometheus
+	if s.customMetrics != nil {
+		s.initMetrics()
 	}
 
 	if checkOrigin {
@@ -137,6 +149,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 				r.Get("/callback", s.verifyAuthProviderCallback)
 			})
 		})
+		s.initCustomMetricResources(r)
 	})
 }
 
@@ -297,4 +310,13 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 		r.Post("/", s.createBoardReaction)
 	})
+}
+
+func (s *Server) initCustomMetricResources(r chi.Router) {
+	if s.customMetrics != nil {
+		r.Handle("/metrics", promhttp.HandlerFor(
+			s.customMetrics.Registry(),
+			promhttp.HandlerOpts{Registry: s.customMetrics.Registry()},
+		))
+	}
 }

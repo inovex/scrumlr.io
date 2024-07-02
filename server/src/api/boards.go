@@ -6,8 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"scrumlr.io/server/identifiers"
 	"strconv"
+
+	"scrumlr.io/server/identifiers"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
