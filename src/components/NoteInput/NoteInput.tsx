@@ -1,8 +1,6 @@
 import {useRef, useState} from "react";
 import "./NoteInput.scss";
-import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
-import {ReactComponent as ImageIcon} from "assets/icon-addimage.svg";
-import {ReactComponent as StarIcon} from "assets/icon-star.svg";
+import {Plus, AddImage, Star} from "components/Icon";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
@@ -97,10 +95,10 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       </div>
       {isImage && (
         <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
-          <ImageIcon className="note-input__icon--image" />
-          <StarIcon className="note-input__icon--star star-1" />
-          <StarIcon className="note-input__icon--star star-2" />
-          <StarIcon className="note-input__icon--star star-3" />
+          <AddImage className="note-input__icon--image" />
+          <Star className="note-input__icon--star star-1" />
+          <Star className="note-input__icon--star star-2" />
+          <Star className="note-input__icon--star star-3" />
         </div>
       )}
       <button
@@ -110,7 +108,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         aria-label={t("NoteInput.create")}
         title={t("NoteInput.create")}
       >
-        <PlusIcon className="note-input__icon--add" />
+        <Plus className="note-input__icon--add" />
       </button>
     </form>
   );

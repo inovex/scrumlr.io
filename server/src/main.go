@@ -313,7 +313,7 @@ func run(c *cli.Context) error {
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	votingService := votings.NewVotingService(dbConnection, rt)
-	userService := users.NewUserService(dbConnection)
+	userService := users.NewUserService(dbConnection, rt)
 	noteService := notes.NewNoteService(dbConnection, rt)
 	reactionService := reactions.NewReactionService(dbConnection, rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))

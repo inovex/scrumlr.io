@@ -57,7 +57,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     <svg
                       class="navigation-item__icon"
                     >
-                      icon-settings.svg
+                      general-settings.svg
                     </svg>
                     <div
                       class="navigation-item__content"
@@ -81,7 +81,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     <svg
                       class="navigation-item__icon"
                     >
-                      icon-participants.svg
+                      participants.svg
                     </svg>
                     <div
                       class="navigation-item__content"
@@ -105,7 +105,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     <svg
                       class="navigation-item__icon"
                     >
-                      icon-appearance.svg
+                      settings-appearance.svg
                     </svg>
                     <div
                       class="navigation-item__content"
@@ -129,7 +129,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     <svg
                       class="navigation-item__icon"
                     >
-                      icon-share.svg
+                      share.svg
                     </svg>
                     <div
                       class="navigation-item__content"
@@ -153,7 +153,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     <svg
                       class="navigation-item__icon"
                     >
-                      icon-export.svg
+                      file-default.svg
                     </svg>
                     <div
                       class="navigation-item__content"
@@ -671,7 +671,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   href="/"
                 >
                   <svg>
-                    icon-arrow-previous.svg
+                    arrow-left.svg
                   </svg>
                 </a>
               </article>
@@ -682,7 +682,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                 <svg
                   class="close-button__icon"
                 >
-                  icon-close.svg
+                  close.svg
                 </svg>
               </a>
             </aside>

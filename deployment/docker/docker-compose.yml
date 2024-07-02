@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  scrumlr-backend:
+    restart: always
+    build:
+      context: ../server/src/
+      dockerfile: Dockerfile
+    command:
+      - "/app/main"
+      - "-disable-check-origin"
+    environment:
+      SCRUMLR_SERVER_PORT: "${SCRUMLR_SERVER_PORT}"
+      SCRUMLR_SERVER_NATS_URL: "${SCRUMLR_SERVER_NATS_URL}"
+      SCRUMLR_PRIVATE_KEY: "${SCRUMLR_PRIVATE_KEY}"
+      SCRUMLR_SERVER_DATABASE_URL: "postgres://scrumlr:${POSTGRES_PASSWORD}@postgres:5432/scrumlr?sslmode=disable"
+      SCRUMLR_AUTH_GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
+      SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
+      SCRUMLR_AUTH_MICROSOFT_CLIENT_ID: "${MICROSOFT_CLIENT_ID}"
+      SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET: "${MICROSOFT_CLIENT_SECRET}"
+      SCRUMLR_FEEDBACK_WEBHOOK_URL: "${WEBHOOK_URL}"
+      SCRUMLR_BASE_PATH: "${SCRUMLR_BASE_PATH}"
+      SCRUMLR_INSECURE: "${SCRUMLR_INSECURE}"
+      SCRUMLR_AUTH_GITHUB_CLIENT_ID: "${GITHUB_CLIENT_ID}"
+      SCRUMLR_AUTH_GITHUB_CLIENT_SECRET: "${GITHUB_CLIENT_SECRET}"
+      SCRUMLR_AUTH_AZURE_AD_TENANT_ID: "${AZURE_AD_TENANT_ID}"
+      SCRUMLR_AUTH_AZURE_AD_CLIENT_ID: "${AZURE_AD_CLIENT_ID}"
+      SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET: "${AZURE_AD_CLIENT_SECRET}"
+      SCRUMLR_AUTH_APPLE_CLIENT_ID: "${APPLE_CLIENT_ID}"
+      SCRUMLR_AUTH_APPLE_CLIENT_SECRET: "${APPLE_CLIENT_SECRET}"
+      # SCRUMLR_CONFIG_PATH: "${SCRUMRL_CONFIG_PATH}"
+      # Redis variables (if you decide to use Redis instead of NATS)
+      SCRUMLR_SERVER_REDIS_HOST: "${REDIS_HOST}"
+      SCRUMLR_SERVER_REDIS_USERNAME: "${REDIS_USERNAME}"
+      SCRUMLR_SERVER_REDIS_PASSWORD: "${REDIS_PASSWORD}"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - nats
+
+  scrumlr-frontend:
+    restart: always
+    build:
+      context: ../.
+      dockerfile: Dockerfile
+    environment:
+      SCRUMLR_SERVER_URL: "${SCRUMLR_SERVER_URL}"
+      SCRUMLR_WEBSOCKET_URL: "${SCRUMLR_WEBSOCKET_URL}"
+      SCRUMLR_SHOW_LEGAL_DOCUMENTS: "${SCRUMLR_SHOW_LEGAL_DOCUMENTS}"
+      # Add missing frontend environment variables here
+      SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT}"
+      SCRUMLR_ANALYTICS_DATA_DOMAIN: "${ANALYTICS_DATA_DOMAIN}"
+      SCRUMLR_ANALYTICS_SRC: "${ANALYTICS_SRC}"
+    ports:
+      - "9090:8080"
+
+  postgres:
+    restart: always
+    image: postgres:15.1
+    environment:
+      POSTGRES_DB: scrumlr
+      POSTGRES_USER: scrumlr
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  nats:
+    restart: always
+    image: nats:2.8.4
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+
+volumes:
+  postgres_data:
