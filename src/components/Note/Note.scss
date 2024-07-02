@@ -144,8 +144,8 @@ $note__footer-gap: 42px;
 }
 
 .note__marker-edited {
-  color: rgb(163, 166, 170);
-  font-size: 13px;
+  color: $color-middle-gray;
+  font-size: $text--sm;
 }
 
 .note__image-wrapper {
@@ -183,9 +183,6 @@ $note__footer-gap: 42px;
 .note__author-container {
   flex-grow: 1;
   overflow: hidden;
-  display: flex;
-  gap: 5px;
-  align-items: end;
 }
 
 .note__footer {

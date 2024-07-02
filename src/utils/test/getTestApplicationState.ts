@@ -94,7 +94,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         column: "test-columns-id-1",
         rank: 0,
       },
-      edited: false,
+      edited: true,
     },
     {
       id: "test-notes-id-2",

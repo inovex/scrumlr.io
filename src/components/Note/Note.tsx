@@ -123,7 +123,7 @@ export const Note = (props: NoteProps) => {
             <div className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
               <NoteTextContent text={note.text} truncate />
             </div>
-            {note.edited && <div className={classNames("note__marker-edited")}>({t("Note.edited")})</div>}
+            {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}
           </main>
         )}
 
