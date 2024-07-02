@@ -48,78 +48,78 @@ type SessionsMock struct {
 }
 
 func (m *SessionsMock) SessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Bool(0), args.Error(1)
 }
 
 func (m *SessionsMock) ParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Bool(0), args.Error(1)
 }
 
 func (m *SessionsMock) Connect(ctx context.Context, boardID, userID uuid.UUID) error {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Error(0)
 }
 
 func (m *SessionsMock) Create(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSession, error) {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Get(0).(*dto.BoardSession), args.Error(1)
 }
 
 // Add other missing methods here
 func (m *SessionsMock) Get(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSession, error) {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Get(0).(*dto.BoardSession), args.Error(1)
 }
 
 func (m *SessionsMock) Update(ctx context.Context, body dto.BoardSessionUpdateRequest) (*dto.BoardSession, error) {
-	args := m.Called(ctx, body)
+	args := m.Called(body)
 	return args.Get(0).(*dto.BoardSession), args.Error(1)
 }
 
 func (m *SessionsMock) UpdateAll(ctx context.Context, body dto.BoardSessionsUpdateRequest) ([]*dto.BoardSession, error) {
-	args := m.Called(ctx, body)
+	args := m.Called(body)
 	return args.Get(0).([]*dto.BoardSession), args.Error(1)
 }
 
 func (m *SessionsMock) List(ctx context.Context, boardID uuid.UUID, f filter.BoardSessionFilter) ([]*dto.BoardSession, error) {
-	args := m.Called(ctx, boardID, f)
+	args := m.Called(boardID, f)
 	return args.Get(0).([]*dto.BoardSession), args.Error(1)
 }
 
 func (m *SessionsMock) Disconnect(ctx context.Context, boardID, userID uuid.UUID) error {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Error(0)
 }
 
 func (m *SessionsMock) GetSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSessionRequest, error) {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Get(0).(*dto.BoardSessionRequest), args.Error(1)
 }
 
 func (m *SessionsMock) CreateSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSessionRequest, error) {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Get(0).(*dto.BoardSessionRequest), args.Error(1)
 }
 
 func (m *SessionsMock) ListSessionRequest(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*dto.BoardSessionRequest, error) {
-	args := m.Called(ctx, boardID, statusQuery)
+	args := m.Called(boardID, statusQuery)
 	return args.Get(0).([]*dto.BoardSessionRequest), args.Error(1)
 }
 
 func (m *SessionsMock) UpdateSessionRequest(ctx context.Context, body dto.BoardSessionRequestUpdate) (*dto.BoardSessionRequest, error) {
-	args := m.Called(ctx, body)
+	args := m.Called(body)
 	return args.Get(0).(*dto.BoardSessionRequest), args.Error(1)
 }
 
 func (m *SessionsMock) ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Bool(0), args.Error(1)
 }
 
 func (m *SessionsMock) SessionRequestExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
-	args := m.Called(ctx, boardID, userID)
+	args := m.Called(boardID, userID)
 	return args.Bool(0), args.Error(1)
 }
 
@@ -294,22 +294,22 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			}, nil)
 
 			// Mock the SessionExists method
-			sessionMock.On("SessionExists", mock.Anything, boardID, userID).Return(true, nil)
+			sessionMock.On("SessionExists", boardID, userID).Return(true, nil)
 
 			// Mock the ModeratorSessionExists method
-			sessionMock.On("ModeratorSessionExists", mock.Anything, boardID, userID).Return(true, nil)
+			sessionMock.On("ModeratorSessionExists", boardID, userID).Return(true, nil)
 
 			// Mock the ParticipantBanned method
-			sessionMock.On("ParticipantBanned", mock.Anything, boardID, userID).Return(false, nil)
+			sessionMock.On("ParticipantBanned", boardID, userID).Return(false, nil)
 
 			if tt.allowEditing {
-				noteMock.On("Delete", mock.Anything, mock.Anything).Return(nil)
+				noteMock.On("Delete", mock.Anything).Return(nil)
 			} else {
 				boardMock.On("Get", boardID).Return(&dto.Board{
 					ID:           boardID,
 					AllowEditing: tt.allowEditing,
 				}, tt.err)
-				noteMock.On("Delete", mock.Anything, mock.Anything).Return(tt.err)
+				noteMock.On("Delete", mock.Anything).Return(tt.err)
 			}
 
 			req := NewTestRequestBuilder("DELETE", fmt.Sprintf("/notes/%s", noteID.String()), strings.NewReader(`{"deleteStack": false}`))
