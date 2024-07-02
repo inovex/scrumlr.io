@@ -58,7 +58,10 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(text);
 
-  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({initialValue: text, suggestionsHidden: isStackedNote});
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({
+    initialValue: text,
+    suggestionsHidden: isStackedNote,
+  });
 
   return (
     <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})} ref={emoji.containerRef}>
@@ -87,6 +90,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         </>
       ) : (
         <>
+          {/* <div className="note-dialog__container"> */}
           <textarea
             className="note-dialog__note-content--text"
             disabled={!editable}
@@ -108,7 +112,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
               }
             }}
           />
-
+          <div className="note-dialog__marker-edited">({t("Note.edited")})</div>
+          {/* </div> */}
           {!isStackedNote && (
             <div className="note-dialog__note-content--emoji-suggestions">
               <EmojiSuggestions {...emoji.suggestionsProps} />

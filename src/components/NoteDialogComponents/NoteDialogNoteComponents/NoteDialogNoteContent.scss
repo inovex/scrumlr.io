@@ -41,13 +41,22 @@
   padding: 0 4px;
   font-size: $text--md;
   line-height: 1.5rem;
-
   &:not(:disabled) {
     &:hover,
     &:focus-visible {
       border-color: var(--accent-color--desaturated-dark);
     }
   }
+}
+.note-dialog__container {
+  width: 100%;
+}
+
+.note-dialog__marker-edited {
+  color: $color-middle-gray;
+  font-size: $text--base;
+  border: 2px transparent;
+  padding: 0 4px;
 }
 
 .note-dialog__note-content--image {
