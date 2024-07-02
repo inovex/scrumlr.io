@@ -25,22 +25,29 @@
 }
 
 .note-dialog__note-content--text {
-  background: none;
-  margin: 0;
-  overflow-y: auto;
-  @include scrollbar();
   width: 100%;
+  height: auto;
+  // since the note height limit is defined here, the sibling elements are subtracted (header, footer, margins, and gap)
+  max-height: calc($stack-content-max-height - 36px - 36px - 2 * ($spacing--base + $spacing--sm));
+  margin: 0;
+  padding: 0 $spacing--xxs;
+  overflow-y: scroll;
+  resize: none;
+  word-wrap: break-word;
+
   color: $color-black;
   letter-spacing: $letter-spacing--medium;
+  font-size: $text--md;
+  line-height: 1.5rem;
+
+  background: none;
+  outline: none;
+
   border: 2px dashed transparent;
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;
-  outline: none;
-  resize: none;
-  word-wrap: break-word;
-  padding: 0 4px;
-  font-size: $text--md;
-  line-height: 1.5rem;
+
+  @include scrollbar(14px, 8px, var(--accent-color), var(--accent-color--dark));
 
   &:not(:disabled) {
     &:hover,
@@ -109,7 +116,7 @@
   box-shadow: $box-shadow--light;
   background-color: $color-lighter-gray;
 
-  @include scrollbar();
+  @include scrollbar($color: var(--accent-color), $color-dark: var(--acccent-color--dark));
 }
 
 [theme="dark"] {

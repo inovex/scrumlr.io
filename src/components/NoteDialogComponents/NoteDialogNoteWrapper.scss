@@ -3,24 +3,21 @@
 @import "routes/StackView/StackView.scss";
 
 .note-dialog__scrollbar {
-  width: calc(100vw - (2 * $column__border-width));
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-color: $color-middle-gray $color-white;
-  margin-bottom: $column__border-width;
-  padding-top: $spacing--xl;
-  padding-left: 10px;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden scroll;
 
-  @include scrollbar();
+  box-sizing: border-box;
+  border-radius: $note__border-radius;
+
+  @include scrollbar($color: var(--accent-color), $color-dark: var(--accent-color--dark)); // scrollbar visibility?
 }
 
 .note-dialog__note-wrapper {
-  margin: 0 $spacing--base $spacing--xl 0;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+
   gap: $spacing--base;
 }
 
@@ -30,8 +27,8 @@
   }
 }
 
-[theme="dark"] {
+@media screen and (max-width: $breakpoint--desktop) {
   .note-dialog__scrollbar {
-    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+    padding-bottom: $spacing--xl;
   }
 }

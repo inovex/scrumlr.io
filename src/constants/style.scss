@@ -98,6 +98,10 @@ $column-emoji-suggestions__max-height: 350px;
 $column-emoji-suggestions__approx-top-distance: 320px;
 $note-dialog-emoji-suggestions__approx-top-distance: 310px;
 
+// stack view
+$stack-content-max-height: 60vh;
+$stack-content-max-height--mobile: 30vh;
+
 // icons
 $icon--small: 16px;
 $icon--medium: 24px;
@@ -190,6 +194,9 @@ $request-z-index: $base-z-index + (9 * $base-z-index-step);
 $tooltip-z-index: $request-z-index;
 $board-reaction-z-index: $backdrop-z-index + $base-z-index-step;
 
+// breakpoints
+$breakpoint--desktop: 1280px;
+
 // responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";
 $smartphone: "screen and (max-width: 767px)";
@@ -244,23 +251,27 @@ $column-stripes--dark: repeating-linear-gradient(
 }
 
 // scrollbar
-@mixin scrollbar($width: 10px, $border-radius: 8px) {
+@mixin scrollbar($width: 10px, $border-radius: 8px, $color: $color-light-gray, $color-dark: $color-black) {
   &::-webkit-scrollbar {
     width: #{$width};
   }
 
   &::-webkit-scrollbar-track {
     border-radius: #{$border-radius};
+    background-color: $color;
+    opacity: 9%;
   }
 
   &::-webkit-scrollbar-thumb {
     border-radius: #{$border-radius};
-    background-color: rgba($color-light-gray, 0.3);
+    background-color: $color;
+    opacity: 15%;
   }
 
-  [theme="dark"] & {
+  [theme="dark"] {
     &::-webkit-scrollbar-thumb {
-      background-color: rgba($color-black, 0.3);
+      background-color: $color-dark;
+      opacity: 30%;
     }
   }
 }
