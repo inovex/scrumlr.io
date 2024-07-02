@@ -3,7 +3,7 @@ import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
-import {ArrowRight,Logout} from "components/Icon";
+import {ArrowRight, Logout} from "components/Icon";
 import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";

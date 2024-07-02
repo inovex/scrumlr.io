@@ -442,13 +442,13 @@ func testUpdateBoardSettings(t *testing.T) {
 
 	showAuthors := true
 	showNotesOfOtherUsers := true
-	allowEditing := true
-	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, ShowAuthors: &showAuthors, ShowNotesOfOtherUsers: &showNotesOfOtherUsers, AllowEditing: &allowEditing})
+	isLocked := true
+	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, ShowAuthors: &showAuthors, ShowNotesOfOtherUsers: &showNotesOfOtherUsers, IsLocked: &isLocked})
 
 	assert.Nil(t, err)
 	assert.Equal(t, showAuthors, updatedBoard.ShowAuthors)
 	assert.Equal(t, showNotesOfOtherUsers, updatedBoard.ShowNotesOfOtherUsers)
-	assert.Equal(t, allowEditing, updatedBoard.AllowEditing)
+	assert.Equal(t, isLocked, updatedBoard.IsLocked)
 }
 
 func testGetBoard(t *testing.T) {

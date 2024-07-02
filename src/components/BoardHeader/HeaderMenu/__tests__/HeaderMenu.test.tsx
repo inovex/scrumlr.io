@@ -3,6 +3,7 @@ import {screen} from "@testing-library/dom";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
+import i18n from "i18nTest";
 
 Object.assign(navigator, {
   clipboard: {
@@ -75,6 +76,18 @@ describe("<HeaderMenu/>", () => {
         const label = screen.getByTestId("column")!.querySelector("span")!;
         expect(label).toHaveClass("board-option-button__label");
         expect(label.innerHTML).toEqual("Show hidden columns for me");
+      });
+    });
+
+    describe("Allow participant changes", () => {
+      it("should display button if participant has moderation permission", () => {
+        render(createHeaderMenu(true), {container: global.document.querySelector("#portal")!});
+        expect(screen.queryByText(i18n.t("BoardSettings.IsLocked"))).toBeInTheDocument();
+      });
+
+      it("should not display button if participant does not have moderation permission", () => {
+        render(createHeaderMenu(false), {container: global.document.querySelector("#portal")!});
+        expect(screen.queryByText(i18n.t("BoardSettings.IsLocked"))).not.toBeInTheDocument();
       });
     });
   });

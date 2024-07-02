@@ -13,9 +13,15 @@ $tooltip-button-size: 46px;
   cursor: pointer;
   pointer-events: auto;
   box-sizing: border-box;
+  color: $color-black;
 
   &:focus-visible {
     outline: 2px solid var(--accent-color, rgba($color-white, 0.5));
+  }
+
+  &:disabled {
+    color: $color-dark-gray;
+    cursor: not-allowed;
   }
 }
 
@@ -124,8 +130,8 @@ $tooltip-button-size: 46px;
       }
     }
 
-    &:focus-visible,
-    &:hover {
+    &:not(:disabled):focus-visible,
+    &:not(:disabled):hover {
       .tooltip-button__tooltip {
         max-width: 500px;
         visibility: visible;

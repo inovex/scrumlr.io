@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {Close, Timer as TimerIcon, MarkAsDone, FlagFinish,PlusOne} from "components/Icon";
+import {Close, Timer as TimerIcon, MarkAsDone, FlagFinish, PlusOne} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
