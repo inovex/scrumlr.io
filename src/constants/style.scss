@@ -1,6 +1,98 @@
 // @use "sass:list";
 @use "sass:color";
 
+// blue
+$blue--800: #002366;
+$blue--700: #003499;
+$blue--600: #0046cc;
+$blue--500: #0057ff;
+$blue--400: #3379ff;
+$blue--300: #669aff;
+$blue--200: #99bcff;
+$blue--100: #ccddff;
+
+// pink
+$pink--800: #66002a;
+$pink--700: #99003f;
+$pink--600: #cc0054;
+$pink--500: #ff0069;
+$pink--400: #ff3387;
+$pink--300: #ff66a5;
+$pink--200: #ff99c3;
+$pink--100: #ffcce1;
+
+// purple
+$purple--800: #500e66;
+$purple--700: #791599;
+$purple--600: #a11ccc;
+$purple--500: #c923ff;
+$purple--400: #d44fff;
+$purple--300: #df7bff;
+$purple--200: #e9a7ff;
+$purple--100: #f4d3ff;
+
+// violet
+$violet--800: #250062;
+$violet--700: #380094;
+$violet--600: #4a00c5;
+$violet--500: #5d00f6;
+$violet--400: #7d33f8;
+$violet--300: #9e66fa;
+$violet--200: #be99fb;
+$violet--100: #dfccfd;
+
+// green
+$green--800: #0b5532;
+$green--700: #107f4c;
+$green--600: #16aa65;
+$green--500: #1bd47e;
+$green--400: #49dd98;
+$green--300: #76e5b2;
+$green--200: #a4eecb;
+$green--100: #d1f6e5;
+
+// yellow
+$yellow--800: #666200;
+$yellow--700: #999300;
+$yellow--600: #ccc400;
+$yellow--500: #fff500;
+$yellow--400: #fff733;
+$yellow--300: #fff966;
+$yellow--200: #fffb99;
+$yellow--100: #fffdcc;
+
+// orange
+$orange--800: #664300;
+$orange--700: #996500;
+$orange--600: #cc8600;
+$orange--500: #ffa800;
+$orange--400: #ffb933;
+$orange--300: #ffcb66;
+$orange--200: #ffdc99;
+$orange--100: #ffeecc;
+
+// gray
+$gray--900: #111111;
+$gray--800: #15171e;
+$gray--700: #232732;
+$gray--600: #292f3b;
+$gray--500: #303745;
+$gray--400: #373e4f;
+$gray--300: #454e63;
+$gray--200: #586073;
+$gray--100: #6a7182;
+
+// white
+$white--800: #8f95a1;
+$white--700: #a2a7b1;
+$white--600: #b5b8c1;
+$white--500: #dddfe3;
+$white--400: #e9eaec;
+$white--300: #eeeff1;
+$white--200: #f4f4f6;
+$white--100: #f9fafa;
+$white--000: #ffffff;
+
 // base colors
 $color-white: #ffffff;
 $color-white-one: #f9fafb;

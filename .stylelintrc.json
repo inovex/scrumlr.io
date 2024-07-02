@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "color-no-hex": true,
+    "color-named": "never"
+  },
+  "ignoreFiles": ["src/constants/style.scss"]
+}
