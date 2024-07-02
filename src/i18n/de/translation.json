@@ -313,7 +313,8 @@
   "Note": {
     "me": "Ich",
     "you": "dir",
-    "userImageAlt": "Von {{user}} hochgeladenes Bild"
+    "userImageAlt": "Von {{user}} hochgeladenes Bild",
+    "edited": "bearbeitet"
   },
   "StackView": {
     "prevNote": "Vorheriges Kärtchen",

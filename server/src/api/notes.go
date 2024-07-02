@@ -2,13 +2,12 @@ package api
 
 import (
 	"fmt"
-	"net/http"
-	"scrumlr.io/server/identifiers"
-
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/identifiers"
 )
 
 // createNote creates a new note
@@ -69,17 +68,17 @@ func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 
 // updateNote updates a note
 func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	noteId := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+
 	var body dto.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
-	body.ID = noteId
-	body.Board = board
-
+	body.ID = noteID
+	body.Board = boardID
 	note, err := s.notes.Update(r.Context(), body)
 	if err != nil {
 		common.Throw(w, r, err)

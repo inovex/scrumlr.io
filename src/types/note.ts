@@ -10,6 +10,7 @@ export interface Note {
     stack: string | null;
     rank: number;
   };
+  edited: boolean;
 }
 
 export type EditNote = Partial<Omit<Note, "id" | "author">>;

@@ -92,7 +92,6 @@ export const Note = (props: NoteProps) => {
   // TODO: replace with stack setting from state when implemented. thanks, love u <3
   // de-activated in css for now
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
-
   if (!note) return null;
 
   return (
@@ -120,10 +119,14 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
-            <NoteTextContent text={note.text} truncate />
+          <main className={classNames("note__container")}>
+            <div className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
+              <NoteTextContent text={note.text} truncate />
+            </div>
+            {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}
           </main>
         )}
+
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
           <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
         </footer>

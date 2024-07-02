@@ -116,8 +116,7 @@ $note__footer-gap: 42px;
   border-radius: 0 $note__indicator-width $note__indicator-width 0;
   background: var(--accent-color);
 }
-
-.note__text {
+.note__container {
   margin: $note__text-margin-top 0 $spacing--xs;
   min-height: 3 * $line-height--medium;
   width: 100%;
@@ -125,11 +124,6 @@ $note__footer-gap: 42px;
   font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
   word-break: keep-all;
   word-wrap: break-word;
   white-space: pre-line;
@@ -138,6 +132,20 @@ $note__footer-gap: 42px;
     // add the difference of note__footer
     min-height: 3 * $line-height--medium + $note__footer-height;
   }
+}
+
+.note__text {
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  display: -webkit-box;
+}
+
+.note__marker-edited {
+  color: $color-middle-gray;
+  font-size: $text--sm;
 }
 
 .note__image-wrapper {
@@ -157,8 +165,8 @@ $note__footer-gap: 42px;
   height: $icon--huge;
   width: $icon--huge;
   position: absolute;
-  top: calc(50% - ($icon--huge/2));
-  left: calc(50% - ($icon--huge/2));
+  top: calc(50% - ($icon--huge / 2));
+  left: calc(50% - ($icon--huge / 2));
   fill: var(--accent-color);
 }
 

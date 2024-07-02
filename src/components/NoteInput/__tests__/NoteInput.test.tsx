@@ -12,7 +12,7 @@ jest.mock("utils/hooks/useImageChecker.ts", () => ({
 const createNoteInput = (columnId: string, maxNoteLength: number) => (
   <I18nextProvider i18n={i18nTest}>
     <Provider store={getTestStore()}>
-      <NoteInput columnId={columnId} maxNoteLength={maxNoteLength} columnIndex={1} columnIsVisible toggleColumnVisibility={() => undefined} />
+      <NoteInput columnId={columnId} columnIndex={1} columnIsVisible toggleColumnVisibility={() => undefined} />
     </Provider>
   </I18nextProvider>
 );
