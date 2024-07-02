@@ -1,26 +1,4 @@
-@import "src/constants/style";
-
-$tooltip-max-width: 80%;
-
-// tooltip
-@mixin tooltip {
-  z-index: $tooltip-z-index;
-  border-radius: $rounded--large;
-  max-width: $tooltip-max-width;
-  font-size: $text--sm;
-}
-
-@mixin tooltip--light {
-  @include tooltip;
-  color: $color-black;
-  background-color: $hover-background-light;
-}
-
-@mixin tooltip--dark {
-  @include tooltip;
-  color: $color-white;
-  background-color: $hover-background-dark;
-}
+@import "constants/style";
 
 // selecting .tooltip-portal directly won't work because of CSS specificity
 .tooltip-portal__root .tooltip-portal {
