@@ -21,10 +21,11 @@ exports[`Column should have correct style show column with correct style 1`] = `
             class="column__header-hidden-icon"
             title="Column is hidden for all participants"
           >
-            icon-hidden.svg
+            hidden.svg
           </svg>
           <h2
             class="column__header-text column__header-text--hidden"
+            id="column-test-columns-id-1"
           >
             Testheader 1
           </h2>
@@ -42,7 +43,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           <svg
             class="column__header-edit-button-icon"
           >
-            icon-dots.svg
+            three-dots.svg
           </svg>
         </button>
       </div>
@@ -69,7 +70,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           <svg
             class="note-input__icon--add"
           >
-            icon-add.svg
+            plus.svg
           </svg>
         </button>
       </form>
@@ -568,7 +569,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <svg
                       class="vote-button-remove__icon"
                     >
-                      icon-remove.svg
+                      minus.svg
                     </svg>
                     <span
                       class="vote-button-remove__count"
@@ -584,7 +585,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <svg
                       class="vote-button-add__icon"
                     >
-                      icon-add.svg
+                      plus.svg
                     </svg>
                   </button>
                 </div>
@@ -610,7 +611,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                       <svg
                         class="note-reaction-list__add-reaction-sticker"
                       >
-                        icon-emoji.svg
+                        add-emoji.svg
                       </svg>
                     </button>
                   </div>
@@ -1133,7 +1134,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     <svg
                       class="vote-button-add__icon"
                     >
-                      icon-add.svg
+                      plus.svg
                     </svg>
                   </button>
                 </div>
@@ -1159,7 +1160,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                       <svg
                         class="note-reaction-list__add-reaction-sticker"
                       >
-                        icon-emoji.svg
+                        add-emoji.svg
                       </svg>
                     </button>
                   </div>

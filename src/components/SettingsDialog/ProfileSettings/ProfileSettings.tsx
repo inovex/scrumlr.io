@@ -5,7 +5,7 @@ import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
 import "./ProfileSettings.scss";
 import {useDispatch} from "react-redux";
-import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
+import {Info} from "components/Icon";
 import {Toggle} from "components/Toggle";
 import {isEqual} from "underscore";
 import {AvatarSettings} from "../Components/AvatarSettings";
@@ -56,7 +56,7 @@ export const ProfileSettings = () => {
             </SettingsButton>
             <a className="profile-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
               <p>{t("Hotkeys.cheatSheet")}</p>
-              <InfoIcon />
+              <Info />
             </a>
           </div>
         </div>

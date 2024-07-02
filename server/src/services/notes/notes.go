@@ -23,10 +23,6 @@ type NoteService struct {
 	realtime *realtime.Broker
 }
 
-type Observer interface {
-	AttachObserver(observer database.Observer)
-}
-
 type DB interface {
 	CreateNote(insert database.NoteInsert) (database.Note, error)
 	GetNote(id uuid.UUID) (database.Note, error)

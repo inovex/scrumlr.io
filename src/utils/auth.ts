@@ -16,7 +16,7 @@ const signInAnonymously = async (displayName: string) => {
   try {
     const user = await API.signInAnonymously(displayName);
     if (user) {
-      store.dispatch(Actions.signIn(user.id, user.name));
+      store.dispatch(Actions.signIn(user.id, user.name, true));
     }
     return true;
   } catch (err) {

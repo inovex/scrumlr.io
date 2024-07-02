@@ -37,6 +37,10 @@
 - Missing something? Add a **Proposal** to [GitHub Discussions.](https://github.com/inovex/scrumlr.io/discussions/new?category=proposals)
 - Found a bug? [Report here!](https://github.com/inovex/scrumlr.io/issues)
 - Want to contribute? Check out our [contribution guide.](https://github.com/inovex/scrumlr.io/blob/main/CONTRIBUTING.md)
+  
+## Documentation
+You can find the full documentation at [docs.scrumlr.io](https://docs.scrumlr.io).
+This includes a guide on how to self-host Scrumlr, how to contribute, and more.
 
 ## Collaborators and beloved friends
 
@@ -75,6 +79,7 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
 [<img src="https://avatars.githubusercontent.com/u/71148001?v=4" width="48" height="48" alt="blxckOxymoron">](https://github.com/blxckOxymoron)
 [<img src="https://avatars.githubusercontent.com/u/54246641?v=4" width="48" height="48" alt="Quasilius-Starlord">](https://github.com/Quasilius-Starlord)
 [<img src="https://avatars.githubusercontent.com/u/52677920?v=4" width="48" height="48" alt="mateo-ivc">](https://github.com/mateo-ivc)
+[<img src="https://avatars.githubusercontent.com/u/56827034?v=4" width="48" height="48" alt="fabi1999">](https://github.com/fabi1999)
 
 ... and many more!
 

@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import _ from "underscore";
-import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
+import {Share} from "components/Icon";
 import {Timer} from "components/Timer";
 import {Tooltip} from "components/Tooltip";
 import {VoteDisplay} from "components/Votes/VoteDisplay";
@@ -37,7 +37,7 @@ export const InfoBar = () => {
           data-tooltip-content={t("InfoBar.ReturnToPresentedNote")}
           to={`note/${state.sharedNote}/stack`}
         >
-          <ShareIcon />
+          <Share />
         </Link>
       )}
       <Tooltip id="info-bar__tooltip" />
