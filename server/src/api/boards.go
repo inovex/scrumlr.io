@@ -33,7 +33,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.boards.Create(r.Context(), body)
 	if err != nil {
-		common.Throw(w, r, common.BadRequestError(err))
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -53,7 +53,8 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 
 	err := s.boards.Delete(r.Context(), board)
 	if err != nil {
-		http.Error(w, "failed to delete board", http.StatusInternalServerError)
+		logger.Get().Errorw("unable to delete board", "board", board, "err", err)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
@@ -68,13 +69,13 @@ func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
 	boardIDs, err := s.boards.GetBoards(r.Context(), user)
 	if err != nil {
 		log.Errorw("unable to get board ids for this user", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 	OverviewBoards, err := s.boards.BoardOverview(r.Context(), boardIDs, user)
 	if err != nil {
 		log.Errorw("unable to get board overview", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 	render.Status(r, http.StatusOK)
@@ -98,7 +99,7 @@ func (s *Server) getBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		log.Errorw("unable to access board", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -128,7 +129,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	exists, err := s.sessions.SessionExists(r.Context(), board, user)
 	if err != nil {
 		log.Errorw("unable to check preexisting sessions", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -136,7 +137,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check if participant is banned", "err", err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, err)
 			return
 		}
 
@@ -164,7 +165,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		_, err := s.sessions.Create(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to add participant", "err", err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, err)
 			return
 		}
 		if s.basePath == "/" {
@@ -192,7 +193,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			_, err := s.sessions.Create(r.Context(), board, user)
 			if err != nil {
 				log.Errorw("unable to create board session", "err", err)
-				common.Throw(w, r, common.InternalServerError)
+				common.Throw(w, r, err)
 				return
 			}
 			if s.basePath == "/" {
@@ -405,7 +406,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		err := csvWriter.WriteAll(records)
 		if err != nil {
 			log.Errorw("failed to respond with csv", "err", err)
-			common.Throw(w, r, common.InternalServerError)
+			common.Throw(w, r, err)
 			return
 		}
 		return

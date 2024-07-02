@@ -7,13 +7,16 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 )
 
 func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
 
 	reaction, err := s.reactions.Get(r.Context(), id)
 	if err != nil {
+		log.Errorw("unable to get reaction", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -23,10 +26,12 @@ func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	reactions, err := s.reactions.List(r.Context(), board)
 	if err != nil {
+		log.Errorw("unable to get reactions", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -36,6 +41,7 @@ func (s *Server) getReactions(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
@@ -50,6 +56,7 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 
 	reaction, err := s.reactions.Create(r.Context(), board, body)
 	if err != nil {
+		log.Errorw("unable to create reaction", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -59,11 +66,13 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
 
 	if err := s.reactions.Delete(r.Context(), board, user, id); err != nil {
+		log.Errorw("unable to remove reaction", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -73,9 +82,11 @@ func (s *Server) removeReaction(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
+
 	var body dto.ReactionUpdateTypeRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
@@ -84,6 +95,7 @@ func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 
 	reaction, err := s.reactions.Update(r.Context(), board, user, id, body)
 	if err != nil {
+		log.Errorw("unable to update reaction", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
