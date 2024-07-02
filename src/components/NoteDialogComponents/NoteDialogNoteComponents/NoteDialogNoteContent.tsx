@@ -90,30 +90,30 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         </>
       ) : (
         <>
-          {/* <div className="note-dialog__container"> */}
-          <textarea
-            className="note-dialog__note-content--text"
-            disabled={!editable}
-            onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
-            onFocus={onFocus}
-            {...emoji.inputBindings}
-            onKeyDown={(e) => {
-              emoji.inputBindings.onKeyDown(e);
-              if (e.defaultPrevented) return;
+          <div className="note-dialog__note-content-container">
+            <textarea
+              className="note-dialog__note-content--text"
+              disabled={!editable}
+              onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
+              onFocus={onFocus}
+              {...emoji.inputBindings}
+              onKeyDown={(e) => {
+                emoji.inputBindings.onKeyDown(e);
+                if (e.defaultPrevented) return;
 
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                e.currentTarget.blur();
-              }
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  e.currentTarget.blur();
+                }
 
-              if (e.key === "Escape") {
-                e.currentTarget.blur();
-                e.stopPropagation();
-              }
-            }}
-          />
-          <div className="note-dialog__marker-edited">({t("Note.edited")})</div>
-          {/* </div> */}
+                if (e.key === "Escape") {
+                  e.currentTarget.blur();
+                  e.stopPropagation();
+                }
+              }}
+            />
+            <div className="note-dialog__marker-edited">({t("Note.edited")})</div>
+          </div>
           {!isStackedNote && (
             <div className="note-dialog__note-content--emoji-suggestions">
               <EmojiSuggestions {...emoji.suggestionsProps} />
