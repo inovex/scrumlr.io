@@ -77,7 +77,7 @@ $max-name-length: 112px;
   height: $icon--medium;
   font-size: $text--xs;
   color: $white--000;
-  background-color: $menu-icon-background-color--dark;
+  background-color: $gray--500;
 
   // add 1px because it's a little bit off in comparison to .note__author margin
   margin: 0 calc($name-gap + 1px) 0 $overlap-margin;
@@ -90,7 +90,7 @@ $max-name-length: 112px;
 }
 
 .note-author-rest--self {
-  border-color: $menu-icon-background-color--dark;
+  border-color: $gray--500;
 }
 
 .note__author-name {

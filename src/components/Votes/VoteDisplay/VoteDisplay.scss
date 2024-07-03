@@ -141,8 +141,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 [theme="dark"] {
   .vote-display {
     color: $white--000;
-    background-color: $menu-icon-background-color--dark;
-    border-color: $menu-icon-background-color--dark;
+    background-color: $gray--500;
+    border-color: $gray--500;
 
     &:has(:focus-visible) {
       outline: 2px solid $color-planning-pink;
@@ -155,7 +155,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 
   .vote-display__short-actions {
-    background-color: $menu-icon-background-color--dark;
+    background-color: $gray--500;
   }
 
   .vote-display--votes-depleted .vote-display__progress-bar {

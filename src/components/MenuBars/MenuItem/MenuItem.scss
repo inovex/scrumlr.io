@@ -173,7 +173,7 @@ $menu-item-size: 42px;
   border-radius: $menu-item-size;
 }
 .menu-item--active .menu-item__icon {
-  background-color: $menu-icon-background-color--dark;
+  background-color: $gray--500;
   color: $white--000;
 }
 .menu-item__icon:nth-of-type(2) {
@@ -202,7 +202,7 @@ $menu-item-size: 42px;
 [theme="dark"] {
   .menu-item__icon {
     color: $white--000;
-    background: $menu-icon-background-color--dark;
+    background: $gray--500;
   }
   .menu-item--active .menu-item__icon {
     background-color: $menu-icon-background-color--light;

@@ -64,7 +64,7 @@ $menu-mobile__width: 72px;
     margin: 0;
 
     &--active {
-      background-color: $menu-icon-background-color--dark;
+      background-color: $gray--500;
     }
   }
 
@@ -95,7 +95,7 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu-bars-mobile__fab {
-    background: $menu-icon-background-color--dark;
+    background: $gray--500;
   }
 
   .menu-bars-mobile__fab-option .tooltip-button__icon {
@@ -114,7 +114,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars-mobile__fab-main--isExpanded {
-  background: $menu-icon-background-color--dark;
+  background: $gray--500;
 
   svg {
     color: $white--000;
@@ -225,7 +225,7 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu {
-    background-color: $menu-icon-background-color--dark;
+    background-color: $gray--500;
     box-shadow: $box-shadow--light;
   }
 }
@@ -279,7 +279,7 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu-bars__navigation {
-    background: $menu-icon-background-color--dark;
+    background: $gray--500;
     color: $white--000;
   }
 
@@ -288,7 +288,7 @@ $menu-mobile__width: 72px;
   }
 
   .menu-bars__navigation:enabled:hover {
-    background-color: getDarkHoverBackground($menu-icon-background-color--dark);
+    background-color: getDarkHoverBackground($gray--500);
   }
 
   .menu-bars__navigation:disabled {

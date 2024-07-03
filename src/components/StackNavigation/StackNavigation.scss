@@ -58,7 +58,7 @@
 
 [theme="dark"] {
   .stack-view__navigation-button {
-    background: $menu-icon-background-color--dark;
+    background: $gray--500;
     color: $white--000;
 
     &:enabled:focus-visible {

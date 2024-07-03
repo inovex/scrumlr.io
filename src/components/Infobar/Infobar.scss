@@ -41,10 +41,10 @@
 }
 [theme="dark"] .info-bar__return-to-shared-note-button {
   color: $white--000;
-  background-color: $menu-icon-background-color--dark;
+  background-color: $gray--500;
 
   &:hover {
-    background-color: getDarkHoverBackground($menu-icon-background-color--dark);
+    background-color: getDarkHoverBackground($gray--500);
   }
 
   &:focus-visible {

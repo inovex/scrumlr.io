@@ -33,7 +33,7 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button__icon {
-    background-color: $menu-icon-background-color--dark;
+    background-color: $gray--500;
     color: $white--000;
   }
 }
@@ -217,7 +217,7 @@ $tooltip-button-size: 46px;
       }
 
       .tooltip-button__icon-container {
-        background-color: $menu-icon-background-color--dark;
+        background-color: $gray--500;
       }
     }
   }
@@ -275,7 +275,7 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button__icon-container {
-    background: $menu-icon-background-color--dark;
+    background: $gray--500;
   }
 
   .tooltip-button__icon {
