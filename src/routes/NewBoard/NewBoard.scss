@@ -92,6 +92,8 @@ $side-padding--desktop: 14vw;
   justify-content: stretch;
 
   margin-top: $spacing--xl;
+
+  overflow-y: hidden;
 }
 
 @media screen and (max-width: $breakpoint--smartphone) {

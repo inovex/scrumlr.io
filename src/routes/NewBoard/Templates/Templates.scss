@@ -21,6 +21,8 @@ $stan-height-factor: 93%;
   padding: $spacing--xl $spacing--xl 0 $spacing--xl;
   border-radius: $rounded--default;
 
+  overflow-y: scroll;
+
   background-color: #dde8ff;
 
   &--saved {
