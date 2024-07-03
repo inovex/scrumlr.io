@@ -65,7 +65,7 @@ $header-menu-border-bottom-color: #efefef;
     }
 
     &:focus-visible {
-      background-color: $color-dark-mode-note--hover;
+      background-color: $gray--400;
     }
   }
 
@@ -79,6 +79,6 @@ $header-menu-border-bottom-color: #efefef;
 
   .board-option-button--expandable:focus-visible,
   .board-option-button--expandable:hover {
-    background-color: $color-dark-mode-note--hover;
+    background-color: $gray--400;
   }
 }

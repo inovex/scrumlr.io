@@ -120,7 +120,7 @@
       box-shadow: 0 16px 32px rgba($gray--700, 0.8);
 
       &:hover {
-        background-color: $color-dark-mode-note--hover;
+        background-color: $gray--400;
       }
     }
 
@@ -130,7 +130,7 @@
       &-group {
         &-header {
           &:hover {
-            background-color: $color-dark-mode-note--hover;
+            background-color: $gray--400;
           }
         }
 
@@ -138,7 +138,7 @@
           color: $white--000;
 
           &:hover:not(.disabled) {
-            background-color: $color-dark-mode-note--hover;
+            background-color: $gray--400;
           }
 
           &-seperator {
