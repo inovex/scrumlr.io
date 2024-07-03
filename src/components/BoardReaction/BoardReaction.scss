@@ -57,7 +57,7 @@ $name-max-length: 20em;
 [theme="dark"] {
   .board-reaction__name-container {
     color: $white--000;
-    background-color: $color-board-reaction-name--dark;
+    background-color: $gray--200;
 
     &--self {
       background-color: $color-board-reaction-name-self--dark;
