@@ -29,7 +29,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: $vote-display__content-height;
   width: $vote-display__content-height;
   background-color: $color-dark-mode-note;
-  color: $color-white;
+  color: $white--000;
   border-radius: 100%;
 }
 
@@ -140,7 +140,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
 [theme="dark"] {
   .vote-display {
-    color: $color-white;
+    color: $white--000;
     background-color: $menu-icon-background-color--dark;
     border-color: $menu-icon-background-color--dark;
 
@@ -150,7 +150,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 
   .vote-display > svg {
-    background-color: $color-white;
+    background-color: $white--000;
     color: $color-dark-mode-note;
   }
 
@@ -164,7 +164,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
   .short-action__button {
     background-color: $color-dark-one;
-    color: $color-white;
+    color: $white--000;
 
     &:hover {
       background-color: getDarkHoverBackground($color-dark-one);

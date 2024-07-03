@@ -100,7 +100,7 @@ $menu-mobile__width: 72px;
 
   .menu-bars-mobile__fab-option .tooltip-button__icon {
     &--active {
-      background-color: $color-white;
+      background-color: $white--000;
     }
   }
 }
@@ -117,7 +117,7 @@ $menu-mobile__width: 72px;
   background: $menu-icon-background-color--dark;
 
   svg {
-    color: $color-white;
+    color: $white--000;
     width: $icon--huge;
     height: $icon--huge;
   }
@@ -125,7 +125,7 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu-bars-mobile__fab svg path {
-    fill: $color-white;
+    fill: $white--000;
   }
 
   .menu-bars-mobile__fab-main--isExpanded {
@@ -192,7 +192,7 @@ $menu-mobile__width: 72px;
 
 .menu {
   border-radius: calc($menu-mobile__width / 2);
-  background-color: $color-white;
+  background-color: $white--000;
   box-shadow: $box-shadow--light;
   padding: $spacing--lg 0;
   width: $action-bar__width;
@@ -235,7 +235,7 @@ $menu-mobile__width: 72px;
   width: 42px;
   height: 42px;
 
-  background: $color-white;
+  background: $white--000;
   border: none;
   border-radius: 100%;
   outline: none;
@@ -270,7 +270,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars__navigation:enabled:hover {
-  background-color: getLightHoverBackground($color-white);
+  background-color: getLightHoverBackground($white--000);
 }
 
 .menu-bars__navigation:disabled {
@@ -280,11 +280,11 @@ $menu-mobile__width: 72px;
 [theme="dark"] {
   .menu-bars__navigation {
     background: $menu-icon-background-color--dark;
-    color: $color-white;
+    color: $white--000;
   }
 
   .menu-bars__navigation:focus-visible {
-    outline: 2px solid rgba($color-white, 0.5);
+    outline: 2px solid rgba($white--000, 0.5);
   }
 
   .menu-bars__navigation:enabled:hover {

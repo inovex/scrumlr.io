@@ -11,7 +11,7 @@
 
   padding: $spacing--xs $spacing--base $spacing--xl * 2 $spacing--base;
 
-  background-color: $color-white;
+  background-color: $white--000;
 
   user-select: none;
 
@@ -68,7 +68,7 @@
 
   &--active {
     background-color: var(--accent-color);
-    color: $color-white;
+    color: $white--000;
 
     &:hover {
       background-color: var(--accent-color); // essentially no hover color when active.
@@ -153,7 +153,7 @@
   }
 
   .note-reaction-popup__tab-all {
-    color: $color-white;
+    color: $white--000;
     background-color: $color-dark-one;
 
     &--active {

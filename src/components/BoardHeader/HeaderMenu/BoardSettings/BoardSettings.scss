@@ -32,7 +32,7 @@ $header-menu-button-width: 24px;
 .board-settings__board-name {
   height: $header-menu-button-height;
   flex-grow: 1;
-  color: $color-white;
+  color: $white--000;
   background-color: transparent;
   font-size: $text-size--medium;
   font-weight: bold;
@@ -43,18 +43,18 @@ $header-menu-button-width: 24px;
   overflow: hidden;
   border-top: none;
   border-right: none;
-  border-bottom: $header-menu__item-border-width dashed $color-white;
+  border-bottom: $header-menu__item-border-width dashed $white--000;
   border-left: none;
   border-radius: 0;
   -webkit-border-radius: 0;
   outline: 0;
   padding: 0;
   transition: border-color 0.1s linear;
-  caret-color: $color-white;
+  caret-color: $white--000;
   min-width: 0;
 
   &::placeholder {
-    color: $color-white;
+    color: $white--000;
     opacity: 0.85;
   }
 
@@ -66,22 +66,22 @@ $header-menu-button-width: 24px;
 
 .board-settings__edit-button {
   height: $header-menu-button-height;
-  box-shadow: 0 0 0 0.1em $color-white;
+  box-shadow: 0 0 0 0.1em $white--000;
   border-color: transparent;
   border-radius: 32px;
   background-color: transparent;
-  color: $color-white;
+  color: $white--000;
   cursor: pointer;
   outline: none;
   transition: all 0.1s ease-in-out;
 
   &:focus-visible {
-    background-color: $color-white;
+    background-color: $white--000;
     color: var(--accent-color);
   }
 
   &:hover {
-    background-color: $color-white;
+    background-color: $white--000;
     color: var(--accent-color);
     transform: scale(1.06);
   }

@@ -1,7 +1,7 @@
 @import "constants/style.scss";
 
 .cookie-notice {
-  background: $color-white;
+  background: $white--000;
   color: $color-black;
   position: fixed;
   bottom: 0;
@@ -25,7 +25,7 @@
   &-accept {
     @extend .cookie-notice__button;
     background: $color-backlog-blue;
-    color: $color-white;
+    color: $white--000;
     margin: 0 0 $spacing--base $spacing--base;
   }
   &-decline {

@@ -50,7 +50,7 @@
   background-color: var(--accent-color);
 
   .note-reaction-chip__amount {
-    color: $color-white;
+    color: $white--000;
   }
 
   &:hover {
@@ -84,6 +84,6 @@
   }
 
   .note-reaction-chip__amount {
-    color: $color-white;
+    color: $white--000;
   }
 }

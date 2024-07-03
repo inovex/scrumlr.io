@@ -18,7 +18,7 @@ $menu-item-size: 42px;
 }
 [theme="dark"] {
   .menu-item:focus-visible {
-    outline: 2px solid rgba($color-white, 0.5);
+    outline: 2px solid rgba($white--000, 0.5);
   }
 }
 
@@ -155,7 +155,7 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .tooltip__text {
-    color: $color-white !important;
+    color: $white--000 !important;
     background-color: $tooltip-background-color--dark !important;
   }
 }
@@ -174,7 +174,7 @@ $menu-item-size: 42px;
 }
 .menu-item--active .menu-item__icon {
   background-color: $menu-icon-background-color--dark;
-  color: $color-white;
+  color: $white--000;
 }
 .menu-item__icon:nth-of-type(2) {
   visibility: hidden;
@@ -201,7 +201,7 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .menu-item__icon {
-    color: $color-white;
+    color: $white--000;
     background: $menu-icon-background-color--dark;
   }
   .menu-item--active .menu-item__icon {

@@ -24,7 +24,7 @@ $note__footer-gap: 42px;
   cursor: pointer;
   position: relative;
   border-radius: $note__border-radius;
-  background-color: $color-white;
+  background-color: $white--000;
   box-shadow:
     0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
     0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
@@ -54,7 +54,7 @@ $note__footer-gap: 42px;
   box-shadow:
     0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
     0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
-  background-color: $color-white;
+  background-color: $white--000;
   z-index: $note-z-index - $base-z-index-step;
   transition: all 0.1s ease-in-out;
 }
@@ -234,6 +234,6 @@ $note__footer-gap: 42px;
   }
 
   .note__text {
-    color: $color-white;
+    color: $white--000;
   }
 }

@@ -58,7 +58,7 @@
   position: relative;
   top: -0.625em;
   padding: 0 $spacing--base;
-  background: $color-white;
+  background: $white--000;
 }
 
 .login-board__fieldset {
@@ -119,7 +119,7 @@
   right: 0;
   overflow: hidden;
   border: 1px solid $color-backlog-blue;
-  background: $color-white;
+  background: $white--000;
   cursor: pointer;
   border-radius: 100%;
   transition: all 0.16s ease-out;
@@ -159,7 +159,7 @@
 
 [theme="dark"] {
   .login-board__dialog {
-    color: $color-white;
+    color: $white--000;
     background: #1a2232;
   }
 
@@ -174,11 +174,11 @@
   }
 
   .login-board__terms:hover .login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba($color-white, 0.2);
+    box-shadow: 0 0 0 4px rgba($white--000, 0.2);
   }
 
   .login-board__terms:focus-visible.login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba($color-white, 0.4);
+    box-shadow: 0 0 0 4px rgba($white--000, 0.4);
   }
 
   @media #{$tablet} {

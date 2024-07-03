@@ -76,7 +76,7 @@ $max-name-length: 112px;
   width: $icon--medium;
   height: $icon--medium;
   font-size: $text--xs;
-  color: $color-white;
+  color: $white--000;
   background-color: $menu-icon-background-color--dark;
 
   // add 1px because it's a little bit off in comparison to .note__author margin
@@ -116,7 +116,7 @@ $max-name-length: 112px;
   }
 
   .note__author-name {
-    color: $color-white;
+    color: $white--000;
   }
 
   .note__author-name--self {

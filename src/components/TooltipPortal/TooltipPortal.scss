@@ -18,7 +18,7 @@ $tooltip-max-width: 80%;
 
 @mixin tooltip--dark {
   @include tooltip;
-  color: $color-white;
+  color: $white--000;
   background-color: $hover-background-dark;
 }
 

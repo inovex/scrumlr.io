@@ -6,7 +6,7 @@
   width: 100%;
   padding: $spacing--xs 0 0 $spacing--lg;
   overflow-x: hidden;
-  background: linear-gradient(320deg, color.change($color-backlog-blue, $alpha: 0.2), color.change($color-white, $alpha: 0.3));
+  background: linear-gradient(320deg, color.change($color-backlog-blue, $alpha: 0.2), color.change($white--000, $alpha: 0.3));
 }
 
 .not-found__background {
@@ -70,7 +70,7 @@
   margin-top: $spacing--base;
 
   padding: $spacing--base $spacing--xl;
-  color: $color-white;
+  color: $white--000;
   background: #ff0069;
 
   font-weight: 700;
@@ -187,6 +187,6 @@
   }
 
   .not-found__content {
-    color: $color-white;
+    color: $white--000;
   }
 }

@@ -115,7 +115,7 @@
 }
 [theme="dark"] {
   .column__header-input {
-    color: $color-white;
+    color: $white--000;
   }
 }
 
@@ -137,7 +137,7 @@
   flex: 1;
   outline: none;
   scrollbar-width: 10px;
-  scrollbar-color: $color-middle-gray $color-white;
+  scrollbar-color: $color-middle-gray $white--000;
 
   @include scrollbar();
 }
@@ -161,7 +161,7 @@
 
 [theme="dark"] {
   .column__header-text {
-    color: $color-white;
+    color: $white--000;
   }
 
   .column__header-text--hidden {
@@ -190,7 +190,7 @@
 
 [theme="dark"] {
   .column__header-hidden-icon:hover {
-    color: $color-white;
+    color: $white--000;
   }
 }
 
@@ -222,5 +222,5 @@
 }
 
 [theme="dark"] .column__header-edit-button-icon {
-  color: $color-white;
+  color: $white--000;
 }

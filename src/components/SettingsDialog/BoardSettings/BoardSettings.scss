@@ -78,7 +78,7 @@
 
 [theme="dark"] {
   .board-settings__board-name-button_input {
-    color: $color-white;
+    color: $white--000;
   }
   .board-settings__board-name-button_input::placeholder {
     color: $color-placeholder-dark;
@@ -202,7 +202,7 @@
 
 [theme="dark"] {
   .board-settings__password-button_value-input {
-    color: $color-white;
+    color: $white--000;
   }
 }
 

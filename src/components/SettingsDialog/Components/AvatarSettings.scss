@@ -23,14 +23,14 @@
       padding: 4px;
       border: 0;
       border-radius: 20px;
-      background-color: $color-white;
+      background-color: $white--000;
       box-shadow: 0 8px 16px rgba(var(--accent-color-rgb), 0.3);
       align-items: center;
       justify-content: center;
       transition: all 0.08s ease-out;
 
       &:hover {
-        background-color: mix($color-white, $color-lean-lilac, 92%);
+        background-color: mix($white--000, $color-lean-lilac, 92%);
         transform: scale(1.06);
         box-shadow: 0 12px 20px rgba(var(--accent-color-rgb), 0.2);
       }
@@ -48,7 +48,7 @@
   }
 
   &__settings {
-    background-color: $color-white;
+    background-color: $white--000;
     border-radius: 8px;
     max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
 
@@ -135,7 +135,7 @@
         }
 
         &-item {
-          color: $color-white;
+          color: $white--000;
 
           &:hover:not(.disabled) {
             background-color: $color-dark-mode-note--hover;

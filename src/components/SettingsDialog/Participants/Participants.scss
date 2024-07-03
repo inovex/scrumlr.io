@@ -27,7 +27,7 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   color: $color-black;
-  background-color: $color-white;
+  background-color: $white--000;
   border: none;
   border-radius: $rounded--full;
   outline: none;
@@ -50,7 +50,7 @@
 
 .participants__permisson-filter-button {
   height: 42px;
-  background-color: $color-white;
+  background-color: $white--000;
   color: $color-black;
   border: none;
   border-radius: $rounded--full;
@@ -62,7 +62,7 @@
 
   &--active {
     background-color: var(--accent-color);
-    color: $color-white;
+    color: $white--000;
   }
   &:focus {
     outline: 2px solid var(--accent-color);
@@ -85,14 +85,14 @@
   width: 42px;
   border: none;
   border-radius: $rounded--full;
-  background-color: $color-white;
+  background-color: $white--000;
   color: $color-black;
   padding: 0;
   cursor: pointer;
 
   &--active {
     background-color: var(--accent-color);
-    color: $color-white;
+    color: $white--000;
   }
   &:focus {
     outline: 2px solid var(--accent-color);
@@ -131,7 +131,7 @@
 
 .participants__list-item {
   height: 55px;
-  background-color: $color-white;
+  background-color: $white--000;
   padding: $spacing--xs;
   display: flex;
   flex-direction: row;
@@ -179,12 +179,12 @@
   font-weight: 500;
   letter-spacing: $letter-spacing--medium;
   background-color: var(--accent-color);
-  color: $color-white;
+  color: $white--000;
   width: fit-content;
 
   &:is(button) {
     line-height: 12px;
-    background-color: $color-white;
+    background-color: $white--000;
     border: 2px solid var(--accent-color--desaturated-light);
     color: $color-black;
     cursor: pointer;
@@ -200,7 +200,7 @@
     cursor: default;
     border-color: var(--accent-color);
     background-color: var(--accent-color);
-    color: $color-white;
+    color: $white--000;
   }
 }
 
@@ -258,7 +258,7 @@
 
   height: 36px;
   background-color: $menu-icon-background-color--dark;
-  color: $color-white;
+  color: $white--000;
   border: none;
   border-radius: $rounded--full;
   font-weight: bold;
@@ -267,7 +267,7 @@
 
   &:hover {
     background-color: $hover-background-dark;
-    color: $color-white;
+    color: $white--000;
   }
 }
 
@@ -279,14 +279,14 @@
   margin-left: auto; // align to the very right
   border-radius: $rounded--default;
   border: none;
-  background-color: $color-white;
+  background-color: $white--000;
   flex-shrink: 0;
 
   cursor: pointer;
 
   &--active {
     background-color: var(--accent-color);
-    color: $color-white;
+    color: $white--000;
   }
   &:focus {
     outline: 2px solid var(--accent-color);
@@ -313,25 +313,25 @@
 [theme="dark"] {
   .participants__search-input {
     background-color: $color-dark-mode-note;
-    color: $color-white;
+    color: $white--000;
   }
   .participants__search-icon {
-    color: $color-white;
+    color: $white--000;
   }
   .participants__permisson-filter-button,
   .participant__status-filter-button {
     background-color: $color-dark-mode-note;
-    color: $color-white;
+    color: $white--000;
     &--active {
       background-color: var(--accent-color);
-      color: $color-white;
+      color: $white--000;
     }
   }
   @media (hover: hover) {
     .participants__permisson-filter-button:hover,
     .participant__status-filter-button:hover {
       background-color: var(--accent-color--desaturated-dark);
-      color: $color-white;
+      color: $white--000;
     }
   }
   .participants__list-item {
@@ -341,13 +341,13 @@
     }
   }
   .participant__name {
-    color: $color-white;
+    color: $white--000;
   }
   .participant__role {
     &:is(button) {
       background-color: $color-dark-mode-note;
       border: 2px solid var(--accent-color--desaturated-dark);
-      color: $color-white;
+      color: $white--000;
     }
     &:is(button):hover {
       background-color: var(--accent-color--desaturated-dark);
@@ -365,7 +365,7 @@
 
   .participants-reset-state-banner__check-icon,
   .participants-reset-state-banner__text {
-    color: $color-white;
+    color: $white--000;
   }
 
   .participants-reset-state-banner__button {
@@ -378,7 +378,7 @@
 
   .participant__join-icon,
   .participant__kick-icon {
-    color: $color-white;
+    color: $white--000;
     background-color: $color-dark-mode-note;
 
     &:hover {

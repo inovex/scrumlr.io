@@ -72,7 +72,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__sidebar {
   width: 100%;
-  background-color: $color-white;
+  background-color: $white--000;
 }
 [theme="dark"] .settings-dialog__sidebar {
   background-color: $color-dark-mode-note;
@@ -132,7 +132,7 @@ $settings-dialog-container--bottom: 62px;
 
   &:hover {
     background-color: $color-backlog-blue;
-    color: $color-white;
+    color: $white--000;
     transform: scale(1.04);
   }
 
@@ -153,7 +153,7 @@ $settings-dialog-container--bottom: 62px;
 
   &:hover {
     background-color: $color-planning-pink;
-    color: $color-white;
+    color: $white--000;
   }
 
   &:focus-visible {
@@ -164,7 +164,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__close-button {
     top: -22px;
     right: -22px;
-    background-color: $color-white;
+    background-color: $white--000;
     box-shadow: 0 16px 32px #0057ff3d;
   }
   [theme="dark"] .settings-dialog__close-button {
@@ -213,7 +213,7 @@ $settings-dialog-container--bottom: 62px;
 
   &:hover {
     background: rgba(var(--accent-color-rgb), 0.8);
-    color: $color-white;
+    color: $white--000;
   }
 
   &:focus-visible {
@@ -248,13 +248,13 @@ $settings-dialog-container--bottom: 62px;
 }
 
 [theme="dark"] .navigation__item {
-  color: $color-white;
+  color: $white--000;
 }
 
 .navigation__item--active {
   outline: none;
   background: var(--accent-color);
-  color: $color-white;
+  color: $white--000;
 }
 
 .navigation-item__icon {
@@ -262,7 +262,7 @@ $settings-dialog-container--bottom: 62px;
   height: 40px;
   border-radius: $rounded--full;
   background: var(--accent-color);
-  color: $color-white;
+  color: $white--000;
 }
 
 .settings-dialog__container {
@@ -307,12 +307,12 @@ $settings-dialog-container--bottom: 62px;
   display: flex;
   flex-direction: column;
   border-radius: $rounded--small;
-  background-color: $color-white;
+  background-color: $white--000;
 }
 
 [theme="dark"] {
   .settings-dialog__header-text {
-    color: $color-white;
+    color: $white--000;
   }
 
   .settings-dialog__separator {

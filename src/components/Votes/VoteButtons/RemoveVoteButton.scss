@@ -29,7 +29,7 @@
 
 .vote-button-remove:enabled:hover {
   background-color: var(--accent-color);
-  color: $color-white;
+  color: $white--000;
   .vote-button-remove__count {
     display: none;
   }
@@ -77,11 +77,11 @@
   border-style: solid;
   background: rgba($color-middle-gray, 0.5);
   box-shadow:
-    2px -2px 0px $color-white,
+    2px -2px 0px $white--000,
     0 1px 1px rgba($color-black, 0.1),
     -1px 1px 1px rgba($color-black, 0.1);
   border-radius: 0 0 0 16px;
-  border-color: $color-white $color-white transparent transparent;
+  border-color: $white--000 $white--000 transparent transparent;
   transition: border-width 0.15s ease-in-out;
 }
 

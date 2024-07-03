@@ -37,7 +37,7 @@
 
   &:hover {
     background-color: var(--accent-color);
-    color: $color-white;
+    color: $white--000;
   }
   &:focus-visible {
     outline: 2px solid var(--accent-color);
@@ -51,7 +51,7 @@
 
     &:hover {
       background-color: var(--accent-color);
-      color: $color-white;
+      color: $white--000;
     }
     &:focus-visible {
       outline: 2px solid var(--accent-color--desaturated-dark);

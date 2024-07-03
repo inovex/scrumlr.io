@@ -19,7 +19,7 @@ $color-close-icon: #bfc1c5;
   box-shadow: $box-shadow--light;
   overflow: inherit;
   cursor: default;
-  background-color: $color-white;
+  background-color: $white--000;
 }
 .Toastify__toast:has(div.toast-single) {
   height: 60px;
@@ -68,7 +68,7 @@ $color-close-icon: #bfc1c5;
   svg {
     height: 46px;
     width: 46px;
-    color: $color-white;
+    color: $white--000;
   }
 }
 .toast__icon-single {
@@ -171,7 +171,7 @@ $color-close-icon: #bfc1c5;
 .toast__button-single {
   border: none;
   background: $menu-icon-background-color--dark;
-  color: $color-white;
+  color: $white--000;
   margin-left: auto;
   white-space: nowrap;
   min-width: auto;
@@ -186,20 +186,20 @@ $color-close-icon: #bfc1c5;
 }
 .toast__button-multi-primary {
   padding: 13px 32px;
-  color: $color-white;
+  color: $white--000;
   background-color: $menu-icon-background-color--dark;
   border: 2px solid $menu-icon-background-color--dark;
 }
 .toast__button-multi-secondary {
   padding: 13px 32px;
-  background: $color-white;
+  background: $white--000;
   border: 2px solid $menu-icon-background-color--dark;
 }
 .toast-single:hover .toast__button-single.toast__button-info,
 .toast__button-multi-primary.toast__button-info:hover {
   border-color: $color-backlog-blue;
   background-color: $color-backlog-blue;
-  color: $color-white;
+  color: $white--000;
 }
 .toast__button-multi-secondary.toast__button-info:hover {
   color: $color-backlog-blue;
@@ -209,7 +209,7 @@ $color-close-icon: #bfc1c5;
 .toast__button-multi-primary.toast__button-error:hover {
   border-color: $color-error;
   background-color: $color-error;
-  color: $color-white;
+  color: $white--000;
 }
 .toast__button-multi-secondary.toast__button-error:hover {
   color: $color-error;
@@ -219,7 +219,7 @@ $color-close-icon: #bfc1c5;
 .toast__button-multi-primary.toast__button-success:hover {
   border-color: $color-success;
   background-color: $color-success;
-  color: $color-white;
+  color: $white--000;
 }
 .toast__button-multi-secondary.toast__button-success:hover {
   color: $color-success;
@@ -241,7 +241,7 @@ $color-close-icon: #bfc1c5;
 input[type="checkbox"] {
   -webkit-appearance: none;
   appearance: none;
-  background-color: $color-white;
+  background-color: $white--000;
   margin: 0;
   font: inherit;
   color: $color-light-gray;
@@ -276,7 +276,7 @@ input[type="checkbox"]:checked::before {
   }
 
   .toast__icon {
-    background-color: $color-white;
+    background-color: $white--000;
     svg {
       color: $menu-icon-background-color--dark;
     }
@@ -291,29 +291,29 @@ input[type="checkbox"]:checked::before {
   .toast__icon-multi-success {
     background-color: $color-success;
     svg {
-      color: $color-white;
+      color: $white--000;
     }
   }
   .toast__icon-single-error,
   .toast__icon-multi-error {
     background-color: $color-error;
     svg {
-      color: $color-white;
+      color: $white--000;
     }
   }
   .toast__title,
   .toast__message {
-    color: $color-white;
+    color: $white--000;
   }
   .toast__button-single,
   .toast__button-multi-primary {
-    background-color: $color-white;
+    background-color: $white--000;
     color: $menu-icon-background-color--dark;
   }
   .toast__button-multi-secondary {
     background-color: $menu-icon-background-color--dark;
-    border-color: $color-white;
-    color: $color-white;
+    border-color: $white--000;
+    color: $white--000;
   }
   input[type="checkbox"] {
     background-color: $menu-icon-background-color--dark;
@@ -381,7 +381,7 @@ input[type="checkbox"]:checked::before {
   }
   .toast__button-single {
     padding: 0px;
-    background-color: $color-white;
+    background-color: $white--000;
     color: $color-backlog-blue;
     margin-left: 0px;
     line-height: 16px;
@@ -395,18 +395,18 @@ input[type="checkbox"]:checked::before {
     color: $color-error;
   }
   .toast-single:hover .toast__button-single.toast__button-info {
-    border-color: $color-white;
-    background-color: $color-white;
+    border-color: $white--000;
+    background-color: $white--000;
     color: $color-backlog-blue;
   }
   .toast-single:hover .toast__button-single.toast__button-error {
-    border-color: $color-white;
-    background-color: $color-white;
+    border-color: $white--000;
+    background-color: $white--000;
     color: $color-error;
   }
   .toast-single:hover .toast__button-single.toast__button-success {
-    border-color: $color-white;
-    background-color: $color-white;
+    border-color: $white--000;
+    background-color: $white--000;
     color: $color-success;
   }
 

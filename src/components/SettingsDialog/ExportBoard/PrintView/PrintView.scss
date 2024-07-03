@@ -46,14 +46,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
     background: $color-button;
     box-shadow: 0 4px 7px 1px darken($color-button-shadow, 15%);
     svg {
-      color: $color-white;
+      color: $white--000;
     }
   }
   &:active {
     background: darken($color-button, 10%);
     box-shadow: 0 4px 5px 1px darken($color-button-shadow, 25%);
     svg {
-      color: $color-white;
+      color: $white--000;
     }
   }
 }
@@ -69,7 +69,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view {
-  background-color: $color-white;
+  background-color: $white--000;
   overflow: visible;
   padding-top: 1cm;
   padding-right: 1cm;
@@ -139,7 +139,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__column {
   display: block;
   width: 100%;
-  background-color: $color-white;
+  background-color: $white--000;
   color: $color-black;
 }
 
@@ -184,7 +184,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   padding: calc(#{$spacing--xs} + 4px);
   border: 2px solid rgba(var(--accent-color-rgb), 0.25);
   border-radius: $note__border-radius;
-  background: $color-white;
+  background: $white--000;
 }
 @media print {
   .print-view__note {

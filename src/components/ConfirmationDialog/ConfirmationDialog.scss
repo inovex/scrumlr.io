@@ -17,7 +17,7 @@
   min-width: 220px;
   max-width: 570px;
   color: $color-black;
-  background-color: $color-white;
+  background-color: $white--000;
   border-radius: $rounded--medium;
   padding: 40px 42px 35px 40px;
   border: 2px transparent;
@@ -104,7 +104,7 @@
   }
 }
 .confirmation-dialog__button--accept {
-  color: $color-white;
+  color: $white--000;
   background-color: $color-backlog-blue;
 }
 .confirmation-dialog__button--decline {
@@ -130,13 +130,13 @@
   border: 2px transparent;
   box-shadow: 0 16px 32px 0 rgba($color-backlog-blue, 0.24);
   padding: 0;
-  background-color: $color-white;
+  background-color: $white--000;
   cursor: pointer;
   transition:
     color 80ms linear,
     background-color 80ms linear;
   &:hover {
-    color: $color-white;
+    color: $white--000;
     background-color: $color-backlog-blue;
   }
 }
@@ -150,7 +150,7 @@
   }
 
   .confirmation-dialog {
-    color: $color-white;
+    color: $white--000;
     background-color: $color-dark-two;
     border-color: $color-planning-pink;
     box-shadow: $box-shadow--dark;
@@ -176,7 +176,7 @@
     border-color: $color-planning-pink;
     box-shadow: $box-shadow--dark;
     &:hover {
-      color: $color-white;
+      color: $white--000;
       background-color: $color-planning-pink;
     }
   }

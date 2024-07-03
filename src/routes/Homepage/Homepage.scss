@@ -5,7 +5,7 @@
 }
 
 .homepage__hero {
-  background: $color-white;
+  background: $white--000;
   min-height: 100vh;
 }
 
@@ -187,11 +187,11 @@
   }
 
   .homepage__hero-title {
-    color: $color-white;
+    color: $white--000;
   }
 
   .homepage__hero-text {
-    color: $color-white;
+    color: $white--000;
   }
 
   .homepage__footer-link {
@@ -199,7 +199,7 @@
 
     a:focus-visible,
     a:hover {
-      color: $color-white;
+      color: $white--000;
     }
   }
 

@@ -32,10 +32,10 @@
 
     &:focus-visible,
     &:hover {
-      color: $color-white;
+      color: $white--000;
     }
   }
   .app-info__icon path {
-    fill: $color-white;
+    fill: $white--000;
   }
 }

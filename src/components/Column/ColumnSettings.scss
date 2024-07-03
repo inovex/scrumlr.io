@@ -5,7 +5,7 @@
   right: 0;
   top: 75%;
   width: 180px;
-  background-color: $color-white;
+  background-color: $white--000;
   border-radius: 8px;
   box-shadow:
     0 4px 6px -1px rgb(0 0 0 / 0.1),
@@ -22,7 +22,7 @@
 .column__header-menu-dropdown > ul > li {
   height: 32px;
   padding: 0 $spacing--sm;
-  background-color: $color-white;
+  background-color: $white--000;
 
   &:hover {
     filter: $darken--slightly;
@@ -99,10 +99,10 @@
   }
 
   .column__header-menu-dropdown > ul > li > button {
-    color: $color-white;
+    color: $white--000;
   }
 
   .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
-    box-shadow: 0 0 0 2px $color-white;
+    box-shadow: 0 0 0 2px $white--000;
   }
 }

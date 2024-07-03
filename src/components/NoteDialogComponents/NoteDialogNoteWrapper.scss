@@ -6,7 +6,7 @@
   width: calc(100vw - (2 * $column__border-width));
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-color: $color-middle-gray $color-white;
+  scrollbar-color: $color-middle-gray $white--000;
   margin-bottom: $column__border-width;
   padding-top: $spacing--xl;
   padding-left: 10px;

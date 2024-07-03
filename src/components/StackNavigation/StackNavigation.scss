@@ -21,7 +21,7 @@
   justify-content: center;
   align-items: center;
   opacity: 0.5;
-  background: $color-white;
+  background: $white--000;
   border: 3px solid transparent;
   border-radius: 100%;
   outline: none;
@@ -47,7 +47,7 @@
 
     &:focus-visible {
       background: var(--accent-color);
-      color: $color-white;
+      color: $white--000;
     }
 
     &:active {
@@ -59,7 +59,7 @@
 [theme="dark"] {
   .stack-view__navigation-button {
     background: $menu-icon-background-color--dark;
-    color: $color-white;
+    color: $white--000;
 
     &:enabled:focus-visible {
       background: var(--accent-color--dark);

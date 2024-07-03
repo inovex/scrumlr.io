@@ -11,7 +11,7 @@ $header-menu-border-bottom-color: #efefef;
   display: flex;
   align-items: center;
 
-  background-color: $color-white;
+  background-color: $white--000;
   border: none;
   outline: none;
   padding: 0;
@@ -46,7 +46,7 @@ $header-menu-border-bottom-color: #efefef;
 
 .board-option-button--expandable {
   height: $header-menu__item-height;
-  background-color: $color-white;
+  background-color: $white--000;
   transition: background-color 0.15s ease-in-out;
   box-sizing: border-box;
 }
@@ -70,7 +70,7 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   .board-option-button__label {
-    color: $color-white;
+    color: $white--000;
   }
 
   .board-option-button--expandable {
