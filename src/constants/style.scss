@@ -93,45 +93,40 @@ $white--200: #f4f4f6;
 $white--100: #f9fafa;
 $white--000: #ffffff;
 
-// base colors
-$color-white: #ffffff;
-$color-white-one: #f9fafb;
-$color-white-two: #f6f5fb;
-$color-dark-one: #242c3d;
-$color-dark-two: #272f41;
-$color-lighter-gray: #edeff2;
-$color-light-gray: #c3c9d3;
-$color-middle-gray: #a3a6aa;
-$color-dark-gray: #859093;
-$color-darker-gray: #4f5253;
-$color-darkest-gray: #232323;
-$color-black: #111111;
+$color-white: #ffffff; // $white--000 (#FFFFFF)
+$color-white-one: #f9fafb; // $white--100 (#F9FAFA)
+$color-white-two: #f6f5fb; // $white--200 (#F4F4F6)
+$color-dark-one: #242c3d; // $gray--600 (#292F3B)
+$color-dark-two: #272f41; // $gray--600 (#292F3B)
+$color-lighter-gray: #edeff2; // $white--300 (#EEEFF1)
+$color-light-gray: #c3c9d3; // $white--600 (#B5B8C1)
+$color-middle-gray: #a3a6aa; // $white--700 (#A2A7B1)
+$color-dark-gray: #859093; // $white--800 (#8F95A1)
+$color-darker-gray: #4f5253; // $gray--300 (#454E63)
+$color-darkest-gray: #232323; // $gray--700 (#232732)
+$color-black: #111111; // $gray--900 (#111111)
+$color-dark-mode: #272f41; // $gray--600 (#292F3B)
+$color-dark-mode--disabled: #1b202d; // $gray--700 (#232732)
+$color-dark-mode-note: #313949; // $gray--500 (#303745)
+$color-dark-mode-note--hover: #3d4555; // $gray--400 (#373E4F)
+$menu-icon-background-color--dark: #333948; // $gray--500 (#303745)
+$tooltip-background-color--light: #d3daf0; // $blue--100 (#CCDDFF)
+$tooltip-background-color--dark: #485064; // $gray--300 (#454E63)
+$color-progress-circle: #3c7fff; // $blue--400 (#3379FF)
+$color-icon-light-blue: #9ebfff; // $blue--200 (#99BCFF)
+$color-board-reaction-name--dark: #5a647d; // $gray--200 (#586073)
+$color-board-reaction-name-self--light: #0057ff; // $blue--500 (#0057FF)
+$color-board-reaction-name-self--dark: #6096ff; // $blue--300 (#669AFF)
 
-// element colors
-$color-dark-mode: #272f41;
-$color-dark-mode--disabled: #1b202d;
-$color-dark-mode-note: #313949;
-$color-dark-mode-note--hover: #3d4555;
-$menu-icon-background-color--dark: #333948;
-$menu-icon-background-color--light: $color-white;
-$tooltip-background-color--light: #d3daf0;
-$tooltip-background-color--dark: #485064;
-$color-progress-circle: #3c7fff;
-$color-icon-light-blue: #9ebfff;
-$color-board-reaction-name--dark: #5a647d;
-$color-board-reaction-name-self--light: #0057ff;
-$color-board-reaction-name-self--dark: #6096ff;
-
-// theme colors
-$color-backlog-blue: #0057ff;
-$color-grooming-green: #18d8ab;
-$color-goal-green: #70e000;
-$color-lean-lilac: #c000ff;
-$color-online-orange: #ffaa5a;
-$color-planning-pink: #e20360;
-$color-poker-purple: #5e00ff;
-$color-retro-red: #ea434b;
-$color-warning-red: #eb625b;
+$color-backlog-blue: #0057ff; // $blue--500 (#0057FF)
+$color-grooming-green: #18d8ab; // $green--500 (#1BD47E)
+$color-goal-green: #70e000; // $yellow--700 (#999300)
+$color-lean-lilac: #c000ff; // $purple--500 (#C923FF)
+$color-online-orange: #ffaa5a; // $orange--300 (#FFCB66)
+$color-planning-pink: #e20360; // $pink--600 (#CC0054)
+$color-poker-purple: #5e00ff; // $violet--500 (#5D00F6)
+$color-retro-red: #ea434b; // $pink--400 (#FF3387)
+$color-warning-red: #eb625b; // $pink--400 (#FF3387)
 
 @mixin rgb($color) {
   --accent-color: #{$color};
