@@ -31,13 +31,13 @@
   &-decline {
     @extend .cookie-notice__button;
     background: $white--300;
-    color: $color-darkest-gray;
+    color: $gray--700;
     margin: 0 0 $spacing--base $spacing--base;
   }
   &-cookie-policy {
     @extend .cookie-notice__button;
     background: $white--300;
-    color: $color-darkest-gray;
+    color: $gray--700;
     margin: 0 auto $spacing--base 0;
   }
 }
