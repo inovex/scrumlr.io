@@ -124,12 +124,12 @@ $max-name-length: 112px;
   }
 
   .note-author-rest {
-    background-color: $color-icon-light-blue;
+    background-color: $blue--200;
     color: $gray--600;
     border-color: $gray--600;
   }
 
   .note-author-rest--self {
-    border-color: $color-icon-light-blue;
+    border-color: $blue--200;
   }
 }

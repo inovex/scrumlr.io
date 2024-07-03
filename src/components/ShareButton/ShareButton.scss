@@ -38,8 +38,8 @@
 
 [theme="dark"] {
   .share-button {
-    border: 2px solid $color-icon-light-blue;
-    color: $color-icon-light-blue;
+    border: 2px solid $blue--200;
+    color: $blue--200;
 
     &:focus-visible {
       box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
