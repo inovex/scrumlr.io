@@ -105,22 +105,26 @@ $note-input__input-right: 40px;
   }
 }
 
-.note-input__emoji-suggestions {
-  position: absolute;
-  top: calc(100% + $spacing--xs);
-  left: 0;
-  width: 100%;
-  background-color: $color-lighter-gray;
-  // prevent overflow by approximating available space below the input box
-  max-height: min($emoji-suggestions__max-height, calc(100svh - $column-emoji-suggestions__approx-top-distance));
+// .note-input > .emoji-suggestions__container {
+//   max-height: min($emoji-suggestions__max-height, calc(100svh - $column-emoji-suggestions__approx-top-distance));
+// }
 
-  z-index: $note-input__emoji-suggestions-z-index;
-  border-radius: $rounded--default;
-  overflow-y: auto;
-  box-shadow: $box-shadow--light;
+// .note-input__emoji-suggestions {
+//   position: absolute;
+//   top: calc(100% + $spacing--xs);
+//   left: 0;
+//   width: 100%;
+//   background-color: $color-lighter-gray;
+//   // prevent overflow by approximating available space below the input box
+// max-height: min($emoji-suggestions__max-height, calc(100svh - $column-emoji-suggestions__approx-top-distance));
 
-  @include scrollbar();
-}
+//   z-index: $note-input__emoji-suggestions-z-index;
+//   border-radius: $rounded--default;
+//   overflow-y: auto;
+//   box-shadow: $box-shadow--light;
+
+//   @include scrollbar();
+// }
 
 [theme="dark"] {
   .note-input {
@@ -136,10 +140,10 @@ $note-input__input-right: 40px;
     color: $color-white;
   }
 
-  .note-input__emoji-suggestions {
-    background-color: $color-dark-mode-note;
-    box-shadow: $box-shadow--dark;
-  }
+  // .note-input__emoji-suggestions {
+  //   background-color: $color-dark-mode-note;
+  //   box-shadow: $box-shadow--dark;
+  // }
 }
 
 @keyframes fade-in {

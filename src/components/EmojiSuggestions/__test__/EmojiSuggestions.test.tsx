@@ -15,8 +15,8 @@ const mockEmojis: EmojiData[] = [
   ["woman_pilot", "👩‍✈️", true, ["woman_pilot", "aviator", "plane", "woman", "human"]],
 ];
 
-function createSuggestions(props: Partial<EmojiSuggestionsProps> = {}, state?: Partial<ApplicationState>) {
-  const suggestionProps: EmojiSuggestionsProps = {
+function createSuggestions(props: Partial<EmojiSuggestionsProps["autocomplete"]> = {}, state?: Partial<ApplicationState>) {
+  const suggestionAutocompleteProps: EmojiSuggestionsProps["autocomplete"] = {
     acceptSuggestion: jest.fn(),
     keyboardFocusedIndex: 0,
     suggestions: mockEmojis,
@@ -25,7 +25,7 @@ function createSuggestions(props: Partial<EmojiSuggestionsProps> = {}, state?: P
 
   return (
     <Provider store={getTestStore(state)}>
-      <EmojiSuggestions {...suggestionProps} />
+      <EmojiSuggestions autocomplete={suggestionAutocompleteProps} approxTopDistance="500px" />
     </Provider>
   );
 }

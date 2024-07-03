@@ -97,9 +97,6 @@ $action-bar__width: 64px;
 
 // emoji suggestions
 $emoji-suggestions__max-height: 350px;
-$header-emoji-suggestions__approx-top-distance: 260px;
-$column-emoji-suggestions__approx-top-distance: 320px;
-$note-dialog-emoji-suggestions__approx-top-distance: 450px;
 
 // icons
 $icon--small: 16px;
@@ -181,7 +178,7 @@ $brighten--strongly: brightness(1.4);
 $base-z-index: 100;
 $base-z-index-step: 10;
 $note-z-index: $base-z-index + (2 * $base-z-index-step);
-$note-input__emoji-suggestions-z-index: $note-z-index + $base-z-index-step;
+$emoji-suggestions-z-index: $note-z-index + $base-z-index-step;
 $menu-z-index: $base-z-index + (8 * $base-z-index-step);
 $menu-item-z-index: $menu-z-index + $base-z-index-step;
 $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);

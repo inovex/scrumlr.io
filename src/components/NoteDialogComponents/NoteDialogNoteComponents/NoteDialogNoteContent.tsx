@@ -109,11 +109,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
             }}
           />
 
-          {!isStackedNote && (
-            <div className="note-dialog__note-content--emoji-suggestions">
-              <EmojiSuggestions {...emoji.suggestionsProps} />
-            </div>
-          )}
+          {!isStackedNote && <EmojiSuggestions autocomplete={emoji.suggestionsProps} approxTopDistance="450px" />}
         </>
       )}
     </div>

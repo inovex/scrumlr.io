@@ -135,9 +135,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             if (e.relatedTarget !== closeButtonRef.current) handleEditColumnName((e.target as HTMLInputElement).value);
           }}
         />
-        <div className="column__header-emoji-suggestions">
-          <EmojiSuggestions {...emoji.suggestionsProps} />
-        </div>
+        <EmojiSuggestions autocomplete={emoji.suggestionsProps} approxTopDistance="260px" />
       </>
     );
 

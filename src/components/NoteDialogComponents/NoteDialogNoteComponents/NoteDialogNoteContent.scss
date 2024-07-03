@@ -95,30 +95,8 @@
   }
 }
 
-.note-dialog__note-content--emoji-suggestions {
-  position: absolute;
-  top: calc(100% + $spacing--xs);
-  left: 0;
-  width: 100%;
-  max-height: min($emoji-suggestions__max-height, calc(100svh - $note-dialog-emoji-suggestions__approx-top-distance));
-  margin-bottom: $spacing--xl;
-
-  z-index: $note-dialog__emoji-suggestions-z-index;
-  border-radius: $rounded--default;
-  overflow-y: auto;
-  box-shadow: $box-shadow--light;
-  background-color: $color-lighter-gray;
-
-  @include scrollbar();
-}
-
 [theme="dark"] {
   .note-dialog__note-content--text {
     color: $color-white;
-  }
-
-  .note-dialog__note-content--emoji-suggestions {
-    background-color: $color-dark-mode-note;
-    box-shadow: $box-shadow--dark;
   }
 }
