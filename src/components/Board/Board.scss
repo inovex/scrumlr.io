@@ -59,7 +59,7 @@
 
 .board__spacer-left:nth-child(even),
 .board__spacer-right:nth-child(even) {
-  background-color: $color-white-one;
+  background-color: $white--100;
 }
 
 .column--hidden + .board__spacer-right,

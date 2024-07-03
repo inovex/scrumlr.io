@@ -42,7 +42,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__content {
   display: none;
-  background: $color-white-one;
+  background: $white--100;
   width: 100%;
   padding-top: 50px;
   overflow-y: hidden; // so that reset state banner can flow out

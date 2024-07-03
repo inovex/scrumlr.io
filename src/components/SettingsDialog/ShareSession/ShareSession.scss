@@ -9,7 +9,7 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 .share-qr-code-option__qrcode path:first-child {
-  fill: $color-white-one;
+  fill: $white--100;
 }
 
 .share-qr-code-option__qrcode path:last-child {
@@ -77,6 +77,6 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   .share-qr-code-option__qrcode path:last-child {
-    fill: $color-white-one;
+    fill: $white--100;
   }
 }
