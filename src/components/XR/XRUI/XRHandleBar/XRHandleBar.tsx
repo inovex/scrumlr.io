@@ -10,7 +10,7 @@ type XRHandleBarProps = {
 
 const currentLookAt = new Vector3();
 const targetLookAt = new Vector3();
-const BAR_OPACITY = 0.5;
+const BAR_OPACITY = 0.6;
 
 const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandleBarProps, ref) => {
   const handleBarRef = useRef<Group>(null!);
@@ -64,6 +64,9 @@ const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandl
         <mesh position={[-0.53, 0, 0]} ref={visibleBarRef}>
           <cylinderGeometry args={[0.01, 0.01, 0.3]} />
           <meshStandardMaterial transparent opacity={BAR_OPACITY} color="white" roughness={0.5} />
+        </mesh>
+        <mesh position={[0.46, 0, 0]} visible={false}>
+          <boxGeometry args={[0.075, 2, 0]} />
         </mesh>
       </group>
     </Grabbable>
