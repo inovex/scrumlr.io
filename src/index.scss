@@ -42,10 +42,10 @@ code {
 [theme="dark"] {
   body,
   #root {
-    background: $color-dark-mode;
+    background: $gray--600;
   }
 }
 
 html[theme="dark"] {
-  background: $color-dark-mode;
+  background: $gray--600;
 }
