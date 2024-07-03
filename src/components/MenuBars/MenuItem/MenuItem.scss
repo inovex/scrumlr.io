@@ -14,7 +14,7 @@ $menu-item-size: 42px;
   pointer-events: auto;
 }
 .menu-item:focus-visible {
-  outline: 2px solid rgba($color-black, 0.5);
+  outline: 2px solid rgba($gray--900, 0.5);
 }
 [theme="dark"] {
   .menu-item:focus-visible {
@@ -123,13 +123,13 @@ $menu-item-size: 42px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
-  color: $color-black;
+  color: $gray--900;
   border-radius: calc($menu-item-size / 2);
 }
 
 @media #{$tablet} {
   .menu-item .tooltip__text {
-    color: $color-black;
+    color: $gray--900;
     background-color: $tooltip-background-color--light;
     height: $menu-item-size;
     line-height: $menu-item-size;
@@ -162,7 +162,7 @@ $menu-item-size: 42px;
 
 .menu-item__icon {
   background-clip: content-box !important;
-  color: $color-black;
+  color: $gray--900;
   background-color: $menu-icon-background-color--light;
   border: 3px solid transparent;
   position: absolute;
@@ -206,7 +206,7 @@ $menu-item-size: 42px;
   }
   .menu-item--active .menu-item__icon {
     background-color: $menu-icon-background-color--light;
-    color: $color-black;
+    color: $gray--900;
   }
   .menu-item:hover .menu-item__icon {
     border-color: $tooltip-background-color--dark !important;

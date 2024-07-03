@@ -1,7 +1,7 @@
 @import "src/constants/style";
 
 .login-board__dialog {
-  color: $color-black;
+  color: $gray--900;
   min-height: 100vh;
 }
 
@@ -225,7 +225,7 @@
     align-items: center;
 
     flex: 1 1 100%;
-    box-shadow: 0 2px 16px 8px rgba($color-black, 0.2);
+    box-shadow: 0 2px 16px 8px rgba($gray--900, 0.2);
     overflow: auto;
   }
 

@@ -28,7 +28,7 @@ $timer__progress-bar-color: #6096ff;
   place-content: center;
   outline: none;
   transition: background-color 150ms linear;
-  color: $color-black;
+  color: $gray--900;
 
   > svg {
     height: $icon--medium;

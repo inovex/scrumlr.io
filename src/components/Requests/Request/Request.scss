@@ -142,7 +142,7 @@ $fly-in-time: 0.5s;
 [theme="dark"] {
   .request__container {
     background-color: $gray--700;
-    box-shadow: 3px 5px 3px rgba($color-black, 30%);
+    box-shadow: 3px 5px 3px rgba($gray--900, 30%);
   }
 
   .request__participant-name,

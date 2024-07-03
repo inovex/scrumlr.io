@@ -92,7 +92,7 @@ $tooltip-button-size: 46px;
   width: $tooltip-button-size;
   height: $tooltip-button-size;
   border-radius: $tooltip-button-size;
-  color: var(--accent-color, $color-black);
+  color: var(--accent-color, $gray--900);
 
   &:nth-of-type(1) {
     visibility: visible;
@@ -144,7 +144,7 @@ $tooltip-button-size: 46px;
     }
 
     &:focus-visible .tooltip-button__icon {
-      outline: 2px solid rgba($color-black, 0.5);
+      outline: 2px solid rgba($gray--900, 0.5);
     }
 
     .tooltip-button__tooltip-text {
@@ -289,6 +289,6 @@ $tooltip-button-size: 46px;
 
   .tooltip-button--active .tooltip-button__icon {
     background-color: $menu-icon-background-color--light;
-    color: $color-black;
+    color: $gray--900;
   }
 }

@@ -2,7 +2,7 @@
 
 .cookie-notice {
   background: $white--000;
-  color: $color-black;
+  color: $gray--900;
   position: fixed;
   bottom: 0;
   right: 0;
@@ -49,6 +49,6 @@
 
 [theme="dark"] {
   .cookie-notice {
-    box-shadow: 0 -4px 16px rgba($color-black, 0.48);
+    box-shadow: 0 -4px 16px rgba($gray--900, 0.48);
   }
 }

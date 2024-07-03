@@ -26,7 +26,7 @@
   font-size: 14px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  color: $color-black;
+  color: $gray--900;
   background-color: $white--000;
   border: none;
   border-radius: $rounded--full;
@@ -37,7 +37,7 @@
   position: absolute;
   height: 100%;
   width: $icon--medium;
-  color: $color-black;
+  color: $gray--900;
   right: $spacing--base;
 }
 
@@ -51,7 +51,7 @@
 .participants__permisson-filter-button {
   height: 42px;
   background-color: $white--000;
-  color: $color-black;
+  color: $gray--900;
   border: none;
   border-radius: $rounded--full;
   padding: 0 10px;
@@ -71,7 +71,7 @@
 @media (hover: hover) {
   .participants__permisson-filter-button:hover {
     background-color: var(--accent-color--desaturated-light);
-    color: $color-black;
+    color: $gray--900;
   }
 }
 @media screen and (min-width: 920px) {
@@ -86,7 +86,7 @@
   border: none;
   border-radius: $rounded--full;
   background-color: $white--000;
-  color: $color-black;
+  color: $gray--900;
   padding: 0;
   cursor: pointer;
 
@@ -105,7 +105,7 @@
 @media (hover: hover) {
   .participant__status-filter-button:hover {
     background-color: var(--accent-color--desaturated-light);
-    color: $color-black;
+    color: $gray--900;
   }
 }
 
@@ -165,7 +165,7 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   line-height: 18px;
-  color: $color-black;
+  color: $gray--900;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -186,7 +186,7 @@
     line-height: 12px;
     background-color: $white--000;
     border: 2px solid var(--accent-color--desaturated-light);
-    color: $color-black;
+    color: $gray--900;
     cursor: pointer;
   }
   &:is(button):hover,

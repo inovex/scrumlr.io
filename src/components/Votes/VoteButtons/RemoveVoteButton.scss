@@ -78,8 +78,8 @@
   background: rgba($white--700, 0.5);
   box-shadow:
     2px -2px 0px $white--000,
-    0 1px 1px rgba($color-black, 0.1),
-    -1px 1px 1px rgba($color-black, 0.1);
+    0 1px 1px rgba($gray--900, 0.1),
+    -1px 1px 1px rgba($gray--900, 0.1);
   border-radius: 0 0 0 16px;
   border-color: $white--000 $white--000 transparent transparent;
   transition: border-width 0.15s ease-in-out;
@@ -93,14 +93,14 @@
   .vote-button-remove {
     color: var(--accent-color--dark);
     background-color: var(--accent-color--desaturated-dark);
-    filter: drop-shadow(0 3px 4px rgba($color-black, 0.16));
+    filter: drop-shadow(0 3px 4px rgba($gray--900, 0.16));
   }
 
   .vote-button-remove__folded-corner {
     box-shadow:
       2px -2px 0px $color-dark-mode-note,
-      0 1px 1px rgba($color-black, 0.1),
-      -1px 1px 1px rgba($color-black, 0.1);
+      0 1px 1px rgba($gray--900, 0.1),
+      -1px 1px 1px rgba($gray--900, 0.1);
     border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
   }
 }

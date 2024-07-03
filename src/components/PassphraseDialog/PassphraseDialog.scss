@@ -68,7 +68,7 @@ $color-form-background--dark: #292f3b;
   align-items: center;
   min-width: 0;
   flex-grow: 1;
-  color: $color-black;
+  color: $gray--900;
   transition: box-shadow 80ms ease-in-out;
 
   &:focus-within {

@@ -26,7 +26,7 @@
   border-radius: 100%;
   outline: none;
   box-shadow: $box-shadow--light;
-  color: $color-black;
+  color: $gray--900;
   padding: 0;
   margin: 0;
 
@@ -63,7 +63,7 @@
 
     &:enabled:focus-visible {
       background: var(--accent-color--dark);
-      color: $color-black;
+      color: $gray--900;
     }
 
     &:disabled {
