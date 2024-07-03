@@ -2,17 +2,18 @@ package api
 
 import (
 	"fmt"
-	"net/http"
-	"scrumlr.io/server/identifiers"
-
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 )
 
 // createNote creates a new note
 func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
@@ -27,6 +28,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 	note, err := s.notes.Create(r.Context(), body)
 	if err != nil {
+		log.Errorw("unable to create note", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -41,10 +43,12 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 
 // getNote get a note
 func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	id := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 
 	note, err := s.notes.Get(r.Context(), id)
 	if err != nil {
+		log.Errorw("unable to get note", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -55,10 +59,12 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 
 // getNotes get all notes
 func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	notes, err := s.notes.List(r.Context(), board)
 	if err != nil {
+		log.Errorw("unable to get notes", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -69,8 +75,10 @@ func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 
 // updateNote updates a note
 func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	noteId := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+
 	var body dto.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
@@ -82,6 +90,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 	note, err := s.notes.Update(r.Context(), body)
 	if err != nil {
+		log.Errorw("unable to update note", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -92,7 +101,9 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	note := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+
 	var body dto.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
@@ -100,6 +111,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := s.notes.Delete(r.Context(), body, note); err != nil {
+		log.Errorw("unable to delete note", "error", err)
 		common.Throw(w, r, err)
 		return
 	}

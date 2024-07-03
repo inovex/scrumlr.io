@@ -149,10 +149,10 @@ func (suite *NotesTestSuite) TestCreateNote() {
 		},
 		{
 			name:         "api err",
-			expectedCode: http.StatusConflict,
+			expectedCode: http.StatusInternalServerError,
 			err: &common.APIError{
 				Err:        errors.New("test"),
-				StatusCode: http.StatusConflict,
+				StatusCode: http.StatusInternalServerError,
 				StatusText: "no",
 				ErrorText:  "way",
 			},
@@ -197,7 +197,6 @@ func (suite *NotesTestSuite) TestCreateNote() {
 			mock.AssertExpectations(suite.T())
 		})
 	}
-
 }
 func (suite *NotesTestSuite) TestGetNote() {
 
@@ -212,10 +211,10 @@ func (suite *NotesTestSuite) TestGetNote() {
 		},
 		{
 			name:         "api err",
-			expectedCode: http.StatusConflict,
+			expectedCode: http.StatusInternalServerError,
 			err: &common.APIError{
 				Err:        errors.New("foo"),
-				StatusCode: http.StatusConflict,
+				StatusCode: http.StatusInternalServerError,
 				StatusText: "no",
 				ErrorText:  "way",
 			},
@@ -263,10 +262,10 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 		},
 		{
 			name:         "Delete Note when board is locked",
-			expectedCode: http.StatusBadRequest,
+			expectedCode: http.StatusForbidden,
 			err: &common.APIError{
 				Err:        errors.New("not allowed to edit a locked board"),
-				StatusCode: http.StatusBadRequest,
+				StatusCode: http.StatusForbidden,
 				StatusText: "Bad request",
 				ErrorText:  "something",
 			},
@@ -297,7 +296,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			sessionMock.On("SessionExists", mock.Anything, boardID, userID).Return(true, nil)
 
 			// Mock the ModeratorSessionExists method
-			sessionMock.On("ModeratorSessionExists", mock.Anything, boardID, userID).Return(true, nil)
+			sessionMock.On("ModeratorSessionExists", mock.Anything, boardID, userID).Return(false, nil)
 
 			// Mock the ParticipantBanned method
 			sessionMock.On("ParticipantBanned", mock.Anything, boardID, userID).Return(false, nil)
@@ -309,7 +308,6 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 					ID:           boardID,
 					AllowEditing: tt.allowEditing,
 				}, tt.err)
-				noteMock.On("Delete", mock.Anything, mock.Anything).Return(tt.err)
 			}
 
 			req := NewTestRequestBuilder("DELETE", fmt.Sprintf("/notes/%s", noteID.String()), strings.NewReader(`{"deleteStack": false}`))

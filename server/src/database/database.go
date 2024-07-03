@@ -2,12 +2,11 @@ package database
 
 import (
 	"database/sql"
-	"runtime"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
+	"runtime"
 )
 
 // Database is the main class within this package and will be extended by several receiver functions

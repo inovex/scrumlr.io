@@ -18,7 +18,7 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	userParam := chi.URLParam(r, "user")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
-		common.Throw(w, r, err)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
@@ -81,7 +81,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 	request, err := s.sessions.UpdateSessionRequest(r.Context(), body)
 	if err != nil {
 		log.Errorw("failed to update board session request", "request", body, "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 

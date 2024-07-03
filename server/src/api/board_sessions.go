@@ -23,7 +23,7 @@ func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 	sessions, err := s.sessions.List(r.Context(), board, filter)
 	if err != nil {
 		log.Errorw("unable to get board sessions", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -37,7 +37,7 @@ func (s *Server) getBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
-		common.Throw(w, r, err)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
@@ -58,13 +58,13 @@ func (s *Server) updateBoardSession(w http.ResponseWriter, r *http.Request) {
 	userParam := chi.URLParam(r, "session")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
-		http.Error(w, "invalid user session id", http.StatusBadRequest)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
 	var body dto.BoardSessionUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		http.Error(w, "unable to parse request body", http.StatusBadRequest)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
@@ -88,14 +88,14 @@ func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
 
 	var body dto.BoardSessionsUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
-		http.Error(w, "unable to parse request body", http.StatusBadRequest)
+		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
 	body.Board = board
 	sessions, err := s.sessions.UpdateAll(r.Context(), body)
 	if err != nil {
-		http.Error(w, "unable to update board sessions", http.StatusInternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 

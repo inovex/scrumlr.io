@@ -2,17 +2,18 @@ package api
 
 import (
 	"fmt"
+	"github.com/go-chi/render"
+	"github.com/google/uuid"
 	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
-
-	"github.com/go-chi/render"
-	"github.com/google/uuid"
+	"scrumlr.io/server/logger"
 )
 
 // createVoting creates a new voting session
 func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body dto.VotingCreateRequest
@@ -24,6 +25,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	body.Board = board
 	voting, err := s.votings.Create(r.Context(), body)
 	if err != nil {
+		log.Errorw("unable to create voting", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -39,6 +41,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 
 // updateVoting updates a voting session
 func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.VotingIdentifier).(uuid.UUID)
 
@@ -53,6 +56,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 	voting, err := s.votings.Update(r.Context(), body)
 	if err != nil {
+		log.Errorw("unable to update voting", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -63,11 +67,13 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 // getVoting get a voting session
 func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.VotingIdentifier).(uuid.UUID)
 
 	voting, err := s.votings.Get(r.Context(), board, id)
 	if err != nil {
+		log.Errorw("unable to get voting", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -78,10 +84,12 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 
 // getVotings get all voting sessions
 func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	votings, err := s.votings.List(r.Context(), board)
 	if err != nil {
+		log.Errorw("unable to get votings", "error", err)
 		common.Throw(w, r, err)
 		return
 	}
