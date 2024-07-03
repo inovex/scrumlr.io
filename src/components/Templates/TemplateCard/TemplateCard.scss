@@ -1,0 +1,16 @@
+@import "constants/style";
+
+$card-height: 220px;
+
+.template-card {
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  grid-template-columns: repeat(4, auto);
+
+  width: 100%;
+  height: $card-height;
+  border-radius: $rounded--default;
+  padding: $spacing--lg;
+
+  background-color: $color-white;
+}
