@@ -227,7 +227,7 @@ $note__footer-gap: 42px;
 [theme="dark"] {
   .note,
   .note__in-stack {
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
     box-shadow:
       0 4px 6px -1px rgba($note__box-shadow-color-dark-mode, 0.1),
       0 2px 4px -2px rgba($note__box-shadow-color-dark-mode, 0.1);

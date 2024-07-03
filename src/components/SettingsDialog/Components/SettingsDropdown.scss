@@ -80,7 +80,7 @@
   .settings-dropdown {
     &__button {
       color: $white--000;
-      background-color: $color-dark-mode-note;
+      background-color: $gray--500;
 
       &:hover {
         background-color: $color-dark-mode-note--hover;
@@ -93,7 +93,7 @@
 
     &__list {
       color: $white--000;
-      background-color: $color-dark-mode-note;
+      background-color: $gray--500;
       box-shadow: 0 2px 2px 0 rgba($gray--900, 0.3);
     }
   }

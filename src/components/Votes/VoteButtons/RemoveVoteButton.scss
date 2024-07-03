@@ -98,9 +98,9 @@
 
   .vote-button-remove__folded-corner {
     box-shadow:
-      2px -2px 0px $color-dark-mode-note,
+      2px -2px 0px $gray--500,
       0 1px 1px rgba($gray--900, 0.1),
       -1px 1px 1px rgba($gray--900, 0.1);
-    border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
+    border-color: $gray--500 $gray--500 transparent transparent;
   }
 }

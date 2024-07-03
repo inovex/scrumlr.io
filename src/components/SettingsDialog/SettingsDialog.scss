@@ -75,7 +75,7 @@ $settings-dialog-container--bottom: 62px;
   background-color: $white--000;
 }
 [theme="dark"] .settings-dialog__sidebar {
-  background-color: $color-dark-mode-note;
+  background-color: $gray--500;
 }
 .settings-dialog--selected .settings-dialog__sidebar {
   display: none;
@@ -169,7 +169,7 @@ $settings-dialog-container--bottom: 62px;
   }
   [theme="dark"] .settings-dialog__close-button {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
-    background: $color-dark-mode-note;
+    background: $gray--500;
   }
 }
 
@@ -320,6 +320,6 @@ $settings-dialog-container--bottom: 62px;
   }
 
   .settings-dialog__group {
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
   }
 }

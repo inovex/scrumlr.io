@@ -312,7 +312,7 @@
 
 [theme="dark"] {
   .participants__search-input {
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
     color: $white--000;
   }
   .participants__search-icon {
@@ -320,7 +320,7 @@
   }
   .participants__permisson-filter-button,
   .participant__status-filter-button {
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
     color: $white--000;
     &--active {
       background-color: var(--accent-color);
@@ -335,7 +335,7 @@
     }
   }
   .participants__list-item {
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
     &:not(:last-child) {
       border-bottom: 1px solid $gray--600;
     }
@@ -345,7 +345,7 @@
   }
   .participant__role {
     &:is(button) {
-      background-color: $color-dark-mode-note;
+      background-color: $gray--500;
       border: 2px solid var(--accent-color--desaturated-dark);
       color: $white--000;
     }
@@ -360,7 +360,7 @@
   }
 
   .participants-reset-state-banner__container {
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
   }
 
   .participants-reset-state-banner__check-icon,
@@ -379,7 +379,7 @@
   .participant__join-icon,
   .participant__kick-icon {
     color: $white--000;
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
 
     &:hover {
       background-color: var(--accent-color--desaturated-dark);

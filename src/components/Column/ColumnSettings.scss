@@ -83,11 +83,11 @@
 
 [theme="dark"] {
   .column__header-menu-dropdown {
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
   }
 
   .column__header-menu-dropdown > ul > li {
-    background-color: $color-dark-mode-note;
+    background-color: $gray--500;
 
     &:hover {
       filter: $brighten--slightly;
