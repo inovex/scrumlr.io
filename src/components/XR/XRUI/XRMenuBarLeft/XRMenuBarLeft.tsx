@@ -1,11 +1,11 @@
 import {Content, Text} from "@react-three/uikit";
 import {Svg} from "@react-three/drei";
 import {TabBar, TabBarItem} from "components/apfel/tab-bar";
-import CheckIcon from "assets/icon-check.svg";
-import RaiseHand from "assets/icon-hand.svg";
-import BoardReactionIcon from "assets/icon-add-board-reaction.svg";
-import SettingsIcon from "assets/icon-settings.svg";
-import ExitIcon from "assets/icon-logout.svg";
+import CheckIcon from "assets/icons/mark-as-done.svg";
+import RaiseHand from "assets/icons/raise-hand.svg";
+import BoardReactionIcon from "assets/icons/add-emoji.svg";
+import SettingsIcon from "assets/icons/general-settings.svg";
+import ExitIcon from "assets/icons/logout.svg";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "store";

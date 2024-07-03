@@ -7,7 +7,7 @@ import ClappingHands from "assets/emoji/emoji-clapping-hands.svg";
 import SparklingHeart from "assets/emoji/emoji-sparkling-heart.svg";
 import ThumbsUp from "assets/emoji/emoji-thumbs-up.svg";
 import ThumbsDown from "assets/emoji/emoji-thumbs-down.svg";
-import CloseIcon from "assets/icon-close.svg";
+import CloseIcon from "assets/icons/close.svg";
 
 const XRReactionsMenu = ({close}: {close: () => void}) => (
   <Card

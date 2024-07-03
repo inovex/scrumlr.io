@@ -96,6 +96,11 @@
   color: $color-middle-gray;
 }
 
+// tooltip requires parent selection because of specificity
+.column__header-text-wrapper .column__tooltip {
+  @include tooltip--light;
+}
+
 .column__header-input {
   display: flex;
   align-items: center;
@@ -168,14 +173,18 @@
     color: $color-middle-gray;
   }
 
+  .column__header-text-wrapper .column__tooltip {
+    @include tooltip--dark;
+  }
+
   .column__notes-wrapper {
     scrollbar-color: $color-darkest-gray $color-dark-mode-note;
   }
 }
 
 .column__header-hidden-icon {
-  height: $icon--medium;
-  width: $icon--medium;
+  height: $icon--large;
+  width: $icon--large;
   min-width: $icon--medium;
   min-height: $icon--medium;
   margin: 0 $spacing--xs 0 0;
@@ -217,6 +226,7 @@
 .column__header-edit-button-icon {
   color: $color-black;
   height: 24px;
+  width: 24px;
   transition: all 0.08s ease-out;
 }
 

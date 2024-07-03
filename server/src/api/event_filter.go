@@ -82,6 +82,20 @@ func parseVotingUpdated(data interface{}) (*VotingUpdated, error) {
 	return ret, nil
 }
 
+func parseParticipantUpdated(data interface{}) (*dto.BoardSession, error) {
+	var ret *dto.BoardSession
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+}
+
 func filterColumns(eventColumns []*dto.Column) []*dto.Column {
 	var visibleColumns = make([]*dto.Column, 0, len(eventColumns))
 	for _, column := range eventColumns {
@@ -186,7 +200,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	if event.Type == realtime.BoardEventColumnsUpdated {
 		columns, err := parseColumnUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
 		// Cache the incoming changes, mod only since they receive all changes
 		if isMod {
@@ -206,7 +220,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	if event.Type == realtime.BoardEventNotesUpdated {
 		notes, err := parseNotesUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
 
 		if isMod {
@@ -226,7 +240,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	if event.Type == realtime.BoardEventBoardUpdated {
 		boardSettings, err := parseBoardUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
 		if isMod {
 			boardSubscription.boardSettings = boardSettings
@@ -239,7 +253,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	if event.Type == realtime.BoardEventVotingUpdated {
 		voting, err := parseVotingUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
 		if isMod {
 			return event
@@ -259,7 +273,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	if event.Type == realtime.BoardEventNotesSync {
 		notes, err := parseNotesUpdated(event.Data)
 		if err != nil {
-			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "error", err)
+			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
 
 		if isMod {
@@ -275,6 +289,23 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 		return &ret
 	}
+
+	if event.Type == realtime.BoardEventParticipantUpdated {
+		participant, err := parseParticipantUpdated(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse participantUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
+		}
+
+		if isMod {
+			// Cache the changes of when a participant got updated
+			for idx, user := range boardSubscription.boardParticipants {
+				if user.User.ID == participant.User.ID {
+					boardSubscription.boardParticipants[idx] = participant
+				}
+			}
+		}
+	}
+
 	// returns, if no filter match occured
 	return event
 }
@@ -288,14 +319,14 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	retEvent := InitEvent{
 		Type: event.Type,
 		Data: EventData{
-			Board:       event.Data.Board,
-			Notes:       nil,
-			Reactions:   event.Data.Reactions,
-			Columns:     nil,
-			Votings:     event.Data.Votings,
-			Votes:       event.Data.Votes,
-			Sessions:    event.Data.Sessions,
-			Requests:    event.Data.Requests,
+			Board:     event.Data.Board,
+			Notes:     nil,
+			Reactions: event.Data.Reactions,
+			Columns:   nil,
+			Votings:   event.Data.Votings,
+			Votes:     event.Data.Votes,
+			Sessions:  event.Data.Sessions,
+			Requests:  event.Data.Requests,
 		},
 	}
 	// Columns

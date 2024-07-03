@@ -1,8 +1,7 @@
 import {FC, useEffect} from "react";
 import {useNavigate} from "react-router";
 import {Note} from "types/note";
-import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
-import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import {ArrowRight, ArrowLeft} from "components/Icon";
 import "./StackNavigation.scss";
 import {useTranslation} from "react-i18next";
 import {StackNavigationDots} from "./Dots/StackNavigationDots";
@@ -69,7 +68,7 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
         className="stack-view__navigation-button"
         aria-label={t("StackView.prevNote")}
       >
-        <LeftArrowIcon
+        <ArrowLeft
           onClick={(e) => {
             e.stopPropagation();
             handleNavigation(currentIndex - 1);
@@ -86,7 +85,7 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
         className="stack-view__navigation-button"
         aria-label={t("StackView.nextNote")}
       >
-        <RightArrowIcon
+        <ArrowRight
           onClick={(e) => {
             e.stopPropagation();
             handleNavigation(currentIndex + 1);

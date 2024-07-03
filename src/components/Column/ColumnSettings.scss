@@ -21,7 +21,7 @@
 
 .column__header-menu-dropdown > ul > li {
   height: 32px;
-  padding: 0 16px;
+  padding: 0 $spacing--sm;
   background-color: $color-white;
 
   &:hover {
@@ -49,8 +49,8 @@
 }
 
 .column__header-menu-dropdown > ul > li > button > svg {
-  height: $icon--medium;
-  width: $icon--medium;
+  height: $icon--large;
+  width: $icon--large;
 }
 
 .column__header-menu-dropdown > ul > li:last-of-type {

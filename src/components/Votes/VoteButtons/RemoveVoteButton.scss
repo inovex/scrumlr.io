@@ -5,6 +5,9 @@
   position: relative;
   height: 32px;
   width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
   background-color: var(--accent-color--desaturated-light);
   color: var(--accent-color);
@@ -43,6 +46,8 @@
 }
 
 .vote-button-remove__icon {
+  height: $icon--medium;
+  width: $icon--medium;
   display: none;
 }
 

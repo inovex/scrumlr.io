@@ -41,7 +41,7 @@ exports[`<ConfirmationDialog /> snapshot test 1`] = `
               <svg
                 class="dialog__close-icon"
               >
-                icon-close.svg
+                close.svg
               </svg>
             </button>
             <div

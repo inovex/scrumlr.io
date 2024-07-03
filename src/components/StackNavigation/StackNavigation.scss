@@ -27,12 +27,14 @@
   outline: none;
   box-shadow: $box-shadow--light;
   color: $color-black;
+  padding: 0;
+  margin: 0;
 
   transition: all 0.08s ease-out;
 
   > svg {
-    height: $icon--small;
-    width: $icon--small;
+    height: $icon--large;
+    width: $icon--large;
   }
 
   &:enabled {

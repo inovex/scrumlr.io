@@ -15,7 +15,7 @@ import {useFrame} from "@react-three/fiber";
 import {colors} from "components/apfel/theme";
 import {Button} from "components/apfel/button";
 import {Svg} from "@react-three/drei";
-import DeleteIcon from "assets/icon-delete.svg";
+import DeleteIcon from "assets/icons/trash.svg";
 import {useDispatch} from "react-redux";
 import {DragContext, DragContextColumnType} from "../XRBoard/XRBoard";
 

@@ -1,8 +1,5 @@
 import {useState, VFC} from "react";
-import {ReactComponent as LockIcon} from "assets/icon-lock.svg";
-import {ReactComponent as GlobeIcon} from "assets/icon-globe.svg";
-import {ReactComponent as KeyIcon} from "assets/icon-key.svg";
-import {ReactComponent as LeaveIcon} from "assets/icon-share.svg";
+import {LockClosed, Open as Globe, KeyProtected, Share} from "components/Icon";
 import {BoardUsers} from "components/BoardUsers";
 import store, {useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
@@ -45,7 +42,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             window.location.pathname = "/";
           }}
           onDecline={() => setShowConfirmationDialog(false)}
-          icon={LeaveIcon}
+          icon={Share}
         />
       )}
       <header className="board-header">
@@ -70,9 +67,9 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
           <div className="board-header__access-policy-status">
             {
               {
-                BY_INVITE: <LockIcon className="board-header__access-policy-status-icon" />,
-                BY_PASSPHRASE: <KeyIcon className="board-header__access-policy-status-icon" />,
-                PUBLIC: <GlobeIcon className="board-header__access-policy-status-icon" />,
+                BY_INVITE: <LockClosed className="board-header__access-policy-status-icon" />,
+                BY_PASSPHRASE: <KeyProtected className="board-header__access-policy-status-icon" />,
+                PUBLIC: <Globe className="board-header__access-policy-status-icon" />,
               }[state.accessPolicy!]
             }
             <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
