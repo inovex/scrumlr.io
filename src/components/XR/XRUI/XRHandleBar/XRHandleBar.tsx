@@ -2,7 +2,7 @@
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
 import {useFrame, useThree} from "@react-three/fiber";
 import {MutableRefObject, forwardRef, useEffect, useImperativeHandle, useRef} from "react";
-import {Euler, Group, Object3DEventMap, Vector3} from "three";
+import {Euler, Group, Material, Mesh, Object3DEventMap, Vector3} from "three";
 
 type XRHandleBarProps = {
   containerRef: MutableRefObject<Group<Object3DEventMap>>;
@@ -10,9 +10,11 @@ type XRHandleBarProps = {
 
 const currentLookAt = new Vector3();
 const targetLookAt = new Vector3();
+const BAR_OPACITY = 0.5;
 
 const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandleBarProps, ref) => {
   const handleBarRef = useRef<Group>(null!);
+  const visibleBarRef = useRef<Mesh>(null!);
   const dragging = useRef(false);
   const {camera} = useThree();
 
@@ -32,6 +34,7 @@ const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandl
       targetLookAt.copy(state.camera.position);
       containerRef.current.lookAt(currentLookAt.lerp(targetLookAt, 0.1));
       handleBarRef.current.lookAt(currentLookAt.lerp(targetLookAt, 0.1));
+      handleBarRef.current.scale.set(1, 1, 1);
     }
   });
 
@@ -45,16 +48,22 @@ const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandl
       onReleased={() => {
         dragging.current = false;
       }}
-      maxGrabbers={1}
+      onPointerEnter={() => {
+        if (visibleBarRef.current.material[0]) visibleBarRef.current.material[0].opacity = 1;
+        else (visibleBarRef.current.material as Material).opacity = 1;
+      }}
+      onPointerLeave={() => {
+        if (visibleBarRef.current.material[0]) visibleBarRef.current.material[0].opacity = BAR_OPACITY;
+        else (visibleBarRef.current.material as Material).opacity = BAR_OPACITY;
+      }}
     >
       <group>
-        <mesh position={[-0.6, 0, 0]} visible={false}>
-          <cylinderGeometry args={[0.1, 0.1, 0.6]} />
-          <meshStandardMaterial transparent opacity={0.8} color="red" roughness={0.5} />
+        <mesh position={[-0.53, 0, 0]} visible={false}>
+          <cylinderGeometry args={[0.05, 0.05, 0.3]} />
         </mesh>
-        <mesh position={[-0.6, 0, 0]}>
+        <mesh position={[-0.53, 0, 0]} ref={visibleBarRef}>
           <cylinderGeometry args={[0.01, 0.01, 0.3]} />
-          <meshStandardMaterial transparent opacity={0.8} color="white" roughness={0.5} />
+          <meshStandardMaterial transparent opacity={BAR_OPACITY} color="white" roughness={0.5} />
         </mesh>
       </group>
     </Grabbable>
