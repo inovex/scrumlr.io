@@ -93,7 +93,6 @@ $white--200: #f4f4f6;
 $white--100: #f9fafa;
 $white--000: #ffffff;
 
-$color-dark-one: #242c3d; // $gray--600 (#292F3B)
 $color-dark-two: #272f41; // $gray--600 (#292F3B)
 $color-lighter-gray: #edeff2; // $white--300 (#EEEFF1)
 $color-light-gray: #c3c9d3; // $white--600 (#B5B8C1)
@@ -300,8 +299,8 @@ $column-stripes--light: repeating-linear-gradient(
 
 $column-stripes--dark: repeating-linear-gradient(
   45deg,
-  $color-dark-one calc(0px + var(--stripe-offset, 0px)),
-  $color-dark-one calc(20px + var(--stripe-offset, 0px)),
+  $gray--600 calc(0px + var(--stripe-offset, 0px)),
+  $gray--600 calc(20px + var(--stripe-offset, 0px)),
   var(--accent-color--background-dark) calc(20px + var(--stripe-offset, 0px)),
   var(--accent-color--background-dark) calc(40px + var(--stripe-offset, 0px))
 );

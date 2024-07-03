@@ -154,7 +154,7 @@
 
   .note-reaction-popup__tab-all {
     color: $white--000;
-    background-color: $color-dark-one;
+    background-color: $gray--600;
 
     &--active {
       background-color: var(--accent-color--desaturated-dark-hover);
@@ -168,6 +168,6 @@
   }
 
   .note-reaction-popup__row-divider {
-    background-color: $color-dark-one;
+    background-color: $gray--600;
   }
 }

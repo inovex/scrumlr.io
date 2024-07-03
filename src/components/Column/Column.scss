@@ -21,7 +21,7 @@
 }
 [theme="dark"] {
   .column:nth-child(even) {
-    background-color: $color-dark-one;
+    background-color: $gray--600;
   }
   .column:nth-child(odd) {
     background-color: $color-dark-two;

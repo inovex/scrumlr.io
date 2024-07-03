@@ -195,11 +195,11 @@ $timer__progress-bar-color: #6096ff;
   }
 
   .short-action__button {
-    background-color: $color-dark-one;
+    background-color: $gray--600;
     color: $white--000;
 
     &:hover {
-      background-color: getDarkHoverBackground($color-dark-one);
+      background-color: getDarkHoverBackground($gray--600);
     }
 
     &:focus-visible {
