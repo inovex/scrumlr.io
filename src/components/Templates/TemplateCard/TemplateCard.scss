@@ -32,7 +32,7 @@ $card-height: 220px;
 
   &--menu {
     grid-area: menu-icon;
-    justify-self: end;
+    transform: rotate(90deg);
   }
 
   &--columns {
