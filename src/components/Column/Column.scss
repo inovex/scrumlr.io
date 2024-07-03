@@ -17,7 +17,7 @@
   background-color: $white--100;
 }
 .column:nth-child(even) {
-  background-color: $color-white-two;
+  background-color: $white--200;
 }
 [theme="dark"] {
   .column:nth-child(even) {

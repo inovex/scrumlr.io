@@ -25,7 +25,7 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   &:focus-visible {
-    background-color: $color-white-two;
+    background-color: $white--200;
   }
 }
 
@@ -53,7 +53,7 @@ $header-menu-border-bottom-color: #efefef;
 
 .board-option-button--expandable:focus-visible,
 .board-option-button--expandable:hover {
-  background-color: $color-white-two;
+  background-color: $white--200;
 }
 
 [theme="dark"] {
