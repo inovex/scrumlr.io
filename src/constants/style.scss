@@ -93,51 +93,51 @@ $white--200: #f4f4f6;
 $white--100: #f9fafa;
 $white--000: #ffffff;
 
-$color-backlog-blue: #0057ff; // $blue--500 (#0057FF)
-$color-grooming-green: #18d8ab; // $green--500 (#1BD47E)
-$color-goal-green: #70e000; // $yellow--700 (#999300)
-$color-lean-lilac: #c000ff; // $purple--500 (#C923FF)
-$color-online-orange: #ffaa5a; // $orange--300 (#FFCB66)
-$color-planning-pink: #e20360; // $pink--600 (#CC0054)
-$color-poker-purple: #5e00ff; // $violet--500 (#5D00F6)
-$color-retro-red: #ea434b; // $pink--400 (#FF3387)
-$color-warning-red: #eb625b; // $pink--400 (#FF3387)
+$color-backlog-blue: #0057ff; // $blue--500, 400
+$color-grooming-green: #18d8ab; // $green--500, 400
+$color-goal-green: #70e000; // ?? TODO
+$color-lean-lilac: #c000ff; // $purple--500, 400
+$color-online-orange: #ffaa5a; // $orange--500, 40
+$color-planning-pink: #e20360; // $pink--500, 400
+$color-poker-purple: #5e00ff; // $violet--500, 400
+$color-retro-red: #ea434b; // ?? TODO
+$color-warning-red: #eb625b; // ?? TODO
 
-@mixin rgb($color) {
-  --accent-color: #{$color};
-  --accent-color-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
-  --accent-color--dark: #{color.change($color, $lightness: 72%, $saturation: 99%)};
-  --accent-color--desaturated-light: #{color.change($color, $lightness: 90%)};
-  --accent-color--desaturated-light-hover: #{color.change($color, $lightness: 85%)};
-  --accent-color--desaturated-dark: #{color.change($color, $lightness: 39%, $saturation: 48%)};
-  --accent-color--desaturated-dark-hover: #{color.change($color, $lightness: 50%, $saturation: 48%)};
-  --accent-color--background-light: #{color.change($color, $lightness: 80%, $alpha: 0.2, $saturation: 60%)};
-  --accent-color--background-dark: #{color.change($color, $lightness: 75%, $alpha: 0.04, $saturation: 75%)};
+@mixin rgb($color--light, $color--dark) {
+  --accent-color: #{$color--light};
+  --accent-color-rgb: #{red($color--light)}, #{green($color--light)}, #{blue($color--light)};
+  --accent-color--dark: #{color.change($color--dark, $lightness: 72%, $saturation: 99%)};
+  --accent-color--desaturated-light: #{color.change($color--light, $lightness: 90%)};
+  --accent-color--desaturated-light-hover: #{color.change($color--light, $lightness: 85%)};
+  --accent-color--desaturated-dark: #{color.change($color--dark, $lightness: 39%, $saturation: 48%)};
+  --accent-color--desaturated-dark-hover: #{color.change($color--dark, $lightness: 50%, $saturation: 48%)};
+  --accent-color--background-light: #{color.change($color--light, $lightness: 80%, $alpha: 0.2, $saturation: 60%)};
+  --accent-color--background-dark: #{color.change($color--dark, $lightness: 75%, $alpha: 0.04, $saturation: 75%)};
 }
 
 .accent-color__backlog-blue {
-  @include rgb($color-backlog-blue);
+  @include rgb($blue--500, $blue--400);
 }
 .accent-color__grooming-green {
-  @include rgb($color-grooming-green);
+  @include rgb($green--500, $green--400);
 }
 .accent-color__goal-green {
-  @include rgb($color-goal-green);
+  @include rgb($color-goal-green, $color-goal-green); // TODO
 }
 .accent-color__lean-lilac {
-  @include rgb($color-lean-lilac);
+  @include rgb($purple--500, $purple--400);
 }
 .accent-color__online-orange {
-  @include rgb($color-online-orange);
+  @include rgb($orange--500, $orange--400);
 }
 .accent-color__planning-pink {
-  @include rgb($color-planning-pink);
+  @include rgb($pink--500, $pink--400);
 }
 .accent-color__poker-purple {
-  @include rgb($color-poker-purple);
+  @include rgb($violet--500, $violet--400);
 }
 .accent-color__retro-red {
-  @include rgb($color-retro-red);
+  @include rgb($color-retro-red, $color-retro-red); // TODO
 }
 
 // hover colors
