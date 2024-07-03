@@ -145,7 +145,7 @@
   display: flex;
   flex: 2 2 auto;
   gap: 2px;
-  color: $color-dark-gray;
+  color: $white--800;
   font-size: $text-size--medium;
   line-height: $line-height--small;
   order: -1;
@@ -161,7 +161,7 @@
 
 .homepage__footer-link {
   display: block;
-  color: $color-dark-gray;
+  color: $white--800;
   font-size: $text-size--medium;
   line-height: $line-height--large;
 }
