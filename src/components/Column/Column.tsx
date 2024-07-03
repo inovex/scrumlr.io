@@ -3,6 +3,7 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteInput} from "components/NoteInput";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
+import {Tooltip} from "react-tooltip";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {Close, MarkAsDone, Hidden, ThreeDots} from "components/Icon";
@@ -97,6 +98,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
         {!visible && <Hidden className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
         <h2
+          id={`column-${id}`}
           onDoubleClick={() => {
             if (isModerator) {
               setColumnNameMode("EDIT");
@@ -106,6 +108,9 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         >
           {name}
         </h2>
+        <Tooltip className="column__tooltip" anchorSelect={`#column-${id}`}>
+          {name}
+        </Tooltip>
       </div>
     ) : (
       <>

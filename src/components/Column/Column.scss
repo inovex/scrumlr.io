@@ -96,6 +96,11 @@
   color: $color-middle-gray;
 }
 
+// tooltip requires parent selection because of specificity
+.column__header-text-wrapper .column__tooltip {
+  @include tooltip--light;
+}
+
 .column__header-input {
   display: flex;
   align-items: center;
@@ -166,6 +171,10 @@
 
   .column__header-text--hidden {
     color: $color-middle-gray;
+  }
+
+  .column__header-text-wrapper .column__tooltip {
+    @include tooltip--dark;
   }
 
   .column__notes-wrapper {
