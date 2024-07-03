@@ -75,7 +75,7 @@
 
   .board__spacer-left:nth-child(even),
   .board__spacer-right:nth-child(even) {
-    background-color: $color-dark-two;
+    background-color: $gray--600;
   }
 
   .column--hidden + .board__spacer-right,

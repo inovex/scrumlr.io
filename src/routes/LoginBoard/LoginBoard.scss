@@ -184,7 +184,7 @@
   @media #{$tablet} {
     .login-board__form-wrapper,
     .login-board__divider::after {
-      background: $color-dark-two;
+      background: $gray--600;
     }
   }
 }

@@ -18,7 +18,7 @@
     100px 100px 80px rgba(0, 0, 0, 0.07);
 }
 [theme="dark"] .dialog {
-  background: $color-dark-two;
+  background: $gray--600;
 }
 
 @media #{$tablet} {
