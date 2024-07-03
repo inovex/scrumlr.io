@@ -49,7 +49,7 @@
 
   &-decline {
     @extend .cookie-policy__button;
-    background: $color-lighter-gray;
+    background: $white--300;
     color: $color-darkest-gray;
     margin: 0 0 $spacing--base auto;
   }

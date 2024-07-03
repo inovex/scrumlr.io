@@ -15,14 +15,14 @@ $skeleton-name-width: 92px;
   height: $avatar-size;
   border-radius: 100%;
   overflow: hidden;
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
 }
 
 .note-author-skeleton__name {
   height: $text-size--small;
   width: $skeleton-name-width;
   border-radius: 4px;
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
 }
 
 [theme="dark"] {

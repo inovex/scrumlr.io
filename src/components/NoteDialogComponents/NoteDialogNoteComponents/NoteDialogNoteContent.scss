@@ -107,7 +107,7 @@
   border-radius: $rounded--default;
   overflow-y: auto;
   box-shadow: $box-shadow--light;
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
 
   @include scrollbar();
 }

@@ -18,7 +18,7 @@
   width: 100%;
   top: 8px;
   left: 0;
-  background: $color-lighter-gray 0 0 no-repeat padding-box;
+  background: $white--300 0 0 no-repeat padding-box;
   border-radius: 4px;
 }
 
@@ -28,7 +28,9 @@
   height: 24px;
   width: 24px;
   border-radius: 100%;
-  transition: all 0.16s ease-out, transform 0.08s ease-out;
+  transition:
+    all 0.16s ease-out,
+    transform 0.08s ease-out;
   top: 0;
 
   left: 0;

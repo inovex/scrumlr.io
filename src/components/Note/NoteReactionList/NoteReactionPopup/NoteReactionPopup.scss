@@ -30,7 +30,7 @@
 .note-reaction-popup__notch {
   width: 64px;
   height: 4px;
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
   border-radius: $rounded--default;
   margin-bottom: $spacing--base;
 }
@@ -55,7 +55,7 @@
   height: 18px;
   padding: 6px 9px 4px 10px;
   border-radius: $rounded--full;
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
 
   font-size: $text--sm;
   font-weight: 600;
@@ -131,7 +131,7 @@
 
   margin: 7px 0 10px 0;
 
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
 }
 
 @keyframes slide-in {

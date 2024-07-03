@@ -139,7 +139,7 @@
   gap: $spacing--xs;
 
   &:not(:last-child) {
-    border-bottom: 1px solid $color-lighter-gray;
+    border-bottom: 1px solid $white--300;
   }
 
   &.banned > *:not(.participant__join-icon) {
@@ -222,7 +222,7 @@
 
   width: calc(100% + 2 * $settings-dialog-container--sides-small); // overflow over parent margin
 
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
 
   visibility: hidden;
   transform: translateY(100%);

@@ -98,7 +98,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
   border-radius: $rounded--full;
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
   color: $color-dark-mode-note;
   border: none;
   padding: 0;
@@ -109,7 +109,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: getLightHoverBackground($color-lighter-gray);
+    background-color: getLightHoverBackground($white--300);
   }
 
   &:focus-visible {

@@ -192,7 +192,7 @@ $color-form-background--dark: #292f3b;
 [theme="dark"] {
   .passphrase-dialog__form {
     background-color: $color-form-background--dark;
-    color: $color-lighter-gray;
+    color: $white--300;
     box-shadow: 0px 6px 9px 0px rgba(27, 30, 38, 0.3);
   }
   .form__password-input {

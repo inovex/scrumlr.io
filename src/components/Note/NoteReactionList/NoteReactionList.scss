@@ -18,7 +18,7 @@
   border-radius: $rounded--full;
 
   &--active {
-    background-color: $color-lighter-gray;
+    background-color: $white--300;
   }
 }
 
@@ -34,7 +34,7 @@
   padding: $reaction__padding--inner;
 
   border-radius: $rounded--full;
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
 
   cursor: pointer;
 

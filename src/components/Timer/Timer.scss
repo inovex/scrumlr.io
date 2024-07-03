@@ -122,7 +122,7 @@ $timer__progress-bar-color: #6096ff;
   height: $timer__short-actions-height;
   width: $timer__short-actions-height;
   border-radius: $rounded--full;
-  background-color: $color-lighter-gray;
+  background-color: $white--300;
   color: $color-dark-mode-note;
   border: none;
   padding: 0;
@@ -133,7 +133,7 @@ $timer__progress-bar-color: #6096ff;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: getLightHoverBackground($color-lighter-gray);
+    background-color: getLightHoverBackground($white--300);
   }
 
   &:focus-visible {
