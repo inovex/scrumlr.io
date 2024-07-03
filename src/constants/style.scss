@@ -93,7 +93,6 @@ $white--200: #f4f4f6;
 $white--100: #f9fafa;
 $white--000: #ffffff;
 
-$color-light-gray: #c3c9d3; // $white--600 (#B5B8C1)
 $color-middle-gray: #a3a6aa; // $white--700 (#A2A7B1)
 $color-dark-gray: #859093; // $white--800 (#8F95A1)
 $color-darker-gray: #4f5253; // $gray--300 (#454E63)
@@ -336,7 +335,7 @@ $column-stripes--dark: repeating-linear-gradient(
 
   &::-webkit-scrollbar-thumb {
     border-radius: #{$border-radius};
-    background-color: rgba($color-light-gray, 0.3);
+    background-color: rgba($white--600, 0.3);
   }
 
   [theme="dark"] & {

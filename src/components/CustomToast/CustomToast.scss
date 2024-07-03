@@ -244,7 +244,7 @@ input[type="checkbox"] {
   background-color: $white--000;
   margin: 0;
   font: inherit;
-  color: $color-light-gray;
+  color: $white--600;
   width: 1.125em;
   height: 1.125em;
   border: 0.15em solid currentColor;
@@ -254,7 +254,7 @@ input[type="checkbox"] {
 }
 input[type="checkbox"]:hover {
   cursor: pointer;
-  box-shadow: 0 0 0 3px rgba($color-light-gray, 0.3);
+  box-shadow: 0 0 0 3px rgba($white--600, 0.3);
 }
 input[type="checkbox"]::before {
   content: "";
@@ -262,7 +262,7 @@ input[type="checkbox"]::before {
   height: 0.625em;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
-  background-color: $color-light-gray;
+  background-color: $white--600;
 }
 input[type="checkbox"]:checked::before {
   transform: scale(1);
