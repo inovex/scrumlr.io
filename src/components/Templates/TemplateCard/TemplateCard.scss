@@ -5,12 +5,12 @@ $card-height: 220px;
 .template-card {
   display: grid;
   grid-template-rows: auto auto 40px auto;
-  grid-template-columns: auto auto auto auto;
+  grid-template-columns: 36px $spacing--xxs auto auto 36px;
   grid-template-areas:
-    "fav-icon   title       title         menu-icon"
-    ".          description description   ."
-    ".          .           .             ."
-    "col-icon   columns     start         start";
+    "fav-icon   .   title         title         menu-icon"
+    ".          .   description   description   ."
+    ".          .   .             .             ."
+    "col-icon   .   columns       start         start";
 
   width: 100%;
   height: $card-height;
@@ -21,12 +21,18 @@ $card-height: 220px;
 }
 
 .template-card__icon {
+  align-self: center;
+
+  width: 36px;
+  height: 36px;
+
   &--favourite {
     grid-area: fav-icon;
   }
 
   &--menu {
     grid-area: menu-icon;
+    justify-self: end;
   }
 
   &--columns {
@@ -36,14 +42,20 @@ $card-height: 220px;
 
 .template-card__title {
   grid-area: title;
+  align-self: center;
 }
 
 .template-card__description {
   grid-area: description;
+  align-self: center;
 }
 
 .template-card__columns {
   grid-area: columns;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .template-card__start-button {
