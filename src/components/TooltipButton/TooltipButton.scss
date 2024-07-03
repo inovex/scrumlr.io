@@ -45,7 +45,7 @@ $tooltip-button-size: 46px;
   max-width: 0;
   height: $tooltip-button-size;
   border-radius: calc($tooltip-button-size / 2);
-  background-color: $tooltip-background-color--light;
+  background-color: $blue--100;
   opacity: 0;
   visibility: hidden;
   transition: opacity 150ms linear 500ms;
@@ -59,7 +59,7 @@ $tooltip-button-size: 46px;
     transform: translateX(-50%);
     border-width: 10px;
     border-style: solid;
-    border-color: $tooltip-background-color--light transparent transparent transparent;
+    border-color: $blue--100 transparent transparent transparent;
   }
 }
 
@@ -134,7 +134,7 @@ $tooltip-button-size: 46px;
       }
 
       .tooltip-button__icon {
-        border-color: var(--accent-color--desaturated-light, $tooltip-background-color--light);
+        border-color: var(--accent-color--desaturated-light, $blue--100);
         transition: border-color 0ms linear 0ms;
       }
 
@@ -148,7 +148,7 @@ $tooltip-button-size: 46px;
     }
 
     .tooltip-button__tooltip-text {
-      background: var(--accent-color--desaturated-light, $tooltip-background-color--light);
+      background: var(--accent-color--desaturated-light, $blue--100);
       height: $tooltip-button-size;
       line-height: $tooltip-button-size;
       width: max-content;

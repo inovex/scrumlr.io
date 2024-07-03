@@ -31,7 +31,7 @@ $menu-item-size: 42px;
   max-width: 0;
   height: $menu-item-size;
   border-radius: calc($menu-item-size / 2);
-  background-color: $tooltip-background-color--light;
+  background-color: $blue--100;
   opacity: 0;
   visibility: hidden;
   transition: opacity 150ms linear 500ms;
@@ -45,7 +45,7 @@ $menu-item-size: 42px;
   transform: translateX(-50%);
   border-width: 10px;
   border-style: solid;
-  border-color: $tooltip-background-color--light transparent transparent transparent;
+  border-color: $blue--100 transparent transparent transparent;
 }
 
 @media #{$smartphone} {
@@ -130,7 +130,7 @@ $menu-item-size: 42px;
 @media #{$tablet} {
   .menu-item .tooltip__text {
     color: $gray--900;
-    background-color: $tooltip-background-color--light;
+    background-color: $blue--100;
     height: $menu-item-size;
     line-height: $menu-item-size;
     width: max-content;
@@ -194,7 +194,7 @@ $menu-item-size: 42px;
     transition: border-color 0ms linear 150ms;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $tooltip-background-color--light;
+    border-color: $blue--100;
     transition: border-color 0ms linear 0ms;
   }
 }
