@@ -9,7 +9,7 @@ export const TemplateCard = () => (
     <FavouriteIcon className={classNames("template-card__icon", "template-card__icon--favourite")} />
     <div className="template-card__title">Title</div>
     <MenuIcon className={classNames("template-card__icon", "template-card__icon--menu")} />
-    <div className="template-card__description">Description blah blah blah</div>
+    <div className="template-card__description">Lorem ipsum dolor sit amet, conse dolo sadipscing elitr vero eos et aquiteres.</div>
     <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
     <div className="template-card__columns">
       <div className="template-card__columns-title">3 Columns</div>
