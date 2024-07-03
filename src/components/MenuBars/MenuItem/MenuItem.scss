@@ -56,10 +56,10 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .menu-item__tooltip {
-    background-color: $tooltip-background-color--dark;
+    background-color: $gray--300;
   }
   .menu-item__tooltip::after {
-    border-color: $tooltip-background-color--dark transparent transparent transparent;
+    border-color: $gray--300 transparent transparent transparent;
   }
 }
 @media screen and (max-width: 450px) {
@@ -156,7 +156,7 @@ $menu-item-size: 42px;
 [theme="dark"] {
   .tooltip__text {
     color: $white--000 !important;
-    background-color: $tooltip-background-color--dark !important;
+    background-color: $gray--300 !important;
   }
 }
 
@@ -209,6 +209,6 @@ $menu-item-size: 42px;
     color: $gray--900;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $tooltip-background-color--dark !important;
+    border-color: $gray--300 !important;
   }
 }

@@ -259,7 +259,7 @@ $tooltip-button-size: 46px;
     &:hover {
       .tooltip-button__icon {
         background: none;
-        border-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
+        border-color: var(--accent-color--desaturated-dark, $gray--300);
       }
     }
 
@@ -283,7 +283,7 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button__tooltip-text {
-    background-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
+    background-color: var(--accent-color--desaturated-dark, $gray--300);
     color: var(--accent-color--dark, $white--000);
   }
 
