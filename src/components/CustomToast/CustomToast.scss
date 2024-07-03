@@ -235,7 +235,7 @@ $color-close-icon: #bfc1c5;
   grid-template-columns: 16px auto;
   gap: 10px;
   margin-top: 13px;
-  color: $color-middle-gray;
+  color: $white--700;
   width: fit-content;
 }
 input[type="checkbox"] {
@@ -323,7 +323,7 @@ input[type="checkbox"]:checked::before {
     background-color: $menu-icon-background-color--dark;
   }
   input[type="checkbox"]:checked::before {
-    background-color: $color-middle-gray;
+    background-color: $white--700;
   }
 }
 

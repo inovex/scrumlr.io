@@ -96,7 +96,7 @@ $settings__item-height: 48px;
 
 [theme="dark"] {
   .profile-settings__open-cheat-sheet-button {
-    color: $color-middle-gray;
+    color: $white--700;
 
     &:focus-visible {
       outline: 2px solid rgba(var(--accent-color-rgb), 0.5);

@@ -93,7 +93,7 @@
 }
 
 .column__header-text--hidden {
-  color: $color-middle-gray;
+  color: $white--700;
 }
 
 .column__header-input {
@@ -122,7 +122,7 @@
 .column__header-card-number {
   margin-bottom: $spacing--base;
   font-size: $text-size--medium;
-  color: $color-middle-gray;
+  color: $white--700;
   font-weight: 600;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -137,7 +137,7 @@
   flex: 1;
   outline: none;
   scrollbar-width: 10px;
-  scrollbar-color: $color-middle-gray $white--000;
+  scrollbar-color: $white--700 $white--000;
 
   @include scrollbar();
 }
@@ -165,7 +165,7 @@
   }
 
   .column__header-text--hidden {
-    color: $color-middle-gray;
+    color: $white--700;
   }
 
   .column__notes-wrapper {

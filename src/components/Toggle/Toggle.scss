@@ -34,7 +34,7 @@
   top: 0;
 
   left: 0;
-  background-color: $color-middle-gray;
+  background-color: $white--700;
 }
 
 .toggle--active::after {
@@ -48,7 +48,7 @@
   opacity: 0.5;
 
   &::after {
-    background-color: $color-middle-gray;
+    background-color: $white--700;
     box-shadow: none;
   }
 

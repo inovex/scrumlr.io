@@ -12,7 +12,7 @@
   transition: all 0.08s ease-out;
 
   &:hover {
-    color: $color-middle-gray;
+    color: $white--700;
   }
 
   &:focus-visible {
@@ -28,7 +28,7 @@
 
 [theme="dark"] {
   .app-info {
-    color: $color-middle-gray;
+    color: $white--700;
 
     &:focus-visible,
     &:hover {

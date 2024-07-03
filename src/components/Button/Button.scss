@@ -63,17 +63,17 @@
 }
 
 .button.button--text-link:disabled {
-  color: $color-middle-gray;
+  color: $white--700;
 }
 
 .button:not(.button--text-link):disabled {
-  background: $color-middle-gray;
+  background: $white--700;
 }
 
 .button.button--outlined:disabled {
   background: none;
-  color: $color-middle-gray;
-  border: 1px solid $color-middle-gray;
+  color: $white--700;
+  border: 1px solid $white--700;
 }
 
 .button--block {

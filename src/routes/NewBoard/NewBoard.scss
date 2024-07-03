@@ -60,7 +60,7 @@
   width: 1px;
 
   &:focus-visible + .new-board__mode-label {
-    box-shadow: 0 0 0 2px $color-middle-gray;
+    box-shadow: 0 0 0 2px $white--700;
   }
 }
 

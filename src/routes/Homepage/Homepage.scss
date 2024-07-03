@@ -32,10 +32,10 @@
 
 .homepage__language {
   background: $white--600;
-  box-shadow: 0 0 rgba($color-middle-gray, 0);
+  box-shadow: 0 0 rgba($white--700, 0);
 
   &:hover {
-    box-shadow: 0 2px 12px 6px rgba($color-middle-gray, 0.2);
+    box-shadow: 0 2px 12px 6px rgba($white--700, 0.2);
   }
 }
 
@@ -195,7 +195,7 @@
   }
 
   .homepage__footer-link {
-    color: $color-middle-gray;
+    color: $white--700;
 
     a:focus-visible,
     a:hover {
@@ -204,7 +204,7 @@
   }
 
   .homepage__footer-developers {
-    color: $color-middle-gray;
+    color: $white--700;
   }
 }
 
