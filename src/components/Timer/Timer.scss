@@ -48,10 +48,10 @@ $timer__progress-bar-color: #6096ff;
   height: 100%;
   width: $timer-display-width;
   color: $gray--500;
-  background-color: $menu-icon-background-color--light;
+  background-color: $white--000;
   border-radius: $rounded--full;
   position: relative;
-  border: 2px solid $menu-icon-background-color--light;
+  border: 2px solid $white--000;
   box-shadow: $box-shadow--light;
 
   &:has(:focus-visible) {
@@ -95,7 +95,7 @@ $timer__progress-bar-color: #6096ff;
   width: 100%;
   position: absolute;
   border-radius: $rounded--full;
-  background-color: $menu-icon-background-color--light;
+  background-color: $white--000;
   display: flex;
   justify-content: flex-end;
   align-items: center;

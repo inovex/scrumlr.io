@@ -163,7 +163,7 @@ $menu-item-size: 42px;
 .menu-item__icon {
   background-clip: content-box !important;
   color: $gray--900;
-  background-color: $menu-icon-background-color--light;
+  background-color: $white--000;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
@@ -205,7 +205,7 @@ $menu-item-size: 42px;
     background: $gray--500;
   }
   .menu-item--active .menu-item__icon {
-    background-color: $menu-icon-background-color--light;
+    background-color: $white--000;
     color: $gray--900;
   }
   .menu-item:hover .menu-item__icon {

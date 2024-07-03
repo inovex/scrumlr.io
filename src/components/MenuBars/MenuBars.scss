@@ -41,7 +41,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars-mobile__fab {
-  background: $menu-icon-background-color--light;
+  background: $white--000;
   border-radius: $rounded--full;
   cursor: pointer;
   width: $menu-mobile__width;
@@ -132,7 +132,7 @@ $menu-mobile__width: 72px;
     svg {
       color: $gray--900;
     }
-    background: $menu-icon-background-color--light;
+    background: $white--000;
   }
 }
 

@@ -13,10 +13,10 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: 100%;
   width: $vote-display-width;
   color: $gray--500;
-  background-color: $menu-icon-background-color--light;
+  background-color: $white--000;
   border-radius: $rounded--full;
   position: relative;
-  border: 2px solid $menu-icon-background-color--light;
+  border: 2px solid $white--000;
   box-shadow: $box-shadow--light;
 
   &:has(:focus-visible) {
@@ -71,7 +71,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   width: 100%;
   position: absolute;
   border-radius: $rounded--full;
-  background-color: $menu-icon-background-color--light;
+  background-color: $white--000;
   display: flex;
   justify-content: flex-end;
   align-items: center;

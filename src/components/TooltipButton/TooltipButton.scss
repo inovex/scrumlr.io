@@ -80,7 +80,7 @@ $tooltip-button-size: 46px;
   height: 100%;
   width: 100%;
   border-radius: $rounded--full;
-  background: $menu-icon-background-color--light;
+  background: $white--000;
   transition: background-color 0.2s ease-out;
 }
 
@@ -269,7 +269,7 @@ $tooltip-button-size: 46px;
 
     &--active {
       .tooltip-button__icon-container {
-        background-color: $menu-icon-background-color--light;
+        background-color: $white--000;
       }
     }
   }
@@ -288,7 +288,7 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button--active .tooltip-button__icon {
-    background-color: $menu-icon-background-color--light;
+    background-color: $white--000;
     color: $gray--900;
   }
 }
