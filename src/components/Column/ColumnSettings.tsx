@@ -69,9 +69,9 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             // title={t("Column.settings")} className="column__header-edit-button"
             onClick={() => setOpenedColorPicker((o) => !o)}
           >
-            {!openedColorPicker && <span className={`column__header-color-option ${color}_selected`} />}
-            {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} />}
+            <span className={`column__header-color-option ${color}_selected`} />
           </button>
+          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} />}
         </li>
         <li>
           <button
