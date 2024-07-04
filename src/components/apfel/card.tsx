@@ -15,6 +15,7 @@ export const Card: (props: CardProperties & RefAttributes<ComponentInternals>) =
     panelMaterialClass={GlassMaterial}
     borderRadius={32}
     ref={ref}
+    castShadow
     {...props}
   >
     <DefaultProperties color={colors.cardForeground}>{children}</DefaultProperties>

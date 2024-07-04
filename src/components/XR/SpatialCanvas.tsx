@@ -3,6 +3,7 @@ import {Controllers, Hands, XRCanvas} from "@coconut-xr/natuerlich/defaults";
 import {ImmersiveSessionOrigin, useHeighestAvailableFrameRate, useInputSources, useNativeFramebufferScaling} from "@coconut-xr/natuerlich/react";
 import {shallowEqual} from "react-redux";
 import {useAppSelector} from "store";
+import {BasicShadowMap} from "three";
 import XRLight from "./XRUI/XRLight/XRLight";
 import XRContainer from "./XRUI/XRContainer/XRContainer";
 
@@ -36,6 +37,8 @@ const SpatialCanvas = () => {
       frameBufferScaling={frameBufferScaling}
       frameRate={heighestAvailableFramerate}
       style={{position: "absolute", inset: 0, pointerEvents: "none"}}
+      shadowMap={{enabled: true, type: BasicShadowMap}}
+      shadows
     >
       {xrActive && (
         <>

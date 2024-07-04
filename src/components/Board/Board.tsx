@@ -32,7 +32,7 @@ export interface ColumnState {
 
 const sessionOptions: XRSessionInit = {
   requiredFeatures: ["local-floor"],
-  optionalFeatures: ["hand-tracking"],
+  optionalFeatures: ["hand-tracking", "plane-detection"],
 };
 
 export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
