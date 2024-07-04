@@ -212,7 +212,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           // show either condensed or normal reaction chips
           (showCondensed ? (
             <>
-              <NoteReactionChipCondensed reactions={reactionsReduced} handleLongPressReaction={openReactionsPopup} skinTone={skinTone.name} />
+              <NoteReactionChipCondensed reactions={reactionsReduced} handleLongPressReaction={openReactionsPopup} />
               {reactionMadeByUser && (
                 <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} showTooltip />
               )}

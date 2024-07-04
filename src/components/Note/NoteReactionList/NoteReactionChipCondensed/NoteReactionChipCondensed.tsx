@@ -10,7 +10,6 @@ import {useAppSelector} from "../../../../store";
 interface NoteReactionChipPropsCondensed {
   reactions: ReactionModeled[];
   handleLongPressReaction: (e: LongPressReactEvents) => void;
-  skinTone: string;
 }
 
 export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed) => {
