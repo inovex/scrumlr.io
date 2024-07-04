@@ -8,6 +8,7 @@ import XRBoardHeader from "../XRBoardHeader/XRBoardHeader";
 import XRBoard from "../XRBoard/XRBoard";
 import XRHandleBar from "../XRHandleBar/XRHandleBar";
 import XRMenuBarLeft from "../XRMenuBarLeft/XRMenuBarLeft";
+import XRContainerCue from "./XRContainerCue/XRContainerCue";
 
 // TODO: make semi transparent glass material
 export const GlassMaterial = MeshPhongMaterial;
@@ -44,6 +45,7 @@ const XRContainer = () => {
 
   return (
     <>
+      <XRContainerCue containerRef={containerRef} />
       <group ref={containerRef} position={[0, 1.5, -0.64]}>
         <Root sizeX={2} sizeY={1} display="flex" flexDirection="column" positionType="relative" pixelSize={0.002}>
           <XRMenuBarLeft />
