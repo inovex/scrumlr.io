@@ -42,7 +42,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
-
+  const skinTone = useAppSelector((state) => state.skinTone);
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
     // get the participant who issued that reaction
@@ -212,7 +212,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
           // show either condensed or normal reaction chips
           (showCondensed ? (
             <>
-              <NoteReactionChipCondensed reactions={reactionsReduced} handleLongPressReaction={openReactionsPopup} />
+              <NoteReactionChipCondensed reactions={reactionsReduced} handleLongPressReaction={openReactionsPopup} skinTone={skinTone.name} />
               {reactionMadeByUser && (
                 <NoteReactionChip reaction={reactionMadeByUser} handleClickReaction={handleClickReaction} handleLongPressReaction={openReactionsPopup} showTooltip />
               )}

@@ -1,4 +1,4 @@
-import {render, fireEvent, screen} from "@testing-library/react";
+import {fireEvent, render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {REACTION_EMOJI_MAP} from "types/reaction";
 import {NoteReactionBar} from "./NoteReactionBar";
@@ -8,7 +8,7 @@ describe("NoteReactionBar", () => {
     render(<NoteReactionBar closeReactionBar={() => {}} reactions={[]} handleClickReaction={() => {}} />);
 
     REACTION_EMOJI_MAP.forEach((emoji) => {
-      expect(screen.getByText(emoji)).toBeInTheDocument();
+      expect(screen.getByText(emoji.emoji)).toBeInTheDocument();
     });
   });
 
@@ -29,8 +29,8 @@ describe("NoteReactionBar", () => {
   it("focuses the first emoji button after TAB is pressed on the last emoji button", async () => {
     render(<NoteReactionBar closeReactionBar={() => {}} reactions={[]} handleClickReaction={() => {}} />);
 
-    const firstEmojiButton = screen.getByText([...REACTION_EMOJI_MAP.values()].at(0)!);
-    const lastEmojiButton = screen.getByText([...REACTION_EMOJI_MAP.values()].at(-1)!);
+    const firstEmojiButton = screen.getByText([...REACTION_EMOJI_MAP.values()].at(0).emoji!);
+    const lastEmojiButton = screen.getByText([...REACTION_EMOJI_MAP.values()].at(-1).emoji!);
 
     lastEmojiButton.focus();
     expect(lastEmojiButton).toHaveFocus();

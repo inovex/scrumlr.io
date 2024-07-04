@@ -6,6 +6,7 @@ import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
+import {useAppSelector} from "../../../../store";
 
 interface NoteReactionChipProps {
   reaction: ReactionModeled;
@@ -20,12 +21,14 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const reactionUsers = props.reaction.users.map((u) => u.user.name).join(", ");
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);
-
+  const skinTone = useAppSelector((state) => state.skinTone);
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
       props.handleLongPressReaction(e);
     }
   });
+
+  const reactionImageWithSkinTone = reactionImage!.skinToneSupported ? reactionImage!.emoji + skinTone.component : reactionImage!.emoji;
 
   return (
     <>
@@ -43,7 +46,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()} // bind long press
       >
-        <div className="note-reaction-chip__reaction">{reactionImage}</div>
+        <div className="note-reaction-chip__reaction">{reactionImageWithSkinTone}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
       <TooltipPortal anchor={anchorId} place="top" show={props.showTooltip}>

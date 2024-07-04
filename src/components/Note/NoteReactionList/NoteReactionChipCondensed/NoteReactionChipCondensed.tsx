@@ -5,10 +5,12 @@ import {uniqueId} from "underscore";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
+import {useAppSelector} from "../../../../store";
 
 interface NoteReactionChipPropsCondensed {
   reactions: ReactionModeled[];
   handleLongPressReaction: (e: LongPressReactEvents) => void;
+  skinTone: string;
 }
 
 export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed) => {
@@ -23,6 +25,8 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
   const totalAmount = reactionsFiltered.reduce((sum, reactionModeled) => sum + reactionModeled.amount, 0);
 
   const anchorId = uniqueId(`reactions-${noteId}-condensed`);
+
+  const skinTone = useAppSelector((state) => state.skinTone);
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
@@ -41,7 +45,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
         <div className="note-reaction-chip-condensed__reactions-container">
           {reactionImages.map((emoji) => (
             <div className="note-reaction-chip-condensed__reaction" key={`reaction-${emoji}`}>
-              {emoji}
+              {emoji?.skinToneSupported ? emoji.emoji + skinTone.component : emoji?.emoji}
             </div>
           ))}
         </div>

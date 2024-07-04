@@ -4,6 +4,7 @@ import classNames from "classnames";
 import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionBar.scss";
+import {useAppSelector} from "../../../../store";
 
 interface NoteReactionBarProps {
   closeReactionBar: () => void;
@@ -17,7 +18,7 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
     props.closeReactionBar();
     props.handleClickReaction(e, reactionType);
   };
-
+  const skinTone = useAppSelector((state) => state.skinTone);
   // this allows the selection of an emoji using the enter key
   // by preventing the note from being opened if it's active
   useEffect(() => {
@@ -37,11 +38,12 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
     <div className="note-reaction-bar__root">
       <ReactFocusLock returnFocus>
         {[...REACTION_EMOJI_MAP.entries()].map(([type, emoji]) => {
+          const emojiWithSkinTone = emoji.skinToneSupported ? emoji.emoji + skinTone.component : emoji.emoji;
           // highlight reaction made by yourself
           const active = !!props.reactions.find((r) => r.reactionType === type && !!r.myReactionId);
           return (
             <button key={type} className={classNames("note-reaction-bar__reaction", {"note-reaction-bar__reaction--active": active})} onClick={(e) => handleClickBar(e, type)}>
-              {emoji}
+              {emojiWithSkinTone}
             </button>
           );
         })}
