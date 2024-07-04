@@ -29,7 +29,9 @@ describe("NoteReactionBar", () => {
   it("focuses the first emoji button after TAB is pressed on the last emoji button", async () => {
     render(<NoteReactionBar closeReactionBar={() => {}} reactions={[]} handleClickReaction={() => {}} />);
 
+    // @ts-ignore
     const firstEmojiButton = screen.getByText([...REACTION_EMOJI_MAP.values()].at(0).emoji!);
+    // @ts-ignore
     const lastEmojiButton = screen.getByText([...REACTION_EMOJI_MAP.values()].at(-1).emoji!);
 
     lastEmojiButton.focus();
