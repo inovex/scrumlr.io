@@ -3,24 +3,22 @@ import {EmojiData, emojiWithSkinTone} from "utils/hooks/useEmojiAutocomplete";
 import "./EmojiSuggestions.scss";
 import {CSSProperties, useEffect, useRef} from "react";
 import {useAppSelector} from "store";
+import {useSize} from "utils/hooks/useSize";
 
 type EmojiSuggestionsProps = {
-  // used to prevent the suggestion container from extending beyond the viewport
-  approxTopDistance?: string;
-  // autocomplete hooks from useEmojiAutocomplete
-  autocomplete: {
-    suggestions: EmojiData[];
-    keyboardFocusedIndex: number;
-    acceptSuggestion: (insertedEmoji: string) => void;
-  };
+  suggestions: EmojiData[];
+  keyboardFocusedIndex: number;
+  acceptSuggestion: (insertedEmoji: string) => void;
 };
 
-const PADDING = 8;
+const suggestionScrollPadding = 8;
 
-export const EmojiSuggestions = ({autocomplete: {suggestions, keyboardFocusedIndex, acceptSuggestion}, approxTopDistance}: EmojiSuggestionsProps) => {
+export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSuggestion}: EmojiSuggestionsProps) => {
   // the refs of the elements to scroll into view
   const suggestionsRef = useRef<HTMLLIElement[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const containerRect = useSize(containerRef, {includePosition: true});
 
   useEffect(() => {
     // whenever the suggestions change, remove the old refs
@@ -29,7 +27,6 @@ export const EmojiSuggestions = ({autocomplete: {suggestions, keyboardFocusedInd
     // scroll the currently selected element into view
     // can't use scrollIntoView directly because it scrolls the whole container horizontally on firefox (see https://github.com/inovex/scrumlr.io/pull/4274)
     const focusedElementRect = suggestionsRef.current[keyboardFocusedIndex]?.getBoundingClientRect();
-    const containerRect = containerRef.current?.getBoundingClientRect();
     if (!focusedElementRect || !containerRect || !containerRef.current) return;
 
     // a) is inside (doesn't care about padding) -> no need to scroll
@@ -38,22 +35,22 @@ export const EmojiSuggestions = ({autocomplete: {suggestions, keyboardFocusedInd
     const scrollPosition =
       focusedElementRect.top < containerRect.top
         ? // b) is above
-          containerRef.current.scrollTop + focusedElementRect.top - containerRect.top - PADDING
+          containerRef.current.scrollTop + focusedElementRect.top - containerRect.top - suggestionScrollPadding
         : // c) is below
-          containerRef.current.scrollTop + focusedElementRect.bottom - containerRect.bottom + PADDING;
+          containerRef.current.scrollTop + focusedElementRect.bottom - containerRect.bottom + suggestionScrollPadding;
 
     containerRef.current?.scrollTo({
       top: scrollPosition,
       behavior: "instant",
     });
-  }, [keyboardFocusedIndex, suggestions]);
+  }, [keyboardFocusedIndex, suggestions, containerRect]);
 
   const skinToneComponent = useAppSelector((state) => state.skinTone.component);
 
   if (suggestions.length === 0) return null;
 
   return (
-    <div className="emoji-suggestions emoji-suggestions__container" style={{"--approx-top-distance": approxTopDistance} as CSSProperties} ref={containerRef}>
+    <div className="emoji-suggestions emoji-suggestions__container" style={{"--top-distance": containerRect?.top ?? 0} as CSSProperties} ref={containerRef}>
       <ul className="emoji-suggestions__list">
         {suggestions.map(([slug, emoji, supportsSkintones], i) => {
           const actualEmoji = supportsSkintones ? emojiWithSkinTone(emoji, skinToneComponent) : emoji;

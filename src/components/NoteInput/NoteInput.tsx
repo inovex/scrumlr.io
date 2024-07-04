@@ -90,7 +90,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       />
-      <EmojiSuggestions autocomplete={emoji.suggestionsProps} approxTopDistance="320px" />
+      <EmojiSuggestions {...emoji.suggestionsProps} />
       {isImage && (
         <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
           <AddImage className="note-input__icon--image" />

@@ -140,7 +140,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             if (e.relatedTarget !== closeButtonRef.current) handleEditColumnName((e.target as HTMLInputElement).value);
           }}
         />
-        <EmojiSuggestions autocomplete={emoji.suggestionsProps} approxTopDistance="260px" />
+        <EmojiSuggestions {...emoji.suggestionsProps} />
       </>
     );
 

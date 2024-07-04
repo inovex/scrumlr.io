@@ -8,7 +8,7 @@
     width: 100%;
     border-radius: $rounded--default;
     background-color: $color-lighter-gray;
-    max-height: min($emoji-suggestions__max-height, calc(100svh - var(--approx-top-distance, 0px)));
+    max-height: min($emoji-suggestions__max-height, calc(100svh - var(--top-distance, 0) * 1px - 2 * $spacing--lg));
     color: $color-black;
 
     z-index: $emoji-suggestions-z-index;

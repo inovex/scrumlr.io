@@ -204,7 +204,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
       suggestions,
       keyboardFocusedIndex: focusedIndex,
       acceptSuggestion,
-    } satisfies ComponentProps<typeof EmojiSuggestions>["autocomplete"],
+    } satisfies ComponentProps<typeof EmojiSuggestions>,
     value,
     setValue,
     inputBindings: {
