@@ -2,10 +2,10 @@ import React, {useEffect} from "react";
 import ReactFocusLock from "react-focus-lock";
 import classNames from "classnames";
 import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
-import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionBar.scss";
 import {useAppSelector} from "store";
 import {getEmojiWithSkinTone} from "utils/reactions";
+import {ReactionModeled} from "../NoteReactionList";
 
 interface NoteReactionBarProps {
   closeReactionBar: () => void;
