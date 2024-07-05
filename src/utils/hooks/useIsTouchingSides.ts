@@ -1,42 +1,31 @@
-import {useEffect, useState, RefObject} from "react";
+import {useEffect, useState, RefObject, useCallback} from "react";
 import {useSize} from "./useSize";
+import {useIsScrolling} from "./useIsScrolling";
 
-export const useIsTouchingSides = (ref: RefObject<HTMLElement>) => {
+/**
+ * returns if the container is scrolled to the very left or very right of the viewport.
+ * @param ref the container ref which is checked
+ */
+export const useIsTouchingSides = (ref: RefObject<HTMLDivElement>) => {
   const [isTouchingLeftSide, setIsTouchingLeftSide] = useState<boolean>(false);
   const [isTouchingRightSide, setIsTouchingRightSide] = useState<boolean>(false);
   const size = useSize(ref);
+  const isScrolling = useIsScrolling(ref, 30);
 
-  const checkTouchingSides = () => {
+  const checkTouchingSides = useCallback(() => {
     if (!ref.current || !size) return;
 
-    const {scrollLeft, scrollWidth, clientWidth} = ref.current;
-    const leftSide = scrollLeft === 0;
-    const rightSide = scrollLeft + clientWidth === scrollWidth;
+    const {scrollLeft: currentScrollLeft, scrollWidth: currentScrollWidth, clientWidth: currentClientWidth} = ref.current;
+    const touchingLeft = currentScrollLeft === 0;
+    const touchingRight = currentScrollLeft + currentClientWidth === currentScrollWidth;
 
-    setIsTouchingLeftSide(leftSide);
-    setIsTouchingRightSide(rightSide);
-  };
+    setIsTouchingLeftSide(touchingLeft);
+    setIsTouchingRightSide(touchingRight);
+  }, [ref, size]);
 
-  useEffect(() => {
-    if (!ref.current) return;
-
-    checkTouchingSides(); // Initial check
-
-    const handleScroll = () => {
-      checkTouchingSides();
-    };
-
-    ref.current.addEventListener("scroll", handleScroll);
-
-    return () => {
-      ref.current?.removeEventListener("scroll", handleScroll);
-    };
-  }, [checkTouchingSides, ref, size]);
-
-  // Check when size changes
   useEffect(() => {
     checkTouchingSides();
-  }, [checkTouchingSides, size]);
+  }, [size, isScrolling, checkTouchingSides]);
 
   return {isTouchingLeftSide, isTouchingRightSide};
 };
