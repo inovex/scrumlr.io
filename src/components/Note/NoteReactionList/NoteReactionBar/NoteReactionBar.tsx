@@ -4,7 +4,8 @@ import classNames from "classnames";
 import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionBar.scss";
-import {useAppSelector} from "../../../../store";
+import {useAppSelector} from "store";
+import {getEmojiWithSkinTone} from "utils/reactions";
 
 interface NoteReactionBarProps {
   closeReactionBar: () => void;
@@ -38,12 +39,11 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
     <div className="note-reaction-bar__root">
       <ReactFocusLock returnFocus>
         {[...REACTION_EMOJI_MAP.entries()].map(([type, emoji]) => {
-          const emojiWithSkinTone = emoji.skinToneSupported ? emoji.emoji + skinTone.component : emoji.emoji;
           // highlight reaction made by yourself
           const active = !!props.reactions.find((r) => r.reactionType === type && !!r.myReactionId);
           return (
             <button key={type} className={classNames("note-reaction-bar__reaction", {"note-reaction-bar__reaction--active": active})} onClick={(e) => handleClickBar(e, type)}>
-              {emojiWithSkinTone}
+              {getEmojiWithSkinTone(emoji, skinTone)}
             </button>
           );
         })}

@@ -6,7 +6,8 @@ import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
-import {useAppSelector} from "../../../../store";
+import {useAppSelector} from "store";
+import {getEmojiWithSkinTone} from "utils/reactions";
 
 interface NoteReactionChipProps {
   reaction: ReactionModeled;
@@ -28,8 +29,6 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
     }
   });
 
-  const reactionImageWithSkinTone = reactionImage!.skinToneSupported ? reactionImage!.emoji + skinTone.component : reactionImage!.emoji;
-
   return (
     <>
       <button
@@ -46,7 +45,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()} // bind long press
       >
-        <div className="note-reaction-chip__reaction">{reactionImageWithSkinTone}</div>
+        <div className="note-reaction-chip__reaction">{getEmojiWithSkinTone(reactionImage!, skinTone)}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
       <TooltipPortal anchor={anchorId} place="top" show={props.showTooltip}>

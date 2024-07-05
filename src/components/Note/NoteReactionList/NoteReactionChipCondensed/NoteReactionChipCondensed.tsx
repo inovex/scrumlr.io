@@ -6,6 +6,7 @@ import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
 import {useAppSelector} from "../../../../store";
+import {getEmojiWithSkinTone} from "../../../../utils/reactions";
 
 interface NoteReactionChipPropsCondensed {
   reactions: ReactionModeled[];
@@ -44,7 +45,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
         <div className="note-reaction-chip-condensed__reactions-container">
           {reactionImages.map((emoji) => (
             <div className="note-reaction-chip-condensed__reaction" key={`reaction-${emoji}`}>
-              {emoji?.skinToneSupported ? emoji.emoji + skinTone.component : emoji?.emoji}
+              {getEmojiWithSkinTone(emoji!, skinTone)}
             </div>
           ))}
         </div>
