@@ -9731,10 +9731,10 @@ react-toastify@^10.0.5:
   dependencies:
     clsx "^2.1.0"
 
-react-tooltip@^5.27.0:
-  version "5.27.0"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-5.27.0.tgz#d502d1055b259c26b10ebfc6d925621f2afd3119"
-  integrity sha512-JXROcdfCEbCqkAkh8LyTSP3guQ0dG53iY2E2o4fw3D8clKzziMpE6QG6CclDaHELEKTzpMSeAOsdtg0ahoQosw==
+react-tooltip@^5.27.1:
+  version "5.27.1"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-5.27.1.tgz#a94481ba146d828d31642f14d6ab29b56998fcda"
+  integrity sha512-a+micPXcMOMt11CYlwJD4XShcqGziasHco4NPe1OFw298WBTILMyzUgNC1LAFViAe791JdHNVSJIpzhZm2MvDA==
   dependencies:
     "@floating-ui/dom" "^1.6.1"
     classnames "^2.3.0"
