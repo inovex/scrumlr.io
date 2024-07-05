@@ -12,11 +12,13 @@ import {useAppSelector} from "store";
 import _ from "underscore";
 import {memo, useState} from "react";
 import {useXR} from "@coconut-xr/natuerlich/react";
+import {useDelayedReset} from "utils/hooks/useDelayedReset";
 import XRReactionsMenu from "../XRReactionsMenu/XRReactionsMenu";
 
 const XRMenuBarLeft = () => {
   const dispatch = useDispatch();
   const [showBoardReactionsMenu, setShowBoardReactionsMenu] = useState(false);
+  const [debounce, resetDebounce] = useDelayedReset<boolean>(false, true, 200);
 
   const state = useAppSelector(
     (rootState) => ({
@@ -46,7 +48,10 @@ const XRMenuBarLeft = () => {
   };
 
   const toggleBoardReactionsMenu = () => {
-    setShowBoardReactionsMenu((show) => !show);
+    if (!debounce) {
+      setShowBoardReactionsMenu(!showBoardReactionsMenu);
+      resetDebounce();
+    }
   };
 
   return (

@@ -17,7 +17,7 @@ type BoardReactionMenuProps = {
   close: () => void;
 };
 
-const REACTION_DEBOUNCE_TIME = 300; // milliseconds
+export const REACTION_DEBOUNCE_TIME = 300; // milliseconds
 
 export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref: ForwardedRef<HTMLDivElement>) => {
   const dispatch = useDispatch();

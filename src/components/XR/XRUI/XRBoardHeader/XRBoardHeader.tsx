@@ -1,8 +1,8 @@
+import {Svg} from "@react-three/drei";
 import {DEFAULT_BOARD_NAME} from "constants/misc";
 import {shallowEqual} from "react-redux";
-import {Container, Image, Text} from "@react-three/uikit";
-import ScrumlrLogo from "assets/scrumlr.png";
-/* import Scrumlr from "public/scrumlr-logo-light.svg"; */
+import {Container, Content, Text} from "@react-three/uikit";
+import ScrumlrLogo from "assets/scrumlr-logo-dark.svg";
 import {useAppSelector} from "store";
 import {FONT_COLOR} from "components/XR/xr-constants";
 
@@ -21,7 +21,9 @@ const XRBoardHeader = () => {
 
   return (
     <Container positionType="absolute" width="100%" positionTop={0} positionLeft={0} flexDirection="row" justifyContent="space-between" alignItems="center" height={32}>
-      <Image url={ScrumlrLogo} margin={32} marginLeft={32} width={128} />
+      <Content padding={0} width={128} height={48} marginLeft={96} marginTop={48}>
+        <Svg src={ScrumlrLogo} />
+      </Content>
       <Text fontSize={24} marginTop={24} color={FONT_COLOR}>
         {boardName || DEFAULT_BOARD_NAME}
       </Text>

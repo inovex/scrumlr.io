@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import {useSize} from "utils/hooks/useSize";
 import "./BoardReaction.scss";
 
-type BoardReactionProps = {
+export type BoardReactionProps = {
   reaction: BoardReactionType;
 };
 
