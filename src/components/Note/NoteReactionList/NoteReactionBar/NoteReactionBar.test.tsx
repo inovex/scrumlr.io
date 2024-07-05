@@ -7,15 +7,28 @@ import {ApplicationState} from "../../../../types";
 import getTestApplicationState from "../../../../utils/test/getTestApplicationState";
 import getTestStore from "../../../../utils/test/getTestStore";
 
-const renderNoteReactionBar = (closeReactionBar: jest.Mock, overwrite?: Partial<ApplicationState>) => render(
+const renderNoteReactionBar = (overwrite?: Partial<ApplicationState>) =>
+  render(
     <Provider store={getTestStore(overwrite)}>
-      <NoteReactionBar closeReactionBar={closeReactionBar} reactions={[]} handleClickReaction={() => {}} />
+      <NoteReactionBar closeReactionBar={() => {}} reactions={[]} handleClickReaction={() => {}} />
+    </Provider>
+  );
+const renderNoteCloseReactionBar = (action: jest.Mock, overwrite?: Partial<ApplicationState>) =>
+  render(
+    <Provider store={getTestStore(overwrite)}>
+      <NoteReactionBar closeReactionBar={action} reactions={[]} handleClickReaction={() => {}} />
+    </Provider>
+  );
+const renderClickNoteReactionBar = (action: jest.Mock, overwrite?: Partial<ApplicationState>) =>
+  render(
+    <Provider store={getTestStore(overwrite)}>
+      <NoteReactionBar closeReactionBar={() => {}} reactions={[]} handleClickReaction={action} />
     </Provider>
   );
 
 describe("NoteReactionBar", () => {
   it("renders the reaction buttons correctly", () => {
-    renderNoteReactionBar(null, getTestApplicationState());
+    renderNoteReactionBar(getTestApplicationState());
     REACTION_EMOJI_MAP.forEach((emoji) => {
       expect(screen.getByText(emoji.emoji)).toBeInTheDocument();
     });
@@ -23,20 +36,20 @@ describe("NoteReactionBar", () => {
 
   it("calls handleClickBar when a reaction button is clicked", () => {
     const handleClickReaction = jest.fn();
-    renderNoteReactionBar(handleClickReaction, getTestApplicationState());
+    renderClickNoteReactionBar(handleClickReaction, getTestApplicationState());
     fireEvent.click(screen.getByText("👍"));
     expect(handleClickReaction).toHaveBeenCalled();
   });
 
   it("closes the reaction bar when Escape key is pressed", () => {
     const closeReactionBar = jest.fn();
-    renderNoteReactionBar(closeReactionBar, getTestApplicationState());
+    renderNoteCloseReactionBar(closeReactionBar, getTestApplicationState());
     fireEvent.keyDown(document, {key: "Escape"});
     expect(closeReactionBar).toHaveBeenCalled();
   });
 
   it("focuses the first emoji button after TAB is pressed on the last emoji button", async () => {
-    renderNoteReactionBar(null, getTestApplicationState());
+    renderNoteReactionBar(getTestApplicationState());
     const firstEmojiButton = screen.getByText([...REACTION_EMOJI_MAP.values()].at(0)!.emoji);
     const lastEmojiButton = screen.getByText([...REACTION_EMOJI_MAP.values()].at(-1)!.emoji);
 
