@@ -5,11 +5,11 @@ import {MenuBars} from "components/MenuBars";
 import {InfoBar} from "components/Infobar";
 import {BoardHeader} from "components/BoardHeader";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
-import "./Board.scss";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {useIsTouchingSides} from "utils/hooks/useIsTouchingSides";
+import "./Board.scss";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
