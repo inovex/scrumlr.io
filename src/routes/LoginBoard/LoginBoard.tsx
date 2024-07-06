@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {getRandomName} from "constants/name";
+import {getRandomName} from "constants/nameList";
 import {Auth} from "utils/auth";
 import {Toast} from "utils/Toast";
 import {useState} from "react";
