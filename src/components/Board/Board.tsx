@@ -9,6 +9,7 @@ import "./Board.scss";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
+import {useIsTouchingSides} from "utils/hooks/useIsTouchingSides";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -37,6 +38,8 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   // stripe offset for spacer divs
   const leftSpacerOffset = useStripeOffset<HTMLDivElement>({gradientLength: 40, gradientAngle: 45});
   const rightSpacerOffset = useStripeOffset<HTMLDivElement>({gradientLength: 40, gradientAngle: 45});
+
+  const {isTouchingLeftSide, isTouchingRightSide} = useIsTouchingSides(boardRef);
 
   useEffect(() => {
     leftSpacerOffset.updateOffset();
@@ -78,7 +81,7 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <InfoBar />
-      <MenuBars showPreviousColumn={false /* TODO */} showNextColumn={false /* TODO */} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
+      <MenuBars showPreviousColumn={isTouchingRightSide} showNextColumn={isTouchingLeftSide} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
       <HotkeyAnchor />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div
