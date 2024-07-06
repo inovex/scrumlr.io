@@ -72,7 +72,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
     const boardWidth = boardRef.current?.scrollWidth ?? 0;
     const columnWidth = boardWidth / columnsCount;
     const scrollValue = columnWidth * (direction === "left" ? -1 : 1);
-    // console.log("width", boardWidth, "columns", columnsCount, "direction", direction, "scrollValue", scrollValue);
     boardRef.current?.scrollBy({left: scrollValue, behavior: "smooth"});
   };
 
