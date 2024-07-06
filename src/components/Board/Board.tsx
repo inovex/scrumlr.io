@@ -82,8 +82,8 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <InfoBar />
       <MenuBars
-        showPreviousColumn={isTouchingRightSide}
-        showNextColumn={isTouchingLeftSide}
+        showPreviousColumn={!isTouchingLeftSide}
+        showNextColumn={!isTouchingRightSide}
         onPreviousColumn={() => scrollBoard("left")}
         onNextColumn={() => scrollBoard("right")}
       />
