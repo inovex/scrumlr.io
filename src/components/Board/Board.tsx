@@ -68,12 +68,12 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
 
   const columnColors = React.Children.map(children, (child) => child.props.color);
 
-  const handlePreviousClick = () => {
-    // TODO
-  };
-
-  const handleNextClick = () => {
-    // TODO
+  const scrollBoard = (direction: "left" | "right") => {
+    const boardWidth = boardRef.current?.scrollWidth ?? 0;
+    const columnWidth = boardWidth / columnsCount;
+    const scrollValue = columnWidth * (direction === "left" ? -1 : 1);
+    // console.log("width", boardWidth, "columns", columnsCount, "direction", direction, "scrollValue", scrollValue);
+    boardRef.current?.scrollBy({left: scrollValue, behavior: "smooth"});
   };
 
   return (
@@ -81,7 +81,12 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <InfoBar />
-      <MenuBars showPreviousColumn={isTouchingRightSide} showNextColumn={isTouchingLeftSide} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
+      <MenuBars
+        showPreviousColumn={isTouchingRightSide}
+        showNextColumn={isTouchingLeftSide}
+        onPreviousColumn={() => scrollBoard("left")}
+        onNextColumn={() => scrollBoard("right")}
+      />
       <HotkeyAnchor />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div
