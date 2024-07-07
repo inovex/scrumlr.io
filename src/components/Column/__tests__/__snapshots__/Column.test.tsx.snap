@@ -25,6 +25,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           </svg>
           <h2
             class="column__header-text column__header-text--hidden"
+            id="column-test-columns-id-1"
           >
             Testheader 1
           </h2>
