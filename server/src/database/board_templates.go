@@ -170,6 +170,10 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 		query_settings.Column("passphrase")
 	}
 
+	if update.Salt != nil {
+		query_settings.Column("salt")
+	}
+
 	if update.AccessPolicy != nil {
 		if *update.AccessPolicy == types.AccessPolicyByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
 			return BoardTemplate{}, errors.New("passphrase and salt should be set when access policy is updated")
@@ -202,7 +206,7 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 	for _, col := range update.ColumnTemplates {
 		column := ColumnTemplateUpdate{
 			ID:            col.ID,
-			BoardTemplate: col.BoardTemplate,
+			BoardTemplate: boardTemplate.ID,
 			Name:          col.Name,
 			Description:   col.Description,
 			Color:         col.Color,
@@ -248,7 +252,7 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 			Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, column.BaseModel), &c)
 
 		if err != nil {
-			logger.Get().Infow("failed to update column template in updte board template", "board_template", update.ID, "err", err)
+			logger.Get().Errorw("failed to update column template in updte board template", "board_template", update.ID, "err", err)
 			return BoardTemplate{}, err
 		}
 		cols_updated = append(cols_updated, c)
