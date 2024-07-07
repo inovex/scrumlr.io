@@ -1,6 +1,7 @@
 @import "constants/style";
 
 $stan-height-factor: 93%;
+$max-card-width: 500px;
 
 .templates {
   display: flex;
@@ -57,6 +58,13 @@ $stan-height-factor: 93%;
   &--disabled {
     color: #8f95a1;
   }
+}
+
+.templates__card-container {
+  display: grid;
+  // place cards next to each other if width limit is exceeded
+  grid-template-columns: repeat(auto-fit, minmax($max-card-width, 1fr));
+  gap: $spacing--md;
 }
 
 .templates__stan {
