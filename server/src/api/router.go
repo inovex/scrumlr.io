@@ -149,13 +149,17 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Verifier())
 		r.Use(jwtauth.Authenticator)
 		r.Use(auth.AuthContext)
+
+		r.Post("/templates", s.createBoardTemplate)
+		r.Get("/templates", s.getBoardTemplates)
+		r.Route("/templates/{id}", func(r chi.Router) {
+			r.With(s.BoardTemplateContext).Get("/", s.getBoardTemplate)
+			r.With(s.BoardTemplateContext).Put("/", s.updateBoardTemplate)
+			r.With(s.BoardTemplateContext).Delete("/", s.deleteBoardTemplate)
+		})
+
 		r.Post("/boards", s.createBoard)
 		r.Get("/boards", s.getBoards)
-		r.Post("/boards/template", s.createBoardTemplate)
-		r.With(s.BoardTemplateContext).Get("/boards/template/{id}", s.getBoardTemplate)
-		r.Get("/boards/template", s.getBoardTemplates)
-		r.With(s.BoardTemplateContext).Put("/boards/template/{id}", s.updateBoardTemplate)
-		r.With(s.BoardTemplateContext).Delete("/boards/template/{id}", s.deleteBoardTemplate)
 		r.Route("/boards/{id}", func(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/", s.getBoard)
 			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)
