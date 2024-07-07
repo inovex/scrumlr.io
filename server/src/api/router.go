@@ -1,14 +1,15 @@
 package api
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"net/http"
-	"time"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
@@ -34,6 +35,7 @@ type Server struct {
 	health         services.Health
 	feedback       services.Feedback
 	boardReactions services.BoardReactions
+	boardTemplates services.BoardTemplates
 
 	upgrader websocket.Upgrader
 
@@ -55,6 +57,7 @@ func New(
 	health services.Health,
 	feedback services.Feedback,
 	boardReactions services.BoardReactions,
+	boardTemplates services.BoardTemplates,
 	verbose bool,
 	checkOrigin bool,
 ) chi.Router {
@@ -96,6 +99,7 @@ func New(
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
+		boardTemplates:                   boardTemplates,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -147,7 +151,11 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(auth.AuthContext)
 		r.Post("/boards", s.createBoard)
 		r.Get("/boards", s.getBoards)
-
+		r.Post("/boards/template", s.createBoardTemplate)
+		r.With(s.BoardTemplateContext).Get("/boards/template/{id}", s.getBoardTemplate)
+		r.Get("/boards/template", s.getBoardTemplates)
+		r.With(s.BoardTemplateContext).Put("/boards/template/{id}", s.updateBoardTemplate)
+		r.With(s.BoardTemplateContext).Delete("/boards/template/{id}", s.deleteBoardTemplate)
 		r.Route("/boards/{id}", func(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/", s.getBoard)
 			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)

@@ -1,15 +1,16 @@
 package api
 
 import (
-  "context"
-  "errors"
-  "github.com/go-chi/chi/v5"
-  "github.com/google/uuid"
-  "net/http"
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/database/types"
-  "scrumlr.io/server/identifiers"
-  "scrumlr.io/server/logger"
+	"context"
+	"errors"
+	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/google/uuid"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 )
 
 func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
@@ -224,5 +225,17 @@ func (s *Server) VotingContext(next http.Handler) http.Handler {
 		}
 		votingContext := context.WithValue(r.Context(), identifiers.VotingIdentifier, voting)
 		next.ServeHTTP(w, r.WithContext(votingContext))
+	})
+}
+
+func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		boardTemplateParam := chi.URLParam(r, "id")
+		boardTemplate, err := uuid.Parse(boardTemplateParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board template id")))
+		}
+		boardTemplateContext := context.WithValue(r.Context(), identifiers.BoardTemplateIdentifier, boardTemplate)
+		next.ServeHTTP(w, r.WithContext(boardTemplateContext))
 	})
 }
