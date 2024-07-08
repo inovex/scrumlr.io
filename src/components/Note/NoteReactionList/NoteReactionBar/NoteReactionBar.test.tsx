@@ -11,7 +11,7 @@ import {getEmojiWithSkinTone} from "../../../../utils/reactions";
 const renderNoteReactionBar = (close?: () => void, click?: () => void, overwrite?: Partial<ApplicationState>) =>
   render(
     <Provider store={getTestStore(overwrite)}>
-      <NoteReactionBar qw={close ?? jest.fn()} reactions={[]} handleClickReaction={click ?? jest.fn()} />
+      <NoteReactionBar closeReactionBar={close ?? jest.fn()} reactions={[]} handleClickReaction={click ?? jest.fn()} />
     </Provider>
   );
 
