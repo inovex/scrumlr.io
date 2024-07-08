@@ -6,11 +6,12 @@ import {ApplicationState} from "types";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestStore from "utils/test/getTestStore";
 import {NoteReactionBar} from "./NoteReactionBar";
+import {getEmojiWithSkinTone} from "../../../../utils/reactions";
 
 const renderNoteReactionBar = (close?: () => void, click?: () => void, overwrite?: Partial<ApplicationState>) =>
   render(
     <Provider store={getTestStore(overwrite)}>
-      <NoteReactionBar closeReactionBar={close ?? jest.fn()} reactions={[]} handleClickReaction={click ?? jest.fn()} />
+      <NoteReactionBar qw={close ?? jest.fn()} reactions={[]} handleClickReaction={click ?? jest.fn()} />
     </Provider>
   );
 
@@ -45,5 +46,15 @@ describe("NoteReactionBar", () => {
     expect(lastEmojiButton).toHaveFocus();
     await userEvent.tab();
     expect(firstEmojiButton).toHaveFocus();
+  });
+
+  it("render emoji in different skin tone", () => {
+    const applicationState = getTestApplicationState();
+    applicationState.skinTone.name = "dark";
+    applicationState.skinTone.component = "🏿";
+    renderNoteReactionBar(undefined, undefined, applicationState);
+    REACTION_EMOJI_MAP.forEach((emoji) => {
+      expect(screen.getByText(getEmojiWithSkinTone(emoji, applicationState.skinTone))).toBeInTheDocument();
+    });
   });
 });
