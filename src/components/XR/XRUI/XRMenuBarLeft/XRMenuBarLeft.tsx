@@ -4,7 +4,7 @@ import {TabBar, TabBarItem} from "components/apfel/tab-bar";
 import CheckIcon from "assets/icons/mark-as-done.svg";
 import RaiseHand from "assets/icons/raise-hand.svg";
 import BoardReactionIcon from "assets/icons/add-emoji.svg";
-import SettingsIcon from "assets/icons/general-settings.svg";
+/* import SettingsIcon from "assets/icons/general-settings.svg"; */
 import ExitIcon from "assets/icons/logout.svg";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
@@ -27,6 +27,7 @@ const XRMenuBarLeft = () => {
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
+      xrSession: rootState.view.xrSession,
     }),
     _.isEqual
   );
@@ -36,7 +37,7 @@ const XRMenuBarLeft = () => {
   const {session} = useXR();
 
   const exitAR = () => {
-    if (session?.frameRate) session.end().then(() => dispatch(Actions.setXRActive(false)));
+    if (session?.frameRate) session.end().then(() => dispatch(Actions.setXRSession(undefined)));
   };
 
   const toggleReadyState = () => {
@@ -90,15 +91,8 @@ const XRMenuBarLeft = () => {
         >
           <Text>React</Text>
         </TabBarItem>
-        <TabBarItem
-          value="4"
-          icon={
-            <Content>
-              <Svg src={SettingsIcon} />
-            </Content>
-          }
-        >
-          <Text>Settings</Text>
+        <TabBarItem value="4" icon={<Text>{state.xrSession === "AR" ? "VR" : "AR"}</Text>} onClick={() => dispatch(Actions.setXRSession(state.xrSession === "AR" ? "VR" : "AR"))}>
+          <Text>Environment</Text>
         </TabBarItem>
         <TabBarItem
           value="5"

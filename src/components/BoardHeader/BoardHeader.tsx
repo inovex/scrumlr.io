@@ -24,7 +24,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
     (rootState) => ({
       name: rootState.board.data?.name,
       accessPolicy: rootState.board.data!.accessPolicy,
-      xrActive: rootState.view.xrActive,
+      xrSession: rootState.view.xrSession,
     }),
     shallowEqual
   );

@@ -4,14 +4,15 @@ import {useHeighestAvailableFrameRate, useNativeFramebufferScaling} from "@cocon
 import {shallowEqual} from "react-redux";
 import {useAppSelector} from "store";
 import {BasicShadowMap} from "three";
+import {Environment} from "@react-three/drei";
 import XRLight from "./XRUI/XRLight/XRLight";
 import XRContainer from "./XRUI/XRContainer/XRContainer";
 import XRInputs from "./XRInputs/XRInputs";
 
 const SpatialCanvas = () => {
-  const {xrActive} = useAppSelector(
+  const {xrSession} = useAppSelector(
     (rootState) => ({
-      xrActive: rootState.view.xrActive,
+      xrSession: rootState.view.xrSession,
     }),
     shallowEqual
   );
@@ -29,11 +30,12 @@ const SpatialCanvas = () => {
       shadowMap={{enabled: true, type: BasicShadowMap}}
       shadows
     >
-      {xrActive && (
+      {xrSession && (
         <>
           <XRLight />
           <XRContainer />
           <XRInputs />
+          {xrSession === "VR" && <Environment files="../environments/dikhololo_night_4k.hdr" background />}
         </>
       )}
     </XRCanvas>

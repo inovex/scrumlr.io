@@ -36,9 +36,9 @@ const sessionOptions: XRSessionInit = {
 };
 
 export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
-  const {xrActive} = useAppSelector(
+  const {xrSession} = useAppSelector(
     (rootState) => ({
-      xrActive: rootState.view.xrActive,
+      xrSession: rootState.view.xrSession,
     }),
     shallowEqual
   );
@@ -47,9 +47,9 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
   const {session} = useXR();
 
   useEffect(() => {
-    if (xrActive && !session) enterAR();
+    if (xrSession && !session) enterAR();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [xrActive]);
+  }, [xrSession]);
 
   const [state, setState] = useState<BoardState & ColumnState>({
     firstVisibleColumnIndex: 0,
