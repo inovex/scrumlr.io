@@ -95,8 +95,8 @@ $white--000: #ffffff;
 
 // info states
 // error
-$error-ember--light: #fe3f3f;
-$error-ember--dark: #fe5757;
+$critical-carmine--light: #fe3f3f;
+$critical-carmine--dark: #fe5757;
 
 // warning
 $alert-amber--light: #ffa800;
@@ -142,7 +142,7 @@ $victory-verde--dark: $green--400;
 }
 // info states
 .accent-color__error-ember {
-  @include rgb($error-ember--light, $error-ember--dark);
+  @include rgb($critical-carmine--light, $critical-carmine--dark);
 }
 .accent-color__alert-amber {
   @include rgb($alert-amber--light, $alert-amber--dark);

@@ -35,7 +35,7 @@ $text-input__adornment-padding: 36px;
 
 .text-input[value=""] {
   background: $white--300;
-  border: 1px solid $error-ember--light;
+  border: 1px solid $critical-carmine--light;
 }
 
 .text-input:focus-visible,
