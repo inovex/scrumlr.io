@@ -30,7 +30,7 @@
       transition: all 0.08s ease-out;
 
       &:hover {
-        background-color: mix($white--000, $color-lean-lilac, 92%);
+        background-color: mix($white--000, $purple--500, 92%);
         transform: scale(1.06);
         box-shadow: 0 12px 20px rgba(var(--accent-color-rgb), 0.2);
       }
@@ -42,7 +42,7 @@
       > svg {
         width: $icon--large;
         height: $icon--large;
-        color: $color-lean-lilac;
+        color: $purple--500;
       }
     }
   }
