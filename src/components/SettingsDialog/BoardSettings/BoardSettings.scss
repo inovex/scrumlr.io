@@ -262,18 +262,18 @@
 }
 
 .board-settings__delete-button span {
-  color: $color-retro-red;
+  color: $error-ember--light;
   font-weight: bold;
 }
 
 [theme="dark"] {
   .board-settings__delete-button span {
-    color: $color-retro-red;
+    color: $error-ember--light;
   }
 }
 
 .board-settings__delete-button svg {
-  color: $color-retro-red;
+  color: $error-ember--light;
 }
 
 .board-settings__confirmation-dialog {
