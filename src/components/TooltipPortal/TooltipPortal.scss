@@ -13,7 +13,7 @@ $tooltip-max-width: 80%;
 @mixin tooltip--light {
   @include tooltip;
   color: $gray--900;
-  background-color: $hover-background-light;
+  background-color: $white--300;
 }
 
 @mixin tooltip--dark {
