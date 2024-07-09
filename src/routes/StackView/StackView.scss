@@ -31,7 +31,7 @@ $stack-view__min-height: 82px;
 }
 
 .stack-view__border--moderating {
-  box-shadow: inset 0 0 0 $column__border-width $color-goal-green;
+  box-shadow: inset 0 0 0 $column__border-width $victory-verde--light;
 }
 
 .stack-view__content {
@@ -112,6 +112,6 @@ $stack-view__min-height: 82px;
   }
 
   .stack-view__border--moderating {
-    box-shadow: inset 0 0 0 $column__border-width $color-goal-green;
+    box-shadow: inset 0 0 0 $column__border-width $victory-verde--light;
   }
 }
