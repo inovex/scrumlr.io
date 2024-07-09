@@ -3,7 +3,7 @@
 .confirmation-dialog__background {
   position: fixed;
   @include inset-0;
-  background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
+  background-color: rgba($color: $blue--500, $alpha: 0.1);
   backdrop-filter: blur(10px);
 }
 
@@ -21,7 +21,7 @@
   border-radius: $rounded--medium;
   padding: 40px 42px 35px 40px;
   border: 2px transparent;
-  box-shadow: 0 16px 32px 0 rgba($color-backlog-blue, 0.24);
+  box-shadow: 0 16px 32px 0 rgba($blue--500, 0.24);
 }
 
 .confirmation-dialog__icon-content-wrapper {
@@ -88,7 +88,7 @@
 }
 
 .confirmation-dialog__button {
-  border: 2px solid $color-backlog-blue;
+  border: 2px solid $blue--500;
   border-radius: $rounded--full;
   padding: $spacing--xs $spacing--lg;
   font-size: $text-size--medium;
@@ -100,16 +100,16 @@
     box-shadow 80ms linear;
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 10px 0 rgba($color: $color-backlog-blue, $alpha: 0.2);
+    box-shadow: 0 4px 10px 0 rgba($color: $blue--500, $alpha: 0.2);
   }
 }
 .confirmation-dialog__button--accept {
   color: $white--000;
-  background-color: $color-backlog-blue;
+  background-color: $blue--500;
 }
 .confirmation-dialog__button--decline {
-  color: $color-backlog-blue;
-  background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
+  color: $blue--500;
+  background-color: rgba($color: $blue--500, $alpha: 0.1);
 }
 .confirmation-dialog__buttons {
   display: flex;
@@ -123,12 +123,12 @@
   right: 0;
   transform: translate(50%, -50%);
   @include flex-center;
-  color: $color-backlog-blue;
+  color: $blue--500;
   height: $icon--extralarge;
   width: $icon--extralarge;
   border-radius: $rounded--full;
   border: 2px transparent;
-  box-shadow: 0 16px 32px 0 rgba($color-backlog-blue, 0.24);
+  box-shadow: 0 16px 32px 0 rgba($blue--500, 0.24);
   padding: 0;
   background-color: $white--000;
   cursor: pointer;
@@ -137,7 +137,7 @@
     background-color 80ms linear;
   &:hover {
     color: $white--000;
-    background-color: $color-backlog-blue;
+    background-color: $blue--500;
   }
 }
 .confirmation-dialog__close-button > svg {

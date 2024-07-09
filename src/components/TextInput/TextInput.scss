@@ -41,15 +41,15 @@ $text-input__adornment-padding: 36px;
 .text-input:focus-visible,
 .text-input:hover {
   background: $white--000;
-  border: 1px solid $color-backlog-blue;
+  border: 1px solid $blue--500;
 }
 
 .text-input:hover {
-  box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.2);
+  box-shadow: 0 0 0 4px rgba($blue--500, 0.2);
 }
 
 .text-input:focus-visible {
-  box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
+  box-shadow: 0 0 0 4px rgba($blue--500, 0.4);
 }
 
 .text-input__adornment {

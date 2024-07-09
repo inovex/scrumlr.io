@@ -42,7 +42,7 @@
 
   &-accept {
     @extend .cookie-policy__button;
-    background: $color-backlog-blue;
+    background: $blue--500;
     color: $white--000;
     margin: 0 0 $spacing--base $spacing--base;
   }

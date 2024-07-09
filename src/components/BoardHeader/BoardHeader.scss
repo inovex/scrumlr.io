@@ -24,11 +24,11 @@
   border: none;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.32);
+    box-shadow: 0 0 0 2px rgba($blue--500, 0.32);
   }
 
   &:hover {
-    background-color: rgba($color-backlog-blue, 0.06);
+    background-color: rgba($blue--500, 0.06);
   }
 }
 
@@ -74,11 +74,11 @@
   cursor: pointer;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.32);
+    box-shadow: 0 0 0 2px rgba($blue--500, 0.32);
   }
 
   &:hover {
-    background-color: rgba($color-backlog-blue, 0.06);
+    background-color: rgba($blue--500, 0.06);
   }
 }
 

@@ -197,13 +197,13 @@ $color-close-icon: #bfc1c5;
 }
 .toast-single:hover .toast__button-single.toast__button-info,
 .toast__button-multi-primary.toast__button-info:hover {
-  border-color: $color-backlog-blue;
-  background-color: $color-backlog-blue;
+  border-color: $blue--500;
+  background-color: $blue--500;
   color: $white--000;
 }
 .toast__button-multi-secondary.toast__button-info:hover {
-  color: $color-backlog-blue;
-  border-color: $color-backlog-blue;
+  color: $blue--500;
+  border-color: $blue--500;
 }
 .toast-single:hover .toast__button-single.toast__button-error,
 .toast__button-multi-primary.toast__button-error:hover {
@@ -382,7 +382,7 @@ input[type="checkbox"]:checked::before {
   .toast__button-single {
     padding: 0px;
     background-color: $white--000;
-    color: $color-backlog-blue;
+    color: $blue--500;
     margin-left: 0px;
     line-height: 16px;
     font-weight: 600;
@@ -397,7 +397,7 @@ input[type="checkbox"]:checked::before {
   .toast-single:hover .toast__button-single.toast__button-info {
     border-color: $white--000;
     background-color: $white--000;
-    color: $color-backlog-blue;
+    color: $blue--500;
   }
   .toast-single:hover .toast__button-single.toast__button-error {
     border-color: $white--000;

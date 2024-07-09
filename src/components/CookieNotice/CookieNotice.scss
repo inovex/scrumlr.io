@@ -8,7 +8,7 @@
   right: 0;
   left: 0;
   padding: $spacing--base;
-  box-shadow: 0 -4px 16px rgba($color-backlog-blue, 0.16);
+  box-shadow: 0 -4px 16px rgba($blue--500, 0.16);
 }
 
 .cookie-notice__buttons {
@@ -24,7 +24,7 @@
 
   &-accept {
     @extend .cookie-notice__button;
-    background: $color-backlog-blue;
+    background: $blue--500;
     color: $white--000;
     margin: 0 0 $spacing--base $spacing--base;
   }

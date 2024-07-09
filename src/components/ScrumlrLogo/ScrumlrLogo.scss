@@ -17,7 +17,7 @@
 }
 
 .scrumlr-logo__paths {
-  fill: $color-backlog-blue;
+  fill: $blue--500;
 
   path {
     transition: all 0.08s ease-out;
@@ -30,7 +30,7 @@
 }
 
 .scrumlr-logo__stop {
-  stop-color: $color-backlog-blue;
+  stop-color: $blue--500;
 }
 
 [theme="dark"] {

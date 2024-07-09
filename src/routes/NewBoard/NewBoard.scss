@@ -29,7 +29,7 @@
     }
 
     &:focus-visible > svg {
-      border: 1px solid $color-backlog-blue;
+      border: 1px solid $blue--500;
     }
   }
 }
@@ -65,11 +65,11 @@
 }
 
 .new-board__mode-input:checked + .new-board__mode-label {
-  border: 1px solid $color-backlog-blue;
+  border: 1px solid $blue--500;
 }
 
 .new-board__mode-input + .new-board__mode-label:hover {
-  box-shadow: 0 4px 8px 2px rgba($color-backlog-blue, 0.3);
+  box-shadow: 0 4px 8px 2px rgba($blue--500, 0.3);
   transform: scale(1.02);
 }
 
@@ -142,7 +142,7 @@
   }
 
   .new-board__mode-input + .new-board__mode-label:hover {
-    box-shadow: 0 4px 8px 2px rgba($color-backlog-blue, 0.1);
+    box-shadow: 0 4px 8px 2px rgba($blue--500, 0.1);
   }
 
   .new-board__actions {

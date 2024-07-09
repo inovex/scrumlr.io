@@ -6,7 +6,7 @@
   align-items: center;
   cursor: initial;
 
-  background: $color-backlog-blue;
+  background: $blue--500;
 
   color: $white--000;
   font-weight: bold;
@@ -20,7 +20,7 @@
   padding: $spacing--xs $spacing--base;
 
   transition: all 0.08s ease-out;
-  box-shadow: 0 0 0 0 rgba($color-backlog-blue, 0.2);
+  box-shadow: 0 0 0 0 rgba($blue--500, 0.2);
 }
 
 .button:not(:disabled) {
@@ -29,8 +29,8 @@
 
 .button.button--outlined {
   background: none;
-  color: $color-backlog-blue;
-  border: 1px solid $color-backlog-blue;
+  color: $blue--500;
+  border: 1px solid $blue--500;
   box-shadow: none;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .button--secondary {
-  background: $color-backlog-blue;
+  background: $blue--500;
 }
 
 .button.button--text-link:disabled {
@@ -83,7 +83,7 @@
 .button:not(:disabled):not(.button--text-link):hover {
   filter: brightness(1.05);
   transform: scale(1.02);
-  box-shadow: 0 6px 9px 0 rgba($color-backlog-blue, 0.24);
+  box-shadow: 0 6px 9px 0 rgba($blue--500, 0.24);
 }
 
 .button:not(:disabled):not(.button--text-link).button--primary:hover {
@@ -101,7 +101,7 @@
 }
 
 .button:not(:disabled):not(.button--text-link):focus-visible {
-  outline: 2px solid rgba($color-backlog-blue, 0.4);
+  outline: 2px solid rgba($blue--500, 0.4);
 }
 
 .button:not(:disabled):not(.button--text-link).button--primary:focus-visible {

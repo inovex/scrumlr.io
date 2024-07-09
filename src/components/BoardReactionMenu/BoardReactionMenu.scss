@@ -44,7 +44,7 @@ $reaction-size: 48px;
   }
   &:focus-visible {
     // lose focus after click
-    outline: 2px solid $color-backlog-blue;
+    outline: 2px solid $blue--500;
     outline-offset: 2px;
   }
   &:disabled {

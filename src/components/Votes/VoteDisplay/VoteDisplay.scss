@@ -20,7 +20,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   box-shadow: $box-shadow--light;
 
   &:has(:focus-visible) {
-    outline: 2px solid $color-backlog-blue;
+    outline: 2px solid $blue--500;
   }
 }
 
@@ -113,7 +113,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 
   &:focus-visible {
-    outline: 2px solid $color-backlog-blue;
+    outline: 2px solid $blue--500;
   }
 }
 

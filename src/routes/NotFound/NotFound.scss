@@ -6,7 +6,7 @@
   width: 100%;
   padding: $spacing--xs 0 0 $spacing--lg;
   overflow-x: hidden;
-  background: linear-gradient(320deg, color.change($color-backlog-blue, $alpha: 0.2), color.change($white--000, $alpha: 0.3));
+  background: linear-gradient(320deg, color.change($blue--500, $alpha: 0.2), color.change($white--000, $alpha: 0.3));
 }
 
 .not-found__background {
@@ -179,10 +179,10 @@
   .not-found__root {
     background: linear-gradient(
       320deg,
-      color.change($color-backlog-blue, $lightness: 12%, $saturation: 25%) 6%,
-      color.change($color-backlog-blue, $lightness: 14%, $saturation: 35%) 30%,
-      color.change($color-backlog-blue, $lightness: 37%, $saturation: 23%) 60%,
-      color.change($color-backlog-blue, $lightness: 56%, $saturation: 28%) 80%
+      color.change($blue--500, $lightness: 12%, $saturation: 25%) 6%,
+      color.change($blue--500, $lightness: 14%, $saturation: 35%) 30%,
+      color.change($blue--500, $lightness: 37%, $saturation: 23%) 60%,
+      color.change($blue--500, $lightness: 56%, $saturation: 28%) 80%
     );
   }
 
