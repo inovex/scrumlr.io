@@ -31,6 +31,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const {t} = useTranslation();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
 
+  const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
+
   const author = useAppSelector((state) => {
     const noteAuthor = state.participants?.others.find((p) => p.user.id === authorId) ?? state.participants?.self;
     const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
@@ -59,7 +61,10 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(text);
 
-  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({initialValue: text, suggestionsHidden: isStackedNote});
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({
+    initialValue: text,
+    suggestionsHidden: isStackedNote,
+  });
 
   return (
     <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})} ref={emoji.containerRef}>
@@ -112,7 +117,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           />
-
+          {note?.edited && <div className="note-dialog__marker-edited">({t("Note.edited")})</div>}
           {!isStackedNote && (
             <div className="note-dialog__note-content--emoji-suggestions">
               <EmojiSuggestions {...emoji.suggestionsProps} />

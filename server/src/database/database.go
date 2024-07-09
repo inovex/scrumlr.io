@@ -12,15 +12,13 @@ import (
 
 // Database is the main class within this package and will be extended by several receiver functions
 type Database struct {
-	db       *bun.DB
-	observer []Observer
+	db *bun.DB
 }
 
 // New creates a new instance of Database
 func New(db *sql.DB, verbose bool) *Database {
 	d := new(Database)
 	d.db = bun.NewDB(db, pgdialect.New())
-	d.observer = []Observer{}
 
 	// configuration of database
 	maxOpenConnections := 4 * runtime.GOMAXPROCS(0)

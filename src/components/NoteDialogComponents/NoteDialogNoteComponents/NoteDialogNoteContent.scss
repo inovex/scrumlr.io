@@ -10,7 +10,8 @@
   line-height: $line-height--medium;
   flex: 1;
   overflow-y: visible;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
 
   &:has(&--image) {
     padding: $spacing--xs;
@@ -55,6 +56,12 @@
       border-color: var(--accent-color--desaturated-dark);
     }
   }
+}
+
+.note-dialog__marker-edited {
+  color: $color-middle-gray;
+  font-size: $text--base;
+  padding: 0 $spacing--xxs;
 }
 
 .note-dialog__note-content--image {
