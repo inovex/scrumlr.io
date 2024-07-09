@@ -51,7 +51,7 @@
   > .avatar #Circle-Background,
   .avatar #Color\/Palette\/Blue-01 {
     transition: fill 0.15s ease-in-out;
-    fill: color.change($color-grooming-green, $lightness: 100%, $saturation: 0%);
+    fill: color.change($green--500, $lightness: 100%, $saturation: 0%);
   }
 }
 
@@ -106,7 +106,7 @@
     }
 
     .circle {
-      fill: color.change($color-grooming-green, $lightness: 20%, $saturation: 70%, $alpha: 0.6);
+      fill: color.change($green--500, $lightness: 20%, $saturation: 70%, $alpha: 0.6);
     }
 
     path {
