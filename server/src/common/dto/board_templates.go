@@ -72,12 +72,10 @@ type BoardTemplateUpdateRequest struct {
 	Description *string `json:"description"`
 
 	// The access policy
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
 
 	// The passphrase must be set if access policy is defined as by passphrase.
-	Passphrase *string `json:"-"`
-
-	Salt *string `json:"-"`
+	Passphrase *string `json:"passphrase"`
 
 	// The template columns
 	ColumnTemplates []ColumnTemplate `json:"templateColumns"`

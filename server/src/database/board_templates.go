@@ -166,27 +166,12 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 		query_settings.Column("description")
 	}
 
-	if update.Passphrase != nil {
-		query_settings.Column("passphrase")
-	}
-
-	if update.Salt != nil {
-		query_settings.Column("salt")
-	}
-
 	if update.AccessPolicy != nil {
 		if *update.AccessPolicy == types.AccessPolicyByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
 			return BoardTemplate{}, errors.New("passphrase and salt should be set when access policy is updated")
 		} else if *update.AccessPolicy != types.AccessPolicyByPassphrase && (update.Passphrase != nil || update.Salt != nil) {
-			return BoardTemplate{}, errors.New("passphrase and salt should not be set if access policy is defined as 'BY_PASSPHRASE'")
+			return BoardTemplate{}, errors.New("passphrase and salt should not be set if access policy is not defined as 'BY_PASSPHRASE'")
 		}
-
-		if *update.AccessPolicy == types.AccessPolicyByInvite {
-			query_settings.Where("access_policy = ?", types.AccessPolicyByInvite)
-		} else {
-			query_settings.Where("access_policy <> ?", types.AccessPolicyByInvite)
-		}
-
 		query_settings.Column("access_policy", "passphrase", "salt")
 	}
 

@@ -3,6 +3,7 @@ package board_templates
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -123,6 +124,7 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 }
 
 func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error) {
+	log := logger.FromContext(ctx)
 	// parse dto cols to db cols
 	req_cols := []*database.ColumnTemplate{}
 	for _, col := range body.ColumnTemplates {
@@ -143,10 +145,31 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 		ID:              body.ID,
 		Name:            body.Name,
 		Description:     body.Description,
-		AccessPolicy:    &body.AccessPolicy,
+		AccessPolicy:    body.AccessPolicy,
 		Passphrase:      body.Passphrase,
-		Salt:            body.Salt,
 		ColumnTemplates: req_cols,
+	}
+
+	if body.AccessPolicy != nil {
+		update.AccessPolicy = body.AccessPolicy
+		if *body.AccessPolicy == types.AccessPolicyByPassphrase {
+			if body.Passphrase == nil {
+				return nil, common.BadRequestError(errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected"))
+			}
+
+			passphrase, salt, err := common.Sha512WithSalt(*body.Passphrase)
+			if err != nil {
+				log.Error("failed to encode passphrase")
+				return nil, fmt.Errorf("failed to encode passphrase: %w", err)
+			}
+
+			update.Passphrase = passphrase
+			update.Salt = salt
+		} else {
+			if body.Passphrase != nil {
+				return nil, common.BadRequestError(errors.New("passphrase should not be set if access policy is not defined as 'BY_PASSPHRASE'"))
+			}
+		}
 	}
 
 	updatedTemplate, err := s.database.UpdateBoardTemplate(update)
