@@ -64,7 +64,6 @@ func (s *BoardTemplateService) Create(ctx context.Context, body dto.CreateBoardT
 	return new(dto.BoardTemplate).From(b), nil
 }
 
-// FIX ME: check if i can return a dto.Boardtemplate with dto.columns instead of database.cloumns
 func (s *BoardTemplateService) Get(_ context.Context, id uuid.UUID) (*dto.BoardTemplate, error) {
 	boardTemplate, err := s.database.GetBoardTemplate(id)
 	if err != nil {

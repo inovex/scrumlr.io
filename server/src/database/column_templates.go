@@ -24,7 +24,7 @@ type ColumnTemplate struct {
 type ColumnTemplateInsert struct {
 	bun.BaseModel `bun:"table:column_templates"`
 	BoardTemplate uuid.UUID
-	Description   string //Fix me, check if i get added on create, I was added later in development
+	Description   string
 	Name          string
 	Color         types.Color
 	Visible       *bool
