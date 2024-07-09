@@ -5,8 +5,8 @@ import {Provider} from "react-redux";
 import {ApplicationState} from "types";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestStore from "utils/test/getTestStore";
+import {getEmojiWithSkinTone} from "utils/reactions";
 import {NoteReactionBar} from "./NoteReactionBar";
-import {getEmojiWithSkinTone} from "../../../../utils/reactions";
 
 const renderNoteReactionBar = (close?: () => void, click?: () => void, overwrite?: Partial<ApplicationState>) =>
   render(
@@ -49,12 +49,9 @@ describe("NoteReactionBar", () => {
   });
 
   it("render emoji in different skin tone", () => {
-    const applicationState = getTestApplicationState();
-    applicationState.skinTone.name = "dark";
-    applicationState.skinTone.component = "🏿";
-    renderNoteReactionBar(undefined, undefined, applicationState);
+    renderNoteReactionBar(undefined, undefined, {skinTone: {name: "dark", component: "🏿"}});
     REACTION_EMOJI_MAP.forEach((emoji) => {
-      expect(screen.getByText(getEmojiWithSkinTone(emoji, applicationState.skinTone))).toBeInTheDocument();
+      expect(screen.getByText(getEmojiWithSkinTone(emoji, {name: "dark", component: "🏿"}))).toBeInTheDocument();
     });
   });
 });

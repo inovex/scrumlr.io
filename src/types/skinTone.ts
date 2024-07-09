@@ -12,8 +12,8 @@ export type SkinToneName = keyof typeof skinTones;
 export type SkinToneComponent = (typeof skinTones)[SkinToneName];
 
 export interface SkinTone {
-  name: SkinToneName;
-  component: SkinToneComponent;
+  readonly name: SkinToneName;
+  readonly component: SkinToneComponent;
 }
 
 export type SkinToneState = SkinTone;
