@@ -4,10 +4,10 @@ import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
 import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
-import "./NoteReactionChip.scss";
 import {useAppSelector} from "store";
 import {getEmojiWithSkinTone} from "utils/reactions";
 import {ReactionModeled} from "../NoteReactionList";
+import "./NoteReactionChip.scss";
 
 interface NoteReactionChipProps {
   reaction: ReactionModeled;
