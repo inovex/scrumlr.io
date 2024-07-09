@@ -16,7 +16,7 @@
       top: 10px;
       border-width: 15px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-planning-pink;
+      border-color: transparent transparent transparent $pink--500;
     }
     .voting-dialog::after {
       content: " ";
@@ -41,7 +41,7 @@
   border-radius: 8px;
   height: 48px;
   width: 80%;
-  background: $color-planning-pink;
+  background: $pink--500;
   cursor: pointer;
   transition: all 0.08s ease-out;
 
@@ -71,14 +71,14 @@
 .voting-dialog__vote-button {
   height: $icon--medium;
   width: $icon--medium;
-  border: 1px solid $color-planning-pink;
+  border: 1px solid $pink--500;
   border-radius: $rounded--full;
   background-color: transparent;
   cursor: pointer;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
-  color: $color-planning-pink;
+  color: $pink--500;
 
   > svg {
     height: 100%;

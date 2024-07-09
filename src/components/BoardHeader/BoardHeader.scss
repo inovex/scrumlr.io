@@ -35,11 +35,11 @@
 [theme="dark"] {
   .board-header__link {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
     }
 
     &:hover {
-      background-color: rgba($color-planning-pink, 0.15);
+      background-color: rgba($pink--500, 0.15);
     }
   }
 }
@@ -85,11 +85,11 @@
 [theme="dark"] {
   .board-header_name-and-settings {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
     }
 
     &:hover {
-      background-color: rgba($color-planning-pink, 0.15); // Ask designer for correct color
+      background-color: rgba($pink--500, 0.15); // Ask designer for correct color
     }
   }
 }

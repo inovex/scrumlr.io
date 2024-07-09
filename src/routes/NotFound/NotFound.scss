@@ -79,7 +79,7 @@
 
   border: none;
   border-radius: $rounded--full;
-  box-shadow: 0 5px 4px color.change($color-planning-pink, $alpha: 0.25);
+  box-shadow: 0 5px 4px color.change($pink--500, $alpha: 0.25);
 
   cursor: pointer;
 }

@@ -49,13 +49,13 @@
 }
 
 .button.button--primary.button--outlined {
-  color: $color-planning-pink;
-  border-color: $color-planning-pink;
+  color: $pink--500;
+  border-color: $pink--500;
 }
 
 .button--primary {
-  background: $color-planning-pink;
-  box-shadow: 0 0 0 0 rgba($color-planning-pink, 0.2);
+  background: $pink--500;
+  box-shadow: 0 0 0 0 rgba($pink--500, 0.2);
 }
 
 .button--secondary {
@@ -89,7 +89,7 @@
 .button:not(:disabled):not(.button--text-link).button--primary:hover {
   filter: brightness(1.05);
   transform: scale(1.02);
-  box-shadow: 0 6px 9px 0 rgba($color-planning-pink, 0.24);
+  box-shadow: 0 6px 9px 0 rgba($pink--500, 0.24);
 }
 
 .button:not(:disabled):not(.button--text-link):active {
@@ -105,7 +105,7 @@
 }
 
 .button:not(:disabled):not(.button--text-link).button--primary:focus-visible {
-  outline: 2px solid rgba($color-planning-pink, 0.4);
+  outline: 2px solid rgba($pink--500, 0.4);
 }
 
 .button__label {

@@ -7,7 +7,7 @@
   backdrop-filter: blur(10px);
 }
 [theme="dark"] .settings-dialog__background {
-  background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+  background-color: rgba($color: $pink--500, $alpha: 0.1);
 }
 
 .settings-dialog__wrapper {
@@ -149,15 +149,15 @@ $settings-dialog-container--bottom: 62px;
   width: 100%;
 }
 [theme="dark"] .settings-dialog__close-button {
-  color: $color-planning-pink;
+  color: $pink--500;
 
   &:hover {
-    background-color: $color-planning-pink;
+    background-color: $pink--500;
     color: $white--000;
   }
 
   &:focus-visible {
-    border: 2px solid $color-planning-pink;
+    border: 2px solid $pink--500;
   }
 }
 @media screen and (min-width: 450px) {
@@ -194,7 +194,7 @@ $settings-dialog-container--bottom: 62px;
     border-radius: $rounded--full;
   }
   [theme="dark"] .settings-dialog__back-link > svg {
-    color: $color-planning-pink;
+    color: $pink--500;
   }
 }
 

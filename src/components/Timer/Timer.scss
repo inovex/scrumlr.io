@@ -169,7 +169,7 @@ $timer__progress-bar-color: #6096ff;
     border-color: $gray--500;
 
     &:has(:focus-visible) {
-      outline: 2px solid $color-planning-pink;
+      outline: 2px solid $pink--500;
     }
   }
   .timer > svg {
@@ -186,7 +186,7 @@ $timer__progress-bar-color: #6096ff;
     }
 
     &:focus-visible {
-      outline: 2px solid $color-planning-pink;
+      outline: 2px solid $pink--500;
     }
   }
 
@@ -203,7 +203,7 @@ $timer__progress-bar-color: #6096ff;
     }
 
     &:focus-visible {
-      outline: 2px solid $color-planning-pink;
+      outline: 2px solid $pink--500;
     }
   }
 }

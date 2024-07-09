@@ -7,7 +7,7 @@
   left: 0;
   box-sizing: border-box;
   position: fixed;
-  border: 3px solid $color-planning-pink;
+  border: 3px solid $pink--500;
   background: $white--100;
   box-shadow:
     2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02),
@@ -43,7 +43,7 @@
 }
 
 .dialog__header-text {
-  border-bottom: solid 3px $color-planning-pink;
+  border-bottom: solid 3px $pink--500;
   padding-bottom: 8px;
   margin: 0;
 }
@@ -57,7 +57,7 @@
   position: absolute;
   top: 2px; // some space for the focus border
   right: 2px;
-  color: $color-planning-pink;
+  color: $pink--500;
   display: flex;
   justify-content: center;
   align-items: center;

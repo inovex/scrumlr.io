@@ -146,38 +146,38 @@
 }
 [theme="dark"] {
   .confirmation-dialog__background {
-    background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+    background-color: rgba($color: $pink--500, $alpha: 0.1);
   }
 
   .confirmation-dialog {
     color: $white--000;
     background-color: $gray--600;
-    border-color: $color-planning-pink;
+    border-color: $pink--500;
     box-shadow: $box-shadow--dark;
   }
 
   .confirmation-dialog__button {
-    border-color: $color-planning-pink;
+    border-color: $pink--500;
     &:hover {
-      box-shadow: 0 4px 8px rgba($color: $color-planning-pink, $alpha: 0.2);
+      box-shadow: 0 4px 8px rgba($color: $pink--500, $alpha: 0.2);
     }
   }
   .confirmation-dialog__button--accept {
-    background-color: $color-planning-pink;
+    background-color: $pink--500;
   }
   .confirmation-dialog__button--decline {
-    color: $color-planning-pink;
-    background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+    color: $pink--500;
+    background-color: rgba($color: $pink--500, $alpha: 0.1);
   }
 
   .confirmation-dialog__close-button {
-    color: $color-planning-pink;
+    color: $pink--500;
     background-color: $gray--500;
-    border-color: $color-planning-pink;
+    border-color: $pink--500;
     box-shadow: $box-shadow--dark;
     &:hover {
       color: $white--000;
-      background-color: $color-planning-pink;
+      background-color: $pink--500;
     }
   }
 }
