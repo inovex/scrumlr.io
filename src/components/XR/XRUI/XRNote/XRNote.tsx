@@ -30,6 +30,7 @@ const initialQuaternion = new Quaternion().setFromEuler(initialRotation);
 
 const XRNote = (props: NoteProps) => {
   const {t} = useTranslation();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const grabbableRef = useRef<Object3D<any>>(null!);
   const staticCardRef = useRef<ContainerProperties>(null!);
   const dragCardRef = useRef<ContainerProperties>(null!);

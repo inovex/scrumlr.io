@@ -1,4 +1,3 @@
-import "./SpatialCanvas.scss";
 import {XRCanvas} from "@coconut-xr/natuerlich/defaults";
 import {useHeighestAvailableFrameRate, useNativeFramebufferScaling} from "@coconut-xr/natuerlich/react";
 import {shallowEqual} from "react-redux";
