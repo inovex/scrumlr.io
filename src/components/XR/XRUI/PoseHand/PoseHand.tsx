@@ -22,7 +22,7 @@ const PoseHand = ({inputSource, setPoseName}: PoseHandProps) => {
     {
       /* fist: "fist.handpose", */
       relax: "relax.handpose",
-      /* point: "point.handpose", */
+      point: "point.handpose",
       thumb: "thumb.handpose",
       peace: "peace.handpose",
       heart: "heart.handpose",

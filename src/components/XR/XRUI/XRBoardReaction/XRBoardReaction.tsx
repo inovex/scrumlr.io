@@ -1,7 +1,7 @@
 import {Svg} from "@react-three/drei";
 import {Container, ContainerProperties, Content, DefaultProperties, Text} from "@react-three/uikit";
 import {BoardReactionProps} from "components/BoardReaction/BoardReaction";
-import {memo, useRef} from "react";
+import {memo, useMemo, useRef} from "react";
 import PartyPopper from "assets/emoji/emoji-party-popper.svg";
 import ClappingHands from "assets/emoji/emoji-clapping-hands.svg";
 import SparklingHeart from "assets/emoji/emoji-sparkling-heart.svg";
@@ -26,6 +26,7 @@ const XR_REACTION_ICONS = new Map<ReactionType, string>([
 const XRBoardReaction = (props: BoardReactionProps) => {
   const containerRef = useRef<ContainerProperties>(null!);
   const positionBottom = useRef<number>(40);
+  const positionLeft = useMemo(() => getRandomNumberInRange(100, 900), []);
 
   const {t} = useTranslation();
 
@@ -48,7 +49,7 @@ const XRBoardReaction = (props: BoardReactionProps) => {
       flexDirection="column"
       alignItems="center"
       positionBottom={40}
-      positionLeft={getRandomNumberInRange(100, 900)}
+      positionLeft={positionLeft}
       zIndexOffset={128}
       transformTranslateZ={128}
       ref={containerRef}
