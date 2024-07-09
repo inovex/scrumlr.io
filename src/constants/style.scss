@@ -120,7 +120,7 @@ $victory-verde--dark: $green--400;
 
 // accent colors for columns, note etc
 .accent-color__backlog-blue {
-  @include rgb($blue--500 $blue--400);
+  @include rgb($blue--500, $blue--400);
 }
 .accent-color__grooming-green {
   @include rgb($green--500, $green--400);
