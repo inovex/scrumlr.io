@@ -81,7 +81,7 @@
     color: $white--000;
   }
   .board-settings__board-name-button_input::placeholder {
-    color: $color-placeholder-dark;
+    color: $white--000;
   }
 }
 
@@ -126,7 +126,7 @@
 
 [theme="dark"] {
   .board-settings__policy-button_value span {
-    color: $color-placeholder-dark;
+    color: $white--000;
   }
 }
 
@@ -185,7 +185,7 @@
 
 [theme="dark"] {
   .board-settings__show-password-button--disabled {
-    color: $color-placeholder-dark;
+    color: $white--000;
   }
 }
 
