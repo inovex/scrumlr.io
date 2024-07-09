@@ -19,7 +19,7 @@ $tooltip-max-width: 80%;
 @mixin tooltip--dark {
   @include tooltip;
   color: $white--000;
-  background-color: $hover-background-dark;
+  background-color: $gray--300;
 }
 
 // selecting .tooltip-portal directly won't work because of CSS specificity
