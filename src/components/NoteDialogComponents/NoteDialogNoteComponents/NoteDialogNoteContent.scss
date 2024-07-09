@@ -10,7 +10,8 @@
   line-height: $line-height--medium;
   flex: 1;
   overflow-y: visible;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
 
   &:has(&--image) {
     padding: $spacing--xs;
@@ -38,7 +39,7 @@
   outline: none;
   resize: none;
   word-wrap: break-word;
-  padding: 0 4px;
+  padding: 0 $spacing--xxs;
   font-size: $text--md;
   line-height: 1.5rem;
   &:not(:disabled) {
@@ -48,14 +49,11 @@
     }
   }
 }
-.note-dialog__note-content-container {
-  width: 100%;
-  height: 100%;
-}
 
 .note-dialog__marker-edited {
   color: $color-middle-gray;
   font-size: $text--base;
+  padding: 0 $spacing--xxs;
 }
 
 .note-dialog__note-content--image {
