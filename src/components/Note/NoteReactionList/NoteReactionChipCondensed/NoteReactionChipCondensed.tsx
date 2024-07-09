@@ -5,8 +5,8 @@ import {uniqueId} from "underscore";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
-import {useAppSelector} from "../../../../store";
-import {getEmojiWithSkinTone} from "../../../../utils/reactions";
+import {useAppSelector} from "store";
+import {getEmojiWithSkinTone} from "utils/reactions";
 
 interface NoteReactionChipPropsCondensed {
   reactions: ReactionModeled[];
