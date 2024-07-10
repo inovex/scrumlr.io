@@ -225,18 +225,19 @@ func (d *Database) GetBoardSessions(board uuid.UUID, filter ...filter.BoardSessi
 }
 
 // Gets all board sessions of a single user who he is currently connected to
-func (d *Database) GetSingleUserConnectedBoards(user uuid.UUID) ([]BoardSession, error) {
-	var sessions []BoardSession
+func (d *Database) GetSingleUserConnectedBoards(user uuid.UUID) ([]uuid.UUID, error) {
+	var connectedBoards []uuid.UUID
 	err := d.db.NewSelect().
+		Model(connectedBoards).
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		ColumnExpr("s.board").
 		Where("s.user = ?", user).
 		Where("s.connected").
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(context.Background(), &sessions)
+		Scan(context.Background(), &connectedBoards)
 	if err != nil {
 		return nil, err
 	}
 
-	return sessions, err
+	return connectedBoards, err
 }

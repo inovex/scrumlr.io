@@ -11,7 +11,7 @@ import (
 
 // BoardSession is the response for all participant requests.
 type BoardSession struct {
-	User User `json:"user"`
+	User uuid.UUID `json:"user"`
 
 	// Flag indicates whether user is online and connected to the board.
 	Connected bool `json:"connected"`
@@ -40,13 +40,7 @@ type BoardSession struct {
 }
 
 func (b *BoardSession) From(session database.BoardSession) *BoardSession {
-	user := User{
-		ID:          session.User,
-		Name:        session.Name,
-		Avatar:      session.Avatar,
-		AccountType: session.AccountType,
-	}
-	b.User = user
+	b.User = session.User
 	b.Connected = session.Connected
 	b.Ready = session.Ready
 	b.RaisedHand = session.RaisedHand

@@ -12,7 +12,7 @@ import (
 
 func isModerator(clientID uuid.UUID, sessions []*dto.BoardSession) bool {
 	for _, session := range sessions {
-		if clientID == session.User.ID {
+		if clientID == session.User {
 			if session.Role == types.SessionRoleModerator || session.Role == types.SessionRoleOwner {
 				return true
 			}
@@ -290,7 +290,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		return &ret
 	}
 
-	if event.Type == realtime.BoardEventParticipantUpdated {
+	if event.Type == realtime.BoardEventParticipantSessionUpdated {
 		participant, err := parseParticipantUpdated(event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse participantUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
@@ -299,7 +299,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		if isMod {
 			// Cache the changes of when a participant got updated
 			for idx, user := range boardSubscription.boardParticipants {
-				if user.User.ID == participant.User.ID {
+				if participant.User == user.User {
 					boardSubscription.boardParticipants[idx] = participant
 				}
 			}
