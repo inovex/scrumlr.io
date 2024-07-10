@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/httprate"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
@@ -237,5 +239,28 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 		}
 		boardTemplateContext := context.WithValue(r.Context(), identifiers.BoardTemplateIdentifier, boardTemplate)
 		next.ServeHTTP(w, r.WithContext(boardTemplateContext))
+	})
+}
+
+func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
+	// Initialize the rate limiter
+	limiter := httprate.Limit(
+		5,
+		3*time.Second,
+		httprate.WithKeyFuncs(httprate.KeyByIP),
+		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, err := w.Write([]byte(`{"error": "Too many requests"}`))
+			if err != nil {
+				log := logger.FromRequest(r)
+				log.Errorw("could not write error", "error", err)
+			}
+		}),
+	)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Apply the rate limiter to the next handler
+		limiter(next).ServeHTTP(w, r)
 	})
 }

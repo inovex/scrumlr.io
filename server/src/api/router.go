@@ -150,9 +150,10 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(jwtauth.Authenticator)
 		r.Use(auth.AuthContext)
 
-		r.Post("/templates", s.createBoardTemplate)
-		r.Get("/templates", s.getBoardTemplates)
+		r.With(s.BoardTemplateRateLimiter).Post("/templates", s.createBoardTemplate)
+		r.With(s.BoardTemplateRateLimiter).Get("/templates", s.getBoardTemplates)
 		r.Route("/templates/{id}", func(r chi.Router) {
+			r.Use(s.BoardTemplateRateLimiter)
 			r.With(s.BoardTemplateContext).Get("/", s.getBoardTemplate)
 			r.With(s.BoardTemplateContext).Put("/", s.updateBoardTemplate)
 			r.With(s.BoardTemplateContext).Delete("/", s.deleteBoardTemplate)
