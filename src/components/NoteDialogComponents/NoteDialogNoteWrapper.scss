@@ -10,7 +10,7 @@
   box-sizing: border-box;
   border-radius: $note__border-radius;
 
-  @include scrollbar($color: var(--accent-color), $color-dark: var(--accent-color--dark)); // scrollbar visibility?
+  @include scrollbar();
 }
 
 .note-dialog__note-wrapper {

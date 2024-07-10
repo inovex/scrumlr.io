@@ -251,28 +251,13 @@ $column-stripes--dark: repeating-linear-gradient(
 }
 
 // scrollbar
-@mixin scrollbar($width: 10px, $border-radius: 8px, $color: $color-light-gray, $color-dark: $color-black) {
-  &::-webkit-scrollbar {
-    width: #{$width};
-  }
+@mixin scrollbar() {
+  scrollbar-width: auto;
 
-  &::-webkit-scrollbar-track {
-    border-radius: #{$border-radius};
-    background-color: $color;
-    opacity: 9%;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: #{$border-radius};
-    background-color: $color;
-    opacity: 15%;
-  }
+  scrollbar-color: var(--accent-color--desaturated-light-hover) var(--accent-color--desaturated-light);
 
   [theme="dark"] {
-    &::-webkit-scrollbar-thumb {
-      background-color: $color-dark;
-      opacity: 30%;
-    }
+    scrollbar-color: var(--accent-color--desaturated-dark-hover) var(--accent-color--desaturated-dark);
   }
 }
 

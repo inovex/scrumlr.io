@@ -48,7 +48,7 @@
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;
 
-  @include scrollbar(14px, 8px, var(--accent-color), var(--accent-color--dark));
+  @include scrollbar();
 
   &:not(:disabled) {
     &:hover,
@@ -123,7 +123,7 @@
   box-shadow: $box-shadow--light;
   background-color: $color-lighter-gray;
 
-  @include scrollbar($color: var(--accent-color), $color-dark: var(--acccent-color--dark));
+  @include scrollbar();
 }
 
 [theme="dark"] {
