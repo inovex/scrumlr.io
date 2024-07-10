@@ -8,27 +8,28 @@ import (
 	"scrumlr.io/server/database/types"
 )
 
-// Column is the response for all column template requests.
+// ColumnTemplate is the response for all column template requests.
 type ColumnTemplate struct {
 
-	// The column id.
+	// The column template id.
 	ID uuid.UUID `json:"id"`
 
-	// The borad template id, that the column is bound to
+	// The board template id, that this column template is bound to.
 	BoardTemplate uuid.UUID `json:"board_template"`
 
+	// The description of a board template column.
 	Description string `json:"description"`
 
-	// The column name.
+	// The column template name.
 	Name string `json:"name"`
 
-	// The column color.
+	// The column template color.
 	Color types.Color `json:"color"`
 
-	// The column visibility.
+	// The column template visibility.
 	Visible bool `json:"visible"`
 
-	// The column rank.
+	// The column template rank.
 	Index int `json:"index"`
 }
 
@@ -47,27 +48,27 @@ func (*ColumnTemplate) Render(_ http.ResponseWriter, _ *http.Request) error {
 	return nil
 }
 
-// ColumnRequest represents the request to create a new column.
+// ColumnTemplateRequest represents the request to create a new column template.
 type ColumnTemplateRequest struct {
 
-	// The column name to set.
+	// The column template name to set.
 	Name string `json:"name"`
 
+	// The columnTemplate description to set.
 	Description string `json:"description"`
 
-	// The column color to set.
+	// The column template color to set.
 	Color types.Color `json:"color"`
 
-	// Sets whether this column should be visible to regular participants.
-	//
+	// Sets whether this column template should be visible to regular participants.
 	// The default value on creation is 'false'.
 	Visible *bool `json:"visible"`
 
-	// Sets the index of this column in the sort order.
+	// Sets the index of this column template in the sort order.
 	Index *int `json:"index"`
 
-	Board uuid.UUID `json:"-"`
-	User  uuid.UUID `json:"-"`
+	BoardTemplate uuid.UUID `json:"-"`
+	User          uuid.UUID `json:"-"`
 }
 
 func ColumnTemplates(columns []database.ColumnTemplate) []*ColumnTemplate {

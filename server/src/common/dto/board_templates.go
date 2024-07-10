@@ -7,16 +7,16 @@ import (
 )
 
 type BoardTemplate struct {
-	// The board id
+	// The board template id
 	ID uuid.UUID `json:"id"`
 
-	// The board creator
+	// The board template creator id
 	Creator uuid.UUID `json:"creator"`
 
-	// The board name
+	// The board template name
 	Name *string `json:"name,omitempty"`
 
-	// Description of the board
+	// Description of the board template
 	Description *string `json:"description"`
 
 	// The access policy
@@ -43,38 +43,39 @@ func (bt *BoardTemplate) From(board database.BoardTemplate) *BoardTemplate {
 
 // CreateBoardTemplateRequest represents the request to create a new board template.
 type CreateBoardTemplateRequest struct {
-	// The name of the board.
+	// The name of the board template.
 	Name *string `json:"name"`
 
 	// The user who creates the template
 	Creator uuid.UUID `json:"creator"`
 
-	// Description of the board
+	// Description of the board template
 	Description *string `json:"description"`
 
+	// Access policy of the board template
 	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
 
-	// The passphrase must be set if access policy is defined as by passphrase.
+	// The passphrase must be set if access policy is defined as "by passphrase".
 	Passphrase *string `json:"passphrase"`
 
-	// The columns to create for the board.
+	// The column templates to create for the board template.
 	Columns []ColumnTemplateRequest `json:"columns"`
 }
 
 type BoardTemplateUpdateRequest struct {
-	// The board id
+	// The board template id
 	ID uuid.UUID `json:"id"`
 
-	// The board name
+	// The board template name
 	Name *string `json:"name,omitempty"`
 
-	// Description of the board
+	// Description of the board template
 	Description *string `json:"description"`
 
 	// The access policy
 	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
 
-	// The passphrase must be set if access policy is defined as by passphrase.
+	// The passphrase must be set if access policy is defined as "by passphrase".
 	Passphrase *string `json:"passphrase"`
 
 	// The template columns

@@ -73,7 +73,7 @@ func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
 			common.Throw(w, r, common.NotFoundError)
 			return
 		}
-		log.Errorw("unable to get board templates for that user", "err", err)
+		log.Errorw("unable to get board templates for that user", "user", user, "err", err)
 		common.Throw(w, r, err)
 		return
 	}

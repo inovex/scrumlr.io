@@ -8,7 +8,7 @@ import (
 	"scrumlr.io/server/database/types"
 )
 
-// Column the model for a column of a board
+// ColumnTemplate the model for a column template of a board template
 type ColumnTemplate struct {
 	bun.BaseModel `bun:"table:column_templates"`
 	ID            uuid.UUID
@@ -20,7 +20,7 @@ type ColumnTemplate struct {
 	Index         int
 }
 
-// ColumnInsert the insert model for a new Column
+// ColumnTemplateInsert the insert model for a new column template
 type ColumnTemplateInsert struct {
 	bun.BaseModel `bun:"table:column_templates"`
 	BoardTemplate uuid.UUID
@@ -31,6 +31,7 @@ type ColumnTemplateInsert struct {
 	Index         *int
 }
 
+// ColumnTemplateUpdated the update model for a new column template
 type ColumnTemplateUpdate struct {
 	bun.BaseModel `bun:"table:column_templates"`
 	ID            uuid.UUID
