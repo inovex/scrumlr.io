@@ -50,6 +50,11 @@
 
   @include scrollbar();
 
+  // also subtract edited marker
+  &--edited {
+    max-height: calc($stack-content-max-height - 20px - 36px - 36px - 2 * ($spacing--base + $spacing--sm));
+  }
+
   &:not(:disabled) {
     &:hover,
     &:focus-visible {

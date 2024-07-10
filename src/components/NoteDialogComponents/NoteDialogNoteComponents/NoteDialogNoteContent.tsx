@@ -94,7 +94,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       ) : (
         <>
           <TextareaAutosize
-            className="note-dialog__note-content-text"
+            className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
             disabled={!editable}
             onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
             onFocus={onFocus}
