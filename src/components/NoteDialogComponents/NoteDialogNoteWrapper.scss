@@ -5,12 +5,19 @@
 .note-dialog__scrollbar {
   display: flex;
   flex-direction: column;
-  overflow: hidden scroll;
 
-  box-sizing: border-box;
   border-radius: $note__border-radius;
 
+  overflow: hidden;
   @include scrollbar();
+}
+
+// inner container preventing scrollbar flowing over border radius
+.note-dialog__inner-scrollbar {
+  width: 100%;
+  height: 100%;
+  overflow: hidden scroll;
+  box-sizing: border-box;
 }
 
 .note-dialog__note-wrapper {

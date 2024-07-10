@@ -41,7 +41,9 @@ export const NoteDialogNoteWrapper: FC<PropsWithChildren> = ({children}) => {
   }, [children]);
   return (
     <div className={classNames("note-dialog__scrollbar")}>
-      <div className={classNames("note-dialog__note-wrapper")}>{children}</div>
+      <div className="note-dialog__inner-scrollbar">
+        <div className={classNames("note-dialog__note-wrapper")}>{children}</div>
+      </div>
     </div>
   );
 };
