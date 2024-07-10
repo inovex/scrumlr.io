@@ -105,11 +105,11 @@ $stack-view__min-height: 82px;
     max-height: initial;
   }
 
-  .stack-view__parent-note .note-dialog__note-content--text {
+  .stack-view__parent-note .note-dialog__note-content-text {
     max-height: $stack-content-max-height--mobile; // initial for full height
   }
 
-  .stack-view__child-note .note-dialog__note-content--text {
+  .stack-view__child-note .note-dialog__note-content-text {
     max-height: $stack-content-max-height--mobile; // initial for full height
   }
 }

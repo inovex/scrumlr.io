@@ -25,7 +25,7 @@
   }
 }
 
-.note-dialog__note-content--text {
+.note-dialog__note-content-text {
   width: 100%;
   height: auto;
   // since the note height limit is defined here, the sibling elements are subtracted (header, footer, margins, and gap)
@@ -127,7 +127,7 @@
 }
 
 [theme="dark"] {
-  .note-dialog__note-content--text {
+  .note-dialog__note-content-text {
     color: $color-white;
   }
 
