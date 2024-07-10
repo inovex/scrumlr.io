@@ -7,7 +7,7 @@ export const NoteDialogNoteWrapper: FC<PropsWithChildren> = ({children}) => {
     const notes = scrollbar.querySelectorAll(".note-dialog__note");
     const scrollbarHeight = scrollbar.clientHeight;
     notes.forEach((note) => {
-      // Top is the div which contains all the notes (.note-dialog__scrollbar)
+      // Top is the div which contains all the notes (.note-dialog__inner-scrollbar)
       const distanceToTop = note.getBoundingClientRect().top - scrollbar.getBoundingClientRect().top;
       const noteHeight = note.scrollHeight;
 
@@ -36,7 +36,7 @@ export const NoteDialogNoteWrapper: FC<PropsWithChildren> = ({children}) => {
   };
 
   useEffect(() => {
-    const scrollbar = document.querySelector(".note-dialog__scrollbar")!;
+    const scrollbar = document.querySelector(".note-dialog__inner-scrollbar")!;
     scrollbar.addEventListener("scroll", () => handleScroll(scrollbar));
   }, [children]);
   return (
