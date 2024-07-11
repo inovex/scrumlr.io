@@ -245,8 +245,8 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
 	limiter := httprate.Limit(
-		5,
-		3*time.Second,
+		7,
+		1*time.Second,
 		httprate.WithKeyFuncs(httprate.KeyByIP),
 		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
