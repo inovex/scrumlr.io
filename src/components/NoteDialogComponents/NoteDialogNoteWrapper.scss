@@ -6,7 +6,7 @@
   width: calc(100vw - (2 * $column__border-width));
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-color: $color-middle-gray $color-white;
+  scrollbar-color: $gray--700 $gray--000;
   margin-bottom: $column__border-width;
   padding-top: $spacing--xl;
   padding-left: 10px;
@@ -32,6 +32,6 @@
 
 [theme="dark"] {
   .note-dialog__scrollbar {
-    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+    scrollbar-color: $navy--700 $navy--500;
   }
 }

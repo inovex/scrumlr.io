@@ -10,7 +10,7 @@ $note-input__input-right: 40px;
   width: 100%;
   position: relative;
   margin-bottom: $spacing--base;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
   border-radius: $rounded--medium;
   transition: all 0.12s ease-in-out;
   border: 2px solid transparent;
@@ -23,7 +23,7 @@ $note-input__input-right: 40px;
 }
 
 .note-input__input {
-  color: $color-black;
+  color: $navy--900;
   font-size: $text-size--medium;
   font-weight: bold;
   line-height: 24px;
@@ -110,7 +110,7 @@ $note-input__input-right: 40px;
   top: calc(100% + $spacing--xs);
   left: 0;
   width: 100%;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
   // prevent overflow by approximating available space below the input box
   max-height: min($column-emoji-suggestions__max-height, calc(100svh - $column-emoji-suggestions__approx-top-distance));
 
@@ -124,7 +124,7 @@ $note-input__input-right: 40px;
 
 [theme="dark"] {
   .note-input {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
 
     &:hover,
     &:focus-within {
@@ -133,11 +133,11 @@ $note-input__input-right: 40px;
   }
 
   .note-input__input {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .note-input__emoji-suggestions {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
     box-shadow: $box-shadow--dark;
   }
 }

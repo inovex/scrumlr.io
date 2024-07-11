@@ -24,7 +24,7 @@ $note__footer-gap: 42px;
   cursor: pointer;
   position: relative;
   border-radius: $note__border-radius;
-  background-color: $color-white;
+  background-color: $gray--000;
   box-shadow:
     0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
     0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
@@ -54,7 +54,7 @@ $note__footer-gap: 42px;
   box-shadow:
     0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
     0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
-  background-color: $color-white;
+  background-color: $gray--000;
   z-index: $note-z-index - $base-z-index-step;
   transition: all 0.1s ease-in-out;
 }
@@ -120,7 +120,7 @@ $note__footer-gap: 42px;
   margin: $note__text-margin-top 0 $spacing--xs;
   min-height: 3 * $line-height--medium;
   width: 100%;
-  color: $color-black;
+  color: $navy--900;
   font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--medium;
@@ -144,7 +144,7 @@ $note__footer-gap: 42px;
 }
 
 .note__marker-edited {
-  color: $color-middle-gray;
+  color: $gray--700;
   font-size: $text--sm;
 }
 
@@ -235,13 +235,13 @@ $note__footer-gap: 42px;
 [theme="dark"] {
   .note,
   .note__in-stack {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
     box-shadow:
       0 4px 6px -1px rgba($note__box-shadow-color-dark-mode, 0.1),
       0 2px 4px -2px rgba($note__box-shadow-color-dark-mode, 0.1);
   }
 
   .note__text {
-    color: $color-white;
+    color: $gray--000;
   }
 }

@@ -14,11 +14,11 @@ $menu-item-size: 42px;
   pointer-events: auto;
 }
 .menu-item:focus-visible {
-  outline: 2px solid rgba($color-black, 0.5);
+  outline: 2px solid rgba($navy--900, 0.5);
 }
 [theme="dark"] {
   .menu-item:focus-visible {
-    outline: 2px solid rgba($color-white, 0.5);
+    outline: 2px solid rgba($gray--000, 0.5);
   }
 }
 
@@ -31,7 +31,7 @@ $menu-item-size: 42px;
   max-width: 0;
   height: $menu-item-size;
   border-radius: calc($menu-item-size / 2);
-  background-color: $tooltip-background-color--light;
+  background-color: $blue--100;
   opacity: 0;
   visibility: hidden;
   transition: opacity 150ms linear 500ms;
@@ -45,7 +45,7 @@ $menu-item-size: 42px;
   transform: translateX(-50%);
   border-width: 10px;
   border-style: solid;
-  border-color: $tooltip-background-color--light transparent transparent transparent;
+  border-color: $blue--100 transparent transparent transparent;
 }
 
 @media #{$smartphone} {
@@ -56,10 +56,10 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .menu-item__tooltip {
-    background-color: $tooltip-background-color--dark;
+    background-color: $navy--300;
   }
   .menu-item__tooltip::after {
-    border-color: $tooltip-background-color--dark transparent transparent transparent;
+    border-color: $navy--300 transparent transparent transparent;
   }
 }
 @media screen and (max-width: 450px) {
@@ -123,14 +123,14 @@ $menu-item-size: 42px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
-  color: $color-black;
+  color: $navy--900;
   border-radius: calc($menu-item-size / 2);
 }
 
 @media #{$tablet} {
   .menu-item .tooltip__text {
-    color: $color-black;
-    background-color: $tooltip-background-color--light;
+    color: $navy--900;
+    background-color: $blue--100;
     height: $menu-item-size;
     line-height: $menu-item-size;
     width: max-content;
@@ -155,15 +155,15 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .tooltip__text {
-    color: $color-white !important;
-    background-color: $tooltip-background-color--dark !important;
+    color: $gray--000 !important;
+    background-color: $navy--300 !important;
   }
 }
 
 .menu-item__icon {
   background-clip: content-box !important;
-  color: $color-black;
-  background-color: $menu-icon-background-color--light;
+  color: $navy--900;
+  background-color: $gray--000;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
@@ -173,8 +173,8 @@ $menu-item-size: 42px;
   border-radius: $menu-item-size;
 }
 .menu-item--active .menu-item__icon {
-  background-color: $menu-icon-background-color--dark;
-  color: $color-white;
+  background-color: $navy--500;
+  color: $gray--000;
 }
 .menu-item__icon:nth-of-type(2) {
   visibility: hidden;
@@ -194,21 +194,21 @@ $menu-item-size: 42px;
     transition: border-color 0ms linear 150ms;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $tooltip-background-color--light;
+    border-color: $blue--100;
     transition: border-color 0ms linear 0ms;
   }
 }
 
 [theme="dark"] {
   .menu-item__icon {
-    color: $color-white;
-    background: $menu-icon-background-color--dark;
+    color: $gray--000;
+    background: $navy--500;
   }
   .menu-item--active .menu-item__icon {
-    background-color: $menu-icon-background-color--light;
-    color: $color-black;
+    background-color: $gray--000;
+    color: $navy--900;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $tooltip-background-color--dark !important;
+    border-color: $navy--300 !important;
   }
 }
