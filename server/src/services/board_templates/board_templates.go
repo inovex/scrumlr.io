@@ -2,14 +2,10 @@ package board_templates
 
 import (
 	"context"
-	"errors"
-	"fmt"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/services"
 )
@@ -28,24 +24,11 @@ func NewBoardTemplateService(db *database.Database) services.BoardTemplates {
 func (s *BoardTemplateService) Create(ctx context.Context, body dto.CreateBoardTemplateRequest) (*dto.BoardTemplate, error) {
 	log := logger.FromContext(ctx)
 	// map request on board object to insert into database
-	var board database.BoardTemplateInsert
-	switch body.AccessPolicy {
-	case types.AccessPolicyPublic, types.AccessPolicyByInvite:
-		board = database.BoardTemplateInsert{Creator: body.Creator, Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
-	case types.AccessPolicyByPassphrase:
-		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
-			return nil, errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
-		}
-
-		encodedPassphrase, salt, _ := common.Sha512WithSalt(*body.Passphrase)
-		board = database.BoardTemplateInsert{
-			Creator:      body.Creator,
-			Name:         body.Name,
-			Description:  body.Description,
-			AccessPolicy: body.AccessPolicy,
-			Passphrase:   encodedPassphrase,
-			Salt:         salt,
-		}
+	board := database.BoardTemplateInsert{
+		Creator:      body.Creator,
+		Name:         body.Name,
+		Description:  body.Description,
+		AccessPolicy: body.AccessPolicy,
 	}
 
 	// map request on column objects to insert into database
@@ -83,8 +66,6 @@ func (s *BoardTemplateService) Get(_ context.Context, id uuid.UUID) (*dto.BoardT
 		Name:            boardTemplate.Name,
 		Description:     boardTemplate.Description,
 		AccessPolicy:    boardTemplate.AccessPolicy,
-		Passphrase:      boardTemplate.Passphrase,
-		Salt:            boardTemplate.Salt,
 		ColumnTemplates: new_cols,
 	}
 
@@ -112,8 +93,6 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 			Name:            board.Name,
 			Description:     board.Description,
 			AccessPolicy:    board.AccessPolicy,
-			Passphrase:      board.Passphrase,
-			Salt:            board.Salt,
 			ColumnTemplates: new_cols,
 		}
 		templatesDto = append(templatesDto, &boardDto)
@@ -123,7 +102,6 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 }
 
 func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error) {
-	log := logger.FromContext(ctx)
 	// parse dto cols to db cols
 	req_cols := []*database.ColumnTemplate{}
 	for _, col := range body.ColumnTemplates {
@@ -145,30 +123,7 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 		Name:            body.Name,
 		Description:     body.Description,
 		AccessPolicy:    body.AccessPolicy,
-		Passphrase:      body.Passphrase,
 		ColumnTemplates: req_cols,
-	}
-
-	if body.AccessPolicy != nil {
-		update.AccessPolicy = body.AccessPolicy
-		if *body.AccessPolicy == types.AccessPolicyByPassphrase {
-			if body.Passphrase == nil {
-				return nil, common.BadRequestError(errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected"))
-			}
-
-			passphrase, salt, err := common.Sha512WithSalt(*body.Passphrase)
-			if err != nil {
-				log.Error("failed to encode passphrase")
-				return nil, fmt.Errorf("failed to encode passphrase: %w", err)
-			}
-
-			update.Passphrase = passphrase
-			update.Salt = salt
-		} else {
-			if body.Passphrase != nil {
-				return nil, common.BadRequestError(errors.New("passphrase should not be set if access policy is not defined as 'BY_PASSPHRASE'"))
-			}
-		}
 	}
 
 	updatedTemplate, err := s.database.UpdateBoardTemplate(update)
@@ -189,8 +144,6 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 		Name:            updatedTemplate.Name,
 		Description:     updatedTemplate.Description,
 		AccessPolicy:    updatedTemplate.AccessPolicy,
-		Passphrase:      updatedTemplate.Passphrase,
-		Salt:            updatedTemplate.Salt,
 		ColumnTemplates: new_cols,
 	}
 

@@ -22,9 +22,6 @@ type BoardTemplate struct {
 	// The access policy
 	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
 
-	Passphrase *string `json:"-"`
-	Salt       *string `json:"-"`
-
 	// The template columns
 	ColumnTemplates []*ColumnTemplate `json:"templateColumns"`
 }
@@ -35,8 +32,6 @@ func (bt *BoardTemplate) From(board database.BoardTemplate) *BoardTemplate {
 	bt.Name = board.Name
 	bt.Description = board.Description
 	bt.AccessPolicy = board.AccessPolicy
-	bt.Passphrase = board.Passphrase
-	bt.Salt = board.Salt
 
 	return bt
 }
@@ -55,9 +50,6 @@ type CreateBoardTemplateRequest struct {
 	// Access policy of the board template
 	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
 
-	// The passphrase must be set if access policy is defined as "by passphrase".
-	Passphrase *string `json:"passphrase"`
-
 	// The column templates to create for the board template.
 	Columns []ColumnTemplateRequest `json:"columns"`
 }
@@ -74,9 +66,6 @@ type BoardTemplateUpdateRequest struct {
 
 	// The access policy
 	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
-
-	// The passphrase must be set if access policy is defined as "by passphrase".
-	Passphrase *string `json:"passphrase"`
 
 	// The template columns
 	ColumnTemplates []ColumnTemplate `json:"templateColumns"`

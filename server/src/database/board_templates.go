@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"time"
 
@@ -21,8 +20,6 @@ type BoardTemplate struct {
 	Name            *string
 	Description     *string
 	AccessPolicy    types.AccessPolicy
-	Passphrase      *string
-	Salt            *string
 	CreatedAt       time.Time
 	ColumnTemplates []ColumnTemplate
 }
@@ -34,8 +31,6 @@ type BoardTemplateGetter struct {
 	Name          *string
 	Description   *string
 	AccessPolicy  types.AccessPolicy
-	Passphrase    *string
-	Salt          *string
 	CreatedAt     time.Time
 }
 
@@ -45,8 +40,6 @@ type BoardTemplateInsert struct {
 	Name          *string
 	Description   *string
 	AccessPolicy  types.AccessPolicy
-	Passphrase    *string
-	Salt          *string
 }
 
 type BoardTemplateUpdate struct {
@@ -55,19 +48,11 @@ type BoardTemplateUpdate struct {
 	Name            *string
 	Description     *string
 	AccessPolicy    *types.AccessPolicy
-	Passphrase      *string
-	Salt            *string
 	ColumnTemplates []*ColumnTemplate
 }
 
 func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []ColumnTemplateInsert) (BoardTemplate, error) {
 	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
-
-	if board.AccessPolicy == types.AccessPolicyByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
-		return BoardTemplate{}, errors.New("passphrase or salt may not be empty")
-	} else if board.AccessPolicy != types.AccessPolicyByPassphrase && (board.Passphrase != nil || board.Salt != nil) {
-		return BoardTemplate{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
-	}
 
 	var b BoardTemplate
 	query := d.db.NewSelect().With("createdBoardTemplate", boardInsert)
@@ -112,9 +97,6 @@ func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
 		Name:            tBoard.Name,
 		Description:     tBoard.Description,
 		AccessPolicy:    tBoard.AccessPolicy,
-		Passphrase:      tBoard.Passphrase,
-		Salt:            tBoard.Salt,
-		CreatedAt:       tBoard.CreatedAt,
 		ColumnTemplates: tColumns,
 	}
 
@@ -143,8 +125,6 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplate, error) {
 			Name:            board.Name,
 			Description:     board.Description,
 			AccessPolicy:    board.AccessPolicy,
-			Passphrase:      board.Passphrase,
-			Salt:            board.Salt,
 			CreatedAt:       board.CreatedAt,
 			ColumnTemplates: cols,
 		}
@@ -167,12 +147,7 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 	}
 
 	if update.AccessPolicy != nil {
-		if *update.AccessPolicy == types.AccessPolicyByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
-			return BoardTemplate{}, errors.New("passphrase and salt should be set when access policy is updated")
-		} else if *update.AccessPolicy != types.AccessPolicyByPassphrase && (update.Passphrase != nil || update.Salt != nil) {
-			return BoardTemplate{}, errors.New("passphrase and salt should not be set if access policy is not defined as 'BY_PASSPHRASE'")
-		}
-		query_settings.Column("access_policy", "passphrase", "salt")
+		query_settings.Column("access_policy")
 	}
 
 	var boardTemplate BoardTemplate

@@ -5,9 +5,7 @@ create table board_templates
     created_at                timestamptz       default now(),
     "name"                    varchar(128),
     description               varchar(300),
-    access_policy             access_policy     not null DEFAULT 'PUBLIC',
-    passphrase                varchar(128),
-    salt                      varchar(32)
+    access_policy             access_policy     not null DEFAULT 'PUBLIC'
 );
 
 create table column_templates
