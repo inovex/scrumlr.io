@@ -35,7 +35,7 @@ export const MENU_ITEMS: Record<MenuKey, MenuItem> = {
     localizationKey: "Appearance",
     location: "appearance",
     isModeratorOnly: false,
-    color: "lean-lilac",
+    color: "value-violet",
     icon: SettingsAppearance,
   },
   share: {
@@ -63,7 +63,7 @@ export const MENU_ITEMS: Record<MenuKey, MenuItem> = {
     localizationKey: "Profile",
     location: "profile",
     isModeratorOnly: false,
-    color: "lean-lilac",
+    color: "value-violet",
     icon: "profile",
   },
 };
