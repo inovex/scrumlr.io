@@ -350,5 +350,5 @@ $column-stripes--dark: repeating-linear-gradient(
 @mixin tooltip--dark {
   @include tooltip;
   color: $gray--000;
-  background-color: $navy--300;
+  background-color: $navy--200;
 }
