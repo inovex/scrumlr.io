@@ -6,7 +6,7 @@ $side-padding--desktop: 14vw;
 .new-board {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(180deg, color.change($color-backlog-blue, $alpha: 0.075), color.change($color-white, $alpha: 0.2));
+  background: linear-gradient(180deg, color.change($blue--500, $alpha: 0.075), color.change($gray--000, $alpha: 0.2));
 }
 
 .new-board__grid {
@@ -41,7 +41,7 @@ $side-padding--desktop: 14vw;
   font-size: $text--2xl;
   font-weight: 700;
   line-height: 48px; // TODO use constant
-  color: $color-black;
+  color: $navy--900;
 }
 
 .new-board__switch {
@@ -68,12 +68,12 @@ $side-padding--desktop: 14vw;
   padding: $spacing--sm;
   border-radius: 100%;
 
-  color: #292f3b;
-  background-color: $color-white;
+  color: $navy--600;
+  background-color: $gray--000;
 
   &--active {
-    color: $color-white;
-    background-color: #292f3b;
+    color: $gray--000;
+    background-color: $navy--600;
   }
 }
 
@@ -137,20 +137,20 @@ $side-padding--desktop: 14vw;
 
 [theme="dark"] {
   .new-board {
-    background: linear-gradient(161deg, #292f3b 16.78%, #232732 49.35%, #15171e 81.65%);
+    background: linear-gradient(161deg, $navy--600 16.78%, $navy--700 49.35%, $navy--800 81.65%);
   }
 
   .new-board__title {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .new-board__search-button-icon-container {
-    color: $color-white;
-    background-color: #373e4f;
+    color: $gray--000;
+    background-color: $navy--400;
 
     &--active {
-      color: #373e4f;
-      background-color: $color-white;
+      color: $navy--400;
+      background-color: $gray--000;
     }
   }
 }

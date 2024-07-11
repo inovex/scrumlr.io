@@ -21,7 +21,7 @@ $stan-height-factor: 93%;
   padding: $spacing--xl $spacing--xl 0 $spacing--xl;
   border-radius: $rounded--default;
 
-  background-color: #dde8ff;
+  background-color: $blue--50;
 
   &--saved {
     margin-right: $spacing--md; // instead of gap, see above
@@ -42,7 +42,7 @@ $stan-height-factor: 93%;
   font-weight: 700;
   line-height: 32px; // TODO use constant
 
-  color: #292f3b;
+  color: $navy--600;
 }
 
 .templates__container-arrow-button {
@@ -53,7 +53,7 @@ $stan-height-factor: 93%;
   display: none;
 
   &--disabled {
-    color: #8f95a1;
+    color: $gray--800;
   }
 }
 
@@ -106,11 +106,11 @@ $stan-height-factor: 93%;
 
 [theme="dark"] {
   .templates__container {
-    background-color: #232732;
+    background-color: $navy--700;
   }
 
   .templates__container-title {
-    color: #dde8ff;
+    color: $blue--50;
   }
 
   .templates__stan {
@@ -125,10 +125,10 @@ $stan-height-factor: 93%;
   }
 
   .templates__container-arrow {
-    color: #dde8ff;
+    color: $blue--50;
 
     &--disabled {
-      color: #454e63;
+      color: $navy--300;
     }
   }
 }

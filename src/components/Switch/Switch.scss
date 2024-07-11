@@ -16,7 +16,7 @@ $padding--mobile: 6px;
   padding: $padding--default;
   border-radius: $rounded--large;
 
-  background-color: $color-white;
+  background-color: $gray--000;
 
   &:enabled {
     cursor: pointer;
@@ -25,14 +25,14 @@ $padding--mobile: 6px;
   }
 
   &:disabled {
-    background-color: #eeeff1;
+    background-color: $gray--000;
 
     .switch__item {
-      color: #8f95a1;
-      background-color: #eeeff1;
+      color: $gray--800;
+      background-color: $gray--000;
 
       &--active {
-        background-color: #e9eaec;
+        background-color: $gray--400;
       }
     }
   }
@@ -49,15 +49,15 @@ $padding--mobile: 6px;
   font-weight: 600;
 
   color: #292f3b;
-  background-color: $color-white;
+  background-color: $gray--000;
 
   transition:
     background-color 0.3s,
     color 0.3s;
 
   &--active {
-    background-color: #292f3b;
-    color: $color-white;
+    background-color: $navy--600;
+    color: $gray--000;
 
     font-weight: 700;
   }
@@ -80,30 +80,30 @@ $padding--mobile: 6px;
 
 [theme="dark"] {
   .switch {
-    background-color: #373e4f;
+    background-color: $navy--600;
 
     &:disabled {
-      background-color: #232b3c;
+      background-color: $navy--700;
 
       .switch__item {
-        color: #454e63;
-        background-color: #232b3c;
+        color: $navy--300;
+        background-color: $navy--700;
 
         &--active {
-          color: #454e63;
-          background-color: #e9eaec;
+          color: $navy--300;
+          background-color: $gray--400;
         }
       }
     }
   }
 
   .switch__item {
-    color: $color-white;
-    background-color: #373e4f;
+    color: $gray--000;
+    background-color: $navy--400;
 
     &--active {
-      background-color: $color-white;
-      color: #373e4f;
+      color: $navy--600;
+      background-color: $gray--000;
     }
   }
 }
