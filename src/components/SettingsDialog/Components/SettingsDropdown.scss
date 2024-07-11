@@ -7,7 +7,7 @@
 
   &__button {
     width: 100%;
-    background-color: $color-white;
+    background-color: $gray--000;
     border: none;
     border-radius: 8px;
     padding: $spacing--base $spacing--lg;
@@ -66,7 +66,7 @@
     right: 0;
     margin: 0 $spacing--base 0 0;
     padding: 0;
-    background-color: $color-white;
+    background-color: $gray--000;
     border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 8px 0 rgba(var(--accent-color-rgb), 0.4);
 
@@ -79,11 +79,11 @@
 [theme="dark"] {
   .settings-dropdown {
     &__button {
-      color: $color-white;
-      background-color: $color-dark-mode-note;
+      color: $gray--000;
+      background-color: $navy--500;
 
       &:hover {
-        background-color: $color-dark-mode-note--hover;
+        background-color: $navy--400;
       }
 
       &:focus-visible {
@@ -92,9 +92,9 @@
     }
 
     &__list {
-      color: $color-white;
-      background-color: $color-dark-mode-note;
-      box-shadow: 0 2px 2px 0 rgba($color-black, 0.3);
+      color: $gray--000;
+      background-color: $navy--500;
+      box-shadow: 0 2px 2px 0 rgba($navy--900, 0.3);
     }
   }
 }

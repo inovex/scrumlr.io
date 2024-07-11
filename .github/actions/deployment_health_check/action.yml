@@ -27,7 +27,7 @@ runs:
         set +e
 
         retry=1
-        max_retries=4
+        max_retries=5
         lastCurlExitCode=-1
         until [ $retry -gt $max_retries ]
         do

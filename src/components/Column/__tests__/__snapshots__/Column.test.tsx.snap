@@ -25,6 +25,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           </svg>
           <h2
             class="column__header-text column__header-text--hidden"
+            id="column-test-columns-id-1"
           >
             Testheader 1
           </h2>
@@ -590,9 +591,20 @@ exports[`Column should have correct style show column with correct style 1`] = `
                 </div>
               </header>
               <main
-                class="note__text"
+                class="note__container"
               >
-                Lorem Ipsum
+                <div
+                  class="note__text"
+                >
+                  Lorem Ipsum
+                </div>
+                <div
+                  class="note__marker-edited"
+                >
+                  (
+                  edited
+                  )
+                </div>
               </main>
               <footer
                 class="note__footer"
@@ -1139,9 +1151,13 @@ exports[`Column should have correct style show column with correct style 1`] = `
                 </div>
               </header>
               <main
-                class="note__text"
+                class="note__container"
               >
-                Lorem Ipsum
+                <div
+                  class="note__text"
+                >
+                  Lorem Ipsum
+                </div>
               </main>
               <footer
                 class="note__footer"

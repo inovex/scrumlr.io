@@ -6,9 +6,9 @@
   align-items: center;
   cursor: initial;
 
-  background: $color-backlog-blue;
+  background: $blue--500;
 
-  color: $color-white;
+  color: $gray--000;
   font-weight: bold;
   text-decoration: none;
 
@@ -20,7 +20,7 @@
   padding: $spacing--xs $spacing--base;
 
   transition: all 0.08s ease-out;
-  box-shadow: 0 0 0 0 rgba($color-backlog-blue, 0.2);
+  box-shadow: 0 0 0 0 rgba($blue--500, 0.2);
 }
 
 .button:not(:disabled) {
@@ -29,8 +29,8 @@
 
 .button.button--outlined {
   background: none;
-  color: $color-backlog-blue;
-  border: 1px solid $color-backlog-blue;
+  color: $blue--500;
+  border: 1px solid $blue--500;
   box-shadow: none;
 }
 
@@ -40,7 +40,7 @@
   background: none;
   padding: 0;
   height: auto;
-  color: $color-black;
+  color: $navy--900;
 }
 
 .button.button--text-link:focus-visible,
@@ -49,31 +49,31 @@
 }
 
 .button.button--primary.button--outlined {
-  color: $color-planning-pink;
-  border-color: $color-planning-pink;
+  color: $pink--500;
+  border-color: $pink--500;
 }
 
 .button--primary {
-  background: $color-planning-pink;
-  box-shadow: 0 0 0 0 rgba($color-planning-pink, 0.2);
+  background: $pink--500;
+  box-shadow: 0 0 0 0 rgba($pink--500, 0.2);
 }
 
 .button--secondary {
-  background: $color-backlog-blue;
+  background: $blue--500;
 }
 
 .button.button--text-link:disabled {
-  color: $color-middle-gray;
+  color: $gray--700;
 }
 
 .button:not(.button--text-link):disabled {
-  background: $color-middle-gray;
+  background: $gray--700;
 }
 
 .button.button--outlined:disabled {
   background: none;
-  color: $color-middle-gray;
-  border: 1px solid $color-middle-gray;
+  color: $gray--700;
+  border: 1px solid $gray--700;
 }
 
 .button--block {
@@ -83,13 +83,13 @@
 .button:not(:disabled):not(.button--text-link):hover {
   filter: brightness(1.05);
   transform: scale(1.02);
-  box-shadow: 0 6px 9px 0 rgba($color-backlog-blue, 0.24);
+  box-shadow: 0 6px 9px 0 rgba($blue--500, 0.24);
 }
 
 .button:not(:disabled):not(.button--text-link).button--primary:hover {
   filter: brightness(1.05);
   transform: scale(1.02);
-  box-shadow: 0 6px 9px 0 rgba($color-planning-pink, 0.24);
+  box-shadow: 0 6px 9px 0 rgba($pink--500, 0.24);
 }
 
 .button:not(:disabled):not(.button--text-link):active {
@@ -101,11 +101,11 @@
 }
 
 .button:not(:disabled):not(.button--text-link):focus-visible {
-  outline: 2px solid rgba($color-backlog-blue, 0.4);
+  outline: 2px solid rgba($blue--500, 0.4);
 }
 
 .button:not(:disabled):not(.button--text-link).button--primary:focus-visible {
-  outline: 2px solid rgba($color-planning-pink, 0.4);
+  outline: 2px solid rgba($pink--500, 0.4);
 }
 
 .button__label {
@@ -131,14 +131,14 @@
   .button.button--outlined,
   .button.button--text-link,
   .button.button--primary.button--outlined {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .button:not(:disabled):not(.button--text-link):focus-visible {
-    outline: 2px solid $color-white;
+    outline: 2px solid $gray--000;
   }
 
   .button:not(:disabled):not(.button--text-link).button--primary:focus-visible {
-    outline: 2px solid $color-white;
+    outline: 2px solid $gray--000;
   }
 }

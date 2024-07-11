@@ -3,11 +3,11 @@
 .emoji-suggestions {
   padding: $spacing--xs;
   border-radius: $rounded--default;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
   list-style: none;
   margin: 0;
 
-  color: $color-black;
+  color: $navy--900;
 
   &__element {
     cursor: pointer;
@@ -33,8 +33,8 @@
 
 [theme="dark"] {
   .emoji-suggestions {
-    color: $color-white;
-    background-color: $color-dark-mode-note;
+    color: $gray--000;
+    background-color: $navy--500;
 
     &__element:hover,
     .emoji-suggestions__element--focus {

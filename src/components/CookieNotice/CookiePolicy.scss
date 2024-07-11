@@ -10,23 +10,23 @@
 }
 
 .cookie-policy__title {
-  color: $color-black;
-  background-color: $color-white;
+  color: $navy--900;
+  background-color: $gray--000;
   padding: $spacing--xs $spacing--base $spacing--xs $spacing--base;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 
 .cookie-policy__body {
-  color: $color-black;
-  background-color: $color-white;
+  color: $navy--900;
+  background-color: $gray--000;
   padding: $spacing--base;
   height: 375px;
   overflow: auto;
 }
 
 .cookie-policy__footer {
-  background-color: $color-white;
+  background-color: $gray--000;
   padding: $spacing--base;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -42,15 +42,15 @@
 
   &-accept {
     @extend .cookie-policy__button;
-    background: $color-backlog-blue;
-    color: $color-white;
+    background: $blue--500;
+    color: $gray--000;
     margin: 0 0 $spacing--base $spacing--base;
   }
 
   &-decline {
     @extend .cookie-policy__button;
-    background: $color-lighter-gray;
-    color: $color-darkest-gray;
+    background: $gray--300;
+    color: $navy--700;
     margin: 0 0 $spacing--base auto;
   }
 }
