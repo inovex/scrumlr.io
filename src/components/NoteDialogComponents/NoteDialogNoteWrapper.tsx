@@ -1,50 +1,46 @@
-import classNames from "classnames";
-import {FC, PropsWithChildren, useEffect} from "react";
+import {FC, PropsWithChildren, useEffect, useRef} from "react";
 import "./NoteDialogNoteWrapper.scss";
 
 export const NoteDialogNoteWrapper: FC<PropsWithChildren> = ({children}) => {
-  // could probably be replaced with an intersection observer,
-  // but in mobile view, a different (stack-view__inner-scrollbar) would need to be checked instead of this one
-  const handleScroll = (scrollbar: Element) => {
-    const notes = scrollbar.querySelectorAll(".note-dialog__note");
-    const scrollbarHeight = scrollbar.clientHeight;
-    notes.forEach((note) => {
-      // Top is the div which contains all the notes (.note-dialog__inner-scrollbar)
-      const distanceToTop = note.getBoundingClientRect().top - scrollbar.getBoundingClientRect().top;
-      const noteHeight = note.scrollHeight;
+  const scrollContainer = useRef<HTMLDivElement>(null);
 
-      let opacity = 1;
-      // Note comes from the top and scrolls in the view (only the lower part is visible)
-      if (distanceToTop < 0) {
-        opacity = (noteHeight + distanceToTop) / noteHeight;
-      }
-
-      // Is the complete note visible or only the upper part?
-      const remainingSpace = scrollbarHeight - (distanceToTop + noteHeight);
-
-      if (remainingSpace < 0) {
-        opacity = (scrollbarHeight - distanceToTop) / noteHeight;
-      }
-
-      // If the card is bigger than our NoteDialog (we don't want to have opacity effects here)
-      if (distanceToTop < 0 && remainingSpace <= 0) {
-        opacity = 1;
-      }
-
-      if (opacity >= 0) {
-        (note as HTMLElement).style.opacity = opacity.toString();
-      }
-    });
-  };
-
+  // display notes within full view with full opacity.
+  // the more it goes out of the view (i.e. intersectionRatio), the less opaque it becomes
   useEffect(() => {
-    const scrollbar = document.querySelector(".note-dialog__inner-scrollbar")!;
-    scrollbar.addEventListener("scroll", () => handleScroll(scrollbar));
+    const container = scrollContainer.current;
+    if (!container) return () => {};
+
+    const notes = container.querySelectorAll(".note-dialog__note");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const note = entry.target as HTMLElement;
+          if (entry.isIntersecting) {
+            const {intersectionRatio} = entry;
+            note.style.opacity = intersectionRatio.toString();
+          } else {
+            note.style.opacity = "0";
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: Array.from({length: 101}, (_, i) => i / 100), // 0.00, 0.01, ..., 1.00
+      }
+    );
+
+    notes.forEach((note) => observer.observe(note));
+
+    return () => {
+      notes.forEach((note) => observer.unobserve(note));
+    };
   }, [children]);
+
   return (
-    <div className={classNames("note-dialog__scrollbar")}>
-      <div className="note-dialog__inner-scrollbar">
-        <div className={classNames("note-dialog__note-wrapper")}>{children}</div>
+    <div className="note-dialog__scrollbar">
+      <div className="note-dialog__inner-scrollbar" ref={scrollContainer}>
+        <div className="note-dialog__note-wrapper">{children}</div>
       </div>
     </div>
   );
