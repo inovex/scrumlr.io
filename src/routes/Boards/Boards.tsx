@@ -7,11 +7,11 @@ import {SearchBar} from "components/SearchBar/SearchBar";
 import {Switch} from "components/Switch/Switch";
 import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import classNames from "classnames";
-import "./NewBoard.scss";
+import "./Boards.scss";
 
 type BoardView = "templates" | "sessions";
 
-export const NewBoard = () => {
+export const Boards = () => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
