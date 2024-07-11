@@ -29,6 +29,7 @@ func (s *BoardTemplateService) Create(ctx context.Context, body dto.CreateBoardT
 		Name:         body.Name,
 		Description:  body.Description,
 		AccessPolicy: body.AccessPolicy,
+		Favourite:    body.Favourite,
 	}
 
 	// map request on column objects to insert into database
@@ -66,6 +67,7 @@ func (s *BoardTemplateService) Get(_ context.Context, id uuid.UUID) (*dto.BoardT
 		Name:            boardTemplate.Name,
 		Description:     boardTemplate.Description,
 		AccessPolicy:    boardTemplate.AccessPolicy,
+		Favourite:       boardTemplate.Favourite,
 		ColumnTemplates: new_cols,
 	}
 
@@ -93,6 +95,7 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 			Name:            board.Name,
 			Description:     board.Description,
 			AccessPolicy:    board.AccessPolicy,
+			Favourite:       board.Favourite,
 			ColumnTemplates: new_cols,
 		}
 		templatesDto = append(templatesDto, &boardDto)
@@ -103,9 +106,9 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 
 func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error) {
 	// parse dto cols to db cols
-	req_cols := []*database.ColumnTemplate{}
+	req_cols := []database.ColumnTemplate{}
 	for _, col := range body.ColumnTemplates {
-		new_col := &database.ColumnTemplate{
+		new_col := database.ColumnTemplate{
 			ID:            col.ID,
 			BoardTemplate: col.BoardTemplate,
 			Name:          col.Name,
@@ -123,6 +126,7 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 		Name:            body.Name,
 		Description:     body.Description,
 		AccessPolicy:    body.AccessPolicy,
+		Favourite:       body.Favourite,
 		ColumnTemplates: req_cols,
 	}
 
@@ -144,6 +148,7 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 		Name:            updatedTemplate.Name,
 		Description:     updatedTemplate.Description,
 		AccessPolicy:    updatedTemplate.AccessPolicy,
+		Favourite:       updatedTemplate.Favourite,
 		ColumnTemplates: new_cols,
 	}
 

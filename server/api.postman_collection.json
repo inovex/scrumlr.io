@@ -520,7 +520,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"My board template\",\n    \"description\": \"This is a test description for a board template\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"columns\": [ \n        { \n            \"name\": \"Lean coffee\", \n            \"description\":\"A template column description\", \n            \"visible\": true,\n            \"color\": \"backlog-blue\"\n        },\n        { \n            \"name\": \"Actions\", \n            \"description\":\"A template column description\", \n            \"visible\": false, \n            \"color\": \"planning-pink\"\n        }\n    ]\n}",
+									"raw": "{\n    \"name\": \"My board template\",\n    \"description\": \"This is a test description for a board template\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"favourite\": true,\n    \"columns\": [ \n        { \n            \"name\": \"Lean coffee\", \n            \"description\":\"A template column description\", \n            \"visible\": true,\n            \"color\": \"backlog-blue\"\n        },\n        { \n            \"name\": \"Actions\", \n            \"description\":\"A template column description\", \n            \"visible\": false, \n            \"color\": \"planning-pink\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -860,6 +860,62 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\n    \"accessPolicy\":\"BY_PASSPHRASE\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/templates/{{board_template_id}}",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"templates",
+										"{{board_template_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Favourite status",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response).to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Check id is included\", function () {",
+											"    var id = pm.response.json().id;",
+											"    pm.expect(id).to.exist;",
+											"})",
+											"",
+											"pm.test(\"Check name is included\", function () {",
+											"    var boardTemplateName = pm.response.json().name;",
+											"    pm.expect(boardTemplateName).to.exist;",
+											"})",
+											"",
+											"pm.test(\"Check if favourite status got updated\", function () {",
+											"    var favouriteStatus = pm.response.json().favourite;",
+											"    pm.expect(favouriteStatus).to.equal(false);",
+											"})"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"favourite\": false\n}",
 									"options": {
 										"raw": {
 											"language": "json"

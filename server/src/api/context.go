@@ -245,7 +245,7 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
 	limiter := httprate.Limit(
-		7,
+		15,
 		1*time.Second,
 		httprate.WithKeyFuncs(httprate.KeyByIP),
 		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {

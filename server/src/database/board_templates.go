@@ -20,6 +20,7 @@ type BoardTemplate struct {
 	Name            *string
 	Description     *string
 	AccessPolicy    types.AccessPolicy
+	Favourite       *bool
 	CreatedAt       time.Time
 	ColumnTemplates []ColumnTemplate
 }
@@ -31,6 +32,7 @@ type BoardTemplateGetter struct {
 	Name          *string
 	Description   *string
 	AccessPolicy  types.AccessPolicy
+	Favourite     *bool
 	CreatedAt     time.Time
 }
 
@@ -40,6 +42,7 @@ type BoardTemplateInsert struct {
 	Name          *string
 	Description   *string
 	AccessPolicy  types.AccessPolicy
+	Favourite     *bool
 }
 
 type BoardTemplateUpdate struct {
@@ -48,7 +51,8 @@ type BoardTemplateUpdate struct {
 	Name            *string
 	Description     *string
 	AccessPolicy    *types.AccessPolicy
-	ColumnTemplates []*ColumnTemplate
+	Favourite       *bool
+	ColumnTemplates []ColumnTemplate
 }
 
 func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []ColumnTemplateInsert) (BoardTemplate, error) {
@@ -97,6 +101,7 @@ func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
 		Name:            tBoard.Name,
 		Description:     tBoard.Description,
 		AccessPolicy:    tBoard.AccessPolicy,
+		Favourite:       tBoard.Favourite,
 		ColumnTemplates: tColumns,
 	}
 
@@ -125,6 +130,7 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplate, error) {
 			Name:            board.Name,
 			Description:     board.Description,
 			AccessPolicy:    board.AccessPolicy,
+			Favourite:       board.Favourite,
 			CreatedAt:       board.CreatedAt,
 			ColumnTemplates: cols,
 		}
@@ -148,6 +154,10 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 
 	if update.AccessPolicy != nil {
 		query_settings.Column("access_policy")
+	}
+
+	if update.Favourite != nil {
+		query_settings.Column("favourite")
 	}
 
 	var boardTemplate BoardTemplate

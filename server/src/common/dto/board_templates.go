@@ -22,6 +22,9 @@ type BoardTemplate struct {
 	// The access policy
 	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
 
+	// The favourite status of the template
+	Favourite *bool `json:"favourite"`
+
 	// The template columns
 	ColumnTemplates []*ColumnTemplate `json:"templateColumns"`
 }
@@ -32,6 +35,7 @@ func (bt *BoardTemplate) From(board database.BoardTemplate) *BoardTemplate {
 	bt.Name = board.Name
 	bt.Description = board.Description
 	bt.AccessPolicy = board.AccessPolicy
+	bt.Favourite = board.Favourite
 
 	return bt
 }
@@ -50,8 +54,11 @@ type CreateBoardTemplateRequest struct {
 	// Access policy of the board template
 	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
 
+	// The favourite status of the template
+	Favourite *bool `json:"favourite"`
+
 	// The column templates to create for the board template.
-	Columns []ColumnTemplateRequest `json:"columns"`
+	Columns []*ColumnTemplateRequest `json:"columns"`
 }
 
 type BoardTemplateUpdateRequest struct {
@@ -67,6 +74,9 @@ type BoardTemplateUpdateRequest struct {
 	// The access policy
 	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
 
+	// The favourite status of the template
+	Favourite *bool `json:"favourite"`
+
 	// The template columns
-	ColumnTemplates []ColumnTemplate `json:"templateColumns"`
+	ColumnTemplates []*ColumnTemplate `json:"templateColumns"`
 }
