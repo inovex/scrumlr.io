@@ -1,4 +1,4 @@
-import {Join, Kick,Search, Wifi, MarkAsDone} from "components/Icon";
+import {Join, Kick, Search, Wifi, MarkAsDone} from "components/Icon";
 import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
@@ -60,7 +60,7 @@ export const Participants = () => {
   };
 
   return (
-    <section className="settings-dialog__container accent-color__poker-purple">
+    <section className="settings-dialog__container accent-color__value-violet">
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("Participants.Title")}</h2>
       </header>

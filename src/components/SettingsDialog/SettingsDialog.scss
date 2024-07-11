@@ -3,11 +3,11 @@
 .settings-dialog__background {
   position: fixed;
   @include inset-0;
-  background-color: rgba($color: $color-backlog-blue, $alpha: 0.1);
+  background-color: rgba($color: $blue--500, $alpha: 0.1);
   backdrop-filter: blur(10px);
 }
 [theme="dark"] .settings-dialog__background {
-  background-color: rgba($color: $color-planning-pink, $alpha: 0.1);
+  background-color: rgba($color: $pink--500, $alpha: 0.1);
 }
 
 .settings-dialog__wrapper {
@@ -42,13 +42,13 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__content {
   display: none;
-  background: $color-white-one;
+  background: $gray--100;
   width: 100%;
   padding-top: 50px;
   overflow-y: hidden; // so that reset state banner can flow out
 }
 [theme="dark"] .settings-dialog__content {
-  background: $color-dark-two;
+  background: $navy--600;
 }
 .settings-dialog--selected .settings-dialog__content {
   display: block;
@@ -72,10 +72,10 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__sidebar {
   width: 100%;
-  background-color: $color-white;
+  background-color: $gray--000;
 }
 [theme="dark"] .settings-dialog__sidebar {
-  background-color: $color-dark-mode-note;
+  background-color: $navy--500;
 }
 .settings-dialog--selected .settings-dialog__sidebar {
   display: none;
@@ -119,7 +119,7 @@ $settings-dialog-container--bottom: 62px;
   position: absolute;
   top: 6px;
   right: 6px;
-  color: $color-backlog-blue;
+  color: $blue--500;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -131,8 +131,8 @@ $settings-dialog-container--bottom: 62px;
   outline: none;
 
   &:hover {
-    background-color: $color-backlog-blue;
-    color: $color-white;
+    background-color: $blue--500;
+    color: $gray--000;
     transform: scale(1.04);
   }
 
@@ -141,7 +141,7 @@ $settings-dialog-container--bottom: 62px;
   }
 
   &:focus-visible {
-    border: 2px solid $color-backlog-blue;
+    border: 2px solid $blue--500;
   }
 }
 .settings-dialog__close-button > svg {
@@ -149,27 +149,27 @@ $settings-dialog-container--bottom: 62px;
   width: 100%;
 }
 [theme="dark"] .settings-dialog__close-button {
-  color: $color-planning-pink;
+  color: $pink--500;
 
   &:hover {
-    background-color: $color-planning-pink;
-    color: $color-white;
+    background-color: $pink--500;
+    color: $gray--000;
   }
 
   &:focus-visible {
-    border: 2px solid $color-planning-pink;
+    border: 2px solid $pink--500;
   }
 }
 @media screen and (min-width: 450px) {
   .settings-dialog__close-button {
     top: -22px;
     right: -22px;
-    background-color: $color-white;
+    background-color: $gray--000;
     box-shadow: 0 16px 32px #0057ff3d;
   }
   [theme="dark"] .settings-dialog__close-button {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
-    background: $color-dark-mode-note;
+    background: $navy--500;
   }
 }
 
@@ -185,7 +185,7 @@ $settings-dialog-container--bottom: 62px;
     position: absolute;
     top: 12px;
     left: 9px;
-    color: $color-backlog-blue;
+    color: $blue--500;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -194,7 +194,7 @@ $settings-dialog-container--bottom: 62px;
     border-radius: $rounded--full;
   }
   [theme="dark"] .settings-dialog__back-link > svg {
-    color: $color-planning-pink;
+    color: $pink--500;
   }
 }
 
@@ -204,7 +204,7 @@ $settings-dialog-container--bottom: 62px;
   margin: 0 $spacing--xl;
   border-radius: $rounded--full;
   text-decoration: none;
-  color: $color-black;
+  color: $navy--900;
   outline: none;
   display: flex;
   flex-direction: row;
@@ -213,7 +213,7 @@ $settings-dialog-container--bottom: 62px;
 
   &:hover {
     background: rgba(var(--accent-color-rgb), 0.8);
-    color: $color-white;
+    color: $gray--000;
   }
 
   &:focus-visible {
@@ -248,13 +248,13 @@ $settings-dialog-container--bottom: 62px;
 }
 
 [theme="dark"] .navigation__item {
-  color: $color-white;
+  color: $gray--000;
 }
 
 .navigation__item--active {
   outline: none;
   background: var(--accent-color);
-  color: $color-white;
+  color: $gray--000;
 }
 
 .navigation-item__icon {
@@ -262,7 +262,7 @@ $settings-dialog-container--bottom: 62px;
   height: 40px;
   border-radius: $rounded--full;
   background: var(--accent-color);
-  color: $color-white;
+  color: $gray--000;
 }
 
 .settings-dialog__container {
@@ -300,26 +300,26 @@ $settings-dialog-container--bottom: 62px;
   margin: 0 0 0 5%;
   width: 90%;
   border: 0;
-  border-top: 0.5px solid $color-lighter-gray;
+  border-top: 0.5px solid $gray--300;
 }
 
 .settings-dialog__group {
   display: flex;
   flex-direction: column;
   border-radius: $rounded--small;
-  background-color: $color-white;
+  background-color: $gray--000;
 }
 
 [theme="dark"] {
   .settings-dialog__header-text {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .settings-dialog__separator {
-    border-top: 0.5px solid $color-dark-one;
+    border-top: 0.5px solid $navy--600;
   }
 
   .settings-dialog__group {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
   }
 }

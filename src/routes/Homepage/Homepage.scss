@@ -1,11 +1,11 @@
 @import "constants/style";
 
 .homepage {
-  background: $color-lighter-gray;
+  background: $gray--300;
 }
 
 .homepage__hero {
-  background: $color-white;
+  background: $gray--000;
   min-height: 100vh;
 }
 
@@ -31,17 +31,17 @@
 }
 
 .homepage__language {
-  background: $color-light-gray;
-  box-shadow: 0 0 rgba($color-middle-gray, 0);
+  background: $gray--600;
+  box-shadow: 0 0 rgba($gray--700, 0);
 
   &:hover {
-    box-shadow: 0 2px 12px 6px rgba($color-middle-gray, 0.2);
+    box-shadow: 0 2px 12px 6px rgba($gray--700, 0.2);
   }
 }
 
 [theme="dark"] {
   .homepage__language {
-    background: $color-dark-mode-note;
+    background: $navy--500;
     box-shadow: none;
   }
 }
@@ -85,14 +85,14 @@
 }
 
 .homepage__hero-title-team {
-  color: $color-backlog-blue;
+  color: $blue--500;
   background: linear-gradient(to right, #1955e5, #6592f7);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .homepage__hero-title-retrospective {
-  color: $color-planning-pink;
+  color: $pink--500;
   background: linear-gradient(to right, #ea346b, #b32651);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -145,7 +145,7 @@
   display: flex;
   flex: 2 2 auto;
   gap: 2px;
-  color: $color-dark-gray;
+  color: $gray--800;
   font-size: $text-size--medium;
   line-height: $line-height--small;
   order: -1;
@@ -161,7 +161,7 @@
 
 .homepage__footer-link {
   display: block;
-  color: $color-dark-gray;
+  color: $gray--800;
   font-size: $text-size--medium;
   line-height: $line-height--large;
 }
@@ -179,32 +179,32 @@
 
 [theme="dark"] {
   .homepage {
-    background: $color-dark-one;
+    background: $navy--600;
   }
 
   .homepage__hero {
-    background: $color-dark-mode;
+    background: $navy--600;
   }
 
   .homepage__hero-title {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .homepage__hero-text {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .homepage__footer-link {
-    color: $color-middle-gray;
+    color: $gray--700;
 
     a:focus-visible,
     a:hover {
-      color: $color-white;
+      color: $gray--000;
     }
   }
 
   .homepage__footer-developers {
-    color: $color-middle-gray;
+    color: $gray--700;
   }
 }
 
