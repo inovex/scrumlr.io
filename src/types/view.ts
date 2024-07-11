@@ -24,6 +24,8 @@ export interface View {
   readonly showBoardReactions: boolean;
 
   readonly xrSession: "AR" | "VR" | undefined;
+
+  readonly xrLookAt: boolean;
 }
 
 export type ViewState = View;

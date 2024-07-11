@@ -2,6 +2,7 @@
 import {Grabbable} from "@coconut-xr/natuerlich/defaults";
 import {useFrame, useThree} from "@react-three/fiber";
 import {MutableRefObject, forwardRef, useEffect, useImperativeHandle, useRef} from "react";
+import {useAppSelector} from "store";
 import {Euler, Group, Material, Mesh, Object3DEventMap, Vector3} from "three";
 
 type XRHandleBarProps = {
@@ -20,6 +21,8 @@ const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandl
 
   useImperativeHandle(ref, () => handleBarRef.current, []);
 
+  const xrLookAt = useAppSelector((state) => state.view.xrLookAt);
+
   useEffect(() => {
     currentLookAt.copy(camera.position);
   });
@@ -30,7 +33,10 @@ const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandl
     handleBarRef.current.getWorldPosition(containerRef.current.position);
     // containerRef.current.scale.copy(handleBarRef.current.scale);
 
-    if (dragging.current) {
+    if (dragging.current || xrLookAt) {
+      const distance = containerRef.current.position.distanceTo(state.camera.position);
+      if (!dragging.current && distance < 1) return;
+
       targetLookAt.copy(state.camera.position);
       containerRef.current.lookAt(currentLookAt.lerp(targetLookAt, 0.1));
       handleBarRef.current.lookAt(currentLookAt.lerp(targetLookAt, 0.1));

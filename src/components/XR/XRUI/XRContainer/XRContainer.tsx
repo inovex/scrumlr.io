@@ -34,13 +34,6 @@ const XRContainer = () => {
         containerRef.current.rotation.copy(handleBarRef.current.rotation);
         isPositionSet.current = true;
       }
-
-      /* const distance = containerRef.current.position.distanceTo(state.camera.position);
-      if (distance > 1) {
-        // Smooth the look-at using linear interpolation
-        targetLookAt.copy(state.camera.position);
-        containerRef.current.lookAt(currentLookAt.lerp(targetLookAt, 0.0025 * distance ** 8));
-      } */
     }
   });
 

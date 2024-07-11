@@ -181,6 +181,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     noteFocused: false,
     showBoardReactions: true,
     xrSession: undefined,
+    xrLookAt: false,
   },
   boardReactions: [],
   skinTone: {

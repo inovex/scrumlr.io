@@ -9,6 +9,7 @@ export const ViewAction = {
   DisableHotkeyNotifications: "scrumlr.io/disableHotkeyNotifications" as const,
   SetShowBoardReactions: "scrumlr.io/setShowBoardReactions" as const,
   SetXRSession: "scrumlr.io/setXRSession" as const,
+  SetXRLookAt: "scrumlr.io/setXRLookAt" as const,
 };
 
 export const ViewActionFactory = {
@@ -60,6 +61,10 @@ export const ViewActionFactory = {
     type: ViewAction.SetXRSession,
     active,
   }),
+  setXRLookAt: (lookAt: boolean) => ({
+    type: ViewAction.SetXRLookAt,
+    lookAt,
+  }),
 };
 
 export type ViewReduxAction =
@@ -72,4 +77,5 @@ export type ViewReduxAction =
   | ReturnType<typeof ViewActionFactory.enableHotkeyNotifications>
   | ReturnType<typeof ViewActionFactory.disableHotkeyNotifications>
   | ReturnType<typeof ViewActionFactory.setShowBoardReactions>
-  | ReturnType<typeof ViewActionFactory.setXRSession>;
+  | ReturnType<typeof ViewActionFactory.setXRSession>
+  | ReturnType<typeof ViewActionFactory.setXRLookAt>;
