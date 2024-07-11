@@ -73,15 +73,15 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;
-  color: $color-placeholder;
+  color: $navy--800;
 }
 
 [theme="dark"] {
   .board-settings__board-name-button_input {
-    color: $color-white;
+    color: $gray--000;
   }
   .board-settings__board-name-button_input::placeholder {
-    color: $color-placeholder-dark;
+    color: $gray--000;
   }
 }
 
@@ -114,7 +114,7 @@
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;
   letter-spacing: 0.5px;
-  color: $color-placeholder;
+  color: $navy--800;
 }
 
 @media screen and (max-width: 920px) {
@@ -126,7 +126,7 @@
 
 [theme="dark"] {
   .board-settings__policy-button_value span {
-    color: $color-placeholder-dark;
+    color: $gray--000;
   }
 }
 
@@ -179,13 +179,13 @@
 }
 
 .board-settings__show-password-button--disabled {
-  color: $color-placeholder;
+  color: $navy--800;
   cursor: default;
 }
 
 [theme="dark"] {
   .board-settings__show-password-button--disabled {
-    color: $color-placeholder-dark;
+    color: $gray--000;
   }
 }
 
@@ -202,7 +202,7 @@
 
 [theme="dark"] {
   .board-settings__password-button_value-input {
-    color: $color-white;
+    color: $gray--000;
   }
 }
 
@@ -262,18 +262,18 @@
 }
 
 .board-settings__delete-button span {
-  color: $color-retro-red;
+  color: $critical-carmine--light;
   font-weight: bold;
 }
 
 [theme="dark"] {
   .board-settings__delete-button span {
-    color: $color-retro-red;
+    color: $critical-carmine--light;
   }
 }
 
 .board-settings__delete-button svg {
-  color: $color-retro-red;
+  color: $critical-carmine--light;
 }
 
 .board-settings__confirmation-dialog {
