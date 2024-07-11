@@ -1,7 +1,7 @@
 @import "src/constants/style";
 
 .login-board__dialog {
-  color: $color-black;
+  color: $navy--900;
   min-height: 100vh;
 }
 
@@ -23,7 +23,7 @@
   }
 
   &:focus-visible svg {
-    border: 1px solid $color-backlog-blue;
+    border: 1px solid $blue--500;
   }
 }
 
@@ -43,8 +43,8 @@
   padding: 0;
   overflow: visible;
   border: none;
-  border-top: 1px solid $color-middle-gray;
-  color: $color-middle-gray;
+  border-top: 1px solid $gray--700;
+  color: $gray--700;
   text-align: center;
 }
 
@@ -58,7 +58,7 @@
   position: relative;
   top: -0.625em;
   padding: 0 $spacing--base;
-  background: $color-white;
+  background: $gray--000;
 }
 
 .login-board__fieldset {
@@ -85,7 +85,7 @@
 }
 
 .login-board__terms a {
-  color: $color-planning-pink;
+  color: $pink--500;
   font-weight: bold;
   text-decoration: none;
   transition: all 0.08s ease-out;
@@ -118,19 +118,19 @@
   bottom: 0;
   right: 0;
   overflow: hidden;
-  border: 1px solid $color-backlog-blue;
-  background: $color-white;
+  border: 1px solid $blue--500;
+  background: $gray--000;
   cursor: pointer;
   border-radius: 100%;
   transition: all 0.16s ease-out;
 }
 
 .login-board__terms:hover .login-board__terms-label::before {
-  box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.2);
+  box-shadow: 0 0 0 4px rgba($blue--500, 0.2);
 }
 
 .login-board__checkbox:focus-visible + .login-board__terms-label::before {
-  box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
+  box-shadow: 0 0 0 4px rgba($blue--500, 0.4);
 }
 
 // checkbox checkmark
@@ -143,7 +143,7 @@
   left: 0.25em;
   bottom: 0;
   right: 0;
-  background-color: rgba($color-backlog-blue, 0.75);
+  background-color: rgba($blue--500, 0.75);
   transition: all 0.4s cubic-bezier(1, 0, 0.4, 1);
   transform: scale(0);
   border-radius: 100%;
@@ -159,32 +159,32 @@
 
 [theme="dark"] {
   .login-board__dialog {
-    color: $color-white;
+    color: $gray--000;
     background: #1a2232;
   }
 
   .login-board__divider {
-    border-color: $color-middle-gray;
-    color: $color-middle-gray;
+    border-color: $gray--700;
+    color: $gray--700;
   }
 
   .login-board__divider::after {
-    color: $color-middle-gray;
+    color: $gray--700;
     background: #1a2232;
   }
 
   .login-board__terms:hover .login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba($color-white, 0.2);
+    box-shadow: 0 0 0 4px rgba($gray--000, 0.2);
   }
 
   .login-board__terms:focus-visible.login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba($color-white, 0.4);
+    box-shadow: 0 0 0 4px rgba($gray--000, 0.4);
   }
 
   @media #{$tablet} {
     .login-board__form-wrapper,
     .login-board__divider::after {
-      background: $color-dark-two;
+      background: $navy--600;
     }
   }
 }
@@ -225,7 +225,7 @@
     align-items: center;
 
     flex: 1 1 100%;
-    box-shadow: 0 2px 16px 8px rgba($color-black, 0.2);
+    box-shadow: 0 2px 16px 8px rgba($navy--900, 0.2);
     overflow: auto;
   }
 

@@ -106,9 +106,9 @@ export const Feedback: React.FC = () => {
   );
 
   return (
-    <div className="settings-dialog__container accent-color__poker-purple">
+    <div className="settings-dialog__container accent-color__value-violet">
       <div className="settings-dialog__header">
-        <h2 className={classNames("settings-dialog__header-text", "accent-color__poker-purple")}>Feedback</h2>
+        <h2 className={classNames("settings-dialog__header-text", "accent-color__value-violet")}>Feedback</h2>
       </div>
       {feedbackEnabled && (
         <form className="settings-dialog__feedback-form" onSubmit={onSubmitFeedback}>

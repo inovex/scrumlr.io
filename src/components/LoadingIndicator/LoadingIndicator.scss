@@ -4,7 +4,7 @@
   width: 70px;
 
   text-align: center;
-  color: $color-black;
+  color: $navy--900;
 }
 
 .loading-indicator > div {
@@ -54,6 +54,6 @@
 
 [theme="dark"] {
   .loading-indicator {
-    color: $color-white;
+    color: $gray--000;
   }
 }
