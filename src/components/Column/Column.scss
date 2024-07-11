@@ -21,10 +21,10 @@
 }
 [theme="dark"] {
   .column:nth-child(even) {
-    background-color: $navy--500;
+    background-color: $navy--600;
   }
   .column:nth-child(odd) {
-    background-color: $navy--600;
+    background-color: $navy--500;
   }
 }
 .column--hidden {

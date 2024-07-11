@@ -70,12 +70,12 @@
 [theme="dark"] {
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
-    background-color: $navy--500;
+    background-color: $navy--600;
   }
 
   .board__spacer-left:nth-child(even),
   .board__spacer-right:nth-child(even) {
-    background-color: $navy--600;
+    background-color: $navy--500;
   }
 
   .column--hidden + .board__spacer-right,
