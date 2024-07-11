@@ -29,7 +29,7 @@
 
 .vote-button-remove:enabled:hover {
   background-color: var(--accent-color);
-  color: $white--000;
+  color: $gray--000;
   .vote-button-remove__count {
     display: none;
   }
@@ -75,13 +75,13 @@
   right: 0;
   border-width: 0;
   border-style: solid;
-  background: rgba($white--700, 0.5);
+  background: rgba($gray--700, 0.5);
   box-shadow:
-    2px -2px 0px $white--000,
+    2px -2px 0px $gray--000,
     0 1px 1px rgba($navy--900, 0.1),
     -1px 1px 1px rgba($navy--900, 0.1);
   border-radius: 0 0 0 16px;
-  border-color: $white--000 $white--000 transparent transparent;
+  border-color: $gray--000 $gray--000 transparent transparent;
   transition: border-width 0.15s ease-in-out;
 }
 

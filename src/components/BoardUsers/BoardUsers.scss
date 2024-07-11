@@ -50,7 +50,7 @@
   border-radius: $rounded--full;
   background-color: $navy--500;
   padding: 2px;
-  color: $white--000;
+  color: $gray--000;
   font-weight: 700;
 
   &__readiness {
@@ -74,7 +74,7 @@
   }
 
   &__all-ready {
-    color: $white--000;
+    color: $gray--000;
     width: 100%;
     height: 100%;
 

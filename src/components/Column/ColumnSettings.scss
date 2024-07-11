@@ -5,7 +5,7 @@
   right: 0;
   top: 75%;
   width: 180px;
-  background-color: $white--000;
+  background-color: $gray--000;
   border-radius: 8px;
   box-shadow:
     0 4px 6px -1px rgb(0 0 0 / 0.1),
@@ -22,14 +22,14 @@
 .column__header-menu-dropdown > ul > li {
   height: 32px;
   padding: 0 $spacing--sm;
-  background-color: $white--000;
+  background-color: $gray--000;
 
   &:hover {
     filter: $darken--slightly;
   }
 
   &:focus-within {
-    background-color: $white--200;
+    background-color: $gray--200;
   }
 }
 
@@ -99,10 +99,10 @@
   }
 
   .column__header-menu-dropdown > ul > li > button {
-    color: $white--000;
+    color: $gray--000;
   }
 
   .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
-    box-shadow: 0 0 0 2px $white--000;
+    box-shadow: 0 0 0 2px $gray--000;
   }
 }

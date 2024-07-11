@@ -8,7 +8,7 @@
 
   background: $blue--500;
 
-  color: $white--000;
+  color: $gray--000;
   font-weight: bold;
   text-decoration: none;
 
@@ -63,17 +63,17 @@
 }
 
 .button.button--text-link:disabled {
-  color: $white--700;
+  color: $gray--700;
 }
 
 .button:not(.button--text-link):disabled {
-  background: $white--700;
+  background: $gray--700;
 }
 
 .button.button--outlined:disabled {
   background: none;
-  color: $white--700;
-  border: 1px solid $white--700;
+  color: $gray--700;
+  border: 1px solid $gray--700;
 }
 
 .button--block {
@@ -131,14 +131,14 @@
   .button.button--outlined,
   .button.button--text-link,
   .button.button--primary.button--outlined {
-    color: $white--000;
+    color: $gray--000;
   }
 
   .button:not(:disabled):not(.button--text-link):focus-visible {
-    outline: 2px solid $white--000;
+    outline: 2px solid $gray--000;
   }
 
   .button:not(:disabled):not(.button--text-link).button--primary:focus-visible {
-    outline: 2px solid $white--000;
+    outline: 2px solid $gray--000;
   }
 }

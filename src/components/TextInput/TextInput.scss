@@ -22,8 +22,8 @@ $text-input__adornment-padding: 36px;
   outline: none;
   width: 100%;
 
-  background: $white--200;
-  box-shadow: 0 0 0 rgba($white--000, 0);
+  background: $gray--200;
+  box-shadow: 0 0 0 rgba($gray--000, 0);
   transition:
     box-shadow 0.25s ease,
     background-color 0.15s ease;
@@ -34,13 +34,13 @@ $text-input__adornment-padding: 36px;
 }
 
 .text-input[value=""] {
-  background: $white--300;
+  background: $gray--300;
   border: 1px solid $critical-carmine--light;
 }
 
 .text-input:focus-visible,
 .text-input:hover {
-  background: $white--000;
+  background: $gray--000;
   border: 1px solid $blue--500;
 }
 
@@ -81,10 +81,10 @@ $text-input__adornment-padding: 36px;
 
 [theme="dark"] {
   .text-input:hover {
-    box-shadow: 0 0 0 4px rgba($white--000, 0.2);
+    box-shadow: 0 0 0 4px rgba($gray--000, 0.2);
   }
 
   .text-input:focus-visible {
-    box-shadow: 0 0 0 4px rgba($white--000, 0.4);
+    box-shadow: 0 0 0 4px rgba($gray--000, 0.4);
   }
 }

@@ -14,10 +14,10 @@
   @include inset-border($top: true, $bottom: true, $color: $victory-verde--light);
 }
 .column:nth-child(odd) {
-  background-color: $white--100;
+  background-color: $gray--100;
 }
 .column:nth-child(even) {
-  background-color: $white--200;
+  background-color: $gray--200;
 }
 [theme="dark"] {
   .column:nth-child(even) {
@@ -93,7 +93,7 @@
 }
 
 .column__header-text--hidden {
-  color: $white--700;
+  color: $gray--700;
 }
 
 // tooltip requires parent selection because of specificity
@@ -120,14 +120,14 @@
 }
 [theme="dark"] {
   .column__header-input {
-    color: $white--000;
+    color: $gray--000;
   }
 }
 
 .column__header-card-number {
   margin-bottom: $spacing--base;
   font-size: $text-size--medium;
-  color: $white--700;
+  color: $gray--700;
   font-weight: 600;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -142,7 +142,7 @@
   flex: 1;
   outline: none;
   scrollbar-width: 10px;
-  scrollbar-color: $white--700 $white--000;
+  scrollbar-color: $gray--700 $gray--000;
 
   @include scrollbar();
 }
@@ -166,11 +166,11 @@
 
 [theme="dark"] {
   .column__header-text {
-    color: $white--000;
+    color: $gray--000;
   }
 
   .column__header-text--hidden {
-    color: $white--700;
+    color: $gray--700;
   }
 
   .column__header-text-wrapper .column__tooltip {
@@ -199,7 +199,7 @@
 
 [theme="dark"] {
   .column__header-hidden-icon:hover {
-    color: $white--000;
+    color: $gray--000;
   }
 }
 
@@ -231,5 +231,5 @@
 }
 
 [theme="dark"] .column__header-edit-button-icon {
-  color: $white--000;
+  color: $gray--000;
 }

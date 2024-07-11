@@ -24,13 +24,13 @@
     height: 8px;
     opacity: 0.5;
     border-radius: 100%;
-    background: $white--000;
+    background: $gray--000;
     margin: 12px auto;
   }
 
   &:focus-visible::after {
     opacity: 1;
-    outline: 2px solid $white--000;
+    outline: 2px solid $gray--000;
     background: var(--accent-color);
     transform: scale(1);
   }

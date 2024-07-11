@@ -1,7 +1,7 @@
 @import "constants/style.scss";
 
 .tooltip-container .tooltip {
-  background-color: $white--300;
+  background-color: $gray--300;
   border-radius: $rounded--full;
   color: $navy--900;
   font-size: $text--sm;
@@ -12,5 +12,5 @@
 
 [theme="dark"] .tooltip-container .tooltip {
   background-color: $navy--300;
-  color: $white--000;
+  color: $gray--000;
 }

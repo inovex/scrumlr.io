@@ -34,11 +34,11 @@ $name-max-length: 20em;
   white-space: nowrap;
   text-overflow: ellipsis;
   color: $navy--900;
-  background-color: $white--300;
+  background-color: $gray--300;
   border-radius: $rounded--large;
 
   &--self {
-    color: $white--000;
+    color: $gray--000;
     background-color: $blue--500;
   }
 }
@@ -56,7 +56,7 @@ $name-max-length: 20em;
 
 [theme="dark"] {
   .board-reaction__name-container {
-    color: $white--000;
+    color: $gray--000;
     background-color: $navy--200;
 
     &--self {

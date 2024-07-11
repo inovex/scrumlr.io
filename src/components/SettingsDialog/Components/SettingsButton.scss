@@ -10,7 +10,7 @@ $header-menu-border-bottom-color: #efefef;
   align-items: center;
   gap: $spacing--base;
 
-  background-color: $white--000;
+  background-color: $gray--000;
   border-radius: 8px;
   border: none;
   padding: 0 $spacing--lg;
@@ -58,7 +58,7 @@ $header-menu-border-bottom-color: #efefef;
 .settings-option-button--disabled:focus-within,
 .settings-option-button--disabled:hover {
   cursor: default;
-  background-color: $white--000;
+  background-color: $gray--000;
 }
 
 [theme="dark"] {
@@ -71,7 +71,7 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   .settings-option-button__label {
-    color: $white--000;
+    color: $gray--000;
   }
 
   .settings-option-button--disabled:focus-within,

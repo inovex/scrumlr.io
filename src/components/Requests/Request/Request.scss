@@ -20,7 +20,7 @@ $fly-in-time: 0.5s;
 
   animation: fly-in-right $fly-in-time ease-out;
 
-  background-color: $white--000;
+  background-color: $gray--000;
   box-shadow: 3px 5px 3px rgba($navy--500, 30%);
 
   transition:
@@ -147,12 +147,12 @@ $fly-in-time: 0.5s;
 
   .request__participant-name,
   .request__info-text {
-    color: $white--000;
+    color: $gray--000;
   }
 
   .request__button {
     background-color: $navy--500;
-    color: $white--000;
+    color: $gray--000;
 
     &:hover {
       background-color: $navy--400;
@@ -161,7 +161,7 @@ $fly-in-time: 0.5s;
 
   .request__icon-container {
     svg {
-      color: $white--000;
+      color: $gray--000;
     }
   }
 }

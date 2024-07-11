@@ -4,7 +4,7 @@ $header-menu__item-height: 48px;
 .board-option-link {
   display: block;
   width: 100%;
-  background: $white--000;
+  background: $gray--000;
   text-decoration: none;
   outline: none;
   height: $header-menu__item-height;
@@ -14,7 +14,7 @@ $header-menu__item-height: 48px;
   }
 
   &:focus-visible {
-    background-color: $white--200;
+    background-color: $gray--200;
   }
 }
 

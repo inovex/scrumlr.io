@@ -51,7 +51,7 @@ $header-menu-toggle-background-color: #c8c8c8;
 }
 .board-option-toggle__switch--left::after {
   left: 0;
-  background-color: $white--700;
+  background-color: $gray--700;
 }
 .board-option-toggle__switch--right::after {
   left: $header-menu-toggle-button-width;

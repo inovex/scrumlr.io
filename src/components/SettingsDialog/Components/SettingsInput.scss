@@ -8,7 +8,7 @@
   height: 48px;
   padding: 0 $spacing--lg;
   border-radius: $rounded--small;
-  background-color: $white--000;
+  background-color: $gray--000;
   color: $navy--900;
 
   &:has(:focus-visible),
@@ -39,7 +39,7 @@
 
   &:disabled {
     cursor: default;
-    background-color: $white--000;
+    background-color: $gray--000;
   }
 
   &:focus-visible ~ label,
@@ -91,10 +91,10 @@
 [theme="dark"] {
   .settings-input__container {
     background-color: $navy--500;
-    color: $white--000;
+    color: $gray--000;
   }
 
   .settings-input__input:disabled {
-    color: $white--000;
+    color: $gray--000;
   }
 }

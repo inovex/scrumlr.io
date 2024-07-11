@@ -95,7 +95,7 @@
 }
 
 .board-header__access-policy-status {
-  color: $white--700;
+  color: $gray--700;
   font-size: $text-size--medium;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
@@ -127,7 +127,7 @@
 
 [theme="dark"] {
   .board-header__name {
-    color: $white--000;
+    color: $gray--000;
   }
 }
 
@@ -142,7 +142,7 @@
 }
 
 .board-header__access-policy-status-icon * {
-  color: $white--700;
+  color: $gray--700;
 }
 
 @media #{$tablet} {

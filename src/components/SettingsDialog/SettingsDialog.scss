@@ -42,7 +42,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__content {
   display: none;
-  background: $white--100;
+  background: $gray--100;
   width: 100%;
   padding-top: 50px;
   overflow-y: hidden; // so that reset state banner can flow out
@@ -72,7 +72,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__sidebar {
   width: 100%;
-  background-color: $white--000;
+  background-color: $gray--000;
 }
 [theme="dark"] .settings-dialog__sidebar {
   background-color: $navy--500;
@@ -132,7 +132,7 @@ $settings-dialog-container--bottom: 62px;
 
   &:hover {
     background-color: $blue--500;
-    color: $white--000;
+    color: $gray--000;
     transform: scale(1.04);
   }
 
@@ -153,7 +153,7 @@ $settings-dialog-container--bottom: 62px;
 
   &:hover {
     background-color: $pink--500;
-    color: $white--000;
+    color: $gray--000;
   }
 
   &:focus-visible {
@@ -164,7 +164,7 @@ $settings-dialog-container--bottom: 62px;
   .settings-dialog__close-button {
     top: -22px;
     right: -22px;
-    background-color: $white--000;
+    background-color: $gray--000;
     box-shadow: 0 16px 32px #0057ff3d;
   }
   [theme="dark"] .settings-dialog__close-button {
@@ -213,7 +213,7 @@ $settings-dialog-container--bottom: 62px;
 
   &:hover {
     background: rgba(var(--accent-color-rgb), 0.8);
-    color: $white--000;
+    color: $gray--000;
   }
 
   &:focus-visible {
@@ -248,13 +248,13 @@ $settings-dialog-container--bottom: 62px;
 }
 
 [theme="dark"] .navigation__item {
-  color: $white--000;
+  color: $gray--000;
 }
 
 .navigation__item--active {
   outline: none;
   background: var(--accent-color);
-  color: $white--000;
+  color: $gray--000;
 }
 
 .navigation-item__icon {
@@ -262,7 +262,7 @@ $settings-dialog-container--bottom: 62px;
   height: 40px;
   border-radius: $rounded--full;
   background: var(--accent-color);
-  color: $white--000;
+  color: $gray--000;
 }
 
 .settings-dialog__container {
@@ -300,19 +300,19 @@ $settings-dialog-container--bottom: 62px;
   margin: 0 0 0 5%;
   width: 90%;
   border: 0;
-  border-top: 0.5px solid $white--300;
+  border-top: 0.5px solid $gray--300;
 }
 
 .settings-dialog__group {
   display: flex;
   flex-direction: column;
   border-radius: $rounded--small;
-  background-color: $white--000;
+  background-color: $gray--000;
 }
 
 [theme="dark"] {
   .settings-dialog__header-text {
-    color: $white--000;
+    color: $gray--000;
   }
 
   .settings-dialog__separator {

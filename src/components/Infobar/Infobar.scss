@@ -18,7 +18,7 @@
 .info-bar__return-to-shared-note-button {
   position: relative;
   border: 0;
-  background-color: $white--000;
+  background-color: $gray--000;
   box-shadow: $box-shadow--light;
   border-radius: $rounded--full;
   height: 42px;
@@ -32,7 +32,7 @@
   color: $navy--900;
 
   &:hover {
-    background-color: getLightHoverBackground($white--000);
+    background-color: getLightHoverBackground($gray--000);
   }
 
   &:focus-visible {
@@ -40,7 +40,7 @@
   }
 }
 [theme="dark"] .info-bar__return-to-shared-note-button {
-  color: $white--000;
+  color: $gray--000;
   background-color: $navy--500;
 
   &:hover {

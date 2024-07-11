@@ -18,7 +18,7 @@
   width: 100%;
   top: 8px;
   left: 0;
-  background: $white--300 0 0 no-repeat padding-box;
+  background: $gray--300 0 0 no-repeat padding-box;
   border-radius: 4px;
 }
 
@@ -34,7 +34,7 @@
   top: 0;
 
   left: 0;
-  background-color: $white--700;
+  background-color: $gray--700;
 }
 
 .toggle--active::after {
@@ -48,7 +48,7 @@
   opacity: 0.5;
 
   &::after {
-    background-color: $white--700;
+    background-color: $gray--700;
     box-shadow: none;
   }
 

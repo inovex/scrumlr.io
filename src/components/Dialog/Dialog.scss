@@ -8,7 +8,7 @@
   box-sizing: border-box;
   position: fixed;
   border: 3px solid $pink--500;
-  background: $white--100;
+  background: $gray--100;
   box-shadow:
     2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02),
     6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
@@ -49,7 +49,7 @@
 }
 [theme="dark"] {
   .dialog__header-text {
-    color: $white--000;
+    color: $gray--000;
   }
 }
 
@@ -92,7 +92,7 @@
   border-radius: 8px;
   height: 48px;
   width: 100%;
-  background: $white--000;
+  background: $gray--000;
   cursor: pointer;
   transition: all 0.08s ease-out;
   outline: none;
@@ -121,7 +121,7 @@
     background-color: $navy--400;
   }
   .dialog__button > label {
-    color: $white--000;
+    color: $gray--000;
   }
   .dialog__close-button:hover {
     background-color: var(--accent-color--desaturated-dark);

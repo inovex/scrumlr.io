@@ -11,7 +11,7 @@
 
   padding: $spacing--xs $spacing--base $spacing--xl * 2 $spacing--base;
 
-  background-color: $white--000;
+  background-color: $gray--000;
 
   user-select: none;
 
@@ -30,7 +30,7 @@
 .note-reaction-popup__notch {
   width: 64px;
   height: 4px;
-  background-color: $white--300;
+  background-color: $gray--300;
   border-radius: $rounded--default;
   margin-bottom: $spacing--base;
 }
@@ -55,7 +55,7 @@
   height: 18px;
   padding: 6px 9px 4px 10px;
   border-radius: $rounded--full;
-  background-color: $white--300;
+  background-color: $gray--300;
 
   font-size: $text--sm;
   font-weight: 600;
@@ -63,12 +63,12 @@
   color: $navy--900;
 
   &:hover {
-    background-color: $white--300;
+    background-color: $gray--300;
   }
 
   &--active {
     background-color: var(--accent-color);
-    color: $white--000;
+    color: $gray--000;
 
     &:hover {
       background-color: var(--accent-color); // essentially no hover color when active.
@@ -131,7 +131,7 @@
 
   margin: 7px 0 10px 0;
 
-  background-color: $white--300;
+  background-color: $gray--300;
 }
 
 @keyframes slide-in {
@@ -153,7 +153,7 @@
   }
 
   .note-reaction-popup__tab-all {
-    color: $white--000;
+    color: $gray--000;
     background-color: $navy--600;
 
     &--active {

@@ -27,7 +27,7 @@ $scale-factor: 120%;
   cursor: pointer;
 
   &:hover {
-    background-color: $white--300;
+    background-color: $gray--300;
     transform: scale($scale-factor);
   }
 

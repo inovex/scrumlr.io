@@ -82,16 +82,16 @@ $navy--300: #454e63;
 $navy--200: #586073;
 $navy--100: #6a7182;
 
-// white
-$white--800: #8f95a1;
-$white--700: #a2a7b1;
-$white--600: #b5b8c1;
-$white--500: #dddfe3;
-$white--400: #e9eaec;
-$white--300: #eeeff1;
-$white--200: #f4f4f6;
-$white--100: #f9fafa;
-$white--000: #ffffff;
+// gray
+$gray--800: #8f95a1;
+$gray--700: #a2a7b1;
+$gray--600: #b5b8c1;
+$gray--500: #dddfe3;
+$gray--400: #e9eaec;
+$gray--300: #eeeff1;
+$gray--200: #f4f4f6;
+$gray--100: #f9fafa;
+$gray--000: #ffffff;
 
 // info states
 // error
@@ -273,8 +273,8 @@ $box-shadow--dark: 0px 5px 15px 0px rgba(0, 0, 0, 0.35);
 // gradients
 $column-stripes--light: repeating-linear-gradient(
   45deg,
-  $white--100 calc(0px + var(--stripe-offset, 0px)),
-  $white--100 calc(20px + var(--stripe-offset, 0px)),
+  $gray--100 calc(0px + var(--stripe-offset, 0px)),
+  $gray--100 calc(20px + var(--stripe-offset, 0px)),
   var(--accent-color--background-light) calc(20px + var(--stripe-offset, 0px)),
   var(--accent-color--background-light) calc(40px + var(--stripe-offset, 0px))
 );
@@ -320,7 +320,7 @@ $column-stripes--dark: repeating-linear-gradient(
 
   &::-webkit-scrollbar-thumb {
     border-radius: #{$border-radius};
-    background-color: rgba($white--600, 0.3);
+    background-color: rgba($gray--600, 0.3);
   }
 
   [theme="dark"] & {
@@ -341,11 +341,11 @@ $column-stripes--dark: repeating-linear-gradient(
 @mixin tooltip--light {
   @include tooltip;
   color: $navy--900;
-  background-color: $white--300;
+  background-color: $gray--300;
 }
 
 @mixin tooltip--dark {
   @include tooltip;
-  color: $white--000;
+  color: $gray--000;
   background-color: $navy--300;
 }

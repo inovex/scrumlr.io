@@ -23,14 +23,14 @@
       padding: 4px;
       border: 0;
       border-radius: 20px;
-      background-color: $white--000;
+      background-color: $gray--000;
       box-shadow: 0 8px 16px rgba(var(--accent-color-rgb), 0.3);
       align-items: center;
       justify-content: center;
       transition: all 0.08s ease-out;
 
       &:hover {
-        background-color: mix($white--000, $purple--500, 92%);
+        background-color: mix($gray--000, $purple--500, 92%);
         transform: scale(1.06);
         box-shadow: 0 12px 20px rgba(var(--accent-color-rgb), 0.2);
       }
@@ -48,7 +48,7 @@
   }
 
   &__settings {
-    background-color: $white--000;
+    background-color: $gray--000;
     border-radius: 8px;
     max-width: calc(544px - (2 * #{$settings-dialog-container--sides-large}));
 
@@ -98,7 +98,7 @@
           margin-left: 10%;
           width: 80%;
           border: 0;
-          border-top: 0.5px solid $white--300;
+          border-top: 0.5px solid $gray--300;
         }
       }
 
@@ -107,7 +107,7 @@
         margin-left: 5%;
         width: 90%;
         border: 0;
-        border-top: 0.5px solid $white--300;
+        border-top: 0.5px solid $gray--300;
       }
     }
   }
@@ -135,7 +135,7 @@
         }
 
         &-item {
-          color: $white--000;
+          color: $gray--000;
 
           &:hover:not(.disabled) {
             background-color: $navy--400;

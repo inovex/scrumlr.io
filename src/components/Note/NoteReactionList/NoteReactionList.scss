@@ -18,7 +18,7 @@
   border-radius: $rounded--full;
 
   &--active {
-    background-color: $white--300;
+    background-color: $gray--300;
   }
 }
 
@@ -34,12 +34,12 @@
   padding: $reaction__padding--inner;
 
   border-radius: $rounded--full;
-  background-color: $white--300;
+  background-color: $gray--300;
 
   cursor: pointer;
 
   &:hover {
-    background-color: $white--300;
+    background-color: $gray--300;
   }
   &:focus-visible {
     outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
@@ -77,6 +77,6 @@
   }
 
   .note-reaction-list__add-reaction-sticker {
-    color: $white--000;
+    color: $gray--000;
   }
 }

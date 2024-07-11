@@ -76,7 +76,7 @@ $max-name-length: 112px;
   width: $icon--medium;
   height: $icon--medium;
   font-size: $text--xs;
-  color: $white--000;
+  color: $gray--000;
   background-color: $navy--500;
 
   // add 1px because it's a little bit off in comparison to .note__author margin
@@ -85,7 +85,7 @@ $max-name-length: 112px;
   justify-content: center;
   align-items: center;
 
-  border: 1.5px solid $white--100;
+  border: 1.5px solid $gray--100;
   border-radius: $rounded--full;
 }
 
@@ -94,7 +94,7 @@ $max-name-length: 112px;
 }
 
 .note__author-name {
-  color: $white--800;
+  color: $gray--800;
   font-size: $text--xs;
   letter-spacing: $letter-spacing--small;
   white-space: nowrap;
@@ -116,7 +116,7 @@ $max-name-length: 112px;
   }
 
   .note__author-name {
-    color: $white--000;
+    color: $gray--000;
   }
 
   .note__author-name--self {

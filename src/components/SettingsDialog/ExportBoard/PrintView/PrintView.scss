@@ -46,14 +46,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
     background: $color-button;
     box-shadow: 0 4px 7px 1px darken($color-button-shadow, 15%);
     svg {
-      color: $white--000;
+      color: $gray--000;
     }
   }
   &:active {
     background: darken($color-button, 10%);
     box-shadow: 0 4px 5px 1px darken($color-button-shadow, 25%);
     svg {
-      color: $white--000;
+      color: $gray--000;
     }
   }
 }
@@ -69,7 +69,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view {
-  background-color: $white--000;
+  background-color: $gray--000;
   overflow: visible;
   padding-top: 1cm;
   padding-right: 1cm;
@@ -139,7 +139,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__column {
   display: block;
   width: 100%;
-  background-color: $white--000;
+  background-color: $gray--000;
   color: $navy--900;
 }
 
@@ -164,7 +164,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__column-header-card-count {
   margin: 0 $spacing--xs 0 0;
-  color: $white--700;
+  color: $gray--700;
   font-weight: bold;
 }
 
@@ -184,7 +184,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   padding: calc(#{$spacing--xs} + 4px);
   border: 2px solid rgba(var(--accent-color-rgb), 0.25);
   border-radius: $note__border-radius;
-  background: $white--000;
+  background: $gray--000;
 }
 @media print {
   .print-view__note {
@@ -231,7 +231,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   display: inline;
   width: auto;
   margin-top: auto;
-  color: $white--700;
+  color: $gray--700;
   font-weight: bold;
 }
 

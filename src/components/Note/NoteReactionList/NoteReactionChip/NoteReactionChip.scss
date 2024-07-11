@@ -14,7 +14,7 @@
   height: 18px;
   padding: 5px 8px 5px 7px;
   border-radius: $rounded--full;
-  background-color: $white--300;
+  background-color: $gray--300;
 
   font-size: $text--base;
 
@@ -22,7 +22,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $white--300;
+    background-color: $gray--300;
   }
 }
 
@@ -50,7 +50,7 @@
   background-color: var(--accent-color);
 
   .note-reaction-chip__amount {
-    color: $white--000;
+    color: $gray--000;
   }
 
   &:hover {
@@ -84,6 +84,6 @@
   }
 
   .note-reaction-chip__amount {
-    color: $white--000;
+    color: $gray--000;
   }
 }

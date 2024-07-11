@@ -30,7 +30,7 @@
 }
 .vote-button-add:enabled:hover {
   background-color: var(--accent-color);
-  color: $white--000;
+  color: $gray--000;
 }
 .vote-button-add:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);

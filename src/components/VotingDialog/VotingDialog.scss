@@ -25,7 +25,7 @@
       top: 15px;
       border-width: 10px;
       border-style: solid;
-      border-color: transparent transparent transparent $white--100;
+      border-color: transparent transparent transparent $gray--100;
     }
   }
 
@@ -63,7 +63,7 @@
 .voting-dialog__start-button > label {
   font-weight: bold;
   font-size: $text-size--medium;
-  color: $white--000;
+  color: $gray--000;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
 }
@@ -121,6 +121,6 @@
 
 [theme="dark"] {
   .voting-dialog__start-button:focus-visible {
-    outline: 2px solid $white--000;
+    outline: 2px solid $gray--000;
   }
 }

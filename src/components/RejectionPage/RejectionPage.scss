@@ -6,7 +6,7 @@
   width: 100%;
   padding: $spacing--xs 0 0 $spacing--lg;
   overflow-x: hidden;
-  background: linear-gradient(320deg, color.change($blue--500, $alpha: 0.2), color.change($white--000, $alpha: 0.3));
+  background: linear-gradient(320deg, color.change($blue--500, $alpha: 0.2), color.change($gray--000, $alpha: 0.3));
 }
 
 .rejection-page__background {
@@ -70,7 +70,7 @@
   margin-top: $spacing--base;
 
   padding: $spacing--base $spacing--xl;
-  color: $white--000;
+  color: $gray--000;
   background: #ff0069;
 
   font-weight: 700;
@@ -171,6 +171,6 @@
   }
 
   .rejection-page__content {
-    color: $white--000;
+    color: $gray--000;
   }
 }

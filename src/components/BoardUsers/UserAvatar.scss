@@ -10,7 +10,7 @@
   position: relative;
 
   #Circle-Background {
-    stroke: $white--100;
+    stroke: $gray--100;
     stroke-width: 24px;
   }
 }
@@ -27,7 +27,7 @@
     stroke-dasharray: var(--dasharray);
     stroke-dashoffset: 0;
     transform-origin: 35% 50%;
-    filter: drop-shadow(0 0 4px $white--000);
+    filter: drop-shadow(0 0 4px $gray--000);
   }
 }
 

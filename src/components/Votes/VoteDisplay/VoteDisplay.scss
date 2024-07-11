@@ -13,10 +13,10 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: 100%;
   width: $vote-display-width;
   color: $navy--500;
-  background-color: $white--000;
+  background-color: $gray--000;
   border-radius: $rounded--full;
   position: relative;
-  border: 2px solid $white--000;
+  border: 2px solid $gray--000;
   box-shadow: $box-shadow--light;
 
   &:has(:focus-visible) {
@@ -29,7 +29,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: $vote-display__content-height;
   width: $vote-display__content-height;
   background-color: $navy--500;
-  color: $white--000;
+  color: $gray--000;
   border-radius: 100%;
 }
 
@@ -71,7 +71,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   width: 100%;
   position: absolute;
   border-radius: $rounded--full;
-  background-color: $white--000;
+  background-color: $gray--000;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -98,7 +98,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
   border-radius: $rounded--full;
-  background-color: $white--300;
+  background-color: $gray--300;
   color: $navy--500;
   border: none;
   padding: 0;
@@ -109,7 +109,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: getLightHoverBackground($white--300);
+    background-color: getLightHoverBackground($gray--300);
   }
 
   &:focus-visible {
@@ -140,7 +140,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
 [theme="dark"] {
   .vote-display {
-    color: $white--000;
+    color: $gray--000;
     background-color: $navy--500;
     border-color: $navy--500;
 
@@ -150,7 +150,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 
   .vote-display > svg {
-    background-color: $white--000;
+    background-color: $gray--000;
     color: $navy--500;
   }
 
@@ -164,7 +164,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
   .short-action__button {
     background-color: $navy--600;
-    color: $white--000;
+    color: $gray--000;
 
     &:hover {
       background-color: getDarkHoverBackground($navy--600);

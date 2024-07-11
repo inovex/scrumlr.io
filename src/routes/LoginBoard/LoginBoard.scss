@@ -43,8 +43,8 @@
   padding: 0;
   overflow: visible;
   border: none;
-  border-top: 1px solid $white--700;
-  color: $white--700;
+  border-top: 1px solid $gray--700;
+  color: $gray--700;
   text-align: center;
 }
 
@@ -58,7 +58,7 @@
   position: relative;
   top: -0.625em;
   padding: 0 $spacing--base;
-  background: $white--000;
+  background: $gray--000;
 }
 
 .login-board__fieldset {
@@ -119,7 +119,7 @@
   right: 0;
   overflow: hidden;
   border: 1px solid $blue--500;
-  background: $white--000;
+  background: $gray--000;
   cursor: pointer;
   border-radius: 100%;
   transition: all 0.16s ease-out;
@@ -159,26 +159,26 @@
 
 [theme="dark"] {
   .login-board__dialog {
-    color: $white--000;
+    color: $gray--000;
     background: #1a2232;
   }
 
   .login-board__divider {
-    border-color: $white--700;
-    color: $white--700;
+    border-color: $gray--700;
+    color: $gray--700;
   }
 
   .login-board__divider::after {
-    color: $white--700;
+    color: $gray--700;
     background: #1a2232;
   }
 
   .login-board__terms:hover .login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba($white--000, 0.2);
+    box-shadow: 0 0 0 4px rgba($gray--000, 0.2);
   }
 
   .login-board__terms:focus-visible.login-board__terms-label::before {
-    box-shadow: 0 0 0 4px rgba($white--000, 0.4);
+    box-shadow: 0 0 0 4px rgba($gray--000, 0.4);
   }
 
   @media #{$tablet} {

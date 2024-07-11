@@ -18,7 +18,7 @@ $menu-item-size: 42px;
 }
 [theme="dark"] {
   .menu-item:focus-visible {
-    outline: 2px solid rgba($white--000, 0.5);
+    outline: 2px solid rgba($gray--000, 0.5);
   }
 }
 
@@ -155,7 +155,7 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .tooltip__text {
-    color: $white--000 !important;
+    color: $gray--000 !important;
     background-color: $navy--300 !important;
   }
 }
@@ -163,7 +163,7 @@ $menu-item-size: 42px;
 .menu-item__icon {
   background-clip: content-box !important;
   color: $navy--900;
-  background-color: $white--000;
+  background-color: $gray--000;
   border: 3px solid transparent;
   position: absolute;
   top: 0;
@@ -174,7 +174,7 @@ $menu-item-size: 42px;
 }
 .menu-item--active .menu-item__icon {
   background-color: $navy--500;
-  color: $white--000;
+  color: $gray--000;
 }
 .menu-item__icon:nth-of-type(2) {
   visibility: hidden;
@@ -201,11 +201,11 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .menu-item__icon {
-    color: $white--000;
+    color: $gray--000;
     background: $navy--500;
   }
   .menu-item--active .menu-item__icon {
-    background-color: $white--000;
+    background-color: $gray--000;
     color: $navy--900;
   }
   .menu-item:hover .menu-item__icon {

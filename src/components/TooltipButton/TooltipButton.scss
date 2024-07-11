@@ -15,7 +15,7 @@ $tooltip-button-size: 46px;
   box-sizing: border-box;
 
   &:focus-visible {
-    outline: 2px solid var(--accent-color, rgba($white--000, 0.5));
+    outline: 2px solid var(--accent-color, rgba($gray--000, 0.5));
   }
 }
 
@@ -34,7 +34,7 @@ $tooltip-button-size: 46px;
 
   .tooltip-button__icon {
     background-color: $navy--500;
-    color: $white--000;
+    color: $gray--000;
   }
 }
 
@@ -80,7 +80,7 @@ $tooltip-button-size: 46px;
   height: 100%;
   width: 100%;
   border-radius: $rounded--full;
-  background: $white--000;
+  background: $gray--000;
   transition: background-color 0.2s ease-out;
 }
 
@@ -104,7 +104,7 @@ $tooltip-button-size: 46px;
 }
 
 .tooltip-button__hotkey {
-  color: $white--800;
+  color: $gray--800;
 }
 
 @media #{$tablet} {
@@ -264,12 +264,12 @@ $tooltip-button-size: 46px;
     }
 
     &:focus-visible .tooltip-button__icon {
-      outline: 2px solid rgba($white--000, 0.5);
+      outline: 2px solid rgba($gray--000, 0.5);
     }
 
     &--active {
       .tooltip-button__icon-container {
-        background-color: $white--000;
+        background-color: $gray--000;
       }
     }
   }
@@ -279,16 +279,16 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button__icon {
-    color: var(--accent-color--dark, $white--000);
+    color: var(--accent-color--dark, $gray--000);
   }
 
   .tooltip-button__tooltip-text {
     background-color: var(--accent-color--desaturated-dark, $navy--300);
-    color: var(--accent-color--dark, $white--000);
+    color: var(--accent-color--dark, $gray--000);
   }
 
   .tooltip-button--active .tooltip-button__icon {
-    background-color: $white--000;
+    background-color: $gray--000;
     color: $navy--900;
   }
 }

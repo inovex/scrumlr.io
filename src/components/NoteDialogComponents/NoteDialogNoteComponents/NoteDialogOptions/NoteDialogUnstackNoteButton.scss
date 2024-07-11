@@ -15,7 +15,7 @@
 }
 .note-dialog__note-option__unstack:hover {
   background-color: var(--accent-color);
-  color: $white--000;
+  color: $gray--000;
 }
 .note-dialog__note-option__unstack:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);

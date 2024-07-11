@@ -51,7 +51,7 @@
 }
 
 .note-dialog__marker-edited {
-  color: $white--700;
+  color: $gray--700;
   font-size: $text--base;
   padding: 0 $spacing--xxs;
 }
@@ -113,14 +113,14 @@
   border-radius: $rounded--default;
   overflow-y: auto;
   box-shadow: $box-shadow--light;
-  background-color: $white--300;
+  background-color: $gray--300;
 
   @include scrollbar();
 }
 
 [theme="dark"] {
   .note-dialog__note-content--text {
-    color: $white--000;
+    color: $gray--000;
   }
 
   .note-dialog__note-content--emoji-suggestions {

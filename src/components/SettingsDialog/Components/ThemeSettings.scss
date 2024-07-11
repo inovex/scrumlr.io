@@ -1,7 +1,7 @@
 @import "constants/style";
 
 .appearance-settings__theme-container {
-  background-color: $white--000;
+  background-color: $gray--000;
   padding: $spacing--base $spacing--lg;
   border-radius: 8px;
   display: flex;
@@ -43,7 +43,7 @@
       }
       ~ p {
         background-color: var(--accent-color);
-        color: $white--000;
+        color: $gray--000;
       }
     }
 
@@ -100,7 +100,7 @@
 
 [theme="dark"] {
   .appearance-settings__theme-container {
-    color: $white--000;
+    color: $gray--000;
     background-color: $navy--500;
   }
 
