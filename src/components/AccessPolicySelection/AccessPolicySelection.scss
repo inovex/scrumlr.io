@@ -32,15 +32,15 @@
   padding: $spacing--base;
   border-radius: 24px;
 
-  color: $gray--900;
+  color: $navy--900;
   background: $white--000;
-  box-shadow: 0 2px 6px 4px rgba($gray--900, 0.1);
+  box-shadow: 0 2px 6px 4px rgba($navy--900, 0.1);
 }
 
 [theme="dark"] {
   .access-policy__details {
     color: $white--000;
-    background: $gray--500;
-    box-shadow: 0 2px 6px 4px rgba($gray--900, 0.2);
+    background: $navy--500;
+    box-shadow: 0 2px 6px 4px rgba($navy--900, 0.2);
   }
 }

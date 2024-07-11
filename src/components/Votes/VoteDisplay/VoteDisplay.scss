@@ -12,7 +12,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 .vote-display {
   height: 100%;
   width: $vote-display-width;
-  color: $gray--500;
+  color: $navy--500;
   background-color: $white--000;
   border-radius: $rounded--full;
   position: relative;
@@ -28,7 +28,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: absolute;
   height: $vote-display__content-height;
   width: $vote-display__content-height;
-  background-color: $gray--500;
+  background-color: $navy--500;
   color: $white--000;
   border-radius: 100%;
 }
@@ -99,7 +99,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   width: $vote-display__short-actions-height;
   border-radius: $rounded--full;
   background-color: $white--300;
-  color: $gray--500;
+  color: $navy--500;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -141,8 +141,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 [theme="dark"] {
   .vote-display {
     color: $white--000;
-    background-color: $gray--500;
-    border-color: $gray--500;
+    background-color: $navy--500;
+    border-color: $navy--500;
 
     &:has(:focus-visible) {
       outline: 2px solid $pink--500;
@@ -151,11 +151,11 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
   .vote-display > svg {
     background-color: $white--000;
-    color: $gray--500;
+    color: $navy--500;
   }
 
   .vote-display__short-actions {
-    background-color: $gray--500;
+    background-color: $navy--500;
   }
 
   .vote-display--votes-depleted .vote-display__progress-bar {
@@ -163,11 +163,11 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 
   .short-action__button {
-    background-color: $gray--600;
+    background-color: $navy--600;
     color: $white--000;
 
     &:hover {
-      background-color: getDarkHoverBackground($gray--600);
+      background-color: getDarkHoverBackground($navy--600);
     }
 
     &:focus-visible {

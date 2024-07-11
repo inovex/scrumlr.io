@@ -34,7 +34,7 @@
   font-size: $text--sm;
   font-weight: 600;
   line-height: 18px;
-  color: $gray--900;
+  color: $navy--900;
 }
 
 .note-reaction-chip__root--self {
@@ -60,10 +60,10 @@
 
 [theme="dark"] {
   .note-reaction-chip__root {
-    background-color: $gray--600;
+    background-color: $navy--600;
 
     &:hover {
-      background-color: $gray--300;
+      background-color: $navy--300;
     }
   }
 

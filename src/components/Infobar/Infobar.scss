@@ -29,7 +29,7 @@
   place-content: center;
   outline: none;
   transition: background-color 150ms linear;
-  color: $gray--900;
+  color: $navy--900;
 
   &:hover {
     background-color: getLightHoverBackground($white--000);
@@ -41,10 +41,10 @@
 }
 [theme="dark"] .info-bar__return-to-shared-note-button {
   color: $white--000;
-  background-color: $gray--500;
+  background-color: $navy--500;
 
   &:hover {
-    background-color: getDarkHoverBackground($gray--500);
+    background-color: getDarkHoverBackground($navy--500);
   }
 
   &:focus-visible {

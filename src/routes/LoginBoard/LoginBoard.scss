@@ -1,7 +1,7 @@
 @import "src/constants/style";
 
 .login-board__dialog {
-  color: $gray--900;
+  color: $navy--900;
   min-height: 100vh;
 }
 
@@ -184,7 +184,7 @@
   @media #{$tablet} {
     .login-board__form-wrapper,
     .login-board__divider::after {
-      background: $gray--600;
+      background: $navy--600;
     }
   }
 }
@@ -225,7 +225,7 @@
     align-items: center;
 
     flex: 1 1 100%;
-    box-shadow: 0 2px 16px 8px rgba($gray--900, 0.2);
+    box-shadow: 0 2px 16px 8px rgba($navy--900, 0.2);
     overflow: auto;
   }
 

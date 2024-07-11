@@ -80,10 +80,10 @@
   .settings-dropdown {
     &__button {
       color: $white--000;
-      background-color: $gray--500;
+      background-color: $navy--500;
 
       &:hover {
-        background-color: $gray--400;
+        background-color: $navy--400;
       }
 
       &:focus-visible {
@@ -93,8 +93,8 @@
 
     &__list {
       color: $white--000;
-      background-color: $gray--500;
-      box-shadow: 0 2px 2px 0 rgba($gray--900, 0.3);
+      background-color: $navy--500;
+      box-shadow: 0 2px 2px 0 rgba($navy--900, 0.3);
     }
   }
 }

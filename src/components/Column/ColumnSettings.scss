@@ -72,7 +72,7 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px $gray--300;
+    box-shadow: 0 0 0 2px $navy--300;
   }
 }
 
@@ -83,18 +83,18 @@
 
 [theme="dark"] {
   .column__header-menu-dropdown {
-    background-color: $gray--500;
+    background-color: $navy--500;
   }
 
   .column__header-menu-dropdown > ul > li {
-    background-color: $gray--500;
+    background-color: $navy--500;
 
     &:hover {
       filter: $brighten--slightly;
     }
 
     &:focus-within {
-      background-color: $gray--400;
+      background-color: $navy--400;
     }
   }
 

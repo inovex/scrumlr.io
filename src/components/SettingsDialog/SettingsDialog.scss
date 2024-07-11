@@ -48,7 +48,7 @@ $settings-dialog-container--bottom: 62px;
   overflow-y: hidden; // so that reset state banner can flow out
 }
 [theme="dark"] .settings-dialog__content {
-  background: $gray--600;
+  background: $navy--600;
 }
 .settings-dialog--selected .settings-dialog__content {
   display: block;
@@ -75,7 +75,7 @@ $settings-dialog-container--bottom: 62px;
   background-color: $white--000;
 }
 [theme="dark"] .settings-dialog__sidebar {
-  background-color: $gray--500;
+  background-color: $navy--500;
 }
 .settings-dialog--selected .settings-dialog__sidebar {
   display: none;
@@ -169,7 +169,7 @@ $settings-dialog-container--bottom: 62px;
   }
   [theme="dark"] .settings-dialog__close-button {
     box-shadow: 0 16px 32px 0 rgba(0, 0, 0, 0.2);
-    background: $gray--500;
+    background: $navy--500;
   }
 }
 
@@ -204,7 +204,7 @@ $settings-dialog-container--bottom: 62px;
   margin: 0 $spacing--xl;
   border-radius: $rounded--full;
   text-decoration: none;
-  color: $gray--900;
+  color: $navy--900;
   outline: none;
   display: flex;
   flex-direction: row;
@@ -316,10 +316,10 @@ $settings-dialog-container--bottom: 62px;
   }
 
   .settings-dialog__separator {
-    border-top: 0.5px solid $gray--600;
+    border-top: 0.5px solid $navy--600;
   }
 
   .settings-dialog__group {
-    background-color: $gray--500;
+    background-color: $navy--500;
   }
 }

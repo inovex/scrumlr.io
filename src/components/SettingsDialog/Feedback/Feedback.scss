@@ -31,7 +31,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   text-align: center;
   font-size: $text-size--small;
   font-weight: 500;
-  color: $gray--900;
+  color: $navy--900;
   background-color: $white--000;
   position: relative;
   top: -19px;
@@ -45,7 +45,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
 }
 [theme="dark"] .settings-dialog__feedback-option > label {
   color: $white--000;
-  background-color: $gray--500;
+  background-color: $navy--500;
   &:hover {
     background-color: var(--accent-color--desaturated-dark);
   }

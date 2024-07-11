@@ -20,14 +20,14 @@ $header-menu__item-height: 48px;
 
 [theme="dark"] {
   .board-option-link {
-    background-color: $gray--500;
+    background-color: $navy--500;
 
     &:hover {
       filter: $brighten--slightly;
     }
 
     &:focus-visible {
-      background-color: $gray--400;
+      background-color: $navy--400;
     }
   }
 }

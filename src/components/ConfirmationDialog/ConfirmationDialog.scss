@@ -16,7 +16,7 @@
 .confirmation-dialog {
   min-width: 220px;
   max-width: 570px;
-  color: $gray--900;
+  color: $navy--900;
   background-color: $white--000;
   border-radius: $rounded--medium;
   padding: 40px 42px 35px 40px;
@@ -151,7 +151,7 @@
 
   .confirmation-dialog {
     color: $white--000;
-    background-color: $gray--600;
+    background-color: $navy--600;
     border-color: $pink--500;
     box-shadow: $box-shadow--dark;
   }
@@ -172,7 +172,7 @@
 
   .confirmation-dialog__close-button {
     color: $pink--500;
-    background-color: $gray--500;
+    background-color: $navy--500;
     border-color: $pink--500;
     box-shadow: $box-shadow--dark;
     &:hover {

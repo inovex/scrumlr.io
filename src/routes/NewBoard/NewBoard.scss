@@ -12,7 +12,7 @@
 
 .new-board {
   position: relative;
-  color: $gray--900;
+  color: $navy--900;
   padding: $spacing--base;
 
   a {
@@ -79,7 +79,7 @@
   align-items: center;
   cursor: pointer;
 
-  color: $gray--900;
+  color: $navy--900;
   background: $white--000;
   border-radius: 16px;
   border: 1px solid transparent;
@@ -92,7 +92,7 @@
   overflow: hidden;
   white-space: nowrap;
 
-  box-shadow: 0 2px 6px 4px rgba($gray--900, 0.1);
+  box-shadow: 0 2px 6px 4px rgba($navy--900, 0.1);
 }
 
 .new-board__mode-name {
@@ -133,8 +133,8 @@
 
   .new-board__mode-label {
     color: $white--000;
-    background: $gray--500;
-    box-shadow: 0 2px 6px 4px rgba($gray--900, 0.2);
+    background: $navy--500;
+    box-shadow: 0 2px 6px 4px rgba($navy--900, 0.2);
   }
 
   .new-board__mode-input:focus-visible + .new-board__mode-label {
@@ -146,7 +146,7 @@
   }
 
   .new-board__actions {
-    background: linear-gradient(0deg, $gray--600 0%, $gray--600 80%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(0deg, $navy--600 0%, $navy--600 80%, rgba(0, 0, 0, 0) 100%);
   }
 }
 

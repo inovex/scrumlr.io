@@ -30,7 +30,7 @@ $header-menu-border-bottom-color: #efefef;
 }
 
 .board-option-button__label {
-  color: $gray--900;
+  color: $navy--900;
   font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
@@ -58,14 +58,14 @@ $header-menu-border-bottom-color: #efefef;
 
 [theme="dark"] {
   .board-option-button {
-    background-color: $gray--500;
+    background-color: $navy--500;
 
     &:hover {
       filter: $brighten--slightly;
     }
 
     &:focus-visible {
-      background-color: $gray--400;
+      background-color: $navy--400;
     }
   }
 
@@ -74,11 +74,11 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   .board-option-button--expandable {
-    background-color: $gray--500;
+    background-color: $navy--500;
   }
 
   .board-option-button--expandable:focus-visible,
   .board-option-button--expandable:hover {
-    background-color: $gray--400;
+    background-color: $navy--400;
   }
 }

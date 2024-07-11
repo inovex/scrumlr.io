@@ -21,10 +21,10 @@
 }
 [theme="dark"] {
   .column:nth-child(even) {
-    background-color: $gray--600;
+    background-color: $navy--600;
   }
   .column:nth-child(odd) {
-    background-color: $gray--600;
+    background-color: $navy--600;
   }
 }
 .column--hidden {
@@ -85,7 +85,7 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
-  color: $gray--900;
+  color: $navy--900;
 
   white-space: nowrap;
   overflow: hidden;
@@ -106,7 +106,7 @@
   align-items: center;
   border: none;
   font-size: calc(#{$text-size--large} + 0.4vw);
-  color: $gray--900;
+  color: $navy--900;
   border-bottom: dashed 3px var(--accent-color);
   margin: 0 auto 0 0;
   font-weight: bold;
@@ -178,7 +178,7 @@
   }
 
   .column__notes-wrapper {
-    scrollbar-color: $gray--700 $gray--500;
+    scrollbar-color: $navy--700 $navy--500;
   }
 }
 
@@ -194,7 +194,7 @@
 }
 
 .column__header-hidden-icon:hover {
-  color: $gray--900;
+  color: $navy--900;
 }
 
 [theme="dark"] {
@@ -224,7 +224,7 @@
 }
 
 .column__header-edit-button-icon {
-  color: $gray--900;
+  color: $navy--900;
   height: 24px;
   width: 24px;
   transition: all 0.08s ease-out;

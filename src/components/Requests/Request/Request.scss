@@ -21,7 +21,7 @@ $fly-in-time: 0.5s;
   animation: fly-in-right $fly-in-time ease-out;
 
   background-color: $white--000;
-  box-shadow: 3px 5px 3px rgba($gray--500, 30%);
+  box-shadow: 3px 5px 3px rgba($navy--500, 30%);
 
   transition:
     margin-right $transition-time ease-out,
@@ -62,7 +62,7 @@ $fly-in-time: 0.5s;
 }
 
 .request__participant-name {
-  color: $gray--500;
+  color: $navy--500;
   font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -70,7 +70,7 @@ $fly-in-time: 0.5s;
 }
 
 .request__info-text {
-  color: $gray--500;
+  color: $navy--500;
   opacity: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -141,8 +141,8 @@ $fly-in-time: 0.5s;
 // DARK THEME
 [theme="dark"] {
   .request__container {
-    background-color: $gray--700;
-    box-shadow: 3px 5px 3px rgba($gray--900, 30%);
+    background-color: $navy--700;
+    box-shadow: 3px 5px 3px rgba($navy--900, 30%);
   }
 
   .request__participant-name,
@@ -151,11 +151,11 @@ $fly-in-time: 0.5s;
   }
 
   .request__button {
-    background-color: $gray--500;
+    background-color: $navy--500;
     color: $white--000;
 
     &:hover {
-      background-color: $gray--400;
+      background-color: $navy--400;
     }
   }
 

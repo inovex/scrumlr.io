@@ -14,7 +14,7 @@ $menu-item-size: 42px;
   pointer-events: auto;
 }
 .menu-item:focus-visible {
-  outline: 2px solid rgba($gray--900, 0.5);
+  outline: 2px solid rgba($navy--900, 0.5);
 }
 [theme="dark"] {
   .menu-item:focus-visible {
@@ -56,10 +56,10 @@ $menu-item-size: 42px;
 
 [theme="dark"] {
   .menu-item__tooltip {
-    background-color: $gray--300;
+    background-color: $navy--300;
   }
   .menu-item__tooltip::after {
-    border-color: $gray--300 transparent transparent transparent;
+    border-color: $navy--300 transparent transparent transparent;
   }
 }
 @media screen and (max-width: 450px) {
@@ -123,13 +123,13 @@ $menu-item-size: 42px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
-  color: $gray--900;
+  color: $navy--900;
   border-radius: calc($menu-item-size / 2);
 }
 
 @media #{$tablet} {
   .menu-item .tooltip__text {
-    color: $gray--900;
+    color: $navy--900;
     background-color: $blue--100;
     height: $menu-item-size;
     line-height: $menu-item-size;
@@ -156,13 +156,13 @@ $menu-item-size: 42px;
 [theme="dark"] {
   .tooltip__text {
     color: $white--000 !important;
-    background-color: $gray--300 !important;
+    background-color: $navy--300 !important;
   }
 }
 
 .menu-item__icon {
   background-clip: content-box !important;
-  color: $gray--900;
+  color: $navy--900;
   background-color: $white--000;
   border: 3px solid transparent;
   position: absolute;
@@ -173,7 +173,7 @@ $menu-item-size: 42px;
   border-radius: $menu-item-size;
 }
 .menu-item--active .menu-item__icon {
-  background-color: $gray--500;
+  background-color: $navy--500;
   color: $white--000;
 }
 .menu-item__icon:nth-of-type(2) {
@@ -202,13 +202,13 @@ $menu-item-size: 42px;
 [theme="dark"] {
   .menu-item__icon {
     color: $white--000;
-    background: $gray--500;
+    background: $navy--500;
   }
   .menu-item--active .menu-item__icon {
     background-color: $white--000;
-    color: $gray--900;
+    color: $navy--900;
   }
   .menu-item:hover .menu-item__icon {
-    border-color: $gray--300 !important;
+    border-color: $navy--300 !important;
   }
 }

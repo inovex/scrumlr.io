@@ -12,14 +12,14 @@ $tooltip-max-width: 80%;
 
 @mixin tooltip--light {
   @include tooltip;
-  color: $gray--900;
+  color: $navy--900;
   background-color: $white--300;
 }
 
 @mixin tooltip--dark {
   @include tooltip;
   color: $white--000;
-  background-color: $gray--300;
+  background-color: $navy--300;
 }
 
 // selecting .tooltip-portal directly won't work because of CSS specificity

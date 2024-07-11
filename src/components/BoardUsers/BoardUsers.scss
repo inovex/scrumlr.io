@@ -48,7 +48,7 @@
   height: $icon--extralarge;
   width: $icon--extralarge;
   border-radius: $rounded--full;
-  background-color: $gray--500;
+  background-color: $navy--500;
   padding: 2px;
   color: $white--000;
   font-weight: 700;
@@ -103,7 +103,7 @@
 [theme="dark"] {
   .rest-users {
     background-color: $blue--200;
-    color: $gray--600;
+    color: $navy--600;
   }
 
   .board-users__button {

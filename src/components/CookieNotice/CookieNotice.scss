@@ -2,7 +2,7 @@
 
 .cookie-notice {
   background: $white--000;
-  color: $gray--900;
+  color: $navy--900;
   position: fixed;
   bottom: 0;
   right: 0;
@@ -31,13 +31,13 @@
   &-decline {
     @extend .cookie-notice__button;
     background: $white--300;
-    color: $gray--700;
+    color: $navy--700;
     margin: 0 0 $spacing--base $spacing--base;
   }
   &-cookie-policy {
     @extend .cookie-notice__button;
     background: $white--300;
-    color: $gray--700;
+    color: $navy--700;
     margin: 0 auto $spacing--base 0;
   }
 }
@@ -49,6 +49,6 @@
 
 [theme="dark"] {
   .cookie-notice {
-    box-shadow: 0 -4px 16px rgba($gray--900, 0.48);
+    box-shadow: 0 -4px 16px rgba($navy--900, 0.48);
   }
 }

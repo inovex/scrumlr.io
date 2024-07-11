@@ -18,7 +18,7 @@
     100px 100px 80px rgba(0, 0, 0, 0.07);
 }
 [theme="dark"] .dialog {
-  background: $gray--600;
+  background: $navy--600;
 }
 
 @media #{$tablet} {
@@ -107,7 +107,7 @@
 
   > label:first-of-type {
     font-size: $text-size--medium;
-    color: $gray--900;
+    color: $navy--900;
     letter-spacing: $letter-spacing--medium;
     cursor: pointer;
   }
@@ -115,10 +115,10 @@
 
 [theme="dark"] {
   .dialog__button {
-    background-color: $gray--500;
+    background-color: $navy--500;
   }
   .dialog__button:hover {
-    background-color: $gray--400;
+    background-color: $navy--400;
   }
   .dialog__button > label {
     color: $white--000;

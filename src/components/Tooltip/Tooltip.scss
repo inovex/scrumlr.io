@@ -3,7 +3,7 @@
 .tooltip-container .tooltip {
   background-color: $white--300;
   border-radius: $rounded--full;
-  color: $gray--900;
+  color: $navy--900;
   font-size: $text--sm;
   font-weight: 600;
   padding: $spacing--xs $spacing--base;
@@ -11,6 +11,6 @@
 }
 
 [theme="dark"] .tooltip-container .tooltip {
-  background-color: $gray--300;
+  background-color: $navy--300;
   color: $white--000;
 }

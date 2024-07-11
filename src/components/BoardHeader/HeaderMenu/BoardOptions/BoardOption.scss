@@ -1,7 +1,7 @@
 @import "constants/style";
 
 .board-option {
-  background: $gray--500;
+  background: $navy--500;
 }
 
 .board-option + .board-option {
@@ -10,11 +10,11 @@
 
 [theme="dark"] {
   .board-option + .board-option {
-    border-color: $gray--600;
+    border-color: $navy--600;
   }
 }
 
 .board-option:focus-visible,
 .board-option:hover {
-  background: $gray--400;
+  background: $navy--400;
 }

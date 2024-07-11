@@ -27,7 +27,7 @@ $skeleton-name-width: 92px;
 
 [theme="dark"] {
   .note-author-skeleton__avatar {
-    background-color: $gray--600;
+    background-color: $navy--600;
 
     img {
       background-blend-mode: luminosity;
@@ -36,6 +36,6 @@ $skeleton-name-width: 92px;
   }
 
   .note-author-skeleton__name {
-    background-color: $gray--600;
+    background-color: $navy--600;
   }
 }

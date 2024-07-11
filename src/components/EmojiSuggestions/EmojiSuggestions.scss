@@ -7,7 +7,7 @@
   list-style: none;
   margin: 0;
 
-  color: $gray--900;
+  color: $navy--900;
 
   &__element {
     cursor: pointer;
@@ -34,7 +34,7 @@
 [theme="dark"] {
   .emoji-suggestions {
     color: $white--000;
-    background-color: $gray--500;
+    background-color: $navy--500;
 
     &__element:hover,
     .emoji-suggestions__element--focus {

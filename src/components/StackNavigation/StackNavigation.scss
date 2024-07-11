@@ -26,7 +26,7 @@
   border-radius: 100%;
   outline: none;
   box-shadow: $box-shadow--light;
-  color: $gray--900;
+  color: $navy--900;
   padding: 0;
   margin: 0;
 
@@ -58,16 +58,16 @@
 
 [theme="dark"] {
   .stack-view__navigation-button {
-    background: $gray--500;
+    background: $navy--500;
     color: $white--000;
 
     &:enabled:focus-visible {
       background: var(--accent-color--dark);
-      color: $gray--900;
+      color: $navy--900;
     }
 
     &:disabled {
-      color: $gray--700;
+      color: $navy--700;
     }
   }
 }

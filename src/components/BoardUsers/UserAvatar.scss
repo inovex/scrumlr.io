@@ -93,7 +93,7 @@
   }
 
   .user-avatar #Circle-Background {
-    stroke: $gray--600;
+    stroke: $navy--600;
   }
 
   .user-avatar__ready {
@@ -110,12 +110,12 @@
     }
 
     path {
-      filter: drop-shadow(0 0 3px $gray--600);
+      filter: drop-shadow(0 0 3px $navy--600);
     }
 
     > .avatar #Circle-Background,
     .avatar #Color\/Palette\/Blue-01 {
-      fill: $gray--600;
+      fill: $navy--600;
     }
   }
 

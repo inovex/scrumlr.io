@@ -31,7 +31,7 @@
   overflow-y: auto;
   @include scrollbar();
   width: 100%;
-  color: $gray--900;
+  color: $navy--900;
   letter-spacing: $letter-spacing--medium;
   border: 2px dashed transparent;
   border-radius: 5px;
@@ -124,7 +124,7 @@
   }
 
   .note-dialog__note-content--emoji-suggestions {
-    background-color: $gray--500;
+    background-color: $navy--500;
     box-shadow: $box-shadow--dark;
   }
 }

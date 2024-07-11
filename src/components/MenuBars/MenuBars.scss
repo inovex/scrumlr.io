@@ -53,7 +53,7 @@ $menu-mobile__width: 72px;
 
   svg {
     path {
-      fill: $gray--900;
+      fill: $navy--900;
     }
   }
 }
@@ -64,7 +64,7 @@ $menu-mobile__width: 72px;
     margin: 0;
 
     &--active {
-      background-color: $gray--500;
+      background-color: $navy--500;
     }
   }
 
@@ -95,7 +95,7 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu-bars-mobile__fab {
-    background: $gray--500;
+    background: $navy--500;
   }
 
   .menu-bars-mobile__fab-option .tooltip-button__icon {
@@ -114,7 +114,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars-mobile__fab-main--isExpanded {
-  background: $gray--500;
+  background: $navy--500;
 
   svg {
     color: $white--000;
@@ -130,7 +130,7 @@ $menu-mobile__width: 72px;
 
   .menu-bars-mobile__fab-main--isExpanded {
     svg {
-      color: $gray--900;
+      color: $navy--900;
     }
     background: $white--000;
   }
@@ -225,7 +225,7 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu {
-    background-color: $gray--500;
+    background-color: $navy--500;
     box-shadow: $box-shadow--light;
   }
 }
@@ -240,7 +240,7 @@ $menu-mobile__width: 72px;
   border-radius: 100%;
   outline: none;
   box-shadow: $box-shadow--light;
-  color: $gray--900;
+  color: $navy--900;
 }
 @media #{$tablet} {
   .menu-bars__navigation {
@@ -266,7 +266,7 @@ $menu-mobile__width: 72px;
 }
 
 .menu-bars__navigation:focus-visible {
-  outline: 2px solid rgba($gray--900, 0.5);
+  outline: 2px solid rgba($navy--900, 0.5);
 }
 
 .menu-bars__navigation:enabled:hover {
@@ -279,7 +279,7 @@ $menu-mobile__width: 72px;
 
 [theme="dark"] {
   .menu-bars__navigation {
-    background: $gray--500;
+    background: $navy--500;
     color: $white--000;
   }
 
@@ -288,11 +288,11 @@ $menu-mobile__width: 72px;
   }
 
   .menu-bars__navigation:enabled:hover {
-    background-color: getDarkHoverBackground($gray--500);
+    background-color: getDarkHoverBackground($navy--500);
   }
 
   .menu-bars__navigation:disabled {
-    color: $gray--700;
+    color: $navy--700;
   }
 }
 

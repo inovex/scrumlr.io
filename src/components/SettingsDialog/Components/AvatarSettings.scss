@@ -116,21 +116,21 @@
 [theme="dark"] {
   .avatar-settings {
     &__avatar-shuffle {
-      background-color: $gray--500;
-      box-shadow: 0 16px 32px rgba($gray--700, 0.8);
+      background-color: $navy--500;
+      box-shadow: 0 16px 32px rgba($navy--700, 0.8);
 
       &:hover {
-        background-color: $gray--400;
+        background-color: $navy--400;
       }
     }
 
     &__settings {
-      background-color: $gray--500;
+      background-color: $navy--500;
 
       &-group {
         &-header {
           &:hover {
-            background-color: $gray--400;
+            background-color: $navy--400;
           }
         }
 
@@ -138,16 +138,16 @@
           color: $white--000;
 
           &:hover:not(.disabled) {
-            background-color: $gray--400;
+            background-color: $navy--400;
           }
 
           &-seperator {
-            border-top: 0.5px solid $gray--600;
+            border-top: 0.5px solid $navy--600;
           }
         }
 
         &-seperator {
-          border-top: 0.5px solid $gray--600;
+          border-top: 0.5px solid $navy--600;
         }
       }
     }

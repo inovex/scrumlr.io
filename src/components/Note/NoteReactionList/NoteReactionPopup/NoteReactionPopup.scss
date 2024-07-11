@@ -16,7 +16,7 @@
   user-select: none;
 
   border-radius: 20px 20px 0 0;
-  box-shadow: 0 2px 30px 0 rgba($gray--500, 0.12);
+  box-shadow: 0 2px 30px 0 rgba($navy--500, 0.12);
 
   animation: slide-in 0.3s ease-in-out;
 }
@@ -60,7 +60,7 @@
   font-size: $text--sm;
   font-weight: 600;
   line-height: 18px;
-  color: $gray--900;
+  color: $navy--900;
 
   &:hover {
     background-color: $white--300;
@@ -145,7 +145,7 @@
 
 [theme="dark"] {
   .note-reaction-popup__root {
-    background-color: $gray--500;
+    background-color: $navy--500;
   }
 
   .note-reaction-popup__notch {
@@ -154,7 +154,7 @@
 
   .note-reaction-popup__tab-all {
     color: $white--000;
-    background-color: $gray--600;
+    background-color: $navy--600;
 
     &--active {
       background-color: var(--accent-color--desaturated-dark-hover);
@@ -168,6 +168,6 @@
   }
 
   .note-reaction-popup__row-divider {
-    background-color: $gray--600;
+    background-color: $navy--600;
   }
 }

@@ -9,7 +9,7 @@
   padding: 0 $spacing--lg;
   border-radius: $rounded--small;
   background-color: $white--000;
-  color: $gray--900;
+  color: $navy--900;
 
   &:has(:focus-visible),
   &:hover {
@@ -90,7 +90,7 @@
 
 [theme="dark"] {
   .settings-input__container {
-    background-color: $gray--500;
+    background-color: $navy--500;
     color: $white--000;
   }
 

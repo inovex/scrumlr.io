@@ -26,7 +26,7 @@
   font-size: 14px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  color: $gray--900;
+  color: $navy--900;
   background-color: $white--000;
   border: none;
   border-radius: $rounded--full;
@@ -37,7 +37,7 @@
   position: absolute;
   height: 100%;
   width: $icon--medium;
-  color: $gray--900;
+  color: $navy--900;
   right: $spacing--base;
 }
 
@@ -51,7 +51,7 @@
 .participants__permisson-filter-button {
   height: 42px;
   background-color: $white--000;
-  color: $gray--900;
+  color: $navy--900;
   border: none;
   border-radius: $rounded--full;
   padding: 0 10px;
@@ -71,7 +71,7 @@
 @media (hover: hover) {
   .participants__permisson-filter-button:hover {
     background-color: var(--accent-color--desaturated-light);
-    color: $gray--900;
+    color: $navy--900;
   }
 }
 @media screen and (min-width: 920px) {
@@ -86,7 +86,7 @@
   border: none;
   border-radius: $rounded--full;
   background-color: $white--000;
-  color: $gray--900;
+  color: $navy--900;
   padding: 0;
   cursor: pointer;
 
@@ -105,7 +105,7 @@
 @media (hover: hover) {
   .participant__status-filter-button:hover {
     background-color: var(--accent-color--desaturated-light);
-    color: $gray--900;
+    color: $navy--900;
   }
 }
 
@@ -165,7 +165,7 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   line-height: 18px;
-  color: $gray--900;
+  color: $navy--900;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -186,7 +186,7 @@
     line-height: 12px;
     background-color: $white--000;
     border: 2px solid var(--accent-color--desaturated-light);
-    color: $gray--900;
+    color: $navy--900;
     cursor: pointer;
   }
   &:is(button):hover,
@@ -249,7 +249,7 @@
 }
 
 .participants-reset-state-banner__text {
-  color: $gray--500;
+  color: $navy--500;
   font-weight: 600;
 }
 
@@ -257,7 +257,7 @@
   padding: 0 $spacing--lg;
 
   height: 36px;
-  background-color: $gray--500;
+  background-color: $navy--500;
   color: $white--000;
   border: none;
   border-radius: $rounded--full;
@@ -266,7 +266,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $gray--300;
+    background-color: $navy--300;
     color: $white--000;
   }
 }
@@ -312,7 +312,7 @@
 
 [theme="dark"] {
   .participants__search-input {
-    background-color: $gray--500;
+    background-color: $navy--500;
     color: $white--000;
   }
   .participants__search-icon {
@@ -320,7 +320,7 @@
   }
   .participants__permisson-filter-button,
   .participant__status-filter-button {
-    background-color: $gray--500;
+    background-color: $navy--500;
     color: $white--000;
     &--active {
       background-color: var(--accent-color);
@@ -335,9 +335,9 @@
     }
   }
   .participants__list-item {
-    background-color: $gray--500;
+    background-color: $navy--500;
     &:not(:last-child) {
-      border-bottom: 1px solid $gray--600;
+      border-bottom: 1px solid $navy--600;
     }
   }
   .participant__name {
@@ -345,7 +345,7 @@
   }
   .participant__role {
     &:is(button) {
-      background-color: $gray--500;
+      background-color: $navy--500;
       border: 2px solid var(--accent-color--desaturated-dark);
       color: $white--000;
     }
@@ -360,7 +360,7 @@
   }
 
   .participants-reset-state-banner__container {
-    background-color: $gray--500;
+    background-color: $navy--500;
   }
 
   .participants-reset-state-banner__check-icon,
@@ -369,17 +369,17 @@
   }
 
   .participants-reset-state-banner__button {
-    background-color: $gray--600;
+    background-color: $navy--600;
 
     &:hover {
-      background-color: $gray--600;
+      background-color: $navy--600;
     }
   }
 
   .participant__join-icon,
   .participant__kick-icon {
     color: $white--000;
-    background-color: $gray--500;
+    background-color: $navy--500;
 
     &:hover {
       background-color: var(--accent-color--desaturated-dark);
