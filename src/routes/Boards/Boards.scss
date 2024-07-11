@@ -3,13 +3,13 @@
 
 $side-padding--desktop: 14vw;
 
-.new-board {
+.boards {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(180deg, color.change($color-backlog-blue, $alpha: 0.075), color.change($color-white, $alpha: 0.2));
+  background: linear-gradient(180deg, color.change($blue--500, $alpha: 0.075), color.change($gray--000, $alpha: 0.2));
 }
 
-.new-board__grid {
+.boards__grid {
   display: grid;
   grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
   grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
@@ -24,16 +24,16 @@ $side-padding--desktop: 14vw;
   height: 100vh;
 }
 
-.new-board__scrumlr-logo-container {
+.boards__scrumlr-logo-container {
   grid-area: logo;
 }
 
-.new-board__user-pill {
+.boards__user-pill {
   grid-area: user;
   justify-self: flex-end;
 }
 
-.new-board__title {
+.boards__title {
   grid-area: title;
   align-self: center;
   justify-self: center;
@@ -41,19 +41,19 @@ $side-padding--desktop: 14vw;
   font-size: $text--2xl;
   font-weight: 700;
   line-height: 48px; // TODO use constant
-  color: $color-black;
+  color: $navy--900;
 }
 
-.new-board__switch {
+.boards__switch {
   grid-area: switch;
 }
 
-.new-board__search-bar {
+.boards__search-bar {
   grid-area: search;
   justify-self: flex-end;
 }
 
-.new-board__search-button {
+.boards__search-button {
   all: unset;
   display: none;
 
@@ -62,31 +62,31 @@ $side-padding--desktop: 14vw;
   cursor: pointer;
 }
 
-.new-board__search-button-icon-container {
+.boards__search-button-icon-container {
   width: $icon--large;
   height: $icon--large;
   padding: $spacing--sm;
   border-radius: 100%;
 
-  color: #292f3b;
-  background-color: $color-white;
+  color: $navy--600;
+  background-color: $gray--000;
 
   &--active {
-    color: $color-white;
-    background-color: #292f3b;
+    color: $gray--000;
+    background-color: $navy--600;
   }
 }
 
-.new-board--search-button-logo {
+.boards--search-button-logo {
   width: $icon--large;
   height: $icon--large;
 }
 
-.new-board__mobile-search-bar {
+.boards__mobile-search-bar {
   display: none;
 }
 
-.new-board__outlet {
+.boards__outlet {
   grid-area: main;
   display: flex;
   justify-content: stretch;
@@ -97,10 +97,10 @@ $side-padding--desktop: 14vw;
 }
 
 @media screen and (max-width: $breakpoint--smartphone) {
-  .new-board {
+  .boards {
   }
 
-  .new-board__grid {
+  .boards__grid {
     // stretch main to full width
     grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
     // adds a row where the mobile search bar resides,
@@ -117,42 +117,42 @@ $side-padding--desktop: 14vw;
       "main main     main    main    main    main     main";
   }
 
-  .new-board__title {
+  .boards__title {
     font-size: $text--lg;
     line-height: 32px; // TODO use constant
   }
 
-  .new-board__search-button {
+  .boards__search-button {
     display: inline-block;
     margin-right: $spacing--sm;
   }
 
-  .new-board__search-bar {
+  .boards__search-bar {
     display: none;
   }
 
-  .new-board__mobile-search-bar {
+  .boards__mobile-search-bar {
     display: flex;
     grid-area: search2;
   }
 }
 
 [theme="dark"] {
-  .new-board {
-    background: linear-gradient(161deg, #292f3b 16.78%, #232732 49.35%, #15171e 81.65%);
+  .boards {
+    background: linear-gradient(161deg, $navy--600 16.78%, $navy--700 49.35%, $navy--800 81.65%);
   }
 
-  .new-board__title {
-    color: $color-white;
+  .boards__title {
+    color: $gray--000;
   }
 
-  .new-board__search-button-icon-container {
-    color: $color-white;
-    background-color: #373e4f;
+  .boards__search-button-icon-container {
+    color: $gray--000;
+    background-color: $navy--400;
 
     &--active {
-      color: #373e4f;
-      background-color: $color-white;
+      color: $navy--400;
+      background-color: $gray--000;
     }
   }
 }

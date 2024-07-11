@@ -88,6 +88,7 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
 		return nil, err
 	}
+
 	return new(dto.Board).From(b), nil
 }
 

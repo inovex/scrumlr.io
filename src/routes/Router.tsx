@@ -1,8 +1,8 @@
 import {BrowserRouter, Navigate, Routes} from "react-router-dom";
 import {LoginBoard} from "routes/LoginBoard";
-import {NewBoard} from "routes/NewBoard";
-import {Templates} from "routes/NewBoard/Templates";
-import {Sessions} from "routes/NewBoard/Sessions";
+import {Boards} from "routes/Boards";
+import {Templates} from "routes/Boards/Templates";
+import {Sessions} from "routes/Boards/Sessions";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
@@ -30,11 +30,12 @@ const Router = () => (
       <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
       <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
       <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
+      <Route path="/new" element={<Navigate to="/boards" />} /> {/* legacy route */}
       <Route
-        path="/new"
+        path="/boards"
         element={
           <RequireAuthentication>
-            <NewBoard />
+            <Boards />
           </RequireAuthentication>
         }
       >

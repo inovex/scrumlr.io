@@ -30,7 +30,7 @@
 }
 .vote-button-add:enabled:hover {
   background-color: var(--accent-color);
-  color: $color-white;
+  color: $gray--000;
 }
 .vote-button-add:focus-visible {
   outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
@@ -40,6 +40,6 @@
   .vote-button-add {
     background-color: var(--accent-color--desaturated-dark);
     color: var(--accent-color--dark);
-    filter: drop-shadow(0 3px 4px rgba($color-black, 0.16));
+    filter: drop-shadow(0 3px 4px rgba($navy--900, 0.16));
   }
 }

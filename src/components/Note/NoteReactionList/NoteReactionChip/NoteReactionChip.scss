@@ -14,7 +14,7 @@
   height: 18px;
   padding: 5px 8px 5px 7px;
   border-radius: $rounded--full;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
 
   font-size: $text--base;
 
@@ -22,7 +22,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $hover-background-light;
+    background-color: $gray--300;
   }
 }
 
@@ -34,7 +34,7 @@
   font-size: $text--sm;
   font-weight: 600;
   line-height: 18px;
-  color: $color-black;
+  color: $navy--900;
 }
 
 .note-reaction-chip__root--self {
@@ -50,7 +50,7 @@
   background-color: var(--accent-color);
 
   .note-reaction-chip__amount {
-    color: $color-white;
+    color: $gray--000;
   }
 
   &:hover {
@@ -60,10 +60,10 @@
 
 [theme="dark"] {
   .note-reaction-chip__root {
-    background-color: $color-dark-one;
+    background-color: $navy--600;
 
     &:hover {
-      background-color: $hover-background-dark;
+      background-color: $navy--300;
     }
   }
 
@@ -84,6 +84,6 @@
   }
 
   .note-reaction-chip__amount {
-    color: $color-white;
+    color: $gray--000;
   }
 }

@@ -24,7 +24,7 @@ $max-card-width: 500px;
 
   overflow-y: scroll;
 
-  background-color: #dde8ff;
+  background-color: $blue--50;
 
   &--saved {
     margin-right: $spacing--md; // instead of gap, see above
@@ -45,7 +45,7 @@ $max-card-width: 500px;
   font-weight: 700;
   line-height: 32px; // TODO use constant
 
-  color: #292f3b;
+  color: $navy--600;
 }
 
 .templates__container-arrow-button {
@@ -56,7 +56,7 @@ $max-card-width: 500px;
   display: none;
 
   &--disabled {
-    color: #8f95a1;
+    color: $gray--800;
   }
 }
 
@@ -117,11 +117,11 @@ $max-card-width: 500px;
 
 [theme="dark"] {
   .templates__container {
-    background-color: #232732;
+    background-color: $navy--700;
   }
 
   .templates__container-title {
-    color: #dde8ff;
+    color: $blue--50;
   }
 
   .templates__stan {
@@ -136,10 +136,10 @@ $max-card-width: 500px;
   }
 
   .templates__container-arrow {
-    color: #dde8ff;
+    color: $blue--50;
 
     &--disabled {
-      color: #454e63;
+      color: $navy--300;
     }
   }
 }

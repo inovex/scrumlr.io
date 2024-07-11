@@ -16,21 +16,21 @@ $size-mobile: 56px;
   padding: $padding--default;
   border-radius: $rounded--large;
 
-  background-color: $color-white;
+  background-color: $gray--000;
 
   &:enabled {
     cursor: pointer;
   }
 
   &:disabled {
-    background-color: #eeeff1;
+    background-color: $gray--300;
 
     .user-pill__avatar-overlay {
       background-color: color.change(#eeeff1, $alpha: 0.5);
     }
 
     .user-pill__name {
-      color: #8f95a1;
+      color: $gray--800;
     }
   }
 }
@@ -49,7 +49,7 @@ $size-mobile: 56px;
   width: $icon--huge;
   height: $icon--huge;
   border-radius: 100%;
-  background-color: #ccddff;
+  background-color: $blue--100;
 
   user-select: none;
 }
@@ -75,7 +75,7 @@ $size-mobile: 56px;
   font-size: $text--base;
   font-weight: 700;
 
-  color: #292f3b;
+  color: $navy--600;
 }
 
 // desktop only styles
@@ -106,26 +106,26 @@ $size-mobile: 56px;
 
 [theme="dark"] {
   .user-pill {
-    background-color: #373e4f;
+    background-color: $navy--400;
 
     &:disabled {
-      background-color: #232b3c;
+      background-color: $navy--400;
 
       .user-pill__avatar-overlay {
-        background-color: color.change(#232b3c, $alpha: 0.5);
+        background-color: color.change($navy--700, $alpha: 0.5);
       }
 
       .user-pill__name {
-        color: #454e63;
+        color: $navy--700;
       }
     }
   }
 
   .user-pill__avatar-container {
-    background-color: #232b3c;
+    background-color: $navy--700;
   }
 
   .user-pill__name {
-    color: $color-white;
+    color: $gray--000;
   }
 }
