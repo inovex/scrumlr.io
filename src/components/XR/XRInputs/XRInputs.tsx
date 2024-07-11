@@ -97,7 +97,7 @@ const XRInputs = () => {
     if (leftPoseName === "relax" && rightPoseName === "relax" && handsDistance.current < 0.1) {
       dispatchReaction("applause");
     }
-    if (leftPoseName === "heart" && rightPoseName === "heart" && handsDistance.current < 0.2) {
+    if (leftPoseName === "heart" && rightPoseName === "heart" && handsDistance.current < 0.15) {
       dispatchReaction("heart");
     }
   });

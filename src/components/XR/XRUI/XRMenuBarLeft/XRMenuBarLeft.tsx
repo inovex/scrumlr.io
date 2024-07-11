@@ -75,7 +75,7 @@ const XRMenuBarLeft = () => {
           }
           onClick={toggleReadyState}
         >
-          <Text>{!isReady ? "Mark me as done" : "Unmark me as done"}</Text>
+          <Text fontWeight={500}>{!isReady ? "Mark me as done" : "Unmark me as done"}</Text>
         </TabBarItem>
         <TabBarItem
           value="2"
@@ -86,7 +86,7 @@ const XRMenuBarLeft = () => {
           }
           onClick={toggleRaiseHand}
         >
-          <Text>{!raisedHand ? "Raise your hand" : "Lower your hand"}</Text>
+          <Text fontWeight={500}>{!raisedHand ? "Raise your hand" : "Lower your hand"}</Text>
         </TabBarItem>
         <TabBarItem
           value="3"
@@ -101,14 +101,18 @@ const XRMenuBarLeft = () => {
           }
           onClick={toggleBoardReactionsMenu}
         >
-          <Text>React</Text>
+          <Text fontWeight={500}>React</Text>
         </TabBarItem>
         <TabBarItem
           value="4"
-          icon={<Text transformTranslateZ={1}>{state.xrSession === "AR" ? "VR" : "AR"}</Text>}
+          icon={
+            <Text transformTranslateZ={1} fontWeight={800}>
+              {state.xrSession === "AR" ? "VR" : "AR"}
+            </Text>
+          }
           onClick={() => dispatch(Actions.setXRSession(state.xrSession === "AR" ? "VR" : "AR"))}
         >
-          <Text>Environment</Text>
+          <Text fontWeight={500}>Environment</Text>
         </TabBarItem>
         <TabBarItem
           value="5"
@@ -119,7 +123,7 @@ const XRMenuBarLeft = () => {
           }
           onClick={toggleXRLookAt}
         >
-          <Text>Auto Follow</Text>
+          <Text fontWeight={500}>Auto Follow</Text>
         </TabBarItem>
         <TabBarItem
           value="6"
@@ -130,7 +134,7 @@ const XRMenuBarLeft = () => {
           }
           onClick={() => session && exitAR()}
         >
-          <Text>Exit</Text>
+          <Text fontWeight={500}>Exit</Text>
         </TabBarItem>
       </TabBar>
       {showBoardReactionsMenu && <XRReactionsMenu close={() => setShowBoardReactionsMenu(false)} />}

@@ -60,7 +60,7 @@ const XRColumn = (props: ColumnProps) => {
       borderLeftRadius={isFirstColumn ? 26 : 0}
       borderRightRadius={isLastColumn ? 26 : 0}
     >
-      <Text ref={columnNameRef} color={FONT_COLOR} marginBottom={4} borderBottom={4} borderColor={getColorFromName(props.color)}>
+      <Text ref={columnNameRef} color={FONT_COLOR} fontWeight={800} fontSize={20} marginBottom={4} borderBottom={4} borderColor={getColorFromName(props.color)}>
         {props.name}
       </Text>
       <Container height={4} width={columnNameRef.current?.size?.v?.[0] ?? "50%"} marginBottom={8} backgroundColor={getColorFromName(props.color)} />

@@ -28,14 +28,14 @@ const XRBoardHeader = () => {
         {boardName || DEFAULT_BOARD_NAME}
       </Text>
       <Container flexDirection="column" height={32} width="24%" gap={6}>
-        <Text fontSize={16} marginTop={24} marginRight={32} color={FONT_COLOR}>
+        <Text fontSize={16} fontWeight={500} marginTop={24} marginRight={32} color={FONT_COLOR}>
           {`${them.length + 1} user${them.length > 0 ? "s" : ""} online`}
         </Text>
         <Container marginRight={32} gap={4}>
-          <Text fontSize={isReady ? 12 : 0} color={FONT_COLOR}>
+          <Text fontWeight={500} fontSize={isReady ? 12 : 0} color={FONT_COLOR}>
             ready {raisedHand ? "&" : ""}
           </Text>
-          <Text fontSize={raisedHand ? 12 : 0} color={FONT_COLOR}>
+          <Text fontWeight={500} fontSize={raisedHand ? 12 : 0} color={FONT_COLOR}>
             raising hand
           </Text>
         </Container>

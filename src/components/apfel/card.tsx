@@ -7,9 +7,9 @@ export type CardProperties = ContainerProperties;
 export const Card: (props: CardProperties & RefAttributes<ComponentInternals>) => ReactNode = forwardRef(({children, ...props}, ref) => (
   <Container
     backgroundColor={colors.card}
-    backgroundOpacity={0.8}
+    backgroundOpacity={0.95}
     borderColor={colors.card}
-    borderOpacity={0.8}
+    borderOpacity={0.95}
     borderWidth={4}
     borderBend={0.3}
     panelMaterialClass={GlassMaterial}

@@ -6,6 +6,7 @@ export class GlassMaterial extends MeshPhongMaterial {
     super({
       specular: "#555",
       shininess: 100,
+      opacity: 1,
     });
   }
 }

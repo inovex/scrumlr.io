@@ -74,7 +74,7 @@ const XRInputField = ({columnIndex, columnId, columnColor}: XRInputFieldProps) =
       backgroundOpacity={0.2}
       onClick={handleFocus} // TODO: right now only focusing the input is supported, no blur event
     >
-      <Text>{focus ? `${inputText}${showCaret ? "|" : ""}` : "Tap to input text"}</Text>
+      <Text fontWeight={500}>{focus ? `${inputText}${showCaret ? "|" : ""}` : "Tap to input text"}</Text>
     </Container>
   );
 };

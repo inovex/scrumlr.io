@@ -132,10 +132,10 @@ const XRNote = (props: NoteProps) => {
         backgroundColor={colors.card}
         hover={{backgroundColor: colors.cardHover}}
       >
-        <Text fontSize={12} color={FONT_COLOR} marginBottom={0}>
+        <Text fontSize={12} color={FONT_COLOR} marginBottom={0} fontWeight={500}>
           {authors[0]?.user.id === me?.user.id ? t("Note.you") : authors[0]?.user.name}
         </Text>
-        <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top">
+        <Text color={FONT_COLOR} fontSize={14} height="100%" wordBreak="break-all" verticalAlign="top" fontWeight={500}>
           {note.text}
         </Text>
         <Button
