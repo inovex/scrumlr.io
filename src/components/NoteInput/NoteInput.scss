@@ -124,7 +124,7 @@ $note-input__input-right: 40px;
 
 [theme="dark"] {
   .note-input {
-    background-color: $navy--500;
+    background-color: $navy--400;
 
     &:hover,
     &:focus-within {
@@ -137,7 +137,7 @@ $note-input__input-right: 40px;
   }
 
   .note-input__emoji-suggestions {
-    background-color: $navy--500;
+    background-color: $navy--400;
     box-shadow: $box-shadow--dark;
   }
 }
