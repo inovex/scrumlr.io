@@ -3,6 +3,8 @@ import {FC, PropsWithChildren, useEffect} from "react";
 import "./NoteDialogNoteWrapper.scss";
 
 export const NoteDialogNoteWrapper: FC<PropsWithChildren> = ({children}) => {
+  // could probably be replaced with an intersection observer,
+  // but in mobile view, a different (stack-view__inner-scrollbar) would need to be checked instead of this one
   const handleScroll = (scrollbar: Element) => {
     const notes = scrollbar.querySelectorAll(".note-dialog__note");
     const scrollbarHeight = scrollbar.clientHeight;
