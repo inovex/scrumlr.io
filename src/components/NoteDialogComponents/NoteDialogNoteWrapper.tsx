@@ -1,7 +1,7 @@
-import {FC, PropsWithChildren, useEffect, useRef} from "react";
+import {PropsWithChildren, useEffect, useRef} from "react";
 import "./NoteDialogNoteWrapper.scss";
 
-export const NoteDialogNoteWrapper: FC<PropsWithChildren> = ({children}) => {
+export const NoteDialogNoteWrapper = ({children}: PropsWithChildren) => {
   const scrollContainer = useRef<HTMLDivElement>(null);
 
   // display notes within full view with full opacity.
