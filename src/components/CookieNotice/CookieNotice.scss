@@ -1,14 +1,14 @@
 @import "constants/style.scss";
 
 .cookie-notice {
-  background: $color-white;
-  color: $color-black;
+  background: $gray--000;
+  color: $navy--900;
   position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
   padding: $spacing--base;
-  box-shadow: 0 -4px 16px rgba($color-backlog-blue, 0.16);
+  box-shadow: 0 -4px 16px rgba($blue--500, 0.16);
 }
 
 .cookie-notice__buttons {
@@ -24,20 +24,20 @@
 
   &-accept {
     @extend .cookie-notice__button;
-    background: $color-backlog-blue;
-    color: $color-white;
+    background: $blue--500;
+    color: $gray--000;
     margin: 0 0 $spacing--base $spacing--base;
   }
   &-decline {
     @extend .cookie-notice__button;
-    background: $color-lighter-gray;
-    color: $color-darkest-gray;
+    background: $gray--300;
+    color: $navy--700;
     margin: 0 0 $spacing--base $spacing--base;
   }
   &-cookie-policy {
     @extend .cookie-notice__button;
-    background: $color-lighter-gray;
-    color: $color-darkest-gray;
+    background: $gray--300;
+    color: $navy--700;
     margin: 0 auto $spacing--base 0;
   }
 }
@@ -49,6 +49,6 @@
 
 [theme="dark"] {
   .cookie-notice {
-    box-shadow: 0 -4px 16px rgba($color-black, 0.48);
+    box-shadow: 0 -4px 16px rgba($navy--900, 0.48);
   }
 }
