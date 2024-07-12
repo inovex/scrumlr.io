@@ -1,5 +1,4 @@
 @import "src/constants/style";
-@import "src/components/Note/Note.scss";
 
 .note-dialog__note {
   --note-footer-height: 28px;
@@ -69,6 +68,6 @@
 [theme="dark"] {
   .note-dialog__note {
     background-color: $navy--500;
-    box-shadow: 0 6px 9px 0 $note__box-shadow-color-dark-mode;
+    box-shadow: 0 6px 9px 0 $navy--900;
   }
 }
