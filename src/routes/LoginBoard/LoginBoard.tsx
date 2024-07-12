@@ -11,7 +11,7 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {Refresh} from "components/Icon";
 import "./LoginBoard.scss";
 import {TextInputAction} from "components/TextInputAction";
-import {Button} from "components/Button";
+import {LegacyButton} from "components/Button";
 import {TextInput} from "components/TextInput";
 import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
@@ -105,9 +105,9 @@ export const LoginBoard = () => {
             </fieldset>
             {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
 
-            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin}>
+            <LegacyButton className="login-board__anonymous-login-button" color="primary" onClick={handleLogin}>
               {t("LoginBoard.login")}
-            </Button>
+            </LegacyButton>
           </div>
         </div>
 

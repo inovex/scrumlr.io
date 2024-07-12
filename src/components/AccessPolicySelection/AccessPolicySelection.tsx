@@ -3,11 +3,11 @@ import "./AccessPolicySelection.scss";
 import {AccessPolicy} from "types/board";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
-import {Visible, Hidden, Duplicate,Refresh} from "components/Icon";
+import {Visible, Hidden, Duplicate, Refresh} from "components/Icon";
 import {TextInputAdornment} from "components/TextInputAdornment";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
-import {Button} from "../Button";
+import {LegacyButton} from "../Button";
 import {ValidationError} from "../ValidationError";
 import {TextInputAction} from "../TextInputAction";
 
@@ -82,27 +82,27 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       <h2 className="access-policy-selection__title">{t("AccessPolicySelection.title")}</h2>
 
       <div className="access-policy-selection__tabs">
-        <Button
+        <LegacyButton
           className="access-policy-selection__access-policy"
           variant={accessPolicy === AccessPolicy.PUBLIC ? "contained" : "outlined"}
           onClick={() => handlePolicyChange(AccessPolicy.PUBLIC)}
         >
           {t("AccessPolicySelection.publicTitle")}
-        </Button>
-        <Button
+        </LegacyButton>
+        <LegacyButton
           className="access-policy-selection__access-policy"
           variant={accessPolicy === AccessPolicy.BY_PASSPHRASE ? "contained" : "outlined"}
           onClick={() => handlePolicyChange(AccessPolicy.BY_PASSPHRASE)}
         >
           {t("AccessPolicySelection.byPassphraseTitle")}
-        </Button>
-        <Button
+        </LegacyButton>
+        <LegacyButton
           className="access-policy-selection__access-policy"
           variant={accessPolicy === AccessPolicy.BY_INVITE ? "contained" : "outlined"}
           onClick={() => handlePolicyChange(AccessPolicy.BY_INVITE)}
         >
           {t("AccessPolicySelection.manualVerificationTitle")}
-        </Button>
+        </LegacyButton>
       </div>
 
       <div className="access-policy__details">

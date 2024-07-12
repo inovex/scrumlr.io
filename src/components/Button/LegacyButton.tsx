@@ -1,8 +1,9 @@
 import {AnchorHTMLAttributes, ButtonHTMLAttributes, Children, cloneElement, DetailedHTMLProps, FC, PropsWithChildren, ReactElement, useEffect, useRef, useState} from "react";
 import classNames from "classnames";
-import "./Button.scss";
+import "./LegacyButton.scss";
 
-export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
+export interface LecagyButtonProps
+  extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
   color?: "primary" | "secondary";
   variant?: "contained" | "outlined" | "text-link";
   leftIcon?: ReactElement;
@@ -11,7 +12,7 @@ export interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTML
   block?: boolean;
 }
 
-export const Button: FC<PropsWithChildren<ButtonProps>> = ({
+export const LegacyButton: FC<PropsWithChildren<LecagyButtonProps>> = ({
   className,
   variant = "contained",
   color = "secondary",

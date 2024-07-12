@@ -1,7 +1,7 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
 import {Google, Microsoft} from "components/Icon";
-import {Button} from "../Button";
+import {LegacyButton} from "../Button";
 import {useAppSelector} from "../../store";
 import "./LoginProviders.scss";
 
@@ -24,14 +24,14 @@ export const LoginProviders = ({originURL = window.location.href}) => {
   return (
     <div className="login-providers">
       {providers.some((provider) => provider === "GOOGLE") && (
-        <Button id="google" className="login-providers__button" onClick={signIn("google")} leftIcon={<Google className="login-providers__icon" />}>
+        <LegacyButton id="google" className="login-providers__button" onClick={signIn("google")} leftIcon={<Google className="login-providers__icon" />}>
           {t("LoginProviders.signInWithGoogle")}
-        </Button>
+        </LegacyButton>
       )}
       {providers.some((provider) => provider === "MICROSOFT") && (
-        <Button id="microsoft" className="login-providers__button" onClick={signIn("microsoft")} leftIcon={<Microsoft className="login-providers__icon" />}>
+        <LegacyButton id="microsoft" className="login-providers__button" onClick={signIn("microsoft")} leftIcon={<Microsoft className="login-providers__icon" />}>
           {t("LoginProviders.signInWithMicrosoft")}
-        </Button>
+        </LegacyButton>
       )}
     </div>
   );

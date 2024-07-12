@@ -3,11 +3,11 @@ import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
-import {ArrowRight,Logout} from "components/Icon";
+import {ArrowRight, Logout} from "components/Icon";
 import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
-import {Button} from "components/Button";
+import {LegacyButton} from "components/Button";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
@@ -50,21 +50,21 @@ export const Homepage = withTranslation()(() => {
 
           <ul className="homepage__settings">
             <li>
-              <Button leftIcon={<German />} className="homepage__language" hideLabel onClick={changeLanguage("de")}>
+              <LegacyButton leftIcon={<German />} className="homepage__language" hideLabel onClick={changeLanguage("de")}>
                 Deutsch
-              </Button>
+              </LegacyButton>
             </li>
             <li>
-              <Button leftIcon={<English />} className="homepage__language" hideLabel onClick={changeLanguage("en")}>
+              <LegacyButton leftIcon={<English />} className="homepage__language" hideLabel onClick={changeLanguage("en")}>
                 English
-              </Button>
+              </LegacyButton>
             </li>
 
             {!!user && (
               <li>
-                <Button variant="text-link" onClick={onLogout} leftIcon={<Logout className="homepage__logout-button-icon" />} className="homepage__logout-button">
+                <LegacyButton variant="text-link" onClick={onLogout} leftIcon={<Logout className="homepage__logout-button-icon" />} className="homepage__logout-button">
                   Logout
-                </Button>
+                </LegacyButton>
               </li>
             )}
           </ul>
@@ -83,9 +83,9 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <Button href={newHref} color="primary" className="homepage__start-button" rightIcon={<ArrowRight className="homepage__proceed-icon" />}>
+              <LegacyButton href={newHref} color="primary" className="homepage__start-button" rightIcon={<ArrowRight className="homepage__proceed-icon" />}>
                 <Trans i18nKey="Homepage.startButton" />
-              </Button>
+              </LegacyButton>
             </main>
 
             <HeroIllustration className="homepage__illustration" />
