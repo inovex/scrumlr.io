@@ -42,7 +42,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
-
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
     // get the participant who issued that reaction

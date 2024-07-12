@@ -1,7 +1,4 @@
-@import "src/constants/style.scss";
-
-$note__box-shadow-color: rgb(0, 87, 255);
-$note__box-shadow-color-dark-mode: rgb(0, 0, 0);
+@import "constants/style.scss";
 
 $note__indicator-height: 34px;
 $note__indicator-width: 3px;
@@ -26,8 +23,8 @@ $note__footer-gap: 42px;
   border-radius: $note__border-radius;
   background-color: $gray--000;
   box-shadow:
-    0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
-    0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
+    0 4px 6px -1px rgba($blue--500, 0.1),
+    0 2px 4px -2px rgba($blue--500, 0.1);
   transition: all 0.1s ease-in-out;
   z-index: $note-z-index;
   padding: $spacing--base $spacing--lg 12px $spacing--base;
@@ -52,8 +49,8 @@ $note__footer-gap: 42px;
   opacity: 0.95;
   border-radius: $note__border-radius;
   box-shadow:
-    0 4px 6px -1px rgba($note__box-shadow-color, 0.1),
-    0 2px 4px -2px rgba($note__box-shadow-color, 0.1);
+    0 4px 6px -1px rgba($blue--500, 0.1),
+    0 2px 4px -2px rgba($blue--500, 0.1);
   background-color: $gray--000;
   z-index: $note-z-index - $base-z-index-step;
   transition: all 0.1s ease-in-out;
@@ -235,10 +232,10 @@ $note__footer-gap: 42px;
 [theme="dark"] {
   .note,
   .note__in-stack {
-    background-color: $navy--500;
+    background-color: $navy--400;
     box-shadow:
-      0 4px 6px -1px rgba($note__box-shadow-color-dark-mode, 0.1),
-      0 2px 4px -2px rgba($note__box-shadow-color-dark-mode, 0.1);
+      0 4px 6px -1px rgba($navy--900, 0.1),
+      0 2px 4px -2px rgba($navy--900, 0.1);
   }
 
   .note__text {
