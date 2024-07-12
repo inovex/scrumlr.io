@@ -35,12 +35,12 @@ $scale-factor: 120%;
     background-color: var(--accent-color--100);
 
     &:hover {
-      background-color: var(--accent-color--desaturated-light-hover);
+      background-color: var(--accent-color--100);
     }
   }
 
   &:focus {
-    background-color: var(--accent-color--desaturated-light-hover);
+    background-color: var(--accent-color--100);
   }
 }
 
