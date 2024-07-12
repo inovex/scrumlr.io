@@ -57,15 +57,14 @@ $scale-factor: 120%;
     }
 
     &--active {
-      background-color: var(--accent-color--desaturated-dark);
-
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
       &:hover {
-        background-color: var(--accent-color--desaturated-dark-hover);
+        background-color: rgba(var(--accent-color--dark-rgb), 0.8);
       }
     }
 
     &:focus {
-      background-color: var(--accent-color--desaturated-dark-hover);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
   }
 }
