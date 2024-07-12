@@ -30,7 +30,7 @@
     align-items: center;
     border: none;
     outline: none;
-    color: var(--accent-color);
+    color: var(--accent-color--light);
     transition: all 0.08s ease-out;
 
     &:hover > svg {
@@ -60,7 +60,7 @@
     }
 
     &__button {
-      color: var(--accent-color);
+      color: var(--accent-color--light);
 
       &:hover > svg,
       &:focus-visible > svg {

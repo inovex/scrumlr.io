@@ -67,7 +67,7 @@ $note__footer-gap: 42px;
 
 .shouldCombine .note {
   transform-origin: center;
-  border: 2px solid var(--accent-color);
+  border: 2px solid var(--accent-color--light);
   border-radius: $note__border-radius;
 
   transform: scale(0.98);
@@ -111,7 +111,7 @@ $note__footer-gap: 42px;
   width: $note__indicator-width;
   height: $note__indicator-height;
   border-radius: 0 $note__indicator-width $note__indicator-width 0;
-  background: var(--accent-color);
+  background: var(--accent-color--light);
 }
 .note__container {
   margin: $note__text-margin-top 0 $spacing--xs;
@@ -164,7 +164,7 @@ $note__footer-gap: 42px;
   position: absolute;
   top: calc(50% - ($icon--huge / 2));
   left: calc(50% - ($icon--huge / 2));
-  fill: var(--accent-color);
+  fill: var(--accent-color--light);
 }
 
 .note__header {

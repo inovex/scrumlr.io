@@ -47,14 +47,14 @@
 
 // override
 .note-reaction-chip__root--override-active {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
 
   .note-reaction-chip__amount {
     color: $gray--000;
   }
 
   &:hover {
-    background-color: var(--accent-color); // essentially no hover color when active.
+    background-color: var(--accent-color--light); // essentially no hover color when active.
   }
 }
 

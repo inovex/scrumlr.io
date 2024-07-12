@@ -72,7 +72,7 @@ $tooltip-button-size: 46px;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
   border-radius: calc($tooltip-button-size / 2);
-  color: var(--accent-color);
+  color: var(--accent-color--light);
 }
 
 .tooltip-button__icon-container {

@@ -19,7 +19,7 @@
   width: 32px;
   padding: 0;
   border: 0;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   background-color: var(--accent-color--desaturated-light);
   border-radius: $rounded--full;
   cursor: pointer;
@@ -36,11 +36,11 @@
   }
 
   &:hover {
-    background-color: var(--accent-color);
+    background-color: var(--accent-color--light);
     color: $gray--000;
   }
   &:focus-visible {
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid var(--accent-color--light);
   }
 }
 
@@ -50,7 +50,7 @@
     color: var(--accent-color--dark);
 
     &:hover {
-      background-color: var(--accent-color);
+      background-color: var(--accent-color--light);
       color: $gray--000;
     }
     &:focus-visible {

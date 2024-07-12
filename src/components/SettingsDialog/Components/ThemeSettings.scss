@@ -28,7 +28,7 @@
   min-width: 0;
 
   &:hover {
-    color: var(--accent-color);
+    color: var(--accent-color--light);
   }
 
   > input {
@@ -39,10 +39,10 @@
 
     &:checked {
       + img {
-        box-shadow: 0 0 0 2px var(--accent-color);
+        box-shadow: 0 0 0 2px var(--accent-color--light);
       }
       ~ p {
-        background-color: var(--accent-color);
+        background-color: var(--accent-color--light);
         color: $gray--000;
       }
     }

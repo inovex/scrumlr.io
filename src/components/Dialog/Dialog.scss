@@ -73,7 +73,7 @@
     background-color: var(--accent-color--desaturated-light);
   }
   &:focus-visible {
-    border: 2px solid var(--accent-color);
+    border: 2px solid var(--accent-color--light);
     outline: none;
   }
 }

@@ -67,11 +67,11 @@
   }
 
   &--active {
-    background-color: var(--accent-color);
+    background-color: var(--accent-color--light);
     color: $gray--000;
 
     &:hover {
-      background-color: var(--accent-color); // essentially no hover color when active.
+      background-color: var(--accent-color--light); // essentially no hover color when active.
     }
   }
 }

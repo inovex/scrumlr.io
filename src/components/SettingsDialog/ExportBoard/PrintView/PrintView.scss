@@ -159,7 +159,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
   color: $navy--900;
-  border-bottom: solid 3px var(--accent-color);
+  border-bottom: solid 3px var(--accent-color--light);
 }
 
 .print-view__column-header-card-count {
@@ -214,7 +214,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__note-info--isTop {
   svg {
-    color: var(--accent-color);
+    color: var(--accent-color--light);
   }
 }
 
@@ -241,7 +241,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   border-radius: $rounded--full;
   padding: 6px 11px;
   background: rgba(var(--accent-color-rgb), 0.25);
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   font-weight: bold;
 }
 

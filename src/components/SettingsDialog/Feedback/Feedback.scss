@@ -41,7 +41,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
 }
 .feedback-option__input:checked + .feedback-option__label {
   color: $gray--000;
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
 }
 [theme="dark"] .settings-dialog__feedback-option > label {
   color: $gray--000;
@@ -61,7 +61,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
 .feedback-form__submit-button {
   padding: $spacing--xs $spacing--lg;
   border-radius: 32px;
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
   color: $gray--000;
   border: none;
   width: 260px;

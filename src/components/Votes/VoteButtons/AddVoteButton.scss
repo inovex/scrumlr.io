@@ -10,7 +10,7 @@
   width: 32px;
 
   background-color: var(--accent-color--desaturated-light);
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   transition:
     background-color 80ms ease-in-out,
     color 80ms ease-in-out;
@@ -29,7 +29,7 @@
   pointer-events: none;
 }
 .vote-button-add:enabled:hover {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
   color: $gray--000;
 }
 .vote-button-add:focus-visible {

@@ -8,13 +8,13 @@
   justify-content: center;
   align-items: center;
   background-color: rgba(var(--accent-color-rgb), 0.2);
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   transition:
     background-color 150ms ease-in-out,
     color 150ms ease-in-out;
 }
 .note-dialog__note-option__unstack:hover {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
   color: $gray--000;
 }
 .note-dialog__note-option__unstack:focus-visible {
