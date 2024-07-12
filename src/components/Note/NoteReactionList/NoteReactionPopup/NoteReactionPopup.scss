@@ -157,7 +157,7 @@
     background-color: $navy--600;
 
     &--active {
-      background-color: var(--accent-color--desaturated-dark-hover);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
   }
 
