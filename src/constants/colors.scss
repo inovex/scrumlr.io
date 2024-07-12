@@ -110,7 +110,7 @@ $victory-verde--dark: $green--400;
 
 // Color Maps
 $primary-colors: (
-  blue: (
+  backlog-blue: (
     800: $blue--800,
     700: $blue--700,
     600: $blue--600,
@@ -120,7 +120,7 @@ $primary-colors: (
     200: $blue--200,
     100: $blue--100,
   ),
-  pink: (
+  planning-pink: (
     800: $pink--800,
     700: $pink--700,
     600: $pink--600,
@@ -130,7 +130,7 @@ $primary-colors: (
     200: $pink--200,
     100: $pink--100,
   ),
-  purple: (
+  poker-purple: (
     800: $purple--800,
     700: $purple--700,
     600: $purple--600,
@@ -140,7 +140,7 @@ $primary-colors: (
     200: $purple--200,
     100: $purple--100,
   ),
-  violet: (
+  value-violet: (
     800: $violet--800,
     700: $violet--700,
     600: $violet--600,
@@ -153,7 +153,7 @@ $primary-colors: (
 );
 
 $secondary-colors: (
-  green: (
+  goal-green: (
     800: $green--800,
     700: $green--700,
     600: $green--600,
@@ -163,7 +163,7 @@ $secondary-colors: (
     200: $green--200,
     100: $green--100,
   ),
-  yellow: (
+  yielding-yellow: (
     800: $yellow--800,
     700: $yellow--700,
     600: $yellow--600,
@@ -173,7 +173,7 @@ $secondary-colors: (
     200: $yellow--200,
     100: $yellow--100,
   ),
-  orange: (
+  online-orange: (
     800: $orange--800,
     700: $orange--700,
     600: $orange--600,
@@ -226,37 +226,4 @@ $base-colors: (
       @include rgb($color-values);
     }
   }
-}
-
-// accent colors for columns, note etc
-.accent-color__backlog-blue {
-  @include rgb($blue--500, $blue--400);
-}
-.accent-color__goal-green {
-  @include rgb($green--500, $green--400);
-}
-.accent-color__poker-purple {
-  @include rgb($purple--500, $purple--400);
-}
-.accent-color__online-orange {
-  @include rgb($orange--500, $orange--400);
-}
-.accent-color__planning-pink {
-  @include rgb($pink--500, $pink--400);
-}
-.accent-color__value-violet {
-  @include rgb($violet--500, $violet--400);
-}
-.accent-color__yielding-yellow {
-  @include rgb($yellow--500, $yellow--400);
-}
-// info states
-.accent-color__error-ember {
-  @include rgb($critical-carmine--light, $critical-carmine--dark);
-}
-.accent-color__alert-amber {
-  @include rgb($alert-amber--light, $alert-amber--dark);
-}
-.accent-color__victory-verde {
-  @include rgb($victory-verde--light, $victory-verde--dark);
 }
