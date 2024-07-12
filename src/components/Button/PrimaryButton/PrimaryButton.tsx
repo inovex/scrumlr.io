@@ -6,6 +6,7 @@ type PrimaryButtonProps = {
   children?: React.ReactNode;
   className?: string;
   color?: "pink" | "blue";
+  disabled?: boolean;
   small?: boolean;
   icon?: React.ReactNode;
 
@@ -24,6 +25,7 @@ export const PrimaryButton = (props: PrimaryButtonProps) => (
       },
       props.className
     )}
+    disabled={props.disabled}
   >
     {props.children}
     {props.icon}
