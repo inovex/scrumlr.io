@@ -10,7 +10,7 @@ type PrimaryButtonProps = {
   small?: boolean;
   icon?: React.ReactNode;
 
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const PrimaryButton = (props: PrimaryButtonProps) => (
@@ -26,6 +26,7 @@ export const PrimaryButton = (props: PrimaryButtonProps) => (
       props.className
     )}
     disabled={props.disabled}
+    onClick={props.onClick}
   >
     {props.children}
     {props.icon}
