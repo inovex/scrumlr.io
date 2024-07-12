@@ -22,7 +22,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $gray--300;
+    background-color: $gray--500;
   }
 }
 
@@ -41,7 +41,7 @@
   background-color: var(--accent-color--100);
 
   &:hover {
-    background-color: var(--accent-color--100);
+    background-color: var(--accent-color--200);
   }
 }
 
