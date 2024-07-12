@@ -135,8 +135,8 @@ $column-stripes--dark: repeating-linear-gradient(
   45deg,
   $navy--600 calc(0px + var(--stripe-offset, 0px)),
   $navy--600 calc(20px + var(--stripe-offset, 0px)),
-  var(--accent-color--background-dark) calc(20px + var(--stripe-offset, 0px)),
-  var(--accent-color--background-dark) calc(40px + var(--stripe-offset, 0px))
+  rgba(var(--accent-color--dark-rgb), 0.04) calc(20px + var(--stripe-offset, 0px)),
+  rgba(var(--accent-color--dark-rgb), 0.04) calc(40px + var(--stripe-offset, 0px))
 );
 
 // helper functions
