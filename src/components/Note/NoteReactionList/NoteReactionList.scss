@@ -39,7 +39,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $gray--300;
+    background-color: rgba(var(--accent-color--light-rgb), 0.1);
   }
   &:focus-visible {
     outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
