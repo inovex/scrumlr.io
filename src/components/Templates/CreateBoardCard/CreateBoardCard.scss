@@ -20,7 +20,7 @@ $icon-size: 80px;
   box-sizing: border-box; // don't overflow
   padding: 0 40px 14px 40px; // non standard, I know
 
-  background-color: #ccddff;
+  background-color: $blue--100;
 
   cursor: pointer;
 
@@ -29,22 +29,22 @@ $icon-size: 80px;
   }
 
   &:focus {
-    background-color: $color-white;
+    background-color: $gray--000;
   }
 
   &:active {
-    background-color: #99bcff;
+    background-color: $blue--200;
   }
 
   &:disabled {
-    background-color: #eeeff1;
-    border-color: #8f95a1;
+    background-color: $gray--300;
+    border-color: $gray--800;
     box-shadow: none;
     cursor: unset;
 
     .create-board-card__icon,
     .create-board-card__title {
-      color: #8f95a1;
+      color: $gray--800;
     }
   }
 }
@@ -52,7 +52,7 @@ $icon-size: 80px;
 .create-board-card__icon {
   width: $icon-size;
   height: $icon-size;
-  color: #0057ff;
+  color: $blue--500;
 }
 
 .create-board-card__title {
@@ -60,5 +60,5 @@ $icon-size: 80px;
   font-weight: 600;
   line-height: 28px;
 
-  color: #0057ff;
+  color: $blue--500;
 }

@@ -17,7 +17,7 @@ $card-height: 220px;
   border-radius: $rounded--default;
   padding: $spacing--lg;
 
-  background-color: $color-white;
+  background-color: $gray--000;
 }
 
 .template-card__icon {
@@ -59,7 +59,7 @@ $card-height: 220px;
   font-weight: 500;
   line-height: 20px;
 
-  color: #111111;
+  color: $navy--900;
 }
 
 .template-card__columns {
@@ -75,7 +75,7 @@ $card-height: 220px;
   font-weight: 600;
   line-height: 16px;
 
-  color: #373e4f;
+  color: $navy--400;
 }
 
 .template-card__columns-subtitle {
@@ -83,7 +83,7 @@ $card-height: 220px;
   font-weight: 600;
   line-height: 16px;
 
-  color: #8f95a1;
+  color: $gray--500;
 }
 
 .template-card__start-button {
