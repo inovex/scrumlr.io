@@ -210,7 +210,7 @@ $base-colors: (
   ),
 );
 
-@mixin rgb($color-map) {
+@mixin set-accent-variables($color-map) {
   @each $shade, $color in $color-map {
     --accent-color-#{$shade}: #{$color};
     --accent-color-#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
@@ -223,7 +223,7 @@ $base-colors: (
 @mixin generate-accent-classes($colors) {
   @each $color-name, $color-values in $colors {
     .accent-color__#{$color-name} {
-      @include rgb($color-values);
+      @include set-accent-variables($color-values);
     }
   }
 }
