@@ -70,7 +70,7 @@
 }
 @media (hover: hover) {
   .participants__permisson-filter-button:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
     color: $navy--900;
   }
 }
@@ -104,7 +104,7 @@
 }
 @media (hover: hover) {
   .participant__status-filter-button:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
     color: $navy--900;
   }
 }
@@ -185,15 +185,15 @@
   &:is(button) {
     line-height: 12px;
     background-color: $gray--000;
-    border: 2px solid var(--accent-color--desaturated-light);
+    border: 2px solid var(--accent-color--100);
     color: $navy--900;
     cursor: pointer;
   }
   &:is(button):hover,
   &:is(button):focus {
     outline: none;
-    border-color: var(--accent-color--desaturated-light);
-    background-color: var(--accent-color--desaturated-light);
+    border-color: var(--accent-color--100);
+    background-color: var(--accent-color--100);
   }
   &--active:is(button),
   &--active:is(button):hover {
@@ -293,7 +293,7 @@
   }
 
   &:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
   }
 }
 

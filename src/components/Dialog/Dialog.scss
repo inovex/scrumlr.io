@@ -70,7 +70,7 @@
   border-radius: $rounded--full;
 
   &:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
   }
   &:focus-visible {
     border: 2px solid var(--accent-color--light);

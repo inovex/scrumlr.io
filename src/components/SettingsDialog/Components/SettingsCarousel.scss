@@ -34,12 +34,12 @@
     transition: all 0.08s ease-out;
 
     &:hover > svg {
-      background-color: var(--accent-color--desaturated-light);
+      background-color: var(--accent-color--100);
       transform: scale(1.1);
     }
 
     &:focus-visible > svg {
-      background-color: var(--accent-color--desaturated-light);
+      background-color: var(--accent-color--100);
     }
 
     svg {

@@ -36,7 +36,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   position: relative;
   top: -19px;
   &:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
   }
 }
 .feedback-option__input:checked + .feedback-option__label {
