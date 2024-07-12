@@ -127,8 +127,8 @@ $column-stripes--light: repeating-linear-gradient(
   45deg,
   $gray--100 calc(0px + var(--stripe-offset, 0px)),
   $gray--100 calc(20px + var(--stripe-offset, 0px)),
-  var(--accent-color--background-light) calc(20px + var(--stripe-offset, 0px)),
-  var(--accent-color--background-light) calc(40px + var(--stripe-offset, 0px))
+  rgba(var(--accent-color--light-rgb), 0.2) calc(20px + var(--stripe-offset, 0px)),
+  rgba(var(--accent-color--light-rgb), 0.2) calc(40px + var(--stripe-offset, 0px))
 );
 
 $column-stripes--dark: repeating-linear-gradient(
