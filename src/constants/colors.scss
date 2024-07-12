@@ -227,3 +227,6 @@ $base-colors: (
     }
   }
 }
+
+@include generate-accent-classes($primary-colors);
+@include generate-accent-classes($secondary-colors);
