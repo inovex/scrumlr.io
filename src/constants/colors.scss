@@ -219,8 +219,12 @@ $base-colors: (
   }
 
   // shortcut for most commonly used accent colors
-  --accent-color--light: #{map-get($color-map, 500)};
-  --accent-color--dark: #{map-get($color-map, 400)};
+  $shade-light: map-get($color-map, 500);
+  $shade-dark: map-get($color-map, 400);
+  --accent-color--light: #{$shade-light};
+  --accent-color--light-rgb: #{red($shade-light)}, #{green($shade-light)}, #{blue($shade-light)};
+  --accent-color--dark: #{$shade-dark};
+  --accent-color--dark-rgb: #{red($shade-dark)}, #{green($shade-dark)}, #{blue($shade-dark)};
 }
 
 // generates css classes which can be included in an element
