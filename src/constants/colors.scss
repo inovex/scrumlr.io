@@ -108,16 +108,124 @@ $alert-amber--dark: #ffb933;
 $victory-verde--light: $green--500;
 $victory-verde--dark: $green--400;
 
-@mixin rgb($color--light, $color--dark) {
-  --accent-color: #{$color--light};
-  --accent-color-rgb: #{red($color--light)}, #{green($color--light)}, #{blue($color--light)};
-  --accent-color--dark: #{color.change($color--dark, $lightness: 72%, $saturation: 99%)};
-  --accent-color--desaturated-light: #{color.change($color--light, $lightness: 90%)};
-  --accent-color--desaturated-light-hover: #{color.change($color--light, $lightness: 85%)};
-  --accent-color--desaturated-dark: #{color.change($color--dark, $lightness: 39%, $saturation: 48%)};
-  --accent-color--desaturated-dark-hover: #{color.change($color--dark, $lightness: 50%, $saturation: 48%)};
-  --accent-color--background-light: #{color.change($color--light, $lightness: 80%, $alpha: 0.2, $saturation: 60%)};
-  --accent-color--background-dark: #{color.change($color--dark, $lightness: 75%, $alpha: 0.04, $saturation: 75%)};
+// Color Maps
+$primary-colors: (
+  blue: (
+    800: $blue--800,
+    700: $blue--700,
+    600: $blue--600,
+    500: $blue--500,
+    400: $blue--400,
+    300: $blue--300,
+    200: $blue--200,
+    100: $blue--100,
+  ),
+  pink: (
+    800: $pink--800,
+    700: $pink--700,
+    600: $pink--600,
+    500: $pink--500,
+    400: $pink--400,
+    300: $pink--300,
+    200: $pink--200,
+    100: $pink--100,
+  ),
+  purple: (
+    800: $purple--800,
+    700: $purple--700,
+    600: $purple--600,
+    500: $purple--500,
+    400: $purple--400,
+    300: $purple--300,
+    200: $purple--200,
+    100: $purple--100,
+  ),
+  violet: (
+    800: $violet--800,
+    700: $violet--700,
+    600: $violet--600,
+    500: $violet--500,
+    400: $violet--400,
+    300: $violet--300,
+    200: $violet--200,
+    100: $violet--100,
+  ),
+);
+
+$secondary-colors: (
+  green: (
+    800: $green--800,
+    700: $green--700,
+    600: $green--600,
+    500: $green--500,
+    400: $green--400,
+    300: $green--300,
+    200: $green--200,
+    100: $green--100,
+  ),
+  yellow: (
+    800: $yellow--800,
+    700: $yellow--700,
+    600: $yellow--600,
+    500: $yellow--500,
+    400: $yellow--400,
+    300: $yellow--300,
+    200: $yellow--200,
+    100: $yellow--100,
+  ),
+  orange: (
+    800: $orange--800,
+    700: $orange--700,
+    600: $orange--600,
+    500: $orange--500,
+    400: $orange--400,
+    300: $orange--300,
+    200: $orange--200,
+    100: $orange--100,
+  ),
+);
+
+$base-colors: (
+  navy: (
+    900: $navy--900,
+    800: $navy--800,
+    700: $navy--700,
+    600: $navy--600,
+    500: $navy--500,
+    400: $navy--400,
+    300: $navy--300,
+    200: $navy--200,
+    100: $navy--100,
+  ),
+  gray: (
+    800: $gray--800,
+    700: $gray--700,
+    600: $gray--600,
+    500: $gray--500,
+    400: $gray--400,
+    300: $gray--300,
+    200: $gray--200,
+    100: $gray--100,
+    000: $gray--000,
+  ),
+);
+
+@mixin rgb($color-map) {
+  @each $shade, $color in $color-map {
+    --accent-color-#{$shade}: #{$color};
+    --accent-color-#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
+  }
+
+  --accent-color--light: #{map-get($color-map, 500)};
+  --accent-color--dark: #{map-get($color-map, 400)};
+}
+
+@mixin generate-accent-classes($colors) {
+  @each $color-name, $color-values in $colors {
+    .accent-color__#{$color-name} {
+      @include rgb($color-values);
+    }
+  }
 }
 
 // accent colors for columns, note etc
