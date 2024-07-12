@@ -163,7 +163,7 @@
 
   .note-reaction-popup__row-reaction {
     &--active {
-      background-color: var(--accent-color--desaturated-dark);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     }
   }
 

@@ -330,7 +330,7 @@
   @media (hover: hover) {
     .participants__permisson-filter-button:hover,
     .participant__status-filter-button:hover {
-      background-color: var(--accent-color--desaturated-dark);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
       color: $gray--000;
     }
   }
@@ -346,11 +346,11 @@
   .participant__role {
     &:is(button) {
       background-color: $navy--500;
-      border: 2px solid var(--accent-color--desaturated-dark);
+      border: 2px solid rgba(var(--accent-color--dark-rgb), 0.6);
       color: $gray--000;
     }
     &:is(button):hover {
-      background-color: var(--accent-color--desaturated-dark);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     }
     &--active:is(button),
     &--active:is(button):hover {
@@ -382,7 +382,7 @@
     background-color: $navy--500;
 
     &:hover {
-      background-color: var(--accent-color--desaturated-dark);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     }
   }
 }

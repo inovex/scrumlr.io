@@ -124,6 +124,6 @@
     color: $gray--000;
   }
   .dialog__close-button:hover {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
   }
 }

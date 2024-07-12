@@ -47,7 +47,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   color: $gray--000;
   background-color: $navy--500;
   &:hover {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
   }
 }
 

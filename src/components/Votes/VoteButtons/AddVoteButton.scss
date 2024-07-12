@@ -38,7 +38,7 @@
 
 [theme="dark"] {
   .vote-button-add {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     color: var(--accent-color--dark);
     filter: drop-shadow(0 3px 4px rgba($navy--900, 0.16));
   }

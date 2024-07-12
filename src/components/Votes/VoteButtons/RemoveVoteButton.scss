@@ -92,7 +92,7 @@
 [theme="dark"] {
   .vote-button-remove {
     color: var(--accent-color--dark);
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     filter: drop-shadow(0 3px 4px rgba($navy--900, 0.16));
   }
 

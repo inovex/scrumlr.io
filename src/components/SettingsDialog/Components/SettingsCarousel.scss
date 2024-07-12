@@ -64,7 +64,7 @@
 
       &:hover > svg,
       &:focus-visible > svg {
-        background-color: var(--accent-color--desaturated-dark);
+        background-color: rgba(var(--accent-color--dark-rgb), 0.6);
       }
     }
   }

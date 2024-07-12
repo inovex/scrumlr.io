@@ -46,7 +46,7 @@
 
 [theme="dark"] {
   .note-option__button {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     color: var(--accent-color--dark);
 
     &:hover {
@@ -54,7 +54,7 @@
       color: $gray--000;
     }
     &:focus-visible {
-      outline: 2px solid var(--accent-color--desaturated-dark);
+      outline: 2px solid rgba(var(--accent-color--dark-rgb), 0.6);
     }
   }
 }

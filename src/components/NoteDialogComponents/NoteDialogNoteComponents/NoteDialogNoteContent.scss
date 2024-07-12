@@ -45,7 +45,7 @@
   &:not(:disabled) {
     &:hover,
     &:focus-visible {
-      border-color: var(--accent-color--desaturated-dark);
+      border-color: rgba(var(--accent-color--dark-rgb), 0.6);
     }
   }
 }
