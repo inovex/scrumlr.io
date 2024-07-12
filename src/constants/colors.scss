@@ -108,7 +108,7 @@ $alert-amber--dark: #ffb933;
 $victory-verde--light: $green--500;
 $victory-verde--dark: $green--400;
 
-// Color Maps
+// color maps
 $primary-colors: (
   backlog-blue: (
     800: $blue--800,
@@ -210,16 +210,22 @@ $base-colors: (
   ),
 );
 
+// sets css variables to be used for the accent colors
+// e.g. var(--accent-color--500)
 @mixin set-accent-variables($color-map) {
   @each $shade, $color in $color-map {
     --accent-color-#{$shade}: #{$color};
     --accent-color-#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
   }
 
+  // shortcut for most commonly used accent colors
   --accent-color--light: #{map-get($color-map, 500)};
   --accent-color--dark: #{map-get($color-map, 400)};
 }
 
+// generates css classes which can be included in an element
+// to use their different accent color shades
+// e.g. .accent-color__backlog-blue
 @mixin generate-accent-classes($colors) {
   @each $color-name, $color-values in $colors {
     .accent-color__#{$color-name} {
