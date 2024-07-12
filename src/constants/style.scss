@@ -1,7 +1,7 @@
 // @use "sass:list";
 @use "sass:color";
 
-@use "./colors";
+@import "./colors";
 
 // board & column constants
 $board__side-panel-width: 64px;
