@@ -5,7 +5,7 @@ import "./PrimaryButton.scss";
 type PrimaryButtonProps = {
   children?: React.ReactNode;
   className?: string;
-  color: "pink" | "blue";
+  color?: "pink" | "blue";
   small?: boolean;
   icon?: React.ReactNode;
 
@@ -19,7 +19,7 @@ export const PrimaryButton = (props: PrimaryButtonProps) => (
       {
         "primary-button--small": props.small,
         "primary-button--with-icon": props.icon,
-        "primary-button--pink": props.color === "pink",
+        "primary-button--pink": props.color === "pink" || !props.color,
         "primary-button--blue": props.color === "blue",
       },
       props.className
