@@ -214,8 +214,8 @@ $base-colors: (
 // e.g. var(--accent-color--500)
 @mixin set-accent-variables($color-map) {
   @each $shade, $color in $color-map {
-    --accent-color-#{$shade}: #{$color};
-    --accent-color-#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
+    --accent-color--#{$shade}: #{$color};
+    --accent-color--#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
   }
 
   // shortcut for most commonly used accent colors
