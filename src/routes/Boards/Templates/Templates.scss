@@ -63,7 +63,7 @@ $max-card-width: 500px;
 .templates__card-container {
   display: grid;
   // place cards next to each other if width limit is exceeded
-  grid-template-columns: repeat(auto-fit, minmax($max-card-width, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
   gap: $spacing--md;
 }
 
