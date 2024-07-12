@@ -87,7 +87,7 @@
   left: 0;
   cursor: zoom-out;
   backdrop-filter: blur(10px) brightness(0.76) saturate(0);
-  background: rgba(var(--accent-color-rgb), 0.42);
+  background: rgba(var(--accent-color--light-rgb), 0.42);
 
   animation: fade 0.1s ease-in-out;
 }

@@ -212,7 +212,7 @@ $settings-dialog-container--bottom: 62px;
   padding: 8px;
 
   &:hover {
-    background: rgba(var(--accent-color-rgb), 0.8);
+    background: rgba(var(--accent-color--light-rgb), 0.8);
     color: $gray--000;
   }
 

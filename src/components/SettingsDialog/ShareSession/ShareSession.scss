@@ -40,7 +40,7 @@ $header-menu-border-bottom-color: #efefef;
   &:hover {
     filter: brightness(1.05);
     transform: scale(1.02);
-    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.24);
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color--light-rgb), 0.24);
   }
 
   &:active {
@@ -48,7 +48,7 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   &:focus-visible {
-    outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
+    outline: 2px solid rgba(var(--accent-color--light-rgb), 0.4);
   }
 
   &.--copied {

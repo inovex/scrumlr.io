@@ -49,10 +49,10 @@
 
     &:focus-within {
       + img {
-        outline: rgba(var(--accent-color-rgb), 0.7) solid 2px;
+        outline: rgba(var(--accent-color--light-rgb), 0.7) solid 2px;
       }
       ~ p {
-        outline: rgba(var(--accent-color-rgb), 0.7) solid 2px;
+        outline: rgba(var(--accent-color--light-rgb), 0.7) solid 2px;
       }
     }
   }

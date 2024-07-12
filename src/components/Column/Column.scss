@@ -44,7 +44,7 @@
   flex-direction: column;
   flex: 1;
   ::selection {
-    background-color: rgba(var(--accent-color-rgb), 0.5);
+    background-color: rgba(var(--accent-color--light-rgb), 0.5);
   }
 }
 
@@ -149,7 +149,7 @@
 
 .column__notes-wrapper.isOver {
   border-color: var(--accent-color--light);
-  background-color: rgba(var(--accent-color-rgb), 0.2);
+  background-color: rgba(var(--accent-color--light-rgb), 0.2);
 }
 
 .column__note-list {
@@ -218,7 +218,7 @@
   &:hover > svg,
   &:focus-visible > svg {
     transform: translate(-0.64px, -0.64px);
-    filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
+    filter: drop-shadow(2px 2px 2px rgba(var(--accent-color--light-rgb), 0.24));
     color: var(--accent-color--light);
   }
 }

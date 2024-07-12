@@ -30,7 +30,7 @@ $header-menu-border-bottom-color: #efefef;
 
 .settings-option-button:focus-within,
 .settings-option-button:hover {
-  background-color: rgba(var(--accent-color-rgb), 0.1);
+  background-color: rgba(var(--accent-color--light-rgb), 0.1);
 }
 
 .settings-option-button__label {

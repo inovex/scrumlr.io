@@ -7,7 +7,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(var(--accent-color-rgb), 0.2);
+  background-color: rgba(var(--accent-color--light-rgb), 0.2);
   color: var(--accent-color--light);
   transition:
     background-color 150ms ease-in-out,
@@ -18,7 +18,7 @@
   color: $gray--000;
 }
 .note-dialog__note-option__unstack:focus-visible {
-  outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+  outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
 }
 
 .note-dialog__note-option__unstack-icon {

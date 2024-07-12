@@ -20,7 +20,7 @@
     }
 
     &:focus-visible {
-      background-color: rgba(var(--accent-color-rgb), 0.1);
+      background-color: rgba(var(--accent-color--light-rgb), 0.1);
     }
   }
 

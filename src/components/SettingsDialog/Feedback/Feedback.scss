@@ -72,7 +72,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
     transform: scale(0.95);
   }
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.8);
+    background-color: rgba(var(--accent-color--light-rgb), 0.8);
   }
 }
 

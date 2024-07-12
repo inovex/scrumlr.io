@@ -42,7 +42,7 @@
     background-color: $gray--300;
   }
   &:focus-visible {
-    outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+    outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
   }
 }
 

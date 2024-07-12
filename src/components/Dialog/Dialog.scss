@@ -98,11 +98,11 @@
   outline: none;
 
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.1);
+    background-color: rgba(var(--accent-color--light-rgb), 0.1);
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 1);
+    box-shadow: 0 0 0 2px rgba(var(--accent-color--light-rgb), 1);
   }
 
   > label:first-of-type {
