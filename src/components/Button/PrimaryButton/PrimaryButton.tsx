@@ -3,9 +3,16 @@ import classNames from "classnames";
 import "./PrimaryButton.scss";
 
 type PrimaryButtonProps = {
-  className?: string;
   children?: React.ReactNode;
+  className?: string;
+  icon?: React.ReactNode;
+
   onClick?: () => void;
 };
 
-export const PrimaryButton = (props: PrimaryButtonProps) => <button className={classNames("primary-button", props.className)}>{props.children}</button>;
+export const PrimaryButton = (props: PrimaryButtonProps) => (
+  <button className={classNames("primary-button", props.className)}>
+    {props.children}
+    {props.icon}
+  </button>
+);
