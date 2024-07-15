@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {Color, getColorClassName} from "constants/colors";
-import {useTheme} from "utils/hooks/useTheme";
+import {useAutoTheme} from "utils/hooks/useAutoTheme";
+import {useAppSelector} from "store";
 import "./ScrumlrLogo.scss";
 
 interface ScrumlrLogoProps {
@@ -8,12 +9,13 @@ interface ScrumlrLogoProps {
 }
 
 export const ScrumlrLogo = ({className}: ScrumlrLogoProps) => {
-  const theme = useTheme();
+  const theme = useAppSelector((state) => state.view.theme);
+  const autoTheme = useAutoTheme(theme);
   const gradientStops = [<stop key="gradient-default-stop" className="scrumlr-logo__stop" />];
   const gradientColorsLight: Color[] = ["backlog-blue"];
   const gradientColorsDark: Color[] = ["backlog-blue", "poker-purple", "value-violet", "planning-pink"];
 
-  const gradientColors = theme === "light" ? gradientColorsLight : gradientColorsDark;
+  const gradientColors = autoTheme === "light" ? gradientColorsLight : gradientColorsDark;
 
   // remove default gradient stop
   gradientStops.pop();
