@@ -1,12 +1,11 @@
-import React, {FC, useEffect} from "react";
-import {Helmet} from "react-helmet";
+import {useEffect} from "react";
+import {Helmet, HelmetProps} from "react-helmet";
 import {useAppSelector} from "store";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
 
-type HelmetProps = React.ComponentProps<typeof Helmet>;
-const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
+const HelmetWorkaround = ({...rest}: HelmetProps) => <Helmet {...rest} />;
 
-export const Html: FC = () => {
+export const Html = () => {
   const lang = useAppSelector((state) => state.view.language);
   let title = useAppSelector((state) => state.board.data?.name);
   if (title) title = `scrumlr.io - ${title}`;
