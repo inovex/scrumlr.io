@@ -28,7 +28,7 @@ export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
 
   if (action.type === Action.SetTheme) {
     if (typeof window !== undefined) {
-      saveToStorage(THEME_STORAGE_KEY, JSON.stringify(action.theme));
+      saveToStorage(THEME_STORAGE_KEY, action.theme);
     }
   }
 
