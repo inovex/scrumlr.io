@@ -5,7 +5,7 @@ import {API} from "api";
 import i18n from "i18n";
 import {Toast} from "utils/Toast";
 import {saveToStorage} from "utils/storage";
-import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY} from "constants/storage";
+import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
 import store from "../index";
 
 export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
@@ -24,6 +24,12 @@ export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
           });
         });
       });
+  }
+
+  if (action.type === Action.SetTheme) {
+    if (typeof window !== undefined) {
+      saveToStorage(THEME_STORAGE_KEY, JSON.stringify(action.theme));
+    }
   }
 
   if (action.type === Action.EnableHotkeyNotifications) {
