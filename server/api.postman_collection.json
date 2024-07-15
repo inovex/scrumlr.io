@@ -1201,7 +1201,7 @@
 					]
 				},
 				{
-					"name": "Get boards",
+					"name": "Get board overviews",
 					"event": [
 						{
 							"listen": "test",
