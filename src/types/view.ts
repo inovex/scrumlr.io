@@ -1,3 +1,5 @@
+export type Theme = "auto" | "light" | "dark";
+
 export interface View {
   readonly moderating: boolean;
 
@@ -12,6 +14,8 @@ export interface View {
   readonly feedbackEnabled: boolean;
 
   readonly language?: string;
+
+  readonly theme: Theme;
 
   readonly route?: string;
 
