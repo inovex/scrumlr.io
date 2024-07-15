@@ -47,7 +47,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
   const colorClassName = getColorClassName(color);
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
-  // const [columnName, setColumnName] = useState(name);
   const {value: columnName, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({maxInputLength: 32, initialValue: name});
 
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");

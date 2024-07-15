@@ -57,6 +57,14 @@ exports[`Column should have correct style show column with correct style 1`] = `
           rows="1"
           style="overflow-x: hidden; word-wrap: break-word; overflow-y: hidden;"
         />
+        <div
+          class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"
+          style="--top-distance: 0px;"
+        >
+          <ul
+            class="emoji-suggestions__list"
+          />
+        </div>
         <button
           aria-label="Create note"
           class="note-input__add-button"

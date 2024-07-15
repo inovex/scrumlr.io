@@ -31,10 +31,6 @@ function createSuggestions(props: Partial<EmojiSuggestionsProps> = {}, state?: P
 }
 
 describe("EmojiSuggestions", () => {
-  beforeEach(() => {
-    Element.prototype.scrollIntoView = jest.fn();
-  });
-
   it("should match the snapshot", () => {
     const {container} = render(createSuggestions());
     expect(container.firstChild).toMatchSnapshot();

@@ -3,7 +3,7 @@
 exports[`EmojiSuggestions should match the snapshot 1`] = `
 <div
   class="emoji-suggestions emoji-suggestions__container"
-  style="--top-distance: 0;"
+  style="--top-distance: 0px;"
 >
   <ul
     class="emoji-suggestions__list"
@@ -63,7 +63,7 @@ exports[`EmojiSuggestions should match the snapshot 1`] = `
 exports[`EmojiSuggestions should use skin tones where supported should use skin tone from store 1`] = `
 <div
   class="emoji-suggestions emoji-suggestions__container"
-  style="--top-distance: 0;"
+  style="--top-distance: 0px;"
 >
   <ul
     class="emoji-suggestions__list"

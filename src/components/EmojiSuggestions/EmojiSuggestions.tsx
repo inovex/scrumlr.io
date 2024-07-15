@@ -47,10 +47,12 @@ export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSugge
 
   const skinToneComponent = useAppSelector((state) => state.skinTone.component);
 
-  if (suggestions.length === 0) return null;
-
   return (
-    <div className="emoji-suggestions emoji-suggestions__container" style={{"--top-distance": containerRect?.top ?? 0} as CSSProperties} ref={containerRef}>
+    <div
+      className={classNames("emoji-suggestions", "emoji-suggestions__container", {"emoji-suggestions__container--empty": suggestions.length === 0})}
+      style={{"--top-distance": `${containerRect?.top ?? 0}px`} as CSSProperties}
+      ref={containerRef}
+    >
       <ul className="emoji-suggestions__list">
         {suggestions.map(([slug, emoji, supportsSkintones], i) => {
           const actualEmoji = supportsSkintones ? emojiWithSkinTone(emoji, skinToneComponent) : emoji;
