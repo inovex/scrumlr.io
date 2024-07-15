@@ -1,4 +1,9 @@
+// the theme that's stored in the state and local storage
 export type Theme = "auto" | "light" | "dark";
+
+// the theme that's automatically set as an attribute and used by stylesheets.
+// if the initial theme is auto, this will be set to either light or dark depending on the system setting
+export type AutoTheme = Omit<Theme, "auto">;
 
 export interface View {
   readonly moderating: boolean;
