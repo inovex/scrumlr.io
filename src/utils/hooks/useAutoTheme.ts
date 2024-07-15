@@ -1,8 +1,7 @@
 import {useState, useEffect, useCallback} from "react";
 import {Theme, AutoTheme} from "types/view";
 
-/* this hook sets the current theme as a global attribute and returns it for further use.
- * if the theme is set to "auto", the system preference will be used. */
+/** this hook return the theme that should be used, regarding the current system preferences. */
 export const useAutoTheme = (theme: Theme): AutoTheme => {
   const getInitialAutoTheme = useCallback((): AutoTheme => {
     if (theme === "auto") {
@@ -33,11 +32,6 @@ export const useAutoTheme = (theme: Theme): AutoTheme => {
       mediaQuery.removeEventListener("change", handleColorSchemeChange);
     };
   }, [getInitialAutoTheme, theme]);
-
-  // set the theme as an attribute, which can then be used inside stylesheets, e.g. [theme="dark"] {...}
-  useEffect(() => {
-    document.documentElement.setAttribute("theme", autoTheme.toString());
-  }, [autoTheme]);
 
   return autoTheme;
 };
