@@ -39,6 +39,13 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
       };
     }
 
+    case Action.SetTheme: {
+      return {
+        ...state,
+        theme: action.theme,
+      };
+    }
+
     case Action.SetServerInfo: {
       return {
         ...state,
