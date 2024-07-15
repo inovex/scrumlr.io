@@ -19,13 +19,14 @@ export const useAutoTheme = (theme: Theme): AutoTheme => {
 
       if (theme === "auto") {
         setAutoTheme(colorSchemePreference);
-      } else {
-        setAutoTheme(theme);
       }
     };
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     mediaQuery.addEventListener("change", handleColorSchemeChange);
+
+    // update the theme based on the initial value and theme changes
+    setAutoTheme(getInitialAutoTheme());
 
     return () => {
       // cleanup
