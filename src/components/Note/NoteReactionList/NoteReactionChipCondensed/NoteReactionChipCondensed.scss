@@ -12,14 +12,14 @@
   height: 18px;
   padding: 5px 8px 5px 7px;
   border-radius: $rounded--full;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
 
   font-size: $text--base;
 
   cursor: pointer;
 
   &:hover {
-    background-color: $hover-background-light;
+    background-color: $gray--300;
   }
 }
 
@@ -36,7 +36,7 @@
 }
 
 .note-reaction-chip-condensed__amount {
-  color: $color-black;
+  color: $navy--900;
   font-size: $text--sm;
   font-weight: 600;
 }
@@ -48,14 +48,14 @@
 
 [theme="dark"] {
   .note-reaction-chip-condensed__root {
-    background-color: $color-dark-one;
+    background-color: $navy--600;
 
     &:hover {
-      background-color: $hover-background-dark;
+      background-color: $navy--300;
     }
   }
 
   .note-reaction-chip-condensed__amount {
-    color: $color-white;
+    color: $gray--000;
   }
 }

@@ -87,4 +87,12 @@ describe("Note", () => {
       expect(navigateSpy).toHaveBeenCalledWith(`note/${NOTE_ID}/stack`);
     });
   });
+
+  describe("edited marker", () => {
+    it("should contain edited marker for edited note", () => {
+      const board = createBoardData({showAuthors: true});
+      const {container} = render(createNote(false, {board: board}));
+      expect(container.getElementsByClassName("note__marker-edited").length).toBeGreaterThan(0);
+    });
+  });
 });

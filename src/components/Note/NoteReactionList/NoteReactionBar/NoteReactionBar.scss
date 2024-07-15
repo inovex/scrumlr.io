@@ -27,7 +27,7 @@ $scale-factor: 120%;
   cursor: pointer;
 
   &:hover {
-    background-color: $hover-background-light;
+    background-color: $gray--300;
     transform: scale($scale-factor);
   }
 
@@ -53,7 +53,7 @@ $scale-factor: 120%;
 [theme="dark"] {
   .note-reaction-bar__reaction {
     &:hover {
-      background-color: $hover-background-dark;
+      background-color: $navy--300;
     }
 
     &--active {

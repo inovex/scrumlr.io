@@ -14,7 +14,7 @@
     &-label {
       font-size: $text-size--small;
       font-weight: 500;
-      color: rgba($color-black, 0.5);
+      color: rgba($navy--900, 0.5);
     }
     &-value {
       font-size: $text-size--medium;
@@ -55,7 +55,7 @@
   .settings-carousel {
     &__text {
       &-label {
-        color: rgba($color-white, 0.65);
+        color: rgba($gray--000, 0.65);
       }
     }
 

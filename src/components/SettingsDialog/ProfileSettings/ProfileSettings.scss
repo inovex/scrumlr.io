@@ -65,7 +65,7 @@ $settings__item-height: 48px;
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: $color-dark-gray;
+  color: $gray--800;
   gap: $spacing--xs;
   margin: $spacing--xs;
   padding: $spacing--xs;
@@ -96,7 +96,7 @@ $settings__item-height: 48px;
 
 [theme="dark"] {
   .profile-settings__open-cheat-sheet-button {
-    color: $color-middle-gray;
+    color: $gray--700;
 
     &:focus-visible {
       outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
