@@ -1,4 +1,6 @@
 import classNames from "classnames";
+import {Color, getColorClassName} from "constants/colors";
+import {useTheme} from "utils/hooks/useTheme";
 import "./ScrumlrLogo.scss";
 
 interface ScrumlrLogoProps {
@@ -7,21 +9,27 @@ interface ScrumlrLogoProps {
 }
 
 export const ScrumlrLogo = ({accentColorClassNames, className}: ScrumlrLogoProps) => {
+  const theme = useTheme();
   const gradientStops = [<stop key="gradient-default-stop" className="scrumlr-logo__stop" />];
+  const gradientColorsLight: Color[] = ["backlog-blue"];
+  const gradientColorsDark: Color[] = ["backlog-blue", "poker-purple", "value-violet", "planning-pink"];
+
+  const gradientColors = theme === "light" ? gradientColorsLight : gradientColorsDark;
 
   if (accentColorClassNames && accentColorClassNames.length > 0) {
     // remove default gradient stop
     gradientStops.pop();
 
-    const stopInterval = Number((1 / accentColorClassNames.length).toFixed(2));
-    for (let i = 0; i < accentColorClassNames.length; i += 1) {
-      gradientStops.push(<stop key={`gradient-stop${i}-start`} offset={stopInterval * i} className={`${accentColorClassNames[i]} scrumlr-logo__stop`} />);
+    const stopInterval = Number((1 / gradientColors.length).toFixed(2));
+    for (let i = 0; i < gradientColors.length; i += 1) {
+      const accentColorClassname = getColorClassName(gradientColors[i]);
+      gradientStops.push(<stop key={`gradient-stop${i}-start`} offset={stopInterval * i} className={classNames("scrumlr-logo__stop", accentColorClassname)} />);
 
       gradientStops.push(
         <stop
           key={`gradient-stop${i}-end`}
-          offset={stopInterval === accentColorClassNames.length - 1 ? 1 : stopInterval * (i + 1)}
-          className={`${accentColorClassNames[i]} scrumlr-logo__stop`}
+          offset={stopInterval === gradientColors.length - 1 ? 1 : stopInterval * (i + 1)}
+          className={classNames("scrumlr-logo__stop", accentColorClassname)}
         />
       );
     }
