@@ -1,7 +1,7 @@
 import React, {FC, useEffect} from "react";
 import {Helmet} from "react-helmet";
 import {useAppSelector} from "store";
-import {useAutoTheme} from "../../utils/hooks/useAutoTheme";
+import {useAutoTheme} from "utils/hooks/useAutoTheme";
 
 type HelmetProps = React.ComponentProps<typeof Helmet>;
 const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
