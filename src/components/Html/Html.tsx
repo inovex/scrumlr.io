@@ -1,32 +1,22 @@
-import {FC, useEffect, useState} from "react";
-import {Helmet} from "react-helmet";
+import {useEffect} from "react";
+import {Helmet, HelmetProps} from "react-helmet";
 import {useAppSelector} from "store";
+import {useAutoTheme} from "utils/hooks/useAutoTheme";
 
-type HelmetProps = React.ComponentProps<typeof Helmet>;
-const HelmetWorkaround: FC<HelmetProps> = ({...rest}) => <Helmet {...rest} />;
+const HelmetWorkaround = ({...rest}: HelmetProps) => <Helmet {...rest} />;
 
-export const Html: FC = () => {
+export const Html = () => {
   const lang = useAppSelector((state) => state.view.language);
   let title = useAppSelector((state) => state.board.data?.name);
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? (!window.matchMedia || window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"));
-
   if (title) title = `scrumlr.io - ${title}`;
 
+  const theme = useAppSelector((state) => state.view.theme);
+  const autoTheme = useAutoTheme(theme);
+
+  // set the theme as an attribute, which can then be used inside stylesheets, e.g. [theme="dark"] {...}
   useEffect(() => {
-    if (theme === "auto") {
-      const autoTheme = window.matchMedia("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
-      setTheme(autoTheme);
-    }
-  }, [theme]);
+    document.documentElement.setAttribute("theme", autoTheme.toString());
+  }, [autoTheme]);
 
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-    const colorScheme = e.matches ? "dark" : "light";
-
-    if (!localStorage.getItem("theme") || localStorage.getItem("theme") === "auto") {
-      setTheme(colorScheme);
-      document.documentElement.setAttribute("theme", colorScheme);
-    }
-  });
-
-  return <HelmetWorkaround title={title} htmlAttributes={{lang, theme}} />;
+  return <HelmetWorkaround title={title} htmlAttributes={{lang, theme: autoTheme.toString()}} />;
 };
