@@ -4,15 +4,17 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/ory/dockertest/v3"
-	"github.com/ory/dockertest/v3/docker"
 	"log"
 	"time"
 
-	"github.com/uptrace/bun/dbfixture"
+	"github.com/ory/dockertest/v3"
+	"github.com/ory/dockertest/v3/docker"
+
 	"os"
-	"scrumlr.io/server/database/migrations"
 	"testing"
+
+	"github.com/uptrace/bun/dbfixture"
+	"scrumlr.io/server/database/migrations"
 )
 
 var testDb *Database
@@ -64,7 +66,7 @@ func initDatabase() (string, func(), error) {
 	// pulls an image, creates a container based on it and runs it
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
 		Repository: "postgres",
-		Tag:        "14.1",
+		Tag:        "16.3",
 		Env: []string{
 			fmt.Sprintf("POSTGRES_PASSWORD=%s", DatabaseUsernameAndPassword),
 			fmt.Sprintf("POSTGRES_USER=%s", DatabaseUsernameAndPassword),

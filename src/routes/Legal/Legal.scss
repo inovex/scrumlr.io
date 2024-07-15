@@ -8,7 +8,7 @@
 }
 
 .legal a {
-  color: $color-planning-pink;
+  color: $pink--500;
   font-weight: bold;
   text-decoration: none;
   transition: all 0.08s ease-out;
@@ -38,7 +38,7 @@
 
 [theme="dark"] {
   .legal {
-    color: $color-white;
+    color: $gray--000;
   }
 }
 

@@ -9,12 +9,12 @@ export type BoardReactionType = {
   reactionType: ReactionType;
 };
 
-export const BOARD_REACTION_EMOJI_MAP = new Map<ReactionType, string>([
-  ["tada", "🎉"],
-  ["applause", "👏"],
-  ["heart", "💖"],
-  ["like", "👍"],
-  ["dislike", "👎"],
+export const BOARD_REACTION_EMOJI_MAP = new Map<ReactionType, {emoji: string; skinToneSupported: boolean}>([
+  ["tada", {emoji: "🎉", skinToneSupported: false}],
+  ["applause", {emoji: "👏", skinToneSupported: true}],
+  ["heart", {emoji: "💖", skinToneSupported: false}],
+  ["like", {emoji: "👍", skinToneSupported: true}],
+  ["dislike", {emoji: "👎", skinToneSupported: true}],
 ]);
 
 export type BoardReactionState = BoardReactionType[];

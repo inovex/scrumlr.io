@@ -15,19 +15,19 @@ $skeleton-name-width: 92px;
   height: $avatar-size;
   border-radius: 100%;
   overflow: hidden;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
 }
 
 .note-author-skeleton__name {
   height: $text-size--small;
   width: $skeleton-name-width;
   border-radius: 4px;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
 }
 
 [theme="dark"] {
   .note-author-skeleton__avatar {
-    background-color: $color-dark-one;
+    background-color: $navy--600;
 
     img {
       background-blend-mode: luminosity;
@@ -36,6 +36,6 @@ $skeleton-name-width: 92px;
   }
 
   .note-author-skeleton__name {
-    background-color: $color-dark-one;
+    background-color: $navy--600;
   }
 }

@@ -41,25 +41,25 @@
   @include inset-border($top: true, $left: true, $bottom: true);
 
   &.board__spacer--moderation-isActive {
-    @include inset-border($top: true, $left: true, $bottom: true, $color: $color-goal-green);
+    @include inset-border($top: true, $left: true, $bottom: true, $color: $victory-verde--light);
   }
 }
 .board__spacer-right {
   @include inset-border($top: true, $right: true, $bottom: true);
 
   &.board__spacer--moderation-isActive {
-    @include inset-border($top: true, $right: true, $bottom: true, $color: $color-goal-green);
+    @include inset-border($top: true, $right: true, $bottom: true, $color: $victory-verde--light);
   }
 }
 
 .board__spacer-left:nth-child(odd),
 .board__spacer-right:nth-child(odd) {
-  background-color: $color-white-two;
+  background-color: $gray--200;
 }
 
 .board__spacer-left:nth-child(even),
 .board__spacer-right:nth-child(even) {
-  background-color: $color-white-one;
+  background-color: $gray--100;
 }
 
 .column--hidden + .board__spacer-right,
@@ -70,12 +70,12 @@
 [theme="dark"] {
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
-    background-color: $color-dark-one;
+    background-color: $navy--600;
   }
 
   .board__spacer-left:nth-child(even),
   .board__spacer-right:nth-child(even) {
-    background-color: $color-dark-two;
+    background-color: $navy--500;
   }
 
   .column--hidden + .board__spacer-right,
