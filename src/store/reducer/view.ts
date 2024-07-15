@@ -1,7 +1,7 @@
-import {ViewState} from "types/view";
+import {Theme, ViewState} from "types/view";
 import {Action, ReduxAction} from "store/action";
 import {getFromStorage} from "utils/storage";
-import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY} from "constants/storage";
+import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
 
 const INITIAL_VIEW_STATE: ViewState = {
   moderating: false,
@@ -12,6 +12,7 @@ const INITIAL_VIEW_STATE: ViewState = {
   noteFocused: false,
   hotkeyNotificationsEnabled: typeof window !== "undefined" && getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
   showBoardReactions: typeof window !== "undefined" && getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
+  theme: ((typeof window !== "undefined" && getFromStorage(THEME_STORAGE_KEY)) as Theme) ?? "auto",
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
