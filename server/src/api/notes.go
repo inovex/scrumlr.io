@@ -2,9 +2,8 @@ package api
 
 import (
 	"fmt"
-  "net/http"
+	"net/http"
 
-	"scrumlr.io/server/identifiers"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
