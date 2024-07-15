@@ -172,6 +172,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     ],
   },
   view: {
+    theme: "auto",
     hotkeyNotificationsEnabled: true,
     moderating: false,
     serverTimeOffset: 0,
