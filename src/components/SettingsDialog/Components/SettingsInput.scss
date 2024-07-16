@@ -13,7 +13,7 @@
 
   &:has(:focus-visible),
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.1);
+    background-color: rgba(var(--accent-color--light-rgb), 0.1);
   }
 }
 
@@ -84,7 +84,7 @@
   cursor: pointer;
 
   &:focus-visible * {
-    outline: 2px solid var(--accent-color-rgb);
+    outline: 2px solid var(--accent-color--light-rgb);
   }
 }
 

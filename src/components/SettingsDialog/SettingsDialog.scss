@@ -212,12 +212,12 @@ $settings-dialog-container--bottom: 62px;
   padding: 8px;
 
   &:hover {
-    background: rgba(var(--accent-color-rgb), 0.8);
+    background: rgba(var(--accent-color--light-rgb), 0.8);
     color: $gray--000;
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px var(--accent-color);
+    box-shadow: 0 0 0 2px var(--accent-color--light);
   }
 }
 
@@ -253,7 +253,7 @@ $settings-dialog-container--bottom: 62px;
 
 .navigation__item--active {
   outline: none;
-  background: var(--accent-color);
+  background: var(--accent-color--light);
   color: $gray--000;
 }
 
@@ -261,7 +261,7 @@ $settings-dialog-container--bottom: 62px;
   width: 40px;
   height: 40px;
   border-radius: $rounded--full;
-  background: var(--accent-color);
+  background: var(--accent-color--light);
   color: $gray--000;
 }
 
@@ -291,7 +291,7 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__header-text {
-  border-bottom: solid 3px var(--accent-color);
+  border-bottom: solid 3px var(--accent-color--light);
   padding-bottom: 8px;
   margin: 0;
 }
