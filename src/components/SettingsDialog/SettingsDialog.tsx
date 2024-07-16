@@ -6,10 +6,9 @@ import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
-import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
-import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
 import {ArrowLeft, Close} from "components/Icon";
 import {MENU_ITEMS, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
@@ -106,8 +105,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
               style={styles}
             >
               <div className="settings-dialog__sidebar">
-                <ScrumlrLogo className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--light" />
-                <img src={ScrumlrLogoDark} alt="Scrumlr Logo" className="settings-dialog__scrumlr-logo settings-dialog__scrumlr-logo--dark" />
+                <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
                 {/* render all menu items */}
                 <nav className="settings-dialog__navigation">{Object.entries(MENU_ITEMS).map(([key, value]) => renderMenuItem(key as MenuKey, value))}</nav>
               </div>
