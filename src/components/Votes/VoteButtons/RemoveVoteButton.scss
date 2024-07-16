@@ -91,9 +91,13 @@
 
 [theme="dark"] {
   .vote-button-remove {
-    color: var(--accent-color--dark);
+    color: $gray--000;
     background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     filter: drop-shadow(0 3px 4px rgba($navy--900, 0.16));
+
+    &:enabled:hover {
+      background-color: var(--accent-color--dark);
+    }
   }
 
   .vote-button-remove__folded-corner {
