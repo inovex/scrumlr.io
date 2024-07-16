@@ -13,7 +13,7 @@ export const ScrumlrLogo = ({className}: ScrumlrLogoProps) => {
   const autoTheme = useAutoTheme(theme);
   const gradientStops = [<stop key="gradient-default-stop" className="scrumlr-logo__stop" />];
   const gradientColorsLight: Color[] = ["backlog-blue"];
-  const gradientColorsDark: Color[] = ["backlog-blue", "poker-purple", "value-violet", "planning-pink"];
+  const gradientColorsDark: Color[] = ["backlog-blue", "value-violet", "poker-purple", "planning-pink"];
 
   const gradientColors = autoTheme === "light" ? gradientColorsLight : gradientColorsDark;
 
