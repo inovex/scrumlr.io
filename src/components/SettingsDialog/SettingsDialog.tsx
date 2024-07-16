@@ -25,7 +25,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
-  const [activeMenuItem, setActiveMenuItem] = useState<MenuKey | "settings">();
+  const [activeMenuKey, setActiveMenuKey] = useState<MenuKey | "settings">();
 
   const transitionConfigMobile = {
     from: {},
@@ -38,7 +38,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
     // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
     const active = (Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd)?.[0] ?? "settings") as MenuKey;
-    setActiveMenuItem(active);
+    setActiveMenuKey(active);
   }, [isBoardModerator, location, navigate]);
 
   useEffect(() => {
@@ -53,15 +53,15 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
     // If the window is large enough the show the whole dialog, automatically select the first navigation item to show.
     // if none is found, go back
-    if (activeMenuItem === "settings" && window.innerWidth >= MOBILE_BREAKPOINT) {
+    if (activeMenuKey === "settings" && window.innerWidth >= MOBILE_BREAKPOINT) {
       const section = findFirstValidMenuItem();
       navigate(section?.location ?? "..");
     }
     // If user is not a moderator of the section, they shouldn't see it
-    if (activeMenuItem && activeMenuItem !== "settings" && MENU_ITEMS[activeMenuItem].isModeratorOnly && !isBoardModerator) {
+    if (activeMenuKey && activeMenuKey !== "settings" && MENU_ITEMS[activeMenuKey].isModeratorOnly && !isBoardModerator) {
       navigate("..");
     }
-  }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems]);
+  }, [navigate, isBoardModerator, activeMenuKey, props.enabledMenuItems]);
 
   /* renders a menu item.
    * condition: menu item is enabled and user has authorization
@@ -78,10 +78,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     const Icon = menuItem.icon;
 
     return (
-      <Link
-        to={menuItem.location}
-        className={classNames("navigation__item", {"navigation__item--active": menuItem.location === activeMenuItem}, getColorClassName(menuItem.color))}
-      >
+      <Link to={menuItem.location} className={classNames("navigation__item", {"navigation__item--active": menuItem.location === activeMenuKey}, getColorClassName(menuItem.color))}>
         {Icon === "profile" ? <Avatar seed={me?.id} avatar={me?.avatar} className="navigation-item__icon" /> : <Icon className="navigation-item__icon" />}
         <div className="navigation-item__content">
           <p className="navigation-item__name">{menuItem.localizationKey === "Profile" ? me?.name : t(`SettingsDialog.${menuItem.localizationKey}`)}</p>
