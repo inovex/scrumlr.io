@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "bdb97d62-be77-4f42-a785-c15b9c2a9374",
+		"_postman_id": "8a37e0fe-f06b-41e4-a538-6689616bd5a6",
 		"name": "scrumlr.io",
 		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](https://info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the _User_ section for more information.\n\n1. A user signs into the application (see _Login_ section)\n2. The user creates a new board (`POST` on `/boards`, checkout _Boards_ section)\n3. Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout _Participants_ section)\n    1. If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2. If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3. If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section _Realtime_ to see how you can open websockets and listen to live updates on the data.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -1866,6 +1866,125 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"id\": \"ac21c194-3067-4710-92e6-b33bbb40fb4a\",\n    \"name\": \"My board\",\n    \"description\": \"Updated to new description\",\n    \"accessPolicy\": \"BY_PASSPHRASE\",\n    \"showAuthors\": true,\n    \"showNotesOfOtherUsers\": true,\n    \"showNoteReactions\": true,\n    \"allowStacking\": true,\n    \"allowEditing\": true,\n    \"sharedNote\": null,\n    \"showVoting\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Get board overviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check if response is an array\", function () {",
+									"    var response = pm.response.json();",
+									"    pm.expect(response).to.be.an('array');",
+									"})",
+									"",
+									"pm.test(\"Check if board id is included\", function (){",
+									"    var responseFirstEntry  = pm.response.json()[0];",
+									"    pm.expect(responseFirstEntry).to.have.property('board')",
+									"    pm.expect(responseFirstEntry.board).to.have.property('id')",
+									"})",
+									"",
+									"pm.test(\"Check if board name is included\", function (){",
+									"    var responseFirstEntry  = pm.response.json()[0];",
+									"    pm.expect(responseFirstEntry).to.have.property('board')",
+									"    pm.expect(responseFirstEntry.board).to.have.property('name')",
+									"})",
+									"",
+									"pm.test(\"Check if number of participants is included\", function (){",
+									"    const firstBoardOverview = pm.response.json()[0];",
+									"    const participants = firstBoardOverview.participants;",
+									"    pm.expect(firstBoardOverview).to.have.property('participants');",
+									"    pm.expect(isNaN(Number(participants))).to.be.false;",
+									"})",
+									"",
+									"",
+									"pm.test(\"Check if creation timestamp is included and readable\", function (){",
+									"    const firstBoardOverview = pm.response.json()[0]",
+									"    pm.expect(firstBoardOverview).to.have.property('createdAt');",
+									"    let timestamp = firstBoardOverview.createdAt;",
+									"",
+									"    // Check general validity",
+									"    let date = new Date(timestamp);",
+									"    const timestampIsReadable =  !isNaN(date.getTime());",
+									"",
+									"    // Tests    ",
+									"    pm.expect(date).to.not.equal(\"Invalid Date\")",
+									"    pm.expect(timestampIsReadable).to.be.true;",
+									"})",
+									"",
+									"pm.test(\"Check if number of columns is included\", function (){",
+									"    const responseFirstEntry = pm.response.json()[0];",
+									"    pm.expect(responseFirstEntry).to.have.property('columnsNumber')",
+									"    pm.expect(isNaN(Number(responseFirstEntry.columnsNumber))).to.be.false;",
+									"})",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/boards",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"boards"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/boards",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"boards"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "[\n    {\n        \"board\": {\n            \"id\": \"4b08e0e9-f141-49b0-a75f-17d181f96969\",\n            \"name\": \"My board\",\n            \"description\": \"This is a test description\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"showNotesOfOtherUsers\": true,\n            \"showNoteReactions\": true,\n            \"allowStacking\": true,\n            \"allowEditing\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columnsNumber\": 2,\n        \"createdAt\": \"0001-01-01T00:00:00Z\",\n        \"participants\": 1\n    }\n]"
 						}
 					]
 				},
