@@ -37,7 +37,7 @@ export const PassphraseDialog: FC<PassphraseDialogProps> = ({onSubmit, incorrect
     <Background>
       <div className="passphrase-dialog">
         <a className="passphrase-dialog__logo" href="/" aria-label="Homepage">
-          <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+          <ScrumlrLogo />
         </a>
 
         <form className="passphrase-dialog__form" onSubmit={submitPassphraseForm}>

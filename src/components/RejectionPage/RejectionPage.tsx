@@ -22,10 +22,7 @@ export const RejectionPage = ({status}: RejectionPageProps) => {
       </div>
       <header className="rejection-page__header">
         <div className="rejection-page__logo-container">
-          <ScrumlrLogo
-            className="rejection-page__scrumlr-logo"
-            accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]}
-          />
+          <ScrumlrLogo className="rejection-page__scrumlr-logo" />
         </div>
       </header>
       <main className="rejection-page__main">

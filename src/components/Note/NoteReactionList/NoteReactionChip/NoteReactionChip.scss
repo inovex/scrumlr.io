@@ -22,7 +22,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $gray--300;
+    background-color: $gray--500;
   }
 }
 
@@ -38,23 +38,23 @@
 }
 
 .note-reaction-chip__root--self {
-  background-color: var(--accent-color--desaturated-light);
+  background-color: var(--accent-color--100);
 
   &:hover {
-    background-color: var(--accent-color--desaturated-light-hover);
+    background-color: var(--accent-color--200);
   }
 }
 
 // override
 .note-reaction-chip__root--override-active {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
 
   .note-reaction-chip__amount {
     color: $gray--000;
   }
 
   &:hover {
-    background-color: var(--accent-color); // essentially no hover color when active.
+    background-color: var(--accent-color--light); // essentially no hover color when active.
   }
 }
 
@@ -68,18 +68,17 @@
   }
 
   .note-reaction-chip__root--self {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
 
     &:hover {
-      background-color: var(--accent-color--desaturated-dark-hover);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
   }
 
   .note-reaction-chip__root--override-active {
-    background-color: var(--accent-color--desaturated-dark-hover);
-
+    background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     &:hover {
-      background-color: var(--accent-color--desaturated-dark-hover);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
   }
 

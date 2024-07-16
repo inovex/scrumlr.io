@@ -20,14 +20,14 @@
     }
 
     &:focus-visible {
-      background-color: rgba(var(--accent-color-rgb), 0.1);
+      background-color: rgba(var(--accent-color--light-rgb), 0.1);
     }
   }
 
   &__header-icon {
     height: 24px;
     width: 24px;
-    color: var(--accent-color);
+    color: var(--accent-color--light);
     transform: rotate(90deg);
     transition: transform 0.2s ease-out;
 
