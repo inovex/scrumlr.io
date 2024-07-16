@@ -7,18 +7,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(var(--accent-color-rgb), 0.2);
-  color: var(--accent-color);
+  background-color: rgba(var(--accent-color--light-rgb), 0.2);
+  color: var(--accent-color--light);
   transition:
     background-color 150ms ease-in-out,
     color 150ms ease-in-out;
 }
 .note-dialog__note-option__remove:hover {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
   color: $gray--000;
 }
 .note-dialog__note-option__remove:focus-visible {
-  outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+  outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
 }
 
 .note-dialog__note-option__remove-icon {

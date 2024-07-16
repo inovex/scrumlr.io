@@ -42,7 +42,7 @@
   height: fit-content;
   width: fit-content;
   ::selection {
-    background-color: rgba(var(--accent-color-rgb), 0.5);
+    background-color: rgba(var(--accent-color--light-rgb), 0.5);
   }
 }
 
