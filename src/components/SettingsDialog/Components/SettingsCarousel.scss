@@ -14,7 +14,7 @@
     &-label {
       font-size: $text-size--small;
       font-weight: 500;
-      color: rgba($color-black, 0.5);
+      color: rgba($navy--900, 0.5);
     }
     &-value {
       font-size: $text-size--medium;
@@ -30,16 +30,16 @@
     align-items: center;
     border: none;
     outline: none;
-    color: var(--accent-color);
+    color: var(--accent-color--light);
     transition: all 0.08s ease-out;
 
     &:hover > svg {
-      background-color: var(--accent-color--desaturated-light);
+      background-color: var(--accent-color--100);
       transform: scale(1.1);
     }
 
     &:focus-visible > svg {
-      background-color: var(--accent-color--desaturated-light);
+      background-color: var(--accent-color--100);
     }
 
     svg {
@@ -55,16 +55,16 @@
   .settings-carousel {
     &__text {
       &-label {
-        color: rgba($color-white, 0.65);
+        color: rgba($gray--000, 0.65);
       }
     }
 
     &__button {
-      color: var(--accent-color);
+      color: var(--accent-color--light);
 
       &:hover > svg,
       &:focus-visible > svg {
-        background-color: var(--accent-color--desaturated-dark);
+        background-color: rgba(var(--accent-color--dark-rgb), 0.6);
       }
     }
   }

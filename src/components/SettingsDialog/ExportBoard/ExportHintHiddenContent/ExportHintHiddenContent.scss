@@ -20,7 +20,7 @@ $list-style-type: "– ";
 .hint-hidden-columns__info-icon {
   width: $icon--large;
   height: $icon--large;
-  color: $color-warning-red;
+  color: $critical-carmine--light;
 }
 
 .hint-hidden-columns__info-text {
@@ -40,6 +40,6 @@ $list-style-type: "– ";
 [theme="dark"] {
   .hint-hidden-columns__info-text,
   .hint-hidden-columns__columns-list {
-    color: $color-white;
+    color: $gray--000;
   }
 }

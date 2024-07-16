@@ -1,15 +1,15 @@
 package database
 
 import (
-	"context"
-	"errors"
-	"scrumlr.io/server/identifiers"
-	"time"
+  "context"
+  "errors"
+  "scrumlr.io/server/identifiers"
+  "time"
 
-	"github.com/google/uuid"
-	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
+  "github.com/google/uuid"
+  "github.com/uptrace/bun"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/database/types"
 )
 
 type Board struct {

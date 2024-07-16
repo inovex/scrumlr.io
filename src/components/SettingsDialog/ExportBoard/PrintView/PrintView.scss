@@ -1,6 +1,6 @@
 @import "src/constants/style.scss";
 
-$color-button: $color-lean-lilac;
+$color-button: $purple--500;
 $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__container {
@@ -46,14 +46,14 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
     background: $color-button;
     box-shadow: 0 4px 7px 1px darken($color-button-shadow, 15%);
     svg {
-      color: $color-white;
+      color: $gray--000;
     }
   }
   &:active {
     background: darken($color-button, 10%);
     box-shadow: 0 4px 5px 1px darken($color-button-shadow, 25%);
     svg {
-      color: $color-white;
+      color: $gray--000;
     }
   }
 }
@@ -69,7 +69,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view {
-  background-color: $color-white;
+  background-color: $gray--000;
   overflow: visible;
   padding-top: 1cm;
   padding-right: 1cm;
@@ -108,7 +108,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 }
 
 .print-view__title-text {
-  color: $color-black;
+  color: $navy--900;
   font-size: 32px;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
@@ -139,8 +139,8 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__column {
   display: block;
   width: 100%;
-  background-color: $color-white;
-  color: $color-black;
+  background-color: $gray--000;
+  color: $navy--900;
 }
 
 .print-view__column-header-wrapper {
@@ -158,23 +158,23 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
-  color: $color-black;
-  border-bottom: solid 3px var(--accent-color);
+  color: $navy--900;
+  border-bottom: solid 3px var(--accent-color--light);
 }
 
 .print-view__column-header-card-count {
   margin: 0 $spacing--xs 0 0;
-  color: $color-middle-gray;
+  color: $gray--700;
   font-weight: bold;
 }
 
 .print-view__note-stack-wrapper {
   border-radius: $note__border-radius;
   padding: $spacing--xs $spacing--xs 0 $spacing--xs;
-  border: 2px solid rgba(var(--accent-color-rgb), 0.25);
+  border: 2px solid rgba(var(--accent-color--light-rgb), 0.25);
   width: 100%;
   margin-bottom: $spacing--base;
-  background: rgba(var(--accent-color-rgb), 0.05);
+  background: rgba(var(--accent-color--light-rgb), 0.05);
 }
 
 .print-view__note {
@@ -182,9 +182,9 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   width: 100%;
   margin-bottom: $spacing--base;
   padding: calc(#{$spacing--xs} + 4px);
-  border: 2px solid rgba(var(--accent-color-rgb), 0.25);
+  border: 2px solid rgba(var(--accent-color--light-rgb), 0.25);
   border-radius: $note__border-radius;
-  background: $color-white;
+  background: $gray--000;
 }
 @media print {
   .print-view__note {
@@ -195,7 +195,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__note--isChild {
   width: 100%;
   margin-bottom: $spacing--xs;
-  border: 2px dashed rgba(var(--accent-color-rgb), 0.25);
+  border: 2px dashed rgba(var(--accent-color--light-rgb), 0.25);
 }
 
 .print-view__note--isTop {
@@ -214,13 +214,13 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__note-info--isTop {
   svg {
-    color: var(--accent-color);
+    color: var(--accent-color--light);
   }
 }
 
 .print-view__note-info--isChild {
   svg {
-    color: rgba(var(--accent-color-rgb), 0.25);
+    color: rgba(var(--accent-color--light-rgb), 0.25);
   }
 }
 
@@ -231,7 +231,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   display: inline;
   width: auto;
   margin-top: auto;
-  color: $color-middle-gray;
+  color: $gray--700;
   font-weight: bold;
 }
 
@@ -240,8 +240,8 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   float: right;
   border-radius: $rounded--full;
   padding: 6px 11px;
-  background: rgba(var(--accent-color-rgb), 0.25);
-  color: var(--accent-color);
+  background: rgba(var(--accent-color--light-rgb), 0.25);
+  color: var(--accent-color--light);
   font-weight: bold;
 }
 

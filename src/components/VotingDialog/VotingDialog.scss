@@ -16,7 +16,7 @@
       top: 10px;
       border-width: 15px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-planning-pink;
+      border-color: transparent transparent transparent $pink--500;
     }
     .voting-dialog::after {
       content: " ";
@@ -25,13 +25,13 @@
       top: 15px;
       border-width: 10px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-white-one;
+      border-color: transparent transparent transparent $gray--100;
     }
   }
 
   [theme="dark"] {
     #portal .voting-dialog::after {
-      border-color: transparent transparent transparent $color-dark-mode;
+      border-color: transparent transparent transparent $navy--600;
     }
   }
 }
@@ -41,14 +41,14 @@
   border-radius: 8px;
   height: 48px;
   width: 80%;
-  background: $color-planning-pink;
+  background: $pink--500;
   cursor: pointer;
   transition: all 0.08s ease-out;
 
   &:hover {
     filter: brightness(1.05);
     transform: scale(1.01);
-    box-shadow: 0 4px 8px 0 rgba(var(--accent-color-rgb), 0.24);
+    box-shadow: 0 4px 8px 0 rgba(var(--accent-color--light-rgb), 0.24);
   }
 
   &:active {
@@ -56,14 +56,14 @@
   }
 
   &:focus-visible {
-    outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
+    outline: 2px solid rgba(var(--accent-color--light-rgb), 0.4);
   }
 }
 
 .voting-dialog__start-button > label {
   font-weight: bold;
   font-size: $text-size--medium;
-  color: $color-white;
+  color: $gray--000;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
 }
@@ -71,14 +71,14 @@
 .voting-dialog__vote-button {
   height: $icon--medium;
   width: $icon--medium;
-  border: 1px solid $color-planning-pink;
+  border: 1px solid $pink--500;
   border-radius: $rounded--full;
   background-color: transparent;
   cursor: pointer;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
-  color: $color-planning-pink;
+  color: $pink--500;
 
   > svg {
     height: 100%;
@@ -121,6 +121,6 @@
 
 [theme="dark"] {
   .voting-dialog__start-button:focus-visible {
-    outline: 2px solid $color-white;
+    outline: 2px solid $gray--000;
   }
 }

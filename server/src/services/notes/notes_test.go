@@ -202,6 +202,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		Board:    boardID,
 		Text:     &txt,
 		Position: &posUpdate,
+		Edited:   true,
 	}).Return(database.Note{}, nil)
 
 	_, err := s.Update(ctx, dto.NoteUpdateRequest{
@@ -209,6 +210,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		ID:       noteID,
 		Board:    boardID,
 		Position: &pos,
+		Edited:   true,
 	})
 	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())

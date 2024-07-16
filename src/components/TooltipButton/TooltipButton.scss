@@ -16,7 +16,7 @@ $tooltip-button-size: 46px;
   color: $color-black;
 
   &:focus-visible {
-    outline: 2px solid var(--accent-color, rgba($color-white, 0.5));
+    outline: 2px solid var(--accent-color, rgba($gray--000, 0.5));
   }
 
   &:disabled {
@@ -39,8 +39,8 @@ $tooltip-button-size: 46px;
   }
 
   .tooltip-button__icon {
-    background-color: $menu-icon-background-color--dark;
-    color: $color-white;
+    background-color: $navy--500;
+    color: $gray--000;
   }
 }
 
@@ -51,7 +51,7 @@ $tooltip-button-size: 46px;
   max-width: 0;
   height: $tooltip-button-size;
   border-radius: calc($tooltip-button-size / 2);
-  background-color: $tooltip-background-color--light;
+  background-color: $blue--100;
   opacity: 0;
   visibility: hidden;
   transition: opacity 150ms linear 500ms;
@@ -65,7 +65,7 @@ $tooltip-button-size: 46px;
     transform: translateX(-50%);
     border-width: 10px;
     border-style: solid;
-    border-color: $tooltip-background-color--light transparent transparent transparent;
+    border-color: $blue--100 transparent transparent transparent;
   }
 }
 
@@ -78,7 +78,7 @@ $tooltip-button-size: 46px;
   letter-spacing: $letter-spacing--medium;
   line-height: $line-height--small;
   border-radius: calc($tooltip-button-size / 2);
-  color: var(--accent-color);
+  color: var(--accent-color--light);
 }
 
 .tooltip-button__icon-container {
@@ -86,7 +86,7 @@ $tooltip-button-size: 46px;
   height: 100%;
   width: 100%;
   border-radius: $rounded--full;
-  background: $menu-icon-background-color--light;
+  background: $gray--000;
   transition: background-color 0.2s ease-out;
 }
 
@@ -98,7 +98,7 @@ $tooltip-button-size: 46px;
   width: $tooltip-button-size;
   height: $tooltip-button-size;
   border-radius: $tooltip-button-size;
-  color: var(--accent-color, $color-black);
+  color: var(--accent-color, $navy--900);
 
   &:nth-of-type(1) {
     visibility: visible;
@@ -110,7 +110,7 @@ $tooltip-button-size: 46px;
 }
 
 .tooltip-button__hotkey {
-  color: $color-dark-gray;
+  color: $gray--800;
 }
 
 @media #{$tablet} {
@@ -140,7 +140,7 @@ $tooltip-button-size: 46px;
       }
 
       .tooltip-button__icon {
-        border-color: var(--accent-color--desaturated-light, $tooltip-background-color--light);
+        border-color: var(--accent-color--desaturated-light, $blue--100);
         transition: border-color 0ms linear 0ms;
       }
 
@@ -150,11 +150,11 @@ $tooltip-button-size: 46px;
     }
 
     &:focus-visible .tooltip-button__icon {
-      outline: 2px solid rgba($color-black, 0.5);
+      outline: 2px solid rgba($navy--900, 0.5);
     }
 
     .tooltip-button__tooltip-text {
-      background: var(--accent-color--desaturated-light, $tooltip-background-color--light);
+      background: var(--accent-color--desaturated-light, $blue--100);
       height: $tooltip-button-size;
       line-height: $tooltip-button-size;
       width: max-content;
@@ -223,7 +223,7 @@ $tooltip-button-size: 46px;
       }
 
       .tooltip-button__icon-container {
-        background-color: $menu-icon-background-color--dark;
+        background-color: $navy--500;
       }
     }
   }
@@ -265,36 +265,36 @@ $tooltip-button-size: 46px;
     &:hover {
       .tooltip-button__icon {
         background: none;
-        border-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
+        border-color: var(--accent-color--desaturated-dark, $navy--300);
       }
     }
 
     &:focus-visible .tooltip-button__icon {
-      outline: 2px solid rgba($color-white, 0.5);
+      outline: 2px solid rgba($gray--000, 0.5);
     }
 
     &--active {
       .tooltip-button__icon-container {
-        background-color: $menu-icon-background-color--light;
+        background-color: $gray--000;
       }
     }
   }
 
   .tooltip-button__icon-container {
-    background: $menu-icon-background-color--dark;
+    background: $navy--500;
   }
 
   .tooltip-button__icon {
-    color: var(--accent-color--dark, $color-white);
+    color: var(--accent-color--dark, $gray--000);
   }
 
   .tooltip-button__tooltip-text {
-    background-color: var(--accent-color--desaturated-dark, $tooltip-background-color--dark);
-    color: var(--accent-color--dark, $color-white);
+    background-color: var(--accent-color--desaturated-dark, $navy--300);
+    color: var(--accent-color--dark, $gray--000);
   }
 
   .tooltip-button--active .tooltip-button__icon {
-    background-color: $menu-icon-background-color--light;
-    color: $color-black;
+    background-color: $gray--000;
+    color: $navy--900;
   }
 }

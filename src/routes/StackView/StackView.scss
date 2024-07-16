@@ -7,7 +7,7 @@ $stack-view__min-height: 82px;
 .stack-view__portal {
   background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px) brightness(0.76) saturate(0);
-  background: rgba(var(--accent-color-rgb), 0.42);
+  background: rgba(var(--accent-color--light-rgb), 0.42);
   transition: all 0.2s ease-in-out;
 }
 
@@ -27,11 +27,11 @@ $stack-view__min-height: 82px;
   left: 0;
   pointer-events: none;
   background: transparent;
-  box-shadow: inset 0 0 0 $column__border-width var(--accent-color);
+  box-shadow: inset 0 0 0 $column__border-width var(--accent-color--light);
 }
 
 .stack-view__border--moderating {
-  box-shadow: inset 0 0 0 $column__border-width $color-goal-green;
+  box-shadow: inset 0 0 0 $column__border-width $victory-verde--light;
 }
 
 .stack-view__content {
@@ -60,7 +60,7 @@ $stack-view__min-height: 82px;
   margin: $spacing--base;
   cursor: pointer;
   width: 42px;
-  color: $color-white;
+  color: $gray--000;
   transition: all 0.08s ease-out;
 
   > svg {
@@ -77,7 +77,7 @@ $stack-view__min-height: 82px;
   }
 
   &:focus-visible {
-    color: var(--accent-color);
+    color: var(--accent-color--light);
   }
 }
 
@@ -104,7 +104,7 @@ $stack-view__min-height: 82px;
   .stack-view__portal {
     backdrop-filter: blur(10px) brightness(0.24) saturate(0);
     box-shadow: inset 0 0 0 $column__border-width var(--accent-color--dark);
-    background: rgba(var(--accent-color-rgb), 0.1);
+    background: rgba(var(--accent-color--light-rgb), 0.1);
   }
 
   .stack-view__border {
@@ -112,6 +112,6 @@ $stack-view__min-height: 82px;
   }
 
   .stack-view__border--moderating {
-    box-shadow: inset 0 0 0 $column__border-width $color-goal-green;
+    box-shadow: inset 0 0 0 $column__border-width $victory-verde--light;
   }
 }
