@@ -13,14 +13,14 @@ $tooltip-button-size: 46px;
   cursor: pointer;
   pointer-events: auto;
   box-sizing: border-box;
-  color: $color-black;
+  color: $navy--900;
 
   &:focus-visible {
     outline: 2px solid var(--accent-color, rgba($gray--000, 0.5));
   }
 
   &:disabled {
-    color: $color-dark-gray;
+    color: $gray--800;
     cursor: not-allowed;
   }
 }

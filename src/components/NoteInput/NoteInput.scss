@@ -28,7 +28,7 @@ $note-input__input-right: 40px;
 .note-input__lock-icon {
   width: $icon--large;
   height: $icon--large;
-  color: $color-dark-gray;
+  color: $gray--800;
 }
 
 .note-input__input {
@@ -75,7 +75,7 @@ $note-input__input-right: 40px;
   color: var(--accent-color);
 
   &:disabled {
-    color: $color-dark-gray;
+    color: $gray--800;
     cursor: default;
   }
 }
@@ -147,7 +147,7 @@ $note-input__input-right: 40px;
 
     &:not(:has(.note-input__input:disabled)):hover,
     &:not(:has(.note-input__input:disabled)):focus-within {
-      box-shadow: 0 6px 9px 0 $color-darkest-gray;
+      box-shadow: 0 6px 9px 0 $navy--700;
     }
   }
 
