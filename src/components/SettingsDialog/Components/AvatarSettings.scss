@@ -24,7 +24,7 @@
       border: 0;
       border-radius: 20px;
       background-color: $gray--000;
-      box-shadow: 0 8px 16px rgba(var(--accent-color-rgb), 0.3);
+      box-shadow: 0 8px 16px rgba(var(--accent-color--light-rgb), 0.3);
       align-items: center;
       justify-content: center;
       transition: all 0.08s ease-out;
@@ -32,7 +32,7 @@
       &:hover {
         background-color: mix($gray--000, $purple--500, 92%);
         transform: scale(1.06);
-        box-shadow: 0 12px 20px rgba(var(--accent-color-rgb), 0.2);
+        box-shadow: 0 12px 20px rgba(var(--accent-color--light-rgb), 0.2);
       }
 
       &:active {
@@ -72,7 +72,7 @@
         cursor: pointer;
 
         &:hover {
-          background-color: rgba(var(--accent-color-rgb), 0.1);
+          background-color: rgba(var(--accent-color--light-rgb), 0.1);
         }
       }
 
@@ -90,7 +90,7 @@
         }
 
         &:hover:not(.disabled) {
-          background-color: rgba(var(--accent-color-rgb), 0.1);
+          background-color: rgba(var(--accent-color--light-rgb), 0.1);
         }
 
         &-seperator {

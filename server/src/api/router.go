@@ -36,7 +36,9 @@ type Server struct {
 	health         services.Health
 	feedback       services.Feedback
 	boardReactions services.BoardReactions
+	boardTemplates services.BoardTemplates
 	customMetrics  services.CustomMetrics
+  
 
 	upgrader websocket.Upgrader
 
@@ -58,6 +60,7 @@ func New(
 	health services.Health,
 	feedback services.Feedback,
 	boardReactions services.BoardReactions,
+	boardTemplates services.BoardTemplates,
 	customMetrics services.CustomMetrics,
 	verbose bool,
 	checkOrigin bool,
@@ -102,6 +105,7 @@ func New(
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
+		boardTemplates:                   boardTemplates,
 		customMetrics:                    customMetrics,
 	}
 
@@ -158,9 +162,18 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Verifier())
 		r.Use(jwtauth.Authenticator)
 		r.Use(auth.AuthContext)
+
+		r.With(s.BoardTemplateRateLimiter).Post("/templates", s.createBoardTemplate)
+		r.With(s.BoardTemplateRateLimiter).Get("/templates", s.getBoardTemplates)
+		r.Route("/templates/{id}", func(r chi.Router) {
+			r.Use(s.BoardTemplateRateLimiter)
+			r.With(s.BoardTemplateContext).Get("/", s.getBoardTemplate)
+			r.With(s.BoardTemplateContext).Put("/", s.updateBoardTemplate)
+			r.With(s.BoardTemplateContext).Delete("/", s.deleteBoardTemplate)
+		})
+
 		r.Post("/boards", s.createBoard)
 		r.Get("/boards", s.getBoards)
-
 		r.Route("/boards/{id}", func(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/", s.getBoard)
 			r.With(s.BoardParticipantContext).Get("/export", s.exportBoard)

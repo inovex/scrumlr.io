@@ -43,5 +43,5 @@ $header-menu-toggle-background-color: #c8c8c8;
 }
 .settings-toggle__switch--right::after {
   left: $header-menu-toggle-button-width;
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
 }

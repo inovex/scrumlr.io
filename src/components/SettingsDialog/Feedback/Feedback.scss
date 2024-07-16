@@ -36,18 +36,18 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   position: relative;
   top: -19px;
   &:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
   }
 }
 .feedback-option__input:checked + .feedback-option__label {
   color: $gray--000;
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
 }
 [theme="dark"] .settings-dialog__feedback-option > label {
   color: $gray--000;
   background-color: $navy--500;
   &:hover {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
   }
 }
 
@@ -61,7 +61,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
 .feedback-form__submit-button {
   padding: $spacing--xs $spacing--lg;
   border-radius: 32px;
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
   color: $gray--000;
   border: none;
   width: 260px;
@@ -72,7 +72,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
     transform: scale(0.95);
   }
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.8);
+    background-color: rgba(var(--accent-color--light-rgb), 0.8);
   }
 }
 
