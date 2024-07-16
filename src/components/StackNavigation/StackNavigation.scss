@@ -46,7 +46,7 @@
     }
 
     &:focus-visible {
-      background: var(--accent-color);
+      background: var(--accent-color--light);
       color: $gray--000;
     }
 

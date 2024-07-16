@@ -17,8 +17,8 @@ $note-input__input-right: 40px;
 
   &:hover,
   &:focus-within {
-    border-color: rgba(var(--accent-color-rgb), 0.5);
-    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.16);
+    border-color: rgba(var(--accent-color--light-rgb), 0.5);
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color--light-rgb), 0.16);
   }
 }
 
@@ -65,7 +65,7 @@ $note-input__input-right: 40px;
 .note-input__icon--add {
   width: $icon--large;
   height: $icon--large;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   align-self: center;
   transition: all 0.08s ease-out;
 }
@@ -81,7 +81,7 @@ $note-input__input-right: 40px;
 
 .note-input__icon--star {
   position: absolute;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   animation: sparkle 1.5s ease-in-out infinite alternate;
 
   &.star-1 {
@@ -124,7 +124,7 @@ $note-input__input-right: 40px;
 
 [theme="dark"] {
   .note-input {
-    background-color: $navy--500;
+    background-color: $navy--400;
 
     &:hover,
     &:focus-within {
@@ -137,7 +137,7 @@ $note-input__input-right: 40px;
   }
 
   .note-input__emoji-suggestions {
-    background-color: $navy--500;
+    background-color: $navy--400;
     box-shadow: $box-shadow--dark;
   }
 }
