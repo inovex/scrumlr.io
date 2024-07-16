@@ -20,12 +20,12 @@
 
     &:focus-visible {
       position: relative;
-      outline: 2px solid rgba(var(--accent-color-rgb), 0.3);
+      outline: 2px solid rgba(var(--accent-color--light-rgb), 0.3);
       z-index: 1;
     }
 
     &:hover {
-      background-color: rgba(var(--accent-color-rgb), 0.1);
+      background-color: rgba(var(--accent-color--light-rgb), 0.1);
     }
 
     &[aria-expanded="true"] .settings-dropdown__item-icon--dropdown {
@@ -68,7 +68,7 @@
     padding: 0;
     background-color: $gray--000;
     border-radius: 0 0 8px 8px;
-    box-shadow: 0 4px 8px 0 rgba(var(--accent-color-rgb), 0.4);
+    box-shadow: 0 4px 8px 0 rgba(var(--accent-color--light-rgb), 0.4);
 
     &:not(.active) {
       display: none;
@@ -87,7 +87,7 @@
       }
 
       &:focus-visible {
-        outline: 2px solid rgba(var(--accent-color-rgb), 0.6);
+        outline: 2px solid rgba(var(--accent-color--light-rgb), 0.6);
       }
     }
 

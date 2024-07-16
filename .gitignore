@@ -12,6 +12,7 @@ yarn-error.log*
 
 # testing
 /coverage
+server/src/coverage.txt
 
 # builds
 build

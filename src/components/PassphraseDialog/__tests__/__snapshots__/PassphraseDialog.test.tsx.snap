@@ -27,35 +27,11 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
             y2="0"
           >
             <stop
-              class="accent-color--blue scrumlr-logo__stop"
+              class="scrumlr-logo__stop accent-color__backlog-blue"
               offset="0"
             />
             <stop
-              class="accent-color--blue scrumlr-logo__stop"
-              offset="0.25"
-            />
-            <stop
-              class="accent-color--purple scrumlr-logo__stop"
-              offset="0.25"
-            />
-            <stop
-              class="accent-color--purple scrumlr-logo__stop"
-              offset="0.5"
-            />
-            <stop
-              class="accent-color--lilac scrumlr-logo__stop"
-              offset="0.5"
-            />
-            <stop
-              class="accent-color--lilac scrumlr-logo__stop"
-              offset="0.75"
-            />
-            <stop
-              class="accent-color--pink scrumlr-logo__stop"
-              offset="0.75"
-            />
-            <stop
-              class="accent-color--pink scrumlr-logo__stop"
+              class="scrumlr-logo__stop accent-color__backlog-blue"
               offset="1"
             />
           </lineargradient>
