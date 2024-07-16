@@ -3,15 +3,16 @@ import QRCode from "qrcode.react";
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import {useAppSelector} from "store";
+import {useAutoTheme} from "utils/hooks/useAutoTheme";
 import "./ShareSession.scss";
 
 export const ShareSession = () => {
   const {t} = useTranslation();
   const boardId = useAppSelector((state) => state.board.data?.id);
+  const theme = useAppSelector((state) => state.view.theme);
+  const autoTheme = useAutoTheme(theme);
 
   const [urlInClipBoard, setUrlInClipBoard] = useState(false);
-
-  const isUsingDarkTheme = document.documentElement.getAttribute("theme") === "dark";
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(`${window.location.origin}/board/${boardId}`);
@@ -30,8 +31,8 @@ export const ShareSession = () => {
             value={`${window.location.origin}/board/${boardId}`}
             renderAs="canvas"
             size={1024}
-            fgColor={isUsingDarkTheme ? "#ffffff" : "#232323"}
-            bgColor={isUsingDarkTheme ? "#232323" : "#ffffff"}
+            fgColor={autoTheme === "dark" ? "#ffffff" : "#232323"}
+            bgColor={autoTheme === "dark" ? "#232323" : "#ffffff"}
             className="share-qr-code-option__qrcode"
           />
         </div>
