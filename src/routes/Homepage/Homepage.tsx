@@ -3,7 +3,7 @@ import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
-import {ArrowRight,Logout} from "components/Icon";
+import {ArrowRight, Logout} from "components/Icon";
 import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
@@ -46,7 +46,7 @@ export const Homepage = withTranslation()(() => {
     <div className="homepage">
       <div className="homepage__hero">
         <header className="homepage__header">
-          <ScrumlrLogo className="homepage__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+          <ScrumlrLogo className="homepage__logo" />
 
           <ul className="homepage__settings">
             <li>
