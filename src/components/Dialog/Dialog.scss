@@ -70,10 +70,10 @@
   border-radius: $rounded--full;
 
   &:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
   }
   &:focus-visible {
-    border: 2px solid var(--accent-color);
+    border: 2px solid var(--accent-color--light);
     outline: none;
   }
 }
@@ -98,11 +98,11 @@
   outline: none;
 
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.1);
+    background-color: rgba(var(--accent-color--light-rgb), 0.1);
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 1);
+    box-shadow: 0 0 0 2px rgba(var(--accent-color--light-rgb), 1);
   }
 
   > label:first-of-type {
@@ -124,6 +124,6 @@
     color: $gray--000;
   }
   .dialog__close-button:hover {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
   }
 }

@@ -159,7 +159,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
   color: $navy--900;
-  border-bottom: solid 3px var(--accent-color);
+  border-bottom: solid 3px var(--accent-color--light);
 }
 
 .print-view__column-header-card-count {
@@ -171,10 +171,10 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__note-stack-wrapper {
   border-radius: $note__border-radius;
   padding: $spacing--xs $spacing--xs 0 $spacing--xs;
-  border: 2px solid rgba(var(--accent-color-rgb), 0.25);
+  border: 2px solid rgba(var(--accent-color--light-rgb), 0.25);
   width: 100%;
   margin-bottom: $spacing--base;
-  background: rgba(var(--accent-color-rgb), 0.05);
+  background: rgba(var(--accent-color--light-rgb), 0.05);
 }
 
 .print-view__note {
@@ -182,7 +182,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   width: 100%;
   margin-bottom: $spacing--base;
   padding: calc(#{$spacing--xs} + 4px);
-  border: 2px solid rgba(var(--accent-color-rgb), 0.25);
+  border: 2px solid rgba(var(--accent-color--light-rgb), 0.25);
   border-radius: $note__border-radius;
   background: $gray--000;
 }
@@ -195,7 +195,7 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 .print-view__note--isChild {
   width: 100%;
   margin-bottom: $spacing--xs;
-  border: 2px dashed rgba(var(--accent-color-rgb), 0.25);
+  border: 2px dashed rgba(var(--accent-color--light-rgb), 0.25);
 }
 
 .print-view__note--isTop {
@@ -214,13 +214,13 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
 
 .print-view__note-info--isTop {
   svg {
-    color: var(--accent-color);
+    color: var(--accent-color--light);
   }
 }
 
 .print-view__note-info--isChild {
   svg {
-    color: rgba(var(--accent-color-rgb), 0.25);
+    color: rgba(var(--accent-color--light-rgb), 0.25);
   }
 }
 
@@ -240,8 +240,8 @@ $color-button-shadow: rgba(133, 144, 147, 0.5);
   float: right;
   border-radius: $rounded--full;
   padding: 6px 11px;
-  background: rgba(var(--accent-color-rgb), 0.25);
-  color: var(--accent-color);
+  background: rgba(var(--accent-color--light-rgb), 0.25);
+  color: var(--accent-color--light);
   font-weight: bold;
 }
 

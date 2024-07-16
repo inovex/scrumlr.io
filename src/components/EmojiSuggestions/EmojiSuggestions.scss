@@ -21,7 +21,7 @@
 
   &__element:hover,
   .emoji-suggestions__element--focus {
-    background-color: rgba(var(--accent-color-rgb), 0.2);
+    background-color: rgba(var(--accent-color--light-rgb), 0.2);
   }
 
   &__emoji {
