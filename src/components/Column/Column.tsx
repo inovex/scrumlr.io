@@ -3,10 +3,10 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteInput} from "components/NoteInput";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
+import {Tooltip} from "react-tooltip";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {Close, MarkAsDone, Hidden} from "components/Icon";
-import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
+import {Close, MarkAsDone, Hidden, ThreeDots} from "components/Icon";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
@@ -94,6 +94,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
         {!visible && <Hidden className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
         <h2
+          id={`column-${id}`}
           onDoubleClick={() => {
             if (isModerator) {
               setColumnNameMode("EDIT");
@@ -103,6 +104,9 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         >
           {name}
         </h2>
+        <Tooltip className="column__tooltip" anchorSelect={`#column-${id}`}>
+          {name}
+        </Tooltip>
       </div>
     ) : (
       <input
@@ -163,7 +167,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       )}
       {!isTemporary && (
         <button title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
-          {openedColumnSettings ? <Close className="column__header-edit-button-icon" /> : <DotsIcon className="column__header-edit-button-icon" />}
+          {openedColumnSettings ? <Close className="column__header-edit-button-icon" /> : <ThreeDots className="column__header-edit-button-icon" />}
         </button>
       )}
     </>

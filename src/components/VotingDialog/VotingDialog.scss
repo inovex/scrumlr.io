@@ -16,7 +16,7 @@
       top: 10px;
       border-width: 15px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-planning-pink;
+      border-color: transparent transparent transparent $pink--500;
     }
     .voting-dialog::after {
       content: " ";
@@ -25,13 +25,13 @@
       top: 15px;
       border-width: 10px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-white-one;
+      border-color: transparent transparent transparent $gray--100;
     }
   }
 
   [theme="dark"] {
     #portal .voting-dialog::after {
-      border-color: transparent transparent transparent $color-dark-mode;
+      border-color: transparent transparent transparent $navy--600;
     }
   }
 }
@@ -41,7 +41,7 @@
   border-radius: 8px;
   height: 48px;
   width: 80%;
-  background: $color-planning-pink;
+  background: $pink--500;
   cursor: pointer;
   transition: all 0.08s ease-out;
 
@@ -63,36 +63,26 @@
 .voting-dialog__start-button > label {
   font-weight: bold;
   font-size: $text-size--medium;
-  color: $color-white;
+  color: $gray--000;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
 }
 
-.voting-dialog__toggle {
-  position: absolute;
-  top: 12px;
-  right: 24px;
-}
-
 .voting-dialog__vote-button {
-  height: 32px;
-  width: 32px;
-  border: none;
-  border-radius: 16px;
+  height: $icon--medium;
+  width: $icon--medium;
+  border: 1px solid $pink--500;
+  border-radius: $rounded--full;
   background-color: transparent;
   cursor: pointer;
-  position: absolute;
-  top: 8px;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
+  color: $pink--500;
 
-  &:first-of-type {
-    right: 80px;
-  }
-
-  &:last-of-type {
-    right: 24px;
+  > svg {
+    height: 100%;
+    width: 100%;
   }
 
   &:hover {
@@ -110,22 +100,27 @@
 }
 
 .voting-dialog__vote-label {
-  position: absolute;
-  top: 8px;
-  right: 56px;
-  height: 32px;
-  width: 24px;
   text-align: center;
-  line-height: 32px;
+  line-height: normal;
   font-size: $text-size--medium;
-  cursor: col-resize;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webit-user-select: none;
+  width: 20px;
+}
+[theme="dark"] .voting-dialog__vote-label {
+  color: white;
+}
+
+.voting-dialog__votes-controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing--xs;
+}
+
+.dialog__button > label {
+  text-align: left;
 }
 
 [theme="dark"] {
   .voting-dialog__start-button:focus-visible {
-    outline: 2px solid $color-white;
+    outline: 2px solid $gray--000;
   }
 }

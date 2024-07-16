@@ -14,7 +14,7 @@ body,
   width: 100%;
   box-sizing: border-box;
 
-  background: $color-white;
+  background: $gray--000;
 }
 *,
 *:before,
@@ -42,10 +42,10 @@ code {
 [theme="dark"] {
   body,
   #root {
-    background: $color-dark-mode;
+    background: $navy--600;
   }
 }
 
 html[theme="dark"] {
-  background: $color-dark-mode;
+  background: $navy--600;
 }

@@ -7,8 +7,8 @@
   left: 0;
   box-sizing: border-box;
   position: fixed;
-  border: 3px solid $color-planning-pink;
-  background: $color-white-one;
+  border: 3px solid $pink--500;
+  background: $gray--100;
   box-shadow:
     2.8px 2.8px 2.2px rgba(0, 0, 0, 0.02),
     6.7px 6.7px 5.3px rgba(0, 0, 0, 0.028),
@@ -18,7 +18,7 @@
     100px 100px 80px rgba(0, 0, 0, 0.07);
 }
 [theme="dark"] .dialog {
-  background: $color-dark-two;
+  background: $navy--600;
 }
 
 @media #{$tablet} {
@@ -43,13 +43,13 @@
 }
 
 .dialog__header-text {
-  border-bottom: solid 3px $color-planning-pink;
+  border-bottom: solid 3px $pink--500;
   padding-bottom: 8px;
   margin: 0;
 }
 [theme="dark"] {
   .dialog__header-text {
-    color: $color-white;
+    color: $gray--000;
   }
 }
 
@@ -57,7 +57,7 @@
   position: absolute;
   top: 2px; // some space for the focus border
   right: 2px;
-  color: $color-planning-pink;
+  color: $pink--500;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,12 +84,15 @@
 }
 
 .dialog__button {
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
   border: none;
   border-radius: 8px;
   height: 48px;
   width: 100%;
-  background: $color-white;
+  background: $gray--000;
   cursor: pointer;
   transition: all 0.08s ease-out;
   outline: none;
@@ -104,24 +107,21 @@
 
   > label:first-of-type {
     font-size: $text-size--medium;
-    color: $color-black;
+    color: $navy--900;
     letter-spacing: $letter-spacing--medium;
-    position: absolute;
-    left: 24px;
-    top: 16px;
     cursor: pointer;
   }
 }
 
 [theme="dark"] {
   .dialog__button {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
   }
   .dialog__button:hover {
-    background-color: $color-dark-mode-note--hover;
+    background-color: $navy--400;
   }
   .dialog__button > label {
-    color: $color-white;
+    color: $gray--000;
   }
   .dialog__close-button:hover {
     background-color: var(--accent-color--desaturated-dark);

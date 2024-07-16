@@ -5,36 +5,32 @@
   gap: 8px;
 }
 
-.login-providers__icon {
-  color: $color-darkest-gray;
-}
-
-.login-providers__icon path {
-  fill: $color-darkest-gray;
-}
-
 .login-providers__button:first-child {
   flex: 1 1 auto;
 }
 
 .login-providers__button:not(:first-child) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
   min-width: auto;
-  background: $color-lighter-gray;
+  padding: 0;
+  background: $gray--300;
+  border-radius: $rounded--full;
 }
 .login-providers__button:not(:first-child) > span {
   display: none;
 }
 
-.login-providers__button:first-child .login-providers__icon {
-  color: $color-white;
-}
-
-.login-providers__button:first-child .login-providers__icon path {
-  fill: $color-white;
+.login-providers__icon {
+  height: $icon--medium;
+  width: $icon--medium;
+  flex: 0 0 $icon--medium;
 }
 
 [theme="dark"] {
   .login-providers__button:not(:first-child) {
-    background: $color-middle-gray;
+    background: $gray--700;
   }
 }

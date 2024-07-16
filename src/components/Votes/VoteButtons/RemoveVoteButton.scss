@@ -5,6 +5,9 @@
   position: relative;
   height: 32px;
   width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
   background-color: var(--accent-color--desaturated-light);
   color: var(--accent-color);
@@ -26,7 +29,7 @@
 
 .vote-button-remove:enabled:hover {
   background-color: var(--accent-color);
-  color: $color-white;
+  color: $gray--000;
   .vote-button-remove__count {
     display: none;
   }
@@ -43,6 +46,8 @@
 }
 
 .vote-button-remove__icon {
+  height: $icon--medium;
+  width: $icon--medium;
   display: none;
 }
 
@@ -70,13 +75,13 @@
   right: 0;
   border-width: 0;
   border-style: solid;
-  background: rgba($color-middle-gray, 0.5);
+  background: rgba($gray--700, 0.5);
   box-shadow:
-    2px -2px 0px $color-white,
-    0 1px 1px rgba($color-black, 0.1),
-    -1px 1px 1px rgba($color-black, 0.1);
+    2px -2px 0px $gray--000,
+    0 1px 1px rgba($navy--900, 0.1),
+    -1px 1px 1px rgba($navy--900, 0.1);
   border-radius: 0 0 0 16px;
-  border-color: $color-white $color-white transparent transparent;
+  border-color: $gray--000 $gray--000 transparent transparent;
   transition: border-width 0.15s ease-in-out;
 }
 
@@ -88,14 +93,14 @@
   .vote-button-remove {
     color: var(--accent-color--dark);
     background-color: var(--accent-color--desaturated-dark);
-    filter: drop-shadow(0 3px 4px rgba($color-black, 0.16));
+    filter: drop-shadow(0 3px 4px rgba($navy--900, 0.16));
   }
 
   .vote-button-remove__folded-corner {
     box-shadow:
-      2px -2px 0px $color-dark-mode-note,
-      0 1px 1px rgba($color-black, 0.1),
-      -1px 1px 1px rgba($color-black, 0.1);
-    border-color: $color-dark-mode-note $color-dark-mode-note transparent transparent;
+      2px -2px 0px $navy--500,
+      0 1px 1px rgba($navy--900, 0.1),
+      -1px 1px 1px rgba($navy--900, 0.1);
+    border-color: $navy--500 $navy--500 transparent transparent;
   }
 }

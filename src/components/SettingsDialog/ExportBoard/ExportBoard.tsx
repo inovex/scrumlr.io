@@ -1,7 +1,6 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {FileCsv, FileJson, Duplicate} from "components/Icon";
-import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
+import {FileCsv, FileJson, Duplicate, Printer} from "components/Icon";
 import {useAppSelector} from "store";
 import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
@@ -46,7 +45,7 @@ export const ExportBoard = () => {
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.openPrintView")}
-          icon={PrintIcon}
+          icon={Printer}
           className="export-board__button-reverse-order export-board__button-print-view"
           onClick={() => {
             window.open(`/board/${boardId}/print`, "_blank");

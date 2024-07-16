@@ -1,6 +1,4 @@
-import {ReactComponent as UnbanIcon} from "assets/icon-join.svg";
-import {ReactComponent as BanIcon} from "assets/icon-kick-participant.svg";
-import {Search, Wifi, MarkAsDone} from "components/Icon";
+import {Join, Kick, Search, Wifi, MarkAsDone} from "components/Icon";
 import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
@@ -62,7 +60,7 @@ export const Participants = () => {
   };
 
   return (
-    <section className="settings-dialog__container accent-color__poker-purple">
+    <section className="settings-dialog__container accent-color__value-violet">
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("Participants.Title")}</h2>
       </header>
@@ -156,7 +154,7 @@ export const Participants = () => {
                       className="participant__join-icon"
                       onClick={() => banParticipant(participant, false)}
                     >
-                      <UnbanIcon />
+                      <Join />
                     </button>
                   ) : (
                     <button
@@ -165,7 +163,7 @@ export const Participants = () => {
                       className="participant__kick-icon"
                       onClick={() => banParticipant(participant, true)}
                     >
-                      <BanIcon />
+                      <Kick />
                     </button>
                   ))}
               </li>
@@ -189,7 +187,7 @@ export const Participants = () => {
           title={t(selectedParticipant.banned ? "ConfirmationDialog.banParticipant" : "ConfirmationDialog.unbanParticipant", {user: selectedParticipant.participant.user.name})}
           onAccept={() => confirmBan(selectedParticipant.participant, selectedParticipant.banned)} // assertion: selectedParticipant is set
           onDecline={() => resetBanProcess()}
-          icon={BanIcon}
+          icon={Kick}
           className="participants__ban-dialog"
         />
       )}

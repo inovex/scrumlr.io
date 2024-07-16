@@ -23,7 +23,7 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.48);
+    box-shadow: 0 0 0 2px rgba($blue--500, 0.48);
   }
 
   &:hover {
@@ -48,13 +48,13 @@
   height: $icon--extralarge;
   width: $icon--extralarge;
   border-radius: $rounded--full;
-  background-color: $menu-icon-background-color--dark;
+  background-color: $navy--500;
   padding: 2px;
-  color: $color-white;
+  color: $gray--000;
   font-weight: 700;
 
   &__readiness {
-    color: $color-progress-circle;
+    color: $blue--400;
     border-radius: $rounded--full;
 
     circle {
@@ -74,7 +74,7 @@
   }
 
   &__all-ready {
-    color: $color-white;
+    color: $gray--000;
     width: 100%;
     height: 100%;
 
@@ -102,13 +102,13 @@
 
 [theme="dark"] {
   .rest-users {
-    background-color: $color-icon-light-blue;
-    color: $color-dark-two;
+    background-color: $blue--200;
+    color: $navy--600;
   }
 
   .board-users__button {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
     }
   }
 }

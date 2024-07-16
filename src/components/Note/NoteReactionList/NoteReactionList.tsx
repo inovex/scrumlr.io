@@ -1,5 +1,4 @@
 import {useDispatch} from "react-redux";
-import {ReactComponent as IconEmoji} from "assets/icon-emoji.svg";
 import {AddEmoji} from "components/Icon";
 import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -37,14 +36,12 @@ const CONDENSED_VIEW_WIDTH_LIMIT = 330; // pixels
 
 export const NoteReactionList = (props: NoteReactionListProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
-
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
     // get the participant who issued that reaction
@@ -130,19 +127,6 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [rootRef]);
 
-  // clicking the button toggles the bar
-  useEffect(() => {
-    const handleClickButton = (e: MouseEvent) => {
-      if (buttonRef.current?.contains(e.target as Node) && !listRef.current?.contains(e.target as Node)) {
-        // click is on button (or the icon inside to be precise) -> toggle bar
-        setShowReactionBar((show) => !show);
-      }
-    };
-
-    document.addEventListener("click", handleClickButton, true);
-    return () => document.removeEventListener("click", handleClickButton, true);
-  }, [buttonRef, listRef]);
-
   const addReaction = (noteId: string, reactionType: ReactionType) => {
     dispatch(Actions.addReaction(noteId, reactionType));
   };
@@ -199,9 +183,12 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     <div className="note-reaction-list__root" ref={rootRef}>
       <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
         <button
-          ref={buttonRef}
           className="note-reaction-list__add-reaction-sticker-container"
           aria-label={t("NoteReactionList.toggleBarLabel")}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowReactionBar((show) => !show);
+          }}
           onKeyDown={(e) => {
             if (e.code === "Enter" || e.code === "Space") {
               // Stop the default, because it will dispatch a click event on
@@ -215,7 +202,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
             }
           }}
         >
-          {showReactionBar ? <AddEmoji className="note-reaction-list__add-reaction-sticker" /> : <IconEmoji className="note-reaction-list__add-reaction-sticker" />}
+          <AddEmoji className="note-reaction-list__add-reaction-sticker" />
         </button>
         {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
       </div>

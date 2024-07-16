@@ -4,7 +4,7 @@ $header-menu__item-height: 48px;
 .board-option-link {
   display: block;
   width: 100%;
-  background: $color-white;
+  background: $gray--000;
   text-decoration: none;
   outline: none;
   height: $header-menu__item-height;
@@ -14,20 +14,20 @@ $header-menu__item-height: 48px;
   }
 
   &:focus-visible {
-    background-color: $color-white-two;
+    background-color: $gray--200;
   }
 }
 
 [theme="dark"] {
   .board-option-link {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
 
     &:hover {
       filter: $brighten--slightly;
     }
 
     &:focus-visible {
-      background-color: $color-dark-mode-note--hover;
+      background-color: $navy--400;
     }
   }
 }
@@ -36,10 +36,10 @@ $header-menu__item-height: 48px;
   margin: 0;
   text-align: center;
   line-height: $header-menu__item-height;
-  color: $color-backlog-blue;
+  color: $blue--500;
   font-weight: 600;
 }
 
 [theme="dark"] .board-option-link__label {
-  color: $color-planning-pink;
+  color: $pink--500;
 }

@@ -8,13 +8,13 @@ import (
 type Color string
 
 const (
-	ColorBacklogBlue   Color = "backlog-blue"
-	ColorGroomingGreen Color = "grooming-green"
-	ColorLeanLilac     Color = "lean-lilac"
-	ColorOnlineOrange  Color = "online-orange"
-	ColorPlanningPink  Color = "planning-pink"
-	ColorPokerPurple   Color = "poker-purple"
-	ColorRetroRed      Color = "retro-red"
+	ColorBacklogBlue    Color = "backlog-blue"
+	ColorGoalGreen      Color = "goal-green"
+	ColorValueViolet    Color = "value-violet"
+	ColorOnlineOrange   Color = "online-orange"
+	ColorPlanningPink   Color = "planning-pink"
+	ColorPokerPurple    Color = "poker-purple"
+	ColorYieldingYellow Color = "yielding-yellow"
 )
 
 func (color *Color) UnmarshalJSON(b []byte) error {
@@ -25,7 +25,7 @@ func (color *Color) UnmarshalJSON(b []byte) error {
 	}
 	unmarshalledColor := Color(s)
 	switch unmarshalledColor {
-	case ColorBacklogBlue, ColorGroomingGreen, ColorLeanLilac, ColorOnlineOrange, ColorPlanningPink, ColorPokerPurple, ColorRetroRed:
+	case ColorBacklogBlue, ColorGoalGreen, ColorValueViolet, ColorOnlineOrange, ColorPlanningPink, ColorPokerPurple, ColorYieldingYellow:
 		*color = unmarshalledColor
 		return nil
 	}
