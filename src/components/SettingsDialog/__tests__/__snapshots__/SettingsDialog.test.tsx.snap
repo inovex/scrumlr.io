@@ -119,7 +119,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     </div>
                   </a>
                   <a
-                    class="navigation__item accent-color__poker-purple"
+                    class="navigation__item accent-color__value-violet"
                     href="/participants"
                   >
                     <svg
@@ -143,7 +143,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     </div>
                   </a>
                   <a
-                    class="navigation__item accent-color__value-violet"
+                    class="navigation__item accent-color__poker-purple"
                     href="/appearance"
                   >
                     <svg
@@ -239,7 +239,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     </div>
                   </a>
                   <a
-                    class="navigation__item accent-color__value-violet"
+                    class="navigation__item accent-color__poker-purple"
                     href="/profile"
                   >
                     <svg
