@@ -10,7 +10,7 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ArrowLeft, Close} from "components/Icon";
-import {MENU_ITEMS, Menu, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
+import {MENU_ITEMS, MenuEntry, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
 
@@ -25,7 +25,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
-  const [activeMenu, setActiveMenu] = useState<Menu>();
+  const [activeMenu, setActiveMenu] = useState<MenuEntry>();
 
   const transitionConfigMobile = {
     from: {},
@@ -37,7 +37,9 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     const pathEnd = location.pathname.split("/").at(-1)!;
 
     // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
-    const active = Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd) as Menu;
+    const active = Object.entries(MENU_ITEMS)
+      .map(([key, value]) => ({key, value}) as MenuEntry)
+      .find((entry) => entry.value.location === pathEnd);
     setActiveMenu(active);
   }, [isBoardModerator, location, navigate]);
 
@@ -58,7 +60,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
       navigate(section?.location ?? "..");
     }
     // If user is not a moderator of the section, they shouldn't see it
-    if (activeMenu && activeMenu[1].isModeratorOnly && !isBoardModerator) {
+    if (activeMenu && activeMenu.value.isModeratorOnly && !isBoardModerator) {
       navigate("..");
     }
   }, [navigate, isBoardModerator, activeMenu, props.enabledMenuItems]);
@@ -66,26 +68,26 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   /* renders a menu item.
    * condition: menu item is enabled and user has authorization
    * special case: profile, where avatar is used instead of an icon and name instead of localization title */
-  const renderMenuItem = (itemKey: MenuKey, menuItem: MenuItem) => {
-    if (!props.enabledMenuItems[itemKey]) {
+  const renderMenuItem = (menuEntry: MenuEntry) => {
+    if (!props.enabledMenuItems[menuEntry.key]) {
       return null;
     }
 
-    if (menuItem.isModeratorOnly && !isBoardModerator) {
+    if (menuEntry.value.isModeratorOnly && !isBoardModerator) {
       return null;
     }
 
-    const Icon = menuItem.icon;
+    const Icon = menuEntry.value.icon;
 
     return (
       <Link
-        to={menuItem.location}
-        className={classNames("navigation__item", {"navigation__item--active": menuItem.location === activeMenu?.[0]}, getColorClassName(menuItem.color))}
+        to={menuEntry.value.location}
+        className={classNames("navigation__item", {"navigation__item--active": menuEntry.value.location === activeMenu?.key}, getColorClassName(menuEntry.value.color))}
       >
         {Icon === "profile" ? <Avatar seed={me?.id} avatar={me?.avatar} className="navigation-item__icon" /> : <Icon className="navigation-item__icon" />}
         <div className="navigation-item__content">
-          <p className="navigation-item__name">{menuItem.localizationKey === "Profile" ? me?.name : t(`SettingsDialog.${menuItem.localizationKey}`)}</p>
-          <p className="navigation-item__description">{t(`SettingsDialog.${menuItem.localizationKey}Description`)}</p>
+          <p className="navigation-item__name">{menuEntry.value.localizationKey === "Profile" ? me?.name : t(`SettingsDialog.${menuEntry.value.localizationKey}`)}</p>
+          <p className="navigation-item__description">{t(`SettingsDialog.${menuEntry.value.localizationKey}Description`)}</p>
         </div>
       </Link>
     );
@@ -107,7 +109,11 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
               <div className="settings-dialog__sidebar">
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
                 {/* render all menu items */}
-                <nav className="settings-dialog__navigation">{Object.entries(MENU_ITEMS).map(([key, value]) => renderMenuItem(key as MenuKey, value))}</nav>
+                <nav className="settings-dialog__navigation">
+                  {Object.entries(MENU_ITEMS)
+                    .map(([key, value]) => ({key, value}) as MenuEntry)
+                    .map((menuEntry) => renderMenuItem(menuEntry))}
+                </nav>
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">
