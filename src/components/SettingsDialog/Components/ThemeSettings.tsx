@@ -1,4 +1,7 @@
-import {useEffect, useState} from "react";
+import {useAppSelector} from "store";
+import {useDispatch} from "react-redux";
+import {Theme} from "types/view";
+import {Actions} from "store/action";
 import {t} from "i18next";
 import {SettingsDarkMode, SettingsLightMode, GeneralSettings} from "components/Icon";
 import ThemePreviewDark from "assets/themes/theme-preview-dark.svg";
@@ -6,15 +9,12 @@ import ThemePreviewLight from "assets/themes/theme-preview-light.svg";
 import "./ThemeSettings.scss";
 
 export const ThemeSettings = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "auto");
-  useEffect(() => {
-    if (theme === "auto") {
-      const autoTheme = window.matchMedia("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
-      document.documentElement.setAttribute("theme", autoTheme);
-    } else document.documentElement.setAttribute("theme", theme!);
+  const dispatch = useDispatch();
+  const theme = useAppSelector((state) => state.view.theme);
 
-    localStorage.setItem("theme", theme!);
-  }, [theme]);
+  const setTheme = (newTheme: Theme) => {
+    dispatch(Actions.setTheme(newTheme));
+  };
 
   return (
     <div className="appearance-settings__theme-container">

@@ -1,20 +1,20 @@
 @import "constants/style";
 
 .board-option {
-  background: $color-dark-mode-note;
+  background: $navy--500;
 }
 
 .board-option + .board-option {
-  border-top: 1px solid $color-lighter-gray;
+  border-top: 1px solid $gray--300;
 }
 
 [theme="dark"] {
   .board-option + .board-option {
-    border-color: $color-dark-one;
+    border-color: $navy--600;
   }
 }
 
 .board-option:focus-visible,
 .board-option:hover {
-  background: $color-dark-mode-note--hover;
+  background: $navy--400;
 }
