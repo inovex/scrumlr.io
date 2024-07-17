@@ -16,6 +16,8 @@ export type MenuItem = {
   icon: ComponentType<SVGProps<SVGSVGElement>> | "profile"; // profile: special case
 };
 
+export type Menu = [MenuKey, MenuItem];
+
 export const MENU_ITEMS: Record<MenuKey, MenuItem> = {
   board: {
     localizationKey: "BoardSettings",

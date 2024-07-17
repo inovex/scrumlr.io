@@ -10,7 +10,7 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ArrowLeft, Close} from "components/Icon";
-import {MENU_ITEMS, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
+import {MENU_ITEMS, Menu, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
 
@@ -25,7 +25,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
-  const [activeMenuKey, setActiveMenuKey] = useState<MenuKey | "settings">();
+  const [activeMenu, setActiveMenu] = useState<Menu>();
 
   const transitionConfigMobile = {
     from: {},
@@ -34,11 +34,11 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   };
 
   useEffect(() => {
-    const pathEnd = location.pathname.split("/").at(-1);
+    const pathEnd = location.pathname.split("/").at(-1)!;
 
     // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
-    const active = (Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd)?.[0] ?? "settings") as MenuKey;
-    setActiveMenuKey(active);
+    const active = Object.entries(MENU_ITEMS).find(([_, item]) => item.location === pathEnd) as Menu;
+    setActiveMenu(active);
   }, [isBoardModerator, location, navigate]);
 
   useEffect(() => {
@@ -53,15 +53,15 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
     // If the window is large enough the show the whole dialog, automatically select the first navigation item to show.
     // if none is found, go back
-    if (activeMenuKey === "settings" && window.innerWidth >= MOBILE_BREAKPOINT) {
+    if (!activeMenu && window.innerWidth >= MOBILE_BREAKPOINT) {
       const section = findFirstValidMenuItem();
       navigate(section?.location ?? "..");
     }
     // If user is not a moderator of the section, they shouldn't see it
-    if (activeMenuKey && activeMenuKey !== "settings" && MENU_ITEMS[activeMenuKey].isModeratorOnly && !isBoardModerator) {
+    if (activeMenu && activeMenu[1].isModeratorOnly && !isBoardModerator) {
       navigate("..");
     }
-  }, [navigate, isBoardModerator, activeMenuKey, props.enabledMenuItems]);
+  }, [navigate, isBoardModerator, activeMenu, props.enabledMenuItems]);
 
   /* renders a menu item.
    * condition: menu item is enabled and user has authorization
@@ -78,7 +78,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     const Icon = menuItem.icon;
 
     return (
-      <Link to={menuItem.location} className={classNames("navigation__item", {"navigation__item--active": menuItem.location === activeMenuKey}, getColorClassName(menuItem.color))}>
+      <Link
+        to={menuItem.location}
+        className={classNames("navigation__item", {"navigation__item--active": menuItem.location === activeMenu?.[0]}, getColorClassName(menuItem.color))}
+      >
         {Icon === "profile" ? <Avatar seed={me?.id} avatar={me?.avatar} className="navigation-item__icon" /> : <Icon className="navigation-item__icon" />}
         <div className="navigation-item__content">
           <p className="navigation-item__name">{menuItem.localizationKey === "Profile" ? me?.name : t(`SettingsDialog.${menuItem.localizationKey}`)}</p>
