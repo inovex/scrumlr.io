@@ -18,7 +18,7 @@ export type MenuItem = {
 
 export type MenuEntry = {key: MenuKey; value: MenuItem};
 
-export const MENU_ITEMS: Record<MenuKey, MenuItem> = {
+const MENU_ENTRY_CONFIG: Record<MenuKey, MenuItem> = {
   board: {
     localizationKey: "BoardSettings",
     location: "board",
@@ -69,6 +69,8 @@ export const MENU_ITEMS: Record<MenuKey, MenuItem> = {
     icon: "profile",
   },
 };
+
+export const MENU_ENTRIES = Object.entries(MENU_ENTRY_CONFIG).map(([key, value]) => ({key, value}) as MenuEntry);
 
 // shorthand to enable all menu items
 export const ENABLE_ALL: Record<MenuKey, boolean> = {

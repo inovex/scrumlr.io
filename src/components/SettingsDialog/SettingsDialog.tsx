@@ -10,7 +10,7 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ArrowLeft, Close} from "components/Icon";
-import {MENU_ITEMS, MenuEntry, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
+import {MENU_ENTRIES, MenuEntry, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
 
@@ -37,9 +37,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     const pathEnd = location.pathname.split("/").at(-1)!;
 
     // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
-    const active = Object.entries(MENU_ITEMS)
-      .map(([key, value]) => ({key, value}) as MenuEntry)
-      .find((entry) => entry.value.location === pathEnd);
+    const active = MENU_ENTRIES.find((entry) => entry.value.location === pathEnd);
     setActiveMenu(active);
   }, [isBoardModerator, location, navigate]);
 
@@ -54,10 +52,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     const isMenuEntryAllowed = (menuEntry: MenuEntry) => props.enabledMenuItems[menuEntry.key] && (isBoardModerator || !menuEntry.value.isModeratorOnly);
 
     /* finds the first valid menu item a user can go to. */
-    const findFirstValidMenuEntry = () =>
-      Object.entries(MENU_ITEMS)
-        .map(([key, value]) => ({key, value}) as MenuEntry)
-        .find(isMenuEntryAllowed);
+    const findFirstValidMenuEntry = () => MENU_ENTRIES.find(isMenuEntryAllowed);
 
     console.group("menu");
     // sub menu
@@ -131,11 +126,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
               <div className="settings-dialog__sidebar">
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
                 {/* render all menu items */}
-                <nav className="settings-dialog__navigation">
-                  {Object.entries(MENU_ITEMS)
-                    .map(([key, value]) => ({key, value}) as MenuEntry)
-                    .map((menuEntry) => renderMenuItem(menuEntry))}
-                </nav>
+                <nav className="settings-dialog__navigation">{MENU_ENTRIES.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">
