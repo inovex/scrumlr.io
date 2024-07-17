@@ -25,7 +25,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
-  const [activeMenuItem, setactiveMenuItem] = useState<MenuItem>();
+  const [activeMenuItem, setActiveMenuItem] = useState<MenuItem>();
 
   const transitionConfigMobile = {
     from: {},
@@ -38,7 +38,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
     // search all menu items for the one where the location matches the current path; then return that entry
     const activeMenuEntry = MENU_ENTRIES.find((entry) => entry.value.location === pathEnd);
-    setactiveMenuItem(activeMenuEntry?.value);
+    setActiveMenuItem(activeMenuEntry?.value);
 
     /* check if a user is allowed to go to a menu entry.
      * the conditions for this are:
