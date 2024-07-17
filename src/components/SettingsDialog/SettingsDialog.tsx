@@ -10,7 +10,7 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ArrowLeft, Close} from "components/Icon";
-import {MENU_ENTRIES, MenuEntry, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
+import {MENU_ENTRIES, MenuEntry, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
 
@@ -25,7 +25,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
-  const [activeMenu, setActiveMenu] = useState<MenuEntry>();
+  const [activeMenuItem, setactiveMenuItem] = useState<MenuItem>();
 
   const transitionConfigMobile = {
     from: {},
@@ -37,8 +37,8 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     const pathEnd = location.pathname.split("/").at(-1)!;
 
     // search all menu items for the one where the location matches the current path; then return that entry
-    const active = MENU_ENTRIES.find((entry) => entry.value.location === pathEnd);
-    setActiveMenu(active);
+    const activeMenuEntry = MENU_ENTRIES.find((entry) => entry.value.location === pathEnd);
+    setactiveMenuItem(activeMenuEntry?.value);
 
     /* check if a user is allowed to go to a menu entry.
      * the conditions for this are:
@@ -54,10 +54,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
     console.group("menu");
     // sub menu
-    if (activeMenu) {
-      console.log("active menu", activeMenu.key);
-      if (isMenuEntryAllowed(activeMenu)) {
-        console.log("allowed to go to", activeMenu.key);
+    if (activeMenuEntry) {
+      console.log("activeMenuEntry menu", activeMenuEntry.key);
+      if (isMenuEntryAllowed(activeMenuEntry)) {
+        console.log("allowed to go to", activeMenuEntry.key);
       } else {
         const firstAllowedMenuEntry = findFirstValidMenuEntry();
         console.log("not allowed, going to", firstAllowedMenuEntry?.value.location, "instead");
@@ -66,7 +66,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     }
     // no sub menu, i.e. /settings/
     else {
-      console.log("no active menu");
+      console.log("no activeMenuEntry menu");
       if (window.innerWidth >= MOBILE_BREAKPOINT) {
         console.log("desktop view, going to first allowed entry");
         const firstAllowedMenuEntry = findFirstValidMenuEntry();
@@ -78,7 +78,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     }
 
     console.groupEnd();
-  }, [navigate, isBoardModerator, activeMenu, props.enabledMenuItems, location.pathname]);
+  }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems, location.pathname]);
 
   /* renders a menu item.
    * condition: menu item is enabled and user has authorization
@@ -97,7 +97,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     return (
       <Link
         to={menuEntry.value.location}
-        className={classNames("navigation__item", {"navigation__item--active": menuEntry.value.location === activeMenu?.key}, getColorClassName(menuEntry.value.color))}
+        className={classNames("navigation__item", {"navigation__item--active": menuEntry.value.location === activeMenuItem?.location}, getColorClassName(menuEntry.value.color))}
       >
         {Icon === "profile" ? <Avatar seed={me?.id} avatar={me?.avatar} className="navigation-item__icon" /> : <Icon className="navigation-item__icon" />}
         <div className="navigation-item__content">
