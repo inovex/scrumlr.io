@@ -5,24 +5,28 @@ import {useAppSelector} from "store";
 import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
 import {TOAST_TIMER_SHORT} from "constants/misc";
-import {SettingsButton} from "../Components/SettingsButton";
-import "./ExportBoard.scss";
-import "../SettingsDialog.scss";
+import {MenuItem} from "constants/settings";
+import {useOutletContext} from "react-router";
+import {getColorClassName} from "constants/colors";
 import ExportHintHiddenContent from "./ExportHintHiddenContent/ExportHintHiddenContent";
+import {SettingsButton} from "../Components/SettingsButton";
+import "../SettingsDialog.scss";
+import "./ExportBoard.scss";
 
 export const ExportBoard = () => {
   const {t} = useTranslation();
+  const activeMenuItem: MenuItem = useOutletContext();
 
   const boardId = useAppSelector((state) => state.board.data!.id);
   const boardName = useAppSelector((state) => state.board.data!.name);
 
   return (
-    <div data-testid="export" className="settings-dialog__container">
+    <div data-testid="export" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
       <div className="settings-dialog__header">
-        <h2 className={classNames("settings-dialog__header-text", "accent-color__backlog-blue")}> {t("ExportBoardOption.title")}</h2>
+        <h2 className="settings-dialog__header-text"> {t("ExportBoardOption.title")}</h2>
       </div>
 
-      <div className={classNames("settings-dialog__group", "accent-color__backlog-blue")}>
+      <div className="settings-dialog__group">
         <SettingsButton
           label={t("ExportBoardOption.exportAsJson")}
           icon={FileJson}

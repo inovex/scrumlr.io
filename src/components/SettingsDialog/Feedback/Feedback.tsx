@@ -5,10 +5,15 @@ import {SettingsButton} from "components/SettingsDialog/Components/SettingsButto
 import {FeedbackAPI} from "api/feedback";
 import {useAppSelector} from "store";
 import {TemplateGallery, Praise, Bug} from "components/Icon";
+import {useOutletContext} from "react-router";
+import {MenuItem} from "constants/settings";
+import {getColorClassName} from "constants/colors";
 import "./Feedback.scss";
 
 export const Feedback: React.FC = () => {
   const {t} = useTranslation();
+  const activeMenuItem: MenuItem = useOutletContext();
+
   const [errorMessage, setErrorMessage] = useState<string>();
   const [feedbackTypeInput, setFeedbackTypeInput] = useState("PRAISE");
   const [feedbackInputLabel, setFeedbackInputLabel] = useState<string>(t("Feedback.PraiseInputLabel"));
@@ -106,9 +111,9 @@ export const Feedback: React.FC = () => {
   );
 
   return (
-    <div className="settings-dialog__container accent-color__value-violet">
+    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
       <div className="settings-dialog__header">
-        <h2 className={classNames("settings-dialog__header-text", "accent-color__value-violet")}>Feedback</h2>
+        <h2 className="settings-dialog__header-text">Feedback</h2>
       </div>
       {feedbackEnabled && (
         <form className="settings-dialog__feedback-form" onSubmit={onSubmitFeedback}>

@@ -2,6 +2,9 @@ import {Join, Kick, Search, Wifi, MarkAsDone} from "components/Icon";
 import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {useOutletContext} from "react-router";
+import {MenuItem} from "constants/settings";
+import {getColorClassName} from "constants/colors";
 import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
@@ -15,6 +18,9 @@ import "./Participants.scss";
 export const Participants = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
+
+  const activeMenuItem: MenuItem = useOutletContext();
+
   const [queryString, setQueryString] = useState<string>("");
   const debouncedQueryString = useDebounce(queryString);
   const [permissionFilter, setPermissionFilter] = useState<"ALL" | "OWNER" | "MODERATOR" | "PARTICIPANT">("ALL");
@@ -60,7 +66,7 @@ export const Participants = () => {
   };
 
   return (
-    <section className="settings-dialog__container accent-color__value-violet">
+    <section className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("Participants.Title")}</h2>
       </header>

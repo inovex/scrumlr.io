@@ -1,12 +1,17 @@
 import classNames from "classnames";
 import QRCode from "qrcode.react";
 import {useTranslation} from "react-i18next";
-import "./ShareSession.scss";
 import {useState, VFC} from "react";
 import {useAppSelector} from "store";
+import {MenuItem} from "constants/settings";
+import {getColorClassName} from "constants/colors";
+import {useOutletContext} from "react-router";
+import "./ShareSession.scss";
 
 export const ShareSession: VFC = () => {
   const {t} = useTranslation();
+  const activeMenuItem: MenuItem = useOutletContext();
+
   const boardId = useAppSelector((state) => state.board.data?.id);
 
   const [urlInClipBoard, setUrlInClipBoard] = useState(false);
@@ -17,11 +22,11 @@ export const ShareSession: VFC = () => {
   };
 
   return (
-    <div data-testid="qrcode" className="settings-dialog__container">
+    <div data-testid="qrcode" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
       <div className="settings-dialog__header">
-        <h2 className={classNames("settings-dialog__header-text", "accent-color__planning-pink")}> {t("ShareQrCodeOption.title")}</h2>
+        <h2 className={classNames("settings-dialog__header-text")}> {t("ShareQrCodeOption.title")}</h2>
       </div>
-      <div className={classNames("share-session__container", "accent-color__planning-pink")}>
+      <div className={classNames("share-session__container")}>
         <div className="share-session__background">
           <QRCode value={`${window.location.origin}/board/${boardId}`} renderAs="svg" className="share-qr-code-option__qrcode" />
         </div>

@@ -132,7 +132,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
                 <Link to="" className="settings-dialog__back-link">
                   <ArrowLeft />
                 </Link>
-                <Outlet />
+                <Outlet context={activeMenuItem} />
               </article>
               <Link to=".." className="settings-dialog__close-button">
                 <Close className="close-button__icon" />
