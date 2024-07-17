@@ -52,32 +52,35 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     /* finds the first valid menu item a user can go to. */
     const findFirstValidMenuEntry = () => MENU_ENTRIES.find(isMenuEntryAllowed);
 
-    console.group("menu");
-    // sub menu
+    const goToFirstValidMenuEntry = () => {
+      const firstAllowedMenuEntry = findFirstValidMenuEntry();
+      navigate(firstAllowedMenuEntry?.value.location ?? "..");
+    };
+
+    /**
+     * settings logic:
+     * if a menu entry is entered (like /settings/board),
+     * check if the user is allowed to go there.
+     * if yes, that's fine, if not, navigate to the first allowed entry.
+     *
+     * if no sub route is entered, so /settings/ standalone,
+     * the first allowed menu entry is set to active.
+     * however, for mobile devices, we stay on /settings/ instead of going to a sub route.
+     * */
+
+    // sub route active, like /settings/board/
     if (activeMenuEntry) {
-      console.log("activeMenuEntry menu", activeMenuEntry.key);
-      if (isMenuEntryAllowed(activeMenuEntry)) {
-        console.log("allowed to go to", activeMenuEntry.key);
-      } else {
-        const firstAllowedMenuEntry = findFirstValidMenuEntry();
-        console.log("not allowed, going to", firstAllowedMenuEntry?.value.location, "instead");
-        navigate(firstAllowedMenuEntry?.value.location ?? "..");
+      if (!isMenuEntryAllowed(activeMenuEntry)) {
+        goToFirstValidMenuEntry();
       }
+      // do nothing if sub route and allowed to enter
     }
     // no sub menu, i.e. /settings/
-    else {
-      console.log("no activeMenuEntry menu");
-      if (window.innerWidth >= MOBILE_BREAKPOINT) {
-        console.log("desktop view, going to first allowed entry");
-        const firstAllowedMenuEntry = findFirstValidMenuEntry();
-        console.log("going to", firstAllowedMenuEntry?.value.location);
-        navigate(firstAllowedMenuEntry?.value.location ?? "..");
-      } else {
-        console.log("mobile view, staying on /settings/");
-      }
+    // not mobile
+    else if (window.innerWidth >= MOBILE_BREAKPOINT) {
+      goToFirstValidMenuEntry();
     }
-
-    console.groupEnd();
+    // else, do nothing if no submenu and mobile
   }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems, location.pathname]);
 
   /* renders a menu item.
