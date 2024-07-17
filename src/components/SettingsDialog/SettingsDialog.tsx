@@ -49,7 +49,8 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
      */
     const isMenuEntryAllowed = (menuEntry: MenuEntry) => props.enabledMenuItems[menuEntry.key] && (isBoardModerator || !menuEntry.value.isModeratorOnly);
 
-    /* finds the first allowed menu item a user can go to and navigates there. */
+    /* finds the first allowed menu item a user can go to and navigates there.
+     * if no route is allowed, the user is navigated back to the page below settings. */
     const goToFirstAllowedMenuEntry = () => {
       const firstAllowedMenuEntry = MENU_ENTRIES.find(isMenuEntryAllowed);
       navigate(firstAllowedMenuEntry?.value.location ?? "..");
