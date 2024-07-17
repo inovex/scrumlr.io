@@ -70,7 +70,7 @@ export const SettingsDialog: FC = () => {
                   )}
                   <Link
                     to="participants"
-                    className={classNames("navigation__item", "accent-color__poker-purple", {
+                    className={classNames("navigation__item", "accent-color__value-violet", {
                       "navigation__item--active": window.location.pathname.endsWith("/settings/participants"),
                     })}
                   >
@@ -113,7 +113,7 @@ export const SettingsDialog: FC = () => {
                   {feedbackEnabled && (
                     <Link
                       to="feedback"
-                      className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
+                      className={classNames("navigation__item", "accent-color__value-violet", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
                     >
                       <SettingsFeedback className="navigation-item__icon" />
                       <div className="navigation-item__content">

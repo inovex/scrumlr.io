@@ -8,12 +8,12 @@
   height: 48px;
   padding: 0 $spacing--lg;
   border-radius: $rounded--small;
-  background-color: $color-white;
-  color: $color-black;
+  background-color: $gray--000;
+  color: $navy--900;
 
   &:has(:focus-visible),
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.1);
+    background-color: rgba(var(--accent-color--light-rgb), 0.1);
   }
 }
 
@@ -39,7 +39,7 @@
 
   &:disabled {
     cursor: default;
-    background-color: $color-white;
+    background-color: $gray--000;
   }
 
   &:focus-visible ~ label,
@@ -84,17 +84,17 @@
   cursor: pointer;
 
   &:focus-visible * {
-    outline: 2px solid var(--accent-color-rgb);
+    outline: 2px solid var(--accent-color--light-rgb);
   }
 }
 
 [theme="dark"] {
   .settings-input__container {
-    background-color: $color-dark-mode-note;
-    color: $color-white;
+    background-color: $navy--500;
+    color: $gray--000;
   }
 
   .settings-input__input:disabled {
-    color: $color-placeholder-dark;
+    color: $gray--000;
   }
 }
