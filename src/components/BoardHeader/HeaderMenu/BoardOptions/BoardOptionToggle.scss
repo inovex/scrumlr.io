@@ -51,12 +51,12 @@ $header-menu-toggle-background-color: #c8c8c8;
 }
 .board-option-toggle__switch--left::after {
   left: 0;
-  background-color: $color-middle-gray;
+  background-color: $gray--700;
 }
 .board-option-toggle__switch--right::after {
   left: $header-menu-toggle-button-width;
-  background-color: $color-backlog-blue;
+  background-color: $blue--500;
 }
 [theme="dark"] .board-option-toggle__switch--right::after {
-  background-color: $color-planning-pink;
+  background-color: $pink--500;
 }

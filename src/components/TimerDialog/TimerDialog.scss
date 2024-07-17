@@ -17,7 +17,7 @@
       top: 10px;
       border-width: 15px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-planning-pink;
+      border-color: transparent transparent transparent $pink--500;
     }
 
     .timer-dialog::after {
@@ -27,13 +27,13 @@
       top: 15px;
       border-width: 10px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-white-one;
+      border-color: transparent transparent transparent $gray--100;
     }
   }
 
   [theme="dark"] {
     #portal .timer-dialog::after {
-      border-color: transparent transparent transparent $color-dark-mode;
+      border-color: transparent transparent transparent $navy--600;
     }
   }
 }
@@ -41,14 +41,14 @@
 .timer-dialog__time-button {
   height: $icon--medium;
   width: $icon--medium;
-  border: 1px solid $color-planning-pink;
+  border: 1px solid $pink--500;
   border-radius: $rounded--full;
   background-color: transparent;
   cursor: pointer;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
-  color: $color-planning-pink;
+  color: $pink--500;
 
   > svg {
     height: 100%;
@@ -85,9 +85,9 @@
   align-items: center;
   height: 24px;
   width: 24px;
-  border: 1px solid $color-planning-pink;
+  border: 1px solid $pink--500;
   border-radius: 999px;
-  color: $color-planning-pink;
+  color: $pink--500;
   font-size: 14px;
 }
 

@@ -1,23 +1,7 @@
 @import "constants/style.scss";
 
-.accent-color--blue {
-  --accent-color: #0057ff;
-}
-
-.accent-color--purple {
-  --accent-color: #5e00ff;
-}
-
-.accent-color--lilac {
-  --accent-color: #c000ff;
-}
-
-.accent-color--pink {
-  --accent-color: #e20360;
-}
-
 .scrumlr-logo__paths {
-  fill: $color-backlog-blue;
+  fill: $blue--500;
 
   path {
     transition: all 0.08s ease-out;
@@ -30,16 +14,16 @@
 }
 
 .scrumlr-logo__stop {
-  stop-color: $color-backlog-blue;
+  stop-color: var(--accent-color--light);
 }
 
 [theme="dark"] {
   .scrumlr-logo__paths {
-    fill: $color-white;
+    fill: $gray--000;
   }
 
   .scrumlr-logo__stop {
-    stop-color: var(--accent-color);
+    stop-color: var(--accent-color--dark);
   }
 }
 
