@@ -44,25 +44,47 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   }, [isBoardModerator, location, navigate]);
 
   useEffect(() => {
-    /* finds the first valid menu item a user can go to.
+    /* check if a user is allowed to go to a menu entry.
      * the conditions for this are:
      * 1. the menu item is enabled
-     * 2. if user is moderator, choose one that is moderator only
-     * 3. if user isn't moderator, choose one that isn't moderator only
-     * 2. and 3.: (P & Q) | (!P & !Q) simplifies to P <=> Q */
-    const findFirstValidMenuItem = () =>
-      Object.entries(MENU_ITEMS).find(([key, menuItem]) => props.enabledMenuItems[key as MenuKey] && menuItem.isModeratorOnly === isBoardModerator)?.[1];
+     * 2. if user is moderator, any entry is allowed (P)
+     * 3. for non-moderators, only non-moderator-only entries are allowed (!P && !Q)
+     * P || (!P && !Q) simplifies to P || !Q
+     */
+    const isMenuEntryAllowed = (menuEntry: MenuEntry) => props.enabledMenuItems[menuEntry.key] && (isBoardModerator || !menuEntry.value.isModeratorOnly);
 
-    // If the window is large enough the show the whole dialog, automatically select the first navigation item to show.
-    // if none is found, go back
-    if (!activeMenu && window.innerWidth >= MOBILE_BREAKPOINT) {
-      const section = findFirstValidMenuItem();
-      navigate(section?.location ?? "..");
+    /* finds the first valid menu item a user can go to. */
+    const findFirstValidMenuEntry = () =>
+      Object.entries(MENU_ITEMS)
+        .map(([key, value]) => ({key, value}) as MenuEntry)
+        .find(isMenuEntryAllowed);
+
+    console.group("menu");
+    // sub menu
+    if (activeMenu) {
+      console.log("active menu", activeMenu.key);
+      if (isMenuEntryAllowed(activeMenu)) {
+        console.log("allowed to go to", activeMenu.key);
+      } else {
+        const firstAllowedMenuEntry = findFirstValidMenuEntry();
+        console.log("not allowed, going to", firstAllowedMenuEntry?.value.location, "instead");
+        navigate(firstAllowedMenuEntry?.value.location ?? "..");
+      }
     }
-    // If user is not a moderator of the section, they shouldn't see it
-    if (activeMenu && activeMenu.value.isModeratorOnly && !isBoardModerator) {
-      navigate("..");
+    // no sub menu, i.e. /settings/
+    else {
+      console.log("no active menu");
+      if (window.innerWidth >= MOBILE_BREAKPOINT) {
+        console.log("desktop view, going to first allowed entry");
+        const firstAllowedMenuEntry = findFirstValidMenuEntry();
+        console.log("going to", firstAllowedMenuEntry?.value.location);
+        navigate(firstAllowedMenuEntry?.value.location ?? "..");
+      } else {
+        console.log("mobile view, staying on /settings/");
+      }
     }
+
+    console.groupEnd();
   }, [navigate, isBoardModerator, activeMenu, props.enabledMenuItems]);
 
   /* renders a menu item.
