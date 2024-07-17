@@ -16,7 +16,7 @@ export const Appearance = () => {
   const activeMenuItem: MenuItem = useOutletContext();
 
   return (
-    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
+    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("SettingsDialog.Appearance")}</h2>
       </header>

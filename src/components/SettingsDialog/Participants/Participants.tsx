@@ -66,7 +66,7 @@ export const Participants = () => {
   };
 
   return (
-    <section className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
+    <section className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("Participants.Title")}</h2>
       </header>

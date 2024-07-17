@@ -22,7 +22,7 @@ export const ShareSession: VFC = () => {
   };
 
   return (
-    <div data-testid="qrcode" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
+    <div data-testid="qrcode" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <div className="settings-dialog__header">
         <h2 className={classNames("settings-dialog__header-text")}> {t("ShareQrCodeOption.title")}</h2>
       </div>

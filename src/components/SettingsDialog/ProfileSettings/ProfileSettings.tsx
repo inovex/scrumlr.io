@@ -33,7 +33,7 @@ export const ProfileSettings = () => {
   const [id] = useState<string | undefined>(state.participant?.user.id);
 
   return (
-    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
+    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("ProfileSettings.Profile")}</h2>
       </header>

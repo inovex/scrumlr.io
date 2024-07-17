@@ -111,7 +111,7 @@ export const Feedback: React.FC = () => {
   );
 
   return (
-    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
+    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <div className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">Feedback</h2>
       </div>

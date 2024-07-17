@@ -21,7 +21,7 @@ export const ExportBoard = () => {
   const boardName = useAppSelector((state) => state.board.data!.name);
 
   return (
-    <div data-testid="export" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem.color))}>
+    <div data-testid="export" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <div className="settings-dialog__header">
         <h2 className="settings-dialog__header-text"> {t("ExportBoardOption.title")}</h2>
       </div>
