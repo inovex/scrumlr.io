@@ -36,12 +36,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   useEffect(() => {
     const pathEnd = location.pathname.split("/").at(-1)!;
 
-    // search all menu items for the one where the location matches the current path. then return the key of the (key, value) tuple
+    // search all menu items for the one where the location matches the current path; then return that entry
     const active = MENU_ENTRIES.find((entry) => entry.value.location === pathEnd);
     setActiveMenu(active);
-  }, [isBoardModerator, location, navigate]);
 
-  useEffect(() => {
     /* check if a user is allowed to go to a menu entry.
      * the conditions for this are:
      * 1. the menu item is enabled
@@ -80,7 +78,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     }
 
     console.groupEnd();
-  }, [navigate, isBoardModerator, activeMenu, props.enabledMenuItems]);
+  }, [navigate, isBoardModerator, activeMenu, props.enabledMenuItems, location.pathname]);
 
   /* renders a menu item.
    * condition: menu item is enabled and user has authorization
