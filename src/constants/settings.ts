@@ -30,14 +30,14 @@ const MENU_ENTRY_CONFIG: Record<MenuKey, MenuItem> = {
     localizationKey: "Participants",
     location: "participants",
     isModeratorOnly: false,
-    color: "poker-purple",
+    color: "value-violet",
     icon: Participants,
   },
   appearance: {
     localizationKey: "Appearance",
     location: "appearance",
     isModeratorOnly: false,
-    color: "value-violet",
+    color: "poker-purple",
     icon: SettingsAppearance,
   },
   share: {
@@ -65,7 +65,7 @@ const MENU_ENTRY_CONFIG: Record<MenuKey, MenuItem> = {
     localizationKey: "Profile",
     location: "profile",
     isModeratorOnly: false,
-    color: "value-violet",
+    color: "poker-purple",
     icon: "profile",
   },
 };
