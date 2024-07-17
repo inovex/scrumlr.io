@@ -31,23 +31,23 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   text-align: center;
   font-size: $text-size--small;
   font-weight: 500;
-  color: $color-black;
-  background-color: $color-white;
+  color: $navy--900;
+  background-color: $gray--000;
   position: relative;
   top: -19px;
   &:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
   }
 }
 .feedback-option__input:checked + .feedback-option__label {
-  color: $color-white;
-  background-color: var(--accent-color);
+  color: $gray--000;
+  background-color: var(--accent-color--light);
 }
 [theme="dark"] .settings-dialog__feedback-option > label {
-  color: $color-white;
-  background-color: $color-dark-mode-note;
+  color: $gray--000;
+  background-color: $navy--500;
   &:hover {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
   }
 }
 
@@ -61,8 +61,8 @@ $FEEDBACK_OPTION_WIDTH: 80px;
 .feedback-form__submit-button {
   padding: $spacing--xs $spacing--lg;
   border-radius: 32px;
-  background-color: var(--accent-color);
-  color: $color-white;
+  background-color: var(--accent-color--light);
+  color: $gray--000;
   border: none;
   width: 260px;
   font-weight: bold;
@@ -72,7 +72,7 @@ $FEEDBACK_OPTION_WIDTH: 80px;
     transform: scale(0.95);
   }
   &:hover {
-    background-color: rgba(var(--accent-color-rgb), 0.8);
+    background-color: rgba(var(--accent-color--light-rgb), 0.8);
   }
 }
 
@@ -110,12 +110,12 @@ $FEEDBACK_OPTION_WIDTH: 80px;
   padding: 0;
 }
 [theme="dark"] .feedback-form__contact-input {
-  color: $color-white;
+  color: $gray--000;
 }
 
 .settings-dialog__error-message {
   margin-top: $spacing--base;
-  color: $color-warning-red;
+  color: $critical-carmine--light;
   width: 100%;
   text-align: center;
 }

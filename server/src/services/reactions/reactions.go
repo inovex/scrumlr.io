@@ -2,6 +2,7 @@ package reactions
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
@@ -16,12 +17,7 @@ type ReactionService struct {
 	realtime *realtime.Broker
 }
 
-type Observer interface {
-	AttachObserver(observer database.Observer)
-}
-
 type DB interface {
-	Observer
 	GetReaction(id uuid.UUID) (database.Reaction, error)
 	GetReactions(board uuid.UUID) ([]database.Reaction, error)
 	CreateReaction(board uuid.UUID, insert database.ReactionInsert) (database.Reaction, error)
@@ -33,7 +29,6 @@ func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
 	b := new(ReactionService)
 	b.database = db
 	b.realtime = rt
-	b.database.AttachObserver((database.ReactionsObserver)(b))
 
 	return b
 }
@@ -71,7 +66,16 @@ func (s *ReactionService) Create(ctx context.Context, board uuid.UUID, body dto.
 }
 
 func (s *ReactionService) Delete(_ context.Context, board, user, id uuid.UUID) error {
-	return s.database.RemoveReaction(board, user, id)
+	err := s.database.RemoveReaction(board, user, id)
+	if err != nil {
+		logger.Get().Errorw("unable to remove reaction", "board", board, "user", user, "reaction", id)
+		return err
+	}
+
+	// notify
+	s.DeletedReaction(board, id)
+
+	return nil
 }
 
 func (s *ReactionService) Update(ctx context.Context, board, user, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error) {

@@ -7,12 +7,12 @@
   font-size: $text-size--medium;
 
   text-decoration: none;
-  color: $color-dark-gray;
+  color: $gray--800;
 
   transition: all 0.08s ease-out;
 
   &:hover {
-    color: $color-middle-gray;
+    color: $gray--700;
   }
 
   &:focus-visible {
@@ -28,14 +28,14 @@
 
 [theme="dark"] {
   .app-info {
-    color: $color-middle-gray;
+    color: $gray--700;
 
     &:focus-visible,
     &:hover {
-      color: $color-white;
+      color: $gray--000;
     }
   }
   .app-info__icon path {
-    fill: $color-white;
+    fill: $gray--000;
   }
 }

@@ -23,7 +23,7 @@ export const NotFound = () => {
       </div>
       <header className="not-found__header">
         <div className="not-found__logo-container">
-          <ScrumlrLogo className="not-found__scrumlr-logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+          <ScrumlrLogo className="not-found__scrumlr-logo" />
         </div>
       </header>
       <main className="not-found__main">

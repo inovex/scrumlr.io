@@ -20,6 +20,7 @@ export const BoardReaction = memo((props: BoardReactionProps) => {
   const emoji = BOARD_REACTION_EMOJI_MAP.get(props.reaction.reactionType);
   const me = useAppSelector((state) => state.participants!.self);
   const others = useAppSelector((state) => state.participants!.others);
+  const skinTone = useAppSelector((state) => state.skinTone);
   const all = [me, ...others];
   const reactionUser = all.find((p) => p.user.id === props.reaction.user)!;
   const {name} = reactionUser.user;
@@ -50,9 +51,11 @@ export const BoardReaction = memo((props: BoardReactionProps) => {
     }
   }, [containerRef, containerDimensions, displayOffset]);
 
+  const emojiWithSkinTone = emoji!.skinToneSupported ? emoji!.emoji + skinTone.component : emoji!.emoji;
+
   return (
     <div className="board-reaction__root" ref={containerRef} style={{left: `${displayOffset}vw`}}>
-      <div className="board-reaction__emoji-container">{emoji}</div>
+      <div className="board-reaction__emoji-container">{emojiWithSkinTone}</div>
       <div className={classNames("board-reaction__name-container", {"board-reaction__name-container--self": reactedSelf})}>{displayName}</div>
     </div>
   );

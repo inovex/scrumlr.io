@@ -22,8 +22,8 @@ $text-input__adornment-padding: 36px;
   outline: none;
   width: 100%;
 
-  background: $color-white-two;
-  box-shadow: 0 0 0 rgba($color-white, 0);
+  background: $gray--200;
+  box-shadow: 0 0 0 rgba($gray--000, 0);
   transition:
     box-shadow 0.25s ease,
     background-color 0.15s ease;
@@ -34,22 +34,22 @@ $text-input__adornment-padding: 36px;
 }
 
 .text-input[value=""] {
-  background: $color-lighter-gray;
-  border: 1px solid $color-retro-red;
+  background: $gray--300;
+  border: 1px solid $critical-carmine--light;
 }
 
 .text-input:focus-visible,
 .text-input:hover {
-  background: $color-white;
-  border: 1px solid $color-backlog-blue;
+  background: $gray--000;
+  border: 1px solid $blue--500;
 }
 
 .text-input:hover {
-  box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.2);
+  box-shadow: 0 0 0 4px rgba($blue--500, 0.2);
 }
 
 .text-input:focus-visible {
-  box-shadow: 0 0 0 4px rgba($color-backlog-blue, 0.4);
+  box-shadow: 0 0 0 4px rgba($blue--500, 0.4);
 }
 
 .text-input__adornment {
@@ -81,10 +81,10 @@ $text-input__adornment-padding: 36px;
 
 [theme="dark"] {
   .text-input:hover {
-    box-shadow: 0 0 0 4px rgba($color-white, 0.2);
+    box-shadow: 0 0 0 4px rgba($gray--000, 0.2);
   }
 
   .text-input:focus-visible {
-    box-shadow: 0 0 0 4px rgba($color-white, 0.4);
+    box-shadow: 0 0 0 4px rgba($gray--000, 0.4);
   }
 }

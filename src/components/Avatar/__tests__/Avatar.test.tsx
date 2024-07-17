@@ -59,6 +59,6 @@ describe("Avatar", () => {
 
   test("seed will define an accent color class", () => {
     const {container} = render(<Avatar seed="2" />);
-    expect(container.firstChild).toHaveClass("accent-color__lean-lilac");
+    expect(container.firstChild).toHaveClass("accent-color__value-violet");
   });
 });

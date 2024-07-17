@@ -315,7 +315,8 @@
   "Note": {
     "me": "Me",
     "you": "you",
-    "userImageAlt": "media provided by {{user}}"
+    "userImageAlt": "media provided by {{user}}",
+    "edited": "edited"
   },
   "StackView": {
     "prevNote": "Previous note",

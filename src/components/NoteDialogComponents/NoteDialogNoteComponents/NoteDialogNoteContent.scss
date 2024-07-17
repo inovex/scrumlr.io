@@ -10,7 +10,8 @@
   line-height: $line-height--medium;
   flex: 1;
   overflow-y: visible;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
 
   &:has(&--image) {
     padding: $spacing--xs;
@@ -30,7 +31,7 @@
   overflow-y: auto;
   @include scrollbar();
   width: 100%;
-  color: $color-black;
+  color: $navy--900;
   letter-spacing: $letter-spacing--medium;
   border: 2px dashed transparent;
   border-radius: 5px;
@@ -38,16 +39,21 @@
   outline: none;
   resize: none;
   word-wrap: break-word;
-  padding: 0 4px;
+  padding: 0 $spacing--xxs;
   font-size: $text--md;
   line-height: 1.5rem;
-
   &:not(:disabled) {
     &:hover,
     &:focus-visible {
-      border-color: var(--accent-color--desaturated-dark);
+      border-color: rgba(var(--accent-color--dark-rgb), 0.6);
     }
   }
+}
+
+.note-dialog__marker-edited {
+  color: $gray--700;
+  font-size: $text--base;
+  padding: 0 $spacing--xxs;
 }
 
 .note-dialog__note-content--image {
@@ -81,7 +87,7 @@
   left: 0;
   cursor: zoom-out;
   backdrop-filter: blur(10px) brightness(0.76) saturate(0);
-  background: rgba(var(--accent-color-rgb), 0.42);
+  background: rgba(var(--accent-color--light-rgb), 0.42);
 
   animation: fade 0.1s ease-in-out;
 }
@@ -107,18 +113,18 @@
   border-radius: $rounded--default;
   overflow-y: auto;
   box-shadow: $box-shadow--light;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
 
   @include scrollbar();
 }
 
 [theme="dark"] {
   .note-dialog__note-content--text {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .note-dialog__note-content--emoji-suggestions {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
     box-shadow: $box-shadow--dark;
   }
 }

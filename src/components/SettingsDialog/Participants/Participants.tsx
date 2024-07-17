@@ -60,7 +60,7 @@ export const Participants = () => {
   };
 
   return (
-    <section className="settings-dialog__container accent-color__poker-purple">
+    <section className="settings-dialog__container accent-color__value-violet">
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("Participants.Title")}</h2>
       </header>
