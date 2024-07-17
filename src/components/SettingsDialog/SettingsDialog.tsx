@@ -50,10 +50,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     const isMenuEntryAllowed = (menuEntry: MenuEntry) => props.enabledMenuItems[menuEntry.key] && (isBoardModerator || !menuEntry.value.isModeratorOnly);
 
     /* finds the first valid menu item a user can go to. */
-    const findFirstValidMenuEntry = () => MENU_ENTRIES.find(isMenuEntryAllowed);
+    const findFirstAllowedMenuEntry = () => MENU_ENTRIES.find(isMenuEntryAllowed);
 
-    const goToFirstValidMenuEntry = () => {
-      const firstAllowedMenuEntry = findFirstValidMenuEntry();
+    const goToFirstAllowedMenuEntry = () => {
+      const firstAllowedMenuEntry = findFirstAllowedMenuEntry();
       navigate(firstAllowedMenuEntry?.value.location ?? "..");
     };
 
@@ -71,14 +71,14 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     // sub route active, like /settings/board/
     if (activeMenuEntry) {
       if (!isMenuEntryAllowed(activeMenuEntry)) {
-        goToFirstValidMenuEntry();
+        goToFirstAllowedMenuEntry();
       }
       // do nothing if sub route and allowed to enter
     }
     // no sub menu, i.e. /settings/
     // not mobile
     else if (window.innerWidth >= MOBILE_BREAKPOINT) {
-      goToFirstValidMenuEntry();
+      goToFirstAllowedMenuEntry();
     }
     // else, do nothing if no submenu and mobile
   }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems, location.pathname]);
