@@ -34,12 +34,12 @@ export const LegacyButton: FC<PropsWithChildren<LecagyButtonProps>> = ({
 
   if (leftIcon) {
     const iconProps = Children.only(leftIcon)?.props;
-    leftIcon = cloneElement(leftIcon!, {className: classNames(iconProps?.className, "button__icon", "button__left-icon")});
+    leftIcon = cloneElement(leftIcon!, {className: classNames(iconProps?.className, "legacy-button__icon", "legacy-button__left-icon")});
   }
 
   if (rightIcon) {
     const iconProps = Children.only(rightIcon)?.props;
-    rightIcon = cloneElement(rightIcon!, {className: classNames(iconProps?.className, "button__icon", "button__right-icon")});
+    rightIcon = cloneElement(rightIcon!, {className: classNames(iconProps?.className, "legacy-button__icon", "legacy-button__right-icon")});
   }
 
   let Component: keyof JSX.IntrinsicElements = "button";
@@ -49,12 +49,19 @@ export const LegacyButton: FC<PropsWithChildren<LecagyButtonProps>> = ({
 
   return (
     <Component
-      className={classNames("button", `button--${color}`, `button--${variant}`, {"button--block": block}, {"button__label--shown": !hideLabel}, className)}
+      className={classNames(
+        "legacy-button",
+        `legacy-button--${color}`,
+        `legacy-button--${variant}`,
+        {"legacy-button--block": block},
+        {"legacy-button__label--shown": !hideLabel},
+        className
+      )}
       {...other}
       {...labelProps}
     >
       {leftIcon}
-      <span ref={labelRef} className={classNames("button__label", {"button__label--hidden": hideLabel})}>
+      <span ref={labelRef} className={classNames("legacy-button__label", {"legacy-button__label--hidden": hideLabel})}>
         {children}
       </span>
       {rightIcon}
