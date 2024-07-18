@@ -1,11 +1,11 @@
 import React from "react";
 import classNames from "classnames";
 import {Color, getColorClassName} from "constants/colors";
-import "./PrimaryButton.scss";
+import "./Button.scss";
 
 type ButtonType = "primary" | "secondary" | "tertiary";
 
-type PrimaryButtonProps = {
+type ButtonProps = {
   type?: ButtonType;
   children?: React.ReactNode;
   className?: string;
@@ -17,7 +17,7 @@ type PrimaryButtonProps = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
-export const PrimaryButton = (props: PrimaryButtonProps) => (
+export const Button = (props: ButtonProps) => (
   <button
     className={classNames(
       props.className,

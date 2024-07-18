@@ -1,4 +1,4 @@
-import {PrimaryButton} from "components/Button";
+import {Button} from "components/Button";
 import {ReactComponent as FavouriteIcon} from "assets/icons/star.svg";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
@@ -17,8 +17,8 @@ export const TemplateCard = () => (
       <div className="template-card__columns-title">3 Columns</div>
       <div className="template-card__columns-subtitle">Ideas, Problems & Solutions</div>
     </div>
-    <PrimaryButton className="template-card__start-button" small icon={<NextIcon />}>
+    <Button className="template-card__start-button" small icon={<NextIcon />}>
       Start
-    </PrimaryButton>
+    </Button>
   </div>
 );
