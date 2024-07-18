@@ -43,7 +43,7 @@ export const Boards = () => {
         {/* logo - - - profile */}
         <div className="boards__scrumlr-logo-container">
           <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
-            <ScrumlrLogo className="new-board__scrumlr-logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+            <ScrumlrLogo className="new-board__scrumlr-logo" />
           </a>
         </div>
         <UserPill className="boards__user-pill" locationPrefix={boardView} />
