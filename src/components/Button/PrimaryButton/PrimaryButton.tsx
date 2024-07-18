@@ -3,7 +3,10 @@ import classNames from "classnames";
 import {Color, getColorClassName} from "constants/colors";
 import "./PrimaryButton.scss";
 
+type ButtonType = "primary" | "secondary" | "tertiary";
+
 type PrimaryButtonProps = {
+  type?: ButtonType;
   children?: React.ReactNode;
   className?: string;
   color?: Color;
@@ -18,10 +21,13 @@ export const PrimaryButton = (props: PrimaryButtonProps) => (
   <button
     className={classNames(
       props.className,
-      "primary-button",
+      "button",
       {
-        "primary-button--small": props.small,
-        "primary-button--with-icon": props.icon,
+        "button--primary": props.type === "primary" || !props.type,
+        "button--secondary": props.type === "secondary",
+        "button--tertiary": props.type === "tertiary",
+        "button--small": props.small,
+        "button--with-icon": props.icon,
       },
       getColorClassName(props.color ?? "planning-pink")
     )}
