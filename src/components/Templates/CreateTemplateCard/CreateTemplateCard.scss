@@ -15,7 +15,7 @@ $icon-size: 80px;
   width: 100%;
   height: $card-height;
   border-radius: $rounded--default;
-  border: 3px dashed #0057ff;
+  border: 3px dashed $blue--500;
 
   box-sizing: border-box; // don't overflow
   padding: 0 40px 14px 40px; // non standard, I know
@@ -26,7 +26,7 @@ $icon-size: 80px;
   cursor: pointer;
 
   &:hover {
-    box-shadow: 0 6px 32px 0 rgba(0, 87, 255, 0.26);
+    box-shadow: 0 6px 32px 0 rgba($blue--500, 0.26);
   }
 
   &:focus {
@@ -62,4 +62,29 @@ $icon-size: 80px;
   line-height: 28px;
 
   color: $blue--500;
+}
+
+[theme="dark"] {
+  .create-template-card {
+    background-color: rgba($blue--400, 0.08);
+    border-color: $blue--400;
+
+    &:focus {
+      background-color: $navy--600;
+    }
+
+    &:active {
+      background-color: rgba($blue--400, 0.2);
+    }
+
+    &:disabled {
+      background: $navy--600;
+      border-color: $navy--300;
+
+      .create-template-card__icon,
+      .create-template-card__title {
+        color: $navy--300;
+      }
+    }
+  }
 }
