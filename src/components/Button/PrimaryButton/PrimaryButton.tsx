@@ -17,12 +17,12 @@ type PrimaryButtonProps = {
 export const PrimaryButton = (props: PrimaryButtonProps) => (
   <button
     className={classNames(
+      props.className,
       "primary-button",
       {
         "primary-button--small": props.small,
         "primary-button--with-icon": props.icon,
       },
-      props.className,
       getColorClassName(props.color ?? "planning-pink")
     )}
     disabled={props.disabled}
