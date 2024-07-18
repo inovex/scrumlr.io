@@ -4,7 +4,7 @@ $card-height: 220px;
 
 .template-card {
   display: grid;
-  grid-template-rows: auto auto 10px 46px;
+  grid-template-rows: 36px auto 10px 46px;
   grid-template-columns: 36px $spacing--xxs 1fr auto 36px;
   grid-template-areas:
     "fav-icon   .   title         title         menu-icon"
