@@ -1,0 +1,244 @@
+@use "sass:color";
+
+// primary
+// blue
+$blue--800: #002366;
+$blue--700: #003499;
+$blue--600: #0046cc;
+$blue--500: #0057ff; // primary light
+$blue--400: #3379ff; // primary dark
+$blue--300: #669aff;
+$blue--200: #99bcff;
+$blue--100: #ccddff;
+$blue--50: #dde8ff;
+
+// pink
+$pink--800: #66002a;
+$pink--700: #99003f;
+$pink--600: #cc0054;
+$pink--500: #ff0069; // primary light
+$pink--400: #ff3387; // primary dark
+$pink--300: #ff66a5;
+$pink--200: #ff99c3;
+$pink--100: #ffcce1;
+
+// purple
+$purple--800: #500e66;
+$purple--700: #791599;
+$purple--600: #a11ccc;
+$purple--500: #c923ff; // primary light
+$purple--400: #d44fff; // primary dark
+$purple--300: #df7bff;
+$purple--200: #e9a7ff;
+$purple--100: #f4d3ff;
+
+// violet
+$violet--800: #250062;
+$violet--700: #380094;
+$violet--600: #4a00c5;
+$violet--500: #5d00f6; // primary light
+$violet--400: #7d33f8; // primary dark
+$violet--300: #9e66fa;
+$violet--200: #be99fb;
+$violet--100: #dfccfd;
+
+// secondary
+// green
+$green--800: #0b5532;
+$green--700: #107f4c;
+$green--600: #16aa65;
+$green--500: #1bd47e; // primary light
+$green--400: #49dd98; // primary dark
+$green--300: #76e5b2;
+$green--200: #a4eecb;
+$green--100: #d1f6e5;
+
+// yellow
+$yellow--800: #666200;
+$yellow--700: #999300;
+$yellow--600: #ccc400;
+$yellow--500: #fff500; // primary light
+$yellow--400: #fff733; // primary dark
+$yellow--300: #fff966;
+$yellow--200: #fffb99;
+$yellow--100: #fffdcc;
+
+// orange
+$orange--800: #664300;
+$orange--700: #996500;
+$orange--600: #cc8600;
+$orange--500: #ffa800; // primary light
+$orange--400: #ffb933; // primary dark
+$orange--300: #ffcb66;
+$orange--200: #ffdc99;
+$orange--100: #ffeecc;
+
+// base
+// navy
+$navy--900: #111111;
+$navy--800: #15171e;
+$navy--700: #232732;
+$navy--600: #292f3b; // e.g. background columns 2, board settings right
+$navy--500: #303745; // e.g. background columns 1
+$navy--400: #373e4f; // e.g. input fields, cards, board setting left
+$navy--300: #454e63;
+$navy--200: #586073; // e.g tooltip
+$navy--100: #6a7182;
+
+// gray
+$gray--800: #8f95a1; // e.g. usernames, add note, hotkey cheat sheet
+$gray--700: #a2a7b1;
+$gray--600: #b5b8c1;
+$gray--500: #dddfe3;
+$gray--400: #e9eaec;
+$gray--300: #eeeff1; // e.g. input field
+$gray--200: #f4f4f6; // e.g. background column 1
+$gray--100: #f9fafa; // e.g. background column 2
+$gray--000: #ffffff;
+
+// info states
+// error
+$critical-carmine--light: #fe3f3f;
+$critical-carmine--dark: #fe5757;
+
+// warning
+$alert-amber--light: #ffa800;
+$alert-amber--dark: #ffb933;
+
+// success
+$victory-verde--light: $green--500;
+$victory-verde--dark: $green--400;
+
+// color maps
+$primary-colors: (
+  backlog-blue: (
+    800: $blue--800,
+    700: $blue--700,
+    600: $blue--600,
+    500: $blue--500,
+    400: $blue--400,
+    300: $blue--300,
+    200: $blue--200,
+    100: $blue--100,
+    50: $blue--50,
+  ),
+  planning-pink: (
+    800: $pink--800,
+    700: $pink--700,
+    600: $pink--600,
+    500: $pink--500,
+    400: $pink--400,
+    300: $pink--300,
+    200: $pink--200,
+    100: $pink--100,
+  ),
+  poker-purple: (
+    800: $purple--800,
+    700: $purple--700,
+    600: $purple--600,
+    500: $purple--500,
+    400: $purple--400,
+    300: $purple--300,
+    200: $purple--200,
+    100: $purple--100,
+  ),
+  value-violet: (
+    800: $violet--800,
+    700: $violet--700,
+    600: $violet--600,
+    500: $violet--500,
+    400: $violet--400,
+    300: $violet--300,
+    200: $violet--200,
+    100: $violet--100,
+  ),
+);
+
+$secondary-colors: (
+  goal-green: (
+    800: $green--800,
+    700: $green--700,
+    600: $green--600,
+    500: $green--500,
+    400: $green--400,
+    300: $green--300,
+    200: $green--200,
+    100: $green--100,
+  ),
+  yielding-yellow: (
+    800: $yellow--800,
+    700: $yellow--700,
+    600: $yellow--600,
+    500: $yellow--500,
+    400: $yellow--400,
+    300: $yellow--300,
+    200: $yellow--200,
+    100: $yellow--100,
+  ),
+  online-orange: (
+    800: $orange--800,
+    700: $orange--700,
+    600: $orange--600,
+    500: $orange--500,
+    400: $orange--400,
+    300: $orange--300,
+    200: $orange--200,
+    100: $orange--100,
+  ),
+);
+
+$base-colors: (
+  navy: (
+    900: $navy--900,
+    800: $navy--800,
+    700: $navy--700,
+    600: $navy--600,
+    500: $navy--500,
+    400: $navy--400,
+    300: $navy--300,
+    200: $navy--200,
+    100: $navy--100,
+  ),
+  gray: (
+    800: $gray--800,
+    700: $gray--700,
+    600: $gray--600,
+    500: $gray--500,
+    400: $gray--400,
+    300: $gray--300,
+    200: $gray--200,
+    100: $gray--100,
+    000: $gray--000,
+  ),
+);
+
+// sets css variables to be used for the accent colors
+// e.g. var(--accent-color--500)
+@mixin set-accent-variables($color-map) {
+  @each $shade, $color in $color-map {
+    --accent-color--#{$shade}: #{$color};
+    --accent-color--#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
+  }
+
+  // shortcut for most commonly used accent colors
+  $shade-light: map-get($color-map, 500);
+  $shade-dark: map-get($color-map, 400);
+  --accent-color--light: #{$shade-light};
+  --accent-color--light-rgb: #{red($shade-light)}, #{green($shade-light)}, #{blue($shade-light)};
+  --accent-color--dark: #{$shade-dark};
+  --accent-color--dark-rgb: #{red($shade-dark)}, #{green($shade-dark)}, #{blue($shade-dark)};
+}
+
+// generates css classes which can be included in an element
+// to use their different accent color shades
+// e.g. .accent-color__backlog-blue
+@mixin generate-accent-classes($colors) {
+  @each $color-name, $color-values in $colors {
+    .accent-color__#{$color-name} {
+      @include set-accent-variables($color-values);
+    }
+  }
+}
+
+@include generate-accent-classes($primary-colors);
+@include generate-accent-classes($secondary-colors);

@@ -30,7 +30,7 @@ $header-menu-border-bottom-color: #efefef;
 
 .settings-option-button:focus-within,
 .settings-option-button:hover {
-  background-color: rgba(var(--accent-color-rgb), 0.1);
+  background-color: rgba(var(--accent-color--light-rgb), 0.1);
 }
 
 .settings-option-button__label {
@@ -46,7 +46,7 @@ $header-menu-border-bottom-color: #efefef;
   width: $icon--large;
   height: $icon--large;
   flex-shrink: 0;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   vertical-align: middle;
   border-bottom: none !important;
 }

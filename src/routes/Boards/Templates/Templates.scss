@@ -27,7 +27,7 @@ $max-card-width: 500px;
   background-color: $blue--50;
 
   &--saved {
-    margin-right: $spacing--md; // instead of gap, see above
+    margin-left: $spacing--md; // instead of gap, see above
   }
 }
 

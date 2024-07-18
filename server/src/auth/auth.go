@@ -6,6 +6,11 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
+	"math"
+	"net/http"
+	"strings"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
@@ -18,15 +23,11 @@ import (
 	"github.com/markbates/goth/providers/google"
 	"github.com/markbates/goth/providers/microsoftonline"
 	"golang.org/x/crypto/ssh"
-	"io"
-	"math"
-	"net/http"
 	"scrumlr.io/server/auth/devkeys"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
-	"strings"
 )
 
 type Auth interface {

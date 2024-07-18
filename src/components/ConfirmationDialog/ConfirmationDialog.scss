@@ -35,7 +35,7 @@
   height: 100%;
   margin-top: -9px;
   margin-left: -14px;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   opacity: 0.6;
 }
 
@@ -58,7 +58,7 @@
   margin: 12px 0px 0px 0px;
 }
 .confirmation-dialog__warning > svg {
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   height: $icon--medium;
   width: $icon--medium;
   opacity: 0.8;

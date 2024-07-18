@@ -16,6 +16,7 @@ type columnIdentifier string
 type reactionIdentifier string
 type votingIdentifier string
 type boardEditableIdentifier string
+type boardTemplateIdentifier string
 
 const (
 	BoardIdentifier         boardIdentifier         = "Board"
@@ -25,4 +26,5 @@ const (
 	ReactionIdentifier      reactionIdentifier      = "Reaction"
 	VotingIdentifier        votingIdentifier        = "Voting"
 	BoardEditableIdentifier boardEditableIdentifier = "BoardEditable"
+	BoardTemplateIdentifier boardTemplateIdentifier = "BoardTemplate"
 )
