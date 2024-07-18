@@ -51,6 +51,7 @@ $border-width: 3px;
 
     &:active {
       background-color: var(--accent-color--600);
+      border-color: var(--accent-color--600);
     }
   }
 
