@@ -38,8 +38,12 @@ $border-width: 3px;
     }
   }
 
-  &:hover {
-    box-shadow: 0 3px 12px 0 rgba(var(--accent-color--light-rgb), 0.3);
+  &:enabled {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 3px 12px 0 rgba(var(--accent-color--light-rgb), 0.3);
+    }
   }
 
   &--primary {
@@ -55,6 +59,12 @@ $border-width: 3px;
       background-color: var(--accent-color--600);
       border-color: var(--accent-color--600);
     }
+
+    &:disabled {
+      color: $gray--800;
+      background-color: $gray--300;
+      border-color: $gray--300;
+    }
   }
 
   &--secondary {
@@ -69,6 +79,12 @@ $border-width: 3px;
 
     &:active {
       background-color: rgba(var(--accent-color--200-rgb), 0.8);
+    }
+
+    &:disabled {
+      color: $gray--800;
+      background-color: $gray--300;
+      border-color: $gray--800;
     }
   }
 }
