@@ -13,6 +13,8 @@ $border-width: 3px;
   align-items: center;
   gap: $content-gap;
 
+  box-sizing: border-box;
+
   @include compensate-padding($spacing--base $spacing--xl, $border-width);
   border-radius: $rounded--full;
   border-width: $border-width;
