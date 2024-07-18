@@ -40,5 +40,13 @@ $border-width: 3px;
     color: $gray--000;
     background-color: var(--accent-color--light);
     border-color: var(--accent-color--light);
+
+    &:active {
+      background-color: var(--accent-color--600);
+    }
+
+    &:focus {
+      border-color: var(--accent-color--300);
+    }
   }
 }
