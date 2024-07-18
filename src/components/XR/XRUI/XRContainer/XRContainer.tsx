@@ -15,6 +15,7 @@ import XRReactionsContainer from "../XRReactionsContainer/XRReactionsContainer";
 export const GlassMaterial = MeshPhongMaterial;
 
 const cameraDirection = new Vector3();
+const newPosition = new Vector3();
 const WebXRExtensionCamPosition = new Vector3(0, 0, 5); // workaround to fix initial position set by the WebXR Browser Extension
 
 const XRContainer = () => {
@@ -23,17 +24,17 @@ const XRContainer = () => {
   const isPositionSet = useRef(false);
 
   useFrame((state) => {
-    if (handleBarRef.current) {
-      // on session startup, set the initial position and rotation of the UI based on the device's position
-      if (!isPositionSet.current && !state.camera.position.equals(WebXRExtensionCamPosition)) {
-        state.camera.getWorldDirection(cameraDirection);
-        cameraDirection.multiplyScalar(1.4); // 1.4 meters in front of the camera
-        const newPosition = state.camera.position.clone().add(cameraDirection);
-        handleBarRef.current.position.copy(newPosition);
-        handleBarRef.current.lookAt(state.camera.position);
-        containerRef.current.rotation.copy(handleBarRef.current.rotation);
-        isPositionSet.current = true;
-      }
+    if (isPositionSet.current) return;
+
+    if (handleBarRef.current && !state.camera.position.equals(WebXRExtensionCamPosition)) {
+      state.camera.getWorldDirection(cameraDirection);
+      cameraDirection.multiplyScalar(1.4); // 1.4 meters in front of the camera
+      cameraDirection.y -= 0.1; // 10 cm below the camera
+      newPosition.copy(state.camera.position).add(cameraDirection);
+      handleBarRef.current.position.copy(newPosition);
+      handleBarRef.current.lookAt(state.camera.position);
+      containerRef.current.rotation.copy(handleBarRef.current.rotation);
+      isPositionSet.current = true;
     }
   });
 

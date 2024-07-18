@@ -4,9 +4,9 @@ import {Color, MeshPhongMaterial} from "three";
 export class GlassMaterial extends MeshPhongMaterial {
   constructor() {
     super({
-      specular: "#555",
+      specular: "#fff",
       shininess: 100,
-      opacity: 1,
+      opacity: 0.95,
     });
   }
 }

@@ -10,6 +10,7 @@ type XRContainerCueProps = {
 const vec3 = new Vector3();
 const frustum = new Frustum();
 const matrix = new Matrix4();
+const arrowPosition = new Vector3(0, -0.05, 0);
 const opacityLerpSpeed = 0.1;
 
 const XRContainerCue = ({containerRef}: XRContainerCueProps) => {
@@ -58,7 +59,7 @@ const XRContainerCue = ({containerRef}: XRContainerCueProps) => {
         <cylinderGeometry args={[0, 0.02, 0.04]} />
         <meshStandardMaterial transparent color="white" roughness={0.5} />
       </mesh>
-      <mesh position={new Vector3(0, -0.05, 0)}>
+      <mesh position={arrowPosition}>
         <cylinderGeometry args={[0.01, 0.01, 0.06]} />
         <meshStandardMaterial transparent color="white" roughness={0.5} />
       </mesh>

@@ -12,6 +12,7 @@ type XRHandleBarProps = {
 const currentLookAt = new Vector3();
 const targetLookAt = new Vector3();
 const BAR_OPACITY = 0.6;
+const handleBarRotation = new Euler(0, 0, 0.5 * Math.PI);
 
 const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandleBarProps, ref) => {
   const handleBarRef = useRef<Group>(null!);
@@ -47,7 +48,7 @@ const XRHandleBar = forwardRef<Group, XRHandleBarProps>(({containerRef}: XRHandl
   return (
     <Grabbable
       ref={handleBarRef}
-      rotation={new Euler(0, 0, 0.5 * Math.PI)}
+      rotation={handleBarRotation}
       onGrabbed={() => {
         dragging.current = true;
       }}

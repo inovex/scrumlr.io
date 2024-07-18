@@ -12,14 +12,8 @@ const planeRotation = new Euler(-Math.PI / 2, 0, 0);
 const XRLight = () => {
   const dirLight = useRef<DirectionalLight>(null!);
   const floorPlaneRef = useRef<Mesh>(null!);
+
   const floor = useTrackedPlanes()?.find((plane) => plane.semanticLabel === "floor");
-
-  /* const {scene} = useThree();
-
-  useEffect(() => {
-    const helper = new CameraHelper(dirLight.current.shadow.camera);
-    scene.add(helper);
-  }, [scene]); */
 
   useFrame(() => {
     if (!floor?.initialPose) return;
@@ -50,4 +44,5 @@ const XRLight = () => {
     </>
   );
 };
+
 export default XRLight;

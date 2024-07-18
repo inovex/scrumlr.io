@@ -20,7 +20,6 @@ const PoseHand = ({inputSource, setPoseName}: PoseHandProps) => {
       if (name !== prevName) setPoseName(name);
     },
     {
-      /* fist: "fist.handpose", */
       relax: "relax.handpose",
       point: "point.handpose",
       thumb: "thumb.handpose",

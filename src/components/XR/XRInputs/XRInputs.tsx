@@ -115,7 +115,6 @@ const XRInputs = () => {
       dispatchReaction("dislike");
       return;
     }
-
     if (leftPoseName === "thumb") {
       if (leftThumb.current === "up") {
         dispatchReaction("like");
@@ -124,12 +123,10 @@ const XRInputs = () => {
       dispatchReaction("dislike");
       return;
     }
-
     if (leftPoseName === "peace" && rightPoseName === "peace") {
       dispatchReaction("tada");
       return;
     }
-
     if (leftPoseName === "heart" && rightPoseName === "heart" && handsDistance.current && handsDistance.current < 0.1) {
       dispatchReaction("heart");
     }
