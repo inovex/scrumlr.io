@@ -1,8 +1,22 @@
 @import "constants/style";
 
+$content-gap: 10px;
+
 .primary-button {
+  all: unset;
+
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  gap: $content-gap;
+
+  padding: $spacing--base $spacing--xl;
+  border-radius: $rounded--full;
+
+  background-color: var(--accent-color--light);
+
+  &--with-icon {
+    padding-right: $spacing--xl - $content-gap;
+  }
 }
