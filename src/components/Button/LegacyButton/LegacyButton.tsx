@@ -12,6 +12,9 @@ export interface LecagyButtonProps
   block?: boolean;
 }
 
+/**
+ * @deprecated since templates, use component Button instead
+ */
 export const LegacyButton: FC<PropsWithChildren<LecagyButtonProps>> = ({
   className,
   variant = "contained",
