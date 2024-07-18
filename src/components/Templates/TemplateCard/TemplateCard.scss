@@ -20,15 +20,17 @@ $card-height: 220px;
   background-color: $gray--000;
 }
 
+.template-card__favourite {
+  grid-area: fav-icon;
+}
+
 .template-card__icon {
   align-self: center;
 
   width: 36px;
   height: 36px;
 
-  &--favourite {
-    grid-area: fav-icon;
-  }
+  color: $navy--900;
 
   &--menu {
     grid-area: menu-icon;
@@ -122,10 +124,6 @@ $card-height: 220px;
     &--menu,
     &--columns {
       color: $gray--000;
-    }
-
-    &--favourite {
-      color: rgba($gray--000, 0.7);
     }
   }
 }

@@ -8,7 +8,7 @@ import "./TemplateCard.scss";
 
 export const TemplateCard = () => (
   <div className="template-card">
-    <FavouriteButton className="template-card__icon" active onClick={() => {}} />
+    <FavouriteButton className="template-card__favourite" active={false} onClick={() => {}} />
     <div className="template-card__title">Title</div>
     <MenuIcon className={classNames("template-card__icon", "template-card__icon--menu")} />
     <div className="template-card__description">Lorem ipsum dolor sit amet, conse dolo sadipscing elitr vero eos et aquiteres.</div>
