@@ -17,7 +17,7 @@ export const TemplateCard = () => (
       <div className="template-card__columns-title">3 Columns</div>
       <div className="template-card__columns-subtitle">Ideas, Problems & Solutions</div>
     </div>
-    <PrimaryButton className="template-card__start-button" icon={<NextIcon />}>
+    <PrimaryButton className="template-card__start-button" small icon={<NextIcon />}>
       Start
     </PrimaryButton>
   </div>

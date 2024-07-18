@@ -17,6 +17,17 @@ $content-gap: 10px;
   background-color: var(--accent-color--light);
 
   &--with-icon {
-    padding-right: $spacing--xl - $content-gap;
+    padding: $spacing--base 22px $spacing--base 28px;
+  }
+
+  &--small {
+    gap: $spacing--xxs;
+
+    padding: 6px $spacing--base;
+
+    &.primary-button--with-icon {
+      // both have to be active to apply
+      padding: 6px $spacing--sm 6px $spacing--base;
+    }
   }
 }
