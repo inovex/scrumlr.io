@@ -3,7 +3,7 @@
 $card-height: 220px;
 $icon-size: 80px;
 
-.create-board-card {
+.create-template-card {
   all: unset;
 
   display: flex;
@@ -42,20 +42,20 @@ $icon-size: 80px;
     box-shadow: none;
     cursor: unset;
 
-    .create-board-card__icon,
-    .create-board-card__title {
+    .create-template-card__icon,
+    .create-template-card__title {
       color: $gray--800;
     }
   }
 }
 
-.create-board-card__icon {
+.create-template-card__icon {
   width: $icon-size;
   height: $icon-size;
   color: $blue--500;
 }
 
-.create-board-card__title {
+.create-template-card__title {
   font-size: $text--lg;
   font-weight: 600;
   line-height: 28px;

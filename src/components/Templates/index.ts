@@ -1,2 +1,2 @@
-export * from "./CreateBoardCard/CreateBoardCard";
+export * from "./CreateTemplateCard/CreateTemplateCard";
 export * from "./TemplateCard/TemplateCard";
