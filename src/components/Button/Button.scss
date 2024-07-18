@@ -1,4 +1,4 @@
-@import "../../constants/style";
+@import "constants/style";
 
 $content-gap: 10px;
 
@@ -14,7 +14,8 @@ $content-gap: 10px;
   padding: $spacing--base $spacing--xl;
   border-radius: $rounded--full;
 
-  background-color: var(--accent-color--light);
+  font-size: $text-size--medium;
+  font-weight: 700;
 
   &--with-icon {
     padding: $spacing--base 22px $spacing--base 28px;
