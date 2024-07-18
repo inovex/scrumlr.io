@@ -48,7 +48,7 @@ $card-height: 220px;
   font-weight: 700;
   line-height: 32px;
 
-  color: #111111;
+  color: $navy--900;
 }
 
 .template-card__description {
@@ -89,4 +89,37 @@ $card-height: 220px;
 .template-card__start-button {
   grid-area: start;
   justify-self: end;
+}
+
+[theme="dark"] {
+  .template-card {
+    background-color: $navy--400;
+  }
+
+  .template-card__title {
+    color: $gray--000;
+  }
+
+  .template-card__description {
+    color: $gray--000;
+  }
+
+  .template-card__columns-title {
+    color: $gray--000;
+  }
+
+  .template-card__columns-subtitle {
+    color: $gray--800;
+  }
+
+  .template-card__icon {
+    &--menu,
+    &--columns {
+      color: $gray--000;
+    }
+
+    &--favourite {
+      color: rgba($gray--000, 0.7);
+    }
+  }
 }
