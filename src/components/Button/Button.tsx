@@ -22,10 +22,8 @@ export const Button = (props: ButtonProps) => (
     className={classNames(
       props.className,
       "button",
+      `button--${props.type ?? "primary"}`,
       {
-        "button--primary": props.type === "primary" || !props.type,
-        "button--secondary": props.type === "secondary",
-        "button--tertiary": props.type === "tertiary",
         "button--small": props.small,
         "button--with-icon": props.icon,
       },
