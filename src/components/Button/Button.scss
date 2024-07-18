@@ -36,6 +36,10 @@ $border-width: 3px;
     }
   }
 
+  &:hover {
+    box-shadow: 0 3px 12px 0 rgba(var(--accent-color--light-rgb), 0.3);
+  }
+
   &--primary {
     color: $gray--000;
     background-color: var(--accent-color--light);
@@ -47,6 +51,16 @@ $border-width: 3px;
 
     &:focus {
       border-color: var(--accent-color--300);
+    }
+  }
+
+  &--secondary {
+    color: var(--accent-color--light);
+    background-color: rgba(var(--accent-color--100-rgb), 0.6);
+    border-color: var(--accent-color--light);
+
+    &:active {
+      background-color: rgba(var(--accent-color--200-rgb), 0.8);
     }
   }
 }
