@@ -15,7 +15,7 @@ $header-menu-button-width: 24px;
 .board-settings {
   position: relative;
   height: 64px;
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
 }
 
 .board-settings > form {
@@ -77,12 +77,12 @@ $header-menu-button-width: 24px;
 
   &:focus-visible {
     background-color: $gray--000;
-    color: var(--accent-color);
+    color: var(--accent-color--light);
   }
 
   &:hover {
     background-color: $gray--000;
-    color: var(--accent-color);
+    color: var(--accent-color--light);
     transform: scale(1.06);
   }
 

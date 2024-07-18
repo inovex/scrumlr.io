@@ -39,8 +39,8 @@
 
 .toggle--active::after {
   left: 16px;
-  background-color: var(--accent-color);
-  box-shadow: 0 4px 8px rgba(var(--accent-color-rgb), 0.24);
+  background-color: var(--accent-color--light);
+  box-shadow: 0 4px 8px rgba(var(--accent-color--light-rgb), 0.24);
 }
 
 .toggle.toggle--disabled {

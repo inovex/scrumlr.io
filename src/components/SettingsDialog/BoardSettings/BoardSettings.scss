@@ -8,7 +8,7 @@
   padding-bottom: $settings-dialog-container--bottom;
 
   &:focus-visible {
-    outline: 2px dashed rgba(var(--accent-color-rgb), 0.5);
+    outline: 2px dashed rgba(var(--accent-color--light-rgb), 0.5);
     border-radius: 8px;
   }
 
@@ -133,7 +133,7 @@
 .board-settings__policy-button_value svg {
   width: $icon--medium;
   height: $icon--medium;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
 }
 
 .board-settings__password-button {
@@ -160,7 +160,7 @@
 }
 
 .board-settings__show-password-button--enabled {
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   cursor: pointer;
   transition: all 0.08s ease-out;
 
@@ -218,7 +218,7 @@
   height: 30px;
   border: none;
   background-color: inherit;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   align-self: center;
 }
 
@@ -244,14 +244,14 @@
 .board-settings__remove-protection-button svg {
   width: $icon--medium;
   height: $icon--medium;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
 }
 
 .board-settings__generate-password-button svg {
   // TODO remove margin when icon gets updated
   width: $icon--medium;
   height: $icon--medium;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
 }
 
 .board-settings__password-management-text {
