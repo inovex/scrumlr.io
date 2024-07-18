@@ -1,9 +1,11 @@
 @import "constants/style";
 
 $content-gap: 10px;
+$border-width: 3px;
 
 .button {
   all: unset;
+  outline: 0;
 
   display: flex;
   flex-direction: row;
@@ -11,24 +13,32 @@ $content-gap: 10px;
   align-items: center;
   gap: $content-gap;
 
-  padding: $spacing--base $spacing--xl;
+  @include compensate-padding($spacing--base $spacing--xl, $border-width);
   border-radius: $rounded--full;
+  border-width: $border-width;
+  border-style: solid;
 
   font-size: $text-size--medium;
   font-weight: 700;
 
   &--with-icon {
-    padding: $spacing--base 22px $spacing--base 28px;
+    @include compensate-padding($spacing--base 22px $spacing--base 28px, $border-width);
   }
 
   &--small {
     gap: $spacing--xxs;
 
-    padding: 6px $spacing--base;
+    @include compensate-padding(6px $spacing--base, $border-width);
 
     &.button--with-icon {
       // both have to be active to apply
-      padding: 6px $spacing--sm 6px $spacing--base;
+      @include compensate-padding(6px $spacing--sm 6px $spacing--base, $border-width);
     }
+  }
+
+  &--primary {
+    color: $gray--000;
+    background-color: var(--accent-color--light);
+    border-color: var(--accent-color--light);
   }
 }
