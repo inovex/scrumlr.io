@@ -10,6 +10,7 @@ $blue--400: #3379ff; // primary dark
 $blue--300: #669aff;
 $blue--200: #99bcff;
 $blue--100: #ccddff;
+$blue--50: #dde8ff;
 
 // pink
 $pink--800: #66002a;
@@ -119,6 +120,7 @@ $primary-colors: (
     300: $blue--300,
     200: $blue--200,
     100: $blue--100,
+    50: $blue--50,
   ),
   planning-pink: (
     800: $pink--800,
