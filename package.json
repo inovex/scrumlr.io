@@ -109,7 +109,7 @@
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "prepare": "husky install",
+    "prepare": "husky",
     "hash": "cross-env REACT_APP_LOCALES_HASH=$(hash-files --algorithm md5 public/locales/**)"
   },
   "jest": {
