@@ -21,11 +21,10 @@ type NoteDialogNoteContentProps = {
   authorId: string;
   text: string;
   viewer: Participant;
-  showNoteReactions: boolean; // used for style adjustments
   isStackedNote: boolean;
 };
 
-export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, showNoteReactions, isStackedNote}: NoteDialogNoteContentProps) => {
+export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, isStackedNote}: NoteDialogNoteContentProps) => {
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useDispatch();
   const {t} = useTranslation();
