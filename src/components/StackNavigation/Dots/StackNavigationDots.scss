@@ -31,7 +31,7 @@
   &:focus-visible::after {
     opacity: 1;
     outline: 2px solid $gray--000;
-    background: var(--accent-color);
+    background: var(--accent-color--light);
     transform: scale(1);
   }
 
