@@ -42,6 +42,10 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
   const me = useAppSelector((state) => state.participants?.self);
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
+
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
     // get the participant who issued that reaction
@@ -181,31 +185,33 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   return (
     <div className="note-reaction-list__root" ref={rootRef}>
-      <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
-        <button
-          className="note-reaction-list__add-reaction-sticker-container"
-          aria-label={t("NoteReactionList.toggleBarLabel")}
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowReactionBar((show) => !show);
-          }}
-          onKeyDown={(e) => {
-            if (e.code === "Enter" || e.code === "Space") {
-              // Stop the default, because it will dispatch a click event on
-              // the first reaction
-              e.preventDefault();
-              // Stop propagation of the event so that it does not bubble up
-              // to the note component and opens the stack view
+      {(isModerator || !boardLocked) && (
+        <div className={classNames("note-reaction-list__reaction-bar-container", {"note-reaction-list__reaction-bar-container--active": showReactionBar})}>
+          <button
+            className="note-reaction-list__add-reaction-sticker-container"
+            aria-label={t("NoteReactionList.toggleBarLabel")}
+            onClick={(e) => {
               e.stopPropagation();
-              // Open the reaction bar
               setShowReactionBar((show) => !show);
-            }
-          }}
-        >
-          <AddEmoji className="note-reaction-list__add-reaction-sticker" />
-        </button>
-        {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
-      </div>
+            }}
+            onKeyDown={(e) => {
+              if (e.code === "Enter" || e.code === "Space") {
+                // Stop the default, because it will dispatch a click event on
+                // the first reaction
+                e.preventDefault();
+                // Stop propagation of the event so that it does not bubble up
+                // to the note component and opens the stack view
+                e.stopPropagation();
+                // Open the reaction bar
+                setShowReactionBar((show) => !show);
+              }
+            }}
+          >
+            <AddEmoji className="note-reaction-list__add-reaction-sticker" />
+          </button>
+          {showReactionBar && <NoteReactionBar closeReactionBar={closeReactionBar} reactions={reactionsReduced} handleClickReaction={handleClickReaction} />}
+        </div>
+      )}
       <div className="note-reaction-list__reaction-chips-container" ref={listRef}>
         {!showReactionBar &&
           // show either condensed or normal reaction chips

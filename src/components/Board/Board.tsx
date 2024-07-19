@@ -8,6 +8,8 @@ import {HotkeyAnchor} from "components/HotkeyAnchor";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
+import {Toast} from "utils/Toast";
+import {useTranslation} from "react-i18next";
 import {useIsTouchingSides} from "utils/hooks/useIsTouchingSides";
 import "./Board.scss";
 
@@ -15,9 +17,11 @@ export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
   currentUserIsModerator: boolean;
   moderating: boolean;
+  locked: boolean;
 }
 
 export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
+  const {t} = useTranslation();
   const [dragActive, setDragActive] = useState(false);
   useDndMonitor({
     onDragStart() {
@@ -47,6 +51,12 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating}: B
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children]);
+
+  useEffect(() => {
+    if (locked) {
+      Toast.info({title: t("Toast.lockedBoard"), autoClose: 10_000});
+    }
+  }, [t, locked]);
 
   if (!children || columnsCount === 0) {
     // Empty board

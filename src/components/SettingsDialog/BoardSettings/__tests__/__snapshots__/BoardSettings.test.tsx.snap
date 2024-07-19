@@ -111,6 +111,51 @@ exports[`BoardSettings should match snapshot 1`] = `
       >
         <button
           aria-checked="true"
+          aria-label="Allow note repositioning"
+          class="settings-option-button board-settings__allow-note-repositioning-button"
+          data-testid="note-repositioning"
+          role="switch"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Allow note repositioning
+          </span>
+          <div
+            class="board-settings__allow-note-repositioning-value"
+          >
+            <div
+              class="toggle toggle--active"
+            />
+          </div>
+        </button>
+        <button
+          aria-checked="true"
+          aria-label="Lock Board"
+          class="settings-option-button board-settings__allow-board-editing"
+          role="switch"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Lock Board
+          </span>
+          <div
+            class="board-settings__allow-board-editing-value"
+          >
+            <div
+              class="toggle toggle--active"
+            />
+          </div>
+        </button>
+      </div>
+      <div
+        class="settings-dialog__group"
+      >
+        <button
+          aria-checked="true"
           aria-label="Show authors of notes"
           class="settings-option-button board-settings__show-author-button"
           data-testid="author"
@@ -199,30 +244,6 @@ exports[`BoardSettings should match snapshot 1`] = `
           >
             <div
               class="toggle"
-            />
-          </div>
-        </button>
-        <hr
-          class="settings-dialog__separator"
-        />
-        <button
-          aria-checked="true"
-          aria-label="Allow note repositioning"
-          class="settings-option-button board-settings__allow-note-repositioning-button"
-          data-testid="note-repositioning"
-          role="switch"
-          type="button"
-        >
-          <span
-            class="settings-option-button__label"
-          >
-            Allow note repositioning
-          </span>
-          <div
-            class="board-settings__allow-note-repositioning-value"
-          >
-            <div
-              class="toggle toggle--active"
             />
           </div>
         </button>
