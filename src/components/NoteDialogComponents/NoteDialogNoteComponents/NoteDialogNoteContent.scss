@@ -16,12 +16,9 @@
   &:has(&--image) {
     padding: $spacing--xs;
   }
+
   &:has(&--image-zoom) {
     overflow: visible;
-  }
-
-  &--extended {
-    height: 5.5 * $line-height--medium;
   }
 }
 

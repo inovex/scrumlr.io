@@ -67,7 +67,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   });
 
   return (
-    <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})} ref={emoji.containerRef}>
+    <div className="note-dialog__note-content" ref={emoji.containerRef}>
       {isImage ? (
         <>
           <img
