@@ -17,6 +17,10 @@ $column-emoji-suggestions__max-height: 350px;
 $column-emoji-suggestions__approx-top-distance: 320px;
 $note-dialog-emoji-suggestions__approx-top-distance: 310px;
 
+// stack view
+$stack-content-max-height: 60vh;
+$stack-content-max-height--mobile: initial; // initial: full height, otherwise 30vh looks good
+
 // icons
 $icon--small: 16px;
 $icon--medium: 24px;
@@ -109,6 +113,9 @@ $request-z-index: $base-z-index + (9 * $base-z-index-step);
 $tooltip-z-index: $request-z-index;
 $board-reaction-z-index: $backdrop-z-index + $base-z-index-step;
 
+// breakpoints
+$breakpoint--desktop: 1280px;
+
 // responsive: @media query
 $mini-smartphone: "screen and (max-width: 480px)";
 $smartphone: "screen and (max-width: 767px)";
@@ -163,24 +170,14 @@ $column-stripes--dark: repeating-linear-gradient(
 }
 
 // scrollbar
-@mixin scrollbar($width: 10px, $border-radius: 8px) {
-  &::-webkit-scrollbar {
-    width: #{$width};
-  }
+@mixin scrollbar() {
+  scrollbar-width: auto;
 
-  &::-webkit-scrollbar-track {
-    border-radius: #{$border-radius};
-  }
+  scrollbar-color: var(--accent-color--200) var(--accent-color--100);
 
-  &::-webkit-scrollbar-thumb {
-    border-radius: #{$border-radius};
-    background-color: rgba($gray--600, 0.3);
-  }
-
+  // ampersand to correctly scope the rule
   [theme="dark"] & {
-    &::-webkit-scrollbar-thumb {
-      background-color: rgba($navy--900, 0.3);
-    }
+    scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) rgba(var(--accent-color--dark-rgb), 0.6);
   }
 }
 
