@@ -45,7 +45,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
             "portal__frame",
             {"portal__frame--hiddenOverflow": hiddenOverflow},
             {"portal__frame--centered": centered},
-            {"portal__frame--disabledPadding": disabledPadding},
+            {"portal__frame--disabled-padding": disabledPadding},
             getAccentColor()
           )}
         >
