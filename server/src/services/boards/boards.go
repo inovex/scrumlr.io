@@ -151,7 +151,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
 		ShowNoteReactions:     body.ShowNoteReactions,
 		AllowStacking:         body.AllowStacking,
-		AllowEditing:          body.AllowEditing,
+		IsLocked:              body.IsLocked,
 		TimerStart:            body.TimerStart,
 		TimerEnd:              body.TimerEnd,
 		SharedNote:            body.SharedNote,
