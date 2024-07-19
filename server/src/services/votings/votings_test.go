@@ -142,35 +142,49 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 	s.realtime = rtMock
 
 	boardId := uuid.New()
+	votingID := uuid.New()
 	updateVotingRequest := dto.VotingUpdateRequest{
-		ID: 	uuid.New(),
+		ID:     votingID,
 		Board:  boardId,
-		Status: types.VotingStatusOpen,
+		Status: types.VotingStatusClosed,
 	}
 
 	// Mocks for realtime
 	publishSubject := "board." + boardId.String()
 	publishEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
-		Data: &dto.Voting{},
+		Data: struct {
+			Voting *dto.Voting `json:"voting"`
+			Notes  []*dto.Note `json:"notes"`
+		}{
+			Voting: &dto.Voting{},
+			Notes:  nil,
+		},
 	}
 
-	votingID := uuid.New()
 	mock.On("UpdateVoting", database.VotingUpdate{
-		ID: 	votingID,
+		ID:     votingID,
 		Board:  boardId,
 		Status: types.VotingStatusClosed,
 	}).Return(database.Voting{
-		ID: votingID,
-		Board: boardId,
-		CreatedAt: time.Now(),
-		VoteLimit: rand.IntN(10),
+		ID:                 votingID,
+		Board:              boardId,
+		CreatedAt:          time.Now(),
+		VoteLimit:          rand.IntN(10),
 		AllowMultipleVotes: false,
-		ShowVotesOfOthers: false,
-		Status: types.VotingStatusClosed,
+		ShowVotesOfOthers:  false,
+		Status:             types.VotingStatusClosed,
 	}, nil)
+
+	mock.On("GetVotes", filter.VoteFilter{
+		Board:  boardId,
+		Voting: &votingID,
+	}).Return([]database.Vote{}, nil)
+
+	mock.On("GetVoting", boardId, votingID).Return(database.Voting{}, []database.Vote{}, nil)
+
 	rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
-	update , err := s.Update(context.Background(), updateVotingRequest)
+	update, err := s.Update(context.Background(), updateVotingRequest)
 
 	assert.NotNil(suite.T(), update)
 	assert.NoError(suite.T(), err)
