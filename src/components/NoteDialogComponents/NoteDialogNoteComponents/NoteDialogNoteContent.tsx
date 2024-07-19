@@ -1,6 +1,5 @@
 import {FC, useState} from "react";
 import {Actions} from "store/action";
-import "./NoteDialogNoteContent.scss";
 import {useDispatch} from "react-redux";
 import {Participant} from "types/participant";
 import {useImageChecker} from "utils/hooks/useImageChecker";
@@ -13,18 +12,19 @@ import {createPortal} from "react-dom";
 import {Toast} from "utils/Toast";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import TextareaAutosize from "react-autosize-textarea";
 import i18n from "../../../i18n";
+import "./NoteDialogNoteContent.scss";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;
   authorId: string;
   text: string;
   viewer: Participant;
-  showNoteReactions: boolean; // used for style adjustments
   isStackedNote: boolean;
 };
 
-export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, showNoteReactions, isStackedNote}: NoteDialogNoteContentProps) => {
+export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, isStackedNote}: NoteDialogNoteContentProps) => {
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useDispatch();
   const {t} = useTranslation();
@@ -66,7 +66,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   });
 
   return (
-    <div className={classNames("note-dialog__note-content", {"note-dialog__note-content--extended": !showNoteReactions})} ref={emoji.containerRef}>
+    <div className="note-dialog__note-content" ref={emoji.containerRef}>
       {isImage ? (
         <>
           <img
@@ -92,8 +92,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         </>
       ) : (
         <>
-          <textarea
-            className="note-dialog__note-content--text"
+          <TextareaAutosize
+            className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
             disabled={!editable}
             onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
             onFocus={onFocus}
@@ -112,6 +112,9 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
                 e.stopPropagation();
               }
             }}
+            // required for some reason
+            onPointerEnterCapture={undefined}
+            onPointerLeaveCapture={undefined}
           />
           {note?.edited && <div className="note-dialog__marker-edited">({t("Note.edited")})</div>}
           {!isStackedNote && (
