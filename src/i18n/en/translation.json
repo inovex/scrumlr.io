@@ -287,6 +287,7 @@
     "moderatorResetReadyStatesButton": "Reset!",
     "bannedParticipant": "Participant '{{user}}' was removed",
     "unbannedParticipant": "The ban for participant '{{user}}' was revoked",
+    "lockedBoard": "The board is currently locked; only moderators can make changes to it.",
     "noteToHiddenColumn": "You just added a note to a hidden column!",
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
@@ -313,7 +314,8 @@
   "Note": {
     "me": "Me",
     "you": "you",
-    "userImageAlt": "media provided by {{user}}"
+    "userImageAlt": "media provided by {{user}}",
+    "edited": "edited"
   },
   "StackView": {
     "prevNote": "Previous note",
@@ -362,6 +364,7 @@
     "ShowOtherUsersNotesOption": "Show notes of other users",
     "ShowNoteReactionsOptions": "Show note reactions",
     "AllowNoteRepositioningOption": "Allow note repositioning",
+    "IsLocked": "Lock Board",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"

@@ -10,14 +10,7 @@ import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import ScrumlrLogoDark from "assets/scrumlr-logo-dark.png";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {ReactComponent as PreviousArrow} from "assets/icon-arrow-previous.svg";
-import {ReactComponent as SettingsIcon} from "assets/icon-settings.svg";
-import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
-import {ReactComponent as ParticipantsIcon} from "assets/icon-participants.svg";
-import {ReactComponent as AppearanceIcon} from "assets/icon-appearance.svg";
-import {ReactComponent as ExportIcon} from "assets/icon-export.svg";
-import {ReactComponent as FeedbackIcon} from "assets/icon-feedback.svg";
+import {Close, ArrowLeft, GeneralSettings, Share, Participants, SettingsAppearance, FileDefault, SettingsFeedback} from "components/Icon";
 import "./SettingsDialog.scss";
 
 export const SettingsDialog: FC = () => {
@@ -68,7 +61,7 @@ export const SettingsDialog: FC = () => {
                       to="board"
                       className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/settings/board")})}
                     >
-                      <SettingsIcon className="navigation-item__icon" />
+                      <GeneralSettings className="navigation-item__icon" />
                       <div className="navigation-item__content">
                         <p className="navigation-item__name">{t("SettingsDialog.BoardSettings")}</p>
                         <p className="navigation-item__description">{t("SettingsDialog.BoardSettingsDescription")}</p>
@@ -77,11 +70,11 @@ export const SettingsDialog: FC = () => {
                   )}
                   <Link
                     to="participants"
-                    className={classNames("navigation__item", "accent-color__poker-purple", {
+                    className={classNames("navigation__item", "accent-color__value-violet", {
                       "navigation__item--active": window.location.pathname.endsWith("/settings/participants"),
                     })}
                   >
-                    <ParticipantsIcon className="navigation-item__icon" />
+                    <Participants className="navigation-item__icon" />
                     <div className="navigation-item__content">
                       <p className="navigation-item__name">{t("SettingsDialog.Participants")}</p>
                       <p className="navigation-item__description">{t("SettingsDialog.ParticipantsDescription")}</p>
@@ -91,7 +84,7 @@ export const SettingsDialog: FC = () => {
                     to="appearance"
                     className={classNames("navigation__item", "accent-color__lean-lilac", {"navigation__item--active": window.location.pathname.endsWith("/appearance")})}
                   >
-                    <AppearanceIcon className="navigation-item__icon" />
+                    <SettingsAppearance className="navigation-item__icon" />
                     <div className="navigation-item__content">
                       <p className="navigation-item__name">{t("SettingsDialog.Appearance")}</p>
                       <p className="navigation-item__description">{t("SettingsDialog.AppearanceDescription")}</p>
@@ -101,7 +94,7 @@ export const SettingsDialog: FC = () => {
                     to="share"
                     className={classNames("navigation__item", "accent-color__planning-pink", {"navigation__item--active": window.location.pathname.endsWith("/share")})}
                   >
-                    <ShareIcon className="navigation-item__icon" />
+                    <Share className="navigation-item__icon" />
                     <div className="navigation-item__content">
                       <p className="navigation-item__name">{t("SettingsDialog.ShareSession")}</p>
                       <p className="navigation-item__description">{t("SettingsDialog.ShareSessionDescription")}</p>
@@ -111,7 +104,7 @@ export const SettingsDialog: FC = () => {
                     to="export"
                     className={classNames("navigation__item", "accent-color__backlog-blue", {"navigation__item--active": window.location.pathname.endsWith("/export")})}
                   >
-                    <ExportIcon className="navigation-item__icon" />
+                    <FileDefault className="navigation-item__icon" />
                     <div className="navigation-item__content">
                       <p className="navigation-item__name">{t("SettingsDialog.ExportBoard")}</p>
                       <p className="navigation-item__description">{t("SettingsDialog.ExportBoardDescription")}</p>
@@ -120,9 +113,9 @@ export const SettingsDialog: FC = () => {
                   {feedbackEnabled && (
                     <Link
                       to="feedback"
-                      className={classNames("navigation__item", "accent-color__poker-purple", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
+                      className={classNames("navigation__item", "accent-color__value-violet", {"navigation__item--active": window.location.pathname.endsWith("/feedback")})}
                     >
-                      <FeedbackIcon className="navigation-item__icon" />
+                      <SettingsFeedback className="navigation-item__icon" />
                       <div className="navigation-item__content">
                         <p className="navigation-item__name">{t("SettingsDialog.Feedback")}</p>
                         <p className="navigation-item__description">{t("SettingsDialog.FeedbackDescription")}</p>
@@ -145,12 +138,12 @@ export const SettingsDialog: FC = () => {
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">
-                  <PreviousArrow />
+                  <ArrowLeft />
                 </Link>
                 <Outlet />
               </article>
               <Link to={`/board/${boardId}`} className="settings-dialog__close-button">
-                <CloseIcon className="close-button__icon" />
+                <Close className="close-button__icon" />
               </Link>
             </animated.aside>
           )}

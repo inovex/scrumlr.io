@@ -1,15 +1,15 @@
 package database
 
 import (
-	"context"
-	"errors"
-	"scrumlr.io/server/identifiers"
-	"time"
+  "context"
+  "errors"
+  "scrumlr.io/server/identifiers"
+  "time"
 
-	"github.com/google/uuid"
-	"github.com/uptrace/bun"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
+  "github.com/google/uuid"
+  "github.com/uptrace/bun"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/database/types"
 )
 
 type Board struct {
@@ -24,7 +24,7 @@ type Board struct {
 	ShowNotesOfOtherUsers bool
 	ShowNoteReactions     bool
 	AllowStacking         bool
-	AllowEditing          bool
+	IsLocked              bool
 	CreatedAt             time.Time
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
@@ -60,7 +60,7 @@ type BoardUpdate struct {
 	ShowNotesOfOtherUsers *bool
 	ShowNoteReactions     *bool
 	AllowStacking         *bool
-	AllowEditing          *bool
+	IsLocked              *bool
 	TimerStart            *time.Time
 	TimerEnd              *time.Time
 	SharedNote            uuid.NullUUID
@@ -143,8 +143,8 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 	if update.AllowStacking != nil {
 		query.Column("allow_stacking")
 	}
-	if update.AllowEditing != nil {
-		query.Column("allow_editing")
+	if update.IsLocked != nil {
+		query.Column("is_locked")
 	}
 
 	var board Board

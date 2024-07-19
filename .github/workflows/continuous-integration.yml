@@ -12,40 +12,32 @@ on:
     branches: [main]
     types:
       - completed
+env:
+  BASE_URL: https://${{ github.event.pull_request.number || 'main' }}.development.scrumlr.fra.ics.inovex.io
 
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  test:
-    name: Build and Test
+  test-frontend:
+    name: Build and Test – Frontend
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: yarn-cache
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-
-      - uses: actions/setup-go@v3
-        with:
-          go-version: "^1.20"
-
-      - name: Build server
-        working-directory: ./server
-        run: |
-          make test
-          make build-alpine
 
       - name: Build client
         run: |
@@ -58,35 +50,151 @@ jobs:
       - name: Test with coverage
         run: yarn test --coverage --watchAll=false --passWithNoTests
 
+  test-backend:
+      name: Build and Test – Backend
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "^1.22"
+          cache: false
+
+      - name: Cache Go Modules
+        id: cache-go-modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            /go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('server/src/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Download Go Modules
+        if: steps.cache-go-modules.outputs.cache-hit != 'true'
+        working-directory: ./server/src
+        run: go mod download
+
+      - name: Verify Go Modules
+        working-directory: ./server/src
+        run: go list -m all
+
+      - name: Go lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: v1.54
+          working-directory: ./server/src/
+
+      - name: Build server
+        working-directory: ./server
+        run: |
+          make test
+          make build-alpine
+
   package:
-    needs: test
+    needs: [test-frontend, test-backend]
     uses: inovex/scrumlr.io/.github/workflows/package.yml@main
 
   deploy_to_dev_cluster:
     needs: package
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main'}}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     uses: inovex/scrumlr.io/.github/workflows/deploy_to_dev_cluster.yml@main
     secrets: inherit
     with:
       frontend_image_tag: ${{ needs.package.outputs.frontend-image-tag }}
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
-  
-  run_postman_tests:
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    needs: deploy_to_dev_cluster
-    uses: ./.github/workflows/postman_e2e_test.yml
-    with: 
-      base_url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          
-  end_to_end_test:
-    name: End to End Test
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    needs: deploy_to_dev_cluster
+
+  docs_changes:
+    if : ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
-      - name: run tests
+      - name: checkout repository
+        uses: actions/checkout@v3
+      - name: paths-filter
+        id: docs_changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            docs:
+              - 'docs/**'
+      - name: set-output
+        id: set-output
+        run: echo "docs_changed=${{ steps.docs_changes.outputs.docs }}" >> $GITHUB_OUTPUT
+    outputs:
+      docs_changed: ${{ steps.set-output.outputs.docs_changed }}
+
+  deploy_github_pages:
+    needs: docs_changes
+    if: ${{ needs.docs_changes.outputs.docs_changed == 'true' }}
+    uses: inovex/scrumlr.io/.github/workflows/deploy_docs.yml@main
+    secrets: inherit
+  deployment_health_check:
+    needs: deploy_to_dev_cluster
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Reachability check
+        uses: ./.github/actions/deployment_health_check
+        with:
+          HEALTH_URL: ${{ env.BASE_URL }}/api/health
+
+  postman_tests:
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Reachability check
+        uses: ./.github/actions/deployment_health_check
+        with:
+          HEALTH_URL: ${{ env.BASE_URL }}/api/health
+      - name: Postman run
+        uses: ./.github/actions/postman_run
+        with:
+          POSTMAN_URL: ${{ env.BASE_URL }}/api
+
+  octomind_end_to_end_test:
+    name: Octomind End to End Test
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Reachability check
+        uses: ./.github/actions/deployment_health_check
+        with:
+          HEALTH_URL: ${{ env.BASE_URL }}/api/health
+      - name: Run tests
         uses: OctoMind-dev/automagically-action-execute@v2
         with:
           url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
           token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
           testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
+
+  cypress_end_to_end_test:
+    name: Cypress End to End Test
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
+    needs: deployment_health_check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Start server
+        run: docker compose --profile build up -d
+        working-directory: server
+      - name: Setup client and run tests
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          start: |
+            yarn install
+            yarn run start
+          working-directory: ./
+          wait-on: 'http://localhost:3000'

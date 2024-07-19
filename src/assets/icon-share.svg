@@ -1,9 +1,0 @@
-<svg fill="currentColor" height="32" width="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-    <rect id="BG" width="32" height="32" fill="none"/>
-    <g id="icon_share_24-grey" data-name="icon/share/24-grey" transform="translate(4 4)">
-    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path transform="translate(4 15)" d="m0 1v2c1.3527e-16 1.1046 0.89543 2 2 2h12c1.1046 0 2-0.89543 2-2v-3" opacity=".5"/>
-        <path transform="translate(4 3)" d="m9.3103 3.8182v-3.8182l8.6897 6.3636-8.6897 6.3636v-3.8182c-3.4448 0-6.6103 0.12727-9.3103 5.0909 0-3.15 0.31034-10.182 9.3103-10.182z" stroke-linejoin="round"/>
-    </g>
-    </g>
-</svg>

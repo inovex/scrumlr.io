@@ -1,5 +1,5 @@
 import {ForwardedRef, forwardRef, MouseEvent} from "react";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {Close} from "components/Icon";
 import {ReactionType} from "types/reaction";
 import {BOARD_REACTION_EMOJI_MAP} from "types/boardReaction";
 import {Actions} from "store/action";
@@ -8,7 +8,6 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
-import classNames from "classnames";
 import {useDelayedReset} from "utils/hooks/useDelayedReset";
 import {animated, useTransition} from "@react-spring/web";
 import "./BoardReactionMenu.scss";
@@ -27,6 +26,8 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
   const boardReactions = [...BOARD_REACTION_EMOJI_MAP];
 
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
+
+  const skinTone = useAppSelector((state) => state.skinTone);
 
   const [debounce, resetDebounce] = useDelayedReset<boolean>(false, true, REACTION_DEBOUNCE_TIME);
 
@@ -60,21 +61,23 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
     (style, item) =>
       item && (
         <animated.div className="board-reactions-menu" ref={ref} style={style}>
-          {boardReactions.map(([reactionType, emoji], index) => (
-            <button
-              key={reactionType}
-              className={classNames("board-reactions-menu__item board-reactions-menu__reaction", {"board-reactions-menu__reaction--disabled": !showBoardReactions})}
-              aria-disabled={!showBoardReactions}
-              aria-label={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
-              title={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
-              onClick={(e) => onClickReaction(e, reactionType)}
-            >
-              <span>{emoji}</span>
-            </button>
-          ))}
-
+          {boardReactions.map(([reactionType, emoji], index) => {
+            const emojiWithSkinTone = emoji.skinToneSupported ? emoji.emoji + skinTone.component : emoji.emoji;
+            return (
+              <button
+                key={reactionType}
+                className="board-reactions-menu__item"
+                aria-label={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
+                title={t("BoardReactionsMenu.react", {reaction: reactionType, shortcut: index + 1})}
+                onClick={(e) => onClickReaction(e, reactionType)}
+                disabled={!showBoardReactions}
+              >
+                <span>{emojiWithSkinTone}</span>
+              </button>
+            );
+          })}
           <button className="board-reactions-menu__item board-reactions-menu__close" onClick={props.close} tabIndex={0} aria-hidden>
-            <CloseIcon />
+            <Close />
           </button>
         </animated.div>
       )

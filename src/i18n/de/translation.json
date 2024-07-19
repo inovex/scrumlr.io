@@ -287,6 +287,7 @@
     "moderatorResetReadyStatesButton": "Zurücksetzen!",
     "bannedParticipant": "Teilnehmer \"{{user}}\" wurde entfernt",
     "unbannedParticipant": "Teilnehmer \"{{user}}\" wird wieder zur Session zugelassen",
+    "lockedBoard": "Das Board ist derzeit gesperrt; Änderungen sind nur durch Moderatoren möglich.",
     "noteToHiddenColumn": "Du hast gerade eine Karte einer ausgeblendeten Spalte hinzugefügt!",
     "noteToHiddenColumnButton": "Spalte für alle anzeigen",
     "noteMovedToStack": "Die Karte wurde in einen Stapel verschoben!",
@@ -313,7 +314,8 @@
   "Note": {
     "me": "Ich",
     "you": "dir",
-    "userImageAlt": "Von {{user}} hochgeladenes Bild"
+    "userImageAlt": "Von {{user}} hochgeladenes Bild",
+    "edited": "bearbeitet"
   },
   "StackView": {
     "prevNote": "Vorheriges Kärtchen",
@@ -362,6 +364,7 @@
     "ShowOtherUsersNotesOption": "Karten anderer Teilnehmer anzeigen",
     "ShowNoteReactionsOptions": "Emoji-Reaktionen auf Karten anzeigen",
     "AllowNoteRepositioningOption": "Verschieben von Karten erlauben",
+    "IsLocked": "Board sperren",
     "generatePassword": "Passwort erstellen und absichern",
     "save": "speichern",
     "edit": "bearbeiten"

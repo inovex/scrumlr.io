@@ -11,20 +11,20 @@
   display: flex;
 }
 .column__moderation-isActive {
-  @include inset-border($top: true, $bottom: true, $color: $color-goal-green);
+  @include inset-border($top: true, $bottom: true, $color: $victory-verde--light);
 }
 .column:nth-child(odd) {
-  background-color: $color-white-one;
+  background-color: $gray--100;
 }
 .column:nth-child(even) {
-  background-color: $color-white-two;
+  background-color: $gray--200;
 }
 [theme="dark"] {
   .column:nth-child(even) {
-    background-color: $color-dark-one;
+    background-color: $navy--600;
   }
   .column:nth-child(odd) {
-    background-color: $color-dark-two;
+    background-color: $navy--500;
   }
 }
 .column--hidden {
@@ -44,7 +44,7 @@
   flex-direction: column;
   flex: 1;
   ::selection {
-    background-color: rgba(var(--accent-color-rgb), 0.5);
+    background-color: rgba(var(--accent-color--light-rgb), 0.5);
   }
 }
 
@@ -70,7 +70,7 @@
   justify-content: space-between;
   width: auto;
   height: auto;
-  border-bottom: solid 3px var(--accent-color);
+  border-bottom: solid 3px var(--accent-color--light);
   margin: 0 $spacing--xs 0 0;
   overflow: hidden;
 }
@@ -85,7 +85,7 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
-  color: $color-black;
+  color: $navy--900;
 
   white-space: nowrap;
   overflow: hidden;
@@ -93,7 +93,12 @@
 }
 
 .column__header-text--hidden {
-  color: $color-middle-gray;
+  color: $gray--700;
+}
+
+// tooltip requires parent selection because of specificity
+.column__header-text-wrapper .column__tooltip {
+  @include tooltip--light;
 }
 
 .column__header-input {
@@ -101,8 +106,8 @@
   align-items: center;
   border: none;
   font-size: calc(#{$text-size--large} + 0.4vw);
-  color: $color-black;
-  border-bottom: dashed 3px var(--accent-color);
+  color: $navy--900;
+  border-bottom: dashed 3px var(--accent-color--light);
   margin: 0 auto 0 0;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
@@ -115,14 +120,14 @@
 }
 [theme="dark"] {
   .column__header-input {
-    color: $color-white;
+    color: $gray--000;
   }
 }
 
 .column__header-card-number {
   margin-bottom: $spacing--base;
   font-size: $text-size--medium;
-  color: $color-middle-gray;
+  color: $gray--700;
   font-weight: 600;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
@@ -137,14 +142,14 @@
   flex: 1;
   outline: none;
   scrollbar-width: 10px;
-  scrollbar-color: $color-middle-gray $color-white;
+  scrollbar-color: $gray--700 $gray--000;
 
   @include scrollbar();
 }
 
 .column__notes-wrapper.isOver {
-  border-color: var(--accent-color);
-  background-color: rgba(var(--accent-color-rgb), 0.2);
+  border-color: var(--accent-color--light);
+  background-color: rgba(var(--accent-color--light-rgb), 0.2);
 }
 
 .column__note-list {
@@ -161,36 +166,40 @@
 
 [theme="dark"] {
   .column__header-text {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .column__header-text--hidden {
-    color: $color-middle-gray;
+    color: $gray--700;
+  }
+
+  .column__header-text-wrapper .column__tooltip {
+    @include tooltip--dark;
   }
 
   .column__notes-wrapper {
-    scrollbar-color: $color-darkest-gray $color-dark-mode-note;
+    scrollbar-color: $navy--700 $navy--500;
   }
 }
 
 .column__header-hidden-icon {
-  height: $icon--medium;
-  width: $icon--medium;
+  height: $icon--large;
+  width: $icon--large;
   min-width: $icon--medium;
   min-height: $icon--medium;
   margin: 0 $spacing--xs 0 0;
-  color: $color-warning-red;
+  color: $critical-carmine--light;
   cursor: pointer;
   transition: all 0.08s ease-out;
 }
 
 .column__header-hidden-icon:hover {
-  color: $color-black;
+  color: $navy--900;
 }
 
 [theme="dark"] {
   .column__header-hidden-icon:hover {
-    color: $color-white;
+    color: $gray--000;
   }
 }
 
@@ -209,17 +218,18 @@
   &:hover > svg,
   &:focus-visible > svg {
     transform: translate(-0.64px, -0.64px);
-    filter: drop-shadow(2px 2px 2px rgba(var(--accent-color-rgb), 0.24));
-    color: var(--accent-color);
+    filter: drop-shadow(2px 2px 2px rgba(var(--accent-color--light-rgb), 0.24));
+    color: var(--accent-color--light);
   }
 }
 
 .column__header-edit-button-icon {
-  color: $color-black;
+  color: $navy--900;
   height: 24px;
+  width: 24px;
   transition: all 0.08s ease-out;
 }
 
 [theme="dark"] .column__header-edit-button-icon {
-  color: $color-white;
+  color: $gray--000;
 }

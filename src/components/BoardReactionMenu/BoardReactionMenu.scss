@@ -1,7 +1,7 @@
 @import "src/constants/style";
 
 $container-height: 64px;
-$reaction-size: 64px;
+$reaction-size: 48px;
 
 .board-reactions-menu {
   position: fixed;
@@ -10,23 +10,15 @@ $reaction-size: 64px;
   right: 0;
   bottom: $column__border-width;
   width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-
+  margin-inline: auto;
+  padding: 0 $spacing--xs;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-
-  background-color: $color-white-one;
+  gap: $spacing--xs;
+  background-color: $gray--100;
   border-radius: $rounded--large;
   box-shadow: $box-shadow--light;
-
-  padding: 0 $spacing--base;
-
   user-select: none;
-
   z-index: $board-reaction-z-index;
 }
 
@@ -34,71 +26,41 @@ $reaction-size: 64px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.board-reactions-menu__reaction {
-  all: unset; // reset button
-  cursor: pointer;
-
   width: $reaction-size;
-  height: 100%;
-
-  font-size: $text--xl;
-
+  height: $reaction-size;
+  padding: 0;
+  border: none;
   border-radius: $rounded--full;
+  background-color: transparent;
+  cursor: pointer;
+  transition: backdrop-filter 80ms ease-in-out;
+  font-size: $text--lg;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &:hover {
-    background-color: $hover-background-light;
+  &:enabled:hover {
+    backdrop-filter: brightness(90%);
   }
-
+  &:enabled:active {
+    transform: scale(0.95);
+  }
   &:focus-visible {
     // lose focus after click
-    background-color: $color-icon-light-blue;
+    outline: 2px solid $blue--500;
+    outline-offset: 2px;
   }
-
-  &--disabled {
+  &:disabled {
     filter: grayscale(100%);
     cursor: not-allowed;
   }
 }
 
-.board-reactions-menu__close {
-  all: unset;
-  width: $icon--large;
-  height: $icon--large;
-  color: $color-dark-mode-note;
-  border-radius: $rounded--full;
-
-  cursor: pointer;
-
-  &:hover,
-  &:focus {
-    background-color: $color-icon-light-blue;
-  }
-}
-
 [theme="dark"] {
   .board-reactions-menu {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
     box-shadow: $box-shadow--dark;
   }
 
-  .board-reactions-menu__reaction {
-    &:hover {
-      background-color: $hover-background-dark;
-    }
-
-    &:focus-visible {
-      background-color: $tooltip-background-color--dark;
-    }
-  }
-
   .board-reactions-menu__close {
-    color: $color-white;
+    color: $gray--000;
   }
 }
 
@@ -106,22 +68,12 @@ $reaction-size: 64px;
   .board-reactions-menu {
     bottom: $column__border-width + $spacing--lg + 72px;
   }
-
-  .board-reactions__close {
-    display: none;
-  }
 }
 
 @media #{$mini-smartphone} {
   .board-reactions-menu {
     bottom: $column__border-width + $spacing--lg + 48px;
     padding: 0 $spacing--xs;
-    gap: 2px;
-  }
-}
-
-@media screen and (max-width: 350px) {
-  .board-reactions-menu__reaction {
-    width: 48px;
+    gap: $spacing--xxs;
   }
 }
