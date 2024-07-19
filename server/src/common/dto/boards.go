@@ -144,9 +144,8 @@ type BoardOverview struct {
 }
 
 type ImportBoardRequest struct {
-	Board         *CreateBoardRequest `json:"board"`
-	Columns       []Column            `json:"columns"`
-	BoardSessions []BoardSession      `json:"participants"`
-	Notes         []Note              `json:"notes"`
-	Votings       []Voting            `json:"votings"`
+	Board   *CreateBoardRequest `json:"board"`
+	Columns []Column            `json:"columns"`
+	Notes   []Note              `json:"notes"`
+	Votings []Voting            `json:"votings"`
 }

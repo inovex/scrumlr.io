@@ -35,6 +35,14 @@ export const BoardAPI = {
       throw new Error(`unable to create board: ${error}`);
     }
   },
+  //
+  // importBoard: async (data: string) =>{
+  //   try {
+  //     const response = await fetch(`${SERVER_HTTP_URL}/boards`), {
+  //
+  //     }
+  //   }
+  // }
 
   /**
    * Edits the board with the specified parameters.

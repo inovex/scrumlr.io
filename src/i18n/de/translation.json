@@ -8,7 +8,10 @@
     "extendedConfigurationButton": "Erweiterte Einstellungen",
     "basicConfigurationButton": "Vorlagenauswahl",
     "extendedConfigurationTitle": "Erweiterte Einstellungen",
-    "basicConfigurationTitle": "Wähle eine Vorlage"
+    "basicConfigurationTitle": "Wähle eine Vorlage",
+    "importBoard": "JSON Importieren",
+    "uploadFile": "Datei hochladen oder hierher ziehen",
+    "importNewBoard": "Jetzt importieren"
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",

@@ -16,7 +16,6 @@ import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
 import "./Note.scss";
-import {ReactComponent as InfoIcon} from "assets/icon-info.svg";
 
 interface NoteProps {
   noteId: string;
@@ -110,7 +109,6 @@ export const Note = (props: NoteProps) => {
             <NoteAuthorList authors={authors} authorID={note.author} showAuthors={showAuthors} viewer={props.viewer} />
           </div>
           <Votes noteId={props.noteId!} aggregateVotes />
-          <InfoIcon />
         </header>
         {isImage ? (
           <div className="note__image-wrapper">

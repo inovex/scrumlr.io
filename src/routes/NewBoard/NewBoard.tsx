@@ -1,8 +1,8 @@
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
-import {useState} from "react";
+import {DragEvent, useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
-import {AccessPolicy} from "types/board";
+import {AccessPolicy, Board} from "types/board";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {columnTemplates} from "./columnTemplates";
@@ -10,6 +10,7 @@ import {TextInputLabel} from "../../components/TextInputLabel";
 import {TextInput} from "../../components/TextInput";
 import {Button} from "../../components/Button";
 import {ScrumlrLogo} from "../../components/ScrumlrLogo";
+import {PassphraseDialog} from "../../components/PassphraseDialog";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
@@ -19,6 +20,45 @@ export const NewBoard = () => {
   const [accessPolicy, setAccessPolicy] = useState(0);
   const [passphrase, setPassphrase] = useState("");
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
+  const [importFile, setImportFileConfiguration] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [fileContent, setFileContent] = useState<string>();
+  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    if (!event.dataTransfer) return;
+
+    // Fetch the files
+    const droppedFile = event.dataTransfer.files[0];
+
+    // Use FileReader to read file content
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      // The file's text will be available in e.target.result
+      const content = e.target?.result as string;
+      setFileContent(content);
+    };
+    reader.readAsText(droppedFile); // You can use other methods like readAsDataURL, readAsArrayBuffer, etc., based on your needs
+    if (!fileContent) return;
+    const obj = JSON.parse(fileContent) as Board;
+    console.log(obj);
+    if (obj.accessPolicy == "BY_PASSPHRASE") {
+      console.log("trest");
+      setShowPasswordModal(true);
+    }
+  };
+
+  const handlePasswordSubmit = (password: string) => {
+    setPassphrase(password);
+    onCreateBoard(); // Continue the method after password is set
+  };
 
   async function onCreateBoard() {
     let additionalAccessPolicyOptions = {};
@@ -65,6 +105,7 @@ export const NewBoard = () => {
                       value={key}
                       onChange={(e) => setColumnTemplate(e.target.value)}
                       checked={columnTemplate === key}
+                      onClick={() => setImportFileConfiguration(false)}
                     />
                     <div className="new-board__mode-label">
                       <div>
@@ -74,6 +115,15 @@ export const NewBoard = () => {
                     </div>
                   </label>
                 ))}
+                <label className="new-board__mode">
+                  <input className="new-board__mode-input" type="radio" name="mode" onClick={() => setImportFileConfiguration(true)} />
+                  <div className="new-board__mode-label" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+                    <div>
+                      <div className="new-board__mode-name">{t("NewBoard.importBoard")}</div>
+                      <div className="new-board__mode-description">{t("NewBoard.uploadFile")}</div>
+                    </div>
+                  </div>
+                </label>
               </div>
             </div>
           )}
@@ -92,9 +142,16 @@ export const NewBoard = () => {
         </div>
       </div>
       <div className="new-board__actions">
-        <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
-          {t("NewBoard.createNewBoard")}
-        </Button>
+        {!importFile ? (
+          <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+            {t("NewBoard.createNewBoard")}
+          </Button>
+        ) : (
+          <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+            {t("NewBoard.importNewBoard")}
+          </Button>
+        )}
+
         {!extendedConfiguration && (
           <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
             {t("NewBoard.extendedConfigurationButton")}
@@ -106,6 +163,13 @@ export const NewBoard = () => {
           </Button>
         )}
       </div>
+      {showPasswordModal && (
+        <PassphraseDialog onSubmit={handlePasswordSubmit} incorrectPassphrase={false} />
+        // <PasswordModal
+        //   onClose={() => setShowPasswordModal(false)}
+        //   onSubmit={handlePasswordSubmit}
+        // />
+      )}
     </div>
   );
 };

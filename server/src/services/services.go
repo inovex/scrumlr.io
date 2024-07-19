@@ -67,6 +67,7 @@ type BoardSessions interface {
 
 type Notes interface {
 	Create(ctx context.Context, body dto.NoteCreateRequest) (*dto.Note, error)
+	Import(ctx context.Context, body dto.NoteImportRequest) (*dto.Note, error)
 	Get(ctx context.Context, id uuid.UUID) (*dto.Note, error)
 	Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error)
 	List(ctx context.Context, id uuid.UUID) ([]*dto.Note, error)
