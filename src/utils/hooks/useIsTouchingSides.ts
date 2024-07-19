@@ -7,6 +7,9 @@ import {useIsScrolling} from "./useIsScrolling";
  * @param ref the container ref which is checked
  */
 export const useIsTouchingSides = (ref: RefObject<HTMLDivElement>) => {
+  // margin of error, because different browsers treat the scroll width differently
+  const EPSILON = 1;
+
   const [isTouchingLeftSide, setIsTouchingLeftSide] = useState<boolean>(false);
   const [isTouchingRightSide, setIsTouchingRightSide] = useState<boolean>(false);
   const size = useSize(ref);
@@ -16,8 +19,8 @@ export const useIsTouchingSides = (ref: RefObject<HTMLDivElement>) => {
     if (!ref.current || !size) return;
 
     const {scrollLeft: currentScrollLeft, scrollWidth: currentScrollWidth, clientWidth: currentClientWidth} = ref.current;
-    const touchingLeft = currentScrollLeft === 0;
-    const touchingRight = currentScrollLeft + currentClientWidth === currentScrollWidth;
+    const touchingLeft = currentScrollLeft <= EPSILON;
+    const touchingRight = currentScrollLeft + currentClientWidth >= currentScrollWidth - EPSILON;
 
     setIsTouchingLeftSide(touchingLeft);
     setIsTouchingRightSide(touchingRight);
