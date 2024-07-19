@@ -133,13 +133,13 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 			return
 		}
 
-		if !isMod && !settings.AllowEditing {
+		if !isMod && settings.IsLocked {
 			log.Errorw("not allowed to edit board", "err", err)
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board")))
 			return
 		}
 
-		boardEditable := context.WithValue(r.Context(), identifiers.BoardEditableIdentifier, settings.AllowEditing)
+		boardEditable := context.WithValue(r.Context(), identifiers.BoardEditableIdentifier, settings.IsLocked)
 		next.ServeHTTP(w, r.WithContext(boardEditable))
 	})
 }
