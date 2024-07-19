@@ -29,6 +29,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
 
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
 
@@ -94,7 +96,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         <>
           <TextareaAutosize
             className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
-            disabled={!editable}
+            disabled={!editable || (!isModerator && boardLocked)}
             onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
             onFocus={onFocus}
             {...emoji.inputBindings}
