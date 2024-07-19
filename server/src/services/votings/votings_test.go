@@ -2,7 +2,9 @@ package votings
 
 import (
 	"context"
+	"math/rand/v2"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -117,13 +119,62 @@ func (suite *votingServiceTestSuite) TestCreate() {
 	mock.On("CreateVoting", database.VotingInsert{
 		Status: types.VotingStatusOpen,
 	}).Return(database.Voting{}, nil)
+
 	mock.On("GetVoting", boardId, votingId).Return(database.Voting{}, []database.Vote{}, nil)
 	rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
-
 	create, err := s.Create(context.Background(), votingRequest)
 
 	assert.NotNil(suite.T(), create)
 	assert.NoError(suite.T(), err)
+	mock.AssertExpectations(suite.T())
+	rtClientMock.AssertExpectations(suite.T())
+}
+
+func (suite *votingServiceTestSuite) TestUpdateVoting() {
+	s := new(VotingService)
+	mock := new(DBMock)
+	s.database = mock
+
+	rtClientMock := &mockRtClient{}
+	rtMock := &realtime.Broker{
+		Con: rtClientMock,
+	}
+	s.realtime = rtMock
+
+	boardId := uuid.New()
+	updateVotingRequest := dto.VotingUpdateRequest{
+		ID: 	uuid.New(),
+		Board:  boardId,
+		Status: types.VotingStatusOpen,
+	}
+
+	// Mocks for realtime
+	publishSubject := "board." + boardId.String()
+	publishEvent := realtime.BoardEvent{
+		Type: realtime.BoardEventVotingUpdated,
+		Data: &dto.Voting{},
+	}
+
+	votingID := uuid.New()
+	mock.On("UpdateVoting", database.VotingUpdate{
+		ID: 	votingID,
+		Board:  boardId,
+		Status: types.VotingStatusClosed,
+	}).Return(database.Voting{
+		ID: votingID,
+		Board: boardId,
+		CreatedAt: time.Now(),
+		VoteLimit: rand.IntN(10),
+		AllowMultipleVotes: false,
+		ShowVotesOfOthers: false,
+		Status: types.VotingStatusClosed,
+	}, nil)
+	rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
+	update , err := s.Update(context.Background(), updateVotingRequest)
+
+	assert.NotNil(suite.T(), update)
+	assert.NoError(suite.T(), err)
+	assert.Equal(suite.T(), update.Status, types.VotingStatusClosed)
 	mock.AssertExpectations(suite.T())
 	rtClientMock.AssertExpectations(suite.T())
 }
