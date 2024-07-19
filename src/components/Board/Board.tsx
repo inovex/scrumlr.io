@@ -20,7 +20,7 @@ export interface BoardProps {
   locked: boolean;
 }
 
-export const BoardComponent = ({children, currentUserIsModerator, moderating}: BoardProps) => {
+export const BoardComponent = ({children, currentUserIsModerator, moderating, locked}: BoardProps) => {
   const {t} = useTranslation();
   const [dragActive, setDragActive] = useState(false);
   useDndMonitor({
