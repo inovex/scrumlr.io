@@ -1,10 +1,11 @@
 package database
 
 import (
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/database/types"
-	"testing"
 )
 
 var boardForColumnsTest uuid.UUID
@@ -49,6 +50,8 @@ func TestRunnerForColumns(t *testing.T) {
 	t.Run("Update=4", testMoveLastColumnOnFirstIndex)
 	t.Run("Update=5", testMoveFirstColumnOnSecondIndex)
 	t.Run("Update=6", testMoveSecondColumnOnFirstIndex)
+
+	t.Run("Update=7", testUpdateDescription)
 }
 
 func testGetColumn(t *testing.T) {
@@ -336,4 +339,18 @@ func verifyOrder(t *testing.T, ids ...uuid.UUID) {
 		assert.Equal(t, expectedOrder[index], value.ID)
 		assert.Equal(t, index, value.Index)
 	}
+}
+
+func testUpdateDescription(t *testing.T) {
+	column, err := testDb.UpdateColumn(ColumnUpdate{
+		ID:          firstColumn.ID,
+		Board:       boardForColumnsTest,
+		Name:        "FirstColumn",
+		Description: "Updated Column Description",
+		Color:       types.ColorBacklogBlue,
+		Visible:     true,
+		Index:       0,
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, "Updated Column Description", column.Description)
 }
