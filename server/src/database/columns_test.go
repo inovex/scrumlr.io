@@ -50,7 +50,6 @@ func TestRunnerForColumns(t *testing.T) {
 	t.Run("Update=4", testMoveLastColumnOnFirstIndex)
 	t.Run("Update=5", testMoveFirstColumnOnSecondIndex)
 	t.Run("Update=6", testMoveSecondColumnOnFirstIndex)
-
 	t.Run("Update=7", testUpdateDescription)
 }
 
