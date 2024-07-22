@@ -7,7 +7,12 @@
     "switchTitle": "Templates",
     "title": "Choose a template",
     "savedTemplates": "Your Templates",
-    "recommendedTemplates": "Our Recommendations"
+    "recommendedTemplates": "Our Recommendations",
+
+    "TemplateCard": {
+      "addFavourite": "Mark as Favourite",
+      "removeFavourite": "Remove Favourite"
+    }
   },
   "Sessions": {
     "switchTitle": "Sessions",

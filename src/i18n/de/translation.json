@@ -7,7 +7,12 @@
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
     "savedTemplates": "Deine Vorlagen",
-    "recommendedTemplates": "Unsere Empfehlungen"
+    "recommendedTemplates": "Unsere Empfehlungen",
+
+    "TemplateCard": {
+      "addFavourite": "Favorit hinzufügen",
+      "removeFavourite": "Favorit entfernen"
+    }
   },
   "Sessions": {
     "switchTitle": "Sitzungen",
