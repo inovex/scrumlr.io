@@ -30,4 +30,29 @@
   }
 }
 
+[theme="dark"] {
+  .favourite-button {
+    color: rgba($gray--000, 0.7);
+
+    &:hover {
+      color: $gray--000;
+      background-color: $navy--600;
+    }
+
+    &:focus {
+      color: $gray--000;
+      border-color: var(--accent-color--200); // same as in light mode
+    }
+
+    &--active {
+      color: var(--accent-color--dark);
+
+      &:hover,
+      &:focus {
+        color: var(--accent-color--dark);
+      }
+    }
+  }
+}
+
 // TODO other states, dark mode
