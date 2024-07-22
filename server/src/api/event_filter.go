@@ -311,22 +311,22 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	isMod := isModerator(clientID, event.Data.Sessions)
+	isMod := isModerator(clientID, event.Data.BoardSessions)
 	if isMod {
 		return event
 	}
 
 	retEvent := InitEvent{
 		Type: event.Type,
-		Data: EventData{
+		Data: dto.FullBoard{
 			Board:     event.Data.Board,
+			BoardSessions:  event.Data.BoardSessions,
+			BoardSessionRequests:  event.Data.BoardSessionRequests,
 			Notes:     nil,
 			Reactions: event.Data.Reactions,
 			Columns:   nil,
 			Votings:   event.Data.Votings,
 			Votes:     event.Data.Votes,
-			Sessions:  event.Data.Sessions,
-			Requests:  event.Data.Requests,
 		},
 	}
 	// Columns

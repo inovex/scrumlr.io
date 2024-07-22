@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"net/http"
+
 	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
@@ -24,7 +25,7 @@ type BoardSubscription struct {
 
 type InitEvent struct {
 	Type realtime.BoardEventType `json:"type"`
-	Data EventData               `json:"data"`
+	Data dto2.FullBoard               `json:"data"`
 }
 
 type EventData struct {
@@ -51,27 +52,18 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	board, requests, sessions, columns, notes, reactions, votings, votes, err := s.boards.FullBoard(r.Context(), id)
+	fullBoard, err := s.boards.FullBoard(r.Context(), id)
 	if err != nil {
 		logger.Get().Errorw("failed to prepare init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
 		return
 	}
 
-	initEventData := EventData{
-		Board:     board,
-		Columns:   columns,
-		Notes:     notes,
-		Reactions: reactions,
-		Votings:   votings,
-		Votes:     votes,
-		Sessions:  sessions,
-		Requests:  requests,
-	}
+	
 
 	initEvent := InitEvent{
 		Type: realtime.BoardEventInit,
-		Data: initEventData,
+		Data: fullBoard,
 	}
 
 	initEvent = eventInitFilter(initEvent, userID)
@@ -107,7 +99,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData EventData) {
+func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData dto2.FullBoard) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
@@ -116,7 +108,7 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 
 	b := s.boardSubscriptions[boardID]
 	b.clients[userID] = conn
-	b.boardParticipants = initEventData.Sessions
+	b.boardParticipants = initEventData.BoardSessions
 	b.boardSettings = initEventData.Board
 	b.boardColumns = initEventData.Columns
 	b.boardNotes = initEventData.Notes
