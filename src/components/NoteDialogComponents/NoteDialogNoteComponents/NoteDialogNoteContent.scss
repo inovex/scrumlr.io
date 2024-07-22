@@ -50,7 +50,7 @@ $min-lines: 3;
   border-radius: 5px;
   transition: border-color 150ms ease-in-out;
 
-  @include scrollbar();
+  @include scrollbar($width: 14px);
 
   // also subtract edited marker
   &--edited {

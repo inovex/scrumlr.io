@@ -7,7 +7,7 @@
   border-radius: $note__border-radius;
 
   overflow: hidden;
-  @include scrollbar();
+  @include scrollbar($width: 14px);
 }
 
 // inner container preventing scrollbar flowing over border radius
