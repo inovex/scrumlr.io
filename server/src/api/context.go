@@ -245,7 +245,7 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
 	limiter := httprate.Limit(
-		15,
+		20,
 		1*time.Second,
 		httprate.WithKeyFuncs(httprate.KeyByIP),
 		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
@@ -262,5 +262,19 @@ func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Apply the rate limiter to the next handler
 		limiter(next).ServeHTTP(w, r)
+	})
+}
+
+func (s *Server) ColumnTemplateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		columnTemplateParam := chi.URLParam(r, "columnTemplate")
+		columnTemplate, err := uuid.Parse(columnTemplateParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid column id")))
+			return
+		}
+
+		columnTemplateContext := context.WithValue(r.Context(), identifiers.ColumnTemplateIdentifier, columnTemplate)
+		next.ServeHTTP(w, r.WithContext(columnTemplateContext))
 	})
 }

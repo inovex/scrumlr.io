@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -75,12 +74,10 @@ func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []Colu
 		return BoardTemplate{}, err
 	}
 
-	var createdCols []ColumnTemplate
-	err = d.db.NewSelect().Model(&createdCols).Where("id = ?", b.ID).Scan(context.Background())
+	err = d.db.NewSelect().Model(&b.ColumnTemplates).Where("board_template = ?", b.ID).Scan(context.Background())
 	if err != nil {
 		return BoardTemplate{}, err
 	}
-	b.ColumnTemplates = createdCols
 
 	return b, err
 }
@@ -146,7 +143,7 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplate, error) {
 	return templates, err
 }
 
-func (d *Database) UpdateBoardTemplate(board BoardTemplateUpdate, columns []ColumnTemplateUpdate) (BoardTemplate, error) {
+func (d *Database) UpdateBoardTemplate(board BoardTemplateUpdate) (BoardTemplate, error) {
 	// General Settings
 	query_settings := d.db.NewUpdate().Model(&board)
 
@@ -176,63 +173,6 @@ func (d *Database) UpdateBoardTemplate(board BoardTemplateUpdate, columns []Colu
 		logger.Get().Errorw("failed to update board template settings", "board", board.ID, "err", err)
 		return BoardTemplate{}, err
 	}
-
-	// columns
-	cols_updated := []ColumnTemplate{}
-	for _, col := range columns {
-		column := ColumnTemplateUpdate{
-			ID:          col.ID,
-			Name:        col.Name,
-			Description: col.Description,
-			Color:       col.Color,
-			Visible:     col.Visible,
-			Index:       col.Index,
-		}
-
-		// Update logic
-		newIndex := column.Index
-		if column.Index < 0 {
-			newIndex = 0
-		}
-
-		selectPrevious := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("board_template", "index").Where("id = ?", column.ID).Where("board_template = ?", board.ID)
-		maxIndexSelect := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("index").Where("board_template = ?", board.ID)
-		updateOnSmallerIndex := d.db.NewUpdate().
-			Model((*ColumnTemplate)(nil)).
-			Column("index").
-			Set("index = index+1").
-			Where("index < (SELECT index FROM \"selectPrevious\")").
-			Where("board_template = ?", board.ID).
-			Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
-			Where("index >= ?", newIndex)
-		updateOnGreaterIndex := d.db.NewUpdate().
-			Model((*ColumnTemplate)(nil)).
-			Column("index").
-			Set("index = index-1").
-			Where("index > (SELECT index FROM \"selectPrevious\")").
-			Where("board_template = ?", board.ID).
-			Where("(SELECT index FROM \"selectPrevious\") < ?", newIndex).
-			Where("index <= ?", newIndex)
-
-		var c ColumnTemplate
-		_, err := d.db.NewUpdate().
-			With("selectPrevious", selectPrevious).
-			With("maxIndexSelect", maxIndexSelect).
-			With("updateOnSmallerIndex", updateOnSmallerIndex).
-			With("updateOnGreaterIndex", updateOnGreaterIndex).
-			Model(&column).
-			Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
-			Where("id = ?", column.ID).
-			Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, column.BaseModel), &c)
-
-		if err != nil {
-			logger.Get().Errorw("failed to update column template in updte board template", "board_template", board.ID, "err", err)
-			return BoardTemplate{}, err
-		}
-		cols_updated = append(cols_updated, c)
-	}
-	boardTemplate.ColumnTemplates = cols_updated
 
 	return boardTemplate, err
 }

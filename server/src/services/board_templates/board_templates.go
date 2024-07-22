@@ -45,6 +45,7 @@ func (s *BoardTemplateService) Create(ctx context.Context, body dto.CreateBoardT
 		log.Errorw("unable to create board", "creator", body.Creator, "policy", body.AccessPolicy, "error", err)
 		return nil, err
 	}
+
 	return new(dto.BoardTemplate).From(b), nil
 }
 
@@ -54,21 +55,13 @@ func (s *BoardTemplateService) Get(_ context.Context, id uuid.UUID) (*dto.BoardT
 		return nil, err
 	}
 
-	// convert database cols to dto cols
-	cols := boardTemplate.ColumnTemplates
-	var new_cols []*dto.ColumnTemplate
-	for _, x := range cols {
-		new_cols = append(new_cols, new(dto.ColumnTemplate).From(x))
-	}
-
 	boardDto := dto.BoardTemplate{
-		ID:              boardTemplate.ID,
-		Creator:         boardTemplate.Creator,
-		Name:            boardTemplate.Name,
-		Description:     boardTemplate.Description,
-		AccessPolicy:    boardTemplate.AccessPolicy,
-		Favourite:       boardTemplate.Favourite,
-		ColumnTemplates: new_cols,
+		ID:           boardTemplate.ID,
+		Creator:      boardTemplate.Creator,
+		Name:         boardTemplate.Name,
+		Description:  boardTemplate.Description,
+		AccessPolicy: boardTemplate.AccessPolicy,
+		Favourite:    boardTemplate.Favourite,
 	}
 
 	return &boardDto, err
@@ -82,21 +75,13 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 
 	var templatesDto []*dto.BoardTemplate
 	for _, board := range templates {
-		// convert database cols to dto cols
-		cols := board.ColumnTemplates
-		var new_cols []*dto.ColumnTemplate
-		for _, x := range cols {
-			new_cols = append(new_cols, new(dto.ColumnTemplate).From(x))
-		}
-
 		boardDto := dto.BoardTemplate{
-			ID:              board.ID,
-			Creator:         board.Creator,
-			Name:            board.Name,
-			Description:     board.Description,
-			AccessPolicy:    board.AccessPolicy,
-			Favourite:       board.Favourite,
-			ColumnTemplates: new_cols,
+			ID:           board.ID,
+			Creator:      board.Creator,
+			Name:         board.Name,
+			Description:  board.Description,
+			AccessPolicy: board.AccessPolicy,
+			Favourite:    board.Favourite,
 		}
 		templatesDto = append(templatesDto, &boardDto)
 	}
@@ -105,20 +90,6 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 }
 
 func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error) {
-	// parse dto cols to db cols
-	updateColumns := []database.ColumnTemplateUpdate{}
-	for _, col := range body.ColumnTemplates {
-		new_col := database.ColumnTemplateUpdate{
-			ID:          col.ID,
-			Name:        col.Name,
-			Description: col.Description,
-			Color:       col.Color,
-			Visible:     col.Visible,
-			Index:       col.Index,
-		}
-		updateColumns = append(updateColumns, new_col)
-	}
-
 	// parse req update to db update
 	updateBoard := database.BoardTemplateUpdate{
 		ID:           body.ID,
@@ -128,26 +99,18 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 		Favourite:    body.Favourite,
 	}
 
-	updatedTemplate, err := s.database.UpdateBoardTemplate(updateBoard, updateColumns)
+	updatedTemplate, err := s.database.UpdateBoardTemplate(updateBoard)
 	if err != nil {
 		return &dto.BoardTemplate{}, err
 	}
 
-	// convert database cols to dto cols
-	cols := updatedTemplate.ColumnTemplates
-	var new_cols []*dto.ColumnTemplate
-	for _, x := range cols {
-		new_cols = append(new_cols, new(dto.ColumnTemplate).From(x))
-	}
-
 	boardDto := dto.BoardTemplate{
-		ID:              updatedTemplate.ID,
-		Creator:         updatedTemplate.Creator,
-		Name:            updatedTemplate.Name,
-		Description:     updatedTemplate.Description,
-		AccessPolicy:    updatedTemplate.AccessPolicy,
-		Favourite:       updatedTemplate.Favourite,
-		ColumnTemplates: new_cols,
+		ID:           updatedTemplate.ID,
+		Creator:      updatedTemplate.Creator,
+		Name:         updatedTemplate.Name,
+		Description:  updatedTemplate.Description,
+		AccessPolicy: updatedTemplate.AccessPolicy,
+		Favourite:    updatedTemplate.Favourite,
 	}
 
 	return &boardDto, err

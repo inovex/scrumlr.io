@@ -24,9 +24,6 @@ type BoardTemplate struct {
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
-
-	// The template columns
-	ColumnTemplates []*ColumnTemplate `json:"templateColumns"`
 }
 
 func (bt *BoardTemplate) From(board database.BoardTemplate) *BoardTemplate {
@@ -58,7 +55,7 @@ type CreateBoardTemplateRequest struct {
 	Favourite *bool `json:"favourite"`
 
 	// The column templates to create for the board template.
-	Columns []*ColumnTemplateRequest `json:"columns"`
+	Columns []*ColumnTemplateRequest `json:"columnTemplates"`
 }
 
 type BoardTemplateUpdateRequest struct {
@@ -76,7 +73,4 @@ type BoardTemplateUpdateRequest struct {
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
-
-	// The template columns
-	ColumnTemplates []*ColumnTemplate `json:"templateColumns"`
 }

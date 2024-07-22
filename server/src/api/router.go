@@ -154,9 +154,24 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.With(s.BoardTemplateRateLimiter).Get("/templates", s.getBoardTemplates)
 		r.Route("/templates/{id}", func(r chi.Router) {
 			r.Use(s.BoardTemplateRateLimiter)
-			r.With(s.BoardTemplateContext).Get("/", s.getBoardTemplate)
-			r.With(s.BoardTemplateContext).Put("/", s.updateBoardTemplate)
-			r.With(s.BoardTemplateContext).Delete("/", s.deleteBoardTemplate)
+			r.Use(s.BoardTemplateContext)
+
+			r.Get("/", s.getBoardTemplate)
+			r.Put("/", s.updateBoardTemplate)
+			r.Delete("/", s.deleteBoardTemplate)
+
+			r.Route("/columns", func(r chi.Router) {
+				r.Post("/", s.createColumnTemplate)
+				r.Get("/", s.getColumnTemplates)
+
+				r.Route("/{columnTemplate}", func(r chi.Router) {
+					r.Use(s.ColumnTemplateContext)
+
+					r.Get("/", s.getColumnTemplate)
+					r.Put("/", s.updateColumnTemplate)
+					r.Delete("/", s.deleteColumnTemplate)
+				})
+			})
 		})
 
 		r.Post("/boards", s.createBoard)
