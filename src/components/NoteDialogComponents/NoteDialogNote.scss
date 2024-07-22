@@ -1,5 +1,8 @@
 @import "src/constants/style";
 
+$header-height: 36px;
+$footer-height: 36px;
+
 .note-dialog__note {
   --note-footer-height: 28px;
 
@@ -9,8 +12,8 @@
     "head head"
     "content options"
     "foot options";
-  grid-template-columns: 11fr 1fr;
-  grid-template-rows: 1fr 4fr 1fr;
+  grid-template-columns: 1fr 32px;
+  grid-template-rows: $header-height 1fr $footer-height;
   gap: $spacing--sm;
 
   padding: $spacing--base;

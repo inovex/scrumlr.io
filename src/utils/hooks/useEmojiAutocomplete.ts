@@ -194,6 +194,10 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null);
   }, []);
 
+  const handleClickClearEmojiSuggestions: ReactEventHandler<InputElement> = useCallback(() => {
+    setEmojiName("");
+  }, []);
+
   return {
     containerRef,
     suggestionsProps: {
@@ -207,7 +211,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
       onChange: handleChange,
       onKeyDown: handleKeyDown,
       onKeyUp: handleUpdateCursor,
-      onClick: handleUpdateCursor,
+      onClick: handleClickClearEmojiSuggestions,
       maxLength: maxInputLength,
       value,
     } satisfies HTMLProps<InputElement>,
