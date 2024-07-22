@@ -157,6 +157,31 @@ export const BoardSettings = () => {
             <>
               <div className="settings-dialog__group">
                 <SettingsButton
+                  data-testid="note-repositioning"
+                  className="board-settings__allow-note-repositioning-button"
+                  label={t("BoardSettings.AllowNoteRepositioningOption")}
+                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                  role="switch"
+                  aria-checked={state.board.allowStacking}
+                >
+                  <div className="board-settings__allow-note-repositioning-value">
+                    <Toggle active={state.board.allowStacking} />
+                  </div>
+                </SettingsButton>
+                <SettingsButton
+                  className="board-settings__allow-board-editing"
+                  label={t("BoardSettings.IsLocked")}
+                  onClick={() => store.dispatch(Actions.editBoard({isLocked: !state.board.isLocked}))}
+                  role="switch"
+                  aria-checked={state.board.isLocked}
+                >
+                  <div className="board-settings__allow-board-editing-value">
+                    <Toggle active={state.board.isLocked} />
+                  </div>
+                </SettingsButton>
+              </div>
+              <div className="settings-dialog__group">
+                <SettingsButton
                   data-testid="author"
                   className="board-settings__show-author-button"
                   label={t("BoardSettings.ShowAuthorOption")}
@@ -207,19 +232,6 @@ export const BoardSettings = () => {
                 >
                   <div className="board-settings__show-columns-value">
                     <Toggle active={!!state.me?.showHiddenColumns} />
-                  </div>
-                </SettingsButton>
-                <hr className="settings-dialog__separator" />
-                <SettingsButton
-                  data-testid="note-repositioning"
-                  className="board-settings__allow-note-repositioning-button"
-                  label={t("BoardSettings.AllowNoteRepositioningOption")}
-                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
-                  role="switch"
-                  aria-checked={state.board.allowStacking}
-                >
-                  <div className="board-settings__allow-note-repositioning-value">
-                    <Toggle active={state.board.allowStacking} />
                   </div>
                 </SettingsButton>
               </div>

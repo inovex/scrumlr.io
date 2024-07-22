@@ -80,6 +80,8 @@ Thanks to all our users, collaborators, contributors & supporters! ❤️
 [<img src="https://avatars.githubusercontent.com/u/54246641?v=4" width="48" height="48" alt="Quasilius-Starlord">](https://github.com/Quasilius-Starlord)
 [<img src="https://avatars.githubusercontent.com/u/52677920?v=4" width="48" height="48" alt="mateo-ivc">](https://github.com/mateo-ivc)
 [<img src="https://avatars.githubusercontent.com/u/56827034?v=4" width="48" height="48" alt="fabi1999">](https://github.com/fabi1999)
+[<img src="https://avatars.githubusercontent.com/u/58568446?v=4" width="48" height="48" alt="liza-kl">](https://github.com/liza-kl)
+
 
 ... and many more!
 

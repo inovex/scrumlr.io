@@ -1,18 +1,18 @@
+import {animated, useSpring} from "@react-spring/web";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useHotkeys} from "react-hotkeys-hook";
+import {useTranslation} from "react-i18next";
+import {useDispatch} from "react-redux";
 import {useLocation, useNavigate} from "react-router";
 import {Actions} from "store/action";
 import {useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
 import {Voting, Timer, RaiseHand, MarkAsDone, AddStickerReaction, GeneralSettings, PresenterMode, Close, ArrowRight, ArrowLeft, Menu} from "components/Icon";
-import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
-import {useHotkeys} from "react-hotkeys-hook";
 import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
-import {animated, useSpring} from "@react-spring/web";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
