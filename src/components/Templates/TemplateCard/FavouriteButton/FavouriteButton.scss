@@ -1,18 +1,32 @@
 @import "constants/style";
 
 .favourite-button {
-  all: unset;
-  cursor: pointer;
-}
-
-.favourite-button__icon {
   width: 36px;
   height: 36px;
+  border: 2px solid transparent;
+  border-radius: $rounded--full;
 
   color: rgba($navy--400, 0.5);
 
+  cursor: pointer;
+
+  &:hover {
+    color: $navy--600;
+    background-color: $gray--300;
+  }
+
+  &:focus {
+    color: $navy--600;
+    border-color: var(--accent-color--200);
+  }
+
   &--active {
     color: var(--accent-color--light);
+
+    &:hover,
+    &:focus {
+      color: var(--accent-color--light);
+    }
   }
 }
 
