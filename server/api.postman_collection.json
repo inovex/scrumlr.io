@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "45d5f690-f459-4371-a09f-8aff874591f2",
+		"_postman_id": "cfc9d0fe-d0b2-45c0-ab1f-8795c542c31b",
 		"name": "scrumlr.io",
 		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](https://info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the _User_ section for more information.\n\n1. A user signs into the application (see _Login_ section)\n2. The user creates a new board (`POST` on `/boards`, checkout _Boards_ section)\n3. Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout _Participants_ section)\n    1. If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2. If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3. If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section _Realtime_ to see how you can open websockets and listen to live updates on the data.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "32837949"
+		"_exporter_id": "32423964"
 	},
 	"item": [
 		{
@@ -17,30 +17,40 @@
 							"listen": "test",
 							"script": {
 								"exec": [
+									"const res = pm.response.json();\r",
+									"\r",
 									"// store the user id within the collection variables\r",
-									"var jsonData = JSON.parse(responseBody);\r",
-									"pm.collectionVariables.set(\"user_id\", jsonData.id);\r",
+									"pm.collectionVariables.set(\"user_id\", res.id);\r",
 									"\r",
 									"// store the jwt within the collection variables\r",
 									"pm.collectionVariables.set(\"bearer_token\", pm.cookies.get(\"jwt\"));\r",
 									"\r",
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful POST request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(201);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check id is included\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.exist;\r",
+									"pm.test(\"Check id is included\", () => {\r",
+									"    pm.expect(res.id).to.exist;\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check name is included and trimmed\", function () {\r",
-									"    var name = pm.response.json().name;\r",
-									"    pm.expect(name).to.exist;\r",
-									"    pm.expect(name).not.to.satisfy(s => s.startsWith(\" \"));\r",
-									"    pm.expect(name).not.to.satisfy(s => s.endsWith(\" \"));\r",
+									"pm.test(\"Check name is included and trimmed\", () => {\r",
+									"    pm.expect(res.name).to.exist;\r",
+									"    pm.expect(res.name).not.to.satisfy(s => s.startsWith(\" \"));\r",
+									"    pm.expect(res.name).not.to.satisfy(s => s.endsWith(\" \"));\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -272,23 +282,24 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {\r",
+									"const res = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Successful PUT request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check id is included\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).to.exist;\r",
+									"pm.test(\"Check id is included\", () => {\r",
+									"    pm.expect(res.id).to.exist;\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check name is included and trimmed\", function () {\r",
-									"    var name = pm.response.json().name;\r",
-									"    pm.expect(name).to.exist;\r",
-									"    pm.expect(name).not.to.satisfy(s => s.startsWith(\" \"));\r",
-									"    pm.expect(name).not.to.satisfy(s => s.endsWith(\" \"));\r",
+									"pm.test(\"Check name is included and trimmed\", () => {\r",
+									"    pm.expect(res.name).to.exist;\r",
+									"    pm.expect(res.name).not.to.satisfy(s => s.startsWith(\" \"));\r",
+									"    pm.expect(res.name).not.to.satisfy(s => s.endsWith(\" \"));\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -371,21 +382,21 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {\r",
+									"const res = pm.response.json();\r",
+									"pm.test(\"Successful GET request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check id is included\", function () {\r",
-									"    var id = pm.response.json().id;\r",
-									"    pm.expect(id).to.exist;\r",
+									"pm.test(\"Check id is included\", () => {\r",
+									"    pm.expect(res.id).to.exist;\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check name is included\", function () {\r",
-									"    var name = pm.response.json().name;\r",
-									"    pm.expect(name).to.exist;\r",
+									"pm.test(\"Check name is included\", () => {\r",
+									"    pm.expect(res.name).to.exist;\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -489,26 +500,26 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(201);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"var jsonData = pm.response.json();",
-											"pm.collectionVariables.set(\"board_template_id\", jsonData.id);",
+											"const jsonData = pm.response.json();",
+											"pm.collectionVariables.set(\"board_template_id\", res.id);",
 											"",
 											"// set two column ids",
-											"pm.collectionVariables.set(\"board_template_column_id_one\", jsonData.templateColumns[0].id)",
-											"pm.collectionVariables.set(\"board_template_column_id_two\", jsonData.templateColumns[1].id)"
+											"pm.collectionVariables.set(\"board_template_column_id_one\", res.templateColumns[0].id)",
+											"pm.collectionVariables.set(\"board_template_column_id_two\", res.templateColumns[1].id)"
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -546,23 +557,22 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(201);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
 											"pm.test(\"Check access policy is set to BY_PASSPHRASE\", function (){",
-											"    var accessPolicy = pm.response.json().accessPolicy;",
-											"    pm.expect(accessPolicy).to.equal(\"BY_PASSPHRASE\");",
+											"    pm.expect(res.accessPolicy).to.equal(\"BY_PASSPHRASE\");",
 											"});",
 											""
 										],
@@ -602,23 +612,22 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(201);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check that access policy is set to BY_INVITE\", function () {",
-											"    var accessPolicy = pm.response.json().accessPolicy",
-											"    pm.expect(accessPolicy).to.equal(\"BY_INVITE\");",
+											"pm.test(\"Check that access policy is set to BY_INVITE\", () => {",
+											"    pm.expect(res.accessPolicy).to.equal(\"BY_INVITE\");",
 											"})"
 										],
 										"type": "text/javascript",
@@ -662,23 +671,22 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(200);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check if name got updated\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.equal(\"Updated: My board template\");",
+											"pm.test(\"Check if name got updated\", () => {",
+											"    pm.expect(res.name).to.equal(\"Updated: My board template\");",
 											"})"
 										],
 										"type": "text/javascript",
@@ -718,23 +726,22 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(200);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check if name got updated\", function () {",
-											"    var boardTemplateDescription = pm.response.json().description;",
-											"    pm.expect(boardTemplateDescription).to.equal(\"Update: This is a test description for a board template\");",
+											"pm.test(\"Check if name got updated\", () => {",
+											"    pm.expect(res.description).to.equal(\"Update: This is a test description for a board template\");",
 											"})"
 										],
 										"type": "text/javascript",
@@ -774,23 +781,22 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(200);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check if access policy is updated to BY_INVITE\", function () {",
-											"    var boardTemplateAccessPolicy = pm.response.json().accessPolicy;",
-											"    pm.expect(boardTemplateAccessPolicy).to.equal(\"BY_INVITE\");",
+											"pm.test(\"Check if access policy is updated to BY_INVITE\", () => {",
+											"    pm.expect(res.accessPolicy).to.equal(\"BY_INVITE\");",
 											"})"
 										],
 										"type": "text/javascript",
@@ -830,23 +836,22 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(200);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check if access policy is updated to BY_PASSPHRASE\", function () {",
-											"    var boardTemplateAccessPolicy = pm.response.json().accessPolicy;",
-											"    pm.expect(boardTemplateAccessPolicy).to.equal(\"BY_PASSPHRASE\");",
+											"pm.test(\"Check if access policy is updated to BY_PASSPHRASE\", () => {",
+											"    pm.expect(res.accessPolicy).to.equal(\"BY_PASSPHRASE\");",
 											"})"
 										],
 										"type": "text/javascript",
@@ -886,23 +891,22 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(200);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check if favourite status got updated\", function () {",
-											"    var favouriteStatus = pm.response.json().favourite;",
-											"    pm.expect(favouriteStatus).to.equal(false);",
+											"pm.test(\"Check if favourite status got updated\", () => {",
+											"    pm.expect(res.favourite).to.equal(false);",
 											"})"
 										],
 										"type": "text/javascript",
@@ -942,22 +946,22 @@
 									"listen": "test",
 									"script": {
 										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
+											"const res = pm.response.json();",
+											"",
+											"pm.test(\"Successful POST request\", () => {",
 											"    pm.expect(pm.response).to.have.status(200);",
 											"});",
 											"",
-											"pm.test(\"Check id is included\", function () {",
-											"    var id = pm.response.json().id;",
-											"    pm.expect(id).to.exist;",
+											"pm.test(\"Check id is included\", () => {",
+											"    pm.expect(res.id).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check name is included\", function () {",
-											"    var boardTemplateName = pm.response.json().name;",
-											"    pm.expect(boardTemplateName).to.exist;",
+											"pm.test(\"Check name is included\", () => {",
+											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"pm.test(\"Check if column #1 changed\", function () {",
-											"    var columnOne = pm.response.json().templateColumns[0];",
+											"pm.test(\"Check if column #1 changed\", () => {",
+											"    const columnOne = res.templateColumns[0];",
 											"    pm.expect(columnOne.description).to.equal(\"Updated Column #1 Template Description\");",
 											"    pm.expect(columnOne.name).to.equal(\"Updated Lean coffee\");",
 											"    pm.expect(columnOne.color).to.equal(\"planning-pink\");",
@@ -965,8 +969,8 @@
 											"    pm.expect(columnOne.visible).to.equal(false);",
 											"})",
 											"",
-											"pm.test(\"Check if column #2 changed\", function () {",
-											"    var columnTwo = pm.response.json().templateColumns[1];",
+											"pm.test(\"Check if column #2 changed\", () => {",
+											"    const columnTwo = pm.response.json().templateColumns[1];",
 											"    pm.expect(columnTwo.description).to.equal(\"Updated Column #2 Template Description\");",
 											"    pm.expect(columnTwo.name).to.equal(\"Updated Actions\");",
 											"    pm.expect(columnTwo.color).to.equal(\"backlog-blue\");",
@@ -1013,18 +1017,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check id is included\", function () {",
-									"    var id = pm.response.json().id;",
-									"    pm.expect(id).to.exist;",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check name is included\", function () {",
-									"    var boardTemplateName = pm.response.json().name;",
-									"    pm.expect(boardTemplateName).to.exist;",
+									"pm.test(\"Check name is included\", () => {",
+									"    pm.expect(res.name).to.exist;",
 									"})"
 								],
 								"type": "text/javascript",
@@ -1055,13 +1059,14 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check that an array of board templates are returned\", function () {",
-									"    var response = pm.response.json()",
-									"    pm.expect(response).to.be.an('array');",
+									"pm.test(\"Check that an array of board templates are returned\", () => {",
+									"    pm.expect(res).to.be.an('array');",
 									"})"
 								],
 								"type": "text/javascript",
@@ -1091,7 +1096,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful DELETE request\", function () {",
+									"pm.test(\"Successful DELETE request\", () => {",
 									"    pm.expect(pm.response).to.have.status(204);",
 									"});",
 									""
@@ -1129,22 +1134,21 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
 									"    pm.expect(pm.response).to.have.status(201);",
 									"});",
 									"",
-									"pm.test(\"Check id is included\", function () {",
-									"    var id = pm.response.json().id;",
-									"    pm.expect(id).to.exist;",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check name is included\", function () {",
-									"    var boardName = pm.response.json().name;",
-									"    pm.expect(boardName).to.exist;",
+									"pm.test(\"Check name is included\", () => {",
+									"    pm.expect(res.name).to.exist;",
 									"})",
 									"",
-									"var jsonData = pm.response.json();",
-									"pm.collectionVariables.set(\"board_id\", jsonData.id);"
+									"pm.collectionVariables.set(\"board_id\", res.id);"
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -1329,6 +1333,34 @@
 				},
 				{
 					"name": "Create board with passphrase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
+									"    pm.expect(pm.response).to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check name is included\", () => {",
+									"    pm.expect(res.name).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check if access policy is BY_PASSPHRASE\", () => {",
+									"    pm.expect(res.accessPolicy).to.equal(\"BY_PASSPHRASE\");",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -1360,7 +1392,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"var body = {",
+									"let body = {",
 									"    \"name\": \"Board to delete\",",
 									"    \"accessPolicy\": \"PUBLIC\",",
 									"    \"columns\": [",
@@ -1388,37 +1420,39 @@
 									"    body: body,",
 									"",
 									"}, function (err, response) {",
-									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", function () {",
+									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", () => {",
 									"        pm.expect(response.code).to.be.equal(201);",
 									"    });",
 									"    ",
-									"    res =  response.json();",
-									"    pm.test(\"PreRequestScript – Check id is included\", function () {",
-									"        var id = res.id;",
+									"    const res = response.json();",
+									"    pm.test(\"PreRequestScript – Check id is included\", () => {",
+									"        const id = res.id;",
 									"        pm.expect(id).to.exist;",
 									"        pm.collectionVariables.set(\"board_to_delete_id\", res.id); ",
 									"    })",
 									"",
-									"    pm.test(\"PreRequestScript – Check name is included\", function () {",
-									"        var boardName = res.name;",
+									"    pm.test(\"PreRequestScript – Check name is included\", () => {",
+									"        const boardName = res.name;",
 									"        pm.expect(boardName).to.exist;",
 									"    })",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful DELETE request\", function () {",
+									"pm.test(\"Successful DELETE request\", () => {",
 									"    pm.expect(pm.response).to.have.status(204);",
 									"});",
 									"",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1481,28 +1515,28 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check id is included\", function () {",
-									"    var id = pm.response.json().id;",
-									"    pm.expect(id).to.exist;",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check name is included\", function () {",
-									"    var boardName = pm.response.json().name;",
-									"    pm.expect(boardName).to.exist;",
+									"pm.test(\"Check name is included\", () => {",
+									"    pm.expect(res.name).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check updated Name\", function () {",
-									"    var boardName = pm.response.json().name;",
-									"    pm.expect(boardName).to.equal(\"Update to new name\")",
+									"pm.test(\"Check updated Name\", () => {",
+									"    pm.expect(res.name).to.equal(\"Update to new name\");",
 									"})",
 									"",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1587,23 +1621,22 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check id is included\", function () {",
-									"    var id = pm.response.json().id;",
-									"    pm.expect(id).to.exist;",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check description is included\", function () {",
-									"    var boardDescription = pm.response.json().description;",
-									"    pm.expect(boardDescription).to.exist;",
+									"pm.test(\"Check description is included\", () => {",
+									"    pm.expect(res.description).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check updated description\", function () {",
-									"    var boardDescription = pm.response.json().description;",
-									"    pm.expect(boardDescription).to.equal(\"Updated to new description\")",
+									"pm.test(\"Check updated description\", () => {",
+									"    pm.expect(res.description).to.equal(\"Updated to new description\")",
 									"})",
 									"",
 									""
@@ -1694,22 +1727,27 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check id is included\", function () {",
-									"    var id = pm.response.json().id;",
-									"    pm.expect(id).to.exist;",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check accessPolicy is included\", function () {",
-									"    var boardName = pm.response.json().accessPolicy;",
-									"    pm.expect(boardName).to.exist;",
+									"pm.test(\"Check accessPolicy is included\", () => {",
+									"    pm.expect(res.accessPolicy).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check accessPolicy is set to BY_PASSPHRASE\", () => {",
+									"    pm.expect(res.accessPolicy).to.equal(\"BY_PASSPHRASE\");",
 									"})",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1794,22 +1832,23 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check id is included\", function () {",
-									"    var id = pm.response.json().id;",
-									"    pm.expect(id).to.exist;",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check name is included\", function () {",
-									"    var boardName = pm.response.json().name;",
-									"    pm.expect(boardName).to.exist;",
+									"pm.test(\"Check name is included\", () => {",
+									"    pm.expect(res.name).to.exist;",
 									"})",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -1876,29 +1915,30 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check if response is an array\", function () {",
-									"    var response = pm.response.json();",
-									"    pm.expect(response).to.be.an('array');",
+									"pm.test(\"Check if response is an array\", () => {",
+									"    pm.expect(res).to.be.an('array');",
 									"})",
 									"",
 									"pm.test(\"Check if board id is included\", function (){",
-									"    var responseFirstEntry  = pm.response.json()[0];",
+									"    const responseFirstEntry  = res[0];",
 									"    pm.expect(responseFirstEntry).to.have.property('board')",
 									"    pm.expect(responseFirstEntry.board).to.have.property('id')",
 									"})",
 									"",
 									"pm.test(\"Check if board name is included\", function (){",
-									"    var responseFirstEntry  = pm.response.json()[0];",
+									"    const responseFirstEntry  = res[0];",
 									"    pm.expect(responseFirstEntry).to.have.property('board')",
 									"    pm.expect(responseFirstEntry.board).to.have.property('name')",
 									"})",
 									"",
 									"pm.test(\"Check if number of participants is included\", function (){",
-									"    const firstBoardOverview = pm.response.json()[0];",
+									"    const firstBoardOverview = res[0];",
 									"    const participants = firstBoardOverview.participants;",
 									"    pm.expect(firstBoardOverview).to.have.property('participants');",
 									"    pm.expect(isNaN(Number(participants))).to.be.false;",
@@ -1906,7 +1946,7 @@
 									"",
 									"",
 									"pm.test(\"Check if creation timestamp is included and readable\", function (){",
-									"    const firstBoardOverview = pm.response.json()[0]",
+									"    const firstBoardOverview = res[0]",
 									"    pm.expect(firstBoardOverview).to.have.property('createdAt');",
 									"    let timestamp = firstBoardOverview.createdAt;",
 									"",
@@ -1920,7 +1960,7 @@
 									"})",
 									"",
 									"pm.test(\"Check if number of columns is included\", function (){",
-									"    const responseFirstEntry = pm.response.json()[0];",
+									"    const responseFirstEntry = res[0];",
 									"    pm.expect(responseFirstEntry).to.have.property('columnsNumber')",
 									"    pm.expect(isNaN(Number(responseFirstEntry.columnsNumber))).to.be.false;",
 									"})",
@@ -1986,45 +2026,41 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test('Successful GET request', function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test('Successful GET request', () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"})",
 									"",
-									"pm.test('Check board id is included', function () {",
-									"    var id = pm.response.json().board.id;",
-									"    pm.expect(id).to.exist;",
+									"pm.test('Check board id is included', () => {",
+									"    pm.expect(res.board.id).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check board name included\", function () {",
-									"    var name = pm.response.json().board.name;",
-									"    pm.expect(name).to.equal(\"Update to new name\");",
+									"pm.test(\"Check board name included\", () => {",
+									"    pm.expect(res.board.name).to.equal(\"Update to new name\");",
 									"})",
 									"",
-									"pm.test(\"Check board description included\", function () {",
-									"    var name = pm.response.json().board.description;",
-									"    pm.expect(name).to.equal(\"Updated to new description\");",
+									"pm.test(\"Check board description included\", () => {",
+									"    pm.expect(res.board.description).to.exist;",
 									"})",
 									"",
-									"pm.test('Check colums', function () {",
-									"    var responseBody = pm.response.json();",
-									"    pm.expect(responseBody).to.have.property('columns');",
-									"    pm.expect(responseBody.columns).to.be.an('array');",
-									"    pm.expect(responseBody.columns.length).to.equal(1);",
+									"pm.test('Check colums', () => {",
+									"    pm.expect(res).to.have.property('columns');",
+									"    pm.expect(res.columns).to.be.an('array');",
+									"    pm.expect(res.columns.length).to.equal(1);",
 									"})",
 									"",
-									"pm.test('Check paricipants', function () {",
-									"    var responseBody = pm.response.json();",
-									"    pm.expect(responseBody).to.have.property('participants');",
-									"    pm.expect(responseBody.participants).to.be.an('array');",
-									"    pm.expect(responseBody.participants.length).to.equal(1);",
-									"    pm.expect(responseBody.participants[0].user.id).to.equal(pm.collectionVariables.get('user_id'));",
+									"pm.test('Check paricipants', () => {",
+									"    pm.expect(res).to.have.property('participants');",
+									"    pm.expect(res.participants).to.be.an('array');",
+									"    pm.expect(res.participants.length).to.equal(1);",
+									"    pm.expect(res.participants[0].user.id).to.equal(pm.collectionVariables.get('user_id'));",
 									"})",
 									"",
-									"pm.test('Check notes', function () {",
-									"    var responseBody = pm.response.json();",
-									"    pm.expect(responseBody).to.have.property('notes');",
-									"    pm.expect(responseBody.notes).to.be.an('array');",
-									"    pm.expect(responseBody.notes.length).to.equal(0);",
+									"pm.test('Check notes', () => {",
+									"    pm.expect(res).to.have.property('notes');",
+									"    pm.expect(res.notes).to.be.an('array');",
+									"    pm.expect(res.notes.length).to.equal(0);",
 									"})",
 									"",
 									""
@@ -2142,22 +2178,23 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check timer start/end – 5 minutes appart\", function () {",
-									"    var res = pm.response.json();",
-									"",
-									"    var timerStart = new Date(res.timerStart);",
-									"    var timerEnd = new Date(res.timerEnd);",
-									"    var timeDifference = timerEnd - timerStart;",
-									"    var timeDifferenceInMinutes = timeDifference / (1000 * 60);",
+									"pm.test(\"Check timer start/end – 5 minutes appart\", () => {",
+									"    const timerStart = new Date(res.timerStart);",
+									"    const timerEnd = new Date(res.timerEnd);",
+									"    const timeDifference = timerEnd - timerStart;",
+									"    const timeDifferenceInMinutes = timeDifference / (1000 * 60);",
 									"",
 									"    pm.expect(timeDifferenceInMinutes).to.eql(5);",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2203,49 +2240,50 @@
 									"",
 									"}, function (err, response) {",
 									"",
-									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", function () {",
+									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", () => {",
 									"        pm.expect(response.code).to.be.equal(200);",
 									"    });",
 									"    ",
-									"    res =  response.json();",
-									"    pm.test(\"PreRequestScript – Check id\", function () {",
-									"        var id = res.id;",
+									"    const res = response.json();",
+									"    pm.test(\"PreRequestScript – Check id\", () => {",
+									"        const id = res.id;",
 									"        pm.expect(id).to.exist;",
 									"        pm.expect(id).to.be.equal(pm.collectionVariables.get(\"board_id\"))",
 									"    })",
 									"",
-									"    pm.test(\"PreRequestScript – Check timer end\", function () {",
-									"        var res = response.json()",
+									"    pm.test(\"PreRequestScript – Check timer end\", () => {",
+									"        const res = response.json()",
 									"        pm.expect(res.timerEnd).to.exist;",
 									"        pm.collectionVariables.set(\"timer_end\", res.timerEnd)",
 									"    })",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check timer incremented by 1 minute\", function () {",
-									"    var res = pm.response.json();",
-									"    var timerEnd = new Date(res.timerEnd);",
-									"    var prevTimerEnd = new Date(pm.collectionVariables.get(\"timer_end\"));",
+									"pm.test(\"Check timer incremented by 1 minute\", () => {",
+									"    const timerEnd = new Date(res.timerEnd);",
+									"    const prevTimerEnd = new Date(pm.collectionVariables.get(\"timer_end\"));",
 									"",
-									"    var timeDifference = timerEnd - prevTimerEnd;",
-									"    var timeDifferenceInMinutes = timeDifference / (1000 * 60);",
+									"    const timeDifference = timerEnd - prevTimerEnd;",
+									"    const timeDifferenceInMinutes = timeDifference / (1000 * 60);",
 									"",
-									"    pm.test(\"Check if time difference is 1 minute\", function () {",
-									"        pm.expect(timeDifferenceInMinutes).to.eql(1);",
-									"});",
-									"})"
+									"    pm.expect(timeDifferenceInMinutes).to.eql(1);",
+									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2274,7 +2312,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 201\", function () {",
+									"pm.test(\"Status code is 201\", () => {",
 									"    pm.response.to.have.status(201);",
 									"});"
 								],
@@ -2316,19 +2354,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful DELETE request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful DELETE request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check timer timestampz not present\", function () {",
-									"    var res = pm.response.json();",
-									"    ",
+									"pm.test(\"Check timer timestampz not present\", () => {    ",
 									"    pm.expect(res).to.not.have.property(\"timerStart\");",
 									"    pm.expect(res).to.not.have.property(\"timerEnd\");",
-									"    ",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2356,33 +2394,30 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check id is included\", function () {",
-									"    var id = pm.response.json().id;",
-									"    pm.expect(id).to.exist;",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
 									"})",
 									"",
-									"pm.test(\"Check showAuthors changed\", function () {",
-									"    var showAuthors = pm.response.json().showAuthors;",
-									"    pm.expect(showAuthors).to.eql(false);",
+									"pm.test(\"Check showAuthors changed\", () => {",
+									"    pm.expect(res.showAuthors).to.eql(false);",
 									"})",
 									"",
-									"pm.test(\"Check showNotesOfOtherUsers changed\", function () {",
-									"    var showNotesOfOtherUsers = pm.response.json().showNotesOfOtherUsers;",
-									"    pm.expect(showNotesOfOtherUsers).to.eql(false);",
+									"pm.test(\"Check showNotesOfOtherUsers changed\", () => {",
+									"    pm.expect(res.showNotesOfOtherUsers).to.eql(false);",
 									"})",
 									"",
-									"pm.test(\"Check showNoteReactions changed\", function () {",
-									"    var showNoteReactions = pm.response.json().showNoteReactions;",
-									"    pm.expect(showNoteReactions).to.eql(false);",
+									"pm.test(\"Check showNoteReactions changed\", () => {",
+									"    pm.expect(res.showNoteReactions).to.eql(false);",
 									"})",
 									"",
-									"pm.test(\"Check allowStacking changed\", function () {",
-									"    var allowStacking = pm.response.json().allowStacking;",
-									"    pm.expect(allowStacking).to.eql(false);",
+									"pm.test(\"Check allowStacking changed\", () => {",
+									"    pm.expect(res.allowStacking).to.eql(false);",
 									"})",
 									""
 								],
@@ -2464,13 +2499,14 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check allowEditing changed\", function () {",
-									"    var isLocked = pm.response.json().isLocked;",
-									"    pm.expect(isLocked).to.eql(true);",
+									"pm.test(\"Check allowEditing changed\", () => {",
+									"    pm.expect(res.isLocked).to.eql(true);",
 									"})",
 									"",
 									"// one could add a test which checks whether the lock actually works, ",
@@ -2589,26 +2625,24 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {\r",
+									"const res = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Successful POST request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(201);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check id is included\", function () {\r",
-									"    var id = pm.response.json().id;\r",
-									"\r",
-									"    pm.expect(id).to.exist;\r",
-									"    pm.expect(id).to.be.not.empty;\r",
-									"    pm.collectionVariables.set(\"column_id\", id);\r",
+									"pm.test(\"Check id is included\", () => {\r",
+									"    pm.expect(res.id).to.exist;\r",
+									"    pm.expect(res.id).to.be.not.empty;\r",
+									"    pm.collectionVariables.set(\"column_id\", res.id);\r",
 									"})\r",
 									"\r",
-									"pm.test(\"Check column name to be right\", function () {\r",
-									"    var name = pm.response.json().name;\r",
-									"    pm.expect(name).to.equal(\"My new column\");\r",
+									"pm.test(\"Check column name to be right\", () => {\r",
+									"    pm.expect(res.name).to.equal(\"My new column\");\r",
 									"})\r",
 									"\r",
-									"pm.test(\"Check if column is correctly not visible\", function () {\r",
-									"    var visible = pm.response.json().visible;\r",
-									"    pm.expect(visible).to.eql(false);\r",
+									"pm.test(\"Check if column is correctly not visible\", () => {\r",
+									"    pm.expect(res.visible).to.eql(false);\r",
 									"})"
 								],
 								"type": "text/javascript",
@@ -2703,18 +2737,20 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check length of coumns array\", function () {",
-									"    var res = pm.response.json();",
+									"pm.test(\"Check length of coumns array\", () => {",
 									"    pm.expect(res).to.be.an(\"array\");",
 									"    pm.expect(res.length).to.be.equal(3);",
 									"})",
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2782,20 +2818,21 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check column\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check column\", () => {",
 									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"column_id\"));",
 									"    pm.expect(res.name).to.equal(\"My new column\");",
 									"    pm.expect(res.visible).to.eql(false);",
 									"    pm.expect(res.index).to.equal(1);",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2865,20 +2902,21 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check updated values\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check updated values\", () => {",
 									"    pm.expect(res.name).to.equal(\"Updated column name\");",
 									"    pm.expect(res.color).to.equal(\"online-orange\");",
 									"    pm.expect(res.visible).to.equal(true);",
 									"    pm.expect(res.index).to.equal(0);",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -2966,7 +3004,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(204);",
 									"});"
 								],
@@ -2984,15 +3022,15 @@
 									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
 									"    },",
 									"}, function (err, response) {",
-									"    pm.test(\"PreRequestScript – Successful GET request (get columns)\", function () {",
+									"    pm.test(\"PreRequestScript – Successful GET request (get columns)\", () => {",
 									"        pm.expect(response.code).to.be.equal(200);",
 									"    });",
 									"    ",
-									"    pm.test(\"PreRequestScript – save last column to delete\", function () {",
-									"     var res =  response.json();",
+									"    pm.test(\"PreRequestScript – save last column to delete\", () => {",
+									"     const res =  response.json();",
 									"",
 									"     pm.expect(res[res.length - 1].id).to.exists;",
-									"     var lastColumnId = res[res.length - 1].id;",
+									"     const lastColumnId = res[res.length - 1].id;",
 									"",
 									"     pm.collectionVariables.set(\"column_to_delete_id\", lastColumnId);",
 									"    })",
@@ -3101,48 +3139,45 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {\r",
+									"const res = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Successful POST request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(201);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check note id\", function () {\r",
-									"    var res = pm.response.json();\r",
-									"\r",
+									"pm.test(\"Check note id\", () => {\r",
 									"    pm.expect(res.id).to.exist;\r",
 									"    pm.expect(res.id).to.not.be.empty;\r",
 									"    pm.collectionVariables.set(\"note_id\", res.id);\r",
 									"})   \r",
 									"\r",
-									"pm.test(\"Check author\", function () {\r",
-									"    var res = pm.response.json();\r",
-									"\r",
+									"pm.test(\"Check author\", () => {\r",
 									"    pm.expect(res.author).to.exist;\r",
 									"    pm.expect(res.author).to.not.be.empty;\r",
 									"    pm.expect(res.author).to.equal(pm.collectionVariables.get(\"user_id\"));\r",
 									"})\r",
 									"\r",
-									"pm.test(\"Check note text\", function () {\r",
-									"    var res = pm.response.json();\r",
-									"\r",
+									"pm.test(\"Check note text\", () => {\r",
 									"    pm.expect(res.text).to.equal(\"Just a note\");\r",
 									"})\r",
 									"\r",
-									"pm.test(\"Check note position\", function () {\r",
-									"    var pos = pm.response.json().position;\r",
+									"pm.test(\"Check note position\", () => {\r",
+									"    const pos = pm.response.json().position;\r",
 									"\r",
 									"    // column\r",
-									"    pm.expect(pos.column).to.exist;\r",
-									"    pm.expect(pos.column).to.equal(pm.collectionVariables.get(\"column_id\"));\r",
+									"    pm.expect(res.position.column).to.exist;\r",
+									"    pm.expect(res.position.column).to.equal(pm.collectionVariables.get(\"column_id\"));\r",
 									"\r",
 									"    // stack\r",
-									"    pm.expect(pos).to.have.property(\"stack\");\r",
+									"    pm.expect(res.position).to.have.property(\"stack\");\r",
 									"\r",
 									"    // rank\r",
-									"    pm.expect(pos.rank).to.exist;\r",
-									"    pm.expect(pos.rank).to.equal(0);\r",
+									"    pm.expect(res.position.rank).to.exist;\r",
+									"    pm.expect(res.position.rank).to.equal(0);\r",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -3233,18 +3268,20 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check note array\", function () {",
-									"    var res = pm.response.json();",
+									"pm.test(\"Check note array\", () => {",
 									"",
 									"    pm.expect(res).to.be.an(\"array\");",
 									"    pm.expect(res.length).to.equal(1);",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -3310,13 +3347,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check note \", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check note \", () => {",
 									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"note_id\"));",
 									"    pm.expect(res.author).to.equal(pm.collectionVariables.get(\"user_id\"));",
 									"",
@@ -3330,7 +3367,8 @@
 									"",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -3398,17 +3436,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check updated text\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check updated text\", () => {",
 									"    pm.expect(res.text).to.equal(\"Updated text\");",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -3446,23 +3485,25 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response.code).to.equal(200);",
 									"})",
 									"",
-									"pm.test(\"Check updated position\", function () {",
-									"    var pos = pm.response.json().position;",
+									"pm.test(\"Check updated position\", () => {",
 									"",
-									"    pm.expect(pos).to.have.property(\"column\");",
-									"    pm.expect(pos.column).to.equal(pm.collectionVariables.get(\"column_id\"));",
-									"    pm.expect(pos).to.have.property(\"rank\");",
-									"    pm.expect(pos).to.have.property(\"stack\");",
+									"    pm.expect(res.position).to.have.property(\"column\");",
+									"    pm.expect(res.position.column).to.equal(pm.collectionVariables.get(\"column_id\"));",
+									"    pm.expect(res.position).to.have.property(\"rank\");",
+									"    pm.expect(res.position).to.have.property(\"stack\");",
 									"    ",
 									"    // This is currently not testable, since our db always calulates the position. You can not simply set a rank.",
 									"    // pm.expect(pos.rank).to.equal(1998);",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -3548,7 +3589,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful DELETE request\", function () {",
+									"pm.test(\"Successful DELETE request\", () => {",
 									"    pm.expect(pm.response).to.have.status(204);",
 									"});",
 									"",
@@ -3562,7 +3603,7 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"var body = {",
+									"let body = {",
 									"    \"column\": pm.collectionVariables.get(\"column_id\"),",
 									"    \"text\": \"Just a note\"",
 									"}",
@@ -3578,14 +3619,13 @@
 									"    body: body,",
 									"",
 									"}, function (err, response) {",
-									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", function () {",
+									"    pm.test(\"PreRequestScript – Successful POST request (createBoard)\", () => {",
 									"        pm.expect(response).to.have.status(201);",
 									"    });",
 									"    ",
-									"    pm.test(\"PreRequestScript – safe note to delete\", function () {",
-									"        res =  response.json();",
-									"        pm.expect(res.id).to.exist;",
-									"        pm.collectionVariables.set(\"note_to_delete_id\", res.id); ",
+									"    pm.test(\"PreRequestScript – safe note to delete\", () => {",
+									"        pm.expect(response.id).to.exist;",
+									"        pm.collectionVariables.set(\"note_to_delete_id\", response.id); ",
 									"    })",
 									"",
 									"});"
@@ -3699,13 +3739,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {\r",
+									"const res = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Successful POST request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(201);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check voting parameters\", function () {\r",
-									"    var res = pm.response.json();\r",
-									"\r",
+									"pm.test(\"Check voting parameters\", () => {\r",
 									"    pm.expect(res.id).to.exist;\r",
 									"    pm.collectionVariables.set(\"voting_id\", res.id);\r",
 									"\r",
@@ -3713,10 +3753,10 @@
 									"    pm.expect(res.allowMultipleVotes).to.equal(true);\r",
 									"    pm.expect(res.showVotesOfOthers).to.equal(true);\r",
 									"    pm.expect(res.status).to.equal(\"OPEN\");\r",
-									"\r",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -3804,18 +3844,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check voting parameters\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check voting parameters\", () => {",
 									"    pm.expect(res).to.be.an(\"array\");",
-									"",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -3883,13 +3923,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check voting parameters\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check voting parameters\", () => {",
 									"    pm.expect(res.id).to.exist;",
 									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"voting_id\"));",
 									"",
@@ -3899,7 +3939,8 @@
 									"    pm.expect(res.status).to.equal(\"OPEN\");",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -3967,17 +4008,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check voting parameters\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check voting parameters\", () => {",
 									"    pm.expect(res.status).to.equal(\"CLOSED\");",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -4145,24 +4187,26 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
 									"    pm.expect(pm.response).to.have.status(201);",
 									"});",
-									"pm.test(\"Check response content\", function () {",
-									"    var res = pm.response.json();",
 									"",
+									"pm.test(\"Check response content\", () => {",
 									"    pm.expect(res.voting).to.equal(pm.collectionVariables.get(\"voting_id\"));",
 									"    pm.expect(res.note).to.equal(pm.collectionVariables.get(\"note_id\"));",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
 								"exec": [
-									"var body = {",
+									"let body = {",
 									"    \"voteLimit\": 5,",
 									"    \"allowMultipleVotes\": true,",
 									"    \"showVotesOfOthers\": true",
@@ -4179,19 +4223,20 @@
 									"    body: body,",
 									"",
 									"}, function (err, response) {",
-									"    pm.test(\"PreRequestScript – Successful POST request (createVoting)\", function () {",
+									"    pm.test(\"PreRequestScript – Successful POST request (createVoting)\", () => {",
 									"        pm.expect(response).to.have.status(201);",
 									"    });",
 									"    ",
-									"    pm.test(\"PreRequestScript – Check voting generated (if then save id)\", function () {",
-									"        var res = response.json();",
+									"    pm.test(\"PreRequestScript – Check voting generated (if then save id)\", () => {",
+									"        const res = response.json();",
 									"        ",
 									"        pm.expect(res.id).to.exist;",
 									"        pm.collectionVariables.set(\"voting_id\", res.id);",
 									"    })",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -4321,18 +4366,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check response content\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response content\", () => {",
 									"    pm.expect(res).to.be.an(\"array\");",
 									"    pm.expect(res.length).to.equal(1);",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -4399,7 +4445,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful DELETE request\", function () {",
+									"pm.test(\"Successful DELETE request\", () => {",
 									"    pm.expect(pm.response).to.have.status(204);",
 									"});"
 								],
@@ -4546,7 +4592,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {\r",
+									"pm.test(\"Successful GET request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(204);\r",
 									"});"
 								],
@@ -4653,13 +4699,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
 									"    pm.expect(pm.response).to.have.status(201);",
 									"});",
 									"",
-									"pm.test(\"Check response\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response\", () => {",
 									"    pm.expect(res.id).to.exist;",
 									"    pm.collectionVariables.set(\"reaction_id\", res.id);",
 									"",
@@ -4668,7 +4714,8 @@
 									"    pm.expect(res.reactionType).to.equal(\"like\");",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -4758,18 +4805,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check response\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response\", () => {",
 									"    pm.expect(res).to.be.an(\"array\");",
-									"",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -4841,23 +4888,22 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check response\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response\", () => {",
 									"    pm.expect(res.id).to.exist;",
 									"    pm.collectionVariables.set(\"reaction_id\", res.id)",
 									"    pm.expect(res.note).to.equal(pm.collectionVariables.get(\"note_id\"));",
 									"    pm.expect(res.user).to.equal(pm.collectionVariables.get(\"user_id\"));",
 									"    pm.expect(res.reactionType).to.equal(\"like\");",
-									"    ",
-									"",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -4929,17 +4975,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check response\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response\", () => {",
 									"    pm.expect(res.reactionType).to.equal(\"heart\");",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -4977,7 +5024,7 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful DELETE request\", function () {",
+									"pm.test(\"Successful DELETE request\", () => {",
 									"    pm.expect(pm.response).to.have.status(204);",
 									"});"
 								],
@@ -5015,18 +5062,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check response content\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response content\", () => {",
 									"    pm.expect(res.user).to.be.an(\"object\");",
 									"    pm.expect(res.user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -5054,21 +5102,21 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {\r",
+									"const res = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Successful GET request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check response content\", function () {\r",
-									"    var res = pm.response.json();\r",
-									"\r",
+									"pm.test(\"Check response content\", () => {\r",
 									"    pm.expect(res).to.be.an(\"array\");\r",
 									"    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));\r",
 									"\r",
 									"    pm.collectionVariables.set(\"owner_id\", res[0].user.id);\r",
-									"\r",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -5096,21 +5144,21 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {\r",
+									"const res = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Successful GET request\", () => {\r",
 									"    pm.expect(pm.response).to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check response content\", function () {\r",
-									"    var res = pm.response.json();\r",
-									"\r",
+									"pm.test(\"Check response content\", () => {\r",
 									"    pm.expect(res).to.be.an(\"array\");\r",
 									"    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));\r",
 									"\r",
 									"    pm.collectionVariables.set(\"owner_id\", res[0].user.id);\r",
-									"\r",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -5160,18 +5208,19 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful GET request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check response content\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response content\", () => {",
 									"    pm.expect(res.user).to.be.an(\"object\");",
 									"    pm.expect(res.user.id).to.equal(pm.collectionVariables.get(\"owner_id\"));",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -5200,13 +5249,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check response content\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response content\", () => {",
 									"    pm.expect(res).to.be.an(\"array\");",
 									"    pm.expect(res[0].user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
 									"",
@@ -5214,7 +5263,8 @@
 									"    pm.expect(res[0].raisedHand).to.equal(false);",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -5251,13 +5301,13 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Successful PUT request\", function () {",
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
-									"pm.test(\"Check response content\", function () {",
-									"    var res = pm.response.json();",
-									"",
+									"pm.test(\"Check response content\", () => {",
 									"    pm.expect(res.user.id).to.equal(pm.collectionVariables.get(\"user_id\"));",
 									"",
 									"    pm.expect(res.ready).to.equal(true);",
@@ -5265,7 +5315,8 @@
 									"    pm.expect(res.banned).to.equal(true);",
 									"})"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						},
 						{
@@ -5274,7 +5325,8 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
