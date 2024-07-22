@@ -5,12 +5,16 @@ import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy, Board} from "types/board";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
+import {TextInputLabel} from "components/TextInputLabel";
+import {TextInput} from "components/TextInput";
+import {Button} from "components/Button";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
+import {Column} from "types/column";
+import {Note} from "types/note";
+import {Participant} from "types/participant";
+import {Voting} from "types/voting";
 import {columnTemplates} from "./columnTemplates";
-import {TextInputLabel} from "../../components/TextInputLabel";
-import {TextInput} from "../../components/TextInput";
-import {Button} from "../../components/Button";
-import {ScrumlrLogo} from "../../components/ScrumlrLogo";
-import {PassphraseDialog} from "../../components/PassphraseDialog";
+import {PassphraseModal} from "../../components/PassphraseDialog/PassphraseModal/PassphraseModal";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
@@ -25,6 +29,14 @@ export const NewBoard = () => {
   const [fileContent, setFileContent] = useState<string>();
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+  };
+
+  type CompleteBoard = {
+    board: Board;
+    columns: Column[];
+    notes: Note[];
+    participants: Participant;
+    votings: Voting;
   };
 
   const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
@@ -47,18 +59,18 @@ export const NewBoard = () => {
     };
     reader.readAsText(droppedFile); // You can use other methods like readAsDataURL, readAsArrayBuffer, etc., based on your needs
     if (!fileContent) return;
-    const obj = JSON.parse(fileContent) as Board;
+    const obj = JSON.parse(fileContent) as CompleteBoard;
     console.log(obj);
-    if (obj.accessPolicy == "BY_PASSPHRASE") {
+    if (obj.board.accessPolicy === "BY_PASSPHRASE") {
       console.log("trest");
       setShowPasswordModal(true);
     }
   };
 
-  const handlePasswordSubmit = (password: string) => {
-    setPassphrase(password);
-    onCreateBoard(); // Continue the method after password is set
-  };
+  // const handlePasswordSubmit = (password: string) => {
+  //   setPassphrase(password);
+  //   onCreateBoard(); // Continue the method after password is set
+  // };
 
   async function onCreateBoard() {
     let additionalAccessPolicyOptions = {};
@@ -163,13 +175,8 @@ export const NewBoard = () => {
           </Button>
         )}
       </div>
-      {showPasswordModal && (
-        <PassphraseDialog onSubmit={handlePasswordSubmit} incorrectPassphrase={false} />
-        // <PasswordModal
-        //   onClose={() => setShowPasswordModal(false)}
-        //   onSubmit={handlePasswordSubmit}
-        // />
-      )}
+      {/* {showPasswordModal && ( */}
+      <PassphraseModal onPassphraseChange={setPassphrase} passphrase={passphrase} />
     </div>
   );
 };
