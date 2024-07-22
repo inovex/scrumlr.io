@@ -11,7 +11,9 @@
 
     "TemplateCard": {
       "addFavourite": "Mark as Favourite",
-      "removeFavourite": "Remove Favourite"
+      "removeFavourite": "Remove Favourite",
+      "column_one": "{{count}} column",
+      "column_other": "{{count}} columns"
     }
   },
   "Sessions": {
