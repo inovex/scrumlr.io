@@ -106,31 +106,29 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 
 func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error) {
 	// parse dto cols to db cols
-	req_cols := []database.ColumnTemplate{}
+	updateColumns := []database.ColumnTemplateUpdate{}
 	for _, col := range body.ColumnTemplates {
-		new_col := database.ColumnTemplate{
-			ID:            col.ID,
-			BoardTemplate: col.BoardTemplate,
-			Name:          col.Name,
-			Description:   col.Description,
-			Color:         col.Color,
-			Visible:       col.Visible,
-			Index:         col.Index,
+		new_col := database.ColumnTemplateUpdate{
+			ID:          col.ID,
+			Name:        col.Name,
+			Description: col.Description,
+			Color:       col.Color,
+			Visible:     col.Visible,
+			Index:       col.Index,
 		}
-		req_cols = append(req_cols, new_col)
+		updateColumns = append(updateColumns, new_col)
 	}
 
 	// parse req update to db update
-	update := database.BoardTemplateUpdate{
-		ID:              body.ID,
-		Name:            body.Name,
-		Description:     body.Description,
-		AccessPolicy:    body.AccessPolicy,
-		Favourite:       body.Favourite,
-		ColumnTemplates: req_cols,
+	updateBoard := database.BoardTemplateUpdate{
+		ID:           body.ID,
+		Name:         body.Name,
+		Description:  body.Description,
+		AccessPolicy: body.AccessPolicy,
+		Favourite:    body.Favourite,
 	}
 
-	updatedTemplate, err := s.database.UpdateBoardTemplate(update)
+	updatedTemplate, err := s.database.UpdateBoardTemplate(updateBoard, updateColumns)
 	if err != nil {
 		return &dto.BoardTemplate{}, err
 	}

@@ -46,13 +46,12 @@ type BoardTemplateInsert struct {
 }
 
 type BoardTemplateUpdate struct {
-	bun.BaseModel   `bun:"table:board_templates"`
-	ID              uuid.UUID
-	Name            *string
-	Description     *string
-	AccessPolicy    *types.AccessPolicy
-	Favourite       *bool
-	ColumnTemplates []ColumnTemplate
+	bun.BaseModel `bun:"table:board_templates"`
+	ID            uuid.UUID
+	Name          *string
+	Description   *string
+	AccessPolicy  *types.AccessPolicy
+	Favourite     *bool
 }
 
 func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []ColumnTemplateInsert) (BoardTemplate, error) {
@@ -75,6 +74,13 @@ func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []Colu
 	if err != nil {
 		return BoardTemplate{}, err
 	}
+
+	var createdCols []ColumnTemplate
+	err = d.db.NewSelect().Model(&createdCols).Where("id = ?", b.ID).Scan(context.Background())
+	if err != nil {
+		return BoardTemplate{}, err
+	}
+	b.ColumnTemplates = createdCols
 
 	return b, err
 }
@@ -140,48 +146,47 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplate, error) {
 	return templates, err
 }
 
-func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplate, error) {
+func (d *Database) UpdateBoardTemplate(board BoardTemplateUpdate, columns []ColumnTemplateUpdate) (BoardTemplate, error) {
 	// General Settings
-	query_settings := d.db.NewUpdate().Model(&update)
+	query_settings := d.db.NewUpdate().Model(&board)
 
-	if update.Name != nil {
+	if board.Name != nil {
 		query_settings.Column("name")
 	}
 
-	if update.Description != nil {
+	if board.Description != nil {
 		query_settings.Column("description")
 	}
 
-	if update.AccessPolicy != nil {
+	if board.AccessPolicy != nil {
 		query_settings.Column("access_policy")
 	}
 
-	if update.Favourite != nil {
+	if board.Favourite != nil {
 		query_settings.Column("favourite")
 	}
 
 	var boardTemplate BoardTemplate
 	_, err := query_settings.
-		Where("id = ?", update.ID).
+		Where("id = ?", board.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &boardTemplate), &boardTemplate)
 
 	if err != nil {
-		logger.Get().Errorw("failed to update board template settings", "board", update.ID, "err", err)
+		logger.Get().Errorw("failed to update board template settings", "board", board.ID, "err", err)
 		return BoardTemplate{}, err
 	}
 
 	// columns
 	cols_updated := []ColumnTemplate{}
-	for _, col := range update.ColumnTemplates {
+	for _, col := range columns {
 		column := ColumnTemplateUpdate{
-			ID:            col.ID,
-			BoardTemplate: boardTemplate.ID,
-			Name:          col.Name,
-			Description:   col.Description,
-			Color:         col.Color,
-			Visible:       col.Visible,
-			Index:         col.Index,
+			ID:          col.ID,
+			Name:        col.Name,
+			Description: col.Description,
+			Color:       col.Color,
+			Visible:     col.Visible,
+			Index:       col.Index,
 		}
 
 		// Update logic
@@ -190,14 +195,14 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 			newIndex = 0
 		}
 
-		selectPrevious := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("board_template", "index").Where("id = ?", column.ID).Where("board_template = ?", column.BoardTemplate)
-		maxIndexSelect := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("index").Where("board_template = ?", column.BoardTemplate)
+		selectPrevious := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("board_template", "index").Where("id = ?", column.ID).Where("board_template = ?", board.ID)
+		maxIndexSelect := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("index").Where("board_template = ?", board.ID)
 		updateOnSmallerIndex := d.db.NewUpdate().
 			Model((*ColumnTemplate)(nil)).
 			Column("index").
 			Set("index = index+1").
 			Where("index < (SELECT index FROM \"selectPrevious\")").
-			Where("board_template = ?", column.BoardTemplate).
+			Where("board_template = ?", board.ID).
 			Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
 			Where("index >= ?", newIndex)
 		updateOnGreaterIndex := d.db.NewUpdate().
@@ -205,7 +210,7 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 			Column("index").
 			Set("index = index-1").
 			Where("index > (SELECT index FROM \"selectPrevious\")").
-			Where("board_template = ?", column.BoardTemplate).
+			Where("board_template = ?", board.ID).
 			Where("(SELECT index FROM \"selectPrevious\") < ?", newIndex).
 			Where("index <= ?", newIndex)
 
@@ -222,7 +227,7 @@ func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplat
 			Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, column.BaseModel), &c)
 
 		if err != nil {
-			logger.Get().Errorw("failed to update column template in updte board template", "board_template", update.ID, "err", err)
+			logger.Get().Errorw("failed to update column template in updte board template", "board_template", board.ID, "err", err)
 			return BoardTemplate{}, err
 		}
 		cols_updated = append(cols_updated, c)

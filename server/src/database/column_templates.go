@@ -35,7 +35,6 @@ type ColumnTemplateInsert struct {
 type ColumnTemplateUpdate struct {
 	bun.BaseModel `bun:"table:column_templates"`
 	ID            uuid.UUID
-	BoardTemplate uuid.UUID
 	Description   string
 	Name          string
 	Color         types.Color
