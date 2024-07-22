@@ -96,8 +96,7 @@ jobs:
 
   package:
     needs: [test-frontend, test-backend]
-    # TODO change to main on merge
-    uses: inovex/scrumlr.io/.github/workflows/package.yml@feat/arm_images
+    uses: inovex/scrumlr.io/.github/workflows/package.yml@main
 
   deploy_to_dev_cluster:
     needs: package
