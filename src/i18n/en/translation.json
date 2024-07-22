@@ -9,6 +9,10 @@
     "savedTemplates": "Your Templates",
     "recommendedTemplates": "Our Recommendations",
 
+    "CreateTemplateCard": {
+      "create": "Create a new Template"
+    },
+
     "TemplateCard": {
       "addFavourite": "Mark as Favourite",
       "removeFavourite": "Remove Favourite",
