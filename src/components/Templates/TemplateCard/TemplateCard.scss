@@ -7,7 +7,7 @@ $card-height: 220px;
   grid-template-rows: 36px auto 10px 46px;
   grid-template-columns: 36px $spacing--xxs 1fr auto 36px;
   grid-template-areas:
-    "fav-icon   .   title         title         menu-icon"
+    "fav-icon   .   head          head         menu-icon"
     ".          .   description   description   ."
     ".          .   .             .             ."
     "col-icon   .   columns       start         start";
@@ -42,15 +42,29 @@ $card-height: 220px;
   }
 }
 
-.template-card__title {
-  grid-area: title;
+.template-card__head {
+  grid-area: head;
   align-self: center;
 
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: $spacing--xxs;
+}
+
+.template-card__title {
   font-size: $text--lg;
   font-weight: 700;
   line-height: 32px;
 
   color: $navy--900;
+}
+
+.template-card__access-policy,
+.template-card__access-policy-icon {
+  width: 20px;
+  height: 20px;
 }
 
 .template-card__description {
