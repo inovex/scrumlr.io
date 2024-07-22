@@ -96,6 +96,19 @@ $side-padding--desktop: 14vw;
   overflow-y: hidden;
 }
 
+@media (max-width: $breakpoint--desktop) {
+  .boards__grid {
+    grid-template-columns: $spacing--2xl 114px auto $spacing--base 1fr auto auto $spacing--2xl;
+    grid-template-areas:
+      ".  .    .       .       .       .       .      ."
+      ".  logo title   title   title   title   user   ."
+      ".  .    title   title   title   title   .      ."
+      ".  switch    switch  .       search  search  search      ."
+      ".  main    main    main    main    main    main      ."
+      ".  .    .       .       .       .       .      .";
+  }
+}
+
 @media screen and (max-width: $breakpoint--smartphone) {
   .boards {
   }
