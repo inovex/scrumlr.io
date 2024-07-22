@@ -114,6 +114,3 @@ type BoardTemplates interface {
 	UpdateColumnTemplate(ctx context.Context, body dto.ColumnTemplateUpdateRequest) (*dto.ColumnTemplate, error)
 	DeleteColumnTemplate(ctx context.Context, boar, column, user uuid.UUID) error
 }
-
-type ColumnTemplates interface {
-}
