@@ -1,6 +1,5 @@
 import {useRef, useState} from "react";
-import "./NoteInput.scss";
-import {Plus, AddImage, Star} from "components/Icon";
+import {AddImage, LockClosed, Plus, Star} from "components/Icon";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
@@ -11,6 +10,8 @@ import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {useAppSelector} from "store";
+import "./NoteInput.scss";
 
 export interface NoteInputProps {
   columnId: string;
@@ -24,6 +25,8 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
 
   const addNote = (content: string) => {
     if (!content.trim()) return;
@@ -66,7 +69,9 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       }}
       ref={emoji.containerRef}
     >
+      {!isModerator && boardLocked && <LockClosed className="note-input__lock-icon" />}
       <TextareaAutosize
+        disabled={!isModerator && boardLocked}
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
@@ -100,6 +105,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         </div>
       )}
       <button
+        disabled={!isModerator && boardLocked}
         type="submit"
         tabIndex={-1} // skip focus
         className="note-input__add-button"

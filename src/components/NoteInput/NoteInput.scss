@@ -5,7 +5,9 @@ $note-input__input-right: 40px;
 
 .note-input {
   display: flex;
+  padding-inline: $spacing--base;
   justify-content: space-between;
+  align-items: center;
   min-height: 36px;
   width: 100%;
   position: relative;
@@ -14,17 +16,23 @@ $note-input__input-right: 40px;
   border-radius: $rounded--medium;
   transition: all 0.12s ease-in-out;
   border: 2px solid transparent;
+  container-type: inline-size;
 
-  &:hover,
-  &:focus-within {
+  &:not(:has(.note-input__input:disabled)):hover,
+  &:not(:has(.note-input__input:disabled)):focus-within {
     border-color: rgba(var(--accent-color--light-rgb), 0.5);
     box-shadow: 0 6px 9px 0 rgba(var(--accent-color--light-rgb), 0.16);
   }
 }
 
+.note-input__lock-icon {
+  width: $icon--large;
+  height: $icon--large;
+  color: $gray--800;
+}
+
 .note-input__input {
   color: $navy--900;
-  font-size: $text-size--medium;
   font-weight: bold;
   line-height: 24px;
   max-height: 70vh;
@@ -33,14 +41,27 @@ $note-input__input-right: 40px;
   font-family: Raleway, sans-serif;
   background-color: transparent;
   border: none;
-  margin-left: $spacing--base;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
   outline: none;
-
   resize: none;
+  font-size: $text--xs;
 
   &:focus::placeholder {
     color: transparent;
+  }
+}
+
+@container (width > 280px) {
+  .note-input__input {
+    font-size: $text-size--medium;
+  }
+}
+
+.note-input__add-button {
+  cursor: pointer;
+
+  &:hover > .note-input__icon--add {
+    filter: $brighten--slightly;
   }
 }
 
@@ -51,13 +72,11 @@ $note-input__input-right: 40px;
   display: flex;
   align-self: flex-start;
   padding: $spacing--xxs 0;
-}
+  color: var(--accent-color);
 
-.note-input__add-button {
-  cursor: pointer;
-
-  &:hover > .note-input__icon--add {
-    filter: $brighten--slightly;
+  &:disabled {
+    color: $gray--800;
+    cursor: default;
   }
 }
 
@@ -109,9 +128,9 @@ $note-input__input-right: 40px;
   .note-input {
     background-color: $navy--400;
 
-    &:hover,
-    &:focus-within {
-      box-shadow: 0 6px 9px 0 #232323;
+    &:not(:has(.note-input__input:disabled)):hover,
+    &:not(:has(.note-input__input:disabled)):focus-within {
+      box-shadow: 0 6px 9px 0 $navy--700;
     }
   }
 
