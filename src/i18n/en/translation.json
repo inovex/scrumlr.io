@@ -13,7 +13,9 @@
       "addFavourite": "Mark as Favourite",
       "removeFavourite": "Remove Favourite",
       "column_one": "{{count}} column",
-      "column_other": "{{count}} columns"
+      "column_other": "{{count}} columns",
+      "start": "Start",
+      "save": "Save"
     }
   },
   "Sessions": {

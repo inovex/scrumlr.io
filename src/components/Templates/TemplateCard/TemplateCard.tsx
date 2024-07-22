@@ -22,7 +22,7 @@ export const TemplateCard = () => {
         <div className="template-card__columns-subtitle">Ideas, Problems & Solutions</div>
       </div>
       <Button className="template-card__start-button" small icon={<NextIcon />}>
-        Start
+        {t("Templates.TemplateCard.start")}
       </Button>
     </div>
   );
