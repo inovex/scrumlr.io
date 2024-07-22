@@ -58,7 +58,7 @@ const MENU_ENTRY_CONFIG: Record<MenuKey, MenuItem> = {
     localizationKey: "Feedback",
     location: "feedback",
     isModeratorOnly: false,
-    color: "poker-purple",
+    color: "value-violet",
     icon: SettingsFeedback,
   },
   profile: {
