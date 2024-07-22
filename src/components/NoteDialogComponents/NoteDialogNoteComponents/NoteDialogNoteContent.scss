@@ -116,30 +116,8 @@ $min-lines: 3;
   }
 }
 
-.note-dialog__note-content--emoji-suggestions {
-  position: absolute;
-  top: calc(100% + $spacing--xs);
-  left: 0;
-  width: 100%;
-  max-height: min(300px, calc(100svh - $note-dialog-emoji-suggestions__approx-top-distance));
-  margin-bottom: $spacing--xl;
-
-  z-index: $note-dialog__emoji-suggestions-z-index;
-  border-radius: $rounded--default;
-  overflow-y: auto;
-  box-shadow: $box-shadow--light;
-  background-color: $gray--300;
-
-  @include scrollbar();
-}
-
 [theme="dark"] {
   .note-dialog__note-content-text {
     color: $gray--000;
-  }
-
-  .note-dialog__note-content--emoji-suggestions {
-    background-color: $navy--500;
-    box-shadow: $box-shadow--dark;
   }
 }
