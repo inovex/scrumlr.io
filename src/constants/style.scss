@@ -169,15 +169,39 @@ $column-stripes--dark: repeating-linear-gradient(
   box-shadow: inset-border($left, $right, $top, $bottom, $color);
 }
 
-// scrollbar
-@mixin scrollbar() {
-  scrollbar-width: auto;
+@mixin scrollbar($width: 8px) {
+  // apply vendor specific rules first
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color--200);
+    border-radius: $rounded--default;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--accent-color--100);
+    border-radius: $rounded--default;
+  }
 
-  scrollbar-color: var(--accent-color--200) var(--accent-color--100);
+  // official CSS rules override vendor rules
+  @supports not selector(::-webkit-scrollbar) {
+    scrollbar-width: auto;
+    scrollbar-color: var(--accent-color--200) var(--accent-color--100);
+  }
 
-  // ampersand to correctly scope the rule
+  // ampersand to correctly scope
   [theme="dark"] & {
-    scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) rgba(var(--accent-color--dark-rgb), 0.6);
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(var(--accent-color--dark-rgb), 0.8);
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
+    }
+
+    @supports not selector(::-webkit-scrollbar) {
+      scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) rgba(var(--accent-color--dark-rgb), 0.6);
+    }
   }
 }
 
