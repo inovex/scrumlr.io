@@ -142,3 +142,14 @@ type BoardOverview struct {
 	CreatedAt    time.Time `json:"createdAt"`
 	Participants int       `json:"participants"`
 }
+
+type FullBoard struct {
+	Board *Board 
+	BoardSessionRequest *BoardSessionRequest 
+	BoardSession *BoardSession 
+	Column *Column
+	Note *Note 
+	Reaction *Reaction 
+	Votings *[]Voting 
+	Votes *[]Vote
+}
