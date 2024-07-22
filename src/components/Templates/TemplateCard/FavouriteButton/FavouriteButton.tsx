@@ -7,15 +7,13 @@ type FavouriteButtonProps = {
   className?: string;
   active: boolean;
   onClick: () => void;
-  disabled?: boolean;
 };
 
 export const FavouriteButton = (props: FavouriteButtonProps) => (
-  <button
+  <FavouriteIcon
     className={classNames(props.className, "favourite-button", {"favourite-button--active": props.active}, getColorClassName("planning-pink"))}
+    role="button"
     onClick={props.onClick}
-    disabled={props.disabled}
-  >
-    <FavouriteIcon className={classNames("favourite-button__icon", {"favourite-button__icon--active": props.active})} />
-  </button>
+    tabIndex={0}
+  />
 );
