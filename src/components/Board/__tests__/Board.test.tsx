@@ -34,14 +34,6 @@ describe("basic", () => {
           disconnect: jest.fn(),
         }) as unknown as IntersectionObserver
     );
-
-    window.ResizeObserver = jest.fn(
-      () =>
-        ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
-        }) as unknown as ResizeObserver
-    );
   });
 
   test("show empty board", () => {
@@ -114,14 +106,6 @@ describe("navigation", () => {
           observe: jest.fn(),
           disconnect: jest.fn(),
         }) as unknown as IntersectionObserver
-    );
-
-    window.ResizeObserver = jest.fn(
-      () =>
-        ({
-          observe: jest.fn(),
-          disconnect: jest.fn(),
-        }) as unknown as ResizeObserver
     );
 
     const root = global.document.createElement("div");
