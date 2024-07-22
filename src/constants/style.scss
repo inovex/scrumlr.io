@@ -169,6 +169,10 @@ $column-stripes--dark: repeating-linear-gradient(
   box-shadow: inset-border($left, $right, $top, $bottom, $color);
 }
 
+// note: there are some limitations with using the vendor specific rules.
+// for instance, including this mixin in a container where the parent container
+// has a border-radius and is set to overflow: hidden,
+// the vendor rules ignore that border-radius whereas the official rules don't.
 @mixin scrollbar($width: 8px) {
   // apply vendor specific rules first
   &::-webkit-scrollbar {
