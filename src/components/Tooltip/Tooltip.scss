@@ -8,6 +8,10 @@
   font-weight: 600;
   padding: $spacing--xs $spacing--base;
   z-index: 9999;
+
+  &--colored {
+    background-color: var(--accent-color--100);
+  }
 }
 
 [theme="dark"] .tooltip-container .tooltip {
