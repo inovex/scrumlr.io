@@ -13,11 +13,10 @@ export interface ColorPickerProps {
   visible: boolean;
   index: number;
   color: Color;
-  updateOpenedPicker?: (updatedOpened) => void;
 }
 
 // Definieren Sie die Komponente
-export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color, updateOpenedPicker}) => {
+export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color}) => {
   const dispatch = useDispatch();
 
   return (

@@ -31,10 +31,6 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
   const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
   const [openedColorPicker, setOpenedColorPicker] = useState(false);
 
-  const updateOpenedColorPicker = () => {
-    setOpenedColorPicker((o) => !o);
-  };
-
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
       dispatch(Actions.setShowHiddenColumns(true));
@@ -51,23 +47,25 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
           <button
             onClick={() => {
               onClose?.();
-              dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+              dispatch(Actions.deleteColumn(id));
             }}
           >
-            {visible ? <Hidden /> : <Visible />}
-            {/* {visible ? t("Column.hideColumn") : t("Column.showColumn")} */}
+            <Trash />
+            {/* {t("Column.deleteColumn")} */}
           </button>
         </li>
-        <li>
+        <li style={{display: "block"}}>
           <button
-            onClick={() => {
-              onNameEdit?.();
-              onClose?.();
-            }}
+            aria-label="Color Picker"
+            title="Color Picker"
+            // className={classNames(getColorClassName("planning-pink"), "column__color-button")}
+            // onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
+            // title={t("Column.settings")} className="column__header-edit-button"
+            onClick={() => setOpenedColorPicker((o) => !o)}
           >
-            <Edit />
-            {/* {t("Column.editName")} */}
+            <span className={`column__header-color-option ${color}_selected`} />
           </button>
+          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} />}
         </li>
         <li>
           <button
@@ -94,26 +92,24 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         <li>
           <button
             onClick={() => {
+              onNameEdit?.();
               onClose?.();
-              dispatch(Actions.deleteColumn(id));
             }}
           >
-            <Trash />
-            {/* {t("Column.deleteColumn")} */}
+            <Edit />
+            {/* {t("Column.editName")} */}
           </button>
         </li>
-        <li style={{display: "block"}}>
+        <li>
           <button
-            aria-label="Color Picker"
-            title="Color Picker"
-            // className={classNames(getColorClassName("planning-pink"), "column__color-button")}
-            // onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
-            // title={t("Column.settings")} className="column__header-edit-button"
-            onClick={() => setOpenedColorPicker((o) => !o)}
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+            }}
           >
-            <span className={`column__header-color-option ${color}_selected`} />
+            {visible ? <Hidden /> : <Visible />}
+            {/* {visible ? t("Column.hideColumn") : t("Column.showColumn")} */}
           </button>
-          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} updateOpenedPicker={updateOpenedColorPicker} />}
         </li>
       </ul>
     </div>
