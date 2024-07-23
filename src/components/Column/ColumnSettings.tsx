@@ -96,16 +96,16 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button
-            aria-label="Planning Pink"
-            title="Planning Pink"
-            className={classNames(getColorClassName("planning-pink"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
-          />
-          <button
             aria-label="Backlog Blue"
             title="Backlog Blue"
             className={classNames(getColorClassName("backlog-blue"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}))}
+          />
+          <button
+            aria-label="Planning Pink"
+            title="Planning Pink"
+            className={classNames(getColorClassName("planning-pink"), "column__color-button")}
+            onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
           />
           <button
             aria-label="Poker Purple"
