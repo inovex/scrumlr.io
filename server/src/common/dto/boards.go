@@ -33,7 +33,7 @@ type Board struct {
 
 	AllowStacking bool `json:"allowStacking"`
 
-	AllowEditing bool `json:"allowEditing"`
+	IsLocked bool `json:"isLocked"`
 
 	TimerStart *time.Time `json:"timerStart,omitempty"`
 	TimerEnd   *time.Time `json:"timerEnd,omitempty"`
@@ -57,7 +57,7 @@ func (b *Board) From(board database.Board) *Board {
 	b.ShowNotesOfOtherUsers = board.ShowNotesOfOtherUsers
 	b.ShowNoteReactions = board.ShowNoteReactions
 	b.AllowStacking = board.AllowStacking
-	b.AllowEditing = board.AllowEditing
+	b.IsLocked = board.IsLocked
 	b.SharedNote = board.SharedNote
 	b.ShowVoting = board.ShowVoting
 	b.TimerStart = board.TimerStart
@@ -121,7 +121,7 @@ type BoardUpdateRequest struct {
 	AllowStacking *bool `json:"allowStacking"`
 
 	// Set whether changes to board should be allowed to all users or only moderators.
-	AllowEditing *bool `json:"allowEditing"`
+	IsLocked *bool `json:"isLocked"`
 
 	// Set the timer start.
 	TimerStart *time.Time `json:"timerStart"`

@@ -5,7 +5,6 @@ $stack-view__navigation-height: 14vh;
 $stack-view__min-height: 82px;
 
 .stack-view__portal {
-  background-color: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px) brightness(0.76) saturate(0);
   background: rgba(var(--accent-color--light-rgb), 0.42);
   transition: all 0.2s ease-in-out;
@@ -16,7 +15,6 @@ $stack-view__min-height: 82px;
   height: 100vh;
   flex-direction: column;
   align-items: center;
-  width: fit-content;
 }
 
 .stack-view__border {
@@ -35,17 +33,29 @@ $stack-view__min-height: 82px;
 }
 
 .stack-view__content {
-  height: auto;
   position: relative;
-  flex-grow: 1;
-  overflow-x: scroll;
+
+  height: auto;
+  border-radius: $note__border-radius;
+
+  overflow: hidden;
+
+  @include scrollbar();
+}
+
+// inner container preventing scrollbar flowing over border radius
+.stack-view__inner-scrollbar {
+  width: 100%;
+  height: 100%;
+  overflow: hidden scroll;
+  box-sizing: border-box;
 }
 
 .stack-view__animation-wrapper {
-  width: fit-content;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  max-height: $stack-content-max-height;
+  gap: $spacing--sm;
 }
 
 .stack-view__disabled-click {
@@ -83,10 +93,10 @@ $stack-view__min-height: 82px;
 
 .stack-view__parent-note {
   margin: 0;
-  min-height: calc($stack-view__min-height * 2);
-  width: calc(100vw - 3 * $column__border-width);
   max-width: 700px;
   font-size: $text-size--large;
+
+  align-self: center;
 
   z-index: $request-z-index;
   --note-footer-height: 36px;
@@ -97,6 +107,21 @@ $stack-view__min-height: 82px;
 
   .vote-button-add {
     margin: 0 0 0 $spacing--xs;
+  }
+}
+
+@media screen and (max-width: $breakpoint--desktop) {
+  .stack-view__animation-wrapper {
+    flex-direction: column;
+    max-height: initial;
+  }
+
+  .stack-view__parent-note .note-dialog__note-content-text {
+    max-height: $stack-content-max-height--mobile; // initial for full height
+  }
+
+  .stack-view__child-note .note-dialog__note-content-text {
+    max-height: $stack-content-max-height--mobile; // initial for full height
   }
 }
 
