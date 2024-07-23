@@ -31,6 +31,10 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
   const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
   const [openedColorPicker, setOpenedColorPicker] = useState(false);
 
+  const updateOpenedColorPicker = () => {
+    setOpenedColorPicker((o) => !o);
+  };
+
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
       dispatch(Actions.setShowHiddenColumns(true));
@@ -51,7 +55,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             }}
           >
             {visible ? <Hidden /> : <Visible />}
-            {visible ? t("Column.hideColumn") : t("Column.showColumn")}
+            {/* {visible ? t("Column.hideColumn") : t("Column.showColumn")} */}
           </button>
         </li>
         <li>
@@ -62,7 +66,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             }}
           >
             <Edit />
-            {t("Column.editName")}
+            {/* {t("Column.editName")} */}
           </button>
         </li>
         <li>
@@ -73,7 +77,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             }}
           >
             <ArrowLeft />
-            {t("Column.addColumnLeft")}
+            {/* {t("Column.addColumnLeft")} */}
           </button>
         </li>
         <li>
@@ -84,7 +88,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             }}
           >
             <ArrowRight />
-            {t("Column.addColumnRight")}
+            {/* {t("Column.addColumnRight")} */}
           </button>
         </li>
         <li>
@@ -95,10 +99,10 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             }}
           >
             <Trash />
-            {t("Column.deleteColumn")}
+            {/* {t("Column.deleteColumn")} */}
           </button>
         </li>
-        <li>
+        <li style={{display: "block"}}>
           <button
             aria-label="Color Picker"
             title="Color Picker"
@@ -109,7 +113,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
           >
             <span className={`column__header-color-option ${color}_selected`} />
           </button>
-          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} />}
+          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} updateOpenedPicker={updateOpenedColorPicker} />}
         </li>
       </ul>
     </div>

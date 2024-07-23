@@ -4,16 +4,22 @@
   position: absolute;
   right: 0;
   top: 75%;
-  width: 180px;
+  //width: 180px;
   background-color: $gray--000;
-  border-radius: 8px;
+  border-radius: 24px;
+  display: flex;
+  //padding-inline: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
   box-shadow:
     0 4px 6px -1px rgb(0 0 0 / 0.1),
     0 2px 4px -2px rgb(0 0 0 / 0.1);
-  z-index: 150;
+  z-index: 200;
 }
 
 .column__header-menu-dropdown > ul {
+  display: flex;
+  align-items: center;
   list-style: none;
   padding: $spacing--xs 0;
   margin: 0;
@@ -44,6 +50,7 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   font-size: $text-size--small;
 }
@@ -59,26 +66,40 @@
   display: flex;
   justify-content: space-between;
 }
-
-.column__header-menu-dropdown > ul > li:last-child > button {
-  height: 18px;
-  width: 18px;
-  border-radius: 4px;
-  background-color: var(--accent-color--light);
-  transition: all 0.08s ease-out;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-
-  &:focus-visible {
-    box-shadow: 0 0 0 2px $navy--300;
-  }
-}
+//
+//.column__header-menu-dropdown > ul > li:last-child > button {
+//  height: 18px;
+//  width: 18px;
+//  border-radius: 4px;
+//  background-color: var(--accent-color--light);
+//  transition: all 0.08s ease-out;
+//
+//  &:hover {
+//    transform: scale(1.1);
+//  }
+//
+//  &:focus-visible {
+//    box-shadow: 0 0 0 2px $navy--300;
+//  }
+//}
 
 // Hacky way to not show delete column button if it's the last column
 .column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(5) {
   display: none;
+}
+
+.column__header-color-picker-dropdown {
+  list-style: none;
+  padding: 0;
+}
+
+.column__header-color-picker-dropdown > li > button {
+  border: none;
+  background: none;
+}
+
+.column__header-color-picker-dropdown > ul > li {
+  padding: 0;
 }
 
 [theme="dark"] {
@@ -96,6 +117,10 @@
     &:focus-within {
       background-color: $navy--400;
     }
+
+    .column__header-color-picker-dropdown > ul > li > button {
+      background-color: coral;
+    }
   }
 
   .column__header-menu-dropdown > ul > li > button {
@@ -105,4 +130,110 @@
   .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
     box-shadow: 0 0 0 2px $gray--000;
   }
+
+  .column__header-color-picker-dropdown {
+    background-color: $navy--500;
+  }
+
+  .column__header-color-picker-dropdown > button {
+    //background-color: $navy--500;
+    background-color: deeppink;
+  }
+}
+
+.column__header-color-option {
+  width: 20px;
+  height: 20px;
+  border-radius: 100px;
+}
+
+.planning-pink {
+  background: #ff3387;
+}
+
+.planning-pink_selected {
+  background: #ff3387;
+  border: 3px solid #ff99c3;
+}
+
+.planning-pink:hover {
+  border: 3px solid #ffcce1;
+}
+
+.backlog-blue {
+  background: #3379ff;
+}
+
+.backlog-blue_selected {
+  background: #3379ff;
+  border: 3px solid #99bcff;
+}
+
+.backlog-blue:hover {
+  border: 3px solid #ccddff;
+}
+
+.value-violet {
+  background: #d44fff;
+}
+
+.value-violet_selected {
+  background: #d44fff;
+  border: 3px solid #e9a7ff;
+}
+
+.value-violet:hover {
+  border: 3px solid #f4d3ff;
+}
+
+.poker-purple {
+  background: #7d33f8;
+}
+
+.poker-purple_selected {
+  background: #7d33f8;
+  border: 3px solid #be99fb;
+}
+
+.poker-purple:hover {
+  border: 3px solid #dfccfd;
+}
+
+.goal-green {
+  background: #49dd98;
+}
+
+.goal-green_selected {
+  background: #49dd98;
+  border: 3px solid #a4eecb;
+}
+
+.goal-green:hover {
+  border: 3px solid #d1f6e5;
+}
+
+.yielding-yellow {
+  background: #fff733;
+}
+
+.yielding-yellow_selected {
+  background: #fff733;
+  border: 3px solid #fffb99;
+}
+
+.yielding-yellow:hover {
+  border: 3px solid #fffdcc;
+}
+
+.online-orange {
+  background: #ffb933;
+}
+
+.online-orange_selected {
+  background: #ffb933;
+  border: 3px solid #ffdc99;
+}
+
+.online-orange:hover {
+  border: 3px solid #ffeecc;
 }
