@@ -1,15 +1,17 @@
-import {FC} from "react";
+import {Dispatch, FC, SetStateAction, useState} from "react";
 import {Actions} from "store/action";
 import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash} from "components/Icon";
-import {Color, getColorClassName, getColorForIndex} from "constants/colors";
+// import {Color, getColorClassName, getColorForIndex} from "constants/colors";
+import {Color, getColorForIndex} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
 import {useAppSelector} from "store";
-import classNames from "classnames";
+// import classNames from "classnames";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
+import {ColorPicker} from "./ColorPicker";
 
 type ColumnSettingsProps = {
   id: string;
@@ -19,13 +21,15 @@ type ColumnSettingsProps = {
   index: number;
   onClose?: () => void;
   onNameEdit?: () => void;
+  setOpenColumnSet?: Dispatch<SetStateAction<boolean>>;
 };
 
-export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit}) => {
+export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit, setOpenColumnSet}) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
   const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
+  const [openedColorPicker, setOpenedColorPicker] = useState(false);
 
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
@@ -96,47 +100,16 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button
-            aria-label="Backlog Blue"
-            title="Backlog Blue"
-            className={classNames(getColorClassName("backlog-blue"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}))}
-          />
-          <button
-            aria-label="Goal Green"
-            title="Goal Green"
-            className={classNames(getColorClassName("goal-green"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "goal-green", index, visible}))}
-          />
-          <button
-            aria-label="Poker Purple"
-            title="Poker Purple"
-            className={classNames(getColorClassName("poker-purple"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "poker-purple", index, visible}))}
-          />
-          <button
-            aria-label="Online Orange"
-            title="Online Orange"
-            className={classNames(getColorClassName("online-orange"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}))}
-          />
-          <button
-            aria-label="Planning Pink"
-            title="Planning Pink"
-            className={classNames(getColorClassName("planning-pink"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
-          />
-          <button
-            aria-label="Value Violet"
-            title="Value Violet"
-            className={classNames(getColorClassName("value-violet"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "value-violet", index, visible}))}
-          />
-          <button
-            aria-label="Yielding Yellow"
-            title="Yielding Yellow"
-            className={classNames(getColorClassName("yielding-yellow"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "yielding-yellow", index, visible}))}
-          />
+            aria-label="Color Picker"
+            title="Color Picker"
+            // className={classNames(getColorClassName("planning-pink"), "column__color-button")}
+            // onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
+            // title={t("Column.settings")} className="column__header-edit-button"
+            onClick={() => setOpenedColorPicker((o) => !o)}
+          >
+            <span className={`column__header-color-option ${color}_selected`} />
+          </button>
+          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} />}
         </li>
       </ul>
     </div>

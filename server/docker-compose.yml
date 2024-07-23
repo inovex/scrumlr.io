@@ -36,7 +36,8 @@ services:
       - build
 
   scrumlr:
-    build: ./src
+#    build: ./src
+    image: scrumlr-test
     command: ./main --disable-check-origin --insecure
     ports:
       - "8080:8080"
