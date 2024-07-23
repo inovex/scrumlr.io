@@ -4,6 +4,7 @@ import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import {useAppSelector} from "store";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
+import {getCSSCustomPropertyValue} from "utils/computedStyles";
 import "./ShareSession.scss";
 
 export const ShareSession = () => {
@@ -11,6 +12,9 @@ export const ShareSession = () => {
   const boardId = useAppSelector((state) => state.board.data?.id);
   const theme = useAppSelector((state) => state.view.theme);
   const autoTheme = useAutoTheme(theme);
+
+  const gray000 = getCSSCustomPropertyValue("--gray--000");
+  const navy900 = getCSSCustomPropertyValue("--navy--900");
 
   const [urlInClipBoard, setUrlInClipBoard] = useState(false);
 
@@ -31,8 +35,8 @@ export const ShareSession = () => {
             value={`${window.location.origin}/board/${boardId}`}
             renderAs="canvas"
             size={1024}
-            fgColor={autoTheme === "dark" ? "#ffffff" : "#232323"}
-            bgColor={autoTheme === "dark" ? "#232323" : "#ffffff"}
+            fgColor={autoTheme === "dark" ? gray000 : navy900}
+            bgColor={autoTheme === "dark" ? navy900 : gray000}
             className="share-qr-code-option__qrcode"
           />
         </div>
