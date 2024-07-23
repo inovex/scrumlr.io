@@ -6,6 +6,7 @@ import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_
 const INITIAL_VIEW_STATE: ViewState = {
   moderating: false,
   serverTimeOffset: 0,
+  anonymousLoginDisabled: false,
   enabledAuthProvider: [],
   feedbackEnabled: false,
   hotkeysAreActive: true,
@@ -49,6 +50,7 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
     case Action.SetServerInfo: {
       return {
         ...state,
+        anonymousLoginDisabled: action.anonymousLoginDisabled,
         enabledAuthProvider: action.enabledAuthProvider,
         serverTimeOffset: new Date().getTime() - action.serverTime,
         feedbackEnabled: action.feedbackEnabled,
