@@ -29,7 +29,7 @@
     "marked": "13.0.2",
     "plausible-tracker": "^0.3.9",
     "qrcode.react": "^3.1.0",
-    "query-string": "^9.0.0",
+    "query-string": "^9.1.0",
     "react": "^18.3.1",
     "react-autosize-textarea": "^7.1.0",
     "react-dom": "^18.3.1",
