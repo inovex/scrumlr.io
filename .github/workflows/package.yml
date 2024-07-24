@@ -22,9 +22,7 @@ jobs:
           if [ "${{ github.event_name }}" == "release" ]; then
             echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
           else
-          # TODO change back after testing
-            # echo "platforms=linux/amd64" >> $GITHUB_OUTPUT
-            echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
+            echo "platforms=linux/amd64" >> $GITHUB_OUTPUT
           fi
   package-frontend:
     needs: determine-platforms

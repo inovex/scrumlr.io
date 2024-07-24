@@ -96,8 +96,7 @@ jobs:
 
   package:
     needs: [test-frontend, test-backend]
-    # TODO change back to main before merge
-    uses: inovex/scrumlr.io/.github/workflows/package.yml@hotfix/build-timeouts
+    uses: inovex/scrumlr.io/.github/workflows/package.yml@main
 
   deploy_to_dev_cluster:
     needs: package
