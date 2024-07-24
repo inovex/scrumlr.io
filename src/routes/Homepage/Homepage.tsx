@@ -1,8 +1,6 @@
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
-import {ReactComponent as German} from "assets/flags/DE.svg";
-import {ReactComponent as English} from "assets/flags/US.svg";
 import {ArrowRight, Logout} from "components/Icon";
 import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
@@ -13,7 +11,6 @@ import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {Toast} from "utils/Toast";
 import {useEffect} from "react";
-import {InovexAnchor} from "./InovexAnchor";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
 export const Homepage = withTranslation()(() => {
@@ -21,12 +18,6 @@ export const Homepage = withTranslation()(() => {
   const newHref = useHref("/new");
   const {user} = useAppSelector((state) => state.auth);
   const dispatch = useDispatch();
-
-  const changeLanguage = (language: string) => () => {
-    i18n.changeLanguage(language).then(() => {
-      document.documentElement.lang = i18n.language;
-    });
-  };
 
   const onLogout = () => {
     dispatch(Actions.signOut());
@@ -49,17 +40,6 @@ export const Homepage = withTranslation()(() => {
           <ScrumlrLogo className="homepage__logo" />
 
           <ul className="homepage__settings">
-            <li>
-              <Button leftIcon={<German />} className="homepage__language" hideLabel onClick={changeLanguage("de")}>
-                Deutsch
-              </Button>
-            </li>
-            <li>
-              <Button leftIcon={<English />} className="homepage__language" hideLabel onClick={changeLanguage("en")}>
-                English
-              </Button>
-            </li>
-
             {!!user && (
               <li>
                 <Button variant="text-link" onClick={onLogout} leftIcon={<Logout className="homepage__logout-button-icon" />} className="homepage__logout-button">
@@ -95,17 +75,6 @@ export const Homepage = withTranslation()(() => {
 
       <footer className="homepage__footer">
         <AppInfo className="homepage__app-info" />
-
-        <div className="homepage__footer-developers">
-          <span>
-            <Trans
-              i18nKey="Homepage.developers"
-              components={{
-                inovex: <InovexAnchor />,
-              }}
-            />
-          </span>
-        </div>
 
         {SHOW_LEGAL_DOCUMENTS && (
           <ul className="homepage__footer-links">
