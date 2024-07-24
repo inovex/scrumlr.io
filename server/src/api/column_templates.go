@@ -8,13 +8,10 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
 )
 
 func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-
-	boardTemplate := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
+	boardTemplateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.ColumnTemplateRequest
@@ -23,12 +20,11 @@ func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body.BoardTemplate = boardTemplate
+	body.BoardTemplate = boardTemplateId
 	body.User = user
 
 	tColumn, err := s.boardTemplates.CreateColumnTemplate(r.Context(), body)
 	if err != nil {
-		log.Errorw("unable to create column template", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -38,14 +34,11 @@ func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-
 	boardTemplateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	columnTemplateId := r.Context().Value(identifiers.ColumnTemplateIdentifier).(uuid.UUID)
 
 	columTemplate, err := s.boardTemplates.GetColumnTemplate(r.Context(), boardTemplateId, columnTemplateId)
 	if err != nil {
-		log.Errorw("unable to get column template", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -55,13 +48,10 @@ func (s *Server) getColumnTemplate(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
+	boardTemplateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 
-	templateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
-
-	columTemplates, err := s.boardTemplates.ListColumnTemplates(r.Context(), templateId)
+	columTemplates, err := s.boardTemplates.ListColumnTemplates(r.Context(), boardTemplateId)
 	if err != nil {
-		log.Errorw("unable to get column templates", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -70,10 +60,9 @@ func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, columTemplates)
 }
 
-// updateColumn updates a column
 func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
-	templateBoardId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
-	templateColumnId := r.Context().Value(identifiers.ColumnTemplateIdentifier).(uuid.UUID)
+	boardTemplateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
+	columnTemplateId := r.Context().Value(identifiers.ColumnTemplateIdentifier).(uuid.UUID)
 
 	var body dto.ColumnTemplateUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -81,8 +70,8 @@ func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	body.BoardTemplate = templateBoardId
-	body.ID = templateColumnId
+	body.BoardTemplate = boardTemplateId
+	body.ID = columnTemplateId
 
 	tColumn, err := s.boardTemplates.UpdateColumnTemplate(r.Context(), body)
 	if err != nil {
@@ -94,7 +83,6 @@ func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	render.Respond(w, r, tColumn)
 }
 
-// deleteColumnTemplate deletes a column
 func (s *Server) deleteColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	boardTemplateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	columnTemplateId := r.Context().Value(identifiers.ColumnTemplateIdentifier).(uuid.UUID)
