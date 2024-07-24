@@ -18,6 +18,7 @@ export const Boards = () => {
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
   const [showMobileSearchBar, setShowMobileSearchBar] = useState(false);
+  const [searchBarInput, setSearchBarInput] = useState("");
 
   const toggleMobileSearchBar = () => {
     setShowMobileSearchBar((open) => !open);
@@ -61,7 +62,7 @@ export const Boards = () => {
         />
 
         {/* desktop search  bar */}
-        <SearchBar className="boards__search-bar" />
+        <SearchBar className="boards__search-bar" input={searchBarInput} setInput={setSearchBarInput} />
 
         {/* mobile search button + search bar (row below) */}
         <button className="boards__search-button" onClick={toggleMobileSearchBar}>
@@ -69,7 +70,7 @@ export const Boards = () => {
             <SearchIcon className="new-board__search-button-icon" aria-label="icon of magnifying glass" />
           </div>
         </button>
-        {showMobileSearchBar && <SearchBar className="boards__mobile-search-bar" closable onClose={toggleMobileSearchBar} />}
+        {showMobileSearchBar && <SearchBar className="boards__mobile-search-bar" input={searchBarInput} setInput={setSearchBarInput} />}
 
         <main className="boards__outlet">
           <Outlet />
