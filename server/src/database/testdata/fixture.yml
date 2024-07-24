@@ -57,6 +57,7 @@
     - _id: boardTestBoard
       id: "5113b096-986c-4e23-adf7-c3fa19224bd4"
       name: Board test
+      description: Description test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true

@@ -1,8 +1,9 @@
 package dto
 
 import (
-	"github.com/google/uuid"
 	"net/http"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 )
@@ -15,6 +16,9 @@ type Column struct {
 
 	// The column name.
 	Name string `json:"name"`
+
+	// The column description.
+	Description string `json:"description"`
 
 	// The column color.
 	Color types.Color `json:"color"`
@@ -29,6 +33,7 @@ type Column struct {
 func (c *Column) From(column database.Column) *Column {
 	c.ID = column.ID
 	c.Name = column.Name
+	c.Description = column.Description
 	c.Color = column.Color
 	c.Visible = column.Visible
 	c.Index = column.Index
@@ -57,6 +62,9 @@ type ColumnRequest struct {
 	// The column name to set.
 	Name string `json:"name"`
 
+	// The column description to set.
+	Description string `json:"description"`
+
 	// The column color to set.
 	Color types.Color `json:"color"`
 
@@ -77,6 +85,9 @@ type ColumnUpdateRequest struct {
 
 	// The column name to set.
 	Name string `json:"name"`
+
+	// The column description to set.
+	Description string `json:"description"`
 
 	// The column color to set.
 	Color types.Color `json:"color"`

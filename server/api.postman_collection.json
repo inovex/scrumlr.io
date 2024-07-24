@@ -2859,6 +2859,11 @@
 									"\r",
 									"pm.test(\"Check if column is correctly not visible\", () => {\r",
 									"    pm.expect(res.visible).to.eql(false);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check if description is saved\", () => {\r",
+									"    pm.expect(res.description).to.exist;\r",
+									"    pm.expect(res.description).to.equal(\"The column description\");\r",
 									"})"
 								],
 								"type": "text/javascript",
@@ -2871,7 +2876,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"My new column\",\r\n    \"visible\": false,\r\n    \"color\": \"backlog-blue\",\r\n    \"index\": 1\r\n}",
+							"raw": "{\r\n    \"name\": \"My new column\",\r\n    \"description\": \"The column description\",\r\n    \"visible\": false,\r\n    \"color\": \"backlog-blue\",\r\n    \"index\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2942,7 +2947,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"My new column\",\n    \"color\": \"lean-lilac\",\n    \"visible\": false,\n    \"index\": 1\n}"
+							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"My new column\",\n    \"description\": \"The column description\",\n    \"color\": \"lean-lilac\",\n    \"visible\": false,\n    \"index\": 1\n}"
 						}
 					]
 				},
@@ -3023,7 +3028,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"id\": \"526d5efb-281d-4f4f-b308-6537e6727381\",\n        \"name\": \"Lean coffee\",\n        \"color\": \"backlog-blue\",\n        \"visible\": true,\n        \"index\": 0\n    },\n    {\n        \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n        \"name\": \"My new column\",\n        \"color\": \"lean-lilac\",\n        \"visible\": false,\n        \"index\": 1\n    },\n    {\n        \"id\": \"70cb04ee-b46e-4176-940c-cdf06cadef07\",\n        \"name\": \"Actions\",\n        \"color\": \"planning-pink\",\n        \"visible\": false,\n        \"index\": 2\n    }\n]"
+							"body": "[\n    {\n        \"id\": \"526d5efb-281d-4f4f-b308-6537e6727381\",\n        \"name\": \"Lean coffee\",\n        \"description\": \"The column description\",\n        \"color\": \"backlog-blue\",\n        \"visible\": true,\n        \"index\": 0\n    },\n    {\n        \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n        \"name\": \"My new column\",\n        \"description\": \"\",\n        \"color\": \"lean-lilac\",\n        \"visible\": false,\n        \"index\": 1\n    },\n    {\n        \"id\": \"70cb04ee-b46e-4176-940c-cdf06cadef07\",\n        \"name\": \"Actions\",\n        \"description\": \"\",\n        \"color\": \"planning-pink\",\n        \"visible\": false,\n        \"index\": 2\n    }\n]"
 						}
 					]
 				},
@@ -3043,6 +3048,7 @@
 									"pm.test(\"Check column\", () => {",
 									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"column_id\"));",
 									"    pm.expect(res.name).to.equal(\"My new column\");",
+									"    pm.expect(res.description).to.equal(\"The column description\");",
 									"    pm.expect(res.visible).to.eql(false);",
 									"    pm.expect(res.index).to.equal(1);",
 									"})"
@@ -3107,7 +3113,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"My new column\",\n    \"color\": \"lean-lilac\",\n    \"visible\": false,\n    \"index\": 1\n}"
+							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"My new column\",\n    \"description\": \"The column description\",\n    \"color\": \"lean-lilac\",\n    \"visible\": false,\n    \"index\": 1\n}"
 						}
 					]
 				},
@@ -3126,6 +3132,7 @@
 									"",
 									"pm.test(\"Check updated values\", () => {",
 									"    pm.expect(res.name).to.equal(\"Updated column name\");",
+									"    pm.expect(res.description).to.equal(\"The updated column description\");",
 									"    pm.expect(res.color).to.equal(\"online-orange\");",
 									"    pm.expect(res.visible).to.equal(true);",
 									"    pm.expect(res.index).to.equal(0);",
@@ -3141,7 +3148,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Updated column name\",\r\n    \"color\": \"online-orange\",\r\n    \"visible\": true,\r\n    \"index\": 0\r\n}",
+							"raw": "{\r\n    \"name\": \"Updated column name\",\r\n    \"description\": \"The updated column description\",\r\n    \"color\": \"online-orange\",\r\n    \"visible\": true,\r\n    \"index\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3209,7 +3216,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"Updated column name\",\n    \"color\": \"online-orange\",\n    \"visible\": true,\n    \"index\": 0\n}"
+							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"description\": \"The updated column description\",\n    \"name\": \"Updated column name\",\n    \"color\": \"online-orange\",\n    \"visible\": true,\n    \"index\": 0\n}"
 						}
 					]
 				},

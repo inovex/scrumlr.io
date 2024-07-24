@@ -18,6 +18,7 @@ type Column struct {
 	ID            uuid.UUID
 	Board         uuid.UUID
 	Name          string
+	Description   string
 	Color         types.Color
 	Visible       bool
 	Index         int
@@ -28,6 +29,7 @@ type ColumnInsert struct {
 	bun.BaseModel `bun:"table:columns"`
 	Board         uuid.UUID
 	Name          string
+	Description   string
 	Color         types.Color
 	Visible       *bool
 	Index         *int
@@ -39,6 +41,7 @@ type ColumnUpdate struct {
 	ID            uuid.UUID
 	Board         uuid.UUID
 	Name          string
+	Description   string
 	Color         types.Color
 	Visible       bool
 	Index         int
