@@ -118,12 +118,9 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
             onPointerEnterCapture={undefined}
             onPointerLeaveCapture={undefined}
           />
+
           {note?.edited && <div className="note-dialog__marker-edited">({t("Note.edited")})</div>}
-          {!isStackedNote && (
-            <div className="note-dialog__note-content--emoji-suggestions">
-              <EmojiSuggestions {...emoji.suggestionsProps} />
-            </div>
-          )}
+          {!isStackedNote && <EmojiSuggestions {...emoji.suggestionsProps} />}
         </>
       )}
     </div>
