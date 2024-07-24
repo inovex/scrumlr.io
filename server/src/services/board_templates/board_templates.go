@@ -42,16 +42,18 @@ func (s *BoardTemplateService) Create(ctx context.Context, body dto.CreateBoardT
 	// create the board template
 	b, err := s.database.CreateBoardTemplate(board, columns)
 	if err != nil {
-		log.Errorw("unable to create board", "creator", body.Creator, "policy", body.AccessPolicy, "error", err)
+		log.Errorw("unable to create board", "creator", body.Creator, "policy", body.AccessPolicy, "err", err)
 		return nil, err
 	}
 
 	return new(dto.BoardTemplate).From(b), nil
 }
 
-func (s *BoardTemplateService) Get(_ context.Context, id uuid.UUID) (*dto.BoardTemplate, error) {
+func (s *BoardTemplateService) Get(ctx context.Context, id uuid.UUID) (*dto.BoardTemplate, error) {
+	log := logger.FromContext(ctx)
 	boardTemplate, err := s.database.GetBoardTemplate(id)
 	if err != nil {
+		log.Errorw("unable to get board template", "id", id, "err", err)
 		return nil, err
 	}
 
@@ -68,8 +70,10 @@ func (s *BoardTemplateService) Get(_ context.Context, id uuid.UUID) (*dto.BoardT
 }
 
 func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto.BoardTemplate, error) {
+	log := logger.FromContext(ctx)
 	templates, err := s.database.GetBoardTemplates(user)
 	if err != nil {
+		log.Errorw("unable to list board templates", "user", user, "err", err)
 		return []*dto.BoardTemplate{}, err
 	}
 
@@ -90,6 +94,7 @@ func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto
 }
 
 func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error) {
+	log := logger.FromContext(ctx)
 	// parse req update to db update
 	updateBoard := database.BoardTemplateUpdate{
 		ID:           body.ID,
@@ -101,6 +106,7 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 
 	updatedTemplate, err := s.database.UpdateBoardTemplate(updateBoard)
 	if err != nil {
+		log.Errorw("unable to update board template", "id", body.ID, "err", err)
 		return &dto.BoardTemplate{}, err
 	}
 
@@ -117,9 +123,11 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 }
 
 func (s *BoardTemplateService) Delete(ctx context.Context, templateId uuid.UUID) error {
+	log := logger.FromContext(ctx)
 	err := s.database.DeleteBoardTemplate(templateId)
 	if err != nil {
-		logger.Get().Errorw("unable to delete board template", "err", err)
+		log.Errorw("unable to delete board template", "err", err)
+		return err
 	}
 	return err
 }
