@@ -57,7 +57,7 @@ services:
       #SCRUMLR_ANALYTICS_DATA_DOMAIN: "${ANALYTICS_DATA_DOMAIN}"
       #SCRUMLR_ANALYTICS_SRC: "${ANALYTICS_SRC}"
     ports:
-      - "43013:8080"
+      - "8080:8080"
 
   postgres:
     restart: always
