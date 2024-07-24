@@ -47,6 +47,8 @@ type ColumnTemplateUpdate struct {
 	Index         int
 }
 
+// CreateColumnTemplate creates a new column template. The index will be set to the highest available or the specified one. All other
+// indices will be adopted (increased by 1) to the new index.
 func (d *Database) CreateColumnTemplate(column ColumnTemplateInsert) (ColumnTemplate, error) {
 	maxIndexSelect := d.db.NewSelect().Model((*ColumnTemplate)(nil)).ColumnExpr("COUNT(*) as index").Where("board_template = ?", column.BoardTemplate)
 
@@ -89,7 +91,7 @@ func (d *Database) ListColumnTemplates(tBoard uuid.UUID) ([]ColumnTemplate, erro
 	return tColumns, err
 }
 
-// UpdateColumn updates the column and re-orders all indices of the columns if necessary.
+// UpdateColumnTemplate updates the column template  and re-orders all indices of the column templates if necessary.
 func (d *Database) UpdateColumnTemplate(column ColumnTemplateUpdate) (ColumnTemplate, error) {
 	newIndex := column.Index
 	if column.Index < 0 {
