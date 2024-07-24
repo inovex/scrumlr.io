@@ -37,7 +37,7 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
 
   return (
     <div className="note-reaction-bar__root">
-      <ReactFocusLock returnFocus>
+      <ReactFocusLock autoFocus={false}>
         {[...REACTION_EMOJI_MAP.entries()].map(([type, emoji]) => {
           // highlight reaction made by yourself
           const active = !!props.reactions.find((r) => r.reactionType === type && !!r.myReactionId);
