@@ -27,6 +27,7 @@
 
 .column__header-menu-dropdown > ul > li {
   height: 32px;
+  width: 56px;
   padding: 0 $spacing--sm;
   background-color: $gray--000;
 
@@ -62,7 +63,7 @@
 
 .column__header-menu-dropdown > ul > li:last-of-type {
   height: auto;
-  padding: $spacing--xs $spacing--base;
+  //padding: $spacing--xs $spacing--base;
   display: flex;
   justify-content: space-between;
 }

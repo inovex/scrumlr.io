@@ -1,6 +1,6 @@
 import {Dispatch, FC, SetStateAction, useState} from "react";
 import {Actions} from "store/action";
-import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash} from "components/Icon";
+import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
 // import {Color, getColorClassName, getColorForIndex} from "constants/colors";
 import {Color, getColorForIndex} from "constants/colors";
 import {useTranslation} from "react-i18next";
@@ -109,6 +109,16 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
           >
             {visible ? <Hidden /> : <Visible />}
             {/* {visible ? t("Column.hideColumn") : t("Column.showColumn")} */}
+          </button>
+        </li>
+        <li>
+          <button
+            aria-label="CloseIcon"
+            title={t("Column.resetName")}
+            className="column__header-menu-dropdown-edit-button"
+            onClick={() => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {})}
+          >
+            <Close className="column__header-edit-button-icon" />
           </button>
         </li>
       </ul>
