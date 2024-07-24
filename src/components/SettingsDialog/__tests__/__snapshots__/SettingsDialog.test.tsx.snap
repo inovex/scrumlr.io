@@ -215,7 +215,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     </div>
                   </a>
                   <a
-                    class="navigation__item accent-color__poker-purple"
+                    class="navigation__item accent-color__value-violet"
                     href="/feedback"
                   >
                     <svg
