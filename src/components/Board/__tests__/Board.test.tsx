@@ -78,10 +78,10 @@ describe("basic", () => {
       });
 
       test("side-panels have correct accent color with single column", () => {
-        const {container} = render(createBoardWithColumns("lean-lilac"));
+        const {container} = render(createBoardWithColumns("value-violet"));
         const board = container.querySelector(".board");
-        expect(board?.childNodes[1]).toHaveClass("accent-color__lean-lilac");
-        expect(board?.lastChild).toHaveClass("accent-color__lean-lilac");
+        expect(board?.childNodes[1]).toHaveClass("accent-color__value-violet");
+        expect(board?.lastChild).toHaveClass("accent-color__value-violet");
       });
     });
   });

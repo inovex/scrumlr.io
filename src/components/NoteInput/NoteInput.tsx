@@ -95,9 +95,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       />
-      <div className="note-input__emoji-suggestions">
-        <EmojiSuggestions {...emoji.suggestionsProps} />
-      </div>
+      <EmojiSuggestions {...emoji.suggestionsProps} />
       {isImage && (
         <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
           <AddImage className="note-input__icon--image" />
