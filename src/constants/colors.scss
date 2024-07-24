@@ -208,7 +208,8 @@ $base-colors: (
     300: $gray--300,
     200: $gray--200,
     100: $gray--100,
-    000: $gray--000,
+    "000": $gray--000,
+    // avoid trailing zeros normalization
   ),
 );
 
@@ -229,6 +230,16 @@ $base-colors: (
   --accent-color--dark-rgb: #{red($shade-dark)}, #{green($shade-dark)}, #{blue($shade-dark)};
 }
 
+// set base colors to be used at the root level
+@mixin set-base-colors($color-map) {
+  @each $color-name, $shades in $color-map {
+    @each $shade, $color in $shades {
+      --#{$color-name}--#{$shade}: #{$color};
+      --#{$color-name}--#{$shade}-rgb: #{red($color)}, #{green($color)}, #{blue($color)};
+    }
+  }
+}
+
 // generates css classes which can be included in an element
 // to use their different accent color shades
 // e.g. .accent-color__backlog-blue
@@ -242,3 +253,6 @@ $base-colors: (
 
 @include generate-accent-classes($primary-colors);
 @include generate-accent-classes($secondary-colors);
+:root {
+  @include set-base-colors($base-colors);
+}

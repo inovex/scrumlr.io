@@ -31,6 +31,8 @@
     "anonymousLogin": "Nehme anonym an der Sitzung teil",
     "usernameValidationError": "Der Benutzername darf nicht leer sein",
     "termsValidationError": "Du musst den AGB und der Datenschutzerklärung zustimmen",
+    "anonymousLoginDisabledError": "Anonyme Accounts sind deaktiviert; bitte nutze eine der offiziellen Loginmöglichkeiten oberhalb",
+    "noLoginAvailable": "Es existiert keine valide Loginmöglichkeit",
     "errorOnRedirect": "Bei der Weiterleitung ist ein Fehler aufgetreten",
     "login": "Jetzt loslegen",
     "acceptTerms": "Ich stimme den <terms>AGB</terms> und der <privacy>Datenschutzerklärung</privacy> zu",

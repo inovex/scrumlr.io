@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cfc9d0fe-d0b2-45c0-ab1f-8795c542c31b",
+		"_postman_id": "42d60e2e-95bb-4336-8893-afed92d835c3",
 		"name": "scrumlr.io",
 		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](https://info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the _User_ section for more information.\n\n1. A user signs into the application (see _Login_ section)\n2. The user creates a new board (`POST` on `/boards`, checkout _Boards_ section)\n3. Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout _Participants_ section)\n    1. If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2. If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3. If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section _Realtime_ to see how you can open websockets and listen to live updates on the data.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -2643,6 +2643,11 @@
 									"\r",
 									"pm.test(\"Check if column is correctly not visible\", () => {\r",
 									"    pm.expect(res.visible).to.eql(false);\r",
+									"})\r",
+									"\r",
+									"pm.test(\"Check if description is saved\", () => {\r",
+									"    pm.expect(res.description).to.exist;\r",
+									"    pm.expect(res.description).to.equal(\"The column description\");\r",
 									"})"
 								],
 								"type": "text/javascript",
@@ -2655,7 +2660,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"My new column\",\r\n    \"visible\": false,\r\n    \"color\": \"backlog-blue\",\r\n    \"index\": 1\r\n}",
+							"raw": "{\r\n    \"name\": \"My new column\",\r\n    \"description\": \"The column description\",\r\n    \"visible\": false,\r\n    \"color\": \"backlog-blue\",\r\n    \"index\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2726,7 +2731,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"My new column\",\n    \"color\": \"lean-lilac\",\n    \"visible\": false,\n    \"index\": 1\n}"
+							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"My new column\",\n    \"description\": \"The column description\",\n    \"color\": \"lean-lilac\",\n    \"visible\": false,\n    \"index\": 1\n}"
 						}
 					]
 				},
@@ -2807,7 +2812,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"id\": \"526d5efb-281d-4f4f-b308-6537e6727381\",\n        \"name\": \"Lean coffee\",\n        \"color\": \"backlog-blue\",\n        \"visible\": true,\n        \"index\": 0\n    },\n    {\n        \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n        \"name\": \"My new column\",\n        \"color\": \"lean-lilac\",\n        \"visible\": false,\n        \"index\": 1\n    },\n    {\n        \"id\": \"70cb04ee-b46e-4176-940c-cdf06cadef07\",\n        \"name\": \"Actions\",\n        \"color\": \"planning-pink\",\n        \"visible\": false,\n        \"index\": 2\n    }\n]"
+							"body": "[\n    {\n        \"id\": \"526d5efb-281d-4f4f-b308-6537e6727381\",\n        \"name\": \"Lean coffee\",\n        \"description\": \"The column description\",\n        \"color\": \"backlog-blue\",\n        \"visible\": true,\n        \"index\": 0\n    },\n    {\n        \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n        \"name\": \"My new column\",\n        \"description\": \"\",\n        \"color\": \"lean-lilac\",\n        \"visible\": false,\n        \"index\": 1\n    },\n    {\n        \"id\": \"70cb04ee-b46e-4176-940c-cdf06cadef07\",\n        \"name\": \"Actions\",\n        \"description\": \"\",\n        \"color\": \"planning-pink\",\n        \"visible\": false,\n        \"index\": 2\n    }\n]"
 						}
 					]
 				},
@@ -2827,6 +2832,7 @@
 									"pm.test(\"Check column\", () => {",
 									"    pm.expect(res.id).to.equal(pm.collectionVariables.get(\"column_id\"));",
 									"    pm.expect(res.name).to.equal(\"My new column\");",
+									"    pm.expect(res.description).to.equal(\"The column description\");",
 									"    pm.expect(res.visible).to.eql(false);",
 									"    pm.expect(res.index).to.equal(1);",
 									"})"
@@ -2891,7 +2897,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"My new column\",\n    \"color\": \"lean-lilac\",\n    \"visible\": false,\n    \"index\": 1\n}"
+							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"My new column\",\n    \"description\": \"The column description\",\n    \"color\": \"lean-lilac\",\n    \"visible\": false,\n    \"index\": 1\n}"
 						}
 					]
 				},
@@ -2910,6 +2916,7 @@
 									"",
 									"pm.test(\"Check updated values\", () => {",
 									"    pm.expect(res.name).to.equal(\"Updated column name\");",
+									"    pm.expect(res.description).to.equal(\"The updated column description\");",
 									"    pm.expect(res.color).to.equal(\"online-orange\");",
 									"    pm.expect(res.visible).to.equal(true);",
 									"    pm.expect(res.index).to.equal(0);",
@@ -2925,7 +2932,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Updated column name\",\r\n    \"color\": \"online-orange\",\r\n    \"visible\": true,\r\n    \"index\": 0\r\n}",
+							"raw": "{\r\n    \"name\": \"Updated column name\",\r\n    \"description\": \"The updated column description\",\r\n    \"color\": \"online-orange\",\r\n    \"visible\": true,\r\n    \"index\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2993,7 +3000,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"name\": \"Updated column name\",\n    \"color\": \"online-orange\",\n    \"visible\": true,\n    \"index\": 0\n}"
+							"body": "{\n    \"id\": \"fecb346a-9d9e-43ca-b873-8fcb09f2b0c3\",\n    \"description\": \"The updated column description\",\n    \"name\": \"Updated column name\",\n    \"color\": \"online-orange\",\n    \"visible\": true,\n    \"index\": 0\n}"
 						}
 					]
 				},
