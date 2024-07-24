@@ -35,6 +35,7 @@ func TestRunnerForColumns(t *testing.T) {
 	t.Run("Create=3", testCreateColumnWithExceptionallyHighIndex)
 	t.Run("Create=4", testCreateColumnWithEmptyName)
 	t.Run("Create=5", testCreateColumnWithEmptyColor)
+	t.Run("Create=6", testCreateColumnWithDescription)
 
 	t.Run("Delete=0", testCreateColumnOnSecondIndex)
 	t.Run("Delete=1", testDeleteColumnOnSecondIndex)
@@ -179,6 +180,22 @@ func testCreateColumnWithEmptyColor(t *testing.T) {
 		Color: "",
 	})
 	assert.NotNil(t, err)
+}
+
+func testCreateColumnWithDescription(t *testing.T) {
+	aDescription := "A description"
+	column, err := testDb.CreateColumn(ColumnInsert{
+		Board:       boardForColumnsTest,
+		Name:        "Column",
+		Color:       types.ColorBacklogBlue,
+		Description: aDescription,
+	})
+	assert.Nil(t, err)
+	assert.NotNil(t, column)
+	assert.Equal(t, aDescription, column.Description)
+
+	// clean up to not crash other tests
+	_ = testDb.DeleteColumn(boardForColumnsTest, column.ID, uuid.New())
 }
 
 func testDeleteColumnOnSecondIndex(t *testing.T) {
