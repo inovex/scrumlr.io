@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
+import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
 import {AccessPolicy} from "types/board";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
@@ -35,7 +36,9 @@ export const TemplateCard = () => {
         <div className="template-card__access-policy">{renderAccessPolicy()}</div>
       </div>
       <MenuIcon className={classNames("template-card__icon", "template-card__icon--menu")} />
-      <div className="template-card__description">Lorem ipsum dolor sit amet, conse dolo sadipscing elitr vero eos et aquiteres.</div>
+      <TextareaAutosize className="template-card__description" disabled onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+        Lorem ipsum dolor sit amet, conse dolo sadipscing elitr vero eos et aquiteres.
+      </TextareaAutosize>
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: 3})}</div>

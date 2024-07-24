@@ -75,6 +75,13 @@ $card-height: 220px;
   font-weight: 500;
   line-height: 20px;
 
+  max-height: 4 * 20px;
+  margin: 0;
+  padding: 0;
+  resize: none;
+
+  border: none;
+
   color: $navy--900;
 }
 
