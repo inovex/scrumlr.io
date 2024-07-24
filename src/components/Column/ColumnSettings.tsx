@@ -102,10 +102,10 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}))}
           />
           <button
-            aria-label="Goal Green"
-            title="Goal Green"
-            className={classNames(getColorClassName("goal-green"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "goal-green", index, visible}))}
+            aria-label="Planning Pink"
+            title="Planning Pink"
+            className={classNames(getColorClassName("planning-pink"), "column__color-button")}
+            onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
           />
           <button
             aria-label="Poker Purple"
@@ -114,28 +114,28 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "poker-purple", index, visible}))}
           />
           <button
-            aria-label="Online Orange"
-            title="Online Orange"
-            className={classNames(getColorClassName("online-orange"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}))}
-          />
-          <button
-            aria-label="Planning Pink"
-            title="Planning Pink"
-            className={classNames(getColorClassName("planning-pink"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
-          />
-          <button
             aria-label="Value Violet"
             title="Value Violet"
             className={classNames(getColorClassName("value-violet"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "value-violet", index, visible}))}
           />
           <button
+            aria-label="Goal Green"
+            title="Goal Green"
+            className={classNames(getColorClassName("goal-green"), "column__color-button")}
+            onClick={() => dispatch(Actions.editColumn(id, {name, color: "goal-green", index, visible}))}
+          />
+          <button
             aria-label="Yielding Yellow"
             title="Yielding Yellow"
             className={classNames(getColorClassName("yielding-yellow"), "column__color-button")}
             onClick={() => dispatch(Actions.editColumn(id, {name, color: "yielding-yellow", index, visible}))}
+          />
+          <button
+            aria-label="Online Orange"
+            title="Online Orange"
+            className={classNames(getColorClassName("online-orange"), "column__color-button")}
+            onClick={() => dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}))}
           />
         </li>
       </ul>
