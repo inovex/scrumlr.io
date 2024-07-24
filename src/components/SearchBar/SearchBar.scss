@@ -37,7 +37,7 @@ $padding--mobile: 12.5px $spacing--base;
 
     .search-bar__icon-container {
       &--search-icon,
-      &--close-icon {
+      &--clear-icon {
         color: $gray--800;
       }
     }
@@ -52,7 +52,7 @@ $padding--mobile: 12.5px $spacing--base;
     color: $gray--800;
   }
 
-  &--close-icon {
+  &--clear-icon {
     cursor: pointer;
   }
 }
@@ -116,7 +116,7 @@ $padding--mobile: 12.5px $spacing--base;
 
       .search-bar__icon-container {
         &--search-icon,
-        &--close-icon {
+        &--clear-icon {
           color: $navy--300;
         }
       }
@@ -135,7 +135,7 @@ $padding--mobile: 12.5px $spacing--base;
 
   .search-bar__icon-container {
     &--search-icon,
-    &--close-icon {
+    &--clear-icon {
       color: $blue--50;
     }
   }
