@@ -103,48 +103,6 @@
       show_authors: true
       show_notes_of_other_users: true
       created_at: '{{ now }}'
-    - _id: columnsObserverTestBoard
-      id: "2813b096-986c-0000-0000-c3fa19224bd4"
-      name: Columns observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: boardsObserverTestBoard
-      id: "2813b096-986c-0000-0001-c3fa19224bd4"
-      name: Boards observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: boardSessionsObserverTestBoard
-      id: "2813b096-986c-0000-0002-c3fa19224bd4"
-      name: Board sessions observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: boardSessionRequestsObserverTestBoard
-      id: "2813b096-986c-0000-0003-c3fa19224bd4"
-      name: Board sessions observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: notesObserverTestBoard
-      id: "2813b096-986c-0000-0004-c3fa19224bd4"
-      name: Notes sessions observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: votingObserverTestBoard
-      id: "2813b096-986c-0000-0005-c3fa19224bd4"
-      name: Voting observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
     - _id: votingSortingTestBoard
       id: "1acd6899-ad71-4479-8ffe-6c6401b208d7"
       name: Voting Sorting test
@@ -201,14 +159,6 @@
     - _id: jacksSessionOnNotesTestBoard
       board: '{{ $.Board.notesTestBoard.ID }}'
       user: '{{ $.User.jack.ID }}'
-      role: OWNER
-    - _id: jacksSessionOnNotesObserverTestBoard
-      board: '{{ $.Board.notesObserverTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
-      role: OWNER
-    - _id: jaysSessionOnBoardSessionsObserverTestBoard
-      board: '{{ $.Board.boardSessionsObserverTestBoard.ID }}'
-      user: '{{ $.User.jay.ID }}'
       role: OWNER
     - _id: justinSessionOnVotingSortingTestBoard
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
@@ -295,13 +245,6 @@
       id: "2cf7f80e-d3ed-4606-be72-59f5dc05ec47"
       board: '{{ $.Board.notesTestBoard.ID }}'
       name: C
-      color: backlog-blue
-      visible: true
-      index: 0
-    - _id: notesObserverTestColumn
-      id: "3113b196-986c-2951-adf7-c3fa19224bd4"
-      board: '{{ $.Board.notesObserverTestBoard.ID }}'
-      name: B
       color: backlog-blue
       visible: true
       index: 0
