@@ -87,6 +87,29 @@ $border-width: 2px;
       border-color: $gray--800;
     }
   }
+
+  &--tertiary {
+    color: var(--accent-color--light);
+    background-color: transparent;
+    border-color: transparent;
+
+    &:enabled:hover {
+      box-shadow: none;
+      text-shadow: 0 0 12px rgba(var(--accent-color--light-rgb), 0.3);
+    }
+
+    &:focus {
+      text-decoration: underline;
+    }
+
+    &:active {
+      color: var(--accent-color--600);
+    }
+
+    &:disabled {
+      color: $gray--800;
+    }
+  }
 }
 
 [theme="dark"] {
