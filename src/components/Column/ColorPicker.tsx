@@ -13,10 +13,11 @@ export interface ColorPickerProps {
   visible: boolean;
   index: number;
   color: Color;
+  onClose?: () => void;
 }
 
 // Definieren Sie die Komponente
-export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color}) => {
+export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color, onClose}) => {
   const dispatch = useDispatch();
 
   return (
@@ -27,7 +28,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             aria-label="Planning Pink"
             title="Planning Pink"
             // className={classNames(getColorClassName("planning-pink"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}));
+            }}
             // title={t("Column.settings")} className="column__header-edit-button"
           >
             <div className="column__header-color-option planning-pink" />
@@ -41,7 +45,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             aria-label="Backlog Blue"
             title="Backlog Blue"
             className={classNames(getColorClassName("backlog-blue"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}))}
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}));
+            }}
           >
             <div className="column__header-color-option backlog-blue" />
           </button>
@@ -54,7 +61,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             aria-label="Grooming Green"
             title="Grooming Green"
             className={classNames(getColorClassName("goal-green"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "goal-green", index, visible}))}
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color: "goal-green", index, visible}));
+            }}
           >
             <div className="column__header-color-option goal-green" />
           </button>
@@ -67,7 +77,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             aria-label="Poker Purple"
             title="Poker Purple"
             className={classNames(getColorClassName("poker-purple"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "poker-purple", index, visible}))}
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color: "poker-purple", index, visible}));
+            }}
           >
             <div className="column__header-color-option poker-purple" />
           </button>
@@ -80,7 +93,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             aria-label="Online Orange"
             title="Online Orange"
             className={classNames(getColorClassName("online-orange"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}))}
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}));
+            }}
           >
             <div className="column__header-color-option online-orange" />
           </button>
@@ -93,7 +109,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             aria-label="Lean Lilac"
             title="Lean Lilac"
             className={classNames(getColorClassName("value-violet"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "value-violet", index, visible}))}
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color: "value-violet", index, visible}));
+            }}
           >
             <div className="column__header-color-option value-violet" />
           </button>
@@ -106,7 +125,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             aria-label="Retro Red"
             title="Retro Red"
             className={classNames(getColorClassName("yielding-yellow"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "yielding-yellow", index, visible}))}
+            onClick={() => {
+              onClose?.();
+              dispatch(Actions.editColumn(id, {name, color: "yielding-yellow", index, visible}));
+            }}
           >
             <div className="column__header-color-option yielding-yellow" />
           </button>

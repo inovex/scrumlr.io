@@ -65,7 +65,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
           >
             <span className={`column__header-color-option ${color}_selected`} />
           </button>
-          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} />}
+          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} />}
         </li>
         <li>
           <button
