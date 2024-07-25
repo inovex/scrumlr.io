@@ -32,7 +32,7 @@ func (s *BoardTemplateService) Create(ctx context.Context, body dto.CreateBoardT
 		Favourite:    body.Favourite,
 	}
 
-	// map request on column objects to insert into database
+	// map request column templates to db column template inserts
 	columns := make([]database.ColumnTemplateInsert, 0, len(body.Columns))
 	for index, value := range body.Columns {
 		var currentIndex = index
@@ -56,38 +56,20 @@ func (s *BoardTemplateService) Get(ctx context.Context, id uuid.UUID) (*dto.Boar
 		log.Errorw("unable to get board template", "board", id, "err", err)
 		return nil, err
 	}
-
-	boardDto := dto.BoardTemplate{
-		ID:           boardTemplate.ID,
-		Creator:      boardTemplate.Creator,
-		Name:         boardTemplate.Name,
-		Description:  boardTemplate.Description,
-		AccessPolicy: boardTemplate.AccessPolicy,
-		Favourite:    boardTemplate.Favourite,
-	}
-
-	return &boardDto, err
+	return new(dto.BoardTemplate).From(boardTemplate), err
 }
 
-func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto.BoardTemplate, error) {
+func (s *BoardTemplateService) List(ctx context.Context, user uuid.UUID) ([]*dto.BoardTemplateFull, error) {
 	log := logger.FromContext(ctx)
 	templates, err := s.database.GetBoardTemplates(user)
 	if err != nil {
 		log.Errorw("unable to list board templates", "user", user, "err", err)
-		return []*dto.BoardTemplate{}, err
+		return []*dto.BoardTemplateFull{}, err
 	}
 
-	var templatesDto []*dto.BoardTemplate
-	for _, board := range templates {
-		boardDto := dto.BoardTemplate{
-			ID:           board.ID,
-			Creator:      board.Creator,
-			Name:         board.Name,
-			Description:  board.Description,
-			AccessPolicy: board.AccessPolicy,
-			Favourite:    board.Favourite,
-		}
-		templatesDto = append(templatesDto, &boardDto)
+	var templatesDto []*dto.BoardTemplateFull
+	for _, template := range templates {
+		templatesDto = append(templatesDto, new(dto.BoardTemplateFull).From(template))
 	}
 
 	return templatesDto, err
@@ -110,16 +92,7 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 		return &dto.BoardTemplate{}, err
 	}
 
-	boardDto := dto.BoardTemplate{
-		ID:           updatedTemplate.ID,
-		Creator:      updatedTemplate.Creator,
-		Name:         updatedTemplate.Name,
-		Description:  updatedTemplate.Description,
-		AccessPolicy: updatedTemplate.AccessPolicy,
-		Favourite:    updatedTemplate.Favourite,
-	}
-
-	return &boardDto, err
+	return new(dto.BoardTemplate).From(updatedTemplate), err
 }
 
 func (s *BoardTemplateService) Delete(ctx context.Context, templateId uuid.UUID) error {

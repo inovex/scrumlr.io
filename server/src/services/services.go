@@ -104,7 +104,7 @@ type BoardReactions interface {
 type BoardTemplates interface {
 	Create(ctx context.Context, body dto.CreateBoardTemplateRequest) (*dto.BoardTemplate, error)
 	Get(ctx context.Context, id uuid.UUID) (*dto.BoardTemplate, error)
-	List(ctx context.Context, user uuid.UUID) ([]*dto.BoardTemplate, error)
+	List(ctx context.Context, user uuid.UUID) ([]*dto.BoardTemplateFull, error)
 	Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 

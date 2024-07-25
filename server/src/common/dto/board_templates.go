@@ -37,6 +37,42 @@ func (bt *BoardTemplate) From(board database.BoardTemplate) *BoardTemplate {
 	return bt
 }
 
+type BoardTemplateFull struct {
+	// The board template id
+	ID uuid.UUID `json:"id"`
+
+	// The board template creator id
+	Creator uuid.UUID `json:"creator"`
+
+	// The board template name
+	Name *string `json:"name,omitempty"`
+
+	// Description of the board template
+	Description *string `json:"description"`
+
+	// The access policy
+	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+
+	// The favourite status of the template
+	Favourite *bool `json:"favourite"`
+
+	// Board templates associated column templates
+	ColumnTemplates []*ColumnTemplate
+}
+
+func (bt *BoardTemplateFull) From(board database.BoardTemplateFull) *BoardTemplateFull {
+	bt.ID = board.ID
+	bt.Creator = board.Creator
+	bt.Name = board.Name
+	bt.Description = board.Description
+	bt.AccessPolicy = board.AccessPolicy
+	bt.Favourite = board.Favourite
+	// parse db to dto column templates with dto helper function ColumnTemplates
+	bt.ColumnTemplates = ColumnTemplates(board.ColumnTemplates)
+
+	return bt
+}
+
 // CreateBoardTemplateRequest represents the request to create a new board template.
 type CreateBoardTemplateRequest struct {
 	// The name of the board template.

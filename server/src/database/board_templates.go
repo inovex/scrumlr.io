@@ -13,18 +13,6 @@ import (
 )
 
 type BoardTemplate struct {
-	bun.BaseModel   `bun:"table:board_templates"`
-	ID              uuid.UUID
-	Creator         uuid.UUID
-	Name            *string
-	Description     *string
-	AccessPolicy    types.AccessPolicy
-	Favourite       *bool
-	CreatedAt       time.Time
-	ColumnTemplates []ColumnTemplate
-}
-
-type BoardTemplateGetter struct {
 	bun.BaseModel `bun:"table:board_templates"`
 	ID            uuid.UUID
 	Creator       uuid.UUID
@@ -33,6 +21,18 @@ type BoardTemplateGetter struct {
 	AccessPolicy  types.AccessPolicy
 	Favourite     *bool
 	CreatedAt     time.Time
+}
+
+type BoardTemplateFull struct {
+	bun.BaseModel   `bun:"table:board_templates"`
+	ID              uuid.UUID
+	Creator         uuid.UUID
+	Name            *string
+	Description     *string
+	AccessPolicy    types.AccessPolicy
+	Favourite       *bool
+	ColumnTemplates []ColumnTemplate
+	CreatedAt       time.Time
 }
 
 type BoardTemplateInsert struct {
@@ -64,6 +64,7 @@ func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []Colu
 			columns[index].Index = &newColumnIndex
 		}
 
+		// create columns
 		query = query.With("createdColumns", d.db.NewInsert().
 			Model(&columns).
 			Value("board_template", "(SELECT id FROM \"createdBoardTemplate\")"))
@@ -74,16 +75,11 @@ func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []Colu
 		return BoardTemplate{}, err
 	}
 
-	err = d.db.NewSelect().Model(&b.ColumnTemplates).Where("board_template = ?", b.ID).Scan(context.Background())
-	if err != nil {
-		return BoardTemplate{}, err
-	}
-
 	return b, err
 }
 
 func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
-	var tBoard BoardTemplateGetter
+	var tBoard BoardTemplate
 
 	// Get settings
 	err := d.db.NewSelect().Model(&tBoard).Where("id = ?", id).Scan(context.Background())
@@ -91,43 +87,26 @@ func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
 		return BoardTemplate{}, err
 	}
 
-	// Get columns
-	var tColumns []ColumnTemplate
-	err = d.db.NewSelect().Model(&tColumns).Where("board_template = ?", tBoard.ID).Order("index ASC").Scan(context.Background())
-	if err != nil {
-		return BoardTemplate{}, err
-	}
-
-	dbBoardTemplate := BoardTemplate{
-		ID:              tBoard.ID,
-		Creator:         tBoard.Creator,
-		Name:            tBoard.Name,
-		Description:     tBoard.Description,
-		AccessPolicy:    tBoard.AccessPolicy,
-		Favourite:       tBoard.Favourite,
-		ColumnTemplates: tColumns,
-	}
-
-	return dbBoardTemplate, err
+	return tBoard, err
 }
 
-func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplate, error) {
-	var tBoards []BoardTemplateGetter
+func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error) {
+	var tBoards []BoardTemplate
 
 	err := d.db.NewSelect().Model(&tBoards).Where("creator = ?", user).Order("created_at ASC").Scan(context.Background())
 	if err != nil {
-		return []BoardTemplate{}, err
+		return []BoardTemplateFull{}, err
 	}
 
-	var templates []BoardTemplate
+	var templates []BoardTemplateFull
 	for _, board := range tBoards {
 		var cols []ColumnTemplate
 		err = d.db.NewSelect().Model(&cols).Where("board_template = ?", board.ID).Scan(context.Background())
 		if err != nil {
-			return []BoardTemplate{}, err
+			return []BoardTemplateFull{}, err
 		}
 
-		dbBoardTemplate := BoardTemplate{
+		dbBoardTemplate := BoardTemplateFull{
 			ID:              board.ID,
 			Creator:         board.Creator,
 			Name:            board.Name,
