@@ -319,14 +319,14 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	retEvent := InitEvent{
 		Type: event.Type,
 		Data: dto.FullBoard{
-			Board:     event.Data.Board,
-			BoardSessions:  event.Data.BoardSessions,
-			BoardSessionRequests:  event.Data.BoardSessionRequests,
-			Notes:     nil,
-			Reactions: event.Data.Reactions,
-			Columns:   nil,
-			Votings:   event.Data.Votings,
-			Votes:     event.Data.Votes,
+			Board:                event.Data.Board,
+			BoardSessions:        event.Data.BoardSessions,
+			BoardSessionRequests: event.Data.BoardSessionRequests,
+			Notes:                nil,
+			Reactions:            event.Data.Reactions,
+			Columns:              nil,
+			Votings:              event.Data.Votings,
+			Votes:                event.Data.Votes,
 		},
 	}
 	// Columns

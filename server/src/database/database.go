@@ -16,14 +16,14 @@ type Database struct {
 }
 
 type FullBoard struct {
-	Board Board
-	BoardSessions []BoardSession
+	Board                Board
+	BoardSessions        []BoardSession
 	BoardSessionRequests []BoardSessionRequest
-	Columns []Column
-	Notes []Note
-	Reactions []Reaction
-	Votings []Voting
-	Votes []Vote
+	Columns              []Column
+	Notes                []Note
+	Reactions            []Reaction
+	Votings              []Voting
+	Votes                []Vote
 }
 
 // New creates a new instance of Database
@@ -57,10 +57,10 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 	)
 	type dataBaseOperation int
 
-	/* The following const can be compared to an enum in Java 
+	/* The following const can be compared to an enum in Java
 	iota allows for an automatic increment in Go */
 	const (
-		getBoard dataBaseOperation = iota 
+		getBoard dataBaseOperation = iota
 		getRequests
 		getSessions
 		getColumns
@@ -90,6 +90,5 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 			return FullBoard{}, err
 		}
 	}
-	return FullBoard{board, sessions,requests, columns, notes, reactions, votings, votes}, nil
+	return FullBoard{board, sessions, requests, columns, notes, reactions, votings, votes}, nil
 }
-

@@ -25,7 +25,7 @@ type BoardSubscription struct {
 
 type InitEvent struct {
 	Type realtime.BoardEventType `json:"type"`
-	Data dto2.FullBoard               `json:"data"`
+	Data dto2.FullBoard          `json:"data"`
 }
 
 type EventData struct {
@@ -58,8 +58,6 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		s.closeBoardSocket(id, userID, conn)
 		return
 	}
-
-	
 
 	initEvent := InitEvent{
 		Type: realtime.BoardEventInit,

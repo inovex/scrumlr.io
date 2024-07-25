@@ -91,9 +91,10 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 
 	return new(dto.Board).From(b), nil
 }
+
 // *dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote
 func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (dto.FullBoard, error) {
-	fullBoard, err:= s.database.Get(boardID)
+	fullBoard, err := s.database.Get(boardID)
 	if err != nil {
 		return dto.FullBoard{}, err
 	}

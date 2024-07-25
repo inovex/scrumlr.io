@@ -134,13 +134,13 @@ var (
 	initEvent = InitEvent{
 		Type: realtime.BoardEventInit,
 		Data: dto.FullBoard{
-			Board:       &dto.Board{},
-			Columns:     []*dto.Column{&aSeeableColumn, &aHiddenColumn},
-			Notes:       []*dto.Note{&aOwnerNote, &aModeratorNote, &aParticipantNote},
-			Votings:     []*dto.Voting{votingData.Voting},
-			Votes:       []*dto.Vote{},
-			BoardSessions:    boardSessions,
-			BoardSessionRequests:    []*dto.BoardSessionRequest{},
+			Board:                &dto.Board{},
+			Columns:              []*dto.Column{&aSeeableColumn, &aHiddenColumn},
+			Notes:                []*dto.Note{&aOwnerNote, &aModeratorNote, &aParticipantNote},
+			Votings:              []*dto.Voting{votingData.Voting},
+			Votes:                []*dto.Vote{},
+			BoardSessions:        boardSessions,
+			BoardSessionRequests: []*dto.BoardSessionRequest{},
 		},
 	}
 )
@@ -382,13 +382,13 @@ func testInitFilterAsParticipant(t *testing.T) {
 	expectedInitEvent := InitEvent{
 		Type: realtime.BoardEventInit,
 		Data: dto.FullBoard{
-			Board:       &dto.Board{},
-			Columns:     []*dto.Column{&aSeeableColumn},
-			Notes:       []*dto.Note{&aParticipantNote},
-			Votings:     []*dto.Voting{&expectedVoting},
-			Votes:       []*dto.Vote{},
-			BoardSessions:    boardSessions,
-			BoardSessionRequests:    []*dto.BoardSessionRequest{},
+			Board:                &dto.Board{},
+			Columns:              []*dto.Column{&aSeeableColumn},
+			Notes:                []*dto.Note{&aParticipantNote},
+			Votings:              []*dto.Voting{&expectedVoting},
+			Votes:                []*dto.Vote{},
+			BoardSessions:        boardSessions,
+			BoardSessionRequests: []*dto.BoardSessionRequest{},
 		},
 	}
 	returnedInitEvent := eventInitFilter(initEvent, participantBoardSession.User.ID)

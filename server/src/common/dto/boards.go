@@ -144,24 +144,24 @@ type BoardOverview struct {
 }
 
 type FullBoard struct {
-	Board *Board 
-	BoardSessionRequests []*BoardSessionRequest 
-	BoardSessions []*BoardSession 
-	Columns []*Column
-	Notes []*Note 
-	Reactions []*Reaction 
-	Votings []*Voting 
-	Votes []*Vote
+	Board                *Board
+	BoardSessionRequests []*BoardSessionRequest
+	BoardSessions        []*BoardSession
+	Columns              []*Column
+	Notes                []*Note
+	Reactions            []*Reaction
+	Votings              []*Voting
+	Votes                []*Vote
 }
 
 func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
 	dtoFullBoard.Board = dtoFullBoard.Board.From(dbFullBoard.Board)
-	dtoFullBoard.BoardSessionRequests = BoardSessionRequests(dbFullBoard.BoardSessionRequests) 
-	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions) 
-	dtoFullBoard.Columns = Columns(dbFullBoard.Columns) 
-	dtoFullBoard.Notes = Notes(dbFullBoard.Notes) 
-	dtoFullBoard.Reactions = Reactions(dbFullBoard.Reactions) 
-	dtoFullBoard.Votings = Votings(dbFullBoard.Votings, dbFullBoard.Votes) 
-	dtoFullBoard.Votes = Votes(dbFullBoard.Votes) 
+	dtoFullBoard.BoardSessionRequests = BoardSessionRequests(dbFullBoard.BoardSessionRequests)
+	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions)
+	dtoFullBoard.Columns = Columns(dbFullBoard.Columns)
+	dtoFullBoard.Notes = Notes(dbFullBoard.Notes)
+	dtoFullBoard.Reactions = Reactions(dbFullBoard.Reactions)
+	dtoFullBoard.Votings = Votings(dbFullBoard.Votings, dbFullBoard.Votes)
+	dtoFullBoard.Votes = Votes(dbFullBoard.Votes)
 	return dtoFullBoard
 }
