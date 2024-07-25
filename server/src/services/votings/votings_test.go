@@ -2,7 +2,9 @@ package votings
 
 import (
 	"context"
+	"errors"
 	"math/rand/v2"
+	"scrumlr.io/server/common"
 	"testing"
 	"time"
 
@@ -131,64 +133,97 @@ func (suite *votingServiceTestSuite) TestCreate() {
 }
 
 func (suite *votingServiceTestSuite) TestUpdateVoting() {
-	s := new(VotingService)
-	mock := new(DBMock)
-	s.database = mock
-
-	rtClientMock := &mockRtClient{}
-	rtMock := &realtime.Broker{
-		Con: rtClientMock,
-	}
-	s.realtime = rtMock
-
 	boardId := uuid.New()
 	votingID := uuid.New()
-	updateVotingRequest := dto.VotingUpdateRequest{
-		ID:     votingID,
-		Board:  boardId,
-		Status: types.VotingStatusClosed,
-	}
-
-	// Mocks for realtime
-	publishSubject := "board." + boardId.String()
-	publishEvent := realtime.BoardEvent{
-		Type: realtime.BoardEventVotingUpdated,
-		Data: struct {
-			Voting *dto.Voting `json:"voting"`
-			Notes  []*dto.Note `json:"notes"`
-		}{
-			Voting: &dto.Voting{},
-			Notes:  nil,
-		},
-	}
-
-	mock.On("UpdateVoting", database.VotingUpdate{
-		ID:     votingID,
-		Board:  boardId,
-		Status: types.VotingStatusClosed,
-	}).Return(database.Voting{
+	voteLimit := rand.IntN(10)
+	voting := database.Voting{
 		ID:                 votingID,
 		Board:              boardId,
 		CreatedAt:          time.Now(),
-		VoteLimit:          rand.IntN(10),
+		VoteLimit:          voteLimit,
 		AllowMultipleVotes: false,
 		ShowVotesOfOthers:  false,
 		Status:             types.VotingStatusClosed,
-	}, nil)
+	}
+	tests := []struct {
+		name         string
+		err          error
+		votingStatus types.VotingStatus
+		voting       database.Voting
+		update       *dto.Voting
+	}{
+		{
+			name:         "Voting status open",
+			err:          common.BadRequestError(errors.New("not allowed ot change to open state")),
+			votingStatus: types.VotingStatusOpen,
+			voting:       database.Voting{},
+			update:       nil,
+		},
+		{
+			name:         "Voting status closed",
+			err:          nil,
+			votingStatus: types.VotingStatusClosed,
+			voting:       voting,
+			update:       new(dto.Voting).From(voting, nil),
+		},
+	}
 
-	mock.On("GetVotes", filter.VoteFilter{
-		Board:  boardId,
-		Voting: &votingID,
-	}).Return([]database.Vote{}, nil)
+	for _, tt := range tests {
 
-	mock.On("GetVoting", boardId, votingID).Return(database.Voting{}, []database.Vote{}, nil)
+		suite.Run(tt.name, func() {
+			s := new(VotingService)
+			mock := new(DBMock)
+			s.database = mock
 
-	rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
-	update, err := s.Update(context.Background(), updateVotingRequest)
+			rtClientMock := &mockRtClient{}
+			rtMock := &realtime.Broker{
+				Con: rtClientMock,
+			}
+			s.realtime = rtMock
 
-	assert.NotNil(suite.T(), update)
-	assert.NoError(suite.T(), err)
-	assert.Equal(suite.T(), update.Status, types.VotingStatusClosed)
-	mock.AssertExpectations(suite.T())
-	rtClientMock.AssertExpectations(suite.T())
+			updateVotingRequest := dto.VotingUpdateRequest{
+				ID:     votingID,
+				Board:  boardId,
+				Status: tt.votingStatus,
+			}
+
+			// Mocks for realtime
+			publishSubject := "board." + boardId.String()
+			publishEvent := realtime.BoardEvent{
+				Type: realtime.BoardEventVotingUpdated,
+				Data: struct {
+					Voting *dto.Voting `json:"voting"`
+					Notes  []*dto.Note `json:"notes"`
+				}{
+					Voting: &dto.Voting{},
+					Notes:  nil,
+				},
+			}
+
+			if tt.votingStatus == types.VotingStatusClosed {
+				mock.On("UpdateVoting", database.VotingUpdate{
+					ID:     votingID,
+					Board:  boardId,
+					Status: tt.votingStatus,
+				}).Return(tt.voting, tt.err)
+
+				mock.On("GetVotes", filter.VoteFilter{
+					Board:  boardId,
+					Voting: &votingID,
+				}).Return([]database.Vote{}, nil)
+
+				mock.On("GetVoting", boardId, votingID).Return(database.Voting{}, []database.Vote{}, nil)
+
+				rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
+			}
+
+			update, err := s.Update(context.Background(), updateVotingRequest)
+
+			assert.Equal(suite.T(), tt.err, err)
+			assert.Equal(suite.T(), update, tt.update)
+			mock.AssertExpectations(suite.T())
+			rtClientMock.AssertExpectations(suite.T())
+
+		})
+	}
 }
