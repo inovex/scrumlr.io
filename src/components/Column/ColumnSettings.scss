@@ -3,10 +3,10 @@
 .column__header-menu-dropdown {
   position: absolute;
   right: 0;
-  top: 75%;
+  //top: 75%;
   //width: 180px;
   background-color: $gray--000;
-  border-radius: 24px;
+  border-radius: $rounded--full;
   display: flex;
   //padding-inline: 16px;
   padding-left: 8px;
@@ -26,6 +26,7 @@
 }
 
 .column__header-menu-dropdown > ul > li {
+  border-radius: $rounded--full;
   height: 32px;
   width: 56px;
   padding: 0 $spacing--sm;
@@ -96,6 +97,7 @@
 }
 
 .column__header-color-picker-dropdown > li > button {
+  cursor: pointer;
   border: none;
   background: none;
 }
@@ -175,29 +177,29 @@
   border: 3px solid #ccddff;
 }
 
-.value-violet {
+.poker-purple {
   background: #d44fff;
 }
 
-.value-violet_selected {
+.poker-purple_selected {
   background: #d44fff;
   border: 3px solid #e9a7ff;
 }
 
-.value-violet:hover {
+.poker-purple:hover {
   border: 3px solid #f4d3ff;
 }
 
-.poker-purple {
+.value-violet {
   background: #7d33f8;
 }
 
-.poker-purple_selected {
+.value-violet_selected {
   background: #7d33f8;
   border: 3px solid #be99fb;
 }
 
-.poker-purple:hover {
+.value-violet:hover {
   border: 3px solid #dfccfd;
 }
 

@@ -39,7 +39,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
         )}
       </li>
       <li>
-        {/* cool */}
         {color.toString() !== "backlog-blue" && (
           <button
             aria-label="Backlog Blue"
@@ -55,7 +54,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
         )}
       </li>
       <li>
-        {/* cool */}
         {color.toString() !== "goal-green" && (
           <button
             aria-label="Grooming Green"
@@ -71,7 +69,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
         )}
       </li>
       <li>
-        {/* cool */}
         {color.toString() !== "poker-purple" && (
           <button
             aria-label="Poker Purple"
@@ -87,7 +84,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
         )}
       </li>
       <li>
-        {/* cool */}
         {color.toString() !== "online-orange" && (
           <button
             aria-label="Online Orange"
@@ -103,7 +99,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
         )}
       </li>
       <li>
-        {/* cool */}
         {color.toString() !== "value-violet" && (
           <button
             aria-label="Lean Lilac"
@@ -119,7 +114,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
         )}
       </li>
       <li>
-        {/* cool */}
         {color.toString() !== "yielding-yellow" && (
           <button
             aria-label="Retro Red"

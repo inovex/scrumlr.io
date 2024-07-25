@@ -49,6 +49,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
               onClose?.();
               dispatch(Actions.deleteColumn(id));
             }}
+            title={t("Column.deleteColumn")}
           >
             <Trash />
             {/* {t("Column.deleteColumn")} */}
@@ -57,7 +58,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         <li style={{display: "block"}}>
           <button
             aria-label="Color Picker"
-            title="Color Picker"
+            title={t("Column.color")}
             // className={classNames(getColorClassName("planning-pink"), "column__color-button")}
             // onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
             // title={t("Column.settings")} className="column__header-edit-button"
@@ -69,46 +70,50 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
         </li>
         <li>
           <button
+            aria-label="AddLeftIcon"
             onClick={() => {
               onClose?.();
               handleAddColumn(index);
             }}
+            title={t("Column.addColumnLeft")}
           >
             <ArrowLeft />
-            {/* {t("Column.addColumnLeft")} */}
           </button>
         </li>
         <li>
           <button
+            aria-label="AddRightIcon"
             onClick={() => {
               onClose?.();
               handleAddColumn(index + 1);
             }}
+            title={t("Column.addColumnRight")}
           >
             <ArrowRight />
-            {/* {t("Column.addColumnRight")} */}
           </button>
         </li>
         <li>
           <button
+            aria-label="EditIcon"
             onClick={() => {
               onNameEdit?.();
               onClose?.();
             }}
+            title={t("Column.editName")}
           >
             <Edit />
-            {/* {t("Column.editName")} */}
           </button>
         </li>
         <li>
           <button
+            aria-label="HideIcon"
             onClick={() => {
               onClose?.();
               dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
             }}
+            title={visible ? t("Column.hideColumn") : t("Column.showColumn")}
           >
             {visible ? <Hidden /> : <Visible />}
-            {/* {visible ? t("Column.hideColumn") : t("Column.showColumn")} */}
           </button>
         </li>
         <li>
