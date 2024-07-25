@@ -144,18 +144,18 @@ type BoardOverview struct {
 }
 
 type FullBoard struct {
-	Board                *Board
-	BoardSessionRequests []*BoardSessionRequest
-	BoardSessions        []*BoardSession
-	Columns              []*Column
-	Notes                []*Note
-	Reactions            []*Reaction
-	Votings              []*Voting
-	Votes                []*Vote
+	Board                *Board                 `json:"board"`
+	BoardSessionRequests []*BoardSessionRequest `json:"requests"`
+	BoardSessions        []*BoardSession        `json:"participants"`
+	Columns              []*Column              `json:"columns"`
+	Notes                []*Note                `json:"notes"`
+	Reactions            []*Reaction            `json:"reactions"`
+	Votings              []*Voting              `json:"votings"`
+	Votes                []*Vote                `json:"votes"`
 }
 
 func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
-	dtoFullBoard.Board = dtoFullBoard.Board.From(dbFullBoard.Board)
+	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
 	dtoFullBoard.BoardSessionRequests = BoardSessionRequests(dbFullBoard.BoardSessionRequests)
 	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions)
 	dtoFullBoard.Columns = Columns(dbFullBoard.Columns)

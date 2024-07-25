@@ -92,10 +92,10 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	return new(dto.Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (dto.FullBoard, error) {
+func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error) {
 	fullBoard, err := s.database.Get(boardID)
 	if err != nil {
-		return dto.FullBoard{}, err
+		return nil, err
 	}
 
 	personalVotes := []database.Vote{}
@@ -106,7 +106,7 @@ func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (dto.Fu
 	}
 	fullBoard.Votes = personalVotes
 
-	return *new(dto.FullBoard).From(fullBoard), err
+	return new(dto.FullBoard).From(fullBoard), err
 }
 
 func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error) {

@@ -61,7 +61,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 
 	initEvent := InitEvent{
 		Type: realtime.BoardEventInit,
-		Data: fullBoard,
+		Data: *fullBoard,
 	}
 
 	initEvent = eventInitFilter(initEvent, userID)

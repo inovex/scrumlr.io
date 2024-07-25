@@ -40,7 +40,7 @@ type Boards interface {
 	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error)
 	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
 
-	FullBoard(ctx context.Context, boardID uuid.UUID) (dto.FullBoard, error)
+	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error)
 	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error)
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
 }
