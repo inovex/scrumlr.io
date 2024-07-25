@@ -9,8 +9,8 @@
   border-radius: $rounded--full;
   display: flex;
   //padding-inline: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
+  //padding-left: 8px;
+  //padding-right: 8px;
   box-shadow:
     0 4px 6px -1px rgb(0 0 0 / 0.1),
     0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -21,15 +21,16 @@
   display: flex;
   align-items: center;
   list-style: none;
-  padding: $spacing--xs 0;
+  padding: $spacing--xs $spacing--sm;
   margin: 0;
+  gap: $spacing--sm;
 }
 
 .column__header-menu-dropdown > ul > li {
   border-radius: $rounded--full;
   height: 32px;
-  width: 56px;
-  padding: 0 $spacing--sm;
+  width: 32px;
+  //padding: 0 $spacing--sm;
   background-color: $gray--000;
 
   &:hover {
@@ -86,14 +87,28 @@
 //}
 
 // Hacky way to not show delete column button if it's the last column
-.column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(5) {
+.column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(1) {
   display: none;
 }
 
 .column__header-color-picker-dropdown {
+  //margin-top: $spacing--sm;
+  //padding-top: $spacing--sm;
+  //padding-bottom: $spacing--sm;
+  background-color: $gray--300;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
   list-style: none;
-  padding: 0;
+  padding: 10px;
+  padding-top: 30px;
+  padding-left: 0;
+  margin-top: -30px;
   border-radius: 24px;
+
+  &:hover {
+    background-color: $brighten--slightly;
+  }
 }
 
 .column__header-color-picker-dropdown > li > button {
@@ -120,10 +135,6 @@
 
     &:focus-within {
       background-color: $navy--400;
-    }
-
-    .column__header-color-picker-dropdown > ul > li > button {
-      background-color: coral;
     }
   }
 
