@@ -53,7 +53,7 @@ func (s *BoardTemplateService) Get(ctx context.Context, id uuid.UUID) (*dto.Boar
 	log := logger.FromContext(ctx)
 	boardTemplate, err := s.database.GetBoardTemplate(id)
 	if err != nil {
-		log.Errorw("unable to get board template", "id", id, "err", err)
+		log.Errorw("unable to get board template", "board", id, "err", err)
 		return nil, err
 	}
 
@@ -106,7 +106,7 @@ func (s *BoardTemplateService) Update(ctx context.Context, body dto.BoardTemplat
 
 	updatedTemplate, err := s.database.UpdateBoardTemplate(updateBoard)
 	if err != nil {
-		log.Errorw("unable to update board template", "id", body.ID, "err", err)
+		log.Errorw("unable to update board template", "board", body.ID, "err", err)
 		return &dto.BoardTemplate{}, err
 	}
 
@@ -126,7 +126,7 @@ func (s *BoardTemplateService) Delete(ctx context.Context, templateId uuid.UUID)
 	log := logger.FromContext(ctx)
 	err := s.database.DeleteBoardTemplate(templateId)
 	if err != nil {
-		log.Errorw("unable to delete board template", "err", err)
+		log.Errorw("unable to delete board template", "board", templateId, "err", err)
 		return err
 	}
 	return err
