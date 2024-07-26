@@ -18,6 +18,7 @@ server/src/coverage.txt
 build
 server/src/main
 server/src/server
+server/src/tmp
 
 # misc
 .DS_Store

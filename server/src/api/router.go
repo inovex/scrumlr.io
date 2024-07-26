@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
@@ -36,6 +37,8 @@ type Server struct {
 	feedback       services.Feedback
 	boardReactions services.BoardReactions
 	boardTemplates services.BoardTemplates
+	customMetrics  services.CustomMetrics
+  
 
 	upgrader websocket.Upgrader
 
@@ -61,7 +64,7 @@ func New(
 	feedback services.Feedback,
 	boardReactions services.BoardReactions,
 	boardTemplates services.BoardTemplates,
-
+	customMetrics services.CustomMetrics,
 	verbose bool,
 	checkOrigin bool,
 	anonymousLoginDisabled bool,
@@ -71,6 +74,8 @@ func New(
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+	r.Use(metricCounterMiddleware)
+	r.Use(metricMeasureLatencyMiddleware)
 
 	if !checkOrigin {
 		r.Use(cors.Handler(cors.Options{
@@ -105,7 +110,7 @@ func New(
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
-
+		customMetrics:                    customMetrics,
 		anonymousLoginDisabled: anonymousLoginDisabled,
 	}
 
@@ -113,6 +118,11 @@ func New(
 	s.upgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
+	}
+
+	// Registers needed metrics for prometheus
+	if s.customMetrics != nil {
+		s.initMetrics()
 	}
 
 	if checkOrigin {
@@ -148,6 +158,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 				r.Get("/callback", s.verifyAuthProviderCallback)
 			})
 		})
+		s.initCustomMetricResources(r)
 	})
 }
 
@@ -331,4 +342,13 @@ func (s *Server) initBoardReactionResources(r chi.Router) {
 
 		r.Post("/", s.createBoardReaction)
 	})
+}
+
+func (s *Server) initCustomMetricResources(r chi.Router) {
+	if s.customMetrics != nil {
+		r.Handle("/metrics", promhttp.HandlerFor(
+			s.customMetrics.Registry(),
+			promhttp.HandlerOpts{Registry: s.customMetrics.Registry()},
+		))
+	}
 }

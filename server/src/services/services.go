@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/google/uuid"
+	"github.com/prometheus/client_golang/prometheus"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 )
@@ -113,4 +114,10 @@ type BoardTemplates interface {
 	ListColumnTemplates(ctx context.Context, board uuid.UUID) ([]*dto.ColumnTemplate, error)
 	UpdateColumnTemplate(ctx context.Context, body dto.ColumnTemplateUpdateRequest) (*dto.ColumnTemplate, error)
 	DeleteColumnTemplate(ctx context.Context, boar, column, user uuid.UUID) error
+}
+
+type CustomMetrics interface {
+	RegisterHistogramVec(hist *prometheus.HistogramVec) error
+	RegisterCounterVec(ctr *prometheus.CounterVec) error
+	Registry() *prometheus.Registry
 }
