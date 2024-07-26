@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,18 +13,6 @@ import (
 )
 
 type BoardTemplate struct {
-	bun.BaseModel   `bun:"table:board_templates"`
-	ID              uuid.UUID
-	Creator         uuid.UUID
-	Name            *string
-	Description     *string
-	AccessPolicy    types.AccessPolicy
-	Favourite       *bool
-	CreatedAt       time.Time
-	ColumnTemplates []ColumnTemplate
-}
-
-type BoardTemplateGetter struct {
 	bun.BaseModel `bun:"table:board_templates"`
 	ID            uuid.UUID
 	Creator       uuid.UUID
@@ -34,6 +21,18 @@ type BoardTemplateGetter struct {
 	AccessPolicy  types.AccessPolicy
 	Favourite     *bool
 	CreatedAt     time.Time
+}
+
+type BoardTemplateFull struct {
+	bun.BaseModel   `bun:"table:board_templates"`
+	ID              uuid.UUID
+	Creator         uuid.UUID
+	Name            *string
+	Description     *string
+	AccessPolicy    types.AccessPolicy
+	Favourite       *bool
+	ColumnTemplates []ColumnTemplate
+	CreatedAt       time.Time
 }
 
 type BoardTemplateInsert struct {
@@ -46,13 +45,12 @@ type BoardTemplateInsert struct {
 }
 
 type BoardTemplateUpdate struct {
-	bun.BaseModel   `bun:"table:board_templates"`
-	ID              uuid.UUID
-	Name            *string
-	Description     *string
-	AccessPolicy    *types.AccessPolicy
-	Favourite       *bool
-	ColumnTemplates []ColumnTemplate
+	bun.BaseModel `bun:"table:board_templates"`
+	ID            uuid.UUID
+	Name          *string
+	Description   *string
+	AccessPolicy  *types.AccessPolicy
+	Favourite     *bool
 }
 
 func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []ColumnTemplateInsert) (BoardTemplate, error) {
@@ -66,6 +64,7 @@ func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []Colu
 			columns[index].Index = &newColumnIndex
 		}
 
+		// create columns
 		query = query.With("createdColumns", d.db.NewInsert().
 			Model(&columns).
 			Value("board_template", "(SELECT id FROM \"createdBoardTemplate\")"))
@@ -80,7 +79,7 @@ func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []Colu
 }
 
 func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
-	var tBoard BoardTemplateGetter
+	var tBoard BoardTemplate
 
 	// Get settings
 	err := d.db.NewSelect().Model(&tBoard).Where("id = ?", id).Scan(context.Background())
@@ -88,43 +87,26 @@ func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
 		return BoardTemplate{}, err
 	}
 
-	// Get columns
-	var tColumns []ColumnTemplate
-	err = d.db.NewSelect().Model(&tColumns).Where("board_template = ?", tBoard.ID).Order("index ASC").Scan(context.Background())
-	if err != nil {
-		return BoardTemplate{}, err
-	}
-
-	dbBoardTemplate := BoardTemplate{
-		ID:              tBoard.ID,
-		Creator:         tBoard.Creator,
-		Name:            tBoard.Name,
-		Description:     tBoard.Description,
-		AccessPolicy:    tBoard.AccessPolicy,
-		Favourite:       tBoard.Favourite,
-		ColumnTemplates: tColumns,
-	}
-
-	return dbBoardTemplate, err
+	return tBoard, err
 }
 
-func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplate, error) {
-	var tBoards []BoardTemplateGetter
+func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error) {
+	var tBoards []BoardTemplate
 
 	err := d.db.NewSelect().Model(&tBoards).Where("creator = ?", user).Order("created_at ASC").Scan(context.Background())
 	if err != nil {
-		return []BoardTemplate{}, err
+		return []BoardTemplateFull{}, err
 	}
 
-	var templates []BoardTemplate
+	var templates []BoardTemplateFull
 	for _, board := range tBoards {
 		var cols []ColumnTemplate
 		err = d.db.NewSelect().Model(&cols).Where("board_template = ?", board.ID).Scan(context.Background())
 		if err != nil {
-			return []BoardTemplate{}, err
+			return []BoardTemplateFull{}, err
 		}
 
-		dbBoardTemplate := BoardTemplate{
+		dbBoardTemplate := BoardTemplateFull{
 			ID:              board.ID,
 			Creator:         board.Creator,
 			Name:            board.Name,
@@ -140,94 +122,36 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplate, error) {
 	return templates, err
 }
 
-func (d *Database) UpdateBoardTemplate(update BoardTemplateUpdate) (BoardTemplate, error) {
+func (d *Database) UpdateBoardTemplate(board BoardTemplateUpdate) (BoardTemplate, error) {
 	// General Settings
-	query_settings := d.db.NewUpdate().Model(&update)
+	query_settings := d.db.NewUpdate().Model(&board)
 
-	if update.Name != nil {
+	if board.Name != nil {
 		query_settings.Column("name")
 	}
 
-	if update.Description != nil {
+	if board.Description != nil {
 		query_settings.Column("description")
 	}
 
-	if update.AccessPolicy != nil {
+	if board.AccessPolicy != nil {
 		query_settings.Column("access_policy")
 	}
 
-	if update.Favourite != nil {
+	if board.Favourite != nil {
 		query_settings.Column("favourite")
 	}
 
 	var boardTemplate BoardTemplate
 	_, err := query_settings.
-		Where("id = ?", update.ID).
+		Where("id = ?", board.ID).
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &boardTemplate), &boardTemplate)
 
 	if err != nil {
-		logger.Get().Errorw("failed to update board template settings", "board", update.ID, "err", err)
+		logger.Get().Errorw("failed to update board template settings", "board", board.ID, "err", err)
 		return BoardTemplate{}, err
 	}
-
-	// columns
-	cols_updated := []ColumnTemplate{}
-	for _, col := range update.ColumnTemplates {
-		column := ColumnTemplateUpdate{
-			ID:            col.ID,
-			BoardTemplate: boardTemplate.ID,
-			Name:          col.Name,
-			Description:   col.Description,
-			Color:         col.Color,
-			Visible:       col.Visible,
-			Index:         col.Index,
-		}
-
-		// Update logic
-		newIndex := column.Index
-		if column.Index < 0 {
-			newIndex = 0
-		}
-
-		selectPrevious := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("board_template", "index").Where("id = ?", column.ID).Where("board_template = ?", column.BoardTemplate)
-		maxIndexSelect := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("index").Where("board_template = ?", column.BoardTemplate)
-		updateOnSmallerIndex := d.db.NewUpdate().
-			Model((*ColumnTemplate)(nil)).
-			Column("index").
-			Set("index = index+1").
-			Where("index < (SELECT index FROM \"selectPrevious\")").
-			Where("board_template = ?", column.BoardTemplate).
-			Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
-			Where("index >= ?", newIndex)
-		updateOnGreaterIndex := d.db.NewUpdate().
-			Model((*ColumnTemplate)(nil)).
-			Column("index").
-			Set("index = index-1").
-			Where("index > (SELECT index FROM \"selectPrevious\")").
-			Where("board_template = ?", column.BoardTemplate).
-			Where("(SELECT index FROM \"selectPrevious\") < ?", newIndex).
-			Where("index <= ?", newIndex)
-
-		var c ColumnTemplate
-		_, err := d.db.NewUpdate().
-			With("selectPrevious", selectPrevious).
-			With("maxIndexSelect", maxIndexSelect).
-			With("updateOnSmallerIndex", updateOnSmallerIndex).
-			With("updateOnGreaterIndex", updateOnGreaterIndex).
-			Model(&column).
-			Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
-			Where("id = ?", column.ID).
-			Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, column.BaseModel), &c)
-
-		if err != nil {
-			logger.Get().Errorw("failed to update column template in updte board template", "board_template", update.ID, "err", err)
-			return BoardTemplate{}, err
-		}
-		cols_updated = append(cols_updated, c)
-	}
-	boardTemplate.ColumnTemplates = cols_updated
 
 	return boardTemplate, err
 }
