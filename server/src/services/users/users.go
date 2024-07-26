@@ -78,8 +78,11 @@ func (s *UserService) Update(_ context.Context, body dto.UserUpdateRequest) (*dt
 		Name:   body.Name,
 		Avatar: body.Avatar,
 	})
-	s.UpdatedUser(user)
 
+	if err != nil {
+		return nil, err
+	}
+	s.UpdatedUser(user)
 	return new(dto.User).From(user), err
 }
 

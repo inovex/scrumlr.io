@@ -12,7 +12,7 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     name: "Positive/Negative",
     columns: [
       {name: "Positive", hidden: false, color: "backlog-blue"},
-      {name: "Negative", hidden: false, color: "value-violet"},
+      {name: "Negative", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
   },
@@ -38,7 +38,7 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     name: "Plus/Delta",
     columns: [
       {name: "Plus", hidden: false, color: "backlog-blue"},
-      {name: "Delta", hidden: false, color: "value-violet"},
+      {name: "Delta", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
   },

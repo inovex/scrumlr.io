@@ -17,6 +17,7 @@ func TestRunnerForBoards(t *testing.T) {
 	t.Run("Create=5", testCreateByPassphraseBoard)
 	t.Run("Create=6", testCreateByInviteBoard)
 	t.Run("Create=7", testCreateBoardWithName)
+	t.Run("Create=8", testCreateBoardWithDescription)
 
 	t.Run("Update=0", testChangePublicBoardToPassphraseBoard)
 	t.Run("Update=1", testChangeToPassphraseBoardWithMissingPassphraseShouldFail)
@@ -29,6 +30,7 @@ func TestRunnerForBoards(t *testing.T) {
 	t.Run("Update=8", testChangeInviteBoardToPublicBoardShouldFail)
 	t.Run("Update=9", testUpdateBoardName)
 	t.Run("Update=10", testUpdateBoardSettings)
+	t.Run("Update=11", testUpdateBoardDescription)
 
 	t.Run("Get=0", testGetBoard)
 	t.Run("Get=1", testGetUserBoards)
@@ -180,6 +182,22 @@ func testCreateBoardWithName(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Equal(t, name, *board.Name)
+}
+
+func testCreateBoardWithDescription(t *testing.T) {
+	user := fixture.MustRow("User.jack").(*User)
+
+	description := "A board description"
+	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+		Name:         nil,
+		AccessPolicy: types.AccessPolicyPublic,
+		Passphrase:   nil,
+		Salt:         nil,
+		Description:  &description,
+	}, []ColumnInsert{})
+
+	assert.Nil(t, err)
+	assert.Equal(t, description, *board.Description)
 }
 
 func testChangePublicBoardToPassphraseBoard(t *testing.T) {
@@ -442,13 +460,33 @@ func testUpdateBoardSettings(t *testing.T) {
 
 	showAuthors := true
 	showNotesOfOtherUsers := true
-	allowEditing := true
-	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, ShowAuthors: &showAuthors, ShowNotesOfOtherUsers: &showNotesOfOtherUsers, AllowEditing: &allowEditing})
+	isLocked := true
+	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, ShowAuthors: &showAuthors, ShowNotesOfOtherUsers: &showNotesOfOtherUsers, IsLocked: &isLocked})
 
 	assert.Nil(t, err)
 	assert.Equal(t, showAuthors, updatedBoard.ShowAuthors)
 	assert.Equal(t, showNotesOfOtherUsers, updatedBoard.ShowNotesOfOtherUsers)
-	assert.Equal(t, allowEditing, updatedBoard.AllowEditing)
+	assert.Equal(t, isLocked, updatedBoard.IsLocked)
+}
+
+func testUpdateBoardDescription(t *testing.T) {
+	user := fixture.MustRow("User.jack").(*User)
+
+	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+		Name:         nil,
+		AccessPolicy: types.AccessPolicyByInvite,
+		Passphrase:   nil,
+		Salt:         nil,
+	}, []ColumnInsert{})
+
+	assert.Nil(t, err)
+
+	description := "New description"
+
+	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, Description: &description})
+
+	assert.Nil(t, err)
+	assert.Equal(t, description, *updatedBoard.Description)
 }
 
 func testGetBoard(t *testing.T) {
@@ -459,6 +497,7 @@ func testGetBoard(t *testing.T) {
 
 	assert.Equal(t, board.ID, gotBoard.ID)
 	assert.Equal(t, board.Name, gotBoard.Name)
+	assert.Equal(t, board.Description, gotBoard.Description)
 	assert.Equal(t, board.ShowAuthors, gotBoard.ShowAuthors)
 	assert.Equal(t, board.ShowNotesOfOtherUsers, gotBoard.ShowNotesOfOtherUsers)
 	assert.Equal(t, board.AccessPolicy, gotBoard.AccessPolicy)

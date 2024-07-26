@@ -105,6 +105,13 @@ func main() {
 				Required: false,
 				Value:    "/",
 			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "disable-anonymous-login",
+				EnvVars:  []string{"SCRUMLR_DISABLE_ANONYMOUS_LOGIN"},
+				Usage:    "enables/disables the login of anonymous clients",
+				Required: false,
+				Value:    false,
+			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-callback-host",
 				Aliases:  []string{"c"},
@@ -326,6 +333,7 @@ func run(c *cli.Context) error {
 		basePath,
 		rt,
 		authConfig,
+
 		boardService,
 		votingService,
 		userService,
@@ -339,6 +347,7 @@ func run(c *cli.Context) error {
 		customMetricService,
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
+		c.Bool("disable-anonymous-login"),
 	)
 
 	port := fmt.Sprintf(":%d", c.Int("port"))

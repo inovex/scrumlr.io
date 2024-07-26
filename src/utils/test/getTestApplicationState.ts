@@ -12,6 +12,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       showNotesOfOtherUsers: true,
       showNoteReactions: true,
       allowStacking: true,
+      isLocked: true,
     },
   },
   requests: [
@@ -176,6 +177,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeyNotificationsEnabled: true,
     moderating: false,
     serverTimeOffset: 0,
+    anonymousLoginDisabled: false,
     enabledAuthProvider: [],
     feedbackEnabled: false,
     hotkeysAreActive: true,
