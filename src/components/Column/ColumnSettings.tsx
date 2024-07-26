@@ -92,7 +92,6 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             <ArrowRight />
           </button>
         </li>
-        adjust{" "}
         <li>
           <button
             aria-label="HideIcon"
