@@ -139,7 +139,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Reachability check
-        uses: ./.github/actions/deployment_health_check
+        uses: inovex/scrumlr.io/.github/actions/deployment_health_check@main
         with:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
 
@@ -151,11 +151,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Reachability check
-        uses: ./.github/actions/deployment_health_check
+        uses: inovex/scrumlr.io/.github/actions/deployment_health_check@main
         with:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
       - name: Postman run
-        uses: ./.github/actions/postman_run
+        uses: inovex/scrumlr.io/.github/actions/postman_run@main
         with:
           POSTMAN_URL: ${{ env.BASE_URL }}/api
 
@@ -168,7 +168,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Reachability check
-        uses: ./.github/actions/deployment_health_check
+        uses: inovex/scrumlr.io/.github/actions/deployment_health_check@main
         with:
           HEALTH_URL: ${{ env.BASE_URL }}/api/health
       - name: Run tests
