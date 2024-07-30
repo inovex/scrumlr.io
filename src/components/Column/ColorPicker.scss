@@ -1,9 +1,6 @@
 @import "src/constants/style";
 
 .column__header-color-picker-dropdown {
-  //margin-top: $spacing--sm;
-  //padding-top: $spacing--sm;
-  //padding-bottom: $spacing--sm;
   background-color: $gray--300;
   box-shadow:
     0 4px 6px -1px rgb(0 0 0 / 0.1),
@@ -34,11 +31,6 @@
   .column__header-color-picker-dropdown {
     background-color: $navy--500;
   }
-
-  //.column__header-color-picker-dropdown > button {
-  //  //background-color: $navy--500;
-  //  background-color: deeppink;
-  //}
 }
 
 .column__header-color-option {

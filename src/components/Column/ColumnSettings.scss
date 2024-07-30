@@ -3,14 +3,9 @@
 .column__header-menu-dropdown {
   position: absolute;
   right: 0;
-  //top: 75%;
-  //width: 180px;
   background-color: $gray--000;
   border-radius: $rounded--full;
   display: flex;
-  //padding-inline: 16px;
-  //padding-left: 8px;
-  //padding-right: 8px;
   box-shadow:
     0 4px 6px -1px rgb(0 0 0 / 0.1),
     0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -30,7 +25,6 @@
   border-radius: $rounded--full;
   height: 32px;
   width: 32px;
-  //padding: 0 $spacing--sm;
   background-color: $gray--000;
 
   &:hover {
@@ -41,10 +35,6 @@
     background-color: $gray--200;
   }
 }
-
-//.column__header-menu-dropdown > ul > li > ul > li {
-//  filter: none;
-//}
 
 .column__header-menu-dropdown > ul > li > button {
   cursor: pointer;
@@ -69,26 +59,9 @@
 
 .column__header-menu-dropdown > ul > li:last-of-type {
   height: auto;
-  //padding: $spacing--xs $spacing--base;
   display: flex;
   justify-content: space-between;
 }
-//
-//.column__header-menu-dropdown > ul > li:last-child > button {
-//  height: 18px;
-//  width: 18px;
-//  border-radius: 4px;
-//  background-color: var(--accent-color--light);
-//  transition: all 0.08s ease-out;
-//
-//  &:hover {
-//    transform: scale(1.1);
-//  }
-//
-//  &:focus-visible {
-//    box-shadow: 0 0 0 2px $navy--300;
-//  }
-//}
 
 // Hacky way to not show delete column button if it's the last column
 .column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(1) {
