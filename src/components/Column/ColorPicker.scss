@@ -1,0 +1,139 @@
+@import "src/constants/style";
+
+.column__header-color-picker-dropdown {
+  //margin-top: $spacing--sm;
+  //padding-top: $spacing--sm;
+  //padding-bottom: $spacing--sm;
+  background-color: $gray--300;
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  list-style: none;
+  padding: 10px;
+  padding-top: 30px;
+  padding-left: 0;
+  margin-top: -30px;
+  border-radius: 24px;
+
+  &:hover {
+    background-color: $brighten--slightly;
+  }
+}
+
+.column__header-color-picker-dropdown > li > button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.column__header-color-picker-dropdown > ul > li {
+  padding: 0;
+}
+
+[theme="dark"] {
+  .column__header-color-picker-dropdown {
+    background-color: $navy--500;
+  }
+
+  //.column__header-color-picker-dropdown > button {
+  //  //background-color: $navy--500;
+  //  background-color: deeppink;
+  //}
+}
+
+.column__header-color-option {
+  width: 20px;
+  height: 20px;
+  border-radius: 100px;
+}
+
+.planning-pink {
+  background: #ff3387;
+}
+
+.planning-pink_selected {
+  background: #ff3387;
+  border: 3px solid #ff99c3;
+}
+
+.planning-pink:hover {
+  border: 3px solid #ffcce1;
+}
+
+.backlog-blue {
+  background: #3379ff;
+}
+
+.backlog-blue_selected {
+  background: #3379ff;
+  border: 3px solid #99bcff;
+}
+
+.backlog-blue:hover {
+  border: 3px solid #ccddff;
+}
+
+.poker-purple {
+  background: #d44fff;
+}
+
+.poker-purple_selected {
+  background: #d44fff;
+  border: 3px solid #e9a7ff;
+}
+
+.poker-purple:hover {
+  border: 3px solid #f4d3ff;
+}
+
+.value-violet {
+  background: #7d33f8;
+}
+
+.value-violet_selected {
+  background: #7d33f8;
+  border: 3px solid #be99fb;
+}
+
+.value-violet:hover {
+  border: 3px solid #dfccfd;
+}
+
+.goal-green {
+  background: #49dd98;
+}
+
+.goal-green_selected {
+  background: #49dd98;
+  border: 3px solid #a4eecb;
+}
+
+.goal-green:hover {
+  border: 3px solid #d1f6e5;
+}
+
+.yielding-yellow {
+  background: #fff733;
+}
+
+.yielding-yellow_selected {
+  background: #fff733;
+  border: 3px solid #fffb99;
+}
+
+.yielding-yellow:hover {
+  border: 3px solid #fffdcc;
+}
+
+.online-orange {
+  background: #ffb933;
+}
+
+.online-orange_selected {
+  background: #ffb933;
+  border: 3px solid #ffdc99;
+}
+
+.online-orange:hover {
+  border: 3px solid #ffeecc;
+}

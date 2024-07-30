@@ -1,13 +1,12 @@
 import {Dispatch, FC, SetStateAction, useState} from "react";
 import {Actions} from "store/action";
 import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
-// import {Color, getColorClassName, getColorForIndex} from "constants/colors";
 import {Color, getColorForIndex} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
+import "./ColorPicker.scss";
 import {useAppSelector} from "store";
-// import classNames from "classnames";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
@@ -56,14 +55,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
           </button>
         </li>
         <li style={{display: "block"}}>
-          <button
-            aria-label="Color Picker"
-            title={t("Column.color")}
-            // className={classNames(getColorClassName("planning-pink"), "column__color-button")}
-            // onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
-            // title={t("Column.settings")} className="column__header-edit-button"
-            onClick={() => setOpenedColorPicker((o) => !o)}
-          >
+          <button aria-label="Color Picker" title={t("Column.color")} onClick={() => setOpenedColorPicker((o) => !o)}>
             <span className={`column__header-color-option ${color}_selected`} />
           </button>
           {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} />}

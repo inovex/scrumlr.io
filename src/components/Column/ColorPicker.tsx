@@ -1,12 +1,9 @@
 import React from "react";
-// import {types} from "sass";
-// import Color = types.Color;
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
 import {Color, getColorClassName} from "../../constants/colors";
 import {Actions} from "../../store/action";
 
-// Definieren Sie die Schnittstelle für die Props der Komponente
 export interface ColorPickerProps {
   id: string;
   name: string;
@@ -16,7 +13,6 @@ export interface ColorPickerProps {
   onClose?: () => void;
 }
 
-// Definieren Sie die Komponente
 export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color, onClose}) => {
   const dispatch = useDispatch();
 
@@ -27,12 +23,10 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
           <button
             aria-label="Planning Pink"
             title="Planning Pink"
-            // className={classNames(getColorClassName("planning-pink"), "column__color-button")}
             onClick={() => {
               onClose?.();
               dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}));
             }}
-            // title={t("Column.settings")} className="column__header-edit-button"
           >
             <div className="column__header-color-option planning-pink" />
           </button>
