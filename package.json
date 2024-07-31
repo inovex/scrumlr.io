@@ -87,7 +87,7 @@
     "eslint-plugin-react-hooks": "4.6.2",
     "hash-files": "^1.1.1",
     "husky": "^9.1.4",
-    "i18next-fs-backend": "^2.3.1",
+    "i18next-fs-backend": "^2.3.2",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
     "react-dnd-test-backend": "^15.1.2",
