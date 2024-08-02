@@ -35,14 +35,28 @@ export const BoardAPI = {
       throw new Error(`unable to create board: ${error}`);
     }
   },
-  //
-  // importBoard: async (data: string) =>{
-  //   try {
-  //     const response = await fetch(`${SERVER_HTTP_URL}/boards`), {
-  //
-  //     }
-  //   }
-  // }
+  importBoard: async (boardJson: string) => {
+    console.log(boardJson);
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/import`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: boardJson,
+      });
+
+      if (response.status === 201) {
+        const body = await response.json();
+        return body.id;
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to import board: ${error}`);
+    }
+  },
 
   /**
    * Edits the board with the specified parameters.

@@ -1,8 +1,8 @@
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
-import {DragEvent, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
-import {AccessPolicy, Board} from "types/board";
+import {AccessPolicy} from "types/board";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {TextInputLabel} from "components/TextInputLabel";
@@ -13,8 +13,8 @@ import {Column} from "types/column";
 import {Note} from "types/note";
 import {Participant} from "types/participant";
 import {Voting} from "types/voting";
+import {PassphraseModal} from "components/PassphraseDialog/PassphraseModal/PassphraseModal";
 import {columnTemplates} from "./columnTemplates";
-import {PassphraseModal} from "../../components/PassphraseDialog/PassphraseModal/PassphraseModal";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
@@ -26,53 +26,113 @@ export const NewBoard = () => {
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
   const [importFile, setImportFileConfiguration] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [fileContent, setFileContent] = useState<string>();
-  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
+  const [completeBoard, setImportBoard] = useState<BoardContent>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  type ImportBoardRequest = {
+    name: string;
+    description?: string;
+    accessPolicy: string;
+    passphrase?: string;
   };
 
-  type CompleteBoard = {
-    board: Board;
+  type BoardContent = {
+    board: ImportBoardRequest;
     columns: Column[];
     notes: Note[];
     participants: Participant;
     votings: Voting;
   };
 
-  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
+  useEffect(() => {
+    const handleEscKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setShowPasswordModal(false);
+        setPassphrase("");
+      }
+    };
+
+    document.addEventListener("keydown", handleEscKey);
+    return () => {
+      document.removeEventListener("keydown", handleEscKey);
+    };
+  }, []);
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    if (!event.dataTransfer) return;
+  };
 
-    // Fetch the files
-    const droppedFile = event.dataTransfer.files[0];
+  const handleFileEvent = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>, inputRef: React.RefObject<HTMLInputElement>) => {
+    console.log(showPasswordModal);
+    let file: File | null = null;
 
-    // Use FileReader to read file content
+    if ("dataTransfer" in event) {
+      event.preventDefault();
+      file = event.dataTransfer?.files?.[0] || null;
+    } else if ("target" in event) {
+      file = event.target.files?.[0] || null;
+    }
+
+    if (!file) return;
+
     const reader = new FileReader();
     reader.onload = (e) => {
-      // The file's text will be available in e.target.result
       const content = e.target?.result as string;
-      setFileContent(content);
+
+      try {
+        const data = JSON.parse(content) as BoardContent;
+        const board: BoardContent = {
+          board: {
+            name: data.board.name,
+            description: data.board.description,
+            accessPolicy: data.board.accessPolicy,
+          },
+          columns: data.columns,
+          notes: data.notes,
+          participants: data.participants,
+          votings: data.votings,
+        };
+        setImportBoard(board);
+        if (board.board.accessPolicy === "BY_PASSPHRASE") {
+          setShowPasswordModal(true);
+          setAccessPolicy(1);
+        }
+      } catch (error) {
+        // console.error("Error parsing JSON:", error);
+      } finally {
+        if (inputRef.current) {
+          inputRef.current.value = "";
+        }
+      }
     };
-    reader.readAsText(droppedFile); // You can use other methods like readAsDataURL, readAsArrayBuffer, etc., based on your needs
-    if (!fileContent) return;
-    const obj = JSON.parse(fileContent) as CompleteBoard;
-    console.log(obj);
-    if (obj.board.accessPolicy === "BY_PASSPHRASE") {
-      console.log("trest");
-      setShowPasswordModal(true);
-    }
+    reader.readAsText(file);
   };
 
-  // const handlePasswordSubmit = (password: string) => {
-  //   setPassphrase(password);
-  //   onCreateBoard(); // Continue the method after password is set
-  // };
+  const onImportBoard = async () => {
+    if (completeBoard && accessPolicy === AccessPolicy.BY_PASSPHRASE && passphrase) {
+      completeBoard.board.passphrase = passphrase;
+    }
 
-  async function onCreateBoard() {
+    const boardId = await API.importBoard(JSON.stringify(completeBoard));
+    navigate(`/board/${boardId}`);
+  };
+
+  const handlePasswordSubmit = (password: string, newAccessPolicy: AccessPolicy) => {
+    if (newAccessPolicy !== accessPolicy) {
+      if (completeBoard) {
+        completeBoard.board.accessPolicy = AccessPolicy[newAccessPolicy];
+      }
+    }
+
+    setPassphrase(password);
+    setShowPasswordModal(false); // Close the modal
+    onImportBoard(); // Continue the method after password is set
+  };
+
+  const onCreateBoard = async () => {
     let additionalAccessPolicyOptions = {};
     if (accessPolicy === AccessPolicy.BY_PASSPHRASE && Boolean(passphrase)) {
       additionalAccessPolicyOptions = {
@@ -91,7 +151,7 @@ export const NewBoard = () => {
       );
       navigate(`/board/${boardId}`);
     }
-  }
+  };
 
   const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
 
@@ -128,8 +188,18 @@ export const NewBoard = () => {
                   </label>
                 ))}
                 <label className="new-board__mode">
-                  <input className="new-board__mode-input" type="radio" name="mode" onClick={() => setImportFileConfiguration(true)} />
-                  <div className="new-board__mode-label" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+                  <input
+                    className="new-board__mode-input"
+                    type="file"
+                    name="mode"
+                    ref={fileInputRef}
+                    onClick={() => {
+                      setImportFileConfiguration(true);
+                      setColumnTemplate(undefined);
+                    }}
+                    onChange={(event) => handleFileEvent(event, fileInputRef)}
+                  />
+                  <div className="new-board__mode-label" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={(event) => handleFileEvent(event, fileInputRef)}>
                     <div>
                       <div className="new-board__mode-name">{t("NewBoard.importBoard")}</div>
                       <div className="new-board__mode-description">{t("NewBoard.uploadFile")}</div>
@@ -175,8 +245,7 @@ export const NewBoard = () => {
           </Button>
         )}
       </div>
-      {/* {showPasswordModal && ( */}
-      <PassphraseModal onPassphraseChange={setPassphrase} passphrase={passphrase} />
+      {showPasswordModal && <PassphraseModal onPassphraseChange={setPassphrase} passphrase={passphrase} onSubmit={handlePasswordSubmit} />}
     </div>
   );
 };

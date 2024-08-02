@@ -7,6 +7,12 @@
   height: 100%;
 }
 
+.password-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .password-modal__container {
   padding: $spacing--lg;
   background: #ffffff;
@@ -22,4 +28,15 @@
   max-height: 90vh;
   display: flex;
   flex-direction: column;
+}
+
+.import-board__action {
+  position: relative;
+}
+.password-modal__close {
+  width: $icon--large;
+}
+
+.password-modal__header span {
+  margin: 0;
 }
