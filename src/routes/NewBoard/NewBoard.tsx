@@ -1,6 +1,6 @@
 import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "types/board";
 import {useTranslation} from "react-i18next";
@@ -43,19 +43,18 @@ export const NewBoard = () => {
     votings: Voting;
   };
 
-  useEffect(() => {
-    const handleEscKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setShowPasswordModal(false);
-        setPassphrase("");
-      }
-    };
-
-    document.addEventListener("keydown", handleEscKey);
-    return () => {
-      document.removeEventListener("keydown", handleEscKey);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const handleEscKey = (event: KeyboardEvent) => {
+  //     if (event.key === "Escape") {
+  //       closeModal()
+  //     }
+  //   };
+  //
+  //   document.addEventListener("keydown", handleEscKey);
+  //   return () => {
+  //     document.removeEventListener("keydown", handleEscKey);
+  //   };
+  // }, []);
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -65,8 +64,12 @@ export const NewBoard = () => {
     event.preventDefault();
   };
 
+  const closeModal = () => {
+    setShowPasswordModal(false);
+    setPassphrase("");
+  };
+
   const handleFileEvent = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>, inputRef: React.RefObject<HTMLInputElement>) => {
-    console.log(showPasswordModal);
     let file: File | null = null;
 
     if ("dataTransfer" in event) {
@@ -245,7 +248,7 @@ export const NewBoard = () => {
           </Button>
         )}
       </div>
-      {showPasswordModal && <PassphraseModal onPassphraseChange={setPassphrase} passphrase={passphrase} onSubmit={handlePasswordSubmit} />}
+      {showPasswordModal && <PassphraseModal onPassphraseChange={setPassphrase} passphrase={passphrase} onSubmit={handlePasswordSubmit} onClose={closeModal} />}
     </div>
   );
 };

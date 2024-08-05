@@ -37,6 +37,10 @@
   width: $icon--large;
 }
 
+.password-modal__close:hover {
+  cursor: pointer;
+}
+
 .password-modal__header span {
   margin: 0;
 }

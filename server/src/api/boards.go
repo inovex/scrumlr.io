@@ -522,6 +522,6 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	render.Status(r, http.StatusOK)
-	render.Respond(w, r, nil)
+	render.Status(r, http.StatusCreated)
+	render.Respond(w, r, b)
 }

@@ -170,6 +170,12 @@
     "inputPlaceholder": "Password",
     "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
   },
+  "PassphraseModal": {
+    "title": "Assign new password",
+    "continuePublic": "Ohne Passwort fortfahren",
+    "newPassword": "Open Board",
+    "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time."
+  },
   "Timer": {
     "endTimer": "End timer",
     "addOneMinute": "Increase timer by one minute",

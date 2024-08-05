@@ -170,6 +170,12 @@
     "inputPlaceholder": "Passwort",
     "incorrectPassphrase": "Ups, das war das falsche Passwort. Versuch's nochmal!"
   },
+  "PassphraseModal": {
+    "title": "Neues Passwort vergeben",
+    "continuePublic": "Ohne Passwort fortfahren",
+    "newPassword": "Board Öffnen",
+    "info": "Dieses Board war einst passwortgeschützt. Gib ein neues Passwort ein, um den Schutz fortzusetzen, oder fahre ohne Passwort fort. Du kannst alle Einstellungen jederzeit ändern."
+  },
   "Timer": {
     "endTimer": "Timer beenden",
     "addOneMinute": "Timer um eine Minute erhöhen",
