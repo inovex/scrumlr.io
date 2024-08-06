@@ -130,13 +130,13 @@ func testCreateBoardTemplateAlsoCreatesColumnTemplates(t *testing.T) {
 	assert.Equal(t, "A", columns[0].Name)
 	assert.Equal(t, "A description", columns[0].Description)
 	assert.True(t, columns[0].Visible)
-	assert.Equal(t, 0, columns[0].Index)
+	assert.Equal(t, indexOne, columns[0].Index)
 
 	// Col Two
 	assert.Equal(t, "B", columns[1].Name)
 	assert.Equal(t, "B description", columns[1].Description)
 	assert.False(t, columns[1].Visible)
-	assert.Equal(t, 1, columns[1].Index)
+	assert.Equal(t, indexTwo, columns[1].Index)
 }
 
 func testCreateBoardTemplateWithName(t *testing.T) {
