@@ -81,10 +81,9 @@ func testCreateColumnTemplateOnFirstIndex(t *testing.T) {
 		Index:         &index,
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, 0, column.Index)
+	assert.Equal(t, index, column.Index)
 
 	verifyColumnTemplateOrder(t, column.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID)
-
 	columnTemplateInsertedFirst = &column
 }
 
@@ -102,16 +101,16 @@ func testCreateColumnTemplateOnLastIndex(t *testing.T) {
 	})
 
 	assert.Nil(t, err)
-	assert.Equal(t, 4, column.Index)
+	assert.Equal(t, index, column.Index)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, column.ID)
-
 	columnTemplateInsertedSecond = &column
 }
 
 func testCreateColumnTemplateOnNegativeIndex(t *testing.T) {
 	visible := true
 	index := -99
+	expectedIndex := 0
 
 	column, err := testDb.CreateColumnTemplate(ColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
@@ -121,16 +120,16 @@ func testCreateColumnTemplateOnNegativeIndex(t *testing.T) {
 		Index:         &index,
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, 0, column.Index)
+	assert.Equal(t, expectedIndex, column.Index)
 
 	verifyColumnTemplateOrder(t, column.ID, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID)
-
 	columnTemplateInsertedThird = &column
 }
 
 func testCreateColumnTemplateWithExceptionallyHighIndex(t *testing.T) {
 	visible := true
 	index := 99
+	expectedIndex := 6
 
 	column, err := testDb.CreateColumnTemplate(ColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
@@ -140,10 +139,9 @@ func testCreateColumnTemplateWithExceptionallyHighIndex(t *testing.T) {
 		Index:         &index,
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, 6, column.Index)
+	assert.Equal(t, expectedIndex, column.Index)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedThird.ID, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID, column.ID)
-
 	columnTemplateInsertedFourth = &column
 }
 
@@ -159,10 +157,9 @@ func testCreateColumnTemplateOnSecondIndex(t *testing.T) {
 		Index:         &index,
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, 1, column.Index)
+	assert.Equal(t, index, column.Index)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedThird.ID, column.ID, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID, columnTemplateInsertedFourth.ID)
-
 	columnTemplateInsertedFifth = &column
 }
 
