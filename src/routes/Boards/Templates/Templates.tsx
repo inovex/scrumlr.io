@@ -9,6 +9,7 @@ import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
+import {EXAMPLE_CUSTOM_TEMPLATE, RECOMMENDED_TEMPLATES} from "constants/templates";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -51,15 +52,21 @@ export const Templates = () => {
           <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
           <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan just hanging there with a coffee" />
         </div>
-        <section className="templates__container templates__container--recommended">{renderContainerHeader("left", t("Templates.recommendedTemplates"))}</section>
+        <section className="templates__container templates__container--recommended">
+          {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
+          <div className="templates__card-container">
+            {RECOMMENDED_TEMPLATES.map((template) => (
+              <TemplateCard template={template} />
+            ))}
+          </div>
+        </section>
         {!isAnonymous && (
           <section className="templates__container templates__container--saved">
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard />
-              <TemplateCard />
-              <TemplateCard />
-              <TemplateCard />
+              <TemplateCard template={EXAMPLE_CUSTOM_TEMPLATE} />
+              <TemplateCard template={EXAMPLE_CUSTOM_TEMPLATE} />
             </div>
           </section>
         )}

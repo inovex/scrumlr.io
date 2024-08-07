@@ -9,15 +9,17 @@ import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
+import {BoardTemplate} from "constants/templates";
 import "./TemplateCard.scss";
 
-export const TemplateCard = () => {
+type TemplateCardProps = {
+  template: BoardTemplate;
+};
+
+export const TemplateCard = ({template}: TemplateCardProps) => {
   const {t} = useTranslation();
 
-  // will be replaced by actual data later
-  const accessPolicy = AccessPolicy.PUBLIC as AccessPolicy;
-
-  const renderAccessPolicy = () => {
+  const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
     switch (accessPolicy) {
       case AccessPolicy.BY_PASSPHRASE:
         return <KeyIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-passphrase" />;
@@ -30,19 +32,24 @@ export const TemplateCard = () => {
 
   return (
     <div className="template-card">
-      <FavouriteButton className="template-card__favourite" active={false} onClick={() => {}} />
+      <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => {}} />
       <div className="template-card__head">
-        <div className="template-card__title">Title</div>
-        <div className="template-card__access-policy">{renderAccessPolicy()}</div>
+        <div className="template-card__title">{template.name}</div>
+        <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
       </div>
       <MenuIcon className={classNames("template-card__icon", "template-card__icon--menu")} />
       <TextareaAutosize className="template-card__description" disabled onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-        Lorem ipsum dolor sit amet, conse dolo sadipscing elitr vero eos et aquiteres.
+        {template.description}
       </TextareaAutosize>
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
-        <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: 3})}</div>
-        <div className="template-card__columns-subtitle">Ideas, Problems & Solutions</div>
+        <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
+        <div className="template-card__columns-subtitle">
+          {template.columns
+            .sort((a, b) => a.index - b.index)
+            .map((c) => c.name)
+            .join(", ")}
+        </div>
       </div>
       <Button className="template-card__start-button" small icon={<NextIcon />}>
         {t("Templates.TemplateCard.start")}
