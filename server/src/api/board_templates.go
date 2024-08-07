@@ -30,18 +30,8 @@ func (s *Server) createBoardTemplate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	c, err := s.boardTemplates.ListTemplateColumns(r.Context(), b.ID)
-	if err != nil {
-		common.Throw(w, r, common.BadRequestError(err))
-		return
-	}
-
-	// finally append the columns
-	b.ColumnTemplates = c
-
 	render.Status(r, http.StatusCreated)
 	render.Respond(w, r, b)
-
 }
 
 func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +50,6 @@ func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, template)
-
 }
 
 func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
