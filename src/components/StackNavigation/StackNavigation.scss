@@ -21,12 +21,12 @@
   justify-content: center;
   align-items: center;
   opacity: 0.5;
-  background: $color-white;
+  background: $gray--000;
   border: 3px solid transparent;
   border-radius: 100%;
   outline: none;
   box-shadow: $box-shadow--light;
-  color: $color-black;
+  color: $navy--900;
   padding: 0;
   margin: 0;
 
@@ -46,8 +46,8 @@
     }
 
     &:focus-visible {
-      background: var(--accent-color);
-      color: $color-white;
+      background: var(--accent-color--light);
+      color: $gray--000;
     }
 
     &:active {
@@ -58,16 +58,16 @@
 
 [theme="dark"] {
   .stack-view__navigation-button {
-    background: $menu-icon-background-color--dark;
-    color: $color-white;
+    background: $navy--500;
+    color: $gray--000;
 
     &:enabled:focus-visible {
       background: var(--accent-color--dark);
-      color: $color-black;
+      color: $navy--900;
     }
 
     &:disabled {
-      color: $color-dark-mode--disabled;
+      color: $navy--700;
     }
   }
 }

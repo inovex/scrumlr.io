@@ -33,13 +33,13 @@ $name-max-length: 20em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: $color-black;
-  background-color: $hover-background-light;
+  color: $navy--900;
+  background-color: $gray--300;
   border-radius: $rounded--large;
 
   &--self {
-    color: $color-white;
-    background-color: $color-board-reaction-name-self--light;
+    color: $gray--000;
+    background-color: $blue--500;
   }
 }
 
@@ -56,11 +56,11 @@ $name-max-length: 20em;
 
 [theme="dark"] {
   .board-reaction__name-container {
-    color: $color-white;
-    background-color: $color-board-reaction-name--dark;
+    color: $gray--000;
+    background-color: $navy--200;
 
     &--self {
-      background-color: $color-board-reaction-name-self--dark;
+      background-color: $blue--300;
     }
   }
 }

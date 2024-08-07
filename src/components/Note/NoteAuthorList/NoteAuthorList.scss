@@ -30,7 +30,7 @@ $max-name-length: 112px;
 }
 
 .note-author__container--self {
-  background: var(--accent-color--desaturated-light);
+  background: var(--accent-color--100);
   padding-right: $spacing--base;
   width: max-content;
 }
@@ -76,8 +76,8 @@ $max-name-length: 112px;
   width: $icon--medium;
   height: $icon--medium;
   font-size: $text--xs;
-  color: $color-white;
-  background-color: $menu-icon-background-color--dark;
+  color: $gray--000;
+  background-color: $navy--500;
 
   // add 1px because it's a little bit off in comparison to .note__author margin
   margin: 0 calc($name-gap + 1px) 0 $overlap-margin;
@@ -85,16 +85,16 @@ $max-name-length: 112px;
   justify-content: center;
   align-items: center;
 
-  border: 1.5px solid $color-white-one;
+  border: 1.5px solid $gray--100;
   border-radius: $rounded--full;
 }
 
 .note-author-rest--self {
-  border-color: $menu-icon-background-color--dark;
+  border-color: $navy--500;
 }
 
 .note__author-name {
-  color: $color-dark-gray;
+  color: $gray--800;
   font-size: $text--xs;
   letter-spacing: $letter-spacing--small;
   white-space: nowrap;
@@ -107,16 +107,16 @@ $max-name-length: 112px;
 }
 
 .note__author-name--self {
-  color: $color-black;
+  color: $navy--900;
 }
 
 [theme="dark"] {
   .note-author__container--self {
-    background: var(--accent-color--desaturated-dark);
+    background: rgba(var(--accent-color--dark-rgb), 0.6);
   }
 
   .note__author-name {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .note__author-name--self {
@@ -124,12 +124,12 @@ $max-name-length: 112px;
   }
 
   .note-author-rest {
-    background-color: $color-icon-light-blue;
-    color: $color-dark-two;
-    border-color: $color-dark-one;
+    background-color: $blue--200;
+    color: $navy--600;
+    border-color: $navy--600;
   }
 
   .note-author-rest--self {
-    border-color: $color-icon-light-blue;
+    border-color: $blue--200;
   }
 }

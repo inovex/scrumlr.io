@@ -9,19 +9,23 @@ import {useLocation} from "react-router";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {Refresh} from "components/Icon";
-import "./LoginBoard.scss";
 import {TextInputAction} from "components/TextInputAction";
 import {Button} from "components/Button";
 import {TextInput} from "components/TextInput";
 import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
+import {useAppSelector} from "store";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
+import "./LoginBoard.scss";
 
 interface State {
   from: {pathname: string};
 }
 
 export const LoginBoard = () => {
+  const anonymousLoginDisabled = useAppSelector((state) => state.view.anonymousLoginDisabled);
+  const providersAvailable = useAppSelector((state) => state.view.enabledAuthProvider).length > 0;
+
   const {t} = useTranslation();
   const location = useLocation();
 
@@ -54,7 +58,7 @@ export const LoginBoard = () => {
         <div className="login-board__form-wrapper">
           <div className="login-board__form">
             <a href="/" aria-label="Homepage">
-              <ScrumlrLogo className="login-board__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+              <ScrumlrLogo className="login-board__logo" />
             </a>
 
             <h1>{t("LoginBoard.title")}</h1>
@@ -105,9 +109,12 @@ export const LoginBoard = () => {
             </fieldset>
             {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
 
-            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin}>
+            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={anonymousLoginDisabled}>
               {t("LoginBoard.login")}
             </Button>
+            {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
+            {/* admin messed something up */}
+            {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}
           </div>
         </div>
 

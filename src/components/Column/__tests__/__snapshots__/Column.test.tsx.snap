@@ -58,8 +58,13 @@ exports[`Column should have correct style show column with correct style 1`] = `
           style="overflow-x: hidden; word-wrap: break-word; overflow-y: hidden;"
         />
         <div
-          class="note-input__emoji-suggestions"
-        />
+          class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"
+          style="--top-distance: 0px;"
+        >
+          <ul
+            class="emoji-suggestions__list"
+          />
+        </div>
         <button
           aria-label="Create note"
           class="note-input__add-button"
@@ -591,9 +596,20 @@ exports[`Column should have correct style show column with correct style 1`] = `
                 </div>
               </header>
               <main
-                class="note__text"
+                class="note__container"
               >
-                Lorem Ipsum
+                <div
+                  class="note__text"
+                >
+                  Lorem Ipsum
+                </div>
+                <div
+                  class="note__marker-edited"
+                >
+                  (
+                  edited
+                  )
+                </div>
               </main>
               <footer
                 class="note__footer"
@@ -620,7 +636,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   >
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-1-like52"
+                      id="reaction-test-notes-id-1-like79"
                     >
                       <div
                         class="note-reaction-chip__reaction"
@@ -635,7 +651,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     </button>
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-1-heart53"
+                      id="reaction-test-notes-id-1-heart80"
                     >
                       <div
                         class="note-reaction-chip__reaction"
@@ -1140,9 +1156,13 @@ exports[`Column should have correct style show column with correct style 1`] = `
                 </div>
               </header>
               <main
-                class="note__text"
+                class="note__container"
               >
-                Lorem Ipsum
+                <div
+                  class="note__text"
+                >
+                  Lorem Ipsum
+                </div>
               </main>
               <footer
                 class="note__footer"
@@ -1169,7 +1189,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   >
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-2-like54"
+                      id="reaction-test-notes-id-2-like81"
                     >
                       <div
                         class="note-reaction-chip__reaction"

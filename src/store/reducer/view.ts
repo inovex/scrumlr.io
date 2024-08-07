@@ -1,17 +1,19 @@
-import {ViewState} from "types/view";
+import {Theme, ViewState} from "types/view";
 import {Action, ReduxAction} from "store/action";
 import {getFromStorage} from "utils/storage";
-import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY} from "constants/storage";
+import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
 
 const INITIAL_VIEW_STATE: ViewState = {
   moderating: false,
   serverTimeOffset: 0,
+  anonymousLoginDisabled: false,
   enabledAuthProvider: [],
   feedbackEnabled: false,
   hotkeysAreActive: true,
   noteFocused: false,
   hotkeyNotificationsEnabled: typeof window !== "undefined" && getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
   showBoardReactions: typeof window !== "undefined" && getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
+  theme: ((typeof window !== "undefined" && getFromStorage(THEME_STORAGE_KEY)) as Theme) ?? "auto",
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
@@ -38,9 +40,17 @@ export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: Redux
       };
     }
 
+    case Action.SetTheme: {
+      return {
+        ...state,
+        theme: action.theme,
+      };
+    }
+
     case Action.SetServerInfo: {
       return {
         ...state,
+        anonymousLoginDisabled: action.anonymousLoginDisabled,
         enabledAuthProvider: action.enabledAuthProvider,
         serverTimeOffset: new Date().getTime() - action.serverTime,
         feedbackEnabled: action.feedbackEnabled,

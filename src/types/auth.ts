@@ -1,4 +1,4 @@
-import {AvataaarProps} from "components/Avatar";
+import {AvataaarProps} from "types/avatar";
 
 export const ACCOUNT_TYPE_ANONYMOUS = "ANONYMOUS";
 

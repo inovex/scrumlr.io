@@ -1,7 +1,10 @@
+import {Theme} from "types/view";
+
 export const ViewAction = {
   InitApplication: "scrumlr.io/initApplication" as const,
   SetModerating: "scrumlr.io/setModerating" as const,
   SetLanguage: "scrumlr.io/setLanguage" as const,
+  SetTheme: "scrumlr.io/setTheme" as const,
   SetServerInfo: "scrumlr.io/setServerInfo" as const,
   SetRoute: "scrumlr.io/setRoute" as const,
   SetHotkeyState: "scrumlr.io/setHotkeyState" as const,
@@ -25,8 +28,14 @@ export const ViewActionFactory = {
     language,
   }),
 
-  setServerInfo: (enabledAuthProvider: string[], serverTime: number, feedbackEnabled: boolean) => ({
+  setTheme: (theme: Theme) => ({
+    type: ViewAction.SetTheme,
+    theme,
+  }),
+
+  setServerInfo: (anonymousLoginDisabled: boolean, enabledAuthProvider: string[], serverTime: number, feedbackEnabled: boolean) => ({
     type: ViewAction.SetServerInfo,
+    anonymousLoginDisabled,
     enabledAuthProvider,
     serverTime,
     feedbackEnabled,
@@ -60,6 +69,7 @@ export type ViewReduxAction =
   | ReturnType<typeof ViewActionFactory.initApplication>
   | ReturnType<typeof ViewActionFactory.setModerating>
   | ReturnType<typeof ViewActionFactory.setLanguage>
+  | ReturnType<typeof ViewActionFactory.setTheme>
   | ReturnType<typeof ViewActionFactory.setRoute>
   | ReturnType<typeof ViewActionFactory.setServerInfo>
   | ReturnType<typeof ViewActionFactory.setHotkeyState>

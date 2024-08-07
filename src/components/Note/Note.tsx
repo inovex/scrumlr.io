@@ -34,6 +34,7 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const boardIsLocked = useAppSelector((state) => state.board.data!.isLocked);
   const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
   const me = useAppSelector((state) => state.participants?.self);
@@ -92,7 +93,6 @@ export const Note = (props: NoteProps) => {
   // TODO: replace with stack setting from state when implemented. thanks, love u <3
   // de-activated in css for now
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
-
   if (!note) return null;
 
   return (
@@ -101,7 +101,7 @@ export const Note = (props: NoteProps) => {
       id={props.noteId}
       columnId={note.position.column}
       className={classNames("note__root", props.colorClassName)}
-      disabled={!(isModerator || allowStacking)}
+      disabled={!isModerator && (!allowStacking || boardIsLocked)}
     >
       <div tabIndex={0} role="button" className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
@@ -120,10 +120,14 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
-            <NoteTextContent text={note.text} truncate />
+          <main className={classNames("note__container")}>
+            <div className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
+              <NoteTextContent text={note.text} truncate />
+            </div>
+            {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}
           </main>
         )}
+
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
           <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
         </footer>
