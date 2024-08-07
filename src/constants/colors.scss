@@ -206,7 +206,8 @@ $base-colors: (
     300: $gray--300,
     200: $gray--200,
     100: $gray--100,
-    "000": $gray--000, // avoid trailing zeros normalization
+    "000": $gray--000,
+    // avoid trailing zeros normalization
   ),
 );
 
