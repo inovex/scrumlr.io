@@ -2,15 +2,18 @@
 
 .column__header-color-picker-dropdown {
   background-color: $gray--300;
-  box-shadow:
-    0 4px 6px -1px rgb(0 0 0 / 0.1),
-    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  //box-shadow:
+  //  0 4px 6px -1px rgb(0 0 0 / 0.1),
+  //  0 2px 4px -2px rgb(0 0 0 / 0.1);
   list-style: none;
-  padding: 10px;
+  //padding: 10px;
   padding-top: 30px;
   padding-left: 0;
   margin-top: -30px;
   border-radius: 24px;
+  width: fit-content;
+  //position: inherit;
+  //left: 30px;
 
   &:hover {
     background-color: $brighten--slightly;
@@ -21,6 +24,13 @@
   cursor: pointer;
   border: none;
   background: none;
+  padding: 0;
+  width: 32px;
+}
+
+.column__header-color-picker-dropdown > li {
+  display: flex;
+  align-content: center;
 }
 
 .column__header-color-picker-dropdown > ul > li {
@@ -31,16 +41,21 @@
   .column__header-color-picker-dropdown {
     background-color: $navy--500;
   }
+
+  .planning-pink {
+    border: $navy--500;
+  }
 }
 
 .column__header-color-option {
-  width: 20px;
-  height: 20px;
+  width: 23px;
+  height: 23px;
   border-radius: 100px;
 }
 
 .planning-pink {
   background: #ff3387;
+  border: 3px solid $gray--300;
 }
 
 .planning-pink_selected {
@@ -54,6 +69,7 @@
 
 .backlog-blue {
   background: #3379ff;
+  border: 3px solid $gray--300;
 }
 
 .backlog-blue_selected {
@@ -62,11 +78,16 @@
 }
 
 .backlog-blue:hover {
+  border: #ccddff;
+}
+
+.backlog-blue:hover {
   border: 3px solid #ccddff;
 }
 
 .poker-purple {
   background: #d44fff;
+  border: 3px solid $gray--300;
 }
 
 .poker-purple_selected {
@@ -80,6 +101,7 @@
 
 .value-violet {
   background: #7d33f8;
+  border: 3px solid $gray--300;
 }
 
 .value-violet_selected {
@@ -93,6 +115,7 @@
 
 .goal-green {
   background: #49dd98;
+  border: 3px solid $gray--300;
 }
 
 .goal-green_selected {
@@ -106,6 +129,7 @@
 
 .yielding-yellow {
   background: #fff733;
+  border: 3px solid $gray--300;
 }
 
 .yielding-yellow_selected {
@@ -119,6 +143,7 @@
 
 .online-orange {
   background: #ffb933;
+  border: 3px solid $gray--300;
 }
 
 .online-orange_selected {
