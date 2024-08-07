@@ -8,6 +8,7 @@ import "./ColumnSettings.scss";
 import "./ColorPicker.scss";
 import {useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
+import {Tooltip} from "react-tooltip";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 import {ColorPicker} from "./ColorPicker";
@@ -41,7 +42,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
 
   return (
     <div className="column__header-menu-dropdown" ref={columnSettingsRef}>
-      <ul>
+      <ul id="cwwwwwww">
         <li>
           <button
             onClick={() => {
@@ -54,11 +55,14 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             {/* {t("Column.deleteColumn")} */}
           </button>
         </li>
-        <li style={{display: "block"}}>
-          <button aria-label="Color Picker" title={t("Column.color")} onClick={() => setOpenedColorPicker((o) => !o)}>
+        <li style={{display: "block"}} id="cwwwwwww">
+          <button id="cwwwwwww" aria-label="Color Picker" title={t("Column.color")} onClick={() => setOpenedColorPicker((o) => !o)}>
             <span className={`column__header-color-option ${color}_selected`} />
           </button>
           {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} />}
+          <Tooltip className="column__tooltip" anchorSelect="cwwwwwww">
+            hi
+          </Tooltip>
         </li>
         <li>
           <button
@@ -118,6 +122,9 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             <Close className="column__header-edit-button-icon" />
           </button>
         </li>
+        <Tooltip className="column__tooltip" anchorSelect="cwwwwwww">
+          hihihi
+        </Tooltip>
       </ul>
     </div>
   );
