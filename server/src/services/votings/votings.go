@@ -31,7 +31,6 @@ type DB interface {
 	GetVotes(f filter.VoteFilter) ([]database.Vote, error)
 	AddVote(board, user, note uuid.UUID) (database.Vote, error)
 	RemoveVote(board, user, note uuid.UUID) error
-
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
 }
 
