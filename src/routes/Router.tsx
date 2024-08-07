@@ -1,6 +1,8 @@
-import {BrowserRouter, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Routes} from "react-router-dom";
 import {LoginBoard} from "routes/LoginBoard";
-import {NewBoard} from "routes/NewBoard";
+import {Boards} from "routes/Boards";
+import {Templates} from "routes/Boards/Templates";
+import {Sessions} from "routes/Boards/Sessions";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
@@ -28,14 +30,32 @@ const Router = () => (
       <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
       <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
       <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
+      <Route path="/new" element={<Navigate to="/boards" />} /> {/* legacy route */}
       <Route
-        path="/new"
+        path="/boards"
         element={
           <RequireAuthentication>
-            <NewBoard />
+            <Boards />
           </RequireAuthentication>
         }
-      />
+      >
+        <Route index element={<Navigate to="templates" />} />
+        <Route path="templates" element={<Templates />}>
+          {/* TODO extract settings routes no avoid repetition */}
+          <Route path="settings" element={<SettingsDialog />}>
+            <Route path="appearance" element={<Appearance />} />
+            <Route path="feedback" element={<Feedback />} />
+            <Route path="profile" element={<ProfileSettings />} />
+          </Route>
+        </Route>
+        <Route path="sessions" element={<Sessions />}>
+          <Route path="settings" element={<SettingsDialog />}>
+            <Route path="appearance" element={<Appearance />} />
+            <Route path="feedback" element={<Feedback />} />
+            <Route path="profile" element={<ProfileSettings />} />
+          </Route>
+        </Route>
+      </Route>
       <Route path="/login" element={<LoginBoard />} />
       <Route
         path="/board/:boardId/print"
