@@ -214,6 +214,7 @@
   transition: all 0.08s ease-out;
   flex: 0 0 24px;
   margin: auto calc(#{$spacing--base} - 2px) auto $spacing--base;
+  //transform: rotate(90deg);
 
   &:hover > svg,
   &:focus-visible > svg {
@@ -228,6 +229,7 @@
   height: 24px;
   width: 24px;
   transition: all 0.08s ease-out;
+  transform: rotate(90deg);
 }
 
 [theme="dark"] .column__header-edit-button-icon {
