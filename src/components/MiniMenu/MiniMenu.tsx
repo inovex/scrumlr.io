@@ -1,4 +1,5 @@
 import {ReactNode} from "react";
+import classNames from "classnames";
 import "./MiniMenu.scss";
 
 type MiniMenuItem = {
@@ -9,7 +10,8 @@ type MiniMenuItem = {
 };
 
 type MiniMenuProps = {
+  className?: string;
   items: MiniMenuItem[];
 };
 
-export const MiniMenu = (props: MiniMenuProps) => <div>Hello MiniMenu</div>;
+export const MiniMenu = (props: MiniMenuProps) => <div className={classNames(props.className, "mini-menu")}>Hello MiniMenu</div>;

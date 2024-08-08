@@ -7,7 +7,7 @@ $card-height: 220px;
   grid-template-rows: 36px auto 10px 46px;
   grid-template-columns: 36px $spacing--xxs 1fr auto 36px;
   grid-template-areas:
-    "fav-icon   .   head          head         menu-icon"
+    "fav-icon   .   head          head         menu"
     ".          .   description   description   ."
     ".          .   .             .             ."
     "col-icon   .   columns       start         start";
@@ -33,7 +33,6 @@ $card-height: 220px;
   color: $navy--900;
 
   &--menu {
-    grid-area: menu-icon;
     transform: rotate(90deg);
   }
 
@@ -69,6 +68,10 @@ $card-height: 220px;
 .template-card__access-policy-icon {
   width: 20px;
   height: 20px;
+}
+
+.template-card__menu {
+  grid-area: menu;
 }
 
 .template-card__description {

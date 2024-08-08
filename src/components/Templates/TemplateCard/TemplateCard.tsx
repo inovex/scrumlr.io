@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
+import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
 import {AccessPolicy} from "types/board";
@@ -10,6 +11,7 @@ import {ReactComponent as NextIcon} from "assets/icons/next.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {BoardTemplate} from "constants/templates";
+import {useState} from "react";
 import "./TemplateCard.scss";
 
 type TemplateCardProps = {
@@ -18,6 +20,8 @@ type TemplateCardProps = {
 
 export const TemplateCard = ({template}: TemplateCardProps) => {
   const {t} = useTranslation();
+
+  const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
     switch (accessPolicy) {
@@ -30,6 +34,13 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
     }
   };
 
+  const renderMenu = () =>
+    showMiniMenu ? (
+      <MiniMenu className="template-card__menu" items={[{label: "Close", icon: <ColumnsIcon />, onClick: () => setShowMiniMenu(false)}]} />
+    ) : (
+      <MenuIcon className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
+    );
+
   return (
     <div className="template-card">
       <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => {}} />
@@ -37,7 +48,7 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
         <div className="template-card__title">{template.name}</div>
         <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
       </div>
-      <MenuIcon className={classNames("template-card__icon", "template-card__icon--menu")} />
+      {renderMenu()}
       <TextareaAutosize className="template-card__description" disabled onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
         {template.description}
       </TextareaAutosize>
