@@ -17,9 +17,9 @@ type MiniMenuProps = {
 export const MiniMenu = (props: MiniMenuProps) => (
   <div className={classNames(props.className, "mini-menu")}>
     {props.items.map((item) => (
-      <div className="mini-menu__item" key={item.label} onClick={item?.onClick}>
+      <button className="mini-menu__item" key={item.label} onClick={item?.onClick}>
         {item.icon}
-      </div>
+      </button>
     ))}
   </div>
 );
