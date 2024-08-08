@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {Outlet} from "react-router-dom";
+import {Outlet, useOutletContext} from "react-router-dom";
 import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {useRef} from "react";
@@ -17,6 +17,9 @@ type Side = "left" | "right";
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
+
+  const searchBarInput: string = useOutletContext();
+
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
 
   const scrollToSide = (side: Side) => {
@@ -55,7 +58,7 @@ export const Templates = () => {
         <section className="templates__container templates__container--recommended">
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
-            {RECOMMENDED_TEMPLATES.map((template) => (
+            {RECOMMENDED_TEMPLATES.filter((template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase())).map((template) => (
               <TemplateCard template={template} />
             ))}
           </div>
