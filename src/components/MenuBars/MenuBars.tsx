@@ -1,5 +1,5 @@
 import {animated, useSpring} from "@react-spring/web";
-import {useEffect, useLayoutEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
@@ -13,6 +13,7 @@ import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
+import {useTimer} from "../../utils/hooks/useTimerLeft";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -72,7 +73,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   }, [location]);
 
   const {TOGGLE_TIMER_MENU, TOGGLE_VOTING_MENU, TOGGLE_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_BOARD_REACTION_MENU, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
-
   // State & Functions
   const state = useAppSelector(
     (rootState) => ({
@@ -81,6 +81,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
+      usedVotes: rootState.votes.filter((v) => v.voting === rootState.votings.open?.id).length,
+      possibleVotes: rootState.votings.open?.voteLimit,
+      timerEnd: rootState.board.data?.timerEnd,
     }),
     _.isEqual
   );
@@ -89,9 +92,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const isReady = state.currentUser.ready;
   const {raisedHand} = state.currentUser;
 
-  const toggleReadyState = () => {
+  const toggleReadyState = useCallback(() => {
     dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
-  };
+  }, [dispatch, isReady, state.currentUser.user.id]);
 
   const toggleRaiseHand = () => {
     dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
@@ -188,6 +191,59 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   useHotkeys(TOGGLE_TIMER_MENU, toggleTimerMenu, hotkeyOptionsAdmin, []);
   useHotkeys(TOGGLE_VOTING_MENU, toggleVotingMenu, hotkeyOptionsAdmin, []);
 
+  /**
+   * Logic for "Mark me as Done" tooltip.
+   * https://github.com/inovex/scrumlr.io/issues/4269
+   */
+  const {timerExpired} = useTimer(state.timerEnd);
+  const [isReadyTooltipClass, setIsReadyTooltipClass] = useState("");
+  /**
+   * Logic for when a) a timer initially expired b) available votes are used up
+   * and the "Mark me as Done" tooltip is not open.
+   * We do not include state.currentUser.ready in the dependency array because the tooltip opening
+   * should be only performed once and not every time users unmark themselves.
+   */
+  const USED_VOTES = state.usedVotes === state.possibleVotes;
+  const USER_NOT_READY = !state.currentUser.ready;
+  const TIMER_NOT_SET = state.timerEnd === undefined;
+  const TOGGLE_COUNT = useRef(0);
+
+  const WITHIN_30SEC_AFTER_TIMER_EXPIRED = state.timerEnd !== undefined && state.timerEnd.getTime() + 30000 > Date.now();
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (!USED_VOTES || !USER_NOT_READY) {
+      return undefined;
+    }
+    const handleTimeout = () => {
+      setIsReadyTooltipClass("tooltip-button--content-extended");
+      TOGGLE_COUNT.current += 1;
+    };
+    if (USED_VOTES && USER_NOT_READY && TIMER_NOT_SET && TOGGLE_COUNT.current === 0) {
+      timer = setTimeout(handleTimeout, 2000);
+    }
+    return () => clearTimeout(timer);
+  }, [TIMER_NOT_SET, USED_VOTES, USER_NOT_READY]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const handleTimeout = () => {
+      if (TOGGLE_COUNT.current === 0) {
+        setIsReadyTooltipClass("tooltip-button--content-extended");
+        TOGGLE_COUNT.current += 1;
+      }
+      setTimeout(toggleReadyState, 28000);
+    };
+    setIsReadyTooltipClass("");
+    if (!timerExpired && !USER_NOT_READY) {
+      setIsReadyTooltipClass("");
+    }
+    if (timerExpired && WITHIN_30SEC_AFTER_TIMER_EXPIRED && USER_NOT_READY) {
+      timer = setTimeout(handleTimeout, 2000);
+    }
+    return () => clearTimeout(timer);
+  }, [timerExpired, WITHIN_30SEC_AFTER_TIMER_EXPIRED, USER_NOT_READY, toggleReadyState, state.timerEnd]);
+
   return (
     <>
       {/* desktop view */}
@@ -198,10 +254,12 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
             <ul className="menu__items">
               <li>
                 <TooltipButton
+                  dataTestid="mark-as-done-button"
                   direction="right"
                   onClick={toggleReadyState}
                   label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
                   icon={MarkAsDone}
+                  className={isReadyTooltipClass}
                   active={isReady}
                   hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
                 />

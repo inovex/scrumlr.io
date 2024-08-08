@@ -2,6 +2,24 @@
 
 $tooltip-button-size: 46px;
 
+@mixin tooltip-content-extended {
+  .tooltip-button__tooltip {
+    max-width: 500px;
+    visibility: visible;
+    opacity: 1;
+    transition: none;
+  }
+
+  .tooltip-button__icon {
+    border-color: var(--accent-color--desaturated-light, $blue--100);
+    transition: border-color 0ms linear 0ms;
+  }
+
+  .tooltip-button__tooltip-text {
+    transform: translateX(0);
+  }
+}
+
 .tooltip-button {
   height: $tooltip-button-size;
   width: $tooltip-button-size;
@@ -132,21 +150,7 @@ $tooltip-button-size: 46px;
 
     &:not(:disabled):focus-visible,
     &:not(:disabled):hover {
-      .tooltip-button__tooltip {
-        max-width: 500px;
-        visibility: visible;
-        opacity: 1;
-        transition: none;
-      }
-
-      .tooltip-button__icon {
-        border-color: var(--accent-color--desaturated-light, $blue--100);
-        transition: border-color 0ms linear 0ms;
-      }
-
-      .tooltip-button__tooltip-text {
-        transform: translateX(0);
-      }
+      @include tooltip-content-extended;
     }
 
     &:focus-visible .tooltip-button__icon {
@@ -297,4 +301,8 @@ $tooltip-button-size: 46px;
     background-color: $gray--000;
     color: $navy--900;
   }
+}
+
+.tooltip-button--content-extended {
+  @include tooltip-content-extended;
 }

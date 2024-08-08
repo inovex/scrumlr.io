@@ -11,6 +11,7 @@ type TooltipButtonProps = {
   className?: string;
   active?: boolean;
   hotkeyKey?: string;
+  dataTestid?: string;
 };
 
 export const TooltipButton = (props: TooltipButtonProps) => {
@@ -22,6 +23,7 @@ export const TooltipButton = (props: TooltipButtonProps) => {
       className={classNames("tooltip-button", `tooltip-button--${props.direction ?? "right"}`, {"tooltip-button--active": props.active}, props.className)}
       onClick={() => props.onClick()}
       aria-label={props.label}
+      data-testid={props.dataTestid}
     >
       <div className="tooltip-button__tooltip" aria-hidden>
         <span className="tooltip-button__tooltip-text">
