@@ -8,6 +8,7 @@ import {AccessPolicy} from "types/board";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
+import {ReactComponent as DoneIcon} from "assets/icons/check-done.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
@@ -59,7 +60,7 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
 
   const renderButton = () =>
     editing ? (
-      <Button className={classNames("template-card__start-button", "template-card__start-button--save")} type="secondary" small icon={<NextIcon />}>
+      <Button className={classNames("template-card__start-button", "template-card__start-button--save")} type="secondary" small icon={<DoneIcon />}>
         {t("Templates.TemplateCard.save")}
       </Button>
     ) : (
