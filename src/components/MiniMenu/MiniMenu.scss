@@ -9,11 +9,12 @@
   gap: $spacing--xs;
 
   width: fit-content;
-  padding: $spacing--xs 2px;
+  height: 48px;
+  padding: $spacing--xxs 2px;
   // place menu at the same place as the icon (including grid padding)
-  transform: translateX(calc(-50% - $spacing--lg));
+  transform: translate(calc(-50% - $spacing--lg), 2 * -$spacing--xxs);
 
-  border-radius: $rounded--default;
+  border-radius: $rounded--full;
   box-shadow: 0 0 20px rgba($navy--400, 0.12);
 
   background-color: $gray--000;
@@ -23,9 +24,11 @@
   all: unset;
 
   display: flex;
+  justify-content: center;
   align-items: center;
 
-  height: $icon--large;
+  width: 40px;
+  height: 40px;
   border-radius: $rounded--full;
 
   color: $navy--900;
