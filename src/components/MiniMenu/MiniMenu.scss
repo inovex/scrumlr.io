@@ -20,5 +20,15 @@
 }
 
 .mini-menu__item {
+  display: flex;
+  align-items: center;
+
   height: $icon--large;
+  border-radius: $rounded--full;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray--300;
+  }
 }
