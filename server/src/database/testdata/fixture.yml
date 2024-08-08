@@ -31,6 +31,17 @@
       account_type: ANONYMOUS
       created_at: '{{ now }}'
 
+- model: BoardTemplate
+  rows:
+    - _id: columnTemplatesTestBoard
+      id: "3113b096-986c-4e23-adf7-b3fa19224bd4"
+      creator: "62e0ea41-6fbf-49a3-8921-1d2f4e5ae316"
+      name: John's template board
+      description: Board template test 
+      access_policy: PUBLIC
+      favourite: false
+      created_at: '{{ now }}'
+
 - model: Board
   rows:
     - _id: columnsTestBoard
@@ -169,6 +180,33 @@
       board: '{{ $.Board.stackTestBoard.ID }}'
       user: '{{ $.User.justin.ID }}'
       role: OWNER
+
+- model: ColumnTemplate
+  rows:
+    - _id: firstColumnTemplate
+      id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: First column
+      description: Fist column description 
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: secondColumnTemplate
+      id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: Second column
+      description: Second column description
+      color: backlog-blue
+      visible: true
+      index: 1
+    - _id: thirdColumnTemplate
+      id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: Third column
+      description: Third column description
+      color: backlog-blue
+      visible: true
+      index: 2
 
 - model: Column
   rows:

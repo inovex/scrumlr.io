@@ -63,7 +63,7 @@ func (d *Database) CreateColumnTemplate(column ColumnTemplateInsert) (ColumnTemp
 
 	query := d.db.NewInsert()
 	if column.Index != nil {
-		indexUpdate := d.db.NewUpdate().Model((*ColumnTemplate)(nil)).Set("index = index+1").Where("index >= ?", newIndex).Where("board = ?", column.BoardTemplate)
+		indexUpdate := d.db.NewUpdate().Model((*ColumnTemplate)(nil)).Set("index = index+1").Where("index >= ?", newIndex).Where("board_template = ?", column.BoardTemplate)
 		query = query.With("indexUpdate", indexUpdate)
 	}
 
@@ -73,7 +73,7 @@ func (d *Database) CreateColumnTemplate(column ColumnTemplateInsert) (ColumnTemp
 		Model(&column).
 		Value("index", fmt.Sprintf("LEAST(coalesce((SELECT index FROM \"maxIndexSelect\"),0), %d)", newIndex)).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, column.BoardTemplate), &c)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)
 
 	return c, err
 }
@@ -127,7 +127,7 @@ func (d *Database) UpdateColumnTemplate(column ColumnTemplateUpdate) (ColumnTemp
 		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
 		Where("id = ?", column.ID).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, column.BoardTemplate), &c)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, column.BoardTemplate), &c)
 
 	return c, err
 }
@@ -146,7 +146,7 @@ func (d *Database) DeleteColumnTemplate(board, column, user uuid.UUID) error {
 		Model((*ColumnTemplate)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.ColumnIdentifier, column, identifiers.UserIdentifier, user, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, board, identifiers.ColumnTemplateIdentifier, column, identifiers.UserIdentifier, user, "Result", &columns), &columns)
 
 	return err
 }
