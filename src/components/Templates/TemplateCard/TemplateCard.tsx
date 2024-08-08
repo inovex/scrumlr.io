@@ -52,6 +52,17 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
       <MenuIcon className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
     );
 
+  const renderButton = () =>
+    editing ? (
+      <Button className={classNames("template-card__start-button", "template-card__start-button--save")} type="secondary" small icon={<NextIcon />}>
+        {t("Templates.TemplateCard.save")}
+      </Button>
+    ) : (
+      <Button className={classNames("template-card__start-button", "template-card__start-button--start")} small icon={<NextIcon />}>
+        {t("Templates.TemplateCard.start")}
+      </Button>
+    );
+
   return (
     <div className="template-card">
       <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => {}} />
@@ -73,9 +84,7 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
             .join(", ")}
         </div>
       </div>
-      <Button className="template-card__start-button" small icon={<NextIcon />}>
-        {t("Templates.TemplateCard.start")}
-      </Button>
+      {renderButton()}
     </div>
   );
 };
