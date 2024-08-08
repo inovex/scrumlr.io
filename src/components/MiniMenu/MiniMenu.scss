@@ -11,8 +11,8 @@
   width: fit-content;
   height: 48px;
   padding: $spacing--xxs 2px;
-  // place menu at the same place as the icon (including grid padding)
-  transform: translate(calc(-50% - $spacing--lg), 2 * -$spacing--xxs);
+  // place menu at the same place as the icon (including fine tuning)
+  transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
 
   border-radius: $rounded--full;
   box-shadow: 0 0 20px rgba($navy--400, 0.12);
