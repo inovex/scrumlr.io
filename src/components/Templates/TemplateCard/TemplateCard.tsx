@@ -27,6 +27,8 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(template.name);
+  const [description, setDescription] = useState(template.description);
 
   const closeMenu = () => {
     setEditing(false);
@@ -73,18 +75,18 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
     <div className="template-card">
       <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => {}} />
       <div className={classNames("template-card__head", {"template-card__head--editing": editing})}>
-        <div className="template-card__title">{template.name}</div>
+        <input className="template-card__title" type="text" value={title} disabled={!editing} onInput={(e) => setTitle(e.currentTarget.value)} />
         <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
       </div>
       {renderMenu()}
       <TextareaAutosize
         className={classNames("template-card__description", {"template-card__description--editing": editing})}
+        value={description}
         disabled={!editing}
+        onInput={(e) => setDescription(e.currentTarget.value)}
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
-      >
-        {template.description}
-      </TextareaAutosize>
+      />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>

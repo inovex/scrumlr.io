@@ -63,6 +63,8 @@ $card-height: 220px;
 }
 
 .template-card__title {
+  all: unset;
+
   font-size: $text--lg;
   font-weight: 700;
   line-height: 24px; // decreased line height to change distance to bottom border
