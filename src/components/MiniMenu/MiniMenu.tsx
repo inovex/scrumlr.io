@@ -4,12 +4,11 @@ import "./MiniMenu.scss";
 type MiniMenuItem = {
   icon: ReactNode;
   label: string;
-  active: boolean;
-  onClick: () => void;
+  active?: boolean;
+  onClick?: () => void;
 };
 
 type MiniMenuProps = {
-  open: boolean;
   items: MiniMenuItem[];
 };
 
