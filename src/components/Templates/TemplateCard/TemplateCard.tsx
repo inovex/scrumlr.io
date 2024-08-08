@@ -27,6 +27,11 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
   const [showMiniMenu, setShowMiniMenu] = useState(false);
   const [editing, setEditing] = useState(false);
 
+  const closeMenu = () => {
+    setEditing(false);
+    setShowMiniMenu(false);
+  };
+
   const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
     switch (accessPolicy) {
       case AccessPolicy.BY_PASSPHRASE:
@@ -43,9 +48,9 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
       <MiniMenu
         className="template-card__menu"
         items={[
-          {label: "Delete", icon: <TrashIcon />, onClick: () => setShowMiniMenu(false)},
+          {label: "Delete", icon: <TrashIcon />, onClick: closeMenu},
           {label: "Edit", icon: <EditIcon />, onClick: () => setEditing((curr) => !curr), active: editing},
-          {label: "Close", icon: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
+          {label: "Close", icon: <CloseIcon />, onClick: closeMenu},
         ]}
       />
     ) : (
