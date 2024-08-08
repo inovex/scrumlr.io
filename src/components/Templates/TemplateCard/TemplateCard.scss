@@ -91,9 +91,16 @@ $card-height: 220px;
   resize: none;
 
   background: none;
-  border: none;
+  border: 2px dashed transparent;
+  border-radius: $rounded--small;
+  outline: none;
 
   color: $navy--900;
+
+  &--editing {
+    // TODO alignment
+    border-color: $pink--200;
+  }
 }
 
 .template-card__columns {

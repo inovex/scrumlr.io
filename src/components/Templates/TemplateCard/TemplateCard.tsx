@@ -76,7 +76,12 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
         <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
       </div>
       {renderMenu()}
-      <TextareaAutosize className="template-card__description" disabled onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+      <TextareaAutosize
+        className={classNames("template-card__description", {"template-card__description--editing": editing})}
+        disabled={!editing}
+        onPointerEnterCapture={undefined}
+        onPointerLeaveCapture={undefined}
+      >
         {template.description}
       </TextareaAutosize>
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
