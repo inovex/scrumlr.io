@@ -25,6 +25,7 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
   const {t} = useTranslation();
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
+  const [editing, setEditing] = useState(false);
 
   const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
     switch (accessPolicy) {
@@ -43,7 +44,7 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
         className="template-card__menu"
         items={[
           {label: "Delete", icon: <TrashIcon />, onClick: () => setShowMiniMenu(false)},
-          {label: "Edit", icon: <EditIcon />, onClick: () => setShowMiniMenu(false)},
+          {label: "Edit", icon: <EditIcon />, onClick: () => setEditing((curr) => !curr), active: editing},
           {label: "Close", icon: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
         ]}
       />

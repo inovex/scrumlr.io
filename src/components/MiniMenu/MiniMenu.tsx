@@ -17,7 +17,7 @@ type MiniMenuProps = {
 export const MiniMenu = (props: MiniMenuProps) => (
   <div className={classNames(props.className, "mini-menu")}>
     {props.items.map((item) => (
-      <button className="mini-menu__item" key={item.label} onClick={item?.onClick}>
+      <button className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})} key={item.label} onClick={item?.onClick}>
         {item.icon}
       </button>
     ))}

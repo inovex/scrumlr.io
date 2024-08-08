@@ -28,9 +28,20 @@
   height: $icon--large;
   border-radius: $rounded--full;
 
+  color: $navy--900;
+
   cursor: pointer;
 
   &:hover {
     background-color: $gray--300;
+  }
+
+  &--active {
+    color: $gray--000;
+    background-color: $navy--400;
+
+    &:hover {
+      background-color: $navy--100; // TODO find out color
+    }
   }
 }
