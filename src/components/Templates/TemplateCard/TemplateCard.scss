@@ -5,12 +5,12 @@ $card-height: 220px;
 .template-card {
   display: grid;
   grid-template-rows: 36px auto 10px 46px;
-  grid-template-columns: 36px $spacing--xxs 1fr auto 36px;
+  grid-template-columns: 36px 1fr auto 36px;
   grid-template-areas:
-    "fav-icon   .   head          head         menu"
-    ".          .   description   description   ."
-    ".          .   .             .             ."
-    "col-icon   .   columns       start         start";
+    "fav-icon   head          head         menu"
+    ".          description   description   ."
+    ".          .             .             ."
+    "col-icon   columns       start         start";
 
   width: 100%;
   height: $card-height;
@@ -51,12 +51,21 @@ $card-height: 220px;
   justify-content: start;
   align-items: center;
   gap: $spacing--xxs;
+
+  // padding instead of a filler column to allow for extra border space
+  padding-left: $spacing--xxs;
+
+  border-bottom: 2px dashed transparent;
+
+  &--editing {
+    border-color: $pink--200;
+  }
 }
 
 .template-card__title {
   font-size: $text--lg;
   font-weight: 700;
-  line-height: 32px;
+  line-height: 24px; // decreased line height to change distance to bottom border
 
   color: $navy--900;
 
@@ -87,7 +96,7 @@ $card-height: 220px;
   height: 4 * 20px; // TODO always keep cards same height?
   max-height: 4 * 20px;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 $spacing--xxs;
   resize: none;
 
   background: none;
@@ -109,6 +118,8 @@ $card-height: 220px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  padding-left: $spacing--xxs;
 
   overflow: hidden;
 }

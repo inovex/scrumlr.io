@@ -72,7 +72,7 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
   return (
     <div className="template-card">
       <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => {}} />
-      <div className="template-card__head">
+      <div className={classNames("template-card__head", {"template-card__head--editing": editing})}>
         <div className="template-card__title">{template.name}</div>
         <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
       </div>
