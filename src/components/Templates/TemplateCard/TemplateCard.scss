@@ -71,6 +71,7 @@ $card-height: 220px;
 }
 
 .template-card__menu {
+  position: relative; // allow mini menu to be positioned
   grid-area: menu;
 }
 

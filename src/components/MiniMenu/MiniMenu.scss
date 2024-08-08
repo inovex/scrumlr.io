@@ -1,0 +1,23 @@
+@import "constants/style";
+
+.mini-menu {
+  position: absolute;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing--xs;
+
+  width: fit-content;
+  padding: $spacing--xs;
+  transform: translateX(-50%);
+
+  border-radius: $rounded--default;
+  box-shadow: 0 0 20px rgba($navy--400, 0.12);
+
+  background-color: $gray--000;
+}
+
+.mini-menu__item {
+  height: $icon--large;
+}

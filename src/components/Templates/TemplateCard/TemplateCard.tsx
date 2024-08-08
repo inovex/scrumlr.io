@@ -10,6 +10,9 @@ import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
+import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
+import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
+import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {BoardTemplate} from "constants/templates";
 import {useState} from "react";
 import "./TemplateCard.scss";
@@ -36,7 +39,14 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
 
   const renderMenu = () =>
     showMiniMenu ? (
-      <MiniMenu className="template-card__menu" items={[{label: "Close", icon: <ColumnsIcon />, onClick: () => setShowMiniMenu(false)}]} />
+      <MiniMenu
+        className="template-card__menu"
+        items={[
+          {label: "Delete", icon: <TrashIcon />, onClick: () => setShowMiniMenu(false)},
+          {label: "Edit", icon: <EditIcon />, onClick: () => setShowMiniMenu(false)},
+          {label: "Close", icon: <CloseIcon />, onClick: () => setShowMiniMenu(false)},
+        ]}
+      />
     ) : (
       <MenuIcon className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
     );

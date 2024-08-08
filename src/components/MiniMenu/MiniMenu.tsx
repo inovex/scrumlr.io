@@ -14,4 +14,12 @@ type MiniMenuProps = {
   items: MiniMenuItem[];
 };
 
-export const MiniMenu = (props: MiniMenuProps) => <div className={classNames(props.className, "mini-menu")}>Hello MiniMenu</div>;
+export const MiniMenu = (props: MiniMenuProps) => (
+  <div className={classNames(props.className, "mini-menu")}>
+    {props.items.map((item) => (
+      <div className="mini-menu__item" key={item.label}>
+        {item.icon}
+      </div>
+    ))}
+  </div>
+);
