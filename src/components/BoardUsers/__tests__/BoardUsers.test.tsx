@@ -25,7 +25,6 @@ describe("users", () => {
             getTestParticipant({user: {id: "other-3", name: "other-3"}}),
             getTestParticipant({user: {id: "other-4", name: "other-4"}}),
           ],
-          focusInitiator: null,
         },
       })
     );
@@ -42,7 +41,6 @@ describe("users", () => {
             getTestParticipant({user: {id: "other-3", name: "other-3"}}),
             getTestParticipant({user: {id: "other-4", name: "other-4"}}),
           ],
-          focusInitiator: null,
         },
       })
     );
@@ -60,7 +58,6 @@ describe("users", () => {
             getTestParticipant({user: {id: "other-4", name: "other-4"}}),
             getTestParticipant({user: {id: "other-5", name: "other-5"}}),
           ],
-          focusInitiator: null,
         },
       })
     );

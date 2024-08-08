@@ -1,5 +1,4 @@
 import {API} from "api";
-import {BoardDataType} from "components/SettingsDialog/ExportBoard/types";
 import {getMarkdownExport} from "../export";
 import dummyBoardData from "./dummy-board-data.json";
 

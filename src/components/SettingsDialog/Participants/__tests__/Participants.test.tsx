@@ -23,7 +23,7 @@ describe("Participants", () => {
   describe("Ban Feature", () => {
     test("ban button not available on self", () => {
       const {container} = render(createParticipants(getTestStore()));
-      const participants = container.getElementsByClassName("participants__list-item");
+      const participants = container.getElementsByClassName("participants__list-item") as HTMLCollectionOf<HTMLLIElement>;
       expect(
         within(participants[0]).queryByLabelText(t("Participants.BanParticipantTooltip", {user: getTestApplicationState().participants!.self.user.name}))
       ).not.toBeInTheDocument();
@@ -31,7 +31,7 @@ describe("Participants", () => {
 
     test("ban button available on moderator", () => {
       const {container} = render(createParticipants(getTestStore()));
-      const participants = container.getElementsByClassName("participants__list-item");
+      const participants = container.getElementsByClassName("participants__list-item") as HTMLCollectionOf<HTMLLIElement>;
       expect(
         within(participants[1]).getByLabelText(t("Participants.BanParticipantTooltip", {user: getTestApplicationState().participants!.others[0].user.name}))
       ).toBeInTheDocument();
