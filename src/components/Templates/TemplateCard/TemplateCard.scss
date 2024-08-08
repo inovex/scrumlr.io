@@ -59,6 +59,10 @@ $card-height: 220px;
   line-height: 32px;
 
   color: $navy--900;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .template-card__access-policy,
