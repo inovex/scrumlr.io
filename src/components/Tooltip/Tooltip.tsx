@@ -21,7 +21,6 @@ export const Tooltip = (props: TooltipProps) => (
       className={classNames("tooltip", {"tooltip--colored": props.color}, props.className, getColorClassName(props.color))}
       content={props.content}
       role="tooltip"
-      positionStrategy="fixed"
     />
   </div>
 );
