@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
@@ -15,14 +16,16 @@ import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {BoardTemplate} from "constants/templates";
-import {useState} from "react";
 import "./TemplateCard.scss";
+
+type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
 type TemplateCardProps = {
   template: BoardTemplate;
+  templateType: TemplateCardType;
 };
 
-export const TemplateCard = ({template}: TemplateCardProps) => {
+export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   const {t} = useTranslation();
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
@@ -46,8 +49,9 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
     }
   };
 
-  const renderMenu = () =>
-    showMiniMenu ? (
+  const renderMenu = () => {
+    if (templateType === "RECOMMENDED") return null;
+    return showMiniMenu ? (
       <MiniMenu
         className="template-card__menu"
         items={[
@@ -59,6 +63,7 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
     ) : (
       <MenuIcon className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
     );
+  };
 
   const renderButton = () =>
     editing ? (

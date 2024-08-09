@@ -59,7 +59,7 @@ export const Templates = () => {
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
             {RECOMMENDED_TEMPLATES.filter((template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase())).map((template) => (
-              <TemplateCard template={template} />
+              <TemplateCard templateType="RECOMMENDED" template={template} />
             ))}
           </div>
         </section>
@@ -68,8 +68,8 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard />
-              <TemplateCard template={EXAMPLE_CUSTOM_TEMPLATE} />
-              <TemplateCard template={EXAMPLE_CUSTOM_TEMPLATE} />
+              <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
+              <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
             </div>
           </section>
         )}
