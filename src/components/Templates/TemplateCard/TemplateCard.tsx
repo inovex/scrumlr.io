@@ -40,7 +40,7 @@ export const TemplateCard = ({template}: TemplateCardProps) => {
       case AccessPolicy.BY_PASSPHRASE:
         return <KeyIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-passphrase" />;
       case AccessPolicy.BY_INVITE:
-        return <LockIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-passphrase" />;
+        return <LockIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-invite" />;
       default:
         return null;
     }
