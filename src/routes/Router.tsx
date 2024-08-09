@@ -21,6 +21,7 @@ import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
+import {CreateTemplate} from "./Boards/CreateTemplate/CreateTemplate";
 
 const Router = () => (
   <BrowserRouter>
@@ -42,6 +43,7 @@ const Router = () => (
         <Route index element={<Navigate to="templates" />} />
         <Route path="templates" element={<Templates />}>
           {/* TODO extract settings routes no avoid repetition */}
+          <Route path="create" element={<CreateTemplate />} />
           <Route path="settings" element={<SettingsDialog />}>
             <Route path="appearance" element={<Appearance />} />
             <Route path="feedback" element={<Feedback />} />

@@ -3,6 +3,7 @@ import {Outlet, useOutletContext} from "react-router-dom";
 import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {useRef} from "react";
+import {useNavigate} from "react-router";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
 import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
@@ -17,10 +18,13 @@ type Side = "left" | "right";
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
+  const navigate = useNavigate();
 
   const searchBarInput: string = useOutletContext();
 
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
+
+  const showCreateTemplateView = () => navigate("create");
 
   const scrollToSide = (side: Side) => {
     const screenWidth = document.documentElement.clientWidth;
@@ -67,7 +71,7 @@ export const Templates = () => {
           <section className="templates__container templates__container--saved">
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
-              <CreateTemplateCard />
+              <CreateTemplateCard onClick={showCreateTemplateView} />
               <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
               <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
             </div>
