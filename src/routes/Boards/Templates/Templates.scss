@@ -1,6 +1,6 @@
 @import "constants/style";
 
-$stan-height-factor: 93%;
+$stan-height: 70vh;
 $max-card-width: 500px;
 
 .templates {
@@ -9,8 +9,6 @@ $max-card-width: 500px;
   flex: 1;
   // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
   // gap: $spacing--md;
-
-  position: relative;
 }
 
 .templates__container {
@@ -67,21 +65,28 @@ $max-card-width: 500px;
   gap: $spacing--md;
 }
 
-.templates__stan {
+.templates__stan-container {
   position: absolute;
-
   width: auto;
-  // TODO find a solution so stan never gets cut off
-  height: 100%;
-
+  height: $stan-height;
   // align right edge of stan to the left edge of the container
   transform: translateX(-100%);
+}
+
+.templates__stan {
+  height: 100%;
 
   &--dark {
     display: initial;
   }
 
   &--light {
+    display: none;
+  }
+}
+
+@media screen and (max-width: $breakpoint--desktop) {
+  .templates__stan-container {
     display: none;
   }
 }
@@ -125,7 +130,6 @@ $max-card-width: 500px;
   }
 
   .templates__stan {
-    height: $stan-height-factor;
     &--dark {
       display: none;
     }
