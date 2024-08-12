@@ -1,11 +1,27 @@
 @import "constants/style";
 
+.dropdown {
+  border-radius: $rounded--default;
+
+  background-color: $gray--000;
+}
+
 .dropdown__option {
   display: flex;
   flex-direction: row;
   gap: $spacing--base;
-
   align-items: center;
+
+  padding: 14px 20px; // TODO constants
+
+  font-size: $text--base;
+  font-weight: 700;
+
+  color: $navy--400;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $gray--300;
+  }
 }
 
 .dropdown__option-icon,
