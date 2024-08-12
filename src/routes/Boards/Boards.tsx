@@ -9,7 +9,7 @@ import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import classNames from "classnames";
 import "./Boards.scss";
 
-type BoardView = "templates" | "sessions";
+type BoardView = "templates" | "sessions" | "create";
 
 export const Boards = () => {
   const {t} = useTranslation();
@@ -26,15 +26,20 @@ export const Boards = () => {
 
   // navigate to view that is currently not visible
   const switchView = () => {
-    if (boardView === "templates") {
-      navigate("sessions");
-    } else {
-      navigate("templates");
+    switch (boardView) {
+      case "templates":
+        navigate("sessions");
+        break;
+      case "sessions":
+        navigate("templates");
+        break;
+      default:
+        break;
     }
   };
 
   useEffect(() => {
-    const currentLocation: BoardView = location.pathname.endsWith("/templates") ? "templates" : "sessions";
+    const currentLocation = location.pathname.split("/").at(-1) as BoardView;
     setBoardView(currentLocation);
   }, [location]);
 
