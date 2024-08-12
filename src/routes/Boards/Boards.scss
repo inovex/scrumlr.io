@@ -11,17 +11,29 @@ $side-padding--desktop: 14vw;
 
 .boards__grid {
   display: grid;
-  grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
-  grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
+
+  grid-template-columns: $side-padding--desktop 114px auto auto $side-padding--desktop;
+  grid-template-rows: $spacing--lg 56px 48px 1fr $spacing--lg;
   grid-template-areas:
-    ".  .    .       .       .       .       .      ."
-    ".  logo title   title   title   title   user   ."
-    ".  .    title   title   title   title   .      ."
-    ".  .    switch  .       search  search  .      ."
-    ".  .    main    main    main    main    .      ."
-    ".  .    .       .       .       .       .      .";
+    ".  .  .  .  ."
+    ".  logo . user ."
+    ".  logo title user ."
+    ".  .    title .    ."
+    ".  .    main  .    .";
 
   height: 100vh;
+
+  &__with-view-options {
+    grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
+    grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
+    grid-template-areas:
+      ".  .    .       .       .       .       .      ."
+      ".  logo title   title   title   title   user   ."
+      ".  .    title   title   title   title   .      ."
+      ".  .    switch  .       search  search  .      ."
+      ".  .    main    main    main    main    .      ."
+      ".  .    .       .       .       .       .      .";
+  }
 }
 
 .boards__scrumlr-logo-container {

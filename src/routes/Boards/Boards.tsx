@@ -43,17 +43,8 @@ export const Boards = () => {
     setBoardView(currentLocation);
   }, [location]);
 
-  return (
-    <div className="boards">
-      <div className="boards__grid">
-        {/* logo - - - profile */}
-        <div className="boards__scrumlr-logo-container">
-          <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
-            <ScrumlrLogo className="new-board__scrumlr-logo" />
-          </a>
-        </div>
-        <UserPill className="boards__user-pill" locationPrefix={boardView} />
-
+  const renderExpandedView = () => boardView !== "create" ? (
+      <>
         {/* - - title - - */}
         <div className="boards__title">{boardView === "templates" ? t("Templates.title") : t("Sessions.title")}</div>
 
@@ -76,6 +67,21 @@ export const Boards = () => {
           </div>
         </button>
         {showMobileSearchBar && <SearchBar className="boards__mobile-search-bar" input={searchBarInput} setInput={setSearchBarInput} />}
+      </>
+    ) : null;
+
+  return (
+    <div className="boards">
+      <div className={classNames("boards__grid", {"boards__grid--with-view-options": boardView !== "create"})}>
+        {/* logo - - - profile */}
+        <div className="boards__scrumlr-logo-container">
+          <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
+            <ScrumlrLogo className="new-board__scrumlr-logo" />
+          </a>
+        </div>
+        <UserPill className="boards__user-pill" locationPrefix={boardView} />
+
+        {renderExpandedView()}
 
         <main className="boards__outlet">
           <Outlet context={searchBarInput} />
