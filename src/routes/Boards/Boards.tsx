@@ -43,11 +43,9 @@ export const Boards = () => {
     setBoardView(currentLocation);
   }, [location]);
 
-  const renderExpandedView = () => boardView !== "create" ? (
+  const renderExpandedView = () =>
+    boardView !== "create" ? (
       <>
-        {/* - - title - - */}
-        <div className="boards__title">{boardView === "templates" ? t("Templates.title") : t("Sessions.title")}</div>
-
         {/* switch - - - search */}
         <Switch
           className="boards__switch"
@@ -79,6 +77,10 @@ export const Boards = () => {
             <ScrumlrLogo className="new-board__scrumlr-logo" />
           </a>
         </div>
+
+        {/* - - title - - */}
+        <div className="boards__title">{boardView === "templates" ? t("Templates.title") : t("Sessions.title")}</div>
+
         <UserPill className="boards__user-pill" locationPrefix={boardView} />
 
         {renderExpandedView()}
