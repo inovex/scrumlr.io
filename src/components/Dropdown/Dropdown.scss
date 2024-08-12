@@ -26,7 +26,15 @@
   }
 }
 
-.dropdown__option-icon,
+.dropdown__option-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: $icon--large;
+  height: $icon--large;
+}
+
 .dropdown__option-arrow {
   display: flex;
   justify-content: center;
@@ -34,4 +42,8 @@
 
   width: $icon--large;
   height: $icon--large;
+
+  &--up {
+    transform: rotate(180deg);
+  }
 }
