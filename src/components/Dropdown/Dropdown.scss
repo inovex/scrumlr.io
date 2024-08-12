@@ -1,1 +1,6 @@
 @import "constants/style";
+
+.dropdown__option {
+  display: flex;
+  flex-direction: row;
+}
