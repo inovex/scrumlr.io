@@ -43,6 +43,18 @@ export const Boards = () => {
     setBoardView(currentLocation);
   }, [location]);
 
+  const renderTitle = () => {
+    switch (boardView) {
+      case "templates":
+        return t("Templates.title");
+      case "sessions":
+        return t("Sessions.title");
+      case "create":
+      default:
+        return t("CreateBoard.title");
+    }
+  };
+
   const renderExpandedView = () =>
     boardView !== "create" ? (
       <>
@@ -79,7 +91,7 @@ export const Boards = () => {
         </div>
 
         {/* - - title - - */}
-        <div className="boards__title">{boardView === "templates" ? t("Templates.title") : t("Sessions.title")}</div>
+        <div className="boards__title">{renderTitle()}</div>
 
         <UserPill className="boards__user-pill" locationPrefix={boardView} />
 

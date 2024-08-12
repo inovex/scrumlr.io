@@ -26,6 +26,9 @@
     "switchTitle": "Sitzungen",
     "title": "Wähle eine Sitzung"
   },
+  "CreateBoard": {
+    "title": "Ein neues Board erstellen"
+  },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
     "anonymousLogin": "Nehme anonym an der Sitzung teil",
