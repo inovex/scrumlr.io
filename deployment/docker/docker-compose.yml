@@ -4,7 +4,7 @@ services:
   scrumlr-backend:
     restart: always
     build:
-      context: ../server/src/
+      context: ../../server/src/
       dockerfile: Dockerfile
     command:
       - "/app/main"
@@ -21,6 +21,7 @@ services:
       SCRUMLR_FEEDBACK_WEBHOOK_URL: "${WEBHOOK_URL}"
       SCRUMLR_BASE_PATH: "${SCRUMLR_BASE_PATH}"
       SCRUMLR_INSECURE: "${SCRUMLR_INSECURE}"
+      SCRUMLR_AUTH_CALLBACK_HOST: "${AUTH_CALLBACK_HOST}"
       SCRUMLR_AUTH_GITHUB_CLIENT_ID: "${GITHUB_CLIENT_ID}"
       SCRUMLR_AUTH_GITHUB_CLIENT_SECRET: "${GITHUB_CLIENT_SECRET}"
       SCRUMLR_AUTH_AZURE_AD_TENANT_ID: "${AZURE_AD_TENANT_ID}"
@@ -28,6 +29,9 @@ services:
       SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET: "${AZURE_AD_CLIENT_SECRET}"
       SCRUMLR_AUTH_APPLE_CLIENT_ID: "${APPLE_CLIENT_ID}"
       SCRUMLR_AUTH_APPLE_CLIENT_SECRET: "${APPLE_CLIENT_SECRET}"
+      SCRUMLR_AUTH_OIDC_CLIENT_ID: "${OIDC_CLIENT_ID}"
+      SCRUMLR_AUTH_OIDC_CLIENT_SECRET: "${OIDC_CLIENT_SECRET}"
+      SCRUMLR_AUTH_OIDC_DISCOVERY_URL: "${OIDC_DISCOVERY_URL}"
       # SCRUMLR_CONFIG_PATH: "${SCRUMRL_CONFIG_PATH}"
       # Redis variables (if you decide to use Redis instead of NATS)
       SCRUMLR_SERVER_REDIS_HOST: "${REDIS_HOST}"
@@ -42,7 +46,7 @@ services:
   scrumlr-frontend:
     restart: always
     build:
-      context: ../.
+      context: ../..
       dockerfile: Dockerfile
     environment:
       SCRUMLR_SERVER_URL: "${SCRUMLR_SERVER_URL}"
@@ -73,6 +77,14 @@ services:
     ports:
       - "4222:4222"
       - "8222:8222"
+
+  oidc.localhost:
+    restart: always
+    image: ghcr.io/dexidp/dex:v2.41.1-distroless
+    volumes:
+      - ./dex.yaml:/etc/dex/config.docker.yaml:ro
+    ports:
+      - "5556:5556"
 
 volumes:
   postgres_data:

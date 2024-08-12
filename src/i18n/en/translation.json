@@ -154,7 +154,8 @@
     "signInWithGitHub": "Sign in with Github",
     "signInWithMicrosoft": "Sign in with Microsoft",
     "signInWithAzureAd": "Sign in with Azure AD",
-    "signInWithApple": "Sign in with Apple"
+    "signInWithApple": "Sign in with Apple",
+    "signInWithOIDC": "Sign in with OpenID Connect"
   },
   "NoteInput": {
     "placeholder": "Add your note...",

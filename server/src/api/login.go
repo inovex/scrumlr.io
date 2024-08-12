@@ -85,19 +85,34 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	provider := strings.ToUpper(externalUser.Provider)
+	provider, err := types.NewAccountType(externalUser.Provider)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("unsupported user provider", "err", err)
+		return
+	}
+
+	userInfo, err := s.auth.ExtractUserInformation(provider, &externalUser)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("insufficient user information from external auth source", "err", err)
+		return
+	}
+
 	var internalUser *dto.User
 	switch provider {
-	case (string)(types.AccountTypeGoogle):
-		internalUser, err = s.users.CreateGoogleUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
-	case (string)(types.AccountTypeGitHub):
-		internalUser, err = s.users.CreateGitHubUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
-	case (string)(types.AccountTypeMicrosoft):
-		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
-	case (string)(types.AccountTypeAzureAd):
-		internalUser, err = s.users.CreateAzureAdUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
-	case (string)(types.AccountTypeApple):
-		internalUser, err = s.users.CreateAppleUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
+	case types.AccountTypeGoogle:
+		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeGitHub:
+		internalUser, err = s.users.CreateGitHubUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeMicrosoft:
+		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeAzureAd:
+		internalUser, err = s.users.CreateAzureAdUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeApple:
+		internalUser, err = s.users.CreateAppleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeOIDC:
+		internalUser, err = s.users.CreateOIDCUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
