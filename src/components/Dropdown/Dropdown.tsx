@@ -17,7 +17,7 @@ type DropdownProps = {
 export const Dropdown = (props: DropdownProps) => {
   const [open, setOpen] = useState(false);
 
-  const activeOption = props.options.find((_, index) => index === props.activeIndex)!;
+  const activeOption = props.options.find((_, index) => index === props.activeIndex) ?? props.options[0];
 
   const toggleMenu = () => {
     setOpen((curr) => !curr);
@@ -32,6 +32,18 @@ export const Dropdown = (props: DropdownProps) => {
           <ArrowIcon />
         </div>
       </div>
+      {open && (
+        <div className="dropdown__options">
+          {props.options
+            .filter((_, index) => index !== props.activeIndex)
+            .map((option) => (
+              <div className={classNames("dropdown__option")} role="button">
+                <div className="dropdown__button-icon">{option.icon}</div>
+                <div className="dropdown__button-label">{option.label}</div>
+              </div>
+            ))}
+        </div>
+      )}
     </div>
   );
 };
