@@ -1,7 +1,7 @@
 @import "constants/style";
 
 .dropdown {
-  border-radius: $rounded--default;
+  border-radius: $rounded--large;
 
   background-color: $gray--000;
 
@@ -24,13 +24,13 @@
   overflow: hidden;
 
   &:first-child {
-    border-top-left-radius: $rounded--default;
-    border-top-right-radius: $rounded--default;
+    border-top-left-radius: $rounded--large;
+    border-top-right-radius: $rounded--large;
   }
 
   &:last-child {
-    border-bottom-left-radius: $rounded--default;
-    border-bottom-right-radius: $rounded--default;
+    border-bottom-left-radius: $rounded--large;
+    border-bottom-right-radius: $rounded--large;
   }
 
   &:not(:last-child) {
