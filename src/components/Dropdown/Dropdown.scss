@@ -3,4 +3,17 @@
 .dropdown__option {
   display: flex;
   flex-direction: row;
+  gap: $spacing--base;
+
+  align-items: center;
+}
+
+.dropdown__option-icon,
+.dropdown__option-arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: $icon--large;
+  height: $icon--large;
 }

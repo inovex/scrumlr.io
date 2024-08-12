@@ -26,9 +26,9 @@ export const Dropdown = (props: DropdownProps) => {
   return (
     <div className={classNames("dropdown", {"dropdown--open": open})}>
       <div className={classNames("dropdown__button", "dropdown__option")} role="button" onClick={toggleMenu}>
-        <div className="dropdown__button-icon">{activeOption.icon}</div>
-        <div className="dropdown__button-label">{activeOption.label}</div>
-        <div className="dropdown__button-arrow">
+        <div className="dropdown__option-icon">{activeOption.icon}</div>
+        <div className="dropdown__option-label">{activeOption.label}</div>
+        <div className="dropdown__option-arrow">
           <ArrowIcon />
         </div>
       </div>
@@ -38,8 +38,8 @@ export const Dropdown = (props: DropdownProps) => {
             .filter((_, index) => index !== props.activeIndex)
             .map((option) => (
               <div className={classNames("dropdown__option")} role="button">
-                <div className="dropdown__button-icon">{option.icon}</div>
-                <div className="dropdown__button-label">{option.label}</div>
+                <div className="dropdown__option-icon">{option.icon}</div>
+                <div className="dropdown__option-label">{option.label}</div>
               </div>
             ))}
         </div>
