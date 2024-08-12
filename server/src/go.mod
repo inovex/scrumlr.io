@@ -25,7 +25,7 @@ require (
 	github.com/uptrace/bun/dbfixture v1.1.17
 	github.com/uptrace/bun/dialect/pgdialect v1.1.17
 	github.com/uptrace/bun/extra/bundebug v1.1.17
-	github.com/urfave/cli/v2 v2.27.3
+	github.com/urfave/cli/v2 v2.27.4
 	github.com/weppos/publicsuffix-go v0.40.2
 	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.26.0
