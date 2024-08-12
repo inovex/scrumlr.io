@@ -14,7 +14,7 @@
   gap: $spacing--base;
   align-items: center;
 
-  padding: 14px 20px; // TODO constants
+  padding: 14px $spacing--md;
 
   font-size: $text--base;
   font-weight: 700;
