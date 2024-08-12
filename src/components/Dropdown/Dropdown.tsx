@@ -22,6 +22,7 @@ export const Dropdown = (props: DropdownProps) => {
   const activeOption = props.options.find((option) => option.key === props.activeKey) ?? props.options[0];
 
   // active refers to the option on the very top
+  // TODO focus lock (maybe the same way as with note reactions)
   const renderDropdownOption = (option: DropdownOption, active: boolean) => (
     <div
       className={classNames("dropdown__option", "dropdown__option--active")}
@@ -47,7 +48,7 @@ export const Dropdown = (props: DropdownProps) => {
   );
 
   return (
-    <div className={classNames("dropdown", {"dropdown--open": props.open})}>
+    <div className={classNames("dropdown", {"dropdown--open": props.open})} role="combobox" aria-controls="dropdown-list" aria-expanded={props.open} tabIndex={0}>
       {renderDropdownOption(activeOption, true)}
       {props.open && props.options.filter((option) => option.key !== props.activeKey).map((option) => renderDropdownOption(option, false))}
     </div>
