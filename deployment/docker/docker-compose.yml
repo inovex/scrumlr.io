@@ -4,7 +4,7 @@ services:
   scrumlr-backend:
     restart: always
     build:
-      context: ../server/src/
+      context: ../../server/src/
       dockerfile: Dockerfile
     command:
       - "/app/main"
@@ -42,7 +42,7 @@ services:
   scrumlr-frontend:
     restart: always
     build:
-      context: ../.
+      context: ../../.
       dockerfile: Dockerfile
     environment:
       SCRUMLR_SERVER_URL: "${SCRUMLR_SERVER_URL}"
