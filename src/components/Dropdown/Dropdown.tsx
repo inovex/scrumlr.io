@@ -25,7 +25,7 @@ export const Dropdown = (props: DropdownProps) => {
 
   return (
     <div className={classNames("dropdown", {"dropdown--open": open})}>
-      <div className={classNames("dropdown__button", "dropdown__option")} role="button" onClick={toggleMenu}>
+      <div className={classNames("dropdown__option", "dropdown__option--active")} role="button" onClick={toggleMenu}>
         <div className="dropdown__option-icon">{activeOption.icon}</div>
         <div className="dropdown__option-label">{activeOption.label}</div>
         <div className={classNames("dropdown__option-arrow", {"dropdown__option-arrow--up": open, "dropdown__option-arrow--down": !open})}>
