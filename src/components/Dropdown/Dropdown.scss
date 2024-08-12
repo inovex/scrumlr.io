@@ -21,8 +21,24 @@
 
   color: $navy--400;
 
+  overflow: hidden;
+
+  &:first-child {
+    border-top-left-radius: $rounded--default;
+    border-top-right-radius: $rounded--default;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: $rounded--default;
+    border-bottom-right-radius: $rounded--default;
+  }
+
   &:not(:last-child) {
     border-bottom: 1px solid $gray--300;
+  }
+
+  &:hover {
+    background-color: $gray--300;
   }
 }
 
