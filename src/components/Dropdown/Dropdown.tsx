@@ -32,18 +32,15 @@ export const Dropdown = (props: DropdownProps) => {
           <ArrowIcon />
         </div>
       </div>
-      {open && (
-        <div className="dropdown__options">
-          {props.options
-            .filter((_, index) => index !== props.activeIndex)
-            .map((option) => (
-              <div className={classNames("dropdown__option")} role="button">
-                <div className="dropdown__option-icon">{option.icon}</div>
-                <div className="dropdown__option-label">{option.label}</div>
-              </div>
-            ))}
-        </div>
-      )}
+      {open &&
+        props.options
+          .filter((_, index) => index !== props.activeIndex)
+          .map((option) => (
+            <div className={classNames("dropdown__option")} role="button">
+              <div className="dropdown__option-icon">{option.icon}</div>
+              <div className="dropdown__option-label">{option.label}</div>
+            </div>
+          ))}
     </div>
   );
 };
