@@ -6,6 +6,7 @@
   background-color: $gray--000;
 
   cursor: pointer;
+  user-select: none;
 }
 
 .dropdown__option {
