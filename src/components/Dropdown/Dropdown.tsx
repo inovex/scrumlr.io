@@ -12,7 +12,7 @@ type DropdownOption = {
 type DropdownProps = {
   options: DropdownOption[];
   activeKey: string;
-  onSelect?: (id: string) => void;
+  onSelect: (id: string) => void;
 };
 
 export const Dropdown = (props: DropdownProps) => {
@@ -37,7 +37,7 @@ export const Dropdown = (props: DropdownProps) => {
         props.options
           .filter((option) => option.key !== props.activeKey)
           .map((option) => (
-            <div className={classNames("dropdown__option")} key={option.key} role="button">
+            <div className={classNames("dropdown__option")} key={option.key} role="button" onClick={() => props.onSelect(option.key)}>
               <div className="dropdown__option-icon">{option.icon}</div>
               <div className="dropdown__option-label">{option.label}</div>
             </div>
