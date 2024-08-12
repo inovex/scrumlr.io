@@ -51,13 +51,16 @@
   height: $icon--large;
 }
 
-.dropdown__option-arrow {
+.dropdown__option-arrow,
+.dropdown__option-arrow-placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
 
   width: $icon--large;
   height: $icon--large;
+
+  margin-left: auto;
 
   &--up {
     transform: rotate(180deg);

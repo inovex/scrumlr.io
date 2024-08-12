@@ -40,6 +40,7 @@ export const Dropdown = (props: DropdownProps) => {
             <div className={classNames("dropdown__option")} key={option.key} role="button" onClick={() => props.onSelect(option.key)}>
               <div className="dropdown__option-icon">{option.icon}</div>
               <div className="dropdown__option-label">{option.label}</div>
+              <div className="dropdown__option-arrow-placeholder" /> {/* placeholder for uniform width  */}
             </div>
           ))}
     </div>
