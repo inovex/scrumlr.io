@@ -24,7 +24,7 @@ export const Templates = () => {
 
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
 
-  const showCreateTemplateView = () => navigate("create");
+  const showCreateTemplateView = () => navigate("../create");
 
   const scrollToSide = (side: Side) => {
     const screenWidth = document.documentElement.clientWidth;
