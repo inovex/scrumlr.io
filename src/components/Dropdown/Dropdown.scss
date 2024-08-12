@@ -1,6 +1,8 @@
 @import "constants/style";
 
 .dropdown {
+  display: inline-block;
+
   border-radius: $rounded--large;
 
   background-color: $gray--000;
