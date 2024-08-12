@@ -8,11 +8,11 @@ export const CreateTemplate = () => (
   <div className="create-template">
     <Dropdown
       options={[
-        {label: "Open", icon: <GlobeIcon />},
-        {label: "Password", icon: <KeyIcon />},
-        {label: "Approval", icon: <LockIcon />},
+        {key: "open", label: "Open", icon: <GlobeIcon />},
+        {key: "password", label: "Password", icon: <KeyIcon />},
+        {key: "approval", label: "Approval", icon: <LockIcon />},
       ]}
-      activeIndex={0}
+      activeKey="open"
     />
   </div>
 );
