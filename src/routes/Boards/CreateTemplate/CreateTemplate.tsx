@@ -38,6 +38,12 @@ export const CreateTemplate = () => {
       />
 
       {activeOptionKey === AccessPolicy.BY_PASSPHRASE && <Input className="create-template__password" type="password" input={passwordInput} setInput={setPasswordInput} />}
+
+      <div className="create-template__info">Info</div>
+      <div className="create-template__name">Name</div>
+      <div className="create-template__description">Description</div>
+      <div className="create-template__columns">Columns</div>
+      <div className="create-template__buttons">Buttons</div>
     </div>
   );
 };

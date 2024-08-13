@@ -1,8 +1,47 @@
 @import "src/constants/style";
 
 .create-template {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr auto;
+  grid-template-rows: auto auto auto auto 1fr auto;
+  grid-template-areas:
+    ".          dropdown    password      ."
+    ".          info        info          ."
+    ".          name        name          ."
+    ".          description description   ."
+    "columns    columns     columns       columns"
+    ".          .           buttons       .";
+
   width: 100%;
   height: 100%;
 
   padding: $spacing--xs;
+}
+
+.create-template__dropdown {
+  grid-area: dropdown;
+}
+
+.create-template__password {
+  grid-area: password;
+}
+
+.create-template__info {
+  grid-area: info;
+}
+
+.create-template__name {
+  grid-area: name;
+}
+
+.create-template__description {
+  grid-area: description;
+}
+
+.create-template__columns {
+  grid-area: columns;
+}
+
+.create-template__buttons {
+  grid-area: buttons;
 }
