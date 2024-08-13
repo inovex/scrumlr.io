@@ -14,6 +14,7 @@ type SearchBarProps = {
   setInput: Dispatch<SetStateAction<string>>;
 
   placeholder?: string;
+  searchable?: boolean;
   clearable?: boolean;
 };
 
@@ -27,9 +28,11 @@ export const Input = (props: SearchBarProps) => {
 
   return (
     <div className={classNames(props.className, "input", `input--${props.type}`, {"input--disabled": props.disabled})}>
-      <div className="input__icon-container input__icon-container--search-icon">
-        <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />
-      </div>
+      {props.searchable && (
+        <div className="input__icon-container input__icon-container--search-icon">
+          <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />
+        </div>
+      )}
       <input className="input__input" type="text" placeholder={props.placeholder} disabled={props.disabled} tabIndex={0} value={props.input} onInput={updateInput} />
       {props.input && props.clearable && (
         <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
