@@ -7,6 +7,10 @@
 
   cursor: pointer;
   user-select: none;
+
+  &--open {
+    box-shadow: 0 3px 12px rgba(var(--navy--700-rgb), 0.12);
+  }
 }
 
 .dropdown__option {
