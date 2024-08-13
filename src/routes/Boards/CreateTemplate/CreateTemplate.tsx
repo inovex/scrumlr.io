@@ -22,6 +22,7 @@ export const CreateTemplate = () => {
   return (
     <div className="create-template">
       <Dropdown<AccessPolicy>
+        className="create-template__dropdown"
         open={openDropdown}
         options={[
           {key: AccessPolicy.PUBLIC, label: t("CreateBoard.dropdown.open"), icon: <GlobeIcon />},

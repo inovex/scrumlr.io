@@ -10,6 +10,7 @@ type DropdownOption<K = string> = {
 };
 
 type DropdownProps<K = string> = {
+  className?: string;
   open: boolean;
   options: DropdownOption<K>[];
   activeKey: K;
@@ -25,7 +26,7 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
   // TODO focus lock (maybe the same way as with note reactions)
   const renderDropdownOption = (option: DropdownOption<K>, active: boolean) => (
     <div
-      className={classNames("dropdown__option", "dropdown__option--active")}
+      className={classNames(props.className, "dropdown__option", "dropdown__option--active")}
       key={String(option.key)}
       role="button"
       onClick={active ? props.onToggleMenu : () => props.onSelect(option.key)}
