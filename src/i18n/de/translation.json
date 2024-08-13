@@ -363,8 +363,10 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "Alle"
   },
-  "SearchBar": {
-    "placeholder": "Suchen"
+  "Input": {
+    "placeholder": {
+      "search": "Suchen"
+    }
   },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
