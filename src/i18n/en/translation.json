@@ -27,7 +27,12 @@
     "title": "Choose a session"
   },
   "CreateBoard": {
-    "title": "Create a new Board"
+    "title": "Create a new Board",
+    "dropdown": {
+      "open": "Open",
+      "password": "Password",
+      "approval": "Approval"
+    }
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
