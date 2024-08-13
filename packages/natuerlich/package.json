@@ -1,0 +1,80 @@
+{
+  "name": "@coconut-xr/natuerlich",
+  "version": "0.0.51",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coconut-xr/natuerlich.git"
+  },
+  "author": "Bela Bohlender",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/coconut-xr/natuerlich/issues"
+  },
+  "homepage": "https://github.com/coconut-xr/natuerlich#readme",
+  "description": "webxr interaction for three.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./react": "./dist/react/index.js",
+    "./defaults": "./dist/defaults/index.js"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*/index.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "check": "run-s check:prettier check:eslint",
+    "check:prettier": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "check:eslint": "eslint src",
+    "fix": "run-s fix:prettier fix:eslint",
+    "fix:prettier": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "fix:eslint": "eslint src --fix"
+  },
+  "dependencies": {
+    "@coconut-xr/xinteraction": "^0.1.12",
+    "@coconut-xr/xmaterials": "*",
+    "@webxr-input-profiles/motion-controllers": "^1.0.0",
+    "meshline": "3.1.6",
+    "suspend-react": "^0.0.9",
+    "zustand": ">=4.0.0"
+  },
+  "peerDependencies": {
+    "@coconut-xr/koestlich": "*",
+    "@react-three/fiber": "*",
+    "react": "*",
+    "three": "*"
+  },
+  "peerDependenciesMeta": {
+    "@coconut-xr/koestlich": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@coconut-xr/koestlich": "0.3.3",
+    "@react-three/fiber": "^8.11.0",
+    "@types/react": "^18.0.27",
+    "@types/three": "^0.152.1",
+    "@types/webxr": "^0.5.5",
+    "@typescript-eslint/eslint-plugin": "^5.45.1",
+    "@typescript-eslint/parser": "^5.45.1",
+    "eslint": "^8.29.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.11",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.8",
+    "react": "^18.2.0",
+    "three": "^0.154.0",
+    "typescript": "^4.9.3",
+    "zustand": "~4.3.2"
+  }
+}
