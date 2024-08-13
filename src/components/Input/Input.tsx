@@ -4,7 +4,7 @@ import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import {ReactComponent as ClearIcon} from "assets/icons/close.svg";
 import "./Input.scss";
 
-type InputType = "text" | "password";
+type InputType = "text" | "search" | "password";
 
 type SearchBarProps = {
   className?: string;
@@ -14,7 +14,6 @@ type SearchBarProps = {
   setInput: Dispatch<SetStateAction<string>>;
 
   placeholder?: string;
-  searchable?: boolean;
   clearable?: boolean;
 };
 
@@ -28,7 +27,7 @@ export const Input = (props: SearchBarProps) => {
 
   return (
     <div className={classNames(props.className, "input", `input--${props.type}`, {"input--disabled": props.disabled})}>
-      {props.searchable && (
+      {props.type === "search" && (
         <div className="input__icon-container input__icon-container--search-icon">
           <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />
         </div>
