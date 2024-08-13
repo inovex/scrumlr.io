@@ -1,8 +1,6 @@
 @import "constants/style";
 
 .dropdown {
-  display: inline-block;
-
   border-radius: $rounded--large;
 
   background-color: $gray--000;
@@ -54,8 +52,7 @@
   height: $icon--large;
 }
 
-.dropdown__option-arrow,
-.dropdown__option-arrow-placeholder {
+.dropdown__option-arrow {
   display: flex;
   justify-content: center;
   align-items: center;

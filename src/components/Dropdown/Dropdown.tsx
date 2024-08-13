@@ -33,7 +33,7 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
     >
       <div className="dropdown__option-icon">{option.icon}</div>
       <div className="dropdown__option-label">{option.label}</div>
-      {active ? (
+      {active && (
         <div
           className={classNames("dropdown__option-arrow", {
             "dropdown__option-arrow--up": props.open,
@@ -42,8 +42,6 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
         >
           <ArrowIcon />
         </div>
-      ) : (
-        <div className="dropdown__option-arrow-placeholder" />
       )}
     </div>
   );
