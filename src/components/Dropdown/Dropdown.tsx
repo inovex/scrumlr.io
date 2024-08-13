@@ -26,7 +26,7 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
   // TODO focus lock (maybe the same way as with note reactions)
   const renderDropdownOption = (option: DropdownOption<K>, active: boolean) => (
     <div
-      className={classNames(props.className, "dropdown__option", "dropdown__option--active")}
+      className={classNames("dropdown__option", {"dropdown__option--active": active})}
       key={String(option.key)}
       role="button"
       onClick={active ? props.onToggleMenu : () => props.onSelect(option.key)}
@@ -49,7 +49,7 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
   );
 
   return (
-    <div className={classNames("dropdown", {"dropdown--open": props.open})} role="combobox" aria-controls="dropdown-list" aria-expanded={props.open} tabIndex={0}>
+    <div className={classNames(props.className, "dropdown", {"dropdown--open": props.open})} role="combobox" aria-controls="dropdown-list" aria-expanded={props.open} tabIndex={0}>
       {renderDropdownOption(activeOption, true)}
       {props.open && props.options.filter((option) => option.key !== props.activeKey).map((option) => renderDropdownOption(option, false))}
     </div>
