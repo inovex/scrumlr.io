@@ -5,11 +5,17 @@ import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import {ReactComponent as ClearIcon} from "assets/icons/close.svg";
 import "./SearchBar.scss";
 
+type InputType = "input" | "password";
+
 type SearchBarProps = {
   className?: string;
+  type: InputType;
   disabled?: boolean;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
+
+  placeholder?: string;
+  clearable?: boolean;
 };
 
 /*
