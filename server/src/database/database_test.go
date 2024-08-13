@@ -66,7 +66,7 @@ func initDatabase() (string, func(), error) {
 	// pulls an image, creates a container based on it and runs it
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
 		Repository: "postgres",
-		Tag:        "16.3",
+		Tag:        "16.4",
 		Env: []string{
 			fmt.Sprintf("POSTGRES_PASSWORD=%s", DatabaseUsernameAndPassword),
 			fmt.Sprintf("POSTGRES_USER=%s", DatabaseUsernameAndPassword),
