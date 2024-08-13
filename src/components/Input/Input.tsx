@@ -14,7 +14,6 @@ type SearchBarProps = {
   setInput: Dispatch<SetStateAction<string>>;
 
   placeholder?: string;
-  clearable?: boolean;
 };
 
 /*
@@ -33,7 +32,7 @@ export const Input = (props: SearchBarProps) => {
         </div>
       )}
       <input className="input__input" type="text" placeholder={props.placeholder} disabled={props.disabled} tabIndex={0} value={props.input} onInput={updateInput} />
-      {props.input && props.clearable && (
+      {props.input && props.type !== "password" && (
         <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
           <ClearIcon className="input__icon" aria-label="clear button" />
         </div>

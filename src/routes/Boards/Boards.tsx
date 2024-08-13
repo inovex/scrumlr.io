@@ -68,7 +68,7 @@ export const Boards = () => {
         />
 
         {/* desktop search  bar */}
-        <Input className="boards__search-bar" type="search" clearable placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
+        <Input className="boards__search-bar" type="search" placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
 
         {/* mobile search button + search bar (row below) */}
         <button className="boards__search-button" onClick={toggleMobileSearchBar}>
@@ -77,7 +77,7 @@ export const Boards = () => {
           </div>
         </button>
         {showMobileSearchBar && (
-          <Input className="boards__mobile-search-bar" type="search" clearable placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
+          <Input className="boards__mobile-search-bar" type="search" placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
         )}
       </>
     ) : null;
