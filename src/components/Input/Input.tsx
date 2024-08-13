@@ -31,7 +31,15 @@ export const Input = (props: SearchBarProps) => {
           <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />
         </div>
       )}
-      <input className="input__input" type="text" placeholder={props.placeholder} disabled={props.disabled} tabIndex={0} value={props.input} onInput={updateInput} />
+      <input
+        className={classNames("input__input", `input__input--${props.type}`)}
+        type={props.type === "password" ? "password" : "text"}
+        placeholder={props.placeholder}
+        disabled={props.disabled}
+        tabIndex={0}
+        value={props.input}
+        onInput={updateInput}
+      />
       {props.input && props.type !== "password" && (
         <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
           <ClearIcon className="input__icon" aria-label="clear button" />

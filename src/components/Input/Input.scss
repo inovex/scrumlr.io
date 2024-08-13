@@ -69,6 +69,12 @@ $padding--mobile: 12.5px $spacing--base;
   color: $gray--800;
   background-color: $gray--000;
 
+  &--password {
+    font-size: $text--lg;
+    font-weight: 900;
+    letter-spacing: 0.125em;
+  }
+
   &:focus {
     outline: none;
 
