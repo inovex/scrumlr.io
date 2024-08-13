@@ -3,30 +3,30 @@ import classNames from "classnames";
 import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
 import "./Dropdown.scss";
 
-type DropdownOption = {
-  key: string;
+type DropdownOption<K = string> = {
+  key: K;
   label: string;
   icon: ReactNode;
 };
 
-type DropdownProps = {
+type DropdownProps<K = string> = {
   open: boolean;
-  options: DropdownOption[];
-  activeKey: string;
+  options: DropdownOption<K>[];
+  activeKey: K;
 
   onToggleMenu: () => void;
-  onSelect: (id: string) => void;
+  onSelect: (key: K) => void;
 };
 
-export const Dropdown = (props: DropdownProps) => {
+export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
   const activeOption = props.options.find((option) => option.key === props.activeKey) ?? props.options[0];
 
   // active refers to the option on the very top
   // TODO focus lock (maybe the same way as with note reactions)
-  const renderDropdownOption = (option: DropdownOption, active: boolean) => (
+  const renderDropdownOption = (option: DropdownOption<K>, active: boolean) => (
     <div
       className={classNames("dropdown__option", "dropdown__option--active")}
-      key={option.key}
+      key={String(option.key)}
       role="button"
       onClick={active ? props.onToggleMenu : () => props.onSelect(option.key)}
     >

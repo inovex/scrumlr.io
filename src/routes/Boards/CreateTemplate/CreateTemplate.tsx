@@ -6,11 +6,13 @@ import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import "./CreateTemplate.scss";
 
+type DropdownOption = "open" | "password" | "approval";
+
 export const CreateTemplate = () => {
   const {t} = useTranslation();
 
   const [openDropdown, setOpenDropdown] = useState(false);
-  const [activeOptionKey, setActiveOptionKey] = useState<string>("open");
+  const [activeOptionKey, setActiveOptionKey] = useState<DropdownOption>("open");
 
   const toggleDropDown = () => setOpenDropdown((curr) => !curr);
   const selectDropdownOption = (key: string) => {
@@ -20,7 +22,7 @@ export const CreateTemplate = () => {
 
   return (
     <div className="create-template">
-      <Dropdown
+      <Dropdown<DropdownOption>
         open={openDropdown}
         options={[
           {key: "open", label: t("CreateBoard.dropdown.open"), icon: <GlobeIcon />},
