@@ -2,20 +2,20 @@
 
 .create-template {
   display: grid;
-  grid-template-columns: auto 1fr 1fr auto;
-  grid-template-rows: auto auto auto auto 1fr auto;
+  grid-template-columns: $spacing--xs auto auto auto auto $spacing--xs;
+  grid-template-rows: $spacing--xs auto auto auto auto 1fr auto $spacing--xs;
   grid-template-areas:
-    ".          dropdown    password      ."
-    ".          info        info          ."
-    ".          name        name          ."
-    ".          description description   ."
-    "columns    columns     columns       columns"
-    ".          .           buttons       .";
+    ".  .          .           .             .       ."
+    ".  .          dropdown    password      .       ."
+    ".  .          info        info          .       ."
+    ".  .          name        name          .       ."
+    ".  .          description description   .       ."
+    ".  columns    columns     columns       columns ."
+    ".  .          .           buttons       .       ."
+    ".  .          .           .             .       .";
 
   width: 100%;
   height: 100%;
-
-  padding: $spacing--xs;
 }
 
 .create-template__dropdown {
