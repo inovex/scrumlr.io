@@ -8,12 +8,12 @@ import {ReactComponent as IconRefresh} from "assets/icon-refresh.svg";
 import {ReactComponent as IconClose} from "assets/icon-close.svg";
 import {generateRandomString} from "utils/random";
 import {AccessPolicy} from "types/board";
-import {TextInputLabel} from "../../TextInputLabel";
-import {TextInput} from "../../TextInput";
-import {TextInputAdornment} from "../../TextInputAdornment";
-import {TextInputAction} from "../../TextInputAction";
-import {ValidationError} from "../../ValidationError";
-import {Button} from "../../Button";
+import {TextInputLabel} from "components/TextInputLabel";
+import {TextInput} from "components/TextInput";
+import {TextInputAdornment} from "components/TextInputAdornment";
+import {TextInputAction} from "components/TextInputAction";
+import {ValidationError} from "components/ValidationError";
+import {Button} from "components/Button";
 
 export interface PassphraseModalProps {
   passphrase: string;
