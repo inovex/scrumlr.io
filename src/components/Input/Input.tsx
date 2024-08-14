@@ -24,6 +24,8 @@ type SearchBarProps = {
  */
 export const Input = (props: SearchBarProps) => {
   const [passwordHidden, setPasswordHidden] = useState(true);
+  // password input type is text when it's not hidden
+  const inputDisplayType = props.type === "password" && passwordHidden ? "password" : "text";
 
   const updateInput = (e: FormEvent<HTMLInputElement>) => props.setInput(e.currentTarget.value);
   const clearInput = () => props.setInput("");
@@ -39,18 +41,18 @@ export const Input = (props: SearchBarProps) => {
             <IconHidden className="input__icon" aria-label="clear button" />
           </div>
         );
-      } return (
-          <div className="input__icon-container input__icon-container--password-visible" role="button" tabIndex={0} onClick={togglePasswordHidden}>
-            <IconVisible className="input__icon" aria-label="clear button" />
-          </div>
-        );
-    } 
+      }
       return (
-        <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
-          <ClearIcon className="input__icon" aria-label="clear button" />
+        <div className="input__icon-container input__icon-container--password-visible" role="button" tabIndex={0} onClick={togglePasswordHidden}>
+          <IconVisible className="input__icon" aria-label="clear button" />
         </div>
       );
-    
+    }
+    return (
+      <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
+        <ClearIcon className="input__icon" aria-label="clear button" />
+      </div>
+    );
   };
 
   return (
@@ -62,7 +64,7 @@ export const Input = (props: SearchBarProps) => {
       )}
       <input
         className={classNames("input__input", `input__input--${props.type}`)}
-        type={props.type === "password" ? "password" : "text"}
+        type={inputDisplayType}
         placeholder={props.placeholder}
         disabled={props.disabled}
         tabIndex={0}
