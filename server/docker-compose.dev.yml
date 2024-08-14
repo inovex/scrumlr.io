@@ -8,7 +8,7 @@ services:
       - "4222:4222"
 
   database:
-    image: postgres:16.3
+    image: postgres:16.4
     ports:
       - "5432:5432"
     environment:
