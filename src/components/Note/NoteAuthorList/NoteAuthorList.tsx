@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import {Participant, ParticipantExtendedInfo} from "types/participant";
 import {useTranslation} from "react-i18next";
-import {UserAvatar} from "../../BoardUsers";
+import {UserAvatar} from "components/BoardUsers";
 import "./NoteAuthorList.scss";
+import {generateRandomProps} from "components/Avatar";
+import {getRandomNameWithSeed} from "constants/name";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
-import {generateRandomProps} from "../../Avatar";
-import {getRandomNameWithSeed} from "../../../constants/name";
 
 type NoteAuthorListProps = {
   authors: Participant[];

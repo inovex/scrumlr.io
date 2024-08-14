@@ -60,7 +60,7 @@ export const Note = (props: NoteProps) => {
       navigate(`note/${note?.id}/stack`);
     }
   }, []);
-  1;
+
   useEffect(() => {
     if (isShared) {
       if (!document.location.pathname.endsWith(props.noteId + "/stack")) {
