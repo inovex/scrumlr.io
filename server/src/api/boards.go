@@ -443,11 +443,10 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		Columns:      columns,
 		Owner:        owner,
 	})
-	fmt.Println("============")
-	fmt.Println(b.ID)
+
 	if err != nil {
 		log.Errorw("Could not import board", "err", err)
-		common.Throw(w, r, common.InternalServerError)
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -488,6 +487,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 				})
 				if err != nil {
 					s.boards.Delete(r.Context(), b.ID)
+					common.Throw(w, r, err)
 					return
 				}
 				parentNote = *note
@@ -516,6 +516,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 			})
 			if err != nil {
 				s.boards.Delete(r.Context(), b.ID)
+				common.Throw(w, r, err)
 				return
 			}
 
