@@ -36,7 +36,6 @@ export const BoardAPI = {
     }
   },
   importBoard: async (boardJson: string) => {
-    console.log(boardJson);
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/import`, {
         method: "POST",
