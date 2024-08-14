@@ -6,7 +6,6 @@ services:
     image: nats:2-alpine
     ports:
       - "4222:4222"
-      - "8222:8222"
 
   database:
     image: postgres:14.1
