@@ -43,19 +43,6 @@ export const NewBoard = () => {
     votings: Voting;
   };
 
-  // useEffect(() => {
-  //   const handleEscKey = (event: KeyboardEvent) => {
-  //     if (event.key === "Escape") {
-  //       closeModal()
-  //     }
-  //   };
-  //
-  //   document.addEventListener("keydown", handleEscKey);
-  //   return () => {
-  //     document.removeEventListener("keydown", handleEscKey);
-  //   };
-  // }, []);
-
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
@@ -65,13 +52,16 @@ export const NewBoard = () => {
   };
 
   const closeModal = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+
     setShowPasswordModal(false);
     setPassphrase("");
   };
 
   const handleFileEvent = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>, inputRef: React.RefObject<HTMLInputElement>) => {
     let file: File | null = null;
-
     if ("dataTransfer" in event) {
       event.preventDefault();
       file = event.dataTransfer?.files?.[0] || null;
@@ -98,19 +88,16 @@ export const NewBoard = () => {
           participants: data.participants,
           votings: data.votings,
         };
-        setImportBoard(board);
         if (board.board.accessPolicy === "BY_PASSPHRASE") {
           setShowPasswordModal(true);
           setAccessPolicy(1);
         }
+        setImportBoard(board);
       } catch (error) {
         // console.error("Error parsing JSON:", error);
-      } finally {
-        if (inputRef.current) {
-          inputRef.current.value = "";
-        }
       }
     };
+
     reader.readAsText(file);
   };
 
@@ -132,7 +119,8 @@ export const NewBoard = () => {
 
     setPassphrase(password);
     setShowPasswordModal(false); // Close the modal
-    onImportBoard(); // Continue the method after password is set
+    // Continue the method after password is set
+    onImportBoard();
   };
 
   const onCreateBoard = async () => {
@@ -157,6 +145,7 @@ export const NewBoard = () => {
   };
 
   const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
+  const isImportBoardDisabled = fileInputRef?.current?.value === "";
 
   return (
     <div className="new-board__wrapper">
@@ -232,7 +221,7 @@ export const NewBoard = () => {
             {t("NewBoard.createNewBoard")}
           </Button>
         ) : (
-          <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+          <Button className="new-board__action" onClick={onImportBoard} color="primary" disabled={isImportBoardDisabled}>
             {t("NewBoard.importNewBoard")}
           </Button>
         )}
