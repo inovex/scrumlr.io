@@ -1,0 +1,53 @@
+@import "constants/style";
+
+.mini-menu {
+  //position: absolute;
+  //align-self: flex-start;
+  //margin-left: auto;
+
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing--xs;
+
+  width: fit-content;
+  height: 48px;
+  padding: $spacing--xxs 2px;
+  // place menu at the same place as the icon (including fine tuning)
+  transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+
+  border-radius: $rounded--full;
+  box-shadow: 0 0 20px rgba($navy--400, 0.12);
+
+  background-color: $gray--000;
+}
+
+.mini-menu__item {
+  all: unset;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 40px;
+  height: 40px;
+  border-radius: $rounded--full;
+
+  color: $navy--900;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: $gray--300;
+  }
+
+  &--active {
+    color: $gray--000;
+    background-color: $navy--400;
+
+    &:hover {
+      background-color: $navy--600;
+    }
+  }
+}

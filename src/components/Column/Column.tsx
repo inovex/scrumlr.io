@@ -212,7 +212,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
                 {notes.length}
               </span>
             )}
-            {isModerator && renderColumnModifiers()}
+            {!openedColumnSettings && isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
                 id={id}

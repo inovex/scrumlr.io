@@ -8,7 +8,8 @@ import "./ColumnSettings.scss";
 import "./ColorPicker.scss";
 import {useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
-import {Tooltip} from "react-tooltip";
+// import {Tooltip} from "react-tooltip";
+import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 import {ColorPicker} from "./ColorPicker";
@@ -40,92 +41,152 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
     dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
+  const renderColorPicker = () =>
+    openedColorPicker ? (
+      <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} />
+    ) : (
+      <span className={`column__header-color-option ${color}_selected`} />
+    );
+
   return (
-    <div className="column__header-menu-dropdown" ref={columnSettingsRef}>
-      <ul id="cwwwwwww">
-        <li>
-          <button
-            onClick={() => {
+    <div ref={columnSettingsRef}>
+      {/* className="column__header-menu-dropdown" */}
+      <MiniMenu
+        className=""
+        items={[
+          {
+            label: "t(asdasdas)",
+            icon: <Trash />,
+            onClick: () => {
               onClose?.();
               dispatch(Actions.deleteColumn(id));
-            }}
-            title={t("Column.deleteColumn")}
-          >
-            <Trash />
-            {/* {t("Column.deleteColumn")} */}
-          </button>
-        </li>
-        <li style={{display: "block"}} id="cwwwwwww">
-          <button id="cwwwwwww" aria-label="Color Picker" title={t("Column.color")} onClick={() => setOpenedColorPicker((o) => !o)}>
-            <span className={`column__header-color-option ${color}_selected`} />
-          </button>
-          {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} />}
-          <Tooltip className="column__tooltip" anchorSelect="cwwwwwww">
-            hi
-          </Tooltip>
-        </li>
-        <li>
-          <button
-            aria-label="AddLeftIcon"
-            onClick={() => {
+            },
+          },
+          {label: t("Column.color"), icon: renderColorPicker(), onClick: () => setOpenedColorPicker((o) => !o)},
+          {
+            label: t("Column.addColumnLeft"),
+            icon: <ArrowLeft />,
+            onClick: () => {
               onClose?.();
               handleAddColumn(index);
-            }}
-            title={t("Column.addColumnLeft")}
-          >
-            <ArrowLeft />
-          </button>
-        </li>
-        <li>
-          <button
-            aria-label="AddRightIcon"
-            onClick={() => {
+            },
+          },
+          {
+            label: t("Column.addColumnRight"),
+            icon: <ArrowRight />,
+            onClick: () => {
               onClose?.();
               handleAddColumn(index + 1);
-            }}
-            title={t("Column.addColumnRight")}
-          >
-            <ArrowRight />
-          </button>
-        </li>
-        <li>
-          <button
-            aria-label="HideIcon"
-            onClick={() => {
+            },
+          },
+          {
+            label: visible ? t("Column.hideColumn") : t("Column.showColumn"),
+            icon: visible ? <Hidden /> : <Visible />,
+            onClick: () => {
               onClose?.();
               dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
-            }}
-            title={visible ? t("Column.hideColumn") : t("Column.showColumn")}
-          >
-            {visible ? <Hidden /> : <Visible />}
-          </button>
-        </li>
-        <li>
-          <button
-            aria-label="EditIcon"
-            onClick={() => {
+            },
+          },
+          {
+            label: t("Column.editName"),
+            icon: <Edit />,
+            onClick: () => {
               onNameEdit?.();
               onClose?.();
-            }}
-            title={t("Column.editName")}
-          >
-            <Edit />
-          </button>
-        </li>
-        <li>
-          <button
-            aria-label="CloseIcon"
-            title={t("Column.resetName")}
-            className="column__header-menu-dropdown-edit-button"
-            onClick={() => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {})}
-          >
-            <Close className="column__header-edit-button-icon" />
-          </button>
-        </li>
-        <Tooltip className="column__tooltip" anchorSelect="cwwwwwww">
-          hihihi
-        </Tooltip>
-      </ul>
+            },
+          },
+          {
+            label: t("Column.resetName"),
+            icon: <Close />,
+            onClick: () => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {}),
+          },
+        ]}
+      />
+
+      {/* <ul id="cwwwwwww"> */}
+      {/*   <li> */}
+      {/*   <button */}
+      {/*       onClick={() => { */}
+      {/*         onClose?.(); */}
+      {/*         dispatch(Actions.deleteColumn(id)); */}
+      {/*       }} */}
+      {/*       title={t("Column.deleteColumn")} */}
+      {/*     > */}
+      {/*       <Trash /> */}
+      {/*       /!* {t("Column.deleteColumn")} *!/ */}
+      {/*     </button> */}
+      {/*   </li> */}
+      {/*   <li style={{display: "block"}} id="cwwwwwww"> */}
+      {/*     <button id="cwwwwwww" aria-label="Color Picker" title={t("Column.color")} onClick={() => setOpenedColorPicker((o) => !o)}> */}
+      {/*       <span className={`column__header-color-option ${color}_selected`} /> */}
+      {/*     </button> */}
+      {/*     {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} />} */}
+      {/*     <Tooltip className="column__tooltip" anchorSelect="cwwwwwww"> */}
+      {/*       hi */}
+      {/*     </Tooltip> */}
+      {/*   </li> */}
+      {/*   <li> */}
+      {/*     <button */}
+      {/*       aria-label="AddLeftIcon" */}
+      {/*       onClick={() => { */}
+      {/*         onClose?.(); */}
+      {/*         handleAddColumn(index); */}
+      {/*       }} */}
+      {/*       title={t("Column.addColumnLeft")} */}
+      {/*     > */}
+      {/*       <ArrowLeft /> */}
+      {/*     </button> */}
+      {/*   </li> */}
+      {/*   <li> */}
+      {/*     <button */}
+      {/*       aria-label="AddRightIcon" */}
+      {/*       onClick={() => { */}
+      {/*         onClose?.(); */}
+      {/*         handleAddColumn(index + 1); */}
+      {/*       }} */}
+      {/*       title={t("Column.addColumnRight")} */}
+      {/*     > */}
+      {/*       <ArrowRight /> */}
+      {/*     </button> */}
+      {/*   </li> */}
+      {/*   <li> */}
+      {/*     <button */}
+      {/*       aria-label="HideIcon" */}
+      {/*       onClick={() => { */}
+      {/*         onClose?.(); */}
+      {/*         dispatch(Actions.editColumn(id, {name, color, index, visible: !visible})); */}
+      {/*       }} */}
+      {/*       title={visible ? t("Column.hideColumn") : t("Column.showColumn")} */}
+      {/*     > */}
+      {/*       {visible ? <Hidden /> : <Visible />} */}
+      {/*     </button> */}
+      {/*   </li> */}
+      {/*   <li> */}
+      {/*     <button */}
+      {/*       aria-label="EditIcon" */}
+      {/*       onClick={() => { */}
+      {/*         onNameEdit?.(); */}
+      {/*         onClose?.(); */}
+      {/*       }} */}
+      {/*       title={t("Column.editName")} */}
+      {/*     > */}
+      {/*       <Edit /> */}
+      {/*     </button> */}
+      {/*   </li> */}
+      {/*   <li> */}
+      {/*     <button */}
+      {/*       aria-label="CloseIcon" */}
+      {/*       title={t("Column.resetName")} */}
+      {/*       className="column__header-menu-dropdown-edit-button" */}
+      {/*       onClick={() => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {})} */}
+      {/*     > */}
+      {/*       <Close className="column__header-edit-button-icon" /> */}
+      {/*     </button> */}
+      {/*   </li> */}
+      {/*   <Tooltip className="column__tooltip" anchorSelect="cwwwwwww"> */}
+      {/*     hihihi */}
+      {/*   </Tooltip> */}
+      {/* </ul> */}
     </div>
   );
 };

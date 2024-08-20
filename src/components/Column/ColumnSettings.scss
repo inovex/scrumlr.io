@@ -1,8 +1,11 @@
 @import "src/constants/style";
 
 .column__header-menu-dropdown {
-  position: absolute;
-  right: 0;
+  align-self: flex-start;
+  //margin-left: auto;
+  //margin-left: auto;
+  padding-right: 32px;
+  //margin-right: auto;
   background-color: $gray--000;
   border-radius: $rounded--full;
   display: flex;
