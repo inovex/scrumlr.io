@@ -19,6 +19,18 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
   return (
     <ul className="column__header-color-picker-dropdown">
       <li>
+        <button
+          aria-label={color.toString()}
+          title={color.toString()}
+          onClick={() => {
+            onClose?.();
+            dispatch(Actions.editColumn(id, {name, color, index, visible}));
+          }}
+        >
+          <div className={`column__header-color-option ${color.toString()}`} />
+        </button>
+      </li>
+      <li>
         {color.toString() !== "planning-pink" && (
           <button
             aria-label="Planning Pink"

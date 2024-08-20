@@ -1,17 +1,25 @@
 @import "src/constants/style";
 
 .column__header-color-picker-dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing--xxs;
+  padding-top: $spacing--xxs;
+  padding-bottom: $spacing--xxs;
+
+  width: 40px;
+
   background-color: $gray--300;
   //box-shadow:
   //  0 4px 6px -1px rgb(0 0 0 / 0.1),
   //  0 2px 4px -2px rgb(0 0 0 / 0.1);
   list-style: none;
   //padding: 10px;
-  padding-top: 30px;
+  //padding-top: 30px;
   padding-left: 0;
-  margin-top: -30px;
+  margin-top: auto;
   border-radius: 24px;
-  width: fit-content;
   //position: inherit;
   //left: 30px;
 
@@ -29,8 +37,13 @@
 }
 
 .column__header-color-picker-dropdown > li {
+  all: unset;
   display: flex;
-  align-content: center;
+  justify-content: center;
+  align-items: center;
+  //width: 40px;
+  //height: 40px;
+  cursor: pointer;
 }
 
 .column__header-color-picker-dropdown > ul > li {
