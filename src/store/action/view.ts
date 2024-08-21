@@ -33,8 +33,9 @@ export const ViewActionFactory = {
     theme,
   }),
 
-  setServerInfo: (enabledAuthProvider: string[], serverTime: number, feedbackEnabled: boolean) => ({
+  setServerInfo: (anonymousLoginDisabled: boolean, enabledAuthProvider: string[], serverTime: number, feedbackEnabled: boolean) => ({
     type: ViewAction.SetServerInfo,
+    anonymousLoginDisabled,
     enabledAuthProvider,
     serverTime,
     feedbackEnabled,

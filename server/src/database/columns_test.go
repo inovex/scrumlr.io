@@ -1,10 +1,11 @@
 package database
 
 import (
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/database/types"
-	"testing"
 )
 
 var boardForColumnsTest uuid.UUID
@@ -34,6 +35,7 @@ func TestRunnerForColumns(t *testing.T) {
 	t.Run("Create=3", testCreateColumnWithExceptionallyHighIndex)
 	t.Run("Create=4", testCreateColumnWithEmptyName)
 	t.Run("Create=5", testCreateColumnWithEmptyColor)
+	t.Run("Create=6", testCreateColumnWithDescription)
 
 	t.Run("Delete=0", testCreateColumnOnSecondIndex)
 	t.Run("Delete=1", testDeleteColumnOnSecondIndex)
@@ -49,6 +51,7 @@ func TestRunnerForColumns(t *testing.T) {
 	t.Run("Update=4", testMoveLastColumnOnFirstIndex)
 	t.Run("Update=5", testMoveFirstColumnOnSecondIndex)
 	t.Run("Update=6", testMoveSecondColumnOnFirstIndex)
+	t.Run("Update=7", testUpdateDescription)
 }
 
 func testGetColumn(t *testing.T) {
@@ -177,6 +180,22 @@ func testCreateColumnWithEmptyColor(t *testing.T) {
 		Color: "",
 	})
 	assert.NotNil(t, err)
+}
+
+func testCreateColumnWithDescription(t *testing.T) {
+	aDescription := "A description"
+	column, err := testDb.CreateColumn(ColumnInsert{
+		Board:       boardForColumnsTest,
+		Name:        "Column",
+		Color:       types.ColorBacklogBlue,
+		Description: aDescription,
+	})
+	assert.Nil(t, err)
+	assert.NotNil(t, column)
+	assert.Equal(t, aDescription, column.Description)
+
+	// clean up to not crash other tests
+	_ = testDb.DeleteColumn(boardForColumnsTest, column.ID, uuid.New())
 }
 
 func testDeleteColumnOnSecondIndex(t *testing.T) {
@@ -336,4 +355,18 @@ func verifyOrder(t *testing.T, ids ...uuid.UUID) {
 		assert.Equal(t, expectedOrder[index], value.ID)
 		assert.Equal(t, index, value.Index)
 	}
+}
+
+func testUpdateDescription(t *testing.T) {
+	column, err := testDb.UpdateColumn(ColumnUpdate{
+		ID:          firstColumn.ID,
+		Board:       boardForColumnsTest,
+		Name:        "FirstColumn",
+		Description: "Updated Column Description",
+		Color:       types.ColorBacklogBlue,
+		Visible:     true,
+		Index:       0,
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, "Updated Column Description", column.Description)
 }

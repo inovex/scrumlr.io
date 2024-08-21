@@ -42,12 +42,15 @@ type Server struct {
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
+
+	anonymousLoginDisabled bool
 }
 
 func New(
 	basePath string,
 	rt *realtime.Broker,
 	auth auth.Auth,
+
 	boards services.Boards,
 	votings services.Votings,
 	users services.Users,
@@ -58,8 +61,10 @@ func New(
 	feedback services.Feedback,
 	boardReactions services.BoardReactions,
 	boardTemplates services.BoardTemplates,
+
 	verbose bool,
 	checkOrigin bool,
+	anonymousLoginDisabled bool,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -100,6 +105,8 @@ func New(
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
+
+		anonymousLoginDisabled: anonymousLoginDisabled,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
@@ -134,7 +141,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 		r.Post("/feedback", s.createFeedback)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
-			r.Post("/anonymous", s.signInAnonymously)
+			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
 
 			r.Route("/{provider}", func(r chi.Router) {
 				r.Get("/", s.beginAuthProviderVerification)
@@ -154,9 +161,24 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.With(s.BoardTemplateRateLimiter).Get("/templates", s.getBoardTemplates)
 		r.Route("/templates/{id}", func(r chi.Router) {
 			r.Use(s.BoardTemplateRateLimiter)
-			r.With(s.BoardTemplateContext).Get("/", s.getBoardTemplate)
-			r.With(s.BoardTemplateContext).Put("/", s.updateBoardTemplate)
-			r.With(s.BoardTemplateContext).Delete("/", s.deleteBoardTemplate)
+			r.Use(s.BoardTemplateContext)
+
+			r.Get("/", s.getBoardTemplate)
+			r.Put("/", s.updateBoardTemplate)
+			r.Delete("/", s.deleteBoardTemplate)
+
+			r.Route("/columns", func(r chi.Router) {
+				r.Post("/", s.createColumnTemplate)
+				r.Get("/", s.getColumnTemplates)
+
+				r.Route("/{columnTemplate}", func(r chi.Router) {
+					r.Use(s.ColumnTemplateContext)
+
+					r.Get("/", s.getColumnTemplate)
+					r.Put("/", s.updateColumnTemplate)
+					r.Delete("/", s.deleteColumnTemplate)
+				})
+			})
 		})
 
 		r.Post("/boards", s.createBoard)

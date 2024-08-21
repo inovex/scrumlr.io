@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httprate"
 	"github.com/google/uuid"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
@@ -175,6 +176,20 @@ func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
 	})
 }
 
+func (s *Server) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		if s.anonymousLoginDisabled {
+			log.Errorw("not allowed to login anonymously")
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to login anonymously")))
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func (s *Server) ColumnContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnParam := chi.URLParam(r, "column")
@@ -245,7 +260,7 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
 	limiter := httprate.Limit(
-		15,
+		20,
 		1*time.Second,
 		httprate.WithKeyFuncs(httprate.KeyByIP),
 		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
@@ -262,5 +277,19 @@ func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Apply the rate limiter to the next handler
 		limiter(next).ServeHTTP(w, r)
+	})
+}
+
+func (s *Server) ColumnTemplateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		columnTemplateParam := chi.URLParam(r, "columnTemplate")
+		columnTemplate, err := uuid.Parse(columnTemplateParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid column id")))
+			return
+		}
+
+		columnTemplateContext := context.WithValue(r.Context(), identifiers.ColumnTemplateIdentifier, columnTemplate)
+		next.ServeHTTP(w, r.WithContext(columnTemplateContext))
 	})
 }
