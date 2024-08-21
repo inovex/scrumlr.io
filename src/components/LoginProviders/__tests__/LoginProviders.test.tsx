@@ -7,7 +7,20 @@ import getTestStore from "utils/test/getTestStore";
 
 describe("check for all provider buttons", () => {
   const createLoginProviders = (providers?: string[]) => (
-    <Provider store={getTestStore({view: {enabledAuthProvider: providers ?? [], serverTimeOffset: 0, moderating: false}})}>
+    <Provider
+      store={getTestStore({
+        view: {
+          enabledAuthProvider: providers ?? [],
+          serverTimeOffset: 0,
+          moderating: false,
+          feedbackEnabled: false,
+          showBoardReactions: true,
+          noteFocused: false,
+          hotkeyNotificationsEnabled: true,
+          hotkeysAreActive: false,
+        },
+      })}
+    >
       <LoginProviders />
     </Provider>
   );
