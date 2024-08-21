@@ -1,108 +1,114 @@
 @import "src/constants/style";
 
-.column__header-menu-dropdown {
-  align-self: flex-start;
-  //margin-left: auto;
-  //margin-left: auto;
-  padding-right: 32px;
-  //margin-right: auto;
-  background-color: $gray--000;
-  border-radius: $rounded--full;
-  display: flex;
-  //box-shadow:
-  //  0 4px 6px -1px rgb(0 0 0 / 0.1),
-  //  0 2px 4px -2px rgb(0 0 0 / 0.1);
-  box-shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.04),
-    0 -4px 6px -1px rgba(0, 0, 0, 0.04),
-    4px 0 6px -1px rgba(0, 0, 0, 0.04),
-    -4px 0 6px -1px rgba(0, 0, 0, 0.04);
-
-  z-index: 200;
-}
-
-.column__header-menu-dropdown > ul {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  padding: $spacing--xs $spacing--sm;
-  margin: 0;
-  gap: $spacing--sm;
-}
-
-.column__header-menu-dropdown > ul .column__tooltip {
-  @include tooltip--light;
-}
-
-.column__header-menu-dropdown > ul > li {
-  border-radius: $rounded--full;
-  height: 32px;
-  width: 32px;
-  background-color: $gray--000;
-
-  &:hover {
-    filter: $darken--slightly;
-  }
-
-  &:focus-within {
-    background-color: $gray--200;
-  }
-}
-
-.column__header-menu-dropdown > ul > li > button {
-  cursor: pointer;
-  border: 0;
-  outline: none;
-  background-color: transparent;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: $text-size--small;
-}
-
-.column__header-menu-dropdown > ul > li > button > svg {
-  height: $icon--large;
-  width: $icon--large;
-}
-
-.column__header-menu-dropdown > ul > li:last-of-type {
-  height: auto;
-  display: flex;
-  justify-content: space-between;
-}
-
-// Hacky way to not show delete column button if it's the last column
-.column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(1) {
-  display: none;
-}
-
-[theme="dark"] {
-  .column__header-menu-dropdown {
-    background-color: $navy--500;
-  }
-
-  .column__header-menu-dropdown > ul > li {
-    background-color: $navy--500;
-
-    &:hover {
-      filter: $brighten--slightly;
-    }
-
-    &:focus-within {
-      background-color: $navy--400;
-    }
-  }
-
-  .column__header-menu-dropdown > ul > li > button {
-    color: $gray--000;
-  }
-
-  .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
-    box-shadow: 0 0 0 2px $gray--000;
-  }
-}
+//.container {
+//  > * {
+//    transform: translate(calc(50% + $spacing--xl), calc(-2 * $spacing--xxs));
+//  }}
+//.settings_pop-up{
+//}
+//.column__header-menu-dropdown {
+//  align-self: flex-start;
+//  //margin-left: auto;
+//  //margin-left: auto;
+//  padding-right: 32px;
+//  //margin-right: auto;
+//  background-color: $gray--000;
+//  border-radius: $rounded--full;
+//  display: flex;
+//  //box-shadow:
+//  //  0 4px 6px -1px rgb(0 0 0 / 0.1),
+//  //  0 2px 4px -2px rgb(0 0 0 / 0.1);
+//  box-shadow:
+//    0 4px 6px -1px rgba(0, 0, 0, 0.04),
+//    0 -4px 6px -1px rgba(0, 0, 0, 0.04),
+//    4px 0 6px -1px rgba(0, 0, 0, 0.04),
+//    -4px 0 6px -1px rgba(0, 0, 0, 0.04);
+//
+//  z-index: 200;
+//}
+//
+//.column__header-menu-dropdown > ul {
+//  display: flex;
+//  align-items: center;
+//  list-style: none;
+//  padding: $spacing--xs $spacing--sm;
+//  margin: 0;
+//  gap: $spacing--sm;
+//}
+//
+//.column__header-menu-dropdown > ul .column__tooltip {
+//  @include tooltip--light;
+//}
+//
+//.column__header-menu-dropdown > ul > li {
+//  border-radius: $rounded--full;
+//  height: 32px;
+//  width: 32px;
+//  background-color: $gray--000;
+//
+//  &:hover {
+//    filter: $darken--slightly;
+//  }
+//
+//  &:focus-within {
+//    background-color: $gray--200;
+//  }
+//}
+//
+//.column__header-menu-dropdown > ul > li > button {
+//  cursor: pointer;
+//  border: 0;
+//  outline: none;
+//  background-color: transparent;
+//  padding: 0;
+//  margin: 0;
+//  height: 100%;
+//  width: 100%;
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//  gap: 10px;
+//  font-size: $text-size--small;
+//}
+//
+//.column__header-menu-dropdown > ul > li > button > svg {
+//  height: $icon--large;
+//  width: $icon--large;
+//}
+//
+//.column__header-menu-dropdown > ul > li:last-of-type {
+//  height: auto;
+//  display: flex;
+//  justify-content: space-between;
+//}
+//
+//// Hacky way to not show delete column button if it's the last column
+//.column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(1) {
+//  display: none;
+//}
+//
+//[theme="dark"] {
+//  .column__header-menu-dropdown {
+//    background-color: $navy--500;
+//  }
+//
+//  .column__header-menu-dropdown > ul > li {
+//    background-color: $navy--500;
+//
+//    &:hover {
+//      filter: $brighten--slightly;
+//    }
+//
+//    &:focus-within {
+//      background-color: $navy--400;
+//    }
+//  }
+//
+//  .column__header-menu-dropdown > ul > li > button {
+//    color: $gray--000;
+//  }
+//
+//  .column__header-menu-dropdown > ul > li:last-child > button:focus-visible {
+//    box-shadow: 0 0 0 2px $gray--000;
+//  }
+//}

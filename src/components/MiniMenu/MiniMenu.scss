@@ -16,7 +16,8 @@
   padding-left: $spacing--xxs 2px;
 
   // place menu at the same place as the icon (including fine tuning)
-  transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+  // this actually randomly moved the menu around for me
+  //transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
 
   border-radius: $rounded--full;
   box-shadow: 0 0 20px rgba($navy--400, 0.12);

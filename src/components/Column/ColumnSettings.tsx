@@ -12,7 +12,6 @@ import {useOnBlur} from "utils/hooks/useOnBlur";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
-// import {ColorPicker, ColorPickerDyn} from "./ColorPicker";
 import {ColorPicker} from "./ColorPicker";
 
 type ColumnSettingsProps = {
@@ -42,14 +41,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
     dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
-  // const renderColorPicker = () =>
-  //   openedColorPicker ? (
-  //     <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} />
-  //   ) : (
-  //     <span className={`column__header-color-option ${color}_selected`} />
-  //   );
-
-  const renderColorPickerDyn = () =>
+  const renderColorPicker = () =>
     openedColorPicker ? (
       <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} colors={COLOR_ORDER} />
     ) : (
@@ -57,10 +49,11 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
     );
 
   return (
-    <div ref={columnSettingsRef}>
+    <div ref={columnSettingsRef} className="container">
+      {/* style={{ background: 'pink', position: 'relative', top: 0, right: 0, width: '100%'}}> */}
       {/* className="column__header-menu-dropdown" */}
       <MiniMenu
-        className=""
+        className="settings_pop-up"
         items={[
           {
             label: t("Column.deleteColumn"),
@@ -70,7 +63,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
               dispatch(Actions.deleteColumn(id));
             },
           },
-          {label: t("Column.color"), icon: renderColorPickerDyn(), onClick: () => setOpenedColorPicker((o) => !o)},
+          {label: t("Column.color"), icon: renderColorPicker(), onClick: () => setOpenedColorPicker((o) => !o)},
           {
             label: t("Column.addColumnLeft"),
             icon: <ArrowLeft />,
