@@ -1,10 +1,17 @@
 @import "constants/style";
 
-.mini-menu {
-  //position: absolute;
-  //align-self: flex-start;
-  //margin-left: auto;
+// Define a variable to control the transform application
+//$apply-transform: true;
 
+// Define the mixin with conditional logic for transform
+@mixin conditional-transform($translateX, $translateY) {
+  $apply-transform: if(var(--apply-transform) == "true", true, false);
+  @if $apply-transform {
+    transform: translate($translateX, $translateY);
+  }
+}
+
+.mini-menu {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -12,12 +19,10 @@
 
   width: fit-content;
   height: 48px;
-  //padding: $spacing--xxs 2px;
   padding-left: $spacing--xxs 2px;
 
-  // place menu at the same place as the icon (including fine tuning)
-  // this actually randomly moved the menu around for me
-  //transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+  // Conditionally apply the transform property
+  @include conditional-transform(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
 
   border-radius: $rounded--full;
   box-shadow: 0 0 20px rgba($navy--400, 0.12);

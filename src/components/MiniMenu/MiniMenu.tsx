@@ -1,4 +1,4 @@
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import classNames from "classnames";
 import {Tooltip} from "components/Tooltip";
 import {uniqueId} from "underscore";
@@ -14,20 +14,21 @@ type MiniMenuItem = {
 type MiniMenuProps = {
   className?: string;
   items: MiniMenuItem[];
+  applyTransform?: boolean;
 };
 
-export const MiniMenu = (props: MiniMenuProps) => (
-    <div className={classNames(props.className, "mini-menu")}>
-      {props.items.map((item) => {
-        const anchor = uniqueId(`mini-menu-${item.label}`);
-        return (
-          <>
-            <button id={anchor} className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})} key={item.label} onClick={item?.onClick}>
-              {item.icon}
-            </button>
-            <Tooltip anchorSelect={`#${anchor}`} content={item.label} color="backlog-blue" />
-          </>
-        );
-      })}
-    </div>
-  );
+export const MiniMenu = ({className, items, applyTransform = true}: MiniMenuProps) => (
+  <div className={classNames(className, "mini-menu")} style={{"--apply-transform": applyTransform ? "true" : "false"} as React.CSSProperties}>
+    {items.map((item) => {
+      const anchor = uniqueId(`mini-menu-${item.label}`);
+      return (
+        <>
+          <button id={anchor} className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})} key={item.label} onClick={item?.onClick}>
+            {item.icon}
+          </button>
+          <Tooltip anchorSelect={`#${anchor}`} content={item.label} color="backlog-blue" />
+        </>
+      );
+    })}
+  </div>
+);

@@ -8,7 +8,6 @@ import "./ColumnSettings.scss";
 import "./ColorPicker.scss";
 import {useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
-// import {Tooltip} from "react-tooltip";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
@@ -50,8 +49,6 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
 
   return (
     <div ref={columnSettingsRef} className="container">
-      {/* style={{ background: 'pink', position: 'relative', top: 0, right: 0, width: '100%'}}> */}
-      {/* className="column__header-menu-dropdown" */}
       <MiniMenu
         className="settings_pop-up"
         items={[
@@ -102,92 +99,8 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             onClick: () => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {}),
           },
         ]}
+        applyTransform={false}
       />
-
-      {/* <ul id="cwwwwwww"> */}
-      {/*   <li> */}
-      {/*   <button */}
-      {/*       onClick={() => { */}
-      {/*         onClose?.(); */}
-      {/*         dispatch(Actions.deleteColumn(id)); */}
-      {/*       }} */}
-      {/*       title={t("Column.deleteColumn")} */}
-      {/*     > */}
-      {/*       <Trash /> */}
-      {/*       /!* {t("Column.deleteColumn")} *!/ */}
-      {/*     </button> */}
-      {/*   </li> */}
-      {/*   <li style={{display: "block"}} id="cwwwwwww"> */}
-      {/*     <button id="cwwwwwww" aria-label="Color Picker" title={t("Column.color")} onClick={() => setOpenedColorPicker((o) => !o)}> */}
-      {/*       <span className={`column__header-color-option ${color}_selected`} /> */}
-      {/*     </button> */}
-      {/*     {openedColorPicker && <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} />} */}
-      {/*     <Tooltip className="column__tooltip" anchorSelect="cwwwwwww"> */}
-      {/*       hi */}
-      {/*     </Tooltip> */}
-      {/*   </li> */}
-      {/*   <li> */}
-      {/*     <button */}
-      {/*       aria-label="AddLeftIcon" */}
-      {/*       onClick={() => { */}
-      {/*         onClose?.(); */}
-      {/*         handleAddColumn(index); */}
-      {/*       }} */}
-      {/*       title={t("Column.addColumnLeft")} */}
-      {/*     > */}
-      {/*       <ArrowLeft /> */}
-      {/*     </button> */}
-      {/*   </li> */}
-      {/*   <li> */}
-      {/*     <button */}
-      {/*       aria-label="AddRightIcon" */}
-      {/*       onClick={() => { */}
-      {/*         onClose?.(); */}
-      {/*         handleAddColumn(index + 1); */}
-      {/*       }} */}
-      {/*       title={t("Column.addColumnRight")} */}
-      {/*     > */}
-      {/*       <ArrowRight /> */}
-      {/*     </button> */}
-      {/*   </li> */}
-      {/*   <li> */}
-      {/*     <button */}
-      {/*       aria-label="HideIcon" */}
-      {/*       onClick={() => { */}
-      {/*         onClose?.(); */}
-      {/*         dispatch(Actions.editColumn(id, {name, color, index, visible: !visible})); */}
-      {/*       }} */}
-      {/*       title={visible ? t("Column.hideColumn") : t("Column.showColumn")} */}
-      {/*     > */}
-      {/*       {visible ? <Hidden /> : <Visible />} */}
-      {/*     </button> */}
-      {/*   </li> */}
-      {/*   <li> */}
-      {/*     <button */}
-      {/*       aria-label="EditIcon" */}
-      {/*       onClick={() => { */}
-      {/*         onNameEdit?.(); */}
-      {/*         onClose?.(); */}
-      {/*       }} */}
-      {/*       title={t("Column.editName")} */}
-      {/*     > */}
-      {/*       <Edit /> */}
-      {/*     </button> */}
-      {/*   </li> */}
-      {/*   <li> */}
-      {/*     <button */}
-      {/*       aria-label="CloseIcon" */}
-      {/*       title={t("Column.resetName")} */}
-      {/*       className="column__header-menu-dropdown-edit-button" */}
-      {/*       onClick={() => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {})} */}
-      {/*     > */}
-      {/*       <Close className="column__header-edit-button-icon" /> */}
-      {/*     </button> */}
-      {/*   </li> */}
-      {/*   <Tooltip className="column__tooltip" anchorSelect="cwwwwwww"> */}
-      {/*     hihihi */}
-      {/*   </Tooltip> */}
-      {/* </ul> */}
     </div>
   );
 };
