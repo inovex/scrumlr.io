@@ -50,7 +50,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             >
               <div className={`column__header-color-option ${item.toString()}`} />
             </button>
-            <Tooltip anchorSelect={`#${anchor}`} content={item.toString()} />
+            {/* <Tooltip anchorSelect={`#${anchor}`} content={item.toString()} /> */}
           </li>
         );
       })}
