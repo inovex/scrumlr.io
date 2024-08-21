@@ -6,14 +6,15 @@
   //margin-left: auto;
 
   display: flex;
-  justify-content: flex-end;
   flex-direction: row;
   align-items: center;
   gap: $spacing--xs;
 
   width: fit-content;
   height: 48px;
-  padding: $spacing--xxs 2px;
+  //padding: $spacing--xxs 2px;
+  padding-left: $spacing--xxs 2px;
+
   // place menu at the same place as the icon (including fine tuning)
   transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
 
@@ -50,4 +51,8 @@
       background-color: $navy--600;
     }
   }
+}
+
+.mini-menu:first-child {
+  padding-left: $spacing--xs;
 }
