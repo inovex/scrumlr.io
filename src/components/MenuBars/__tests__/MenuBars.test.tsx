@@ -7,7 +7,7 @@ import getTestParticipant from "../../../utils/test/getTestParticipant";
 
 const createMenuBars = (store: MockStoreEnhanced) => (
   <Provider store={store}>
-    <MenuBars />
+    <MenuBars showNextColumn showPreviousColumn onNextColumn={() => {}} onPreviousColumn={() => {}} />
   </Provider>
 );
 

@@ -169,7 +169,7 @@ exports[`MenuBars should match snapshot 1`] = `
     </section>
     <button
       aria-hidden="true"
-      class="menu-bars__navigation"
+      class="menu-bars__navigation menu-bars__navigation--visible"
     >
       <svg
         class="menu-bars__navigation-icon"
@@ -305,7 +305,7 @@ exports[`MenuBars should match snapshot 1`] = `
     </section>
     <button
       aria-hidden="true"
-      class="menu-bars__navigation"
+      class="menu-bars__navigation menu-bars__navigation--visible"
     >
       <svg
         class="menu-bars__navigation-icon"
