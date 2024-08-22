@@ -13,12 +13,16 @@
 
 .mini-menu {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
   gap: $spacing--xs;
+  justify-content: center;
+  //TODO: fix padding
 
   width: fit-content;
-  height: 48px;
+  height: fit-content;
+  min-height: 48px;
   padding-left: $spacing--xxs 2px;
 
   // Conditionally apply the transform property
@@ -29,7 +33,6 @@
 
   background-color: $gray--000;
 }
-
 .mini-menu__item {
   all: unset;
 
@@ -61,4 +64,26 @@
 
 .mini-menu:first-child {
   padding-left: $spacing--xs;
+}
+
+[theme="dark"] {
+  .mini-menu__item {
+    color: $gray--000;
+
+    &:hover {
+      background-color: $navy--600;
+    }
+
+    &--active {
+      color: $gray--000;
+      background-color: $navy--600;
+
+      &:hover {
+        background-color: $navy--600;
+      }
+    }
+  }
+  .mini-menu {
+    background-color: $navy--400;
+  }
 }
