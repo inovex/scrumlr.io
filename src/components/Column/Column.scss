@@ -214,11 +214,10 @@
   transition: all 0.08s ease-out;
   flex: 0 0 24px;
   margin: auto calc(#{$spacing--base} - 2px) auto $spacing--base;
-  //transform: rotate(90deg);
 
   &:hover > svg,
   &:focus-visible > svg {
-    transform: translate(-0.64px, -0.64px);
+    transform: translate(-0.64px, -0.64px) rotate(90deg);
     filter: drop-shadow(2px 2px 2px rgba(var(--accent-color--light-rgb), 0.24));
     color: var(--accent-color--light);
   }
