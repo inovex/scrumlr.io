@@ -48,9 +48,9 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
     );
 
   return (
-    <div ref={columnSettingsRef} className="container">
+    <div ref={columnSettingsRef} className="column_settings">
       <MiniMenu
-        className="settings_pop-up"
+        className=""
         items={[
           {
             label: t("Column.deleteColumn"),
