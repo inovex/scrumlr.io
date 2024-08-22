@@ -92,20 +92,21 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	return new(dto.Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error) {
-	board, requests, sessions, columns, notes, reactions, votings, votes, err := s.database.Get(boardID)
+func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error) {
+	fullBoard, err := s.database.Get(boardID)
 	if err != nil {
-		return nil, nil, nil, nil, nil, nil, nil, nil, err
+		return nil, err
 	}
 
-	personalVotes := []*dto.Vote{}
-	for _, vote := range votes {
+	personalVotes := []database.Vote{}
+	for _, vote := range fullBoard.Votes {
 		if vote.User == ctx.Value(identifiers.UserIdentifier).(uuid.UUID) {
-			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
+			personalVotes = append(personalVotes, vote)
 		}
 	}
+	fullBoard.Votes = personalVotes
 
-	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Reactions(reactions), dto.Votings(votings, votes), personalVotes, err
+	return new(dto.FullBoard).From(fullBoard), err
 }
 
 func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error) {

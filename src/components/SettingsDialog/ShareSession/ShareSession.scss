@@ -4,16 +4,10 @@ $header-menu__item-border-width: 1px;
 $header-menu-border-bottom-color: #efefef;
 
 .share-qr-code-option__qrcode {
-  height: 100%;
   width: 100%;
-}
-
-.share-qr-code-option__qrcode path:first-child {
-  fill: $gray--100;
-}
-
-.share-qr-code-option__qrcode path:last-child {
-  fill: $navy--700;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .share-session__background {
@@ -69,14 +63,4 @@ $header-menu-border-bottom-color: #efefef;
   align-items: center;
   flex-direction: column;
   border-radius: 8px;
-}
-
-[theme="dark"] {
-  .share-qr-code-option__qrcode path:first-child {
-    fill: $navy--600;
-  }
-
-  .share-qr-code-option__qrcode path:last-child {
-    fill: $gray--100;
-  }
 }

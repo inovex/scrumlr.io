@@ -10,7 +10,7 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
 
       const self = action.participants.find((p) => p.user.id === ownUserId)!;
       const others = action.participants.filter((p) => p.user.id !== ownUserId);
-      const focusInitiator = null;
+      const focusInitiator = undefined;
 
       return {
         ...state,
@@ -75,7 +75,7 @@ export const participantsReducer = (state: ParticipantsState = null, action: Red
         ...state,
         self: state!.self,
         others: [...state!.others],
-        focusInitiator: null,
+        focusInitiator: undefined,
       };
     }
 
