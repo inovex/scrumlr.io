@@ -30,6 +30,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
   const dispatch = useDispatch();
   const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
   const [openedColorPicker, setOpenedColorPicker] = useState(false);
+  const isMobile = false; // TODO: how do i find out if sth is mobile?
 
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
@@ -42,7 +43,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
 
   const renderColorPicker = () =>
     openedColorPicker ? (
-      <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} colors={COLOR_ORDER} />
+      <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} colors={COLOR_ORDER} horizontal={isMobile} />
     ) : (
       <span className={`column__header-color-option ${color}_selected`} />
     );

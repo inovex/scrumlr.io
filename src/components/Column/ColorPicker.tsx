@@ -13,14 +13,15 @@ type ColorPickerProps = {
   color: Color;
   onClose?: () => void;
   colors: Color[];
+  horizontal?: boolean;
 };
 
-export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color, onClose, colors}) => {
+export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color, onClose, colors, horizontal = false}) => {
   const dispatch = useDispatch();
   const colorsWithoutSelectedColor = colors.filter((curColor) => curColor !== color);
   const primColorAnchor = uniqueId(`color-picker-${color.toString()}`);
   return (
-    <ul className="column__header-color-picker-dropdown" style={{"--horizontal": "false"} as React.CSSProperties}>
+    <ul className="column__header-color-picker-dropdown" style={{"--horizontal": horizontal} as React.CSSProperties}>
       <li>
         <button
           id={primColorAnchor}

@@ -15,10 +15,19 @@ type MiniMenuProps = {
   className?: string;
   items: MiniMenuItem[];
   applyTransform?: boolean;
+  horizontal?: boolean;
 };
 
-export const MiniMenu = ({className, items, applyTransform = true}: MiniMenuProps) => (
-  <div className={classNames(className, "mini-menu")} style={{"--apply-transform": applyTransform ? "true" : "false"} as React.CSSProperties}>
+export const MiniMenu = ({className, items, applyTransform = true, horizontal = true}: MiniMenuProps) => (
+  <div
+    className={classNames(className, "mini-menu")}
+    style={
+      {
+        "--apply-transform": applyTransform ? "true" : "false",
+        "--horizontal": horizontal ? "true" : "false",
+      } as React.CSSProperties
+    }
+  >
     {items.map((item) => {
       const anchor = uniqueId(`mini-menu-${item.label}`);
       return (

@@ -1,9 +1,5 @@
 @import "constants/style";
 
-// Define a variable to control the transform application
-//$apply-transform: true;
-
-// Define the mixin with conditional logic for transform
 @mixin conditional-transform($translateX, $translateY) {
   $apply-transform: if(var(--apply-transform) == "true", true, false);
   @if $apply-transform {
@@ -11,10 +7,19 @@
   }
 }
 
+@mixin rotate($horizontal) {
+  @if $horizontal == true {
+    flex-direction: row;
+  } @else {
+    flex-direction: column;
+  }
+}
+
 .mini-menu {
+  --horizontal: true; /* default value */
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
+  flex-direction: row; /* default direction */
   align-items: center;
   gap: $spacing--xxs;
   justify-content: center;
@@ -26,6 +31,11 @@
 
   // Conditionally apply the transform property
   @include conditional-transform(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+
+  /* Change flex-direction based on the value of --horizontal */
+  &[style*="--horizontal: true"] {
+    flex-direction: row;
+  }
 
   border-radius: $rounded--full;
   box-shadow: 0 0 20px rgba($navy--400, 0.12);
