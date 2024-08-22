@@ -11,8 +11,8 @@
   //padding-top: $spacing--xxs;
   padding-bottom: $spacing--xxs;
   box-shadow: 0 0 20px rgba(55, 62, 79, 0.12);
-  background-color: #ffffff;
-  //background-color: $gray--300;
+  //background-color: #ffffff;
+  background-color: $gray--300;
 
   //width: 40px;
 
@@ -61,11 +61,7 @@
 
 [theme="dark"] {
   .column__header-color-picker-dropdown {
-    background-color: $navy--500;
-  }
-
-  .planning-pink {
-    border: $navy--500;
+    background-color: $navy--600;
   }
 }
 
@@ -175,4 +171,91 @@
 
 .online-orange:hover {
   border: 3px solid #ffeecc;
+}
+
+[theme="dark"] {
+  .planning-pink {
+    border: 3px solid $navy--600;
+  }
+
+  .planning-pink_selected {
+    border: 3px solid #ff99c3;
+  }
+
+  .planning-pink:hover {
+    border: 3px solid #ffcce1;
+  }
+
+  .backlog-blue {
+    border: 3px solid $navy--600;
+  }
+
+  .backlog-blue_selected {
+    border: 3px solid #99bcff;
+  }
+
+  .backlog-blue:hover {
+    border: 3px solid #ccddff;
+  }
+
+  .poker-purple {
+    border: 3px solid $navy--600;
+  }
+
+  .poker-purple_selected {
+    border: 3px solid #e9a7ff;
+  }
+
+  .poker-purple:hover {
+    border: 3px solid #f4d3ff;
+  }
+
+  .value-violet {
+    border: 3px solid $navy--600;
+  }
+
+  .value-violet_selected {
+    border: 3px solid #be99fb;
+  }
+
+  .value-violet:hover {
+    border: 3px solid #dfccfd;
+  }
+
+  .goal-green {
+    border: 3px solid $navy--600;
+  }
+
+  .goal-green_selected {
+    border: 3px solid #a4eecb;
+  }
+
+  .goal-green:hover {
+    border: 3px solid #d1f6e5;
+  }
+
+  .yielding-yellow {
+    border: 3px solid $navy--600;
+  }
+
+  .yielding-yellow_selected {
+    border: 3px solid #fffb99;
+  }
+
+  .yielding-yellow:hover {
+    border: 3px solid #fffdcc;
+  }
+
+  .online-orange {
+    border: 3px solid $navy--600;
+  }
+
+  .online-orange_selected {
+    background: #ffb933;
+    border: 3px solid #ffdc99;
+  }
+
+  .online-orange:hover {
+    border: 3px solid #ffeecc;
+  }
 }
