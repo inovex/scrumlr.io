@@ -3,3 +3,8 @@
 .column_settings {
   z-index: 220;
 }
+
+// Hacky way to not show delete column button if it's the last column
+.column:only-of-type .column__header-menu-dropdown > ul > li:nth-child(5) {
+  display: none;
+}
