@@ -259,3 +259,14 @@
     border: 3px solid #ffeecc;
   }
 }
+
+@media #{$smartphone} {
+  .column__header-color-picker-dropdown {
+    flex-direction: row-reverse;
+    position: absolute;
+    right: 0;
+    margin: auto;
+    justify-self: center;
+    padding: $spacing--xxs 2px;
+  }
+}

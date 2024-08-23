@@ -99,7 +99,6 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             onClick: () => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {}),
           },
         ]}
-        applyTransform={false}
       />
     </div>
   );

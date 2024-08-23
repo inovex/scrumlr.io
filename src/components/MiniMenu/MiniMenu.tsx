@@ -1,4 +1,4 @@
-import React, {ReactNode} from "react";
+import {ReactNode} from "react";
 import classNames from "classnames";
 import {Tooltip} from "components/Tooltip";
 import {uniqueId} from "underscore";
@@ -14,11 +14,10 @@ type MiniMenuItem = {
 type MiniMenuProps = {
   className?: string;
   items: MiniMenuItem[];
-  applyTransform?: boolean;
 };
 
-export const MiniMenu = ({className, items, applyTransform = true}: MiniMenuProps) => (
-  <div className={classNames(className, "mini-menu")} style={{"--apply-transform": applyTransform ? "true" : "false"} as React.CSSProperties}>
+export const MiniMenu = ({className, items}: MiniMenuProps) => (
+  <div className={classNames(className, "mini-menu")}>
     {items.map((item) => {
       const anchor = uniqueId(`mini-menu-${item.label}`);
       return (
