@@ -16,33 +16,9 @@
   flex-wrap: wrap;
   flex-direction: row;
   align-items: center;
-  gap: $spacing--xxs;
+  gap: $spacing--xs;
   justify-content: center;
-
-  width: fit-content;
-  height: fit-content;
-  min-height: 48px;
-  padding-left: $spacing--xxs 2px;
-
-  // Conditionally apply the transform property
-  @include conditional-transform(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
-
-  border-radius: $rounded--full;
-  box-shadow: 0 0 20px rgba($navy--400, 0.12);
-
-  background-color: $gray--000;
-
-  &.mobile {
-    flex-direction: column;
-  }
-}
-
-.mini-menu-mobile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: $spacing--xxs;
-  justify-content: center;
+  //TODO: fix padding
 
   width: fit-content;
   height: fit-content;
@@ -57,7 +33,6 @@
 
   background-color: $gray--000;
 }
-
 .mini-menu__item {
   all: unset;
 
