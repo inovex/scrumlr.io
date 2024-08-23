@@ -20,7 +20,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
   const colorsWithoutSelectedColor = colors.filter((curColor) => curColor !== color);
   const primColorAnchor = uniqueId(`color-picker-${color.toString()}`);
   return (
-    <ul className="column__header-color-picker-dropdown" style={{"--horizontal": "false"} as React.CSSProperties}>
+    <ul className="column__header-color-picker-dropdown">
       <li>
         <button
           id={primColorAnchor}

@@ -1,26 +1,12 @@
 @import "src/constants/style";
 
-@mixin conditional-transform($horizontal) {
-  @if $horizontal == true {
-    flex-direction: row;
-  } @else {
-    flex-direction: column;
-  }
-}
-
 .column__header-color-picker-dropdown {
-  --horizontal: false; /* default value */
   z-index: 220;
+
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column; /* default direction */
-
-  /* Change flex-direction based on the value of --horizontal */
-  &[style*="--horizontal: true"] {
-    flex-direction: row;
-  }
-
   //gap: $spacing--xxs;
   //padding-top: $spacing--xxs;
   padding-bottom: $spacing--xxs;
@@ -28,6 +14,11 @@
   //background-color: #ffffff;
   background-color: $gray--300;
 
+  //width: 40px;
+
+  //box-shadow:
+  //  0 4px 6px -1px rgb(0 0 0 / 0.1),
+  //  0 2px 4px -2px rgb(0 0 0 / 0.1);
   list-style: none;
   //padding: 10px;
   //padding-top: 30px;
