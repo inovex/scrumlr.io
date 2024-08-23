@@ -5,13 +5,13 @@ import {Color, getColorForIndex, COLOR_ORDER} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
-import "./ColorPicker.scss";
+import "../ColorPicker/ColorPicker.scss";
 import {useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
-import {ColorPicker} from "./ColorPicker";
+import {ColorPicker} from "../ColorPicker/ColorPicker";
 
 type ColumnSettingsProps = {
   id: string;
