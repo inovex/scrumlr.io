@@ -39,12 +39,24 @@ export const boardReducer = createReducer(initialState, (builder) => {
         },
       };
     })
-    .addCase(permittedBoardAccess, () => ({status: "accepted"}))
-    .addCase(rejectedBoardAccess, () => ({status: "rejected"}))
-    .addCase(passphraseChallengeRequired, () => ({status: "passphrase_required"}))
-    .addCase(incorrectPassphrase, () => ({status: "incorrect_passphrase"}))
-    .addCase(tooManyJoinRequests, () => ({status: "too_many_join_requests"}))
-    .addCase(bannedFromBoard, () => ({status: "banned"}))
+    .addCase(permittedBoardAccess, (state) => {
+      state.status = "accepted";
+    })
+    .addCase(rejectedBoardAccess, (state) => {
+      state.status = "rejected";
+    })
+    .addCase(passphraseChallengeRequired, (state) => {
+      state.status = "passphrase_required";
+    })
+    .addCase(incorrectPassphrase, (state) => {
+      state.status = "incorrect_passphrase";
+    })
+    .addCase(tooManyJoinRequests, (state) => {
+      state.status = "too_many_join_requests";
+    })
+    .addCase(bannedFromBoard, (state) => {
+      state.status = "banned";
+    })
     // TODO CreatedVoting
     // TODO UpdatedVoting
     // TODO DeletedNote
@@ -56,5 +68,7 @@ export const boardReducer = createReducer(initialState, (builder) => {
         timerEnd: Timer.addOffsetToDate(action.payload.board.timerEnd, store.getState().view.serverTimeOffset),
       },
     }))
-    .addMatcher(isAnyOf(joinBoard, pendingBoardAccessConfirmation), () => ({status: "pending"}));
+    .addMatcher(isAnyOf(joinBoard, pendingBoardAccessConfirmation), (state) => {
+      state.status = "pending";
+    });
 });
