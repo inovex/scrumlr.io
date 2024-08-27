@@ -44,62 +44,65 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
     openedColorPicker ? (
       <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} colors={COLOR_ORDER} />
     ) : (
-      <span className={`column__header-color-option ${color}_selected`} />
+      <span className={`column__header-color-option column__header-color-option--${color}-selected`} />
     );
+
+  const menuItems = [
+    {
+      label: t("Column.deleteColumn"),
+      icon: <Trash />,
+      onClick: () => {
+        onClose?.();
+        dispatch(Actions.deleteColumn(id));
+      },
+    },
+    {
+      label: t("Column.color"),
+      icon: renderColorPicker(),
+      onClick: () => setOpenedColorPicker((o) => !o),
+    },
+    {
+      label: t("Column.addColumnLeft"),
+      icon: <ArrowLeft />,
+      onClick: () => {
+        onClose?.();
+        handleAddColumn(index);
+      },
+    },
+    {
+      label: t("Column.addColumnRight"),
+      icon: <ArrowRight />,
+      onClick: () => {
+        onClose?.();
+        handleAddColumn(index + 1);
+      },
+    },
+    {
+      label: visible ? t("Column.hideColumn") : t("Column.showColumn"),
+      icon: visible ? <Hidden /> : <Visible />,
+      onClick: () => {
+        onClose?.();
+        dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+      },
+    },
+    {
+      label: t("Column.editName"),
+      icon: <Edit />,
+      onClick: () => {
+        onNameEdit?.();
+        onClose?.();
+      },
+    },
+    {
+      label: t("Column.resetName"),
+      icon: <Close />,
+      onClick: () => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {}),
+    },
+  ];
 
   return (
     <div ref={columnSettingsRef} className="column_settings">
-      <MiniMenu
-        className=""
-        items={[
-          {
-            label: t("Column.deleteColumn"),
-            icon: <Trash />,
-            onClick: () => {
-              onClose?.();
-              dispatch(Actions.deleteColumn(id));
-            },
-          },
-          {label: t("Column.color"), icon: renderColorPicker(), onClick: () => setOpenedColorPicker((o) => !o)},
-          {
-            label: t("Column.addColumnLeft"),
-            icon: <ArrowLeft />,
-            onClick: () => {
-              onClose?.();
-              handleAddColumn(index);
-            },
-          },
-          {
-            label: t("Column.addColumnRight"),
-            icon: <ArrowRight />,
-            onClick: () => {
-              onClose?.();
-              handleAddColumn(index + 1);
-            },
-          },
-          {
-            label: visible ? t("Column.hideColumn") : t("Column.showColumn"),
-            icon: visible ? <Hidden /> : <Visible />,
-            onClick: () => {
-              onClose?.();
-              dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
-            },
-          },
-          {
-            label: t("Column.editName"),
-            icon: <Edit />,
-            onClick: () => {
-              onNameEdit?.();
-              onClose?.();
-            },
-          },
-          {
-            label: t("Column.resetName"),
-            icon: <Close />,
-            onClick: () => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {}),
-          },
-        ]}
-      />
+      <MiniMenu className="" items={menuItems} />
     </div>
   );
 };
