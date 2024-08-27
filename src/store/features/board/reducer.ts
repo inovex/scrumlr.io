@@ -20,6 +20,7 @@ const initialState: BoardState = {status: "unknown"};
 
 export const boardReducer = createReducer(initialState, (builder) => {
   builder
+    // need to be careful here, since data might be undefined
     .addCase(updatedBoardTimer, (state, action) => {
       if (action.payload.timerEnd) {
         return {
