@@ -70,6 +70,9 @@ const boardReducer = createReducer(initialState, (builder) => {
     .addCase(incorrectPassphrase, () => ({status: "incorrect_passphrase"}))
     .addCase(tooManyJoinRequests, () => ({status: "too_many_join_requests"}))
     .addCase(bannedFromBoard, () => ({status: "banned"}))
+    // TODO CreatedVoting
+    // TODO UpdatedVoting
+    // TODO DeletedNote
     .addMatcher(isAnyOf(initializeBoard, updatedBoard), (_, action) => ({
       status: "ready",
       data: {
