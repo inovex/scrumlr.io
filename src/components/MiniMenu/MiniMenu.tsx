@@ -22,7 +22,7 @@ export const MiniMenu = ({className, items}: MiniMenuProps) => (
       const anchor = uniqueId(`mini-menu-${item.label}`);
       return (
         <>
-          <button id={anchor} className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})} key={item.label} onClick={item?.onClick}>
+          <button aria-label={item.label} id={anchor} className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})} key={item.label} onClick={item?.onClick}>
             {item.icon}
           </button>
           <Tooltip anchorSelect={`#${anchor}`} content={item.label} color="backlog-blue" />

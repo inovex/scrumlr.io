@@ -1,39 +1,26 @@
 @import "../../constants/style";
 
-.column__header-color-picker-dropdown {
+.color-picker {
   z-index: 220;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  //gap: $spacing--xxs;
-  //padding-top: $spacing--xxs;
   padding-bottom: $spacing--xxs;
   box-shadow: 0 0 20px rgba(55, 62, 79, 0.12);
-  //background-color: #ffffff;
   background-color: $gray--300;
-
-  //width: 40px;
-
-  //box-shadow:
-  //  0 4px 6px -1px rgb(0 0 0 / 0.1),
-  //  0 2px 4px -2px rgb(0 0 0 / 0.1);
   list-style: none;
-  //padding: 10px;
-  //padding-top: 30px;
   padding-left: 0;
   margin-top: auto;
-  border-radius: 24px;
-  //position: inherit;
-  //left: 30px;
+  border-radius: $rounded--full;
 
   &:hover {
     background-color: $brighten--slightly;
   }
 }
 
-.column__header-color-picker-dropdown > li > button {
+.color-picker > li > button {
   cursor: pointer;
   border: none;
   background: none;
@@ -45,22 +32,18 @@
   align-items: center;
 }
 
-.column__header-color-picker-dropdown > li {
-  all: unset;
+.color-picker > li {
   display: flex;
   justify-content: center;
   align-items: center;
-  //width: 40px;
-  //height: 40px;
-  cursor: pointer;
 }
 
-.column__header-color-picker-dropdown > ul > li {
+.color-picker > ul > li {
   padding: 0;
 }
 
 [theme="dark"] {
-  .column__header-color-picker-dropdown {
+  .color-picker {
     background-color: $navy--600;
   }
 }
@@ -261,7 +244,7 @@
 }
 
 @media #{$smartphone} {
-  .column__header-color-picker-dropdown {
+  .color-picker {
     flex-direction: row-reverse;
     position: absolute;
     right: 0;

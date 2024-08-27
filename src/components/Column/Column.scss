@@ -218,7 +218,7 @@
 
   &:hover > svg,
   &:focus-visible > svg {
-    transform: translate(-0.64px, -0.64px) rotate(90deg);
+    transform: translate(-0.64px, -0.64px);
     filter: drop-shadow(2px 2px 2px rgba(var(--accent-color--light-rgb), 0.24));
     color: var(--accent-color--light);
   }
@@ -229,7 +229,6 @@
   height: 24px;
   width: 24px;
   transition: all 0.08s ease-out;
-  transform: rotate(90deg);
 }
 
 [theme="dark"] .column__header-edit-button-icon {
