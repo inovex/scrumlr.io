@@ -15,6 +15,13 @@ type ColorPickerProps = {
   colors: Color[];
 };
 
+function formatColorName(input: string): string {
+  return input
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color, onClose, colors}) => {
   const dispatch = useDispatch();
   const colorsWithoutSelectedColor = colors.filter((curColor) => curColor !== color);
@@ -41,7 +48,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
           <li>
             <button
               id={anchor}
-              aria-label={item.toString()}
+              aria-label={formatColorName(item.toString())}
               title={item.toString()}
               onClick={() => {
                 onClose?.();
