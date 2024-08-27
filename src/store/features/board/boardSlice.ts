@@ -1,5 +1,5 @@
-import {createAction} from "@reduxjs/toolkit";
-import {Board, EditBoardRequest} from "types/board";
+import {createAction, createReducer, isAnyOf} from "@reduxjs/toolkit";
+import {Board, BoardState, EditBoardRequest} from "types/board";
 import {Participant} from "types/participant";
 import {Request} from "types/request";
 import {Column} from "types/column";
@@ -7,6 +7,8 @@ import {Note} from "types/note";
 import {Reaction} from "types/reaction";
 import {Vote} from "types/vote";
 import {Voting} from "types/voting";
+import store from "store";
+import {Timer} from "utils/timer";
 
 type BoardActionType = {
   board: Board;
@@ -38,15 +40,36 @@ export const setTimer = createAction<number>("scrumlr.io/setTimer");
 export const cancelTimer = createAction("scrumlr.io/cancelTimer");
 export const incrementTimer = createAction("scrumlr.io/incrementTimer");
 
-// const initialState: BoardState = {status: "unknown"};
+const initialState: BoardState = {status: "unknown"};
 
-/* TODO timer offset is required as context to update timer related stuff,
-     but that is in *view* and therefore not available in the state.
-     previously this was evaded by concatenating the action object with a context object. */
-
-// const boardReducer = createReducer(initialState, builder => {
-// builder
-// .addCase(updatedBoardTimer, (state, action) => ({...state, data: {...state.data, timerStart: Timer.addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
-//     timerEnd: Timer.addOffsetToDate(action.board.timerEnd, action.payload.view.serverTimeOffset)}}))
-// .addMatcher(isAnyOf(initializeBoard, updatedBoard), (state, action) => ({status: "ready", data: {...action.payload.board, timerStart: Timer.addOffsetToDate(action.payload.board.timerStart, action.payload.view.serverTimeOffset), timerEnd: Timer.addOffsetToDate(action.payload.board.timerEnd, state.data.)}}))//
-// })
+const boardReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(updatedBoardTimer, (state, action) => {
+      // state may be mutated directly because Immer is used internally https://redux-toolkit.js.org/usage/immer-reducers
+      if (action.payload.timerEnd) {
+        return {
+          ...state,
+          data: {
+            ...state.data!,
+            timerStart: Timer.addOffsetToDate(action.payload.timerStart, store.getState().view.serverTimeOffset),
+            timerEnd: Timer.addOffsetToDate(action.payload.timerEnd, store.getState().view.serverTimeOffset),
+          },
+        };
+      }
+      return {
+        status: "ready",
+        data: {
+          ...state.data!,
+          timerEnd: action.payload.timerEnd,
+        },
+      };
+    })
+    .addMatcher(isAnyOf(initializeBoard, updatedBoard), (state, action) => ({
+      status: "ready",
+      data: {
+        ...action.payload.board,
+        timerStart: Timer.addOffsetToDate(action.payload.board.timerStart, store.getState().view.serverTimeOffset),
+        timerEnd: Timer.addOffsetToDate(action.payload.board.timerEnd, store.getState().view.serverTimeOffset),
+      },
+    }));
+});
