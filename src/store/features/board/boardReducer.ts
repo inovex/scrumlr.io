@@ -42,7 +42,7 @@ export const incrementTimer = createAction("scrumlr.io/incrementTimer");
 
 const initialState: BoardState = {status: "unknown"};
 
-const boardReducer = createReducer(initialState, (builder) => {
+export const boardReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(updatedBoardTimer, (state, action) => {
       if (action.payload.timerEnd) {
