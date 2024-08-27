@@ -51,195 +51,262 @@
 .column__header-color-option {
   width: 23px;
   height: 23px;
-  border-radius: 100px;
-}
+  border-radius: $rounded--full;
 
-.planning-pink {
-  background: #ff3387;
-  border: 3px solid $gray--300;
-}
+  &--planning-pink {
+    background-color: $pink--400;
+    border: 3px solid $gray--300;
 
-.planning-pink_selected {
-  background: #ff3387;
-  border: 3px solid #ff99c3;
-}
+    &-selected {
+      background-color: $pink--400;
+      border: 3px solid $pink--200;
+    }
 
-.planning-pink:hover {
-  border: 3px solid #ffcce1;
-}
+    &:hover {
+      background-color: $pink--400;
+      border: 3px solid $pink--100;
+    }
 
-.backlog-blue {
-  background: #3379ff;
-  border: 3px solid $gray--300;
-}
+    &:focus {
+      background-color: $pink--400;
+      border: 3px solid $pink--100;
+    }
+  }
 
-.backlog-blue_selected {
-  background: #3379ff;
-  border: 3px solid #99bcff;
-}
+  &--backlog-blue {
+    background-color: $blue--400;
+    border: 3px solid $gray--300;
 
-.backlog-blue:hover {
-  border: #ccddff;
-}
+    &-selected {
+      background-color: $blue--400;
+      border: 3px solid $blue--200;
+    }
 
-.backlog-blue:hover {
-  border: 3px solid #ccddff;
-}
+    &:hover {
+      background-color: $blue--400;
+      border: 3px solid $blue--100;
+    }
 
-.poker-purple {
-  background: #d44fff;
-  border: 3px solid $gray--300;
-}
+    &:focus {
+      background-color: $blue--400;
+      border: 3px solid $blue--100;
+    }
+  }
 
-.poker-purple_selected {
-  background: #d44fff;
-  border: 3px solid #e9a7ff;
-}
+  &--poker-purple {
+    background-color: $purple--400;
+    border: 3px solid $gray--300;
 
-.poker-purple:hover {
-  border: 3px solid #f4d3ff;
-}
+    &-selected {
+      background-color: $purple--400;
+      border: 3px solid $purple--200;
+    }
 
-.value-violet {
-  background: #7d33f8;
-  border: 3px solid $gray--300;
-}
+    &:hover {
+      background-color: $purple--400;
+      border: 3px solid $purple--100;
+    }
 
-.value-violet_selected {
-  background: #7d33f8;
-  border: 3px solid #be99fb;
-}
+    &:focus {
+      background-color: $purple--400;
+      border: 3px solid $purple--100;
+    }
+  }
 
-.value-violet:hover {
-  border: 3px solid #dfccfd;
-}
+  &--value-violet {
+    background-color: $violet--400;
+    border: 3px solid $gray--300;
 
-.goal-green {
-  background: #49dd98;
-  border: 3px solid $gray--300;
-}
+    &-selected {
+      background-color: $violet--400;
+      border: 3px solid $violet--200;
+    }
 
-.goal-green_selected {
-  background: #49dd98;
-  border: 3px solid #a4eecb;
-}
+    &:hover {
+      background-color: $violet--400;
+      border: 3px solid $violet--100;
+    }
 
-.goal-green:hover {
-  border: 3px solid #d1f6e5;
-}
+    &:focus {
+      background-color: $violet--400;
+      border: 3px solid $violet--100;
+    }
+  }
 
-.yielding-yellow {
-  background: #fff733;
-  border: 3px solid $gray--300;
-}
+  &--goal-green {
+    background-color: $green--400;
+    border: 3px solid $gray--300;
 
-.yielding-yellow_selected {
-  background: #fff733;
-  border: 3px solid #fffb99;
-}
+    &-selected {
+      background-color: $green--400;
+      border: 3px solid $green--200;
+    }
 
-.yielding-yellow:hover {
-  border: 3px solid #fffdcc;
-}
+    &:hover {
+      background-color: $green--400;
+      border: 3px solid $green--100;
+    }
 
-.online-orange {
-  background: #ffb933;
-  border: 3px solid $gray--300;
-}
+    &:focus {
+      background-color: $green--400;
+      border: 3px solid $green--100;
+    }
+  }
 
-.online-orange_selected {
-  background: #ffb933;
-  border: 3px solid #ffdc99;
-}
+  &--yielding-yellow {
+    background-color: $yellow--400;
+    border: 3px solid $gray--300;
 
-.online-orange:hover {
-  border: 3px solid #ffeecc;
+    &-selected {
+      background-color: $yellow--400;
+      border: 3px solid $yellow--200;
+    }
+
+    &:hover {
+      background-color: $yellow--400;
+      border: 3px solid $yellow--100;
+    }
+
+    &:focus {
+      background-color: $yellow--400;
+      border: 3px solid $yellow--100;
+    }
+  }
+
+  &--online-orange {
+    background-color: $orange--400;
+    border: 3px solid $gray--300;
+
+    &-selected {
+      background-color: $orange--400;
+      border: 3px solid $orange--200;
+    }
+
+    &:hover {
+      background-color: $orange--400;
+      border: 3px solid $orange--100;
+    }
+
+    &:focus {
+      background-color: $orange--400;
+      border: 3px solid $orange--100;
+    }
+  }
 }
 
 [theme="dark"] {
-  .planning-pink {
-    border: 3px solid $navy--600;
-  }
+  .column__header-color-option {
+    &--planning-pink {
+      border: 3px solid $navy--600;
 
-  .planning-pink_selected {
-    border: 3px solid #ff99c3;
-  }
+      &-selected {
+        border: 3px solid $pink--200;
+      }
 
-  .planning-pink:hover {
-    border: 3px solid #ffcce1;
-  }
+      &:hover {
+        border: 3px solid $pink--100;
+      }
 
-  .backlog-blue {
-    border: 3px solid $navy--600;
-  }
+      &:focus {
+        border: 3px solid $pink--100;
+      }
+    }
 
-  .backlog-blue_selected {
-    border: 3px solid #99bcff;
-  }
+    &--backlog-blue {
+      border: 3px solid $navy--600;
 
-  .backlog-blue:hover {
-    border: 3px solid #ccddff;
-  }
+      &-selected {
+        border: 3px solid $blue--200;
+      }
 
-  .poker-purple {
-    border: 3px solid $navy--600;
-  }
+      &:hover {
+        border: 3px solid $blue--100;
+      }
 
-  .poker-purple_selected {
-    border: 3px solid #e9a7ff;
-  }
+      &:focus {
+        border: 3px solid $blue--100;
+      }
+    }
 
-  .poker-purple:hover {
-    border: 3px solid #f4d3ff;
-  }
+    &--poker-purple {
+      border: 3px solid $navy--600;
 
-  .value-violet {
-    border: 3px solid $navy--600;
-  }
+      &-selected {
+        border: 3px solid $purple--200;
+      }
 
-  .value-violet_selected {
-    border: 3px solid #be99fb;
-  }
+      &:hover {
+        border: 3px solid $purple--100;
+      }
 
-  .value-violet:hover {
-    border: 3px solid #dfccfd;
-  }
+      &:focus {
+        border: 3px solid $purple--100;
+      }
+    }
 
-  .goal-green {
-    border: 3px solid $navy--600;
-  }
+    &--value-violet {
+      border: 3px solid $navy--600;
 
-  .goal-green_selected {
-    border: 3px solid #a4eecb;
-  }
+      &-selected {
+        border: 3px solid $violet--200;
+      }
 
-  .goal-green:hover {
-    border: 3px solid #d1f6e5;
-  }
+      &:hover {
+        border: 3px solid $violet--100;
+      }
 
-  .yielding-yellow {
-    border: 3px solid $navy--600;
-  }
+      &:focus {
+        border: 3px solid $violet--100;
+      }
+    }
 
-  .yielding-yellow_selected {
-    border: 3px solid #fffb99;
-  }
+    &--goal-green {
+      border: 3px solid $navy--600;
 
-  .yielding-yellow:hover {
-    border: 3px solid #fffdcc;
-  }
+      &-selected {
+        border: 3px solid $green--200;
+      }
 
-  .online-orange {
-    border: 3px solid $navy--600;
-  }
+      &:hover {
+        border: 3px solid $green--100;
+      }
 
-  .online-orange_selected {
-    background: #ffb933;
-    border: 3px solid #ffdc99;
-  }
+      &:focus {
+        border: 3px solid $green--100;
+      }
+    }
 
-  .online-orange:hover {
-    border: 3px solid #ffeecc;
+    &--yielding-yellow {
+      border: 3px solid $navy--600;
+
+      &-selected {
+        border: 3px solid $yellow--200;
+      }
+
+      &:hover {
+        border: 3px solid $yellow--100;
+      }
+
+      &:focus {
+        border: 3px solid $yellow--100;
+      }
+    }
+
+    &--online-orange {
+      border: 3px solid $navy--600;
+
+      &-selected {
+        border: 3px solid $orange--200;
+      }
+
+      &:hover {
+        border: 3px solid $orange--100;
+      }
+
+      &:focus {
+        border: 3px solid $orange--100;
+      }
+    }
   }
 }
 

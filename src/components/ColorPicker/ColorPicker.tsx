@@ -38,7 +38,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
             dispatch(Actions.editColumn(id, {name, color, index, visible}));
           }}
         >
-          <div className={`column__header-color-option ${color.toString()}_selected`} />
+          <div className={`column__header-color-option column__header-color-option--${color.toString()}-selected`} />
         </button>
         <Tooltip anchorSelect={`#${primColorAnchor}`} content={color.toString()} />
       </li>
@@ -55,7 +55,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
                 dispatch(Actions.editColumn(id, {name, color: item, index, visible}));
               }}
             >
-              <div className={`column__header-color-option ${item.toString()}`} />
+              <div className={`column__header-color-option column__header-color-option--${item.toString()}`} />
             </button>
           </li>
         );
