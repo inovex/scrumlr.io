@@ -64,12 +64,19 @@ const boardReducer = createReducer(initialState, (builder) => {
         },
       };
     })
-    .addMatcher(isAnyOf(initializeBoard, updatedBoard), (state, action) => ({
+    .addCase(permittedBoardAccess, () => ({status: "accepted"}))
+    .addCase(rejectedBoardAccess, () => ({status: "rejected"}))
+    .addCase(passphraseChallengeRequired, () => ({status: "passphrase_required"}))
+    .addCase(incorrectPassphrase, () => ({status: "incorrect_passphrase"}))
+    .addCase(tooManyJoinRequests, () => ({status: "too_many_join_requests"}))
+    .addCase(bannedFromBoard, () => ({status: "banned"}))
+    .addMatcher(isAnyOf(initializeBoard, updatedBoard), (_, action) => ({
       status: "ready",
       data: {
         ...action.payload.board,
         timerStart: Timer.addOffsetToDate(action.payload.board.timerStart, store.getState().view.serverTimeOffset),
         timerEnd: Timer.addOffsetToDate(action.payload.board.timerEnd, store.getState().view.serverTimeOffset),
       },
-    }));
+    }))
+    .addMatcher(isAnyOf(joinBoard, pendingBoardAccessConfirmation), () => ({status: "pending"}));
 });
