@@ -45,7 +45,6 @@ const initialState: BoardState = {status: "unknown"};
 const boardReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(updatedBoardTimer, (state, action) => {
-      // state may be mutated directly because Immer is used internally https://redux-toolkit.js.org/usage/immer-reducers
       if (action.payload.timerEnd) {
         return {
           ...state,
