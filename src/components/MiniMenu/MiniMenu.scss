@@ -55,6 +55,10 @@
   padding-left: $spacing--xxs;
 }
 
+.mini-menu:last-child {
+  padding-right: $spacing--xxs;
+}
+
 [theme="dark"] {
   .mini-menu__item {
     color: $gray--000;
