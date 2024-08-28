@@ -6,6 +6,6 @@ on:
 
 jobs:
   package:
-    uses: inovex/scrumlr.io/.github/workflows/package.yml@main
+    uses: ./.github/workflows/package.yml
 
 
