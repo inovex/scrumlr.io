@@ -200,6 +200,7 @@
     &:focus-visible {
       border-radius: $rounded--full;
       background-color: $navy--300;
+      border-color: $navy--300;
     }
   }
 
