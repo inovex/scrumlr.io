@@ -1,6 +1,5 @@
 import {ReactNode} from "react";
 import classNames from "classnames";
-import {Tooltip} from "components/Tooltip";
 import {uniqueId} from "underscore";
 import "./MiniMenu.scss";
 
@@ -21,12 +20,17 @@ export const MiniMenu = ({className, items}: MiniMenuProps) => (
     {items.map((item) => {
       const anchor = uniqueId(`mini-menu-${item.label}`);
       return (
-        <>
-          <button aria-label={item.label} id={anchor} className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})} key={item.label} onClick={item?.onClick}>
+        <button
+            data-tooltip-id="scrumlr-tooltip"
+            data-tooltip-content={item.label}
+            aria-label={item.label}
+            id={anchor}
+            className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})}
+            key={item.label}
+            onClick={item?.onClick}
+          >
             {item.icon}
           </button>
-          <Tooltip anchorSelect={`#${anchor}`} content={item.label} color="backlog-blue" />
-        </>
       );
     })}
   </div>
