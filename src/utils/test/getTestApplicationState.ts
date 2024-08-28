@@ -64,7 +64,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         role: "PARTICIPANT",
       },
     ],
-    focusInitiator: null,
   },
   columns: [
     {
