@@ -37,6 +37,10 @@
     background-color: $gray--300;
   }
 
+  &:focus-visible {
+    background-color: $gray--300;
+  }
+
   &--active {
     color: $gray--000;
     background-color: $navy--400;
@@ -56,6 +60,10 @@
     color: $gray--000;
 
     &:hover {
+      background-color: $navy--600;
+    }
+
+    &:focus-visible {
       background-color: $navy--600;
     }
 
