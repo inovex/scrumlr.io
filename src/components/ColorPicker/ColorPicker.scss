@@ -14,10 +14,6 @@
   padding-left: 0;
   margin-top: auto;
   border-radius: $rounded--full;
-
-  &:hover {
-    background-color: $brighten--slightly;
-  }
 }
 
 .color-picker > li > button {
@@ -30,6 +26,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:focus-visible {
+    border-radius: $rounded--full;
+    background-color: $gray--400;
+  }
 }
 
 .color-picker > li {
@@ -49,8 +50,8 @@
 }
 
 .column__header-color-option {
-  width: 23px;
-  height: 23px;
+  width: 24px;
+  height: 24px;
   border-radius: $rounded--full;
 
   &--planning-pink {
@@ -195,6 +196,13 @@
 }
 
 [theme="dark"] {
+  .color-picker > li > button {
+    &:focus-visible {
+      border-radius: $rounded--full;
+      background-color: $navy--300;
+    }
+  }
+
   .column__header-color-option {
     &--planning-pink {
       border: 3px solid $navy--600;
