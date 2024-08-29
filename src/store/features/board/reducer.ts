@@ -61,7 +61,7 @@ export const boardReducer = createReducer(initialState, (builder) => {
     // TODO CreatedVoting
     // TODO UpdatedVoting
     // TODO DeletedNote
-    .addMatcher(isAnyOf(initializeBoard, updatedBoard), (_, action) => ({
+    .addMatcher(isAnyOf(initializeBoard, updatedBoard), (_state, action) => ({
       status: "ready",
       data: {
         ...action.payload.board,
