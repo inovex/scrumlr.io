@@ -68,7 +68,7 @@
       border: 3px solid $pink--100;
     }
 
-    &:focus {
+    &:focus-visible {
       background-color: $pink--400;
       border: 3px solid $pink--100;
     }
@@ -88,7 +88,7 @@
       border: 3px solid $blue--100;
     }
 
-    &:focus {
+    &:focus-visible {
       background-color: $blue--400;
       border: 3px solid $blue--100;
     }
@@ -108,7 +108,7 @@
       border: 3px solid $purple--100;
     }
 
-    &:focus {
+    &:focus-visible {
       background-color: $purple--400;
       border: 3px solid $purple--100;
     }
@@ -128,7 +128,7 @@
       border: 3px solid $violet--100;
     }
 
-    &:focus {
+    &:focus-visible {
       background-color: $violet--400;
       border: 3px solid $violet--100;
     }
@@ -148,7 +148,7 @@
       border: 3px solid $green--100;
     }
 
-    &:focus {
+    &:focus-visible {
       background-color: $green--400;
       border: 3px solid $green--100;
     }
@@ -168,7 +168,7 @@
       border: 3px solid $yellow--100;
     }
 
-    &:focus {
+    &:focus-visible {
       background-color: $yellow--400;
       border: 3px solid $yellow--100;
     }
@@ -188,7 +188,7 @@
       border: 3px solid $orange--100;
     }
 
-    &:focus {
+    &:focus-visible {
       background-color: $orange--400;
       border: 3px solid $orange--100;
     }
@@ -216,7 +216,7 @@
         border: 3px solid $pink--100;
       }
 
-      &:focus {
+      &:focus-visible {
         border: 3px solid $pink--100;
       }
     }
@@ -232,7 +232,7 @@
         border: 3px solid $blue--100;
       }
 
-      &:focus {
+      &:focus-visible {
         border: 3px solid $blue--100;
       }
     }
@@ -248,7 +248,7 @@
         border: 3px solid $purple--100;
       }
 
-      &:focus {
+      &:focus-visible {
         border: 3px solid $purple--100;
       }
     }
@@ -264,7 +264,7 @@
         border: 3px solid $violet--100;
       }
 
-      &:focus {
+      &:focus-visible {
         border: 3px solid $violet--100;
       }
     }
@@ -280,7 +280,7 @@
         border: 3px solid $green--100;
       }
 
-      &:focus {
+      &:focus-visible {
         border: 3px solid $green--100;
       }
     }
@@ -296,7 +296,7 @@
         border: 3px solid $yellow--100;
       }
 
-      &:focus {
+      &:focus-visible {
         border: 3px solid $yellow--100;
       }
     }
@@ -312,7 +312,7 @@
         border: 3px solid $orange--100;
       }
 
-      &:focus {
+      &:focus-visible {
         border: 3px solid $orange--100;
       }
     }
