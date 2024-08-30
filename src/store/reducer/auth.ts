@@ -1,6 +1,6 @@
 import {AuthState} from "types/auth";
 import {ReduxAction} from "store/action";
-import {AuthAction} from "store/features/auth/auth";
+import {AuthAction} from "store/features/auth/actions";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const authReducer = (state: AuthState = {user: undefined, initializationSucceeded: null}, action: ReduxAction): AuthState => {
