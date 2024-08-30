@@ -22,7 +22,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.9.0
 	github.com/uptrace/bun v1.2.2
-	github.com/uptrace/bun/dbfixture v1.1.17
+	github.com/uptrace/bun/dbfixture v1.2.2
 	github.com/uptrace/bun/dialect/pgdialect v1.2.2
 	github.com/uptrace/bun/extra/bundebug v1.1.17
 	github.com/urfave/cli/v2 v2.27.4
