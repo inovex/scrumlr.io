@@ -53,7 +53,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps)
               props.onClose?.();
               dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: props.visible}));
             }}
-            className="backlog-blue"
           >
             <div className={`column__header-color-option column__header-color-option--${props.color.toString()}-selected`} />
           </button>
@@ -71,7 +70,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps)
                   props.onClose?.();
                   dispatch(Actions.editColumn(props.id, {name: props.name, color: item, index: props.index, visible: props.visible}));
                 }}
-                className={`${props.color.toString()}`}
               >
                 <div className={`column__header-color-option column__header-color-option--${item.toString()}`} />
               </button>

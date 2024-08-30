@@ -29,14 +29,6 @@
   &:focus-visible {
     border-radius: $rounded--full;
     outline: 2px solid $gray--500;
-
-    &.planning-pink {
-      outline: 2px solid $pink--400;
-    }
-    &.backlog-blue {
-      outline: 2px solid $blue--400;
-      background-color: #1bd47e;
-    }
   }
 }
 
