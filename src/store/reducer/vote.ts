@@ -1,5 +1,5 @@
 import {Action, ReduxAction} from "store/action";
-import {VotesState} from "store/features/votes/vote";
+import {VotesState} from "store/features/votes/types";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const voteReducer = (state: VotesState = [], action: ReduxAction): VotesState => {

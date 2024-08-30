@@ -1,7 +1,7 @@
 import {ComponentProps} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppSelector} from "store";
-import {SkinToneName, skinTones} from "store/features/skinTone/skinTone";
+import {SkinToneName, skinTones} from "store/features/skinTone/types";
 import {useDispatch} from "react-redux";
 import {Actions} from "store/action";
 import {SettingsDropdown} from "./SettingsDropdown";

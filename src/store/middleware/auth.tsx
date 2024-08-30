@@ -2,7 +2,7 @@ import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Actions, ReduxAction} from "store/action";
 import {AuthAction} from "store/features/auth/actions";
-import {ACCOUNT_TYPE_ANONYMOUS} from "store/features/auth/auth";
+import {ACCOUNT_TYPE_ANONYMOUS} from "store/features/auth/types";
 import {API} from "api";
 import {ViewAction} from "store/features/view/actions";
 import {Toast} from "utils/Toast";

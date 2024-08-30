@@ -1,4 +1,4 @@
-import {Participant} from "store/features/participants/participant";
+import {Participant} from "store/features/participants/types";
 
 export default (overwrite?: Partial<Participant>): Participant => ({
   user: {

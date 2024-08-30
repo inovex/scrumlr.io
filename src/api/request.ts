@@ -1,4 +1,4 @@
-import {Request} from "store/features/requests/request";
+import {Request} from "store/features/requests/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const RequestAPI = {

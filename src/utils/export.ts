@@ -1,11 +1,11 @@
 import {saveAs} from "file-saver";
 import i18n from "i18next";
 import {DEFAULT_BOARD_NAME, DEFAULT_URL} from "constants/misc";
-import {Board} from "store/features/board/board";
-import {Column} from "store/features/columns/column";
-import {Note} from "store/features/notes/note";
-import {Participant} from "store/features/participants/participant";
-import {Voting} from "store/features/votings/voting";
+import {Board} from "store/features/board/types";
+import {Column} from "store/features/columns/types";
+import {Note} from "store/features/notes/types";
+import {Participant} from "store/features/participants/types";
+import {Voting} from "store/features/votings/types";
 import {API} from "../api";
 
 const {t} = i18n;

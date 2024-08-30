@@ -1,4 +1,4 @@
-import {ReactionType} from "../reactions/reaction";
+import {ReactionType} from "../reactions/types";
 
 /**
  * representation of a board reaction on the server side

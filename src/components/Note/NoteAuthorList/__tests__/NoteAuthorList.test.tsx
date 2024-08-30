@@ -2,7 +2,7 @@ import {ApplicationState} from "types";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import {NoteAuthorList} from "../NoteAuthorList";
-import {Participant} from "store/features/participants/participant";
+import {Participant} from "store/features/participants/types";
 import {render} from "testUtils";
 import getTestParticipant from "utils/test/getTestParticipant";
 

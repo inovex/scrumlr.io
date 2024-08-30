@@ -1,15 +1,15 @@
-import {BoardState} from "../store/features/board/board";
-import {VotesState} from "../store/features/votes/vote";
-import {AuthState} from "../store/features/auth/auth";
-import {RequestsState} from "../store/features/requests/request";
-import {VotingsState} from "../store/features/votings/voting";
-import {ColumnsState} from "../store/features/columns/column";
-import {ParticipantsState} from "../store/features/participants/participant";
-import {NotesState} from "../store/features/notes/note";
-import {ViewState} from "../store/features/view/view";
-import {ReactionState} from "../store/features/reactions/reaction";
-import {BoardReactionState} from "../store/features/boardReactions/boardReaction";
-import {SkinToneState} from "../store/features/skinTone/skinTone";
+import {BoardState} from "../store/features/board/types";
+import {VotesState} from "../store/features/votes/types";
+import {AuthState} from "../store/features/auth/types";
+import {RequestsState} from "../store/features/requests/types";
+import {VotingsState} from "../store/features/votings/types";
+import {ColumnsState} from "../store/features/columns/types";
+import {ParticipantsState} from "../store/features/participants/types";
+import {NotesState} from "../store/features/notes/types";
+import {ViewState} from "../store/features/view/types";
+import {ReactionState} from "../store/features/reactions/types";
+import {BoardReactionState} from "../store/features/boardReactions/types";
+import {SkinToneState} from "../store/features/skinTone/types";
 
 export interface ApplicationState {
   auth: AuthState;

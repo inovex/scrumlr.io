@@ -1,6 +1,6 @@
 import {hashCode} from "utils/hash";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
-import {REACTION_EMOJI_MAP} from "store/features/reactions/reaction";
+import {REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {uniqueId} from "underscore";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {useAppSelector} from "store";

@@ -1,5 +1,5 @@
 import {FC, useState} from "react";
-import {Participant} from "store/features/participants/participant";
+import {Participant} from "store/features/participants/types";
 import {Trash, Eject} from "components/Icon";
 import "./NoteDialogNoteOptions.scss";
 import {useTranslation} from "react-i18next";

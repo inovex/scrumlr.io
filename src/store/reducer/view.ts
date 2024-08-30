@@ -1,4 +1,4 @@
-import {Theme, ViewState} from "store/features/view/view";
+import {Theme, ViewState} from "store/features/view/types";
 import {Action, ReduxAction} from "store/action";
 import {getFromStorage} from "utils/storage";
 import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";

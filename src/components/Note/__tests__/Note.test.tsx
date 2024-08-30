@@ -6,7 +6,7 @@ import getTestStore from "utils/test/getTestStore";
 import getTestParticipant from "utils/test/getTestParticipant";
 import * as reactRouter from "react-router";
 import {ApplicationState} from "types";
-import {BoardState} from "store/features/board/board";
+import {BoardState} from "store/features/board/types";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 

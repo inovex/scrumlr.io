@@ -1,5 +1,5 @@
 import {Action, ReduxAction} from "store/action";
-import {ColumnsState} from "store/features/columns/column";
+import {ColumnsState} from "store/features/columns/types";
 import {TEMPORARY_COLUMN_ID} from "../../constants/misc";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last

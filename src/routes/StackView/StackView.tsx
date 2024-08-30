@@ -13,7 +13,7 @@ import {Close, Trash} from "components/Icon";
 import {Toast} from "utils/Toast";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Note} from "store/features/notes/note";
+import {Note} from "store/features/notes/types";
 import {AvataaarProps} from "types/avatar";
 import "./StackView.scss";
 

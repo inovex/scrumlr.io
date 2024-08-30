@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useNavigate} from "react-router";
-import {Note} from "store/features/notes/note";
+import {Note} from "store/features/notes/types";
 import "./StackNavigationDots.scss";
 
 type StackNavigationDotsProps = {

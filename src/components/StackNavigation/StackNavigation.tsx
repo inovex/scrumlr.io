@@ -1,6 +1,6 @@
 import {FC, useEffect} from "react";
 import {useNavigate} from "react-router";
-import {Note} from "store/features/notes/note";
+import {Note} from "store/features/notes/types";
 import {ArrowRight, ArrowLeft} from "components/Icon";
 import "./StackNavigation.scss";
 import {useTranslation} from "react-i18next";

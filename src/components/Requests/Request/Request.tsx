@@ -2,7 +2,7 @@ import "./Request.scss";
 import {RaiseHand, Join} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
-import {Auth} from "../../../store/features/auth/auth";
+import {Auth} from "../../../store/features/auth/types";
 
 type RequestType = "JOIN" | "RAISE_HAND";
 

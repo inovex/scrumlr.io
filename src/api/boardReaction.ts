@@ -1,6 +1,6 @@
 import {SERVER_HTTP_URL} from "config";
-import {ReactionType} from "store/features/reactions/reaction";
-import {BoardReactionType} from "store/features/boardReactions/boardReaction";
+import {ReactionType} from "store/features/reactions/types";
+import {BoardReactionType} from "store/features/boardReactions/types";
 
 export const BoardReactionAPI = {
   addBoardReaction: async (boardId: string, reactionType: ReactionType) => {

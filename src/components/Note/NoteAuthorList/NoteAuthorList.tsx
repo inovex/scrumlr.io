@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {Participant, ParticipantExtendedInfo} from "store/features/participants/participant";
+import {Participant, ParticipantExtendedInfo} from "store/features/participants/types";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
 import "./NoteAuthorList.scss";

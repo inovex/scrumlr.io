@@ -1,6 +1,6 @@
 import {useAppSelector} from "store";
 import {useDispatch} from "react-redux";
-import {Theme} from "store/features/view/view";
+import {Theme} from "store/features/view/types";
 import {Actions} from "store/action";
 import {t} from "i18next";
 import {SettingsDarkMode, SettingsLightMode, GeneralSettings} from "components/Icon";

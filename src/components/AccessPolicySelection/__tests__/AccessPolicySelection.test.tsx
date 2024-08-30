@@ -1,6 +1,6 @@
 import {fireEvent, waitFor} from "@testing-library/react";
 import {AccessPolicySelection} from "components/AccessPolicySelection/AccessPolicySelection";
-import {AccessPolicy} from "store/features/board/board";
+import {AccessPolicy} from "store/features/board/types";
 import {render} from "testUtils";
 
 describe("AccessPolicySelection", () => {

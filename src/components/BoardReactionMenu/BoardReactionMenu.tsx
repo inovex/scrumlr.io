@@ -1,7 +1,7 @@
 import {ForwardedRef, forwardRef, MouseEvent} from "react";
 import {Close} from "components/Icon";
-import {ReactionType} from "store/features/reactions/reaction";
-import {BOARD_REACTION_EMOJI_MAP} from "store/features/boardReactions/boardReaction";
+import {ReactionType} from "store/features/reactions/types";
+import {BOARD_REACTION_EMOJI_MAP} from "store/features/boardReactions/types";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
 import {useHotkeys} from "react-hotkeys-hook";

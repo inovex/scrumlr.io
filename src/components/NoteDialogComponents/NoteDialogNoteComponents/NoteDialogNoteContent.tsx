@@ -1,7 +1,7 @@
 import {FC, useState} from "react";
 import {Actions} from "store/action";
 import {useDispatch} from "react-redux";
-import {Participant} from "store/features/participants/participant";
+import {Participant} from "store/features/participants/types";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {addProtocol} from "utils/images";
 import {useAppSelector} from "store";

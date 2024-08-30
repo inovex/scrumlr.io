@@ -1,5 +1,5 @@
 import {createReducer, isAnyOf} from "@reduxjs/toolkit";
-import {BoardState} from "store/features/board/board";
+import {BoardState} from "store/features/board/types";
 import store from "store";
 import {Timer} from "utils/timer";
 import {

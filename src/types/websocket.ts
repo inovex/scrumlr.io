@@ -1,12 +1,12 @@
-import {Board} from "../store/features/board/board";
-import {Column} from "../store/features/columns/column";
-import {Participant} from "../store/features/participants/participant";
-import {Note} from "../store/features/notes/note";
-import {Vote} from "../store/features/votes/vote";
-import {Voting} from "../store/features/votings/voting";
-import {Request} from "../store/features/requests/request";
-import {Reaction} from "../store/features/reactions/reaction";
-import {BoardReactionType} from "../store/features/boardReactions/boardReaction";
+import {Board} from "../store/features/board/types";
+import {Column} from "../store/features/columns/types";
+import {Participant} from "../store/features/participants/types";
+import {Note} from "../store/features/notes/types";
+import {Vote} from "../store/features/votes/types";
+import {Voting} from "../store/features/votings/types";
+import {Request} from "../store/features/requests/types";
+import {Reaction} from "../store/features/reactions/types";
+import {BoardReactionType} from "../store/features/boardReactions/types";
 
 export interface BoardInitEvent {
   type: "INIT";

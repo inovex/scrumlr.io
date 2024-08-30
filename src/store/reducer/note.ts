@@ -1,5 +1,5 @@
 import {Action, ReduxAction} from "store/action";
-import {NotesState} from "store/features/notes/note";
+import {NotesState} from "store/features/notes/types";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesState => {

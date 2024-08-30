@@ -1,6 +1,6 @@
 import {FC, useState} from "react";
 import "./AccessPolicySelection.scss";
-import {AccessPolicy} from "store/features/board/board";
+import {AccessPolicy} from "store/features/board/types";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
 import {Visible, Hidden, Duplicate, Refresh} from "components/Icon";
