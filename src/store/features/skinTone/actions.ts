@@ -1,14 +1,4 @@
-import {SkinToneName} from "types/skinTone";
+import {createAction} from "@reduxjs/toolkit";
+import {SkinToneName} from "./types";
 
-export const SkinToneAction = {
-  SetSkinTone: "scrumlr.io/setSkinTone" as const,
-};
-
-export const SkinToneActionFactory = {
-  setSkinTone: (skinToneName: SkinToneName) => ({
-    type: SkinToneAction.SetSkinTone,
-    skinToneName,
-  }),
-};
-
-export type SkinToneReduxAction = ReturnType<typeof SkinToneActionFactory.setSkinTone>;
+export const setSkinTone = createAction<SkinToneName>("scrumlr.io/setSkinTone");

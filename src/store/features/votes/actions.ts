@@ -1,40 +1,10 @@
-import {Vote} from "types/vote";
+import {createAction} from "@reduxjs/toolkit";
+import {Vote} from "./types";
 
-export const VoteAction = {
-  AddVote: "scrumlr.io/addVote" as const,
-  CreatedVote: "scrumlr.io/createdVote" as const,
-  DeleteVote: "scrumlr.io/deleteVote" as const,
-  DeletedVote: "scrumlr.io/deletedVote" as const,
-  UpdatedVotes: "scrumlr.io/updatedVotes" as const,
-};
+export const addVote = createAction<string>("scrumlr.io/addVote");
+export const createdVote = createAction<Vote>("scrumlr.io/createdVote");
 
-export const VoteActionFactory = {
-  addVote: (note: string) => ({
-    type: VoteAction.AddVote,
-    note,
-  }),
-  deleteVote: (note: string) => ({
-    type: VoteAction.DeleteVote,
-    note,
-  }),
+export const updatedVotes = createAction<Vote[]>("scrumlr.io/updatedVotes");
 
-  createdVote: (vote: Vote) => ({
-    type: VoteAction.CreatedVote,
-    vote,
-  }),
-  deletedVote: (vote: Vote) => ({
-    type: VoteAction.DeletedVote,
-    vote,
-  }),
-  updatedVotes: (votes: Vote[]) => ({
-    type: VoteAction.UpdatedVotes,
-    votes,
-  }),
-};
-
-export type VoteReduxAction =
-  | ReturnType<typeof VoteActionFactory.addVote>
-  | ReturnType<typeof VoteActionFactory.deleteVote>
-  | ReturnType<typeof VoteActionFactory.createdVote>
-  | ReturnType<typeof VoteActionFactory.deletedVote>
-  | ReturnType<typeof VoteActionFactory.updatedVotes>;
+export const deleteVote = createAction<string>("scrumlr.io/deleteVote");
+export const deletedVote = createAction<Vote>("scrumlr.io/deletedVote");

@@ -1,78 +1,13 @@
-import {Theme} from "types/view";
+import {createAction} from "@reduxjs/toolkit";
+import {ServerInfo, Theme} from "./types";
 
-export const ViewAction = {
-  InitApplication: "scrumlr.io/initApplication" as const,
-  SetModerating: "scrumlr.io/setModerating" as const,
-  SetLanguage: "scrumlr.io/setLanguage" as const,
-  SetTheme: "scrumlr.io/setTheme" as const,
-  SetServerInfo: "scrumlr.io/setServerInfo" as const,
-  SetRoute: "scrumlr.io/setRoute" as const,
-  SetHotkeyState: "scrumlr.io/setHotkeyState" as const,
-  EnableHotkeyNotifications: "scrumlr.io/enableHotkeyNotifications" as const,
-  DisableHotkeyNotifications: "scrumlr.io/disableHotkeyNotifications" as const,
-  SetShowBoardReactions: "scrumlr.io/setShowBoardReactions" as const,
-};
-
-export const ViewActionFactory = {
-  initApplication: () => ({
-    type: ViewAction.InitApplication,
-  }),
-
-  setModerating: (moderating: boolean) => ({
-    type: ViewAction.SetModerating,
-    moderating,
-  }),
-
-  setLanguage: (language: string) => ({
-    type: ViewAction.SetLanguage,
-    language,
-  }),
-
-  setTheme: (theme: Theme) => ({
-    type: ViewAction.SetTheme,
-    theme,
-  }),
-
-  setServerInfo: (anonymousLoginDisabled: boolean, enabledAuthProvider: string[], serverTime: number, feedbackEnabled: boolean) => ({
-    type: ViewAction.SetServerInfo,
-    anonymousLoginDisabled,
-    enabledAuthProvider,
-    serverTime,
-    feedbackEnabled,
-  }),
-
-  setRoute: (route: string) => ({
-    type: ViewAction.SetRoute,
-    route,
-  }),
-
-  setHotkeyState: (active: boolean) => ({
-    type: ViewAction.SetHotkeyState,
-    active,
-  }),
-
-  enableHotkeyNotifications: () => ({
-    type: ViewAction.EnableHotkeyNotifications,
-  }),
-
-  disableHotkeyNotifications: () => ({
-    type: ViewAction.DisableHotkeyNotifications,
-  }),
-
-  setShowBoardReactions: (show: boolean) => ({
-    type: ViewAction.SetShowBoardReactions,
-    show,
-  }),
-};
-
-export type ViewReduxAction =
-  | ReturnType<typeof ViewActionFactory.initApplication>
-  | ReturnType<typeof ViewActionFactory.setModerating>
-  | ReturnType<typeof ViewActionFactory.setLanguage>
-  | ReturnType<typeof ViewActionFactory.setTheme>
-  | ReturnType<typeof ViewActionFactory.setRoute>
-  | ReturnType<typeof ViewActionFactory.setServerInfo>
-  | ReturnType<typeof ViewActionFactory.setHotkeyState>
-  | ReturnType<typeof ViewActionFactory.enableHotkeyNotifications>
-  | ReturnType<typeof ViewActionFactory.disableHotkeyNotifications>
-  | ReturnType<typeof ViewActionFactory.setShowBoardReactions>;
+export const initApplication = createAction("scrumlr.io/initApplication");
+export const setModerating = createAction<boolean>("scrumlr.io/setModerating");
+export const setLanguage = createAction<string>("scrumlr.io/setLanguage");
+export const setTheme = createAction<Theme>("scrumlr.io/setTheme");
+export const setServerInfo = createAction<ServerInfo>("scrumlr.io/setServerInfo");
+export const setRoute = createAction<string>("scrumlr.io/setRoute");
+export const setHotkeyState = createAction<boolean>("scrumlr.io/setHotkeyState");
+export const enableHotkeyNotifications = createAction("scrumlr.io/enableHotkeyNotifications");
+export const disableHotkeyNotifications = createAction("scrumlr.io/disableHotkeyNotifications");
+export const setShowBoardReactions = createAction<boolean>("scrumlr.io/setShowBoardReactions");
