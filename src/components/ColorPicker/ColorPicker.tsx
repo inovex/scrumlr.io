@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {uniqueId} from "underscore";
+import ReactFocusLock from "react-focus-lock";
 import {Color} from "../../constants/colors";
 import {Actions} from "../../store/action";
 import {Tooltip} from "../Tooltip";
@@ -41,39 +42,41 @@ export const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps)
   }, [props]);
 
   return (
-    <ul className="color-picker">
-      <li>
-        <button
-          id={primColorAnchor}
-          aria-label={props.color.toString()}
-          title={props.color.toString()}
-          onClick={() => {
-            props.onClose?.();
-            dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: props.visible}));
-          }}
-        >
-          <div className={`column__header-color-option column__header-color-option--${props.color.toString()}-selected`} />
-        </button>
-        <Tooltip anchorSelect={`#${primColorAnchor}`} content={props.color.toString()} />
-      </li>
-      {colorsWithoutSelectedColor.map((item) => {
-        const anchor = uniqueId(`color-picker-${item.toString()}`);
-        return (
-          <li>
-            <button
-              id={anchor}
-              aria-label={formatColorName(item.toString())}
-              title={item.toString()}
-              onClick={() => {
-                props.onClose?.();
-                dispatch(Actions.editColumn(props.id, {name: props.name, color: item, index: props.index, visible: props.visible}));
-              }}
-            >
-              <div className={`column__header-color-option column__header-color-option--${item.toString()}`} />
-            </button>
-          </li>
-        );
-      })}
-    </ul>
+    <ReactFocusLock autoFocus={false} className="color-picker">
+      <ul className="color-picker">
+        <li>
+          <button
+            id={primColorAnchor}
+            aria-label={props.color.toString()}
+            title={props.color.toString()}
+            onClick={() => {
+              props.onClose?.();
+              dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: props.visible}));
+            }}
+          >
+            <div className={`column__header-color-option column__header-color-option--${props.color.toString()}-selected`} />
+          </button>
+          <Tooltip anchorSelect={`#${primColorAnchor}`} content={props.color.toString()} />
+        </li>
+        {colorsWithoutSelectedColor.map((item) => {
+          const anchor = uniqueId(`color-picker-${item.toString()}`);
+          return (
+            <li>
+              <button
+                id={anchor}
+                aria-label={formatColorName(item.toString())}
+                title={item.toString()}
+                onClick={() => {
+                  props.onClose?.();
+                  dispatch(Actions.editColumn(props.id, {name: props.name, color: item, index: props.index, visible: props.visible}));
+                }}
+              >
+                <div className={`column__header-color-option column__header-color-option--${item.toString()}`} />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </ReactFocusLock>
   );
 };
