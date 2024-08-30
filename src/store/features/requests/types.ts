@@ -1,4 +1,4 @@
-import {Auth} from "../auth/types";
+import {Auth} from "../auth";
 
 export enum JoinRequestStatus {
   "PENDING" = 0,

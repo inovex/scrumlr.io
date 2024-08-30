@@ -5,34 +5,41 @@ export type Theme = "auto" | "light" | "dark";
 // if the initial theme is auto, this will be set to either light or dark depending on the system setting
 export type AutoTheme = Omit<Theme, "auto">;
 
+export type ServerInfo = {
+  anonymousLoginDisabled: boolean;
+  enabledAuthProvider: string[];
+  serverTime: number;
+  feedbackEnabled: boolean;
+};
+
 export interface View {
-  readonly moderating: boolean;
+  moderating: boolean;
 
   /**
    * The offset between the client and the server time in milliseconds.
    * A negative number means the server time is ahead.
    */
-  readonly serverTimeOffset: number;
+  serverTimeOffset: number;
 
-  readonly anonymousLoginDisabled: boolean;
+  anonymousLoginDisabled: boolean;
 
-  readonly enabledAuthProvider: string[];
+  enabledAuthProvider: string[];
 
-  readonly feedbackEnabled: boolean;
+  feedbackEnabled: boolean;
 
-  readonly language?: string;
+  language?: string;
 
-  readonly theme: Theme;
+  theme: Theme;
 
-  readonly route?: string;
+  route?: string;
 
-  readonly noteFocused: boolean;
+  noteFocused: boolean;
 
-  readonly hotkeysAreActive: boolean;
+  hotkeysAreActive: boolean;
 
-  readonly hotkeyNotificationsEnabled: boolean;
+  hotkeyNotificationsEnabled: boolean;
 
-  readonly showBoardReactions: boolean;
+  showBoardReactions: boolean;
 }
 
 export type ViewState = View;

@@ -1,3 +1,11 @@
+import {Participant} from "../participants/types";
+import {Request} from "../requests/types";
+import {Column} from "../columns/types";
+import {Note} from "../notes/types";
+import {Reaction} from "../reactions/types";
+import {Vote} from "../votes/types";
+import {Voting} from "../votings/types";
+
 export enum AccessPolicy {
   "PUBLIC" = 0,
   "BY_PASSPHRASE" = 1,
@@ -20,6 +28,17 @@ export interface Board {
   sharedNote?: string;
   showVoting?: string;
 }
+
+export type BoardActionType = {
+  board: Board;
+  participants: Participant[];
+  requests: Request[];
+  columns: Column[];
+  notes: Note[];
+  reactions: Reaction[];
+  votes: Vote[];
+  votings: Voting[];
+};
 
 export type EditBoardRequest = Partial<Omit<Board, "id">> & {passphrase?: string};
 

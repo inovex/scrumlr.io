@@ -1,4 +1,4 @@
-import {Auth} from "../auth/types";
+import {Auth} from "../auth";
 
 export type ParticipantRole = "OWNER" | "MODERATOR" | "PARTICIPANT";
 
@@ -12,9 +12,9 @@ export interface Participant {
   banned?: boolean;
 }
 
-export type ParticipantsState = null | {
-  others: Participant[];
-  self: Participant;
+export type ParticipantsState = {
+  self?: Participant;
+  others?: Participant[];
   focusInitiator?: Participant;
 };
 

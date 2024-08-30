@@ -1,4 +1,4 @@
-import {ReactionType} from "../reactions/types";
+import {ReactionType} from "store/features/reactions/types";
 
 /**
  * representation of a board reaction on the server side

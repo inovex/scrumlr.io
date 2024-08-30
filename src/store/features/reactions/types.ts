@@ -1,6 +1,3 @@
-/**
- * representation of a note reaction on the server side
- */
 export type Reaction = {
   id: string;
   note: string;

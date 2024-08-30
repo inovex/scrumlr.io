@@ -8,6 +8,6 @@ export interface Column {
   index: number;
 }
 
-export type EditColumnRequest = Omit<Column, "id">;
+export type ColumnWithoutId = Omit<Column, "id">;
 
 export type ColumnsState = Column[];
