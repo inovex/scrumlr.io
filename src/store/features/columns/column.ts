@@ -1,5 +1,5 @@
 import {Column, EditColumnRequest} from "types/column";
-import {Color} from "../../constants/colors";
+import {Color} from "../../../constants/colors";
 
 /** This object lists column object specific internal Redux Action types. */
 export const ColumnAction = {

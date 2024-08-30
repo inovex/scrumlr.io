@@ -1,10 +1,10 @@
 import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Actions, ReduxAction} from "store/action";
-import {AuthAction} from "store/action/auth";
+import {AuthAction} from "store/features/auth/auth";
 import {ACCOUNT_TYPE_ANONYMOUS} from "types/auth";
 import {API} from "api";
-import {ViewAction} from "store/action/view";
+import {ViewAction} from "store/features/view/view";
 import {Toast} from "utils/Toast";
 import i18n from "i18n";
 import store from "store";

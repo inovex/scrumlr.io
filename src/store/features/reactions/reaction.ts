@@ -1,4 +1,4 @@
-import {Reaction, ReactionType} from "../../types/reaction";
+import {Reaction, ReactionType} from "../../../types/reaction";
 
 /** This object lists note object specific internal Redux Action types. */
 export const ReactionAction = {

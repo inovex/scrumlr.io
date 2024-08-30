@@ -1,5 +1,5 @@
 import {CreateVotingRequest, Voting} from "types/voting";
-import {Note} from "../../types/note";
+import {Note} from "../../../types/note";
 
 export const VotingAction = {
   CreateVoting: "scrumlr.io/createVoting" as const,

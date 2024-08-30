@@ -1,15 +1,15 @@
-import {BoardActionFactory, BoardAction, BoardReduxAction} from "./board";
-import {NoteActionFactory, NoteAction, NoteReduxAction} from "./note";
-import {VoteActionFactory, VoteAction, VoteReduxAction} from "./vote";
-import {ParticipantAction, ParticipantActionFactory, ParticipantReduxAction} from "./participants";
-import {ColumnActionFactory, ColumnAction, ColumnReduxAction} from "./column";
-import {RequestActionFactory, RequestAction, RequestReduxAction} from "./request";
-import {VotingActionFactory, VotingAction, VotingReduxAction} from "./votings";
-import {AuthActionFactory, AuthAction, AuthReduxAction} from "./auth";
-import {ViewAction, ViewActionFactory, ViewReduxAction} from "./view";
-import {ReactionAction, ReactionActionFactory, ReactionReduxAction} from "./reaction";
-import {BoardReactionAction, BoardReactionActionFactory, BoardReactionReduxAction} from "./boardReaction";
-import {SkinToneAction, SkinToneActionFactory, SkinToneReduxAction} from "./skinTone";
+import {BoardActionFactory, BoardAction, BoardReduxAction} from "../features/board/board";
+import {NoteActionFactory, NoteAction, NoteReduxAction} from "../features/notes/note";
+import {VoteActionFactory, VoteAction, VoteReduxAction} from "../features/votes/vote";
+import {ParticipantAction, ParticipantActionFactory, ParticipantReduxAction} from "../features/participants/participants";
+import {ColumnActionFactory, ColumnAction, ColumnReduxAction} from "../features/columns/column";
+import {RequestActionFactory, RequestAction, RequestReduxAction} from "../features/requests/request";
+import {VotingActionFactory, VotingAction, VotingReduxAction} from "../features/votings/votings";
+import {AuthActionFactory, AuthAction, AuthReduxAction} from "../features/auth/auth";
+import {ViewAction, ViewActionFactory, ViewReduxAction} from "../features/view/view";
+import {ReactionAction, ReactionActionFactory, ReactionReduxAction} from "../features/reactions/reaction";
+import {BoardReactionAction, BoardReactionActionFactory, BoardReactionReduxAction} from "../features/boardReactions/boardReaction";
+import {SkinToneAction, SkinToneActionFactory, SkinToneReduxAction} from "../features/skinTone/skinTone";
 
 /** This object lists all internal Redux Action types. */
 export const Action = {
