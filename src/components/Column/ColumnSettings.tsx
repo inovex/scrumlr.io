@@ -1,4 +1,4 @@
-import {Dispatch, FC, SetStateAction, useState} from "react";
+import {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
 import {Color, getColorForIndex, COLOR_ORDER} from "constants/colors";
@@ -22,13 +22,14 @@ type ColumnSettingsProps = {
   onClose?: () => void;
   onNameEdit?: () => void;
   setOpenColumnSet?: Dispatch<SetStateAction<boolean>>;
+  closeColumnSettings: () => void;
 };
 
-export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit, setOpenColumnSet}) => {
+export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsProps) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
-  const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
+  const columnSettingsRef = useOnBlur(props.onClose ?? (() => {}));
   const [openedColorPicker, setOpenedColorPicker] = useState(false);
 
   const handleAddColumn = (columnIndex: number) => {
@@ -40,11 +41,24 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
     dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.stopPropagation();
+      } else if (e.key === "Escape") {
+        props.closeColumnSettings();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress, true);
+    return () => document.removeEventListener("keydown", handleKeyPress, true);
+  }, [props]);
+
   const renderColorPicker = () =>
     openedColorPicker ? (
-      <ColorPicker id={id} name={name} visible={visible} index={index} color={color} onClose={onClose} colors={COLOR_ORDER} />
+      <ColorPicker id={props.id} name={props.name} visible={props.visible} index={props.index} color={props.color} onClose={props.onClose} colors={COLOR_ORDER} />
     ) : (
-      <span className={`column__header-color-option column__header-color-option--${color}-selected`} />
+      <span className={`column__header-color-option column__header-color-option--${props.color}-selected`} />
     );
 
   const menuItems = [
@@ -52,8 +66,8 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
       label: t("Column.deleteColumn"),
       icon: <Trash />,
       onClick: () => {
-        onClose?.();
-        dispatch(Actions.deleteColumn(id));
+        props.onClose?.();
+        dispatch(Actions.deleteColumn(props.id));
       },
     },
     {
@@ -65,38 +79,38 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
       label: t("Column.addColumnLeft"),
       icon: <ArrowLeft />,
       onClick: () => {
-        onClose?.();
-        handleAddColumn(index);
+        props.onClose?.();
+        handleAddColumn(props.index);
       },
     },
     {
       label: t("Column.addColumnRight"),
       icon: <ArrowRight />,
       onClick: () => {
-        onClose?.();
-        handleAddColumn(index + 1);
+        props.onClose?.();
+        handleAddColumn(props.index + 1);
       },
     },
     {
-      label: visible ? t("Column.hideColumn") : t("Column.showColumn"),
-      icon: visible ? <Hidden /> : <Visible />,
+      label: props.visible ? t("Column.hideColumn") : t("Column.showColumn"),
+      icon: props.visible ? <Hidden /> : <Visible />,
       onClick: () => {
-        onClose?.();
-        dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+        props.onClose?.();
+        dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: !props.visible}));
       },
     },
     {
       label: t("Column.editName"),
       icon: <Edit />,
       onClick: () => {
-        onNameEdit?.();
-        onClose?.();
+        props.onNameEdit?.();
+        props.onClose?.();
       },
     },
     {
       label: t("Column.resetName"),
       icon: <Close />,
-      onClick: () => (setOpenColumnSet ? setOpenColumnSet((o) => !o) : () => {}),
+      onClick: () => (props.setOpenColumnSet ? props.setOpenColumnSet((o) => !o) : () => {}),
     },
   ];
 
