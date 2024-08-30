@@ -196,11 +196,10 @@
 
 [theme="dark"] {
   .color-picker > li > button {
-    //&:focus-visible {
-    //  border-radius: $rounded--full;
-    //  background-color: $navy--300;
-    //  border-color: $navy--300;
-    //}
+    &:focus-visible {
+      border-radius: $rounded--full;
+      outline: 2px solid $navy--300;
+    }
   }
 
   .column__header-color-option {
