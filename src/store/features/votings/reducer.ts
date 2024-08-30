@@ -1,34 +1,30 @@
-import {VotingsState} from "store/features/votings/types";
-import {Action, ReduxAction} from "store/action";
+import {createReducer} from "@reduxjs/toolkit";
+import {VotingsState} from "./types";
+import {initializeBoard} from "../board";
+import {createdVoting, updatedVoting} from "./actions";
 
-/**
- * Default vote configuration if the state is undefined (e.g. no default vote configuration available in the database)
- */
-const INITIAL_VOTING_STATE: VotingsState = {open: undefined, past: []};
+const initialState: VotingsState = {open: undefined, past: []};
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const votingReducer = (state: VotingsState = INITIAL_VOTING_STATE, action: ReduxAction): VotingsState => {
-  if (action.type === Action.InitializeBoard) {
-    return {
-      ...state,
-      open: action.votings.find((v) => v.status === "OPEN"),
-      past: action.votings.filter((v) => v.status !== "OPEN"),
-    };
-  }
-
-  if (action.type === Action.CreatedVoting) {
-    return {
-      ...state,
-      open: action.voting,
-    };
-  }
-
-  if (action.type === Action.UpdatedVoting) {
-    return {
-      ...state,
-      open: undefined,
-      past: [action.voting, ...state.past],
-    };
-  }
-  return state;
-};
+export const votingsReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(initializeBoard, (_state, action) =>
+      action.payload.votings.reduce<VotingsState>(
+        (acc, voting) => {
+          if (voting.status === "OPEN") {
+            acc.open = voting;
+          } else {
+            acc.past.push(voting);
+          }
+          return acc;
+        },
+        {open: undefined, past: []}
+      )
+    )
+    .addCase(createdVoting, (state, action) => {
+      state.open = action.payload;
+    })
+    .addCase(updatedVoting, (state, action) => {
+      state.open = undefined;
+      state.past.push(action.payload.voting);
+    })
+);

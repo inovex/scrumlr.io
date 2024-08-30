@@ -1,9 +1,24 @@
-import {Theme, ViewState} from "store/features/view/types";
-import {Action, ReduxAction} from "store/action";
 import {getFromStorage} from "utils/storage";
 import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
+import {createReducer} from "@reduxjs/toolkit";
+import store from "store";
+import {Theme, ViewState} from "./types";
+import {leaveBoard} from "../board";
+import {
+  disableHotkeyNotifications,
+  enableHotkeyNotifications,
+  setHotkeyState,
+  setLanguage,
+  setModerating,
+  setRoute,
+  setServerInfo,
+  setShowBoardReactions,
+  setTheme,
+} from "./actions";
+import {updatedParticipant} from "../participants";
+import {onNoteBlur, onNoteFocus} from "../notes";
 
-const INITIAL_VIEW_STATE: ViewState = {
+const initialState: ViewState = {
   moderating: false,
   serverTimeOffset: 0,
   anonymousLoginDisabled: false,
@@ -11,112 +26,55 @@ const INITIAL_VIEW_STATE: ViewState = {
   feedbackEnabled: false,
   hotkeysAreActive: true,
   noteFocused: false,
-  hotkeyNotificationsEnabled: typeof window !== "undefined" && getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
-  showBoardReactions: typeof window !== "undefined" && getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
-  theme: ((typeof window !== "undefined" && getFromStorage(THEME_STORAGE_KEY)) as Theme) ?? "auto",
+  hotkeyNotificationsEnabled: getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
+  showBoardReactions: getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
+  theme: (getFromStorage(THEME_STORAGE_KEY) as Theme) ?? "auto",
 };
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const viewReducer = (state: ViewState = INITIAL_VIEW_STATE, action: ReduxAction): ViewState => {
-  switch (action.type) {
-    case Action.LeaveBoard: {
-      return {
-        ...state,
-        moderating: INITIAL_VIEW_STATE.moderating,
-      };
-    }
-
-    case Action.SetModerating: {
-      return {
-        ...state,
-        moderating: action.moderating,
-      };
-    }
-
-    case Action.SetLanguage: {
-      return {
-        ...state,
-        language: action.language,
-      };
-    }
-
-    case Action.SetTheme: {
-      return {
-        ...state,
-        theme: action.theme,
-      };
-    }
-
-    case Action.SetServerInfo: {
-      return {
-        ...state,
-        anonymousLoginDisabled: action.anonymousLoginDisabled,
-        enabledAuthProvider: action.enabledAuthProvider,
-        serverTimeOffset: new Date().getTime() - action.serverTime,
-        feedbackEnabled: action.feedbackEnabled,
-      };
-    }
-
-    case Action.SetRoute: {
-      return {
-        ...state,
-        route: action.route,
-      };
-    }
-
-    case Action.UpdatedParticipant: {
-      if (action.participant.user.id === action.context.user && action.participant.role === "PARTICIPANT" && state.moderating === true) {
-        return {
-          ...state,
-          moderating: INITIAL_VIEW_STATE.moderating,
-        };
+export const viewReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(leaveBoard, (state) => {
+      state.moderating = false;
+    })
+    .addCase(setModerating, (state, action) => {
+      state.moderating = action.payload;
+    })
+    .addCase(setLanguage, (state, action) => {
+      state.language = action.payload;
+    })
+    .addCase(setTheme, (state, action) => {
+      state.theme = action.payload;
+    })
+    .addCase(setServerInfo, (state, action) => {
+      state.anonymousLoginDisabled = action.payload.anonymousLoginDisabled;
+      state.enabledAuthProvider = action.payload.enabledAuthProvider;
+      state.serverTimeOffset = new Date().getTime() - action.payload.serverTime;
+      state.feedbackEnabled = action.payload.feedbackEnabled;
+    })
+    .addCase(setRoute, (state, action) => {
+      state.route = action.payload;
+    })
+    .addCase(updatedParticipant, (state, action) => {
+      if (action.payload.user.id === store.getState().auth.user?.id && action.payload.role === "PARTICIPANT" && state.moderating) {
+        state.moderating = false;
       }
-      return state;
-    }
-
-    case Action.SetHotkeyState: {
-      return {
-        ...state,
-        hotkeysAreActive: action.active,
-      };
-    }
-
-    case Action.OnNoteFocus: {
-      return {
-        ...state,
-        noteFocused: true,
-      };
-    }
-
-    case Action.OnNoteBlur: {
-      return {
-        ...state,
-        noteFocused: false,
-      };
-    }
-
-    case Action.EnableHotkeyNotifications: {
-      return {
-        ...state,
-        hotkeyNotificationsEnabled: true,
-      };
-    }
-
-    case Action.DisableHotkeyNotifications: {
-      return {
-        ...state,
-        hotkeyNotificationsEnabled: false,
-      };
-    }
-
-    case Action.SetShowBoardReactions: {
-      return {
-        ...state,
-        showBoardReactions: action.show,
-      };
-    }
-
-    default:
-      return state;
-  }
-};
+    })
+    .addCase(setHotkeyState, (state, action) => {
+      state.hotkeysAreActive = action.payload;
+    })
+    .addCase(onNoteFocus, (state) => {
+      state.noteFocused = true;
+    })
+    .addCase(onNoteBlur, (state) => {
+      state.noteFocused = false;
+    })
+    .addCase(enableHotkeyNotifications, (state) => {
+      state.hotkeyNotificationsEnabled = true;
+    })
+    .addCase(disableHotkeyNotifications, (state) => {
+      state.hotkeyNotificationsEnabled = false;
+    })
+    .addCase(setShowBoardReactions, (state, action) => {
+      state.showBoardReactions = action.payload;
+    })
+);

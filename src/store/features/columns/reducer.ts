@@ -1,26 +1,20 @@
-import {Action, ReduxAction} from "store/action";
-import {ColumnsState} from "store/features/columns/types";
-import {TEMPORARY_COLUMN_ID} from "../../../constants/misc";
+import {TEMPORARY_COLUMN_ID} from "constants/misc";
+import {createReducer} from "@reduxjs/toolkit";
+import {ColumnsState} from "./types";
+import {createColumnOptimistically, deleteColumnOptimistically, deletedColumn, editColumnOptimistically, updatedColumns} from "./actions";
+import {initializeBoard} from "../board";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const columnsReducer = (state: ColumnsState = [], action: ReduxAction): ColumnsState => {
-  if (action.type === Action.InitializeBoard || action.type === Action.UpdatedColumns) {
-    return action.columns;
-  }
-  if (action.type === Action.CreateColumnOptimistically) {
-    const mutableState = [...state];
-    mutableState.splice(action.column.index, 0, action.column);
-    return [...mutableState];
-  }
-  if (action.type === Action.DeleteColumnOptimistically) {
-    return [...state.filter((c) => c.id !== TEMPORARY_COLUMN_ID)];
-  }
-  if (action.type === Action.EditColumnOptimistically) {
-    const mutableState = [...state];
-    return [...mutableState.map((c) => (c.id === TEMPORARY_COLUMN_ID ? {...c, name: action.column.name} : c))];
-  }
-  if (action.type === Action.DeletedColumn) {
-    return state.filter((c) => c.id !== action.columnId);
-  }
-  return state;
-};
+const initialState: ColumnsState = [];
+
+export const columnsReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(initializeBoard, (_state, action) => action.payload.columns)
+    .addCase(updatedColumns, (_state, action) => action.payload)
+    .addCase(createColumnOptimistically, (state, action) => state.splice(action.payload.index, 0, action.payload))
+    .addCase(deleteColumnOptimistically, (state) => state.filter((c) => c.id !== TEMPORARY_COLUMN_ID))
+    .addCase(editColumnOptimistically, (state, action) => {
+      const col = state.find((c) => c.id === TEMPORARY_COLUMN_ID);
+      if (col) col.name = action.payload.column.name;
+    })
+    .addCase(deletedColumn, (state, action) => state.filter((c) => c.id !== action.payload))
+);

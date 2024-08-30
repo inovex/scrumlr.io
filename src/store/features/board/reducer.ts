@@ -1,114 +1,66 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {Action, ReduxAction} from "store/action";
+import {createReducer, isAnyOf} from "@reduxjs/toolkit";
 import {BoardState} from "store/features/board/types";
+import store from "store";
 import {Timer} from "utils/timer";
+import {
+  bannedFromBoard,
+  incorrectPassphrase,
+  initializeBoard,
+  joinBoard,
+  passphraseChallengeRequired,
+  pendingBoardAccessConfirmation,
+  permittedBoardAccess,
+  rejectedBoardAccess,
+  tooManyJoinRequests,
+  updatedBoard,
+  updatedBoardTimer,
+} from "./actions";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const boardReducer = (state: BoardState = {status: "unknown"}, action: ReduxAction): BoardState => {
-  switch (action.type) {
-    case Action.InitializeBoard:
-    case Action.UpdatedBoard: {
-      return {
-        status: "ready",
-        data: {
-          ...action.board,
-          timerStart: Timer.addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
-          timerEnd: Timer.addOffsetToDate(action.board.timerEnd, action.context.serverTimeOffset),
-        },
-      };
-    }
-    case Action.UpdatedBoardTimer: {
-      if (action.board.timerEnd) {
-        return {
-          ...state,
-          data: {
-            ...state.data!,
-            timerStart: Timer.addOffsetToDate(action.board.timerStart, action.context.serverTimeOffset),
-            timerEnd: Timer.addOffsetToDate(action.board.timerEnd, action.context.serverTimeOffset),
-          },
-        };
+const initialState: BoardState = {status: "unknown"};
+
+export const boardReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(updatedBoardTimer, (state, action) => {
+      if (state.data) {
+        if (action.payload.timerEnd) {
+          state.data.timerStart = Timer.addOffsetToDate(action.payload.timerStart, store.getState().view.serverTimeOffset);
+          state.data.timerEnd = Timer.addOffsetToDate(action.payload.timerEnd, store.getState().view.serverTimeOffset);
+        } else {
+          state.status = "ready";
+          state.data.timerEnd = action.payload.timerEnd;
+        }
       }
-      return {
-        status: "ready",
-        data: {...state.data!, timerEnd: action.board.timerEnd},
-      };
-    }
-    case Action.PendingBoardAccessConfirmation:
-    case Action.JoinBoard: {
-      return {
-        status: "pending",
-      };
-    }
-    case Action.PermittedBoardAccess: {
-      return {
-        status: "accepted",
-      };
-    }
-    case Action.RejectedBoardAccess: {
-      return {
-        status: "rejected",
-      };
-    }
-    case Action.PassphraseChallengeRequired: {
-      return {
-        status: "passphrase_required",
-      };
-    }
-    case Action.IncorrectPassphrase: {
-      return {
-        status: "incorrect_passphrase",
-      };
-    }
-    case Action.TooManyJoinRequests: {
-      return {
-        status: "too_many_join_requests",
-      };
-    }
-    case Action.BannedFromBoard: {
-      return {
-        status: "banned",
-      };
-    }
-    case Action.CreatedVoting: {
-      // reset show voting, since websocket messages won't trigger update of board
-      return {
-        status: state.status,
-        data: {
-          ...state.data!,
-          showVoting: undefined,
-        },
-      };
-    }
-
-    case Action.UpdatedVoting: {
-      // show new voting results, since websocket messages won't trigger update of board
-      if (action.voting.status === "CLOSED") {
-        return {
-          status: state.status,
-          data: {
-            ...state.data!,
-            showVoting: action.voting.id,
-          },
-        };
-      }
-      return state;
-    }
-
-    case Action.DeletedNote: {
-      if (action.noteId === state.data?.sharedNote) {
-        return {
-          status: state.status,
-          data: {
-            ...state.data!,
-            sharedNote: undefined,
-          },
-        };
-      }
-      return state;
-    }
-
-    default: {
-      return state;
-    }
-  }
-};
+    })
+    .addCase(permittedBoardAccess, (state) => {
+      state.status = "accepted";
+    })
+    .addCase(rejectedBoardAccess, (state) => {
+      state.status = "rejected";
+    })
+    .addCase(passphraseChallengeRequired, (state) => {
+      state.status = "passphrase_required";
+    })
+    .addCase(incorrectPassphrase, (state) => {
+      state.status = "incorrect_passphrase";
+    })
+    .addCase(tooManyJoinRequests, (state) => {
+      state.status = "too_many_join_requests";
+    })
+    .addCase(bannedFromBoard, (state) => {
+      state.status = "banned";
+    })
+    // TODO CreatedVoting
+    // TODO UpdatedVoting
+    // TODO DeletedNote
+    .addMatcher(isAnyOf(initializeBoard, updatedBoard), (_state, action) => ({
+      status: "ready",
+      data: {
+        ...action.payload.board,
+        timerStart: Timer.addOffsetToDate(action.payload.board.timerStart, store.getState().view.serverTimeOffset),
+        timerEnd: Timer.addOffsetToDate(action.payload.board.timerEnd, store.getState().view.serverTimeOffset),
+      },
+    }))
+    .addMatcher(isAnyOf(joinBoard, pendingBoardAccessConfirmation), (state) => {
+      state.status = "pending";
+    });
+});

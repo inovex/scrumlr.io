@@ -1,86 +1,45 @@
-import {Action, ReduxAction} from "store/action";
-import {ParticipantsState} from "store/features/participants/types";
+import {createReducer} from "@reduxjs/toolkit";
+import store from "store";
+import {Participant, ParticipantsState} from "./types";
+import {initializeBoard} from "../board";
+import {clearFocusInitiator, createdParticipant, editSelf, setFocusInitiator, setParticipants, updatedParticipant} from "./actions";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const participantsReducer = (state: ParticipantsState = null, action: ReduxAction): ParticipantsState => {
-  switch (action.type) {
-    case Action.InitializeBoard:
-    case Action.SetParticipants: {
-      const ownUserId = action.context.user;
+const initialState: ParticipantsState = {};
 
-      const self = action.participants.find((p) => p.user.id === ownUserId)!;
-      const others = action.participants.filter((p) => p.user.id !== ownUserId);
-      const focusInitiator = undefined;
+const mapParticipantsToState = (participants: Participant[]): ParticipantsState => {
+  const ownUserId: string = store.getState().auth.user?.id;
 
-      return {
-        ...state,
-        self,
-        others,
-        focusInitiator,
-      };
-    }
+  const self = participants.find((p) => p.user.id === ownUserId)!;
+  const others = participants.filter((p) => p.user.id !== ownUserId);
+  const focusInitiator = undefined;
 
-    case Action.CreatedParticipant: {
-      return {
-        ...state!,
-        self: state!.self,
-        others: [action.participant, ...state!.others],
-      };
-    }
-
-    case Action.UpdatedParticipant: {
-      if (action.participant.user.id === state!.self.user.id) {
-        return {
-          ...state!,
-          self: action.participant,
-          others: [...state!.others],
-        };
-      }
-
-      const index = state!.others.findIndex((p) => p.user.id === action.participant.user.id);
-
-      const newOthers = state!.others.slice();
-      newOthers.splice(index, 1, action.participant);
-
-      return {
-        ...state!,
-        self: state!.self,
-        others: newOthers,
-      };
-    }
-
-    case Action.EditSelf: {
-      return {
-        ...state!,
-        self: {
-          ...state!.self,
-          user: action.user,
-        },
-        others: [...state!.others],
-      };
-    }
-
-    case Action.SetFocusInitiator: {
-      const focusInitiator = action.participant;
-      return {
-        ...state,
-        self: state!.self,
-        others: [...state!.others],
-        focusInitiator,
-      };
-    }
-
-    case Action.ClearFocusInitiator: {
-      return {
-        ...state,
-        self: state!.self,
-        others: [...state!.others],
-        focusInitiator: undefined,
-      };
-    }
-
-    default: {
-      return state;
-    }
-  }
+  return {self, others, focusInitiator};
 };
+
+export const participantsReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(initializeBoard, (_state, action) => mapParticipantsToState(action.payload.participants))
+    .addCase(setParticipants, (_state, action) => mapParticipantsToState(action.payload))
+    .addCase(createdParticipant, (state, action) => {
+      state.others?.push(action.payload);
+    })
+    .addCase(updatedParticipant, (state, action) => {
+      const isSelf = action.payload.user.id === store.getState().auth.user?.id;
+      if (isSelf) {
+        state.self = action.payload;
+      } else {
+        state.others = state.others?.map((p) => (p.user.id === action.payload.user.id ? action.payload : p));
+      }
+    })
+    .addCase(editSelf, (state, action) => {
+      if (state.self?.user) {
+        state.self.user = action.payload;
+      }
+    })
+    .addCase(setFocusInitiator, (state, action) => {
+      state.focusInitiator = action.payload;
+    })
+    .addCase(clearFocusInitiator, (state) => {
+      state.focusInitiator = undefined;
+    })
+);

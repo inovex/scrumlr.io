@@ -1,14 +1,13 @@
-import {Action, ReduxAction} from "store/action";
-import {BoardReactionState} from "store/features/boardReactions/types";
+import {createReducer} from "@reduxjs/toolkit";
+import {BoardReactionState} from "./types";
+import {addedBoardReaction, removeBoardReaction} from "./actions";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const boardReactionReducer = (state: BoardReactionState = [], action: ReduxAction): BoardReactionState => {
-  switch (action.type) {
-    case Action.AddedBoardReaction:
-      return [...state, action.boardReaction];
-    case Action.RemoveBoardReaction:
-      return state.filter((br) => br.id !== action.id);
-    default:
-      return state;
-  }
-};
+const initialState: BoardReactionState = [];
+
+export const boardReactionReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(addedBoardReaction, (state, action) => {
+      state.push(action.payload);
+    })
+    .addCase(removeBoardReaction, (state, action) => state.filter((br) => br.id !== action.payload))
+);

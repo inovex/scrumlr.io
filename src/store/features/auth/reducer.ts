@@ -1,34 +1,20 @@
-import {AuthState} from "store/features/auth/types";
-import {ReduxAction} from "store/action";
-import {AuthAction} from "store/features/auth/actions";
+import {createReducer} from "@reduxjs/toolkit";
+import {AuthState} from "./types";
+import {signIn, signOut, userCheckCompleted} from "./actions";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const authReducer = (state: AuthState = {user: undefined, initializationSucceeded: null}, action: ReduxAction): AuthState => {
-  if (action.type === AuthAction.SignOut) {
-    return {
-      ...state,
-      user: undefined,
-    };
-  }
+const initialState: AuthState = {user: undefined, initializationSucceeded: null};
 
-  if (action.type === AuthAction.SignIn) {
-    return {
-      ...state,
-      user: {
-        id: action.id,
-        name: action.name,
-        isAnonymous: action.isAnonymous,
-        avatar: action.avatar,
-      },
-    };
-  }
-
-  if (action.type === AuthAction.UserCheckCompleted) {
-    return {
-      ...state,
-      initializationSucceeded: action.success,
-    };
-  }
-
-  return state;
-};
+export const authReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(signIn, (state, action) => {
+      // inside reducers mutations like this are allowed, since Immer is used internally.
+      // note that directly reassigning the whole state won't work though!
+      state.user = action.payload;
+    })
+    .addCase(signOut, (state) => {
+      state.user = undefined;
+    })
+    .addCase(userCheckCompleted, (state, action) => {
+      state.initializationSucceeded = action.payload;
+    })
+);

@@ -1,28 +1,16 @@
-import {Action, ReduxAction} from "store/action";
-import {VotesState} from "store/features/votes/types";
+import {createReducer} from "@reduxjs/toolkit";
+import {VotesState} from "./types";
+import {initializeBoard} from "../board";
+import {createdVote, deletedVote, updatedVotes} from "./actions";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const voteReducer = (state: VotesState = [], action: ReduxAction): VotesState => {
-  if (action.type === Action.InitializeBoard) {
-    return action.votes;
-  }
+const initialState: VotesState = [];
 
-  if (action.type === Action.CreatedVote) {
-    return [action.vote, ...state];
-  }
-
-  if (action.type === Action.DeletedVote) {
-    const newVotes = state.slice();
-    const index = newVotes.findIndex((v) => v.voting === action.vote.voting && v.note === action.vote.note);
-    if (index >= 0) {
-      newVotes.splice(index, 1);
-      return newVotes;
-    }
-  }
-
-  if (action.type === Action.UpdatedVotes) {
-    return action.votes;
-  }
-
-  return state;
-};
+export const votesReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(initializeBoard, (_state, action) => action.payload.votes)
+    .addCase(createdVote, (state, action) => {
+      state.push(action.payload);
+    })
+    .addCase(updatedVotes, (_state, action) => action.payload)
+    .addCase(deletedVote, (state, action) => state.filter((v) => !(v.voting === action.payload.voting && v.note === action.payload.note)))
+);

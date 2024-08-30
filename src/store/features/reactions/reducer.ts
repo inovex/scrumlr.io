@@ -1,27 +1,16 @@
-import {ReactionState} from "store/features/reactions/types";
-import {Action, ReduxAction} from "../../action";
+import {createReducer} from "@reduxjs/toolkit";
+import {ReactionState} from "./types";
+import {initializeBoard} from "../board";
+import {addedReaction, deletedReaction, updatedReaction} from "./actions";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const reactionReducer = (state: ReactionState = [], action: ReduxAction): ReactionState => {
-  switch (action.type) {
-    case Action.InitializeBoard:
-      return action.reactions;
+const initialState: ReactionState = [];
 
-    case Action.AddedReaction:
-      return [...state, action.reaction];
-
-    case Action.DeletedReaction:
-      return state.filter((r) => r.id !== action.reactionId);
-
-    case Action.UpdatedReaction: {
-      const updatedReaction = action.reaction;
-      // since we don't mutate our original state we first filter out the old reaction ...
-      const filteredState = state.filter((r) => r.id !== updatedReaction.id);
-      // ... then add the reaction with the new reactionType
-      return [...filteredState, updatedReaction];
-    }
-
-    default:
-      return state;
-  }
-};
+export const reactionsReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(initializeBoard, (_state, action) => action.payload.reactions)
+    .addCase(addedReaction, (state, action) => {
+      state.push(action.payload);
+    })
+    .addCase(deletedReaction, (state, action) => state.filter((r) => r.id !== action.payload))
+    .addCase(updatedReaction, (state, action) => state.map((r) => (r.id !== action.payload.id ? r : action.payload)))
+);

@@ -1,38 +1,39 @@
-import {Action, ReduxAction} from "store/action";
-import {NotesState} from "store/features/notes/types";
+import {createReducer, isAnyOf} from "@reduxjs/toolkit";
+import {NotesState} from "./types";
+import {initializeBoard} from "../board";
+import {deletedNote, syncNotes, updatedNotes} from "./actions";
 
-// eslint-disable-next-line @typescript-eslint/default-param-last
-export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesState => {
-  switch (action.type) {
-    case Action.InitializeBoard:
-    case Action.UpdatedNotes: {
-      return action.notes;
-    }
-    case Action.DeletedNote: {
-      const deletedNote = state.find((n) => n.id === action.noteId);
+const initialState: NotesState = [];
+
+export const noteReducer = createReducer(initialState, (builder) =>
+  builder
+    .addCase(initializeBoard, (_state, action) => action.payload.notes)
+    .addCase(updatedNotes, (_state, action) => action.payload)
+    .addCase(deletedNote, (state, action) => {
+      const note = state.find((n) => n.id === action.payload.noteId);
+
+      if (!note) return state;
 
       // Delete stack
-      if (action.deleteStack) {
+      if (action.payload.deleteStack) {
         const newState = state.filter((n) => {
-          if (n.id === action.noteId) {
+          if (n.id === action.payload.noteId) {
             return false;
           }
-          if (n.position.stack === action.noteId) {
-            return false;
-          }
-          return true;
+          return n.position.stack !== action.payload.noteId;
         });
         return newState.map((n) => {
-          if (!n.position.stack && n.position.rank > deletedNote!.position.rank) {
+          if (!n.position.stack && n.position.rank > note.position.rank) {
             const newRank = n.position.rank - 1;
             return {...n, position: {...n.position, rank: newRank}};
           }
           return n;
         });
       }
+
       // Delete parent note
-      const childrenOfDeletedNote = state.filter((n) => n.position.stack === deletedNote?.id);
-      if (deletedNote?.position.stack === null && childrenOfDeletedNote.length > 0) {
+      const childrenOfDeletedNote = state.filter((n) => n.position.stack === note.id);
+      if (note.position.stack === null && childrenOfDeletedNote.length > 0) {
         // Find the next parent note among its children
         const nextParentNote = childrenOfDeletedNote.reduce((acc, curr) => {
           if (curr.position.rank > acc.position.rank) {
@@ -42,52 +43,44 @@ export const noteReducer = (state: NotesState = [], action: ReduxAction): NotesS
         }, childrenOfDeletedNote[0]);
 
         // Update the children notes' stack to the next parent note's ID
-        const newState = state.map((note) => {
-          if (note.id === nextParentNote.id) {
-            // The next parent note should now have null stack
-            return {...note, position: {...note.position, stack: null, rank: deletedNote.position.rank}}; // rank
+        const newState = state.map((n) => {
+          if (n.id === nextParentNote.id) {
+            // The next parent n should now have null stack
+            return {...n, position: {...n.position, stack: null, rank: n.position.rank}};
           }
-          if (note.position.stack === deletedNote.id) {
-            // The other children should now have the next parent note's ID as their stack
-            return {...note, position: {...note.position, stack: nextParentNote.id}};
+          if (n.position.stack === n.id) {
+            // The other children should now have the next parent n's ID as their stack
+            return {...n, position: {...n.position, stack: nextParentNote.id}};
           }
-          return note;
+          return n;
         });
 
         // Delete the old parent note
-        return newState.filter((n) => n.id !== deletedNote.id);
+        return newState.filter((n) => n.id !== note.id);
       }
+
       // Delete child note
-      if (deletedNote?.position.stack) {
-        const newState = state.filter((n) => n.id !== action.noteId);
+      if (note.position.stack) {
+        const newState = state.filter((n) => n.id !== action.payload.noteId);
         return newState.map((n) => {
-          if (n.position.stack === deletedNote.position.stack) {
+          if (n.position.stack === note.position.stack) {
             const newRank = n.position.rank - 1;
             return {...n, position: {...n.position, rank: newRank}};
           }
           return n;
         });
       }
+
       // Delete note
-      const newState = state.filter((n) => n.id !== action.noteId);
+      const newState = state.filter((n) => n.id !== action.payload.noteId);
       return newState.map((n) => {
-        if (!n.position.stack && n.position.rank > deletedNote!.position.rank) {
+        if (!n.position.stack && n.position.rank > note.position.rank) {
           const newRank = n.position.rank - 1;
           return {...n, position: {...n.position, rank: newRank}};
         }
         return n;
       });
-    }
-    case Action.SyncNotes: {
-      return action.notes;
-    }
-    case Action.UpdatedVoting: {
-      if (action.notes) {
-        return action.notes;
-      }
-      return state;
-    }
-    default:
-      return state;
-  }
-};
+    })
+
+    .addMatcher(isAnyOf(updatedNotes, syncNotes), (_state, action) => action.payload)
+);
