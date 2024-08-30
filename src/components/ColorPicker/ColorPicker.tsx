@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {uniqueId} from "underscore";
 import {Color} from "../../constants/colors";
@@ -13,6 +13,7 @@ type ColorPickerProps = {
   color: Color;
   onClose?: () => void;
   colors: Color[];
+  closeColorPicker: () => void;
 };
 
 function formatColorName(input: string): string {
@@ -22,25 +23,38 @@ function formatColorName(input: string): string {
     .join(" ");
 }
 
-export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, index, color, onClose, colors}) => {
+export const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
   const dispatch = useDispatch();
-  const colorsWithoutSelectedColor = colors.filter((curColor) => curColor !== color);
-  const primColorAnchor = uniqueId(`color-picker-${color.toString()}`);
+  const colorsWithoutSelectedColor = props.colors.filter((curColor) => curColor !== props.color);
+  const primColorAnchor = uniqueId(`color-picker-${props.color.toString()}`);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.stopPropagation();
+        props.closeColorPicker();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress, true);
+    return () => document.removeEventListener("keydown", handleKeyPress, true);
+  }, [props]);
+
   return (
     <ul className="color-picker">
       <li>
         <button
           id={primColorAnchor}
-          aria-label={color.toString()}
-          title={color.toString()}
+          aria-label={props.color.toString()}
+          title={props.color.toString()}
           onClick={() => {
-            onClose?.();
-            dispatch(Actions.editColumn(id, {name, color, index, visible}));
+            props.onClose?.();
+            dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: props.visible}));
           }}
         >
-          <div className={`column__header-color-option column__header-color-option--${color.toString()}-selected`} />
+          <div className={`column__header-color-option column__header-color-option--${props.color.toString()}-selected`} />
         </button>
-        <Tooltip anchorSelect={`#${primColorAnchor}`} content={color.toString()} />
+        <Tooltip anchorSelect={`#${primColorAnchor}`} content={props.color.toString()} />
       </li>
       {colorsWithoutSelectedColor.map((item) => {
         const anchor = uniqueId(`color-picker-${item.toString()}`);
@@ -51,8 +65,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({id, name, visible, inde
               aria-label={formatColorName(item.toString())}
               title={item.toString()}
               onClick={() => {
-                onClose?.();
-                dispatch(Actions.editColumn(id, {name, color: item, index, visible}));
+                props.onClose?.();
+                dispatch(Actions.editColumn(props.id, {name: props.name, color: item, index: props.index, visible: props.visible}));
               }}
             >
               <div className={`column__header-color-option column__header-color-option--${item.toString()}`} />
