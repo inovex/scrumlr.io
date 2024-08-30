@@ -2,30 +2,30 @@ import {combineReducers, configureStore, Dispatch, MiddlewareAPI} from "@reduxjs
 import {TypedUseSelectorHook, useSelector} from "react-redux";
 import {ApplicationState} from "types";
 import {ReduxAction} from "./action";
-import {boardReducer} from "./features/board/board";
-import {noteReducer} from "./features/notes/note";
-import {voteReducer} from "./features/votes/vote";
-import {participantsReducer} from "./features/participants/participants";
-import {votingReducer} from "./features/votings/votings";
+import {boardReducer} from "./features/board/reducer";
+import {noteReducer} from "./features/notes/reducer";
+import {voteReducer} from "./features/votes/reducer";
+import {participantsReducer} from "./features/participants/reducer";
+import {votingReducer} from "./features/votings/reducer";
 import {passNoteMiddleware} from "./middleware/note";
 import {passVoteMiddleware} from "./middleware/vote";
 import {passBoardMiddleware} from "./middleware/board";
 import {passColumnMiddleware} from "./middleware/column";
 import {passParticipantsMiddleware} from "./middleware/participants";
-import {joinRequestReducer} from "./features/requests/requests";
+import {joinRequestReducer} from "./features/requests/reducer";
 import {passVotingMiddleware} from "./middleware/votings";
-import {authReducer} from "./features/auth/auth";
+import {authReducer} from "./features/auth/reducer";
 import {passAuthMiddleware} from "./middleware/auth";
-import {columnsReducer} from "./features/columns/columns";
-import {viewReducer} from "./features/view/view";
+import {columnsReducer} from "./features/columns/reducer";
+import {viewReducer} from "./features/view/reducer";
 import {passRequestMiddleware} from "./middleware/request";
 import {passViewMiddleware} from "./middleware/view";
-import {boardReactionReducer} from "./features/boardReactions/boardReaction";
+import {boardReactionReducer} from "./features/boardReactions/reducer";
 import {passBoardReactionMiddleware} from "./middleware/boardReaction";
-import {reactionReducer} from "./features/reactions/reaction";
+import {reactionReducer} from "./features/reactions/reducer";
 import {passReactionMiddleware} from "./middleware/reaction";
 import {passSkinToneMiddleware} from "./middleware/skinTone";
-import {skinToneReducer} from "./features/skinTone/skinTone";
+import {skinToneReducer} from "./features/skinTone/reducer";
 
 const parseMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>) => (dispatch: Dispatch) => (action: ReduxAction) => {
   action.context = {
