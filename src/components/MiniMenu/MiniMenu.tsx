@@ -2,6 +2,7 @@ import {ReactNode} from "react";
 import classNames from "classnames";
 import {uniqueId} from "underscore";
 import "./MiniMenu.scss";
+import ReactFocusLock from "react-focus-lock";
 
 type MiniMenuItem = {
   icon: ReactNode;
@@ -16,6 +17,7 @@ type MiniMenuProps = {
 };
 
 export const MiniMenu = ({className, items}: MiniMenuProps) => (
+  <ReactFocusLock autoFocus={false}>
     <div className={classNames(className, "mini-menu")}>
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
@@ -34,4 +36,5 @@ export const MiniMenu = ({className, items}: MiniMenuProps) => (
         );
       })}
     </div>
-  );
+  </ReactFocusLock>
+);
