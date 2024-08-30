@@ -1,4 +1,4 @@
-import {EditColumnRequest} from "types/column";
+import {EditColumnRequest} from "store/features/columns/column";
 import {SERVER_HTTP_URL} from "../config";
 
 export const ColumnAPI = {

@@ -1,4 +1,4 @@
-import {Voting} from "types/voting";
+import {Voting} from "store/features/votings/voting";
 
 export default (overwrite?: Partial<Voting>): Voting => ({
   id: "test-votings-open-id-1",

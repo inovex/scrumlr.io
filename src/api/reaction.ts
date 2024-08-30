@@ -1,5 +1,5 @@
 import {SERVER_HTTP_URL} from "../config";
-import {Reaction, ReactionType} from "../types/reaction";
+import {Reaction, ReactionType} from "../store/features/reactions/reaction";
 
 export const ReactionAPI = {
   addReaction: async (board: string, note: string, reactionType: ReactionType) => {

@@ -1,4 +1,4 @@
-import {RequestsState} from "types/request";
+import {RequestsState} from "store/features/requests/request";
 import {Action, ReduxAction} from "store/action";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last

@@ -1,5 +1,5 @@
 import {SERVER_HTTP_URL} from "../config";
-import {AuthDto} from "../types/auth";
+import {AuthDto} from "../store/features/auth/auth";
 
 export const AuthAPI = {
   /**

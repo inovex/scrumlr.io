@@ -1,4 +1,4 @@
-import {ReactionState} from "types/reaction";
+import {ReactionState} from "store/features/reactions/reaction";
 import {Action, ReduxAction} from "../action";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last

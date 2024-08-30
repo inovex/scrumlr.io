@@ -1,4 +1,4 @@
-import {AuthState} from "types/auth";
+import {AuthState} from "store/features/auth/auth";
 import {ReduxAction} from "store/action";
 import {AuthAction} from "store/features/auth/actions";
 

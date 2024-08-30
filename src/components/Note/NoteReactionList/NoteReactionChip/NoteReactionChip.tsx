@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
-import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
+import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/reaction";
 import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {getEmojiWithSkinTone} from "utils/reactions";

@@ -1,4 +1,4 @@
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/participant";
 import {SERVER_HTTP_URL} from "../config";
 
 export const ParticipantsAPI = {

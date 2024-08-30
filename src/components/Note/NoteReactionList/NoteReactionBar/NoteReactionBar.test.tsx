@@ -1,6 +1,6 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {REACTION_EMOJI_MAP} from "types/reaction";
+import {REACTION_EMOJI_MAP} from "store/features/reactions/reaction";
 import {Provider} from "react-redux";
 import {ApplicationState} from "types";
 import getTestApplicationState from "utils/test/getTestApplicationState";

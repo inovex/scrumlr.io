@@ -1,4 +1,4 @@
-import {SkinTone} from "../types/skinTone";
+import {SkinTone} from "../store/features/skinTone/skinTone";
 
 export const getEmojiWithSkinTone = (
   emoji: {

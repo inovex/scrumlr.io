@@ -2,7 +2,7 @@ import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
 import {useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
-import {AccessPolicy} from "types/board";
+import {AccessPolicy} from "store/features/board/board";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {columnTemplates} from "./columnTemplates";

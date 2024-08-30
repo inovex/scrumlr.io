@@ -1,4 +1,4 @@
-import {VotingsState} from "types/voting";
+import {VotingsState} from "store/features/votings/voting";
 import {Action, ReduxAction} from "store/action";
 
 /**

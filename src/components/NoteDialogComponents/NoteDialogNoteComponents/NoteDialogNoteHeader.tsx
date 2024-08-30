@@ -1,5 +1,5 @@
 import {NoteAuthorList} from "components/Note/NoteAuthorList/NoteAuthorList";
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/participant";
 import {useAppSelector} from "store";
 import {AvataaarProps} from "types/avatar";
 import {Votes} from "../../Votes";

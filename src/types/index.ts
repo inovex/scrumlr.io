@@ -1,15 +1,15 @@
-import {BoardState} from "./board";
-import {VotesState} from "./vote";
-import {AuthState} from "./auth";
-import {RequestsState} from "./request";
-import {VotingsState} from "./voting";
-import {ColumnsState} from "./column";
-import {ParticipantsState} from "./participant";
-import {NotesState} from "./note";
-import {ViewState} from "./view";
-import {ReactionState} from "./reaction";
-import {BoardReactionState} from "./boardReaction";
-import {SkinToneState} from "./skinTone";
+import {BoardState} from "../store/features/board/board";
+import {VotesState} from "../store/features/votes/vote";
+import {AuthState} from "../store/features/auth/auth";
+import {RequestsState} from "../store/features/requests/request";
+import {VotingsState} from "../store/features/votings/voting";
+import {ColumnsState} from "../store/features/columns/column";
+import {ParticipantsState} from "../store/features/participants/participant";
+import {NotesState} from "../store/features/notes/note";
+import {ViewState} from "../store/features/view/view";
+import {ReactionState} from "../store/features/reactions/reaction";
+import {BoardReactionState} from "../store/features/boardReactions/boardReaction";
+import {SkinToneState} from "../store/features/skinTone/skinTone";
 
 export interface ApplicationState {
   auth: AuthState;

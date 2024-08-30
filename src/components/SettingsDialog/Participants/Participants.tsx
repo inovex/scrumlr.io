@@ -7,7 +7,7 @@ import {useTranslation} from "react-i18next";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/participant";
 import _ from "underscore";
 import {useDebounce} from "utils/hooks/useDebounce";
 import "./Participants.scss";

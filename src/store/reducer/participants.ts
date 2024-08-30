@@ -1,5 +1,5 @@
 import {Action, ReduxAction} from "store/action";
-import {ParticipantsState} from "types/participant";
+import {ParticipantsState} from "store/features/participants/participant";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const participantsReducer = (state: ParticipantsState = null, action: ReduxAction): ParticipantsState => {

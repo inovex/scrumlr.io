@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {Action, ReduxAction} from "store/action";
-import {BoardState} from "types/board";
+import {BoardState} from "store/features/board/board";
 import {Timer} from "utils/timer";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last

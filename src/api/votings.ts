@@ -1,4 +1,4 @@
-import {CreateVotingRequest} from "types/voting";
+import {CreateVotingRequest} from "store/features/votings/voting";
 import {SERVER_HTTP_URL} from "../config";
 
 export const VotingAPI = {

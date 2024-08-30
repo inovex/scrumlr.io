@@ -1,4 +1,4 @@
-import {Note} from "../../types/note";
+import {Note} from "../../store/features/notes/note";
 
 export default (overwrite?: Partial<Note>): Note => ({
   id: "test-note-id",

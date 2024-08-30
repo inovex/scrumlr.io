@@ -1,6 +1,6 @@
 import {SKIN_TONE_STORAGE_KEY} from "constants/storage";
 import {Action, ReduxAction} from "store/action";
-import {SkinToneName, SkinToneState, skinTones} from "types/skinTone";
+import {SkinToneName, SkinToneState, skinTones} from "store/features/skinTone/skinTone";
 import {getFromStorage} from "utils/storage";
 
 let skinToneName: SkinToneName = (getFromStorage(SKIN_TONE_STORAGE_KEY) as SkinToneName) ?? "default";

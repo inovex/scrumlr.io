@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
-import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
+import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/reaction";
 import {useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
 import {useDispatch} from "react-redux";

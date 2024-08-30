@@ -7,7 +7,7 @@ import {isEqual} from "underscore";
 import {Votes} from "components/Votes";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/participant";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useSize} from "utils/hooks/useSize";

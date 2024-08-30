@@ -1,8 +1,8 @@
 import {Actions} from "store/action";
-import {Request as RequestModel} from "types/request";
+import {Request as RequestModel} from "store/features/requests/request";
 import "./Requests.scss";
 import {useDispatch} from "react-redux";
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/participant";
 import {Request} from "./Request";
 
 export interface RequestsProps {

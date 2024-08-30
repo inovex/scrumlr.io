@@ -1,6 +1,6 @@
 import {createAction} from "@reduxjs/toolkit";
-import {ReactionType} from "types/reaction";
-import {BoardReactionType} from "types/boardReaction";
+import {ReactionType} from "store/features/reactions/reaction";
+import {BoardReactionType} from "store/features/boardReactions/boardReaction";
 
 export const addBoardReaction = createAction<ReactionType>("scrumlr.io/addBoardReaction");
 export const addedBoardReaction = createAction<BoardReactionType>("scrumlr.io/addedBoardReaction");

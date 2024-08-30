@@ -1,5 +1,5 @@
 import {Action, ReduxAction} from "store/action";
-import {BoardReactionState} from "types/boardReaction";
+import {BoardReactionState} from "store/features/boardReactions/boardReaction";
 
 // eslint-disable-next-line @typescript-eslint/default-param-last
 export const boardReactionReducer = (state: BoardReactionState = [], action: ReduxAction): BoardReactionState => {

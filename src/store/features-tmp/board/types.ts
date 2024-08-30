@@ -1,10 +1,10 @@
-import {Participant} from "../../../types/participant";
-import {Request} from "../../../types/request";
-import {Column} from "../../../types/column";
-import {Note} from "../../../types/note";
-import {Reaction} from "../../../types/reaction";
-import {Vote} from "../../../types/vote";
-import {Voting} from "../../../types/voting";
+import {Participant} from "../../features/participants/participant";
+import {Request} from "../../features/requests/request";
+import {Column} from "../../features/columns/column";
+import {Note} from "../../features/notes/note";
+import {Reaction} from "../../features/reactions/reaction";
+import {Vote} from "../../features/votes/vote";
+import {Voting} from "../../features/votings/voting";
 
 export enum AccessPolicy {
   "PUBLIC" = 0,
