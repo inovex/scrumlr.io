@@ -43,9 +43,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsPro
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === "Enter") {
-        e.stopPropagation();
-      } else if (e.key === "Escape") {
+      if (e.key === "Escape") {
         props.closeColumnSettings();
       }
     };
@@ -56,7 +54,16 @@ export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsPro
 
   const renderColorPicker = () =>
     openedColorPicker ? (
-      <ColorPicker id={props.id} name={props.name} visible={props.visible} index={props.index} color={props.color} onClose={props.onClose} colors={COLOR_ORDER} />
+      <ColorPicker
+        id={props.id}
+        name={props.name}
+        visible={props.visible}
+        index={props.index}
+        color={props.color}
+        onClose={props.onClose}
+        colors={COLOR_ORDER}
+        closeColorPicker={() => setOpenedColorPicker(false)}
+      />
     ) : (
       <span className={`column__header-color-option column__header-color-option--${props.color}-selected`} />
     );
