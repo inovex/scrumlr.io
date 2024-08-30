@@ -20,25 +20,16 @@ const initialState: BoardState = {status: "unknown"};
 
 export const boardReducer = createReducer(initialState, (builder) => {
   builder
-    // need to be careful here, since data might be undefined
     .addCase(updatedBoardTimer, (state, action) => {
-      if (action.payload.timerEnd) {
-        return {
-          ...state,
-          data: {
-            ...state.data!,
-            timerStart: Timer.addOffsetToDate(action.payload.timerStart, store.getState().view.serverTimeOffset),
-            timerEnd: Timer.addOffsetToDate(action.payload.timerEnd, store.getState().view.serverTimeOffset),
-          },
-        };
+      if (state.data) {
+        if (action.payload.timerEnd) {
+          state.data.timerStart = Timer.addOffsetToDate(action.payload.timerStart, store.getState().view.serverTimeOffset);
+          state.data.timerEnd = Timer.addOffsetToDate(action.payload.timerEnd, store.getState().view.serverTimeOffset);
+        } else {
+          state.status = "ready";
+          state.data.timerEnd = action.payload.timerEnd;
+        }
       }
-      return {
-        status: "ready",
-        data: {
-          ...state.data!,
-          timerEnd: action.payload.timerEnd,
-        },
-      };
     })
     .addCase(permittedBoardAccess, (state) => {
       state.status = "accepted";
