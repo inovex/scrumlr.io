@@ -2,7 +2,6 @@
 
 .color-picker {
   z-index: 220;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,7 +28,15 @@
 
   &:focus-visible {
     border-radius: $rounded--full;
-    background-color: $gray--400;
+    outline: 2px solid $gray--500;
+
+    &.planning-pink {
+      outline: 2px solid $pink--400;
+    }
+    &.backlog-blue {
+      outline: 2px solid $blue--400;
+      background-color: #1bd47e;
+    }
   }
 }
 
@@ -197,11 +204,11 @@
 
 [theme="dark"] {
   .color-picker > li > button {
-    &:focus-visible {
-      border-radius: $rounded--full;
-      background-color: $navy--300;
-      border-color: $navy--300;
-    }
+    //&:focus-visible {
+    //  border-radius: $rounded--full;
+    //  background-color: $navy--300;
+    //  border-color: $navy--300;
+    //}
   }
 
   .column__header-color-option {
@@ -328,4 +335,8 @@
     justify-self: center;
     padding: $spacing--xxs 2px;
   }
+}
+
+.fix-focus-lock-placement {
+  margin-top: auto;
 }
