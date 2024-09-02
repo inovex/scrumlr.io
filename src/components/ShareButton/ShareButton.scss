@@ -1,10 +1,10 @@
 @import "constants/style";
 
 .share-button {
-  color: $color-backlog-blue;
+  color: $blue--500;
   outline: none;
-  border: 2px solid $menu-icon-background-color--dark;
-  color: $menu-icon-background-color--dark;
+  border: 2px solid $navy--500;
+  color: $navy--500;
   border-radius: 100%;
   height: 36px;
   width: 36px;
@@ -27,7 +27,7 @@
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.32);
+    box-shadow: 0 0 0 2px rgba($blue--500, 0.32);
   }
 }
 
@@ -38,11 +38,11 @@
 
 [theme="dark"] {
   .share-button {
-    border: 2px solid $color-icon-light-blue;
-    color: $color-icon-light-blue;
+    border: 2px solid $blue--200;
+    color: $blue--200;
 
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
     }
   }
 }

@@ -14,7 +14,7 @@
     right: -3px;
     bottom: -3px;
     left: -3px;
-    border: 2px solid var(--accent-color);
+    border: 2px solid var(--accent-color--light);
     border-radius: $rounded--full;
     pointer-events: none;
   }
@@ -26,8 +26,8 @@
   font-size: 14px;
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
-  color: $color-black;
-  background-color: $color-white;
+  color: $navy--900;
+  background-color: $gray--000;
   border: none;
   border-radius: $rounded--full;
   outline: none;
@@ -37,7 +37,7 @@
   position: absolute;
   height: 100%;
   width: $icon--medium;
-  color: $color-black;
+  color: $navy--900;
   right: $spacing--base;
 }
 
@@ -50,8 +50,8 @@
 
 .participants__permisson-filter-button {
   height: 42px;
-  background-color: $color-white;
-  color: $color-black;
+  background-color: $gray--000;
+  color: $navy--900;
   border: none;
   border-radius: $rounded--full;
   padding: 0 10px;
@@ -61,17 +61,17 @@
   cursor: pointer;
 
   &--active {
-    background-color: var(--accent-color);
-    color: $color-white;
+    background-color: var(--accent-color--light);
+    color: $gray--000;
   }
   &:focus {
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid var(--accent-color--light);
   }
 }
 @media (hover: hover) {
   .participants__permisson-filter-button:hover {
-    background-color: var(--accent-color--desaturated-light);
-    color: $color-black;
+    background-color: var(--accent-color--100);
+    color: $navy--900;
   }
 }
 @media screen and (min-width: 920px) {
@@ -85,17 +85,17 @@
   width: 42px;
   border: none;
   border-radius: $rounded--full;
-  background-color: $color-white;
-  color: $color-black;
+  background-color: $gray--000;
+  color: $navy--900;
   padding: 0;
   cursor: pointer;
 
   &--active {
-    background-color: var(--accent-color);
-    color: $color-white;
+    background-color: var(--accent-color--light);
+    color: $gray--000;
   }
   &:focus {
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid var(--accent-color--light);
   }
   > svg {
     height: $icon--large;
@@ -104,8 +104,8 @@
 }
 @media (hover: hover) {
   .participant__status-filter-button:hover {
-    background-color: var(--accent-color--desaturated-light);
-    color: $color-black;
+    background-color: var(--accent-color--100);
+    color: $navy--900;
   }
 }
 
@@ -131,7 +131,7 @@
 
 .participants__list-item {
   height: 55px;
-  background-color: $color-white;
+  background-color: $gray--000;
   padding: $spacing--xs;
   display: flex;
   flex-direction: row;
@@ -139,7 +139,7 @@
   gap: $spacing--xs;
 
   &:not(:last-child) {
-    border-bottom: 1px solid $color-lighter-gray;
+    border-bottom: 1px solid $gray--300;
   }
 
   &.banned > *:not(.participant__join-icon) {
@@ -165,7 +165,7 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   line-height: 18px;
-  color: $color-black;
+  color: $navy--900;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -178,29 +178,29 @@
   padding: 0 $spacing--xs;
   font-weight: 500;
   letter-spacing: $letter-spacing--medium;
-  background-color: var(--accent-color);
-  color: $color-white;
+  background-color: var(--accent-color--light);
+  color: $gray--000;
   width: fit-content;
 
   &:is(button) {
     line-height: 12px;
-    background-color: $color-white;
-    border: 2px solid var(--accent-color--desaturated-light);
-    color: $color-black;
+    background-color: $gray--000;
+    border: 2px solid var(--accent-color--100);
+    color: $navy--900;
     cursor: pointer;
   }
   &:is(button):hover,
   &:is(button):focus {
     outline: none;
-    border-color: var(--accent-color--desaturated-light);
-    background-color: var(--accent-color--desaturated-light);
+    border-color: var(--accent-color--100);
+    background-color: var(--accent-color--100);
   }
   &--active:is(button),
   &--active:is(button):hover {
     cursor: default;
-    border-color: var(--accent-color);
-    background-color: var(--accent-color);
-    color: $color-white;
+    border-color: var(--accent-color--light);
+    background-color: var(--accent-color--light);
+    color: $gray--000;
   }
 }
 
@@ -222,7 +222,7 @@
 
   width: calc(100% + 2 * $settings-dialog-container--sides-small); // overflow over parent margin
 
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
 
   visibility: hidden;
   transform: translateY(100%);
@@ -249,7 +249,7 @@
 }
 
 .participants-reset-state-banner__text {
-  color: $menu-icon-background-color--dark;
+  color: $navy--500;
   font-weight: 600;
 }
 
@@ -257,8 +257,8 @@
   padding: 0 $spacing--lg;
 
   height: 36px;
-  background-color: $menu-icon-background-color--dark;
-  color: $color-white;
+  background-color: $navy--500;
+  color: $gray--000;
   border: none;
   border-radius: $rounded--full;
   font-weight: bold;
@@ -266,8 +266,8 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $hover-background-dark;
-    color: $color-white;
+    background-color: $navy--300;
+    color: $gray--000;
   }
 }
 
@@ -279,21 +279,21 @@
   margin-left: auto; // align to the very right
   border-radius: $rounded--default;
   border: none;
-  background-color: $color-white;
+  background-color: $gray--000;
   flex-shrink: 0;
 
   cursor: pointer;
 
   &--active {
-    background-color: var(--accent-color);
-    color: $color-white;
+    background-color: var(--accent-color--light);
+    color: $gray--000;
   }
   &:focus {
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid var(--accent-color--light);
   }
 
   &:hover {
-    background-color: var(--accent-color--desaturated-light);
+    background-color: var(--accent-color--100);
   }
 }
 
@@ -312,77 +312,77 @@
 
 [theme="dark"] {
   .participants__search-input {
-    background-color: $color-dark-mode-note;
-    color: $color-white;
+    background-color: $navy--500;
+    color: $gray--000;
   }
   .participants__search-icon {
-    color: $color-white;
+    color: $gray--000;
   }
   .participants__permisson-filter-button,
   .participant__status-filter-button {
-    background-color: $color-dark-mode-note;
-    color: $color-white;
+    background-color: $navy--500;
+    color: $gray--000;
     &--active {
-      background-color: var(--accent-color);
-      color: $color-white;
+      background-color: var(--accent-color--light);
+      color: $gray--000;
     }
   }
   @media (hover: hover) {
     .participants__permisson-filter-button:hover,
     .participant__status-filter-button:hover {
-      background-color: var(--accent-color--desaturated-dark);
-      color: $color-white;
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
+      color: $gray--000;
     }
   }
   .participants__list-item {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
     &:not(:last-child) {
-      border-bottom: 1px solid $color-dark-one;
+      border-bottom: 1px solid $navy--600;
     }
   }
   .participant__name {
-    color: $color-white;
+    color: $gray--000;
   }
   .participant__role {
     &:is(button) {
-      background-color: $color-dark-mode-note;
-      border: 2px solid var(--accent-color--desaturated-dark);
-      color: $color-white;
+      background-color: $navy--500;
+      border: 2px solid rgba(var(--accent-color--dark-rgb), 0.6);
+      color: $gray--000;
     }
     &:is(button):hover {
-      background-color: var(--accent-color--desaturated-dark);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     }
     &--active:is(button),
     &--active:is(button):hover {
-      background-color: var(--accent-color);
-      border-color: var(--accent-color);
+      background-color: var(--accent-color--light);
+      border-color: var(--accent-color--light);
     }
   }
 
   .participants-reset-state-banner__container {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
   }
 
   .participants-reset-state-banner__check-icon,
   .participants-reset-state-banner__text {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .participants-reset-state-banner__button {
-    background-color: $color-dark-mode;
+    background-color: $navy--600;
 
     &:hover {
-      background-color: $color-dark-one;
+      background-color: $navy--600;
     }
   }
 
   .participant__join-icon,
   .participant__kick-icon {
-    color: $color-white;
-    background-color: $color-dark-mode-note;
+    color: $gray--000;
+    background-color: $navy--500;
 
     &:hover {
-      background-color: var(--accent-color--desaturated-dark);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     }
   }
 }

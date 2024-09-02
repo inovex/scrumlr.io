@@ -5,14 +5,14 @@ import {API} from "api";
 import i18n from "i18n";
 import {Toast} from "utils/Toast";
 import {saveToStorage} from "utils/storage";
-import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY} from "constants/storage";
+import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
 import store from "../index";
 
 export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.InitApplication) {
     API.getServerInfo()
       .then((r) => {
-        dispatch(Actions.setServerInfo(r.authProvider || [], new Date(r.serverTime).getTime(), r.feedbackEnabled));
+        dispatch(Actions.setServerInfo(r.anonymousLoginDisabled, r.authProvider || [], new Date(r.serverTime).getTime(), r.feedbackEnabled));
       })
       .catch(() => {
         i18n.on("loaded", () => {
@@ -24,6 +24,12 @@ export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
           });
         });
       });
+  }
+
+  if (action.type === Action.SetTheme) {
+    if (typeof window !== undefined) {
+      saveToStorage(THEME_STORAGE_KEY, action.theme);
+    }
   }
 
   if (action.type === Action.EnableHotkeyNotifications) {

@@ -24,22 +24,22 @@
   border: none;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.32);
+    box-shadow: 0 0 0 2px rgba($blue--500, 0.32);
   }
 
   &:hover {
-    background-color: rgba($color-backlog-blue, 0.06);
+    background-color: rgba($blue--500, 0.06);
   }
 }
 
 [theme="dark"] {
   .board-header__link {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
     }
 
     &:hover {
-      background-color: rgba($color-planning-pink, 0.15);
+      background-color: rgba($pink--500, 0.15);
     }
   }
 }
@@ -74,28 +74,28 @@
   cursor: pointer;
 
   &:focus-visible {
-    box-shadow: 0 0 0 2px rgba($color-backlog-blue, 0.32);
+    box-shadow: 0 0 0 2px rgba($blue--500, 0.32);
   }
 
   &:hover {
-    background-color: rgba($color-backlog-blue, 0.06);
+    background-color: rgba($blue--500, 0.06);
   }
 }
 
 [theme="dark"] {
   .board-header_name-and-settings {
     &:focus-visible {
-      box-shadow: 0 0 0 2px rgba($color-planning-pink, 0.48);
+      box-shadow: 0 0 0 2px rgba($pink--500, 0.48);
     }
 
     &:hover {
-      background-color: rgba($color-planning-pink, 0.15); // Ask designer for correct color
+      background-color: rgba($pink--500, 0.15); // Ask designer for correct color
     }
   }
 }
 
 .board-header__access-policy-status {
-  color: $color-middle-gray;
+  color: $gray--700;
   font-size: $text-size--medium;
   font-weight: bold;
   letter-spacing: $letter-spacing--small;
@@ -112,7 +112,7 @@
 .board-header__name {
   display: inline-block;
 
-  color: $color-black;
+  color: $navy--900;
   font-size: 32px;
   font-weight: bold;
   letter-spacing: $letter-spacing--large;
@@ -127,7 +127,7 @@
 
 [theme="dark"] {
   .board-header__name {
-    color: $color-white;
+    color: $gray--000;
   }
 }
 
@@ -142,7 +142,7 @@
 }
 
 .board-header__access-policy-status-icon * {
-  color: $color-middle-gray;
+  color: $gray--700;
 }
 
 @media #{$tablet} {

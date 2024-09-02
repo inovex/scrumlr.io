@@ -57,7 +57,7 @@ services:
 
   postgres:
     restart: always
-    image: postgres:15.1
+    image: postgres:16.4
     environment:
       POSTGRES_DB: scrumlr
       POSTGRES_USER: scrumlr

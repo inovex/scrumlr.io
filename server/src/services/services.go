@@ -40,7 +40,7 @@ type Boards interface {
 	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error)
 	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
 
-	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error)
+	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error)
 	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error)
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
 }
@@ -99,4 +99,18 @@ type Health interface {
 
 type BoardReactions interface {
 	Create(ctx context.Context, board uuid.UUID, body dto.BoardReactionCreateRequest)
+}
+
+type BoardTemplates interface {
+	Create(ctx context.Context, body dto.CreateBoardTemplateRequest) (*dto.BoardTemplate, error)
+	Get(ctx context.Context, id uuid.UUID) (*dto.BoardTemplate, error)
+	List(ctx context.Context, user uuid.UUID) ([]*dto.BoardTemplateFull, error)
+	Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error)
+	Delete(ctx context.Context, id uuid.UUID) error
+
+	CreateColumnTemplate(ctx context.Context, body dto.ColumnTemplateRequest) (*dto.ColumnTemplate, error)
+	GetColumnTemplate(ctx context.Context, boardID, columnID uuid.UUID) (*dto.ColumnTemplate, error)
+	ListColumnTemplates(ctx context.Context, board uuid.UUID) ([]*dto.ColumnTemplate, error)
+	UpdateColumnTemplate(ctx context.Context, body dto.ColumnTemplateUpdateRequest) (*dto.ColumnTemplate, error)
+	DeleteColumnTemplate(ctx context.Context, boar, column, user uuid.UUID) error
 }

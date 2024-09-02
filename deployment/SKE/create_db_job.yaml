@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: create-db
-        image: postgres:15-alpine
+        image: postgres:16.4-alpine
         env:
         - name: DB_URL
           value: "$DB_URL"

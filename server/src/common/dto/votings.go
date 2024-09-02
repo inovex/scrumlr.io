@@ -66,7 +66,7 @@ type VotingCreateRequest struct {
 	ShowVotesOfOthers  bool      `json:"showVotesOfOthers"`
 }
 
-// VotingUpdateRequest represents the request to update a voting session.
+// VotingUpdateRequest represents the request to u pdate a voting session.
 type VotingUpdateRequest struct {
 	ID     uuid.UUID          `json:"-"`
 	Board  uuid.UUID          `json:"-"`

@@ -1,7 +1,7 @@
 version: "3.9"
 
+name: scrumlr
 services:
-
   nats:
     image: nats:2-alpine
     ports:
@@ -17,7 +17,7 @@ services:
       - build
 
   database:
-    image: postgres:14.1
+    image: postgres:16.4
     ports:
       - "5432:5432"
     environment:
