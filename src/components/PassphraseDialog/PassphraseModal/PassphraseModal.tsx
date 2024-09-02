@@ -23,7 +23,7 @@ export interface PassphraseModalProps {
 }
 
 export const PassphraseModal: FC<PassphraseModalProps> = ({passphrase, onPassphraseChange, onSubmit, onClose}) => {
-  const [visiblePassphrase, setVisiblePassphrase] = useState(true);
+  const [visiblePassphrase, setVisiblePassphrase] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

@@ -147,7 +147,7 @@ export const NewBoard = () => {
   };
 
   const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
-  const isImportBoardDisabled = !(loadedFile && loadedFile.size > 0);
+  const isImportBoardDisabled = !(loadedFile && loadedFile.size > 0) || accessPolicy === AccessPolicy.BY_PASSPHRASE;
 
   return (
     <div className="new-board__wrapper">
