@@ -119,24 +119,23 @@ export const getRandomName = () => {
   return `${randomAdjective} ${randomCreature}`;
 };
 
+function hashString(str: string) {
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 33 + str.charCodeAt(i)) % 2 ** 32;
+  }
+  return hash;
+}
+
 function seededRandom(seed: string) {
   let value = hashString(seed);
-  return function () {
+  return () => {
     const a = 1664525;
     const c = 1013904223;
     const m = 2 ** 32;
     value = (a * value + c) % m;
     return value / m;
   };
-}
-
-// Simple hash function (DJB2)
-function hashString(str: string) {
-  let hash = 5381;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash * 33) ^ str.charCodeAt(i);
-  }
-  return hash >>> 0;
 }
 
 export const getRandomNameWithSeed = (seed: string) => {
