@@ -15,7 +15,7 @@ import {passParticipantsMiddleware} from "./middleware/participants";
 import {joinRequestReducer} from "./features/requests/reducer";
 import {passVotingMiddleware} from "./middleware/votings";
 import {authReducer} from "./features/auth/reducer";
-import {passAuthMiddleware} from "./middleware/auth";
+import {passAuthMiddleware} from "./features/auth/auth";
 import {columnsReducer} from "./features/columns/reducer";
 import {viewReducer} from "./features/view/reducer";
 import {passRequestMiddleware} from "./middleware/request";

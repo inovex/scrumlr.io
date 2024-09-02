@@ -7,7 +7,7 @@ import {API} from "api";
 import {ViewAction} from "store/features/view/actions";
 import {Toast} from "utils/Toast";
 import i18n from "i18n";
-import store from "store";
+import store from "store/index";
 
 export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ViewAction.InitApplication) {
