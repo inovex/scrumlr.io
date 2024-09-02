@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {UserAvatar} from "components/BoardUsers";
 import "./NoteAuthorList.scss";
 import {generateRandomProps} from "components/Avatar";
-import {getRandomNameWithSeed} from "constants/name";
+import {getRandomNameWithSeed} from "constants/nameList";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
 
 type NoteAuthorListProps = {
