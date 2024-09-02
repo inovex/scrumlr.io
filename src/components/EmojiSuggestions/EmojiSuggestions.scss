@@ -1,13 +1,32 @@
 @import "constants/style";
 
 .emoji-suggestions {
-  padding: $spacing--xs;
-  border-radius: $rounded--default;
-  background-color: $color-lighter-gray;
-  list-style: none;
-  margin: 0;
+  &__container {
+    position: absolute;
+    top: calc(100% + $spacing--xs);
+    left: 0;
+    width: 100%;
+    border-radius: $rounded--default;
+    background-color: $gray--300;
+    max-height: min($emoji-suggestions__max-height, calc(100vh - var(--top-distance, 0px) - 2 * $spacing--lg));
+    color: $navy--900;
 
-  color: $color-black;
+    z-index: $emoji-suggestions-z-index;
+    overflow-y: auto;
+    box-shadow: $box-shadow--light;
+
+    @include scrollbar();
+
+    &--empty {
+      display: none;
+    }
+  }
+
+  &__list {
+    padding: $spacing--xs;
+    margin: 0;
+    list-style: none;
+  }
 
   &__element {
     cursor: pointer;
@@ -20,8 +39,8 @@
   }
 
   &__element:hover,
-  .emoji-suggestions__element--focus {
-    background-color: rgba(var(--accent-color-rgb), 0.2);
+  &__element--focus {
+    background-color: rgba(var(--accent-color--light-rgb), 0.2);
   }
 
   &__emoji {
@@ -33,11 +52,13 @@
 
 [theme="dark"] {
   .emoji-suggestions {
-    color: $color-white;
-    background-color: $color-dark-mode-note;
+    &__container {
+      color: $gray--000;
+      background-color: $navy--500;
+    }
 
     &__element:hover,
-    .emoji-suggestions__element--focus {
+    &__element--focus {
       background-color: #485064;
     }
   }

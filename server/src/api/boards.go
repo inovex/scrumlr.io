@@ -6,8 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"scrumlr.io/server/identifiers"
 	"strconv"
+
+	"scrumlr.io/server/identifiers"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
@@ -308,21 +309,21 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	board, _, sessions, columns, notes, _, votings, _, err := s.boards.FullBoard(r.Context(), boardId)
+	fullBoard, err := s.boards.FullBoard(r.Context(), boardId)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
 	}
 
 	visibleColumns := []*dto.Column{}
-	for _, column := range columns {
+	for _, column := range fullBoard.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 		}
 	}
 
 	visibleNotes := []*dto.Note{}
-	for _, note := range notes {
+	for _, note := range fullBoard.Notes {
 		for _, column := range visibleColumns {
 			if note.Position.Column == column.ID {
 				visibleNotes = append(visibleNotes, note)
@@ -339,16 +340,16 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			Notes        []*dto.Note         `json:"notes"`
 			Votings      []*dto.Voting       `json:"votings"`
 		}{
-			Board:        board,
-			Participants: sessions,
+			Board:        fullBoard.Board,
+			Participants: fullBoard.BoardSessions,
 			Columns:      visibleColumns,
 			Notes:        visibleNotes,
-			Votings:      votings,
+			Votings:      fullBoard.Votings,
 		})
 		return
 	} else if r.Header.Get("Accept") == "text/csv" {
 		header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-		for index, voting := range votings {
+		for index, voting := range fullBoard.Votings {
 			if voting.Status == types.VotingStatusClosed {
 				header = append(header, fmt.Sprintf("voting_%d", index))
 			}
@@ -362,7 +363,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			}
 
 			author := note.Author.String()
-			for _, session := range sessions {
+			for _, session := range fullBoard.BoardSessions {
 				if session.User.ID == note.Author {
 					author = session.User.Name
 				}
@@ -386,7 +387,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 				stack,
 			}
 
-			for _, voting := range votings {
+			for _, voting := range fullBoard.Votings {
 				if voting.Status == types.VotingStatusClosed {
 					if voting.VotingResults != nil {
 						resultOnNote = append(resultOnNote, strconv.Itoa(voting.VotingResults.Votes[note.ID].Total))

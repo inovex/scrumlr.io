@@ -1,9 +1,10 @@
-FROM node:lts-hydrogen as build-stage
+FROM node:hydrogen-alpine AS build-stage
 
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-RUN yarn install
+
+RUN yarn install --network-timeout 240000
 
 COPY src/ src/
 COPY public/ public/
@@ -35,3 +36,4 @@ ENV SCRUMLR_ANALYTICS_SRC=''
 
 COPY ./nginx.conf /etc/nginx/templates/scrumlr.io.conf.template
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf

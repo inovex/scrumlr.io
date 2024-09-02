@@ -12,6 +12,7 @@ yarn-error.log*
 
 # testing
 /coverage
+server/src/coverage.txt
 
 # builds
 build
@@ -35,6 +36,7 @@ ui-debug.log
 
 # env files
 server/.env
+deployment/.env
 
 # script output
 scripts/out

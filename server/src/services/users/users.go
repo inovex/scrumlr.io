@@ -3,8 +3,10 @@ package users
 import (
 	"context"
 	"database/sql"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
 
 	"github.com/google/uuid"
@@ -15,11 +17,13 @@ import (
 
 type UserService struct {
 	database *database.Database
+	realtime *realtime.Broker
 }
 
-func NewUserService(db *database.Database) services.Users {
+func NewUserService(db *database.Database, rt *realtime.Broker) services.Users {
 	b := new(UserService)
 	b.database = db
+	b.realtime = rt
 	return b
 }
 
@@ -74,5 +78,31 @@ func (s *UserService) Update(_ context.Context, body dto.UserUpdateRequest) (*dt
 		Name:   body.Name,
 		Avatar: body.Avatar,
 	})
+
+	if err != nil {
+		return nil, err
+	}
+	s.UpdatedUser(user)
 	return new(dto.User).From(user), err
+}
+
+func (s *UserService) UpdatedUser(user database.User) {
+	connectedBoards, err := s.database.GetSingleUserConnectedBoards(user.ID)
+	if err != nil {
+		return
+	}
+	for _, session := range connectedBoards {
+		userSession, err := s.database.GetBoardSession(session.Board, session.User)
+		if err != nil {
+			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID(), "err", err)
+		}
+		err = s.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
+			Type: realtime.BoardEventParticipantUpdated,
+			Data: new(dto.BoardSession).From(session),
+		})
+
+		if err != nil {
+			logger.Get().Errorw("unable to broadcast updated user", "err", err)
+		}
+	}
 }

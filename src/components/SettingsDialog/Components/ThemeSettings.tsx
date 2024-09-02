@@ -1,22 +1,20 @@
-import {useEffect, useState} from "react";
+import {useAppSelector} from "store";
+import {useDispatch} from "react-redux";
+import {Theme} from "types/view";
+import {Actions} from "store/action";
 import {t} from "i18next";
-import {ReactComponent as DarkIcon} from "assets/icon-darkmode.svg";
-import {ReactComponent as LightIcon} from "assets/icon-lightmode.svg";
-import {ReactComponent as AutoIcon} from "assets/icon-settings.svg";
+import {SettingsDarkMode, SettingsLightMode, GeneralSettings} from "components/Icon";
 import ThemePreviewDark from "assets/themes/theme-preview-dark.svg";
 import ThemePreviewLight from "assets/themes/theme-preview-light.svg";
 import "./ThemeSettings.scss";
 
 export const ThemeSettings = () => {
-  const [theme, setTheme] = useState(localStorage.getItem("theme") ?? "auto");
-  useEffect(() => {
-    if (theme === "auto") {
-      const autoTheme = window.matchMedia("(prefers-color-scheme: dark)")?.matches ? "dark" : "light";
-      document.documentElement.setAttribute("theme", autoTheme);
-    } else document.documentElement.setAttribute("theme", theme!);
+  const dispatch = useDispatch();
+  const theme = useAppSelector((state) => state.view.theme);
 
-    localStorage.setItem("theme", theme!);
-  }, [theme]);
+  const setTheme = (newTheme: Theme) => {
+    dispatch(Actions.setTheme(newTheme));
+  };
 
   return (
     <div className="appearance-settings__theme-container">
@@ -27,7 +25,7 @@ export const ThemeSettings = () => {
           <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} Auto`} />
           <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} Auto`} />
           <p>
-            <AutoIcon className="appearance-settings__theme-icon" />
+            <GeneralSettings className="appearance-settings__theme-icon" />
             <span>Auto</span>
           </p>
         </label>
@@ -35,7 +33,7 @@ export const ThemeSettings = () => {
           <input id="light" type="radio" value="light" name="themeLight" checked={theme === "light"} onChange={() => setTheme("light")} />
           <img src={ThemePreviewLight} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeLight")}`} />
           <p>
-            <LightIcon className="appearance-settings__theme-icon" />
+            <SettingsLightMode className="appearance-settings__theme-icon" />
             <span>{t("Appearance.colorSchemeLight")}</span>
           </p>
         </label>
@@ -43,7 +41,7 @@ export const ThemeSettings = () => {
           <input id="dark" type="radio" value="dark" name="themeDark" checked={theme === "dark"} onChange={() => setTheme("dark")} />
           <img src={ThemePreviewDark} alt={`${t("Appearance.colorScheme")} ${t("Appearance.colorSchemeDark")}`} />
           <p>
-            <DarkIcon className="appearance-settings__theme-icon" />
+            <SettingsDarkMode className="appearance-settings__theme-icon" />
             <span>{t("Appearance.colorSchemeDark")}</span>
           </p>
         </label>

@@ -222,7 +222,7 @@ kind: Cluster
 metadata:
   name: cluster-PR_NUMBER
 spec:
-  imageName: ghcr.io/cloudnative-pg/postgresql:15.1
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4
   instances: 1
   storage:
     storageClass: csi-cinder-sc-delete

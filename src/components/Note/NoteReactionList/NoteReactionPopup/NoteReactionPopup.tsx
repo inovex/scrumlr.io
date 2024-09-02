@@ -90,7 +90,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
                 className={classNames("note-reaction-popup__row-reaction", {"note-reaction-popup__row-reaction--active": r.myReactionId})}
                 onClick={(e) => removeOwnReaction(e, r)}
               >
-                {REACTION_EMOJI_MAP.get(r.reactionType)}
+                {REACTION_EMOJI_MAP.get(r.reactionType)?.emoji}
               </button>
             </div>
             <div className="note-reaction-popup__row-divider" />

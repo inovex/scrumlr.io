@@ -1,6 +1,5 @@
 import {FC} from "react";
-import {ReactComponent as RightArrowIcon} from "assets/icon-arrow-next.svg";
-import {ReactComponent as LeftArrowIcon} from "assets/icon-arrow-previous.svg";
+import {ArrowRight, ArrowLeft} from "components/Icon";
 import "./SettingsCarousel.scss";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
@@ -31,7 +30,7 @@ export const SettingsCarousel: FC<SettingsCarouselProps<string>> = ({carouselIte
   return (
     <div className={classNames("settings-carousel", className)}>
       <button className="settings-carousel__button settings-carousel__button--left" disabled={disabled} onClick={() => handleClick(true)} aria-label={t("Avatar.prevOption")}>
-        <LeftArrowIcon />
+        <ArrowLeft />
       </button>
       <div className="settings-carousel__text">
         {label && <span className="settings-carousel__text-label">{label}</span>}
@@ -41,7 +40,7 @@ export const SettingsCarousel: FC<SettingsCarouselProps<string>> = ({carouselIte
         {/* eslint-enable */}
       </div>
       <button className="settings-carousel__button settings-carousel__button--right" disabled={disabled} onClick={() => handleClick()} aria-label={t("Avatar.nextOption")}>
-        <RightArrowIcon />
+        <ArrowRight />
       </button>
     </div>
   );

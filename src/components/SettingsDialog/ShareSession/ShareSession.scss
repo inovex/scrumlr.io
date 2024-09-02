@@ -4,16 +4,10 @@ $header-menu__item-border-width: 1px;
 $header-menu-border-bottom-color: #efefef;
 
 .share-qr-code-option__qrcode {
-  height: 100%;
   width: 100%;
-}
-
-.share-qr-code-option__qrcode path:first-child {
-  fill: $color-white-one;
-}
-
-.share-qr-code-option__qrcode path:last-child {
-  fill: $color-darkest-gray;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .share-session__background {
@@ -29,10 +23,10 @@ $header-menu-border-bottom-color: #efefef;
   padding: $spacing--xs $spacing--lg;
   margin-top: $spacing--xl;
   width: 260px;
-  border: solid 2px var(--accent-color);
+  border: solid 2px var(--accent-color--light);
   border-radius: 32px;
-  background-color: var(--accent-color);
-  color: $color-white;
+  background-color: var(--accent-color--light);
+  color: $gray--000;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.08s ease-out;
@@ -40,7 +34,7 @@ $header-menu-border-bottom-color: #efefef;
   &:hover {
     filter: brightness(1.05);
     transform: scale(1.02);
-    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.24);
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color--light-rgb), 0.24);
   }
 
   &:active {
@@ -48,12 +42,12 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   &:focus-visible {
-    outline: 2px solid rgba(var(--accent-color-rgb), 0.4);
+    outline: 2px solid rgba(var(--accent-color--light-rgb), 0.4);
   }
 
   &.--copied {
     background-color: transparent;
-    color: var(--accent-color);
+    color: var(--accent-color--light);
     cursor: default;
 
     &:hover {
@@ -69,14 +63,4 @@ $header-menu-border-bottom-color: #efefef;
   align-items: center;
   flex-direction: column;
   border-radius: 8px;
-}
-
-[theme="dark"] {
-  .share-qr-code-option__qrcode path:first-child {
-    fill: $color-dark-one;
-  }
-
-  .share-qr-code-option__qrcode path:last-child {
-    fill: $color-white-one;
-  }
 }

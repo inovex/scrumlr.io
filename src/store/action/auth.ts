@@ -1,4 +1,4 @@
-import {AvataaarProps} from "components/Avatar";
+import {AvataaarProps} from "types/avatar";
 
 export const AuthAction = {
   SignIn: "scrumlr.io/signIn" as const,
@@ -7,10 +7,11 @@ export const AuthAction = {
 };
 
 export const AuthActionFactory = {
-  signIn: (id: string, name: string, avatar?: AvataaarProps) => ({
+  signIn: (id: string, name: string, isAnonymous: boolean, avatar?: AvataaarProps) => ({
     type: AuthAction.SignIn,
     id,
     name,
+    isAnonymous,
     avatar,
   }),
 

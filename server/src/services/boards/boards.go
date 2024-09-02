@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"scrumlr.io/server/identifiers"
 	"time"
+
+	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 
@@ -28,7 +29,6 @@ func NewBoardService(db *database.Database, rt *realtime.Broker) services.Boards
 	b := new(BoardService)
 	b.database = db
 	b.realtime = rt
-	b.database.AttachObserver((database.BoardObserver)(b))
 	return b
 }
 
@@ -92,20 +92,21 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	return new(dto.Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error) {
-	board, requests, sessions, columns, notes, reactions, votings, votes, err := s.database.Get(boardID)
+func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error) {
+	fullBoard, err := s.database.Get(boardID)
 	if err != nil {
-		return nil, nil, nil, nil, nil, nil, nil, nil, err
+		return nil, err
 	}
 
-	personalVotes := []*dto.Vote{}
-	for _, vote := range votes {
+	personalVotes := []database.Vote{}
+	for _, vote := range fullBoard.Votes {
 		if vote.User == ctx.Value(identifiers.UserIdentifier).(uuid.UUID) {
-			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
+			personalVotes = append(personalVotes, vote)
 		}
 	}
+	fullBoard.Votes = personalVotes
 
-	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Reactions(reactions), dto.Votings(votings, votes), personalVotes, err
+	return new(dto.FullBoard).From(fullBoard), err
 }
 
 func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error) {
@@ -134,7 +135,11 @@ func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, us
 }
 
 func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
-	return s.database.DeleteBoard(id)
+	err := s.database.DeleteBoard(id)
+	if err != nil {
+		logger.Get().Errorw("unable to delete board", "err", err)
+	}
+	return err
 }
 
 func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) (*dto.Board, error) {
@@ -147,7 +152,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		ShowNotesOfOtherUsers: body.ShowNotesOfOtherUsers,
 		ShowNoteReactions:     body.ShowNoteReactions,
 		AllowStacking:         body.AllowStacking,
-		AllowEditing:          body.AllowEditing,
+		IsLocked:              body.IsLocked,
 		TimerStart:            body.TimerStart,
 		TimerEnd:              body.TimerEnd,
 		SharedNote:            body.SharedNote,
@@ -173,8 +178,11 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 
 	board, err := s.database.UpdateBoard(update)
 	if err != nil {
+		log.Errorw("unable to update board", "err", err)
 		return nil, err
 	}
+	s.UpdatedBoard(board)
+
 	return new(dto.Board).From(board), err
 }
 
@@ -188,8 +196,11 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
+		logger.Get().Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+	s.UpdatedBoardTimer(board)
+
 	return new(dto.Board).From(board), err
 }
 
@@ -201,8 +212,11 @@ func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
+		logger.Get().Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+	s.UpdatedBoardTimer(board)
+
 	return new(dto.Board).From(board), err
 }
 
@@ -233,8 +247,11 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 
 	board, err = s.database.UpdateBoardTimer(update)
 	if err != nil {
+		logger.Get().Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+	s.UpdatedBoardTimer(board)
+
 	return new(dto.Board).From(board), nil
 }
 

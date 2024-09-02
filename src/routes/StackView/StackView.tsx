@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {useDispatch} from "react-redux";
-import {useParams, useNavigate} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {useTranslation} from "react-i18next";
 import _ from "underscore";
 import {animated, Transition} from "@react-spring/web";
@@ -9,14 +9,13 @@ import {NoteDialogComponents} from "components/NoteDialogComponents";
 import {Portal} from "components/Portal";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as TrashIcon} from "assets/icon-delete.svg";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {Close, Trash} from "components/Icon";
 import {Toast} from "utils/Toast";
-import "./StackView.scss";
 import {StackNavigation} from "components/StackNavigation";
 import {CSSProperties, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {Note} from "types/note";
-import {AvataaarProps} from "components/Avatar";
+import {AvataaarProps} from "types/avatar";
+import "./StackView.scss";
 
 type StackedNote = Note & {
   authorName: string;
@@ -118,7 +117,10 @@ export const StackView = () => {
     },
   });
 
-  const authorRef = useRef<{name: string | undefined; avatar?: AvataaarProps}>({name: authorName, avatar: author?.user.avatar});
+  const authorRef = useRef<{name: string | undefined; avatar?: AvataaarProps}>({
+    name: authorName,
+    avatar: author?.user.avatar,
+  });
   const stackedNotesRef = useRef<StackedNote[]>(stackedNotes);
 
   const hasMixedAuthors = (stack: Note[]) => {
@@ -133,7 +135,12 @@ export const StackView = () => {
   useEffect(() => {
     if (
       prevNote.current?.id === note?.id &&
-      (!_.isEqual(prevNote.current, note) || !_.isEqual(authorRef.current, {name: authorName, avatar: author?.user.avatar}) || !_.isEqual(stackedNotesRef.current, stackedNotes))
+      (!_.isEqual(prevNote.current, note) ||
+        !_.isEqual(authorRef.current, {
+          name: authorName,
+          avatar: author?.user.avatar,
+        }) ||
+        !_.isEqual(stackedNotesRef.current, stackedNotes))
     ) {
       setTransitionConfig({
         from: {transform: "translateX(0%)", position: "relative", opacity: 1},
@@ -200,7 +207,7 @@ export const StackView = () => {
   // show toast if note has been deleted
   useLayoutEffect(() => {
     if (prevNote.current && !note) {
-      Toast.info({title: t("Toast.noteDeleted"), icon: TrashIcon});
+      Toast.info({title: t("Toast.noteDeleted"), icon: Trash});
     }
   }, [note, t]);
 
@@ -248,57 +255,69 @@ export const StackView = () => {
         <NoteDialogComponents.Header columnName={column?.name ?? ""} />
         <StackNavigation {...navigationProps} />
         <div className="stack-view__content">
-          <Transition {...transitionConfig}>
-            {(styles: CSSProperties, item: {parent?: Note; stack: StackedNote[]; avatar?: AvataaarProps; authorName: string}) => (
-              <animated.div style={styles} className="stack-view__animation-wrapper">
-                {item.parent && item.parent.position.column === column?.id && (
-                  <>
-                    <NoteDialogComponents.Note
-                      key={item.parent.id}
-                      noteId={item.parent.id}
-                      text={item.parent.text}
-                      authorId={item.parent.author}
-                      avatar={item.avatar}
-                      authorName={item.authorName}
-                      showAuthors={showAuthors}
-                      showNoteReactions={showNoteReactions}
-                      onClose={handleClose}
-                      isStackedNote={false}
-                      hasStackedNotes={item.stack.length > 0}
-                      stackHasMixedAuthors={stackHasMixedAuthors}
-                      viewer={viewer}
-                      className="stack-view__parent-note"
-                      colorClassName={colorClassName}
-                    />
-                    <NoteDialogComponents.Wrapper>
-                      {item.stack?.map((n: StackedNote) => (
-                        <NoteDialogComponents.Note
-                          key={n.id}
-                          noteId={n.id}
-                          text={n.text}
-                          authorId={n.author}
-                          avatar={n.avatar}
-                          authorName={n.authorName}
-                          showAuthors={showAuthors}
-                          showNoteReactions={showNoteReactions}
-                          onClose={handleClose}
-                          isStackedNote
-                          viewer={viewer}
-                          className="stack-view__child-note"
-                          colorClassName={colorClassName}
-                        />
-                      ))}
-                    </NoteDialogComponents.Wrapper>
-                  </>
-                )}
-              </animated.div>
-            )}
-          </Transition>
+          <div className="stack-view__inner-scrollbar">
+            <Transition {...transitionConfig}>
+              {(
+                styles: CSSProperties,
+                item: {
+                  parent?: Note;
+                  stack: StackedNote[];
+                  avatar?: AvataaarProps;
+                  authorName: string;
+                }
+              ) => (
+                <animated.div style={styles} className="stack-view__animation-wrapper">
+                  {item.parent && item.parent.position.column === column?.id && (
+                    <>
+                      <NoteDialogComponents.Note
+                        key={item.parent.id}
+                        noteId={item.parent.id}
+                        text={item.parent.text}
+                        authorId={item.parent.author}
+                        avatar={item.avatar}
+                        authorName={item.authorName}
+                        showAuthors={showAuthors}
+                        showNoteReactions={showNoteReactions}
+                        onClose={handleClose}
+                        isStackedNote={false}
+                        hasStackedNotes={item.stack.length > 0}
+                        stackHasMixedAuthors={stackHasMixedAuthors}
+                        viewer={viewer}
+                        className="stack-view__parent-note"
+                        colorClassName={colorClassName}
+                      />
+                      {item.stack.length ? (
+                        <NoteDialogComponents.Wrapper>
+                          {item.stack?.map((n: StackedNote) => (
+                            <NoteDialogComponents.Note
+                              key={n.id}
+                              noteId={n.id}
+                              text={n.text}
+                              authorId={n.author}
+                              avatar={n.avatar}
+                              authorName={n.authorName}
+                              showAuthors={showAuthors}
+                              showNoteReactions={showNoteReactions}
+                              onClose={handleClose}
+                              isStackedNote
+                              viewer={viewer}
+                              className="stack-view__child-note"
+                              colorClassName={colorClassName}
+                            />
+                          ))}
+                        </NoteDialogComponents.Wrapper>
+                      ) : null}
+                    </>
+                  )}
+                </animated.div>
+              )}
+            </Transition>
+          </div>
         </div>
       </div>
       <div className={classNames("stack-view__border", {"stack-view__border--moderating": userIsModerating}, colorClassName)} />
       <button onClick={handleClose} className="stack-view__close-button" aria-label={t("StackView.close")}>
-        <CloseIcon />
+        <Close />
       </button>
     </Portal>
   );

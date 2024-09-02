@@ -33,7 +33,7 @@ type Board struct {
 
 	AllowStacking bool `json:"allowStacking"`
 
-	AllowEditing bool `json:"allowEditing"`
+	IsLocked bool `json:"isLocked"`
 
 	TimerStart *time.Time `json:"timerStart,omitempty"`
 	TimerEnd   *time.Time `json:"timerEnd,omitempty"`
@@ -57,7 +57,7 @@ func (b *Board) From(board database.Board) *Board {
 	b.ShowNotesOfOtherUsers = board.ShowNotesOfOtherUsers
 	b.ShowNoteReactions = board.ShowNoteReactions
 	b.AllowStacking = board.AllowStacking
-	b.AllowEditing = board.AllowEditing
+	b.IsLocked = board.IsLocked
 	b.SharedNote = board.SharedNote
 	b.ShowVoting = board.ShowVoting
 	b.TimerStart = board.TimerStart
@@ -121,7 +121,7 @@ type BoardUpdateRequest struct {
 	AllowStacking *bool `json:"allowStacking"`
 
 	// Set whether changes to board should be allowed to all users or only moderators.
-	AllowEditing *bool `json:"allowEditing"`
+	IsLocked *bool `json:"isLocked"`
 
 	// Set the timer start.
 	TimerStart *time.Time `json:"timerStart"`
@@ -148,4 +148,27 @@ type ImportBoardRequest struct {
 	Columns []Column            `json:"columns"`
 	Notes   []Note              `json:"notes"`
 	Votings []Voting            `json:"votings"`
+}
+
+type FullBoard struct {
+	Board                *Board                 `json:"board"`
+	BoardSessionRequests []*BoardSessionRequest `json:"requests"`
+	BoardSessions        []*BoardSession        `json:"participants"`
+	Columns              []*Column              `json:"columns"`
+	Notes                []*Note                `json:"notes"`
+	Reactions            []*Reaction            `json:"reactions"`
+	Votings              []*Voting              `json:"votings"`
+	Votes                []*Vote                `json:"votes"`
+}
+
+func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
+	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
+	dtoFullBoard.BoardSessionRequests = BoardSessionRequests(dbFullBoard.BoardSessionRequests)
+	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions)
+	dtoFullBoard.Columns = Columns(dbFullBoard.Columns)
+	dtoFullBoard.Notes = Notes(dbFullBoard.Notes)
+	dtoFullBoard.Reactions = Reactions(dbFullBoard.Reactions)
+	dtoFullBoard.Votings = Votings(dbFullBoard.Votings, dbFullBoard.Votes)
+	dtoFullBoard.Votes = Votes(dbFullBoard.Votes)
+	return dtoFullBoard
 }

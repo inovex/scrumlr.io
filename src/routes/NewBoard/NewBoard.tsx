@@ -154,7 +154,7 @@ export const NewBoard = () => {
       <div className="new-board">
         <div>
           <a href="/" aria-label="Homepage">
-            <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+            <ScrumlrLogo />
           </a>
 
           {!extendedConfiguration && (

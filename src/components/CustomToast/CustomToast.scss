@@ -19,7 +19,7 @@ $color-close-icon: #bfc1c5;
   box-shadow: $box-shadow--light;
   overflow: inherit;
   cursor: default;
-  background-color: $color-white;
+  background-color: $gray--000;
 }
 .Toastify__toast:has(div.toast-single) {
   height: 60px;
@@ -64,11 +64,11 @@ $color-close-icon: #bfc1c5;
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  background-color: $menu-icon-background-color--dark;
+  background-color: $navy--500;
   svg {
     height: 46px;
     width: 46px;
-    color: $color-white;
+    color: $gray--000;
   }
 }
 .toast__icon-single {
@@ -79,28 +79,11 @@ $color-close-icon: #bfc1c5;
     width: 38px;
   }
 }
-.toast__icon-single-info {
-  svg {
-    height: 30px;
-    width: 30px;
-    path {
-      stroke: rgba($color-white, 0.7);
-    }
-  }
-}
 .toast__icon-single-success {
   background-color: $color-success;
-  svg {
-    height: 22px;
-    width: 22px;
-  }
 }
 .toast__icon-single-error {
   background-color: $color-error;
-  svg {
-    height: 32px;
-    width: 32px;
-  }
 }
 .toast__icon-multi {
   position: absolute;
@@ -110,28 +93,11 @@ $color-close-icon: #bfc1c5;
   width: 64px;
   height: 64px;
 }
-.toast__icon-multi-info {
-  svg {
-    height: 38px;
-    width: 38px;
-    path {
-      stroke: rgba($color-white, 0.7);
-    }
-  }
-}
 .toast__icon-multi-success {
   background-color: $color-success;
-  svg {
-    height: 32px;
-    width: 32px;
-  }
 }
 .toast__icon-multi-error {
   background-color: $color-error;
-  svg {
-    height: 42px;
-    width: 42px;
-  }
 }
 
 // Toast close icon
@@ -167,7 +133,7 @@ $color-close-icon: #bfc1c5;
   font-size: 16px;
   line-height: 19px;
   font-weight: 700;
-  color: $menu-icon-background-color--dark;
+  color: $navy--500;
 }
 
 // Toast message
@@ -175,7 +141,7 @@ $color-close-icon: #bfc1c5;
   font-size: 14px;
   line-height: 18px;
   font-weight: 500;
-  color: $menu-icon-background-color--dark;
+  color: $navy--500;
   margin-top: 5px;
 }
 
@@ -204,8 +170,8 @@ $color-close-icon: #bfc1c5;
 }
 .toast__button-single {
   border: none;
-  background: $menu-icon-background-color--dark;
-  color: $color-white;
+  background: $navy--500;
+  color: $gray--000;
   margin-left: auto;
   white-space: nowrap;
   min-width: auto;
@@ -220,30 +186,30 @@ $color-close-icon: #bfc1c5;
 }
 .toast__button-multi-primary {
   padding: 13px 32px;
-  color: $color-white;
-  background-color: $menu-icon-background-color--dark;
-  border: 2px solid $menu-icon-background-color--dark;
+  color: $gray--000;
+  background-color: $navy--500;
+  border: 2px solid $navy--500;
 }
 .toast__button-multi-secondary {
   padding: 13px 32px;
-  background: $color-white;
-  border: 2px solid $menu-icon-background-color--dark;
+  background: $gray--000;
+  border: 2px solid $navy--500;
 }
 .toast-single:hover .toast__button-single.toast__button-info,
 .toast__button-multi-primary.toast__button-info:hover {
-  border-color: $color-backlog-blue;
-  background-color: $color-backlog-blue;
-  color: $color-white;
+  border-color: $blue--500;
+  background-color: $blue--500;
+  color: $gray--000;
 }
 .toast__button-multi-secondary.toast__button-info:hover {
-  color: $color-backlog-blue;
-  border-color: $color-backlog-blue;
+  color: $blue--500;
+  border-color: $blue--500;
 }
 .toast-single:hover .toast__button-single.toast__button-error,
 .toast__button-multi-primary.toast__button-error:hover {
   border-color: $color-error;
   background-color: $color-error;
-  color: $color-white;
+  color: $gray--000;
 }
 .toast__button-multi-secondary.toast__button-error:hover {
   color: $color-error;
@@ -253,7 +219,7 @@ $color-close-icon: #bfc1c5;
 .toast__button-multi-primary.toast__button-success:hover {
   border-color: $color-success;
   background-color: $color-success;
-  color: $color-white;
+  color: $gray--000;
 }
 .toast__button-multi-secondary.toast__button-success:hover {
   color: $color-success;
@@ -269,16 +235,16 @@ $color-close-icon: #bfc1c5;
   grid-template-columns: 16px auto;
   gap: 10px;
   margin-top: 13px;
-  color: $color-middle-gray;
+  color: $gray--700;
   width: fit-content;
 }
 input[type="checkbox"] {
   -webkit-appearance: none;
   appearance: none;
-  background-color: $color-white;
+  background-color: $gray--000;
   margin: 0;
   font: inherit;
-  color: $color-light-gray;
+  color: $gray--600;
   width: 1.125em;
   height: 1.125em;
   border: 0.15em solid currentColor;
@@ -288,7 +254,7 @@ input[type="checkbox"] {
 }
 input[type="checkbox"]:hover {
   cursor: pointer;
-  box-shadow: 0 0 0 3px rgba($color-light-gray, 0.3);
+  box-shadow: 0 0 0 3px rgba($gray--600, 0.3);
 }
 input[type="checkbox"]::before {
   content: "";
@@ -296,7 +262,7 @@ input[type="checkbox"]::before {
   height: 0.625em;
   transform: scale(0);
   transition: 120ms transform ease-in-out;
-  background-color: $color-light-gray;
+  background-color: $gray--600;
 }
 input[type="checkbox"]:checked::before {
   transform: scale(1);
@@ -306,58 +272,58 @@ input[type="checkbox"]:checked::before {
 [theme="dark"] {
   .Toastify__toast.Toastify__toast:has(div.toast-single),
   .Toastify__toast.Toastify__toast:has(div.toast-multi) {
-    background-color: $menu-icon-background-color--dark;
+    background-color: $navy--500;
   }
 
   .toast__icon {
-    background-color: $color-white;
+    background-color: $gray--000;
     svg {
-      color: $menu-icon-background-color--dark;
+      color: $navy--500;
     }
   }
   .toast__icon-single-info,
   .toast__icon-multi-info {
-    svg path {
-      stroke: $menu-icon-background-color--dark;
+    svg {
+      color: $navy--500;
     }
   }
   .toast__icon-single-success,
   .toast__icon-multi-success {
     background-color: $color-success;
     svg {
-      color: $color-white;
+      color: $gray--000;
     }
   }
   .toast__icon-single-error,
   .toast__icon-multi-error {
     background-color: $color-error;
     svg {
-      color: $color-white;
+      color: $gray--000;
     }
   }
   .toast__title,
   .toast__message {
-    color: $color-white;
+    color: $gray--000;
   }
   .toast__button-single,
   .toast__button-multi-primary {
-    background-color: $color-white;
-    color: $menu-icon-background-color--dark;
+    background-color: $gray--000;
+    color: $navy--500;
   }
   .toast__button-multi-secondary {
-    background-color: $menu-icon-background-color--dark;
-    border-color: $color-white;
-    color: $color-white;
+    background-color: $navy--500;
+    border-color: $gray--000;
+    color: $gray--000;
   }
   input[type="checkbox"] {
-    background-color: $menu-icon-background-color--dark;
+    background-color: $navy--500;
     color: inherit;
   }
   input[type="checkbox"]::before {
-    background-color: $menu-icon-background-color--dark;
+    background-color: $navy--500;
   }
   input[type="checkbox"]:checked::before {
-    background-color: $color-middle-gray;
+    background-color: $gray--700;
   }
 }
 
@@ -386,7 +352,7 @@ input[type="checkbox"]:checked::before {
     }
   }
   .toast__icon-multi-info {
-    background-color: $menu-icon-background-color--dark;
+    background-color: $navy--500;
     svg {
       height: 29px;
       width: 29px;
@@ -415,8 +381,8 @@ input[type="checkbox"]:checked::before {
   }
   .toast__button-single {
     padding: 0px;
-    background-color: $color-white;
-    color: $color-backlog-blue;
+    background-color: $gray--000;
+    color: $blue--500;
     margin-left: 0px;
     line-height: 16px;
     font-weight: 600;
@@ -429,44 +395,44 @@ input[type="checkbox"]:checked::before {
     color: $color-error;
   }
   .toast-single:hover .toast__button-single.toast__button-info {
-    border-color: $color-white;
-    background-color: $color-white;
-    color: $color-backlog-blue;
+    border-color: $gray--000;
+    background-color: $gray--000;
+    color: $blue--500;
   }
   .toast-single:hover .toast__button-single.toast__button-error {
-    border-color: $color-white;
-    background-color: $color-white;
+    border-color: $gray--000;
+    background-color: $gray--000;
     color: $color-error;
   }
   .toast-single:hover .toast__button-single.toast__button-success {
-    border-color: $color-white;
-    background-color: $color-white;
+    border-color: $gray--000;
+    background-color: $gray--000;
     color: $color-success;
   }
 
   [theme="dark"] {
     .toast-single:hover .toast__button-single.toast__button-info {
-      background: $menu-icon-background-color--dark;
+      background: $navy--500;
       color: $color-info-darkmode;
     }
     .toast-single:hover .toast__button-single.toast__button-error {
-      background: $menu-icon-background-color--dark;
+      background: $navy--500;
       color: $color-error;
     }
     .toast-single:hover .toast__button-single.toast__button-success {
-      background: $menu-icon-background-color--dark;
+      background: $navy--500;
       color: $color-success;
     }
     .toast__button-single.toast__button-info {
-      background: $menu-icon-background-color--dark;
+      background: $navy--500;
       color: $color-info-darkmode;
     }
     .toast__button-single.toast__button-error {
-      background: $menu-icon-background-color--dark;
+      background: $navy--500;
       color: $color-error;
     }
     .toast__button-single.toast__button-success {
-      background: $menu-icon-background-color--dark;
+      background: $navy--500;
       color: $color-success;
     }
   }

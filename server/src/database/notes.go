@@ -22,6 +22,7 @@ type Note struct {
 	Text          string
 	Stack         uuid.NullUUID
 	Rank          int
+	Edited        bool
 }
 
 type NoteInsert struct {
@@ -52,6 +53,7 @@ type NoteUpdate struct {
 	Board         uuid.UUID
 	Text          *string
 	Position      *NoteUpdatePosition `bun:"embed"`
+	Edited        bool
 }
 
 func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
@@ -141,7 +143,7 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 
 func (d *Database) updateNoteText(update NoteUpdate) (Note, error) {
 	var note Note
-	_, err := d.db.NewUpdate().Model(&update).Column("text").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
+	_, err := d.db.NewUpdate().Model(&update).Column("text", "edited").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 	if err != nil {
 		return note, err
 	}

@@ -10,7 +10,7 @@
   position: relative;
 
   #Circle-Background {
-    stroke: $color-white-one;
+    stroke: $gray--100;
     stroke-width: 24px;
   }
 }
@@ -22,12 +22,12 @@
 
   color: #1bd47e;
 
-  .check {
+  path {
     --dasharray: 20;
     stroke-dasharray: var(--dasharray);
     stroke-dashoffset: 0;
     transform-origin: 35% 50%;
-    filter: drop-shadow(0 0 4px $color-white);
+    filter: drop-shadow(0 0 4px $gray--000);
   }
 }
 
@@ -51,7 +51,7 @@
   > .avatar #Circle-Background,
   .avatar #Color\/Palette\/Blue-01 {
     transition: fill 0.15s ease-in-out;
-    fill: color.change($color-grooming-green, $lightness: 100%, $saturation: 0%);
+    fill: color.change($green--500, $lightness: 100%, $saturation: 0%);
   }
 }
 
@@ -60,7 +60,7 @@
     animation: draw 0.45s ease-in-out;
   }
 
-  > .user-avatar__ready .check {
+  > .user-avatar__ready path {
     animation:
       draw 0.6s ease-in-out,
       scale 0.3s ease-in-out;
@@ -75,7 +75,7 @@
   width: 24px;
   height: 24px;
 
-  color: $color-backlog-blue;
+  color: $blue--500;
   animation: wave 0.8s ease-in-out;
   transform-origin: bottom left;
 
@@ -89,11 +89,11 @@
 
 [theme="dark"] {
   .user-avatar__raised-hand {
-    color: $color-planning-pink;
+    color: $pink--500;
   }
 
   .user-avatar #Circle-Background {
-    stroke: $color-dark-one;
+    stroke: $navy--600;
   }
 
   .user-avatar__ready {
@@ -106,16 +106,16 @@
     }
 
     .circle {
-      fill: color.change($color-grooming-green, $lightness: 20%, $saturation: 70%, $alpha: 0.6);
+      fill: color.change($green--500, $lightness: 20%, $saturation: 70%, $alpha: 0.6);
     }
 
-    .check {
-      filter: drop-shadow(0 0 3px $color-dark-one);
+    path {
+      filter: drop-shadow(0 0 3px $navy--600);
     }
 
     > .avatar #Circle-Background,
     .avatar #Color\/Palette\/Blue-01 {
-      fill: $color-dark-one;
+      fill: $navy--600;
     }
   }
 

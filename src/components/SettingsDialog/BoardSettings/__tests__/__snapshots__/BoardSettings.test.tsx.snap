@@ -97,13 +97,58 @@ exports[`BoardSettings should match snapshot 1`] = `
           class="board-settings__password-management-button board-settings__generate-password-button"
         >
           <svg>
-            icon-refresh.svg
+            refresh.svg
           </svg>
           <span
             class="board-settings__password-management-text"
           >
             Generate password and protect
           </span>
+        </button>
+      </div>
+      <div
+        class="settings-dialog__group"
+      >
+        <button
+          aria-checked="true"
+          aria-label="Allow note repositioning"
+          class="settings-option-button board-settings__allow-note-repositioning-button"
+          data-testid="note-repositioning"
+          role="switch"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Allow note repositioning
+          </span>
+          <div
+            class="board-settings__allow-note-repositioning-value"
+          >
+            <div
+              class="toggle toggle--active"
+            />
+          </div>
+        </button>
+        <button
+          aria-checked="true"
+          aria-label="Lock Board"
+          class="settings-option-button board-settings__allow-board-editing"
+          role="switch"
+          type="button"
+        >
+          <span
+            class="settings-option-button__label"
+          >
+            Lock Board
+          </span>
+          <div
+            class="board-settings__allow-board-editing-value"
+          >
+            <div
+              class="toggle toggle--active"
+            />
+          </div>
         </button>
       </div>
       <div
@@ -202,30 +247,6 @@ exports[`BoardSettings should match snapshot 1`] = `
             />
           </div>
         </button>
-        <hr
-          class="settings-dialog__separator"
-        />
-        <button
-          aria-checked="true"
-          aria-label="Allow note repositioning"
-          class="settings-option-button board-settings__allow-note-repositioning-button"
-          data-testid="note-repositioning"
-          role="switch"
-          type="button"
-        >
-          <span
-            class="settings-option-button__label"
-          >
-            Allow note repositioning
-          </span>
-          <div
-            class="board-settings__allow-note-repositioning-value"
-          >
-            <div
-              class="toggle toggle--active"
-            />
-          </div>
-        </button>
       </div>
       <button
         aria-label="Delete Board"
@@ -240,7 +261,7 @@ exports[`BoardSettings should match snapshot 1`] = `
         <svg
           class="settings-option-button__icon"
         >
-          icon-delete.svg
+          trash.svg
         </svg>
       </button>
     </div>

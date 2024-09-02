@@ -3,9 +3,7 @@ import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import store, {useAppSelector} from "store";
-import {ReactComponent as SetPolicyIcon} from "assets/icon-lock.svg";
-import {ReactComponent as DeleteIcon} from "assets/icon-delete.svg";
-import {ReactComponent as RefreshIcon} from "assets/icon-refresh.svg";
+import {LockClosed, Trash, Refresh} from "components/Icon";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
 import {generateRandomString} from "utils/random";
@@ -67,7 +65,7 @@ export const BoardSettings = () => {
             handleSetPassword("");
           }}
         >
-          <SetPolicyIcon />
+          <LockClosed />
           <span className="board-settings__password-management-text">{t("BoardSettings.SetAccessPolicyOpen")}</span>
         </button>
       );
@@ -81,7 +79,7 @@ export const BoardSettings = () => {
             handleSetPassword(pw);
           }}
         >
-          <RefreshIcon />
+          <Refresh />
           <span className="board-settings__password-management-text">{t("BoardSettings.generatePassword")}</span>
         </button>
       );
@@ -94,7 +92,7 @@ export const BoardSettings = () => {
       return (
         <>
           <span>{t("AccessPolicySelection.manualVerificationTitle")}</span>
-          <SetPolicyIcon />
+          <LockClosed />
         </>
       );
     return !isProtected ? (
@@ -102,7 +100,7 @@ export const BoardSettings = () => {
     ) : (
       <>
         <span>{t("AccessPolicySelection.byPassphraseTitle")}</span>
-        <SetPolicyIcon />
+        <LockClosed />
       </>
     );
   };
@@ -153,6 +151,31 @@ export const BoardSettings = () => {
           </div>
           {state.currentUserIsModerator && (
             <>
+              <div className="settings-dialog__group">
+                <SettingsButton
+                  data-testid="note-repositioning"
+                  className="board-settings__allow-note-repositioning-button"
+                  label={t("BoardSettings.AllowNoteRepositioningOption")}
+                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                  role="switch"
+                  aria-checked={state.board.allowStacking}
+                >
+                  <div className="board-settings__allow-note-repositioning-value">
+                    <Toggle active={state.board.allowStacking} />
+                  </div>
+                </SettingsButton>
+                <SettingsButton
+                  className="board-settings__allow-board-editing"
+                  label={t("BoardSettings.IsLocked")}
+                  onClick={() => store.dispatch(Actions.editBoard({isLocked: !state.board.isLocked}))}
+                  role="switch"
+                  aria-checked={state.board.isLocked}
+                >
+                  <div className="board-settings__allow-board-editing-value">
+                    <Toggle active={state.board.isLocked} />
+                  </div>
+                </SettingsButton>
+              </div>
               <div className="settings-dialog__group">
                 <SettingsButton
                   data-testid="author"
@@ -207,26 +230,13 @@ export const BoardSettings = () => {
                     <Toggle active={!!state.me?.showHiddenColumns} />
                   </div>
                 </SettingsButton>
-                <hr className="settings-dialog__separator" />
-                <SettingsButton
-                  data-testid="note-repositioning"
-                  className="board-settings__allow-note-repositioning-button"
-                  label={t("BoardSettings.AllowNoteRepositioningOption")}
-                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
-                  role="switch"
-                  aria-checked={state.board.allowStacking}
-                >
-                  <div className="board-settings__allow-note-repositioning-value">
-                    <Toggle active={state.board.allowStacking} />
-                  </div>
-                </SettingsButton>
               </div>
 
               <SettingsButton
                 className={classNames("board-settings__delete-button")}
                 label={t("BoardSettings.DeleteBoard")}
                 onClick={() => setShowConfirmationDialog(true)}
-                icon={DeleteIcon}
+                icon={Trash}
               />
             </>
           )}
@@ -236,7 +246,7 @@ export const BoardSettings = () => {
               title={t("ConfirmationDialog.deleteBoard")}
               onAccept={() => store.dispatch(Actions.deleteBoard())}
               onDecline={() => setShowConfirmationDialog(false)}
-              icon={DeleteIcon}
+              icon={Trash}
               warning
             />
           )}

@@ -3,18 +3,18 @@ import {Color, getColorClassName} from "constants/colors";
 import {NoteInput} from "components/NoteInput";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
+import {Tooltip} from "react-tooltip";
 import {useAppSelector} from "store";
 import {Actions} from "store/action";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
-import {ReactComponent as SubmitIcon} from "assets/icon-check.svg";
-import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
-import {ReactComponent as DotsIcon} from "assets/icon-dots.svg";
+import {Close, MarkAsDone, Hidden, ThreeDots} from "components/Icon";
 import _ from "underscore";
 import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {hotkeyMap} from "constants/hotkeys";
 import {Droppable} from "components/DragAndDrop/Droppable";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
+import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 
@@ -47,7 +47,8 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
   const colorClassName = getColorClassName(color);
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
-  const [columnName, setColumnName] = useState(name);
+  const {value: columnName, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({maxInputLength: 32, initialValue: name});
+
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
   const [openedColumnSettings, setOpenedColumnSettings] = useState(false);
   const [isTemporary, setIsTemporary] = useState(id === "TEMP_ID");
@@ -94,8 +95,9 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const renderColumnName = () =>
     columnNameMode === "VIEW" ? (
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
-        {!visible && <HiddenIcon className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
+        {!visible && <Hidden className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
         <h2
+          id={`column-${id}`}
           onDoubleClick={() => {
             if (isModerator) {
               setColumnNameMode("EDIT");
@@ -105,32 +107,40 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         >
           {name}
         </h2>
+        <Tooltip className="column__tooltip" anchorSelect={`#column-${id}`}>
+          {name}
+        </Tooltip>
       </div>
     ) : (
-      <input
-        maxLength={32}
-        className="column__header-input"
-        defaultValue={name}
-        onChange={() => setColumnName(inputRef.current?.value ?? "")}
-        onKeyDown={(e) => {
-          if (e.key === "Escape") {
-            if (isTemporary) {
-              dispatch(Actions.deleteColumnOptimistically(id));
+      <>
+        <input
+          {...emoji.inputBindings}
+          className="column__header-input"
+          type="text"
+          onKeyDown={(e) => {
+            emoji.inputBindings.onKeyDown(e);
+            if (e.defaultPrevented) return;
+
+            if (e.key === "Escape") {
+              if (isTemporary) {
+                dispatch(Actions.deleteColumnOptimistically(id));
+              }
+              setColumnNameMode("VIEW");
+            } else if (e.key === "Enter") {
+              handleEditColumnName((e.target as HTMLInputElement).value);
             }
-            setColumnNameMode("VIEW");
-          } else if (e.key === "Enter") {
-            handleEditColumnName((e.target as HTMLInputElement).value);
-          }
-        }}
-        ref={(ref) => {
-          ref?.focus();
-          inputRef.current = ref!;
-        }}
-        onFocus={(e) => e.target.select()}
-        onBlur={(e) => {
-          if (e.relatedTarget !== closeButtonRef.current) handleEditColumnName((e.target as HTMLInputElement).value);
-        }}
-      />
+          }}
+          ref={(ref) => {
+            ref?.focus();
+            inputRef.current = ref!;
+          }}
+          onFocus={(e) => e.target.select()}
+          onBlur={(e) => {
+            if (e.relatedTarget !== closeButtonRef.current) handleEditColumnName((e.target as HTMLInputElement).value);
+          }}
+        />
+        <EmojiSuggestions {...emoji.suggestionsProps} />
+      </>
     );
 
   const renderColumnModifiers = () => (
@@ -144,7 +154,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           }}
           aria-label={t("Column.submitName")}
         >
-          <SubmitIcon className="column__header-edit-button-icon" />
+          <MarkAsDone className="column__header-edit-button-icon" />
         </button>
       )}
       {columnNameMode === "EDIT" && (
@@ -160,12 +170,12 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           }}
           aria-label={t("Column.resetName")}
         >
-          <CloseIcon className="column__header-edit-button-icon" />
+          <Close className="column__header-edit-button-icon" />
         </button>
       )}
       {!isTemporary && (
         <button title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
-          {openedColumnSettings ? <CloseIcon className="column__header-edit-button-icon" /> : <DotsIcon className="column__header-edit-button-icon" />}
+          {openedColumnSettings ? <Close className="column__header-edit-button-icon" /> : <ThreeDots className="column__header-edit-button-icon" />}
         </button>
       )}
     </>
@@ -195,7 +205,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
     >
       <div className="column__content">
         <div className="column__header">
-          <div className="column__header-title">
+          <div className="column__header-title" ref={emoji.containerRef}>
             {renderColumnName()}
             {columnNameMode === "VIEW" && notes.length > 0 && (
               <span className="column__header-card-number" title={t("Column.notes", {count: notes.length})}>

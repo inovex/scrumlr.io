@@ -5,28 +5,34 @@ $note-input__input-right: 40px;
 
 .note-input {
   display: flex;
+  padding-inline: $spacing--base;
   justify-content: space-between;
+  align-items: center;
   min-height: 36px;
   width: 100%;
   position: relative;
   margin-bottom: $spacing--base;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
   border-radius: $rounded--medium;
   transition: all 0.12s ease-in-out;
   border: 2px solid transparent;
+  container-type: inline-size;
 
-  &:hover,
-  &:focus-within {
-    border-color: rgba(var(--accent-color-rgb), 0.5);
-    box-shadow: 0 6px 9px 0 rgba(var(--accent-color-rgb), 0.16);
+  &:not(:has(.note-input__input:disabled)):hover,
+  &:not(:has(.note-input__input:disabled)):focus-within {
+    border-color: rgba(var(--accent-color--light-rgb), 0.5);
+    box-shadow: 0 6px 9px 0 rgba(var(--accent-color--light-rgb), 0.16);
   }
 }
 
+.note-input__lock-icon {
+  width: $icon--large;
+  height: $icon--large;
+  color: $gray--800;
+}
+
 .note-input__input {
-  left: $note-input__input-left;
-  right: $note-input__input-right;
-  color: $color-black;
-  font-size: $text-size--medium;
+  color: $navy--900;
   font-weight: bold;
   line-height: 24px;
   max-height: 70vh;
@@ -35,24 +41,20 @@ $note-input__input-right: 40px;
   font-family: Raleway, sans-serif;
   background-color: transparent;
   border: none;
-  margin-left: $spacing--base;
   width: calc(100% - #{$note-input__input-left} - #{$note-input__input-right});
   outline: none;
-
   resize: none;
+  font-size: $text--xs;
 
   &:focus::placeholder {
     color: transparent;
   }
 }
 
-.note-input__image-indicator,
-.note-input__add-button {
-  all: unset;
-  position: relative;
-  display: flex;
-  align-self: flex-start;
-  padding: $spacing--xs 0;
+@container (width > 280px) {
+  .note-input__input {
+    font-size: $text-size--medium;
+  }
 }
 
 .note-input__add-button {
@@ -63,17 +65,32 @@ $note-input__input-right: 40px;
   }
 }
 
+.note-input__image-indicator,
+.note-input__add-button {
+  all: unset;
+  position: relative;
+  display: flex;
+  align-self: flex-start;
+  padding: $spacing--xxs 0;
+  color: var(--accent-color);
+
+  &:disabled {
+    color: $gray--800;
+    cursor: default;
+  }
+}
+
 .note-input__icon--image,
 .note-input__icon--add {
-  width: $icon--medium;
-  height: $icon--medium;
-  color: var(--accent-color);
+  width: $icon--large;
+  height: $icon--large;
+  color: var(--accent-color--light);
   align-self: center;
   transition: all 0.08s ease-out;
 }
 
 .note-input__icon--add {
-  margin-right: $spacing--base;
+  margin-right: $spacing--sm;
 }
 
 .note-input__icon--image {
@@ -83,7 +100,7 @@ $note-input__input-right: 40px;
 
 .note-input__icon--star {
   position: absolute;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   animation: sparkle 1.5s ease-in-out infinite alternate;
 
   &.star-1 {
@@ -107,40 +124,18 @@ $note-input__input-right: 40px;
   }
 }
 
-.note-input__emoji-suggestions {
-  position: absolute;
-  top: calc(100% + $spacing--xs);
-  left: 0;
-  width: 100%;
-  background-color: $color-lighter-gray;
-  // prevent overflow by approximating available space below the input box
-  max-height: min($column-emoji-suggestions__max-height, calc(100svh - $column-emoji-suggestions__approx-top-distance));
-
-  z-index: $note-input__emoji-suggestions-z-index;
-  border-radius: $rounded--default;
-  overflow-y: auto;
-  box-shadow: $box-shadow--light;
-
-  @include scrollbar();
-}
-
 [theme="dark"] {
   .note-input {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--400;
 
-    &:hover,
-    &:focus-within {
-      box-shadow: 0 6px 9px 0 #232323;
+    &:not(:has(.note-input__input:disabled)):hover,
+    &:not(:has(.note-input__input:disabled)):focus-within {
+      box-shadow: 0 6px 9px 0 $navy--700;
     }
   }
 
   .note-input__input {
-    color: $color-white;
-  }
-
-  .note-input__emoji-suggestions {
-    background-color: $color-dark-mode-note;
-    box-shadow: $box-shadow--dark;
+    color: $gray--000;
   }
 }
 

@@ -1,8 +1,5 @@
 import {useRef, useState} from "react";
-import "./NoteInput.scss";
-import {ReactComponent as PlusIcon} from "assets/icon-add.svg";
-import {ReactComponent as ImageIcon} from "assets/icon-addimage.svg";
-import {ReactComponent as StarIcon} from "assets/icon-star.svg";
+import {AddImage, LockClosed, Plus, Star} from "components/Icon";
 import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
@@ -13,6 +10,8 @@ import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {useAppSelector} from "store";
+import "./NoteInput.scss";
 
 export interface NoteInputProps {
   columnId: string;
@@ -26,6 +25,8 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
   const dispatch = useDispatch();
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
 
   const addNote = (content: string) => {
     if (!content.trim()) return;
@@ -68,7 +69,9 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       }}
       ref={emoji.containerRef}
     >
+      {!isModerator && boardLocked && <LockClosed className="note-input__lock-icon" />}
       <TextareaAutosize
+        disabled={!isModerator && boardLocked}
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
@@ -92,25 +95,24 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       />
-      <div className="note-input__emoji-suggestions">
-        <EmojiSuggestions {...emoji.suggestionsProps} />
-      </div>
+      <EmojiSuggestions {...emoji.suggestionsProps} />
       {isImage && (
         <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
-          <ImageIcon className="note-input__icon--image" />
-          <StarIcon className="note-input__icon--star star-1" />
-          <StarIcon className="note-input__icon--star star-2" />
-          <StarIcon className="note-input__icon--star star-3" />
+          <AddImage className="note-input__icon--image" />
+          <Star className="note-input__icon--star star-1" />
+          <Star className="note-input__icon--star star-2" />
+          <Star className="note-input__icon--star star-3" />
         </div>
       )}
       <button
+        disabled={!isModerator && boardLocked}
         type="submit"
         tabIndex={-1} // skip focus
         className="note-input__add-button"
         aria-label={t("NoteInput.create")}
         title={t("NoteInput.create")}
       >
-        <PlusIcon className="note-input__icon--add" />
+        <Plus className="note-input__icon--add" />
       </button>
     </form>
   );

@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {ReactComponent as CloseIcon} from "assets/icon-close.svg";
+import {Close} from "components/Icon";
 import "./TooltipButton.scss";
 
 type TooltipButtonProps = {
@@ -31,7 +31,7 @@ export const TooltipButton = (props: TooltipButtonProps) => {
       </div>
       <div className="tooltip-button__icon-container">
         <Icon className="tooltip-button__icon" aria-hidden />
-        <CloseIcon className="tooltip-button__icon" aria-hidden />
+        <Close className="tooltip-button__icon" aria-hidden />
       </div>
     </button>
   );

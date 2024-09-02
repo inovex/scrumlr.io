@@ -1,34 +1,22 @@
-import {ReactComponent as IconShuffle} from "assets/icon-shuffle.svg";
+import {Shuffle} from "components/Icon";
 import classNames from "classnames";
-import {AvataaarProps, Avatar, generateRandomProps} from "components/Avatar";
-import {
-  AVATAR_ACCESSORIES_TYPES,
-  AVATAR_CLOTHE_COLORS,
-  AVATAR_CLOTHE_TYPES,
-  AVATAR_EYEBROW_TYPES,
-  AVATAR_EYE_TYPES,
-  AVATAR_FACIAL_HAIR_COLORS,
-  AVATAR_FACIAL_HAIR_TYPES,
-  AVATAR_GRAPHIC_TYPES,
-  AVATAR_HAIR_COLORS,
-  AVATAR_MOUTH_TYPES,
-  AVATAR_SKIN_COLORS,
-  AVATAR_TOP_TYPES,
-} from "components/Avatar/types";
-import {FC, Fragment, useEffect, useState} from "react";
+import {Avatar, generateRandomProps} from "components/Avatar";
+import {Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import store, {useAppSelector} from "store";
 import {Actions} from "store/action";
-import "./AvatarSettings.scss";
 import {isEqual} from "underscore";
+import {AVATAR_CONFIG} from "constants/avatar";
+import {AvataaarProps, AvatarGroup} from "types/avatar";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
+import "./AvatarSettings.scss";
 
 export interface AvatarSettingsProps {
   id?: string;
 }
 
-export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
+export const AvatarSettings = (props: AvatarSettingsProps) => {
   const {t} = useTranslation();
   const state = useAppSelector(
     (applicationState) => ({
@@ -39,13 +27,13 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
 
   let initialState = state.participant.user.avatar;
   if (initialState === null || initialState === undefined) {
-    initialState = generateRandomProps(id ?? "");
+    initialState = generateRandomProps(props.id ?? "");
   }
 
   const [properties, setProperties] = useState<AvataaarProps>(initialState!);
   const [openAccordionIndex, setOpenAccordionIndex] = useState(-1);
 
-  const updateAvatar = <PropertyKey extends keyof AvataaarProps>(key: PropertyKey, value: AvataaarProps[PropertyKey]) => {
+  const updateAvatar = (key: keyof AvataaarProps, value: AvataaarProps[keyof AvataaarProps]) => {
     if (properties && properties[key] !== value) {
       setProperties({...properties, [key]: value});
     }
@@ -61,46 +49,47 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
-  const settingGroups: {[key: string]: {values: readonly string[]; key: keyof AvataaarProps; disabledOn?: {[key in keyof Partial<AvataaarProps>]: string[]}}[]} = {
-    hair: [
-      {values: AVATAR_TOP_TYPES, key: "topType"},
-      {
-        values: AVATAR_HAIR_COLORS,
-        key: "hairColor",
-        disabledOn: {topType: ["NoHair", "Eyepatch", "Hat", "Hijab", "Turban", "WinterHat1", "WinterHat2", "WinterHat3", "WinterHat4", "LongHairFrida", "LongHairShavedSides"]},
-      },
-      {values: AVATAR_FACIAL_HAIR_TYPES, key: "facialHairType", disabledOn: {topType: ["Hijab"]}},
-      {values: AVATAR_FACIAL_HAIR_COLORS, key: "facialHairColor", disabledOn: {topType: ["Hijab"], facialHairType: ["Blank"]}},
-    ],
-    facialFeatures: [
-      {values: AVATAR_SKIN_COLORS, key: "skinColor"},
-      {values: AVATAR_EYEBROW_TYPES, key: "eyebrowType"},
-      {values: AVATAR_EYE_TYPES, key: "eyeType"},
-      {values: AVATAR_MOUTH_TYPES, key: "mouthType"},
-    ],
-    clothing: [
-      {values: AVATAR_ACCESSORIES_TYPES, key: "accessoriesType", disabledOn: {topType: ["Eyepatch"]}},
-      {values: AVATAR_CLOTHE_TYPES, key: "clotheType"},
-      {values: AVATAR_CLOTHE_COLORS, key: "clotheColor", disabledOn: {clotheType: ["BlazerShirt", "BlazerSweater"]}},
-      {
-        values: AVATAR_GRAPHIC_TYPES,
-        key: "graphicType",
-        disabledOn: {clotheType: ["BlazerShirt", "BlazerSweater", "CollarSweater", "Hoodie", "Overall", "ShirtCrewNeck", "ShirtScoopNeck", "ShirtVNeck"]},
-      },
-    ],
+  // a group is disabled if any property (stored in properties) is found within the disabledOn array of the group.
+  const checkDisabled = (group: AvatarGroup): boolean =>
+    (group.disabledOn &&
+      Object.entries(group.disabledOn)
+        .map(([key, value]) => {
+          const typedKey = key as keyof AvataaarProps;
+          const typedValue = value as AvataaarProps[keyof AvataaarProps][];
+          return Object.hasOwnProperty.call(properties, typedKey) && typedValue.some((val) => properties[typedKey] === val);
+        })
+        .some((val) => val)) ??
+    false;
+
+  const renderAvatarGroup = (group: AvatarGroup) => {
+    const isDisabled = checkDisabled(group);
+
+    return (
+      <Fragment key={group.key}>
+        <SettingsCarousel
+          carouselItems={group.values}
+          currentValue={properties[group.key]}
+          onValueChange={(value) => updateAvatar(group.key, value)}
+          disabled={isDisabled}
+          localizationPath={`Avatar.${group.key}.`}
+          label={t(`Avatar.${group.key}.label`)}
+          className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
+        />
+      </Fragment>
+    );
   };
 
   return (
     <>
       <div className="avatar-settings__avatar">
-        <Avatar seed={id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
+        <Avatar seed={props.id ?? ""} avatar={properties} className="avatar-settings__avatar-icon" />
         <button className="avatar-settings__avatar-shuffle" onClick={() => setProperties(generateRandomProps(Math.random().toString(36).slice(2)))} aria-label={t("Avatar.random")}>
-          <IconShuffle />
+          <Shuffle />
         </button>
       </div>
       <div className="avatar-settings__settings-wrapper">
         <div className="avatar-settings__settings">
-          {Object.entries(settingGroups).map(([label, props], groupIndex, array) => (
+          {Object.entries(AVATAR_CONFIG).map(([label, groups], groupIndex, array) => (
             <Fragment key={label}>
               <SettingsAccordion
                 label={t(`Avatar.groups.${label as "hair" | "facialFeatures" | "clothing"}`)}
@@ -109,30 +98,7 @@ export const AvatarSettings: FC<AvatarSettingsProps> = ({id}) => {
                 headerClassName="avatar-settings__settings-group-header"
               >
                 <hr className="avatar-settings__settings-group-seperator" />
-                <div className="avatar-settings__settings-group">
-                  {props.map((element, index) => {
-                    const isDisabled =
-                      element.disabledOn &&
-                      Object.entries(element.disabledOn)
-                        .map(([key, value]) => Object.hasOwnProperty.call(properties, key) && value.some((val) => properties[key].indexOf(val) >= 0))
-                        .some((val) => val);
-
-                    return (
-                      <Fragment key={element.key}>
-                        <SettingsCarousel
-                          carouselItems={element.values}
-                          currentValue={properties[element.key]}
-                          onValueChange={(value) => updateAvatar(element.key, value as (typeof element.values)[number])}
-                          disabled={isDisabled}
-                          localizationPath={`Avatar.${element.key}.`}
-                          label={t(`Avatar.${element.key as keyof Omit<AvataaarProps, "accentColorClass">}.label`)}
-                          className={classNames("avatar-settings__settings-group-item", {disabled: isDisabled})}
-                        />
-                        {index < props.length - 1 && <hr className="avatar-settings__settings-group-item-seperator" />}
-                      </Fragment>
-                    );
-                  })}
-                </div>
+                <div className="avatar-settings__settings-group">{groups.map((group) => renderAvatarGroup(group))}</div>
               </SettingsAccordion>
               {groupIndex < array.length - 1 && <hr className="avatar-settings__settings-group-seperator" />}
             </Fragment>

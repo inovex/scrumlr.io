@@ -17,6 +17,7 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/board_reactions"
+	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
@@ -101,6 +102,13 @@ func main() {
 				Usage:    "the base `path` of the application (e.g. '/api'); must start with '/'",
 				Required: false,
 				Value:    "/",
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "disable-anonymous-login",
+				EnvVars:  []string{"SCRUMLR_DISABLE_ANONYMOUS_LOGIN"},
+				Usage:    "enables/disables the login of anonymous clients",
+				Required: false,
+				Value:    false,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "auth-callback-host",
@@ -298,17 +306,19 @@ func run(c *cli.Context) error {
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	votingService := votings.NewVotingService(dbConnection, rt)
-	userService := users.NewUserService(dbConnection)
+	userService := users.NewUserService(dbConnection, rt)
 	noteService := notes.NewNoteService(dbConnection, rt)
 	reactionService := reactions.NewReactionService(dbConnection, rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
+	boardTemplateService := board_templates.NewBoardTemplateService(dbConnection)
 
 	s := api.New(
 		basePath,
 		rt,
 		authConfig,
+
 		boardService,
 		votingService,
 		userService,
@@ -318,8 +328,11 @@ func run(c *cli.Context) error {
 		healthService,
 		feedbackService,
 		boardReactionService,
+		boardTemplateService,
+
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
+		c.Bool("disable-anonymous-login"),
 	)
 
 	port := fmt.Sprintf(":%d", c.Int("port"))

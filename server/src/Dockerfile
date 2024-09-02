@@ -1,11 +1,15 @@
 # Build application
-FROM golang:1.20
+FROM golang:1.22
+
+ARG TARGETARCH
+ARG TARGETOS
+
 WORKDIR /go/src/github.com/inovex/scrumlr.io/
 COPY ./ .
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -a -o main
+RUN GOOS=$TARGETOS GOARCH=$TARGETARCH CGO_ENABLED=0 go build -a -o main
 
 # Start application
-FROM alpine:3.19
+FROM alpine:3.20
 
 RUN mkdir /app
 WORKDIR /app

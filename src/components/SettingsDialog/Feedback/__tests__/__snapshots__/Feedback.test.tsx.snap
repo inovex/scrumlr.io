@@ -2,13 +2,13 @@
 
 exports[`Feedback should match snapshot 1`] = `
 <div
-  class="settings-dialog__container accent-color__poker-purple"
+  class="settings-dialog__container accent-color__value-violet"
 >
   <div
     class="settings-dialog__header"
   >
     <h2
-      class="settings-dialog__header-text accent-color__poker-purple"
+      class="settings-dialog__header-text accent-color__value-violet"
     >
       Feedback
     </h2>
@@ -35,7 +35,7 @@ exports[`Feedback should match snapshot 1`] = `
           for="feedbackTypePraise"
         >
           <svg>
-            icon-praise.svg
+            praise.svg
           </svg>
           <span>
             Praise
@@ -57,7 +57,7 @@ exports[`Feedback should match snapshot 1`] = `
           for="feedbackTypeFeatureRequest"
         >
           <svg>
-            icon-add-feature.svg
+            template-gallery.svg
           </svg>
           <span>
             Feature Request
@@ -79,7 +79,7 @@ exports[`Feedback should match snapshot 1`] = `
           for="feedbackTypeBugReport"
         >
           <svg>
-            icon-bug.svg
+            bug.svg
           </svg>
           <span>
             Bug Report
