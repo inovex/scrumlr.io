@@ -1,11 +1,11 @@
 import "./PassphraseModal.scss";
 import {t} from "i18next";
-import {ReactComponent as HiddenIcon} from "assets/icon-hidden.svg";
-import {ReactComponent as VisibleIcon} from "assets/icon-visible.svg";
+import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
+import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
 import {FC, useEffect, useState} from "react";
-import {ReactComponent as IconClipboard} from "assets/icon-clipboard.svg";
-import {ReactComponent as IconRefresh} from "assets/icon-refresh.svg";
-import {ReactComponent as IconClose} from "assets/icon-close.svg";
+import {ReactComponent as IconClipboard} from "assets/icons/duplicate.svg";
+import {ReactComponent as IconRefresh} from "assets/icons/refresh.svg";
+import {ReactComponent as IconClose} from "assets/icons/close.svg";
 import {generateRandomString} from "utils/random";
 import {AccessPolicy} from "types/board";
 import {TextInputLabel} from "components/TextInputLabel";
