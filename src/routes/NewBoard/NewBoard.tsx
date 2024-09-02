@@ -26,8 +26,10 @@ export const NewBoard = () => {
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
   const [importFile, setImportFileConfiguration] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [loadedFile, setFile] = useState<File>();
   const [completeBoard, setImportBoard] = useState<BoardContent>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   type ImportBoardRequest = {
     name: string;
     description?: string;
@@ -60,7 +62,7 @@ export const NewBoard = () => {
     setPassphrase("");
   };
 
-  const handleFileEvent = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>, inputRef: React.RefObject<HTMLInputElement>) => {
+  const handleFileEvent = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>) => {
     let file: File | null = null;
     if ("dataTransfer" in event) {
       event.preventDefault();
@@ -94,10 +96,10 @@ export const NewBoard = () => {
         }
         setImportBoard(board);
       } catch (error) {
-        // console.error("Error parsing JSON:", error);
+        console.error("Error parsing JSON:", error);
       }
     };
-
+    setFile(file);
     reader.readAsText(file);
   };
 
@@ -145,7 +147,7 @@ export const NewBoard = () => {
   };
 
   const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
-  const isImportBoardDisabled = fileInputRef?.current?.value === "";
+  const isImportBoardDisabled = !(loadedFile && loadedFile.size > 0);
 
   return (
     <div className="new-board__wrapper">
@@ -189,9 +191,17 @@ export const NewBoard = () => {
                       setImportFileConfiguration(true);
                       setColumnTemplate(undefined);
                     }}
-                    onChange={(event) => handleFileEvent(event, fileInputRef)}
+                    onChange={(event) => handleFileEvent(event)}
                   />
-                  <div className="new-board__mode-label" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={(event) => handleFileEvent(event, fileInputRef)}>
+                  <div
+                    className="new-board__mode-label"
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={(event) => {
+                      setImportFileConfiguration(true);
+                      handleFileEvent(event);
+                    }}
+                  >
                     <div>
                       <div className="new-board__mode-name">{t("NewBoard.importBoard")}</div>
                       <div className="new-board__mode-description">{t("NewBoard.uploadFile")}</div>
