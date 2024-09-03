@@ -14,6 +14,8 @@ import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {ApplicationState} from "../../../types";
 import {API} from "../../../api";
+import {EditBoardRequest} from "./types";
+import {Timer} from "../../../utils/timer";
 
 let socket: Socket | null = null;
 
@@ -21,7 +23,8 @@ export const leaveBoard = () => async () => {
   socket?.close();
 };
 
-export const permittedBoardAccess = createAsyncThunk("scrumlr.io/permittedBoardAccess", async (boardId: string, {dispatch}) => {
+// generic args: <returnArg, payloadArg, otherArgs(like state type)
+export const permittedBoardAccess = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/permittedBoardAccess", async (boardId: string, {dispatch}) => {
   socket = new Socket(`${SERVER_WEBSOCKET_URL}/boards/${boardId}`, {
     timeout: 5000,
     maxAttempts: 0,
@@ -128,7 +131,24 @@ export const permittedBoardAccess = createAsyncThunk("scrumlr.io/permittedBoardA
   });
 });
 
-// TODO edit board
+export const editBoard = createAsyncThunk<void, EditBoardRequest, {state: ApplicationState}>("scrumlr.io/editBoard", async (payload, {getState}) => {
+  const board = getState().board.data!;
+  const {serverTimeOffset} = getState().view;
+  await API.editBoard(board.id, {
+    sharedNote: board.sharedNote,
+    showVoting: board.showVoting,
+    timerStart: Timer.removeOffsetFromDate(board.timerStart, serverTimeOffset),
+    timerEnd: Timer.removeOffsetFromDate(board.timerEnd, serverTimeOffset),
+    accessPolicy: payload.accessPolicy,
+    passphrase: payload.passphrase,
+    allowStacking: payload.allowStacking,
+    showAuthors: payload.showAuthors,
+    showNotesOfOtherUsers: payload.showNotesOfOtherUsers,
+    showNoteReactions: payload.showNoteReactions,
+    name: payload.name == null ? board.name : payload.name,
+    isLocked: payload.isLocked,
+  });
+});
 
 export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}>("scrumlr.io/setTimer", async (payload: number, {getState}) => {
   const {id} = getState().board.data!;
