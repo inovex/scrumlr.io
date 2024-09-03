@@ -1,10 +1,10 @@
-import {createAsyncThunk, Dispatch} from "@reduxjs/toolkit";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import {signIn, userCheckCompleted} from "store/features/auth/actions";
 import {ACCOUNT_TYPE_ANONYMOUS} from "store/features/auth/types";
 import {API} from "api";
 
 // TODO Toasts
-export const initAuth = () => async (dispatch: Dispatch) => {
+export const initAuth = createAsyncThunk("scrumlr.io/setTimer", async (_payload, {dispatch}) => {
   API.getCurrentUser()
     .then((user) => {
       if (user) {
@@ -16,7 +16,7 @@ export const initAuth = () => async (dispatch: Dispatch) => {
     .catch(() => {
       dispatch(userCheckCompleted(false));
     });
-};
+});
 
 // use createAsyncThunk, because the action also changes state in the reducer.
 export const signOut = createAsyncThunk("scrumlr.io/signOut", async () => {
