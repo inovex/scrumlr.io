@@ -3,12 +3,12 @@ import {ApplicationState} from "types";
 import {Actions, Action, ReduxAction} from "store/action";
 import Socket from "sockette";
 import {ServerEvent} from "types/websocket";
-import store from "store";
+import store from "store/index";
 import {API} from "api";
 import {Timer} from "utils/timer";
-import {Toast} from "../../utils/Toast";
-import i18n from "../../i18n";
-import {SERVER_WEBSOCKET_URL} from "../../config";
+import {Toast} from "../../../utils/Toast";
+import i18n from "../../../i18n";
+import {SERVER_WEBSOCKET_URL} from "../../../config";
 
 let socket: Socket | undefined;
 

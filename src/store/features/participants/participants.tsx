@@ -2,9 +2,9 @@ import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
-import {Toast} from "../../utils/Toast";
-import i18n from "../../i18n";
-import store from "../index";
+import {Toast} from "../../../utils/Toast";
+import i18n from "../../../i18n";
+import store from "../../index";
 
 export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.SetRaisedHandStatus) {

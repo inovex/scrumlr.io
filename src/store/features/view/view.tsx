@@ -6,7 +6,7 @@ import i18n from "i18n";
 import {Toast} from "utils/Toast";
 import {saveToStorage} from "utils/storage";
 import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
-import store from "../index";
+import store from "../../index";
 
 export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.InitApplication) {

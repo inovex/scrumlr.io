@@ -2,9 +2,9 @@ import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {API} from "api";
 import {Action, Actions, ReduxAction} from "store/action";
 import {ApplicationState} from "types";
-import {Toast} from "../../utils/Toast";
-import i18n from "../../i18n";
-import store from "../index";
+import {Toast} from "../../../utils/Toast";
+import i18n from "../../../i18n";
+import store from "../../index";
 
 export const passColumnMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.EditColumn) {

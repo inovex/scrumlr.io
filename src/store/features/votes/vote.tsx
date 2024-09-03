@@ -3,8 +3,8 @@ import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
 import i18n from "i18next";
-import {Toast} from "../../utils/Toast";
-import store from "../index";
+import {Toast} from "../../../utils/Toast";
+import store from "../../index";
 
 export const passVoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.AddVote) {
