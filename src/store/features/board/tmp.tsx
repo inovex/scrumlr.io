@@ -193,6 +193,9 @@ export const stopSharing = createAsyncThunk<void, void, {state: ApplicationState
   });
 });
 
-// TODO delete board
-
-// TODO other actions
+export const deleteBoard = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/deleteBoard", async (_payload, {getState}) => {
+  const {id} = getState().board.data!;
+  API.deleteBoard(id).then(() => {
+    document.location.pathname = "/";
+  });
+});
