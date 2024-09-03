@@ -224,7 +224,7 @@
   .color-picker > li > button {
     &:focus-visible {
       border-radius: $rounded--full;
-      outline: 2px solid $navy--300;
+      outline: none;
     }
   }
 
