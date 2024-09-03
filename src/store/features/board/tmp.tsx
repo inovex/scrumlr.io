@@ -181,8 +181,18 @@ export const shareNote = createAsyncThunk<void, string, {state: ApplicationState
   });
 });
 
-// TODO share note
-// TODO stop sharing
+export const stopSharing = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/shareNote", async (_payload, {getState}) => {
+  const board = getState().board.data!;
+  const {serverTimeOffset} = getState().view;
+
+  await API.editBoard(board.id, {
+    sharedNote: undefined,
+    showVoting: board.showVoting,
+    timerStart: Timer.removeOffsetFromDate(board.timerStart, serverTimeOffset),
+    timerEnd: Timer.removeOffsetFromDate(board.timerEnd, serverTimeOffset),
+  });
+});
+
 // TODO delete board
 
 // TODO other actions
