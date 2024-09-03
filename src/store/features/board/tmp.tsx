@@ -12,6 +12,8 @@ import {createdVoting, updatedVoting} from "../votings";
 import {updatedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
+import {ApplicationState} from "../../../types";
+import {API} from "../../../api";
 
 let socket: Socket | null = null;
 
@@ -125,5 +127,17 @@ export const permittedBoardAccess = createAsyncThunk("scrumlr.io/permittedBoardA
     },
   });
 });
+
+// TODO edit board
+
+export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}>("scrumlr.io/setTimer", async (payload: number, {getState}) => {
+  const {id} = getState().board.data!;
+  await API.setTimer(id, payload);
+});
+// TODO cancel timer
+// TODO increment timer
+// TODO share note
+// TODO stop sharing
+// TODO delete board
 
 // TODO other actions
