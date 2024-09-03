@@ -134,8 +134,17 @@ export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}
   const {id} = getState().board.data!;
   await API.setTimer(id, payload);
 });
-// TODO cancel timer
-// TODO increment timer
+
+export const cancelTimer = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/setTimer", async (_payload, {getState}) => {
+  const {id} = getState().board.data!;
+  await API.deleteTimer(id);
+});
+
+export const incrementTimer = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/setTimer", async (_payload, {getState}) => {
+  const {id} = getState().board.data!;
+  await API.incrementTimer(id);
+});
+
 // TODO share note
 // TODO stop sharing
 // TODO delete board
