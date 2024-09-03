@@ -343,6 +343,10 @@
   }
 }
 
+.fix-focus-lock-placement {
+  margin-top: auto;
+}
+
 @media #{$smartphone} {
   .color-picker {
     flex-direction: row-reverse;
@@ -350,10 +354,11 @@
     right: 0;
     margin: auto;
     justify-self: center;
-    padding: $spacing--xxs 2px;
+    padding-right: $spacing--xxs;
   }
-}
 
-.fix-focus-lock-placement {
-  margin-top: auto;
+  .fix-focus-lock-placement {
+    margin-top: initial;
+    margin-bottom: auto;
+  }
 }
