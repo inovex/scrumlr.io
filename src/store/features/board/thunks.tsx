@@ -150,7 +150,7 @@ export const editBoard = createAsyncThunk<void, EditBoardRequest, {state: Applic
   });
 });
 
-export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}>("scrumlr.io/setTimer", async (payload: number, {getState}) => {
+export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}>("scrumlr.io/setTimer", async (payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.setTimer(id, payload);
 });
