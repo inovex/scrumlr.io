@@ -1,14 +1,32 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
-import {ApplicationState} from "types";
-import {Actions, ReduxAction} from "store/action";
-import {AuthAction} from "store/features/auth/actions";
+import {createAsyncThunk, Dispatch} from "@reduxjs/toolkit";
+import {signIn, userCheckCompleted} from "store/features/auth/actions";
 import {ACCOUNT_TYPE_ANONYMOUS} from "store/features/auth/types";
 import {API} from "api";
-import {ViewAction} from "store/features/view/actions";
-import {Toast} from "utils/Toast";
-import i18n from "i18n";
-import store from "store/index";
 
+// TODO Toasts
+export const initAuth = () => async (dispatch: Dispatch) => {
+  API.getCurrentUser()
+    .then((user) => {
+      if (user) {
+        const isAnonymous = user.accountType === ACCOUNT_TYPE_ANONYMOUS;
+        dispatch(signIn({id: user.id, name: user.name, isAnonymous, avatar: user.avatar}));
+      }
+      dispatch(userCheckCompleted(true));
+    })
+    .catch(() => {
+      dispatch(userCheckCompleted(false));
+    });
+};
+
+// use createAsyncThunk, because the action also changes state in the reducer.
+export const signOut = createAsyncThunk("scrumlr.io/signOut", async () => {
+  API.signOut().then(() => {
+    // eslint-disable-next-line no-restricted-globals
+    location.reload();
+  });
+});
+
+/*
 export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === ViewAction.InitApplication) {
     API.getCurrentUser()
@@ -50,3 +68,4 @@ export const passAuthMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Application
       });
   }
 };
+*/

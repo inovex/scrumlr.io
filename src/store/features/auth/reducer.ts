@@ -1,6 +1,7 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {AuthState} from "./types";
-import {signIn, signOut, userCheckCompleted} from "./actions";
+import {signIn, userCheckCompleted} from "./actions";
+import {signOut} from "./thunks";
 
 const initialState: AuthState = {user: undefined, initializationSucceeded: null};
 
@@ -11,7 +12,7 @@ export const authReducer = createReducer(initialState, (builder) =>
       // note that directly reassigning the whole state won't work though!
       state.user = action.payload;
     })
-    .addCase(signOut, (state) => {
+    .addCase(signOut.fulfilled, (state) => {
       state.user = undefined;
     })
     .addCase(userCheckCompleted, (state, action) => {
