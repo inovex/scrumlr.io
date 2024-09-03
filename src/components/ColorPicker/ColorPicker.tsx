@@ -37,7 +37,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps)
       }
     };
 
-    document.addEventListener("keydown", handleKeyPress, true);
+    document.addEventListener("keydown", handleKeyPress, true); // trigger in capture phase
     return () => document.removeEventListener("keydown", handleKeyPress, true);
   }, [props]);
 

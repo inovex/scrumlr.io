@@ -43,13 +43,13 @@ export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsPro
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === "Escape" && !openedColorPicker) {
         props.closeColumnSettings();
       }
     };
 
-    document.addEventListener("keydown", handleKeyPress, true);
-    return () => document.removeEventListener("keydown", handleKeyPress, true);
+    document.addEventListener("keydown", handleKeyPress, false); // trigger in bubble phase
+    return () => document.removeEventListener("keydown", handleKeyPress, false);
   }, [props]);
 
   const renderColorPicker = () =>
