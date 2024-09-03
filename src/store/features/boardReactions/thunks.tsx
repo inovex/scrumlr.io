@@ -1,10 +1,9 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
-import {Action, ReduxAction} from "store/action";
 import {API} from "api";
+import {ReactionType} from "../reactions";
 
-export const passBoardReactionMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === Action.AddBoardReaction) {
-    API.addBoardReaction(action.context.board!, action.reactionType); // TODO handle promise & toasts
-  }
-};
+export const addBoardReaction = createAsyncThunk<void, ReactionType, {state: ApplicationState}>("scrumlr.io/addBoardReaction", async (payload, {getState}) => {
+  const {id} = getState().board.data!;
+  await API.addBoardReaction(id, payload);
+});
