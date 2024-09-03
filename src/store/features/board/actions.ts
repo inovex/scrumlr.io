@@ -1,7 +1,6 @@
 import {createAction} from "@reduxjs/toolkit";
-import {Board, BoardActionType, EditBoardRequest} from "./types";
+import {Board, BoardActionType} from "./types";
 
-// TODO possibly adjust payload types
 export const leaveBoard = createAction("scrumlr.io/leaveBoard");
 export const joinBoard = createAction("scrumlr.io/joinBoard");
 export const initializeBoard = createAction<BoardActionType>("scrumlr.io/initializeBoard");

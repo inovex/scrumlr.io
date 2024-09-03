@@ -13,7 +13,7 @@ import {
   tooManyJoinRequests,
   updatedBoardTimer,
 } from "./actions";
-import {permittedBoardAccess} from "./tmp";
+import {permittedBoardAccess} from "./thunks";
 
 const initialState: BoardState = {status: "unknown"};
 
