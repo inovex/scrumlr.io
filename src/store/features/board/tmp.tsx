@@ -1,7 +1,10 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {SERVER_WEBSOCKET_URL} from "../../../config";
-import {ServerEvent} from "../../../types/websocket";
+import {SERVER_WEBSOCKET_URL} from "config";
+import {ServerEvent} from "types/websocket";
+import {ApplicationState} from "types";
+import {API} from "api";
+import {Timer} from "utils/timer";
 import store from "../../index";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updateColumns} from "../columns";
@@ -12,10 +15,7 @@ import {createdVoting, updatedVoting} from "../votings";
 import {updatedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
-import {ApplicationState} from "../../../types";
-import {API} from "../../../api";
 import {EditBoardRequest} from "./types";
-import {Timer} from "../../../utils/timer";
 
 let socket: Socket | null = null;
 
