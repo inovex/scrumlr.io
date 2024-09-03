@@ -155,14 +155,30 @@ export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}
   await API.setTimer(id, payload);
 });
 
-export const cancelTimer = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/setTimer", async (_payload, {getState}) => {
+export const cancelTimer = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/cancelTimer", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.deleteTimer(id);
 });
 
-export const incrementTimer = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/setTimer", async (_payload, {getState}) => {
+export const incrementTimer = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/incrementTimer", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.incrementTimer(id);
+});
+
+export const shareNote = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/shareNote", async (payload, {getState}) => {
+  const board = getState().board.data!;
+  const {serverTimeOffset} = getState().view;
+  const note = getState().notes.find((n) => n.id === payload);
+  const column = getState().columns.find((c) => c.id === note?.position.column);
+
+  if (!column?.visible) return; // do not share notes in hidden columns
+
+  await API.editBoard(board.id, {
+    sharedNote: payload,
+    showVoting: board.showVoting,
+    timerStart: Timer.removeOffsetFromDate(board.timerStart, serverTimeOffset),
+    timerEnd: Timer.removeOffsetFromDate(board.timerEnd, serverTimeOffset),
+  });
 });
 
 // TODO share note

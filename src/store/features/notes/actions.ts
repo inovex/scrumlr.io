@@ -11,6 +11,7 @@ export const unstackNote = createAction<string>("scrumlr.io/unstackNote");
 export const deleteNote = createAction<{noteId: string; deleteStack: boolean}>("scrumlr.io/deleteNote");
 export const deletedNote = createAction<{noteId: string; deleteStack: boolean}>("scrumlr.io/deletedNote");
 
+// sharing notes is used in board thunk
 export const shareNote = createAction<string>("scrumlr.io/shareNote");
 export const stopSharing = createAction("scrumlr.io/stopSharing");
 
