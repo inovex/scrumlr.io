@@ -50,7 +50,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsPro
 
     document.addEventListener("keydown", handleKeyPress, false); // trigger in bubble phase
     return () => document.removeEventListener("keydown", handleKeyPress, false);
-  }, [props]);
+  }, [openedColorPicker, props]);
 
   const renderColorPicker = () =>
     openedColorPicker ? (
