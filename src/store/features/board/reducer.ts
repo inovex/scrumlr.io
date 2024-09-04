@@ -2,18 +2,9 @@ import {createReducer, isAnyOf} from "@reduxjs/toolkit";
 import {BoardState} from "store/features/board/types";
 import store from "store";
 import {Timer} from "utils/timer";
-import {
-  bannedFromBoard,
-  incorrectPassphrase,
-  initializeBoard,
-  joinBoard,
-  passphraseChallengeRequired,
-  pendingBoardAccessConfirmation,
-  rejectedBoardAccess,
-  tooManyJoinRequests,
-  updatedBoardTimer,
-} from "./actions";
+import {bannedFromBoard, incorrectPassphrase, initializeBoard, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests, updatedBoardTimer} from "./actions";
 import {permittedBoardAccess} from "./thunks";
+import {joinBoard, pendingBoardAccessConfirmation} from "../requests/tmp";
 
 const initialState: BoardState = {status: "unknown"};
 
@@ -59,7 +50,7 @@ export const boardReducer = createReducer(initialState, (builder) => {
     // TODO CreatedVoting
     // TODO UpdatedVoting
     // TODO DeletedNote
-    .addMatcher(isAnyOf(joinBoard, pendingBoardAccessConfirmation), (state) => {
+    .addMatcher(isAnyOf(joinBoard.pending, pendingBoardAccessConfirmation.pending), (state) => {
       state.status = "pending";
     });
 });

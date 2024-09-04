@@ -2,10 +2,11 @@ import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "../../../api";
 import {permittedBoardAccess} from "../board/thunks";
-import {bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, pendingBoardAccessConfirmation, rejectedBoardAccess, tooManyJoinRequests} from "../board";
+import {bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
 import {ApplicationState} from "../../../types";
+import {SERVER_WEBSOCKET_PROTOCOL} from "../../../config";
 
-const socket: Socket | null = null;
+let socket: Socket | null = null;
 
 // was defined in board actions before
 export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: string}, {state: ApplicationState}>("scrumlr.io/joinBoard", async (payload, {dispatch}) => {
@@ -37,3 +38,27 @@ export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: s
     }
   });
 });
+
+// TODO setRoute, if that does anything
+
+export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: string; requestReference: string}, {state: ApplicationState}>(
+  "scrumlr.io/pendingBardAccessConfirmation",
+  async (payload, {dispatch}) => {
+    // change protocol of url
+    const websocketURL = new URL(payload.requestReference);
+    websocketURL.protocol = SERVER_WEBSOCKET_PROTOCOL;
+
+    socket = new Socket(websocketURL.toString(), {
+      timeout: 5000,
+      maxAttempts: 0,
+      onmessage: async (evt: MessageEvent<string>) => {
+        const message = JSON.parse(evt.data);
+        if (message === "SESSION_ACCEPTED") {
+          dispatch(permittedBoardAccess(payload.board));
+        } else if (message === "SESSION_REJECTED") {
+          dispatch(rejectedBoardAccess());
+        }
+      },
+    });
+  }
+);

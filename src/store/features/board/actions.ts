@@ -2,7 +2,7 @@ import {createAction} from "@reduxjs/toolkit";
 import {Board, BoardActionType} from "./types";
 
 export const leaveBoard = createAction("scrumlr.io/leaveBoard");
-export const joinBoard = createAction<{boardId: string; passphrase?: string}>("scrumlr.io/joinBoard");
+// export const joinBoard = createAction<{boardId: string; passphrase?: string}>("scrumlr.io/joinBoard");
 export const initializeBoard = createAction<BoardActionType>("scrumlr.io/initializeBoard");
 // export const editBoard = createAction<EditBoardRequest>("scrumlr.io/editBoard");
 export const updatedBoard = createAction<Board>("scrumlr.io/updatedBoard");
@@ -10,7 +10,7 @@ export const updatedBoardTimer = createAction<Board>("scrumlr.io/updatedBoardTim
 // export const deleteBoard = createAction("scrumlr.io/deleteBoard");
 // export const permittedBoardAccess = createAction<string>("scrumlr.io/permittedBoardAccess");
 export const rejectedBoardAccess = createAction("scrumlr.io/rejectedBoardAccess");
-export const pendingBoardAccessConfirmation = createAction<{board: string; requestReference: string}>("scrumlr.io/pendingBoardAccessConfirmation");
+// export const pendingBoardAccessConfirmation = createAction<{board: string; requestReference: string}>("scrumlr.io/pendingBoardAccessConfirmation");
 export const passphraseChallengeRequired = createAction("scrumlr.io/passphraseChallengeRequired");
 export const incorrectPassphrase = createAction("scrumlr.io/incorrectPassphrase");
 export const tooManyJoinRequests = createAction("scrumlr.io/tooManyJoinRequests");
