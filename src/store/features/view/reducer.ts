@@ -4,19 +4,10 @@ import {createReducer} from "@reduxjs/toolkit";
 import store from "store";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
-import {
-  disableHotkeyNotifications,
-  enableHotkeyNotifications,
-  setHotkeyState,
-  setLanguage,
-  setModerating,
-  setRoute,
-  setServerInfo,
-  setShowBoardReactions,
-  setTheme,
-} from "./actions";
+import {disableHotkeyNotifications, enableHotkeyNotifications, setHotkeyState, setLanguage, setModerating, setServerInfo, setShowBoardReactions, setTheme} from "./actions";
 import {updatedParticipant} from "../participants";
 import {onNoteBlur, onNoteFocus} from "../notes";
+import {setRoute} from "../requests/thunks";
 
 const initialState: ViewState = {
   moderating: false,
@@ -51,7 +42,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
       state.serverTimeOffset = new Date().getTime() - action.payload.serverTime;
       state.feedbackEnabled = action.payload.feedbackEnabled;
     })
-    .addCase(setRoute, (state, action) => {
+    .addCase(setRoute.fulfilled, (state, action) => {
       state.route = action.payload;
     })
     .addCase(updatedParticipant, (state, action) => {
