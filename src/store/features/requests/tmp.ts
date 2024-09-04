@@ -1,10 +1,14 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
+import i18n from "i18next";
 import {API} from "../../../api";
 import {permittedBoardAccess} from "../board/thunks";
 import {bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
 import {ApplicationState} from "../../../types";
 import {SERVER_WEBSOCKET_PROTOCOL} from "../../../config";
+import {Toast} from "../../../utils/Toast";
+import store from "../../index";
+import {Actions} from "../../action";
 
 let socket: Socket | null = null;
 
@@ -68,3 +72,15 @@ export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: str
     });
   }
 );
+
+export const acceptJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("scrumlr.io/acceptJoinRequests", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+
+  await Promise.all(payload.map((userId) => API.acceptJoinRequest(boardId, userId)));
+});
+
+export const rejectJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("scrumlr.io/rejectJoinRequests", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+
+  await Promise.all(payload.map((userId) => API.rejectJoinRequest(boardId, userId)));
+});
