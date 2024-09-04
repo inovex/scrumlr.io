@@ -39,7 +39,13 @@ export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: s
   });
 });
 
-// TODO setRoute, if that does anything
+// don't know why this is needed tbh, but I'm just gonna keep it
+export const setRoute = createAsyncThunk<void, string>("scrumlr.io/setRoute", async () => {
+  if (socket) {
+    socket.close();
+    socket = null;
+  }
+});
 
 export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: string; requestReference: string}, {state: ApplicationState}>(
   "scrumlr.io/pendingBardAccessConfirmation",
