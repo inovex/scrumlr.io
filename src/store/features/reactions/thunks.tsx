@@ -1,16 +1,25 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "../../../types";
-import {Action, ReduxAction} from "../../action";
 import {API} from "../../../api";
+import {ReactionType} from "./types";
 
-export const passReactionMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === Action.AddReaction) {
-    API.addReaction(action.context.board!, action.noteId, action.reactionType);
+export const addReaction = createAsyncThunk<void, {noteId: string; reactionType: ReactionType}, {state: ApplicationState}>(
+  "scrumlr.io/addReaction",
+  async (payload, {getState}) => {
+    const boardId = getState().board.data!.id;
+    await API.addReaction(boardId, payload.noteId, payload.reactionType);
   }
-  if (action.type === Action.DeleteReaction) {
-    API.deleteReaction(action.context.board!, action.reactionId);
+);
+
+export const updateReaction = createAsyncThunk<void, {reactionId: string; reactionType: ReactionType}, {state: ApplicationState}>(
+  "scrumlr.io/updateReaction",
+  async (payload, {getState}) => {
+    const boardId = getState().board.data!.id;
+    await API.updateReaction(boardId, payload.reactionId, payload.reactionType);
   }
-  if (action.type === Action.UpdateReaction) {
-    API.updateReaction(action.context.board!, action.reactionId, action.reactionType);
-  }
-};
+);
+
+export const deleteReaction = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/deleteReaction", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+  await API.deleteReaction(boardId, payload);
+});
