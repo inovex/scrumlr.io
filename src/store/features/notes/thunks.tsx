@@ -1,60 +1,33 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
-import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
-import {Toast} from "../../../utils/Toast";
-import i18n from "../../../i18n";
-import store from "../../index";
+import {EditNote} from "./types";
 
-export const passNoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === Action.AddNote) {
-    API.addNote(action.context.board!, action.columnId, action.text).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.addNote"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.addNote(action.columnId, action.text)),
-      });
-    });
-  }
+export const addNote = createAsyncThunk<void, {columnId: string; text: string}, {state: ApplicationState}>("scrumlr.io/addNote", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+  await API.addNote(boardId, payload.columnId, payload.text);
+});
 
-  if (action.type === Action.DeleteNote) {
-    const sharedNoteId = stateAPI.getState().board.data?.sharedNote;
-    const currentNoteId = action.noteId;
-    const {moderating} = stateAPI.getState().view;
+export const editNote = createAsyncThunk<void, {noteId: string; request: EditNote}, {state: ApplicationState}>("scrumlr.io/editNote", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+  await API.editNote(boardId, payload.noteId, payload.request);
+});
 
-    if (sharedNoteId === currentNoteId && !moderating) {
-      Toast.error({title: i18n.t("Error.deleteNoteWhenShared")});
-    } else {
-      API.deleteNote(action.context.board!, action.noteId, action.deleteStack).catch(() => {
-        Toast.error({
-          title: i18n.t("Error.deleteNote"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.deleteNote(action.noteId)),
-        });
-      });
-    }
-  }
+export const unstackNote = createAsyncThunk<void, {noteId: string; request: EditNote}, {state: ApplicationState}>("scrumlr.io/unstackNote", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+  const note = getState().notes.find((n) => n.id === payload.noteId)!;
+  const parent = getState().notes.find((n) => n.id === note.position.stack)!;
 
-  if (action.type === Action.EditNote) {
-    API.editNote(action.context.board!, action.note, action.request).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.editNote"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.editNote(action.note, action.request)),
-      });
-    });
-  }
+  await API.editNote(boardId, payload.noteId, {position: {column: note.position.column, stack: null, rank: Math.max(parent.position.rank - 1, 0)}});
+});
 
-  if (action.type === Action.UnstackNote) {
-    const note = stateAPI.getState().notes.find((n) => n.id === action.note)!;
-    const parent = stateAPI.getState().notes.find((n) => n.id === note.position.stack)!;
+export const deleteNote = createAsyncThunk<void, {noteId: string; deleteStack: boolean}, {state: ApplicationState}>("scrumlr.io/deleteNote", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+  const {moderating} = getState().view;
+  const sharedNoteId = getState().board.data?.sharedNote;
 
-    API.editNote(action.context.board!, action.note, {position: {column: note.position.column, stack: null, rank: Math.max(parent.position.rank - 1, 0)}}).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.unstackNote"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.unstackNote(action.note)),
-      });
-    });
-  }
-};
+  // should that logic really be here?
+  if (sharedNoteId === payload.noteId && !moderating) {
+    // error
+  } else await API.deleteNote(boardId, payload.noteId, payload.deleteStack);
+});
