@@ -2,7 +2,8 @@ import {createReducer} from "@reduxjs/toolkit";
 import store from "store";
 import {Participant, ParticipantsState} from "./types";
 import {initializeBoard} from "../board";
-import {clearFocusInitiator, createdParticipant, editSelf, setFocusInitiator, setParticipants, updatedParticipant} from "./actions";
+import {clearFocusInitiator, createdParticipant, setFocusInitiator, setParticipants, updatedParticipant} from "./actions";
+import {editSelf} from "./thunks";
 
 const initialState: ParticipantsState = {};
 
@@ -31,7 +32,7 @@ export const participantsReducer = createReducer(initialState, (builder) =>
         state.others = state.others?.map((p) => (p.user.id === action.payload.user.id ? action.payload : p));
       }
     })
-    .addCase(editSelf, (state, action) => {
+    .addCase(editSelf.fulfilled, (state, action) => {
       if (state.self?.user) {
         state.self.user = action.payload;
       }

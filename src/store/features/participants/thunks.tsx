@@ -1,78 +1,46 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
-import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
-import {Toast} from "../../../utils/Toast";
-import i18n from "../../../i18n";
-import store from "../../index";
+import {Auth} from "../auth";
 
-export const passParticipantsMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === Action.SetRaisedHandStatus) {
-    API.editParticipant(action.context.board!, action.user, {raisedHand: action.raisedHand}).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.setRaiseHand"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.setRaisedHand(action.user, action.raisedHand)),
-      });
+export const editSelf = createAsyncThunk<Auth, Auth>("scrumlr.io/editSelf", async (payload) => {
+  await API.editUser(payload);
+  return payload;
+});
+
+export const changePermission = createAsyncThunk<void, {userId: string; moderator: boolean}, {state: ApplicationState}>(
+  "scrumlr.io/changePermission",
+  async (payload, {getState}) => {
+    const boardId = getState().board.data!.id;
+    await API.editParticipant(boardId, payload.userId, {
+      role: payload.moderator ? "MODERATOR" : "PARTICIPANT",
     });
   }
+);
 
-  if (action.type === Action.SetUserReadyStatus) {
-    API.editParticipant(action.context.board!, action.user, {ready: action.ready}).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.setUserReady"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.setUserReadyStatus(action.user, action.ready)),
-      });
+export const setRaisedHandStatus = createAsyncThunk<void, {userId: string; raisedHand: boolean}, {state: ApplicationState}>(
+  "scrumlr.io/setRaisedHandStatus",
+  async (payload, {getState}) => {
+    const boardId = getState().board.data!.id;
+    await API.editParticipant(boardId, payload.userId, {
+      raisedHand: payload.raisedHand,
     });
   }
+);
 
-  if (action.type === Action.SetShowHiddenColumns) {
-    API.editParticipant(action.context.board!, action.context.user!, {showHiddenColumns: action.showHiddenColumns}).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.setShowHiddenColumns"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.setShowHiddenColumns(action.showHiddenColumns)),
-      });
+export const setShowHiddenColumns = createAsyncThunk<void, {userId: string; showHiddenColumns: boolean}, {state: ApplicationState}>(
+  "scrumlr.io/setShowHiddenColumns",
+  async (payload, {getState}) => {
+    const boardId = getState().board.data!.id;
+    await API.editParticipant(boardId, payload.userId, {
+      showHiddenColumns: payload.showHiddenColumns,
     });
   }
+);
 
-  if (action.type === Action.SetUserBanned) {
-    API.editParticipant(action.context.board!, action.user.id, {
-      banned: action.banned,
-    }).then(
-      () => {
-        Toast.info({title: i18n.t(action.banned ? "Toast.bannedParticipant" : "Toast.unbannedParticipant", {user: action.user.name})});
-      },
-      () => {
-        Toast.error({
-          title: i18n.t("Error.setUserBanned"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.setUserBanned(action.user, action.banned)),
-        });
-      }
-    );
-  }
-
-  if (action.type === Action.ChangePermission) {
-    API.editParticipant(action.context.board!, action.userId, {
-      role: action.moderator ? "MODERATOR" : "PARTICIPANT",
-    }).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.changePermission"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.changePermission(action.userId, action.moderator)),
-      });
-    });
-  }
-
-  if (action.type === Action.EditSelf) {
-    API.editUser(action.user).catch(() => {
-      Toast.error({
-        title: i18n.t("Error.editSelf"),
-        buttons: [i18n.t("Error.retry")],
-        firstButtonOnClick: () => store.dispatch(Actions.editSelf(action.user)),
-      });
-    });
-  }
-};
+export const setUserBanned = createAsyncThunk<void, {userId: string; banned: boolean}, {state: ApplicationState}>("scrumlr.io/setUserBanned", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+  await API.editParticipant(boardId, payload.userId, {
+    banned: payload.banned,
+  });
+});
