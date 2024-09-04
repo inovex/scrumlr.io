@@ -1,4 +1,4 @@
-import {EditColumnRequest} from "store/features/columns/types";
+import {ColumnWithoutId} from "store/features/columns/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const ColumnAPI = {
@@ -14,7 +14,7 @@ export const ColumnAPI = {
    *
    * @returns a {status, description} object
    */
-  editColumn: async (boardId: string, columnId: string, column: EditColumnRequest) => {
+  editColumn: async (boardId: string, columnId: string, column: ColumnWithoutId) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/columns/${columnId}`, {
         method: "PUT",
