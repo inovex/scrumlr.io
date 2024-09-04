@@ -4,10 +4,11 @@ import {createReducer} from "@reduxjs/toolkit";
 import store from "store";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
-import {disableHotkeyNotifications, enableHotkeyNotifications, setHotkeyState, setLanguage, setModerating, setServerInfo, setShowBoardReactions, setTheme} from "./actions";
+import {setHotkeyState, setLanguage, setModerating, setServerInfo} from "./actions";
 import {updatedParticipant} from "../participants";
 import {onNoteBlur, onNoteFocus} from "../notes";
 import {setRoute} from "../requests/thunks";
+import {disableHotkeyNotifications, enableHotkeyNotifications, setShowBoardReactions, setTheme} from "./thunks";
 
 const initialState: ViewState = {
   moderating: false,
@@ -33,7 +34,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
     .addCase(setLanguage, (state, action) => {
       state.language = action.payload;
     })
-    .addCase(setTheme, (state, action) => {
+    .addCase(setTheme.fulfilled, (state, action) => {
       state.theme = action.payload;
     })
     .addCase(setServerInfo, (state, action) => {
@@ -59,13 +60,13 @@ export const viewReducer = createReducer(initialState, (builder) =>
     .addCase(onNoteBlur, (state) => {
       state.noteFocused = false;
     })
-    .addCase(enableHotkeyNotifications, (state) => {
+    .addCase(enableHotkeyNotifications.fulfilled, (state) => {
       state.hotkeyNotificationsEnabled = true;
     })
-    .addCase(disableHotkeyNotifications, (state) => {
+    .addCase(disableHotkeyNotifications.fulfilled, (state) => {
       state.hotkeyNotificationsEnabled = false;
     })
-    .addCase(setShowBoardReactions, (state, action) => {
+    .addCase(setShowBoardReactions.fulfilled, (state, action) => {
       state.showBoardReactions = action.payload;
     })
 );

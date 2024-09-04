@@ -1,13 +1,9 @@
-import {createAsyncThunk, Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
-import {ApplicationState} from "types";
-import {Action, Actions, ReduxAction} from "store/action";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
-import i18n from "i18n";
-import {Toast} from "utils/Toast";
 import {saveToStorage} from "utils/storage";
 import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
-import store from "../../index";
 import {setServerInfo} from "./actions";
+import {Theme} from "./types";
 
 export const initApplication = createAsyncThunk("scrumlr.io/initApplication", async (_payload, {dispatch}) => {
   API.getServerInfo().then((r) => {
@@ -22,45 +18,22 @@ export const initApplication = createAsyncThunk("scrumlr.io/initApplication", as
   });
 });
 
-export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === Action.InitApplication) {
-    API.getServerInfo()
-      .then((r) => {
-        dispatch(Actions.setServerInfo(r.anonymousLoginDisabled, r.authProvider || [], new Date(r.serverTime).getTime(), r.feedbackEnabled));
-      })
-      .catch(() => {
-        i18n.on("loaded", () => {
-          Toast.error({
-            title: i18n.t("Error.initApplication"),
-            buttons: [i18n.t("Error.retry")],
-            firstButtonOnClick: () => store.dispatch(Actions.initApplication()),
-            autoClose: false,
-          });
-        });
-      });
-  }
+export const setTheme = createAsyncThunk<Theme, Theme>("scrumlr.io/setTheme", async (payload) => {
+  saveToStorage(THEME_STORAGE_KEY, payload);
+  return payload;
+});
 
-  if (action.type === Action.SetTheme) {
-    if (typeof window !== undefined) {
-      saveToStorage(THEME_STORAGE_KEY, action.theme);
-    }
-  }
+export const enableHotkeyNotifications = createAsyncThunk<boolean>("scrumlr.io/enableHotkeyNotifications", async () => {
+  saveToStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, JSON.stringify(true));
+  return true;
+});
 
-  if (action.type === Action.EnableHotkeyNotifications) {
-    if (typeof window !== undefined) {
-      saveToStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, JSON.stringify(true));
-    }
-  }
+export const disableHotkeyNotifications = createAsyncThunk<boolean>("scrumlr.io/disableHotkeyNotifications", async () => {
+  saveToStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, JSON.stringify(false));
+  return false;
+});
 
-  if (action.type === Action.DisableHotkeyNotifications) {
-    if (typeof window !== undefined) {
-      saveToStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, JSON.stringify(false));
-    }
-  }
-
-  if (action.type === Action.SetShowBoardReactions) {
-    if (typeof window !== undefined) {
-      saveToStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY, JSON.stringify(action.show));
-    }
-  }
-};
+export const setShowBoardReactions = createAsyncThunk<boolean, boolean>("scrumlr.io/setShowBoardReactions", async (payload) => {
+  saveToStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY, JSON.stringify(payload));
+  return payload;
+});
