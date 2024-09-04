@@ -1,4 +1,4 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
+import {createAsyncThunk, Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
 import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
@@ -7,6 +7,20 @@ import {Toast} from "utils/Toast";
 import {saveToStorage} from "utils/storage";
 import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
 import store from "../../index";
+import {setServerInfo} from "./actions";
+
+export const initApplication = createAsyncThunk("scrumlr.io/initApplication", async (_payload, {dispatch}) => {
+  API.getServerInfo().then((r) => {
+    dispatch(
+      setServerInfo({
+        anonymousLoginDisabled: r.anonymousLoginDisabled,
+        enabledAuthProvider: r.authProvider || [],
+        serverTime: new Date(r.serverTime).getTime(),
+        feedbackEnabled: r.feedbackEnabled,
+      })
+    );
+  });
+});
 
 export const passViewMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
   if (action.type === Action.InitApplication) {

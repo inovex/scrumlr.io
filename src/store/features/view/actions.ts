@@ -1,7 +1,7 @@
 import {createAction} from "@reduxjs/toolkit";
 import {ServerInfo, Theme} from "./types";
 
-export const initApplication = createAction("scrumlr.io/initApplication");
+// export const initApplication = createAction("scrumlr.io/initApplication");
 export const setModerating = createAction<boolean>("scrumlr.io/setModerating");
 export const setLanguage = createAction<string>("scrumlr.io/setLanguage");
 export const setTheme = createAction<Theme>("scrumlr.io/setTheme");
