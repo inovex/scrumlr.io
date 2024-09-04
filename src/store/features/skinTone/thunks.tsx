@@ -1,13 +1,9 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
-import {ApplicationState} from "types";
-import {Action, ReduxAction} from "store/action";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import {SKIN_TONE_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
+import {SkinToneName} from "./types";
 
-export const passSkinToneMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === Action.SetSkinTone) {
-    if (typeof window !== undefined) {
-      saveToStorage(SKIN_TONE_STORAGE_KEY, action.skinToneName);
-    }
-  }
-};
+export const setSkinTone = createAsyncThunk<SkinToneName, SkinToneName>("scrumlr.io/setSkinTone", async (payload) => {
+  saveToStorage(SKIN_TONE_STORAGE_KEY, payload);
+  return payload;
+});

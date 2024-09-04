@@ -2,7 +2,7 @@ import {SKIN_TONE_STORAGE_KEY} from "constants/storage";
 import {getFromStorage} from "utils/storage";
 import {createReducer} from "@reduxjs/toolkit";
 import {SkinToneName, skinTones, SkinToneState} from "./types";
-import {setSkinTone} from "./actions";
+import {setSkinTone} from "./thunks";
 
 // TODO maybe persist this in the backend in the future
 const skinToneName: SkinToneName = (getFromStorage(SKIN_TONE_STORAGE_KEY) as SkinToneName) ?? "default";
@@ -12,7 +12,7 @@ const initialState: SkinToneState = {
 };
 
 export const skinToneReducer = createReducer(initialState, (builder) =>
-  builder.addCase(setSkinTone, (state, action) => {
+  builder.addCase(setSkinTone.fulfilled, (state, action) => {
     state.name = action.payload;
     state.component = skinTones[action.payload];
   })
