@@ -1,55 +1,18 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
 import Socket from "sockette";
-import {ApplicationState} from "types";
-import store from "store/index";
-import {Action, Actions, ReduxAction} from "store/action";
-import {API} from "api";
-import i18n from "i18next";
-import {Toast} from "../../../utils/Toast";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import {API} from "../../../api";
+import {permittedBoardAccess} from "../board/thunks";
+import {bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
+import {ApplicationState} from "../../../types";
 import {SERVER_WEBSOCKET_PROTOCOL} from "../../../config";
 
-let socket: Socket | undefined;
+let socket: Socket | null = null;
 
-export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === Action.JoinBoard) {
-    API.joinBoard(action.boardId, action.passphrase)
-      .then((r) => {
-        if (r.status === "ACCEPTED") {
-          store.dispatch(Actions.permittedBoardAccess(action.boardId));
-        } else if (r.status === "REJECTED") {
-          store.dispatch(Actions.rejectedBoardAccess());
-        } else if (r.status === "PASSPHRASE_REQUIRED") {
-          store.dispatch(Actions.requirePassphraseChallenge());
-        } else if (r.status === "WRONG_PASSPHRASE") {
-          store.dispatch(Actions.incorrectPassphrase());
-        } else if (r.status === "PENDING") {
-          store.dispatch(Actions.pendingBoardAccessConfirmation(action.boardId, r.joinRequestReference!));
-        } else if (r.status === "TOO_MANY_JOIN_REQUESTS") {
-          store.dispatch(Actions.tooManyJoinRequests());
-        } else if (r.status === "BANNED") {
-          store.dispatch(Actions.bannedFromBoard());
-        }
-      })
-      .catch(() => {
-        Toast.error({
-          title: i18n.t("Error.joinBoard"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.joinBoard(action.boardId, action.passphrase)),
-          autoClose: false,
-        });
-      });
-  }
-
-  if (action.type === Action.SetRoute) {
-    if (socket) {
-      socket.close();
-      socket = undefined;
-    }
-  }
-
-  if (action.type === Action.PendingBoardAccessConfirmation) {
+export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: string; requestReference: string}, {state: ApplicationState}>(
+  "scrumlr.io/pendingBardAccessConfirmation",
+  async (payload, {dispatch}) => {
     // change protocol of url
-    const websocketURL = new URL(action.requestReference);
+    const websocketURL = new URL(payload.requestReference);
     websocketURL.protocol = SERVER_WEBSOCKET_PROTOCOL;
 
     socket = new Socket(websocketURL.toString(), {
@@ -58,37 +21,62 @@ export const passRequestMiddleware = (stateAPI: MiddlewareAPI<Dispatch, Applicat
       onmessage: async (evt: MessageEvent<string>) => {
         const message = JSON.parse(evt.data);
         if (message === "SESSION_ACCEPTED") {
-          store.dispatch(Actions.permittedBoardAccess(action.board));
+          dispatch(permittedBoardAccess(payload.board));
         } else if (message === "SESSION_REJECTED") {
-          store.dispatch(Actions.rejectedBoardAccess());
+          dispatch(rejectedBoardAccess());
         }
       },
     });
   }
+);
 
-  if (action.type === Action.AcceptJoinRequests) {
-    action.userIds.forEach((userId) => {
-      API.acceptJoinRequest(action.context.board!, userId).catch(() => {
-        Toast.error({
-          title: i18n.t("Error.acceptJoinRequests"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.acceptJoinRequests(action.userIds)),
-          autoClose: false,
-        });
-      });
-    });
-  }
+// was defined in board actions before
+export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: string}, {state: ApplicationState}>("scrumlr.io/joinBoard", async (payload, {dispatch}) => {
+  API.joinBoard(payload.boardId, payload.passphrase).then((r) => {
+    switch (r.status) {
+      case "ACCEPTED":
+        dispatch(permittedBoardAccess(payload.boardId));
+        break;
+      case "REJECTED":
+        dispatch(rejectedBoardAccess());
+        break;
+      case "PASSPHRASE_REQUIRED":
+        dispatch(passphraseChallengeRequired());
+        break;
+      case "WRONG_PASSPHRASE":
+        dispatch(incorrectPassphrase());
+        break;
+      case "PENDING":
+        dispatch(pendingBoardAccessConfirmation({board: payload.boardId, requestReference: r.joinRequestReference!}));
+        break;
+      case "TOO_MANY_JOIN_REQUESTS":
+        dispatch(tooManyJoinRequests());
+        break;
+      case "BANNED":
+        dispatch(bannedFromBoard());
+        break;
+      default:
+        break;
+    }
+  });
+});
 
-  if (action.type === Action.RejectJoinRequests) {
-    action.userIds.forEach((userId) => {
-      API.rejectJoinRequest(action.context.board!, userId).catch(() => {
-        Toast.error({
-          title: i18n.t("Error.rejectJoinRequests"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.rejectJoinRequests(action.userIds)),
-          autoClose: false,
-        });
-      });
-    });
+// don't know why this is needed tbh, but I'm just gonna keep it
+export const setRoute = createAsyncThunk<void, string>("scrumlr.io/setRoute", async () => {
+  if (socket) {
+    socket.close();
+    socket = null;
   }
-};
+});
+
+export const acceptJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("scrumlr.io/acceptJoinRequests", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+
+  await Promise.all(payload.map((userId) => API.acceptJoinRequest(boardId, userId)));
+});
+
+export const rejectJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("scrumlr.io/rejectJoinRequests", async (payload, {getState}) => {
+  const boardId = getState().board.data!.id;
+
+  await Promise.all(payload.map((userId) => API.rejectJoinRequest(boardId, userId)));
+});
