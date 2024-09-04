@@ -1,16 +1,34 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import i18n from "i18next";
 import {API} from "../../../api";
 import {permittedBoardAccess} from "../board/thunks";
 import {bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
 import {ApplicationState} from "../../../types";
 import {SERVER_WEBSOCKET_PROTOCOL} from "../../../config";
-import {Toast} from "../../../utils/Toast";
-import store from "../../index";
-import {Actions} from "../../action";
 
 let socket: Socket | null = null;
+
+export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: string; requestReference: string}, {state: ApplicationState}>(
+  "scrumlr.io/pendingBardAccessConfirmation",
+  async (payload, {dispatch}) => {
+    // change protocol of url
+    const websocketURL = new URL(payload.requestReference);
+    websocketURL.protocol = SERVER_WEBSOCKET_PROTOCOL;
+
+    socket = new Socket(websocketURL.toString(), {
+      timeout: 5000,
+      maxAttempts: 0,
+      onmessage: async (evt: MessageEvent<string>) => {
+        const message = JSON.parse(evt.data);
+        if (message === "SESSION_ACCEPTED") {
+          dispatch(permittedBoardAccess(payload.board));
+        } else if (message === "SESSION_REJECTED") {
+          dispatch(rejectedBoardAccess());
+        }
+      },
+    });
+  }
+);
 
 // was defined in board actions before
 export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: string}, {state: ApplicationState}>("scrumlr.io/joinBoard", async (payload, {dispatch}) => {
@@ -50,28 +68,6 @@ export const setRoute = createAsyncThunk<void, string>("scrumlr.io/setRoute", as
     socket = null;
   }
 });
-
-export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: string; requestReference: string}, {state: ApplicationState}>(
-  "scrumlr.io/pendingBardAccessConfirmation",
-  async (payload, {dispatch}) => {
-    // change protocol of url
-    const websocketURL = new URL(payload.requestReference);
-    websocketURL.protocol = SERVER_WEBSOCKET_PROTOCOL;
-
-    socket = new Socket(websocketURL.toString(), {
-      timeout: 5000,
-      maxAttempts: 0,
-      onmessage: async (evt: MessageEvent<string>) => {
-        const message = JSON.parse(evt.data);
-        if (message === "SESSION_ACCEPTED") {
-          dispatch(permittedBoardAccess(payload.board));
-        } else if (message === "SESSION_REJECTED") {
-          dispatch(rejectedBoardAccess());
-        }
-      },
-    });
-  }
-);
 
 export const acceptJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("scrumlr.io/acceptJoinRequests", async (payload, {getState}) => {
   const boardId = getState().board.data!.id;
