@@ -2,7 +2,7 @@ import {createAction} from "@reduxjs/toolkit";
 import {Board, BoardActionType} from "./types";
 
 export const leaveBoard = createAction("scrumlr.io/leaveBoard");
-export const joinBoard = createAction("scrumlr.io/joinBoard");
+export const joinBoard = createAction<{boardId: string; passphrase?: string}>("scrumlr.io/joinBoard");
 export const initializeBoard = createAction<BoardActionType>("scrumlr.io/initializeBoard");
 // export const editBoard = createAction<EditBoardRequest>("scrumlr.io/editBoard");
 export const updatedBoard = createAction<Board>("scrumlr.io/updatedBoard");
