@@ -13,7 +13,7 @@ export const editNote = createAsyncThunk<void, {noteId: string; request: EditNot
   await API.editNote(boardId, payload.noteId, payload.request);
 });
 
-export const unstackNote = createAsyncThunk<void, {noteId: string; request: EditNote}, {state: ApplicationState}>("scrumlr.io/unstackNote", async (payload, {getState}) => {
+export const unstackNote = createAsyncThunk<void, {noteId: string}, {state: ApplicationState}>("scrumlr.io/unstackNote", async (payload, {getState}) => {
   const boardId = getState().board.data!.id;
   const note = getState().notes.find((n) => n.id === payload.noteId)!;
   const parent = getState().notes.find((n) => n.id === note.position.stack)!;
