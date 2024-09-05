@@ -5,7 +5,7 @@ import {deletedNote, syncNotes, updatedNotes} from "./actions";
 
 const initialState: NotesState = [];
 
-export const noteReducer = createReducer(initialState, (builder) =>
+export const notesReducer = createReducer(initialState, (builder) =>
   builder
     .addCase(initializeBoard, (_state, action) => action.payload.notes)
     .addCase(updatedNotes, (_state, action) => action.payload)

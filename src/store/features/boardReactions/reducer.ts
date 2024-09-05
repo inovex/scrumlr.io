@@ -4,7 +4,7 @@ import {addedBoardReaction, removeBoardReaction} from "./actions";
 
 const initialState: BoardReactionState = [];
 
-export const boardReactionReducer = createReducer(initialState, (builder) =>
+export const boardReactionsReducer = createReducer(initialState, (builder) =>
   builder
     .addCase(addedBoardReaction, (state, action) => {
       state.push(action.payload);
