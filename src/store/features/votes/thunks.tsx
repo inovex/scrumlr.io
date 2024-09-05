@@ -1,39 +1,19 @@
-import {Dispatch, MiddlewareAPI} from "@reduxjs/toolkit";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "types";
-import {Action, Actions, ReduxAction} from "store/action";
 import {API} from "api";
-import i18n from "i18next";
-import {Toast} from "../../../utils/Toast";
-import store from "../../index";
+import {createdVote, deletedVote} from "./actions";
 
-export const passVoteMiddleware = (stateAPI: MiddlewareAPI<Dispatch, ApplicationState>, dispatch: Dispatch, action: ReduxAction) => {
-  if (action.type === Action.AddVote) {
-    API.addVote(action.context.board!, action.note)
-      .then((r) => {
-        dispatch(Actions.createdVote(r));
-      })
-      .catch(() => {
-        Toast.error({
-          title: i18n.t("Error.addVote"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.addVote(action.note)),
-          autoClose: false,
-        });
-      });
-  }
+export const addVote = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/addVote", async (payload, {dispatch, getState}) => {
+  const boardId = getState().board.data!.id;
+  API.addVote(boardId, payload).then((r) => {
+    dispatch(createdVote(r));
+  });
+});
 
-  if (action.type === Action.DeleteVote) {
-    API.deleteVote(action.context.board!, action.note)
-      .then(() => {
-        dispatch(Actions.deletedVote({voting: action.context.voting!, note: action.note}));
-      })
-      .catch(() => {
-        Toast.error({
-          title: i18n.t("Error.deleteVote"),
-          buttons: [i18n.t("Error.retry")],
-          firstButtonOnClick: () => store.dispatch(Actions.deleteVote(action.note)),
-          autoClose: false,
-        });
-      });
-  }
-};
+export const deleteVote = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/deleteVote", async (payload, {dispatch, getState}) => {
+  const boardId = getState().board.data!.id;
+  const voting = getState().votings.open!.id;
+  API.deleteVote(boardId, payload).then(() => {
+    dispatch(deletedVote({voting, note: payload}));
+  });
+});
