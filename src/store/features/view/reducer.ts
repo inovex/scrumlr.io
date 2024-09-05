@@ -7,7 +7,7 @@ import {leaveBoard} from "../board";
 import {setHotkeyState, setLanguage, setModerating, setServerInfo} from "./actions";
 import {updatedParticipant} from "../participants";
 import {onNoteBlur, onNoteFocus} from "../notes";
-import {setRoute} from "../requests/thunks";
+import {setRoute} from "../requests";
 import {disableHotkeyNotifications, enableHotkeyNotifications, setShowBoardReactions, setTheme} from "./thunks";
 
 const initialState: ViewState = {
@@ -25,7 +25,7 @@ const initialState: ViewState = {
 
 export const viewReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(leaveBoard, (state) => {
+    .addCase(leaveBoard.fulfilled, (state) => {
       state.moderating = false;
     })
     .addCase(setModerating, (state, action) => {

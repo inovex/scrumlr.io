@@ -18,9 +18,9 @@ import {EditBoardRequest} from "./types";
 
 let socket: Socket | null = null;
 
-export const leaveBoard = () => async () => {
+export const leaveBoard = createAsyncThunk("scrumlr.io/leaveBoard", async () => {
   socket?.close();
-};
+});
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
 export const permittedBoardAccess = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/permittedBoardAccess", async (boardId: string, {dispatch}) => {
