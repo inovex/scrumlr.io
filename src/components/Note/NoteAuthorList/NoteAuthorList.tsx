@@ -8,7 +8,7 @@ import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
 type NoteAuthorListProps = {
   authors: Participant[];
   showAuthors: boolean;
-  viewer: Participant;
+  viewer?: Participant;
 };
 export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const {t} = useTranslation();
@@ -21,7 +21,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const prepareAuthors = (authors: Participant[]): ParticipantExtendedInfo[] => {
     const allAuthors = authors
       .map((a) => {
-        const isSelf = a?.user.id === props.viewer.user.id; // assertion: viewer is self
+        const isSelf = a?.user.id === props.viewer?.user.id; // assertion: viewer is self
         const displayName = isSelf ? t("Note.me") : a.user.name;
         return {
           ...a,
@@ -41,7 +41,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
 
     // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
     // the other authors are excluded as we only require the stack author
-    if (!props.showAuthors && props.viewer.user.id === props.authors[0].user.id) {
+    if (!props.showAuthors && props.viewer?.user.id === props.authors[0].user.id) {
       return [allAuthors[0]]; // stack author is always first element
     }
 
@@ -62,7 +62,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const restUsersExist = restAuthors.length > 0;
   const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
 
-  const authorVisible = props.showAuthors || stackAuthor.user.id === props.viewer.user.id;
+  const authorVisible = props.showAuthors || stackAuthor.user.id === props.viewer?.user.id;
   if (!authorVisible) {
     return <NoteAuthorSkeleton />;
   }

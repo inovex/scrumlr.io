@@ -1,13 +1,12 @@
 import {FC} from "react";
-import {Actions} from "store/action";
 import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash} from "components/Icon";
 import {Color, getColorClassName, getColorForIndex} from "constants/colors";
 import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
-import {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import classNames from "classnames";
 import {useOnBlur} from "utils/hooks/useOnBlur";
+import {createColumnOptimistically, deleteColumn, editColumn, setShowHiddenColumns} from "store/features";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 
@@ -23,17 +22,17 @@ type ColumnSettingsProps = {
 
 export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit}) => {
   const {t} = useTranslation();
-  const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
-  const dispatch = useDispatch();
+  const showHiddenColumns = useAppSelector((state) => state.participants?.self!.showHiddenColumns);
+  const dispatch = useAppDispatch();
   const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
 
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
-      dispatch(Actions.setShowHiddenColumns(true));
+      dispatch(setShowHiddenColumns({showHiddenColumns: true}));
       Toast.success({title: t("Toast.hiddenColumnsVisible"), autoClose: TOAST_TIMER_SHORT});
     }
     const randomColor = getColorForIndex(Math.floor(Math.random() * 100));
-    dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
+    dispatch(createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
   return (
@@ -43,7 +42,17 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
           <button
             onClick={() => {
               onClose?.();
-              dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+              dispatch(
+                editColumn({
+                  id,
+                  column: {
+                    name,
+                    color,
+                    index,
+                    visible: !visible,
+                  },
+                })
+              );
             }}
           >
             {visible ? <Hidden /> : <Visible />}
@@ -87,7 +96,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
           <button
             onClick={() => {
               onClose?.();
-              dispatch(Actions.deleteColumn(id));
+              dispatch(deleteColumn(id));
             }}
           >
             <Trash />
@@ -99,43 +108,43 @@ export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visibl
             aria-label="Backlog Blue"
             title="Backlog Blue"
             className={classNames(getColorClassName("backlog-blue"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "backlog-blue", index, visible}))}
+            onClick={() => dispatch(editColumn({id, column: {name, color: "backlog-blue", index, visible}}))}
           />
           <button
             aria-label="Planning Pink"
             title="Planning Pink"
             className={classNames(getColorClassName("planning-pink"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "planning-pink", index, visible}))}
+            onClick={() => dispatch(editColumn({id, column: {name, color: "planning-pink", index, visible}}))}
           />
           <button
             aria-label="Poker Purple"
             title="Poker Purple"
             className={classNames(getColorClassName("poker-purple"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "poker-purple", index, visible}))}
+            onClick={() => dispatch(editColumn({id, column: {name, color: "poker-purple", index, visible}}))}
           />
           <button
             aria-label="Value Violet"
             title="Value Violet"
             className={classNames(getColorClassName("value-violet"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "value-violet", index, visible}))}
+            onClick={() => dispatch(editColumn({id, column: {name, color: "value-violet", index, visible}}))}
           />
           <button
             aria-label="Goal Green"
             title="Goal Green"
             className={classNames(getColorClassName("goal-green"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "goal-green", index, visible}))}
+            onClick={() => dispatch(editColumn({id, column: {name, color: "goal-green", index, visible}}))}
           />
           <button
             aria-label="Yielding Yellow"
             title="Yielding Yellow"
             className={classNames(getColorClassName("yielding-yellow"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "yielding-yellow", index, visible}))}
+            onClick={() => dispatch(editColumn({id, column: {name, color: "yielding-yellow", index, visible}}))}
           />
           <button
             aria-label="Online Orange"
             title="Online Orange"
             className={classNames(getColorClassName("online-orange"), "column__color-button")}
-            onClick={() => dispatch(Actions.editColumn(id, {name, color: "online-orange", index, visible}))}
+            onClick={() => dispatch(editColumn({id, column: {name, color: "online-orange", index, visible}}))}
           />
         </li>
       </ul>

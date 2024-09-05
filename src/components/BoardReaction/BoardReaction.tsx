@@ -18,8 +18,8 @@ export const BoardReaction = memo((props: BoardReactionProps) => {
   const [displayOffset, setDisplayOffset] = useState<number>(-100);
   const {t} = useTranslation();
   const emoji = BOARD_REACTION_EMOJI_MAP.get(props.reaction.reactionType);
-  const me = useAppSelector((state) => state.participants!.self);
-  const others = useAppSelector((state) => state.participants!.others);
+  const me = useAppSelector((state) => state.participants!.self)!;
+  const others = useAppSelector((state) => state.participants!.others) ?? [];
   const skinTone = useAppSelector((state) => state.skinTone);
   const all = [me, ...others];
   const reactionUser = all.find((p) => p.user.id === props.reaction.user)!;

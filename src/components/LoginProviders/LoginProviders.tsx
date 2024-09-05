@@ -1,8 +1,8 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
 import {Google, Microsoft} from "components/Icon";
+import {useAppSelector} from "store";
 import {Button} from "../Button";
-import {useAppSelector} from "../../store";
 import "./LoginProviders.scss";
 
 export interface LoginProvidersProps {

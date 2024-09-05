@@ -1,8 +1,8 @@
-import {Actions} from "store/action";
 import {Request as RequestModel} from "store/features/requests/types";
 import "./Requests.scss";
-import {useDispatch} from "react-redux";
 import {Participant} from "store/features/participants/types";
+import {useAppDispatch} from "store";
+import {acceptJoinRequests, rejectJoinRequests, setRaisedHandStatus} from "store/features";
 import {Request} from "./Request";
 
 export interface RequestsProps {
@@ -11,18 +11,18 @@ export interface RequestsProps {
 }
 
 export const Requests = ({requests, participantsWithRaisedHand}: RequestsProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const handleJoin = (user: string, acceptJoin?: boolean) => {
+  const handleJoin = (userId: string, acceptJoin?: boolean) => {
     if (acceptJoin) {
-      dispatch(Actions.acceptJoinRequests([user]));
+      dispatch(acceptJoinRequests([userId]));
     } else {
-      dispatch(Actions.rejectJoinRequests([user]));
+      dispatch(rejectJoinRequests([userId]));
     }
   };
 
-  const lowerHand = (user: string) => {
-    dispatch(Actions.setRaisedHand(user, false));
+  const lowerHand = (userId: string) => {
+    dispatch(setRaisedHandStatus({userId, raisedHand: false}));
   };
 
   return requests.length || participantsWithRaisedHand.length ? (

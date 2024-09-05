@@ -1,12 +1,10 @@
 import classNames from "classnames";
 import {KeyboardEvent, useEffect, useRef} from "react";
-import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
 import {Votes} from "components/Votes";
-import {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppDispatch, useAppSelector} from "store";
 import {Participant} from "store/features/participants/types";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
@@ -16,17 +14,18 @@ import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
 import "./Note.scss";
+import {shareNote} from "store/features";
 
 interface NoteProps {
   noteId: string;
-  viewer: Participant;
+  viewer?: Participant;
   setItems?: (items: string[]) => void;
   colorClassName?: string;
 }
 
 export const Note = (props: NoteProps) => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const noteRef = useRef<HTMLDivElement>(null);
 
@@ -37,14 +36,15 @@ export const Note = (props: NoteProps) => {
   const boardIsLocked = useAppSelector((state) => state.board.data!.isLocked);
   const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
-  const me = useAppSelector((state) => state.participants?.self);
+  const me = useAppSelector((state) => state.participants?.self)!;
+  const others = useAppSelector((state) => state.participants?.others) ?? [];
   const moderating = useAppSelector((state) => state.view.moderating);
-  const isModerator = props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER";
+  const isModerator = props.viewer?.role === "MODERATOR" || props.viewer?.role === "OWNER";
 
   // all authors of a note, including its children if it's a stack.
   const authors = useAppSelector((state) => {
-    const allUsers = state.participants?.others.concat(state.participants?.self);
-    const noteAuthor = allUsers?.find((p) => p.user.id === note?.author);
+    const allUsers = [me, ...others];
+    const noteAuthor = allUsers.find((p) => p.user.id === note?.author);
     const childrenNoteAuthors = state.notes
       // get all notes which are in the same stack as the main note
       .filter((n) => n.position.stack === props.noteId)
@@ -79,7 +79,7 @@ export const Note = (props: NoteProps) => {
 
   const handleClick = () => {
     if (moderating && isModerator) {
-      dispatch(Actions.shareNote(props.noteId));
+      dispatch(shareNote(props.noteId));
     }
     navigate(`note/${props.noteId}/stack`);
   };

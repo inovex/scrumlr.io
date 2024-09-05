@@ -2,10 +2,8 @@ import {animated, useSpring} from "@react-spring/web";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
 import {useLocation, useNavigate} from "react-router";
-import {Actions} from "store/action";
-import {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import _ from "underscore";
 import classNames from "classnames";
 import {Voting, Timer, RaiseHand, MarkAsDone, AddStickerReaction, GeneralSettings, PresenterMode, Close, ArrowRight, ArrowLeft, Menu} from "components/Icon";
@@ -13,6 +11,7 @@ import {hotkeyMap} from "constants/hotkeys";
 import {TooltipButton} from "components/TooltipButton/TooltipButton";
 import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
 import "./MenuBars.scss";
+import {clearFocusInitiator, setFocusInitiator, setModerating, setRaisedHandStatus, setUserReadyStatus, stopSharing} from "store/features";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -32,7 +31,7 @@ const defaultHorizontalStop = {opacity: 1, transform: "translateX(0%)", config: 
 
 export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, onNextColumn}: MenuBarsProps) => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const menuBarsMobileRef = useRef<HTMLElement>(null);
@@ -76,7 +75,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   // State & Functions
   const state = useAppSelector(
     (rootState) => ({
-      currentUser: rootState.participants!.self,
+      currentUser: rootState.participants!.self!,
       moderation: rootState.view.moderating,
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
@@ -90,11 +89,11 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   const {raisedHand} = state.currentUser;
 
   const toggleReadyState = () => {
-    dispatch(Actions.setUserReadyStatus(state.currentUser.user.id, !isReady));
+    dispatch(setUserReadyStatus({userId: state.currentUser.user.id, ready: !isReady}));
   };
 
   const toggleRaiseHand = () => {
-    dispatch(Actions.setRaisedHand(state.currentUser.user.id, !raisedHand));
+    dispatch(setRaisedHandStatus({userId: state.currentUser.user.id, raisedHand: !raisedHand}));
   };
 
   const toggleBoardReactionsMenu = () => {
@@ -103,11 +102,11 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
 
   const toggleModeration = () => {
     if (state.moderation) {
-      dispatch(Actions.stopSharing());
-      dispatch(Actions.clearFocusInitiator());
-    } else dispatch(Actions.setFocusInitiator(state.currentUser));
+      dispatch(stopSharing());
+      dispatch(clearFocusInitiator());
+    } else dispatch(setFocusInitiator(state.currentUser));
 
-    dispatch(Actions.setModerating(!state.moderation));
+    dispatch(setModerating(!state.moderation));
   };
 
   const toggleTimerMenu = () => (window.location.pathname.includes("timer") ? navigate("") : navigate("timer"));
