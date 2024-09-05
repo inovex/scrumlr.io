@@ -28,6 +28,16 @@ export const setRaisedHandStatus = createAsyncThunk<void, {userId: string; raise
   }
 );
 
+export const setUserReadyStatus = createAsyncThunk<void, {userId: string; ready: boolean}, {state: ApplicationState}>(
+  "scrumlr.io/setUserReadyStatus",
+  async (payload, {getState}) => {
+    const boardId = getState().board.data!.id;
+    await API.editParticipant(boardId, payload.userId, {
+      ready: payload.ready,
+    });
+  }
+);
+
 export const setShowHiddenColumns = createAsyncThunk<void, {showHiddenColumns: boolean}, {state: ApplicationState}>(
   "scrumlr.io/setShowHiddenColumns",
   async (payload, {getState}) => {
