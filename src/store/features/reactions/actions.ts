@@ -1,5 +1,5 @@
 import {createAction} from "@reduxjs/toolkit";
-import {Reaction, ReactionType} from "./types";
+import {Reaction} from "./types";
 
 // export const addReaction = createAction<{noteId: string; reactionType: ReactionType}>("scrumlr.io/addReaction");
 export const addedReaction = createAction<Reaction>("scrumlr.io/addedReaction");
