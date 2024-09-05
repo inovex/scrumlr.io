@@ -1,4 +1,5 @@
 import {configureStore} from "@reduxjs/toolkit";
+import {TypedUseSelectorHook, useSelector} from "react-redux";
 import {
   authReducer,
   boardReducer,
@@ -36,3 +37,4 @@ export const store = configureStore({
 });
 
 export type ApplicationState = ReturnType<typeof store.getState>;
+export const useAppSelector: TypedUseSelectorHook<ApplicationState> = useSelector;
