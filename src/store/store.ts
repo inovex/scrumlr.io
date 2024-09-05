@@ -1,5 +1,5 @@
 import {configureStore} from "@reduxjs/toolkit";
-import {TypedUseSelectorHook, useSelector} from "react-redux";
+import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {
   authReducer,
   boardReducer,
@@ -37,4 +37,7 @@ export const store = configureStore({
 });
 
 export type ApplicationState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
 export const useAppSelector: TypedUseSelectorHook<ApplicationState> = useSelector;
+export const useAppDispatch: () => AppDispatch = useDispatch;
