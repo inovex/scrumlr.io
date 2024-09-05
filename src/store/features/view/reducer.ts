@@ -1,7 +1,7 @@
 import {getFromStorage} from "utils/storage";
 import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
 import {createReducer} from "@reduxjs/toolkit";
-import store from "store";
+import {store} from "store";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
 import {setHotkeyState, setLanguage, setModerating, setServerInfo} from "./actions";
