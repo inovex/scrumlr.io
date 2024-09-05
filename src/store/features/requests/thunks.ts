@@ -1,9 +1,9 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
+import {ApplicationState} from "store";
 import {API} from "../../../api";
 import {permittedBoardAccess} from "../board/thunks";
 import {bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
-import {ApplicationState} from "../../../types";
 import {SERVER_WEBSOCKET_PROTOCOL} from "../../../config";
 
 let socket: Socket | null = null;

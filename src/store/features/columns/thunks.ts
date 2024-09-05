@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import {ColumnWithoutId} from "./types";
 
 export const editColumn = createAsyncThunk<void, {id: string; column: ColumnWithoutId}, {state: ApplicationState}>("scrumlr.io/editColumn", async (payload, {getState}) => {

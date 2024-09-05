@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ApplicationState} from "types";
 import {API} from "api";
+import {ApplicationState} from "store";
 import {Auth} from "../auth";
 
 export const editSelf = createAsyncThunk<Auth, Auth>("scrumlr.io/editSelf", async (payload) => {

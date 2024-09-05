@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ApplicationState} from "types";
 import {API} from "api";
+import {ApplicationState} from "store";
 import {ReactionType} from "../reactions";
 
 export const addBoardReaction = createAsyncThunk<void, ReactionType, {state: ApplicationState}>("scrumlr.io/addBoardReaction", async (payload, {getState}) => {

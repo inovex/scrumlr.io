@@ -2,10 +2,9 @@ import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {SERVER_WEBSOCKET_URL} from "config";
 import {ServerEvent} from "types/websocket";
-import {ApplicationState} from "types";
 import {API} from "api";
 import {Timer} from "utils/timer";
-import store from "../../index";
+import {ApplicationState} from "store";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updateColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
@@ -125,7 +124,7 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
       }
       if (message.type === "BOARD_REACTION_ADDED") {
         dispatch(addedBoardReaction(message.data));
-        setTimeout(() => store.dispatch(removeBoardReaction(message.data.id)), 5000);
+        setTimeout(() => dispatch(removeBoardReaction(message.data.id)), 5000);
       }
     },
   });

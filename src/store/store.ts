@@ -34,3 +34,5 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   devTools: process.env.NODE_ENV !== "production",
 });
+
+export type ApplicationState = ReturnType<typeof store.getState>;

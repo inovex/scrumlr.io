@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ApplicationState} from "types";
 import {API} from "api";
+import {ApplicationState} from "store";
 import {EditNote} from "./types";
 
 export const addNote = createAsyncThunk<void, {columnId: string; text: string}, {state: ApplicationState}>("scrumlr.io/addNote", async (payload, {getState}) => {

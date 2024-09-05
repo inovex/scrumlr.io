@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ApplicationState} from "types";
 import {API} from "api";
+import {ApplicationState} from "store";
 import {CreateVotingRequest} from "./types";
 
 export const createVoting = createAsyncThunk<void, CreateVotingRequest, {state: ApplicationState}>("scrumlr.io/createVoting", async (payload, {getState}) => {

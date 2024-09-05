@@ -1,5 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ApplicationState} from "../../../types";
+import {ApplicationState} from "store";
 import {API} from "../../../api";
 import {ReactionType} from "./types";
 
