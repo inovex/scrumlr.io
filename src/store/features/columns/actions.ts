@@ -9,7 +9,7 @@ export const createColumnOptimistically = createAction<Column>("scrumlr.io/creat
 // export const editColumn = createAction<{id: string; column: ColumnWithoutId}>("scrumlr.io/editColumn");
 export const editColumnOptimistically = createAction<{id: string; column: ColumnWithoutId}>("scrumlr.io/editColumnOptimistically");
 
-export const updateColumns = createAction<Column[]>("scrumlr.io/updatColumns");
+export const updateColumns = createAction<Column[]>("scrumlr.io/updateColumns");
 export const updatedColumns = createAction<Column[]>("scrumlr.io/updatedColumns");
 
 // export const deleteColumn = createAction<string>("scrumlr.io/deleteColumn");
