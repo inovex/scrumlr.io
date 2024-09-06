@@ -4,11 +4,11 @@ import {createReducer} from "@reduxjs/toolkit";
 import {store} from "store";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
-import {setHotkeyState, setLanguage, setModerating, setServerInfo} from "./actions";
+import {setHotkeyState, setLanguage, setModerating} from "./actions";
 import {updatedParticipant} from "../participants";
 import {onNoteBlur, onNoteFocus} from "../notes";
 import {setRoute} from "../requests";
-import {disableHotkeyNotifications, enableHotkeyNotifications, setShowBoardReactions, setTheme} from "./thunks";
+import {disableHotkeyNotifications, enableHotkeyNotifications, setServerInfo, setShowBoardReactions, setTheme} from "./thunks";
 
 const initialState: ViewState = {
   moderating: false,
@@ -37,7 +37,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
     .addCase(setTheme.fulfilled, (state, action) => {
       state.theme = action.payload;
     })
-    .addCase(setServerInfo, (state, action) => {
+    .addCase(setServerInfo.fulfilled, (state, action) => {
       state.anonymousLoginDisabled = action.payload.anonymousLoginDisabled;
       state.enabledAuthProvider = action.payload.enabledAuthProvider;
       state.serverTimeOffset = new Date().getTime() - action.payload.serverTime;
