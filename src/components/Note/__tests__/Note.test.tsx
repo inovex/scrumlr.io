@@ -5,7 +5,7 @@ import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
 import getTestParticipant from "utils/test/getTestParticipant";
 import * as reactRouter from "react-router";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import {BoardState} from "store/features/board/types";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
@@ -23,6 +23,7 @@ const createBoardData = (overwrite?: Partial<BoardState["data"]> & Partial<Pick<
       showNoteReactions: overwrite?.showNoteReactions ?? true,
       showNotesOfOtherUsers: overwrite?.showNotesOfOtherUsers ?? true,
       allowStacking: overwrite?.allowStacking ?? true,
+      isLocked: overwrite?.isLocked ?? false,
     },
   };
 };

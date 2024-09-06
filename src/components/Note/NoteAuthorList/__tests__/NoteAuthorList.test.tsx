@@ -1,4 +1,4 @@
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import {NoteAuthorList} from "../NoteAuthorList";
@@ -6,12 +6,12 @@ import {Participant} from "store/features/participants/types";
 import {render} from "testUtils";
 import getTestParticipant from "utils/test/getTestParticipant";
 
-const AUTHOR1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}});
-const AUTHOR2: Participant = getTestParticipant({user: {id: "test-participant-id-2", name: "test-participant-name-2"}});
-const AUTHOR3: Participant = getTestParticipant({user: {id: "test-participant-id-3", name: "test-participant-name-3"}});
-const AUTHOR4: Participant = getTestParticipant({user: {id: "test-participant-id-4", name: "test-participant-name-4"}});
-const AUTHOR5: Participant = getTestParticipant({user: {id: "test-participant-id-5", name: "test-participant-name-5"}});
-const VIEWER1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}});
+const AUTHOR1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1", isAnonymous: true}});
+const AUTHOR2: Participant = getTestParticipant({user: {id: "test-participant-id-2", name: "test-participant-name-2", isAnonymous: true}});
+const AUTHOR3: Participant = getTestParticipant({user: {id: "test-participant-id-3", name: "test-participant-name-3", isAnonymous: true}});
+const AUTHOR4: Participant = getTestParticipant({user: {id: "test-participant-id-4", name: "test-participant-name-4", isAnonymous: true}});
+const AUTHOR5: Participant = getTestParticipant({user: {id: "test-participant-id-5", name: "test-participant-name-5", isAnonymous: true}});
+const VIEWER1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1", isAnonymous: true}});
 
 const createNoteAuthorList = (authors: Participant[], showAuthors: boolean, overwrite?: Partial<ApplicationState>) => {
   return (
