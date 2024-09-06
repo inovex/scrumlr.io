@@ -7,7 +7,7 @@ const initialState: ReactionState = [];
 
 export const reactionsReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.reactions)
+    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.reactions)
     .addCase(addedReaction, (state, action) => {
       state.push(action.payload);
     })

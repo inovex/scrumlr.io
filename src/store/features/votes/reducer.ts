@@ -7,7 +7,7 @@ const initialState: VotesState = [];
 
 export const votesReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.votes)
+    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.votes)
     .addCase(createdVote, (state, action) => {
       state.push(action.payload);
     })

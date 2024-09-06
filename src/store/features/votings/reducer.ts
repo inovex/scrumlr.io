@@ -8,7 +8,7 @@ const initialState: VotingsState = {open: undefined, past: []};
 export const votingsReducer = createReducer(initialState, (builder) =>
   builder
     .addCase(initializeBoard, (_state, action) =>
-      action.payload.votings.reduce<VotingsState>(
+      action.payload.fullBoard.votings.reduce<VotingsState>(
         (acc, voting) => {
           if (voting.status === "OPEN") {
             acc.open = voting;

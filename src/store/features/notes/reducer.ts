@@ -7,7 +7,7 @@ const initialState: NotesState = [];
 
 export const notesReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.notes)
+    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.notes)
     .addCase(updatedNotes, (_state, action) => action.payload)
     .addCase(deletedNote, (state, action) => {
       const note = state.find((n) => n.id === action.payload.noteId);

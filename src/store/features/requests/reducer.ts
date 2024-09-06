@@ -7,7 +7,7 @@ const initialState: RequestsState = [];
 
 export const requestsReducer = createReducer(initialState, (builder) =>
   builder
-    .addCase(initializeBoard, (_state, action) => action.payload.requests)
+    .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.requests)
     .addCase(createJoinRequest, (state, action) => {
       state.push(action.payload);
     })
