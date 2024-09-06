@@ -9,10 +9,10 @@ import {useHotkeys} from "react-hotkeys-hook";
 import {useTranslation} from "react-i18next";
 import {useLocation, useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "store";
+import {clearFocusInitiator, setFocusInitiator, setModerating, setRaisedHandStatus, setUserReadyStatus, stopSharing} from "store/features";
 import _ from "underscore";
 import {useTimer} from "../../utils/hooks/useTimerLeft";
 import "./MenuBars.scss";
-import {clearFocusInitiator, setFocusInitiator, setModerating, setRaisedHandStatus, setUserReadyStatus, stopSharing} from "store/features";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
