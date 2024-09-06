@@ -2,9 +2,11 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {signIn, userCheckCompleted} from "store/features/auth/actions";
 import {ACCOUNT_TYPE_ANONYMOUS} from "store/features/auth/types";
 import {API} from "api";
+import {setServerInfo} from "store/features";
 
 // TODO Toasts
-export const initAuth = createAsyncThunk("scrumlr.io/setTimer", async (_payload, {dispatch}) => {
+export const initAuth = createAsyncThunk("scrumlr.io/initAuth", async (_payload, {dispatch}) => {
+  dispatch(setServerInfo());
   API.getCurrentUser()
     .then((user) => {
       if (user) {

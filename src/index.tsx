@@ -15,7 +15,7 @@ import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import Plausible from "plausible-tracker";
 import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "./config";
-import {initApplication} from "./store/features";
+import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
@@ -63,4 +63,4 @@ root.render(
     </I18nextProvider>
   </React.StrictMode>
 );
-store.dispatch(initApplication());
+store.dispatch(initAuth());
