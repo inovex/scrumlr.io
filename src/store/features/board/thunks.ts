@@ -6,7 +6,7 @@ import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState} from "store";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
-import {deletedColumn, updateColumns} from "../columns";
+import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
 import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
 import {createdParticipant, setParticipants, updatedParticipant} from "../participants";
@@ -67,7 +67,7 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
 
       if (message.type === "COLUMNS_UPDATED") {
         const columns = message.data;
-        dispatch(updateColumns(columns));
+        dispatch(updatedColumns(columns));
       }
 
       if (message.type === "COLUMN_DELETED") {
