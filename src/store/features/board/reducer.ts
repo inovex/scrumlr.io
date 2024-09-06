@@ -1,6 +1,5 @@
 import {createReducer, isAnyOf} from "@reduxjs/toolkit";
 import {BoardState} from "store/features/board/types";
-import {store} from "store";
 import {Timer} from "utils/timer";
 import {bannedFromBoard, incorrectPassphrase, initializeBoard, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests, updatedBoardTimer} from "./actions";
 import {permittedBoardAccess} from "./thunks";
@@ -13,19 +12,19 @@ export const boardReducer = createReducer(initialState, (builder) => {
     .addCase(initializeBoard, (_state, action) => ({
       status: "ready",
       data: {
-        ...action.payload.board,
-        timerStart: Timer.addOffsetToDate(action.payload.board.timerStart, store.getState().view.serverTimeOffset),
-        timerEnd: Timer.addOffsetToDate(action.payload.board.timerEnd, store.getState().view.serverTimeOffset),
+        ...action.payload.fullBoard.board,
+        timerStart: Timer.addOffsetToDate(action.payload.fullBoard.board.timerStart, action.payload.serverTimeOffset),
+        timerEnd: Timer.addOffsetToDate(action.payload.fullBoard.board.timerEnd, action.payload.serverTimeOffset),
       },
     }))
     .addCase(updatedBoardTimer, (state, action) => {
       if (state.data) {
-        if (action.payload.timerEnd) {
-          state.data.timerStart = Timer.addOffsetToDate(action.payload.timerStart, store.getState().view.serverTimeOffset);
-          state.data.timerEnd = Timer.addOffsetToDate(action.payload.timerEnd, store.getState().view.serverTimeOffset);
+        if (action.payload.board.timerEnd) {
+          state.data.timerStart = Timer.addOffsetToDate(action.payload.board.timerStart, action.payload.serverTimeOffset);
+          state.data.timerEnd = Timer.addOffsetToDate(action.payload.board.timerEnd, action.payload.serverTimeOffset);
         } else {
           state.status = "ready";
-          state.data.timerEnd = action.payload.timerEnd;
+          state.data.timerEnd = action.payload.board.timerEnd;
         }
       }
     })
