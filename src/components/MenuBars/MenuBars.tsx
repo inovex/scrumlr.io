@@ -1,15 +1,16 @@
 import {animated, useSpring} from "@react-spring/web";
+import classNames from "classnames";
+import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
+import {AddStickerReaction, ArrowLeft, ArrowRight, Close, GeneralSettings, MarkAsDone, Menu, PresenterMode, RaiseHand, Timer, Voting} from "components/Icon";
+import {TooltipButton} from "components/TooltipButton/TooltipButton";
+import {hotkeyMap} from "constants/hotkeys";
 import {useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useHotkeys} from "react-hotkeys-hook";
 import {useTranslation} from "react-i18next";
 import {useLocation, useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "store";
 import _ from "underscore";
-import classNames from "classnames";
-import {Voting, Timer, RaiseHand, MarkAsDone, AddStickerReaction, GeneralSettings, PresenterMode, Close, ArrowRight, ArrowLeft, Menu} from "components/Icon";
-import {hotkeyMap} from "constants/hotkeys";
-import {TooltipButton} from "components/TooltipButton/TooltipButton";
-import {BoardReactionMenu} from "components/BoardReactionMenu/BoardReactionMenu";
+import {useTimer} from "../../utils/hooks/useTimerLeft";
 import "./MenuBars.scss";
 import {clearFocusInitiator, setFocusInitiator, setModerating, setRaisedHandStatus, setUserReadyStatus, stopSharing} from "store/features";
 
@@ -71,7 +72,6 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   }, [location]);
 
   const {TOGGLE_TIMER_MENU, TOGGLE_VOTING_MENU, TOGGLE_SETTINGS, TOGGLE_RAISED_HAND, TOGGLE_BOARD_REACTION_MENU, TOGGLE_READY_STATE, TOGGLE_MODERATION} = hotkeyMap;
-
   // State & Functions
   const state = useAppSelector(
     (rootState) => ({
@@ -80,6 +80,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
+      usedVotes: rootState.votes.filter((v) => v.voting === rootState.votings.open?.id).length,
+      possibleVotes: rootState.votings.open?.voteLimit,
+      timerEnd: rootState.board.data?.timerEnd,
     }),
     _.isEqual
   );
@@ -187,6 +190,35 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   useHotkeys(TOGGLE_TIMER_MENU, toggleTimerMenu, hotkeyOptionsAdmin, []);
   useHotkeys(TOGGLE_VOTING_MENU, toggleVotingMenu, hotkeyOptionsAdmin, []);
 
+  /**
+   * Logic for "Mark me as Done" tooltip.
+   * https://github.com/inovex/scrumlr.io/issues/4269
+   */
+  const timerExpired = useTimer(state.timerEnd);
+  const [isReadyTooltipClass, setIsReadyTooltipClass] = useState("");
+  /**
+   * Logic for when a) a timer initially expired b) available votes are used up
+   * and the "Mark me as Done" tooltip is not open.
+   */
+  const USED_VOTES = state.usedVotes === state.possibleVotes;
+  const USER_NOT_READY = !state.currentUser.ready;
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    const handleTimeout = () => {
+      setIsReadyTooltipClass("tooltip-button--content-extended");
+      setTimeout(() => setIsReadyTooltipClass(""), 28000);
+    };
+    if ((timerExpired || USED_VOTES) && USER_NOT_READY && (state.activeTimer || state.activeVoting)) {
+      timer = setTimeout(handleTimeout, 2000);
+    }
+    if (!USED_VOTES || !state.activeTimer || !USER_NOT_READY || !state.activeVoting) {
+      setIsReadyTooltipClass("");
+    }
+
+    return () => clearTimeout(timer);
+  }, [timerExpired, USER_NOT_READY, state.timerEnd, USED_VOTES, state.activeTimer, state.activeVoting]);
+
   return (
     <>
       {/* desktop view */}
@@ -201,6 +233,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
                   onClick={toggleReadyState}
                   label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
                   icon={MarkAsDone}
+                  className={isReadyTooltipClass}
                   active={isReady}
                   hotkeyKey={TOGGLE_READY_STATE.toUpperCase()}
                 />
