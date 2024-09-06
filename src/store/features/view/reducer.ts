@@ -1,7 +1,6 @@
 import {getFromStorage} from "utils/storage";
 import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
 import {createReducer} from "@reduxjs/toolkit";
-import {store} from "store";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
 import {setHotkeyState, setLanguage, setModerating} from "./actions";
@@ -47,7 +46,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
       state.route = action.payload;
     })
     .addCase(updatedParticipant, (state, action) => {
-      if (action.payload.user.id === store.getState().auth.user?.id && action.payload.role === "PARTICIPANT" && state.moderating) {
+      if (action.payload.participant.user.id === action.payload.self.id && action.payload.participant.role === "PARTICIPANT" && state.moderating) {
         state.moderating = false;
       }
     })
