@@ -1,10 +1,10 @@
 import {useAppDispatch, useAppSelector} from "store";
+import {editBoard} from "store/features";
 import {useTranslation} from "react-i18next";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
 import "../BoardSettings/BoardSettings.scss";
-import {editBoard} from "store/features";
 
 export const ShowAuthorOption = () => {
   const {t} = useTranslation();

@@ -5,6 +5,7 @@ import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
 import {Votes} from "components/Votes";
 import {useAppDispatch, useAppSelector} from "store";
+import {shareNote} from "store/features";
 import {Participant} from "store/features/participants/types";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
@@ -14,7 +15,6 @@ import {NoteAuthorList} from "./NoteAuthorList/NoteAuthorList";
 import {NoteReactionList} from "./NoteReactionList/NoteReactionList";
 import {NoteTextContent} from "./NoteTextContent/NoteTextContent";
 import "./Note.scss";
-import {shareNote} from "store/features";
 
 interface NoteProps {
   noteId: string;

@@ -3,6 +3,7 @@ import {Participant} from "store/features/participants/types";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {addProtocol} from "utils/images";
 import {useAppDispatch, useAppSelector} from "store";
+import {editNote, onNoteBlur, onNoteFocus} from "store/features";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
 import classNames from "classnames";
@@ -13,7 +14,6 @@ import {EmojiSuggestions} from "components/EmojiSuggestions";
 import TextareaAutosize from "react-autosize-textarea";
 import i18n from "../../../i18n";
 import "./NoteDialogNoteContent.scss";
-import {editNote, onNoteBlur, onNoteFocus} from "store/features";
 
 type NoteDialogNoteContentProps = {
   noteId?: string;

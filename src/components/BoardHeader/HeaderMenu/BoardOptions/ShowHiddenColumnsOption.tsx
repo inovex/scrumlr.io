@@ -1,10 +1,10 @@
 import {useAppDispatch, useAppSelector} from "store";
+import {setShowHiddenColumns} from "store/features";
 import {useTranslation} from "react-i18next";
 import {BoardOption} from "./BoardOption";
 import {BoardOptionButton} from "./BoardOptionButton";
 import {BoardOptionToggle} from "./BoardOptionToggle";
 import "../BoardSettings/BoardSettings.scss";
-import {setShowHiddenColumns} from "store/features";
 
 export const ShowHiddenColumnsOption = () => {
   const {t} = useTranslation();

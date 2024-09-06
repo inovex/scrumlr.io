@@ -2,6 +2,7 @@ import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
+import {deleteBoard, editBoard, setShowHiddenColumns} from "store/features";
 import {LockClosed, Trash, Refresh} from "components/Icon";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
@@ -12,7 +13,6 @@ import {isEqual} from "underscore";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
-import {deleteBoard, editBoard, setShowHiddenColumns} from "store/features";
 
 export const BoardSettings = () => {
   const dispatch = useAppDispatch();

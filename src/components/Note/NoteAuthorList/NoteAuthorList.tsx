@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import {Participant, ParticipantExtendedInfo} from "store/features/participants/types";
+import {Participant, ParticipantExtendedInfo} from "store/features/";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "../../BoardUsers";
-import "./NoteAuthorList.scss";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
+import "./NoteAuthorList.scss";
 
 type NoteAuthorListProps = {
   authors: Participant[];
