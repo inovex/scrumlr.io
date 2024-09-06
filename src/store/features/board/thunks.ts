@@ -23,7 +23,9 @@ export const leaveBoard = createAsyncThunk("scrumlr.io/leaveBoard", async () => 
 });
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
-export const permittedBoardAccess = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/permittedBoardAccess", async (boardId: string, {dispatch}) => {
+export const permittedBoardAccess = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/permittedBoardAccess", async (boardId: string, {dispatch, getState}) => {
+  const {serverTimeOffset} = getState().view;
+  const self = getState().auth.user!;
   socket = new Socket(`${SERVER_WEBSOCKET_URL}/boards/${boardId}`, {
     timeout: 5000,
     maxAttempts: 0,
@@ -34,14 +36,18 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
         const {board, columns, participants, notes, reactions, votes, votings, requests} = message.data;
         dispatch(
           initializeBoard({
-            board,
-            columns,
-            notes: notes ?? [],
-            participants,
-            reactions: reactions ?? [],
-            requests: requests ?? [],
-            votes: votes ?? [],
-            votings: votings ?? [],
+            fullBoard: {
+              board,
+              columns,
+              notes: notes ?? [],
+              participants,
+              reactions: reactions ?? [],
+              requests: requests ?? [],
+              votes: votes ?? [],
+              votings: votings ?? [],
+            },
+            serverTimeOffset,
+            self,
           })
         );
       }
@@ -51,7 +57,7 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
       }
 
       if (message.type === "BOARD_TIMER_UPDATED") {
-        dispatch(updatedBoardTimer(message.data));
+        dispatch(updatedBoardTimer({board: message.data, serverTimeOffset}));
       }
 
       if (message.type === "BOARD_DELETED") {
@@ -98,10 +104,10 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
         dispatch(createdParticipant(message.data));
       }
       if (message.type === "PARTICIPANT_UPDATED") {
-        dispatch(updatedParticipant(message.data));
+        dispatch(updatedParticipant({participant: message.data, self: getState().auth.user!}));
       }
       if (message.type === "PARTICIPANTS_UPDATED") {
-        dispatch(setParticipants(message.data));
+        dispatch(setParticipants({participants: message.data, self: getState().auth.user!}));
       }
 
       if (message.type === "VOTING_CREATED") {
