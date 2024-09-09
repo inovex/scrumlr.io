@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {uniqueId} from "underscore";
 import ReactFocusLock from "react-focus-lock";
-import {Color} from "../../constants/colors";
+import {Color, getColorClassName} from "../../constants/colors";
 import {Actions} from "../../store/action";
 import {Tooltip} from "../Tooltip";
 
@@ -44,7 +44,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps)
   return (
     <ReactFocusLock autoFocus={false} className="fix-focus-lock-placement">
       <ul className="color-picker">
-        <li>
+        <li className={`${props.color.toString()}`}>
           <button
             id={primColorAnchor}
             aria-label={props.color.toString()}
@@ -54,14 +54,14 @@ export const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps)
               dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: props.visible}));
             }}
           >
-            <div className={`column__header-color-option column__header-color-option--${props.color.toString()}-selected`} />
+            <div className="column__header-color-option column__header-color-option-selected" />
           </button>
           <Tooltip anchorSelect={`#${primColorAnchor}`} content={props.color.toString()} />
         </li>
         {colorsWithoutSelectedColor.map((item) => {
           const anchor = uniqueId(`color-picker-${item.toString()}`);
           return (
-            <li>
+            <li className={getColorClassName(item)}>
               <button
                 id={anchor}
                 aria-label={formatColorName(item.toString())}
@@ -70,6 +70,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps)
                   props.onClose?.();
                   dispatch(Actions.editColumn(props.id, {name: props.name, color: item, index: props.index, visible: props.visible}));
                 }}
+                className={item.toString()}
               >
                 <div className={`column__header-color-option column__header-color-option--${item.toString()}`} />
               </button>

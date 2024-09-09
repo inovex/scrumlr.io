@@ -65,7 +65,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsPro
         closeColorPicker={() => setOpenedColorPicker(false)}
       />
     ) : (
-      <span className={`column__header-color-option column__header-color-option--${props.color}-selected`} />
+      <span className="column__header-color-option column__header-color-option-selected" />
     );
 
   const menuItems = [
