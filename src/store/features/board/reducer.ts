@@ -46,9 +46,6 @@ export const boardReducer = createReducer(initialState, (builder) => {
     .addCase(bannedFromBoard, (state) => {
       state.status = "banned";
     })
-    // TODO CreatedVoting
-    // TODO UpdatedVoting
-    // TODO DeletedNote
     .addMatcher(isAnyOf(joinBoard.pending, pendingBoardAccessConfirmation.pending), (state) => {
       state.status = "pending";
     });
