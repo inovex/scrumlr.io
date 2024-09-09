@@ -1467,10 +1467,10 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.1.tgz#16308cea045f0fc777b6ff20a9f25474dd8293d2"
   integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
 
-"@fontsource/raleway@^5.0.20":
-  version "5.0.20"
-  resolved "https://registry.yarnpkg.com/@fontsource/raleway/-/raleway-5.0.20.tgz#114b865c92eec473ca5f4268c97bc918e57dc249"
-  integrity sha512-ZgTAEnlVYUIk75RM1Xsyk932zQ29DgxVr7io0QwVfDwcr88LHop0e2BZhBBI4MxL4b5L+T91RYwm6mLl/CXnpA==
+"@fontsource/raleway@^5.0.21":
+  version "5.0.21"
+  resolved "https://registry.yarnpkg.com/@fontsource/raleway/-/raleway-5.0.21.tgz#2f9a482cf8e7b3d1425a405161f3eb94231e090f"
+  integrity sha512-RXvN0mM6DyDQMdp+6OdaUBgcjDWpWeoDqutfCALo4OTpjqmcdpy9eJ7Z0rl1NOFOoltYth/nt27o7YKveT86dw==
 
 "@humanwhocodes/config-array@^0.11.14":
   version "0.11.14"
