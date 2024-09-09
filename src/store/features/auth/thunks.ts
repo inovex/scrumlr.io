@@ -5,7 +5,7 @@ import {API} from "api";
 import {setServerInfo} from "store/features";
 
 // TODO Toasts
-export const initAuth = createAsyncThunk("scrumlr.io/initAuth", async (_payload, {dispatch}) => {
+export const initAuth = createAsyncThunk("auth/initAuth", async (_payload, {dispatch}) => {
   dispatch(setServerInfo());
   API.getCurrentUser()
     .then((user) => {
@@ -21,7 +21,7 @@ export const initAuth = createAsyncThunk("scrumlr.io/initAuth", async (_payload,
 });
 
 // use createAsyncThunk, because the action also changes state in the reducer.
-export const signOut = createAsyncThunk("scrumlr.io/signOut", async () => {
+export const signOut = createAsyncThunk("auth/signOut", async () => {
   API.signOut().then(() => {
     // eslint-disable-next-line no-restricted-globals
     location.reload();

@@ -1,8 +1,8 @@
 import {createAction} from "@reduxjs/toolkit";
 import {Reaction} from "./types";
 
-export const addedReaction = createAction<Reaction>("scrumlr.io/addedReaction");
+export const addedReaction = createAction<Reaction>("reactions/addedReaction");
 
-export const updatedReaction = createAction<Reaction>("scrumlr.io/updatedReaction");
+export const updatedReaction = createAction<Reaction>("reactions/updatedReaction");
 
-export const deletedReaction = createAction<string>("scrumlr.io/deletedReaction");
+export const deletedReaction = createAction<string>("reactions/deletedReaction");

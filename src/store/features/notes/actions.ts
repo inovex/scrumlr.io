@@ -1,10 +1,10 @@
 import {createAction} from "@reduxjs/toolkit";
 import {Note} from "./types";
 
-export const syncNotes = createAction<Note[]>("scrumlr.io/syncNotes");
-export const updatedNotes = createAction<Note[]>("scrumlr.io/updatedNotes");
+export const syncNotes = createAction<Note[]>("notes/syncNotes");
+export const updatedNotes = createAction<Note[]>("notes/updatedNotes");
 
-export const deletedNote = createAction<{noteId: string; deleteStack: boolean}>("scrumlr.io/deletedNote");
+export const deletedNote = createAction<{noteId: string; deleteStack: boolean}>("notes/deletedNote");
 
-export const onNoteFocus = createAction("scrumlr.io/onNoteFocus");
-export const onNoteBlur = createAction("scrumlr.io/onNoteBlur");
+export const onNoteFocus = createAction("notes/onNoteFocus");
+export const onNoteBlur = createAction("notes/onNoteBlur");

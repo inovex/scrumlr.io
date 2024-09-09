@@ -1,15 +1,14 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "store";
-import {API} from "../../../api";
-import {permittedBoardAccess} from "../board/thunks";
-import {bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
+import {API} from "api";
+import {permittedBoardAccess, bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
 import {SERVER_WEBSOCKET_PROTOCOL} from "../../../config";
 
 let socket: Socket | null = null;
 
 export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: string; requestReference: string}, {state: ApplicationState}>(
-  "scrumlr.io/pendingBardAccessConfirmation",
+  "requests/pendingBardAccessConfirmation",
   async (payload, {dispatch}) => {
     // change protocol of url
     const websocketURL = new URL(payload.requestReference);
@@ -31,7 +30,7 @@ export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: str
 );
 
 // was defined in board actions before
-export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: string}, {state: ApplicationState}>("scrumlr.io/joinBoard", async (payload, {dispatch}) => {
+export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: string}, {state: ApplicationState}>("requests/joinBoard", async (payload, {dispatch}) => {
   API.joinBoard(payload.boardId, payload.passphrase).then((r) => {
     switch (r.status) {
       case "ACCEPTED":
@@ -62,7 +61,7 @@ export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: s
 });
 
 // don't know why this is needed tbh, but I'm just gonna keep it
-export const setRoute = createAsyncThunk<string, string>("scrumlr.io/setRoute", async (payload) => {
+export const setRoute = createAsyncThunk<string, string>("requests/setRoute", async (payload) => {
   if (socket) {
     socket.close();
     socket = null;
@@ -70,13 +69,13 @@ export const setRoute = createAsyncThunk<string, string>("scrumlr.io/setRoute", 
   return payload;
 });
 
-export const acceptJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("scrumlr.io/acceptJoinRequests", async (payload, {getState}) => {
+export const acceptJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("requests/acceptJoinRequests", async (payload, {getState}) => {
   const boardId = getState().board.data!.id;
 
   await Promise.all(payload.map((userId) => API.acceptJoinRequest(boardId, userId)));
 });
 
-export const rejectJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("scrumlr.io/rejectJoinRequests", async (payload, {getState}) => {
+export const rejectJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("requests/rejectJoinRequests", async (payload, {getState}) => {
   const boardId = getState().board.data!.id;
 
   await Promise.all(payload.map((userId) => API.rejectJoinRequest(boardId, userId)));

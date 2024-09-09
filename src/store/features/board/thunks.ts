@@ -18,12 +18,12 @@ import {EditBoardRequest} from "./types";
 
 let socket: Socket | null = null;
 
-export const leaveBoard = createAsyncThunk("scrumlr.io/leaveBoard", async () => {
+export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   socket?.close();
 });
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
-export const permittedBoardAccess = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/permittedBoardAccess", async (boardId: string, {dispatch, getState}) => {
+export const permittedBoardAccess = createAsyncThunk<void, string, {state: ApplicationState}>("board/permittedBoardAccess", async (boardId: string, {dispatch, getState}) => {
   const {serverTimeOffset} = getState().view;
   const self = getState().auth.user!;
   socket = new Socket(`${SERVER_WEBSOCKET_URL}/boards/${boardId}`, {
@@ -136,7 +136,7 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
   });
 });
 
-export const editBoard = createAsyncThunk<void, EditBoardRequest, {state: ApplicationState}>("scrumlr.io/editBoard", async (payload, {getState}) => {
+export const editBoard = createAsyncThunk<void, EditBoardRequest, {state: ApplicationState}>("board/editBoard", async (payload, {getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
   await API.editBoard(board.id, {
@@ -155,22 +155,22 @@ export const editBoard = createAsyncThunk<void, EditBoardRequest, {state: Applic
   });
 });
 
-export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}>("scrumlr.io/setTimer", async (payload, {getState}) => {
+export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}>("board/setTimer", async (payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.setTimer(id, payload);
 });
 
-export const cancelTimer = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/cancelTimer", async (_payload, {getState}) => {
+export const cancelTimer = createAsyncThunk<void, void, {state: ApplicationState}>("board/cancelTimer", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.deleteTimer(id);
 });
 
-export const incrementTimer = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/incrementTimer", async (_payload, {getState}) => {
+export const incrementTimer = createAsyncThunk<void, void, {state: ApplicationState}>("board/incrementTimer", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.incrementTimer(id);
 });
 
-export const shareNote = createAsyncThunk<void, string, {state: ApplicationState}>("scrumlr.io/shareNote", async (payload, {getState}) => {
+export const shareNote = createAsyncThunk<void, string, {state: ApplicationState}>("board/shareNote", async (payload, {getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
   const note = getState().notes.find((n) => n.id === payload);
@@ -186,7 +186,7 @@ export const shareNote = createAsyncThunk<void, string, {state: ApplicationState
   });
 });
 
-export const stopSharing = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/shareNote", async (_payload, {getState}) => {
+export const stopSharing = createAsyncThunk<void, void, {state: ApplicationState}>("board/shareNote", async (_payload, {getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
 
@@ -198,7 +198,7 @@ export const stopSharing = createAsyncThunk<void, void, {state: ApplicationState
   });
 });
 
-export const deleteBoard = createAsyncThunk<void, void, {state: ApplicationState}>("scrumlr.io/deleteBoard", async (_payload, {getState}) => {
+export const deleteBoard = createAsyncThunk<void, void, {state: ApplicationState}>("board/deleteBoard", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   API.deleteBoard(id).then(() => {
     document.location.pathname = "/";
