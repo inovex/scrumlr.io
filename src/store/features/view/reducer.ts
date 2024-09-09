@@ -3,10 +3,9 @@ import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_
 import {createReducer} from "@reduxjs/toolkit";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
-import {setHotkeyState, setLanguage, setModerating} from "./actions";
+import {setHotkeyState, setLanguage, setModerating, setRoute} from "./actions";
 import {updatedParticipant} from "../participants";
 import {onNoteBlur, onNoteFocus} from "../notes";
-import {setRoute} from "../requests";
 import {disableHotkeyNotifications, enableHotkeyNotifications, setServerInfo, setShowBoardReactions, setTheme} from "./thunks";
 
 const initialState: ViewState = {
@@ -42,7 +41,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
       state.serverTimeOffset = new Date().getTime() - action.payload.serverTime;
       state.feedbackEnabled = action.payload.feedbackEnabled;
     })
-    .addCase(setRoute.fulfilled, (state, action) => {
+    .addCase(setRoute, (state, action) => {
       state.route = action.payload;
     })
     .addCase(updatedParticipant, (state, action) => {

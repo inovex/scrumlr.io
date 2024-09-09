@@ -19,7 +19,10 @@ import {EditBoardRequest} from "./types";
 let socket: Socket | null = null;
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
-  socket?.close();
+  if (socket) {
+    socket.close();
+    socket = null;
+  }
 });
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)

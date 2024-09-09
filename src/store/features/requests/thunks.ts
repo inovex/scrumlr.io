@@ -2,8 +2,8 @@ import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "store";
 import {API} from "api";
+import {SERVER_WEBSOCKET_PROTOCOL} from "config";
 import {permittedBoardAccess, bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
-import {SERVER_WEBSOCKET_PROTOCOL} from "../../../config";
 
 let socket: Socket | null = null;
 
@@ -35,6 +35,10 @@ export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: s
     switch (r.status) {
       case "ACCEPTED":
         dispatch(permittedBoardAccess(payload.boardId));
+        if (socket) {
+          socket.close();
+          socket = null;
+        }
         break;
       case "REJECTED":
         dispatch(rejectedBoardAccess());
@@ -58,15 +62,6 @@ export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: s
         break;
     }
   });
-});
-
-// don't know why this is needed tbh, but I'm just gonna keep it
-export const setRoute = createAsyncThunk<string, string>("requests/setRoute", async (payload) => {
-  if (socket) {
-    socket.close();
-    socket = null;
-  }
-  return payload;
 });
 
 export const acceptJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("requests/acceptJoinRequests", async (payload, {getState}) => {
