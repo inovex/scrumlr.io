@@ -1,10 +1,10 @@
-import {Participant} from "../participants/types";
-import {Request} from "../requests/types";
-import {Column} from "../columns/types";
-import {Note} from "../notes/types";
-import {Reaction} from "../reactions/types";
-import {Vote} from "../votes/types";
-import {Voting} from "../votings/types";
+import {Participant} from "../participants";
+import {Request} from "../requests";
+import {Column} from "../columns";
+import {Note} from "../notes";
+import {Reaction} from "../reactions";
+import {Vote} from "../votes";
+import {Voting} from "../votings";
 
 export enum AccessPolicy {
   "PUBLIC" = 0,
@@ -39,6 +39,8 @@ export type BoardActionType = {
   votes: Vote[];
   votings: Voting[];
 };
+
+export type BoardWithServerTimeOffset = {board: Board; serverTimeOffset: number};
 
 export type EditBoardRequest = Partial<Omit<Board, "id">> & {passphrase?: string};
 

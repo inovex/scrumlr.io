@@ -1,22 +1,34 @@
 import {createReducer, isAnyOf} from "@reduxjs/toolkit";
-import {BoardState} from "store/features/board/types";
+import {Board, BoardState} from "store/features/board/types";
 import {Timer} from "utils/timer";
-import {bannedFromBoard, incorrectPassphrase, initializeBoard, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests, updatedBoardTimer} from "./actions";
+import {
+  bannedFromBoard,
+  incorrectPassphrase,
+  initializeBoard,
+  passphraseChallengeRequired,
+  rejectedBoardAccess,
+  tooManyJoinRequests,
+  updatedBoard,
+  updatedBoardTimer,
+} from "./actions";
 import {permittedBoardAccess} from "./thunks";
 import {joinBoard, pendingBoardAccessConfirmation} from "../requests";
 
 const initialState: BoardState = {status: "unknown"};
 
+const createUpdatedBoardState = (board: Board, serverTimeOffset: number): BoardState => ({
+  status: "ready",
+  data: {
+    ...board,
+    timerStart: Timer.addOffsetToDate(board.timerStart, serverTimeOffset),
+    timerEnd: Timer.addOffsetToDate(board.timerEnd, serverTimeOffset),
+  },
+});
+
 export const boardReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(initializeBoard, (_state, action) => ({
-      status: "ready",
-      data: {
-        ...action.payload.fullBoard.board,
-        timerStart: Timer.addOffsetToDate(action.payload.fullBoard.board.timerStart, action.payload.serverTimeOffset),
-        timerEnd: Timer.addOffsetToDate(action.payload.fullBoard.board.timerEnd, action.payload.serverTimeOffset),
-      },
-    }))
+    .addCase(initializeBoard, (_state, action) => createUpdatedBoardState(action.payload.fullBoard.board, action.payload.serverTimeOffset))
+    .addCase(updatedBoard, (_state, action) => createUpdatedBoardState(action.payload.board, action.payload.serverTimeOffset))
     .addCase(updatedBoardTimer, (state, action) => {
       if (state.data) {
         if (action.payload.board.timerEnd) {

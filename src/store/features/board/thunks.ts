@@ -53,7 +53,7 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
       }
 
       if (message.type === "BOARD_UPDATED") {
-        dispatch(updatedBoard(message.data));
+        dispatch(updatedBoard({board: message.data, serverTimeOffset}));
       }
 
       if (message.type === "BOARD_TIMER_UPDATED") {

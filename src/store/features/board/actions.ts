@@ -1,13 +1,13 @@
 import {createAction} from "@reduxjs/toolkit";
-import {Board, BoardActionType} from "./types";
+import {BoardActionType, BoardWithServerTimeOffset} from "./types";
 import {Auth} from "../auth";
 
 // export const leaveBoard = createAction("scrumlr.io/leaveBoard");
 // export const joinBoard = createAction<{boardId: string; passphrase?: string}>("scrumlr.io/joinBoard");
 export const initializeBoard = createAction<{fullBoard: BoardActionType; serverTimeOffset: number; self: Auth}>("scrumlr.io/initializeBoard");
 // export const editBoard = createAction<EditBoardRequest>("scrumlr.io/editBoard");
-export const updatedBoard = createAction<Board>("scrumlr.io/updatedBoard");
-export const updatedBoardTimer = createAction<{board: Board; serverTimeOffset: number}>("scrumlr.io/updatedBoardTimer");
+export const updatedBoard = createAction<BoardWithServerTimeOffset>("scrumlr.io/updatedBoard");
+export const updatedBoardTimer = createAction<BoardWithServerTimeOffset>("scrumlr.io/updatedBoardTimer");
 // export const deleteBoard = createAction("scrumlr.io/deleteBoard");
 // export const permittedBoardAccess = createAction<string>("scrumlr.io/permittedBoardAccess");
 export const rejectedBoardAccess = createAction("scrumlr.io/rejectedBoardAccess");
