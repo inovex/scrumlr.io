@@ -1,16 +1,26 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
-import {ApplicationState} from "store";
+import {ApplicationState, retryable} from "store";
 import {CreateVotingRequest} from "./types";
 
-export const createVoting = createAsyncThunk<void, CreateVotingRequest, {state: ApplicationState}>("votings/createVoting", async (payload, {getState}) => {
+export const createVoting = createAsyncThunk<void, CreateVotingRequest, {state: ApplicationState}>("votings/createVoting", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
 
-  await API.createVoting(boardId, payload);
+  await retryable(
+    () => API.createVoting(boardId, payload),
+    dispatch,
+    () => createVoting({...payload}),
+    "createVoting"
+  );
 });
 
-export const closeVoting = createAsyncThunk<void, string, {state: ApplicationState}>("votings/closeVoting", async (payload, {getState}) => {
+export const closeVoting = createAsyncThunk<void, string, {state: ApplicationState}>("votings/closeVoting", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
 
-  await API.changeVotingStatus(boardId, payload, "CLOSED");
+  await retryable(
+    () => API.changeVotingStatus(boardId, payload, "CLOSED"),
+    dispatch,
+    () => closeVoting(payload),
+    "closeVoting"
+  );
 });
