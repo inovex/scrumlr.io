@@ -13,44 +13,51 @@
   padding-left: 0;
   margin-top: auto;
   border-radius: $rounded--full;
-}
 
-.color-picker > li > button {
-  cursor: pointer;
-  border: none;
-  background: none;
-  padding: 0;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  > li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  &:focus-within {
-    > .column__header-color-option {
-      border: 3px solid var(--accent-color--100);
+    > button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:focus-within {
+        > .column__header-color-option {
+          border: 3px solid var(--accent-color--100);
+        }
+      }
+
+      &:focus-visible {
+        border-radius: $rounded--full;
+        outline: none;
+      }
     }
   }
 
-  &:focus-visible {
-    border-radius: $rounded--full;
-    outline: none;
+  > ul > li {
+    padding: 0;
   }
-}
-
-.color-picker > li {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.color-picker > ul > li {
-  padding: 0;
 }
 
 [theme="dark"] {
   .color-picker {
     background-color: $navy--600;
+
+    > li > button {
+      &:focus-visible {
+        border-radius: $rounded--full;
+        outline: none;
+      }
+    }
   }
 }
 
@@ -58,7 +65,6 @@
   width: 24px;
   height: 24px;
   border-radius: $rounded--full;
-
   background-color: var(--accent-color--400);
   border: 3px solid $gray--300;
 
@@ -67,11 +73,7 @@
     border: 3px solid var(--accent-color--200);
   }
 
-  &:hover {
-    background-color: var(--accent-color--400);
-    border: 3px solid var(--accent-color--100);
-  }
-
+  &:hover,
   &:focus-visible {
     background-color: var(--accent-color--400);
     border: 3px solid var(--accent-color--100);
@@ -79,13 +81,6 @@
 }
 
 [theme="dark"] {
-  .color-picker > li > button {
-    &:focus-visible {
-      border-radius: $rounded--full;
-      outline: none;
-    }
-  }
-
   .column__header-color-option {
     border: 3px solid $navy--600;
 
@@ -93,10 +88,7 @@
       border: 3px solid var(--accent-color--200);
     }
 
-    &:hover {
-      border: 3px solid var(--accent-color--100);
-    }
-
+    &:hover,
     &:focus-visible {
       border: 3px solid var(--accent-color--100);
     }
