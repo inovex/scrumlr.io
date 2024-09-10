@@ -1,6 +1,6 @@
 import Socket from "sockette";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {ApplicationState} from "store";
+import {ApplicationState, retryable} from "store";
 import {API} from "api";
 import {SERVER_WEBSOCKET_PROTOCOL} from "config";
 import {permittedBoardAccess, bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, rejectedBoardAccess, tooManyJoinRequests} from "../board";
@@ -31,7 +31,12 @@ export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: str
 
 // was defined in board actions before
 export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: string}, {state: ApplicationState}>("requests/joinBoard", async (payload, {dispatch}) => {
-  API.joinBoard(payload.boardId, payload.passphrase).then((r) => {
+  await retryable(
+    () => API.joinBoard(payload.boardId, payload.passphrase),
+    dispatch,
+    () => joinBoard({...payload}),
+    "joinBoard"
+  ).then((r) => {
     switch (r.status) {
       case "ACCEPTED":
         dispatch(permittedBoardAccess(payload.boardId));
@@ -64,14 +69,24 @@ export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: s
   });
 });
 
-export const acceptJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("requests/acceptJoinRequests", async (payload, {getState}) => {
+export const acceptJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("requests/acceptJoinRequests", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
 
-  await Promise.all(payload.map((userId) => API.acceptJoinRequest(boardId, userId)));
+  await retryable(
+    () => Promise.all(payload.map((userId) => API.acceptJoinRequest(boardId, userId))),
+    dispatch,
+    () => acceptJoinRequests(payload),
+    "acceptJoinRequests"
+  );
 });
 
-export const rejectJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("requests/rejectJoinRequests", async (payload, {getState}) => {
+export const rejectJoinRequests = createAsyncThunk<void, string[], {state: ApplicationState}>("requests/rejectJoinRequests", async (payload, {dispatch, getState}) => {
   const boardId = getState().board.data!.id;
 
-  await Promise.all(payload.map((userId) => API.rejectJoinRequest(boardId, userId)));
+  await retryable(
+    () => Promise.all(payload.map((userId) => API.rejectJoinRequest(boardId, userId))),
+    dispatch,
+    () => acceptJoinRequests(payload),
+    "rejectJoinRequests"
+  );
 });
