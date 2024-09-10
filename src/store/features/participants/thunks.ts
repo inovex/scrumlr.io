@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
-import {ApplicationState} from "store";
+import {ApplicationState, retryable} from "store";
 import {Auth} from "../auth";
 
 export const editSelf = createAsyncThunk<Auth, Auth>("participants/editSelf", async (payload) => {
@@ -10,48 +10,81 @@ export const editSelf = createAsyncThunk<Auth, Auth>("participants/editSelf", as
 
 export const changePermission = createAsyncThunk<void, {userId: string; moderator: boolean}, {state: ApplicationState}>(
   "participants/changePermission",
-  async (payload, {getState}) => {
+  async (payload, {dispatch, getState}) => {
     const boardId = getState().board.data!.id;
-    await API.editParticipant(boardId, payload.userId, {
-      role: payload.moderator ? "MODERATOR" : "PARTICIPANT",
-    });
+    await retryable(
+      () =>
+        API.editParticipant(boardId, payload.userId, {
+          role: payload.moderator ? "MODERATOR" : "PARTICIPANT",
+        }),
+      dispatch,
+      () => changePermission({...payload}),
+      "changePermission"
+    );
   }
 );
 
 export const setRaisedHandStatus = createAsyncThunk<void, {userId: string; raisedHand: boolean}, {state: ApplicationState}>(
   "participants/setRaisedHandStatus",
-  async (payload, {getState}) => {
+  async (payload, {dispatch, getState}) => {
     const boardId = getState().board.data!.id;
-    await API.editParticipant(boardId, payload.userId, {
-      raisedHand: payload.raisedHand,
-    });
+    await retryable(
+      () =>
+        API.editParticipant(boardId, payload.userId, {
+          raisedHand: payload.raisedHand,
+        }),
+      dispatch,
+      () => setRaisedHandStatus({...payload}),
+      "setRaiseHand"
+    );
   }
 );
 
 export const setUserReadyStatus = createAsyncThunk<void, {userId: string; ready: boolean}, {state: ApplicationState}>(
   "participants/setUserReadyStatus",
-  async (payload, {getState}) => {
+  async (payload, {dispatch, getState}) => {
     const boardId = getState().board.data!.id;
-    await API.editParticipant(boardId, payload.userId, {
-      ready: payload.ready,
-    });
+    await retryable(
+      () =>
+        API.editParticipant(boardId, payload.userId, {
+          ready: payload.ready,
+        }),
+      dispatch,
+      () => setUserReadyStatus({...payload}),
+      "setUserReady"
+    );
   }
 );
 
 export const setShowHiddenColumns = createAsyncThunk<void, {showHiddenColumns: boolean}, {state: ApplicationState}>(
   "participants/setShowHiddenColumns",
-  async (payload, {getState}) => {
+  async (payload, {dispatch, getState}) => {
     const boardId = getState().board.data!.id;
     const self = getState().participants.self?.user.id;
-    await API.editParticipant(boardId, self!, {
-      showHiddenColumns: payload.showHiddenColumns,
-    });
+    await retryable(
+      () =>
+        API.editParticipant(boardId, self!, {
+          showHiddenColumns: payload.showHiddenColumns,
+        }),
+      dispatch,
+      () => setShowHiddenColumns({...payload}),
+      "setShowHiddenColumns"
+    );
   }
 );
 
-export const setUserBanned = createAsyncThunk<void, {userId: string; banned: boolean}, {state: ApplicationState}>("participants/setUserBanned", async (payload, {getState}) => {
-  const boardId = getState().board.data!.id;
-  await API.editParticipant(boardId, payload.userId, {
-    banned: payload.banned,
-  });
-});
+export const setUserBanned = createAsyncThunk<void, {userId: string; banned: boolean}, {state: ApplicationState}>(
+  "participants/setUserBanned",
+  async (payload, {dispatch, getState}) => {
+    const boardId = getState().board.data!.id;
+    await retryable(
+      () =>
+        API.editParticipant(boardId, payload.userId, {
+          banned: payload.banned,
+        }),
+      dispatch,
+      () => setUserBanned({...payload}),
+      "setUserBanned"
+    );
+  }
+);
