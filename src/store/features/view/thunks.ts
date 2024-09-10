@@ -2,10 +2,11 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
 import {saveToStorage} from "utils/storage";
 import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
+import {retryable} from "store";
 import {ServerInfo, Theme} from "./types";
 
-export const setServerInfo = createAsyncThunk<ServerInfo, void>("view/setServerInfo", async () => {
-  const serverInfo = await API.getServerInfo();
+export const setServerInfo = createAsyncThunk<ServerInfo, void>("view/setServerInfo", async (_payload, {dispatch}) => {
+  const serverInfo: ServerInfo = await retryable(API.getServerInfo, dispatch, setServerInfo, "initApplication");
   return serverInfo;
 });
 
