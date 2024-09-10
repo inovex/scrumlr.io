@@ -1,6 +1,8 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
 import {ApplicationState, retryable} from "store";
+import {Toast} from "utils/Toast";
+import i18n from "i18next";
 import {Auth} from "../auth";
 
 export const editSelf = createAsyncThunk<Auth, Auth>("participants/editSelf", async (payload) => {
@@ -77,6 +79,12 @@ export const setUserBanned = createAsyncThunk<void, {userId: string; banned: boo
   "participants/setUserBanned",
   async (payload, {dispatch, getState}) => {
     const boardId = getState().board.data!.id;
+    // TODO would probably make sense to out that logic elsewhere, thunks are able to return stuff so that wouldn't be too difficult.
+    const self = getState().participants.self!;
+    const others = getState().participants.others ?? [];
+    const all = [self, ...others];
+    const userName = all.map((p) => p.user).find((u) => u.id === payload.userId)?.name;
+
     await retryable(
       () =>
         API.editParticipant(boardId, payload.userId, {
@@ -85,6 +93,6 @@ export const setUserBanned = createAsyncThunk<void, {userId: string; banned: boo
       dispatch,
       () => setUserBanned({...payload}),
       "setUserBanned"
-    );
+    ).then(() => Toast.info({title: i18n.t(payload.banned ? "Toast.bannedParticipant" : "Toast.unbannedParticipant", {user: userName})}));
   }
 );
