@@ -10,12 +10,12 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ArrowLeft, Close} from "components/Icon";
-import {MENU_ENTRIES, MenuEntry, MenuItem, MenuKey, MOBILE_BREAKPOINT} from "constants/settings";
+import {MENU_ENTRIES, MenuEntry, MenuItemConfig, MenuItemKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
 
 type SettingsDialogProps = {
-  enabledMenuItems: Partial<Record<MenuKey, boolean>>;
+  enabledMenuItems: Partial<Record<MenuItemKey, boolean>>;
 };
 
 export const SettingsDialog = (props: SettingsDialogProps) => {
@@ -25,7 +25,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
   const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
 
-  const [activeMenuItem, setActiveMenuItem] = useState<MenuItem>();
+  const [activeMenuItem, setActiveMenuItem] = useState<MenuItemConfig>();
 
   const transitionConfigMobile = {
     from: {},

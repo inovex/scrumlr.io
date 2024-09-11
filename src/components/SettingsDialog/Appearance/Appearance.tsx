@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {getColorClassName} from "constants/colors";
-import {MenuItem} from "constants/settings";
+import {MenuItemConfig} from "constants/settings";
 import {useOutletContext} from "react-router";
 import {LanguageSettingsDropdown} from "../Components/LanguageSettingsDropdown";
 import "../SettingsDialog.scss";
@@ -13,7 +13,7 @@ import "./Appearance.scss";
 
 export const Appearance = () => {
   const {t} = useTranslation();
-  const activeMenuItem: MenuItem = useOutletContext();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   return (
     <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>

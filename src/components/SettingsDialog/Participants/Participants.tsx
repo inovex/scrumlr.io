@@ -3,7 +3,7 @@ import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {useOutletContext} from "react-router";
-import {MenuItem} from "constants/settings";
+import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -19,7 +19,7 @@ export const Participants = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const activeMenuItem: MenuItem = useOutletContext();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const [queryString, setQueryString] = useState<string>("");
   const debouncedQueryString = useDebounce(queryString);

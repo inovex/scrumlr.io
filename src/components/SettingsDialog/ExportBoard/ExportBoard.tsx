@@ -5,7 +5,7 @@ import {useAppSelector} from "store";
 import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
 import {TOAST_TIMER_SHORT} from "constants/misc";
-import {MenuItem} from "constants/settings";
+import {MenuItemConfig} from "constants/settings";
 import {useOutletContext} from "react-router";
 import {getColorClassName} from "constants/colors";
 import ExportHintHiddenContent from "./ExportHintHiddenContent/ExportHintHiddenContent";
@@ -15,7 +15,7 @@ import "./ExportBoard.scss";
 
 export const ExportBoard = () => {
   const {t} = useTranslation();
-  const activeMenuItem: MenuItem = useOutletContext();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const boardId = useAppSelector((state) => state.board.data!.id);
   const boardName = useAppSelector((state) => state.board.data!.name);

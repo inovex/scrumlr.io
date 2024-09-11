@@ -10,7 +10,7 @@ import {generateRandomString} from "utils/random";
 import {Toggle} from "components/Toggle";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {isEqual} from "underscore";
-import {MenuItem} from "constants/settings";
+import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import {useOutletContext} from "react-router";
 import {SettingsButton} from "../Components/SettingsButton";
@@ -19,7 +19,7 @@ import "./BoardSettings.scss";
 
 export const BoardSettings = () => {
   const {t} = useTranslation();
-  const activeMenuItem: MenuItem = useOutletContext();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const state = useAppSelector(
     (applicationState) => ({

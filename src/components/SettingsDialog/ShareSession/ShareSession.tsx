@@ -3,7 +3,7 @@ import {QRCodeCanvas} from "qrcode.react";
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import {useAppSelector} from "store";
-import {MenuItem} from "constants/settings";
+import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import {useOutletContext} from "react-router";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
@@ -12,7 +12,7 @@ import "./ShareSession.scss";
 
 export const ShareSession = () => {
   const {t} = useTranslation();
-  const activeMenuItem: MenuItem = useOutletContext();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const boardId = useAppSelector((state) => state.board.data?.id);
   const theme = useAppSelector((state) => state.view.theme);

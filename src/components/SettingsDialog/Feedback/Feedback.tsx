@@ -6,13 +6,13 @@ import {FeedbackAPI} from "api/feedback";
 import {useAppSelector} from "store";
 import {TemplateGallery, Praise, Bug} from "components/Icon";
 import {useOutletContext} from "react-router";
-import {MenuItem} from "constants/settings";
+import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./Feedback.scss";
 
 export const Feedback: React.FC = () => {
   const {t} = useTranslation();
-  const activeMenuItem: MenuItem = useOutletContext();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const [errorMessage, setErrorMessage] = useState<string>();
   const [feedbackTypeInput, setFeedbackTypeInput] = useState("PRAISE");

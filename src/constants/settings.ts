@@ -4,11 +4,11 @@ import {Color} from "./colors";
 
 export const MOBILE_BREAKPOINT = 920;
 
-export type MenuKey = "board" | "participants" | "appearance" | "share" | "export" | "feedback" | "profile";
+export type MenuItemKey = "board" | "participants" | "appearance" | "share" | "export" | "feedback" | "profile";
 
 type LocalizationKey = "BoardSettings" | "Participants" | "Appearance" | "ShareSession" | "ExportBoard" | "Feedback" | "Profile";
 
-export type MenuItem = {
+export type MenuItemConfig = {
   localizationKey: LocalizationKey;
   location: string;
   isModeratorOnly: boolean;
@@ -16,9 +16,9 @@ export type MenuItem = {
   icon: ComponentType<SVGProps<SVGSVGElement>> | "profile"; // profile: special case
 };
 
-export type MenuEntry = {key: MenuKey; value: MenuItem};
+export type MenuEntry = {key: MenuItemKey; value: MenuItemConfig};
 
-const MENU_ENTRY_CONFIG: Record<MenuKey, MenuItem> = {
+const MENU_ITEM_CONFIG: Record<MenuItemKey, MenuItemConfig> = {
   board: {
     localizationKey: "BoardSettings",
     location: "board",
@@ -70,10 +70,10 @@ const MENU_ENTRY_CONFIG: Record<MenuKey, MenuItem> = {
   },
 };
 
-export const MENU_ENTRIES = Object.entries(MENU_ENTRY_CONFIG).map(([key, value]) => ({key, value}) as MenuEntry);
+export const MENU_ENTRIES = Object.entries(MENU_ITEM_CONFIG).map(([key, value]) => ({key, value}) as MenuEntry);
 
 // shorthand to enable all menu items
-export const ENABLE_ALL: Record<MenuKey, boolean> = {
+export const ENABLE_ALL: Record<MenuItemKey, boolean> = {
   board: true,
   participants: true,
   appearance: true,

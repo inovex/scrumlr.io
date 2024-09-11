@@ -8,7 +8,7 @@ import {Info} from "components/Icon";
 import {Toggle} from "components/Toggle";
 import {isEqual} from "underscore";
 import {useOutletContext} from "react-router";
-import {MenuItem} from "constants/settings";
+import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import {AvatarSettings} from "../Components/AvatarSettings";
 import {SettingsInput} from "../Components/SettingsInput";
@@ -19,7 +19,7 @@ export const ProfileSettings = () => {
   const {t} = useTranslation();
   const dispatch = useDispatch();
 
-  const activeMenuItem: MenuItem = useOutletContext();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const state = useAppSelector(
     (applicationState) => ({
