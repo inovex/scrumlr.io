@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import QRCode from "qrcode.react";
+import {QRCodeCanvas} from "qrcode.react";
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import {useAppSelector} from "store";
@@ -36,9 +36,8 @@ export const ShareSession = () => {
       <div className={classNames("share-session__container")}>
         <div className="share-session__background">
           {/* using an upscaled canvas instead of svg to make it a savable image */}
-          <QRCode
+          <QRCodeCanvas
             value={`${window.location.origin}/board/${boardId}`}
-            renderAs="canvas"
             size={1024}
             fgColor={autoTheme === "dark" ? gray000 : navy900}
             bgColor={autoTheme === "dark" ? navy900 : gray000}

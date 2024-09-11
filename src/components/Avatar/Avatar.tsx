@@ -4,7 +4,6 @@ import _ from "underscore";
 import {hashCode} from "utils/hash";
 import "./Avatar.scss";
 import classNames from "classnames";
-import {getColorClassName, getColorForIndex} from "../../constants/colors";
 import {
   AVATAR_ACCESSORIES_TYPES,
   AVATAR_CLOTHE_COLORS,
@@ -18,35 +17,9 @@ import {
   AVATAR_MOUTH_TYPES,
   AVATAR_SKIN_COLORS,
   AVATAR_TOP_TYPES,
-  AvatarAccessoriesType,
-  AvatarClotheColor,
-  AvatarClotheType,
-  AvatarEyebrowType,
-  AvatarEyeType,
-  AvatarFacialHairColor,
-  AvatarFacialHairType,
-  AvatarGraphicType,
-  AvatarHairColor,
-  AvatarMouthType,
-  AvatarSkinColor,
-  AvatarTopType,
-} from "./types";
-
-export interface AvataaarProps {
-  accentColorClass: string;
-  skinColor: AvatarSkinColor;
-  topType: AvatarTopType;
-  clotheColor: AvatarClotheColor;
-  graphicType: AvatarGraphicType;
-  clotheType: AvatarClotheType;
-  hairColor: AvatarHairColor;
-  facialHairColor: AvatarFacialHairColor;
-  facialHairType: AvatarFacialHairType;
-  accessoriesType: AvatarAccessoriesType;
-  eyeType: AvatarEyeType;
-  eyebrowType: AvatarEyebrowType;
-  mouthType: AvatarMouthType;
-}
+} from "constants/avatar";
+import {AvataaarProps} from "types/avatar";
+import {getColorClassName, getColorForIndex} from "../../constants/colors";
 
 export type AvatarProps = {
   seed?: string;
