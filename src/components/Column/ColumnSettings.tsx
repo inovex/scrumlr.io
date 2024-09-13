@@ -117,13 +117,13 @@ export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsPro
     {
       label: t("Column.resetName"),
       icon: <Close />,
-      onClick: () => (props.setOpenColumnSet ? props.setOpenColumnSet((o) => !o) : () => {}),
+      onClick: () => props.setOpenColumnSet?.((o) => !o),
     },
   ];
 
   return (
-    <div ref={columnSettingsRef} className="column_settings">
-      <MiniMenu className="" items={menuItems} />
+    <div ref={columnSettingsRef} className="column-settings">
+      <MiniMenu items={menuItems} />
     </div>
   );
 };
