@@ -47,7 +47,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
               dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: props.visible}));
             }}
           >
-            <div className="column__header-color-option column__header-color-option-selected" />
+            <div className="column__header-color-option column__header-color-option--selected" />
           </button>
           <Tooltip anchorSelect={`#${primColorAnchor}`} content={formatColorName(props.color)} />
         </li>

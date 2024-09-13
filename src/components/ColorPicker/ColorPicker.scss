@@ -68,7 +68,7 @@
   background-color: var(--accent-color--400);
   border: 3px solid $gray--300;
 
-  &-selected {
+  &--selected {
     background-color: var(--accent-color--400);
     border: 3px solid var(--accent-color--200);
   }
@@ -84,7 +84,7 @@
   .column__header-color-option {
     border: 3px solid $navy--600;
 
-    &-selected {
+    &--selected {
       border: 3px solid var(--accent-color--200);
     }
 
