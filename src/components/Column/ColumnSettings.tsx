@@ -1,4 +1,4 @@
-import {Dispatch, FC, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Actions} from "store/action";
 import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
 import {Color, getColorForIndex, COLOR_ORDER} from "constants/colors";
@@ -25,7 +25,7 @@ type ColumnSettingsProps = {
   closeColumnSettings: () => void;
 };
 
-export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsProps) => {
+export const ColumnSettings = (props: ColumnSettingsProps) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
   const dispatch = useDispatch();
@@ -37,7 +37,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsPro
       dispatch(Actions.setShowHiddenColumns(true));
       Toast.success({title: t("Toast.hiddenColumnsVisible"), autoClose: TOAST_TIMER_SHORT});
     }
-    const randomColor = getColorForIndex(Math.floor(Math.random() * 100));
+    const randomColor = getColorForIndex(Math.floor(Math.random() * COLOR_ORDER.length));
     dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
