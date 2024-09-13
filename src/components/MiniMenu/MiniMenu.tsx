@@ -4,7 +4,7 @@ import {uniqueId} from "underscore";
 import "./MiniMenu.scss";
 import ReactFocusLock from "react-focus-lock";
 
-type MiniMenuItem = {
+export type MiniMenuItem = {
   icon: ReactNode;
   label: string;
   active?: boolean;

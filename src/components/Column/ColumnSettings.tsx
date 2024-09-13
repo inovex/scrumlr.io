@@ -8,7 +8,7 @@ import "./ColumnSettings.scss";
 import "../ColorPicker/ColorPicker.scss";
 import {useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
-import {MiniMenu} from "components/MiniMenu/MiniMenu";
+import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 import {ColorPicker} from "../ColorPicker/ColorPicker";
@@ -68,7 +68,7 @@ export const ColumnSettings: FC<ColumnSettingsProps> = (props: ColumnSettingsPro
       <span className="column__header-color-option column__header-color-option--selected" />
     );
 
-  const menuItems = [
+  const menuItems: MiniMenuItem[] = [
     {
       label: t("Column.deleteColumn"),
       icon: <Trash />,
