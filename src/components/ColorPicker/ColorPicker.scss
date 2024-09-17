@@ -14,12 +14,12 @@
   margin-top: auto;
   border-radius: $rounded--full;
 
-  > li {
+  &__item {
     display: flex;
     justify-content: center;
     align-items: center;
 
-    > button {
+    &__button {
       cursor: pointer;
       border: none;
       background: none;
@@ -44,7 +44,6 @@
   }
 
   > ul > li {
-    padding: 0;
   }
 }
 
@@ -52,10 +51,12 @@
   .color-picker {
     background-color: $navy--600;
 
-    > li > button {
-      &:focus-visible {
-        border-radius: $rounded--full;
-        outline: none;
+    &__item {
+      &__button {
+        &:focus-visible {
+          border-radius: $rounded--full;
+          outline: none;
+        }
       }
     }
   }

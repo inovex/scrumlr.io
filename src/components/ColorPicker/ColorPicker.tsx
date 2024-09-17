@@ -37,7 +37,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
   return (
     <ReactFocusLock autoFocus={false} className="fix-focus-lock-placement">
       <ul className="color-picker">
-        <li className={getColorClassName(props.color)}>
+        <li className={`${getColorClassName(props.color)} color-picker__item`}>
           <button
             id={primColorAnchor}
             aria-label={formatColorName(props.color)}
@@ -46,6 +46,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
               props.onClose?.();
               dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: props.visible}));
             }}
+            className="color-picker__item__button"
           >
             <div className="column__header-color-option column__header-color-option--selected" />
           </button>
@@ -54,7 +55,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
         {colorsWithoutSelectedColor.map((item) => {
           const anchor = uniqueId(`color-picker-${item.toString()}`);
           return (
-            <li className={getColorClassName(item)}>
+            <li className={`${getColorClassName(item)} color-picker__item`}>
               <button
                 id={anchor}
                 aria-label={formatColorName(item)}
@@ -63,7 +64,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
                   props.onClose?.();
                   dispatch(Actions.editColumn(props.id, {name: props.name, color: item, index: props.index, visible: props.visible}));
                 }}
-                className={item.toString()}
+                className={`${item.toString()} color-picker__item__button`}
               >
                 <div className={`column__header-color-option column__header-color-option--${item.toString()}`} />
               </button>
