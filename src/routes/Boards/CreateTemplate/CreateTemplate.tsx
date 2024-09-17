@@ -37,7 +37,9 @@ export const CreateTemplate = () => {
         onSelect={selectDropdownOption}
       />
 
-      {activeOptionKey === AccessPolicy.BY_PASSPHRASE && <Input className="create-template__password" type="password" input={passwordInput} setInput={setPasswordInput} />}
+      {activeOptionKey === AccessPolicy.BY_PASSPHRASE && (
+        <Input className="create-template__password" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} />
+      )}
 
       <div className="create-template__info">Info</div>
       <div className="create-template__name">Name</div>

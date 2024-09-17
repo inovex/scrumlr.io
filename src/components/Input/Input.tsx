@@ -16,6 +16,8 @@ type SearchBarProps = {
   setInput: Dispatch<SetStateAction<string>>;
 
   placeholder?: string;
+
+  height: "normal" | "larger"; // normal e.g. CreateTemplate, larger e.g. Boards
 };
 
 /*
@@ -56,7 +58,7 @@ export const Input = (props: SearchBarProps) => {
   };
 
   return (
-    <div className={classNames(props.className, "input", `input--${props.type}`, {"input--disabled": props.disabled})}>
+    <div className={classNames(props.className, "input", `input--${props.type}`, `input--height-${props.height}`, {"input--disabled": props.disabled})}>
       {props.type === "search" && (
         <div className="input__icon-container input__icon-container--search-icon">
           <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />

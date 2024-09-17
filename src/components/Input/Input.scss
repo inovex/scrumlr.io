@@ -15,6 +15,14 @@ $padding--mobile: 12.5px $spacing--base;
 
   background-color: $gray--000;
 
+  &--height-normal {
+    height: 60px;
+  }
+
+  &--height-larger {
+    height: 64px;
+  }
+
   &:not(&--disabled) {
     // TODO increase padding-left by 8px if no icon is present
     @include default-states($padding: $padding--default);
