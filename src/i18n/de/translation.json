@@ -32,6 +32,11 @@
       "open": "Offen",
       "password": "Passwort",
       "approval": "Freigabe"
+    },
+    "info": {
+      "open": "TBA",
+      "password": "TBA",
+      "approval": "TBA"
     }
   },
   "LoginBoard": {

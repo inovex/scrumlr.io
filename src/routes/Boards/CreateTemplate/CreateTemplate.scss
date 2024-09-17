@@ -28,6 +28,18 @@
 
 .create-template__info {
   grid-area: info;
+  display: flex;
+  gap: $spacing--xs;
+
+  &-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  &-text {
+    font-size: $text--sm;
+    font-weight: 400;
+  }
 }
 
 .create-template__name {

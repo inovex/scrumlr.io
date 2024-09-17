@@ -6,7 +6,19 @@ import {Input} from "components/Input/Input";
 import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
+import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
 import "./CreateTemplate.scss";
+
+const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
+  switch (policy) {
+    case AccessPolicy.PUBLIC:
+      return "open";
+    case AccessPolicy.BY_PASSPHRASE:
+      return "password";
+    default:
+      return "approval";
+  }
+};
 
 export const CreateTemplate = () => {
   const {t} = useTranslation();
@@ -28,9 +40,9 @@ export const CreateTemplate = () => {
         className="create-template__dropdown"
         open={openDropdown}
         options={[
-          {key: AccessPolicy.PUBLIC, label: t("CreateBoard.dropdown.open"), icon: <GlobeIcon />},
-          {key: AccessPolicy.BY_PASSPHRASE, label: t("CreateBoard.dropdown.password"), icon: <KeyIcon />},
-          {key: AccessPolicy.BY_INVITE, label: t("CreateBoard.dropdown.approval"), icon: <LockIcon />},
+          {key: AccessPolicy.PUBLIC, label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey(AccessPolicy.PUBLIC)}`), icon: <GlobeIcon />},
+          {key: AccessPolicy.BY_PASSPHRASE, label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey(AccessPolicy.BY_PASSPHRASE)}`), icon: <KeyIcon />},
+          {key: AccessPolicy.BY_INVITE, label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey(AccessPolicy.BY_INVITE)}`), icon: <LockIcon />},
         ]}
         activeKey={activeOptionKey}
         onToggleMenu={toggleDropDown}
@@ -41,7 +53,10 @@ export const CreateTemplate = () => {
         <Input className="create-template__password" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} />
       )}
 
-      <div className="create-template__info">Info</div>
+      <div className="create-template__info">
+        <InfoIcon className="create-template__info-icon" />
+        <div className="create-template__info-text">{t(`CreateBoard.info.${getAccessPolicyTranslationKey(activeOptionKey)}`)}</div>
+      </div>
       <div className="create-template__name">Name</div>
       <div className="create-template__description">Description</div>
       <div className="create-template__columns">Columns</div>
