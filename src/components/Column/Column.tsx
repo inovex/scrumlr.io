@@ -175,7 +175,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       )}
       {!isTemporary && !openedColumnSettings && (
         <button title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
-          <ThreeDots className="column__header-edit-button-icon" style={{transform: "rotate(90deg)"}} />
+          <ThreeDots className="column__header-edit-button-icon" style={{transform: "rotate(90deg)"}} /> {/* inline style to avoid funky rotating behaviour when hovering */}
         </button>
       )}
     </>
