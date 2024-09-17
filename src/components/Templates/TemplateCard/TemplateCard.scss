@@ -56,10 +56,6 @@ $card-height: 220px;
   padding-left: $spacing--xxs;
 
   border-bottom: 2px dashed transparent;
-
-  &--editing {
-    border-color: $pink--200;
-  }
 }
 
 .template-card__title {
@@ -109,11 +105,6 @@ $card-height: 220px;
   outline: none;
 
   color: $navy--900;
-
-  &--editing {
-    // TODO alignment
-    border-color: $pink--200;
-  }
 }
 
 .template-card__columns {
