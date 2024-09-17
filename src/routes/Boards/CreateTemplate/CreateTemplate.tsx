@@ -27,6 +27,7 @@ export const CreateTemplate = () => {
   const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>(AccessPolicy.PUBLIC);
 
   const [passwordInput, setPasswordInput] = useState("");
+  const [nameInput, setNameInput] = useState("");
 
   const toggleDropDown = () => setOpenDropdown((curr) => !curr);
   const selectDropdownOption = (key: AccessPolicy) => {
@@ -50,14 +51,16 @@ export const CreateTemplate = () => {
       />
 
       {activeOptionKey === AccessPolicy.BY_PASSPHRASE && (
-        <Input className="create-template__password" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} />
+        <Input className="create-template__password" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} placeholder="Password" />
       )}
 
       <div className="create-template__info">
         <InfoIcon className="create-template__info-icon" />
         <div className="create-template__info-text">{t(`CreateBoard.info.${getAccessPolicyTranslationKey(activeOptionKey)}`)}</div>
       </div>
-      <div className="create-template__name">Name</div>
+      <div className="create-template__name">
+        <Input type="text" input={nameInput} setInput={setNameInput} height="normal" placeholder="Board name" />
+      </div>
       <div className="create-template__description">Description</div>
       <div className="create-template__columns">Columns</div>
       <div className="create-template__buttons">Buttons</div>
