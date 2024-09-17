@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import {AccessPolicy} from "types/board";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
+import {TextArea} from "components/TextArea/TextArea";
 import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
@@ -28,6 +29,7 @@ export const CreateTemplate = () => {
 
   const [passwordInput, setPasswordInput] = useState("");
   const [nameInput, setNameInput] = useState("");
+  const [descriptionInput, setDescriptionInput] = useState("");
 
   const toggleDropDown = () => setOpenDropdown((curr) => !curr);
   const selectDropdownOption = (key: AccessPolicy) => {
@@ -61,7 +63,9 @@ export const CreateTemplate = () => {
       <div className="create-template__name">
         <Input type="text" input={nameInput} setInput={setNameInput} height="normal" placeholder="Board name" />
       </div>
-      <div className="create-template__description">Description</div>
+      <div className="create-template__description">
+        <TextArea className="create-template__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description" />
+      </div>
       <div className="create-template__columns">Columns</div>
       <div className="create-template__buttons">Buttons</div>
     </div>
