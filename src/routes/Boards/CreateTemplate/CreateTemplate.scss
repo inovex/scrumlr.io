@@ -3,12 +3,15 @@
 .create-template {
   display: grid;
   grid-template-columns: $spacing--xs auto auto auto auto $spacing--xs;
-  grid-template-rows: $spacing--xs auto auto auto auto 1fr auto $spacing--xs;
+  grid-template-rows: $spacing--xs auto 14px auto 26px auto 20px auto 1fr auto $spacing--xs;
   grid-template-areas:
     ".  .          .           .             .       ."
     ".  .          dropdown    password      .       ."
+    ".  .          .           .             .       ."
     ".  .          info        info          .       ."
+    ".  .          .           .             .       ."
     ".  .          name        name          .       ."
+    ".  .          .           .             .       ."
     ".  .          description description   .       ."
     ".  columns    columns     columns       columns ."
     ".  .          .           buttons       .       ."
