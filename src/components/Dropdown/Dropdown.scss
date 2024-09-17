@@ -2,17 +2,26 @@
 
 .dropdown {
   position: relative;
-  border-radius: $rounded--large;
 
   background-color: $gray--000;
 
   cursor: pointer;
   user-select: none;
 
+  // applying border-radius: $rounded-large leaves some pixels visible, when hovering,
+  // but targeting the specific corners seems to work
+  border-top-left-radius: $rounded--large;
+  border-top-right-radius: $rounded--large;
+  &:not(&--open) {
+    border-bottom-left-radius: $rounded--large;
+    border-bottom-right-radius: $rounded--large;
+  }
+
   &--open {
     .dropdown__options-container {
-      // TODO fix box shadow
-      // box-shadow: 0 3px 12px rgba(var(--navy--700-rgb), 0.12);
+      // clip top of box shadow, since it's absolute and below a different element
+      box-shadow: 0 3px 12px rgba(var(--navy--700-rgb), 0.12);
+      clip-path: inset(0px -10px -10px -10px);
     }
   }
 }
@@ -23,6 +32,7 @@
   gap: $spacing--base;
   align-items: center;
 
+  box-sizing: border-box;
   padding: 14px $spacing--md;
 
   font-size: $text--base;
@@ -52,6 +62,7 @@
 
 .dropdown__options-container {
   position: absolute;
+  top: 100%;
   left: 0;
   right: 0;
 
