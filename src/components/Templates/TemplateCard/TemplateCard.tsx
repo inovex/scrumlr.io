@@ -9,7 +9,6 @@ import {AccessPolicy} from "types/board";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
-import {ReactComponent as DoneIcon} from "assets/icons/check-done.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
@@ -29,13 +28,13 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   const {t} = useTranslation();
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [title, setTitle] = useState(template.name);
-  const [description, setDescription] = useState(template.description);
 
   const closeMenu = () => {
-    setEditing(false);
     setShowMiniMenu(false);
+  };
+
+  const navigateToEdit = () => {
+    // TODO
   };
 
   const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
@@ -56,7 +55,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
         className="template-card__menu"
         items={[
           {label: "Delete", icon: <TrashIcon />, onClick: closeMenu},
-          {label: "Edit", icon: <EditIcon />, onClick: () => setEditing((curr) => !curr), active: editing},
+          {label: "Edit", icon: <EditIcon />, onClick: navigateToEdit},
           {label: "Close", icon: <CloseIcon />, onClick: closeMenu},
         ]}
       />
@@ -65,30 +64,18 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
     );
   };
 
-  const renderButton = () =>
-    editing ? (
-      <Button className={classNames("template-card__start-button", "template-card__start-button--save")} type="secondary" small icon={<DoneIcon />}>
-        {t("Templates.TemplateCard.save")}
-      </Button>
-    ) : (
-      <Button className={classNames("template-card__start-button", "template-card__start-button--start")} small icon={<NextIcon />}>
-        {t("Templates.TemplateCard.start")}
-      </Button>
-    );
-
   return (
     <div className="template-card">
       <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => {}} />
-      <div className={classNames("template-card__head", {"template-card__head--editing": editing})}>
-        <input className="template-card__title" type="text" value={title} disabled={!editing} onInput={(e) => setTitle(e.currentTarget.value)} />
+      <div className={classNames("template-card__head")}>
+        <input className="template-card__title" type="text" value={template.name} disabled />
         <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
       </div>
       {renderMenu()}
       <TextareaAutosize
-        className={classNames("template-card__description", {"template-card__description--editing": editing})}
-        value={description}
-        disabled={!editing}
-        onInput={(e) => setDescription(e.currentTarget.value)}
+        className={classNames("template-card__description")}
+        value={template.description}
+        disabled
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       />
@@ -102,7 +89,9 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
             .join(", ")}
         </div>
       </div>
-      {renderButton()}
+      <Button className={classNames("template-card__start-button", "template-card__start-button--start")} small icon={<NextIcon />}>
+        {t("Templates.TemplateCard.start")}
+      </Button>
     </div>
   );
 };
