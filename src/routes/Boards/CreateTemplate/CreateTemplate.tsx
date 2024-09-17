@@ -64,7 +64,7 @@ export const CreateTemplate = () => {
         <Input type="text" input={nameInput} setInput={setNameInput} height="normal" placeholder="Board name" />
       </div>
       <div className="create-template__description">
-        <TextArea className="create-template__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description" />
+        <TextArea className="create-template__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
       </div>
       <div className="create-template__columns">Columns</div>
       <div className="create-template__buttons">Buttons</div>

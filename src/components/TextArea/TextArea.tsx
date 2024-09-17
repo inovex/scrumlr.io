@@ -7,6 +7,10 @@ type TextAreaProps = {
   className?: string;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
+
+  extendable?: boolean;
+  // minLines?: number;
+
   placeholder?: string;
 };
 
@@ -15,7 +19,7 @@ export const TextArea = (props: TextAreaProps) => {
 
   return (
     <TextareaAutosize
-      className={classNames(props.className, "text-area")}
+      className={classNames(props.className, "text-area", {"text-area--extendable": props.extendable})}
       value={props.input}
       onInput={updateInput}
       placeholder={props.placeholder}
