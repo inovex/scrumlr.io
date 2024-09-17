@@ -1,0 +1,16 @@
+@import "constants/style";
+
+$padding--default: $spacing--base;
+
+.text-area {
+  resize: none;
+
+  width: 100%;
+
+  padding: $padding--default 0;
+  margin: 0;
+  outline: none;
+  border-radius: $rounded--full;
+
+  background-color: $gray--000;
+}
