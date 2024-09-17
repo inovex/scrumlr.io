@@ -93,6 +93,9 @@ $padding--mobile: 12.5px $spacing--base;
 
   &::placeholder {
     opacity: 100%;
+    font-size: $text--base;
+    font-weight: 600;
+    letter-spacing: initial;
   }
 
   &:disabled {
