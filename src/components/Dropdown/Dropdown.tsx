@@ -49,7 +49,9 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
   return (
     <div className={classNames(props.className, "dropdown", {"dropdown--open": props.open})} role="combobox" aria-controls="dropdown-list" aria-expanded={props.open} tabIndex={0}>
       {renderDropdownOption(activeOption, true)}
-      {props.open && props.options.filter((option) => option.key !== props.activeKey).map((option) => renderDropdownOption(option, false))}
+      {props.open && (
+        <div className="dropdown__options-container">{props.options.filter((option) => option.key !== props.activeKey).map((option) => renderDropdownOption(option, false))}</div>
+      )}
     </div>
   );
 };

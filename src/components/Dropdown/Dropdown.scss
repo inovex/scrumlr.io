@@ -1,6 +1,7 @@
 @import "constants/style";
 
 .dropdown {
+  position: relative;
   border-radius: $rounded--large;
 
   background-color: $gray--000;
@@ -9,7 +10,10 @@
   user-select: none;
 
   &--open {
-    box-shadow: 0 3px 12px rgba(var(--navy--700-rgb), 0.12);
+    .dropdown__options-container {
+      // TODO fix box shadow
+      // box-shadow: 0 3px 12px rgba(var(--navy--700-rgb), 0.12);
+    }
   }
 }
 
@@ -27,10 +31,13 @@
   color: $navy--400;
 
   overflow: hidden;
+  background-color: $gray--000;
 
-  &:first-child {
-    border-top-left-radius: $rounded--large;
+  // first item (active) always has top border radius,
+  // but only bottom if the menu isn't expanded.
+  &--active {
     border-top-right-radius: $rounded--large;
+    border-top-left-radius: $rounded--large;
   }
 
   &:last-child {
@@ -38,13 +45,20 @@
     border-bottom-right-radius: $rounded--large;
   }
 
-  &:not(:last-child) {
-    border-bottom: 1px solid $gray--300;
-  }
-
   &:hover {
     background-color: $gray--300;
   }
+}
+
+.dropdown__options-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+
+  background-color: $gray--000;
+
+  border-bottom-left-radius: $rounded--large;
+  border-bottom-right-radius: $rounded--large;
 }
 
 .dropdown__option-icon {
