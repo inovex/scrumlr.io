@@ -19,7 +19,7 @@
     justify-content: center;
     align-items: center;
 
-    &__button {
+    &-button {
       cursor: pointer;
       border: none;
       background: none;
@@ -41,9 +41,6 @@
         outline: none;
       }
     }
-  }
-
-  > ul > li {
   }
 }
 
