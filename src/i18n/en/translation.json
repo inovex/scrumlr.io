@@ -2,7 +2,14 @@
   "InfoBar": {
     "ReturnToPresentedNote": "Return to presented note"
   },
-  "NewBoard": {},
+  "LegacyNewBoard": {
+    "boardName": "Board name",
+    "createNewBoard": "Create new Board",
+    "extendedConfigurationButton": "Extended configuration",
+    "basicConfigurationButton": "Template selection",
+    "extendedConfigurationTitle": "Extended configuration",
+    "basicConfigurationTitle": "Choose a template"
+  },
   "Templates": {
     "switchTitle": "Templates",
     "title": "Choose a template",

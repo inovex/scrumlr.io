@@ -2,7 +2,14 @@
   "InfoBar": {
     "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
   },
-  "NewBoard": {},
+  "LegacyNewBoard": {
+    "boardName": "Sitzungsname",
+    "createNewBoard": "Erstelle eine Sitzung",
+    "extendedConfigurationButton": "Erweiterte Einstellungen",
+    "basicConfigurationButton": "Vorlagenauswahl",
+    "extendedConfigurationTitle": "Erweiterte Einstellungen",
+    "basicConfigurationTitle": "Wähle eine Vorlage"
+  },
   "Templates": {
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
