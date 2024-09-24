@@ -8,6 +8,8 @@ import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
+import classNames from "classnames";
+import {Button} from "components/Button";
 import "./CreateTemplate.scss";
 
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
@@ -67,7 +69,14 @@ export const CreateTemplate = () => {
         <TextArea className="create-template__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
       </div>
       <div className="create-template__columns">Columns</div>
-      <div className="create-template__buttons">Buttons</div>
+      <div className="create-template__buttons">
+        <Button className={classNames("create-template__button", "create-template__button--return")} type="secondary">
+          Go Back
+        </Button>
+        <Button className={classNames("create-template__button", "create-template__button--create")} type="primary">
+          Create Board
+        </Button>
+      </div>
     </div>
   );
 };

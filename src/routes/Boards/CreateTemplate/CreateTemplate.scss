@@ -59,4 +59,7 @@
 
 .create-template__buttons {
   grid-area: buttons;
+  display: flex;
+  flex-direction: row;
+  gap: $spacing--base;
 }
