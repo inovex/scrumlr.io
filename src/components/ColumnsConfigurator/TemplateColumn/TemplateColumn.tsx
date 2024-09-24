@@ -49,14 +49,18 @@ export const TemplateColumn = (props: TemplateColumnProps) => {
       <div className="template-column__name">{props.column.name}</div>
       <div className="template-column__menu">
         <DnDIcon
-          className={classNames("template-column__drag-element", {
+          className={classNames("template-column__icon", "template-column__icon--dnd", "template-column__drag-element", {
             "template-column__drag-element--dragging": props.activeDrag,
           })}
           {...listeners}
         />
         <div className="template-column__color" />
-        {props.column.visible ? <VisibleIcon /> : <HiddenIcon />}
-        <DeleteIcon />
+        {props.column.visible ? (
+          <VisibleIcon className={classNames("template-column__icon", "template-column__icon--visible")} />
+        ) : (
+          <HiddenIcon className={classNames("template-column__icon", "template-column__icon--hidden")} />
+        )}
+        <DeleteIcon className={classNames("template-column__icon", "template-column__icon--delete")} />
       </div>
     </div>
   );
