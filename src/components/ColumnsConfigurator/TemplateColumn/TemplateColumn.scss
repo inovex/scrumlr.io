@@ -27,6 +27,10 @@ $column-height: 339px;
       border-left: none;
     }
   }
+
+  &--active-drag {
+    border: $spacing--xxs dashed var(--accent-color--light);
+  }
 }
 
 // temporary!
