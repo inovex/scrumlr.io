@@ -2,15 +2,16 @@ import "./ColumnsConfigurator.scss";
 import classNames from "classnames";
 import {useState} from "react";
 import {Column} from "types/column";
+import {TemplateColumn} from "./TemplateColumn/TemplateColumn";
 
 type ColumnsConfiguratorProps = {
   className?: string;
 };
 
-type TemplateColumn = Omit<Column, "index">;
+export type TemplateColumnType = Omit<Column, "index">;
 
 export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
-  const initialState: TemplateColumn[] = [
+  const initialState: TemplateColumnType[] = [
     {
       id: "col1",
       color: "backlog-blue",
@@ -30,7 +31,13 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
       visible: false,
     },
   ];
-  const [columns, setColumns] = useState<TemplateColumn[]>(initialState);
+  const [columns, _setColumns] = useState<TemplateColumnType[]>(initialState);
 
-  return <div className={classNames(props.className, "columns-configurator")}>Hello Columns Configurator</div>;
+  return (
+    <div className={classNames(props.className, "columns-configurator")}>
+      {columns.map((column) => (
+        <TemplateColumn key={column.id} column={column} />
+      ))}
+    </div>
+  );
 };
