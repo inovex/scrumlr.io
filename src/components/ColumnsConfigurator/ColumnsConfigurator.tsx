@@ -29,8 +29,14 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     {
       id: "col3",
       color: "value-violet",
-      name: "Column3",
+      name: "Column 3",
       visible: false,
+    },
+    {
+      id: "col4",
+      color: "goal-green",
+      name: "Column 4",
+      visible: true,
     },
   ];
   const [templateColumns, setTemplateColumns] = useState<TemplateColumnType[]>(initialState);
@@ -108,16 +114,20 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
         <div className={classNames(props.className, "columns-configurator")}>
-          {templateColumns.map((column, index) => (
-            <TemplateColumn
-              className="columns-configurator__column"
-              key={column.id}
-              column={column}
-              activeDrag={column.id === dragElementId}
-              activeDrop={column.id === dropElemenId}
-              placement={calcPlacement(getPotentialIndex(index))}
-            />
-          ))}
+          {templateColumns.map((column, index) => {
+            const potentialIndex = getPotentialIndex(index);
+            return (
+              <TemplateColumn
+                className="columns-configurator__column"
+                key={column.id}
+                column={column}
+                index={potentialIndex}
+                activeDrag={column.id === dragElementId}
+                activeDrop={column.id === dropElemenId}
+                placement={calcPlacement(potentialIndex)}
+              />
+            );
+          })}
         </div>
       </SortableContext>
     </DndContext>

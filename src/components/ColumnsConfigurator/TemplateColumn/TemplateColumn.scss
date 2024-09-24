@@ -15,6 +15,16 @@ $column-height: 339px;
   padding: $spacing--md $spacing--base;
 
   border: $spacing--xxs solid var(--accent-color--light);
+
+  z-index: $base-z-index;
+
+  &--even {
+    background-color: $gray--200;
+  }
+  &--odd {
+    background-color: $gray--100;
+  }
+
   &--border {
     &-first {
       border-right: none;
@@ -30,6 +40,7 @@ $column-height: 339px;
 
   &--active-drag {
     border: $spacing--xxs dashed var(--accent-color--light);
+    z-index: $base-z-index + $base-z-index-step; // display dragged item above others
   }
 }
 

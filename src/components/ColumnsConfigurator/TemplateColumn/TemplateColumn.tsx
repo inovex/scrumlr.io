@@ -13,6 +13,7 @@ import "./TemplateColumn.scss";
 type TemplateColumnProps = {
   className?: string;
   column: TemplateColumnType;
+  index: number;
   placement: "first" | "center" | "last";
   activeDrag: boolean;
   activeDrop: boolean;
@@ -34,6 +35,8 @@ export const TemplateColumn = (props: TemplateColumnProps) => {
         "template-column",
         `template-column--border-${props.placement}`,
         {
+          "template-column--even": props.index % 2 === 0,
+          "template-column--odd": props.index % 2 !== 0,
           "template-column--active-drag": props.activeDrag,
           "template-column--active-drop": props.activeDrop,
         },
