@@ -47,15 +47,17 @@ export const TemplateColumn = (props: TemplateColumnProps) => {
       {...attributes}
     >
       <div className="template-column__name">{props.column.name}</div>
-      <DnDIcon
-        className={classNames("template-column__drag-element", {
-          "template-column__drag-element--dragging": props.activeDrag,
-        })}
-        {...listeners}
-      />
-      <div className="template-column__color" />
-      {props.column.visible ? <VisibleIcon /> : <HiddenIcon />}
-      <DeleteIcon />
+      <div className="template-column__menu">
+        <DnDIcon
+          className={classNames("template-column__drag-element", {
+            "template-column__drag-element--dragging": props.activeDrag,
+          })}
+          {...listeners}
+        />
+        <div className="template-column__color" />
+        {props.column.visible ? <VisibleIcon /> : <HiddenIcon />}
+        <DeleteIcon />
+      </div>
     </div>
   );
 };
