@@ -1,0 +1,38 @@
+@import "constants/style";
+
+// hard coded for now
+$column-width: 158px;
+$column-height: 339px;
+
+.template-column {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xl;
+
+  width: $column-width;
+  height: $column-height;
+
+  padding: $spacing--md $spacing--base;
+
+  border: $spacing--xxs solid var(--accent-color--light);
+  &--border {
+    &-left {
+      border-right: none;
+    }
+    &-center {
+      border-left: none;
+      border-right: none;
+    }
+    &-right {
+      border-left: none;
+    }
+  }
+}
+
+// temporary!
+.template-column__color {
+  width: 20px;
+  height: 20px;
+  border-radius: $rounded--full;
+  background-color: var(--accent-color--light);
+}

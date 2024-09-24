@@ -33,10 +33,20 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   ];
   const [columns, _setColumns] = useState<TemplateColumnType[]>(initialState);
 
+  const calcPlacement = (index: number) => {
+    if (index === 0) {
+      return "left";
+    }
+    if (index === columns.length - 1) {
+      return "right";
+    }
+    return "center";
+  };
+
   return (
     <div className={classNames(props.className, "columns-configurator")}>
-      {columns.map((column) => (
-        <TemplateColumn key={column.id} column={column} />
+      {columns.map((column, index) => (
+        <TemplateColumn key={column.id} column={column} placement={calcPlacement(index)} />
       ))}
     </div>
   );
