@@ -11,6 +11,7 @@ import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
 import classNames from "classnames";
 import {Button} from "components/Button";
 import "./CreateTemplate.scss";
+import {ColumnsConfigurator} from "../../../components/ColumnsConfigurator/ColumnsConfigurator";
 
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   switch (policy) {
@@ -68,7 +69,9 @@ export const CreateTemplate = () => {
       <div className="create-template__description">
         <TextArea className="create-template__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
       </div>
-      <div className="create-template__columns">Columns</div>
+      <div className="create-template__columns-configurator-wrapper">
+        <ColumnsConfigurator className="create-template__columns-configurator" />
+      </div>
       <div className="create-template__buttons">
         <Button className={classNames("create-template__button", "create-template__button--return")} type="secondary">
           Go Back
