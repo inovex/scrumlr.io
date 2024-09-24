@@ -33,6 +33,14 @@ $column-height: 339px;
   }
 }
 
+.template-column__drag-element {
+  cursor: grab;
+
+  &--dragging {
+    cursor: grabbing;
+  }
+}
+
 // temporary!
 .template-column__color {
   width: 20px;
