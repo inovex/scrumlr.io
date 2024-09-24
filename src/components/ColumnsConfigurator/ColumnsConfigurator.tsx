@@ -42,13 +42,13 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   const [templateColumns, setTemplateColumns] = useState<TemplateColumnType[]>(initialState);
 
   // id of column which is actively being dragged
-  const [dragElementId, setDragElementId] = useState<string | null>(null);
+  const [activeElementId, setActiveElementId] = useState<string | null>(null);
   const [dropElementId, setDropElementId] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragStart = (event: DragStartEvent) => {
-    setDragElementId(event.active.id as string);
+    setActiveElementId(event.active.id as string);
   };
 
   const handleDragOver = (event: DragOverEvent) => {
@@ -68,7 +68,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     }
 
     // don't forget to clear states
-    setDragElementId(null);
+    setActiveElementId(null);
     setDropElementId(null);
   };
 
@@ -85,9 +85,9 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   // function to calculate where each column would be positioned if the drag-and-drop operation were completed at its current state
   const getPotentialIndex = (index: number) => {
     // no valid drag operation occurring
-    if (!dragElementId || !dropElementId) return index;
+    if (!activeElementId || !dropElementId) return index;
 
-    const dragElementIndex = templateColumns.findIndex((c) => c.id === dragElementId);
+    const dragElementIndex = templateColumns.findIndex((c) => c.id === activeElementId);
     const dropElementIndex = templateColumns.findIndex((c) => c.id === dropElementId);
 
     // if current index matches active index of drag element, the column is being dragged there,
@@ -122,7 +122,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
                 key={column.id}
                 column={column}
                 index={potentialIndex}
-                activeDrag={column.id === dragElementId}
+                activeDrag={column.id === activeElementId}
                 activeDrop={column.id === dropElementId}
                 placement={calcPlacement(potentialIndex)}
               />
