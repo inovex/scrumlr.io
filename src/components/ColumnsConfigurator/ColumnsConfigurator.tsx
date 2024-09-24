@@ -114,6 +114,22 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     return index;
   };
 
+  // renders the drag overlay, which is the element which is dragged
+  const renderDragOverlay = () => {
+    if (!activeElementId || !activeColumn) return null;
+    const activeColumnIndex = getPotentialIndex(templateColumns.findIndex((c) => c.id === activeColumn.id));
+
+    return (
+      <TemplateColumn
+        className={classNames("columns-configurator__column", "columns-configurator__column--ghost")}
+        column={activeColumn}
+        // here, use actual index unlike potential index in the main part
+        index={activeColumnIndex}
+        placement={calcPlacement(activeColumnIndex)}
+      />
+    );
+  };
+
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
@@ -135,15 +151,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
         </div>
       </SortableContext>
 
-      <DragOverlay>
-        {activeElementId && activeColumn ? (
-          <TemplateColumn
-            className={classNames("columns-configurator__column", "columns-configurator__column--ghost")}
-            column={activeColumn}
-            index={getPotentialIndex(templateColumns.findIndex((c) => c.id === activeColumn.id))}
-          />
-        ) : null}
-      </DragOverlay>
+      <DragOverlay>{renderDragOverlay()}</DragOverlay>
     </DndContext>
   );
 };
