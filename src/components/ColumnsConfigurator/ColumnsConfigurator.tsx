@@ -2,6 +2,8 @@ import "./ColumnsConfigurator.scss";
 import classNames from "classnames";
 import {useState} from "react";
 import {Column} from "types/column";
+import {closestCenter, DndContext, DragEndEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {arrayMove, horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {TemplateColumn} from "./TemplateColumn/TemplateColumn";
 
 type ColumnsConfiguratorProps = {
@@ -31,23 +33,41 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
       visible: false,
     },
   ];
-  const [columns, _setColumns] = useState<TemplateColumnType[]>(initialState);
+  const [templateColumns, setTemplateColumns] = useState<TemplateColumnType[]>(initialState);
+
+  const sensors = useSensors(useSensor(PointerSensor));
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const {active, over} = event;
+    if (active.id !== over?.id) {
+      setTemplateColumns((columns) => {
+        const oldIndex = columns.findIndex((c) => c.id === active.id);
+        const newIndex = columns.findIndex((c) => c.id === over?.id);
+
+        return arrayMove(columns, oldIndex, newIndex);
+      });
+    }
+  };
 
   const calcPlacement = (index: number) => {
     if (index === 0) {
       return "left";
     }
-    if (index === columns.length - 1) {
+    if (index === templateColumns.length - 1) {
       return "right";
     }
     return "center";
   };
 
   return (
-    <div className={classNames(props.className, "columns-configurator")}>
-      {columns.map((column, index) => (
-        <TemplateColumn key={column.id} column={column} placement={calcPlacement(index)} />
-      ))}
-    </div>
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
+        <div className={classNames(props.className, "columns-configurator")}>
+          {templateColumns.map((column, index) => (
+            <TemplateColumn key={column.id} column={column} placement={calcPlacement(index)} />
+          ))}
+        </div>
+      </SortableContext>
+    </DndContext>
   );
 };
