@@ -1,12 +1,12 @@
 @import "constants/style";
 
-// hard coded for now
 $column-width: 158px;
-$column-height: 339px;
+$column-height: 340px;
 
 .template-column {
   display: flex;
   flex-direction: column;
+  gap: $spacing--xl;
 
   width: $column-width;
   height: $column-height;
@@ -43,11 +43,31 @@ $column-height: 339px;
   }
 }
 
+.template-column__name {
+  align-self: flex-start; // only take as much space as needed
+  padding-right: $spacing--xs; // extend border to the right
+
+  font-size: $text--base;
+  font-weight: 600;
+  color: $gray--800;
+  border-bottom: 2px solid var(--accent-color--light);
+}
+
 .template-column__menu {
   display: flex;
   flex-direction: column;
-  gap: $spacing--xl;
+  gap: $spacing--xl; // TODO proper gaps
   align-items: center;
+}
+
+.template-column__icon {
+  width: $icon--large;
+  height: $icon--large;
+
+  &--dnd {
+    width: 22px;
+    height: 15px;
+  }
 }
 
 .template-column__drag-element {
