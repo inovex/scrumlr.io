@@ -85,6 +85,8 @@ services:
       - ./dex.yaml:/etc/dex/config.docker.yaml:ro
     ports:
       - "5556:5556"
+    profiles:
+      - oidc
 
 volumes:
   postgres_data:

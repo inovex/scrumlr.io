@@ -144,7 +144,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			provider.UserNameScope,
 		)
 		if err != nil {
-			return fmt.Errorf("OIDC provider setup failed: %w", err)
+			logger.Get().Errorw("OIDC provider setup failed", "error", err)
 		}
 
 		p.SetName(strings.ToLower((string)(types.AccountTypeOIDC)))

@@ -9,17 +9,18 @@ web:
   http: '0.0.0.0:5556'
 
 staticClients:
-  - id: '8127257d-828f-4737-9d5b-9026dfa685da'
+  - id: ''
     redirectURIs:
       - 'http://localhost:8080/api/login/oidc/callback'
-    name: 'scrumlr.io'
-    secret: AjVYci6IYz9hQMw6rgMEKv1sowF6jXgr
+    name: ''
+    secret: ''
 
 enablePasswordDB: true
 staticPasswords:
-  - email: 'example@scrumlr.io'
-    hash: '$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W' # password
-    username: 'example'
-    userID: '34a73c21-dfae-43ec-9142-55771079bd57'
+  - email: ''
+    # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)
+    hash: ''
+    username: ''
+    userID: ''
 
 
