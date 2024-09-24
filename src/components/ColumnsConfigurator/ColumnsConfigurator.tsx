@@ -43,7 +43,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
 
   // id of column which is actively being dragged
   const [dragElementId, setDragElementId] = useState<string | null>(null);
-  const [dropElemenId, setDropElementId] = useState<string | null>(null);
+  const [dropElementId, setDropElementId] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -85,10 +85,10 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   // function to calculate where each column would be positioned if the drag-and-drop operation were completed at its current state
   const getPotentialIndex = (index: number) => {
     // no valid drag operation occurring
-    if (!dragElementId || !dropElemenId) return index;
+    if (!dragElementId || !dropElementId) return index;
 
     const dragElementIndex = templateColumns.findIndex((c) => c.id === dragElementId);
-    const dropElementIndex = templateColumns.findIndex((c) => c.id === dropElemenId);
+    const dropElementIndex = templateColumns.findIndex((c) => c.id === dropElementId);
 
     // if current index matches active index of drag element, the column is being dragged there,
     // so the potential index is that of the drop element
@@ -123,7 +123,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
                 column={column}
                 index={potentialIndex}
                 activeDrag={column.id === dragElementId}
-                activeDrop={column.id === dropElemenId}
+                activeDrop={column.id === dropElementId}
                 placement={calcPlacement(potentialIndex)}
               />
             );
