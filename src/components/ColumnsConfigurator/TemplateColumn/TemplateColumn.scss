@@ -37,7 +37,9 @@ $column-height: 340px;
     }
   }
 
+  // not the column that's currently being dragged, but actually where it was
   &--active-drag {
+    background-color: rgba(var(--accent-color--100-rgb, 0.5));
     border: $spacing--xxs dashed var(--accent-color--light);
     z-index: $base-z-index + $base-z-index-step; // display dragged item above others
   }

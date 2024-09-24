@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {useState} from "react";
 import {Column} from "types/column";
-import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
+import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {arrayMove, horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {TemplateColumn} from "./TemplateColumn/TemplateColumn";
 import "./ColumnsConfigurator.scss";
@@ -43,12 +43,15 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
 
   // id of column which is actively being dragged
   const [activeElementId, setActiveElementId] = useState<string | null>(null);
+  const [activeColumn, setActiveColumn] = useState<TemplateColumnType | null>(null);
   const [dropElementId, setDropElementId] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveElementId(event.active.id as string);
+    const activeId = event.active.id as string;
+    setActiveElementId(activeId);
+    setActiveColumn(templateColumns.find((c) => c.id === activeId)!);
   };
 
   const handleDragOver = (event: DragOverEvent) => {
@@ -69,6 +72,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
 
     // don't forget to clear states
     setActiveElementId(null);
+    setActiveColumn(null);
     setDropElementId(null);
   };
 
@@ -130,6 +134,16 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
           })}
         </div>
       </SortableContext>
+
+      <DragOverlay>
+        {activeElementId && activeColumn ? (
+          <TemplateColumn
+            className={classNames("columns-configurator__column", "columns-configurator__column--ghost")}
+            column={activeColumn}
+            index={getPotentialIndex(templateColumns.findIndex((c) => c.id === activeColumn.id))}
+          />
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 };

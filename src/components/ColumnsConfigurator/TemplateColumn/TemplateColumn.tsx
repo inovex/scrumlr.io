@@ -14,9 +14,9 @@ type TemplateColumnProps = {
   className?: string;
   column: TemplateColumnType;
   index: number;
-  placement: "first" | "center" | "last";
-  activeDrag: boolean;
-  activeDrop: boolean;
+  placement?: "first" | "center" | "last";
+  activeDrag?: boolean;
+  activeDrop?: boolean;
 };
 
 export const TemplateColumn = (props: TemplateColumnProps) => {
@@ -33,7 +33,7 @@ export const TemplateColumn = (props: TemplateColumnProps) => {
       className={classNames(
         props.className,
         "template-column",
-        `template-column--border-${props.placement}`,
+        `template-column--border-${props.placement ?? "ghost"}`,
         {
           "template-column--even": props.index % 2 === 0,
           "template-column--odd": props.index % 2 !== 0,
