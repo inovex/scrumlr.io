@@ -16,14 +16,14 @@ $column-height: 339px;
 
   border: $spacing--xxs solid var(--accent-color--light);
   &--border {
-    &-left {
+    &-first {
       border-right: none;
     }
     &-center {
       border-left: none;
       border-right: none;
     }
-    &-right {
+    &-last {
       border-left: none;
     }
   }

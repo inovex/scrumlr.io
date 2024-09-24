@@ -68,12 +68,40 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
 
   const calcPlacement = (index: number) => {
     if (index === 0) {
-      return "left";
+      return "first";
     }
     if (index === templateColumns.length - 1) {
-      return "right";
+      return "last";
     }
     return "center";
+  };
+
+  // function to calculate where each column would be positioned if the drag-and-drop operation were completed at its current state
+  const getPotentialIndex = (index: number) => {
+    // no valid drag operation occurring
+    if (!dragElementId || !dropElemenId) return index;
+
+    const dragElementIndex = templateColumns.findIndex((c) => c.id === dragElementId);
+    const dropElementIndex = templateColumns.findIndex((c) => c.id === dropElemenId);
+
+    // if current index matches active index of drag element, the column is being dragged there,
+    // so the potential index is that of the drop element
+    if (index === dragElementIndex) {
+      return dropElementIndex;
+    }
+
+    // dragging right: active index less the drop zone, and element is between them, the element shifts to the left
+    if (dragElementIndex < dropElementIndex && index > dragElementIndex && index <= dropElementIndex) {
+      return index - 1;
+    }
+
+    // dragging left: analogue to above, element shifts to the right
+    if (dragElementIndex > dropElementIndex && index < dragElementIndex && index >= dropElementIndex) {
+      return index + 1;
+    }
+
+    // otherwise the index remains unchanged
+    return index;
   };
 
   return (
@@ -87,7 +115,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
               column={column}
               activeDrag={column.id === dragElementId}
               activeDrop={column.id === dropElemenId}
-              placement={calcPlacement(index)}
+              placement={calcPlacement(getPotentialIndex(index))}
             />
           ))}
         </div>

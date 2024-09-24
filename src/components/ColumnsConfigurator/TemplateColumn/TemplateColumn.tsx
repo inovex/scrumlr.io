@@ -13,7 +13,7 @@ import "./TemplateColumn.scss";
 type TemplateColumnProps = {
   className?: string;
   column: TemplateColumnType;
-  placement: "left" | "center" | "right";
+  placement: "first" | "center" | "last";
   activeDrag: boolean;
   activeDrop: boolean;
 };
