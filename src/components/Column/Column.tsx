@@ -173,9 +173,9 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <Close className="column__header-edit-button-icon" />
         </button>
       )}
-      {!isTemporary && (
+      {!isTemporary && !openedColumnSettings && (
         <button title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
-          {openedColumnSettings ? <Close className="column__header-edit-button-icon" /> : <ThreeDots className="column__header-edit-button-icon" />}
+          <ThreeDots className="column__header-edit-button-icon" style={{transform: "rotate(90deg)"}} /> {/* inline style to avoid funky rotating behaviour when hovering */}
         </button>
       )}
     </>
@@ -212,7 +212,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
                 {notes.length}
               </span>
             )}
-            {isModerator && renderColumnModifiers()}
+            {!openedColumnSettings && isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
                 id={id}
@@ -222,6 +222,8 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
                 index={index}
                 onClose={() => setOpenedColumnSettings(false)}
                 onNameEdit={() => setColumnNameMode("EDIT")}
+                setOpenColumnSet={setOpenedColumnSettings}
+                closeColumnSettings={() => setOpenedColumnSettings(false)}
               />
             )}
           </div>
