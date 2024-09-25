@@ -1,12 +1,17 @@
 @import "constants/style";
 
+$add-column-width: 144px;
+$add-column-height: 326px;
+
 .add-template-column {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  width: 144px;
-  height: 326px;
+  min-width: $add-column-width;
+  width: $add-column-width;
+
+  height: $add-column-height;
 
   border: 3px dashed var(--accent-color--light);
 

@@ -22,9 +22,10 @@
   justify-items: stretch;
 
   width: 100%;
+  max-width: 100%;
   height: 100%;
 
-  overflow: scroll scroll;
+  overflow: hidden auto;
 }
 
 .create-template__dropdown {
@@ -62,7 +63,15 @@
 
 .create-template__columns-configurator-wrapper {
   grid-area: columns;
+
+  display: flex;
+  flex-direction: column;
   justify-self: center;
+
+  // lock scrolling
+  max-width: 100%;
+  height: 340px; // TODO fix magic
+  overflow: hidden;
 }
 
 .create-template__buttons {
