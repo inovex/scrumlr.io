@@ -142,14 +142,9 @@ $card-height: 220px;
     background-color: $navy--400;
   }
 
-  .template-card__title {
-    color: $gray--000;
-  }
-
-  .template-card__description {
-    color: $gray--000;
-  }
-
+  .template-card__title,
+  .template-card__access-policy,
+  .template-card__description,
   .template-card__columns-title {
     color: $gray--000;
   }
