@@ -2,7 +2,14 @@
   "InfoBar": {
     "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
   },
-  "NewBoard": {},
+  "LegacyNewBoard": {
+    "boardName": "Sitzungsname",
+    "createNewBoard": "Erstelle eine Sitzung",
+    "extendedConfigurationButton": "Erweiterte Einstellungen",
+    "basicConfigurationButton": "Vorlagenauswahl",
+    "extendedConfigurationTitle": "Erweiterte Einstellungen",
+    "basicConfigurationTitle": "Wähle eine Vorlage"
+  },
   "Templates": {
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
@@ -141,7 +148,8 @@
     "addColumnRight": "Rechts einfügen",
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
     "notes_one": "{{count}} Kärtchen",
-    "notes_other": "{{count}} Kärtchen"
+    "notes_other": "{{count}} Kärtchen",
+    "color": "Farbe ändern"
   },
   "ErrorPage": {
     "navigateHome": "Startseite",

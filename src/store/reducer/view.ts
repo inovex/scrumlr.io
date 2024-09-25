@@ -14,6 +14,7 @@ const INITIAL_VIEW_STATE: ViewState = {
   hotkeyNotificationsEnabled: typeof window !== "undefined" && getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
   showBoardReactions: typeof window !== "undefined" && getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
   theme: ((typeof window !== "undefined" && getFromStorage(THEME_STORAGE_KEY)) as Theme) ?? "auto",
+  legacyCreateBoard: process.env.REACT_APP_LEGACY_CREATE_BOARD === "true",
 };
 
 // eslint-disable-next-line @typescript-eslint/default-param-last

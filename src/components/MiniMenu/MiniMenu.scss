@@ -1,25 +1,22 @@
 @import "constants/style";
 
 .mini-menu {
-  position: absolute;
-
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: $spacing--xs;
+  gap: $spacing--xxs;
+  justify-content: center;
 
   width: fit-content;
-  height: 48px;
-  padding: $spacing--xxs 2px;
-  // place menu at the same place as the icon (including fine tuning)
-  transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+  height: fit-content;
+  min-height: 48px;
+  padding-left: $spacing--xxs 2px;
 
   border-radius: $rounded--full;
   box-shadow: 0 0 20px rgba($navy--400, 0.12);
 
   background-color: $gray--000;
 }
-
 .mini-menu__item {
   all: unset;
 
@@ -39,6 +36,10 @@
     background-color: $gray--300;
   }
 
+  &:focus-visible {
+    background-color: $gray--300;
+  }
+
   &--active {
     color: $gray--000;
     background-color: $navy--400;
@@ -46,5 +47,57 @@
     &:hover {
       background-color: $navy--600;
     }
+  }
+}
+
+.mini-menu:first-child {
+  padding-left: $spacing--xxs;
+}
+
+.mini-menu:last-child {
+  padding-right: $spacing--xxs;
+}
+
+[theme="dark"] {
+  .mini-menu__item {
+    color: $gray--000;
+
+    &:hover {
+      background-color: $navy--600;
+    }
+
+    &:focus-visible {
+      background-color: $navy--600;
+    }
+
+    &--active {
+      color: $gray--000;
+      background-color: $navy--600;
+
+      &:hover {
+        background-color: $navy--600;
+      }
+    }
+  }
+  .mini-menu {
+    background-color: $navy--400;
+  }
+}
+
+// Hacky way to not show delete column button if it's the last column
+.column:only-of-type .mini-menu > button:nth-child(1) {
+  display: none;
+}
+
+@media #{$smartphone} {
+  .mini-menu {
+    flex-direction: column-reverse;
+    align-content: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .mini-menu:first-child {
+    padding: $spacing--xxs;
   }
 }

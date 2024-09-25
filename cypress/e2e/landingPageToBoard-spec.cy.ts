@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 /// <reference path="../support/index.d.ts" />
 
-import { columnTemplates } from "../../src/routes/Boards/columnTemplates"
+import { legacyColumnTemplates } from "../../src/routes/Boards/Legacy/legacyColumnTemplates"
 import translationEn from "../../src/i18n/en/translation.json"
 
 describe("Navigation from landing page to board", () => {
@@ -28,13 +28,13 @@ describe("Navigation from landing page to board", () => {
         cy.get("button").contains(translationEn.LoginBoard.login).click()
 
         // check templates
-        cy.get("h1").contains(translationEn.NewBoard.basicConfigurationTitle)
-        Object.values(columnTemplates).forEach(templateName => {
+        cy.get("h1").contains(translationEn.LegacyNewBoard.basicConfigurationTitle)
+        Object.values(legacyColumnTemplates).forEach(templateName => {
             cy.contains(templateName.name)
         })
 
         cy.get("button")
-        .contains(translationEn.NewBoard.createNewBoard)
+        .contains(translationEn.LegacyNewBoard.createNewBoard)
         .parent()
         .should("be.disabled")
 
@@ -42,13 +42,13 @@ describe("Navigation from landing page to board", () => {
         cy.get("input[type='radio']").siblings().contains("Lean Coffee").click()
 
         cy.get("button")
-        .contains(translationEn.NewBoard.createNewBoard)
+        .contains(translationEn.LegacyNewBoard.createNewBoard)
         .parent()
         .should("not.be.disabled")
 
         // click CTA
         cy.get("button")
-        .contains(translationEn.NewBoard.createNewBoard)
+        .contains(translationEn.LegacyNewBoard.createNewBoard)
         .click()
 
         // navigates to the board

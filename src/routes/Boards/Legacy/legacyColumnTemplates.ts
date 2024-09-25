@@ -1,6 +1,6 @@
 import {Color} from "constants/colors";
 
-export const columnTemplates: {[id: string]: {name: string; description?: string; columns: {name: string; hidden: boolean; color: Color}[]}} = {
+export const legacyColumnTemplates: {[id: string]: {name: string; description?: string; columns: {name: string; hidden: boolean; color: Color}[]}} = {
   leanCoffee: {
     name: "Lean Coffee",
     columns: [
