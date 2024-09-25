@@ -17,80 +17,87 @@ import {Feedback} from "components/SettingsDialog/Feedback";
 import {VotingDialog} from "components/VotingDialog";
 import {TimerDialog} from "components/TimerDialog";
 import {ProfileSettings} from "components/SettingsDialog/ProfileSettings";
+import {useAppSelector} from "store";
 import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
+import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
 import {CreateTemplate} from "./Boards/CreateTemplate/CreateTemplate";
 
-const Router = () => (
-  <BrowserRouter>
-    <RouteChangeObserver />
-    <Routes>
-      <Route path="/" element={<Homepage />} />
-      <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
-      <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
-      <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
-      <Route path="/new" element={<Navigate to="/boards" />} /> {/* legacy route */}
-      <Route
-        path="/boards"
-        element={
-          <RequireAuthentication>
-            <Boards />
-          </RequireAuthentication>
-        }
-      >
-        <Route index element={<Navigate to="templates" />} />
-        <Route path="templates" element={<Templates />}>
-          {/* TODO extract settings routes no avoid repetition */}
+const renderLegacyRoute = (legacy: boolean) => (legacy ? <Route path="/new" element={<LegacyNewBoard />} /> : <Route path="/new" element={<Navigate to="/boards" />} />);
+
+const Router = () => {
+  const legacyCreateBoard = !!useAppSelector((state) => state.view.legacyCreateBoard);
+  return (
+    <BrowserRouter>
+      <RouteChangeObserver />
+      <Routes>
+        <Route path="/" element={<Homepage />} />
+        <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
+        <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
+        <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
+        {renderLegacyRoute(legacyCreateBoard)}
+        <Route
+          path="/boards"
+          element={
+            <RequireAuthentication>
+              <Boards />
+            </RequireAuthentication>
+          }
+        >
+          <Route index element={<Navigate to="templates" />} />
+          <Route path="templates" element={<Templates />}>
+            {/* TODO extract settings routes no avoid repetition */}
+            <Route path="settings" element={<SettingsDialog />}>
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="profile" element={<ProfileSettings />} />
+            </Route>
+          </Route>
+          <Route path="create" element={<CreateTemplate />} />
+          <Route path="sessions" element={<Sessions />}>
+            <Route path="settings" element={<SettingsDialog />}>
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="profile" element={<ProfileSettings />} />
+            </Route>
+          </Route>
+        </Route>
+        <Route path="/login" element={<LoginBoard />} />
+        <Route
+          path="/board/:boardId/print"
+          element={
+            <RequireAuthentication>
+              <BoardGuard printViewEnabled />
+            </RequireAuthentication>
+          }
+        />
+        <Route
+          path="/board/:boardId"
+          element={
+            <RequireAuthentication>
+              <BoardGuard printViewEnabled={false} />
+            </RequireAuthentication>
+          }
+        >
           <Route path="settings" element={<SettingsDialog />}>
+            <Route path="board" element={<BoardSettings />} />
+            <Route path="participants" element={<Participants />} />
             <Route path="appearance" element={<Appearance />} />
+            <Route path="share" element={<ShareSession />} />
+            <Route path="export" element={<ExportBoard />} />
             <Route path="feedback" element={<Feedback />} />
             <Route path="profile" element={<ProfileSettings />} />
           </Route>
+          <Route path="voting" element={<VotingDialog />} />
+          <Route path="timer" element={<TimerDialog />} />
+          <Route path="note/:noteId/stack" element={<StackView />} />
         </Route>
-        <Route path="create" element={<CreateTemplate />} />
-        <Route path="sessions" element={<Sessions />}>
-          <Route path="settings" element={<SettingsDialog />}>
-            <Route path="appearance" element={<Appearance />} />
-            <Route path="feedback" element={<Feedback />} />
-            <Route path="profile" element={<ProfileSettings />} />
-          </Route>
-        </Route>
-      </Route>
-      <Route path="/login" element={<LoginBoard />} />
-      <Route
-        path="/board/:boardId/print"
-        element={
-          <RequireAuthentication>
-            <BoardGuard printViewEnabled />
-          </RequireAuthentication>
-        }
-      />
-      <Route
-        path="/board/:boardId"
-        element={
-          <RequireAuthentication>
-            <BoardGuard printViewEnabled={false} />
-          </RequireAuthentication>
-        }
-      >
-        <Route path="settings" element={<SettingsDialog />}>
-          <Route path="board" element={<BoardSettings />} />
-          <Route path="participants" element={<Participants />} />
-          <Route path="appearance" element={<Appearance />} />
-          <Route path="share" element={<ShareSession />} />
-          <Route path="export" element={<ExportBoard />} />
-          <Route path="feedback" element={<Feedback />} />
-          <Route path="profile" element={<ProfileSettings />} />
-        </Route>
-        <Route path="voting" element={<VotingDialog />} />
-        <Route path="timer" element={<TimerDialog />} />
-        <Route path="note/:noteId/stack" element={<StackView />} />
-      </Route>
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </BrowserRouter>
-);
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default Router;

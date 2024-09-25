@@ -1,10 +1,10 @@
 import {ReactNode} from "react";
 import classNames from "classnames";
-import {Tooltip} from "components/Tooltip";
 import {uniqueId} from "underscore";
 import "./MiniMenu.scss";
+import ReactFocusLock from "react-focus-lock";
 
-type MiniMenuItem = {
+export type MiniMenuItem = {
   icon: ReactNode;
   label: string;
   active?: boolean;
@@ -16,18 +16,25 @@ type MiniMenuProps = {
   items: MiniMenuItem[];
 };
 
-export const MiniMenu = (props: MiniMenuProps) => (
-    <div className={classNames(props.className, "mini-menu")}>
-      {props.items.map((item) => {
+export const MiniMenu = ({className, items}: MiniMenuProps) => (
+  <ReactFocusLock autoFocus={false}>
+    <div className={classNames(className, "mini-menu")}>
+      {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
         return (
-          <>
-            <button id={anchor} className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})} key={item.label} onClick={item?.onClick}>
-              {item.icon}
-            </button>
-            <Tooltip anchorSelect={`#${anchor}`} content={item.label} color="backlog-blue" />
-          </>
+          <button
+            data-tooltip-id="scrumlr-tooltip"
+            data-tooltip-content={item.label}
+            aria-label={item.label}
+            id={anchor}
+            className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})}
+            key={item.label}
+            onClick={item?.onClick}
+          >
+            {item.icon}
+          </button>
         );
       })}
     </div>
-  );
+  </ReactFocusLock>
+);

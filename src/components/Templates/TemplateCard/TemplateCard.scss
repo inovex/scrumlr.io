@@ -18,6 +18,7 @@ $card-height: 220px;
   padding: $spacing--lg;
 
   background-color: $gray--000;
+  box-shadow: 0 6px 9px 0 rgba($blue--500, 0.1);
 }
 
 .template-card__favourite {
@@ -76,8 +77,14 @@ $card-height: 220px;
 }
 
 .template-card__menu {
-  position: relative; // allow mini menu to be positioned
   grid-area: menu;
+
+  &--open {
+    // position menu over icon
+    transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+
+    box-shadow: 0 2px 20px 0 rgba(var($navy--400), 0.12);
+  }
 }
 
 .template-card__description {
@@ -140,18 +147,20 @@ $card-height: 220px;
 [theme="dark"] {
   .template-card {
     background-color: $navy--400;
+    box-shadow: 0 2px 20px 0 rgba($navy--700, 0.5);
   }
 
-  .template-card__title {
-    color: $gray--000;
-  }
-
-  .template-card__description {
-    color: $gray--000;
-  }
-
+  .template-card__title,
+  .template-card__access-policy,
+  .template-card__description,
   .template-card__columns-title {
     color: $gray--000;
+  }
+
+  .template-card__menu {
+    &--open {
+      box-shadow: 0 2px 20px 0 rgba($navy--700, 0.5);
+    }
   }
 
   .template-card__columns-subtitle {
