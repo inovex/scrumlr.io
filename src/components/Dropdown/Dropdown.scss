@@ -95,3 +95,42 @@
     transform: rotate(180deg);
   }
 }
+
+[theme="dark"] {
+  .dropdown {
+    background-color: $navy--400;
+  }
+
+  .dropdown__options-container {
+    color: $gray--000;
+    background-color: $navy--400;
+  }
+
+  .dropdown__option {
+    background-color: $navy--400;
+  }
+
+  // different styles for hovering options when dropdown is open or closed
+  .dropdown {
+    &--open {
+      .dropdown__option {
+        color: $gray--000;
+
+        &:hover {
+          color: $navy--500;
+          background-color: $gray--800;
+        }
+      }
+    }
+
+    &:not(&--open) {
+      .dropdown__option {
+        color: $gray--800;
+
+        &:hover {
+          color: $gray--000;
+        }
+      }
+    }
+  }
+}
