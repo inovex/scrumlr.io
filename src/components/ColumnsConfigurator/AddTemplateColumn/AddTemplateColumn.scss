@@ -1,0 +1,32 @@
+@import "constants/style";
+
+.add-template-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 144px;
+  height: 326px;
+
+  border: 3px dashed var(--accent-color--light);
+
+  &--left {
+    border-right: none;
+    border-top-left-radius: $rounded--default;
+    border-bottom-left-radius: $rounded--default;
+  }
+  &--right {
+    border-left: none;
+    border-top-right-radius: $rounded--default;
+    border-bottom-right-radius: $rounded--default;
+  }
+}
+
+.add-template-column__icon {
+  width: 56px;
+  height: 56px;
+
+  color: var(--accent-color--light);
+
+  cursor: pointer;
+}

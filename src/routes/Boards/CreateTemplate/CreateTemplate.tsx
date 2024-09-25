@@ -4,6 +4,7 @@ import {AccessPolicy} from "types/board";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
+import {ColumnsConfigurator} from "components/ColumnsConfigurator/ColumnsConfigurator";
 import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
@@ -11,7 +12,6 @@ import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
 import classNames from "classnames";
 import {Button} from "components/Button";
 import "./CreateTemplate.scss";
-import {ColumnsConfigurator} from "../../../components/ColumnsConfigurator/ColumnsConfigurator";
 
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   switch (policy) {

@@ -4,6 +4,7 @@ import {Column} from "types/column";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {arrayMove, horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {TemplateColumn} from "./TemplateColumn/TemplateColumn";
+import {AddTemplateColumn} from "./AddTemplateColumn/AddTemplateColumn";
 import "./ColumnsConfigurator.scss";
 
 type ColumnsConfiguratorProps = {
@@ -31,12 +32,6 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
       color: "value-violet",
       name: "Column 3",
       visible: false,
-    },
-    {
-      id: "col4",
-      color: "goal-green",
-      name: "Column 4",
-      visible: true,
     },
   ];
   const [templateColumns, setTemplateColumns] = useState<TemplateColumnType[]>(initialState);
@@ -134,6 +129,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
         <div className={classNames(props.className, "columns-configurator")}>
+          <AddTemplateColumn alignment="left" color="poker-purple" />
           {templateColumns.map((column, index) => {
             const potentialIndex = getPotentialIndex(index);
             return (
@@ -148,6 +144,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
               />
             );
           })}
+          <AddTemplateColumn alignment="right" color="poker-purple" />
         </div>
       </SortableContext>
 
