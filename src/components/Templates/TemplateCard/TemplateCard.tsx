@@ -52,7 +52,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
     if (templateType === "RECOMMENDED") return null;
     return showMiniMenu ? (
       <MiniMenu
-        className="template-card__menu"
+        className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
           {label: "Delete", icon: <TrashIcon />, onClick: closeMenu},
           {label: "Edit", icon: <EditIcon />, onClick: navigateToEdit},

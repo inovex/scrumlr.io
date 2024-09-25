@@ -76,8 +76,12 @@ $card-height: 220px;
 }
 
 .template-card__menu {
-  position: relative; // allow mini menu to be positioned
   grid-area: menu;
+
+  // position menu over icon
+  &--open {
+    transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+  }
 }
 
 .template-card__description {
