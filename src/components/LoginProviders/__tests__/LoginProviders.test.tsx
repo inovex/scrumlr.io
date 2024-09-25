@@ -34,12 +34,21 @@ describe("check for all provider buttons", () => {
     const {container} = render(createLoginProviders(["GOOGLE"]));
     expect(container.querySelector("#google")).toBeInTheDocument();
     expect(container.querySelector("#microsoft")).not.toBeInTheDocument();
+    expect(container.querySelector("#oidc")).not.toBeInTheDocument();
   });
 
   test("microsoft sign in", () => {
     const {container} = render(createLoginProviders(["MICROSOFT"]));
     expect(container.querySelector("#google")).not.toBeInTheDocument();
     expect(container.querySelector("#microsoft")).toBeInTheDocument();
+    expect(container.querySelector("#oidc")).not.toBeInTheDocument();
+  });
+
+  test("oidc sign in", () => {
+    const {container} = render(createLoginProviders(["OIDC"]));
+    expect(container.querySelector("#google")).not.toBeInTheDocument();
+    expect(container.querySelector("#microsoft")).not.toBeInTheDocument();
+    expect(container.querySelector("#oidc")).toBeInTheDocument();
   });
 
   describe("click-handler", () => {
@@ -57,6 +66,13 @@ describe("check for all provider buttons", () => {
       const button = container.querySelector("#microsoft");
       fireEvent.click(button!);
       expect(signInSpy).toHaveBeenCalledWith("microsoft", expect.anything());
+    });
+
+    test("oidc sign in", () => {
+      const {container} = render(createLoginProviders(["OIDC"]));
+      const button = container.querySelector("#oidc");
+      fireEvent.click(button!);
+      expect(signInSpy).toHaveBeenCalledWith("oidc", expect.anything());
     });
   });
 });
