@@ -6,7 +6,7 @@ import {useNavigate} from "react-router";
 import {TextInputLabel} from "components/TextInputLabel";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {TextInput} from "components/TextInput";
-import {Button} from "components/Button";
+import {LegacyButton} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {legacyColumnTemplates} from "./legacyColumnTemplates";
 import "./LegacyNewBoard.scss";
@@ -92,18 +92,18 @@ export const LegacyNewBoard = () => {
         </div>
       </div>
       <div className="new-board__actions">
-        <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+        <LegacyButton className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
           {t("LegacyNewBoard.createNewBoard")}
-        </Button>
+        </LegacyButton>
         {!extendedConfiguration && (
-          <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
+          <LegacyButton className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
             {t("LegacyNewBoard.extendedConfigurationButton")}
-          </Button>
+          </LegacyButton>
         )}
         {extendedConfiguration && (
-          <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
+          <LegacyButton className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
             {t("LegacyNewBoard.basicConfigurationButton")}
-          </Button>
+          </LegacyButton>
         )}
       </div>
     </div>
