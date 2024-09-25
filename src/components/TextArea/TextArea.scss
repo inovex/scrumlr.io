@@ -14,7 +14,7 @@ $height--default: calc(6.5 * $text--base + 2 * $padding--default);
   margin: 0;
   outline: none;
   border: none;
-  border-radius: $rounded--large;
+  border-radius: $rounded--default;
 
   font-size: $text--base;
   font-weight: 500;
