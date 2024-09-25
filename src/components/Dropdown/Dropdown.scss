@@ -3,8 +3,6 @@
 .dropdown {
   position: relative;
 
-  background-color: $gray--000;
-
   cursor: pointer;
   user-select: none;
 
@@ -12,17 +10,10 @@
   // but targeting the specific corners seems to work
   border-top-left-radius: $rounded--large;
   border-top-right-radius: $rounded--large;
+
   &:not(&--open) {
     border-bottom-left-radius: $rounded--large;
     border-bottom-right-radius: $rounded--large;
-  }
-
-  &--open {
-    .dropdown__options-container {
-      // clip top of box shadow, since it's absolute and below a different element
-      box-shadow: 0 3px 12px rgba(var(--navy--700-rgb), 0.12);
-      clip-path: inset(0px -10px -10px -10px);
-    }
   }
 }
 
@@ -38,10 +29,7 @@
   font-size: $text--base;
   font-weight: 700;
 
-  color: $navy--400;
-
   overflow: hidden;
-  background-color: $gray--000;
 
   // first item (active) always has top border radius,
   // but only bottom if the menu isn't expanded.
@@ -54,10 +42,6 @@
     border-bottom-left-radius: $rounded--large;
     border-bottom-right-radius: $rounded--large;
   }
-
-  &:hover {
-    background-color: $gray--300;
-  }
 }
 
 .dropdown__options-container {
@@ -65,8 +49,6 @@
   top: 100%;
   left: 0;
   right: 0;
-
-  background-color: $gray--000;
 
   border-bottom-left-radius: $rounded--large;
   border-bottom-right-radius: $rounded--large;
@@ -96,13 +78,63 @@
   }
 }
 
+// color logic is separate to clarify what's going on:
+// different styles for hovering options when dropdown is open or closed
+// closed:
+//  default: kinda opaque text, analogue to input fields
+//  hover: more visible text
+// open:
+//  default: visible text by default
+//  hover: color & background changes
+.dropdown {
+  background-color: $gray--000;
+}
+
+// to help with border radius overlap
+.dropdown__options-container {
+  background-color: $gray--000;
+}
+
+.dropdown__option {
+  background-color: $gray--000;
+}
+
+.dropdown {
+  &--open {
+    .dropdown__options-container {
+      // clip top of box shadow, since it's absolute and below a different element
+      box-shadow: 0 3px 12px rgba($navy--700, 0.12);
+      clip-path: inset(0px -10px -10px -10px);
+    }
+
+    .dropdown__option {
+      color: $navy--500;
+
+      &:hover {
+        color: $navy--500;
+        background-color: $gray--200;
+      }
+    }
+  }
+
+  &:not(&--open) {
+    .dropdown__option {
+      color: $gray--800;
+
+      &:hover {
+        color: $navy--500;
+      }
+    }
+  }
+}
+
+// same goes for dark mode
 [theme="dark"] {
   .dropdown {
     background-color: $navy--400;
   }
 
   .dropdown__options-container {
-    color: $gray--000;
     background-color: $navy--400;
   }
 
@@ -110,7 +142,6 @@
     background-color: $navy--400;
   }
 
-  // different styles for hovering options when dropdown is open or closed
   .dropdown {
     &--open {
       .dropdown__option {
