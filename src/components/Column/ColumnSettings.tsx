@@ -73,7 +73,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       icon: <Trash />,
       onClick: () => {
         props.onClose?.();
-        dispatch(Actions.deleteColumn(props.id));
+        dispatch(deleteColumn(props.id));
       },
     },
     {
@@ -102,7 +102,17 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       icon: props.visible ? <Hidden /> : <Visible />,
       onClick: () => {
         props.onClose?.();
-        dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: !props.visible}));
+        dispatch(
+          editColumn({
+            id: props.id,
+            column: {
+              name: props.name,
+              color: props.color,
+              index: props.index,
+              visible: !props.visible,
+            },
+          })
+        );
       },
     },
     {
