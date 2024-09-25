@@ -24,6 +24,12 @@
 
 .add-template-column__button {
   all: unset;
+
+  &:active {
+    .add-template-column__icon #circle {
+      fill-opacity: 0.2;
+    }
+  }
 }
 
 .add-template-column__icon {
