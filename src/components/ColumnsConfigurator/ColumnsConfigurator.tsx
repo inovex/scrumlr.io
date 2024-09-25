@@ -145,7 +145,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
         <div className={classNames(props.className, "columns-configurator")}>
-          <AddTemplateColumn alignment="left" color="poker-purple" onClick={() => addTemplateColumn("left")} />
+          <AddTemplateColumn alignment="left" color="poker-purple" onClick={addTemplateColumn} />
           {templateColumns.map((column, index) => {
             const potentialIndex = getPotentialIndex(index);
             return (
@@ -160,7 +160,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
               />
             );
           })}
-          <AddTemplateColumn alignment="right" color="poker-purple" onClick={() => addTemplateColumn("right")} />
+          <AddTemplateColumn alignment="right" color="poker-purple" onClick={addTemplateColumn} />
         </div>
       </SortableContext>
 
