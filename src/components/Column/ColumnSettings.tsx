@@ -1,14 +1,16 @@
-import {FC} from "react";
-import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash} from "components/Icon";
-import {Color, getColorClassName, getColorForIndex} from "constants/colors";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
+import {Color, getColorForIndex, COLOR_ORDER} from "constants/colors";
 import {useTranslation} from "react-i18next";
 import "./ColumnSettings.scss";
+import "../ColorPicker/ColorPicker.scss";
 import {useAppDispatch, useAppSelector} from "store";
-import classNames from "classnames";
 import {useOnBlur} from "utils/hooks/useOnBlur";
+import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {createColumnOptimistically, deleteColumn, editColumn, setShowHiddenColumns} from "store/features";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
+import {ColorPicker} from "../ColorPicker/ColorPicker";
 
 type ColumnSettingsProps = {
   id: string;
@@ -18,136 +20,109 @@ type ColumnSettingsProps = {
   index: number;
   onClose?: () => void;
   onNameEdit?: () => void;
+  setOpenColumnSet?: Dispatch<SetStateAction<boolean>>;
+  closeColumnSettings: () => void;
 };
 
-export const ColumnSettings: FC<ColumnSettingsProps> = ({id, name, color, visible, index, onClose, onNameEdit}) => {
+export const ColumnSettings = (props: ColumnSettingsProps) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self!.showHiddenColumns);
   const dispatch = useAppDispatch();
-  const columnSettingsRef = useOnBlur(onClose ?? (() => {}));
+  const columnSettingsRef = useOnBlur(props.onClose ?? (() => {}));
+  const [openedColorPicker, setOpenedColorPicker] = useState(false);
 
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
       dispatch(setShowHiddenColumns({showHiddenColumns: true}));
       Toast.success({title: t("Toast.hiddenColumnsVisible"), autoClose: TOAST_TIMER_SHORT});
     }
-    const randomColor = getColorForIndex(Math.floor(Math.random() * 100));
+    const randomColor = getColorForIndex(Math.floor(Math.random() * COLOR_ORDER.length));
     dispatch(createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !openedColorPicker) {
+        props.closeColumnSettings();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress, false); // trigger in bubble phase
+    return () => document.removeEventListener("keydown", handleKeyPress, false);
+  }, [openedColorPicker, props]);
+
+  const renderColorPicker = () =>
+    openedColorPicker ? (
+      <ColorPicker
+        id={props.id}
+        name={props.name}
+        visible={props.visible}
+        index={props.index}
+        color={props.color}
+        onClose={props.onClose}
+        colors={COLOR_ORDER}
+        closeColorPicker={() => setOpenedColorPicker(false)}
+      />
+    ) : (
+      <span className="column__header-color-option column__header-color-option--selected" />
+    );
+
+  const menuItems: MiniMenuItem[] = [
+    {
+      label: t("Column.deleteColumn"),
+      icon: <Trash />,
+      onClick: () => {
+        props.onClose?.();
+        dispatch(Actions.deleteColumn(props.id));
+      },
+    },
+    {
+      label: t("Column.color"),
+      icon: renderColorPicker(),
+      onClick: () => setOpenedColorPicker((o) => !o),
+    },
+    {
+      label: t("Column.addColumnLeft"),
+      icon: <ArrowLeft />,
+      onClick: () => {
+        props.onClose?.();
+        handleAddColumn(props.index);
+      },
+    },
+    {
+      label: t("Column.addColumnRight"),
+      icon: <ArrowRight />,
+      onClick: () => {
+        props.onClose?.();
+        handleAddColumn(props.index + 1);
+      },
+    },
+    {
+      label: props.visible ? t("Column.hideColumn") : t("Column.showColumn"),
+      icon: props.visible ? <Hidden /> : <Visible />,
+      onClick: () => {
+        props.onClose?.();
+        dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: !props.visible}));
+      },
+    },
+    {
+      label: t("Column.editName"),
+      icon: <Edit />,
+      onClick: () => {
+        props.onNameEdit?.();
+        props.onClose?.();
+      },
+    },
+    {
+      label: t("Column.resetName"),
+      icon: <Close />,
+      onClick: () => props.setOpenColumnSet?.((o) => !o),
+    },
+  ];
+
   return (
-    <div className="column__header-menu-dropdown" ref={columnSettingsRef}>
-      <ul>
-        <li>
-          <button
-            onClick={() => {
-              onClose?.();
-              dispatch(
-                editColumn({
-                  id,
-                  column: {
-                    name,
-                    color,
-                    index,
-                    visible: !visible,
-                  },
-                })
-              );
-            }}
-          >
-            {visible ? <Hidden /> : <Visible />}
-            {visible ? t("Column.hideColumn") : t("Column.showColumn")}
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => {
-              onNameEdit?.();
-              onClose?.();
-            }}
-          >
-            <Edit />
-            {t("Column.editName")}
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => {
-              onClose?.();
-              handleAddColumn(index);
-            }}
-          >
-            <ArrowLeft />
-            {t("Column.addColumnLeft")}
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => {
-              onClose?.();
-              handleAddColumn(index + 1);
-            }}
-          >
-            <ArrowRight />
-            {t("Column.addColumnRight")}
-          </button>
-        </li>
-        <li>
-          <button
-            onClick={() => {
-              onClose?.();
-              dispatch(deleteColumn(id));
-            }}
-          >
-            <Trash />
-            {t("Column.deleteColumn")}
-          </button>
-        </li>
-        <li>
-          <button
-            aria-label="Backlog Blue"
-            title="Backlog Blue"
-            className={classNames(getColorClassName("backlog-blue"), "column__color-button")}
-            onClick={() => dispatch(editColumn({id, column: {name, color: "backlog-blue", index, visible}}))}
-          />
-          <button
-            aria-label="Planning Pink"
-            title="Planning Pink"
-            className={classNames(getColorClassName("planning-pink"), "column__color-button")}
-            onClick={() => dispatch(editColumn({id, column: {name, color: "planning-pink", index, visible}}))}
-          />
-          <button
-            aria-label="Poker Purple"
-            title="Poker Purple"
-            className={classNames(getColorClassName("poker-purple"), "column__color-button")}
-            onClick={() => dispatch(editColumn({id, column: {name, color: "poker-purple", index, visible}}))}
-          />
-          <button
-            aria-label="Value Violet"
-            title="Value Violet"
-            className={classNames(getColorClassName("value-violet"), "column__color-button")}
-            onClick={() => dispatch(editColumn({id, column: {name, color: "value-violet", index, visible}}))}
-          />
-          <button
-            aria-label="Goal Green"
-            title="Goal Green"
-            className={classNames(getColorClassName("goal-green"), "column__color-button")}
-            onClick={() => dispatch(editColumn({id, column: {name, color: "goal-green", index, visible}}))}
-          />
-          <button
-            aria-label="Yielding Yellow"
-            title="Yielding Yellow"
-            className={classNames(getColorClassName("yielding-yellow"), "column__color-button")}
-            onClick={() => dispatch(editColumn({id, column: {name, color: "yielding-yellow", index, visible}}))}
-          />
-          <button
-            aria-label="Online Orange"
-            title="Online Orange"
-            className={classNames(getColorClassName("online-orange"), "column__color-button")}
-            onClick={() => dispatch(editColumn({id, column: {name, color: "online-orange", index, visible}}))}
-          />
-        </li>
-      </ul>
+    <div ref={columnSettingsRef} className="column-settings">
+      <MiniMenu items={menuItems} />
     </div>
   );
 };
