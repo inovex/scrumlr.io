@@ -38,6 +38,7 @@
 .create-template__info {
   grid-area: info;
   display: flex;
+  align-items: center;
   gap: $spacing--xs;
 
   &-icon {
