@@ -135,7 +135,8 @@
     "addColumnRight": "Rechts einfügen",
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
     "notes_one": "{{count}} Kärtchen",
-    "notes_other": "{{count}} Kärtchen"
+    "notes_other": "{{count}} Kärtchen",
+    "color": "Farbe ändern"
   },
   "ErrorPage": {
     "navigateHome": "Startseite",
