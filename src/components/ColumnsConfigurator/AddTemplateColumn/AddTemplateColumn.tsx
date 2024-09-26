@@ -7,7 +7,7 @@ type AddTemplateColumnProps = {
   className?: string;
   alignment: "left" | "right";
   color: Color;
-  onClick: (alignment: "left" | "right") => void;
+  onClick: (alignment: "left" | "right", color: Color) => void;
   disabled?: boolean;
 };
 
@@ -21,7 +21,7 @@ export const AddTemplateColumn = (props: AddTemplateColumnProps) => (
       getColorClassName(props.color)
     )}
   >
-    <button className="add-template-column__button" onClick={() => props.onClick(props.alignment)} disabled={props.disabled}>
+    <button className="add-template-column__button" onClick={() => props.onClick(props.alignment, props.color)} disabled={props.disabled}>
       <AddColumnIcon className={classNames("add-template-column__icon", {"add-template-column__icon--disabled": props.disabled})} />
     </button>
   </div>

@@ -2,7 +2,7 @@ import {uniqueId} from "underscore";
 import classNames from "classnames";
 import {useState} from "react";
 import {Column} from "types/column";
-import {getRandomColor} from "constants/colors";
+import {Color, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {arrayMove, horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {TemplateColumn} from "./TemplateColumn/TemplateColumn";
@@ -19,19 +19,19 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   const initialState: TemplateColumnType[] = [
     {
       id: uniqueId("col"),
-      color: "backlog-blue",
+      color: "planning-pink",
       name: "Column 1",
       visible: true,
     },
     {
       id: uniqueId("col"),
-      color: "planning-pink",
+      color: "backlog-blue",
       name: "Column 2",
       visible: true,
     },
     {
       id: uniqueId("col"),
-      color: "value-violet",
+      color: "poker-purple",
       name: "Column 3",
       visible: false,
     },
@@ -127,10 +127,10 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     );
   };
 
-  const addTemplateColumn = (alignment: "left" | "right") => {
+  const addTemplateColumn = (alignment: "left" | "right", color: Color) => {
     const newColumn: TemplateColumnType = {
       id: uniqueId("col"),
-      color: getRandomColor(),
+      color,
       name: "Column",
       visible: false,
     };
@@ -145,7 +145,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
         <div className={classNames(props.className, "columns-configurator")}>
-          <AddTemplateColumn alignment="left" color="poker-purple" onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="left" color={getPreviousColor(templateColumns[0].color)} onClick={addTemplateColumn} />
           {templateColumns.map((column, index) => {
             const potentialIndex = getPotentialIndex(index);
             return (
@@ -160,7 +160,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
               />
             );
           })}
-          <AddTemplateColumn alignment="right" color="poker-purple" onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="right" color={getNextColor(templateColumns[templateColumns.length - 1].color)} onClick={addTemplateColumn} />
         </div>
       </SortableContext>
 
