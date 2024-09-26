@@ -2,7 +2,7 @@
 
 .create-template {
   display: grid;
-  grid-template-columns: $spacing--xs auto $spacing--xs auto $spacing--xs;
+  grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
   grid-template-rows:
     $spacing--xs
     auto
