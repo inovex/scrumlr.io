@@ -2,22 +2,35 @@
 
 .create-template {
   display: grid;
-  grid-template-columns: $spacing--xs auto auto $spacing--xs;
-  grid-template-rows: $spacing--xs auto 14px auto 26px auto 20px auto 46px 1fr 56px auto $spacing--xs;
+  grid-template-columns: $spacing--xs auto $spacing--xs auto $spacing--xs;
+  grid-template-rows:
+    $spacing--xs
+    auto
+    14px
+    auto
+    26px
+    auto
+    20px
+    auto
+    46px
+    auto
+    56px
+    auto
+    $spacing--xs;
   grid-template-areas:
-    ".          .           .             ."
-    ".          dropdown    password      ."
-    ".          .           .             ."
-    ".          info        info          ."
-    ".          .           .             ."
-    ".          name        name          ."
-    ".          .           .             ."
-    ".          description description   ."
-    ".          .           .             ."
-    ".          columns     columns       ."
-    ".          .           .             ."
-    ".          buttons     buttons       ."
-    ".          .           .             .";
+    ".          .           .         .         ."
+    ".          dropdown    .         password  ."
+    ".          .           .         .         ."
+    ".          info        info      info      ."
+    ".          .           .         .         ."
+    ".          name        name      name      ."
+    ".          .           .         .         ."
+    ".          description description description ."
+    ".          .           .         .         ."
+    ".          columns     columns   columns   ."
+    ".          .           .         .         ."
+    ".          buttons     buttons   buttons   ."
+    ".          .           .         .         .";
 
   justify-items: stretch;
 
