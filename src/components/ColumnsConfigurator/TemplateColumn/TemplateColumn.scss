@@ -96,3 +96,23 @@ $column-height: 340px;
   border-radius: $rounded--full;
   background-color: var(--accent-color--light);
 }
+
+[theme="dark"] {
+  .template-column {
+    border-color: var(--accent-color--dark);
+
+    &--active-drag {
+      background-color: rgba(var(--accent-color--200-rgb, 0.5));
+      border-color: var(--accent-color--dark);
+    }
+
+    &--active-drop {
+      background-color: rgba(var(--accent-color--200-rgb, 0.5));
+      border-color: var(--accent-color--dark);
+    }
+  }
+
+  .template-column__color {
+    background-color: var(--accent-color--dark);
+  }
+}

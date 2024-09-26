@@ -55,3 +55,17 @@ $add-column-height: 326px;
     }
   }
 }
+
+[theme="dark"] {
+  .add-template-column {
+    border-color: var(--accent-color--dark);
+  }
+
+  .add-template-column__icon {
+    color: var(--accent-color--dark);
+
+    &:not(&--disabled):hover {
+      filter: drop-shadow(0 4px 14px rgba(var(--accent-color--dark-rgb), 0.26));
+    }
+  }
+}
