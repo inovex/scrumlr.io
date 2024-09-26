@@ -16,7 +16,7 @@
     ".          .           .             ."
     ".          columns     columns       ."
     ".          .           .             ."
-    ".          .           buttons       ."
+    ".          buttons     buttons       ."
     ".          .           .             .";
 
   justify-items: stretch;
@@ -76,6 +76,8 @@
 
 .create-template__buttons {
   grid-area: buttons;
+  justify-self: end;
+
   display: flex;
   flex-direction: row;
   gap: $spacing--base;
