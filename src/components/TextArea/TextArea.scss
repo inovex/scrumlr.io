@@ -40,3 +40,22 @@ $height--default: calc(6.5 * $text--base + 2 * $padding--default);
     max-height: $height--default;
   }
 }
+
+[theme="dark"] {
+  .text-area {
+    color: $gray--300;
+    background-color: $navy--400;
+
+    &::placeholder {
+      color: $gray--800;
+    }
+
+    &:hover,
+    &:focus-within {
+      color: $gray--300;
+      &::placeholder {
+        color: $gray--300;
+      }
+    }
+  }
+}
