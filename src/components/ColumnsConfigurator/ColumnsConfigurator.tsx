@@ -19,13 +19,13 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   const initialState: TemplateColumnType[] = [
     {
       id: uniqueId("col"),
-      color: "planning-pink",
+      color: "backlog-blue",
       name: "Column 1",
       visible: true,
     },
     {
       id: uniqueId("col"),
-      color: "backlog-blue",
+      color: "planning-pink",
       name: "Column 2",
       visible: true,
     },

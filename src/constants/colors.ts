@@ -1,6 +1,6 @@
 export type Color = "backlog-blue" | "goal-green" | "poker-purple" | "online-orange" | "planning-pink" | "value-violet" | "yielding-yellow";
 
-export const COLOR_ORDER: Color[] = ["planning-pink", "backlog-blue", "poker-purple", "value-violet", "goal-green", "yielding-yellow", "online-orange"];
+export const COLOR_ORDER: Color[] = ["backlog-blue", "planning-pink", "poker-purple", "value-violet", "goal-green", "yielding-yellow", "online-orange"];
 
 export const getColorIndex = (color: Color) => COLOR_ORDER.indexOf(color);
 export const getColorForIndex = (index: number, offset = 0) => COLOR_ORDER[(index + offset + COLOR_ORDER.length) % COLOR_ORDER.length];
