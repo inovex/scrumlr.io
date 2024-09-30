@@ -5,7 +5,7 @@ import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
-import {AccessPolicy} from "types/board";
+import {AccessPolicy} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";

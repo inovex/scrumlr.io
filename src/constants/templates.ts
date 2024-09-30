@@ -1,4 +1,4 @@
-import {AccessPolicy} from "types/board";
+import {AccessPolicy} from "store/features";
 import {Color} from "./colors";
 
 // TODO define types in store instead
