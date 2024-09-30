@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {ChangeEvent, useEffect, useState} from "react";
-import {Actions} from "store/action";
-import store, {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
+import {deleteBoard, editBoard, setShowHiddenColumns} from "store/features";
 import {LockClosed, Trash, Refresh} from "components/Icon";
 import {DEFAULT_BOARD_NAME, MIN_PASSWORD_LENGTH, PLACEHOLDER_PASSWORD, TOAST_TIMER_SHORT} from "constants/misc";
 import {Toast} from "utils/Toast";
@@ -18,6 +18,7 @@ import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
 
 export const BoardSettings = () => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const activeMenuItem: MenuItemConfig = useOutletContext();
 
@@ -25,7 +26,7 @@ export const BoardSettings = () => {
     (applicationState) => ({
       board: applicationState.board.data!,
       me: applicationState.participants?.self,
-      currentUserIsModerator: applicationState.participants?.self.role === "OWNER" || applicationState.participants?.self.role === "MODERATOR",
+      currentUserIsModerator: applicationState.participants?.self?.role === "OWNER" || applicationState.participants?.self?.role === "MODERATOR",
     }),
     isEqual
   );
@@ -49,11 +50,11 @@ export const BoardSettings = () => {
   const handleSetPassword = (newPassword: string) => {
     setPassword(newPassword);
     if (newPassword.length >= MIN_PASSWORD_LENGTH) {
-      store.dispatch(Actions.editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
+      dispatch(editBoard({accessPolicy: "BY_PASSPHRASE", passphrase: newPassword}));
       navigator.clipboard.writeText(newPassword).then(() => Toast.success({title: t("Toast.passwordCopied"), autoClose: TOAST_TIMER_SHORT}));
       setIsProtected(true);
     } else if (isProtected || isProtectedOnInitialSettingsOpen) {
-      store.dispatch(Actions.editBoard({accessPolicy: "PUBLIC"}));
+      dispatch(editBoard({accessPolicy: "PUBLIC"}));
       setIsProtectedOnInitialSettingsOpen(false);
       setIsProtected(false);
       Toast.info({title: t("Toast.boardMadePublic"), autoClose: TOAST_TIMER_SHORT});
@@ -121,7 +122,7 @@ export const BoardSettings = () => {
             id="boardSettingsBoardName"
             label={t("BoardSettings.BoardName")}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setBoardName(e.target.value)}
-            submit={() => store.dispatch(Actions.editBoard({name: boardName}))}
+            submit={() => dispatch(editBoard({name: boardName}))}
             disabled={!state.currentUserIsModerator}
             placeholder={DEFAULT_BOARD_NAME}
             maxLength={128}
@@ -160,7 +161,7 @@ export const BoardSettings = () => {
                   data-testid="note-repositioning"
                   className="board-settings__allow-note-repositioning-button"
                   label={t("BoardSettings.AllowNoteRepositioningOption")}
-                  onClick={() => store.dispatch(Actions.editBoard({allowStacking: !state.board.allowStacking}))}
+                  onClick={() => dispatch(editBoard({allowStacking: !state.board.allowStacking}))}
                   role="switch"
                   aria-checked={state.board.allowStacking}
                 >
@@ -171,7 +172,7 @@ export const BoardSettings = () => {
                 <SettingsButton
                   className="board-settings__allow-board-editing"
                   label={t("BoardSettings.IsLocked")}
-                  onClick={() => store.dispatch(Actions.editBoard({isLocked: !state.board.isLocked}))}
+                  onClick={() => dispatch(editBoard({isLocked: !state.board.isLocked}))}
                   role="switch"
                   aria-checked={state.board.isLocked}
                 >
@@ -186,7 +187,7 @@ export const BoardSettings = () => {
                   className="board-settings__show-author-button"
                   label={t("BoardSettings.ShowAuthorOption")}
                   onClick={() => {
-                    store.dispatch(Actions.editBoard({showAuthors: !state.board.showAuthors}));
+                    dispatch(editBoard({showAuthors: !state.board.showAuthors}));
                   }}
                   role="switch"
                   aria-checked={state.board.showAuthors}
@@ -200,7 +201,7 @@ export const BoardSettings = () => {
                   data-testid="notes"
                   className="board-settings__show-notes-button"
                   label={t("BoardSettings.ShowOtherUsersNotesOption")}
-                  onClick={() => store.dispatch(Actions.editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
+                  onClick={() => dispatch(editBoard({showNotesOfOtherUsers: !state.board.showNotesOfOtherUsers}))}
                   role="switch"
                   aria-checked={state.board.showNotesOfOtherUsers}
                 >
@@ -213,7 +214,7 @@ export const BoardSettings = () => {
                   data-testid="reactions"
                   className="board-settings__show-reactions-button"
                   label={t("BoardSettings.ShowNoteReactionsOptions")}
-                  onClick={() => store.dispatch(Actions.editBoard({showNoteReactions: !state.board.showNoteReactions}))}
+                  onClick={() => dispatch(editBoard({showNoteReactions: !state.board.showNoteReactions}))}
                   role="switch"
                   aria-checked={state.board.showNoteReactions}
                 >
@@ -226,7 +227,7 @@ export const BoardSettings = () => {
                   data-testid="columns"
                   className="board-settings__show-columns-button"
                   label={t("BoardSettings.ShowHiddenColumnsOption")}
-                  onClick={() => store.dispatch(Actions.setShowHiddenColumns(!state.me?.showHiddenColumns))}
+                  onClick={() => dispatch(setShowHiddenColumns({showHiddenColumns: !state.me?.showHiddenColumns}))}
                   role="switch"
                   aria-checked={!!state.me?.showHiddenColumns}
                 >
@@ -248,7 +249,7 @@ export const BoardSettings = () => {
           {showConfirmationDialog && (
             <ConfirmationDialog
               title={t("ConfirmationDialog.deleteBoard")}
-              onAccept={() => store.dispatch(Actions.deleteBoard())}
+              onAccept={() => dispatch(deleteBoard())}
               onDecline={() => setShowConfirmationDialog(false)}
               icon={Trash}
               warning

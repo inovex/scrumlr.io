@@ -1,9 +1,8 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {useDispatch} from "react-redux";
+import {useAppDispatch, useAppSelector} from "store";
+import {editSelf, setHotkeyState} from "store/features";
 import {Info} from "components/Icon";
 import {Toggle} from "components/Toggle";
 import {isEqual} from "underscore";
@@ -16,14 +15,14 @@ import {SettingsButton} from "../Components/SettingsButton";
 import "./ProfileSettings.scss";
 
 export const ProfileSettings = () => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
-  const dispatch = useDispatch();
 
   const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const state = useAppSelector(
     (applicationState) => ({
-      participant: applicationState.participants!.self,
+      participant: applicationState.participants.self!,
       hotkeysAreActive: applicationState.view.hotkeysAreActive,
     }),
     isEqual
@@ -45,7 +44,7 @@ export const ProfileSettings = () => {
             value={userName}
             maxLength={64}
             onChange={(e) => setUserName(e.target.value)}
-            submit={() => store.dispatch(Actions.editSelf({...state.participant.user, name: userName}))}
+            submit={() => dispatch(editSelf({...state.participant.user, name: userName}))}
           />
 
           <AvatarSettings id={id} />
@@ -54,7 +53,7 @@ export const ProfileSettings = () => {
               className="profile-settings__toggle-hotkeys-button"
               label={t("Hotkeys.hotkeyToggle")}
               onClick={() => {
-                dispatch(Actions.setHotkeyState(!state.hotkeysAreActive));
+                dispatch(setHotkeyState(!state.hotkeysAreActive));
               }}
             >
               <Toggle active={state.hotkeysAreActive} />

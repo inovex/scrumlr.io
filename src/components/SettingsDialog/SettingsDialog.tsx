@@ -22,8 +22,8 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
-  const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
-  const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
+  const me = useAppSelector((applicationState) => applicationState.participants?.self?.user)!;
+  const isBoardModerator = useAppSelector((state) => state.participants?.self?.role === "MODERATOR" || state.participants?.self?.role === "OWNER");
 
   const [activeMenuItem, setActiveMenuItem] = useState<MenuItemConfig>();
 
