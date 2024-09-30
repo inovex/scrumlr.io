@@ -1,17 +1,17 @@
 import {API} from "api";
-import "routes/NewBoard/NewBoard.scss";
 import {useState} from "react";
-import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
-import {columnTemplates} from "./columnTemplates";
-import {TextInputLabel} from "../../components/TextInputLabel";
-import {TextInput} from "../../components/TextInput";
-import {Button} from "../../components/Button";
-import {ScrumlrLogo} from "../../components/ScrumlrLogo";
+import {TextInputLabel} from "components/TextInputLabel";
+import {AccessPolicySelection} from "components/AccessPolicySelection";
+import {TextInput} from "components/TextInput";
+import {Button} from "components/Button";
+import {ScrumlrLogo} from "components/ScrumlrLogo";
+import {legacyColumnTemplates} from "./legacyColumnTemplates";
+import "./LegacyNewBoard.scss";
 
-export const NewBoard = () => {
+export const LegacyNewBoard = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState<string | undefined>();
@@ -35,7 +35,7 @@ export const NewBoard = () => {
           type: AccessPolicy[accessPolicy],
           ...additionalAccessPolicyOptions,
         },
-        columnTemplates[columnTemplate].columns
+        legacyColumnTemplates[columnTemplate].columns
       );
       navigate(`/board/${boardId}`);
     }
@@ -53,10 +53,10 @@ export const NewBoard = () => {
 
           {!extendedConfiguration && (
             <div>
-              <h1>{t("NewBoard.basicConfigurationTitle")}</h1>
+              <h1>{t("LegacyNewBoard.basicConfigurationTitle")}</h1>
 
               <div className="new-board__mode-selection">
-                {Object.keys(columnTemplates).map((key) => (
+                {Object.keys(legacyColumnTemplates).map((key) => (
                   <label key={key} className="new-board__mode">
                     <input
                       className="new-board__mode-input"
@@ -68,8 +68,8 @@ export const NewBoard = () => {
                     />
                     <div className="new-board__mode-label">
                       <div>
-                        <div className="new-board__mode-name">{columnTemplates[key].name}</div>
-                        <div className="new-board__mode-description">{columnTemplates[key].description}</div>
+                        <div className="new-board__mode-name">{legacyColumnTemplates[key].name}</div>
+                        <div className="new-board__mode-description">{legacyColumnTemplates[key].description}</div>
                       </div>
                     </div>
                   </label>
@@ -80,9 +80,9 @@ export const NewBoard = () => {
 
           {extendedConfiguration && (
             <div>
-              <h1>{t("NewBoard.extendedConfigurationTitle")}</h1>
+              <h1>{t("LegacyNewBoard.extendedConfigurationTitle")}</h1>
 
-              <TextInputLabel label={t("NewBoard.boardName")}>
+              <TextInputLabel label={t("LegacyNewBoard.boardName")}>
                 <TextInput onChange={(e) => setBoardName(e.target.value)} />
               </TextInputLabel>
 
@@ -93,16 +93,16 @@ export const NewBoard = () => {
       </div>
       <div className="new-board__actions">
         <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
-          {t("NewBoard.createNewBoard")}
+          {t("LegacyNewBoard.createNewBoard")}
         </Button>
         {!extendedConfiguration && (
           <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
-            {t("NewBoard.extendedConfigurationButton")}
+            {t("LegacyNewBoard.extendedConfigurationButton")}
           </Button>
         )}
         {extendedConfiguration && (
           <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
-            {t("NewBoard.basicConfigurationButton")}
+            {t("LegacyNewBoard.basicConfigurationButton")}
           </Button>
         )}
       </div>
