@@ -1,14 +1,13 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {Actions} from "store/action";
 import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
 import {Color, COLOR_ORDER, getRandomColor} from "constants/colors";
 import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
 import "./ColumnSettings.scss";
 import "../ColorPicker/ColorPicker.scss";
-import {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
+import {createColumnOptimistically, deleteColumn, editColumn, setShowHiddenColumns} from "store/features";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 import {ColorPicker} from "../ColorPicker/ColorPicker";
@@ -27,18 +26,18 @@ type ColumnSettingsProps = {
 
 export const ColumnSettings = (props: ColumnSettingsProps) => {
   const {t} = useTranslation();
-  const showHiddenColumns = useAppSelector((state) => state.participants?.self.showHiddenColumns);
-  const dispatch = useDispatch();
+  const showHiddenColumns = useAppSelector((state) => state.participants?.self!.showHiddenColumns);
+  const dispatch = useAppDispatch();
   const columnSettingsRef = useOnBlur(props.onClose ?? (() => {}));
   const [openedColorPicker, setOpenedColorPicker] = useState(false);
 
   const handleAddColumn = (columnIndex: number) => {
     if (!showHiddenColumns) {
-      dispatch(Actions.setShowHiddenColumns(true));
+      dispatch(setShowHiddenColumns({showHiddenColumns: true}));
       Toast.success({title: t("Toast.hiddenColumnsVisible"), autoClose: TOAST_TIMER_SHORT});
     }
     const randomColor = getRandomColor();
-    dispatch(Actions.createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
+    dispatch(createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
   useEffect(() => {
@@ -74,7 +73,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       icon: <Trash />,
       onClick: () => {
         props.onClose?.();
-        dispatch(Actions.deleteColumn(props.id));
+        dispatch(deleteColumn(props.id));
       },
     },
     {
@@ -103,7 +102,17 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       icon: props.visible ? <Hidden /> : <Visible />,
       onClick: () => {
         props.onClose?.();
-        dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: !props.visible}));
+        dispatch(
+          editColumn({
+            id: props.id,
+            column: {
+              name: props.name,
+              color: props.color,
+              index: props.index,
+              visible: !props.visible,
+            },
+          })
+        );
       },
     },
     {

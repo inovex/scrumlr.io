@@ -245,6 +245,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Sign-in with OIDC",
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/login/oidc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login",
+								"oidc"
+							],
+							"query": [
+								{
+									"key": "state",
+									"value": "",
+									"description": "URL to redirect to on successful authentication",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"description": "These resources can be used to sign-in into the application.\n\nThe login's with third party providers will automatically sign-in the user, sync the user profile (e.g. the name or avatar URL) and redirect back to the URL specified by the `state` query parameter. Do not worry about CSRF vulnerabilities here, since we'll enrich your URL with a randomly generated nonce.",
