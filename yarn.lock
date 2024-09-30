@@ -9792,10 +9792,10 @@ react-side-effect@^2.1.0:
   resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-2.1.2.tgz#dc6345b9e8f9906dc2eeb68700b615e0b4fe752a"
   integrity sha512-PVjOcvVOyIILrYoyGEpDN3vmYNLdy1CajSFNt4TDsVQC5KpTijDvWVoR+/7Rz2xT978D8/ZtFceXxzsPwZEDvw==
 
-react-to-print@^2.15.1:
-  version "2.15.1"
-  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.15.1.tgz#c9a6732cadf1118fc90d886b54a9388c419561b9"
-  integrity sha512-1foogIFbCpzAVxydkhBiDfMiFYhIMphiagDOfcG4X/EcQ+fBPqJ0rby9Wv/emzY1YLkIQy/rEgOrWQT+rBKhjw==
+react-to-print@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-3.0.0.tgz#636fca1096ab45cb4073a53befbc0debca6db6f2"
+  integrity sha512-FyPaTCzZgZyrUe3J3yNth7XrQZJ1l+5ODzB4CDxv1VOQbEKnGtNpasDbsVDLiyXHu5UNBxg2eD2HmRzCoCagJw==
 
 react-toastify@^10.0.5:
   version "10.0.5"
