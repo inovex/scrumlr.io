@@ -2,21 +2,22 @@ import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
 import {useNavigate} from "react-router-dom";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppDispatch, useAppSelector} from "store";
 import {getNumberFromStorage, saveToStorage} from "utils/storage";
 import {CUSTOM_TIMER_STORAGE_KEY} from "constants/storage";
 import {Plus, Minus} from "components/Icon";
 import "./TimerDialog.scss";
+import {setTimer} from "store/features";
 
 export const TimerDialog = () => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
+  const isAdmin = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
   const [customTime, setCustomTime] = useState(getNumberFromStorage(CUSTOM_TIMER_STORAGE_KEY, 10));
 
   const startTimer = (minutes: number) => {
-    store.dispatch(Actions.setTimer(minutes));
+    dispatch(setTimer(minutes));
     navigate("..");
   };
 

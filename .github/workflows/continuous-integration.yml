@@ -85,7 +85,7 @@ jobs:
       - name: Go lint
         uses: golangci/golangci-lint-action@v4
         with:
-          version: v1.54
+          version: v1.61
           working-directory: ./server/src/
 
       - name: Build server

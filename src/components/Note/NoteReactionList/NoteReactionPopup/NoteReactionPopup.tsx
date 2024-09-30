@@ -1,12 +1,11 @@
 import React, {useEffect, useRef, useState} from "react";
 import {Portal} from "components/Portal";
 import classNames from "classnames";
-import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
-import {useAppSelector} from "store";
+import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
+import {useAppDispatch, useAppSelector} from "store";
 import {useIsScrolling} from "utils/hooks/useIsScrolling";
-import {useDispatch} from "react-redux";
-import {Actions} from "store/action";
 import {useTranslation} from "react-i18next";
+import {deleteReaction} from "store/features";
 import {ReactionModeled} from "../NoteReactionList";
 import {NoteReactionChip} from "../NoteReactionChip/NoteReactionChip";
 import {NoteAuthorList} from "../../NoteAuthorList/NoteAuthorList";
@@ -20,7 +19,7 @@ interface NoteReactionPopupProps {
 }
 
 export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const rootRef = useRef<HTMLDivElement>(null);
   const draggableNotchRef = useRef<HTMLDivElement>(null);
@@ -28,7 +27,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const isScrolling = useIsScrolling(containerRef);
   // sum total reactions
   const totalReactions = props.reactionsReduced.reduce((acc: number, curr: ReactionModeled) => acc + curr.amount, 0);
-  const viewer = useAppSelector((state) => state.participants!.self);
+  const viewer = useAppSelector((state) => state.participants!.self!);
 
   // activeTab === undefined -> all are active
   const [activeTab, setActiveTab] = useState<ReactionType>();
@@ -64,7 +63,7 @@ export const NoteReactionPopup = (props: NoteReactionPopupProps) => {
   const removeOwnReaction = (e: React.MouseEvent<HTMLButtonElement>, r: ReactionModeled) => {
     e.stopPropagation();
     if (r.myReactionId) {
-      dispatch(Actions.deleteReaction(r.myReactionId));
+      dispatch(deleteReaction(r.myReactionId));
     }
   };
 

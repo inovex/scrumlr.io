@@ -1,8 +1,8 @@
 import {fireEvent, render, screen} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {REACTION_EMOJI_MAP} from "types/reaction";
+import {REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {Provider} from "react-redux";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestStore from "utils/test/getTestStore";
 import {getEmojiWithSkinTone} from "utils/reactions";
