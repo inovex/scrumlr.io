@@ -1,7 +1,7 @@
 import {render} from "testUtils";
 import {Provider} from "react-redux";
 import {BoardUsers} from "components/BoardUsers";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import getTestStore from "utils/test/getTestStore";
 import getTestParticipant from "utils/test/getTestParticipant";
 
@@ -20,10 +20,10 @@ describe("users", () => {
         participants: {
           self: getTestParticipant(),
           others: [
-            getTestParticipant({user: {id: "other-1", name: "other-1"}, connected: false}),
-            getTestParticipant({user: {id: "other-2", name: "other-2"}}),
-            getTestParticipant({user: {id: "other-3", name: "other-3"}}),
-            getTestParticipant({user: {id: "other-4", name: "other-4"}}),
+            getTestParticipant({user: {id: "other-1", name: "other-1", isAnonymous: true}, connected: false}),
+            getTestParticipant({user: {id: "other-2", name: "other-2", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-3", name: "other-3", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-4", name: "other-4", isAnonymous: true}}),
           ],
         },
       })
@@ -36,10 +36,10 @@ describe("users", () => {
         participants: {
           self: getTestParticipant(),
           others: [
-            getTestParticipant({user: {id: "other-1", name: "other-1"}}),
-            getTestParticipant({user: {id: "other-2", name: "other-2"}}),
-            getTestParticipant({user: {id: "other-3", name: "other-3"}}),
-            getTestParticipant({user: {id: "other-4", name: "other-4"}}),
+            getTestParticipant({user: {id: "other-1", name: "other-1", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-2", name: "other-2", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-3", name: "other-3", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-4", name: "other-4", isAnonymous: true}}),
           ],
         },
       })
@@ -52,11 +52,11 @@ describe("users", () => {
         participants: {
           self: getTestParticipant(),
           others: [
-            getTestParticipant({user: {id: "other-1", name: "other-1"}}),
-            getTestParticipant({user: {id: "other-2", name: "other-2"}}),
-            getTestParticipant({user: {id: "other-3", name: "other-3"}}),
-            getTestParticipant({user: {id: "other-4", name: "other-4"}}),
-            getTestParticipant({user: {id: "other-5", name: "other-5"}}),
+            getTestParticipant({user: {id: "other-1", name: "other-1", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-2", name: "other-2", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-3", name: "other-3", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-4", name: "other-4", isAnonymous: true}}),
+            getTestParticipant({user: {id: "other-5", name: "other-5", isAnonymous: true}}),
           ],
         },
       })

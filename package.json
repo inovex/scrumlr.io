@@ -17,7 +17,7 @@
     "@fontsource/raleway": "^5.1.0",
     "@react-hook/resize-observer": "^2.0.2",
     "@react-spring/web": "^9.7.4",
-    "@reduxjs/toolkit": "^1.9.7",
+    "@reduxjs/toolkit": "^2.2.7",
     "avataaars": "^2.0.0",
     "classnames": "^2.5.1",
     "file-saver": "^2.0.5",
