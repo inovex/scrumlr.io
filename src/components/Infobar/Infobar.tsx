@@ -29,7 +29,7 @@ export const InfoBar = () => {
     <aside className="info-bar">
       {state.startTime && state.endTime && <Timer startTime={state.startTime} endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
-      {state.sharedNote && viewer.user.id !== focusInitiator?.user.id && (
+      {state.sharedNote && viewer?.user.id !== focusInitiator?.user.id && (
         <Link
           aria-label={t("InfoBar.ReturnToPresentedNote")}
           className="info-bar__return-to-shared-note-button"

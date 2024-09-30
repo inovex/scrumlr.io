@@ -1,11 +1,11 @@
 import {FC, useState} from "react";
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/types";
 import {Trash, Eject} from "components/Icon";
 import "./NoteDialogNoteOptions.scss";
 import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
-import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {useAppDispatch} from "store";
+import {deleteNote, unstackNote} from "store/features";
 
 type NoteDialogNoteOptionsProps = {
   isStackedNote: boolean;
@@ -19,13 +19,13 @@ type NoteDialogNoteOptionsProps = {
 
 export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: NoteDialogNoteOptionsProps) => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [showParentDialog, setShowParentDialog] = useState<boolean>(false);
   const [showChildDialog, setShowChildDialog] = useState<boolean>(false);
 
   const onUnstack = (id: string) => {
-    dispatch(Actions.unstackNote(id));
+    dispatch(unstackNote({noteId: id}));
   };
 
   const allowedToDeleteStack = props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR" || (props.authorId === props.viewer.user.id && !props.stackHasMixedAuthors);
@@ -48,7 +48,7 @@ export const NoteDialogNoteOptions: FC<NoteDialogNoteOptionsProps> = (props: Not
       setShowChildDialog(true);
       return;
     }
-    dispatch(Actions.deleteNote(id, deleteStack));
+    dispatch(deleteNote({noteId: id, deleteStack: !!deleteStack}));
   };
 
   const showDeleteButton = props.authorId === props.viewer.user.id || props.viewer.role === "OWNER" || props.viewer.role === "MODERATOR";

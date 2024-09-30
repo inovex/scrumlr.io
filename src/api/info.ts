@@ -1,6 +1,8 @@
-import {SERVER_HTTP_URL} from "../config";
+import {SERVER_HTTP_URL} from "config";
+import {ServerInfo} from "store/features";
 
-interface ServerInformation {
+// type as received from the backend
+interface ServerInformationDto {
   anonymousLoginDisabled: boolean;
   authProvider: string[];
   serverTime: string;
@@ -21,7 +23,14 @@ export const InfoAPI = {
       const response = await fetch(`${SERVER_HTTP_URL}/info`);
 
       if (response.status === 200) {
-        return (await response.json()) as ServerInformation;
+        const info = (await response.json()) as ServerInformationDto;
+        // convert to frontend type, don't ask me why they're different in the first place though
+        return {
+          serverTime: new Date(info.serverTime).getTime(),
+          enabledAuthProvider: info.authProvider,
+          anonymousLoginDisabled: info.anonymousLoginDisabled,
+          feedbackEnabled: info.feedbackEnabled,
+        } as ServerInfo;
       }
 
       throw new Error(`responded with status code ${response.status}`);
