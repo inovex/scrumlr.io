@@ -28,13 +28,13 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 
 	var body AnonymousSignUpRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	user, err := s.users.LoginAnonymous(r.Context(), body.Name)
 	if err != nil {
-		log.Errorw("could not create user", "req", body, "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
