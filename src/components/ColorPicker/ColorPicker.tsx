@@ -1,9 +1,9 @@
 import {useEffect} from "react";
-import {useDispatch} from "react-redux";
 import {uniqueId} from "underscore";
 import ReactFocusLock from "react-focus-lock";
 import {Color, getColorClassName, formatColorName} from "constants/colors";
-import {Actions} from "../../store/action";
+import {useAppDispatch} from "store";
+import {editColumn} from "store/features";
 import {Tooltip} from "../Tooltip";
 
 type ColorPickerProps = {
@@ -18,7 +18,7 @@ type ColorPickerProps = {
 };
 
 export const ColorPicker = (props: ColorPickerProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const colorsWithoutSelectedColor = props.colors.filter((curColor) => curColor !== props.color);
   const primColorAnchor = uniqueId(`color-picker-${props.color.toString()}`);
 
@@ -44,7 +44,17 @@ export const ColorPicker = (props: ColorPickerProps) => {
             title={formatColorName(props.color)}
             onClick={() => {
               props.onClose?.();
-              dispatch(Actions.editColumn(props.id, {name: props.name, color: props.color, index: props.index, visible: props.visible}));
+              dispatch(
+                editColumn({
+                  id: props.id,
+                  column: {
+                    name: props.name,
+                    color: props.color,
+                    index: props.index,
+                    visible: props.visible,
+                  },
+                })
+              );
             }}
             className="color-picker__item-button"
           >
@@ -62,7 +72,17 @@ export const ColorPicker = (props: ColorPickerProps) => {
                 title={formatColorName(item)}
                 onClick={() => {
                   props.onClose?.();
-                  dispatch(Actions.editColumn(props.id, {name: props.name, color: item, index: props.index, visible: props.visible}));
+                  dispatch(
+                    editColumn({
+                      id: props.id,
+                      column: {
+                        name: props.name,
+                        color: item,
+                        index: props.index,
+                        visible: props.visible,
+                      },
+                    })
+                  );
                 }}
                 className={`${item.toString()} color-picker__item-button`}
               >
