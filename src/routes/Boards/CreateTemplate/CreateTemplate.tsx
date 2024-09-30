@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {AccessPolicy} from "types/board";
+import {AccessPolicy} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";

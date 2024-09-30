@@ -1,7 +1,7 @@
 import {uniqueId} from "underscore";
 import classNames from "classnames";
 import {useState} from "react";
-import {Column} from "types/column";
+import {Column} from "store/features";
 import {Color, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {arrayMove, horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
