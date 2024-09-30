@@ -1,6 +1,6 @@
 import {API} from "api";
 import {useState} from "react";
-import {AccessPolicy} from "types/board";
+import {AccessPolicy} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {TextInputLabel} from "components/TextInputLabel";

@@ -188,7 +188,7 @@ $secondary-colors: (
 );
 
 $base-colors: (
-  navy: (
+  "navy": (
     900: $navy--900,
     800: $navy--800,
     700: $navy--700,
@@ -199,7 +199,7 @@ $base-colors: (
     200: $navy--200,
     100: $navy--100,
   ),
-  gray: (
+  "gray": (
     800: $gray--800,
     700: $gray--700,
     600: $gray--600,
