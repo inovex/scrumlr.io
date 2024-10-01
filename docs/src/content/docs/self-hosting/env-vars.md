@@ -139,6 +139,17 @@ SCRUMLR_AUTH_APPLE_CLIENT_ID=''
 SCRUMLR_AUTH_APPLE_CLIENT_SECRET=''
 ```
 
+### OpenID Connect OAuth
+Required OIDC credentials.
+Only configure if you wish to use generic OpenID Connect Authentication.
+```bash
+SCRUMLR_AUTH_OIDC_CLIENT_ID
+SCRUMLR_AUTH_OIDC_CLIENT_SECRET
+SCRUMLR_AUTH_OIDC_DISCOVERY_URL
+SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE
+SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE
+```
+
 ### Feedback Webhook URL
 A webhook URL to which feedback should be sent.
 This is not required.
