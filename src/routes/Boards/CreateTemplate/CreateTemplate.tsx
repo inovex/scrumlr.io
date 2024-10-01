@@ -8,6 +8,7 @@ import {ColumnsConfigurator} from "components/ColumnsConfigurator/ColumnsConfigu
 import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
+import {ReactComponent as ShuffleIcon} from "assets/icons/shuffle.svg";
 import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
 import classNames from "classnames";
 import {Button} from "components/Button";
@@ -56,7 +57,10 @@ export const CreateTemplate = () => {
       />
 
       {activeOptionKey === AccessPolicy.BY_PASSPHRASE && (
-        <Input className="create-template__password" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} placeholder="Password" />
+        <div className="create-template__password-wrapper">
+          <ShuffleIcon className="create-template__shuffle-icon" />
+          <Input className="create-template__password-wrapper" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} placeholder="Password" />
+        </div>
       )}
 
       <div className="create-template__info">

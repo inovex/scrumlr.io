@@ -5,7 +5,7 @@
   grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
   grid-template-rows:
     $spacing--xs
-    auto
+    60px
     14px
     auto
     26px
@@ -45,8 +45,20 @@
   grid-area: dropdown;
 }
 
-.create-template__password {
+.create-template__password-wrapper {
   grid-area: password;
+
+  display: flex;
+  flex-direction: row;
+  gap: $spacing--base;
+  align-items: center;
+
+  .create-template__shuffle-icon {
+    min-width: $icon--large;
+    min-height: $icon--large;
+
+    color: $navy--400;
+  }
 }
 
 .create-template__info {
