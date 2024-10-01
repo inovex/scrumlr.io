@@ -48,12 +48,25 @@ $ docker compose --project-directory server/ --profile dev up -d
 $ go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" -v --disable-check-origin --insecure
 ```
 ## Testing
+### Frontend Testing
 To run the tests locally, you can use the following command in your terminal:
 ```bash
 yarn test
 ```
 
 This command will execute the test suite and provide you with detailed feedback on the test results, including any failures or errors encountered. Running tests locally helps you verify that your changes have not introduced any regressions and ensures that the existing functionality remains intact.
+
+### Backend Testing
+To ensure the functionality of your backend, you can run tests locally using the following methods: 
+To test your general Go code, use the built-in testing tool:
+```bash
+go test ./... -cover -coverprofile=coverage.txt
+```
+### API Testing
+When all backend components are running, you can use Postman tests to check the API. The CLI tool for this is `newman`, which needs to be installed beforehand:
+```bash
+newman run api.postman_collection.json --env-var "base_url=localhost:8080" --verbose
+```
 
 In addition to local testing, we utilize GitHub Actions to automate the testing process for every pull request. GitHub Actions automatically runs the test suite against the proposed changes, providing a clear indication of whether the tests pass or not. This ensures that all tests are passing before merging any changes into the main branch, maintaining the stability and integrity of our codebase.
 
