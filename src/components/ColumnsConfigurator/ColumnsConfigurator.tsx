@@ -2,7 +2,7 @@ import {uniqueId} from "underscore";
 import classNames from "classnames";
 import {useState} from "react";
 import {Column} from "store/features";
-import {Color, getNextColor, getPreviousColor} from "constants/colors";
+import {Color, getColorClassName, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {arrayMove, horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {TemplateColumn} from "./TemplateColumn/TemplateColumn";
@@ -144,7 +144,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
-        <div className={classNames(props.className, "columns-configurator")}>
+        <div className={classNames(props.className, "columns-configurator", getColorClassName("backlog-blue"))}>
           <AddTemplateColumn alignment="left" color={getPreviousColor(templateColumns[0].color)} onClick={addTemplateColumn} />
           {templateColumns.map((column, index) => {
             const potentialIndex = getPotentialIndex(index);
