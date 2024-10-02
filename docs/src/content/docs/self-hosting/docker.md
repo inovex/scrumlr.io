@@ -45,3 +45,15 @@ You can now start the deployment using the following command.
 ```sh
 docker-compose up -d
 ```
+
+## Reverse Proxy
+We strongly recommend using a reverse proxy to handle TLS termination and to provide a secure connection to your users.
+Scrumlr should work with all major reverse proxies like Nginx, Traefik, or Caddy.
+We automatically include a caddy deployment in the docker-compose file, which you can use as a reverse proxy.
+All you need to do is updating the Caddyfile to include your host domain instead of `0.0.0.0:80`.
+If you dont want TLS you can simply keep the specified port.
+Keep in mind that running Scrumlr without TLS is **not recommended**.
+```
+your_domain {
+}
+```
