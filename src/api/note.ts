@@ -1,5 +1,5 @@
 import {SERVER_HTTP_URL} from "../config";
-import {EditNote, Note} from "../types/note";
+import {EditNote, Note} from "../store/features/notes/types";
 
 export const NoteAPI = {
   /**
