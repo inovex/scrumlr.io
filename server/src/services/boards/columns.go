@@ -77,7 +77,7 @@ func (s *BoardService) UpdatedColumns(board uuid.UUID) {
 		logger.Get().Errorw("unable to retrieve columns in updated notes", "err", err)
 		return
 	}
-	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: dto.Columns(dbColumns),
 	})
@@ -119,7 +119,7 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 }
 
 func (s *BoardService) DeletedColumn(user, board, column uuid.UUID) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
 		Data: column,
 	})
