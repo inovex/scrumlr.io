@@ -133,7 +133,7 @@ func (s *BoardService) DeletedColumn(user, board, column uuid.UUID) {
 	for index, note := range dbNotes {
 		eventNotes[index] = *new(dto.Note).From(note)
 	}
-	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})
@@ -149,7 +149,7 @@ func (s *BoardService) DeletedColumn(user, board, column uuid.UUID) {
 			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
 		}
 	}
-	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotesUpdated,
 		Data: personalVotes,
 	})
