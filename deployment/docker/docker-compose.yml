@@ -11,7 +11,7 @@ services:
       SCRUMLR_SERVER_PORT: "${SCRUMLR_SERVER_PORT}"
       SCRUMLR_SERVER_NATS_URL: "${SCRUMLR_SERVER_NATS_URL}"
       SCRUMLR_PRIVATE_KEY: "${SCRUMLR_PRIVATE_KEY}"
-      SCRUMLR_SERVER_DATABASE_URL: "postgres://scrumlr:${POSTGRES_PASSWORD}@postgres:5432/scrumlr?sslmode=disable"
+      SCRUMLR_SERVER_DATABASE_URL: "postgres://${POSTGRES_USER:-scrumlr}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-scrumlr}?sslmode=disable"
       SCRUMLR_AUTH_GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
       SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
       SCRUMLR_AUTH_MICROSOFT_CLIENT_ID: "${MICROSOFT_CLIENT_ID}"
@@ -39,8 +39,16 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres
-      - nats
+      postgres:
+        condition: service_healthy
+      nats:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1"]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   scrumlr-frontend:
     restart: always
@@ -56,18 +64,27 @@ services:
       SCRUMLR_CLARITY_ID: "${SCRUMLR_CLARITY_ID}"
     ports:
       - "9090:8080"
+    depends_on:
+      scrumlr-backend:
+        condition: service_healthy
 
   postgres:
     restart: always
     image: postgres:16.4
     environment:
-      POSTGRES_DB: scrumlr
-      POSTGRES_USER: scrumlr
+      POSTGRES_DB: ${POSTGRES_DB:-scrumlr}
+      POSTGRES_USER: ${POSTGRES_USER:-scrumlr}
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scrumlr} -d ${POSTGRES_DB:-scrumlr}" ]
+      start_period: 10s
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   nats:
     restart: always
