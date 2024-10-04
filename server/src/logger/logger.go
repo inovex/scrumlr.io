@@ -95,3 +95,23 @@ func ChiZapLogger() func(next http.Handler) http.Handler {
 		return http.HandlerFunc(fn)
 	}
 }
+
+//func InitTestLogger(req *http.Request) *http.Request {
+//	loggerConfig := zap.NewNop() // Use a no-op logger for testing
+//	logger := loggerConfig.Sugar()
+//	req = req.WithContext(AddLoggerToContext(req.Context(), logger))
+//	return req
+//}
+
+func InitTestLogger(ctx context.Context) context.Context {
+	loggerConfig := zap.NewNop() // Use a no-op logger for testing
+	logger := loggerConfig.Sugar()
+
+	return AddLoggerToContext(ctx, logger)
+}
+
+func InitTestLoggerRequest(req *http.Request) *http.Request {
+	ctx := InitTestLogger(req.Context())
+	req = req.WithContext(ctx)
+	return req
+}
