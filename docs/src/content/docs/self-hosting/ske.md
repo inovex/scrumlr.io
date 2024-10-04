@@ -17,7 +17,7 @@ The following pre-requisites are required to deploy Scrumlr using SKE:
 git clone https://github.com/inovex/scrumlr.io.git
 ```
 ```sh
-cd scrumlr.io/deployment/ske
+cd scrumlr.io/deployment/SKE
 ```
 
 ### Deploy SKE and Postgres Flex using Terraform
