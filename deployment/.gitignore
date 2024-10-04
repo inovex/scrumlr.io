@@ -1,2 +1,2 @@
-.env
-jwt.key
+**/.env
+**/jwt.key
