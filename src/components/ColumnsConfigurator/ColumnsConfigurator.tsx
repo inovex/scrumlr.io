@@ -45,22 +45,17 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
 
   const sensors = useSensors(useSensor(PointerSensor));
 
-  const [dndState, setDndState] = useState<"start" | "over" | "end">();
-
   const handleDragStart = (event: DragStartEvent) => {
-    setDndState("start");
     const activeId = event.active.id as string;
     setActiveElementId(activeId);
     setActiveColumn(templateColumns.find((c) => c.id === activeId)!);
   };
 
   const handleDragOver = (event: DragOverEvent) => {
-    setDndState("over");
     setDropElementId((event.over?.id as string) ?? null);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
-    setDndState("end");
     const {active, over} = event;
 
     if (active.id !== over?.id) {
@@ -128,7 +123,6 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
         // here, use actual index unlike potential index in the main part
         index={activeColumnIndex}
         placement={calcPlacement(activeColumnIndex)}
-        dndState={dndState}
       />
     );
   };
@@ -163,7 +157,6 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
                 activeDrag={column.id === activeElementId}
                 activeDrop={column.id === dropElementId}
                 placement={calcPlacement(potentialIndex)}
-                dndState={dndState}
               />
             );
           })}

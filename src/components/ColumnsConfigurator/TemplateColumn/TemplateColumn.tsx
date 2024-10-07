@@ -16,7 +16,6 @@ type TemplateColumnProps = {
   column: TemplateColumnType;
   index: number;
   placement?: "first" | "center" | "last";
-  dndState?: "start" | "over" | "end";
   activeDrag?: boolean;
   activeDrop?: boolean;
 };
@@ -46,10 +45,8 @@ export const TemplateColumn = (props: TemplateColumnProps) => {
 
   // update offset after dragging is completed
   useEffect(() => {
-    if (props.dndState === "end") {
-      updateOffset();
-    }
-  }, [props.dndState, updateOffset]);
+    updateOffset();
+  }, [props.activeDrag, props.activeDrop, updateOffset]);
 
   return (
     <div
