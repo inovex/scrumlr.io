@@ -1,32 +1,30 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"strings"
+  "errors"
+  "fmt"
+  "net/http"
+  "strings"
 
-	"scrumlr.io/server/auth"
-	"scrumlr.io/server/services/health"
+  "scrumlr.io/server/auth"
+  "scrumlr.io/server/services/health"
 
-	"github.com/urfave/cli/v2"
-	"github.com/urfave/cli/v2/altsrc"
-	"scrumlr.io/server/api"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/migrations"
-	"scrumlr.io/server/database/types"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services/board_reactions"
-	"scrumlr.io/server/services/board_templates"
-	"scrumlr.io/server/services/boards"
-	"scrumlr.io/server/services/feedback"
-	"scrumlr.io/server/services/notes"
-	"scrumlr.io/server/services/reactions"
-	"scrumlr.io/server/services/users"
-	"scrumlr.io/server/services/votings"
+  "github.com/urfave/cli/v2"
+  "github.com/urfave/cli/v2/altsrc"
+  "scrumlr.io/server/api"
+  "scrumlr.io/server/database"
+  "scrumlr.io/server/database/migrations"
+  "scrumlr.io/server/database/types"
+  "scrumlr.io/server/logger"
+  "scrumlr.io/server/realtime"
+  "scrumlr.io/server/services/board_reactions"
+  "scrumlr.io/server/services/board_templates"
+  "scrumlr.io/server/services/boards"
+  "scrumlr.io/server/services/feedback"
+  "scrumlr.io/server/services/notes"
+  "scrumlr.io/server/services/reactions"
+  "scrumlr.io/server/services/users"
+  "scrumlr.io/server/services/votings"
 )
 
 func main() {
@@ -238,18 +236,13 @@ func main() {
 		},
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
-
-	// check if process is executed within docker environment
-	if _, err := os.Stat("/.dockerenv"); err != nil {
-		logger.EnableDevelopmentLogger()
-	}
-
-	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
-	}
 }
 
 func run(c *cli.Context) error {
+	if c.IsSet("verbose") {
+		logger.EnableDevelopmentLogger()
+	}
+
 	db, err := migrations.MigrateDatabase(c.String("database"))
 	if err != nil {
 		return fmt.Errorf("unable to migrate database: %w", err)
