@@ -38,6 +38,10 @@ $column-height: 340px;
     border: $spacing--xxs dashed var(--accent-color--light);
   }
 
+  &--hidden {
+    background-image: $column-stripes--light;
+  }
+
   // deactivate borders depending on position
   &--border {
     &-first {

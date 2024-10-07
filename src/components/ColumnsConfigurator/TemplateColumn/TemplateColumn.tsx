@@ -6,8 +6,9 @@ import {ReactComponent as DnDIcon} from "assets/icons/drag-and-drop.svg";
 import {TemplateColumnType} from "components/ColumnsConfigurator/ColumnsConfigurator";
 import {getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
-import {CSSProperties} from "react";
+import {CSSProperties, useCallback, useEffect} from "react";
 import {CSS} from "@dnd-kit/utilities";
+import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import "./TemplateColumn.scss";
 
 type TemplateColumnProps = {
@@ -15,18 +16,40 @@ type TemplateColumnProps = {
   column: TemplateColumnType;
   index: number;
   placement?: "first" | "center" | "last";
+  dndState?: "start" | "over" | "end";
   activeDrag?: boolean;
   activeDrop?: boolean;
 };
 
 export const TemplateColumn = (props: TemplateColumnProps) => {
-  // the column id is used to determine sortable context
   const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: props.column.id});
+  const {
+    bindings: {ref: stripeRef, style: stripeStyle},
+    updateOffset,
+  } = useStripeOffset<HTMLDivElement>();
 
+  // combine ref to be used by both offset hook and dnd kit
+  const combinedRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      stripeRef.current = node;
+      setNodeRef(node);
+    },
+    [stripeRef, setNodeRef]
+  );
+
+  // combine styles from both offset hook and dnd kit
   const style: CSSProperties = {
+    ...stripeStyle,
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  // update offset after dragging is completed
+  useEffect(() => {
+    if (props.dndState === "end") {
+      updateOffset();
+    }
+  }, [props.dndState, updateOffset]);
 
   return (
     <div
@@ -37,12 +60,13 @@ export const TemplateColumn = (props: TemplateColumnProps) => {
         {
           "template-column--even": props.index % 2 === 0,
           "template-column--odd": props.index % 2 !== 0,
+          "template-column--hidden": !props.column.visible,
           "template-column--active-drag": props.activeDrag,
           "template-column--active-drop": props.activeDrop,
         },
         getColorClassName(props.column.color)
       )}
-      ref={setNodeRef}
+      ref={combinedRef}
       style={style}
       {...attributes}
     >
