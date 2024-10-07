@@ -1,8 +1,8 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
-import {Google, Microsoft} from "components/Icon";
+import {Google, Microsoft, OpenID} from "components/Icon";
+import {useAppSelector} from "store";
 import {Button} from "../Button";
-import {useAppSelector} from "../../store";
 import "./LoginProviders.scss";
 
 export interface LoginProvidersProps {
@@ -31,6 +31,11 @@ export const LoginProviders = ({originURL = window.location.href}) => {
       {providers.some((provider) => provider === "MICROSOFT") && (
         <Button id="microsoft" className="login-providers__button" onClick={signIn("microsoft")} leftIcon={<Microsoft className="login-providers__icon" />}>
           {t("LoginProviders.signInWithMicrosoft")}
+        </Button>
+      )}
+      {providers.some((provider) => provider === "OIDC") && (
+        <Button id="oidc" className="login-providers__button" onClick={signIn("oidc")} leftIcon={<OpenID className="login-providers__icon" />}>
+          {t("LoginProviders.signInWithOIDC")}
         </Button>
       )}
     </div>
