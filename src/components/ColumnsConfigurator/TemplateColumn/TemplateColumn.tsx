@@ -18,6 +18,7 @@ type TemplateColumnProps = {
   placement?: "first" | "center" | "last";
   activeDrag?: boolean;
   activeDrop?: boolean;
+  allColumns: TemplateColumnType[]; // TODO get rest using redux
 };
 
 export const TemplateColumn = (props: TemplateColumnProps) => {
@@ -43,10 +44,10 @@ export const TemplateColumn = (props: TemplateColumnProps) => {
     transition,
   };
 
-  // update offset after dragging is completed
+  // update offset when dragging or columns change
   useEffect(() => {
     updateOffset();
-  }, [props.activeDrag, props.activeDrop, updateOffset]);
+  }, [props.activeDrag, props.activeDrop, props.allColumns, updateOffset]);
 
   return (
     <div

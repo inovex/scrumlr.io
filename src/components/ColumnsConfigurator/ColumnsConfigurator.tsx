@@ -123,6 +123,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
         // here, use actual index unlike potential index in the main part
         index={activeColumnIndex}
         placement={calcPlacement(activeColumnIndex)}
+        allColumns={templateColumns}
       />
     );
   };
@@ -146,20 +147,23 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
       <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
         <div className={classNames(props.className, "columns-configurator", getColorClassName("backlog-blue"))}>
           <AddTemplateColumn alignment="left" color={getPreviousColor(templateColumns[0].color)} onClick={addTemplateColumn} />
-          {templateColumns.map((column, index) => {
-            const potentialIndex = getPotentialIndex(index);
-            return (
-              <TemplateColumn
-                className="columns-configurator__column"
-                key={column.id}
-                column={column}
-                index={potentialIndex}
-                activeDrag={column.id === activeElementId}
-                activeDrop={column.id === dropElementId}
-                placement={calcPlacement(potentialIndex)}
-              />
-            );
-          })}
+          <div className="columns-configurator__columns-wrapper">
+            {templateColumns.map((column, index) => {
+              const potentialIndex = getPotentialIndex(index);
+              return (
+                <TemplateColumn
+                  className="columns-configurator__column"
+                  key={column.id}
+                  column={column}
+                  index={potentialIndex}
+                  activeDrag={column.id === activeElementId}
+                  activeDrop={column.id === dropElementId}
+                  placement={calcPlacement(potentialIndex)}
+                  allColumns={templateColumns}
+                />
+              );
+            })}
+          </div>
           <AddTemplateColumn alignment="right" color={getNextColor(templateColumns[templateColumns.length - 1].color)} onClick={addTemplateColumn} />
         </div>
       </SortableContext>
