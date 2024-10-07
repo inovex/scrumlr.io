@@ -1,4 +1,5 @@
 @import "constants/style";
+$color-form-background--dark: #292f3b;
 
 .password-modal {
   position: absolute;
@@ -43,4 +44,11 @@
 
 .password-modal__header span {
   margin: 0;
+}
+
+[theme="dark"] {
+  .password-modal__container {
+    background: $color-form-background--dark;
+    color: white;
+  }
 }
