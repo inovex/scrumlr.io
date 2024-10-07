@@ -4,11 +4,9 @@ import {NoteInput} from "components/NoteInput";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import {Tooltip} from "react-tooltip";
-import {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppDispatch, useAppSelector} from "store";
 import {Close, MarkAsDone, Hidden, ThreeDots} from "components/Icon";
 import _ from "underscore";
-import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import {hotkeyMap} from "constants/hotkeys";
 import {Droppable} from "components/DragAndDrop/Droppable";
@@ -17,6 +15,7 @@ import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
+import {createColumn, deleteColumnOptimistically, editColumn, editColumnOptimistically} from "../../store/features";
 
 const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
 
@@ -30,7 +29,7 @@ export interface ColumnProps {
 
 export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const notes = useAppSelector(
     (state) =>
@@ -46,7 +45,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const viewer = useAppSelector((state) => state.participants!.self);
 
   const colorClassName = getColorClassName(color);
-  const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
+  const isModerator = viewer?.role === "OWNER" || viewer?.role === "MODERATOR";
   const {value: columnName, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({maxInputLength: 32, initialValue: name});
 
   const [columnNameMode, setColumnNameMode] = useState<"VIEW" | "EDIT">("VIEW");
@@ -58,7 +57,17 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const toggleVisibilityHandler = () => {
-    dispatch(Actions.editColumn(id, {name, color, index, visible: !visible}));
+    dispatch(
+      editColumn({
+        id,
+        column: {
+          name,
+          color,
+          index,
+          visible: !visible,
+        },
+      })
+    );
   };
 
   const [localNotes, setLocalNotes] = useState(notes);
@@ -80,14 +89,34 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const handleEditColumnName = (newName: string) => {
     if (isTemporary) {
       if (!newName) {
-        dispatch(Actions.deleteColumnOptimistically(id));
+        dispatch(deleteColumnOptimistically(id));
       } else {
-        dispatch(Actions.editColumnOptimistically(id, {name: newName, color, visible, index})); // Prevents flicker when submitting a new column
-        dispatch(Actions.createColumn({name: newName, color, visible, index}));
+        dispatch(
+          editColumnOptimistically({
+            id,
+            column: {
+              name: newName,
+              color,
+              visible,
+              index,
+            },
+          })
+        ); // Prevents flicker when submitting a new column
+        dispatch(createColumn({name: newName, color, visible, index}));
         setIsTemporary(false);
       }
     } else {
-      dispatch(Actions.editColumn(id, {name: newName, color, visible, index}));
+      dispatch(
+        editColumn({
+          id,
+          column: {
+            name: newName,
+            color,
+            visible,
+            index,
+          },
+        })
+      );
     }
     setColumnNameMode("VIEW");
   };
@@ -123,7 +152,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
 
             if (e.key === "Escape") {
               if (isTemporary) {
-                dispatch(Actions.deleteColumnOptimistically(id));
+                dispatch(deleteColumnOptimistically(id));
               }
               setColumnNameMode("VIEW");
             } else if (e.key === "Enter") {
@@ -164,7 +193,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           ref={closeButtonRef}
           onClick={() => {
             if (isTemporary) {
-              dispatch(Actions.deleteColumnOptimistically(id));
+              dispatch(deleteColumnOptimistically(id));
             }
             setColumnNameMode("VIEW");
           }}
@@ -173,9 +202,9 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
           <Close className="column__header-edit-button-icon" />
         </button>
       )}
-      {!isTemporary && (
+      {!isTemporary && !openedColumnSettings && (
         <button title={t("Column.settings")} className="column__header-edit-button" onClick={() => setOpenedColumnSettings((o) => !o)}>
-          {openedColumnSettings ? <Close className="column__header-edit-button-icon" /> : <ThreeDots className="column__header-edit-button-icon" />}
+          <ThreeDots className="column__header-edit-button-icon" style={{transform: "rotate(90deg)"}} /> {/* inline style to avoid funky rotating behaviour when hovering */}
         </button>
       )}
     </>
@@ -212,7 +241,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
                 {notes.length}
               </span>
             )}
-            {isModerator && renderColumnModifiers()}
+            {!openedColumnSettings && isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
                 id={id}
@@ -222,6 +251,8 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
                 index={index}
                 onClose={() => setOpenedColumnSettings(false)}
                 onNameEdit={() => setColumnNameMode("EDIT")}
+                setOpenColumnSet={setOpenedColumnSettings}
+                closeColumnSettings={() => setOpenedColumnSettings(false)}
               />
             )}
           </div>

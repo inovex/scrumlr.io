@@ -1,9 +1,9 @@
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppDispatch, useAppSelector} from "store";
 import {Voting, Close, FlagFinish, MarkAsDone} from "components/Icon";
 import "./VoteDisplay.scss";
+import {closeVoting, setUserReadyStatus} from "store/features";
 
 type VoteDisplayProps = {
   usedVotes: number;
@@ -11,8 +11,9 @@ type VoteDisplayProps = {
 };
 
 export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
-  const me = useAppSelector((state) => state.participants!.self);
+  const me = useAppSelector((state) => state.participants!.self)!;
   const voting = useAppSelector((state) => state.votings.open?.id);
   const isAdmin = me.role === "OWNER" || me.role === "MODERATOR";
   const isReady = me.ready;
@@ -31,7 +32,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
               data-tooltip-id="info-bar__tooltip"
               data-tooltip-content={t("VoteDisplay.finishActionTooltip")}
               className="short-action__button"
-              onClick={() => store.dispatch(Actions.closeVoting(voting!))}
+              onClick={() => dispatch(closeVoting(voting!))}
             >
               <FlagFinish className="short-action__flag-icon" />
             </button>
@@ -43,7 +44,7 @@ export const VoteDisplay = ({usedVotes, possibleVotes}: VoteDisplayProps) => {
             data-tooltip-id="info-bar__tooltip"
             data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
             className={classNames("short-action__button", {"short-action__button--ready": isReady})}
-            onClick={() => store.dispatch(Actions.setUserReadyStatus(me.user.id, !isReady))}
+            onClick={() => dispatch(setUserReadyStatus({userId: me.user.id, ready: !isReady}))}
           >
             <MarkAsDone className="short-action__check-icon" />
             <Close className="short-action__cancel-icon" />

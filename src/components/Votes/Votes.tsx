@@ -28,7 +28,7 @@ export const Votes: FC<VotesProps> = (props) => {
         ? state.notes.filter((n) => n.position.stack === props.noteId).reduce((sum, curr) => sum + (state.votings.past[0]?.votes?.votesPerNote[curr.id]?.total ?? 0), 0)
         : 0)
   );
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self.role));
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 
   /**
