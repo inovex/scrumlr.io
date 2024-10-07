@@ -12,7 +12,7 @@ We maintain a Docker Compose file in our Repository that you can use to deploy S
 Clone the Scrumlr repository to your server and navigate to the deployment directory.
 ```sh
 git clone https://github.com/inovex/scrumlr.io
-cd scrumlr.io/deployment/
+cd scrumlr.io/deployment/docker
 ```
 
 Copy the `.env.example` file to `.env` and adjust the variables to your needs.
