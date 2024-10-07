@@ -10,6 +10,9 @@ import {generateRandomString} from "utils/random";
 import {Toggle} from "components/Toggle";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {isEqual} from "underscore";
+import {MenuItemConfig} from "constants/settings";
+import {getColorClassName} from "constants/colors";
+import {useOutletContext} from "react-router";
 import {SettingsButton} from "../Components/SettingsButton";
 import {SettingsInput} from "../Components/SettingsInput";
 import "./BoardSettings.scss";
@@ -17,6 +20,7 @@ import "./BoardSettings.scss";
 export const BoardSettings = () => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const state = useAppSelector(
     (applicationState) => ({
@@ -107,7 +111,7 @@ export const BoardSettings = () => {
   };
 
   return (
-    <div className={classNames("settings-dialog__container", "accent-color__backlog-blue")}>
+    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text"> {t("SettingsDialog.BoardSettings")}</h2>
       </header>
