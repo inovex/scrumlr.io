@@ -103,9 +103,11 @@ $side-padding--desktop: 14vw;
   display: flex;
   justify-content: stretch;
 
-  margin-top: $spacing--xl;
-
   overflow-y: hidden;
+
+  &--extended-top {
+    margin-top: $spacing--xl;
+  }
 }
 
 @media (max-width: $breakpoint--desktop) {
