@@ -3,14 +3,16 @@ import {BoardComponent} from "components/Board";
 import {Column} from "components/Column";
 import {Requests} from "components/Requests";
 import {BoardReactionContainer} from "components/BoardReactionContainer/BoardReactionContainer";
-import store, {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
-import {Actions} from "store/action";
 import _ from "underscore";
 import {Outlet} from "react-router-dom";
+import {leaveBoard} from "store/features";
 
 export const Board = () => {
+  const dispatch = useAppDispatch();
+
   useEffect(
     () => () => {
       toast.clearWaitingQueue();
@@ -23,7 +25,7 @@ export const Board = () => {
     window.addEventListener(
       "beforeunload",
       () => {
-        store.dispatch(Actions.leaveBoard());
+        dispatch(leaveBoard());
       },
       false
     );
@@ -31,11 +33,11 @@ export const Board = () => {
     window.addEventListener(
       "onunload",
       () => {
-        store.dispatch(Actions.leaveBoard());
+        dispatch(leaveBoard());
       },
       false
     );
-  }, []);
+  }, [dispatch]);
 
   const state = useAppSelector(
     (applicationState) => ({
@@ -53,9 +55,9 @@ export const Board = () => {
     _.isEqual
   );
 
-  const currentUserIsModerator = state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR";
+  const currentUserIsModerator = state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR";
 
-  if (state.participants?.self.banned) {
+  if (state.participants?.self?.banned) {
     window.location.reload();
     return <LoadingScreen />; // fallback
   }
@@ -70,13 +72,13 @@ export const Board = () => {
         {currentUserIsModerator && (
           <Requests
             requests={state.requests.filter((request) => request.status === "PENDING")}
-            participantsWithRaisedHand={state.participants!.others.filter((p) => p.raisedHand)}
+            participantsWithRaisedHand={(state.participants!.others ?? []).filter((p) => p.raisedHand)}
           />
         )}
         <Outlet />
         <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating} locked={!!state.board.locked}>
           {state.columns
-            .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self.showHiddenColumns))
+            .filter((column) => column.visible || (currentUserIsModerator && state.participants?.self?.showHiddenColumns))
             .map((column) => (
               <Column key={column.id} id={column.id} index={column.index} name={column.name} visible={column.visible} color={column.color} />
             ))}

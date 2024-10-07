@@ -1,11 +1,11 @@
 import classNames from "classnames";
-import {Participant, ParticipantExtendedInfo} from "types/participant";
+import {Participant, ParticipantExtendedInfo} from "store/features/";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "components/BoardUsers";
-import "./NoteAuthorList.scss";
 import {generateRandomProps} from "components/Avatar";
 import {getRandomNameWithSeed} from "constants/nameList";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
+import "./NoteAuthorList.scss";
 
 type NoteAuthorListProps = {
   authors: Participant[];
@@ -43,7 +43,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const prepareAuthors = (authors: Participant[]): ParticipantExtendedInfo[] => {
     const allAuthors = authors
       .map((a) => {
-        const isSelf = a?.user.id === props.viewer.user.id; // assertion: viewer is self
+        const isSelf = a?.user.id === props.viewer?.user.id; // assertion: viewer is self
         const displayName = isSelf ? t("Note.me") : a.user.name;
         return {
           ...a,
@@ -63,7 +63,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
 
     // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
     // the other authors are excluded as we only require the stack author
-    if (!props.showAuthors && props.viewer.user.id === props.authors[0].user.id) {
+    if (!props.showAuthors && props.viewer?.user.id === props.authors[0].user.id) {
       return [allAuthors[0]]; // stack author is always first element
     }
 
@@ -85,7 +85,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const restUsersExist = restAuthors.length > 0;
   const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
 
-  const authorVisible = props.showAuthors || stackAuthor.user.id === props.viewer.user.id;
+  const authorVisible = props.showAuthors || stackAuthor.user.id === props.viewer?.user.id;
   if (!authorVisible) {
     return <NoteAuthorSkeleton />;
   }
