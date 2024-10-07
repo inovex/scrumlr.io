@@ -1,12 +1,11 @@
 import {FC, useEffect} from "react";
 import {useNavigate} from "react-router";
-import {Note} from "types/note";
+import {Note} from "store/features/notes/types";
 import {ArrowRight, ArrowLeft} from "components/Icon";
 import "./StackNavigation.scss";
 import {useTranslation} from "react-i18next";
+import {useAppSelector} from "store";
 import {StackNavigationDots} from "./Dots/StackNavigationDots";
-import {ApplicationState} from "../../types";
-import {useAppSelector} from "../../store";
 
 interface StackNavigationProps {
   stacks: Note[];
@@ -18,7 +17,7 @@ interface StackNavigationProps {
 
 export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack, prevColumnStack, nextColumnStack, handleModeration}: StackNavigationProps) => {
   const {t} = useTranslation();
-  const noteFocus = useAppSelector((s: ApplicationState) => s.view.noteFocused);
+  const noteFocus = useAppSelector((s) => s.view.noteFocused);
 
   const navigate = useNavigate();
   const currentIndex = stacks.findIndex((s) => s.id === currentStack);

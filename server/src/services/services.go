@@ -16,6 +16,7 @@ type Users interface {
 	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
+	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	Update(ctx context.Context, body dto.UserUpdateRequest) (*dto.User, error)
 }
 
