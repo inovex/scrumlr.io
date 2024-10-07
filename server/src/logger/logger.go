@@ -19,6 +19,7 @@ const ctxRequestLogger ctxLoggerKey = iota
 func init() {
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
+	loggerConfig.EncoderConfig.StacktraceKey = "" //remove stacktrace from logging
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
 }
@@ -26,8 +27,7 @@ func init() {
 // EnableDevelopmentLogger constructs a development logger and overwrites the default production logger
 // this is only for development
 func EnableDevelopmentLogger() {
-	loggerConfig := zap.NewProductionConfig()
-	loggerConfig.EncoderConfig.StacktraceKey = "" // remove this line and add to init() for production
+	loggerConfig := zap.NewDevelopmentConfig()
 	loggerConfig.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
@@ -47,7 +47,6 @@ func FromRequest(r *http.Request) *zap.SugaredLogger {
 // to the pre initialized logger.
 func FromContext(ctx context.Context) *zap.SugaredLogger {
 	l, ok := ctx.Value(ctxRequestLogger).(*zap.SugaredLogger)
-	l.WithOptions()
 	if !ok {
 		return _logger
 	}
