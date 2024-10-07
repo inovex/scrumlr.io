@@ -1,5 +1,5 @@
 import {Color} from "constants/colors";
-import {EditBoardRequest} from "types/board";
+import {EditBoardRequest} from "store/features/board/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {

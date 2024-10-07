@@ -1,6 +1,5 @@
 import {useEffect} from "react";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppDispatch, useAppSelector} from "store";
 import {LoadingIndicator} from "components/LoadingIndicator";
 import "./BoardGuard.scss";
 import {PassphraseDialog} from "components/PassphraseDialog";
@@ -9,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import {PrintView} from "components/SettingsDialog/ExportBoard/PrintView";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 import {RejectionPage} from "components/RejectionPage";
+import {joinBoard, leaveBoard} from "store/features";
 import {Board} from "./Board";
 
 interface BoardGuardProps {
@@ -16,6 +16,7 @@ interface BoardGuardProps {
 }
 
 export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
+  const dispatch = useAppDispatch();
   const {boardId} = useParams<"boardId">();
   const {t} = useTranslation();
 
@@ -23,12 +24,12 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
   const boardName = useAppSelector((applicationState) => applicationState.board.data?.name);
 
   useEffect(() => {
-    store.dispatch(Actions.joinBoard(boardId!));
+    dispatch(joinBoard({boardId: boardId!}));
 
     return () => {
-      store.dispatch(Actions.leaveBoard());
+      dispatch(leaveBoard());
     };
-  }, [boardId]);
+  }, [boardId, dispatch]);
 
   if (printViewEnabled && boardId) {
     return <PrintView boardId={boardId} boardName={boardName ?? "scrumlr.io"} />;
@@ -46,7 +47,7 @@ export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
     return (
       <PassphraseDialog
         onSubmit={(passphrase: string) => {
-          store.dispatch(Actions.joinBoard(boardId!, passphrase));
+          dispatch(joinBoard({boardId: boardId!, passphrase}));
         }}
         incorrectPassphrase={boardStatus === "incorrect_passphrase"}
       />

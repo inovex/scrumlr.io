@@ -17,8 +17,8 @@ export const SettingsDialog: FC = () => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const boardId = useAppSelector((applicationState) => applicationState.board.data!.id);
-  const me = useAppSelector((applicationState) => applicationState.participants?.self.user);
-  const isBoardModerator = useAppSelector((state) => state.participants?.self.role === "MODERATOR" || state.participants?.self.role === "OWNER");
+  const me = useAppSelector((applicationState) => applicationState.participants?.self?.user)!;
+  const isBoardModerator = useAppSelector((state) => state.participants?.self?.role === "MODERATOR" || state.participants?.self?.role === "OWNER");
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
 
   const transitionConfigMobile = {

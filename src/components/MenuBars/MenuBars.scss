@@ -129,10 +129,11 @@ $menu-mobile__width: 72px;
   }
 
   .menu-bars-mobile__fab-main--isExpanded {
+    background: $gray--000;
+
     svg {
       color: $navy--900;
     }
-    background: $gray--000;
   }
 }
 

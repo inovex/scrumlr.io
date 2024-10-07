@@ -2,7 +2,7 @@ import {Provider} from "react-redux";
 import {Votes} from "components/Votes";
 import {render} from "testUtils";
 import getTestStore from "utils/test/getTestStore";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import getTestVoting from "utils/test/getTestVoting";
 import getTestParticipant from "utils/test/getTestParticipant";
 import i18n from "i18nTest";
@@ -83,7 +83,7 @@ describe("Votes", () => {
         participants: {
           self: getTestParticipant({role: "PARTICIPANT"}),
           others: [],
-          focusInitiator: null,
+          focusInitiator: undefined,
         },
       })
     );
@@ -113,7 +113,7 @@ describe("Votes", () => {
         participants: {
           self: getTestParticipant({role: "MODERATOR"}),
           others: [],
-          focusInitiator: null,
+          focusInitiator: undefined,
         },
       })
     );

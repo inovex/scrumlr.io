@@ -125,7 +125,8 @@
     "addColumnRight": "Add column right",
     "hiddenColumn": "Column is hidden for all participants",
     "notes_one": "{{count}} note",
-    "notes_other": "{{count}} notes"
+    "notes_other": "{{count}} notes",
+    "color": "Change color"
   },
   "ErrorPage": {
     "navigateHome": "Home",
@@ -154,7 +155,8 @@
     "signInWithGitHub": "Sign in with Github",
     "signInWithMicrosoft": "Sign in with Microsoft",
     "signInWithAzureAd": "Sign in with Azure AD",
-    "signInWithApple": "Sign in with Apple"
+    "signInWithApple": "Sign in with Apple",
+    "signInWithOIDC": "Sign in with OpenID Connect"
   },
   "NoteInput": {
     "placeholder": "Add your note...",

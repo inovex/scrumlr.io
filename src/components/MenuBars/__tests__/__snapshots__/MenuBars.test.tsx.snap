@@ -1,5 +1,1103 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the possibleVotes !== usedVotes 1`] = `
+<DocumentFragment>
+  <aside
+    class="menu-bars"
+  >
+    <div
+      class="menu__container"
+    >
+      <section
+        class="menu user-menu"
+      >
+        <ul
+          class="menu__items"
+        >
+          <li>
+            <button
+              aria-label="Mark me as done"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Mark me as done
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [D]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  mark-as-done.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="Raise your hand"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Raise your hand
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [H]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  raise-hand.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="React"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  React
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [R]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  add-sticker-reaction.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="Settings"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Settings
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [S]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  general-settings.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+        </ul>
+      </section>
+      <button
+        aria-hidden="true"
+        class="menu-bars__navigation menu-bars__navigation--visible"
+      >
+        <svg
+          class="menu-bars__navigation-icon"
+        >
+          arrow-left.svg
+        </svg>
+      </button>
+    </div>
+    <div
+      class="menu__container"
+    >
+      <section
+        class="menu admin-menu admin-menu--empty"
+      />
+      <button
+        aria-hidden="true"
+        class="menu-bars__navigation menu-bars__navigation--visible"
+      >
+        <svg
+          class="menu-bars__navigation-icon"
+        >
+          arrow-right.svg
+        </svg>
+      </button>
+    </div>
+  </aside>
+  <aside
+    class="menu-bars-mobile"
+  >
+    <button
+      aria-label="Open user menu"
+      class="menu-bars-mobile__fab menu-bars-mobile__fab-main"
+    >
+      <svg
+        aria-hidden="true"
+      >
+        menu.svg
+      </svg>
+    </button>
+    <ul
+      class="menu-bars-mobile__options menu-bars-mobile__options--horizontal"
+    >
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Settings"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Settings
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              general-settings.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="React"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              React
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              add-sticker-reaction.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Raise your hand"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Raise your hand
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              raise-hand.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Mark me as done"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Mark me as done
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              mark-as-done.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+    </ul>
+  </aside>
+</DocumentFragment>
+`;
+
+exports[`Mark me as Done Tooltip Logic Does not expand the tooltip if the timer is not expired 1`] = `
+<DocumentFragment>
+  <aside
+    class="menu-bars"
+  >
+    <div
+      class="menu__container"
+    >
+      <section
+        class="menu user-menu"
+      >
+        <ul
+          class="menu__items"
+        >
+          <li>
+            <button
+              aria-label="Mark me as done"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Mark me as done
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [D]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  mark-as-done.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="Raise your hand"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Raise your hand
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [H]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  raise-hand.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="React"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  React
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [R]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  add-sticker-reaction.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="Settings"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Settings
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [S]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  general-settings.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+        </ul>
+      </section>
+      <button
+        aria-hidden="true"
+        class="menu-bars__navigation menu-bars__navigation--visible"
+      >
+        <svg
+          class="menu-bars__navigation-icon"
+        >
+          arrow-left.svg
+        </svg>
+      </button>
+    </div>
+    <div
+      class="menu__container"
+    >
+      <section
+        class="menu admin-menu admin-menu--empty"
+      />
+      <button
+        aria-hidden="true"
+        class="menu-bars__navigation menu-bars__navigation--visible"
+      >
+        <svg
+          class="menu-bars__navigation-icon"
+        >
+          arrow-right.svg
+        </svg>
+      </button>
+    </div>
+  </aside>
+  <aside
+    class="menu-bars-mobile"
+  >
+    <button
+      aria-label="Open user menu"
+      class="menu-bars-mobile__fab menu-bars-mobile__fab-main"
+    >
+      <svg
+        aria-hidden="true"
+      >
+        menu.svg
+      </svg>
+    </button>
+    <ul
+      class="menu-bars-mobile__options menu-bars-mobile__options--horizontal"
+    >
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Settings"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Settings
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              general-settings.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="React"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              React
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              add-sticker-reaction.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Raise your hand"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Raise your hand
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              raise-hand.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Mark me as done"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Mark me as done
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              mark-as-done.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+    </ul>
+  </aside>
+</DocumentFragment>
+`;
+
+exports[`Mark me as Done Tooltip Logic Expand the tooltip everytime a potential ready state in voting is fulfilled. 1`] = `
+<DocumentFragment>
+  <aside
+    class="menu-bars"
+  >
+    <div
+      class="menu__container"
+    >
+      <section
+        class="menu user-menu"
+      >
+        <ul
+          class="menu__items"
+        >
+          <li>
+            <button
+              aria-label="Mark me as done"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Mark me as done
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [D]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  mark-as-done.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="Raise your hand"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Raise your hand
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [H]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  raise-hand.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="React"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  React
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [R]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  add-sticker-reaction.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+          <li>
+            <button
+              aria-label="Settings"
+              class="tooltip-button tooltip-button--right"
+            >
+              <div
+                aria-hidden="true"
+                class="tooltip-button__tooltip"
+              >
+                <span
+                  class="tooltip-button__tooltip-text"
+                >
+                  Settings
+                  <span
+                    class="tooltip-button__hotkey"
+                  >
+                     [S]
+                  </span>
+                </span>
+              </div>
+              <div
+                class="tooltip-button__icon-container"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  general-settings.svg
+                </svg>
+                <svg
+                  aria-hidden="true"
+                  class="tooltip-button__icon"
+                >
+                  close.svg
+                </svg>
+              </div>
+            </button>
+          </li>
+        </ul>
+      </section>
+      <button
+        aria-hidden="true"
+        class="menu-bars__navigation menu-bars__navigation--visible"
+      >
+        <svg
+          class="menu-bars__navigation-icon"
+        >
+          arrow-left.svg
+        </svg>
+      </button>
+    </div>
+    <div
+      class="menu__container"
+    >
+      <section
+        class="menu admin-menu admin-menu--empty"
+      />
+      <button
+        aria-hidden="true"
+        class="menu-bars__navigation menu-bars__navigation--visible"
+      >
+        <svg
+          class="menu-bars__navigation-icon"
+        >
+          arrow-right.svg
+        </svg>
+      </button>
+    </div>
+  </aside>
+  <aside
+    class="menu-bars-mobile"
+  >
+    <button
+      aria-label="Open user menu"
+      class="menu-bars-mobile__fab menu-bars-mobile__fab-main"
+    >
+      <svg
+        aria-hidden="true"
+      >
+        menu.svg
+      </svg>
+    </button>
+    <ul
+      class="menu-bars-mobile__options menu-bars-mobile__options--horizontal"
+    >
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Settings"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Settings
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              general-settings.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="React"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              React
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              add-sticker-reaction.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Raise your hand"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Raise your hand
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              raise-hand.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+      <li
+        class="menu-bars-mobile__fab-option menu-bars-mobile__fab-option--horizontal"
+        style="opacity: 0; transform: translateX(100%);"
+      >
+        <button
+          aria-label="Mark me as done"
+          class="tooltip-button tooltip-button--left"
+          disabled=""
+        >
+          <div
+            aria-hidden="true"
+            class="tooltip-button__tooltip"
+          >
+            <span
+              class="tooltip-button__tooltip-text"
+            >
+              Mark me as done
+            </span>
+          </div>
+          <div
+            class="tooltip-button__icon-container"
+          >
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              mark-as-done.svg
+            </svg>
+            <svg
+              aria-hidden="true"
+              class="tooltip-button__icon"
+            >
+              close.svg
+            </svg>
+          </div>
+        </button>
+      </li>
+    </ul>
+  </aside>
+</DocumentFragment>
+`;
+
 exports[`MenuBars should match snapshot 1`] = `
 <aside
   class="menu-bars"
@@ -169,7 +1267,7 @@ exports[`MenuBars should match snapshot 1`] = `
     </section>
     <button
       aria-hidden="true"
-      class="menu-bars__navigation"
+      class="menu-bars__navigation menu-bars__navigation--visible"
     >
       <svg
         class="menu-bars__navigation-icon"
@@ -305,7 +1403,7 @@ exports[`MenuBars should match snapshot 1`] = `
     </section>
     <button
       aria-hidden="true"
-      class="menu-bars__navigation"
+      class="menu-bars__navigation menu-bars__navigation--visible"
     >
       <svg
         class="menu-bars__navigation-icon"
