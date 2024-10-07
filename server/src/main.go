@@ -239,8 +239,6 @@ func main() {
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
-	// check if process is executed within docker environment
-
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
