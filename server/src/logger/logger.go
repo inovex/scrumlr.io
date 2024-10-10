@@ -19,7 +19,7 @@ const ctxRequestLogger ctxLoggerKey = iota
 func init() {
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
-	//loggerConfig.EncoderConfig.StacktraceKey = "" //remove stacktrace from logging
+	loggerConfig.EncoderConfig.StacktraceKey = "" //remove stacktrace from logging
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
 }
