@@ -1,0 +1,54 @@
+@import "constants/style";
+$color-form-background--dark: #292f3b;
+
+.password-modal {
+  position: absolute;
+  backdrop-filter: blur(4px);
+  width: 100%;
+  height: 100%;
+}
+
+.password-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.password-modal__container {
+  padding: $spacing--lg;
+  background: #ffffff;
+  border-radius: 0.5em;
+  box-shadow: 0 10px 20px rgba(black, 0.2);
+  left: 50%;
+  max-width: 90%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 30em;
+  text-align: left;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.import-board__action {
+  position: relative;
+}
+.password-modal__close {
+  width: $icon--large;
+}
+
+.password-modal__close:hover {
+  cursor: pointer;
+}
+
+.password-modal__header span {
+  margin: 0;
+}
+
+[theme="dark"] {
+  .password-modal__container {
+    background: $color-form-background--dark;
+    color: white;
+  }
+}
