@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/go-chi/render"
 	"net/http"
+	"scrumlr.io/server/logger"
 )
 
 type FeedbackType string
@@ -36,8 +37,10 @@ type FeedbackRequest struct {
 }
 
 func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	var body FeedbackRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}

@@ -2,8 +2,7 @@ package avatar
 
 import (
 	"encoding/json"
-
-	"github.com/pkg/errors"
+	"errors"
 )
 
 type AccessoriesType string

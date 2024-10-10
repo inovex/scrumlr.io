@@ -1,9 +1,9 @@
 package common
 
 import (
-	"log"
 	"net"
 	"net/http"
+	"scrumlr.io/server/logger"
 	"strings"
 
 	"github.com/weppos/publicsuffix-go/publicsuffix"
@@ -30,7 +30,7 @@ func GetTopLevelHost(r *http.Request) string {
 	hostname := GetHostWithoutPort(r)
 	domain, err := publicsuffix.Domain(hostname)
 	if err != nil {
-		log.Printf("Error getting domain for %s: %v", hostname, err)
+		logger.Get().Warnw("Error getting domain", "hostname", hostname, "err", err)
 		return ""
 	}
 	return domain
