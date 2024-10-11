@@ -365,8 +365,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
-				if session.User.ID == note.Author {
-					author = session.User.Name
+				if session.User == note.Author {
+					author = session.User.String()
 				}
 			}
 
