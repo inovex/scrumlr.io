@@ -1,16 +1,16 @@
 import {useRef, useState} from "react";
-import "./NoteInput.scss";
-import {Plus, AddImage, Star} from "components/Icon";
-import {Actions} from "store/action";
+import {AddImage, LockClosed, Plus, Star} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
-import {useDispatch} from "react-redux";
 import TextareaAutosize from "react-autosize-textarea";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {useAppDispatch, useAppSelector} from "store";
+import "./NoteInput.scss";
+import {addNote} from "store/features";
 
 export interface NoteInputProps {
   columnId: string;
@@ -21,13 +21,15 @@ export interface NoteInputProps {
 }
 
 export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility}: NoteInputProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const [toastDisplayed, setToastDisplayed] = useState(false);
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self?.role === role));
 
-  const addNote = (content: string) => {
+  const dispatchAddNote = (content: string) => {
     if (!content.trim()) return;
-    dispatch(Actions.addNote(columnId!, content));
+    dispatch(addNote({columnId, text: content}));
     if (!columnIsVisible && !toastDisplayed) {
       Toast.info({
         title: t("Toast.noteToHiddenColumn"),
@@ -61,12 +63,14 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       className="note-input"
       onSubmit={(e) => {
         e.preventDefault();
-        addNote(value);
+        dispatchAddNote(value);
         setValue("");
       }}
       ref={emoji.containerRef}
     >
+      {!isModerator && boardLocked && <LockClosed className="note-input__lock-icon" />}
       <TextareaAutosize
+        disabled={!isModerator && boardLocked}
         ref={noteInputRef}
         className="note-input__input"
         placeholder={t("NoteInput.placeholder")}
@@ -90,9 +94,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       />
-      <div className="note-input__emoji-suggestions">
-        <EmojiSuggestions {...emoji.suggestionsProps} />
-      </div>
+      <EmojiSuggestions {...emoji.suggestionsProps} />
       {isImage && (
         <div className="note-input__image-indicator" title={t("NoteInput.imageInfo")}>
           <AddImage className="note-input__icon--image" />
@@ -102,6 +104,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
         </div>
       )}
       <button
+        disabled={!isModerator && boardLocked}
         type="submit"
         tabIndex={-1} // skip focus
         className="note-input__add-button"

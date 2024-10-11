@@ -11,7 +11,7 @@ $header-menu-border-bottom-color: #efefef;
   display: flex;
   align-items: center;
 
-  background-color: $color-white;
+  background-color: $gray--000;
   border: none;
   outline: none;
   padding: 0;
@@ -25,12 +25,12 @@ $header-menu-border-bottom-color: #efefef;
   }
 
   &:focus-visible {
-    background-color: $color-white-two;
+    background-color: $gray--200;
   }
 }
 
 .board-option-button__label {
-  color: $color-black;
+  color: $navy--900;
   font-size: $text-size--medium;
   letter-spacing: $letter-spacing--medium;
   cursor: pointer;
@@ -46,39 +46,39 @@ $header-menu-border-bottom-color: #efefef;
 
 .board-option-button--expandable {
   height: $header-menu__item-height;
-  background-color: $color-white;
+  background-color: $gray--000;
   transition: background-color 0.15s ease-in-out;
   box-sizing: border-box;
 }
 
 .board-option-button--expandable:focus-visible,
 .board-option-button--expandable:hover {
-  background-color: $color-white-two;
+  background-color: $gray--200;
 }
 
 [theme="dark"] {
   .board-option-button {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
 
     &:hover {
       filter: $brighten--slightly;
     }
 
     &:focus-visible {
-      background-color: $color-dark-mode-note--hover;
+      background-color: $navy--400;
     }
   }
 
   .board-option-button__label {
-    color: $color-white;
+    color: $gray--000;
   }
 
   .board-option-button--expandable {
-    background-color: $color-dark-mode-note;
+    background-color: $navy--500;
   }
 
   .board-option-button--expandable:focus-visible,
   .board-option-button--expandable:hover {
-    background-color: $color-dark-mode-note--hover;
+    background-color: $navy--400;
   }
 }

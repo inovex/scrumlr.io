@@ -1,4 +1,4 @@
-import {Note} from "../../types/note";
+import {Note} from "../../store/features/notes/types";
 
 export default (overwrite?: Partial<Note>): Note => ({
   id: "test-note-id",
@@ -9,5 +9,6 @@ export default (overwrite?: Partial<Note>): Note => ({
     column: "test-note-position-column-id",
     rank: 0,
   },
+  edited: true,
   ...overwrite,
 });

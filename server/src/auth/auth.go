@@ -6,6 +6,11 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"io"
+	"math"
+	"net/http"
+	"strings"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
@@ -17,29 +22,30 @@ import (
 	"github.com/markbates/goth/providers/github"
 	"github.com/markbates/goth/providers/google"
 	"github.com/markbates/goth/providers/microsoftonline"
+	oidc "github.com/markbates/goth/providers/openidConnect"
 	"golang.org/x/crypto/ssh"
-	"io"
-	"math"
-	"net/http"
 	"scrumlr.io/server/auth/devkeys"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
-	"strings"
 )
 
 type Auth interface {
 	Sign(map[string]interface{}) (string, error)
 	Verifier() func(http.Handler) http.Handler
 	Exists(accountType types.AccountType) bool
+	ExtractUserInformation(types.AccountType, *goth.User) (*UserInformation, error)
 }
 
 type AuthProviderConfiguration struct {
-	TenantId     string
-	ClientId     string
-	ClientSecret string
-	RedirectUri  string
+	TenantId       string
+	ClientId       string
+	ClientSecret   string
+	RedirectUri    string
+	DiscoveryUri   string
+	UserIdentScope string
+	UserNameScope  string
 }
 
 type AuthConfiguration struct {
@@ -51,19 +57,28 @@ type AuthConfiguration struct {
 	database         *database.Database
 }
 
-func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *database.Database) Auth {
+type UserInformation struct {
+	Provider               types.AccountType
+	Ident, Name, AvatarURL string
+}
+
+func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *database.Database) (Auth, error) {
 	a := new(AuthConfiguration)
 	a.providers = providers
 	a.unsafePrivateKey = unsafePrivateKey
 	a.database = database
 	a.privateKey = privateKey
-	a.initializeProviders()
-	a.initializeJWTAuth()
+	if err := a.initializeProviders(); err != nil {
+		return nil, err
+	}
+	if err := a.initializeJWTAuth(); err != nil {
+		return nil, err
+	}
 
-	return a
+	return a, nil
 }
 
-func (a *AuthConfiguration) initializeProviders() {
+func (a *AuthConfiguration) initializeProviders() error {
 	providers := []goth.Provider{}
 	if provider, ok := a.providers[(string)(types.AccountTypeGoogle)]; ok {
 		p := google.New(
@@ -109,7 +124,6 @@ func (a *AuthConfiguration) initializeProviders() {
 		p.SetName(strings.ToLower((string)(types.AccountTypeAzureAd)))
 		providers = append(providers, p)
 	}
-
 	if provider, ok := a.providers[(string)(types.AccountTypeApple)]; ok {
 		providers = append(providers, apple.New(
 			provider.ClientId,
@@ -119,6 +133,22 @@ func (a *AuthConfiguration) initializeProviders() {
 			apple.ScopeName,
 			apple.ScopeEmail,
 		))
+	}
+	if provider, ok := a.providers[(string)(types.AccountTypeOIDC)]; ok {
+		p, err := oidc.New(
+			provider.ClientId,
+			provider.ClientSecret,
+			provider.RedirectUri,
+			provider.DiscoveryUri,
+			provider.UserIdentScope,
+			provider.UserNameScope,
+		)
+		if err != nil {
+			logger.Get().Errorw("OIDC provider setup failed", "error", err)
+		}
+
+		p.SetName(strings.ToLower((string)(types.AccountTypeOIDC)))
+		providers = append(providers, p)
 	}
 	goth.UseProviders(providers...)
 	gothic.GetProviderName = func(r *http.Request) (string, error) {
@@ -139,6 +169,8 @@ func (a *AuthConfiguration) initializeProviders() {
 
 		return nonce
 	}
+
+	return nil
 }
 
 func (a *AuthConfiguration) Sign(claims map[string]interface{}) (string, error) {
@@ -198,7 +230,34 @@ func (a *AuthConfiguration) Exists(accountType types.AccountType) bool {
 	return false
 }
 
-func (a *AuthConfiguration) initializeJWTAuth() {
+func (a *AuthConfiguration) ExtractUserInformation(accountType types.AccountType, user *goth.User) (*UserInformation, error) {
+	ident := user.UserID
+	name := user.NickName
+	avatar := user.AvatarURL
+
+	if ident == "" {
+		return nil, fmt.Errorf("unable to extract identifier information for user")
+	}
+
+	if name == "" {
+		name = user.Name
+	}
+
+	if name == "" {
+		return nil, fmt.Errorf("unable to extract name information for user %q", ident)
+	}
+
+	result := &UserInformation{
+		Provider:  accountType,
+		Ident:     ident,
+		Name:      name,
+		AvatarURL: avatar,
+	}
+
+	return result, nil
+}
+
+func (a *AuthConfiguration) initializeJWTAuth() error {
 	if a.privateKey == "" {
 		logger.Get().Warnw("invalid keypair config, falling back to dev keys!")
 		a.privateKey = devkeys.PrivateKey
@@ -207,23 +266,24 @@ func (a *AuthConfiguration) initializeJWTAuth() {
 	if a.unsafePrivateKey != "" {
 		unsafeKey, err := ssh.ParseRawPrivateKey([]byte(a.unsafePrivateKey))
 		if err != nil {
-			logger.Get().DPanicw("unable to start as we cannot parse unsafe auth keys", "error", err)
+			return fmt.Errorf("unable parse unsafe auth keys: %w", err)
 		}
 		unsafePrivateKey, ok := unsafeKey.(*ecdsa.PrivateKey)
 		if !ok {
-			logger.Get().DPanic("unable to start as the provided unsafe keys are no ecdsa keys")
+			return errors.New("the provided unsafe keys are no ecdsa keys")
 		}
 		a.unsafeAuth = jwtauth.New("ES512", unsafePrivateKey, unsafePrivateKey.PublicKey)
 	}
 
 	key, err := ssh.ParseRawPrivateKey([]byte(a.privateKey))
 	if err != nil {
-		logger.Get().DPanicw("unable to start as we cannot parse auth keys", "error", err)
+		return fmt.Errorf("unable to parse auth keys: %w", err)
 	}
 	privateKey, ok := key.(*ecdsa.PrivateKey)
 	if !ok {
-		logger.Get().DPanic("unable to start as the provided keys are no ecdsa keys")
+		return errors.New("the provided keys are no ecdsa keys")
 	}
 
 	a.auth = jwtauth.New("ES512", privateKey, privateKey.PublicKey)
+	return nil
 }

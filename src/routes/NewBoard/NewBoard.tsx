@@ -2,7 +2,7 @@ import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
 import {useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
-import {AccessPolicy} from "types/board";
+import {AccessPolicy} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {columnTemplates} from "./columnTemplates";
@@ -48,7 +48,7 @@ export const NewBoard = () => {
       <div className="new-board">
         <div>
           <a href="/" aria-label="Homepage">
-            <ScrumlrLogo accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+            <ScrumlrLogo />
           </a>
 
           {!extendedConfiguration && (

@@ -1,7 +1,7 @@
 import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps, ReactEventHandler} from "react";
 import {MAX_NOTE_LENGTH, MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
-import {SkinToneComponent} from "types/skinTone";
+import {SkinToneComponent} from "store/features/skinTone/types";
 import {useAppSelector} from "store";
 import {useOnBlur} from "./useOnBlur";
 
@@ -194,6 +194,10 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
     setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null);
   }, []);
 
+  const handleClickClearEmojiSuggestions: ReactEventHandler<InputElement> = useCallback(() => {
+    setEmojiName("");
+  }, []);
+
   return {
     containerRef,
     suggestionsProps: {
@@ -207,7 +211,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
       onChange: handleChange,
       onKeyDown: handleKeyDown,
       onKeyUp: handleUpdateCursor,
-      onClick: handleUpdateCursor,
+      onClick: handleClickClearEmojiSuggestions,
       maxLength: maxInputLength,
       value,
     } satisfies HTMLProps<InputElement>,

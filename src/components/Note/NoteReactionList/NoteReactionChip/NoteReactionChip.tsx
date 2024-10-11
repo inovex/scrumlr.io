@@ -2,8 +2,10 @@ import classNames from "classnames";
 import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
-import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
+import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
+import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
+import {getEmojiWithSkinTone} from "utils/reactions";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
 
@@ -20,6 +22,9 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const reactionUsers = props.reaction.users.map((u) => u.user.name).join(", ");
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);
+  const skinTone = useAppSelector((state) => state.skinTone);
+  const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
@@ -30,6 +35,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   return (
     <>
       <button
+        disabled={!isModerator && boardLocked}
         id={anchorId} // unique identifier
         className={classNames("note-reaction-chip__root", {
           "note-reaction-chip__root--self": props.reaction.myReactionId && props.overrideActive === undefined, // highlight chips that yourself reacted to (if no override)
@@ -43,7 +49,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()} // bind long press
       >
-        <div className="note-reaction-chip__reaction">{reactionImage}</div>
+        <div className="note-reaction-chip__reaction">{getEmojiWithSkinTone(reactionImage!, skinTone)}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
       <TooltipPortal anchor={anchorId} place="top" show={props.showTooltip}>

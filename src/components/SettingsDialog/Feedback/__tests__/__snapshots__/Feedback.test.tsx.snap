@@ -2,13 +2,13 @@
 
 exports[`Feedback should match snapshot 1`] = `
 <div
-  class="settings-dialog__container accent-color__poker-purple"
+  class="settings-dialog__container accent-color__backlog-blue"
 >
   <div
     class="settings-dialog__header"
   >
     <h2
-      class="settings-dialog__header-text accent-color__poker-purple"
+      class="settings-dialog__header-text"
     >
       Feedback
     </h2>

@@ -1,9 +1,9 @@
 import {FC, useState} from "react";
 import "./AccessPolicySelection.scss";
-import {AccessPolicy} from "types/board";
+import {AccessPolicy} from "store/features/board/types";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
-import {Visible, Hidden, Duplicate,Refresh} from "components/Icon";
+import {Visible, Hidden, Duplicate, Refresh} from "components/Icon";
 import {TextInputAdornment} from "components/TextInputAdornment";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";

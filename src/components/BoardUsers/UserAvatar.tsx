@@ -1,7 +1,8 @@
 import {useEffect, useState, useRef} from "react";
 import classNames from "classnames";
 import {CheckDone, RaiseHand} from "components/Icon";
-import {AvataaarProps, Avatar} from "../Avatar";
+import {AvataaarProps} from "types/avatar";
+import {Avatar} from "../Avatar";
 import {Badge} from "../Badge";
 import "./UserAvatar.scss";
 

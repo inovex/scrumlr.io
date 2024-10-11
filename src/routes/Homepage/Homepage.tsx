@@ -3,16 +3,15 @@ import "./Homepage.scss";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 import {ReactComponent as German} from "assets/flags/DE.svg";
 import {ReactComponent as English} from "assets/flags/US.svg";
-import {ArrowRight,Logout} from "components/Icon";
+import {ArrowRight, Logout} from "components/Icon";
 import {Link, useHref} from "react-router-dom";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
 import {Button} from "components/Button";
-import {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {useDispatch} from "react-redux";
+import {useAppDispatch, useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useEffect} from "react";
+import {signOut} from "store/features";
 import {InovexAnchor} from "./InovexAnchor";
 import {SHOW_LEGAL_DOCUMENTS} from "../../config";
 
@@ -20,7 +19,7 @@ export const Homepage = withTranslation()(() => {
   const {i18n} = useTranslation();
   const newHref = useHref("/new");
   const {user} = useAppSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
@@ -29,7 +28,7 @@ export const Homepage = withTranslation()(() => {
   };
 
   const onLogout = () => {
-    dispatch(Actions.signOut());
+    dispatch(signOut());
   };
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export const Homepage = withTranslation()(() => {
     <div className="homepage">
       <div className="homepage__hero">
         <header className="homepage__header">
-          <ScrumlrLogo className="homepage__logo" accentColorClassNames={["accent-color--blue", "accent-color--purple", "accent-color--lilac", "accent-color--pink"]} />
+          <ScrumlrLogo className="homepage__logo" />
 
           <ul className="homepage__settings">
             <li>

@@ -28,6 +28,9 @@ database = "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable"
 # Define the base path for the application.
 base-path = "/"
 
+# Enable/Disable the login of anonymous clients
+disable-anonymous-login = false
+
 # Set the protocol and host for the auth provider callbacks (e.g. https://scrumlr.io)
 auth-callback-host = ""
 
@@ -63,6 +66,21 @@ auth-apple-client-id = ""
 
 # Set the client secret for Apple OAuth authentication.
 auth-apple-client-secret = ""
+
+# Set the client ID for OIDC authentication.
+auth-oidc-client-id = ""
+
+# Set the client secret for OIDC authentication.
+auth-oidc-client-secret = ""
+
+# Set the URL hosting the OIDC discovery document.
+auth-oidc-discovery-url = ""
+
+# Set the JWT scope to request from the IDP for user identifier information.
+auth-oidc-user-ident-scope = ""
+
+# Set the JWT scope to request from the IDP for user name information.
+auth-oidc-user-name-scope = ""
 
 # Enable or disable verbose logging.
 verbose = true

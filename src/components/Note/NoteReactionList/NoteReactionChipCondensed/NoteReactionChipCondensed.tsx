@@ -1,8 +1,10 @@
 import {hashCode} from "utils/hash";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
-import {REACTION_EMOJI_MAP} from "types/reaction";
+import {REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {uniqueId} from "underscore";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
+import {useAppSelector} from "store";
+import {getEmojiWithSkinTone} from "utils/reactions";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChipCondensed.scss";
 
@@ -24,6 +26,8 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
 
   const anchorId = uniqueId(`reactions-${noteId}-condensed`);
 
+  const skinTone = useAppSelector((state) => state.skinTone);
+
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
       props.handleLongPressReaction(e);
@@ -41,7 +45,7 @@ export const NoteReactionChipCondensed = (props: NoteReactionChipPropsCondensed)
         <div className="note-reaction-chip-condensed__reactions-container">
           {reactionImages.map((emoji) => (
             <div className="note-reaction-chip-condensed__reaction" key={`reaction-${emoji}`}>
-              {emoji}
+              {getEmojiWithSkinTone(emoji!, skinTone)}
             </div>
           ))}
         </div>

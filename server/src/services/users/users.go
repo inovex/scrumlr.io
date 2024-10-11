@@ -72,14 +72,22 @@ func (s *UserService) CreateAppleUser(_ context.Context, id, name, avatarUrl str
 	return new(dto.User).From(user), err
 }
 
+func (s *UserService) CreateOIDCUser(_ context.Context, id, name, avatarUrl string) (*dto.User, error) {
+	user, err := s.database.CreateOIDCUser(id, name, avatarUrl)
+	return new(dto.User).From(user), err
+}
+
 func (s *UserService) Update(_ context.Context, body dto.UserUpdateRequest) (*dto.User, error) {
 	user, err := s.database.UpdateUser(database.UserUpdate{
 		ID:     body.ID,
 		Name:   body.Name,
 		Avatar: body.Avatar,
 	})
-	s.UpdatedUser(user)
 
+	if err != nil {
+		return nil, err
+	}
+	s.UpdatedUser(user)
 	return new(dto.User).From(user), err
 }
 
