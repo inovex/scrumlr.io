@@ -99,7 +99,7 @@
     "stylelint": "^16.9.0",
     "stylelint-config-standard": "^36.0.1",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "scripts": {
     "start": "react-scripts start",
