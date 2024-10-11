@@ -2,7 +2,7 @@
 
 exports[`Appearance should render all Settings correctly 1`] = `
 <div
-  class="settings-dialog__container accent-color__lean-lilac"
+  class="settings-dialog__container accent-color__backlog-blue"
 >
   <header
     class="settings-dialog__header"
