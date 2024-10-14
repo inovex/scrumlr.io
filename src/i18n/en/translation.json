@@ -178,7 +178,10 @@
     "title": "Assign new password",
     "continuePublic": "Ohne Passwort fortfahren",
     "newPassword": "Open Board",
-    "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time."
+    "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.",
+    "submit": "Open board",
+    "showPassword": "Show password",
+    "inputPlaceholder": "Password"
   },
   "Timer": {
     "endTimer": "End timer",

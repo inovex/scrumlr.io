@@ -10,7 +10,7 @@ import "./NoteAuthorList.scss";
 type NoteAuthorListProps = {
   authors: Participant[];
   showAuthors: boolean;
-  viewer: Participant;
+  viewer?: Participant;
   authorID: string;
 };
 

@@ -178,7 +178,10 @@
     "title": "Neues Passwort vergeben",
     "continuePublic": "Ohne Passwort fortfahren",
     "newPassword": "Board Öffnen",
-    "info": "Dieses Board war einst passwortgeschützt. Gib ein neues Passwort ein, um den Schutz fortzusetzen, oder fahre ohne Passwort fort. Du kannst alle Einstellungen jederzeit ändern."
+    "info": "Dieses Board war einst passwortgeschützt. Gib ein neues Passwort ein, um den Schutz fortzusetzen, oder fahre ohne Passwort fort. Du kannst alle Einstellungen jederzeit ändern.",
+    "submit": "Board öffnen",
+    "inputPlaceholder": "Passwort",
+    "showPassword": "Zeige das Passwort"
   },
   "Timer": {
     "endTimer": "Timer beenden",

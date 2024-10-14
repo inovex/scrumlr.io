@@ -9,11 +9,9 @@ import {TextInputLabel} from "components/TextInputLabel";
 import {TextInput} from "components/TextInput";
 import {Button} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
-import {Column} from "types/column";
-import {Note} from "types/note";
-import {Participant} from "types/participant";
-import {Voting} from "types/voting";
+
 import {PassphraseModal} from "components/PassphraseDialog/PassphraseModal/PassphraseModal";
+import {Column, Note, Participant, Voting} from "store/features";
 import {columnTemplates} from "./columnTemplates";
 
 export const NewBoard = () => {
@@ -42,7 +40,7 @@ export const NewBoard = () => {
     columns: Column[];
     notes: Note[];
     participants: Participant;
-    votings: Voting;
+    voting: Voting;
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -88,7 +86,7 @@ export const NewBoard = () => {
           columns: data.columns,
           notes: data.notes,
           participants: data.participants,
-          votings: data.votings,
+          voting: data.voting,
         };
         if (board.board.accessPolicy === "BY_PASSPHRASE") {
           setShowPasswordModal(true);

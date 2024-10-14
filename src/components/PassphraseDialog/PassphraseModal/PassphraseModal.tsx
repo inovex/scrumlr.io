@@ -7,13 +7,13 @@ import {ReactComponent as IconClipboard} from "assets/icons/duplicate.svg";
 import {ReactComponent as IconRefresh} from "assets/icons/refresh.svg";
 import {ReactComponent as IconClose} from "assets/icons/close.svg";
 import {generateRandomString} from "utils/random";
-import {AccessPolicy} from "types/board";
 import {TextInputLabel} from "components/TextInputLabel";
 import {TextInput} from "components/TextInput";
 import {TextInputAdornment} from "components/TextInputAdornment";
 import {TextInputAction} from "components/TextInputAction";
 import {ValidationError} from "components/ValidationError";
 import {Button} from "components/Button";
+import {AccessPolicy} from "store/features";
 
 export interface PassphraseModalProps {
   passphrase: string;
@@ -53,9 +53,14 @@ export const PassphraseModal: FC<PassphraseModalProps> = ({passphrase, onPassphr
             data-testid="passphrase-input"
             type={visiblePassphrase ? "text" : "password"}
             value={passphrase}
+            placeholder={t("PassphraseDialog.inputPlaceholder")}
             onChange={(e) => onPassphraseChange(e.target.value)}
             rightAdornment={
-              <TextInputAdornment title={t("AccessPolicySelection.togglePassphraseVisibility")} onClick={() => setVisiblePassphrase(!visiblePassphrase)}>
+              <TextInputAdornment
+                aria-label={t(`PassphraseDialog${visiblePassphrase ? ".hidePassword" : ".showPassword"}`)}
+                title={t("AccessPolicySelection.togglePassphraseVisibility")}
+                onClick={() => setVisiblePassphrase(!visiblePassphrase)}
+              >
                 {visiblePassphrase && <VisibleIcon />}
                 {!visiblePassphrase && <HiddenIcon />}
               </TextInputAdornment>
@@ -80,8 +85,10 @@ export const PassphraseModal: FC<PassphraseModalProps> = ({passphrase, onPassphr
         </div>
         <div className="new-board__actions import-board__action">
           <Button
+            aria-label={t("PassphraseModal.submit")}
             className="new-board__action import-board__action"
             color="primary"
+            aria-disabled={passphrase.length <= 0}
             disabled={passphrase.length <= 0}
             onClick={() => onSubmit(passphrase, AccessPolicy.BY_PASSPHRASE)}
           >
