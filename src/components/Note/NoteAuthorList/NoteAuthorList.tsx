@@ -18,7 +18,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const {t} = useTranslation();
 
   if (!props.authors[0] || props.authors.length === 0) {
-    // return <NoteAuthorSkeleton />;
+    return <NoteAuthorSkeleton authorID={props.authorID} />;
 
     const avatarProps = generateRandomProps(props.authorID);
     return (
