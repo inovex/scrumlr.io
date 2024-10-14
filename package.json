@@ -29,7 +29,7 @@
     "marked": "14.1.2",
     "plausible-tracker": "^0.3.9",
     "qrcode.react": "^4.0.1",
-    "query-string": "^9.1.0",
+    "query-string": "^9.1.1",
     "react": "^18.3.1",
     "react-autosize-textarea": "^7.1.0",
     "react-dom": "^18.3.1",
@@ -95,11 +95,11 @@
     "react-scripts": "^5.0.1",
     "redux-mock-store": "^1.5.4",
     "resize-observer-polyfill": "^1.5.1",
-    "sass": "^1.79.4",
+    "sass": "^1.79.5",
     "stylelint": "^16.9.0",
     "stylelint-config-standard": "^36.0.1",
     "ts-jest": "^29.2.5",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "scripts": {
     "start": "react-scripts start",
