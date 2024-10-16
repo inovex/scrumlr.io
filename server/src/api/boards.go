@@ -21,10 +21,12 @@ import (
 
 // createBoard creates a new board
 func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 	// parse request
 	var body dto.CreateBoardRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -62,18 +64,15 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	boardIDs, err := s.boards.GetBoards(r.Context(), user)
 	if err != nil {
-		log.Errorw("unable to get board ids for this user", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 	OverviewBoards, err := s.boards.BoardOverview(r.Context(), boardIDs, user)
 	if err != nil {
-		log.Errorw("unable to get board overview", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -120,6 +119,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	boardParam := chi.URLParam(r, "id")
 	board, err := uuid.Parse(boardParam)
 	if err != nil {
+		log.Errorw("Wrong board id", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -127,7 +127,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 	exists, err := s.sessions.SessionExists(r.Context(), board, user)
 	if err != nil {
-		log.Errorw("unable to check preexisting sessions", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -135,7 +134,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if exists {
 		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
 		if err != nil {
-			log.Errorw("unable to check if participant is banned", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -163,7 +161,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if b.AccessPolicy == types.AccessPolicyPublic {
 		_, err := s.sessions.Create(r.Context(), board, user)
 		if err != nil {
-			log.Errorw("unable to add participant", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -191,7 +188,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		if encodedPassphrase == *b.Passphrase {
 			_, err := s.sessions.Create(r.Context(), board, user)
 			if err != nil {
-				log.Errorw("unable to create board session", "err", err)
 				common.Throw(w, r, common.InternalServerError)
 				return
 			}
@@ -244,10 +240,12 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 // updateBoard updates a board
 func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body dto.BoardUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
 	}
@@ -264,10 +262,12 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body dto.SetTimerRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
