@@ -94,7 +94,8 @@ export const NewBoard = () => {
         }
         setImportBoard(board);
       } catch (error) {
-        console.error("Error parsing JSON:", error);
+        // console.error("Error parsing JSON:", error);
+        // TODO toast error instead
       }
     };
     setFile(file);
