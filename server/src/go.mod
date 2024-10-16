@@ -26,7 +26,7 @@ require (
 	github.com/uptrace/bun/dbfixture v1.2.3
 	github.com/uptrace/bun/dialect/pgdialect v1.2.3
 	github.com/uptrace/bun/extra/bundebug v1.2.3
-	github.com/urfave/cli/v2 v2.27.4
+	github.com/urfave/cli/v2 v2.27.5
 	github.com/weppos/publicsuffix-go v0.40.2
 	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.28.0
@@ -37,14 +37,14 @@ require (
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
-	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/BurntSushi/toml v1.4.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/containerd/continuity v0.4.3 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.5 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.3.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
