@@ -180,8 +180,8 @@
     "newPassword": "Open Board",
     "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.",
     "submit": "Open board",
-    "showPassword": "Show password",
-    "inputPlaceholder": "Password"
+    "inputPlaceholder": "Password",
+    "showPassword": "Show password"
   },
   "Timer": {
     "endTimer": "End timer",
