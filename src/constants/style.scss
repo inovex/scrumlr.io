@@ -98,10 +98,12 @@ $brighten--slightly: brightness(1.1);
 $brighten--strongly: brightness(1.4);
 
 // z-index
+// TODO clean this up
 $base-z-index: 100;
 $base-z-index-step: 10;
 $note-z-index: $base-z-index + (2 * $base-z-index-step);
-$emoji-suggestions-z-index: $note-z-index + $base-z-index-step;
+$column-header-z-index: $note-z-index + $base-z-index-step; // elements from header overlaying notes must always be visible
+$emoji-suggestions-z-index: $column-header-z-index;
 $menu-z-index: $base-z-index + (8 * $base-z-index-step);
 $menu-item-z-index: $menu-z-index + $base-z-index-step;
 $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);
