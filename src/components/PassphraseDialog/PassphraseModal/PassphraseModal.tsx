@@ -1,8 +1,7 @@
-import "./PassphraseModal.scss";
 import {t} from "i18next";
 import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
 import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
-import {FC, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {ReactComponent as IconClipboard} from "assets/icons/duplicate.svg";
 import {ReactComponent as IconRefresh} from "assets/icons/refresh.svg";
 import {ReactComponent as IconClose} from "assets/icons/close.svg";
@@ -14,6 +13,7 @@ import {TextInputAction} from "components/TextInputAction";
 import {ValidationError} from "components/ValidationError";
 import {Button} from "components/Button";
 import {AccessPolicy} from "store/features";
+import "./PassphraseModal.scss";
 
 export interface PassphraseModalProps {
   passphrase: string;
@@ -22,7 +22,7 @@ export interface PassphraseModalProps {
   onClose: () => void;
 }
 
-export const PassphraseModal: FC<PassphraseModalProps> = ({passphrase, onPassphraseChange, onSubmit, onClose}) => {
+export const PassphraseModal = ({passphrase, onPassphraseChange, onSubmit, onClose}: PassphraseModalProps) => {
   const [visiblePassphrase, setVisiblePassphrase] = useState(false);
 
   useEffect(() => {
