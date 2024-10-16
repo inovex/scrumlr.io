@@ -1,5 +1,5 @@
 @import "constants/style";
 
 .column-settings {
-  z-index: $menu-z-index;
+  z-index: $column-header-z-index; // display over rest of column
 }
