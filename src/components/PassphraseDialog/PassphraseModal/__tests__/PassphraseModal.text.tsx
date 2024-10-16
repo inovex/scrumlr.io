@@ -3,6 +3,7 @@ import {t} from "i18next";
 import {PassphraseModal} from "../PassphraseModal";
 import {fireEvent} from "@testing-library/react";
 import {useState} from "react";
+import {AccessPolicy} from "store/features";
 
 describe("<PassphraseDialog />", () => {
   test("snapshot test", () => {
@@ -47,7 +48,6 @@ describe("<PassphraseDialog />", () => {
     const passwordInput = getByPlaceholderText(t("PassphraseDialog.inputPlaceholder"));
     fireEvent.change(passwordInput, {target: {value: "Passphrase"}});
     fireEvent.click(submitButton);
-    expect(onSubmit).toHaveBeenCalled();
-    expect(onSubmit).toHaveBeenCalledWith("Passphrase");
+    expect(onSubmit).toHaveBeenCalledWith("Passphrase", AccessPolicy.BY_PASSPHRASE);
   });
 });
