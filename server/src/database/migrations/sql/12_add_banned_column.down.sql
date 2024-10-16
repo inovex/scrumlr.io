@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS board_sessions DROP COLUMN IF EXISTS banned;
