@@ -12,8 +12,8 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 
 import {PassphraseModal} from "components/PassphraseDialog/PassphraseModal/PassphraseModal";
 import {Column, importBoard, Note, Participant, Voting} from "store/features";
+import {useAppDispatch} from "store";
 import {columnTemplates} from "./columnTemplates";
-import {useAppDispatch} from "../../store";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
@@ -55,9 +55,10 @@ export const NewBoard = () => {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-
-    setShowPasswordModal(false);
+    setFile(new File([], ""));
+    setAccessPolicy(0);
     setPassphrase("");
+    setShowPasswordModal(false);
   };
 
   const handleFileEvent = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>) => {
@@ -136,7 +137,6 @@ export const NewBoard = () => {
 
   const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
   const isImportBoardDisabled = !(loadedFile && loadedFile.size > 0) || accessPolicy === AccessPolicy.BY_PASSPHRASE;
-
   return (
     <div className="new-board__wrapper">
       <div className="new-board">
