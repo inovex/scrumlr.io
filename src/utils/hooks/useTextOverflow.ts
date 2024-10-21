@@ -1,14 +1,14 @@
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect, useRef, RefObject} from "react";
 
 /**
  * Custom hook to detect whether the text within a referenced container is truncated (ellipsis).
  * It can be used to determine if a tooltip should be displayed based on text visibility.
  *
- * @template T
+ * @template RefElement
  * @param {string} label - The text to monitor for overflow.
- * @returns {Object} An object containing:
- * @returns {boolean} isTextTruncated - A boolean indicating if the text is truncated.
- * @returns {React.RefObject<RefElement>} textRef - A ref to be attached to the text element to measure its dimensions.
+ * @returns {{ isTextTruncated: boolean, textRef: React.RefObject<RefElement> }} An object containing:
+ * - `isTextTruncated`: A boolean indicating if the text is truncated.
+ * - `textRef`: A ref to be attached to the text element to measure its dimensions.
  *
  * @example
  * const MyComponent = () => {
@@ -22,7 +22,7 @@ import {useState, useEffect, useRef} from "react";
  *   );
  * };
  */
-export const useTextOverflow = <RefElement extends HTMLElement>(label: string) => {
+export const useTextOverflow = <RefElement extends HTMLElement>(label: string): {isTextTruncated: boolean; textRef: RefObject<RefElement>} => {
   const [isTextTruncated, setIsTextTruncated] = useState<boolean>(false);
   const textRef = useRef<RefElement | null>(null);
 
