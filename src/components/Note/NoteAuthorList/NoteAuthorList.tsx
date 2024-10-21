@@ -2,8 +2,6 @@ import classNames from "classnames";
 import {Participant, ParticipantExtendedInfo} from "store/features/";
 import {useTranslation} from "react-i18next";
 import {UserAvatar} from "components/BoardUsers";
-import {generateRandomProps} from "components/Avatar";
-import {getRandomNameWithSeed} from "constants/nameList";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
 import "./NoteAuthorList.scss";
 
@@ -19,24 +17,6 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
 
   if (!props.authors[0] || props.authors.length === 0) {
     return <NoteAuthorSkeleton authorID={props.authorID} />;
-
-    const avatarProps = generateRandomProps(props.authorID);
-    return (
-      <div className="note-author-list">
-        <div className={classNames("note-author__container", {"note-author__container--self": false})}>
-          <figure
-            className={classNames("note__author", {
-              "note__author--self": false,
-            })}
-            aria-roledescription="author"
-            key={props.authorID}
-          >
-            <UserAvatar id={props.authorID} avatar={avatarProps} title={getRandomNameWithSeed(props.authorID)} className="note__user-avatar" avatarClassName="note__user-avatar" />
-          </figure>
-          <div className={classNames("note__author-name", {"note__author-name--self": false})}>{getRandomNameWithSeed(props.authorID)}</div>
-        </div>
-      </div>
-    );
   }
 
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.

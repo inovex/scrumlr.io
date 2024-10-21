@@ -1,5 +1,5 @@
 import {Color} from "constants/colors";
-import {EditBoardRequest} from "store/features/board/types";
+import {Board, EditBoardRequest} from "store/features/board/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
@@ -47,7 +47,7 @@ export const BoardAPI = {
       });
 
       if (response.status === 201) {
-        const body = await response.json();
+        const body = (await response.json()) as Board;
         return body.id;
       }
 

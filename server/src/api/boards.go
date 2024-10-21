@@ -424,6 +424,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
+
 	body.Board.Owner = owner
 
 	columns := make([]dto.ColumnRequest, 0, len(body.Notes))
@@ -453,7 +454,8 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	cols, err := s.boards.ListColumns(r.Context(), b.ID)
 	if err != nil {
-		s.boards.Delete(r.Context(), b.ID)
+		_ = s.boards.Delete(r.Context(), b.ID)
+
 	}
 
 	type ParentChildNotes struct {
@@ -487,7 +489,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 					User:  parentNote.Author,
 				})
 				if err != nil {
-					s.boards.Delete(r.Context(), b.ID)
+					_ = s.boards.Delete(r.Context(), b.ID)
 					common.Throw(w, r, err)
 					return
 				}
@@ -516,7 +518,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 				},
 			})
 			if err != nil {
-				s.boards.Delete(r.Context(), b.ID)
+				_ = s.boards.Delete(r.Context(), b.ID)
 				common.Throw(w, r, err)
 				return
 			}

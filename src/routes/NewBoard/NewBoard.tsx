@@ -11,11 +11,13 @@ import {Button} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 
 import {PassphraseModal} from "components/PassphraseDialog/PassphraseModal/PassphraseModal";
-import {Column, Note, Participant, Voting} from "store/features";
+import {Column, importBoard, Note, Participant, Voting} from "store/features";
 import {columnTemplates} from "./columnTemplates";
+import {useAppDispatch} from "../../store";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState<string | undefined>();
   const [columnTemplate, setColumnTemplate] = useState<string | undefined>(undefined);
@@ -28,15 +30,13 @@ export const NewBoard = () => {
   const [completeBoard, setImportBoard] = useState<BoardContent>();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  type ImportBoardRequest = {
-    name: string;
-    description?: string;
-    accessPolicy: string;
-    passphrase?: string;
-  };
-
   type BoardContent = {
-    board: ImportBoardRequest;
+    board: {
+      name: string;
+      description?: string;
+      accessPolicy: string;
+      passphrase?: string;
+    };
     columns: Column[];
     notes: Note[];
     participants: Participant;
@@ -74,25 +74,13 @@ export const NewBoard = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const content = e.target?.result as string;
-
       try {
         const data = JSON.parse(content) as BoardContent;
-        const board: BoardContent = {
-          board: {
-            name: data.board.name,
-            description: data.board.description,
-            accessPolicy: data.board.accessPolicy,
-          },
-          columns: data.columns,
-          notes: data.notes,
-          participants: data.participants,
-          voting: data.voting,
-        };
-        if (board.board.accessPolicy === "BY_PASSPHRASE") {
+        if (data.board.accessPolicy === "BY_PASSPHRASE") {
           setShowPasswordModal(true);
           setAccessPolicy(1);
         }
-        setImportBoard(board);
+        setImportBoard(data);
       } catch (error) {
         // console.error("Error parsing JSON:", error);
         // TODO toast error instead
@@ -106,9 +94,9 @@ export const NewBoard = () => {
     if (completeBoard && accessPolicy === AccessPolicy.BY_PASSPHRASE && passphrase) {
       completeBoard.board.passphrase = passphrase;
     }
-
-    const boardId = await API.importBoard(JSON.stringify(completeBoard));
-    navigate(`/board/${boardId}`);
+    dispatch(importBoard(JSON.stringify(completeBoard)));
+    // const boardId = await API.importBoard(JSON.stringify(completeBoard));
+    // navigate(`/board/${boardId}`);
   };
 
   const handlePasswordSubmit = (password: string, newAccessPolicy: AccessPolicy) => {
@@ -133,6 +121,7 @@ export const NewBoard = () => {
     }
 
     if (columnTemplate) {
+      // todo: use thunk instead
       const boardId = await API.createBoard(
         boardName,
         {
