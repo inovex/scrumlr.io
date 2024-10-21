@@ -13,6 +13,7 @@ import {Droppable} from "components/DragAndDrop/Droppable";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {Note} from "../Note";
 import {ColumnSettings} from "./ColumnSettings";
 import {createColumn, deleteColumnOptimistically, editColumn, editColumnOptimistically} from "../../store/features";
@@ -30,6 +31,8 @@ export interface ColumnProps {
 export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
+
+  const {isTextTruncated, textRef} = useTextOverflow<HTMLHeadingElement>(name);
 
   const notes = useAppSelector(
     (state) =>
@@ -126,6 +129,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
         {!visible && <Hidden className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
         <h2
+          ref={textRef}
           id={`column-${id}`}
           onDoubleClick={() => {
             if (isModerator) {
@@ -136,9 +140,11 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
         >
           {name}
         </h2>
-        <Tooltip className="column__tooltip" anchorSelect={`#column-${id}`}>
-          {name}
-        </Tooltip>
+        {isTextTruncated && (
+          <Tooltip className="column__tooltip" anchorSelect={`#column-${id}`}>
+            {name}
+          </Tooltip>
+        )}
       </div>
     ) : (
       <>
