@@ -312,7 +312,8 @@
     "ready": "Bist du fertig?",
     "readyButton": "Fertig!",
     "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
-    "enable": "Aktivieren"
+    "enable": "Aktivieren",
+    "failedImport": "Fehler beim importieren der Datei"
   },
   "Language": {
     "german": "Deutsch",

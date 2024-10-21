@@ -312,7 +312,8 @@
     "ready": "Are you ready?",
     "readyButton": "Ready!",
     "boardReactionsDisabled": "Board reactions are disabled",
-    "enable": "Enable"
+    "enable": "Enable",
+    "failedImport": "Error importing the file"
   },
   "Language": {
     "german": "German",

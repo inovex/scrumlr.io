@@ -14,6 +14,7 @@ import {PassphraseModal} from "components/PassphraseDialog/PassphraseModal/Passp
 import {Column, importBoard, Note, Participant, Voting} from "store/features";
 import {useAppDispatch} from "store";
 import {columnTemplates} from "./columnTemplates";
+import {Toast} from "../../utils/Toast";
 
 export const NewBoard = () => {
   const {t} = useTranslation();
@@ -83,8 +84,8 @@ export const NewBoard = () => {
         }
         setImportBoard(data);
       } catch (error) {
-        // console.error("Error parsing JSON:", error);
-        // TODO toast error instead
+        Toast.error({title: t("Toast.failedImport")});
+        setFile(new File([], ""));
       }
     };
     setFile(file);
@@ -96,8 +97,6 @@ export const NewBoard = () => {
       completeBoard.board.passphrase = passphrase;
     }
     dispatch(importBoard(JSON.stringify(completeBoard)));
-    // const boardId = await API.importBoard(JSON.stringify(completeBoard));
-    // navigate(`/board/${boardId}`);
   };
 
   const handlePasswordSubmit = (password: string, newAccessPolicy: AccessPolicy) => {
