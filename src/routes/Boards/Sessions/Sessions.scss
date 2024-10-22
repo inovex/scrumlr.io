@@ -7,9 +7,17 @@
   padding: $spacing--xl $spacing--xl 0 $spacing--xl;
   border-radius: $rounded--default;
 
-  background-color: $blue--50;
+  background-color: deeppink;
+  //background-color: $blue--50;
 
   &--saved {
     margin-left: $spacing--md; // instead of gap, see above
+  }
+}
+
+[theme="dark"] {
+  .sessions__container {
+    background-color: deeppink;
+    //background-color: $navy--700;
   }
 }
