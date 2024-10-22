@@ -9534,10 +9534,10 @@ q@^1.1.2:
   resolved "https://registry.yarnpkg.com/q/-/q-1.5.1.tgz#7e32f75b41381291d04611f1bf14109ac00651d7"
   integrity sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==
 
-qrcode.react@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-4.0.1.tgz#1caf1d3f45bf1b6d9cf800cb0f0d671f6a89e68f"
-  integrity sha512-Lpj0tPBn561WiQ3QQWXbkx8xTtB8BZkJeMZWLJIL8iaPBCoWzW1IpCeU3gY5MDqsb0+efCvEGkl9O0naP64crA==
+qrcode.react@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-4.1.0.tgz#ff15dc9edb135f735bb303a8356938c1e8dcc4c8"
+  integrity sha512-uqXVIIVD/IPgWLYxbOczCNAQw80XCM/LulYDADF+g2xDsPj5OoRwSWtIS4jGyp295wyjKstfG1qIv/I2/rNWpQ==
 
 qs@6.11.0:
   version "6.11.0"
