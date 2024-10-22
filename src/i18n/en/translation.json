@@ -11,7 +11,7 @@
     "basicConfigurationTitle": "Choose a template",
     "importBoard": "Import JSON",
     "uploadFile": "Upload file or drag here",
-    "importNewBoard": "import now"
+    "importNewBoard": "Import now"
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
