@@ -1,0 +1,15 @@
+.sessions__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: $spacing--lg;
+
+  padding: $spacing--xl $spacing--xl 0 $spacing--xl;
+  border-radius: $rounded--default;
+
+  background-color: $blue--50;
+
+  &--saved {
+    margin-left: $spacing--md; // instead of gap, see above
+  }
+}
