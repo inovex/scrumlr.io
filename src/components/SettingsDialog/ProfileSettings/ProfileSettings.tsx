@@ -5,7 +5,6 @@ import {useAppDispatch, useAppSelector} from "store";
 import {editSelf, setHotkeyState} from "store/features";
 import {Info} from "components/Icon";
 import {Toggle} from "components/Toggle";
-import {isEqual} from "underscore";
 import {useOutletContext} from "react-router";
 import {MenuItemConfig} from "constants/settings";
 import {getColorClassName} from "constants/colors";
@@ -20,16 +19,11 @@ export const ProfileSettings = () => {
 
   const activeMenuItem: MenuItemConfig = useOutletContext();
 
-  const state = useAppSelector(
-    (applicationState) => ({
-      participant: applicationState.participants.self!,
-      hotkeysAreActive: applicationState.view.hotkeysAreActive,
-    }),
-    isEqual
-  );
+  const self = useAppSelector((state) => state.auth.user!);
+  const hotkeysAreActive = useAppSelector((state) => state.view.hotkeysAreActive);
 
-  const [userName, setUserName] = useState<string>(state.participant?.user.name);
-  const [id] = useState<string | undefined>(state.participant?.user.id);
+  const [userName, setUserName] = useState<string>(self.name);
+  const [id] = useState<string | undefined>(self.id);
 
   return (
     <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
@@ -44,7 +38,7 @@ export const ProfileSettings = () => {
             value={userName}
             maxLength={64}
             onChange={(e) => setUserName(e.target.value)}
-            submit={() => dispatch(editSelf({...state.participant.user, name: userName}))}
+            submit={() => dispatch(editSelf({auth: {...self, name: userName}, applyOptimistically: true}))}
           />
 
           <AvatarSettings id={id} />
@@ -53,10 +47,10 @@ export const ProfileSettings = () => {
               className="profile-settings__toggle-hotkeys-button"
               label={t("Hotkeys.hotkeyToggle")}
               onClick={() => {
-                dispatch(setHotkeyState(!state.hotkeysAreActive));
+                dispatch(setHotkeyState(!hotkeysAreActive));
               }}
             >
-              <Toggle active={state.hotkeysAreActive} />
+              <Toggle active={hotkeysAreActive} />
             </SettingsButton>
             <a className="profile-settings__open-cheat-sheet-button" href={`${process.env.PUBLIC_URL}/hotkeys.pdf`} target="_blank" rel="noopener noreferrer">
               <p>{t("Hotkeys.cheatSheet")}</p>
