@@ -1,6 +1,6 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {AuthState} from "./types";
-import {signIn, userCheckCompleted} from "./actions";
+import {editUserOptimistically, signIn, userCheckCompleted} from "./actions";
 import {signOut} from "./thunks";
 
 const initialState: AuthState = {user: undefined, initializationSucceeded: null};
@@ -17,5 +17,8 @@ export const authReducer = createReducer(initialState, (builder) =>
     })
     .addCase(userCheckCompleted, (state, action) => {
       state.initializationSucceeded = action.payload;
+    })
+    .addCase(editUserOptimistically, (state, action) => {
+      state.user = action.payload;
     })
 );
