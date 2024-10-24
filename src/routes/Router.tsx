@@ -50,15 +50,15 @@ const Router = () => {
         >
           <Route index element={<Navigate to="templates" />} />
           <Route path="templates" element={<Templates />}>
-            {/* TODO extract settings routes no avoid repetition */}
-            <Route path="settings" element={<SettingsDialog enabledMenuItems={{...ENABLE_ALL, feedback: feedbackEnabled}} />}>
+            {/* TODO extract settings routes to avoid repetition */}
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />
               <Route path="feedback" element={<Feedback />} />
               <Route path="profile" element={<ProfileSettings />} />
             </Route>
           </Route>
           <Route path="sessions" element={<Sessions />}>
-            <Route path="settings" element={<SettingsDialog enabledMenuItems={{...ENABLE_ALL, feedback: feedbackEnabled}} />}>
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />
               <Route path="feedback" element={<Feedback />} />
               <Route path="profile" element={<ProfileSettings />} />
