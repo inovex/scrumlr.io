@@ -1,7 +1,7 @@
 import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps, ReactEventHandler} from "react";
 import {MAX_NOTE_LENGTH, MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
-import {SkinToneComponent} from "types/skinTone";
+import {SkinToneComponent} from "store/features/skinTone/types";
 import {useAppSelector} from "store";
 import {useOnBlur} from "./useOnBlur";
 

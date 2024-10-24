@@ -3,7 +3,7 @@ import getTestStore from "utils/test/getTestStore";
 import {NoteReactionList} from "../NoteReactionList";
 import {render} from "testUtils";
 import {fireEvent} from "@testing-library/react";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 
 const NOTE_ID = "test-notes-id-1";
 

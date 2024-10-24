@@ -27,12 +27,12 @@ $settings__item-height: 48px;
       margin-right: calc(-1 * (#{$spacing--xs} + 10px));
       padding-bottom: $settings-dialog-container--bottom;
 
+      @include scrollbar();
+
       @media screen and (min-width: 920px) {
         padding-right: $spacing--lg;
         margin-right: calc(-1 * (#{$spacing--lg} + 10px));
       }
-
-      @include scrollbar();
 
       &:focus-visible {
         outline: 2px dashed rgba(var(--accent-color--light-rgb), 0.5);

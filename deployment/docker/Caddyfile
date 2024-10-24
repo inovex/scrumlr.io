@@ -1,0 +1,14 @@
+0.0.0.0:80 {
+    log {
+        output stdout
+    }
+    @api {
+        path /api*
+    }
+    reverse_proxy @api scrumlr-backend:8080
+
+    @frontend {
+        path / /static* /locales* /login* /board* /new* /timer_finished.mp3 /hotkeys.pdf /legal/* /manifest.json /service-worker.js
+    }
+    reverse_proxy @frontend scrumlr-frontend:8080
+}

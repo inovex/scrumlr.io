@@ -5,6 +5,7 @@ import (
 	"errors"
 	"math/rand/v2"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/logger"
 	"testing"
 	"time"
 
@@ -124,7 +125,7 @@ func (suite *votingServiceTestSuite) TestCreate() {
 
 	mock.On("GetVoting", boardId, votingId).Return(database.Voting{}, []database.Vote{}, nil)
 	rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
-	create, err := s.Create(context.Background(), votingRequest)
+	create, err := s.Create(logger.InitTestLogger(context.Background()), votingRequest)
 
 	assert.NotNil(suite.T(), create)
 	assert.NoError(suite.T(), err)
@@ -217,7 +218,7 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 				rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
 			}
 
-			update, err := s.Update(context.Background(), updateVotingRequest)
+			update, err := s.Update(logger.InitTestLogger(context.Background()), updateVotingRequest)
 
 			assert.Equal(suite.T(), tt.err, err)
 			assert.Equal(suite.T(), update, tt.update)

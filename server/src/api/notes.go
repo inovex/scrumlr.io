@@ -8,15 +8,18 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 )
 
 // createNote creates a new note
 func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.NoteCreateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -68,11 +71,13 @@ func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 
 // updateNote updates a note
 func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 
 	var body dto.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -91,9 +96,11 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	note := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 	var body dto.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}

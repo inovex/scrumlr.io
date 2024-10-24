@@ -1,5 +1,5 @@
 import {SERVER_HTTP_URL} from "../config";
-import {Vote} from "../types/vote";
+import {Vote} from "../store/features/votes/types";
 
 export const VoteAPI = {
   /**

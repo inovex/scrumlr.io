@@ -3,11 +3,11 @@ import classNames from "classnames";
 import {Avatar, generateRandomProps} from "components/Avatar";
 import {Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppDispatch, useAppSelector} from "store";
 import {isEqual} from "underscore";
 import {AVATAR_CONFIG} from "constants/avatar";
 import {AvataaarProps, AvatarGroup} from "types/avatar";
+import {editSelf} from "store/features";
 import {SettingsAccordion} from "./SettingsAccordion";
 import {SettingsCarousel} from "./SettingsCarousel";
 import "./AvatarSettings.scss";
@@ -17,15 +17,16 @@ export interface AvatarSettingsProps {
 }
 
 export const AvatarSettings = (props: AvatarSettingsProps) => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const state = useAppSelector(
     (applicationState) => ({
-      participant: applicationState.participants!.self,
+      participant: applicationState.participants!.self!,
     }),
     isEqual
   );
 
-  let initialState = state.participant.user.avatar;
+  let initialState = state.participant?.user.avatar;
   if (initialState === null || initialState === undefined) {
     initialState = generateRandomProps(props.id ?? "");
   }
@@ -45,7 +46,7 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
   };
 
   useEffect(() => {
-    store.dispatch(Actions.editSelf({...state.participant.user, avatar: properties}));
+    dispatch(editSelf({...state.participant.user, avatar: properties}));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 

@@ -1,14 +1,5 @@
 package identifiers
 
-//
-//type BoardIdentifier struct{}
-//type UserIdentifier struct{}
-//type NoteIdentifier struct{}
-//type ColumnIdentifier struct{}
-//type ReactionIdentifier struct{}
-//type VotingIdentifier struct{}
-//type BoardEditableIdentifier struct{}
-
 type boardIdentifier string
 type userIdentifier string
 type noteIdentifier string

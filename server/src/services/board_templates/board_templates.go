@@ -42,7 +42,7 @@ func (s *BoardTemplateService) Create(ctx context.Context, body dto.CreateBoardT
 	// create the board template
 	b, err := s.database.CreateBoardTemplate(board, columns)
 	if err != nil {
-		log.Errorw("unable to create board", "creator", body.Creator, "policy", body.AccessPolicy, "err", err)
+		log.Errorw("unable to create board template", "creator", body.Creator, "policy", body.AccessPolicy, "err", err)
 		return nil, err
 	}
 

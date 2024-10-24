@@ -49,10 +49,11 @@
 }
 
 .column__header {
-  z-index: $base-z-index;
   display: flex;
   flex-direction: column;
   padding: 0 $spacing--xl;
+
+  z-index: $column-header-z-index;
 }
 
 .column__header-title {

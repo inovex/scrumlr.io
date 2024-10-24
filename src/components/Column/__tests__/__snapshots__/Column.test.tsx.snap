@@ -42,9 +42,11 @@ exports[`Column should have correct style show column with correct style 1`] = `
         >
           <svg
             class="column__header-edit-button-icon"
+            style="transform: rotate(90deg);"
           >
             three-dots.svg
           </svg>
+           
         </button>
       </div>
       <form
