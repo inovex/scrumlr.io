@@ -40,6 +40,8 @@ export interface View {
   hotkeyNotificationsEnabled: boolean;
 
   showBoardReactions: boolean;
+
+  readonly legacyCreateBoard?: boolean;
 }
 
 export type ViewState = View;
