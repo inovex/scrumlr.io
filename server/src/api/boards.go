@@ -23,7 +23,6 @@ import (
 func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-
 	// parse request
 	var body dto.CreateBoardRequest
 	if err := render.Decode(r, &body); err != nil {
@@ -414,4 +413,119 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusNotAcceptable)
 	render.Respond(w, r, nil)
+}
+
+func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
+	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	var body dto.ImportBoardRequest
+	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Could not read body", "err", err)
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+
+	body.Board.Owner = owner
+
+	columns := make([]dto.ColumnRequest, 0, len(body.Notes))
+
+	for _, column := range body.Columns {
+		columns = append(columns, dto.ColumnRequest{
+			Name:    column.Name,
+			Color:   column.Color,
+			Visible: &column.Visible,
+			Index:   &column.Index,
+		})
+	}
+	b, err := s.boards.Create(r.Context(), dto.CreateBoardRequest{
+		Name:         body.Board.Name,
+		Description:  body.Board.Description,
+		AccessPolicy: body.Board.AccessPolicy,
+		Passphrase:   body.Board.Passphrase,
+		Columns:      columns,
+		Owner:        owner,
+	})
+
+	if err != nil {
+		log.Errorw("Could not import board", "err", err)
+		common.Throw(w, r, err)
+		return
+	}
+
+	cols, err := s.boards.ListColumns(r.Context(), b.ID)
+	if err != nil {
+		_ = s.boards.Delete(r.Context(), b.ID)
+
+	}
+
+	type ParentChildNotes struct {
+		Parent   dto.Note
+		Children []dto.Note
+	}
+	parentNotes := make(map[uuid.UUID]dto.Note)
+	childNotes := make(map[uuid.UUID][]dto.Note)
+
+	for _, note := range body.Notes {
+		if !note.Position.Stack.Valid {
+			parentNotes[note.ID] = note
+		} else {
+			childNotes[note.Position.Stack.UUID] = append(childNotes[note.Position.Stack.UUID], note)
+		}
+	}
+
+	var organizedNotes []ParentChildNotes
+	for parentID, parentNote := range parentNotes {
+		for i, column := range body.Columns {
+			if parentNote.Position.Column == column.ID {
+
+				note, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+					Text: parentNote.Text,
+					Position: dto.NotePosition{
+						Column: cols[i].ID,
+						Stack:  uuid.NullUUID{},
+						Rank:   0,
+					},
+					Board: b.ID,
+					User:  parentNote.Author,
+				})
+				if err != nil {
+					_ = s.boards.Delete(r.Context(), b.ID)
+					common.Throw(w, r, err)
+					return
+				}
+				parentNote = *note
+			}
+		}
+		organizedNotes = append(organizedNotes, ParentChildNotes{
+			Parent:   parentNote,
+			Children: childNotes[parentID],
+		})
+	}
+
+	for _, node := range organizedNotes {
+		for _, note := range node.Children {
+			_, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+				Text:  note.Text,
+				Board: b.ID,
+				User:  note.Author,
+				Position: dto.NotePosition{
+					Column: node.Parent.Position.Column,
+					Rank:   note.Position.Rank,
+					Stack: uuid.NullUUID{
+						UUID:  node.Parent.ID,
+						Valid: true,
+					},
+				},
+			})
+			if err != nil {
+				_ = s.boards.Delete(r.Context(), b.ID)
+				common.Throw(w, r, err)
+				return
+			}
+
+		}
+	}
+
+	render.Status(r, http.StatusCreated)
+	render.Respond(w, r, b)
 }

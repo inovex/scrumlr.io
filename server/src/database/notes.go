@@ -33,6 +33,14 @@ type NoteInsert struct {
 	Text          string
 }
 
+type NoteImport struct {
+	bun.BaseModel `bun:"table:notes"`
+	Author        uuid.UUID
+	Board         uuid.UUID
+	Text          string
+	Position      *NoteUpdatePosition `bun:",embed"`
+}
+
 type NoteUpdatePosition struct {
 	Column uuid.UUID
 	Rank   int
@@ -55,6 +63,16 @@ func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
 		Value("rank", "coalesce((SELECT COUNT(*) as rank FROM notes WHERE board = ? AND \"column\" = ? AND stack IS NULL), 0)", insert.Board, insert.Column).
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
+	return note, err
+}
+
+func (d *Database) ImportNote(insert NoteImport) (Note, error) {
+	var note Note
+	query := d.db.NewInsert().
+		Model(&insert).
+		Returning("*")
+	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
+
 	return note, err
 }
 

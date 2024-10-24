@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {Participant, ParticipantExtendedInfo} from "store/features/";
 import {useTranslation} from "react-i18next";
-import {UserAvatar} from "../../BoardUsers";
+import {UserAvatar} from "components/BoardUsers";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
 import "./NoteAuthorList.scss";
 
@@ -9,12 +9,14 @@ type NoteAuthorListProps = {
   authors: Participant[];
   showAuthors: boolean;
   viewer?: Participant;
+  authorID: string;
 };
+
 export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const {t} = useTranslation();
 
   if (!props.authors[0] || props.authors.length === 0) {
-    return <NoteAuthorSkeleton />;
+    return <NoteAuthorSkeleton authorID={props.authorID} />;
   }
 
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
@@ -47,6 +49,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
 
     return allAuthors;
   };
+
   const authorExtendedInfo = prepareAuthors(props.authors);
   // expected behaviour:
   // 1 => avatar1 name
@@ -85,7 +88,6 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
             avatarClassName="note__user-avatar"
           />
         </figure>
-
         <div className={classNames("note__author-name", {"note__author-name--self": stackAuthor.isSelf})}>{stackAuthor.displayName}</div>
       </div>
 

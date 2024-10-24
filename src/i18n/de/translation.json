@@ -8,7 +8,10 @@
     "extendedConfigurationButton": "Erweiterte Einstellungen",
     "basicConfigurationButton": "Vorlagenauswahl",
     "extendedConfigurationTitle": "Erweiterte Einstellungen",
-    "basicConfigurationTitle": "Wähle eine Vorlage"
+    "basicConfigurationTitle": "Wähle eine Vorlage",
+    "importBoard": "JSON Importieren",
+    "uploadFile": "Datei hochladen oder hierher ziehen",
+    "importNewBoard": "Jetzt importieren"
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
@@ -171,6 +174,15 @@
     "inputPlaceholder": "Passwort",
     "incorrectPassphrase": "Ups, das war das falsche Passwort. Versuch's nochmal!"
   },
+  "PassphraseModal": {
+    "title": "Neues Passwort vergeben",
+    "continuePublic": "Ohne Passwort fortfahren",
+    "newPassword": "Board Öffnen",
+    "info": "Dieses Board war einst passwortgeschützt. Gib ein neues Passwort ein, um den Schutz fortzusetzen, oder fahre ohne Passwort fort. Du kannst alle Einstellungen jederzeit ändern.",
+    "submit": "Board öffnen",
+    "inputPlaceholder": "Passwort",
+    "showPassword": "Zeige das Passwort"
+  },
   "Timer": {
     "endTimer": "Timer beenden",
     "addOneMinute": "Timer um eine Minute erhöhen",
@@ -300,7 +312,8 @@
     "ready": "Bist du fertig?",
     "readyButton": "Fertig!",
     "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
-    "enable": "Aktivieren"
+    "enable": "Aktivieren",
+    "failedImport": "Fehler beim importieren der Datei"
   },
   "Language": {
     "german": "Deutsch",
