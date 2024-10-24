@@ -4,7 +4,6 @@ import {Avatar, generateRandomProps} from "components/Avatar";
 import {Fragment, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
-import {isEqual} from "underscore";
 import {AVATAR_CONFIG} from "constants/avatar";
 import {AvataaarProps, AvatarGroup} from "types/avatar";
 import {editSelf} from "store/features";
@@ -19,14 +18,9 @@ export interface AvatarSettingsProps {
 export const AvatarSettings = (props: AvatarSettingsProps) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
-  const state = useAppSelector(
-    (applicationState) => ({
-      participant: applicationState.participants!.self!,
-    }),
-    isEqual
-  );
+  const self = useAppSelector((state) => state.auth.user!);
 
-  let initialState = state.participant?.user.avatar;
+  let initialState = self.avatar;
   if (initialState === null || initialState === undefined) {
     initialState = generateRandomProps(props.id ?? "");
   }
@@ -46,7 +40,12 @@ export const AvatarSettings = (props: AvatarSettingsProps) => {
   };
 
   useEffect(() => {
-    dispatch(editSelf({...state.participant.user, avatar: properties}));
+    dispatch(
+      editSelf({
+        auth: {...self, avatar: properties},
+        applyOptimistically: true,
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [properties]);
 
