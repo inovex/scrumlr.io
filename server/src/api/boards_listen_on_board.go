@@ -40,12 +40,13 @@ type EventData struct {
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	id := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		logger.FromRequest(r).Errorw("unable to upgrade websocket",
+		log.Errorw("unable to upgrade websocket",
 			"err", err,
 			"board", id,
 			"user", userID)
@@ -54,7 +55,6 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 
 	fullBoard, err := s.boards.FullBoard(r.Context(), id)
 	if err != nil {
-		logger.Get().Errorw("failed to prepare init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
 		return
 	}
@@ -67,7 +67,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	initEvent = eventInitFilter(initEvent, userID)
 	err = conn.WriteJSON(initEvent)
 	if err != nil {
-		logger.Get().Errorw("failed to send init message", "board", id, "user", userID, "err", err)
+		log.Errorw("failed to send init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
 		return
 	}

@@ -2,6 +2,7 @@ package notes
 
 import (
 	"context"
+	"scrumlr.io/server/logger"
 
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/realtime"
@@ -115,7 +116,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 
 	clientMock.On("Publish", publishSubject, publishEvent).Return(nil)
 
-	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(logger.InitTestLogger(context.Background()), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
@@ -138,7 +139,7 @@ func (suite *NoteServiceTestSuite) TestGetNote() {
 		ID: noteID,
 	}, nil)
 
-	_, err := s.Get(context.Background(), noteID)
+	_, err := s.Get(logger.InitTestLogger(context.Background()), noteID)
 
 	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
@@ -153,7 +154,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 
 	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
 
-	_, err := s.List(context.Background(), boardID)
+	_, err := s.List(logger.InitTestLogger(context.Background()), boardID)
 
 	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
@@ -195,8 +196,10 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	// Mock for the updatedNotes call, which internally calls GetNotes
 	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
 
-	ctx := context.Background()
+	ctx := logger.InitTestLogger(context.Background())
+
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
+
 	mock.On("UpdateNote", callerID, database.NoteUpdate{
 		ID:       noteID,
 		Board:    boardID,
@@ -257,7 +260,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	clientMock.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
 	clientMock.On("Publish", publishSubject, publishEventVotesUpdated).Return(nil)
 
-	ctx := context.Background()
+	ctx := logger.InitTestLogger(context.Background())
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 	ctx = context.WithValue(ctx, identifiers.BoardIdentifier, boardID)
 	ctx = context.WithValue(ctx, identifiers.NoteIdentifier, noteID)
@@ -293,7 +296,7 @@ func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
 		Text:   txt,
 	}).Return(database.Note{}, aDBError)
 
-	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(logger.InitTestLogger(context.Background()), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
@@ -313,7 +316,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 	expectedAPIError := &common.APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
 	mock.On("GetNote", boardID).Return(database.Note{}, sql.ErrNoRows)
 
-	_, err := s.Get(context.Background(), boardID)
+	_, err := s.Get(logger.InitTestLogger(context.Background()), boardID)
 
 	assert.Error(suite.T(), err)
 	assert.Equal(suite.T(), expectedAPIError, err)
