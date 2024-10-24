@@ -2,6 +2,7 @@ package api
 
 import (
 	"database/sql"
+	"fmt"
 	"net/http"
 
 	"github.com/go-chi/render"
@@ -44,6 +45,8 @@ func (s *Server) getBoardTemplate(w http.ResponseWriter, r *http.Request) {
 			common.Throw(w, r, common.NotFoundError)
 			return
 		}
+		c := r.Context()
+		fmt.Println(c)
 		log.Errorw("unable to get board template", err)
 		common.Throw(w, r, common.InternalServerError)
 	}

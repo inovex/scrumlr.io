@@ -68,7 +68,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(text);
 
-  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({
+  const {...emoji} = useEmojiAutocomplete<HTMLDivElement>({
     initialValue: text,
     suggestionsHidden: isStackedNote,
   });
