@@ -2,7 +2,7 @@ import {useEffect} from "react";
 import {uniqueId} from "underscore";
 import ReactFocusLock from "react-focus-lock";
 import {Color, getColorClassName, formatColorName} from "constants/colors";
-import {Tooltip} from "../Tooltip";
+import {Tooltip} from "components/Tooltip";
 
 type ColorPickerProps = {
   colors: Color[];

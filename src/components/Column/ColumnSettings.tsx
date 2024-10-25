@@ -1,16 +1,16 @@
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
-import {Color, getColorForIndex, COLOR_ORDER} from "constants/colors";
 import {useTranslation} from "react-i18next";
-import "./ColumnSettings.scss";
-import "../ColorPicker/ColorPicker.scss";
 import {useAppDispatch, useAppSelector} from "store";
-import {useOnBlur} from "utils/hooks/useOnBlur";
-import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Column, createColumnOptimistically, deleteColumn, editColumn, setShowHiddenColumns} from "store/features";
-import {Toast} from "../../utils/Toast";
-import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
-import {ColorPicker} from "../ColorPicker/ColorPicker";
+import {Color, getColorForIndex, COLOR_ORDER} from "constants/colors";
+import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "constants/misc";
+import {useOnBlur} from "utils/hooks/useOnBlur";
+import {Toast} from "utils/Toast";
+import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
+import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
+import {ColorPicker} from "components/ColorPicker/ColorPicker";
+import "./ColumnSettings.scss";
+import "components/ColorPicker/ColorPicker.scss";
 
 type ColumnSettingsProps = {
   column: Column;
