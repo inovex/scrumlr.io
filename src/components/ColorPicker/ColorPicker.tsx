@@ -38,7 +38,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
             onClick={() => props.selectColor(props.activeColor)}
             className="color-picker__item-button"
           >
-            <div className="column__header-color-option column__header-color-option--selected" />
+            <div className="color-picker__color-option color-picker__color-option--selected" />
           </button>
           <Tooltip anchorSelect={`#${primColorAnchor}`} content={formatColorName(props.activeColor)} />
         </li>
@@ -53,7 +53,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
                 onClick={() => props.selectColor(color)}
                 className={`${color.toString()} color-picker__item-button`}
               >
-                <div className={`column__header-color-option column__header-color-option--${color.toString()}`} />
+                <div className={`color-picker__color-option color-picker__color-option--${color.toString()}`} />
               </button>
             </li>
           );

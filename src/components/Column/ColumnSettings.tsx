@@ -9,8 +9,8 @@ import {Toast} from "utils/Toast";
 import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "components/Icon";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
+import "components/ColorPicker/ColorPicker.scss"; // color picker option
 import "./ColumnSettings.scss";
-import "components/ColorPicker/ColorPicker.scss";
 
 type ColumnSettingsProps = {
   column: Column;
@@ -62,7 +62,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     openedColorPicker ? (
       <ColorPicker colors={COLOR_ORDER} activeColor={props.column.color} selectColor={onSelectColor} closeColorPicker={() => setOpenedColorPicker(false)} />
     ) : (
-      <span className="column__header-color-option column__header-color-option--selected" />
+      <span className="color-picker__color-option color-picker__color-option--selected" />
     );
 
   const menuItems: MiniMenuItem[] = [
