@@ -31,7 +31,8 @@
   },
   "Sessions": {
     "switchTitle": "Sitzungen",
-    "title": "Wähle eine Sitzung"
+    "title": "Wähle eine Sitzung",
+    "savedSessions": "Deine Sitzungen"
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
