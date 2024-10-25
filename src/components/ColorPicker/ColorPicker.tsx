@@ -2,25 +2,18 @@ import {useEffect} from "react";
 import {uniqueId} from "underscore";
 import ReactFocusLock from "react-focus-lock";
 import {Color, getColorClassName, formatColorName} from "constants/colors";
-import {useAppDispatch} from "store";
-import {editColumn} from "store/features";
 import {Tooltip} from "../Tooltip";
 
 type ColorPickerProps = {
-  id: string;
-  name: string;
-  visible: boolean;
-  index: number;
-  color: Color;
-  onClose?: () => void;
   colors: Color[];
+  activeColor: Color;
+  selectColor: (color: Color) => void;
   closeColorPicker: () => void;
 };
 
 export const ColorPicker = (props: ColorPickerProps) => {
-  const dispatch = useAppDispatch();
-  const colorsWithoutSelectedColor = props.colors.filter((curColor) => curColor !== props.color);
-  const primColorAnchor = uniqueId(`color-picker-${props.color.toString()}`);
+  const colorsWithoutSelectedColor = props.colors.filter((curColor) => curColor !== props.activeColor);
+  const primColorAnchor = uniqueId(`color-picker-${props.activeColor.toString()}`);
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
@@ -37,56 +30,30 @@ export const ColorPicker = (props: ColorPickerProps) => {
   return (
     <ReactFocusLock autoFocus={false} className="fix-focus-lock-placement">
       <ul className="color-picker">
-        <li className={`${getColorClassName(props.color)} color-picker__item`}>
+        <li className={`${getColorClassName(props.activeColor)} color-picker__item`}>
           <button
             id={primColorAnchor}
-            aria-label={formatColorName(props.color)}
-            title={formatColorName(props.color)}
-            onClick={() => {
-              props.onClose?.();
-              dispatch(
-                editColumn({
-                  id: props.id,
-                  column: {
-                    name: props.name,
-                    color: props.color,
-                    index: props.index,
-                    visible: props.visible,
-                  },
-                })
-              );
-            }}
+            aria-label={formatColorName(props.activeColor)}
+            title={formatColorName(props.activeColor)}
+            onClick={() => props.selectColor(props.activeColor)}
             className="color-picker__item-button"
           >
             <div className="column__header-color-option column__header-color-option--selected" />
           </button>
-          <Tooltip anchorSelect={`#${primColorAnchor}`} content={formatColorName(props.color)} />
+          <Tooltip anchorSelect={`#${primColorAnchor}`} content={formatColorName(props.activeColor)} />
         </li>
-        {colorsWithoutSelectedColor.map((item) => {
-          const anchor = uniqueId(`color-picker-${item.toString()}`);
+        {colorsWithoutSelectedColor.map((color) => {
+          const anchor = uniqueId(`color-picker-${color.toString()}`);
           return (
-            <li className={`${getColorClassName(item)} color-picker__item`}>
+            <li className={`${getColorClassName(color)} color-picker__item`}>
               <button
                 id={anchor}
-                aria-label={formatColorName(item)}
-                title={formatColorName(item)}
-                onClick={() => {
-                  props.onClose?.();
-                  dispatch(
-                    editColumn({
-                      id: props.id,
-                      column: {
-                        name: props.name,
-                        color: item,
-                        index: props.index,
-                        visible: props.visible,
-                      },
-                    })
-                  );
-                }}
-                className={`${item.toString()} color-picker__item-button`}
+                aria-label={formatColorName(color)}
+                title={formatColorName(color)}
+                onClick={() => props.selectColor(color)}
+                className={`${color.toString()} color-picker__item-button`}
               >
-                <div className={`column__header-color-option column__header-color-option--${item.toString()}`} />
+                <div className={`column__header-color-option column__header-color-option--${color.toString()}`} />
               </button>
             </li>
           );

@@ -7,18 +7,14 @@ import "../ColorPicker/ColorPicker.scss";
 import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
-import {createColumnOptimistically, deleteColumn, editColumn, setShowHiddenColumns} from "store/features";
+import {Column, createColumnOptimistically, deleteColumn, editColumn, setShowHiddenColumns} from "store/features";
 import {Toast} from "../../utils/Toast";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "../../constants/misc";
 import {ColorPicker} from "../ColorPicker/ColorPicker";
 
 type ColumnSettingsProps = {
-  id: string;
-  name: string;
-  color: Color;
-  visible: boolean;
-  index: number;
-  onClose?: () => void;
+  column: Column;
+  onClose: () => void;
   onNameEdit?: () => void;
   setOpenColumnSet?: Dispatch<SetStateAction<boolean>>;
   closeColumnSettings: () => void;
@@ -51,18 +47,22 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     return () => document.removeEventListener("keydown", handleKeyPress, false);
   }, [openedColorPicker, props]);
 
+  const onSelectColor = (color: Color) => {
+    props.onClose();
+    dispatch(
+      editColumn({
+        id: props.column.id,
+        column: {
+          ...props.column,
+          color, // overwrite
+        },
+      })
+    );
+  };
+
   const renderColorPicker = () =>
     openedColorPicker ? (
-      <ColorPicker
-        id={props.id}
-        name={props.name}
-        visible={props.visible}
-        index={props.index}
-        color={props.color}
-        onClose={props.onClose}
-        colors={COLOR_ORDER}
-        closeColorPicker={() => setOpenedColorPicker(false)}
-      />
+      <ColorPicker colors={COLOR_ORDER} activeColor={props.column.color} selectColor={onSelectColor} closeColorPicker={() => setOpenedColorPicker(false)} />
     ) : (
       <span className="column__header-color-option column__header-color-option--selected" />
     );
@@ -73,7 +73,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       icon: <Trash />,
       onClick: () => {
         props.onClose?.();
-        dispatch(deleteColumn(props.id));
+        dispatch(deleteColumn(props.column.id));
       },
     },
     {
@@ -86,7 +86,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       icon: <ArrowLeft />,
       onClick: () => {
         props.onClose?.();
-        handleAddColumn(props.index);
+        handleAddColumn(props.column.index);
       },
     },
     {
@@ -94,22 +94,22 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       icon: <ArrowRight />,
       onClick: () => {
         props.onClose?.();
-        handleAddColumn(props.index + 1);
+        handleAddColumn(props.column.index + 1);
       },
     },
     {
-      label: props.visible ? t("Column.hideColumn") : t("Column.showColumn"),
-      icon: props.visible ? <Hidden /> : <Visible />,
+      label: props.column.visible ? t("Column.hideColumn") : t("Column.showColumn"),
+      icon: props.column.visible ? <Hidden /> : <Visible />,
       onClick: () => {
         props.onClose?.();
         dispatch(
           editColumn({
-            id: props.id,
+            id: props.column.id,
             column: {
-              name: props.name,
-              color: props.color,
-              index: props.index,
-              visible: !props.visible,
+              name: props.column.name,
+              color: props.column.color,
+              index: props.column.index,
+              visible: !props.column.visible,
             },
           })
         );

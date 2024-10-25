@@ -250,11 +250,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             {!openedColumnSettings && isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
               <ColumnSettings
-                id={id}
-                name={name}
-                color={color}
-                visible={visible}
-                index={index}
+                column={{id, name, color, visible, index}}
                 onClose={() => setOpenedColumnSettings(false)}
                 onNameEdit={() => setColumnNameMode("EDIT")}
                 setOpenColumnSet={setOpenedColumnSettings}
