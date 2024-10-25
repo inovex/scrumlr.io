@@ -3,8 +3,10 @@ import {uniqueId} from "underscore";
 import ReactFocusLock from "react-focus-lock";
 import {Color, getColorClassName, formatColorName} from "constants/colors";
 import {Tooltip} from "components/Tooltip";
+import "./ColorPicker.scss";
 
 type ColorPickerProps = {
+  open: boolean;
   colors: Color[];
   activeColor: Color;
   selectColor: (color: Color) => void;
@@ -26,6 +28,10 @@ export const ColorPicker = (props: ColorPickerProps) => {
     document.addEventListener("keydown", handleKeyPress, true); // trigger in capture phase
     return () => document.removeEventListener("keydown", handleKeyPress, true);
   }, [props]);
+
+  if (!props.open) {
+    return <span className="color-picker__color-option color-picker__color-option--selected" />;
+  }
 
   return (
     <ReactFocusLock autoFocus={false} className="fix-focus-lock-placement">
