@@ -60,7 +60,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
   const menuItems: MiniMenuItem[] = [
     {
       label: t("Column.deleteColumn"),
-      icon: <Trash />,
+      element: <Trash />,
       onClick: () => {
         props.onClose();
         dispatch(deleteColumn(props.column.id));
@@ -68,7 +68,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.color"),
-      icon: (
+      element: (
         <ColorPicker
           open={openedColorPicker}
           colors={COLOR_ORDER}
@@ -81,7 +81,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.addColumnLeft"),
-      icon: <ArrowLeft />,
+      element: <ArrowLeft />,
       onClick: () => {
         props.onClose();
         handleAddColumn(props.column.index);
@@ -89,7 +89,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.addColumnRight"),
-      icon: <ArrowRight />,
+      element: <ArrowRight />,
       onClick: () => {
         props.onClose();
         handleAddColumn(props.column.index + 1);
@@ -97,7 +97,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: props.column.visible ? t("Column.hideColumn") : t("Column.showColumn"),
-      icon: props.column.visible ? <Hidden /> : <Visible />,
+      element: props.column.visible ? <Hidden /> : <Visible />,
       onClick: () => {
         props.onClose?.();
         dispatch(
@@ -115,7 +115,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.editName"),
-      icon: <Edit />,
+      element: <Edit />,
       onClick: () => {
         props.onNameEdit();
         props.onClose();
@@ -123,7 +123,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     },
     {
       label: t("Column.resetName"),
-      icon: <Close />,
+      element: <Close />,
       onClick: props.onClose,
     },
   ];
