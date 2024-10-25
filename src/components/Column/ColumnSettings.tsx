@@ -15,14 +15,14 @@ import "components/ColorPicker/ColorPicker.scss";
 type ColumnSettingsProps = {
   column: Column;
   onClose: () => void;
-  onNameEdit?: () => void;
+  onNameEdit: () => void;
 };
 
 export const ColumnSettings = (props: ColumnSettingsProps) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self!.showHiddenColumns);
   const dispatch = useAppDispatch();
-  const columnSettingsRef = useOnBlur(props.onClose ?? (() => {}));
+  const columnSettingsRef = useOnBlur(props.onClose);
   const [openedColorPicker, setOpenedColorPicker] = useState(false);
 
   const handleAddColumn = (columnIndex: number) => {
@@ -70,7 +70,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       label: t("Column.deleteColumn"),
       icon: <Trash />,
       onClick: () => {
-        props.onClose?.();
+        props.onClose();
         dispatch(deleteColumn(props.column.id));
       },
     },
@@ -83,7 +83,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       label: t("Column.addColumnLeft"),
       icon: <ArrowLeft />,
       onClick: () => {
-        props.onClose?.();
+        props.onClose();
         handleAddColumn(props.column.index);
       },
     },
@@ -91,7 +91,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       label: t("Column.addColumnRight"),
       icon: <ArrowRight />,
       onClick: () => {
-        props.onClose?.();
+        props.onClose();
         handleAddColumn(props.column.index + 1);
       },
     },
@@ -117,8 +117,8 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       label: t("Column.editName"),
       icon: <Edit />,
       onClick: () => {
-        props.onNameEdit?.();
-        props.onClose?.();
+        props.onNameEdit();
+        props.onClose();
       },
     },
     {
