@@ -1,0 +1,197 @@
+@import "constants/style";
+
+$card-height: 220px;
+
+.session-card {
+  display: grid;
+  grid-template-rows: 36px auto 10px 46px;
+  grid-template-columns: 36px $spacing--xs 1fr $spacing--xs 36px $spacing--xs 1fr $spacing--xs 36px $spacing--xs 1fr auto auto 36px;
+  grid-template-areas:
+    "fav-icon   .  head          head          head          head          head          head          head               head          head          head          head          menu"
+    ".          .  description   description   description   description   description   description   description        description   description   description   description   ."
+    ".          .  .             .             .             .             .             .             .                  .             .             .             .             ."
+    "col-icon   .  columns       .             age-icon      .             age           .             participants-icon  .             participants  .             start         start";
+
+  width: 100%;
+  height: $card-height;
+  border-radius: $rounded--default;
+  padding: $spacing--lg;
+
+  background-color: $gray--000;
+  box-shadow: 0 6px 9px 0 rgba($blue--500, 0.1);
+}
+
+.session-card__favourite {
+  grid-area: fav-icon;
+}
+
+.session-card__icon {
+  align-self: center;
+
+  width: 36px;
+  height: 36px;
+
+  color: $navy--900;
+
+  &--menu {
+    transform: rotate(90deg);
+    cursor: pointer;
+  }
+
+  &--columns {
+    grid-area: col-icon;
+  }
+
+  &--age {
+    grid-area: age-icon;
+  }
+
+  &--participants {
+    grid-area: participants-icon;
+  }
+}
+
+.session-card__head {
+  grid-area: head;
+  align-self: center;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: $spacing--xxs;
+}
+
+.session-card__title {
+  all: unset;
+
+  width: 100%;
+
+  font-size: $text--lg;
+  font-weight: 700;
+  line-height: 24px; // decreased line height to change distance to bottom border
+
+  color: $navy--900;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.session-card__menu {
+  grid-area: menu;
+
+  &--open {
+    // position menu over icon
+    transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+
+    box-shadow: 0 2px 20px 0 rgba(var($navy--400), 0.12);
+  }
+}
+
+.session-card__description {
+  grid-area: description;
+  align-self: start;
+
+  font-size: $text--sm;
+  font-weight: 500;
+  line-height: 20px;
+
+  height: 4 * 20px; // TODO always keep cards same height?
+  max-height: 4 * 20px;
+  margin: 0;
+  padding: 0;
+  resize: none;
+
+  background: none;
+  border: none;
+  border-radius: $rounded--small;
+  outline: none;
+
+  color: $navy--900;
+}
+
+.session-card__columns {
+  grid-area: columns;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.session-card__age {
+  grid-area: age;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.session-card__participants {
+  grid-area: participants;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.session-card__columns-title {
+  font-size: $text--sm;
+  font-weight: 600;
+  line-height: 16px;
+
+  color: $navy--400;
+}
+
+.session-card__columns-subtitle {
+  font-size: $text--xs;
+  font-weight: 600;
+  line-height: 16px;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: $gray--800;
+}
+
+.session-card__start-button {
+  grid-area: start;
+  justify-self: end;
+}
+
+[theme="dark"] {
+  .session-card {
+    background-color: $navy--400;
+    box-shadow: 0 2px 20px 0 rgba($navy--700, 0.5);
+  }
+
+  .session-card__title,
+  .session-card__description,
+  .session-card__columns-title {
+    color: $gray--000;
+  }
+
+  .session-card__menu {
+    &--open {
+      box-shadow: 0 2px 20px 0 rgba($navy--700, 0.5);
+    }
+  }
+
+  .session-card__columns-subtitle {
+    color: $gray--800;
+  }
+
+  .session-card__icon {
+    &--menu,
+    &--columns {
+      color: $gray--000;
+    }
+  }
+}
