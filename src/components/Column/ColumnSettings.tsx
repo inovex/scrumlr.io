@@ -1,4 +1,4 @@
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {Column, createColumnOptimistically, deleteColumn, editColumn, setShowHiddenColumns} from "store/features";
@@ -16,8 +16,6 @@ type ColumnSettingsProps = {
   column: Column;
   onClose: () => void;
   onNameEdit?: () => void;
-  setOpenColumnSet?: Dispatch<SetStateAction<boolean>>;
-  closeColumnSettings: () => void;
 };
 
 export const ColumnSettings = (props: ColumnSettingsProps) => {
@@ -39,7 +37,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === "Escape" && !openedColorPicker) {
-        props.closeColumnSettings();
+        props.onClose();
       }
     };
 
@@ -126,7 +124,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
     {
       label: t("Column.resetName"),
       icon: <Close />,
-      onClick: () => props.setOpenColumnSet?.((o) => !o),
+      onClick: props.onClose,
     },
   ];
 

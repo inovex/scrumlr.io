@@ -249,13 +249,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             )}
             {!openedColumnSettings && isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
-              <ColumnSettings
-                column={{id, name, color, visible, index}}
-                onClose={() => setOpenedColumnSettings(false)}
-                onNameEdit={() => setColumnNameMode("EDIT")}
-                setOpenColumnSet={setOpenedColumnSettings}
-                closeColumnSettings={() => setOpenedColumnSettings(false)}
-              />
+              <ColumnSettings column={{id, name, color, visible, index}} onClose={() => setOpenedColumnSettings(false)} onNameEdit={() => setColumnNameMode("EDIT")} />
             )}
           </div>
           <NoteInput
