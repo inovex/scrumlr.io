@@ -25,15 +25,25 @@ export const getTemplates = createAsyncThunk<Template[], void, {state: Applicati
   return templates.map(transformTemplate);
 });
 
-export const editTemplate = createAsyncThunk<Omit<Template, "columns">, Template, {state: ApplicationState}>("templates/editTemplate", async (payload) => {
-  const template = await API.editTemplate(payload);
-  return template;
-});
+export const editTemplate = createAsyncThunk<Omit<Template, "columns">, {id: string; overwrite: Partial<Template>}, {state: ApplicationState}>(
+  "templates/editTemplate",
+  async (payload) => {
+    const template = await API.editTemplate(payload.id, payload.overwrite);
+    return template;
+  }
+);
 
-export const setTemplateFavourite = createAsyncThunk<Omit<Template, "columns">, {template: Template; favourite: boolean}, {state: ApplicationState}>(
+export const setTemplateFavourite = createAsyncThunk<Omit<Template, "columns">, {id: string; favourite: boolean}, {state: ApplicationState}>(
   "templates/editTemplate",
   async (payload, {dispatch}) => {
-    const result = await dispatch(editTemplate({...payload.template, favourite: payload.favourite}));
+    const result = await dispatch(
+      editTemplate({
+        id: payload.id,
+        overwrite: {
+          favourite: payload.favourite,
+        },
+      })
+    );
     return unwrapResult(result);
   }
 );
