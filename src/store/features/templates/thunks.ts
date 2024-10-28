@@ -15,7 +15,7 @@ const transformTemplate = (templateDto: TemplateDto) =>
     })),
   }) as Template;
 
-export const getTemplates = createAsyncThunk<Template[], void, {state: ApplicationState}>("reactions/addReaction", async () => {
+export const getTemplates = createAsyncThunk<Template[], void, {state: ApplicationState}>("templates/getTemplates", async () => {
   const templates = await API.getTemplates();
   return templates.map(transformTemplate);
 });
