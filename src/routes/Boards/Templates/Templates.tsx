@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {Outlet, useOutletContext} from "react-router-dom";
 import {useAppSelector, useAppDispatch} from "store";
-import {getTemplates} from "store/features";
+import {getTemplates, Template} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
@@ -37,6 +37,9 @@ export const Templates = () => {
     templatesRef.current?.scroll({left: offset, behavior: "smooth"});
   };
 
+  // simple comparison between template name and search input
+  const matchSearchInput = (template: Template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase());
+
   const renderContainerHeader = (renderSide: Side, title: string) =>
     isAnonymous ? (
       <header className="templates__container-header">
@@ -67,7 +70,7 @@ export const Templates = () => {
         <section className="templates__container templates__container--recommended">
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
-            {RECOMMENDED_TEMPLATES.filter((template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase())).map((template) => (
+            {RECOMMENDED_TEMPLATES.filter(matchSearchInput).map((template) => (
               <TemplateCard templateType="RECOMMENDED" template={template} />
             ))}
           </div>
@@ -77,11 +80,9 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard />
-              {templates
-                .filter((template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase()))
-                .map((template) => (
-                  <TemplateCard templateType="CUSTOM" template={template} />
-                ))}
+              {templates.filter(matchSearchInput).map((template) => (
+                <TemplateCard templateType="CUSTOM" template={template} />
+              ))}
             </div>
           </section>
         )}
