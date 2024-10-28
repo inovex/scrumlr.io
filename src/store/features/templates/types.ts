@@ -9,6 +9,7 @@ export type TemplateColumn = {
   name: string;
   description: string;
   color: Color;
+  visible: boolean;
   index: number;
 };
 
@@ -39,6 +40,7 @@ export type TemplateDto = {
     name: string;
     description: string;
     color: Color;
+    visible: boolean;
     index: number;
   }[];
 };
