@@ -1,4 +1,4 @@
-import {createAsyncThunk} from "@reduxjs/toolkit";
+import {createAsyncThunk, unwrapResult} from "@reduxjs/toolkit";
 import {ApplicationState} from "store";
 import {API} from "api";
 import {Color} from "constants/colors";
@@ -24,3 +24,16 @@ export const getTemplates = createAsyncThunk<Template[], void, {state: Applicati
   const templates = await API.getTemplates();
   return templates.map(transformTemplate);
 });
+
+export const editTemplate = createAsyncThunk<Omit<Template, "columns">, Template, {state: ApplicationState}>("templates/editTemplate", async (payload) => {
+  const template = await API.editTemplate(payload);
+  return template;
+});
+
+export const setTemplateFavourite = createAsyncThunk<Omit<Template, "columns">, {template: Template; favourite: boolean}, {state: ApplicationState}>(
+  "templates/editTemplate",
+  async (payload, {dispatch}) => {
+    const result = await dispatch(editTemplate({...payload.template, favourite: payload.favourite}));
+    return unwrapResult(result);
+  }
+);
