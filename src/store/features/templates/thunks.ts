@@ -1,6 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "store";
 import {API} from "api";
+import {Color} from "constants/colors";
 import {Template, TemplateDto} from "./types";
 import {AccessPolicy} from "../board";
 
@@ -11,8 +12,9 @@ const transformTemplate = (templateDto: TemplateDto): Template => {
   return {
     ...rest,
     accessPolicy: AccessPolicy[accessPolicy as keyof typeof AccessPolicy], // convert to enum
-    columns: ColumnTemplates.map(({board_template, ...columnRest}) => ({
+    columns: ColumnTemplates.map(({board_template, color, ...columnRest}) => ({
       ...columnRest,
+      color: color as Color,
       template: board_template,
     })),
   };
