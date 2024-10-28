@@ -29,7 +29,7 @@ export type TemplateDto = {
   creator: string; // UUID
   name: string;
   description: string;
-  access_policy: AccessPolicy;
+  accessPolicy: string;
   favourite: boolean;
   ColumnTemplates: {
     // TODO change prop name also in backend

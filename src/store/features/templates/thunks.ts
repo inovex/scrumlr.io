@@ -2,16 +2,15 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState} from "store";
 import {API} from "api";
 import {Template, TemplateDto} from "./types";
+import {AccessPolicy} from "../board";
 
 // transforms data object as sent from backend to usable Template object
 const transformTemplate = (templateDto: TemplateDto): Template => {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  const {created_at, access_policy, ColumnTemplates, ...rest} = templateDto;
+  const {accessPolicy, ColumnTemplates, ...rest} = templateDto;
 
   return {
     ...rest,
-    createdAt: created_at,
-    accessPolicy: access_policy,
+    accessPolicy: AccessPolicy[accessPolicy as keyof typeof AccessPolicy], // convert to enum
     columns: ColumnTemplates.map(({board_template, ...columnRest}) => ({
       ...columnRest,
       template: board_template,
