@@ -33,6 +33,7 @@ export const editTemplate = createAsyncThunk<Omit<Template, "columns">, {id: str
   }
 );
 
+// await can be removed if `result.unwrap()` is returned instead
 export const setTemplateFavourite = createAsyncThunk<Omit<Template, "columns">, {id: string; favourite: boolean}, {state: ApplicationState}>(
   "templates/setTemplateFavourite",
   async (payload, {dispatch}) => {
