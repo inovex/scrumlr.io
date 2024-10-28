@@ -77,9 +77,11 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard />
-              {templates.map((template) => (
-                <TemplateCard templateType="CUSTOM" template={template} />
-              ))}
+              {templates
+                .filter((template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase()))
+                .map((template) => (
+                  <TemplateCard templateType="CUSTOM" template={template} />
+                ))}
             </div>
           </section>
         )}
