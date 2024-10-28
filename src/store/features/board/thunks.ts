@@ -14,9 +14,13 @@ import {createdVoting, updatedVoting} from "../votings";
 import {updatedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
-import {EditBoardRequest} from "./types";
+import {AccessPolicy, EditBoardRequest} from "./types";
+import {Template} from "../templates";
 
 let socket: Socket | null = null;
+
+// creates a board from a template and returns board id if successful
+export const createBoardFromTemplate = createAsyncThunk<string, Template>("board/createBoardFromTemplate", async (payload) => API.createBoard(payload.name, {type: AccessPolicy[payload.accessPolicy]}, payload.columns));
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   if (socket) {
