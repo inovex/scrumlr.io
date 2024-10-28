@@ -7,7 +7,7 @@ import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
 import {useAppDispatch} from "store";
-import {AccessPolicy, createBoardFromTemplate, Template} from "store/features";
+import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, Template} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -35,6 +35,8 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   const closeMenu = () => {
     setShowMiniMenu(false);
   };
+
+  const toggleFavourite = () => dispatch(setTemplateFavourite({id: template.id, favourite: !template.favourite}));
 
   const navigateToEdit = () => {
     // TODO
@@ -75,7 +77,8 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
 
   return (
     <div className="template-card">
-      <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => {}} />
+      {/* TODO probably remove favourites from recommended cards, since these are constant and we'd need to keep track of it somewhere */}
+      <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={toggleFavourite} />
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.name} disabled />
         <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
