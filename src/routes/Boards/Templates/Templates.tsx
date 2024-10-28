@@ -10,7 +10,7 @@ import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
-import {EXAMPLE_CUSTOM_TEMPLATE, RECOMMENDED_TEMPLATES} from "constants/templates";
+import {RECOMMENDED_TEMPLATES} from "constants/templates";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -81,8 +81,9 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard />
-              <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
-              <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
+              {templates.map((template) => (
+                <TemplateCard templateType="CUSTOM" template={template} />
+              ))}
             </div>
           </section>
         )}
