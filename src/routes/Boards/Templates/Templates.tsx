@@ -26,14 +26,10 @@ export const Templates = () => {
 
   const templates = useAppSelector((state) => state.templates);
 
+  // init templates
   useEffect(() => {
-    console.log("getting templates");
     dispatch(getTemplates());
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log("templates change", templates);
-  }, [templates]);
 
   const scrollToSide = (side: Side) => {
     const screenWidth = document.documentElement.clientWidth;
