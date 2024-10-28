@@ -34,7 +34,7 @@ export const editTemplate = createAsyncThunk<Omit<Template, "columns">, {id: str
 );
 
 export const setTemplateFavourite = createAsyncThunk<Omit<Template, "columns">, {id: string; favourite: boolean}, {state: ApplicationState}>(
-  "templates/editTemplate",
+  "templates/setTemplateFavourite",
   async (payload, {dispatch}) => {
     const result = await dispatch(
       editTemplate({
