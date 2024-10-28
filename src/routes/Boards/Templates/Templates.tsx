@@ -1,8 +1,9 @@
 import classNames from "classnames";
 import {Outlet, useOutletContext} from "react-router-dom";
-import {useAppSelector} from "store";
+import {useAppSelector, useAppDispatch} from "store";
+import {getTemplates} from "store/features";
 import {useTranslation} from "react-i18next";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
 import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
@@ -17,10 +18,22 @@ type Side = "left" | "right";
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
 
   const searchBarInput: string = useOutletContext();
 
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
+
+  const templates = useAppSelector((state) => state.templates);
+
+  useEffect(() => {
+    console.log("getting templates");
+    dispatch(getTemplates());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log("templates change", templates);
+  }, [templates]);
 
   const scrollToSide = (side: Side) => {
     const screenWidth = document.documentElement.clientWidth;
