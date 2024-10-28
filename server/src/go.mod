@@ -25,7 +25,7 @@ require (
 	github.com/uptrace/bun v1.2.5
 	github.com/uptrace/bun/dbfixture v1.2.3
 	github.com/uptrace/bun/dialect/pgdialect v1.2.5
-	github.com/uptrace/bun/extra/bundebug v1.2.3
+	github.com/uptrace/bun/extra/bundebug v1.2.5
 	github.com/urfave/cli/v2 v2.27.5
 	github.com/weppos/publicsuffix-go v0.40.2
 	go.uber.org/zap v1.27.0
@@ -52,7 +52,7 @@ require (
 	github.com/docker/docker v27.2.0+incompatible // indirect
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
-	github.com/fatih/color v1.17.0 // indirect
+	github.com/fatih/color v1.18.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.0.0 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
