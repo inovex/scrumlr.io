@@ -16,7 +16,6 @@ export type TemplateColumn = {
 export type Template = {
   id: string; // UUID
   creator: string; // UUID
-  createdAt: Date;
   name: string;
   description: string;
   accessPolicy: AccessPolicy;
@@ -28,7 +27,6 @@ export type Template = {
 export type TemplateDto = {
   id: string; // UUID
   creator: string; // UUID
-  created_at: Date;
   name: string;
   description: string;
   access_policy: AccessPolicy;

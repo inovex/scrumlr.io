@@ -4,7 +4,6 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
   {
     id: "recommended-1",
     creator: "scrumlr-id",
-    createdAt: new Date(),
     name: "Lean Coffee",
     accessPolicy: AccessPolicy.PUBLIC,
     description: "A flexible discussion method without a fixed agenda. Ideal for identifying & discussing important topics.",
@@ -24,7 +23,6 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
   {
     id: "recommended-2",
     creator: "scrumlr-id",
-    createdAt: new Date(),
     name: "Quick Review",
     accessPolicy: AccessPolicy.PUBLIC,
     description: "Participants highlight positives & negatives incidents for quick identification of successes & issues.",
@@ -53,7 +51,6 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
   {
     id: "recommended-3",
     creator: "scrumlr-id",
-    createdAt: new Date(),
     name: "Cycle Check",
     accessPolicy: AccessPolicy.PUBLIC,
     description: "The team reflects on actions to start, stop, and continue, promoting continuous improvement.",
@@ -91,7 +88,6 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
   {
     id: "recommended-4",
     creator: "scrumlr-id",
-    createdAt: new Date(),
     name: "Mood",
     accessPolicy: AccessPolicy.PUBLIC,
     description: "Participants share things that made them mad, sad, or glad. Good for understanding emotional states.",
@@ -129,7 +125,6 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
   {
     id: "recommended-5",
     creator: "scrumlr-id",
-    createdAt: new Date(),
     name: "Kalm",
     accessPolicy: AccessPolicy.PUBLIC,
     description: "The team identifies what to keep, add, reduce, or amplify to enhance performance.",
@@ -176,7 +171,6 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
   {
     id: "recommended-6",
     creator: "scrumlr-id",
-    createdAt: new Date(),
     name: "4L",
     accessPolicy: AccessPolicy.PUBLIC,
     description: "Participants review what they liked, learned, lacked, and longed for, encouraging feedback.",
@@ -223,7 +217,6 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
   {
     id: "recommended-7",
     creator: "scrumlr-id",
-    createdAt: new Date(),
     name: "SWOT",
     accessPolicy: AccessPolicy.PUBLIC,
     description: "Analyzes strengths, weaknesses, opportunities, and threats to support strategic planning.",
