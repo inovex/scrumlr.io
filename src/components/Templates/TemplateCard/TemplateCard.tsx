@@ -5,7 +5,7 @@ import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
-import {AccessPolicy} from "store/features";
+import {AccessPolicy, Template} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -14,13 +14,12 @@ import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
-import {BoardTemplate} from "constants/templates";
 import "./TemplateCard.scss";
 
 type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
 type TemplateCardProps = {
-  template: BoardTemplate;
+  template: Template;
   templateType: TemplateCardType;
 };
 
