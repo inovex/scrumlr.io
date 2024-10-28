@@ -10,3 +10,4 @@ export * from "./skinTone";
 export * from "./view";
 export * from "./votes";
 export * from "./votings";
+export * from "./templates";

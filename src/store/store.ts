@@ -2,6 +2,7 @@ import {configureStore} from "@reduxjs/toolkit";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {
   authReducer,
+  templatesReducer,
   boardReducer,
   boardReactionsReducer,
   columnsReducer,
@@ -17,6 +18,7 @@ import {
 
 const rootReducer = {
   auth: authReducer,
+  templates: templatesReducer,
   board: boardReducer,
   boardReactions: boardReactionsReducer,
   columns: columnsReducer,
