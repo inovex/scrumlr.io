@@ -1,11 +1,13 @@
 import classNames from "classnames";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router";
 import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
-import {AccessPolicy, Template} from "store/features";
+import {useAppDispatch} from "store";
+import {AccessPolicy, createBoardFromTemplate, Template} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -25,6 +27,8 @@ type TemplateCardProps = {
 
 export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
@@ -34,6 +38,12 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
 
   const navigateToEdit = () => {
     // TODO
+  };
+
+  const createBoard = () => {
+    dispatch(createBoardFromTemplate(template))
+      .unwrap()
+      .then((boardId) => navigate(`/board/${boardId}`));
   };
 
   const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
@@ -88,7 +98,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
             .join(", ")}
         </div>
       </div>
-      <Button className={classNames("template-card__start-button", "template-card__start-button--start")} small icon={<NextIcon />}>
+      <Button className={classNames("template-card__start-button", "template-card__start-button--start")} small icon={<NextIcon />} onClick={createBoard}>
         {t("Templates.TemplateCard.start")}
       </Button>
     </div>

@@ -21,7 +21,7 @@ export const BoardAPI = {
           name,
           accessPolicy: accessPolicy.type,
           passphrase: accessPolicy.passphrase,
-          columns,
+          columns, // TODO add index or pre-sort to guarantee correct order
         }),
       });
 
