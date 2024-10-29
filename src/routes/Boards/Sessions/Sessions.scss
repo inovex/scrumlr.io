@@ -1,10 +1,10 @@
-//@import "constants/style";
+@import "/src/constants/style.scss";
 
-$stan-height: 40vh;
+$stan-height: 70vh;
 $max-card-width: 500px;
 
 .sessions {
-  display: flex;
+  display: contents;
   flex-direction: row;
   flex: 1;
   // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
@@ -12,7 +12,7 @@ $max-card-width: 500px;
 }
 
 .sessions__container {
-  display: flex;
+  //display: flex;
   flex-direction: column;
   flex: 1;
   gap: $spacing--lg;
@@ -29,25 +29,59 @@ $max-card-width: 500px;
   }
 }
 
+.sessions__container-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0;
+}
+
+.sessions__container-title {
+  word-break: break-word; // because the word "Recommendations" is too long, TODO find better solution for this
+  font-size: $text--lg;
+  font-weight: 700;
+  line-height: 32px; // TODO use constant
+
+  color: $navy--600;
+}
+
+.sessions__container-arrow-button {
+  all: unset;
+}
+
+.sessions__container-arrow {
+  display: none;
+
+  &--disabled {
+    color: $gray--800;
+  }
+}
+
+.sessions__card-container {
+  display: grid;
+  // place cards next to each other if width limit is exceeded
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
+  gap: $spacing--md;
+}
+
 .sessions__stan-container {
   position: absolute;
   width: auto;
-  height: $stan-height; // Ensure this variable is defined
-  // Align right edge of stan to the left edge of the container
+  height: $stan-height;
+  // align right edge of stan to the left edge of the container
   transform: translateX(-100%);
-  overflow: hidden; // Ensure overflow is hidden
 }
 
 .sessions__stan {
   height: 100%;
-  clip-path: inset(0 50% 0 0); // This clips the left half
 
   &--dark {
-    display: initial; // Show dark variant
+    display: initial;
   }
 
   &--light {
-    display: none; // Hide light variant
+    display: none;
   }
 }
 
@@ -57,9 +91,42 @@ $max-card-width: 500px;
   }
 }
 
+@media screen and (max-width: $breakpoint--smartphone) {
+  // instead of the both containers sitting on one screen we want them to be full width each, and make the main container scrollable.
+  .sessions {
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+  }
+
+  .sessions__container {
+    flex: 0 0 100%; // no growing, no shrinking, and take up the whole width
+    scroll-snap-align: center;
+  }
+
+  .sessions__container-header {
+    justify-content: center;
+    gap: $spacing--md;
+  }
+
+  .sessions__container-title {
+    font-size: $text--md;
+    line-height: 24px; // TODO use constant
+  }
+
+  .sessions__container-arrow {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+  }
+}
+
 [theme="dark"] {
   .sessions__container {
     background-color: $navy--700;
+  }
+
+  .sessions__container-title {
+    color: $blue--50;
   }
 
   .sessions__stan {
@@ -81,10 +148,93 @@ $max-card-width: 500px;
   }
 }
 
-@media screen and (max-width: $breakpoint--smartphone) {
-  // instead of the both containers sitting on one screen we want them to be full width each, and make the main container scrollable.
-  .sessions {
-    overflow-x: scroll;
-    scroll-snap-type: x mandatory;
-  }
-}
+////@import "constants/style";
+//
+//$stan-height: 40vh;
+//$max-card-width: 500px;
+//
+//.sessions {
+//  display: flex;
+//  flex-direction: row;
+//  flex: 1;
+//  // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
+//  // gap: $spacing--md;
+//}
+//
+//.sessions__container {
+//  display: flex;
+//  flex-direction: column;
+//  flex: 1;
+//  gap: $spacing--lg;
+//
+//  padding: $spacing--xl;
+//  border-radius: $rounded--default;
+//
+//  overflow-y: scroll;
+//
+//  background-color: $blue--50;
+//
+//  &--saved {
+//    margin-left: $spacing--md; // instead of gap, see above
+//  }
+//}
+//
+//.sessions__stan-container {
+//  position: absolute;
+//  width: auto;
+//  height: $stan-height; // Ensure this variable is defined
+//  // Align right edge of stan to the left edge of the container
+//  transform: translateX(-100%);
+//  overflow: hidden; // Ensure overflow is hidden
+//}
+//
+//.sessions__stan {
+//  height: 100%;
+//  clip-path: inset(0 50% 0 0); // This clips the left half
+//
+//  &--dark {
+//    display: initial; // Show dark variant
+//  }
+//
+//  &--light {
+//    display: none; // Hide light variant
+//  }
+//}
+//
+//@media screen and (max-width: $breakpoint--desktop) {
+//  .sessions__stan-container {
+//    display: none;
+//  }
+//}
+//
+//[theme="dark"] {
+//  .sessions__container {
+//    background-color: $navy--700;
+//  }
+//
+//  .sessions__stan {
+//    &--dark {
+//      display: none;
+//    }
+//
+//    &--light {
+//      display: initial;
+//    }
+//  }
+//
+//  .sessions__container-arrow {
+//    color: $blue--50;
+//
+//    &--disabled {
+//      color: $navy--300;
+//    }
+//  }
+//}
+//
+//@media screen and (max-width: $breakpoint--smartphone) {
+//  // instead of the both containers sitting on one screen we want them to be full width each, and make the main container scrollable.
+//  .sessions {
+//    overflow-x: scroll;
+//    scroll-snap-type: x mandatory;
+//  }
+//}

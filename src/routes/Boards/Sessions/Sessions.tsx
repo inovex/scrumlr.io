@@ -14,7 +14,7 @@ import {SessionCard} from "../../../components/Sessions/SessionCard/SessionCard"
 export const Sessions = () => (
   <>
     <Outlet /> {/* settings */}
-    <div className="templates">
+    <div className="sessions" style={{display: "contents"}}>
       {/* <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" /> */}
       <div className={classNames("templates__container")}>
         {/* <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" /> */}
