@@ -1,22 +1,22 @@
-import "./Column.scss";
-import {Color, getColorClassName} from "constants/colors";
-import {NoteInput} from "components/NoteInput";
+import {useTranslation} from "react-i18next";
+import _ from "underscore";
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import {Tooltip} from "react-tooltip";
 import {useAppDispatch, useAppSelector} from "store";
-import {Close, MarkAsDone, Hidden, ThreeDots} from "components/Icon";
-import _ from "underscore";
-import {useTranslation} from "react-i18next";
+import {createColumn, deleteColumnOptimistically, editColumn, editColumnOptimistically} from "store/features";
+import {Color, getColorClassName} from "constants/colors";
 import {hotkeyMap} from "constants/hotkeys";
+import {NoteInput} from "components/NoteInput";
 import {Droppable} from "components/DragAndDrop/Droppable";
-import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {ColumnSettings} from "components/Column/ColumnSettings";
+import {Close, MarkAsDone, Hidden, ThreeDots} from "components/Icon";
+import {Note} from "components/Note";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
-import {Note} from "../Note";
-import {ColumnSettings} from "./ColumnSettings";
-import {createColumn, deleteColumnOptimistically, editColumn, editColumnOptimistically} from "../../store/features";
+import "./Column.scss";
 
 const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
 
@@ -249,17 +249,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
             )}
             {!openedColumnSettings && isModerator && renderColumnModifiers()}
             {openedColumnSettings && (
-              <ColumnSettings
-                id={id}
-                name={name}
-                color={color}
-                visible={visible}
-                index={index}
-                onClose={() => setOpenedColumnSettings(false)}
-                onNameEdit={() => setColumnNameMode("EDIT")}
-                setOpenColumnSet={setOpenedColumnSettings}
-                closeColumnSettings={() => setOpenedColumnSettings(false)}
-              />
+              <ColumnSettings column={{id, name, color, visible, index}} onClose={() => setOpenedColumnSettings(false)} onNameEdit={() => setColumnNameMode("EDIT")} />
             )}
           </div>
           <NoteInput
