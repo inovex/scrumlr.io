@@ -1,11 +1,11 @@
-import {AccessPolicy, Template} from "store/features";
+import {TemplateWithColumns} from "store/features";
 
-export const RECOMMENDED_TEMPLATES: Template[] = [
+export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
   {
     id: "recommended-1",
     creator: "scrumlr-id",
     name: "Lean Coffee",
-    accessPolicy: AccessPolicy.PUBLIC,
+    accessPolicy: "PUBLIC",
     description: "A flexible discussion method without a fixed agenda. Ideal for identifying & discussing important topics.",
     favourite: false,
     columns: [
@@ -24,7 +24,7 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
     id: "recommended-2",
     creator: "scrumlr-id",
     name: "Quick Review",
-    accessPolicy: AccessPolicy.PUBLIC,
+    accessPolicy: "PUBLIC",
     description: "Participants highlight positives & negatives incidents for quick identification of successes & issues.",
     favourite: false,
     columns: [
@@ -52,7 +52,7 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
     id: "recommended-3",
     creator: "scrumlr-id",
     name: "Cycle Check",
-    accessPolicy: AccessPolicy.PUBLIC,
+    accessPolicy: "PUBLIC",
     description: "The team reflects on actions to start, stop, and continue, promoting continuous improvement.",
     favourite: false,
     columns: [
@@ -89,7 +89,7 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
     id: "recommended-4",
     creator: "scrumlr-id",
     name: "Mood",
-    accessPolicy: AccessPolicy.PUBLIC,
+    accessPolicy: "PUBLIC",
     description: "Participants share things that made them mad, sad, or glad. Good for understanding emotional states.",
     favourite: false,
     columns: [
@@ -126,7 +126,7 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
     id: "recommended-5",
     creator: "scrumlr-id",
     name: "Kalm",
-    accessPolicy: AccessPolicy.PUBLIC,
+    accessPolicy: "PUBLIC",
     description: "The team identifies what to keep, add, reduce, or amplify to enhance performance.",
     favourite: false,
     columns: [
@@ -172,7 +172,7 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
     id: "recommended-6",
     creator: "scrumlr-id",
     name: "4L",
-    accessPolicy: AccessPolicy.PUBLIC,
+    accessPolicy: "PUBLIC",
     description: "Participants review what they liked, learned, lacked, and longed for, encouraging feedback.",
     favourite: false,
     columns: [
@@ -218,7 +218,7 @@ export const RECOMMENDED_TEMPLATES: Template[] = [
     id: "recommended-7",
     creator: "scrumlr-id",
     name: "SWOT",
-    accessPolicy: AccessPolicy.PUBLIC,
+    accessPolicy: "PUBLIC",
     description: "Analyzes strengths, weaknesses, opportunities, and threats to support strategic planning.",
     favourite: false,
     columns: [
