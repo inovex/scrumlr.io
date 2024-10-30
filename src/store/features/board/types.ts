@@ -6,7 +6,6 @@ import {Reaction} from "../reactions";
 import {Vote} from "../votes";
 import {Voting} from "../votings";
 
-// we used an enum before but this is better tbh
 export type AccessPolicy = "PUBLIC" | "BY_PASSPHRASE" | "BY_INVITE";
 
 export interface Board {
