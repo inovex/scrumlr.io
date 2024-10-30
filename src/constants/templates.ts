@@ -1,5 +1,44 @@
 import {AccessPolicy, Template} from "store/features";
 
+// default template with arbitrary ids (will be overwritten when submitting the first time)
+export const DEFAULT_TEMPLATE: Template = {
+  id: "default",
+  creator: "default",
+  name: "",
+  accessPolicy: AccessPolicy.PUBLIC,
+  description: "",
+  favourite: false,
+  columns: [
+    {
+      id: "col-1",
+      name: "Column 1",
+      description: "",
+      index: 0,
+      template: "default",
+      color: "backlog-blue",
+      visible: true,
+    },
+    {
+      id: "col-2",
+      name: "Column 2",
+      description: "",
+      index: 1,
+      template: "default",
+      color: "planning-pink",
+      visible: true,
+    },
+    {
+      id: "col-3",
+      name: "Column 3",
+      description: "",
+      index: 2,
+      template: "default",
+      color: "poker-purple",
+      visible: true,
+    },
+  ],
+};
+
 export const RECOMMENDED_TEMPLATES: Template[] = [
   {
     id: "recommended-1",
