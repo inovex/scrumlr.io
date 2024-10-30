@@ -15,7 +15,7 @@ export const BoardOptionButton: FC<PropsWithChildren<BoardOptionButtonProps>> = 
   const Icon = icon!;
 
   return (
-    <button className={classNames("board-option-button", {"board-option-button--expandable": isExpandable})} onClick={onClick} {...other}>
+    <button className={classNames(className, "board-option-button", {"board-option-button--expandable": isExpandable})} onClick={onClick} {...other}>
       {icon && <Icon className="board-option-button__icon" />}
       {children}
       <span className="board-option-button__label">{label}</span>

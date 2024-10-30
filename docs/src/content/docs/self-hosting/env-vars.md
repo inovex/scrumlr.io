@@ -135,8 +135,8 @@ SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET=''
 Required Apple OAuth credentials.
 Only configure if you wish to use Apple OAuth.
 ```bash
-SCRUMLR_AUTH_APPLE_CLIENT_ID
-SCRUMLR_AUTH_APPLE_CLIENT_SECRET
+SCRUMLR_AUTH_APPLE_CLIENT_ID=''
+SCRUMLR_AUTH_APPLE_CLIENT_SECRET=''
 ```
 
 ### OpenID Connect OAuth
@@ -160,6 +160,6 @@ SCRUMLR_FEEDBACK_WEBHOOK_URL=''
 ### Scrumlr Config Path
 The path to the Scrumlr configuration file.
 ```bash
-SCRUMLR_CONFIG_PATH
+SCRUMLR_CONFIG_PATH=''
 ```
 

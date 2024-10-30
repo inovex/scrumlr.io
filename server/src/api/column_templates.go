@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"scrumlr.io/server/logger"
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -11,11 +12,13 @@ import (
 )
 
 func (s *Server) createColumnTemplate(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	boardTemplateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.ColumnTemplateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
 	}
@@ -61,11 +64,13 @@ func (s *Server) getColumnTemplates(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	boardTemplateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	columnTemplateId := r.Context().Value(identifiers.ColumnTemplateIdentifier).(uuid.UUID)
 
 	var body dto.ColumnTemplateUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
 	}

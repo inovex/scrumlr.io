@@ -12,7 +12,7 @@ export const BoardAPI = {
    *
    * @returns the board id of the created board
    */
-  createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) => {
+  createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; visible: boolean; color: Color}[]) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
         method: "POST",
@@ -21,13 +21,13 @@ export const BoardAPI = {
           name,
           accessPolicy: accessPolicy.type,
           passphrase: accessPolicy.passphrase,
-          columns: columns.map((c) => ({name: c.name, visible: !c.hidden, color: c.color})),
+          columns, // TODO add index or pre-sort to guarantee correct order
         }),
       });
 
       if (response.status === 201) {
         const body = await response.json();
-        return body.id;
+        return body.id as string;
       }
 
       throw new Error(`request resulted in response status ${response.status}`);
