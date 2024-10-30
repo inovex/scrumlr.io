@@ -6,8 +6,8 @@ import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
-import {useAppDispatch} from "store";
-import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, Template} from "store/features";
+import {useAppDispatch, useAppSelector} from "store";
+import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, Template, TemplateWithColumns} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -30,6 +30,11 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const templateColumns = useAppSelector((state) => state.templatesColumns.filter((tc) => tc.template === template.id));
+
+  // as you can see, because templates and columns are handled separately, we sometimes to need to stitch them back together
+  const templateWithColumns: TemplateWithColumns = {...template, columns: templateColumns};
+
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const closeMenu = () => {
@@ -43,7 +48,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   };
 
   const createBoard = () => {
-    dispatch(createBoardFromTemplate(template))
+    dispatch(createBoardFromTemplate(templateWithColumns))
       .unwrap()
       .then((boardId) => navigate(`/board/${boardId}`));
   };
@@ -81,7 +86,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
       <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={toggleFavourite} />
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.name} disabled />
-        <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
+        <div className="template-card__access-policy">{renderAccessPolicy(AccessPolicy[template.accessPolicy])}</div>
       </div>
       {renderMenu()}
       <TextareaAutosize
@@ -93,9 +98,9 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
       />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
-        <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
+        <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: templateColumns.length})}</div>
         <div className="template-card__columns-subtitle">
-          {[...template.columns] // shallow copy
+          {templateColumns
             .sort((a, b) => a.index - b.index)
             .map((c) => c.name)
             .join(", ")}
