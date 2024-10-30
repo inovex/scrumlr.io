@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {Outlet, useOutletContext} from "react-router-dom";
 import {useAppSelector, useAppDispatch} from "store";
-import {getTemplates, Template} from "store/features";
+import {getTemplates, Template, TemplateColumn, TemplateWithColumns} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
@@ -25,6 +25,7 @@ export const Templates = () => {
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
 
   const templates = useAppSelector((state) => state.templates);
+  const templateColumns = useAppSelector((state) => state.templatesColumns);
 
   // init templates
   useEffect(() => {
@@ -39,6 +40,17 @@ export const Templates = () => {
 
   // simple comparison between template name and search input
   const matchSearchInput = (template: Template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase());
+
+  // ironically, since templates and their columns are handled separately, we need to stitch them back together
+  // to a common object in order to avoid losing information (since recommended templates don't have associated cols)
+  const mergeTemplateWithColumns = (template: Template, columns?: TemplateColumn[]): TemplateWithColumns => {
+    if (columns) {
+      return {...template, columns};
+    }
+
+    const associatedColumns = templateColumns.filter((tc) => tc.template === template.id);
+    return {...template, columns: associatedColumns};
+  };
 
   const renderContainerHeader = (renderSide: Side, title: string) =>
     isAnonymous ? (
@@ -71,7 +83,7 @@ export const Templates = () => {
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
             {RECOMMENDED_TEMPLATES.filter(matchSearchInput).map((template) => (
-              <TemplateCard templateType="RECOMMENDED" template={template} />
+              <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(template, template.columns)} />
             ))}
           </div>
         </section>
@@ -81,7 +93,7 @@ export const Templates = () => {
             <div className="templates__card-container">
               <CreateTemplateCard />
               {templates.filter(matchSearchInput).map((template) => (
-                <TemplateCard templateType="CUSTOM" template={template} />
+                <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} />
               ))}
             </div>
           </section>

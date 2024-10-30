@@ -6,8 +6,8 @@ import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
-import {useAppDispatch, useAppSelector} from "store";
-import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, Template, TemplateWithColumns} from "store/features";
+import {useAppDispatch} from "store";
+import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, TemplateWithColumns} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -21,7 +21,7 @@ import "./TemplateCard.scss";
 type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
 type TemplateCardProps = {
-  template: Template;
+  template: TemplateWithColumns;
   templateType: TemplateCardType;
 };
 
@@ -29,11 +29,6 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  const templateColumns = useAppSelector((state) => state.templatesColumns.filter((tc) => tc.template === template.id));
-
-  // as you can see, because templates and columns are handled separately, we sometimes to need to stitch them back together
-  const templateWithColumns: TemplateWithColumns = {...template, columns: templateColumns};
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
@@ -48,7 +43,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   };
 
   const createBoard = () => {
-    dispatch(createBoardFromTemplate(templateWithColumns))
+    dispatch(createBoardFromTemplate(template))
       .unwrap()
       .then((boardId) => navigate(`/board/${boardId}`));
   };
@@ -98,9 +93,9 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
       />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
-        <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: templateColumns.length})}</div>
+        <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
         <div className="template-card__columns-subtitle">
-          {templateColumns
+          {template.columns
             .sort((a, b) => a.index - b.index)
             .map((c) => c.name)
             .join(", ")}
