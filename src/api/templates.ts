@@ -1,4 +1,4 @@
-import {Template, TemplateDto} from "store/features";
+import {Template, TemplateWithColumns} from "store/features";
 import {SERVER_HTTP_URL} from "config";
 
 export const TemplatesAPI = {
@@ -10,7 +10,7 @@ export const TemplatesAPI = {
       });
 
       if (response.status === 200) {
-        return (await response.json()) as TemplateDto[];
+        return (await response.json()) as TemplateWithColumns[];
       }
 
       throw new Error(`get all templates request resulted in status ${response.status}`);
@@ -28,7 +28,7 @@ export const TemplatesAPI = {
       });
 
       if (response.status === 200) {
-        return (await response.json()) as Omit<Template, "columns">;
+        return (await response.json()) as Template;
       }
 
       throw new Error(`get all templates request resulted in status ${response.status}`);

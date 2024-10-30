@@ -1,7 +1,10 @@
 import {Color} from "constants/colors";
 import {AccessPolicy} from "../board";
 
-/* unlike normal boards/columns, templates and their columns are combined into one feature */
+// getTemplates returns all templates with columns, but is the only endpoint to do so.
+// All other template / column endpoints are handled separately, i.e. getting/updating a template
+// does not return the associated columns.
+// Thus, it's important to be aware of this to avoid inconsistencies in the store.
 
 export type TemplateColumn = {
   id: string; // UUID
@@ -18,30 +21,11 @@ export type Template = {
   creator: string; // UUID
   name: string;
   description: string;
-  accessPolicy: AccessPolicy;
+  accessPolicy: keyof typeof AccessPolicy;
   favourite: boolean;
-  columns: TemplateColumn[];
 };
 
-// used for data transformation from backend
-export type TemplateDto = {
-  id: string; // UUID
-  creator: string; // UUID
-  name: string;
-  description: string;
-  accessPolicy: string;
-  favourite: boolean;
-  ColumnTemplates: {
-    // TODO change prop name also in backend
-    id: string;
-    board_template: string;
-    name: string;
-    description: string;
-    color: Color;
-    visible: boolean;
-    index: number;
-  }[];
-};
+export type TemplateWithColumns = Template & {columns: TemplateColumn[]};
 
 // used in store
 export type TemplatesState = Template[];
