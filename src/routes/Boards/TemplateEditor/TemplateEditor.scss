@@ -1,6 +1,6 @@
 @import "src/constants/style";
 
-.create-template {
+.template-editor {
   display: grid;
   grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
   grid-template-rows:
@@ -41,11 +41,11 @@
   overflow: hidden auto;
 }
 
-.create-template__dropdown {
+.template-editor__dropdown {
   grid-area: dropdown;
 }
 
-.create-template__password-wrapper {
+.template-editor__password-wrapper {
   grid-area: password;
 
   display: flex;
@@ -53,7 +53,7 @@
   gap: $spacing--base;
   align-items: center;
 
-  .create-template__shuffle-icon {
+  .template-editor__shuffle-icon {
     min-width: $icon--large;
     min-height: $icon--large;
 
@@ -61,7 +61,7 @@
   }
 }
 
-.create-template__info {
+.template-editor__info {
   grid-area: info;
   display: flex;
   align-items: center;
@@ -78,15 +78,15 @@
   }
 }
 
-.create-template__name {
+.template-editor__name {
   grid-area: name;
 }
 
-.create-template__description {
+.template-editor__description {
   grid-area: description;
 }
 
-.create-template__columns-configurator-wrapper {
+.template-editor__columns-configurator-wrapper {
   grid-area: columns;
 
   display: flex;
@@ -99,7 +99,7 @@
   overflow: hidden;
 }
 
-.create-template__buttons {
+.template-editor__buttons {
   grid-area: buttons;
   justify-self: end;
 

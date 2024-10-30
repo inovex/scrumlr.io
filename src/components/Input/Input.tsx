@@ -17,7 +17,7 @@ type SearchBarProps = {
 
   placeholder?: string;
 
-  height: "normal" | "larger"; // normal e.g. CreateTemplate, larger e.g. Boards
+  height: "normal" | "larger"; // normal e.g. TemplateEditor, larger e.g. Boards
 };
 
 /*

@@ -12,7 +12,7 @@ import {ReactComponent as ShuffleIcon} from "assets/icons/shuffle.svg";
 import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
 import classNames from "classnames";
 import {Button} from "components/Button";
-import "./CreateTemplate.scss";
+import "./TemplateEditor.scss";
 
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   switch (policy) {
@@ -25,7 +25,10 @@ const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   }
 };
 
-export const CreateTemplate = () => {
+// component to edit a template.
+// can be either used to edit an existing template (referred by their uuid) or create one from scratch.
+// changes will only be saved after clicking the button and are local till then.
+export const TemplateEditor = () => {
   const {t} = useTranslation();
 
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -42,9 +45,9 @@ export const CreateTemplate = () => {
   };
 
   return (
-    <div className="create-template">
+    <div className="template-editor">
       <Dropdown<AccessPolicy>
-        className="create-template__dropdown"
+        className="template-editor__dropdown"
         open={openDropdown}
         options={[
           {key: AccessPolicy.PUBLIC, label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey(AccessPolicy.PUBLIC)}`), icon: <GlobeIcon />},
@@ -57,30 +60,30 @@ export const CreateTemplate = () => {
       />
 
       {activeOptionKey === AccessPolicy.BY_PASSPHRASE && (
-        <div className="create-template__password-wrapper">
-          <ShuffleIcon className="create-template__shuffle-icon" />
-          <Input className="create-template__password-wrapper" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} placeholder="Password" />
+        <div className="template-editor__password-wrapper">
+          <ShuffleIcon className="template-editor__shuffle-icon" />
+          <Input className="template-editor__password-wrapper" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} placeholder="Password" />
         </div>
       )}
 
-      <div className="create-template__info">
-        <InfoIcon className="create-template__info-icon" />
-        <div className="create-template__info-text">{t(`CreateBoard.info.${getAccessPolicyTranslationKey(activeOptionKey)}`)}</div>
+      <div className="template-editor__info">
+        <InfoIcon className="template-editor__info-icon" />
+        <div className="template-editor__info-text">{t(`CreateBoard.info.${getAccessPolicyTranslationKey(activeOptionKey)}`)}</div>
       </div>
-      <div className="create-template__name">
+      <div className="template-editor__name">
         <Input type="text" input={nameInput} setInput={setNameInput} height="normal" placeholder="Board name" />
       </div>
-      <div className="create-template__description">
-        <TextArea className="create-template__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
+      <div className="template-editor__description">
+        <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
       </div>
-      <div className="create-template__columns-configurator-wrapper">
-        <ColumnsConfigurator className="create-template__columns-configurator" />
+      <div className="template-editor__columns-configurator-wrapper">
+        <ColumnsConfigurator className="template-editor__columns-configurator" />
       </div>
-      <div className="create-template__buttons">
-        <Button className={classNames("create-template__button", "create-template__button--return")} type="secondary">
+      <div className="template-editor__buttons">
+        <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary">
           Go Back
         </Button>
-        <Button className={classNames("create-template__button", "create-template__button--create")} type="primary">
+        <Button className={classNames("template-editor__button", "template-editor__button--create")} type="primary">
           Create Board
         </Button>
       </div>

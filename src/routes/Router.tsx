@@ -24,7 +24,7 @@ import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
-import {CreateTemplate} from "./Boards/CreateTemplate/CreateTemplate";
+import {TemplateEditor} from "./Boards/TemplateEditor/TemplateEditor";
 
 const renderLegacyRoute = (legacy: boolean) => (legacy ? <Route path="/new" element={<LegacyNewBoard />} /> : <Route path="/new" element={<Navigate to="/boards" />} />);
 
@@ -58,7 +58,7 @@ const Router = () => {
               <Route path="profile" element={<ProfileSettings />} />
             </Route>
           </Route>
-          <Route path="create" element={<CreateTemplate />} />
+          <Route path="create" element={<TemplateEditor />} />
           <Route path="sessions" element={<Sessions />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />
