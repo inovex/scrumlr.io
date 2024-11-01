@@ -189,5 +189,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     component: "",
   },
   templates: [],
+  templatesColumns: [],
   ...overwrite,
 });

@@ -7,7 +7,7 @@ import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
 import {useAppDispatch} from "store";
-import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, Template} from "store/features";
+import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, TemplateWithColumns} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -21,7 +21,7 @@ import "./TemplateCard.scss";
 type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
 type TemplateCardProps = {
-  template: Template;
+  template: TemplateWithColumns;
   templateType: TemplateCardType;
 };
 
@@ -81,7 +81,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
       <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={toggleFavourite} />
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.name} disabled />
-        <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
+        <div className="template-card__access-policy">{renderAccessPolicy(AccessPolicy[template.accessPolicy])}</div>
       </div>
       {renderMenu()}
       <TextareaAutosize
@@ -95,7 +95,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
         <div className="template-card__columns-subtitle">
-          {[...template.columns] // shallow copy
+          {template.columns
             .sort((a, b) => a.index - b.index)
             .map((c) => c.name)
             .join(", ")}

@@ -3,6 +3,7 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {
   authReducer,
   templatesReducer,
+  templateColumnsReducer,
   boardReducer,
   boardReactionsReducer,
   columnsReducer,
@@ -19,6 +20,7 @@ import {
 const rootReducer = {
   auth: authReducer,
   templates: templatesReducer,
+  templatesColumns: templateColumnsReducer,
   board: boardReducer,
   boardReactions: boardReactionsReducer,
   columns: columnsReducer,
