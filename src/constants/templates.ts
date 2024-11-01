@@ -1,4 +1,28 @@
 import {TemplateWithColumns} from "store/features";
+import {uniqueId} from "underscore";
+
+export const DEFAULT_TEMPLATE_ID = "DEFAULT_TEMPLATE_ID";
+const DEFAULT_TEMPLATE_CREATOR = "DEFAULT_CREATOR_ID";
+
+export const DEFAULT_TEMPLATE: TemplateWithColumns = {
+  id: DEFAULT_TEMPLATE_ID,
+  creator: DEFAULT_TEMPLATE_CREATOR,
+  name: "",
+  accessPolicy: "PUBLIC",
+  description: "",
+  favourite: false,
+  columns: [
+    {
+      id: uniqueId("template-column-"),
+      template: DEFAULT_TEMPLATE_ID,
+      name: "",
+      description: "",
+      color: "backlog-blue",
+      visible: true,
+      index: 0,
+    },
+  ],
+};
 
 export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
   {
