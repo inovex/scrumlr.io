@@ -1,4 +1,5 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {AccessPolicy} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
@@ -12,7 +13,10 @@ import {ReactComponent as ShuffleIcon} from "assets/icons/shuffle.svg";
 import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
 import classNames from "classnames";
 import {Button} from "components/Button";
+import {useParams} from "react-router";
+import {DEFAULT_TEMPLATE, DEFAULT_TEMPLATE_ID} from "constants/templates";
 import "./TemplateEditor.scss";
+import {addTemplateOptimistically} from "../../../store/features/templates/actions";
 
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   switch (policy) {
@@ -30,7 +34,27 @@ const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
 // changes will only be saved after clicking the button and are local till then.
 export const TemplateEditor = () => {
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
 
+  const {id} = useParams();
+  const templateId = id ?? DEFAULT_TEMPLATE_ID;
+
+  // get template with that id from store. if not available, make api call or create if default
+  const template = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === templateId));
+
+  // if no template is found, create one optimistically
+  // todo check double invocation, maybe caused by strict mode
+  useEffect(() => {
+    if (!template) {
+      if (templateId === DEFAULT_TEMPLATE_ID) {
+        dispatch(addTemplateOptimistically(DEFAULT_TEMPLATE));
+      } else {
+        // TODO get template using id. also handle error
+      }
+    }
+  }, [dispatch, template, templateId]);
+
+  // todo all these will be replaced and refer to the working local template instead
   const [openDropdown, setOpenDropdown] = useState(false);
   const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>(AccessPolicy.PUBLIC);
 
