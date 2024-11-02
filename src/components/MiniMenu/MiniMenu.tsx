@@ -16,35 +16,25 @@ type MiniMenuProps = {
   items: MiniMenuItem[];
 };
 
-export const MiniMenu = ({className, items}: MiniMenuProps) => {
-  /**
-   * In Firefox, the tab navigation doesn't work as expected when using
-   * the columns menu or the note reactions menu. We should activate
-   * autoFocus to solve this issue.
-   */
-  const isFirefox = navigator.userAgent.includes("Firefox");
-
-  return (
-    <ReactFocusLock autoFocus={isFirefox}>
-      <div className={classNames(className, "mini-menu")}>
-        {items.map((item) => {
-          const anchor = uniqueId(`mini-menu-${item.label}`);
-          return (
-            <button
-              data-tooltip-id="scrumlr-tooltip"
-              data-tooltip-content={item.label}
-              aria-label={item.label}
-              id={anchor}
-              className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})}
-              key={item.label}
-              onClick={item?.onClick}
-            >
-              {item.icon}
-            </button>
-          );
-        })}
-      </div>
-    </ReactFocusLock>
-  );
-};
-
+export const MiniMenu = ({className, items}: MiniMenuProps) => (
+  <ReactFocusLock autoFocus>
+    <div className={classNames(className, "mini-menu")}>
+      {items.map((item) => {
+        const anchor = uniqueId(`mini-menu-${item.label}`);
+        return (
+          <button
+            data-tooltip-id="scrumlr-tooltip"
+            data-tooltip-content={item.label}
+            aria-label={item.label}
+            id={anchor}
+            className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})}
+            key={item.label}
+            onClick={item?.onClick}
+          >
+            {item.element}
+          </button>
+        );
+      })}
+    </div>
+  </ReactFocusLock>
+);
