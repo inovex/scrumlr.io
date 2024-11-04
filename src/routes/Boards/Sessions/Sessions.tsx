@@ -2,7 +2,7 @@ import {Outlet} from "react-router-dom";
 import classNames from "classnames";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {t} from "i18next";
-// import StanDark from "../../../assets/stan/Stan_OK_Dark.svg";
+import StanDark from "../../../assets/stan/Stan_OK_Dark.svg";
 import {TemplateCard} from "../../../components/Templates";
 import {EXAMPLE_CUSTOM_TEMPLATE} from "../../../constants/templates";
 import {SessionCard} from "../../../components/Sessions/SessionCard/SessionCard";
@@ -10,25 +10,26 @@ import {SessionCard} from "../../../components/Sessions/SessionCard/SessionCard"
 // import StanDark from "../../../assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 // import {RECOMMENDED_TEMPLATES} from "../../../constants/templates";
 // import {TemplateCard} from "../../../components/Templates";
+import "./Sessions.scss";
 
 export const Sessions = () => (
   <>
     <Outlet /> {/* settings */}
+    <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan giving you his approval" />
     <div className="sessions" style={{display: "contents"}}>
       {/* <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" /> */}
-      <div className={classNames("templates__container")}>
-        {/* <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" /> */}
-        {/* <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan just hanging there with a coffee" /> */}
-        <div className="templates__card-container">
-          <header className="templates__container-header">
-            <button className="templates__container-arrow-button">
-              <ArrowLeft className={classNames("templates__container-arrow", "templates__container-arrow--left")} />
+      <div className="sessions__container">
+        {/* <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan giving you his approval" /> */}
+        <div className="sessions__card-container">
+          <header className="sessions__container-header">
+            <button className="sessions__container-arrow-button">
+              <ArrowLeft className={classNames("sessions__container-arrow", "sessions__container-arrow--left")} />
             </button>
-            <div className="templates__container-title" role="button">
+            <div className="sessions__container-title" role="button">
               {t("Sessions.savedSessions")}
             </div>
           </header>
-          <div className="templates__card-container">
+          <div className="sessions__card-container">
             <SessionCard template={EXAMPLE_CUSTOM_TEMPLATE} />
             <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
           </div>
