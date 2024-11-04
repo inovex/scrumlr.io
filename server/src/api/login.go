@@ -75,7 +75,7 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 // beginAuthProviderVerification will redirect the user to the specified auth provider consent page
 func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
 	store := sessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
-	store.MaxLength(1e9)
+	store.MaxLength(0x8000)
 	gothic.Store = store
 	gothic.BeginAuthHandler(w, r)
 }
