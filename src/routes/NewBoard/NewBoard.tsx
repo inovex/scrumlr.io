@@ -2,7 +2,7 @@ import {API} from "api";
 import "routes/NewBoard/NewBoard.scss";
 import React, {useRef, useState} from "react";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
-import {AccessPolicy} from "store/features/board/types";
+import {AccessPolicy, BoardImportData} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {TextInputLabel} from "components/TextInputLabel";
@@ -11,7 +11,7 @@ import {Button} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 
 import {PassphraseModal} from "components/PassphraseDialog/PassphraseModal/PassphraseModal";
-import {Column, importBoard, Note, Participant, Voting} from "store/features";
+import {importBoard} from "store/features";
 import {useAppDispatch} from "store";
 import {columnTemplates} from "./columnTemplates";
 import {Toast} from "../../utils/Toast";
@@ -28,21 +28,8 @@ export const NewBoard = () => {
   const [importFile, setImportFileConfiguration] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [loadedFile, setFile] = useState<File>();
-  const [completeBoard, setImportBoard] = useState<BoardContent>();
+  const [completeBoard, setImportBoard] = useState<BoardImportData>();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  type BoardContent = {
-    board: {
-      name: string;
-      description?: string;
-      accessPolicy: string;
-      passphrase?: string;
-    };
-    columns: Column[];
-    notes: Note[];
-    participants: Participant;
-    voting: Voting;
-  };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -77,10 +64,10 @@ export const NewBoard = () => {
     reader.onload = (e) => {
       const content = e.target?.result as string;
       try {
-        const data = JSON.parse(content) as BoardContent;
+        const data = JSON.parse(content) as BoardImportData;
         if (data.board.accessPolicy === "BY_PASSPHRASE") {
           setShowPasswordModal(true);
-          setAccessPolicy(1);
+          setAccessPolicy(AccessPolicy.BY_PASSPHRASE);
         }
         setImportBoard(data);
       } catch (error) {
@@ -92,7 +79,7 @@ export const NewBoard = () => {
     reader.readAsText(file);
   };
 
-  const onImportBoard = async () => {
+  const onImportBoard = () => {
     if (completeBoard && accessPolicy === AccessPolicy.BY_PASSPHRASE && passphrase) {
       completeBoard.board.passphrase = passphrase;
     }

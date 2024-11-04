@@ -29,6 +29,19 @@ export interface Board {
   showVoting?: string;
 }
 
+export type BoardImportData = {
+  board: {
+    name: string;
+    description?: string;
+    accessPolicy: string;
+    passphrase?: string;
+  };
+  columns: Column[];
+  notes: Note[];
+  participants: Participant;
+  voting: Voting;
+};
+
 export type BoardActionType = {
   board: Board;
   participants: Participant[];
