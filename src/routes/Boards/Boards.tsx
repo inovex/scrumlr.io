@@ -11,7 +11,8 @@ import {getTemplates} from "store/features";
 import {useAppDispatch} from "store";
 import "./Boards.scss";
 
-type BoardView = "templates" | "sessions" | "create";
+// keeps track of the current view, i.e. sub route
+type BoardView = "templates" | "sessions" | "create" | "edit";
 
 export const Boards = () => {
   const {t} = useTranslation();
@@ -20,6 +21,8 @@ export const Boards = () => {
   const dispatch = useAppDispatch();
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
+  // a simplification of BoardView in order to change some render behaviour (e.g. conditional render of SearchBar)
+  const viewType = ["templates", "sessions"].includes(boardView) ? "overview" : "edit";
   const [showMobileSearchBar, setShowMobileSearchBar] = useState(false);
   const [searchBarInput, setSearchBarInput] = useState("");
 
@@ -42,8 +45,9 @@ export const Boards = () => {
   };
 
   useEffect(() => {
-    const currentLocation = location.pathname.split("/").at(-1) as BoardView;
-    setBoardView(currentLocation);
+    // first sub path after "/boards"
+    const subRoute = location.pathname.split("/").filter(Boolean)[1] as BoardView;
+    setBoardView(subRoute);
   }, [location]);
 
   // init templates
@@ -64,7 +68,7 @@ export const Boards = () => {
   };
 
   const renderExpandedView = () =>
-    boardView !== "create" ? (
+    viewType === "overview" ? (
       <>
         {/* switch - - - search */}
         <Switch
@@ -99,7 +103,7 @@ export const Boards = () => {
 
   return (
     <div className="boards">
-      <div className={classNames("boards__grid", {"boards__grid--with-view-options": boardView !== "create"})}>
+      <div className={classNames("boards__grid", {"boards__grid--with-view-options": viewType === "overview"})}>
         {/* logo - - - profile */}
         <div className="boards__scrumlr-logo-container">
           <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
@@ -114,7 +118,7 @@ export const Boards = () => {
 
         {renderExpandedView()}
 
-        <main className={classNames("boards__outlet", {"boards__outlet--extended-top": boardView !== "create"})}>
+        <main className={classNames("boards__outlet", {"boards__outlet--extended-top": viewType === "overview"})}>
           <Outlet context={searchBarInput} />
         </main>
       </div>
