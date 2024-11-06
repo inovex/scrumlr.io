@@ -59,6 +59,7 @@ const Router = () => {
             </Route>
           </Route>
           <Route path="create" element={<TemplateEditor />} />
+          <Route path="edit/:id" element={<TemplateEditor />} />
           <Route path="sessions" element={<Sessions />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />
