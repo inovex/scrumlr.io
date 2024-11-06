@@ -1,46 +1,25 @@
 import {uniqueId} from "underscore";
 import classNames from "classnames";
 import {useState} from "react";
-import {Column} from "store/features";
+import {TemplateColumn} from "store/features";
 import {Color, getColorClassName, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {arrayMove, horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
-import {TemplateColumn} from "./TemplateColumn/TemplateColumn";
+import {ColumnsConfiguratorColumn} from "./ColumnsConfiguratorColumn/ColumnsConfiguratorColumn";
 import {AddTemplateColumn} from "./AddTemplateColumn/AddTemplateColumn";
 import "./ColumnsConfigurator.scss";
 
 type ColumnsConfiguratorProps = {
-  className?: string;
+  className: string;
+  templateId: string;
+  columns: TemplateColumn[];
 };
 
-export type TemplateColumnType = Omit<Column, "index">;
-
 export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
-  const initialState: TemplateColumnType[] = [
-    {
-      id: uniqueId("col"),
-      color: "backlog-blue",
-      name: "Column 1",
-      visible: true,
-    },
-    {
-      id: uniqueId("col"),
-      color: "planning-pink",
-      name: "Column 2",
-      visible: false,
-    },
-    {
-      id: uniqueId("col"),
-      color: "poker-purple",
-      name: "Column 3",
-      visible: false,
-    },
-  ];
-  const [templateColumns, setTemplateColumns] = useState<TemplateColumnType[]>(initialState);
-
+  const [templateColumns, setTemplateColumns] = useState<TemplateColumn[]>(props.columns); // TODO use props as direct state
   // id of column which is actively being dragged
   const [activeElementId, setActiveElementId] = useState<string | null>(null);
-  const [activeColumn, setActiveColumn] = useState<TemplateColumnType | null>(null);
+  const [activeColumn, setActiveColumn] = useState<TemplateColumn | null>(null);
   const [dropElementId, setDropElementId] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor));
@@ -117,7 +96,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     const activeColumnIndex = getPotentialIndex(templateColumns.findIndex((c) => c.id === activeColumn.id));
 
     return (
-      <TemplateColumn
+      <ColumnsConfiguratorColumn
         className={classNames("columns-configurator__column", "columns-configurator__column--ghost")}
         column={activeColumn}
         // here, use actual index unlike potential index in the main part
@@ -129,11 +108,14 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   };
 
   const addTemplateColumn = (alignment: "left" | "right", color: Color) => {
-    const newColumn: TemplateColumnType = {
+    const newColumn: TemplateColumn = {
       id: uniqueId("col"),
-      color,
+      template: props.templateId,
       name: "Column",
+      description: "",
+      color,
       visible: false,
+      index: -1, // index doesn't mean anything here, since swapping is handled by DnD. Indices will be set by backend.
     };
     if (alignment === "left") {
       setTemplateColumns((curr) => [newColumn, ...curr]);
@@ -151,7 +133,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
             {templateColumns.map((column, index) => {
               const potentialIndex = getPotentialIndex(index);
               return (
-                <TemplateColumn
+                <ColumnsConfiguratorColumn
                   className="columns-configurator__column"
                   key={column.id}
                   column={column}
