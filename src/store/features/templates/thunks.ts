@@ -8,6 +8,12 @@ export const getTemplates = createAsyncThunk<TemplateWithColumns[], void, {state
   return templates;
 });
 
+export const getTemplate = createAsyncThunk<Template, string, {state: ApplicationState}>("templates/getTemplate", async (payload, {dispatch}) => {
+  const template = await API.getTemplate(payload);
+  // dispatch(getTemplateColumns(payload)) // TODO dispatch automatically or manually?
+  return template;
+});
+
 export const editTemplate = createAsyncThunk<Template, {id: string; overwrite: Partial<Template>}, {state: ApplicationState}>("templates/editTemplate", async (payload) => {
   const template = await API.editTemplate(payload.id, payload.overwrite);
   return template;

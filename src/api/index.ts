@@ -11,6 +11,7 @@ import {InfoAPI} from "api/info";
 import {UserAPI} from "api/user";
 import {BoardReactionAPI} from "api/boardReaction";
 import {TemplatesAPI} from "api/templates";
+import {TemplateColumnsAPI} from "api/templateColumns";
 
 /** This class lists all API functions of the server. */
 export const API = {
@@ -27,4 +28,5 @@ export const API = {
   ...UserAPI,
   ...BoardReactionAPI,
   ...TemplatesAPI,
+  ...TemplateColumnsAPI,
 };

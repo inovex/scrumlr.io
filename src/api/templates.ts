@@ -19,6 +19,23 @@ export const TemplatesAPI = {
     }
   },
 
+  getTemplate: async (id: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/templates/${id}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return (await response.json()) as Template;
+      }
+
+      throw new Error(`get template request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get all templates with error: ${error}`);
+    }
+  },
+
   editTemplate: async (templateId: string, overwrite: Partial<Template>) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}`, {
