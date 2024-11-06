@@ -49,11 +49,11 @@ export const Templates = () => {
   // to a common object in order to avoid losing information (since recommended templates don't have associated cols)
   const mergeTemplateWithColumns = (template: Template, columns?: TemplateColumn[]): TemplateWithColumns => {
     if (columns) {
-      return {...template, columns};
+      return {template, columns};
     }
 
     const associatedColumns = templateColumns.filter((tc) => tc.template === template.id);
-    return {...template, columns: associatedColumns};
+    return {template, columns: associatedColumns};
   };
 
   const renderContainerHeader = (renderSide: Side, title: string) =>
@@ -86,8 +86,8 @@ export const Templates = () => {
         <section className="templates__container templates__container--recommended">
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
-            {RECOMMENDED_TEMPLATES.filter(matchSearchInput).map((template) => (
-              <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(template, template.columns)} />
+            {RECOMMENDED_TEMPLATES.filter((rc) => matchSearchInput(rc.template)).map((templateFull) => (
+              <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)} />
             ))}
           </div>
         </section>

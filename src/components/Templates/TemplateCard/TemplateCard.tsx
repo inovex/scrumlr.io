@@ -36,7 +36,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
     setShowMiniMenu(false);
   };
 
-  const toggleFavourite = () => dispatch(setTemplateFavourite({id: template.id, favourite: !template.favourite}));
+  const toggleFavourite = () => dispatch(setTemplateFavourite({id: template.template.id, favourite: !template.template.favourite}));
 
   const navigateToEdit = () => {
     // TODO
@@ -78,15 +78,15 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   return (
     <div className="template-card">
       {/* TODO probably remove favourites from recommended cards, since these are constant and we'd need to keep track of it somewhere */}
-      <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={toggleFavourite} />
+      <FavouriteButton className="template-card__favourite" active={template.template.favourite} onClick={toggleFavourite} />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={template.name} disabled />
-        <div className="template-card__access-policy">{renderAccessPolicy(AccessPolicy[template.accessPolicy])}</div>
+        <input className="template-card__title" type="text" value={template.template.name} disabled />
+        <div className="template-card__access-policy">{renderAccessPolicy(AccessPolicy[template.template.accessPolicy])}</div>
       </div>
       {renderMenu()}
       <TextareaAutosize
         className={classNames("template-card__description")}
-        value={template.description}
+        value={template.template.description}
         disabled
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}

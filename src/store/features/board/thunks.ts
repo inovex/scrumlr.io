@@ -21,7 +21,7 @@ let socket: Socket | null = null;
 
 // creates a board from a template and returns board id if successful
 export const createBoardFromTemplate = createAsyncThunk<string, TemplateWithColumns>("board/createBoardFromTemplate", async (payload) =>
-  API.createBoard(payload.name, {type: payload.accessPolicy}, payload.columns)
+  API.createBoard(payload.template.name, {type: payload.template.accessPolicy}, payload.columns)
 );
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {

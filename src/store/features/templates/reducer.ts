@@ -7,11 +7,11 @@ const initialState: TemplatesState = [];
 
 export const templatesReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(getTemplates.fulfilled, (_state, action) => action.payload)
+    .addCase(getTemplates.fulfilled, (_state, action) => action.payload.map((twc) => twc.template))
     .addCase(editTemplate.fulfilled, (state, action) =>
       state.map(
         (t) => (t.id === action.payload.id ? {...action.payload} : t) // only change edited templates, other stay the same
       )
     )
-    .addCase(addTemplateOptimistically, (state, action) => [...state, action.payload]);
+    .addCase(addTemplateOptimistically, (state, action) => [...state, action.payload.template]);
 });

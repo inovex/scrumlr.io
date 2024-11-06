@@ -5,12 +5,14 @@ export const DEFAULT_TEMPLATE_ID = "DEFAULT_TEMPLATE_ID";
 const DEFAULT_TEMPLATE_CREATOR = "DEFAULT_CREATOR_ID";
 
 export const DEFAULT_TEMPLATE: TemplateWithColumns = {
-  id: DEFAULT_TEMPLATE_ID,
-  creator: DEFAULT_TEMPLATE_CREATOR,
-  name: "",
-  accessPolicy: "PUBLIC",
-  description: "",
-  favourite: false,
+  template: {
+    id: DEFAULT_TEMPLATE_ID,
+    creator: DEFAULT_TEMPLATE_CREATOR,
+    name: "",
+    accessPolicy: "PUBLIC",
+    description: "",
+    favourite: false,
+  },
   columns: [
     {
       id: uniqueId("template-column-"),
@@ -26,12 +28,14 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
 
 export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
   {
-    id: "recommended-1",
-    creator: "scrumlr-id",
-    name: "Lean Coffee",
-    accessPolicy: "PUBLIC",
-    description: "A flexible discussion method without a fixed agenda. Ideal for identifying & discussing important topics.",
-    favourite: false,
+    template: {
+      id: "recommended-1",
+      creator: "scrumlr-id",
+      name: "Lean Coffee",
+      accessPolicy: "PUBLIC",
+      description: "A flexible discussion method without a fixed agenda. Ideal for identifying & discussing important topics.",
+      favourite: false,
+    },
     columns: [
       {
         id: "recommended-col-1-1",
@@ -45,12 +49,14 @@ export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
     ],
   },
   {
-    id: "recommended-2",
-    creator: "scrumlr-id",
-    name: "Quick Review",
-    accessPolicy: "PUBLIC",
-    description: "Participants highlight positives & negatives incidents for quick identification of successes & issues.",
-    favourite: false,
+    template: {
+      id: "recommended-2",
+      creator: "scrumlr-id",
+      name: "Quick Review",
+      accessPolicy: "PUBLIC",
+      description: "Participants highlight positives & negatives incidents for quick identification of successes & issues.",
+      favourite: false,
+    },
     columns: [
       {
         id: "recommended-col-2-1",
@@ -73,12 +79,14 @@ export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
     ],
   },
   {
-    id: "recommended-3",
-    creator: "scrumlr-id",
-    name: "Cycle Check",
-    accessPolicy: "PUBLIC",
-    description: "The team reflects on actions to start, stop, and continue, promoting continuous improvement.",
-    favourite: false,
+    template: {
+      id: "recommended-3",
+      creator: "scrumlr-id",
+      name: "Cycle Check",
+      accessPolicy: "PUBLIC",
+      description: "The team reflects on actions to start, stop, and continue, promoting continuous improvement.",
+      favourite: false,
+    },
     columns: [
       {
         id: "recommended-col-3-1",
@@ -110,12 +118,14 @@ export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
     ],
   },
   {
-    id: "recommended-4",
-    creator: "scrumlr-id",
-    name: "Mood",
-    accessPolicy: "PUBLIC",
-    description: "Participants share things that made them mad, sad, or glad. Good for understanding emotional states.",
-    favourite: false,
+    template: {
+      id: "recommended-4",
+      creator: "scrumlr-id",
+      name: "Mood",
+      accessPolicy: "PUBLIC",
+      description: "Participants share things that made them mad, sad, or glad. Good for understanding emotional states.",
+      favourite: false,
+    },
     columns: [
       {
         id: "recommended-col-4-1",
@@ -147,12 +157,14 @@ export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
     ],
   },
   {
-    id: "recommended-5",
-    creator: "scrumlr-id",
-    name: "Kalm",
-    accessPolicy: "PUBLIC",
-    description: "The team identifies what to keep, add, reduce, or amplify to enhance performance.",
-    favourite: false,
+    template: {
+      id: "recommended-5",
+      creator: "scrumlr-id",
+      name: "Kalm",
+      accessPolicy: "PUBLIC",
+      description: "The team identifies what to keep, add, reduce, or amplify to enhance performance.",
+      favourite: false,
+    },
     columns: [
       {
         id: "recommended-col-5-1",
@@ -193,12 +205,14 @@ export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
     ],
   },
   {
-    id: "recommended-6",
-    creator: "scrumlr-id",
-    name: "4L",
-    accessPolicy: "PUBLIC",
-    description: "Participants review what they liked, learned, lacked, and longed for, encouraging feedback.",
-    favourite: false,
+    template: {
+      id: "recommended-6",
+      creator: "scrumlr-id",
+      name: "4L",
+      accessPolicy: "PUBLIC",
+      description: "Participants review what they liked, learned, lacked, and longed for, encouraging feedback.",
+      favourite: false,
+    },
     columns: [
       {
         id: "recommended-col-6-1",
@@ -239,12 +253,14 @@ export const RECOMMENDED_TEMPLATES: TemplateWithColumns[] = [
     ],
   },
   {
-    id: "recommended-7",
-    creator: "scrumlr-id",
-    name: "SWOT",
-    accessPolicy: "PUBLIC",
-    description: "Analyzes strengths, weaknesses, opportunities, and threats to support strategic planning.",
-    favourite: false,
+    template: {
+      id: "recommended-7",
+      creator: "scrumlr-id",
+      name: "SWOT",
+      accessPolicy: "PUBLIC",
+      description: "Analyzes strengths, weaknesses, opportunities, and threats to support strategic planning.",
+      favourite: false,
+    },
     columns: [
       {
         id: "recommended-col-7-1",
