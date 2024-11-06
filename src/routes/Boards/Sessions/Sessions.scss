@@ -4,7 +4,7 @@ $stan-height: 70vh;
 $max-card-width: 500px;
 
 .sessions {
-  display: contents;
+  display: flex;
   flex-direction: row;
   flex: 1;
   // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
@@ -23,6 +23,8 @@ $max-card-width: 500px;
   overflow-y: scroll;
 
   background-color: $blue--50;
+
+  position: relative;
 
   &--saved {
     margin-left: $spacing--md; // instead of gap, see above
@@ -68,10 +70,12 @@ $max-card-width: 500px;
 
 .sessions__stan-container {
   position: absolute;
+
   width: auto;
   height: $stan-height;
   // align right edge of stan to the left edge of the container
-  transform: translateX(-100%);
+  right: 0;
+  //transform: translateX(-100%);
 }
 
 .sessions__stan {
@@ -122,8 +126,12 @@ $max-card-width: 500px;
 }
 
 [theme="dark"] {
+  // TODO: this needs to move to another place higher in the hierarchy and not be inside the sessions component
+  scrollbar-color: $navy--400 $navy--700;
+
   .sessions__container {
     background-color: $navy--700;
+    scrollbar-color: $navy--400 $navy--700;
   }
 
   .sessions__container-title {

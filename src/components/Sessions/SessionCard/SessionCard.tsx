@@ -11,6 +11,8 @@ import {ReactComponent as NextIcon} from "assets/icons/next.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
+import {ReactComponent as MultipleUserIcon} from "assets/icons/multiple-user.svg";
+import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
 import {BoardTemplate} from "constants/templates";
 import "./SessionCard.scss";
 
@@ -31,7 +33,8 @@ export const SessionCard = ({template}: SessionCardProps) => {
     // TODO
   };
 
-  const renderMenu = () => showMiniMenu ? (
+  const renderMenu = () =>
+    showMiniMenu ? (
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
@@ -68,7 +71,7 @@ export const SessionCard = ({template}: SessionCardProps) => {
             .join(", ")}
         </div>
       </div>
-      <ColumnsIcon className={classNames("session-card__icon", "session-card__icon--age")} />
+      <CalendarIcon className={classNames("session-card__icon", "session-card__icon--age")} />
       <div className="session-card__age">
         <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
         <div className="session-card__columns-subtitle">
@@ -78,7 +81,7 @@ export const SessionCard = ({template}: SessionCardProps) => {
             .join(", ")}
         </div>
       </div>
-      <ColumnsIcon className={classNames("session-card__icon", "session-card__icon--participants")} />
+      <MultipleUserIcon className={classNames("session-card__icon", "session-card__icon--participants")} />
       <div className="session-card__participants">
         <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
         <div className="session-card__columns-subtitle">

@@ -5,7 +5,7 @@ $card-height: 220px;
 .session-card {
   display: grid;
   grid-template-rows: 36px auto 10px 46px;
-  grid-template-columns: 36px $spacing--xs 1fr $spacing--xs 36px $spacing--xs 1fr $spacing--xs 36px $spacing--xs 1fr auto auto 36px;
+  grid-template-columns: 36px $spacing--xs fit-content(200px) $spacing--sm 36px $spacing--xs fit-content(200px) $spacing--sm 36px $spacing--xs fit-content(200px) 1fr 1fr 36px;
   grid-template-areas:
     "fav-icon   .  head          head          head          head          head          head          head               head          head          head          head          menu"
     ".          .  description   description   description   description   description   description   description        description   description   description   description   ."
@@ -170,6 +170,7 @@ $card-height: 220px;
   .session-card {
     background-color: $navy--400;
     box-shadow: 0 2px 20px 0 rgba($navy--700, 0.5);
+    scrollbar-color: $gray--000 $navy--400;
   }
 
   .session-card__title,
@@ -191,6 +192,12 @@ $card-height: 220px;
   .session-card__icon {
     &--menu,
     &--columns {
+      color: $gray--000;
+    }
+    &--age {
+      color: $gray--000;
+    }
+    &--participants {
       color: $gray--000;
     }
   }
