@@ -17,7 +17,7 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     {
       id: uniqueId("template-column-"),
       template: DEFAULT_TEMPLATE_ID,
-      name: "",
+      name: "Default",
       description: "",
       color: "backlog-blue",
       visible: true,
