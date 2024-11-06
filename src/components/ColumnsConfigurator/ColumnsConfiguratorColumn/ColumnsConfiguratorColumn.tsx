@@ -1,27 +1,27 @@
 import classNames from "classnames";
+import {TemplateColumn} from "store/features";
 import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
 import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
 import {ReactComponent as DnDIcon} from "assets/icons/drag-and-drop.svg";
-import {TemplateColumnType} from "components/ColumnsConfigurator/ColumnsConfigurator";
 import {getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
 import {CSSProperties, useCallback, useEffect} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
-import "./TemplateColumn.scss";
+import "./ColumnsConfiguratorColumn.scss";
 
-type TemplateColumnProps = {
+type ColumnsConfiguratorColumnProps = {
   className?: string;
-  column: TemplateColumnType;
+  column: TemplateColumn;
   index: number;
   placement?: "first" | "center" | "last";
   activeDrag?: boolean;
   activeDrop?: boolean;
-  allColumns: TemplateColumnType[]; // TODO get rest using redux
+  allColumns: TemplateColumn[]; // TODO get rest using redux
 };
 
-export const TemplateColumn = (props: TemplateColumnProps) => {
+export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
   const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: props.column.id});
   const {
     bindings: {ref: stripeRef, style: stripeStyle},
