@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {AccessPolicy} from "store/features";
+import {AccessPolicy, TemplateColumn} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
@@ -11,6 +11,7 @@ import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as ShuffleIcon} from "assets/icons/shuffle.svg";
 import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
+import {DEFAULT_TEMPLATE, DEFAULT_TEMPLATE_ID} from "constants/templates";
 import classNames from "classnames";
 import {Button} from "components/Button";
 import {useParams} from "react-router";
@@ -35,7 +36,10 @@ export const TemplateEditor = () => {
 
   const {id} = useParams();
 
-  const basis = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === id));
+  const templateId = id ?? DEFAULT_TEMPLATE_ID;
+
+  const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === id));
+  const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === id));
 
   // todo all these will be replaced and refer to the working local template instead
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -45,14 +49,21 @@ export const TemplateEditor = () => {
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
 
-  // after finding the basis template for editing, set the corresponding form values
+  const [templateColumns, setTemplateColumns] = useState<TemplateColumn[]>(DEFAULT_TEMPLATE.columns);
+
   useEffect(() => {
-    if (basis) {
-      setActiveOptionKey(AccessPolicy[basis.accessPolicy]);
-      setNameInput(basis.name);
-      setDescriptionInput(basis.description);
+    // after finding the basisTemplate template for editing, set the corresponding form values
+    if (id && basisTemplate) {
+      setActiveOptionKey(AccessPolicy[basisTemplate.accessPolicy]);
+      setNameInput(basisTemplate.name);
+      setDescriptionInput(basisTemplate.description);
     }
-  }, [basis]);
+
+    // same for template columns
+    if (id && basisColumns) {
+      setTemplateColumns(basisColumns);
+    }
+  }, [id, basisColumns, basisTemplate]);
 
   const toggleDropDown = () => setOpenDropdown((curr) => !curr);
   const selectDropdownOption = (key: AccessPolicy) => {
@@ -93,7 +104,7 @@ export const TemplateEditor = () => {
         <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
       </div>
       <div className="template-editor__columns-configurator-wrapper">
-        <ColumnsConfigurator className="template-editor__columns-configurator" />
+        <ColumnsConfigurator className="template-editor__columns-configurator" templateId={templateId} columns={templateColumns} />
       </div>
       <div className="template-editor__buttons">
         <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary">
