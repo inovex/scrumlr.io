@@ -1,9 +1,9 @@
 import classNames from "classnames";
 import {Outlet, useOutletContext} from "react-router-dom";
-import {useAppSelector, useAppDispatch} from "store";
-import {getTemplates, Template, TemplateColumn, TemplateWithColumns} from "store/features";
+import {useAppSelector} from "store";
+import {Template, TemplateColumn, TemplateWithColumns} from "store/features";
 import {useTranslation} from "react-i18next";
-import {useEffect, useRef} from "react";
+import {useRef} from "react";
 import {useNavigate} from "react-router";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
@@ -19,7 +19,6 @@ type Side = "left" | "right";
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const searchBarInput: string = useOutletContext();
@@ -30,11 +29,6 @@ export const Templates = () => {
 
   const templates = useAppSelector((state) => state.templates);
   const templateColumns = useAppSelector((state) => state.templatesColumns);
-
-  // init templates
-  useEffect(() => {
-    dispatch(getTemplates());
-  }, [dispatch]);
 
   const scrollToSide = (side: Side) => {
     const screenWidth = document.documentElement.clientWidth;

@@ -7,6 +7,8 @@ import {Input} from "components/Input/Input";
 import {Switch} from "components/Switch/Switch";
 import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import classNames from "classnames";
+import {getTemplates} from "store/features";
+import {useAppDispatch} from "store";
 import "./Boards.scss";
 
 type BoardView = "templates" | "sessions" | "create";
@@ -15,6 +17,7 @@ export const Boards = () => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
   const [showMobileSearchBar, setShowMobileSearchBar] = useState(false);
@@ -42,6 +45,11 @@ export const Boards = () => {
     const currentLocation = location.pathname.split("/").at(-1) as BoardView;
     setBoardView(currentLocation);
   }, [location]);
+
+  // init templates
+  useEffect(() => {
+    dispatch(getTemplates());
+  }, [dispatch]);
 
   const renderTitle = () => {
     switch (boardView) {
