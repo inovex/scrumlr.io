@@ -44,7 +44,9 @@ export const TemplateEditor = () => {
   const basisColumns = useAppSelector((state) => {
     const cols = state.templatesColumns.filter((tmplCol) => tmplCol.template === id);
     return cols || DEFAULT_TEMPLATE.columns;
-  });
+  })
+    // template columns are displayed in order of their index.
+    .sort((a, b) => a.index - b.index);
 
   // todo all these will be replaced and refer to the working local template instead
   const [openDropdown, setOpenDropdown] = useState(false);

@@ -126,16 +126,13 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     return null;
   }
 
-  // sort columns by their index before rendering
-  const sortedColumns = [...props.columns].sort((a, b) => a.index - b.index);
-
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-      <SortableContext items={sortedColumns} strategy={horizontalListSortingStrategy}>
+      <SortableContext items={props.columns} strategy={horizontalListSortingStrategy}>
         <div className={classNames(props.className, "columns-configurator", getColorClassName("backlog-blue"))}>
-          <AddTemplateColumn alignment="left" color={getPreviousColor(sortedColumns[0].color)} onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="left" color={getPreviousColor(props.columns[0].color)} onClick={addTemplateColumn} />
           <div className="columns-configurator__columns-wrapper">
-            {sortedColumns.map((column, index) => {
+            {props.columns.map((column, index) => {
               const potentialIndex = getPotentialIndex(index);
               return (
                 <ColumnsConfiguratorColumn
@@ -146,12 +143,12 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
                   activeDrag={column.id === activeElementId}
                   activeDrop={column.id === dropElementId}
                   placement={calcPlacement(potentialIndex)}
-                  allColumns={sortedColumns}
+                  allColumns={props.columns}
                 />
               );
             })}
           </div>
-          <AddTemplateColumn alignment="right" color={getNextColor(sortedColumns[sortedColumns.length - 1].color)} onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="right" color={getNextColor(props.columns[props.columns.length - 1].color)} onClick={addTemplateColumn} />
         </div>
       </SortableContext>
 
