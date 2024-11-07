@@ -11,7 +11,7 @@ import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as ShuffleIcon} from "assets/icons/shuffle.svg";
 import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
-import {DEFAULT_TEMPLATE, DEFAULT_TEMPLATE_ID} from "constants/templates";
+import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import classNames from "classnames";
 import {Button} from "components/Button";
 import {useParams} from "react-router";
@@ -35,18 +35,15 @@ export const TemplateEditor = () => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
 
+  // id is set in /edit/:id route (not checked whether its valid though)
   const {id} = useParams();
 
   const templateId = id ?? DEFAULT_TEMPLATE_ID;
 
-  const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === id)) ?? DEFAULT_TEMPLATE.template;
+  const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === templateId));
   // no columns found? use from default template. keep in mind this is also true if template is valid, but the array is empty! logic to avoid empty array has to be checked
-  const basisColumns = useAppSelector((state) => {
-    const cols = state.templatesColumns.filter((tmplCol) => tmplCol.template === id);
-    return cols || DEFAULT_TEMPLATE.columns;
-  })
-    // template columns are displayed in order of their index.
-    .sort((a, b) => a.index - b.index);
+  // template columns are displayed in order of their index.
+  const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === templateId)).sort((a, b) => a.index - b.index);
 
   // todo all these will be replaced and refer to the working local template instead
   const [openDropdown, setOpenDropdown] = useState(false);
