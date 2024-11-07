@@ -1,16 +1,17 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {arrayMove} from "@dnd-kit/sortable";
+import {DEFAULT_TEMPLATE} from "constants/templates";
 import {TemplateColumnsState} from "./types";
 import {getTemplates} from "../templates";
 import {addTemplateOptimistically} from "../templates/actions";
 import {addTemplateColumnOptimistically, moveTemplateColumnOptimistically} from "./actions";
 
-const initialState: TemplateColumnsState = [];
+const initialState: TemplateColumnsState = [...DEFAULT_TEMPLATE.columns];
 
 export const templateColumnsReducer = createReducer(initialState, (builder) => {
   builder
     // each full template has a column prop which is an array, so we need to map out the columns prop and also flatten the array
-    .addCase(getTemplates.fulfilled, (_state, action) => action.payload.flatMap((c) => c.columns))
+    .addCase(getTemplates.fulfilled, (_state, action) => [...DEFAULT_TEMPLATE.columns, ...action.payload.flatMap((c) => c.columns)])
     .addCase(addTemplateOptimistically, (state, action) => [...state, ...action.payload.columns])
     .addCase(addTemplateColumnOptimistically, (state, action) => {
       // since we potentially have template columns by many different templates here, we need to differentiate them.
