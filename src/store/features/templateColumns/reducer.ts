@@ -31,10 +31,10 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
       return [...unrelatedColumns, ...updatedColumnsWithIndices];
     })
     .addCase(moveTemplateColumnOptimistically, (state, action) => {
-      const relatedColumns = state.filter((column) => column.template === action.payload.templateColumn.template);
-      const unrelatedColumns = state.filter((column) => column.template !== action.payload.templateColumn.template);
+      const relatedColumns = state.filter((column) => column.template === action.payload.templateId);
+      const unrelatedColumns = state.filter((column) => column.template !== action.payload.templateId);
 
-      const updatedRelatedColumns = arrayMove(relatedColumns, action.payload.templateColumn.index, action.payload.toIndex);
+      const updatedRelatedColumns = arrayMove(relatedColumns, action.payload.fromIndex, action.payload.toIndex);
 
       const updatedColumnsWithIndices = updatedRelatedColumns.map((column, index) => ({
         ...column,
