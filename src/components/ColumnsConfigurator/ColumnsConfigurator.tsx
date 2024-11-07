@@ -1,6 +1,6 @@
 import {uniqueId} from "underscore";
 import classNames from "classnames";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useState} from "react";
 import {TemplateColumn} from "store/features";
 import {Color, getColorClassName, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
@@ -42,7 +42,13 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
         const oldIndex = columns.findIndex((c) => c.id === active.id);
         const newIndex = columns.findIndex((c) => c.id === over?.id);
 
-        return arrayMove(columns, oldIndex, newIndex);
+        const updatedColumns = arrayMove(columns, oldIndex, newIndex);
+
+        // Update the index property for each column
+        return updatedColumns.map((column, index) => ({
+          ...column,
+          index,
+        }));
       });
     }
 
@@ -115,7 +121,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
       description: "",
       color,
       visible: false,
-      index: -1, // index doesn't mean anything here, since swapping is handled by DnD. Indices will be set by backend.
+      index: -1,
     };
     if (alignment === "left") {
       props.setColumns((curr) => [newColumn, ...curr]);
@@ -128,13 +134,16 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     return null;
   }
 
+  // sort columns by their index before rendering
+  const sortedColumns = [...props.columns].sort((a, b) => a.index - b.index);
+
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-      <SortableContext items={props.columns} strategy={horizontalListSortingStrategy}>
+      <SortableContext items={sortedColumns} strategy={horizontalListSortingStrategy}>
         <div className={classNames(props.className, "columns-configurator", getColorClassName("backlog-blue"))}>
-          <AddTemplateColumn alignment="left" color={getPreviousColor(props.columns[0].color)} onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="left" color={getPreviousColor(sortedColumns[0].color)} onClick={addTemplateColumn} />
           <div className="columns-configurator__columns-wrapper">
-            {props.columns.map((column, index) => {
+            {sortedColumns.map((column, index) => {
               const potentialIndex = getPotentialIndex(index);
               return (
                 <ColumnsConfiguratorColumn
@@ -145,12 +154,12 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
                   activeDrag={column.id === activeElementId}
                   activeDrop={column.id === dropElementId}
                   placement={calcPlacement(potentialIndex)}
-                  allColumns={props.columns}
+                  allColumns={sortedColumns}
                 />
               );
             })}
           </div>
-          <AddTemplateColumn alignment="right" color={getNextColor(props.columns[props.columns.length - 1].color)} onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="right" color={getNextColor(sortedColumns[sortedColumns.length - 1].color)} onClick={addTemplateColumn} />
         </div>
       </SortableContext>
 
