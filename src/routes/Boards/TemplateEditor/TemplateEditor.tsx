@@ -17,6 +17,7 @@ import {Button} from "components/Button";
 import {useParams} from "react-router";
 import "./TemplateEditor.scss";
 
+// todo maybe just change the translation keys to AccessPolicy => lowercase
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   switch (policy) {
     case AccessPolicy.PUBLIC:
@@ -40,15 +41,17 @@ export const TemplateEditor = () => {
 
   const templateId = id ?? DEFAULT_TEMPLATE_ID;
 
+  // template which serves as basis, either from given id or default fallback.
   const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === templateId));
   // no columns found? use from default template. keep in mind this is also true if template is valid, but the array is empty! logic to avoid empty array has to be checked
   // template columns are displayed in order of their index.
   const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === templateId)).sort((a, b) => a.index - b.index);
 
-  // todo all these will be replaced and refer to the working local template instead
   const [openDropdown, setOpenDropdown] = useState(false);
   const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>(AccessPolicy.PUBLIC);
 
+  // states to keep track of changes of the form.
+  // could be changed to directly refer to the basisTemplate, but that would probably cause a lot of dispatches
   const [passwordInput, setPasswordInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
@@ -68,6 +71,7 @@ export const TemplateEditor = () => {
       setNameInput(basisTemplate.name);
       setDescriptionInput(basisTemplate.description);
     }
+    // todo handle error if id ends up not referring to an actual template
   }, [basisTemplate, id]);
 
   const toggleDropDown = () => setOpenDropdown((curr) => !curr);

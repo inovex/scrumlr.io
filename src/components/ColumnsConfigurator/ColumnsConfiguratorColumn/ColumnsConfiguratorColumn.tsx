@@ -18,7 +18,7 @@ type ColumnsConfiguratorColumnProps = {
   placement?: "first" | "center" | "last";
   activeDrag?: boolean;
   activeDrop?: boolean;
-  allColumns: TemplateColumn[]; // TODO get rest using redux
+  allColumns: TemplateColumn[];
 };
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
