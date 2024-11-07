@@ -1,6 +1,6 @@
 import {uniqueId} from "underscore";
 import classNames from "classnames";
-import {useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {TemplateColumn} from "store/features";
 import {Color, getColorClassName, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
@@ -13,10 +13,10 @@ type ColumnsConfiguratorProps = {
   className: string;
   templateId: string;
   columns: TemplateColumn[];
+  setColumns: Dispatch<SetStateAction<TemplateColumn[]>>;
 };
 
 export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
-  const [templateColumns, setTemplateColumns] = useState<TemplateColumn[]>(props.columns); // TODO use props as direct state
   // id of column which is actively being dragged
   const [activeElementId, setActiveElementId] = useState<string | null>(null);
   const [activeColumn, setActiveColumn] = useState<TemplateColumn | null>(null);
@@ -27,7 +27,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   const handleDragStart = (event: DragStartEvent) => {
     const activeId = event.active.id as string;
     setActiveElementId(activeId);
-    setActiveColumn(templateColumns.find((c) => c.id === activeId)!);
+    setActiveColumn(props.columns.find((c) => c.id === activeId)!);
   };
 
   const handleDragOver = (event: DragOverEvent) => {
@@ -38,7 +38,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     const {active, over} = event;
 
     if (active.id !== over?.id) {
-      setTemplateColumns((columns) => {
+      props.setColumns((columns) => {
         const oldIndex = columns.findIndex((c) => c.id === active.id);
         const newIndex = columns.findIndex((c) => c.id === over?.id);
 
@@ -56,7 +56,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     if (index === 0) {
       return "first";
     }
-    if (index === templateColumns.length - 1) {
+    if (index === props.columns.length - 1) {
       return "last";
     }
     return "center";
@@ -67,8 +67,8 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     // no valid drag operation occurring
     if (!activeElementId || !dropElementId) return index;
 
-    const dragElementIndex = templateColumns.findIndex((c) => c.id === activeElementId);
-    const dropElementIndex = templateColumns.findIndex((c) => c.id === dropElementId);
+    const dragElementIndex = props.columns.findIndex((c) => c.id === activeElementId);
+    const dropElementIndex = props.columns.findIndex((c) => c.id === dropElementId);
 
     // if current index matches active index of drag element, the column is being dragged there,
     // so the potential index is that of the drop element
@@ -93,7 +93,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   // renders the drag overlay, which is the element which is dragged
   const renderDragOverlay = () => {
     if (!activeElementId || !activeColumn) return null;
-    const activeColumnIndex = getPotentialIndex(templateColumns.findIndex((c) => c.id === activeColumn.id));
+    const activeColumnIndex = getPotentialIndex(props.columns.findIndex((c) => c.id === activeColumn.id));
 
     return (
       <ColumnsConfiguratorColumn
@@ -102,7 +102,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
         // here, use actual index unlike potential index in the main part
         index={activeColumnIndex}
         placement={calcPlacement(activeColumnIndex)}
-        allColumns={templateColumns}
+        allColumns={props.columns}
       />
     );
   };
@@ -118,19 +118,23 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
       index: -1, // index doesn't mean anything here, since swapping is handled by DnD. Indices will be set by backend.
     };
     if (alignment === "left") {
-      setTemplateColumns((curr) => [newColumn, ...curr]);
+      props.setColumns((curr) => [newColumn, ...curr]);
     } else {
-      setTemplateColumns((curr) => [...curr, newColumn]);
+      props.setColumns((curr) => [...curr, newColumn]);
     }
   };
 
+  if (props.columns.length === 0) {
+    return null;
+  }
+
   return (
     <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-      <SortableContext items={templateColumns} strategy={horizontalListSortingStrategy}>
+      <SortableContext items={props.columns} strategy={horizontalListSortingStrategy}>
         <div className={classNames(props.className, "columns-configurator", getColorClassName("backlog-blue"))}>
-          <AddTemplateColumn alignment="left" color={getPreviousColor(templateColumns[0].color)} onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="left" color={getPreviousColor(props.columns[0].color)} onClick={addTemplateColumn} />
           <div className="columns-configurator__columns-wrapper">
-            {templateColumns.map((column, index) => {
+            {props.columns.map((column, index) => {
               const potentialIndex = getPotentialIndex(index);
               return (
                 <ColumnsConfiguratorColumn
@@ -141,12 +145,12 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
                   activeDrag={column.id === activeElementId}
                   activeDrop={column.id === dropElementId}
                   placement={calcPlacement(potentialIndex)}
-                  allColumns={templateColumns}
+                  allColumns={props.columns}
                 />
               );
             })}
           </div>
-          <AddTemplateColumn alignment="right" color={getNextColor(templateColumns[templateColumns.length - 1].color)} onClick={addTemplateColumn} />
+          <AddTemplateColumn alignment="right" color={getNextColor(props.columns[props.columns.length - 1].color)} onClick={addTemplateColumn} />
         </div>
       </SortableContext>
 
