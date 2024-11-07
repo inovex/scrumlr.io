@@ -39,7 +39,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   const toggleFavourite = () => dispatch(setTemplateFavourite({id: template.template.id, favourite: !template.template.favourite}));
 
   const navigateToEdit = () => {
-    // TODO
+    navigate(`../edit/${template.template.id}`);
   };
 
   const createBoard = () => {
