@@ -1,10 +1,10 @@
 import {uniqueId} from "underscore";
 import classNames from "classnames";
-import {Dispatch, SetStateAction, useState} from "react";
+import {useState} from "react";
 import {TemplateColumn} from "store/features";
 import {Color, getColorClassName, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
-import {arrayMove, horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
+import {horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {ColumnsConfiguratorColumn} from "./ColumnsConfiguratorColumn/ColumnsConfiguratorColumn";
 import {AddTemplateColumn} from "./AddTemplateColumn/AddTemplateColumn";
 import "./ColumnsConfigurator.scss";
@@ -13,7 +13,8 @@ type ColumnsConfiguratorProps = {
   className: string;
   templateId: string;
   columns: TemplateColumn[];
-  setColumns: Dispatch<SetStateAction<TemplateColumn[]>>;
+  addColumn: (templateColumn: TemplateColumn, index: number) => void;
+  moveColumn: (fromIndex: number, toIndex: number) => void;
 };
 
 export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
@@ -38,18 +39,10 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     const {active, over} = event;
 
     if (active.id !== over?.id) {
-      props.setColumns((columns) => {
-        const oldIndex = columns.findIndex((c) => c.id === active.id);
-        const newIndex = columns.findIndex((c) => c.id === over?.id);
+      const oldIndex = props.columns.findIndex((c) => c.id === active.id);
+      const newIndex = props.columns.findIndex((c) => c.id === over?.id);
 
-        const updatedColumns = arrayMove(columns, oldIndex, newIndex);
-
-        // Update the index property for each column
-        return updatedColumns.map((column, index) => ({
-          ...column,
-          index,
-        }));
-      });
+      props.moveColumn(oldIndex, newIndex);
     }
 
     // don't forget to clear states
@@ -121,13 +114,12 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
       description: "",
       color,
       visible: false,
-      index: -1,
+      index: -1, // will be overwritten by reducer
     };
-    if (alignment === "left") {
-      props.setColumns((curr) => [newColumn, ...curr]);
-    } else {
-      props.setColumns((curr) => [...curr, newColumn]);
-    }
+
+    const index = alignment === "left" ? 0 : props.columns.length;
+
+    props.addColumn(newColumn, index);
   };
 
   if (props.columns.length === 0) {
