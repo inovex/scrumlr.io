@@ -11,7 +11,7 @@ import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
-import {RECOMMENDED_TEMPLATES} from "constants/templates";
+import {DEFAULT_TEMPLATE_ID, RECOMMENDED_TEMPLATES} from "constants/templates";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -38,6 +38,9 @@ export const Templates = () => {
 
   // simple comparison between template name and search input
   const matchSearchInput = (template: Template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase());
+
+  // default template, which is in the state should not be shown.
+  const excludeDefaultTemplate = (template: Template) => template.id !== DEFAULT_TEMPLATE_ID;
 
   // ironically, since templates and their columns are handled separately, we need to stitch them back together
   // to a common object in order to avoid losing information (since recommended templates don't have associated cols)
@@ -90,9 +93,12 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard onClick={showCreateTemplateView} />
-              {templates.filter(matchSearchInput).map((template) => (
-                <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} />
-              ))}
+              {templates
+                .filter(matchSearchInput)
+                .filter(excludeDefaultTemplate)
+                .map((template) => (
+                  <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} />
+                ))}
             </div>
           </section>
         )}
