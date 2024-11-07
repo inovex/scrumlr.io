@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {AccessPolicy, TemplateColumn} from "store/features";
+import {AccessPolicy, addTemplateColumnOptimistically, moveTemplateColumnOptimistically, TemplateColumn} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
@@ -33,13 +33,18 @@ const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
 // changes will only be saved after clicking the button and are local till then.
 export const TemplateEditor = () => {
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
 
   const {id} = useParams();
 
   const templateId = id ?? DEFAULT_TEMPLATE_ID;
 
-  const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === id));
-  const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === id));
+  const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === id)) ?? DEFAULT_TEMPLATE.template;
+  // no columns found? use from default template. keep in mind this is also true if template is valid, but the array is empty! logic to avoid empty array has to be checked
+  const basisColumns = useAppSelector((state) => {
+    const cols = state.templatesColumns.filter((tmplCol) => tmplCol.template === id);
+    return cols || DEFAULT_TEMPLATE.columns;
+  });
 
   // todo all these will be replaced and refer to the working local template instead
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -49,7 +54,13 @@ export const TemplateEditor = () => {
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
 
-  const [templateColumns, setTemplateColumns] = useState<TemplateColumn[]>(DEFAULT_TEMPLATE.columns);
+  const addColumn = (templateColumn: TemplateColumn, index: number) => {
+    dispatch(addTemplateColumnOptimistically({templateColumn, index}));
+  };
+
+  const moveColumn = (fromIndex: number, toIndex: number) => {
+    dispatch(moveTemplateColumnOptimistically({templateId, fromIndex, toIndex}));
+  };
 
   useEffect(() => {
     // after finding the basisTemplate template for editing, set the corresponding form values
@@ -58,12 +69,7 @@ export const TemplateEditor = () => {
       setNameInput(basisTemplate.name);
       setDescriptionInput(basisTemplate.description);
     }
-
-    // same for template columns
-    if (id && basisColumns) {
-      setTemplateColumns(basisColumns);
-    }
-  }, [id, basisColumns, basisTemplate]);
+  }, [basisTemplate, id]);
 
   const toggleDropDown = () => setOpenDropdown((curr) => !curr);
   const selectDropdownOption = (key: AccessPolicy) => {
@@ -104,7 +110,7 @@ export const TemplateEditor = () => {
         <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
       </div>
       <div className="template-editor__columns-configurator-wrapper">
-        <ColumnsConfigurator className="template-editor__columns-configurator" templateId={templateId} columns={templateColumns} />
+        <ColumnsConfigurator className="template-editor__columns-configurator" templateId={templateId} columns={basisColumns} addColumn={addColumn} moveColumn={moveColumn} />
       </div>
       <div className="template-editor__buttons">
         <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary">
