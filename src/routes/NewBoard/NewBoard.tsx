@@ -16,13 +16,13 @@ export const NewBoard = () => {
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState<string | undefined>();
   const [columnTemplate, setColumnTemplate] = useState<string | undefined>(undefined);
-  const [accessPolicy, setAccessPolicy] = useState(0);
+  const [accessPolicy, setAccessPolicy] = useState<AccessPolicy>("PUBLIC");
   const [passphrase, setPassphrase] = useState("");
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
 
   async function onCreateBoard() {
     let additionalAccessPolicyOptions = {};
-    if (accessPolicy === AccessPolicy.BY_PASSPHRASE && Boolean(passphrase)) {
+    if (accessPolicy === "BY_PASSPHRASE" && Boolean(passphrase)) {
       additionalAccessPolicyOptions = {
         passphrase,
       };
@@ -32,7 +32,7 @@ export const NewBoard = () => {
       const boardId = await API.createBoard(
         boardName,
         {
-          type: AccessPolicy[accessPolicy],
+          type: accessPolicy,
           ...additionalAccessPolicyOptions,
         },
         columnTemplates[columnTemplate].columns
@@ -41,7 +41,7 @@ export const NewBoard = () => {
     }
   }
 
-  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
+  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === "BY_PASSPHRASE" && !passphrase);
 
   return (
     <div className="new-board__wrapper">
