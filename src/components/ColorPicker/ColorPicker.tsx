@@ -34,7 +34,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
   }
 
   return (
-    <ReactFocusLock autoFocus={false} className="fix-focus-lock-placement">
+    <ReactFocusLock autoFocus className="fix-focus-lock-placement">
       <ul className="color-picker">
         <li className={`${getColorClassName(props.activeColor)} color-picker__item`}>
           <button
