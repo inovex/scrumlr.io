@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 	"scrumlr.io/server/logger"
 
 	"github.com/go-chi/render"
+	"github.com/gorilla/sessions"
 	"github.com/markbates/goth/gothic"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
@@ -72,6 +74,9 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 
 // beginAuthProviderVerification will redirect the user to the specified auth provider consent page
 func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
+	store := sessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
+	store.MaxLength(0x8000)
+	gothic.Store = store
 	gothic.BeginAuthHandler(w, r)
 }
 
