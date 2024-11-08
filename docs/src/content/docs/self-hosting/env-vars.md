@@ -100,12 +100,12 @@ Default is `false`.
 SCRUMLR_DISABLE_ANONYMOUS_LOGIN=false
 ```
 
-### Enable Experimental File Store
+### Enable Experimental File System Store
 Enables an experimental file store for session cookies.
 Required for some OIDC providers, since their session cookies exceed the size limit of 4KB.
 Default is `false`.
 ```bash
-SCRUMLR_AUTH_FILE_SYSTEM_STORE=false
+SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE=false
 ```
 
 ### Auth Callback Host

@@ -110,8 +110,8 @@ func main() {
 				Value:    false,
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
-				Name:     "auth-experimental-file-system-store",
-				EnvVars:  []string{"SCRUMLR_AUTH_FILE_SYSTEM_STORE"},
+				Name:     "auth-enable-experimental-file-system-store",
+				EnvVars:  []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
 				Usage:    "enables/disables experimental file system store, in order to allow larger session cookie sizes",
 				Required: false,
 				Value:    false,
@@ -380,7 +380,7 @@ func run(c *cli.Context) error {
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
 		c.Bool("disable-anonymous-login"),
-		c.Bool("auth-experimental-file-system-store"),
+		c.Bool("auth-enable-experimental-file-system-store"),
 	)
 
 	port := fmt.Sprintf(":%d", c.Int("port"))
