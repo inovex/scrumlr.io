@@ -92,6 +92,22 @@ The base path of the API. The default is `/`.
 SCRUMLR_BASE_PATH=''
 ```
 
+### Disable Anonymous Login
+If set to `true`, users won't be able to log in anonymously, forcing them to use a provider (any OAuth or OIDC).
+Note that if this is set to `true`, and no valid providers are available, login won't be possible at all.
+Default is `false`.
+```bash
+SCRUMLR_DISABLE_ANONYMOUS_LOGIN=false
+```
+
+### Enable Experimental File Store
+Enables an experimental file store for session cookies.
+Required for some OIDC providers, since their session cookies exceed the size limit of 4KB.
+Default is `false`.
+```bash
+SCRUMLR_AUTH_FILE_SYSTEM_STORE=false
+```
+
 ### Auth Callback Host
 The host to which the OAuth callback should redirect.
 ```bash
