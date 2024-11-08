@@ -126,6 +126,7 @@ func New(
 	// this might be required when using some OIDC providers which exceed the 4KB limit.
 	// see https://github.com/markbates/goth/pull/141
 	if s.experimentalFileSystemStore {
+		logger.Get().Infow("using experimental file system store")
 		store := gorillaSessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
 		store.MaxLength(0x8000) // 32KB should be plenty of space
 		gothic.Store = store
