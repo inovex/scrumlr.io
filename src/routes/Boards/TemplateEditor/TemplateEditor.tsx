@@ -1,7 +1,17 @@
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {AccessPolicy, addTemplateColumnOptimistically, createTemplateWithColumns, moveTemplateColumnOptimistically, TemplateColumn, TemplateWithColumns} from "store/features";
+import {
+  AccessPolicy,
+  addTemplateColumnOptimistically,
+  createTemplateWithColumns,
+  editTemplate,
+  moveTemplateColumnOptimistically,
+  createTemplateColumn,
+  editTemplateColumn,
+  TemplateColumn,
+  TemplateWithColumns,
+} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
@@ -88,7 +98,26 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         .unwrap()
         .then(() => navigate("/boards/templates"));
     } else {
-      throw new Error("not yet implemented.");
+      // edit => update existing columns, create missing columns
+      const editTemplateDispatch = dispatch(
+        editTemplate({
+          id: basisTemplate.id,
+          overwrite: {
+            name: nameInput,
+            description: descriptionInput,
+            accessPolicy: AccessPolicy[activeOptionKey] as keyof typeof AccessPolicy,
+          },
+        })
+      );
+
+      const columnsToEditDispatches = basisColumns.filter((tmplCol) => !tmplCol.temporary).map((ce) => dispatch(editTemplateColumn({templateId, columnId: ce.id, overwrite: ce})));
+      const columnsToCreateDispatches = basisColumns.filter((tmplCol) => tmplCol.temporary === true).map((cc) => dispatch(createTemplateColumn({templateId, templateColumn: cc})));
+
+      Promise.all([editTemplateDispatch, ...columnsToEditDispatches, ...columnsToCreateDispatches])
+        .then(() => navigate("/boards/templates"))
+        .catch((e) => {
+          throw new Error("Error while editing template", e);
+        });
     }
   };
 
