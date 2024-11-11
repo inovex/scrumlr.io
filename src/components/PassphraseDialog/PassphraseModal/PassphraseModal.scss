@@ -1,0 +1,47 @@
+@import "constants/style";
+
+.password-modal {
+  position: absolute;
+  backdrop-filter: blur(4px);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.password-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.password-modal__container {
+  padding: $spacing--lg;
+  background: $gray--000;
+  border-radius: 0.5em;
+  box-shadow: 0 10px 20px rgba($navy--900, 0.2);
+  width: 30em;
+}
+
+.import-board__action {
+  position: relative;
+}
+.password-modal__close {
+  width: $icon--large;
+}
+
+.password-modal__close:hover {
+  cursor: pointer;
+}
+
+.password-modal__header span {
+  margin: 0;
+}
+
+[theme="dark"] {
+  .password-modal__container {
+    background: $navy--600;
+    color: white;
+  }
+}
