@@ -67,8 +67,8 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
     })
     .addCase(createTemplateColumn.fulfilled, (state, action) =>
       state.map(
-        // reset temporary, as this is now officially from the backend
-        (t) => (t.id === action.payload.id ? {...action.payload, temporary: false} : t)
+        // reset temporary (flag and id), as this is now officially from the backend
+        (t) => (t.id === action.payload.temporaryColumnId ? {...action.payload.column, temporary: false} : t)
       )
     )
     // in theory, this should actually change nothing as all changes have been made optimistically, but for the sake of completeness we'll do it anyway

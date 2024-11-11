@@ -18,7 +18,7 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     {
       id: uniqueId(DEFAULT_TEMPLATE_COLUMN_ID_PREFIX),
       template: DEFAULT_TEMPLATE_ID,
-      name: "Lean Coffee",
+      name: "Default Main",
       description: "",
       color: "backlog-blue",
       visible: true,
@@ -27,7 +27,7 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     {
       id: uniqueId(DEFAULT_TEMPLATE_COLUMN_ID_PREFIX),
       template: DEFAULT_TEMPLATE_ID,
-      name: "Actions",
+      name: "Default Action",
       description: "",
       color: "planning-pink",
       visible: false,

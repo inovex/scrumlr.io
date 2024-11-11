@@ -8,13 +8,14 @@ export const getTemplateColumns = createAsyncThunk<TemplateColumn[], string, {st
   return columns;
 });
 
-export const createTemplateColumn = createAsyncThunk<TemplateColumn, {templateId: string; templateColumn: TemplateColumn}, {state: ApplicationState}>(
-  "templateColumns/createColumn",
-  async (payload) => {
-    const column = await API.createTemplateColumn(payload.templateId, payload.templateColumn);
-    return column;
-  }
-);
+export const createTemplateColumn = createAsyncThunk<
+  {temporaryColumnId: string; column: TemplateColumn},
+  {templateId: string; templateColumn: TemplateColumn},
+  {state: ApplicationState}
+>("templateColumns/createColumn", async (payload) => {
+  const column = await API.createTemplateColumn(payload.templateId, payload.templateColumn);
+  return {column, temporaryColumnId: payload.templateColumn.id};
+});
 
 export const editTemplateColumn = createAsyncThunk<TemplateColumn, {templateId: string; columnId: string; overwrite: Partial<TemplateColumn>}, {state: ApplicationState}>(
   "templateColumns/editColumn",
