@@ -36,6 +36,28 @@ export const TemplatesAPI = {
     }
   },
 
+  createTemplate: async (templateWithColumns: TemplateWithColumns) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/templates`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({
+          ...templateWithColumns.template,
+          // some naming inconsistencies here ...
+          columnTemplates: templateWithColumns.columns,
+        }),
+      });
+
+      if (response.status === 201) {
+        return (await response.json()) as Template;
+      }
+
+      throw new Error(`create template request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to create template with error: ${error}`);
+    }
+  },
+
   editTemplate: async (templateId: string, overwrite: Partial<Template>) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}`, {
