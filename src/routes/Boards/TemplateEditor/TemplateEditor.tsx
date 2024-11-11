@@ -29,10 +29,12 @@ const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   }
 };
 
+type TemplateColumnProps = {mode: "create" | "edit"};
+
 // component to edit a template.
 // can be either used to edit an existing template (referred by their uuid) or create one from scratch.
 // changes will only be saved after clicking the button and are local till then.
-export const TemplateEditor = () => {
+export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
 
