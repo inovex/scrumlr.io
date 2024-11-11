@@ -6,17 +6,13 @@ import {Reaction} from "../reactions";
 import {Vote} from "../votes";
 import {Voting} from "../votings";
 
-export enum AccessPolicy {
-  "PUBLIC" = 0,
-  "BY_PASSPHRASE" = 1,
-  "BY_INVITE" = 2,
-}
+export type AccessPolicy = "PUBLIC" | "BY_PASSPHRASE" | "BY_INVITE";
 
 export interface Board {
   id: string;
 
   name?: string;
-  accessPolicy: keyof typeof AccessPolicy;
+  accessPolicy: AccessPolicy;
   showAuthors: boolean;
   showNotesOfOtherUsers: boolean;
   showNoteReactions: boolean;

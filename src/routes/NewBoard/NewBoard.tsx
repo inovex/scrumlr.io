@@ -22,7 +22,7 @@ export const NewBoard = () => {
   const navigate = useNavigate();
   const [boardName, setBoardName] = useState<string | undefined>();
   const [columnTemplate, setColumnTemplate] = useState<string | undefined>(undefined);
-  const [accessPolicy, setAccessPolicy] = useState(0);
+  const [accessPolicy, setAccessPolicy] = useState<AccessPolicy>("PUBLIC");
   const [passphrase, setPassphrase] = useState("");
   const [extendedConfiguration, setExtendedConfiguration] = useState(false);
   const [importFile, setImportFileConfiguration] = useState(false);
@@ -101,7 +101,7 @@ export const NewBoard = () => {
 
   const onCreateBoard = async () => {
     let additionalAccessPolicyOptions = {};
-    if (accessPolicy === AccessPolicy.BY_PASSPHRASE && Boolean(passphrase)) {
+    if (accessPolicy === "BY_PASSPHRASE" && Boolean(passphrase)) {
       additionalAccessPolicyOptions = {
         passphrase,
       };
@@ -112,7 +112,7 @@ export const NewBoard = () => {
       const boardId = await API.createBoard(
         boardName,
         {
-          type: AccessPolicy[accessPolicy],
+          type: accessPolicy,
           ...additionalAccessPolicyOptions,
         },
         columnTemplates[columnTemplate].columns
