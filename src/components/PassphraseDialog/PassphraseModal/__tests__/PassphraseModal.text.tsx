@@ -3,7 +3,6 @@ import {t} from "i18next";
 import {PassphraseModal} from "../PassphraseModal";
 import {fireEvent} from "@testing-library/react";
 import {useState} from "react";
-import {AccessPolicy} from "store/features";
 
 describe("<PassphraseDialog />", () => {
   test("snapshot test", () => {
