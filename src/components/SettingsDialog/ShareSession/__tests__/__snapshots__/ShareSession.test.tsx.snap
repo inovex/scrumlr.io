@@ -28,7 +28,6 @@ Object {
             <canvas
               class="share-qr-code-option__qrcode"
               height="1024"
-              role="img"
               style="height: 1024px; width: 1024px;"
               width="1024"
             />
@@ -66,7 +65,6 @@ Object {
           <canvas
             class="share-qr-code-option__qrcode"
             height="1024"
-            role="img"
             style="height: 1024px; width: 1024px;"
             width="1024"
           />

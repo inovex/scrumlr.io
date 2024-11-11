@@ -48,6 +48,6 @@ describe("<PassphraseDialog />", () => {
     const passwordInput = getByPlaceholderText(t("PassphraseDialog.inputPlaceholder"));
     fireEvent.change(passwordInput, {target: {value: "Passphrase"}});
     fireEvent.click(submitButton);
-    expect(onSubmit).toHaveBeenCalledWith("Passphrase", AccessPolicy.BY_PASSPHRASE);
+    expect(onSubmit).toHaveBeenCalledWith("Passphrase", "BY_PASSPHRASE");
   });
 });
