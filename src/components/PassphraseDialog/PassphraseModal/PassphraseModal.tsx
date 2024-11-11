@@ -90,7 +90,7 @@ export const PassphraseModal = ({passphrase, onPassphraseChange, onSubmit, onClo
             color="primary"
             aria-disabled={passphrase.length <= 0}
             disabled={passphrase.length <= 0}
-            onClick={() => onSubmit(passphrase, AccessPolicy.BY_PASSPHRASE)}
+            onClick={() => onSubmit(passphrase, "BY_PASSPHRASE")}
           >
             {t("PassphraseModal.newPassword")}
           </Button>
@@ -98,7 +98,7 @@ export const PassphraseModal = ({passphrase, onPassphraseChange, onSubmit, onClo
           <Button
             className="new-board__action import-board__action"
             color="primary"
-            onClick={() => onSubmit("", AccessPolicy.PUBLIC)} // Call onSubmit with an empty string to continue without a password
+            onClick={() => onSubmit("", "PUBLIC")} // Call onSubmit with an empty string to continue without a password
           >
             {t("PassphraseModal.continuePublic")}
           </Button>

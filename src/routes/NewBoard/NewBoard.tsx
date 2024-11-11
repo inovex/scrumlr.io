@@ -44,7 +44,7 @@ export const NewBoard = () => {
       fileInputRef.current.value = "";
     }
     setFile(new File([], ""));
-    setAccessPolicy(0);
+    setAccessPolicy("PUBLIC");
     setPassphrase("");
     setShowPasswordModal(false);
   };
@@ -67,7 +67,7 @@ export const NewBoard = () => {
         const data = JSON.parse(content) as BoardImportData;
         if (data.board.accessPolicy === "BY_PASSPHRASE") {
           setShowPasswordModal(true);
-          setAccessPolicy(AccessPolicy.BY_PASSPHRASE);
+          setAccessPolicy("BY_PASSPHRASE");
         }
         setImportBoard(data);
       } catch (error) {
@@ -80,7 +80,7 @@ export const NewBoard = () => {
   };
 
   const onImportBoard = () => {
-    if (completeBoard && accessPolicy === AccessPolicy.BY_PASSPHRASE && passphrase) {
+    if (completeBoard && accessPolicy === "BY_PASSPHRASE" && passphrase) {
       completeBoard.board.passphrase = passphrase;
     }
     dispatch(importBoard(JSON.stringify(completeBoard)));
@@ -89,7 +89,7 @@ export const NewBoard = () => {
   const handlePasswordSubmit = (password: string, newAccessPolicy: AccessPolicy) => {
     if (newAccessPolicy !== accessPolicy) {
       if (completeBoard) {
-        completeBoard.board.accessPolicy = AccessPolicy[newAccessPolicy];
+        completeBoard.board.accessPolicy = newAccessPolicy;
       }
     }
 
@@ -121,8 +121,8 @@ export const NewBoard = () => {
     }
   };
 
-  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === AccessPolicy.BY_PASSPHRASE && !passphrase);
-  const isImportBoardDisabled = !(loadedFile && loadedFile.size > 0) || accessPolicy === AccessPolicy.BY_PASSPHRASE;
+  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === "BY_PASSPHRASE" && !passphrase);
+  const isImportBoardDisabled = !(loadedFile && loadedFile.size > 0) || accessPolicy === "BY_PASSPHRASE";
   return (
     <div className="new-board__wrapper">
       <div className="new-board">
