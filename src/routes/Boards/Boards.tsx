@@ -62,8 +62,10 @@ export const Boards = () => {
       case "sessions":
         return t("Sessions.title");
       case "create":
-      default:
-        return t("CreateBoard.title");
+        return t("Templates.TemplateEditor.createTitle");
+      case "edit":
+      default: // TS is smart enough to recognize boardView is exhaustive, but ESLint isn't
+        return t("Templates.TemplateEditor.editTitle");
     }
   };
 

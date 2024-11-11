@@ -11,6 +11,7 @@ import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as ShuffleIcon} from "assets/icons/shuffle.svg";
 import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
+import {ReactComponent as AddIcon} from "assets/icons/plus.svg";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import classNames from "classnames";
 import {Button} from "components/Button";
@@ -119,10 +120,10 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
       </div>
       <div className="template-editor__buttons">
         <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary">
-          Go Back
+          {t("Templates.TemplateEditor.cancel")}
         </Button>
-        <Button className={classNames("template-editor__button", "template-editor__button--create")} type="primary">
-          Create Board
+        <Button className={classNames("template-editor__button", "template-editor__button--create")} type="primary" icon={<AddIcon />}>
+          {t("Templates.TemplateEditor.save")}
         </Button>
       </div>
     </div>

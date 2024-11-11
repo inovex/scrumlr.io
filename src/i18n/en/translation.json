@@ -27,6 +27,13 @@
       "column_other": "{{count}} Columns",
       "start": "Start",
       "save": "Save"
+    },
+
+    "TemplateEditor": {
+      "createTitle": "Create a Template",
+      "editTitle": "Edit a Template",
+      "cancel": "Cancel",
+      "save": "Save"
     }
   },
   "Sessions": {

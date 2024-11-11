@@ -27,6 +27,13 @@
       "column_other": "{{count}} Spalten",
       "start": "Starten",
       "save": "Speichern"
+    },
+
+    "TemplateEditor": {
+      "create": "Erstelle eine Vorlage",
+      "edit": "Bearbeite eine Vorlage",
+      "cancel": "Abbrechen",
+      "save": "Speichern"
     }
   },
   "Sessions": {
