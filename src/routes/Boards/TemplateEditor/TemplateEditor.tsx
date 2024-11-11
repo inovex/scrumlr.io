@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {AccessPolicy, addTemplateColumnOptimistically, moveTemplateColumnOptimistically, TemplateColumn} from "store/features";
+import {AccessPolicy, addTemplateColumnOptimistically, createTemplateWithColumns, moveTemplateColumnOptimistically, TemplateColumn, TemplateWithColumns} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
@@ -15,7 +15,7 @@ import {ReactComponent as AddIcon} from "assets/icons/plus.svg";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import classNames from "classnames";
 import {Button} from "components/Button";
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import "./TemplateEditor.scss";
 
 // todo maybe just change the translation keys to AccessPolicy => lowercase
@@ -37,6 +37,7 @@ type TemplateColumnProps = {mode: "create" | "edit"};
 // changes will only be saved after clicking the button and are local till then.
 export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   const {t} = useTranslation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   // id is set in /edit/:id route (not checked whether its valid though)
@@ -65,6 +66,30 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
 
   const moveColumn = (fromIndex: number, toIndex: number) => {
     dispatch(moveTemplateColumnOptimistically({templateId, fromIndex, toIndex}));
+  };
+
+  const cancelAndGoBack = () => navigate("/boards/templates");
+
+  const saveTemplate = () => {
+    if (!basisTemplate || !basisColumns) return;
+    if (mode === "create") {
+      // overwrite from form
+      const newTemplateWithColumns: TemplateWithColumns = {
+        template: {
+          ...basisTemplate,
+          name: nameInput,
+          description: descriptionInput,
+          accessPolicy: AccessPolicy[activeOptionKey] as keyof typeof AccessPolicy, // ... this will look better in a sec
+        },
+        columns: basisColumns,
+      };
+      // create and go back on success
+      dispatch(createTemplateWithColumns(newTemplateWithColumns))
+        .unwrap()
+        .then(() => navigate("/boards/templates"));
+    } else {
+      throw new Error("not yet implemented.");
+    }
   };
 
   useEffect(() => {
@@ -119,10 +144,10 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         <ColumnsConfigurator className="template-editor__columns-configurator" templateId={templateId} columns={basisColumns} addColumn={addColumn} moveColumn={moveColumn} />
       </div>
       <div className="template-editor__buttons">
-        <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary">
+        <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary" onClick={cancelAndGoBack}>
           {t("Templates.TemplateEditor.cancel")}
         </Button>
-        <Button className={classNames("template-editor__button", "template-editor__button--create")} type="primary" icon={<AddIcon />}>
+        <Button className={classNames("template-editor__button", "template-editor__button--create")} type="primary" icon={<AddIcon />} onClick={saveTemplate}>
           {t("Templates.TemplateEditor.save")}
         </Button>
       </div>
