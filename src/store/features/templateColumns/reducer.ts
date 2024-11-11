@@ -5,7 +5,7 @@ import {TemplateColumnsState} from "./types";
 import {getTemplates} from "../templates";
 import {addTemplateOptimistically} from "../templates/actions";
 import {addTemplateColumnOptimistically, moveTemplateColumnOptimistically} from "./actions";
-import {getTemplateColumns} from "./thunks";
+import {createTemplateColumn, editTemplateColumn, getTemplateColumns} from "./thunks";
 
 const initialState: TemplateColumnsState = [...DEFAULT_TEMPLATE.columns];
 
@@ -35,6 +35,7 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
     )
     .addCase(addTemplateOptimistically, (state, action) => [...state, ...action.payload.columns])
     .addCase(addTemplateColumnOptimistically, (state, action) => {
+      action.payload.templateColumn.temporary = true; // tag as temporary, so it can be properly persisted later
       // since we potentially have template columns by many different templates here, we need to differentiate them.
       // after adding/moving, it is asserted that the indices are correct afterward.
       const relatedColumns = state.filter((column) => column.template === action.payload.templateColumn.template);
@@ -63,5 +64,13 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
         index,
       }));
       return [...unrelatedColumns, ...updatedColumnsWithIndices];
-    });
+    })
+    .addCase(createTemplateColumn.fulfilled, (state, action) =>
+      state.map(
+        // reset temporary, as this is now officially from the backend
+        (t) => (t.id === action.payload.id ? {...action.payload, temporary: false} : t)
+      )
+    )
+    // in theory, this should actually change nothing as all changes have been made optimistically, but for the sake of completeness we'll do it anyway
+    .addCase(editTemplateColumn.fulfilled, (state, action) => state.map((t) => (t.id === action.payload.id ? {...action.payload} : t)));
 });
