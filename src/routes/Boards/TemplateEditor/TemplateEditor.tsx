@@ -62,7 +62,9 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === templateId));
   // no columns found? use from default template. keep in mind this is also true if template is valid, but the array is empty! logic to avoid empty array has to be checked
   // template columns are displayed in order of their index.
-  const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === templateId)).sort((a, b) => a.index - b.index);
+  const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === templateId))
+    .filter((c) => !c.deleteFlag)
+    .sort((a, b) => a.index - b.index);
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>(AccessPolicy.PUBLIC);
