@@ -9,6 +9,7 @@ import {createTemplateColumn, deleteTemplateColumn, editTemplateColumn, getTempl
 
 const initialState: TemplateColumnsState = [...DEFAULT_TEMPLATE.columns];
 
+/* FIXME fuck all of this, it's just generally a bad idea trying to synchronize frontend/backend state manually. */
 export const templateColumnsReducer = createReducer(initialState, (builder) => {
   builder
     // each full template has a column prop which is an array, so we need to map out the columns prop and also flatten the array
@@ -38,20 +39,19 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
       action.payload.templateColumn.temporaryFlag = true; // tag as temporary, so it can be properly persisted later
       // since we potentially have template columns by many different templates here, we need to differentiate them.
       // after adding/moving, it is asserted that the indices are correct afterward.
-      const relatedColumns = state.filter((column) => column.template === action.payload.templateColumn.template);
       const unrelatedColumns = state.filter((column) => column.template !== action.payload.templateColumn.template);
-
-      // insert the new column at the specified index in the related columns
-      const updatedRelatedColumns = relatedColumns.toSpliced(action.payload.index, 0, action.payload.templateColumn);
-
-      // update the index for each column in the related group
-      const updatedColumnsWithIndices = updatedRelatedColumns.map((column, i) => ({
-        ...column,
-        index: i,
-      }));
+      const relatedColumns = state
+        .filter((column) => column.template === action.payload.templateColumn.template)
+        // insert the new column at the specified index in the related columns
+        .toSpliced(action.payload.index, 0, action.payload.templateColumn)
+        // update the index for each column in the related group
+        .map((column, i) => ({
+          ...column,
+          index: i,
+        }));
 
       // combine unrelated columns with updated related columns
-      return [...unrelatedColumns, ...updatedColumnsWithIndices];
+      return [...unrelatedColumns, ...relatedColumns];
     })
     .addCase(moveTemplateColumnOptimistically, (state, action) => {
       const relatedColumns = state.filter((column) => column.template === action.payload.templateId);

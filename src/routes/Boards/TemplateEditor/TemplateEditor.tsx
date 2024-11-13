@@ -63,8 +63,8 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   // no columns found? use from default template. keep in mind this is also true if template is valid, but the array is empty! logic to avoid empty array has to be checked
   // template columns are displayed in order of their index.
   const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === templateId))
-    // remove columns that are flagged to be deleted
-    .filter((c) => !c.deleteFlag)
+    // remove columns that are flagged to be deleted TODO maybe irrelevant?
+    // .filter((c) => !c.deleteFlag)
     // presort by index for DnD
     .sort((a, b) => a.index - b.index);
 
@@ -126,10 +126,14 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
       );
 
       const columnsToEditDispatches = basisColumns
-        .filter((tmplCol) => !tmplCol.createFlag && !tmplCol.deleteFlag)
+        .filter((tmplCol) => !tmplCol.temporaryFlag && !tmplCol.toBeDeletedFlag)
         .map((ce) => dispatch(editTemplateColumn({templateId, columnId: ce.id, overwrite: ce})));
-      const columnsToCreateDispatches = basisColumns.filter((tmplCol) => tmplCol.createFlag).map((cc) => dispatch(createTemplateColumn({templateId, templateColumn: cc})));
-      const columnsToDeleteDispatches = basisColumns.filter((tmplCol) => tmplCol.deleteFlag).map((cd) => dispatch(deleteTemplateColumn({templateId, columnId: cd.id})));
+      const columnsToCreateDispatches = basisColumns
+        .filter((tmplCol) => tmplCol.temporaryFlag && !tmplCol.toBeDeletedFlag)
+        .map((cc) => dispatch(createTemplateColumn({templateId, templateColumn: cc})));
+      const columnsToDeleteDispatches = basisColumns
+        .filter((tmplCol) => tmplCol.toBeDeletedFlag && !tmplCol.temporaryFlag)
+        .map((cd) => dispatch(deleteTemplateColumn({templateId, columnId: cd.id})));
 
       Promise.all([editTemplateDispatch, ...columnsToEditDispatches, ...columnsToCreateDispatches, ...columnsToDeleteDispatches])
         .then(() => navigate("/boards/templates"))
