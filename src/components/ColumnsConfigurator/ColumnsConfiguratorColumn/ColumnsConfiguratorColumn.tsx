@@ -19,6 +19,8 @@ type ColumnsConfiguratorColumnProps = {
   activeDrag?: boolean;
   activeDrop?: boolean;
   allColumns: TemplateColumn[];
+  editColumn?: (templateColumn: TemplateColumn, overwrite: Partial<TemplateColumn>) => void;
+  deleteColumn?: (templateColumn: TemplateColumn) => void;
 };
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
@@ -82,7 +84,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         ) : (
           <HiddenIcon className={classNames("template-column__icon", "template-column__icon--hidden")} />
         )}
-        <DeleteIcon className={classNames("template-column__icon", "template-column__icon--delete")} />
+        <DeleteIcon className={classNames("template-column__icon", "template-column__icon--delete")} onClick={() => props.deleteColumn?.(props.column)} />
       </div>
     </div>
   );

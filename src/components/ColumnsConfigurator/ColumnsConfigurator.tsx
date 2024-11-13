@@ -15,6 +15,8 @@ type ColumnsConfiguratorProps = {
   columns: TemplateColumn[];
   addColumn: (templateColumn: TemplateColumn, index: number) => void;
   moveColumn: (fromIndex: number, toIndex: number) => void;
+  editColumn: (templateColumn: TemplateColumn, overwrite: Partial<TemplateColumn>) => void;
+  deleteColumn: (templateColumn: TemplateColumn) => void;
 };
 
 export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
@@ -144,6 +146,8 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
                   activeDrop={column.id === dropElementId}
                   placement={calcPlacement(potentialIndex)}
                   allColumns={props.columns}
+                  editColumn={props.editColumn}
+                  deleteColumn={props.deleteColumn}
                 />
               );
             })}

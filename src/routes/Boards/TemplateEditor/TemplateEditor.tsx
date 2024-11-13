@@ -11,6 +11,9 @@ import {
   editTemplateColumn,
   TemplateColumn,
   TemplateWithColumns,
+  deleteTemplateColumn,
+  editTemplateColumnOptimistically,
+  deleteTemplateColumnOptimistically,
 } from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
@@ -78,6 +81,14 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
     dispatch(moveTemplateColumnOptimistically({templateId, fromIndex, toIndex}));
   };
 
+  const editColumn = (templateColumn: TemplateColumn, overwrite: Partial<TemplateColumn>) => {
+    dispatch(editTemplateColumnOptimistically({columnId: templateColumn.id, overwrite}));
+  };
+
+  const deleteColumn = (templateColumn: TemplateColumn) => {
+    dispatch(deleteTemplateColumnOptimistically({columnId: templateColumn.id}));
+  };
+
   const cancelAndGoBack = () => navigate("/boards/templates");
 
   const saveTemplate = () => {
@@ -110,10 +121,13 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         })
       );
 
-      const columnsToEditDispatches = basisColumns.filter((tmplCol) => !tmplCol.temporary).map((ce) => dispatch(editTemplateColumn({templateId, columnId: ce.id, overwrite: ce})));
-      const columnsToCreateDispatches = basisColumns.filter((tmplCol) => tmplCol.temporary === true).map((cc) => dispatch(createTemplateColumn({templateId, templateColumn: cc})));
+      const columnsToEditDispatches = basisColumns
+        .filter((tmplCol) => !tmplCol.createFlag && !tmplCol.deleteFlag)
+        .map((ce) => dispatch(editTemplateColumn({templateId, columnId: ce.id, overwrite: ce})));
+      const columnsToCreateDispatches = basisColumns.filter((tmplCol) => tmplCol.createFlag).map((cc) => dispatch(createTemplateColumn({templateId, templateColumn: cc})));
+      const columnsToDeleteDispatches = basisColumns.filter((tmplCol) => tmplCol.deleteFlag).map((cd) => dispatch(deleteTemplateColumn({templateId, columnId: cd.id})));
 
-      Promise.all([editTemplateDispatch, ...columnsToEditDispatches, ...columnsToCreateDispatches])
+      Promise.all([editTemplateDispatch, ...columnsToEditDispatches, ...columnsToCreateDispatches, ...columnsToDeleteDispatches])
         .then(() => navigate("/boards/templates"))
         .catch((e) => {
           throw new Error("Error while editing template", e);
@@ -170,7 +184,15 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
       </div>
       <div className="template-editor__columns-configurator-wrapper">
-        <ColumnsConfigurator className="template-editor__columns-configurator" templateId={templateId} columns={basisColumns} addColumn={addColumn} moveColumn={moveColumn} />
+        <ColumnsConfigurator
+          className="template-editor__columns-configurator"
+          templateId={templateId}
+          columns={basisColumns}
+          addColumn={addColumn}
+          moveColumn={moveColumn}
+          editColumn={editColumn}
+          deleteColumn={deleteColumn}
+        />
       </div>
       <div className="template-editor__buttons">
         <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary" onClick={cancelAndGoBack}>
