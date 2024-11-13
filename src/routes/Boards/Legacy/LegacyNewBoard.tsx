@@ -176,8 +176,8 @@ export const LegacyNewBoard = () => {
                     }}
                   >
                     <div>
-                      <div className="new-board__mode-name">{t("NewBoard.importBoard")}</div>
-                      <div className="new-board__mode-description">{t("NewBoard.uploadFile")}</div>
+                      <div className="new-board__mode-name">{t("LegacyNewBoard.importBoard")}</div>
+                      <div className="new-board__mode-description">{t("LegacyNewBoard.uploadFile")}</div>
                     </div>
                   </div>
                 </label>
@@ -205,7 +205,7 @@ export const LegacyNewBoard = () => {
           </Button>
         ) : (
           <Button className="new-board__action" onClick={onImportBoard} color="primary" disabled={isImportBoardDisabled}>
-            {t("NewBoard.importNewBoard")}
+            {t("LegacyNewBoard.importNewBoard")}
           </Button>
         )}
         {!extendedConfiguration && (
