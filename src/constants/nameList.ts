@@ -98,23 +98,3 @@ export const ADJECTIVES: NameList = {
   Y: ["Yappy", "Yodeling", "Youthful", "Yummy", "Yearling", "Yelping", "Young"],
   Z: ["Zany", "Zealous", "Zigzag", "Zazzy", "Zappy", "Zestful", "Zen", "Zingy", "Zippy"],
 };
-
-export const getRandomName = () => {
-  let randomCreature;
-  let randomAdjective;
-
-  const oneOrZero = Math.random() > 0.5 ? 1 : 0;
-  if (oneOrZero === 1) {
-    const keys = Object.keys(ANIMAL_NAMES);
-    const randomKey = keys[Math.floor(keys.length * Math.random())];
-    randomCreature = ANIMAL_NAMES[randomKey][Math.floor(ANIMAL_NAMES[randomKey].length * Math.random())];
-    randomAdjective = ADJECTIVES[randomKey][Math.floor(ADJECTIVES[randomKey].length * Math.random())];
-  } else {
-    const keys = Object.keys(MYTHICAL_CREATURES);
-    const randomKey = keys[Math.floor(keys.length * Math.random())];
-    randomCreature = MYTHICAL_CREATURES[randomKey][Math.floor(MYTHICAL_CREATURES[randomKey].length * Math.random())];
-    randomAdjective = ADJECTIVES[randomKey][Math.floor(ADJECTIVES[randomKey].length * Math.random())];
-  }
-
-  return `${randomAdjective} ${randomCreature}`;
-};

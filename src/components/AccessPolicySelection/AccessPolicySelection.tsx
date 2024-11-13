@@ -22,16 +22,10 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
   const {t} = useTranslation();
   const [visiblePassphrase, setVisiblePassphrase] = useState(true);
 
-  const handlePolicyChange = (newAccessPolicy: AccessPolicy) => {
-    if (newAccessPolicy >= 0 && newAccessPolicy <= 2) {
-      onAccessPolicyChange(newAccessPolicy);
-    }
-  };
-
   let AccessPolicyDescription;
   let AdditionalAccessPolicySettings;
   switch (accessPolicy) {
-    case AccessPolicy.BY_PASSPHRASE:
+    case "BY_PASSPHRASE":
       AccessPolicyDescription = <span>{t("AccessPolicySelection.byPassphrase")}</span>;
       AdditionalAccessPolicySettings = (
         <>
@@ -68,10 +62,10 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
         </>
       );
       break;
-    case AccessPolicy.BY_INVITE:
+    case "BY_INVITE":
       AccessPolicyDescription = <span>{t("AccessPolicySelection.manualVerification")}</span>;
       break;
-    case AccessPolicy.PUBLIC:
+    case "PUBLIC":
     default:
       AccessPolicyDescription = <span>{t("AccessPolicySelection.public")}</span>;
       break;
@@ -84,22 +78,22 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       <div className="access-policy-selection__tabs">
         <LegacyButton
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.PUBLIC ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.PUBLIC)}
+          variant={accessPolicy === "PUBLIC" ? "contained" : "outlined"}
+          onClick={() => onAccessPolicyChange("PUBLIC")}
         >
           {t("AccessPolicySelection.publicTitle")}
         </LegacyButton>
         <LegacyButton
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.BY_PASSPHRASE ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.BY_PASSPHRASE)}
+          variant={accessPolicy === "BY_PASSPHRASE" ? "contained" : "outlined"}
+          onClick={() => onAccessPolicyChange("BY_PASSPHRASE")}
         >
           {t("AccessPolicySelection.byPassphraseTitle")}
         </LegacyButton>
         <LegacyButton
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.BY_INVITE ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.BY_INVITE)}
+          variant={accessPolicy === "BY_INVITE" ? "contained" : "outlined"}
+          onClick={() => onAccessPolicyChange("BY_INVITE")}
         >
           {t("AccessPolicySelection.manualVerificationTitle")}
         </LegacyButton>

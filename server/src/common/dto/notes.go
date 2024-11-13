@@ -77,6 +77,15 @@ type NoteCreateRequest struct {
 	User  uuid.UUID `json:"-"`
 }
 
+type NoteImportRequest struct {
+	// The text of the note.
+	Text     string       `json:"text"`
+	Position NotePosition `json:"position"`
+
+	Board uuid.UUID `json:"-"`
+	User  uuid.UUID `json:"-"`
+}
+
 // NoteUpdateRequest represents the request to update a note.
 type NoteUpdateRequest struct {
 
