@@ -8,7 +8,10 @@
     "extendedConfigurationButton": "Extended configuration",
     "basicConfigurationButton": "Template selection",
     "extendedConfigurationTitle": "Extended configuration",
-    "basicConfigurationTitle": "Choose a template"
+    "basicConfigurationTitle": "Choose a template",
+    "importBoard": "Import JSON",
+    "uploadFile": "Upload file or drag here",
+    "importNewBoard": "Import now"
   },
   "Templates": {
     "switchTitle": "Templates",
@@ -181,6 +184,15 @@
     "inputPlaceholder": "Password",
     "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
   },
+  "PassphraseModal": {
+    "title": "Assign new password",
+    "continuePublic": "Ohne Passwort fortfahren",
+    "newPassword": "Open Board",
+    "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.",
+    "submit": "Open board",
+    "inputPlaceholder": "Password",
+    "showPassword": "Show password"
+  },
   "Timer": {
     "endTimer": "End timer",
     "addOneMinute": "Increase timer by one minute",
@@ -310,7 +322,8 @@
     "ready": "Are you ready?",
     "readyButton": "Ready!",
     "boardReactionsDisabled": "Board reactions are disabled",
-    "enable": "Enable"
+    "enable": "Enable",
+    "failedImport": "Error importing the file"
   },
   "Language": {
     "german": "German",
