@@ -34,9 +34,9 @@ import "./TemplateEditor.scss";
 // todo maybe just change the translation keys to AccessPolicy => lowercase
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   switch (policy) {
-    case AccessPolicy.PUBLIC:
+    case "PUBLIC":
       return "open";
-    case AccessPolicy.BY_PASSPHRASE:
+    case "BY_PASSPHRASE":
       return "password";
     default:
       return "approval";
@@ -69,7 +69,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
     .sort((a, b) => a.index - b.index);
 
   const [openDropdown, setOpenDropdown] = useState(false);
-  const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>(AccessPolicy.PUBLIC);
+  const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>("PUBLIC");
 
   // states to keep track of changes of the form.
   // could be changed to directly refer to the basisTemplate, but that would probably cause a lot of dispatches
@@ -104,7 +104,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
           ...basisTemplate,
           name: nameInput,
           description: descriptionInput,
-          accessPolicy: AccessPolicy[activeOptionKey] as keyof typeof AccessPolicy, // ... this will look better in a sec
+          accessPolicy: activeOptionKey,
         },
         columns: basisColumns,
       };
@@ -120,7 +120,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
           overwrite: {
             name: nameInput,
             description: descriptionInput,
-            accessPolicy: AccessPolicy[activeOptionKey] as keyof typeof AccessPolicy,
+            accessPolicy: activeOptionKey,
           },
         })
       );
@@ -146,7 +146,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   useEffect(() => {
     // after finding the basisTemplate template for editing, set the corresponding form values
     if (id && basisTemplate) {
-      setActiveOptionKey(AccessPolicy[basisTemplate.accessPolicy]);
+      setActiveOptionKey(basisTemplate.accessPolicy);
       setNameInput(basisTemplate.name);
       setDescriptionInput(basisTemplate.description);
     }
@@ -165,16 +165,16 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         className="template-editor__dropdown"
         open={openDropdown}
         options={[
-          {key: AccessPolicy.PUBLIC, label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey(AccessPolicy.PUBLIC)}`), icon: <GlobeIcon />},
-          {key: AccessPolicy.BY_PASSPHRASE, label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey(AccessPolicy.BY_PASSPHRASE)}`), icon: <KeyIcon />},
-          {key: AccessPolicy.BY_INVITE, label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey(AccessPolicy.BY_INVITE)}`), icon: <LockIcon />},
+          {key: "PUBLIC", label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey("PUBLIC")}`), icon: <GlobeIcon />},
+          {key: "BY_PASSPHRASE", label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey("BY_PASSPHRASE")}`), icon: <KeyIcon />},
+          {key: "BY_INVITE", label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey("BY_INVITE")}`), icon: <LockIcon />},
         ]}
         activeKey={activeOptionKey}
         onToggleMenu={toggleDropDown}
         onSelect={selectDropdownOption}
       />
 
-      {activeOptionKey === AccessPolicy.BY_PASSPHRASE && (
+      {activeOptionKey === "BY_PASSPHRASE" && (
         <div className="template-editor__password-wrapper">
           <ShuffleIcon className="template-editor__shuffle-icon" />
           <Input className="template-editor__password-wrapper" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} placeholder="Password" />

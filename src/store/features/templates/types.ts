@@ -11,7 +11,7 @@ export type Template = {
   creator: string; // UUID
   name: string;
   description: string;
-  accessPolicy: keyof typeof AccessPolicy;
+  accessPolicy: AccessPolicy;
   favourite: boolean;
 };
 
