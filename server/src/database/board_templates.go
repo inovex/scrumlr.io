@@ -87,6 +87,7 @@ func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
 func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error) {
 	var tBoards []BoardTemplate
 
+	// FIXME don't return nil if empty
 	err := d.db.NewSelect().Model(&tBoards).Where("creator = ?", user).Order("created_at ASC").Scan(context.Background())
 	if err != nil {
 		return []BoardTemplateFull{}, err
