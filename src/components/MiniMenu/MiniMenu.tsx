@@ -17,7 +17,7 @@ type MiniMenuProps = {
 };
 
 export const MiniMenu = ({className, items}: MiniMenuProps) => (
-  <ReactFocusLock autoFocus={false}>
+  <ReactFocusLock autoFocus>
     <div className={classNames(className, "mini-menu")}>
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);

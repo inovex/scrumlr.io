@@ -3,7 +3,6 @@ package notes
 import (
 	"context"
 	"database/sql"
-
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/services"
@@ -25,6 +24,7 @@ type NoteService struct {
 
 type DB interface {
 	CreateNote(insert database.NoteInsert) (database.Note, error)
+	ImportNote(note database.NoteImport) (database.Note, error)
 	GetNote(id uuid.UUID) (database.Note, error)
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
@@ -47,6 +47,26 @@ func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*
 		return nil, common.InternalServerError
 	}
 	s.UpdatedNotes(body.Board)
+	return new(dto.Note).From(note), err
+}
+
+func (s *NoteService) Import(ctx context.Context, body dto.NoteImportRequest) (*dto.Note, error) {
+	log := logger.FromContext(ctx)
+
+	note, err := s.database.ImportNote(database.NoteImport{
+		Author: body.User,
+		Board:  body.Board,
+		Position: &database.NoteUpdatePosition{
+			Column: body.Position.Column,
+			Rank:   body.Position.Rank,
+			Stack:  body.Position.Stack,
+		},
+		Text: body.Text,
+	})
+	if err != nil {
+		log.Errorw("Could not import notes", "err", err)
+		return nil, err
+	}
 	return new(dto.Note).From(note), err
 }
 
