@@ -15,7 +15,7 @@ export const TemplateColumnsAPI = {
 
       throw new Error(`get all template columns request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates with error: ${error}`);
+      throw new Error(`unable to get all templates columns with error: ${error}`);
     }
   },
 
@@ -34,7 +34,7 @@ export const TemplateColumnsAPI = {
 
       throw new Error(`add template column request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to add template with error: ${error}`);
+      throw new Error(`unable to add template column with error: ${error}`);
     }
   },
 
@@ -52,7 +52,24 @@ export const TemplateColumnsAPI = {
 
       throw new Error(`edit template column request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to edit template with error: ${error}`);
+      throw new Error(`unable to edit template column with error: ${error}`);
+    }
+  },
+
+  deleteTemplateColumn: async (templateId: string, columnId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}/columns/${columnId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.status === 204) {
+        return await response.json();
+      }
+
+      throw new Error(`delete template column request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to delete template column with error: ${error}`);
     }
   },
 };
