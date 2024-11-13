@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PassphraseDialog /> snapshot test 1`] = `
+<div
+  class="password-modal"
+>
+  <div
+    class="password-modal__container"
+  >
+    <div
+      class="password-modal__header"
+    >
+      <label
+        class="text-input-label"
+        for="access-policy-selection__password"
+      >
+        <span
+          class="text-input-label__label"
+        >
+          Passphrase
+        </span>
+      </label>
+      <svg
+        class="password-modal__close"
+      >
+        close.svg
+      </svg>
+    </div>
+    <p>
+      This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.
+    </p>
+    <div>
+      <div
+        class="text-input__container"
+      >
+        <div
+          class="text-input__input-wrapper"
+        >
+          <input
+            class="text-input text-input--adornment-right"
+            data-testid="passphrase-input"
+            id="access-policy-selection__password"
+            placeholder="Password"
+            type="password"
+            value=""
+          />
+          <button
+            aria-label="Show password"
+            class="text-input-adornment text-input__adornment text-input__adornment--right"
+            title="Toggle passphrase visibility"
+            type="button"
+          >
+            <svg>
+              hidden.svg
+            </svg>
+          </button>
+        </div>
+        <div
+          class="text-input__actions"
+        >
+          <button
+            aria-label="Generate random passphrase"
+            class="text-input-action"
+            data-testid="random-passwort-generator"
+            title="Generate random passphrase"
+            type="button"
+          >
+            <svg>
+              refresh.svg
+            </svg>
+          </button>
+          <button
+            aria-label="Copy passphrase to clipboard"
+            class="text-input-action"
+            disabled=""
+            title="Copy passphrase to clipboard"
+            type="button"
+          >
+            <svg>
+              duplicate.svg
+            </svg>
+          </button>
+        </div>
+      </div>
+      <span
+        class="validation-error"
+        role="alert"
+      >
+        A passphrase must be set
+      </span>
+    </div>
+    <div
+      class="new-board__actions import-board__action"
+    >
+      <button
+        aria-disabled="true"
+        aria-label="Open board"
+        class="button button--primary button--contained button__label--shown new-board__action import-board__action"
+        disabled=""
+      >
+        <span
+          class="button__label"
+        >
+          Open Board
+        </span>
+      </button>
+      <button
+        class="button button--primary button--contained button__label--shown new-board__action import-board__action"
+      >
+        <span
+          class="button__label"
+        >
+          Ohne Passwort fortfahren
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;

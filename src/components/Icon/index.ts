@@ -39,6 +39,7 @@ export {ReactComponent as MenuSettings} from "assets/icons/menu-settings.svg";
 export {ReactComponent as Microsoft} from "assets/icons/microsoft.svg";
 export {ReactComponent as MultipleUser} from "assets/icons/multiple-user.svg";
 export {ReactComponent as Open} from "assets/icons/open.svg";
+export {ReactComponent as OpenID} from "assets/icons/openid.svg";
 export {ReactComponent as Participants} from "assets/icons/participants.svg";
 export {ReactComponent as PinDefault} from "assets/icons/pin-default.svg";
 export {ReactComponent as PinFilled} from "assets/icons/pin-filled.svg";

@@ -2,13 +2,39 @@
   "InfoBar": {
     "ReturnToPresentedNote": "Return to presented note"
   },
-  "NewBoard": {
+  "LegacyNewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
     "extendedConfigurationButton": "Extended configuration",
     "basicConfigurationButton": "Template selection",
     "extendedConfigurationTitle": "Extended configuration",
-    "basicConfigurationTitle": "Choose a template"
+    "basicConfigurationTitle": "Choose a template",
+    "importBoard": "Import JSON",
+    "uploadFile": "Upload file or drag here",
+    "importNewBoard": "Import now"
+  },
+  "Templates": {
+    "switchTitle": "Templates",
+    "title": "Choose a template",
+    "savedTemplates": "Your Templates",
+    "recommendedTemplates": "Our Recommendations",
+
+    "CreateTemplateCard": {
+      "create": "Create a new Template"
+    },
+
+    "TemplateCard": {
+      "addFavourite": "Mark as Favourite",
+      "removeFavourite": "Remove Favourite",
+      "column_one": "{{count}} Column",
+      "column_other": "{{count}} Columns",
+      "start": "Start",
+      "save": "Save"
+    }
+  },
+  "Sessions": {
+    "switchTitle": "Sessions",
+    "title": "Choose a session"
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
@@ -125,7 +151,8 @@
     "addColumnRight": "Add column right",
     "hiddenColumn": "Column is hidden for all participants",
     "notes_one": "{{count}} note",
-    "notes_other": "{{count}} notes"
+    "notes_other": "{{count}} notes",
+    "color": "Change color"
   },
   "ErrorPage": {
     "navigateHome": "Home",
@@ -154,7 +181,8 @@
     "signInWithGitHub": "Sign in with Github",
     "signInWithMicrosoft": "Sign in with Microsoft",
     "signInWithAzureAd": "Sign in with Azure AD",
-    "signInWithApple": "Sign in with Apple"
+    "signInWithApple": "Sign in with Apple",
+    "signInWithOIDC": "Sign in with OpenID Connect"
   },
   "NoteInput": {
     "placeholder": "Add your note...",
@@ -168,6 +196,15 @@
     "submit": "Open board",
     "inputPlaceholder": "Password",
     "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
+  },
+  "PassphraseModal": {
+    "title": "Assign new password",
+    "continuePublic": "Ohne Passwort fortfahren",
+    "newPassword": "Open Board",
+    "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.",
+    "submit": "Open board",
+    "inputPlaceholder": "Password",
+    "showPassword": "Show password"
   },
   "Timer": {
     "endTimer": "End timer",
@@ -298,7 +335,8 @@
     "ready": "Are you ready?",
     "readyButton": "Ready!",
     "boardReactionsDisabled": "Board reactions are disabled",
-    "enable": "Enable"
+    "enable": "Enable",
+    "failedImport": "Error importing the file"
   },
   "Language": {
     "german": "German",
@@ -338,6 +376,9 @@
   },
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
+  },
+  "SearchBar": {
+    "placeholder": "Search"
   },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",

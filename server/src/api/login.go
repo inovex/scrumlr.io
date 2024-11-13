@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -11,6 +12,7 @@ import (
 	"scrumlr.io/server/logger"
 
 	"github.com/go-chi/render"
+	"github.com/gorilla/sessions"
 	"github.com/markbates/goth/gothic"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
@@ -28,13 +30,13 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 
 	var body AnonymousSignUpRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	user, err := s.users.LoginAnonymous(r.Context(), body.Name)
 	if err != nil {
-		log.Errorw("could not create user", "req", body, "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -72,6 +74,9 @@ func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 
 // beginAuthProviderVerification will redirect the user to the specified auth provider consent page
 func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
+	store := sessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
+	store.MaxLength(0x8000)
+	gothic.Store = store
 	gothic.BeginAuthHandler(w, r)
 }
 
@@ -85,19 +90,34 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	provider := strings.ToUpper(externalUser.Provider)
+	provider, err := types.NewAccountType(externalUser.Provider)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("unsupported user provider", "err", err)
+		return
+	}
+
+	userInfo, err := s.auth.ExtractUserInformation(provider, &externalUser)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("insufficient user information from external auth source", "err", err)
+		return
+	}
+
 	var internalUser *dto.User
 	switch provider {
-	case (string)(types.AccountTypeGoogle):
-		internalUser, err = s.users.CreateGoogleUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
-	case (string)(types.AccountTypeGitHub):
-		internalUser, err = s.users.CreateGitHubUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
-	case (string)(types.AccountTypeMicrosoft):
-		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
-	case (string)(types.AccountTypeAzureAd):
-		internalUser, err = s.users.CreateAzureAdUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
-	case (string)(types.AccountTypeApple):
-		internalUser, err = s.users.CreateAppleUser(r.Context(), externalUser.UserID, externalUser.NickName, externalUser.AvatarURL)
+	case types.AccountTypeGoogle:
+		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeGitHub:
+		internalUser, err = s.users.CreateGitHubUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeMicrosoft:
+		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeAzureAd:
+		internalUser, err = s.users.CreateAzureAdUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeApple:
+		internalUser, err = s.users.CreateAppleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case types.AccountTypeOIDC:
+		internalUser, err = s.users.CreateOIDCUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 	}
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)

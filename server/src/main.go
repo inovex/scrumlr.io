@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,6 +11,8 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/services/health"
 
+	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/migrations"
@@ -24,10 +27,6 @@ import (
 	"scrumlr.io/server/services/reactions"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
-
-	"github.com/pkg/errors"
-	"github.com/urfave/cli/v2"
-	"github.com/urfave/cli/v2/altsrc"
 )
 
 func main() {
@@ -183,6 +182,36 @@ func main() {
 				Usage:    "the client `secret` for Apple",
 				Required: false,
 			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "auth-oidc-client-id",
+				EnvVars:  []string{"SCRUMLR_AUTH_OIDC_CLIENT_ID"},
+				Usage:    "the client `id` for OpenID Connect",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "auth-oidc-client-secret",
+				EnvVars:  []string{"SCRUMLR_AUTH_OIDC_CLIENT_SECRET"},
+				Usage:    "the client `secret` for OpenID Connect",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "auth-oidc-discovery-url",
+				EnvVars:  []string{"SCRUMLR_AUTH_OIDC_DISCOVERY_URL"},
+				Usage:    "URL hosting the OIDC discovery document",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "auth-oidc-user-ident-scope",
+				EnvVars: []string{"SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE"},
+				Usage:   "JWT claim to request for the user identifier",
+				Value:   "openid",
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "auth-oidc-user-name-scope",
+				EnvVars: []string{"SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE"},
+				Usage:   "JWT claim to request for the user name",
+				Value:   "profile",
+			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:    "verbose",
 				Aliases: []string{"v"},
@@ -210,20 +239,18 @@ func main() {
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
-	// check if process is executed within docker environment
-	if _, err := os.Stat("/.dockerenv"); err != nil {
-		logger.EnableDevelopmentLogger()
-	}
-
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func run(c *cli.Context) error {
+	if c.Bool("verbose") {
+		logger.EnableDevelopmentLogger()
+	}
 	db, err := migrations.MigrateDatabase(c.String("database"))
 	if err != nil {
-		return errors.Wrap(err, "unable to migrate database")
+		return fmt.Errorf("unable to migrate database: %w", err)
 	}
 
 	if !c.Bool("insecure") && c.String("key") == "" {
@@ -296,12 +323,25 @@ func run(c *cli.Context) error {
 			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
+	if c.IsSet("auth-oidc-discovery-url") && c.IsSet("auth-oidc-client-id") && c.IsSet("auth-oidc-client-secret") && c.IsSet("auth-callback-host") {
+		providersMap[(string)(types.AccountTypeOIDC)] = auth.AuthProviderConfiguration{
+			ClientId:       c.String("auth-oidc-client-id"),
+			ClientSecret:   c.String("auth-oidc-client-secret"),
+			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+			DiscoveryUri:   c.String("auth-oidc-discovery-url"),
+			UserIdentScope: c.String("auth-oidc-user-ident-scope"),
+			UserNameScope:  c.String("auth-oidc-user-name-scope"),
+		}
+	}
 
 	dbConnection := database.New(db, c.Bool("verbose"))
 
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
-	authConfig := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
+	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
+	if err != nil {
+		return fmt.Errorf("unable to setup authentication: %w", err)
+	}
 
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)

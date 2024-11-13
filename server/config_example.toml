@@ -67,6 +67,21 @@ auth-apple-client-id = ""
 # Set the client secret for Apple OAuth authentication.
 auth-apple-client-secret = ""
 
+# Set the client ID for OIDC authentication.
+auth-oidc-client-id = ""
+
+# Set the client secret for OIDC authentication.
+auth-oidc-client-secret = ""
+
+# Set the URL hosting the OIDC discovery document.
+auth-oidc-discovery-url = ""
+
+# Set the JWT scope to request from the IDP for user identifier information.
+auth-oidc-user-ident-scope = ""
+
+# Set the JWT scope to request from the IDP for user name information.
+auth-oidc-user-name-scope = ""
+
 # Enable or disable verbose logging.
 verbose = true
 

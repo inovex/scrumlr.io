@@ -41,7 +41,7 @@ export const BoardUsers = () => {
 
   const {me, them} = useAppSelector(
     (state) => ({
-      them: state.participants!.others.filter((participant) => participant.connected),
+      them: state.participants!.others!.filter((participant) => participant.connected),
       me: state.participants!.self,
     }),
     isEqual

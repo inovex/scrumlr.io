@@ -16,6 +16,7 @@ type Users interface {
 	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
+	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
 	Update(ctx context.Context, body dto.UserUpdateRequest) (*dto.User, error)
 }
 
@@ -67,6 +68,7 @@ type BoardSessions interface {
 
 type Notes interface {
 	Create(ctx context.Context, body dto.NoteCreateRequest) (*dto.Note, error)
+	Import(ctx context.Context, body dto.NoteImportRequest) (*dto.Note, error)
 	Get(ctx context.Context, id uuid.UUID) (*dto.Note, error)
 	Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error)
 	List(ctx context.Context, id uuid.UUID) ([]*dto.Note, error)
