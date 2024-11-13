@@ -204,9 +204,9 @@ export const LegacyNewBoard = () => {
             {t("LegacyNewBoard.createNewBoard")}
           </LegacyButton>
         ) : (
-          <Button className="new-board__action" onClick={onImportBoard} color="primary" disabled={isImportBoardDisabled}>
+          <LegacyButton className="new-board__action" onClick={onImportBoard} color="primary" disabled={isImportBoardDisabled}>
             {t("LegacyNewBoard.importNewBoard")}
-          </Button>
+          </LegacyButton>
         )}
         {!extendedConfiguration && (
           <LegacyButton className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
