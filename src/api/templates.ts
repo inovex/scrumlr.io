@@ -10,7 +10,7 @@ export const TemplatesAPI = {
       });
 
       if (response.status === 200) {
-        return (await response.json()) as TemplateWithColumns[];
+        return ((await response.json()) as TemplateWithColumns[]) ?? [];
       }
 
       throw new Error(`get all templates request resulted in status ${response.status}`);
