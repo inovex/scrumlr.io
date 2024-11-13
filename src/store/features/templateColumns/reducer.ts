@@ -5,7 +5,7 @@ import {TemplateColumnsState} from "./types";
 import {getTemplates} from "../templates";
 import {addTemplateOptimistically} from "../templates/actions";
 import {addTemplateColumnOptimistically, deleteTemplateColumnOptimistically, editTemplateColumnOptimistically, moveTemplateColumnOptimistically} from "./actions";
-import {createTemplateColumn, editTemplateColumn, getTemplateColumns} from "./thunks";
+import {createTemplateColumn, deleteTemplateColumn, editTemplateColumn, getTemplateColumns} from "./thunks";
 
 const initialState: TemplateColumnsState = [...DEFAULT_TEMPLATE.columns];
 
@@ -75,5 +75,6 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
       )
     )
     // in theory, this should actually change nothing as all changes have been made optimistically, but for the sake of completeness we'll do it anyway
-    .addCase(editTemplateColumn.fulfilled, (state, action) => state.map((t) => (t.id === action.payload.id ? {...action.payload} : t)));
+    .addCase(editTemplateColumn.fulfilled, (state, action) => state.map((t) => (t.id === action.payload.id ? {...action.payload} : t)))
+    .addCase(deleteTemplateColumn.fulfilled, (state, action) => state.filter((c) => c.id !== action.payload));
 });
