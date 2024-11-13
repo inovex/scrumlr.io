@@ -8,7 +8,8 @@ export type TemplateColumn = {
   color: Color;
   visible: boolean;
   index: number;
-  temporary?: boolean; // indicates whether this column is persisted yet, or temporary in editor
+  createFlag?: boolean; // indicates whether this column is persisted yet, or temporary in editor
+  deleteFlag?: boolean; // column is to be deleted
 };
 
 export type TemplateColumnsState = TemplateColumn[];
