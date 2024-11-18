@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
@@ -312,6 +311,18 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	isMod := isModerator(clientID, event.Data.BoardSessions)
+	latestVoting := event.Data.Votings[0]
+	event.Data.Votings = []*dto.Voting{latestVoting}
+
+	latestVotes := make([]*dto.Vote, 0)
+	for _, v := range event.Data.Votes {
+		if v.Voting == latestVoting.ID {
+			latestVotes = append(latestVotes, v)
+		}
+	}
+
+	event.Data.Votes = latestVotes
+
 	if isMod {
 		return event
 	}
@@ -335,9 +346,9 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	// Notes
 	filteredNotes := filterNotes(event.Data.Notes, clientID, event.Data.Board, event.Data.Columns)
 
-	// Votes
+	// Votes -> only from the latest voting
 	visibleVotes := make([]*dto.Vote, 0)
-	for _, v := range event.Data.Votes {
+	for _, v := range latestVotes {
 		for _, n := range filteredNotes {
 			if v.Note == n.ID {
 				aVote := dto.Vote{
@@ -348,17 +359,16 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			}
 		}
 	}
+
 	// Votings
-	visibleVotings := make([]*dto.Voting, 0)
-	for _, v := range event.Data.Votings {
-		filteredVoting := filterVoting(v, filteredNotes, clientID)
-		visibleVotings = append(visibleVotings, filteredVoting)
-	}
+	visibleVoting := make([]*dto.Voting, 0)
+	filteredVoting := filterVoting(event.Data.Votings[0], filteredNotes, clientID)
+	visibleVoting = append(visibleVoting, filteredVoting)
 
 	retEvent.Data.Columns = filteredColumns
 	retEvent.Data.Notes = filteredNotes
 	retEvent.Data.Votes = visibleVotes
-	retEvent.Data.Votings = visibleVotings
+	retEvent.Data.Votings = visibleVoting
 
 	return retEvent
 }

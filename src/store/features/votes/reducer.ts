@@ -10,7 +10,7 @@ export const votesReducer = createReducer(initialState, (builder) =>
   builder
     .addCase(initializeBoard, (_state, action) => action.payload.fullBoard.votes)
     .addCase(createdVote, (state, action) => {
-      state.unshift(action.payload);
+      state.push(action.payload);
     })
     .addCase(updatedVoting, (_state, action) => action.payload.notes?.map((n) => ({voting: action.payload.voting.id, note: n.id})))
     .addCase(updatedVotes, (_state, action) => action.payload)
