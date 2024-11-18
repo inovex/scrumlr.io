@@ -4,11 +4,26 @@ $stan-height: 70vh;
 $max-card-width: 500px;
 
 .sessions {
+  //position: relative;
+  //width: 100%;
+
+  //overflow-y: scroll;
+  //overflow-x: visible;
   display: flex;
   flex-direction: row;
   flex: 1;
+  //width: 1200px;
   // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
   // gap: $spacing--md;
+}
+
+// TODO: um mit der position relative in dieser klasse und der position absolute in der stan klasse zu schaffen, dass stan
+// rechts in dem grid aligned nicht mit dem rechten rand des bildschirms
+.sessions__interior {
+  position: relative;
+  width: 100%;
+  //overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .sessions__container {
@@ -68,6 +83,7 @@ $max-card-width: 500px;
   gap: $spacing--md;
 }
 
+//TODO: der boy ist momentan versteckt aber richtig platziert.
 .sessions__stan-container {
   position: absolute;
 
@@ -75,7 +91,8 @@ $max-card-width: 500px;
   height: $stan-height;
   // align right edge of stan to the left edge of the container
   right: 0;
-  //transform: translateX(-100%);
+  top: 0;
+  transform: translateX(100%);
 }
 
 .sessions__stan {
@@ -127,11 +144,11 @@ $max-card-width: 500px;
 
 [theme="dark"] {
   // TODO: this needs to move to another place higher in the hierarchy and not be inside the sessions component
-  scrollbar-color: $navy--400 $navy--700;
+  scrollbar-color: $navy--200 $navy--700;
 
   .sessions__container {
     background-color: $navy--700;
-    scrollbar-color: $navy--400 $navy--700;
+    scrollbar-color: $navy--200 $navy--700;
   }
 
   .sessions__container-title {

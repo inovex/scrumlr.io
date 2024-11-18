@@ -94,6 +94,7 @@ $side-padding--desktop: 14vw;
   margin-top: $spacing--xl;
 
   overflow-y: hidden;
+  //overflow-x: visible;
 }
 
 @media (max-width: $breakpoint--desktop) {

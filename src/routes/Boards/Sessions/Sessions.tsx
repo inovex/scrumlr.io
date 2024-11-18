@@ -2,7 +2,8 @@ import {Outlet, useOutletContext} from "react-router-dom";
 import classNames from "classnames";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {t} from "i18next";
-import StanDark from "../../../assets/stan/Stan_OK_Dark.svg";
+import StanDark from "../../../assets/stan/Stan_OK_Cropped_Light.png";
+// import StanDark from "../../../assets/stan/Stan_OK_Dark.svg";
 import {BoardTemplate /* EXAMPLE_CUSTOM_TEMPLATE */} from "../../../constants/templates";
 import {SessionCard} from "../../../components/Sessions/SessionCard/SessionCard";
 // import StanLight from "../../../assets/stan/Stan_OK_Light.svg";
@@ -10,7 +11,7 @@ import {SessionCard} from "../../../components/Sessions/SessionCard/SessionCard"
 // import {RECOMMENDED_TEMPLATES} from "../../../constants/templates";
 // import {TemplateCard} from "../../../components/Templates";
 import "./Sessions.scss";
-import StanLight from "../../../assets/stan/Stan_OK_Light.svg";
+import StanLight from "../../../assets/stan/Stan_OK_Cropped_Light.png";
 import {AccessPolicy} from "../../../store/features";
 
 export const EXAMPLESESSIONSFORSEARCHFCT: BoardTemplate[] = [
@@ -135,7 +136,7 @@ export const Sessions = () => {
       <Outlet /> {/* settings */}
       {/* <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan giving you his approval" /> */}
       <div className="sessions" /* style={{display: "contents"}} */>
-        <div className="ahhhhh">
+        <div className="sessions__interior">
           <div className="sessions__container">
             {/* <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan giving you his approval" /> */}
             <div className="sessions__card-container">
