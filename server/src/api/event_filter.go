@@ -311,17 +311,23 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	isMod := isModerator(clientID, event.Data.BoardSessions)
-	latestVoting := event.Data.Votings[0]
-	event.Data.Votings = []*dto.Voting{latestVoting}
 
-	latestVotes := make([]*dto.Vote, 0)
-	for _, v := range event.Data.Votes {
-		if v.Voting == latestVoting.ID {
-			latestVotes = append(latestVotes, v)
+	// filter to only respond with the latest voting and its votes
+	latestVoting := event.Data.Votings
+	if len(event.Data.Votings) != 0 {
+		latestVoting = make([]*dto.Voting, 0)
+		activeNotes := make([]*dto.Vote, 0)
+
+		latestVoting = append(latestVoting, event.Data.Votings[0])
+
+		for _, v := range event.Data.Votes {
+			if v.Voting == latestVoting[0].ID {
+				activeNotes = append(activeNotes, v)
+			}
 		}
+		event.Data.Votings = latestVoting
+		event.Data.Votes = activeNotes
 	}
-
-	event.Data.Votes = latestVotes
 
 	if isMod {
 		return event
@@ -340,15 +346,15 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			Votes:                event.Data.Votes,
 		},
 	}
+
 	// Columns
 	filteredColumns := filterColumns(event.Data.Columns)
-
 	// Notes
 	filteredNotes := filterNotes(event.Data.Notes, clientID, event.Data.Board, event.Data.Columns)
 
-	// Votes -> only from the latest voting
+	// Votes
 	visibleVotes := make([]*dto.Vote, 0)
-	for _, v := range latestVotes {
+	for _, v := range event.Data.Votes {
 		for _, n := range filteredNotes {
 			if v.Note == n.ID {
 				aVote := dto.Vote{
@@ -359,16 +365,17 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			}
 		}
 	}
-
 	// Votings
-	visibleVoting := make([]*dto.Voting, 0)
-	filteredVoting := filterVoting(event.Data.Votings[0], filteredNotes, clientID)
-	visibleVoting = append(visibleVoting, filteredVoting)
+	visibleVotings := make([]*dto.Voting, 0)
+	for _, v := range event.Data.Votings {
+		filteredVoting := filterVoting(v, filteredNotes, clientID)
+		visibleVotings = append(visibleVotings, filteredVoting)
+	}
 
 	retEvent.Data.Columns = filteredColumns
 	retEvent.Data.Notes = filteredNotes
 	retEvent.Data.Votes = visibleVotes
-	retEvent.Data.Votings = visibleVoting
+	retEvent.Data.Votings = visibleVotings
 
 	return retEvent
 }
