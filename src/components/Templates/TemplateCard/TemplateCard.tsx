@@ -50,9 +50,9 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
 
   const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
     switch (accessPolicy) {
-      case AccessPolicy.BY_PASSPHRASE:
+      case "BY_PASSPHRASE":
         return <KeyIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-passphrase" />;
-      case AccessPolicy.BY_INVITE:
+      case "BY_INVITE":
         return <LockIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-invite" />;
       default:
         return null;
@@ -81,7 +81,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
       <FavouriteButton className="template-card__favourite" active={template.template.favourite} onClick={toggleFavourite} />
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.template.name} disabled />
-        <div className="template-card__access-policy">{renderAccessPolicy(AccessPolicy[template.template.accessPolicy])}</div>
+        <div className="template-card__access-policy">{renderAccessPolicy(template.template.accessPolicy)}</div>
       </div>
       {renderMenu()}
       <TextareaAutosize
