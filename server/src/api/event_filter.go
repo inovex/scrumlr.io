@@ -107,7 +107,7 @@ func filterColumns(eventColumns []*dto.Column) []*dto.Column {
 }
 
 func filterNotes(eventNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board, columns []*dto.Column) []*dto.Note {
-	var visibleNotes = make([]*dto.Note, 0, len(eventNotes))
+	var visibleNotes = make([]*dto.Note, 0)
 	for _, note := range eventNotes {
 		for _, column := range columns {
 			if (note.Position.Column == column.ID) && column.Visible {
@@ -313,16 +313,21 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	isMod := isModerator(clientID, event.Data.BoardSessions)
 
 	// filter to only respond with the latest voting and its votes
-	latestVoting := event.Data.Votings
 	if len(event.Data.Votings) != 0 {
-		latestVoting = make([]*dto.Voting, 0)
+		latestVoting := make([]*dto.Voting, 0)
 		activeNotes := make([]*dto.Vote, 0)
 
 		latestVoting = append(latestVoting, event.Data.Votings[0])
 
 		for _, v := range event.Data.Votes {
 			if v.Voting == latestVoting[0].ID {
-				activeNotes = append(activeNotes, v)
+				if latestVoting[0].Status == types.VotingStatusOpen {
+					if v.User == clientID {
+						activeNotes = append(activeNotes, v)
+					}
+				} else {
+					activeNotes = append(activeNotes, v)
+				}
 			}
 		}
 		event.Data.Votings = latestVoting
@@ -349,23 +354,17 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 
 	// Columns
 	filteredColumns := filterColumns(event.Data.Columns)
-	// Notes
+	// Notes TODO: make to map for easier checks
 	filteredNotes := filterNotes(event.Data.Notes, clientID, event.Data.Board, event.Data.Columns)
-
+	notesMap := make(map[uuid.UUID]*dto.Note)
+	for _, n := range filteredNotes {
+		notesMap[n.ID] = n
+	}
 	// Votes
 	visibleVotes := make([]*dto.Vote, 0)
-	for _, v := range event.Data.Votes {
-		for _, n := range filteredNotes {
-			if v.Note == n.ID {
-				aVote := dto.Vote{
-					Voting: v.Voting,
-					Note:   n.ID,
-				}
-				if clientID == v.User {
-					visibleVotes = append(visibleVotes, &aVote)
-				}
-
-			}
+	for _, vote := range event.Data.Votes {
+		if _, exists := notesMap[vote.Note]; exists {
+			visibleVotes = append(visibleVotes, vote)
 		}
 	}
 	// Votings
