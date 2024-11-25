@@ -361,7 +361,10 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 					Voting: v.Voting,
 					Note:   n.ID,
 				}
-				visibleVotes = append(visibleVotes, &aVote)
+				if clientID == v.User {
+					visibleVotes = append(visibleVotes, &aVote)
+				}
+
 			}
 		}
 	}
