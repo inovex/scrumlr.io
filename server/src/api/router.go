@@ -122,7 +122,7 @@ func New(
 		WriteBufferSize: 1024,
 	}
 
-	// if enabled, this experimental feature allows for larger session cookies by storing them in a file store.
+	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
 	// this might be required when using some OIDC providers which exceed the 4KB limit.
 	// see https://github.com/markbates/goth/pull/141
 	if s.experimentalFileSystemStore {
