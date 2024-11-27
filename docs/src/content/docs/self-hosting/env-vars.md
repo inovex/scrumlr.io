@@ -101,7 +101,7 @@ SCRUMLR_DISABLE_ANONYMOUS_LOGIN=false
 ```
 
 ### Enable Experimental File System Store
-Enables an experimental file store for session cookies.
+Enables an experimental file store for session cookies, which is used during OAuth authentication to store session info while on the provider page.
 Required for some OIDC providers, since their session cookies exceed the size limit of 4KB.
 Default is `false`.
 ```bash
@@ -165,6 +165,7 @@ SCRUMLR_AUTH_OIDC_DISCOVERY_URL
 SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE
 SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE
 ```
+Note: Might require larger session store to be active, see [SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE](#enable-experimental-file-system-store)
 
 ### Feedback Webhook URL
 A webhook URL to which feedback should be sent.
