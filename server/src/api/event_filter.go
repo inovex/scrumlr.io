@@ -95,6 +95,21 @@ func parseParticipantUpdated(data interface{}) (*dto.BoardSession, error) {
 	return ret, nil
 }
 
+func parseVotesDeleted(data interface{}) ([]*dto.Vote, error) {
+	var ret []*dto.Vote
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+
+}
+
 func filterColumns(eventColumns []*dto.Column) []*dto.Column {
 	var visibleColumns = make([]*dto.Column, 0, len(eventColumns))
 	for _, column := range eventColumns {
@@ -303,6 +318,27 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 				}
 			}
 		}
+	}
+
+	if event.Type == realtime.BoardEventVotesDeleted {
+		//filter deleted votes after user
+		votes, err := parseVotesDeleted(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse deleteVotes in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
+		}
+		userVotes := make([]*dto.Vote, 0)
+		for _, v := range votes {
+			if v.User == userID {
+				userVotes = append(userVotes, v)
+			}
+		}
+
+		ret := realtime.BoardEvent{
+			Type: event.Type,
+			Data: userVotes,
+		}
+
+		return &ret
 	}
 
 	// returns, if no filter match occured

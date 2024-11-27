@@ -254,7 +254,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 		Data: deletedNoteRealTimeUpdate,
 	}
 	publishEventVotesUpdated := realtime.BoardEvent{
-		Type: realtime.BoardEventVotesUpdated,
+		Type: realtime.BoardEventVotesDeleted,
 		Data: []*dto.Vote{},
 	}
 	clientMock.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
