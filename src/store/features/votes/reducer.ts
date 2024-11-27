@@ -13,6 +13,14 @@ export const votesReducer = createReducer(initialState, (builder) =>
       state.push(action.payload);
     })
     .addCase(updatedVotes, (_state, action) => action.payload)
-    .addCase(deletedVote, (state, action) => state.filter((v) => !(v.voting === action.payload.voting && v.note === action.payload.note)))
+    .addCase(deletedVote, (state, action) => {
+      const newVotes = state.slice();
+      const index = newVotes.findIndex((v) => v.voting === action.payload.voting && v.note === action.payload.note);
+      if (index >= 0) {
+        newVotes.splice(index, 1);
+        return newVotes;
+      }
+      return state;
+    })
     .addCase(createdVoting, () => [])
 );
