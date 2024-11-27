@@ -22,20 +22,24 @@ export const VotingDialog = () => {
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(cumulativeVotingDefault);
   const [numberOfVotes, setNumberOfVotes] = useState(getNumberFromStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, 5));
 
+  const IS_ANONYMOUS_STORAGE_KEY = "IS_ANONYMOUS_DEFAULT";
+  const [isAnonymous, setIsAnonymous] = useState(true);
+
   if (!isAdmin) {
     navigate("..");
   }
-
   const startVoting = () => {
     dispatch(
       createVoting({
         voteLimit: numberOfVotes,
-        showVotesOfOthers: false,
+        showVotesOfOthers: !isAnonymous, // Nur anzeigen, wenn nicht anonym
         allowMultipleVotes: allowCumulativeVoting,
+        isAnonymous, // Neue Eigenschaft, die den Modus an das Backend sendet
       })
     );
     saveToStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, String(numberOfVotes));
     saveToStorage(CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, String(allowCumulativeVoting));
+    saveToStorage(IS_ANONYMOUS_STORAGE_KEY, String(isAnonymous));
     navigate("..");
   };
 
@@ -55,6 +59,12 @@ export const VotingDialog = () => {
           <button className="dialog__button" data-testid="voting-dialog__cumulative-voting-button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
             <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
             <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />
+          </button>
+
+          {/* Neuer Toggle für anonymen Modus */}
+          <button className="dialog__button" data-testid="voting-dialog__anonymous-button" onClick={() => setIsAnonymous((prev) => !prev)}>
+            <label>{isAnonymous ? t("VoteConfigurationButton.anonymousMode") : t("VoteConfigurationButton.nonAnonymousMode")}</label>
+            <Toggle active={isAnonymous} className="voting-dialog__toggle" />
           </button>
           <div className="dialog__button">
             <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
