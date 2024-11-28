@@ -1,9 +1,9 @@
-version: "3.8"
-
+---
 services:
   scrumlr-backend:
     restart: always
-    image: ghcr.io/inovex/scrumlr.io/scrumlr-server:3.9.0
+    image: "ghcr.io/inovex/scrumlr.io/scrumlr-server:${SCRUMLR_BACKEND_VERSION:-3.9.0}"
+    container_name: scrumlr-backend
     command:
       - "/app/main"
       - "-disable-check-origin"
@@ -35,8 +35,6 @@ services:
       # SCRUMLR_SERVER_REDIS_HOST: "${REDIS_HOST}"
       # SCRUMLR_SERVER_REDIS_USERNAME: "${REDIS_USERNAME}"
       # SCRUMLR_SERVER_REDIS_PASSWORD: "${REDIS_PASSWORD}"
-    ports:
-      - "8080:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -51,7 +49,8 @@ services:
 
   scrumlr-frontend:
     restart: always
-    image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:3.9.0
+    image: "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${SCRUMLR_FRONTEND_VERSION:-3.9.0}"
+    container_name: scrumlr-frontend
     environment:
       SCRUMLR_SERVER_URL: "${SCRUMLR_SERVER_URL}"
       SCRUMLR_WEBSOCKET_URL: "${SCRUMLR_WEBSOCKET_URL}"
@@ -60,23 +59,20 @@ services:
       # SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT}"
       # SCRUMLR_ANALYTICS_DATA_DOMAIN: "${ANALYTICS_DATA_DOMAIN}"
       # SCRUMLR_ANALYTICS_SRC: "${ANALYTICS_SRC}"
-    ports:
-      - "9090:8080"
     depends_on:
       scrumlr-backend:
         condition: service_healthy
 
   postgres:
     restart: always
-    image: postgres:16.4
+    image: "postgres:${POSTGRES_VERSION:-17.2}"
+    container_name: postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-scrumlr}
       POSTGRES_USER: ${POSTGRES_USER:-scrumlr}
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scrumlr} -d ${POSTGRES_DB:-scrumlr}" ]
       start_period: 10s
@@ -86,14 +82,13 @@ services:
 
   nats:
     restart: always
-    image: nats:2.8.4
-    ports:
-      - "4222:4222"
-      - "8222:8222"
+    image: "nats:${NATS_VERSION:-2.8.4}"
+    container_name: nats
 
   # oidc.localhost:
   #   restart: always
   #   image: ghcr.io/dexidp/dex:v2.41.1-distroless
+  #   container_name: oidc.localhost
   #   volumes:
   #     - ./dex.yaml:/etc/dex/config.docker.yaml:ro
   #   ports:
@@ -102,8 +97,9 @@ services:
   #     - oidc
 
   caddy:
-    image: caddy
     restart: always
+    image: "caddy:${CADDY_VERSION:-2.9}"
+    container_name: caddy
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
     ports:
