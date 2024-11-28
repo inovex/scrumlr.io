@@ -1,25 +1,29 @@
-version: "3.8"
-
+---
 services:
   scrumlr-backend:
     restart: always
-    image: ghcr.io/inovex/scrumlr.io/scrumlr-server:3.10.1
+    image: "ghcr.io/inovex/scrumlr.io/scrumlr-server:${SCRUMLR_BACKEND_VERSION:-3.10.0}"
+    container_name: scrumlr-backend
     command:
       - "/app/main"
       - "-disable-check-origin"
     environment:
-      SCRUMLR_SERVER_PORT: "${SCRUMLR_SERVER_PORT}"
-      SCRUMLR_SERVER_NATS_URL: "${SCRUMLR_SERVER_NATS_URL}"
+      SCRUMLR_SERVER_PORT: "${SCRUMLR_SERVER_PORT:-8080}"
+      SCRUMLR_BASE_PATH: "${SCRUMLR_BASE_PATH}"
+      SCRUMLR_INSECURE: "${SCRUMLR_INSECURE}"
       SCRUMLR_PRIVATE_KEY: "${SCRUMLR_PRIVATE_KEY}"
       SCRUMLR_SERVER_DATABASE_URL: "postgres://${POSTGRES_USER:-scrumlr}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-scrumlr}?sslmode=disable"
+      SCRUMLR_SERVER_NATS_URL: "${SCRUMLR_SERVER_NATS_URL}"
+      # Redis variables (if you decide to use Redis instead of NATS)
+      SCRUMLR_SERVER_REDIS_HOST: "${REDIS_HOST}"
+      SCRUMLR_SERVER_REDIS_USERNAME: "${REDIS_USERNAME}"
+      SCRUMLR_SERVER_REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      SCRUMLR_FEEDBACK_WEBHOOK_URL: "${WEBHOOK_URL}"
+      SCRUMLR_AUTH_CALLBACK_HOST: "${AUTH_CALLBACK_HOST}"
       SCRUMLR_AUTH_GOOGLE_CLIENT_ID: "${GOOGLE_CLIENT_ID}"
       SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET: "${GOOGLE_CLIENT_SECRET}"
       SCRUMLR_AUTH_MICROSOFT_CLIENT_ID: "${MICROSOFT_CLIENT_ID}"
       SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET: "${MICROSOFT_CLIENT_SECRET}"
-      SCRUMLR_FEEDBACK_WEBHOOK_URL: "${WEBHOOK_URL}"
-      SCRUMLR_BASE_PATH: "${SCRUMLR_BASE_PATH}"
-      SCRUMLR_INSECURE: "${SCRUMLR_INSECURE}"
-      SCRUMLR_AUTH_CALLBACK_HOST: "${AUTH_CALLBACK_HOST}"
       SCRUMLR_AUTH_GITHUB_CLIENT_ID: "${GITHUB_CLIENT_ID}"
       SCRUMLR_AUTH_GITHUB_CLIENT_SECRET: "${GITHUB_CLIENT_SECRET}"
       SCRUMLR_AUTH_AZURE_AD_TENANT_ID: "${AZURE_AD_TENANT_ID}"
@@ -31,13 +35,8 @@ services:
       SCRUMLR_AUTH_OIDC_CLIENT_SECRET: "${OIDC_CLIENT_SECRET}"
       SCRUMLR_AUTH_OIDC_DISCOVERY_URL: "${OIDC_DISCOVERY_URL}"
       SESSION_SECRET: "${SESSION_SECRET}"
+      SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE: "${SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE}"
       # SCRUMLR_CONFIG_PATH: "${SCRUMRL_CONFIG_PATH}"
-      # Redis variables (if you decide to use Redis instead of NATS)
-      SCRUMLR_SERVER_REDIS_HOST: "${REDIS_HOST}"
-      SCRUMLR_SERVER_REDIS_USERNAME: "${REDIS_USERNAME}"
-      SCRUMLR_SERVER_REDIS_PASSWORD: "${REDIS_PASSWORD}"
-    ports:
-      - "8080:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -52,13 +51,13 @@ services:
 
   scrumlr-frontend:
     restart: always
-    image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:3.10.1
+    image: "ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${SCRUMLR_FRONTEND_VERSION:-3.10.0}"
+    container_name: scrumlr-frontend
     environment:
+      SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT:-8080}"
       SCRUMLR_SERVER_URL: "${SCRUMLR_SERVER_URL}"
       SCRUMLR_WEBSOCKET_URL: "${SCRUMLR_WEBSOCKET_URL}"
       SCRUMLR_SHOW_LEGAL_DOCUMENTS: "${SCRUMLR_SHOW_LEGAL_DOCUMENTS}"
-      # Add missing frontend environment variables here
-      SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT:-8080}"
       SCRUMLR_ANALYTICS_DATA_DOMAIN: "${ANALYTICS_DATA_DOMAIN}"
       SCRUMLR_ANALYTICS_SRC: "${ANALYTICS_SRC}"
       SCRUMLR_CLARITY_ID: "${SCRUMLR_CLARITY_ID}"
@@ -70,15 +69,14 @@ services:
 
   postgres:
     restart: always
-    image: postgres:16.4
+    image: "postgres:${POSTGRES_VERSION:-17.2}"
+    container_name: postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-scrumlr}
       POSTGRES_USER: ${POSTGRES_USER:-scrumlr}
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scrumlr} -d ${POSTGRES_DB:-scrumlr}" ]
       start_period: 10s
@@ -88,14 +86,13 @@ services:
 
   nats:
     restart: always
-    image: nats:2.8.4
-    ports:
-      - "4222:4222"
-      - "8222:8222"
+    image: "nats:${NATS_VERSION:-2.10.24}"
+    container_name: nats
 
   # oidc.localhost:
   #   restart: always
   #   image: ghcr.io/dexidp/dex:v2.41.1-distroless
+  #   container_name: oidc.localhost
   #   volumes:
   #     - ./dex.yaml:/etc/dex/config.docker.yaml:ro
   #   ports:
@@ -104,8 +101,9 @@ services:
   #     - oidc
 
   caddy:
-    image: caddy
     restart: always
+    image: "caddy:${CADDY_VERSION:-2.8.4}"
+    container_name: caddy
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
     ports:
