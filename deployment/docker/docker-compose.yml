@@ -43,7 +43,7 @@ services:
       nats:
         condition: service_started
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:${SCRUMLR_SERVER_PORT:-8080}/api/health || exit 1"]
       start_period: 10s
       interval: 10s
       timeout: 5s
@@ -61,8 +61,6 @@ services:
       SCRUMLR_ANALYTICS_DATA_DOMAIN: "${ANALYTICS_DATA_DOMAIN}"
       SCRUMLR_ANALYTICS_SRC: "${ANALYTICS_SRC}"
       SCRUMLR_CLARITY_ID: "${SCRUMLR_CLARITY_ID}"
-    ports:
-      - "9090:8080"
     depends_on:
       scrumlr-backend:
         condition: service_healthy
@@ -104,6 +102,9 @@ services:
     restart: always
     image: "caddy:${CADDY_VERSION:-2.8.4}"
     container_name: caddy
+    environment:
+      SCRUMLR_SERVER_PORT: "${SCRUMLR_SERVER_PORT:-8080}"
+      SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT:-8080}"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
     ports:
