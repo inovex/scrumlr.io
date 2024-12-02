@@ -28,12 +28,24 @@ func (s *BoardService) CreateColumn(ctx context.Context, body dto.ColumnRequest)
 
 func (s *BoardService) DeleteColumn(ctx context.Context, board, column, user uuid.UUID) error {
 	log := logger.FromContext(ctx)
-	err := s.database.DeleteColumn(board, column, user)
+
+	voting, err := s.database.GetOpenVoting(board)
+	if err != nil {
+		logger.Get().Errorw("No ongoing voting", "err", err)
+		return err
+	}
+
+	toBeDeletedVotes, err := s.database.GetVotes(filter.VoteFilter{Board: board, Voting: &voting.ID})
+	if err != nil {
+		logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err, "board", board, "column", column)
+		return err
+	}
+	err = s.database.DeleteColumn(board, column, user)
 	if err != nil {
 		log.Errorw("unable to delete column", "err", err)
 		return err
 	}
-	s.DeletedColumn(user, board, column)
+	s.DeletedColumn(user, board, column, toBeDeletedVotes)
 	return err
 }
 
@@ -118,7 +130,7 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 	return "", err
 }
 
-func (s *BoardService) DeletedColumn(user, board, column uuid.UUID) {
+func (s *BoardService) DeletedColumn(user, board, column uuid.UUID, toBeDeletedVotes []database.Vote) {
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
 		Data: column,
@@ -138,19 +150,8 @@ func (s *BoardService) DeletedColumn(user, board, column uuid.UUID) {
 		Data: eventNotes,
 	})
 
-	boardVotes, err := s.database.GetVotes(filter.VoteFilter{Board: board})
-	if err != nil {
-		logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err)
-		return
-	}
-	personalVotes := []*dto.Vote{}
-	for _, vote := range boardVotes {
-		if vote.User == user {
-			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
-		}
-	}
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotesDeleted,
-		Data: personalVotes,
+		Data: toBeDeletedVotes,
 	})
 }
