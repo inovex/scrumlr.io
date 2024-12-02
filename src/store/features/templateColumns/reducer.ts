@@ -1,10 +1,8 @@
 import {createReducer} from "@reduxjs/toolkit";
-import {arrayMove} from "@dnd-kit/sortable";
 import {DEFAULT_TEMPLATE} from "constants/templates";
 import {TemplateColumnsState} from "./types";
 import {getTemplates} from "../templates";
-import {addTemplateOptimistically} from "../templates/actions";
-import {addTemplateColumnOptimistically, deleteTemplateColumnOptimistically, editTemplateColumnOptimistically, moveTemplateColumnOptimistically} from "./actions";
+// import {addTemplateColumnOptimistically, deleteTemplateColumnOptimistically, editTemplateColumnOptimistically, moveTemplateColumnOptimistically} from "./actions";
 import {createTemplateColumn, deleteTemplateColumn, editTemplateColumn, getTemplateColumns} from "./thunks";
 
 const initialState: TemplateColumnsState = [...DEFAULT_TEMPLATE.columns];
@@ -34,7 +32,7 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
           [...state]
         ) // start with a copy of the existing state
     )
-    .addCase(addTemplateOptimistically, (state, action) => [...state, ...action.payload.columns])
+    /* .addCase(addTemplateOptimistically, (state, action) => [...state, ...action.payload.columns])
     .addCase(addTemplateColumnOptimistically, (state, action) => {
       action.payload.templateColumn.temporaryFlag = true; // tag as temporary, so it can be properly persisted later
       // since we potentially have template columns by many different templates here, we need to differentiate them.
@@ -79,6 +77,7 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
           })
           .filter((t) => t !== null) // remove items marked as such
     )
+     */
     .addCase(createTemplateColumn.fulfilled, (state, action) =>
       state.map(
         // reset temporary (flag and id), as this is now officially from the backend

@@ -2,7 +2,7 @@ import {createReducer} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
 import {TemplatesState} from "./types";
 import {createTemplateWithColumns, editTemplate, getTemplates} from "./thunks";
-import {addTemplateOptimistically} from "./actions";
+// import {addTemplateOptimistically} from "./actions";
 
 // both this and templateColumns reducer don't have an empty state.
 // the reason for this is the fact the template/templateColumn logic for reordering is handled partly by the reducer.
@@ -18,6 +18,6 @@ export const templatesReducer = createReducer(initialState, (builder) => {
         (t) => (t.id === action.payload.id ? {...action.payload} : t) // only change edited templates, other stay the same
       )
     )
-    .addCase(addTemplateOptimistically, (state, action) => [...state, action.payload.template])
+    // .addCase(addTemplateOptimistically, (state, action) => [...state, action.payload.template])
     .addCase(createTemplateWithColumns.fulfilled, (state, action) => [...state, action.payload]);
 });
