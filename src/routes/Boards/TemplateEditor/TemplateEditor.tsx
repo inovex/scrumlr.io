@@ -1,20 +1,7 @@
 import {useEffect, useState} from "react";
-import {useAppDispatch, useAppSelector} from "store";
+import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {
-  AccessPolicy,
-  addTemplateColumnOptimistically,
-  createTemplateWithColumns,
-  editTemplate,
-  moveTemplateColumnOptimistically,
-  createTemplateColumn,
-  editTemplateColumn,
-  TemplateColumn,
-  TemplateWithColumns,
-  deleteTemplateColumn,
-  editTemplateColumnOptimistically,
-  deleteTemplateColumnOptimistically,
-} from "store/features";
+import {AccessPolicy, TemplateColumn, EditableTemplateColumn, Template} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
@@ -30,6 +17,8 @@ import classNames from "classnames";
 import {Button} from "components/Button";
 import {useNavigate, useParams} from "react-router";
 import "./TemplateEditor.scss";
+import {arrayMove} from "@dnd-kit/sortable";
+import {diff} from "deep-object-diff"; // for debug purposes
 
 // todo maybe just change the translation keys to AccessPolicy => lowercase
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
@@ -51,7 +40,7 @@ type TemplateColumnProps = {mode: "create" | "edit"};
 export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   // id is set in /edit/:id route (not checked whether its valid though)
   const {id} = useParams();
@@ -97,21 +86,66 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   const [passwordInput, setPasswordInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
+  const updateIndex = (column: EditableTemplateColumn, index: number) => ({...column, index});
 
   const addColumn = (templateColumn: TemplateColumn, index: number) => {
-    dispatch(addTemplateColumnOptimistically({templateColumn, index}));
+    // dispatch(addTemplateColumnOptimistically({templateColumn, index}));
+    if (!editableTemplateColumns) return;
+
+    const updated = editableTemplateColumns
+      // add column with status
+      .toSpliced(index, 0, {...templateColumn, persisted: false, mode: "create"})
+      // reset indices
+      .map(updateIndex);
+
+    console.log("add column", diff(editableTemplateColumns, updated));
+    setEditableTemplateColumns(updated);
   };
 
   const moveColumn = (fromIndex: number, toIndex: number) => {
-    dispatch(moveTemplateColumnOptimistically({templateId, fromIndex, toIndex}));
+    // dispatch(moveTemplateColumnOptimistically({templateId, fromIndex, toIndex}));
+    if (!editableTemplateColumns) return;
+
+    const fromColumn = editableTemplateColumns[fromIndex];
+    const toColumn = editableTemplateColumns[toIndex];
+
+    // TODO change using setter func instead of direct access?
+    fromColumn.mode = "edit";
+    toColumn.mode = "edit";
+
+    const updated = arrayMove(editableTemplateColumns, fromIndex, toIndex).map(updateIndex);
+
+    console.log("move column", diff(editableTemplateColumns, updated));
+    setEditableTemplateColumns(updated);
   };
 
-  const editColumn = (templateColumn: TemplateColumn, overwrite: Partial<TemplateColumn>) => {
-    dispatch(editTemplateColumnOptimistically({columnId: templateColumn.id, overwrite}));
+  // edit column and mark as edited
+  const editColumn = (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => {
+    // dispatch(editTemplateColumnOptimistically({columnId: templateColumn.id, overwrite}));
+    if (!editableTemplateColumns) return;
+    const updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? ({...col, ...overwrite, mode: "edit"} as EditableTemplateColumn) : col));
+
+    console.log("edit column", diff(editableTemplateColumns, updated));
+    setEditableTemplateColumns(updated);
   };
 
-  const deleteColumn = (templateColumn: TemplateColumn) => {
-    dispatch(deleteTemplateColumnOptimistically({columnId: templateColumn.id}));
+  const deleteColumn = (templateColumn: EditableTemplateColumn) => {
+    // dispatch(deleteTemplateColumnOptimistically({columnId: templateColumn.id}));
+    if (!editableTemplateColumns) return;
+
+    let updated: EditableTemplateColumn[];
+    if (templateColumn.persisted) {
+      // only mark as deleted
+      // TODO how are indices handled if we filter these out visually but still remain in array?
+      templateColumn.mode = "delete";
+      updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? templateColumn : col)); // may be not required since it's already part of array
+    } else {
+      // actually delete
+      updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? col : null)).filter((col) => col !== null);
+    }
+
+    console.log("delete column", diff(editableTemplateColumns, updated));
+    setEditableTemplateColumns(updated);
   };
 
   const cancelAndGoBack = () => navigate("/boards/templates");
