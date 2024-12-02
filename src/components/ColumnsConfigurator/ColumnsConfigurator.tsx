@@ -1,7 +1,7 @@
 import {uniqueId} from "underscore";
 import classNames from "classnames";
 import {useState} from "react";
-import {TemplateColumn} from "store/features";
+import {EditableTemplateColumn, TemplateColumn} from "store/features";
 import {Color, getColorClassName, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
@@ -12,17 +12,17 @@ import "./ColumnsConfigurator.scss";
 type ColumnsConfiguratorProps = {
   className: string;
   templateId: string;
-  columns: TemplateColumn[];
+  columns: EditableTemplateColumn[];
   addColumn: (templateColumn: TemplateColumn, index: number) => void;
   moveColumn: (fromIndex: number, toIndex: number) => void;
-  editColumn: (templateColumn: TemplateColumn, overwrite: Partial<TemplateColumn>) => void;
-  deleteColumn: (templateColumn: TemplateColumn) => void;
+  editColumn: (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void;
+  deleteColumn: (templateColumn: EditableTemplateColumn) => void;
 };
 
 export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   // id of column which is actively being dragged
   const [activeElementId, setActiveElementId] = useState<string | null>(null);
-  const [activeColumn, setActiveColumn] = useState<TemplateColumn | null>(null);
+  const [activeColumn, setActiveColumn] = useState<EditableTemplateColumn | null>(null);
   const [dropElementId, setDropElementId] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor));

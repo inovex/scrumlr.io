@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {TemplateColumn} from "store/features";
+import {EditableTemplateColumn} from "store/features";
 import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
 import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
@@ -13,14 +13,14 @@ import "./ColumnsConfiguratorColumn.scss";
 
 type ColumnsConfiguratorColumnProps = {
   className?: string;
-  column: TemplateColumn;
+  column: EditableTemplateColumn;
   index: number;
   placement?: "first" | "center" | "last";
   activeDrag?: boolean;
   activeDrop?: boolean;
-  allColumns: TemplateColumn[];
-  editColumn?: (templateColumn: TemplateColumn, overwrite: Partial<TemplateColumn>) => void;
-  deleteColumn?: (templateColumn: TemplateColumn) => void;
+  allColumns: EditableTemplateColumn[];
+  editColumn?: (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void;
+  deleteColumn?: (templateColumn: EditableTemplateColumn) => void;
 };
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
