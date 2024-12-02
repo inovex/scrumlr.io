@@ -68,6 +68,27 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
     // presort by index for DnD
     .sort((a, b) => a.index - b.index);
 
+  // these are to keep track of the template/columns in the editor.
+  // they will be initialized using the basis and are editable.
+  // the `mode` property will be later used to determine how the backend should handle each column
+  const [editableTemplate, setEditableTemplate] = useState<Template>();
+  const [editableTemplateColumns, setEditableTemplateColumns] = useState<EditableTemplateColumn[]>();
+
+  useEffect(() => {
+    if (basisTemplate && !editableTemplate) {
+      // safeguard so it only gets set once
+      console.log("init template to", basisTemplate);
+      setEditableTemplate({...basisTemplate}); // shallow copy
+    }
+  }, [basisTemplate, editableTemplate]);
+
+  useEffect(() => {
+    if (basisColumns && !editableTemplateColumns) {
+      console.log("init columns to", basisColumns);
+      setEditableTemplateColumns(basisColumns.map((bc) => ({...bc, persisted: true, mode: undefined})));
+    }
+  }, [basisColumns, editableTemplateColumns]);
+
   const [openDropdown, setOpenDropdown] = useState(false);
   const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>("PUBLIC");
 
@@ -159,6 +180,8 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
     setOpenDropdown(false);
   };
 
+  if (!editableTemplate || !editableTemplateColumns) return <div>Error loading template</div>;
+
   return (
     <div className="template-editor">
       <Dropdown<AccessPolicy>
@@ -195,7 +218,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         <ColumnsConfigurator
           className="template-editor__columns-configurator"
           templateId={templateId}
-          columns={basisColumns}
+          columns={editableTemplateColumns}
           addColumn={addColumn}
           moveColumn={moveColumn}
           editColumn={editColumn}
