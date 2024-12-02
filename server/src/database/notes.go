@@ -1,15 +1,15 @@
 package database
 
 import (
-  "context"
-  "errors"
-  "scrumlr.io/server/identifiers"
-  "time"
+	"context"
+	"errors"
+	"scrumlr.io/server/identifiers"
+	"time"
 
-  "github.com/google/uuid"
-  "github.com/uptrace/bun"
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/database/types"
+	"github.com/google/uuid"
+	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/database/types"
 )
 
 type Note struct {
@@ -90,6 +90,15 @@ func (d *Database) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]Note, erro
 	}
 	err := query.OrderExpr("\"column\", stack DESC, rank DESC").Scan(context.Background(), &notes)
 	return notes, err
+}
+
+func (d *Database) GetChildNotes(parentNote uuid.UUID) ([]Note, error) {
+	var notes []Note
+	err := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", parentNote).Scan(context.Background(), &notes)
+	if err != nil {
+		return nil, err
+	}
+	return notes, nil
 }
 
 func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error) {

@@ -30,6 +30,7 @@ type DB interface {
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 	GetVotes(f filter.VoteFilter) ([]database.Vote, error)
+	GetChildNotes(parentNote uuid.UUID) ([]database.Note, error)
 }
 
 func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
@@ -131,8 +132,22 @@ func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id
 		Board: board,
 		Note:  &note,
 	}
-
 	deletedVotes, err := s.database.GetVotes(voteFilter)
+	if body.DeleteStack {
+		stackedVotes, _ := s.database.GetChildNotes(note)
+		for _, n := range stackedVotes {
+			votes, err := s.database.GetVotes(filter.VoteFilter{
+				Board: board,
+				Note:  &n.ID,
+			})
+			if err != nil {
+				log.Errorw("unable to get votes of stacked notes", "note", n, "error", err)
+				return err
+			}
+			deletedVotes = append(deletedVotes, votes...)
+		}
+	}
+
 	if err != nil {
 		log.Errorw("unable to retrieve votes for a note delete", "err", err)
 	}
