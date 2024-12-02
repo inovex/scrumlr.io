@@ -80,6 +80,10 @@ func (m *DBMock) GetVotes(f filter.VoteFilter) ([]database.Vote, error) {
 	args := m.Called(f)
 	return args.Get(0).([]database.Vote), args.Error(1)
 }
+func (m *DBMock) GetChildNotes(note uuid.UUID) ([]database.Note, error) {
+	args := m.Called(note)
+	return args.Get(0).([]database.Note), args.Error(1)
+}
 
 func TestNoteServiceTestSuite(t *testing.T) {
 	suite.Run(t, new(NoteServiceTestSuite))
@@ -252,12 +256,12 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 		Type: realtime.BoardEventNoteDeleted,
 		Data: deletedNoteRealTimeUpdate,
 	}
-	publishEventVotesUpdated := realtime.BoardEvent{
+	publishEventVotesDeleted := realtime.BoardEvent{
 		Type: realtime.BoardEventVotesDeleted,
-		Data: []*dto.Vote{},
+		Data: []database.Vote{},
 	}
 	clientMock.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
-	clientMock.On("Publish", publishSubject, publishEventVotesUpdated).Return(nil)
+	clientMock.On("Publish", publishSubject, publishEventVotesDeleted).Return(nil)
 
 	ctx := logger.InitTestLogger(context.Background())
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
@@ -265,6 +269,10 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	ctx = context.WithValue(ctx, identifiers.NoteIdentifier, noteID)
 
 	mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
+	if deleteStack {
+		mock.On("GetChildNotes", noteID).Return([]database.Note{}, nil)
+		mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
+	}
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
 
 	err := s.Delete(ctx, body, noteID)
