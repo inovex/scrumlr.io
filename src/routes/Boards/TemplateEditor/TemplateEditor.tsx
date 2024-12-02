@@ -116,8 +116,10 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
 
   const cancelAndGoBack = () => navigate("/boards/templates");
 
+  // TODO revise
   const saveTemplate = () => {
-    if (!basisTemplate || !basisColumns) return;
+    throw new Error("save not implemented yet");
+    /* if (!basisTemplate || !basisColumns) return;
     if (mode === "create") {
       // overwrite from form
       const newTemplateWithColumns: TemplateWithColumns = {
@@ -161,7 +163,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         .catch((e) => {
           throw new Error("Error while editing template", e);
         });
-    }
+    } */
   };
 
   useEffect(() => {
