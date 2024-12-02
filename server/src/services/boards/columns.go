@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -30,16 +31,20 @@ func (s *BoardService) DeleteColumn(ctx context.Context, board, column, user uui
 	log := logger.FromContext(ctx)
 
 	voting, err := s.database.GetOpenVoting(board)
+	var toBeDeletedVotes []database.Vote
 	if err != nil {
-		logger.Get().Errorw("No ongoing voting", "err", err)
-		return err
+		if !errors.Is(err, sql.ErrNoRows) {
+			log.Errorw("unable to get open voting", "board", board, "err", err)
+			return err
+		}
+	} else {
+		toBeDeletedVotes, err = s.database.GetVotes(filter.VoteFilter{Board: board, Voting: &voting.ID})
+		if err != nil {
+			logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err, "board", board, "column", column)
+			return err
+		}
 	}
 
-	toBeDeletedVotes, err := s.database.GetVotes(filter.VoteFilter{Board: board, Voting: &voting.ID})
-	if err != nil {
-		logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err, "board", board, "column", column)
-		return err
-	}
 	err = s.database.DeleteColumn(board, column, user)
 	if err != nil {
 		log.Errorw("unable to delete column", "err", err)
