@@ -174,8 +174,10 @@ func (s *NoteService) DeletedNote(user, board, note uuid.UUID, deletedVotes []da
 		Data: noteData,
 	})
 
-	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-		Type: realtime.BoardEventVotesDeleted,
-		Data: deletedVotes,
-	})
+	if len(deletedVotes) > 0 {
+		_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+			Type: realtime.BoardEventVotesDeleted,
+			Data: deletedVotes,
+		})
+	}
 }

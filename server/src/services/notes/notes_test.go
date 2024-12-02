@@ -238,7 +238,6 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 		DeleteStack: deleteStack,
 	}
 	voteFilter := filter.VoteFilter{
-		User:  &callerID,
 		Board: boardID,
 		Note:  &noteID,
 	}
