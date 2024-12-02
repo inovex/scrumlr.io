@@ -154,9 +154,10 @@ func (s *BoardService) DeletedColumn(user, board, column uuid.UUID, toBeDeletedV
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})
-
-	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-		Type: realtime.BoardEventVotesDeleted,
-		Data: toBeDeletedVotes,
-	})
+	if len(toBeDeletedVotes) > 0 {
+		_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+			Type: realtime.BoardEventVotesDeleted,
+			Data: toBeDeletedVotes,
+		})
+	}
 }
