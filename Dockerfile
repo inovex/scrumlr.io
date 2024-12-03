@@ -1,4 +1,4 @@
-FROM node:hydrogen-alpine AS build-stage
+FROM node:iron-alpine AS build-stage
 
 WORKDIR /usr/src/app
 
