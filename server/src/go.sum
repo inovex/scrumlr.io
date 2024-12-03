@@ -217,8 +217,8 @@ github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOf
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc h1:9lRDQMhESg+zvGYmW5DyG0UqvY96Bu5QYsTLvCHdrgo=
 github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc/go.mod h1:bciPuU6GHm1iF1pBvUfxfsH0Wmnc2VbpgvbI9ZWuIRs=
-github.com/uptrace/bun v1.2.5 h1:gSprL5xiBCp+tzcZHgENzJpXnmQwRM/A6s4HnBF85mc=
-github.com/uptrace/bun v1.2.5/go.mod h1:vkQMS4NNs4VNZv92y53uBSHXRqYyJp4bGhMHgaNCQpY=
+github.com/uptrace/bun v1.2.6 h1:lyGBQAhNiClchb97HA2cBnDeRxwTRLhSIgiFPXVisV8=
+github.com/uptrace/bun v1.2.6/go.mod h1:xMgnVFf+/5xsrFBU34HjDJmzZnXbVuNEt/Ih56I8qBU=
 github.com/uptrace/bun/dbfixture v1.2.5 h1:DSf8EMOl0V9lQn3bDaUmMjhrXQkgoWgI7khblPOqtW8=
 github.com/uptrace/bun/dbfixture v1.2.5/go.mod h1:L5h2wJJQBODi46tqqqLOd62gJY7P5f/4EYrTdvQkCaA=
 github.com/uptrace/bun/dialect/pgdialect v1.2.5 h1:dWLUxpjTdglzfBks2x+U2WIi+nRVjuh7Z3DLYVFswJk=
