@@ -117,8 +117,8 @@ export interface VotingUpdatedEvent {
   };
 }
 
-export interface UpdatedVotesEvent {
-  type: "VOTES_UPDATED";
+export interface DeleteVotesEvent {
+  type: "VOTES_DELETED";
   data: Vote[];
 }
 
@@ -147,5 +147,5 @@ export type ServerEvent =
   | ParticipantsUpdatedEvent
   | VotingCreatedEvent
   | VotingUpdatedEvent
-  | UpdatedVotesEvent
+  | DeleteVotesEvent
   | AddedBoardReactionEvent;
