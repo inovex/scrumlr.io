@@ -31,6 +31,9 @@ base-path = "/"
 # Enable/Disable the login of anonymous clients
 disable-anonymous-login = false
 
+# enables/disables experimental file system store, in order to allow larger session cookie sizes
+auth-experimental-file-system-store = false
+
 # Set the protocol and host for the auth provider callbacks (e.g. https://scrumlr.io)
 auth-callback-host = ""
 
