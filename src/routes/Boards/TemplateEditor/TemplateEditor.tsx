@@ -141,7 +141,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
       updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? templateColumn : col)); // may be not required since it's already part of array
     } else {
       // actually delete
-      updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? col : null)).filter((col) => col !== null);
+      updated = editableTemplateColumns.map((col) => (col.id !== templateColumn.id ? col : null)).filter((col) => col !== null);
     }
 
     console.log("delete column", diff(editableTemplateColumns, updated));
