@@ -1,5 +1,11 @@
 import {getFromStorage} from "utils/storage";
-import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
+import {
+  BOARD_REACTIONS_ENABLE_STORAGE_KEY,
+  HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY,
+  SNOWFALL_NOTIFICATION_STORAGE_KEY,
+  SNOWFALL_STORAGE_KEY,
+  THEME_STORAGE_KEY,
+} from "constants/storage";
 import {createReducer} from "@reduxjs/toolkit";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
@@ -28,8 +34,8 @@ const initialState: ViewState = {
   hotkeyNotificationsEnabled: getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
   showBoardReactions: getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
   theme: (getFromStorage(THEME_STORAGE_KEY) as Theme) ?? "auto",
-  snowfallEnabled: getFromStorage("snowfall") !== "false",
-  snowfallNotificationEnabled: getFromStorage("snowfall_notification") !== "false",
+  snowfallEnabled: getFromStorage(SNOWFALL_STORAGE_KEY) !== "false",
+  snowfallNotificationEnabled: getFromStorage(SNOWFALL_NOTIFICATION_STORAGE_KEY) !== "false",
 };
 
 export const viewReducer = createReducer(initialState, (builder) =>
