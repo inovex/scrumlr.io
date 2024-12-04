@@ -57,10 +57,14 @@ $column-height: 340px;
   }
 }
 
+// TODO input style wip
 .template-column__name {
+  all: unset;
+
   align-self: flex-start; // only take as much space as needed
   // extend border to bottom and right
   padding: 0 $spacing--xs $spacing--xs 0;
+  max-width: 100%;
 
   font-size: $text--base;
   font-weight: 600;

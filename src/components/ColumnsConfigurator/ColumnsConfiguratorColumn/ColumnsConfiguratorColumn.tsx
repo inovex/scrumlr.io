@@ -70,7 +70,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       style={style}
       {...attributes}
     >
-      <div className="template-column__name">{props.column.name}</div>
+      <input className="template-column__name" value={props.column.name} onInput={(e) => props.editColumn?.(props.column, {name: e.currentTarget.value})} />
       <div className="template-column__menu">
         <DnDIcon
           className={classNames("template-column__icon", "template-column__icon--dnd", "template-column__drag-element", {
