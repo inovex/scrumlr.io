@@ -4,9 +4,10 @@ import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
 import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
 import {ReactComponent as DnDIcon} from "assets/icons/drag-and-drop.svg";
-import {getColorClassName} from "constants/colors";
+import {ColorPicker} from "components/ColorPicker/ColorPicker";
+import {Color, COLOR_ORDER, getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
-import {CSSProperties, useCallback, useEffect} from "react";
+import {CSSProperties, useCallback, useEffect, useState} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import "./ColumnsConfiguratorColumn.scss";
@@ -24,6 +25,8 @@ type ColumnsConfiguratorColumnProps = {
 };
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
+  const [openColorPicker, setOpenColorPicker] = useState(false);
+
   const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: props.column.id});
   const {
     bindings: {ref: stripeRef, style: stripeStyle},
@@ -50,6 +53,19 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
   useEffect(() => {
     updateOffset();
   }, [props.activeDrag, props.activeDrop, props.allColumns, updateOffset]);
+
+  const editColor = (color: Color) => {
+    props.editColumn?.(props.column, {color});
+    setOpenColorPicker(false);
+  };
+
+  const renderColorPicker = () =>
+    openColorPicker ? (
+      // TODO align properly, fix overflow
+      <ColorPicker open={openColorPicker} colors={COLOR_ORDER} activeColor={props.column.color} selectColor={editColor} closeColorPicker={() => setOpenColorPicker(false)} />
+    ) : (
+      <div className="template-column__color" role="button" tabIndex={0} onClick={() => setOpenColorPicker(true)} />
+    );
 
   return (
     <div
@@ -78,7 +94,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
           })}
           {...listeners}
         />
-        <div className="template-column__color" />
+        {renderColorPicker()}
         {props.column.visible ? (
           <VisibleIcon className={classNames("template-column__icon", "template-column__icon--visible")} />
         ) : (
