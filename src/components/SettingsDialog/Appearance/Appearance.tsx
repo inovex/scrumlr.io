@@ -10,6 +10,7 @@ import {NotificationSettings} from "../Components/NotificationSettings";
 import {BoardReactionsSettings} from "../Components/BoardReactionsSettings";
 import {SkinToneSelector} from "../Components/SkinToneSelector";
 import "./Appearance.scss";
+import {SnowfallSettings} from "../Components/SnowfallSettings";
 
 export const Appearance = () => {
   const {t} = useTranslation();
@@ -22,6 +23,7 @@ export const Appearance = () => {
       </header>
       <div className="appearance-container">
         <ThemeSettings />
+        <SnowfallSettings />
         <NotificationSettings />
         <BoardReactionsSettings />
         <SkinToneSelector />
