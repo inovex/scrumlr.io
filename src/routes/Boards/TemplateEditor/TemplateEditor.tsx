@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {AccessPolicy, TemplateColumn, EditableTemplateColumn, Template} from "store/features";
+import {AccessPolicy, TemplateColumn, EditableTemplateColumn, Template, TemplateWithColumns, createTemplateWithColumns} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
@@ -40,7 +40,7 @@ type TemplateColumnProps = {mode: "create" | "edit"};
 export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   // id is set in /edit/:id route (not checked whether its valid though)
   const {id} = useParams();
@@ -139,6 +139,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
       // TODO how are indices handled if we filter these out visually but still remain in array?
       templateColumn.mode = "delete";
       updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? templateColumn : col)); // may be not required since it's already part of array
+      console.log("flag as deleted", updated);
     } else {
       // actually delete
       updated = editableTemplateColumns.map((col) => (col.id !== templateColumn.id ? col : null)).filter((col) => col !== null);
@@ -152,7 +153,28 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
 
   // TODO revise
   const saveTemplate = () => {
-    throw new Error("save not implemented yet");
+    // throw new Error("save not implemented yet");
+    if (!editableTemplateColumns || !editableTemplate) return;
+
+    if (mode === "create") {
+      // create template based on state
+      const newTemplateWithColumns: TemplateWithColumns = {
+        template: {
+          ...editableTemplate,
+          name: nameInput,
+          description: descriptionInput,
+          accessPolicy: activeOptionKey,
+        },
+        columns: editableTemplateColumns,
+      };
+
+      // create and go back on success
+      dispatch(createTemplateWithColumns(newTemplateWithColumns))
+        .unwrap()
+        .then(() => navigate("/boards/templates"));
+    } else if (mode === "edit") {
+      // collect which columns to create/edit/delete by comparing to current (store)
+    }
     /* if (!basisTemplate || !basisColumns) return;
     if (mode === "create") {
       // overwrite from form
