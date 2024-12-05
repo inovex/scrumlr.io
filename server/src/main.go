@@ -255,6 +255,7 @@ func run(c *cli.Context) error {
 	if c.Bool("verbose") {
 		logger.EnableDevelopmentLogger()
 	}
+
 	db, err := migrations.MigrateDatabase(c.String("database"))
 	if err != nil {
 		return fmt.Errorf("unable to migrate database: %w", err)
@@ -294,28 +295,28 @@ func run(c *cli.Context) error {
 	}
 
 	providersMap := make(map[string]auth.AuthProviderConfiguration)
-	if c.IsSet("auth-google-client-id") && c.IsSet("auth-google-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-google-client-id") != "" && c.String("auth-google-client-secret") != "" && c.String("auth-callback-host") != "" {
 		providersMap[(string)(types.AccountTypeGoogle)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-google-client-id"),
 			ClientSecret: c.String("auth-google-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-github-client-id") && c.IsSet("auth-github-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-github-client-id") != "" && c.String("auth-github-client-secret") != "" && c.String("auth-callback-host") != "" {
 		providersMap[(string)(types.AccountTypeGitHub)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-github-client-id"),
 			ClientSecret: c.String("auth-github-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-microsoft-client-id") && c.IsSet("auth-microsoft-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-microsoft-client-id") != "" && c.String("auth-microsoft-client-secret") != "" && c.String("auth-callback-host") != "" {
 		providersMap[(string)(types.AccountTypeMicrosoft)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-microsoft-client-id"),
 			ClientSecret: c.String("auth-microsoft-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-azure-ad-tenant-id") && c.IsSet("auth-azure-ad-client-id") && c.IsSet("auth-azure-ad-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-azure-ad-tenant-id") != "" && c.String("auth-azure-ad-client-id") != "" && c.String("auth-azure-ad-client-secret") != "" && c.String("auth-callback-host") != "" {
 		providersMap[(string)(types.AccountTypeAzureAd)] = auth.AuthProviderConfiguration{
 			TenantId:     c.String("auth-azure-ad-tenant-id"),
 			ClientId:     c.String("auth-azure-ad-client-id"),
@@ -323,14 +324,14 @@ func run(c *cli.Context) error {
 			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-apple-client-id") && c.IsSet("auth-apple-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-apple-client-id") != "" && c.String("auth-apple-client-secret") != "" && c.String("auth-callback-host") != "" {
 		providersMap[(string)(types.AccountTypeApple)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-apple-client-id"),
 			ClientSecret: c.String("auth-apple-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-oidc-discovery-url") && c.IsSet("auth-oidc-client-id") && c.IsSet("auth-oidc-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-oidc-discovery-url") != "" && c.String("auth-oidc-client-id") != "" && c.String("auth-oidc-client-secret") != "" && c.String("auth-callback-host") != "" {
 		providersMap[(string)(types.AccountTypeOIDC)] = auth.AuthProviderConfiguration{
 			ClientId:       c.String("auth-oidc-client-id"),
 			ClientSecret:   c.String("auth-oidc-client-secret"),
