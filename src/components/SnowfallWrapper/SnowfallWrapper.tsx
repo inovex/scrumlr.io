@@ -18,7 +18,7 @@ export const SnowfallWrapper = () => {
       Toast.info({title: t("Snowfall.toastTitle"), message: t("Snowfall.toastMessage")});
     }
     dispatch(setSnowfallNotification(false));
-  }, []);
+  }, [currentMonth, dispatch, snowfallNotificationEnabled, t]);
 
   return (
     <>
