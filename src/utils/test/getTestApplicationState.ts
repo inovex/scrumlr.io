@@ -182,6 +182,8 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeysAreActive: true,
     noteFocused: false,
     showBoardReactions: true,
+    snowfallEnabled: false,
+    snowfallNotificationEnabled: false,
   },
   boardReactions: [],
   skinTone: {
