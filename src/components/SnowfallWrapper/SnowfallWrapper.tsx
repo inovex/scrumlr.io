@@ -14,7 +14,7 @@ export const SnowfallWrapper = () => {
   const currentMonth = new Date().getMonth();
 
   useEffect(() => {
-    if (snowfallNotificationEnabled) {
+    if (currentMonth === 11 && snowfallNotificationEnabled) {
       Toast.info({title: t("Snowfall.toastTitle"), message: t("Snowfall.toastMessage")});
     }
     dispatch(setSnowfallNotification(false));
