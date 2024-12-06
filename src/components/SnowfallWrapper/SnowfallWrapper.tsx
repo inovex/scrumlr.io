@@ -13,9 +13,6 @@ export const SnowfallWrapper = () => {
   const snowfallNotificationEnabled = useAppSelector((applicationState) => applicationState.view.snowfallNotificationEnabled);
   const currentMonth = new Date().getMonth();
 
-  const snowflakeImage = new Image();
-  snowflakeImage.src = "/snowflake.png";
-
   useEffect(() => {
     if (snowfallNotificationEnabled) {
       Toast.info({title: t("Snowfall.toastTitle"), message: t("Snowfall.toastMessage")});
@@ -26,7 +23,7 @@ export const SnowfallWrapper = () => {
   return (
     <>
       {/** Snowfall is only enabled in December */}
-      {snowfallEnabled && currentMonth === 11 && <Snowfall images={[snowflakeImage]} radius={[1, 20]} />}
+      {snowfallEnabled && currentMonth === 11 && <Snowfall color="#99bcff" />}
     </>
   );
 };
