@@ -92,6 +92,15 @@ func (d *Database) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]Note, erro
 	return notes, err
 }
 
+func (d *Database) GetChildNotes(parentNote uuid.UUID) ([]Note, error) {
+	var notes []Note
+	err := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", parentNote).Scan(context.Background(), &notes)
+	if err != nil {
+		return nil, err
+	}
+	return notes, nil
+}
+
 func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error) {
 	boardSelect := d.db.NewSelect().Model((*Board)(nil)).Column("allow_stacking").Where("id = ?", update.Board)
 	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", update.Board)

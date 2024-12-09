@@ -22,6 +22,7 @@ export const votingsReducer = createReducer(initialState, (builder) =>
     )
     .addCase(createdVoting, (state, action) => {
       state.open = action.payload;
+      state.past = [];
     })
     .addCase(updatedVoting, (state, action) => {
       state.open = undefined;
