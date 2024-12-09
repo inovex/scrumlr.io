@@ -6,3 +6,5 @@ export const createdVote = createAction<Vote>("votes/createdVote");
 export const updatedVotes = createAction<Vote[]>("votes/updatedVotes");
 
 export const deletedVote = createAction<Vote>("votes/deletedVote");
+
+export const deletedVotes = createAction<Vote[]>("votes/deletedVotes");
