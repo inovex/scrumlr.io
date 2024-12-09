@@ -10,10 +10,12 @@ import {NotificationSettings} from "../Components/NotificationSettings";
 import {BoardReactionsSettings} from "../Components/BoardReactionsSettings";
 import {SkinToneSelector} from "../Components/SkinToneSelector";
 import "./Appearance.scss";
+import {SnowfallSettings} from "../Components/SnowfallSettings";
 
 export const Appearance = () => {
   const {t} = useTranslation();
   const activeMenuItem: MenuItemConfig = useOutletContext();
+  const currentMonth = new Date().getMonth();
 
   return (
     <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
@@ -22,6 +24,8 @@ export const Appearance = () => {
       </header>
       <div className="appearance-container">
         <ThemeSettings />
+        {/** Since snowfall is only enabled in December, we only show the snowfall settings in December too */}
+        {currentMonth === 11 && <SnowfallSettings />}
         <NotificationSettings />
         <BoardReactionsSettings />
         <SkinToneSelector />
