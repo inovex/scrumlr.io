@@ -40,6 +40,10 @@ export interface View {
   hotkeyNotificationsEnabled: boolean;
 
   showBoardReactions: boolean;
+
+  snowfallEnabled: boolean;
+
+  snowfallNotificationEnabled: boolean;
 }
 
 export type ViewState = View;
