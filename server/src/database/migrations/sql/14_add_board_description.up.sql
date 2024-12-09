@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS boards ADD COLUMN description VARCHAR(300);
