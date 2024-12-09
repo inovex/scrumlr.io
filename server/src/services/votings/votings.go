@@ -32,6 +32,7 @@ type DB interface {
 	AddVote(board, user, note uuid.UUID) (database.Vote, error)
 	RemoveVote(board, user, note uuid.UUID) error
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
+	GetOpenVoting(board uuid.UUID) (database.Voting, error)
 }
 
 func NewVotingService(db DB, rt *realtime.Broker) services.Votings {

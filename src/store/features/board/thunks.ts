@@ -11,7 +11,7 @@ import {deletedNote, syncNotes, updatedNotes} from "../notes";
 import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
 import {createdParticipant, setParticipants, updatedParticipant} from "../participants";
 import {createdVoting, updatedVoting} from "../votings";
-import {updatedVotes} from "../votes";
+import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {EditBoardRequest} from "./types";
@@ -126,9 +126,9 @@ export const permittedBoardAccess = createAsyncThunk<
         dispatch(updatedVoting({voting: message.data.voting, notes: message.data.notes}));
       }
 
-      if (message.type === "VOTES_UPDATED") {
+      if (message.type === "VOTES_DELETED") {
         const votes = message.data;
-        dispatch(updatedVotes(votes));
+        dispatch(deletedVotes(votes));
       }
 
       if (message.type === "REQUEST_CREATED") {
