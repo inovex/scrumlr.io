@@ -26,7 +26,9 @@ func (s *VotingService) AddVote(ctx context.Context, body dto.VoteRequest) (*dto
 func (s *VotingService) RemoveVote(ctx context.Context, body dto.VoteRequest) error {
 	log := logger.FromContext(ctx)
 	err := s.database.RemoveVote(body.Board, body.User, body.Note)
-	log.Errorw("unable to remove vote", "board", body.Board, "user", body.User)
+	if err != nil {
+		log.Errorw("unable to remove vote", "board", body.Board, "user", body.User)
+	}
 	return err
 }
 
