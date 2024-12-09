@@ -199,6 +199,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		})
 
 		r.Post("/boards", s.createBoard)
+		r.Post("/import", s.importBoard)
 		r.Get("/boards", s.getBoards)
 		r.Route("/boards/{id}", func(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/", s.getBoard)

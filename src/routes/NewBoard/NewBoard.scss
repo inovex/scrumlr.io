@@ -33,6 +33,10 @@
     }
   }
 }
+.new-board__mode:last-child {
+  grid-column: 1 / -1;
+  max-width: 100%;
+}
 
 .new-board__mode {
   position: relative;
