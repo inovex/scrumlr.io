@@ -1,6 +1,7 @@
 module scrumlr.io/server
 
-go 1.22.0
+go 1.23
+
 toolchain go1.23rc1
 
 // https://github.com/inovex/scrumlr.io/security/dependabot/108
