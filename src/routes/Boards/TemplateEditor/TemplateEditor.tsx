@@ -62,6 +62,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   // the `mode` property will be later used to determine how the backend should handle each column
   const [editableTemplate, setEditableTemplate] = useState<Template>();
   const [editableTemplateColumns, setEditableTemplateColumns] = useState<EditableTemplateColumn[]>();
+  // TODO add state keeping track of to be deleted columns
 
   useEffect(() => {
     if (basisTemplate && !editableTemplate) {
