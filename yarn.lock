@@ -6609,10 +6609,10 @@ i18next@^21.0.1:
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-i18next@^24.0.2:
-  version "24.0.2"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-24.0.2.tgz#00ee14417675e5733902d60e0bbd424c1ecd2a5f"
-  integrity sha512-D88xyIGcWAKwBTAs4RSqASi8NXR/NhCVSTM4LDbdoU8qb/5dcEZjNCLDhtQBB7Epw/Cp1w2vH/3ujoTbqLSs5g==
+i18next@^24.1.0:
+  version "24.1.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-24.1.0.tgz#d28cda44977c9620ef8ba75845c604f45e52c351"
+  integrity sha512-suKlX82AlptkMUO5YRfaAeH4FQyyKvR66jNaubTMiyPPMx7INU6PXAiy3PGULc0q6K+t9nxmDf/TRj9KjAivmw==
   dependencies:
     "@babel/runtime" "^7.23.2"
 
