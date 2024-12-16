@@ -98,8 +98,8 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         return "create";
       case "edit":
       default:
-        // if col is to be created, editing it doesn't change the fact
-        return currentMode === "create" ? "create" : "edit";
+        // if col is to be created or deleted, editing it doesn't change the fact
+        return currentMode;
     }
   };
 
