@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {Outlet} from "react-router-dom";
+import {Outlet} from "react-router";
 import {useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {useRef} from "react";
