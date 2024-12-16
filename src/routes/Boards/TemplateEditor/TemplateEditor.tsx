@@ -62,7 +62,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   // the `mode` property will be later used to determine how the backend should handle each column
   const [editableTemplate, setEditableTemplate] = useState<Template>();
   const [editableTemplateColumns, setEditableTemplateColumns] = useState<EditableTemplateColumn[]>();
-  // TODO add state keeping track of to be deleted columns
+  // TODO add state keeping track of to be deleted columns (maybe not required since in flagged in above array)
 
   useEffect(() => {
     if (basisTemplate && !editableTemplate) {
@@ -272,6 +272,26 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
       </div>
       <div className="template-editor__description">
         <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
+      </div>
+      <div className="template-editor__debug">
+        <table>
+          <thead>
+            <tr>
+              <th>Column</th>
+              <th>Persisted</th>
+              <th>Mode</th>
+            </tr>
+          </thead>
+          <tbody>
+            {editableTemplateColumns.map((etc) => (
+              <tr>
+                <td>{etc.id}</td>
+                <td>{String(etc.persisted)}</td>
+                <td>{String(etc.mode)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       <div className="template-editor__columns-configurator-wrapper">
         <ColumnsConfigurator

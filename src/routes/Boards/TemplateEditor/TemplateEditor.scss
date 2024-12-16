@@ -5,17 +5,18 @@
   grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
   grid-template-rows:
     $spacing--xs
-    60px
+    60px // <- dropdown
     14px
-    auto
+    auto // <- info
     26px
-    auto
+    auto // <- name
     20px
-    auto
+    auto // <- description
     46px
-    auto
+    auto // <- debug
+    auto // <- column
     56px
-    52px
+    52px // <- buttons
     $spacing--xs;
   grid-template-areas:
     ".          .           .         .         ."
@@ -27,6 +28,7 @@
     ".          .           .         .         ."
     ".          description description description ."
     ".          .           .         .         ."
+    ".          debug        debug      debug      ."
     ".          columns     columns   columns   ."
     ".          .           .         .         ."
     ".          buttons     buttons   buttons   ."
@@ -84,6 +86,11 @@
 
 .template-editor__description {
   grid-area: description;
+}
+
+.template-editor__debug {
+  grid-area: debug;
+  color: $pink--500;
 }
 
 .template-editor__columns-configurator-wrapper {
