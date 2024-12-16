@@ -8,7 +8,7 @@ toolchain go1.23rc1
 replace github.com/opencontainers/runc v1.1.0 => github.com/opencontainers/runc v1.1.2
 
 require (
-	github.com/go-chi/chi/v5 v5.1.0
+	github.com/go-chi/chi/v5 v5.2.0
 	github.com/go-chi/cors v1.2.1
 	github.com/go-chi/httprate v0.14.1
 	github.com/go-chi/jwtauth/v5 v5.1.1
@@ -30,7 +30,7 @@ require (
 	github.com/urfave/cli/v2 v2.27.5
 	github.com/weppos/publicsuffix-go v0.40.2
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.30.0
+	golang.org/x/crypto v0.31.0
 )
 
 require (
