@@ -6,6 +6,9 @@ import "@testing-library/jest-dom";
 
 global.ResizeObserver = require("resize-observer-polyfill");
 
+// global.TextDecoder = require('util').TextDecoder;
+global.TextEncoder = require("util").TextEncoder;
+
 // jest can't handle match media, and the official workaround doesn't work (lol):
 // https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
 // the package to mock it correctly almost works, but not quite:
