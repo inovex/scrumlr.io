@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import {Outlet, useOutletContext} from "react-router-dom";
+import {Outlet, useOutletContext} from "react-router";
 import {useAppSelector, useAppDispatch} from "store";
 import {getTemplates, Template, TemplateColumn, TemplateWithColumns} from "store/features";
 import {useTranslation} from "react-i18next";

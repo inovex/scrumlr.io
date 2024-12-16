@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import {Outlet, useLocation, useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
