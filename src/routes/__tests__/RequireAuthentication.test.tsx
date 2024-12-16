@@ -6,8 +6,8 @@ import {ApplicationState} from "store";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
   Navigate: () => <div>Error</div>,
 }));
 

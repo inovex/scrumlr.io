@@ -7,8 +7,9 @@ import {useAppDispatch, useAppSelector} from "store";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
 import _ from "underscore";
-import {Outlet} from "react-router-dom";
+import {Outlet} from "react-router";
 import {leaveBoard} from "store/features";
+import {SnowfallWrapper} from "components/SnowfallWrapper/SnowfallWrapper";
 
 export const Board = () => {
   const dispatch = useAppDispatch();
@@ -75,6 +76,7 @@ export const Board = () => {
             participantsWithRaisedHand={(state.participants!.others ?? []).filter((p) => p.raisedHand)}
           />
         )}
+        <SnowfallWrapper />
         <Outlet />
         <BoardComponent currentUserIsModerator={currentUserIsModerator} moderating={state.view.moderating} locked={!!state.board.locked}>
           {state.columns

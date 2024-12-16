@@ -1,7 +1,9 @@
 package api
 
 import (
+	"github.com/markbates/goth/gothic"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/cors"
@@ -9,6 +11,7 @@ import (
 	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	gorillaSessions "github.com/gorilla/sessions"
 	"github.com/gorilla/websocket"
 
 	"scrumlr.io/server/auth"
@@ -43,7 +46,9 @@ type Server struct {
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 
-	anonymousLoginDisabled bool
+	// note: if more options come with time, it might be sensible to wrap them into a struct
+	anonymousLoginDisabled      bool
+	experimentalFileSystemStore bool
 }
 
 func New(
@@ -65,6 +70,7 @@ func New(
 	verbose bool,
 	checkOrigin bool,
 	anonymousLoginDisabled bool,
+	experimentalFileSystemStore bool,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -106,13 +112,24 @@ func New(
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
 
-		anonymousLoginDisabled: anonymousLoginDisabled,
+		anonymousLoginDisabled:      anonymousLoginDisabled,
+		experimentalFileSystemStore: experimentalFileSystemStore,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
 	s.upgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
+	}
+
+	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
+	// this might be required when using some OIDC providers which exceed the 4KB limit.
+	// see https://github.com/markbates/goth/pull/141
+	if s.experimentalFileSystemStore {
+		logger.Get().Infow("using experimental file system store")
+		store := gorillaSessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
+		store.MaxLength(0x8000) // 32KB should be plenty of space
+		gothic.Store = store
 	}
 
 	if checkOrigin {

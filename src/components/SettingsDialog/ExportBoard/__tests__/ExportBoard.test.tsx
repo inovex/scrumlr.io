@@ -5,7 +5,7 @@ import {ExportBoard} from "../ExportBoard";
 import {I18nextProvider} from "react-i18next";
 import i18nTest from "i18nTest";
 import getTestStore from "utils/test/getTestStore";
-import {BrowserRouter} from "react-router-dom";
+import {BrowserRouter} from "react-router";
 
 jest.mock("utils/export", () => ({
   ...jest.requireActual("utils/export"),

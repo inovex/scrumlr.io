@@ -1,5 +1,5 @@
 # Build application
-FROM golang:1.22
+FROM golang:1.23
 
 ARG TARGETARCH
 ARG TARGETOS

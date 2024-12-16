@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	dto2 "scrumlr.io/server/common/dto"
+	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
@@ -16,27 +16,27 @@ import (
 type BoardSubscription struct {
 	subscription      chan *realtime.BoardEvent
 	clients           map[uuid.UUID]*websocket.Conn
-	boardParticipants []*dto2.BoardSession
-	boardSettings     *dto2.Board
-	boardColumns      []*dto2.Column
-	boardNotes        []*dto2.Note
-	boardReactions    []*dto2.Reaction
+	boardParticipants []*dto.BoardSession
+	boardSettings     *dto.Board
+	boardColumns      []*dto.Column
+	boardNotes        []*dto.Note
+	boardReactions    []*dto.Reaction
 }
 
 type InitEvent struct {
 	Type realtime.BoardEventType `json:"type"`
-	Data dto2.FullBoard          `json:"data"`
+	Data dto.FullBoard           `json:"data"`
 }
 
 type EventData struct {
-	Board     *dto2.Board                 `json:"board"`
-	Columns   []*dto2.Column              `json:"columns"`
-	Notes     []*dto2.Note                `json:"notes"`
-	Reactions []*dto2.Reaction            `json:"reactions"`
-	Votings   []*dto2.Voting              `json:"votings"`
-	Votes     []*dto2.Vote                `json:"votes"`
-	Sessions  []*dto2.BoardSession        `json:"participants"`
-	Requests  []*dto2.BoardSessionRequest `json:"requests"`
+	Board     *dto.Board                 `json:"board"`
+	Columns   []*dto.Column              `json:"columns"`
+	Notes     []*dto.Note                `json:"notes"`
+	Reactions []*dto.Reaction            `json:"reactions"`
+	Votings   []*dto.Voting              `json:"votings"`
+	Votes     []*dto.Vote                `json:"votes"`
+	Sessions  []*dto.BoardSession        `json:"participants"`
+	Requests  []*dto.BoardSessionRequest `json:"requests"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
@@ -97,7 +97,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData dto2.FullBoard) {
+func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData dto.FullBoard) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),

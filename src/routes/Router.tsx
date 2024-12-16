@@ -1,4 +1,4 @@
-import {BrowserRouter, Navigate, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 import {LoginBoard} from "routes/LoginBoard";
 import {Boards} from "routes/Boards";
 import {Templates} from "routes/Boards/Templates";
@@ -6,7 +6,6 @@ import {Sessions} from "routes/Boards/Sessions";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
-import {Route} from "react-router";
 import {SettingsDialog} from "components/SettingsDialog";
 import {ExportBoard} from "components/SettingsDialog/ExportBoard";
 import {ShareSession} from "components/SettingsDialog/ShareSession";
