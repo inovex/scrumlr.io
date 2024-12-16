@@ -7,7 +7,7 @@ import {useAppDispatch, useAppSelector} from "store";
 import {useEffect} from "react";
 import {toast} from "react-toastify";
 import _ from "underscore";
-import {Outlet} from "react-router-dom";
+import {Outlet} from "react-router";
 import {leaveBoard} from "store/features";
 import {SnowfallWrapper} from "components/SnowfallWrapper/SnowfallWrapper";
 
