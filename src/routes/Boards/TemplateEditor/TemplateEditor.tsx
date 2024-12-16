@@ -103,7 +103,11 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
     }
   };
 
-  const updateIndex = (column: EditableTemplateColumn, index: number) => ({...column, index});
+  // update index of column. if index changed, also update mode.
+  const updateIndex = (column: EditableTemplateColumn, index: number): EditableTemplateColumn =>
+    column.index === index
+      ? column // no change
+      : {...column, index, mode: nextMode("edit", column.mode)}; // update index and mode
 
   const addColumn = (templateColumn: TemplateColumn, index: number) => {
     // dispatch(addTemplateColumnOptimistically({templateColumn, index}));
