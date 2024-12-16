@@ -168,6 +168,8 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
       updated = editableTemplateColumns.map((col) => (col.id !== templateColumn.id ? col : null)).filter((col) => col !== null);
     }
 
+    updated = updated.map(updateIndex);
+
     console.log("delete column", diff(editableTemplateColumns, updated));
     setEditableTemplateColumns(updated);
   };
