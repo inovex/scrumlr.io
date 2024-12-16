@@ -10,9 +10,11 @@ export type TemplateColumn = {
   index: number;
 };
 
+export type TemplateColumnAction = "create" | "edit" | "delete";
+
 type ExistenceStatus = {
   persisted: boolean;
-  mode?: "create" | "edit" | "delete";
+  mode?: TemplateColumnAction;
 };
 
 export type EditableTemplateColumn = TemplateColumn & ExistenceStatus;

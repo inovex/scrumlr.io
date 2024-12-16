@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {AccessPolicy, TemplateColumn, EditableTemplateColumn, Template, TemplateWithColumns, createTemplateWithColumns} from "store/features";
+import {AccessPolicy, TemplateColumn, EditableTemplateColumn, Template, TemplateWithColumns, createTemplateWithColumns, TemplateColumnAction} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
@@ -87,6 +87,22 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   const [passwordInput, setPasswordInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
+
+  const nextMode = (action: TemplateColumnAction, currentMode?: TemplateColumnAction): TemplateColumnAction => {
+    if (!currentMode) return action;
+
+    switch (action) {
+      case "delete":
+        return "delete";
+      case "create":
+        return "create";
+      case "edit":
+      default:
+        // if col is to be created, editing it doesn't change the fact
+        return currentMode === "create" ? "create" : "edit";
+    }
+  };
+
   const updateIndex = (column: EditableTemplateColumn, index: number) => ({...column, index});
 
   const addColumn = (templateColumn: TemplateColumn, index: number) => {
@@ -95,7 +111,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
 
     const updated = editableTemplateColumns
       // add column with status
-      .toSpliced(index, 0, {...templateColumn, persisted: false, mode: "create"})
+      .toSpliced(index, 0, {...templateColumn, persisted: false, mode: "create"}) // no nextMode since no previous state exists at this point
       // reset indices
       .map(updateIndex);
 
@@ -111,8 +127,8 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
     const toColumn = editableTemplateColumns[toIndex];
 
     // TODO change using setter func instead of direct access?
-    fromColumn.mode = "edit";
-    toColumn.mode = "edit";
+    fromColumn.mode = nextMode("edit", fromColumn.mode);
+    toColumn.mode = nextMode("edit", toColumn.mode);
 
     const updated = arrayMove(editableTemplateColumns, fromIndex, toIndex).map(updateIndex);
 
@@ -124,7 +140,9 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   const editColumn = (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => {
     // dispatch(editTemplateColumnOptimistically({columnId: templateColumn.id, overwrite}));
     if (!editableTemplateColumns) return;
-    const updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? ({...col, ...overwrite, mode: "edit"} as EditableTemplateColumn) : col));
+    const updated = editableTemplateColumns.map((col) =>
+      col.id === templateColumn.id ? ({...col, ...overwrite, mode: nextMode("edit", col.mode)} as EditableTemplateColumn) : col
+    );
 
     console.log("edit column", diff(editableTemplateColumns, updated));
     setEditableTemplateColumns(updated);
@@ -138,7 +156,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
     if (templateColumn.persisted) {
       // only mark as deleted
       // TODO how are indices handled if we filter these out visually but still remain in array?
-      templateColumn.mode = "delete";
+      templateColumn.mode = nextMode("delete", templateColumn.mode);
       updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? templateColumn : col)); // may be not required since it's already part of array
       console.log("flag as deleted", updated);
     } else {
@@ -278,6 +296,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
           <thead>
             <tr>
               <th>Column</th>
+              <th>Index</th>
               <th>Persisted</th>
               <th>Mode</th>
             </tr>
@@ -286,6 +305,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
             {editableTemplateColumns.map((etc) => (
               <tr>
                 <td>{etc.id}</td>
+                <td>{etc.index}</td>
                 <td>{String(etc.persisted)}</td>
                 <td>{String(etc.mode)}</td>
               </tr>
