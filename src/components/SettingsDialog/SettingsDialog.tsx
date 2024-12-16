@@ -1,7 +1,6 @@
 import {useEffect, useState} from "react";
 import {animated, Transition} from "@react-spring/web";
-import {Outlet, useLocation, useNavigate} from "react-router";
-import {Link} from "react-router-dom";
+import {Outlet, useLocation, useNavigate, Link} from "react-router";
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
