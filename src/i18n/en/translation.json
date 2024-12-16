@@ -462,7 +462,8 @@
     "colorSchemeLight": "Light",
     "colorSchemeDark": "Dark",
     "showHotkeyNotifications": "Show hotkey notifications",
-    "showBoardReactions": "Show board reactions"
+    "showBoardReactions": "Show board reactions",
+    "showSnowfall": "Show snowfall"
   },
   "Feedback": {
     "PraiseInputLabel": "Anything else you want to tell us?",
@@ -720,5 +721,9 @@
     "AddVote": "Add vote",
     "RemoveVote": "Remove vote",
     "VotesOnNote": "{{votes}} vote(s)"
+  },
+  "Snowfall": {
+    "toastTitle": "Happy Holidays 🎄",
+    "toastMessage": "Happy Holidays from the Scrumlr team! You can turn off the snow animations in the appearance settings."
   }
 }

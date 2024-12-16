@@ -4,7 +4,12 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom";
 
+import {TextEncoder} from "util";
+
 global.ResizeObserver = require("resize-observer-polyfill");
+
+// global.TextDecoder = require('util').TextDecoder;
+global.TextEncoder = TextEncoder;
 
 // jest can't handle match media, and the official workaround doesn't work (lol):
 // https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom

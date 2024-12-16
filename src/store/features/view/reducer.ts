@@ -1,12 +1,27 @@
 import {getFromStorage} from "utils/storage";
-import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
+import {
+  BOARD_REACTIONS_ENABLE_STORAGE_KEY,
+  HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY,
+  SNOWFALL_NOTIFICATION_STORAGE_KEY,
+  SNOWFALL_STORAGE_KEY,
+  THEME_STORAGE_KEY,
+} from "constants/storage";
 import {createReducer} from "@reduxjs/toolkit";
 import {Theme, ViewState} from "./types";
 import {leaveBoard} from "../board";
 import {setHotkeyState, setLanguage, setModerating, setRoute} from "./actions";
 import {updatedParticipant} from "../participants";
 import {onNoteBlur, onNoteFocus} from "../notes";
-import {disableHotkeyNotifications, enableHotkeyNotifications, setServerInfo, setShowBoardReactions, setTheme} from "./thunks";
+import {
+  disableHotkeyNotifications,
+  disableSnowfall,
+  enableHotkeyNotifications,
+  enableSnowfall,
+  setServerInfo,
+  setShowBoardReactions,
+  setSnowfallNotification,
+  setTheme,
+} from "./thunks";
 
 const initialState: ViewState = {
   moderating: false,
@@ -20,6 +35,8 @@ const initialState: ViewState = {
   showBoardReactions: getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
   theme: (getFromStorage(THEME_STORAGE_KEY) as Theme) ?? "auto",
   legacyCreateBoard: process.env.REACT_APP_LEGACY_CREATE_BOARD === "true",
+  snowfallEnabled: getFromStorage(SNOWFALL_STORAGE_KEY) !== "false",
+  snowfallNotificationEnabled: getFromStorage(SNOWFALL_NOTIFICATION_STORAGE_KEY) !== "false",
 };
 
 export const viewReducer = createReducer(initialState, (builder) =>
@@ -67,5 +84,14 @@ export const viewReducer = createReducer(initialState, (builder) =>
     })
     .addCase(setShowBoardReactions.fulfilled, (state, action) => {
       state.showBoardReactions = action.payload;
+    })
+    .addCase(enableSnowfall.fulfilled, (state) => {
+      state.snowfallEnabled = true;
+    })
+    .addCase(disableSnowfall.fulfilled, (state) => {
+      state.snowfallEnabled = false;
+    })
+    .addCase(setSnowfallNotification.fulfilled, (state, action) => {
+      state.snowfallNotificationEnabled = action.payload;
     })
 );

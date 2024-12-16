@@ -30,6 +30,7 @@ type DB interface {
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 	GetVotes(f filter.VoteFilter) ([]database.Vote, error)
+	GetChildNotes(parentNote uuid.UUID) ([]database.Note, error)
 }
 
 func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
@@ -128,12 +129,25 @@ func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	note := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
 	voteFilter := filter.VoteFilter{
-		User:  &user,
 		Board: board,
 		Note:  &note,
 	}
+	deletedVotes, err := s.database.GetVotes(voteFilter)
+	if body.DeleteStack {
+		stackedVotes, _ := s.database.GetChildNotes(note)
+		for _, n := range stackedVotes {
+			votes, err := s.database.GetVotes(filter.VoteFilter{
+				Board: board,
+				Note:  &n.ID,
+			})
+			if err != nil {
+				log.Errorw("unable to get votes of stacked notes", "note", n, "error", err)
+				return err
+			}
+			deletedVotes = append(deletedVotes, votes...)
+		}
+	}
 
-	votes, err := s.database.GetVotes(voteFilter)
 	if err != nil {
 		log.Errorw("unable to retrieve votes for a note delete", "err", err)
 	}
@@ -144,7 +158,7 @@ func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id
 		return err
 	}
 
-	s.DeletedNote(user, board, note, votes, body.DeleteStack)
+	s.DeletedNote(user, board, note, deletedVotes, body.DeleteStack)
 	return err
 }
 
@@ -165,7 +179,7 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID) {
 	})
 }
 
-func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote, deleteStack bool) {
+func (s *NoteService) DeletedNote(user, board, note uuid.UUID, deletedVotes []database.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,
 		"deleteStack": deleteStack,
@@ -175,14 +189,9 @@ func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.
 		Data: noteData,
 	})
 
-	personalVotes := []*dto.Vote{}
-	for _, vote := range votes {
-		if vote.User == user {
-			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
-		}
-	}
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-		Type: realtime.BoardEventVotesUpdated,
-		Data: personalVotes,
+		Type: realtime.BoardEventVotesDeleted,
+		Data: deletedVotes,
 	})
+
 }
