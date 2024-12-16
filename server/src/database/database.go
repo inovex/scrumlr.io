@@ -18,6 +18,7 @@ type Database struct {
 type FullBoard struct {
 	Board                Board
 	BoardSessions        []BoardSession
+	Participants         []User
 	BoardSessionRequests []BoardSessionRequest
 	Columns              []Column
 	Notes                []Note
@@ -45,15 +46,16 @@ func New(db *sql.DB, verbose bool) *Database {
 
 func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 	var (
-		board     Board
-		sessions  []BoardSession
-		requests  []BoardSessionRequest
-		columns   []Column
-		notes     []Note
-		reactions []Reaction
-		votings   []Voting
-		votes     []Vote
-		err       error
+		board        Board
+		sessions     []BoardSession
+		participants []User
+		requests     []BoardSessionRequest
+		columns      []Column
+		notes        []Note
+		reactions    []Reaction
+		votings      []Voting
+		votes        []Vote
+		err          error
 	)
 	type dataBaseOperation int
 
@@ -63,6 +65,7 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		getBoard dataBaseOperation = iota
 		getRequests
 		getSessions
+		getParticipants
 		getColumns
 		getNotes
 		getReactions
@@ -77,6 +80,8 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 			requests, err = d.GetBoardSessionRequests(id)
 		case getSessions:
 			sessions, err = d.GetBoardSessions(id)
+		case getParticipants:
+			participants, err = d.GetParticipants(id)
 		case getColumns:
 			columns, err = d.GetColumns(id)
 		case getNotes:
@@ -90,5 +95,5 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 			return FullBoard{}, err
 		}
 	}
-	return FullBoard{board, sessions, requests, columns, notes, reactions, votings, votes}, nil
+	return FullBoard{board, sessions, participants, requests, columns, notes, reactions, votings, votes}, nil
 }

@@ -153,7 +153,8 @@ type ImportBoardRequest struct {
 type FullBoard struct {
 	Board                *Board                 `json:"board"`
 	BoardSessionRequests []*BoardSessionRequest `json:"requests"`
-	BoardSessions        []*BoardSession        `json:"participants"`
+	BoardSessions        []*BoardSession        `json:"sessions"`
+	Participants         []*User                `json:"participants"`
 	Columns              []*Column              `json:"columns"`
 	Notes                []*Note                `json:"notes"`
 	Reactions            []*Reaction            `json:"reactions"`

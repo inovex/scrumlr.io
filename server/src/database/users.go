@@ -110,6 +110,12 @@ func (d *Database) GetUser(id uuid.UUID) (User, error) {
 	return user, err
 }
 
+func (d *Database) GetParticipants(board uuid.UUID) ([]User, error) {
+	var participants []User
+	err := d.db.NewSelect().Model((*User)(nil)).Where("board = ?", board).Scan(context.Background(), &participants)
+	return participants, err
+}
+
 func (d *Database) IsUserAnonymous(id uuid.UUID) (bool, error) {
 	count, err := d.db.NewSelect().
 		Table("users").

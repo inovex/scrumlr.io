@@ -29,14 +29,15 @@ type InitEvent struct {
 }
 
 type EventData struct {
-	Board     *dto.Board                 `json:"board"`
-	Columns   []*dto.Column              `json:"columns"`
-	Notes     []*dto.Note                `json:"notes"`
-	Reactions []*dto.Reaction            `json:"reactions"`
-	Votings   []*dto.Voting              `json:"votings"`
-	Votes     []*dto.Vote                `json:"votes"`
-	Sessions  []*dto.BoardSession        `json:"participants"`
-	Requests  []*dto.BoardSessionRequest `json:"requests"`
+	Board        *dto.Board                 `json:"board"`
+	Columns      []*dto.Column              `json:"columns"`
+	Notes        []*dto.Note                `json:"notes"`
+	Reactions    []*dto.Reaction            `json:"reactions"`
+	Votings      []*dto.Voting              `json:"votings"`
+	Votes        []*dto.Vote                `json:"votes"`
+	Sessions     []*dto.BoardSession        `json:"sessions"`
+	Participants []*dto.User                `json:"participants"`
+	Requests     []*dto.BoardSessionRequest `json:"requests"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
