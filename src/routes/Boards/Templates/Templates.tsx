@@ -1,10 +1,9 @@
 import classNames from "classnames";
-import {Outlet, useOutletContext} from "react-router-dom";
+import {Outlet, useOutletContext,useNavigate} from "react-router";
 import {useAppSelector} from "store";
 import {Template, TemplateColumn, TemplateWithColumns} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useRef} from "react";
-import {useNavigate} from "react-router";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
 import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
