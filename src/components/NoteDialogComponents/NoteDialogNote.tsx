@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {FC} from "react";
 import {AvataaarProps} from "types/avatar";
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/types";
 import {useAppSelector} from "store";
 import {NoteDialogNoteComponents} from "./NoteDialogNoteComponents";
 import "./NoteDialogNote.scss";
@@ -26,7 +26,7 @@ export type NoteDialogNoteProps = {
 
 export const NoteDialogNote: FC<NoteDialogNoteProps> = (props: NoteDialogNoteProps) => {
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self.role));
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
 
   /* eslint-disable jsx-a11y/no-static-element-interactions */
   return (

@@ -20,6 +20,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 	var body dto.ColumnRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
 	}
@@ -28,7 +29,6 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 	body.User = user
 	column, err := s.boards.CreateColumn(r.Context(), body)
 	if err != nil {
-		log.Errorw("unable to create column", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -58,11 +58,13 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 
 // updateColumn updates a column
 func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	columnId := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
 
 	var body dto.ColumnUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
 	}
@@ -97,13 +99,10 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 
 // getColumns get all columns
 func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	columns, err := s.boards.ListColumns(r.Context(), board)
 	if err != nil {
-		log.Errorw("unable to get columns", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}

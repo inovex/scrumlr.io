@@ -10,11 +10,13 @@ import (
 type Vote struct {
 	Voting uuid.UUID `json:"voting"`
 	Note   uuid.UUID `json:"note"`
+	User   uuid.UUID `json:"user"`
 }
 
 func (v *Vote) From(vote database.Vote) *Vote {
 	v.Voting = vote.Voting
 	v.Note = vote.Note
+	v.User = vote.User
 	return v
 }
 

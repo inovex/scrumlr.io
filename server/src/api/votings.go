@@ -6,6 +6,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -13,10 +14,12 @@ import (
 
 // createVoting creates a new voting session
 func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body dto.VotingCreateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -39,11 +42,13 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 
 // updateVoting updates a voting session
 func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.VotingIdentifier).(uuid.UUID)
 
 	var body dto.VotingUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -53,6 +58,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 	voting, err := s.votings.Update(r.Context(), body)
 	if err != nil {
+
 		common.Throw(w, r, err)
 		return
 	}

@@ -2,6 +2,7 @@ package notes
 
 import (
 	"context"
+	"scrumlr.io/server/logger"
 
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/realtime"
@@ -79,6 +80,10 @@ func (m *DBMock) GetVotes(f filter.VoteFilter) ([]database.Vote, error) {
 	args := m.Called(f)
 	return args.Get(0).([]database.Vote), args.Error(1)
 }
+func (m *DBMock) GetChildNotes(note uuid.UUID) ([]database.Note, error) {
+	args := m.Called(note)
+	return args.Get(0).([]database.Note), args.Error(1)
+}
 
 func TestNoteServiceTestSuite(t *testing.T) {
 	suite.Run(t, new(NoteServiceTestSuite))
@@ -115,7 +120,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 
 	clientMock.On("Publish", publishSubject, publishEvent).Return(nil)
 
-	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(logger.InitTestLogger(context.Background()), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
@@ -138,7 +143,7 @@ func (suite *NoteServiceTestSuite) TestGetNote() {
 		ID: noteID,
 	}, nil)
 
-	_, err := s.Get(context.Background(), noteID)
+	_, err := s.Get(logger.InitTestLogger(context.Background()), noteID)
 
 	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
@@ -153,7 +158,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 
 	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
 
-	_, err := s.List(context.Background(), boardID)
+	_, err := s.List(logger.InitTestLogger(context.Background()), boardID)
 
 	assert.NoError(suite.T(), err)
 	mock.AssertExpectations(suite.T())
@@ -195,8 +200,10 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	// Mock for the updatedNotes call, which internally calls GetNotes
 	mock.On("GetNotes", boardID).Return([]database.Note{}, nil)
 
-	ctx := context.Background()
+	ctx := logger.InitTestLogger(context.Background())
+
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
+
 	mock.On("UpdateNote", callerID, database.NoteUpdate{
 		ID:       noteID,
 		Board:    boardID,
@@ -235,7 +242,6 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 		DeleteStack: deleteStack,
 	}
 	voteFilter := filter.VoteFilter{
-		User:  &callerID,
 		Board: boardID,
 		Note:  &noteID,
 	}
@@ -250,19 +256,23 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 		Type: realtime.BoardEventNoteDeleted,
 		Data: deletedNoteRealTimeUpdate,
 	}
-	publishEventVotesUpdated := realtime.BoardEvent{
-		Type: realtime.BoardEventVotesUpdated,
-		Data: []*dto.Vote{},
+	publishEventVotesDeleted := realtime.BoardEvent{
+		Type: realtime.BoardEventVotesDeleted,
+		Data: []database.Vote{},
 	}
 	clientMock.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
-	clientMock.On("Publish", publishSubject, publishEventVotesUpdated).Return(nil)
+	clientMock.On("Publish", publishSubject, publishEventVotesDeleted).Return(nil)
 
-	ctx := context.Background()
+	ctx := logger.InitTestLogger(context.Background())
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 	ctx = context.WithValue(ctx, identifiers.BoardIdentifier, boardID)
 	ctx = context.WithValue(ctx, identifiers.NoteIdentifier, noteID)
 
 	mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
+	if deleteStack {
+		mock.On("GetChildNotes", noteID).Return([]database.Note{}, nil)
+		mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
+	}
 	mock.On("DeleteNote", callerID, boardID, noteID, deleteStack).Return(nil)
 
 	err := s.Delete(ctx, body, noteID)
@@ -293,7 +303,7 @@ func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
 		Text:   txt,
 	}).Return(database.Note{}, aDBError)
 
-	_, err := s.Create(context.Background(), dto.NoteCreateRequest{
+	_, err := s.Create(logger.InitTestLogger(context.Background()), dto.NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
@@ -313,7 +323,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 	expectedAPIError := &common.APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
 	mock.On("GetNote", boardID).Return(database.Note{}, sql.ErrNoRows)
 
-	_, err := s.Get(context.Background(), boardID)
+	_, err := s.Get(logger.InitTestLogger(context.Background()), boardID)
 
 	assert.Error(suite.T(), err)
 	assert.Equal(suite.T(), expectedAPIError, err)

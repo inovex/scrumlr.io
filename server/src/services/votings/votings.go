@@ -32,6 +32,7 @@ type DB interface {
 	AddVote(board, user, note uuid.UUID) (database.Vote, error)
 	RemoveVote(board, user, note uuid.UUID) error
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
+	GetOpenVoting(board uuid.UUID) (database.Voting, error)
 }
 
 func NewVotingService(db DB, rt *realtime.Broker) services.Votings {
@@ -83,7 +84,11 @@ func (s *VotingService) Update(ctx context.Context, body dto.VotingUpdateRequest
 	}
 
 	if voting.Status == types.VotingStatusClosed {
-		votes, _ := s.getVotes(ctx, body.Board, body.ID)
+		votes, err := s.getVotes(ctx, body.Board, body.ID)
+		if err != nil {
+			log.Errorw("unable to get votes", "err", err)
+			return nil, err
+		}
 		s.UpdatedVoting(body.Board, voting.ID)
 		return new(dto.Voting).From(voting, votes), err
 	}
@@ -103,19 +108,34 @@ func (s *VotingService) Get(ctx context.Context, boardID, id uuid.UUID) (*dto.Vo
 	}
 
 	if voting.Status == types.VotingStatusClosed {
-		votes, _ := s.getVotes(ctx, boardID, id)
+		votes, err := s.getVotes(ctx, boardID, id)
+		if err != nil {
+			log.Errorw("unable to get votes", "voting", id, "error", err)
+			return nil, err
+		}
 		return new(dto.Voting).From(voting, votes), err
 	}
 	return new(dto.Voting).From(voting, nil), err
 }
 
-func (s *VotingService) List(_ context.Context, boardID uuid.UUID) ([]*dto.Voting, error) {
+func (s *VotingService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Voting, error) {
+	log := logger.FromContext(ctx)
 	votings, votes, err := s.database.GetVotings(boardID)
+	if err != nil {
+		log.Errorw("unable to get votings", "board", boardID, "error", err)
+		return nil, err
+	}
 	return dto.Votings(votings, votes), err
 }
 
-func (s *VotingService) getVotes(_ context.Context, boardID, id uuid.UUID) ([]database.Vote, error) {
-	return s.database.GetVotes(filter.VoteFilter{Board: boardID, Voting: &id})
+func (s *VotingService) getVotes(ctx context.Context, boardID, id uuid.UUID) ([]database.Vote, error) {
+	log := logger.FromContext(ctx)
+	votes, err := s.database.GetVotes(filter.VoteFilter{Board: boardID, Voting: &id})
+	if err != nil {
+		log.Errorw("unable to get votes", "voting", id, "error", err)
+		return nil, err
+	}
+	return votes, err
 }
 
 func (s *VotingService) CreatedVoting(board, voting uuid.UUID) {
@@ -125,13 +145,10 @@ func (s *VotingService) CreatedVoting(board, voting uuid.UUID) {
 		return
 	}
 
-	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingCreated,
 		Data: new(dto.Voting).From(dbVoting, nil),
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast created voting", "err", err)
-	}
 }
 
 func (s *VotingService) UpdatedVoting(board, voting uuid.UUID) {
@@ -142,10 +159,13 @@ func (s *VotingService) UpdatedVoting(board, voting uuid.UUID) {
 		return
 	}
 	if dbVoting.Status == types.VotingStatusClosed {
-		notes, _ = s.database.GetNotes(board)
+		notes, err = s.database.GetNotes(board)
+		if err != nil {
+			logger.Get().Errorw("unable to retrieve notes in updated voting", "err", err)
+		}
 	}
 
-	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: struct {
 			Voting *dto.Voting `json:"voting"`
@@ -155,7 +175,5 @@ func (s *VotingService) UpdatedVoting(board, voting uuid.UUID) {
 			Notes:  dto.Notes(notes),
 		},
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated voting", "err", err)
-	}
+
 }

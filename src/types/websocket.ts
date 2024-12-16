@@ -1,12 +1,12 @@
-import {Board} from "./board";
-import {Column} from "./column";
-import {Participant} from "./participant";
-import {Note} from "./note";
-import {Vote} from "./vote";
-import {Voting} from "./voting";
-import {Request} from "./request";
-import {Reaction} from "./reaction";
-import {BoardReactionType} from "./boardReaction";
+import {Board} from "../store/features/board/types";
+import {Column} from "../store/features/columns/types";
+import {Participant} from "../store/features/participants/types";
+import {Note} from "../store/features/notes/types";
+import {Vote} from "../store/features/votes/types";
+import {Voting} from "../store/features/votings/types";
+import {Request} from "../store/features/requests/types";
+import {Reaction} from "../store/features/reactions/types";
+import {BoardReactionType} from "../store/features/boardReactions/types";
 
 export interface BoardInitEvent {
   type: "INIT";
@@ -117,8 +117,8 @@ export interface VotingUpdatedEvent {
   };
 }
 
-export interface UpdatedVotesEvent {
-  type: "VOTES_UPDATED";
+export interface DeleteVotesEvent {
+  type: "VOTES_DELETED";
   data: Vote[];
 }
 
@@ -147,5 +147,5 @@ export type ServerEvent =
   | ParticipantsUpdatedEvent
   | VotingCreatedEvent
   | VotingUpdatedEvent
-  | UpdatedVotesEvent
+  | DeleteVotesEvent
   | AddedBoardReactionEvent;

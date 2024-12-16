@@ -22,7 +22,7 @@ import {AvataaarProps} from "types/avatar";
 import {getColorClassName, getColorForIndex} from "../../constants/colors";
 
 export type AvatarProps = {
-  seed: string;
+  seed?: string;
   className?: string;
   avatar?: AvataaarProps;
 };
@@ -77,6 +77,9 @@ export const generateRandomProps = (seed: string) => {
  */
 export const Avatar = React.memo(
   ({className, seed, avatar}: AvatarProps) => {
+    if (!seed) {
+      return null;
+    }
     if (!avatar) {
       const {accentColorClass, ...avatarProps} = generateRandomProps(seed);
       return <Avataar className={classNames("avatar", className, accentColorClass)} avatarStyle="Circle" {...avatarProps} />;

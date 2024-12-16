@@ -23,12 +23,20 @@ func (s *VotingService) AddVote(ctx context.Context, body dto.VoteRequest) (*dto
 	return new(dto.Vote).From(v), err
 }
 
-func (s *VotingService) RemoveVote(_ context.Context, body dto.VoteRequest) error {
-	return s.database.RemoveVote(body.Board, body.User, body.Note)
+func (s *VotingService) RemoveVote(ctx context.Context, body dto.VoteRequest) error {
+	log := logger.FromContext(ctx)
+	err := s.database.RemoveVote(body.Board, body.User, body.Note)
+	if err != nil {
+		log.Errorw("unable to remove vote", "board", body.Board, "user", body.User)
+	}
+	return err
 }
 
-func (s *VotingService) GetVotes(_ context.Context, f filter.VoteFilter) ([]*dto.Vote, error) {
+func (s *VotingService) GetVotes(ctx context.Context, f filter.VoteFilter) ([]*dto.Vote, error) {
+	log := logger.FromContext(ctx)
 	votes, err := s.database.GetVotes(f)
+	if err != nil {
+		log.Errorw("unable to get votes", "err", err)
+	}
 	return dto.Votes(votes), err
-
 }

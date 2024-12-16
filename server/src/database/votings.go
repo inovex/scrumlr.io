@@ -152,3 +152,9 @@ func (d *Database) GetVotings(board uuid.UUID) ([]Voting, []Vote, error) {
 	votes, err := d.GetVotes(filter.VoteFilter{Board: board})
 	return votings, votes, err
 }
+
+func (d *Database) GetOpenVoting(board uuid.UUID) (Voting, error) {
+	var voting Voting
+	err := d.db.NewSelect().Model(&voting).Where("board = ?", board).Where("status = ?", "OPEN").Scan(context.Background())
+	return voting, err
+}

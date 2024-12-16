@@ -2,12 +2,12 @@ import {getByTestId} from "@testing-library/dom";
 import {waitFor} from "@testing-library/react";
 import {RequireAuthentication} from "../RequireAuthentication";
 import {render} from "testUtils";
-import {ApplicationState} from "../../types";
+import {ApplicationState} from "store";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
   Navigate: () => <div>Error</div>,
 }));
 
@@ -26,7 +26,7 @@ describe("RequireAuthentication", () => {
   });
 
   test("show children on valid session", async () => {
-    const {container} = render(createRequireAuthentication({auth: {initializationSucceeded: true, user: {id: "test", name: "test"}}}));
+    const {container} = render(createRequireAuthentication({auth: {initializationSucceeded: true, user: {id: "test", name: "test", isAnonymous: true}}}));
 
     await waitFor(() => {
       expect(getByTestId(container, "test")).toBeDefined();

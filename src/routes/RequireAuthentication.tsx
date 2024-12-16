@@ -1,5 +1,4 @@
-import {Navigate} from "react-router-dom";
-import {useLocation} from "react-router";
+import {useLocation, Navigate} from "react-router";
 import {FC, PropsWithChildren} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppSelector} from "store";

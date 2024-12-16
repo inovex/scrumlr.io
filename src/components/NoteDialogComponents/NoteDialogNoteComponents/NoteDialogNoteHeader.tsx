@@ -1,5 +1,5 @@
 import {NoteAuthorList} from "components/Note/NoteAuthorList/NoteAuthorList";
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/types";
 import {useAppSelector} from "store";
 import {AvataaarProps} from "types/avatar";
 import {Votes} from "../../Votes";
@@ -23,7 +23,7 @@ export const NoteDialogNoteHeader = (props: NoteDialogNoteHeaderProps) => {
   return (
     <div className="note-dialog-note-header__root">
       <div className="note-dialog-note-header__author-list-container">
-        <NoteAuthorList authors={[author]} showAuthors={props.showAuthors} viewer={props.viewer} />
+        <NoteAuthorList authors={[author]} authorID={props.authorId} showAuthors={props.showAuthors} viewer={props.viewer} />
       </div>
       <Votes {...props} className="note-dialog__note-votes" />
     </div>
