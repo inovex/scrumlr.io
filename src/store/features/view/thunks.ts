@@ -1,7 +1,13 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {API} from "api";
 import {saveToStorage} from "utils/storage";
-import {BOARD_REACTIONS_ENABLE_STORAGE_KEY, HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY, THEME_STORAGE_KEY} from "constants/storage";
+import {
+  BOARD_REACTIONS_ENABLE_STORAGE_KEY,
+  HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY,
+  THEME_STORAGE_KEY,
+  SNOWFALL_STORAGE_KEY,
+  SNOWFALL_NOTIFICATION_STORAGE_KEY,
+} from "constants/storage";
 import {retryable} from "store";
 import {ServerInfo, Theme} from "./types";
 
@@ -27,5 +33,20 @@ export const disableHotkeyNotifications = createAsyncThunk<boolean>("view/disabl
 
 export const setShowBoardReactions = createAsyncThunk<boolean, boolean>("view/setShowBoardReactions", async (payload) => {
   saveToStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY, JSON.stringify(payload));
+  return payload;
+});
+
+export const enableSnowfall = createAsyncThunk<boolean>("view/enableSnowfall", async () => {
+  saveToStorage(SNOWFALL_STORAGE_KEY, JSON.stringify(true));
+  return true;
+});
+
+export const disableSnowfall = createAsyncThunk<boolean>("view/disableSnowfall", async () => {
+  saveToStorage(SNOWFALL_STORAGE_KEY, JSON.stringify(false));
+  return false;
+});
+
+export const setSnowfallNotification = createAsyncThunk<boolean, boolean>("view/setSnowfallNotification", async (payload) => {
+  saveToStorage(SNOWFALL_NOTIFICATION_STORAGE_KEY, JSON.stringify(payload));
   return payload;
 });

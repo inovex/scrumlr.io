@@ -440,7 +440,8 @@
     "colorSchemeLight": "Hell",
     "colorSchemeDark": "Dunkel",
     "showHotkeyNotifications": "Zeige Hotkey-Notifikationen",
-    "showBoardReactions": "Zeige Board-Reaktionen"
+    "showBoardReactions": "Zeige Board-Reaktionen",
+    "showSnowfall": "Zeige Schneefall"
   },
   "Feedback": {
     "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",
@@ -698,5 +699,9 @@
     "AddVote": "Stimme hinzufügen",
     "RemoveVote": "Stimme entfernen",
     "VotesOnNote": "{{votes}} Stimme(n)"
+  },
+  "Snowfall": {
+    "toastTitle": "Frohe Feiertage 🎄",
+    "toastMessage": "Frohe Feiertage vom Scrumlr-Team! Du kannst die Schneeanimationen in den Erscheinungseinstellungen deaktivieren."
   }
 }
