@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "store";
 import {getNumberFromStorage, saveToStorage} from "utils/storage";
 import {CUSTOM_TIMER_STORAGE_KEY} from "constants/storage";

@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import _ from "underscore";
 import {Share} from "components/Icon";
 import {Timer} from "components/Timer";

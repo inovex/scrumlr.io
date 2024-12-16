@@ -1,10 +1,9 @@
-import {BrowserRouter, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router";
 import {LoginBoard} from "routes/LoginBoard";
 import {NewBoard} from "routes/NewBoard";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
-import {Route} from "react-router";
 import {SettingsDialog} from "components/SettingsDialog";
 import {ExportBoard} from "components/SettingsDialog/ExportBoard";
 import {ShareSession} from "components/SettingsDialog/ShareSession";
