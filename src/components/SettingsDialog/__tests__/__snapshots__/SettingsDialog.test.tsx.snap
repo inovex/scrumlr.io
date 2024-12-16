@@ -96,6 +96,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                 >
                   <a
                     class="navigation__item navigation__item--active accent-color__backlog-blue"
+                    data-discover="true"
                     href="/board"
                   >
                     <svg
@@ -120,6 +121,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </a>
                   <a
                     class="navigation__item accent-color__value-violet"
+                    data-discover="true"
                     href="/participants"
                   >
                     <svg
@@ -144,6 +146,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </a>
                   <a
                     class="navigation__item accent-color__poker-purple"
+                    data-discover="true"
                     href="/appearance"
                   >
                     <svg
@@ -168,6 +171,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </a>
                   <a
                     class="navigation__item accent-color__planning-pink"
+                    data-discover="true"
                     href="/share"
                   >
                     <svg
@@ -192,6 +196,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </a>
                   <a
                     class="navigation__item accent-color__backlog-blue"
+                    data-discover="true"
                     href="/export"
                   >
                     <svg
@@ -216,6 +221,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </a>
                   <a
                     class="navigation__item accent-color__value-violet"
+                    data-discover="true"
                     href="/feedback"
                   >
                     <svg
@@ -240,6 +246,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </a>
                   <a
                     class="navigation__item accent-color__poker-purple"
+                    data-discover="true"
                     href="/profile"
                   >
                     <svg
@@ -654,6 +661,7 @@ exports[`SettingsDialog should render correctly 1`] = `
               >
                 <a
                   class="settings-dialog__back-link"
+                  data-discover="true"
                   href="/"
                 >
                   <svg>
@@ -663,6 +671,7 @@ exports[`SettingsDialog should render correctly 1`] = `
               </article>
               <a
                 class="settings-dialog__close-button"
+                data-discover="true"
                 href="/"
               >
                 <svg
