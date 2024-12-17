@@ -121,8 +121,8 @@ export const Note = (props: NoteProps) => {
           </div>
         ) : (
           <main className={classNames("note__container")}>
-            <div className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
-              <NoteTextContent data-clarity-mask="True" text={note.text} truncate />
+            <div data-clarity-mask="True" className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
+              <NoteTextContent text={note.text} truncate />
             </div>
             {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}
           </main>
