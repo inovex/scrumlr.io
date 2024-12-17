@@ -49,7 +49,7 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
 
-Clarity.init("pf8vadt2x0");
+Clarity.init("pffqg7itv6");
 
 root.render(
   <React.StrictMode>

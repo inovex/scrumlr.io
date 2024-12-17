@@ -605,6 +605,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__text"
+                  data-clarity-mask="True"
                 >
                   Lorem Ipsum
                 </div>
@@ -1166,6 +1167,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__text"
+                  data-clarity-mask="True"
                 >
                   Lorem Ipsum
                 </div>
