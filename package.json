@@ -39,7 +39,7 @@
     "react-helmet": "^6.1.0",
     "react-hotkeys-hook": "^4.6.1",
     "react-i18next": "^15.2.0",
-    "react-redux": "^9.1.2",
+    "react-redux": "^9.2.0",
     "react-router": "^7.0.2",
     "react-snowfall": "^2.2.0",
     "react-to-print": "^2.15.1",
