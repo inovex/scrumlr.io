@@ -219,6 +219,12 @@ func main() {
 				Usage:   "JWT claim to request for the user name",
 				Value:   "profile",
 			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "session-secret",
+				EnvVars:  []string{"SESSION_SECRET"},
+				Usage:    "Session secret for the authentication provider. Must be provided if an authentication provider is used.",
+				Required: false,
+			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:    "verbose",
 				Aliases: []string{"v"},
@@ -348,6 +354,10 @@ func run(c *cli.Context) error {
 			UserIdentScope: c.String("auth-oidc-user-ident-scope"),
 			UserNameScope:  c.String("auth-oidc-user-name-scope"),
 		}
+	}
+
+	if c.String("session-secret") == "" && len(providersMap) != 0 {
+		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
 
 	dbConnection := database.New(db, c.Bool("verbose"))
