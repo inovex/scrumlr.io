@@ -109,6 +109,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     >
                       <p
                         class="navigation-item__name"
+                        data-clarity-mask="False"
                       >
                         Board Settings
                       </p>
@@ -134,6 +135,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     >
                       <p
                         class="navigation-item__name"
+                        data-clarity-mask="False"
                       >
                         Participants
                       </p>
@@ -159,6 +161,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     >
                       <p
                         class="navigation-item__name"
+                        data-clarity-mask="False"
                       >
                         Appearance
                       </p>
@@ -184,6 +187,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     >
                       <p
                         class="navigation-item__name"
+                        data-clarity-mask="False"
                       >
                         Share Session
                       </p>
@@ -209,6 +213,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     >
                       <p
                         class="navigation-item__name"
+                        data-clarity-mask="False"
                       >
                         Export Board
                       </p>
@@ -234,6 +239,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     >
                       <p
                         class="navigation-item__name"
+                        data-clarity-mask="False"
                       >
                         Feedback
                       </p>
@@ -644,6 +650,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     >
                       <p
                         class="navigation-item__name"
+                        data-clarity-mask="True"
                       >
                         test-participant-name
                       </p>

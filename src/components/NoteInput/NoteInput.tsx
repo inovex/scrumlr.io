@@ -70,6 +70,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
     >
       {!isModerator && boardLocked && <LockClosed className="note-input__lock-icon" />}
       <TextareaAutosize
+        data-clarity-mask="True"
         disabled={!isModerator && boardLocked}
         ref={noteInputRef}
         className="note-input__input"

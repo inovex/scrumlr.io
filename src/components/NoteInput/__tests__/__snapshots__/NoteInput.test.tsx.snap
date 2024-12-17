@@ -6,6 +6,7 @@ exports[`Note Input should render correctly 1`] = `
 >
   <textarea
     class="note-input__input"
+    data-clarity-mask="True"
     maxlength="1024"
     placeholder="Add your note..."
     rows="1"

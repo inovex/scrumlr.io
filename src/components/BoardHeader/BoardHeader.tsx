@@ -70,7 +70,9 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
           </div>
           <div className="board-header__name-container">
-            <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
+            <h1 data-clarity-mask="True" className="board-header__name">
+              {state.name || DEFAULT_BOARD_NAME}
+            </h1>
           </div>
           <Tooltip
             anchorSelect="#board-header__name-and-settings"
