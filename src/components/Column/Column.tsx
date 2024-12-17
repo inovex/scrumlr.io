@@ -129,6 +129,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
         {!visible && <Hidden className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
         <h2
+          data-clarity-mask="True"
           ref={textRef}
           id={`column-${id}`}
           onDoubleClick={() => {
@@ -150,6 +151,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       <>
         <input
           {...emoji.inputBindings}
+          data-clarity-mask="True"
           className="column__header-input"
           type="text"
           onKeyDown={(e) => {

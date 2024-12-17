@@ -118,6 +118,7 @@ export const BoardSettings = () => {
       <div className="board-settings__container-wrapper">
         <div className="board-settings__container">
           <SettingsInput
+            data-clarity-mask="True"
             value={boardName}
             id="boardSettingsBoardName"
             label={t("BoardSettings.BoardName")}
