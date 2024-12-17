@@ -159,13 +159,20 @@ SCRUMLR_AUTH_APPLE_CLIENT_SECRET=''
 Required OIDC credentials.
 Only configure if you wish to use generic OpenID Connect Authentication.
 ```bash
-SCRUMLR_AUTH_OIDC_CLIENT_ID
-SCRUMLR_AUTH_OIDC_CLIENT_SECRET
-SCRUMLR_AUTH_OIDC_DISCOVERY_URL
-SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE
-SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE
+SCRUMLR_AUTH_OIDC_CLIENT_ID=''
+SCRUMLR_AUTH_OIDC_CLIENT_SECRET=''
+SCRUMLR_AUTH_OIDC_DISCOVERY_URL=''
+SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE=''
+SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE=''
 ```
 Note: Might require larger session store to be active, see [SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE](#enable-experimental-file-system-store)
+
+### Session Secret
+The secret for the session. This secret is used by gothic.
+This needs to be configured if you are using an authentication provider.
+```bash
+SESSION_SECRET=''
+```
 
 ### Feedback Webhook URL
 A webhook URL to which feedback should be sent.
