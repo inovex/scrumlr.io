@@ -30,7 +30,7 @@
     "linkifyjs": "^4.1.4",
     "marked": "15.0.3",
     "plausible-tracker": "^0.3.9",
-    "qrcode.react": "^4.1.0",
+    "qrcode.react": "^4.2.0",
     "query-string": "^9.1.1",
     "react": "^18.3.1",
     "react-autosize-textarea": "^7.1.0",
