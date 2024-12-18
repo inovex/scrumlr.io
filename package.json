@@ -27,7 +27,7 @@
     "js-cookie": "^3.0.5",
     "js-md5": "^0.8.3",
     "linkify-react": "^4.2.0",
-    "linkifyjs": "^4.1.4",
+    "linkifyjs": "^4.2.0",
     "marked": "15.0.3",
     "plausible-tracker": "^0.3.9",
     "qrcode.react": "^4.2.0",
