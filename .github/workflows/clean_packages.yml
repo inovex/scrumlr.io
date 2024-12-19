@@ -1,0 +1,32 @@
+---
+name: Remove old unused scrumlr packages
+
+on:
+  push:
+    branches:
+      - this_branch_does_not_exist
+  # schedule:
+  #   - cron: "30 10 * * 1" # TODO: enable cronjob if it works
+
+jobs:
+  clean_scrumlr_server_packages:
+    name: "clean scrumlr server packages"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: "scrumlr.io/scrumlr-server"
+          package-type: 'container'
+          min-versions-to-keep: 256
+          delete-only-untagged-versions: "true"
+  
+  clean_scrumlr_frontend_packages:
+    name: "clean scrumlr frontend packages"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: "scrumlr.io/scrumlr-frontend"
+          package-type: 'container'
+          min-versions-to-keep: 256
+          delete-only-untagged-versions: "true"
