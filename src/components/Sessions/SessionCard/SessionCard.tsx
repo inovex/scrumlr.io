@@ -38,9 +38,9 @@ export const SessionCard = ({template}: SessionCardProps) => {
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
-          {label: "Delete", icon: <TrashIcon />, onClick: closeMenu},
-          {label: "Edit", icon: <EditIcon />, onClick: navigateToEdit},
-          {label: "Close", icon: <CloseIcon />, onClick: closeMenu},
+          {label: "Delete", element: <TrashIcon />, onClick: closeMenu},
+          {label: "Edit", element: <EditIcon />, onClick: navigateToEdit},
+          {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
       />
     ) : (
