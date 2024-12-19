@@ -35,8 +35,11 @@ ui-debug.log
 /.vscode
 
 # env files
-server/.env
-deployment/.env
+server/**/.env
+deployment/**/.env
+
+# keys
+**/jwt.key
 
 # script output
 scripts/out
