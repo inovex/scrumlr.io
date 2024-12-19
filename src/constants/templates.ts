@@ -1,9 +1,169 @@
-import {TemplateWithColumns} from "store/features";
+import {TemplateWithColumns, AccessPolicy} from "store/features";
 import {uniqueId} from "underscore";
+import {Color} from "./colors";
 
 export const DEFAULT_TEMPLATE_ID = "DEFAULT_TEMPLATE_ID";
 const DEFAULT_TEMPLATE_COLUMN_ID_PREFIX = "DEFAULT_TEMPLATE_COLUMN_ID-";
 const DEFAULT_TEMPLATE_CREATOR = "DEFAULT_CREATOR_ID";
+
+export const DEFAULT_SESSION_ID = "DEFAULT_SESSION_ID";
+
+export type ColumnTemplate = {
+  name: string;
+  description?: string;
+  color: Color;
+  visible: boolean;
+  index: number;
+};
+
+export type BoardTemplate = {
+  id: string;
+  creator?: string;
+  name: string;
+  description?: string;
+  accessPolicy: AccessPolicy;
+  favourite: boolean;
+  columns: ColumnTemplate[];
+};
+
+export const DEFAULT_SESSION: BoardTemplate = {
+  id: DEFAULT_SESSION_ID,
+  name: "Default Session",
+  accessPolicy: "PUBLIC",
+  description: "Lorem",
+  favourite: true,
+  columns: [
+    {
+      name: "Stuff",
+      color: "goal-green",
+      visible: true,
+      index: 0,
+    },
+    {
+      name: "Actions",
+      color: "poker-purple",
+      visible: false,
+      index: 1,
+    },
+  ],
+};
+
+export const EXAMPLESESSIONSFORSEARCHFCT: BoardTemplate[] = [
+  {
+    id: DEFAULT_SESSION_ID,
+    name: "Custom Template",
+    accessPolicy: "PUBLIC",
+    description:
+      "Lorem lol ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. " +
+      "At vero eos et accusam et justo duo dolores et ea rebum. " +
+      "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, " +
+      "sed diam nonumy eirmod tempor invidunt ut " +
+      "labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
+      " no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy " +
+      "eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
+      "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \n" +
+      "\n" +
+      "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, " +
+      "vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit " +
+      "augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam" +
+      " nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. \n" +
+      "\n" +
+      "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" +
+      " lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore " +
+      "eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. ",
+    favourite: true,
+    columns: [
+      {
+        name: "Stuff",
+        color: "goal-green",
+        visible: true,
+        index: 0,
+      },
+      {
+        name: "Actions",
+        color: "poker-purple",
+        visible: false,
+        index: 1,
+      },
+    ],
+  },
+  {
+    id: DEFAULT_SESSION_ID,
+    name: "Custom Template 2",
+    accessPolicy: "PUBLIC",
+    description:
+      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. " +
+      "At vero eos et accusam et justo duo dolores et ea rebum. " +
+      "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, " +
+      "sed diam nonumy eirmod tempor invidunt ut " +
+      "labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
+      " no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy " +
+      "eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
+      "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \n" +
+      "\n" +
+      "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, " +
+      "vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit " +
+      "augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam" +
+      " nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. \n" +
+      "\n" +
+      "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" +
+      " lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore " +
+      "eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. ",
+    favourite: true,
+    columns: [
+      {
+        name: "Stuff",
+        color: "goal-green",
+        visible: true,
+        index: 0,
+      },
+      {
+        name: "Actions",
+        color: "poker-purple",
+        visible: false,
+        index: 1,
+      },
+    ],
+  },
+  {
+    id: DEFAULT_SESSION_ID,
+    name: "Custom Template 3",
+    accessPolicy: "PUBLIC",
+    description:
+      "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. " +
+      "At vero eos et accusam et justo duo dolores et ea rebum. " +
+      "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, " +
+      "sed diam nonumy eirmod tempor invidunt ut " +
+      "labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren," +
+      " no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy " +
+      "eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
+      "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. \n" +
+      "\n" +
+      "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, " +
+      "vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit " +
+      "augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam" +
+      " nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. \n" +
+      "\n" +
+      "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit" +
+      " lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore " +
+      "eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. ",
+    favourite: true,
+    columns: [
+      {
+        name: "Stuff",
+        color: "goal-green",
+        visible: true,
+        index: 0,
+      },
+      {
+        name: "Actions",
+        color: "poker-purple",
+        visible: false,
+        index: 1,
+      },
+    ],
+  },
+];
 
 export const DEFAULT_TEMPLATE: TemplateWithColumns = {
   template: {

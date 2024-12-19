@@ -3,6 +3,7 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {
   authReducer,
   templatesReducer,
+  sessionsReducer,
   templateColumnsReducer,
   boardReducer,
   boardReactionsReducer,
@@ -28,6 +29,7 @@ const rootReducer = {
   participants: participantsReducer,
   reactions: reactionsReducer,
   requests: requestsReducer,
+  sessions: sessionsReducer,
   skinTone: skinToneReducer,
   view: viewReducer,
   votes: votesReducer,
