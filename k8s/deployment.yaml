@@ -80,6 +80,11 @@ spec:
                 secretKeyRef:
                   name: scrumlr-secrets
                   key: WEBHOOK_URL
+            - name: SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: scrumlr-secrets
+                  key: SESSION_SECRET
             - name: SCRUMLR_BASE_PATH
               value: "/api"
           ports:
