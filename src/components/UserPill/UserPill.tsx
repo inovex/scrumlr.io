@@ -1,5 +1,5 @@
 import {useAppSelector} from "store";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router";
 import StanAvatar from "assets/stan/Stan_Avatar.png";
 import classNames from "classnames";
 import {Avatar} from "components/Avatar";

@@ -1,11 +1,13 @@
 import classNames from "classnames";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
+import {useNavigate} from "react-router";
 import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
 import {FavouriteButton} from "components/Templates";
-import {AccessPolicy} from "store/features";
+import {useAppDispatch} from "store";
+import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, TemplateWithColumns} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -14,18 +16,19 @@ import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
-import {BoardTemplate} from "constants/templates";
 import "./TemplateCard.scss";
 
 type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
 type TemplateCardProps = {
-  template: BoardTemplate;
+  template: TemplateWithColumns;
   templateType: TemplateCardType;
 };
 
 export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
@@ -33,15 +36,23 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
     setShowMiniMenu(false);
   };
 
+  const toggleFavourite = () => dispatch(setTemplateFavourite({id: template.template.id, favourite: !template.template.favourite}));
+
   const navigateToEdit = () => {
-    // TODO
+    navigate(`../edit/${template.template.id}`);
+  };
+
+  const createBoard = () => {
+    dispatch(createBoardFromTemplate(template))
+      .unwrap()
+      .then((boardId) => navigate(`/board/${boardId}`));
   };
 
   const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
     switch (accessPolicy) {
-      case AccessPolicy.BY_PASSPHRASE:
+      case "BY_PASSPHRASE":
         return <KeyIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-passphrase" />;
-      case AccessPolicy.BY_INVITE:
+      case "BY_INVITE":
         return <LockIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-invite" />;
       default:
         return null;
@@ -54,9 +65,9 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
-          {label: "Delete", icon: <TrashIcon />, onClick: closeMenu},
-          {label: "Edit", icon: <EditIcon />, onClick: navigateToEdit},
-          {label: "Close", icon: <CloseIcon />, onClick: closeMenu},
+          {label: "Delete", element: <TrashIcon />, onClick: closeMenu},
+          {label: "Edit", element: <EditIcon />, onClick: navigateToEdit},
+          {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
       />
     ) : (
@@ -66,15 +77,16 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
 
   return (
     <div className="template-card">
-      <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => {}} />
+      {/* TODO probably remove favourites from recommended cards, since these are constant and we'd need to keep track of it somewhere */}
+      <FavouriteButton className="template-card__favourite" active={template.template.favourite} onClick={toggleFavourite} />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={template.name} disabled />
-        <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
+        <input className="template-card__title" type="text" value={template.template.name} disabled />
+        <div className="template-card__access-policy">{renderAccessPolicy(template.template.accessPolicy)}</div>
       </div>
       {renderMenu()}
       <TextareaAutosize
         className={classNames("template-card__description")}
-        value={template.description}
+        value={template.template.description}
         disabled
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
@@ -89,7 +101,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
             .join(", ")}
         </div>
       </div>
-      <Button className={classNames("template-card__start-button", "template-card__start-button--start")} small icon={<NextIcon />}>
+      <Button className={classNames("template-card__start-button", "template-card__start-button--start")} small icon={<NextIcon />} onClick={createBoard}>
         {t("Templates.TemplateCard.start")}
       </Button>
     </div>

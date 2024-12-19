@@ -9,8 +9,8 @@ import {TimerDialog} from "..";
 
 const mockedUsedNavigate = jest.fn();
 jest.spyOn(store, "dispatch");
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
   useNavigate: () => mockedUsedNavigate,
 }));
 

@@ -182,11 +182,15 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeysAreActive: true,
     noteFocused: false,
     showBoardReactions: true,
+    snowfallEnabled: false,
+    snowfallNotificationEnabled: false,
   },
   boardReactions: [],
   skinTone: {
     name: "default",
     component: "",
   },
+  templates: [],
+  templatesColumns: [],
   ...overwrite,
 });

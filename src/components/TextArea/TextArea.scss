@@ -1,0 +1,61 @@
+@import "constants/style";
+
+$padding--default: 16px;
+
+$height--default: calc(6.5 * $text--base + 2 * $padding--default);
+
+.text-area {
+  resize: none;
+
+  width: 100%;
+  min-height: $height--default;
+
+  padding: $padding--default;
+  margin: 0;
+  outline: none;
+  border: none;
+  border-radius: $rounded--default;
+
+  font-size: $text--base;
+  font-weight: 500;
+
+  color: $gray--800;
+  background-color: $gray--000;
+
+  @include default-states($padding: $padding--default);
+
+  &::placeholder {
+    color: $gray--800;
+  }
+
+  &:hover,
+  &:focus-within {
+    color: $navy--400;
+    &::placeholder {
+      color: $navy--400;
+    }
+  }
+
+  &:not(&--extendable) {
+    max-height: $height--default;
+  }
+}
+
+[theme="dark"] {
+  .text-area {
+    color: $gray--300;
+    background-color: $navy--400;
+
+    &::placeholder {
+      color: $gray--800;
+    }
+
+    &:hover,
+    &:focus-within {
+      color: $gray--300;
+      &::placeholder {
+        color: $gray--300;
+      }
+    }
+  }
+}

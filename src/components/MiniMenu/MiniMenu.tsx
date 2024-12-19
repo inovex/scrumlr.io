@@ -5,7 +5,7 @@ import "./MiniMenu.scss";
 import ReactFocusLock from "react-focus-lock";
 
 export type MiniMenuItem = {
-  icon: ReactNode;
+  element: ReactNode; // an Icon in most cases, but can also be a complex element (e.g. ColorPicker)
   label: string;
   active?: boolean;
   onClick?: () => void;
@@ -17,7 +17,7 @@ type MiniMenuProps = {
 };
 
 export const MiniMenu = ({className, items}: MiniMenuProps) => (
-  <ReactFocusLock autoFocus={false}>
+  <ReactFocusLock autoFocus>
     <div className={classNames(className, "mini-menu")}>
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
@@ -31,7 +31,7 @@ export const MiniMenu = ({className, items}: MiniMenuProps) => (
             key={item.label}
             onClick={item?.onClick}
           >
-            {item.icon}
+            {item.element}
           </button>
         );
       })}

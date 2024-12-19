@@ -1,0 +1,116 @@
+@import "src/constants/style";
+
+.template-editor {
+  display: grid;
+  grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
+  grid-template-rows:
+    $spacing--xs
+    60px // <- dropdown
+    14px
+    auto // <- info
+    26px
+    auto // <- name
+    20px
+    auto // <- description
+    46px
+    auto // <- debug
+    auto // <- column
+    56px
+    52px // <- buttons
+    $spacing--xs;
+  grid-template-areas:
+    ".          .           .         .         ."
+    ".          dropdown    .         password  ."
+    ".          .           .         .         ."
+    ".          info        info      info      ."
+    ".          .           .         .         ."
+    ".          name        name      name      ."
+    ".          .           .         .         ."
+    ".          description description description ."
+    ".          .           .         .         ."
+    ".          debug        debug      debug      ."
+    ".          columns     columns   columns   ."
+    ".          .           .         .         ."
+    ".          buttons     buttons   buttons   ."
+    ".          .           .         .         .";
+
+  justify-items: stretch;
+
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+
+  overflow: hidden auto;
+}
+
+.template-editor__dropdown {
+  grid-area: dropdown;
+}
+
+.template-editor__password-wrapper {
+  grid-area: password;
+
+  display: flex;
+  flex-direction: row;
+  gap: $spacing--base;
+  align-items: center;
+
+  .template-editor__shuffle-icon {
+    min-width: $icon--large;
+    min-height: $icon--large;
+
+    color: $navy--400;
+  }
+}
+
+.template-editor__info {
+  grid-area: info;
+  display: flex;
+  align-items: center;
+  gap: $spacing--xs;
+
+  &-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  &-text {
+    font-size: $text--sm;
+    font-weight: 400;
+  }
+}
+
+.template-editor__name {
+  grid-area: name;
+}
+
+.template-editor__description {
+  grid-area: description;
+}
+
+.template-editor__debug {
+  grid-area: debug;
+  color: $pink--500;
+}
+
+.template-editor__columns-configurator-wrapper {
+  grid-area: columns;
+
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+
+  // lock scrolling
+  max-width: 100%;
+  height: 340px; // TODO fix magic
+  overflow: hidden;
+}
+
+.template-editor__buttons {
+  grid-area: buttons;
+  justify-self: end;
+
+  display: flex;
+  flex-direction: row;
+  gap: $spacing--base;
+}

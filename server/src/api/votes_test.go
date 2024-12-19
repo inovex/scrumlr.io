@@ -8,6 +8,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 	"strings"
 	"testing"
 
@@ -71,8 +72,9 @@ func (suite *VoteTestSuite) TestAddVote() {
 
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"note": "%s"
-				}`, noteId.String()))).
-				AddToContext(identifiers.BoardIdentifier, boardId).
+				}`, noteId.String())))
+			req.req = logger.InitTestLoggerRequest(req.Request())
+			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
 			rr := httptest.NewRecorder()

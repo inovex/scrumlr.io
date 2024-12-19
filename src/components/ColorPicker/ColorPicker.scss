@@ -1,7 +1,6 @@
 @import "constants/style";
 
 .color-picker {
-  z-index: $menu-item-z-index;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -31,7 +30,7 @@
       align-items: center;
 
       &:focus-within {
-        > .column__header-color-option {
+        > .color-picker__color-option {
           border: 3px solid var(--accent-color--100);
         }
       }
@@ -59,7 +58,7 @@
   }
 }
 
-.column__header-color-option {
+.color-picker__color-option {
   width: 24px;
   height: 24px;
   border-radius: $rounded--full;
@@ -79,7 +78,7 @@
 }
 
 [theme="dark"] {
-  .column__header-color-option {
+  .color-picker__color-option {
     border: 3px solid $navy--600;
 
     &--selected {

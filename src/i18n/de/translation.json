@@ -8,7 +8,10 @@
     "extendedConfigurationButton": "Erweiterte Einstellungen",
     "basicConfigurationButton": "Vorlagenauswahl",
     "extendedConfigurationTitle": "Erweiterte Einstellungen",
-    "basicConfigurationTitle": "Wähle eine Vorlage"
+    "basicConfigurationTitle": "Wähle eine Vorlage",
+    "importBoard": "JSON Importieren",
+    "uploadFile": "Datei hochladen oder hierher ziehen",
+    "importNewBoard": "Jetzt importieren"
   },
   "Templates": {
     "switchTitle": "Vorlagen",
@@ -27,12 +30,32 @@
       "column_other": "{{count}} Spalten",
       "start": "Starten",
       "save": "Speichern"
+    },
+
+    "TemplateEditor": {
+      "create": "Erstelle eine Vorlage",
+      "edit": "Bearbeite eine Vorlage",
+      "cancel": "Abbrechen",
+      "save": "Speichern"
     }
   },
   "Sessions": {
     "switchTitle": "Sitzungen",
     "title": "Wähle eine Sitzung",
     "savedSessions": "Deine Sitzungen"
+  },
+  "CreateBoard": {
+    "title": "Ein neues Board erstellen",
+    "dropdown": {
+      "open": "Offen",
+      "password": "Passwort",
+      "approval": "Freigabe"
+    },
+    "info": {
+      "open": "TBA",
+      "password": "TBA",
+      "approval": "TBA"
+    }
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
@@ -195,6 +218,15 @@
     "inputPlaceholder": "Passwort",
     "incorrectPassphrase": "Ups, das war das falsche Passwort. Versuch's nochmal!"
   },
+  "PassphraseModal": {
+    "title": "Neues Passwort vergeben",
+    "continuePublic": "Ohne Passwort fortfahren",
+    "newPassword": "Board Öffnen",
+    "info": "Dieses Board war einst passwortgeschützt. Gib ein neues Passwort ein, um den Schutz fortzusetzen, oder fahre ohne Passwort fort. Du kannst alle Einstellungen jederzeit ändern.",
+    "submit": "Board öffnen",
+    "inputPlaceholder": "Passwort",
+    "showPassword": "Zeige das Passwort"
+  },
   "Timer": {
     "endTimer": "Timer beenden",
     "addOneMinute": "Timer um eine Minute erhöhen",
@@ -324,7 +356,8 @@
     "ready": "Bist du fertig?",
     "readyButton": "Fertig!",
     "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
-    "enable": "Aktivieren"
+    "enable": "Aktivieren",
+    "failedImport": "Fehler beim importieren der Datei"
   },
   "Language": {
     "german": "Deutsch",
@@ -365,8 +398,10 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "Alle"
   },
-  "SearchBar": {
-    "placeholder": "Suchen"
+  "Input": {
+    "placeholder": {
+      "search": "Suchen"
+    }
   },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
@@ -428,7 +463,8 @@
     "colorSchemeLight": "Hell",
     "colorSchemeDark": "Dunkel",
     "showHotkeyNotifications": "Zeige Hotkey-Notifikationen",
-    "showBoardReactions": "Zeige Board-Reaktionen"
+    "showBoardReactions": "Zeige Board-Reaktionen",
+    "showSnowfall": "Zeige Schneefall"
   },
   "Feedback": {
     "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",
@@ -686,5 +722,9 @@
     "AddVote": "Stimme hinzufügen",
     "RemoveVote": "Stimme entfernen",
     "VotesOnNote": "{{votes}} Stimme(n)"
+  },
+  "Snowfall": {
+    "toastTitle": "Frohe Feiertage 🎄",
+    "toastMessage": "Frohe Feiertage vom Scrumlr-Team! Du kannst die Schneeanimationen in den Erscheinungseinstellungen deaktivieren."
   }
 }

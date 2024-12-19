@@ -1,6 +1,7 @@
 import classNames from "classnames";
-import {Outlet, useOutletContext} from "react-router-dom";
+import {Outlet, useOutletContext, useNavigate} from "react-router";
 import {useAppSelector} from "store";
+import {Template, TemplateColumn, TemplateWithColumns} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useRef} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
@@ -9,7 +10,7 @@ import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
-import {EXAMPLE_CUSTOM_TEMPLATE, RECOMMENDED_TEMPLATES} from "constants/templates";
+import {DEFAULT_TEMPLATE_ID, RECOMMENDED_TEMPLATES} from "constants/templates";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -17,15 +18,38 @@ type Side = "left" | "right";
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
+  const navigate = useNavigate();
 
   const searchBarInput: string = useOutletContext();
 
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
 
+  const showCreateTemplateView = () => navigate("../create");
+
+  const templates = useAppSelector((state) => state.templates);
+  const templateColumns = useAppSelector((state) => state.templatesColumns);
+
   const scrollToSide = (side: Side) => {
     const screenWidth = document.documentElement.clientWidth;
     const offset = screenWidth * (side === "left" ? -1 : 1);
     templatesRef.current?.scroll({left: offset, behavior: "smooth"});
+  };
+
+  // simple comparison between template name and search input
+  const matchSearchInput = (template: Template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase());
+
+  // default template, which is in the state should not be shown.
+  const excludeDefaultTemplate = (template: Template) => template.id !== DEFAULT_TEMPLATE_ID;
+
+  // ironically, since templates and their columns are handled separately, we need to stitch them back together
+  // to a common object in order to avoid losing information (since recommended templates don't have associated cols)
+  const mergeTemplateWithColumns = (template: Template, columns?: TemplateColumn[]): TemplateWithColumns => {
+    if (columns) {
+      return {template, columns};
+    }
+
+    const associatedColumns = templateColumns.filter((tc) => tc.template === template.id);
+    return {template, columns: associatedColumns};
   };
 
   const renderContainerHeader = (renderSide: Side, title: string) =>
@@ -58,8 +82,8 @@ export const Templates = () => {
         <section className="templates__container templates__container--recommended">
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
-            {RECOMMENDED_TEMPLATES.filter((template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase())).map((template) => (
-              <TemplateCard templateType="RECOMMENDED" template={template} />
+            {RECOMMENDED_TEMPLATES.filter((rc) => matchSearchInput(rc.template)).map((templateFull) => (
+              <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)} />
             ))}
           </div>
         </section>
@@ -67,9 +91,13 @@ export const Templates = () => {
           <section className="templates__container templates__container--saved">
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
-              <CreateTemplateCard />
-              <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
-              <TemplateCard templateType="CUSTOM" template={EXAMPLE_CUSTOM_TEMPLATE} />
+              <CreateTemplateCard onClick={showCreateTemplateView} />
+              {templates
+                .filter(matchSearchInput)
+                .filter(excludeDefaultTemplate)
+                .map((template) => (
+                  <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} />
+                ))}
             </div>
           </section>
         )}

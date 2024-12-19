@@ -143,6 +143,13 @@ type BoardOverview struct {
 	Participants int       `json:"participants"`
 }
 
+type ImportBoardRequest struct {
+	Board   *CreateBoardRequest `json:"board"`
+	Columns []Column            `json:"columns"`
+	Notes   []Note              `json:"notes"`
+	Votings []Voting            `json:"votings"`
+}
+
 type FullBoard struct {
 	Board                *Board                 `json:"board"`
 	BoardSessionRequests []*BoardSessionRequest `json:"requests"`

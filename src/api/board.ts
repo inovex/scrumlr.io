@@ -1,5 +1,5 @@
 import {Color} from "constants/colors";
-import {EditBoardRequest} from "store/features/board/types";
+import {Board, EditBoardRequest} from "store/features/board/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
@@ -12,7 +12,7 @@ export const BoardAPI = {
    *
    * @returns the board id of the created board
    */
-  createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; hidden: boolean; color: Color}[]) => {
+  createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; visible: boolean; color: Color}[]) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
         method: "POST",
@@ -21,18 +21,39 @@ export const BoardAPI = {
           name,
           accessPolicy: accessPolicy.type,
           passphrase: accessPolicy.passphrase,
-          columns: columns.map((c) => ({name: c.name, visible: !c.hidden, color: c.color})),
+          columns, // TODO add index or pre-sort to guarantee correct order
         }),
       });
 
       if (response.status === 201) {
         const body = await response.json();
-        return body.id;
+        return body.id as string;
       }
 
       throw new Error(`request resulted in response status ${response.status}`);
     } catch (error) {
       throw new Error(`unable to create board: ${error}`);
+    }
+  },
+  importBoard: async (boardJson: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/import`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: boardJson,
+      });
+
+      if (response.status === 201) {
+        const body = (await response.json()) as Board;
+        return body.id;
+      }
+
+      throw new Error(`request resulted in response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to import board: ${error}`);
     }
   },
 

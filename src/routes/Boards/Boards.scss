@@ -11,17 +11,29 @@ $side-padding--desktop: 14vw;
 
 .boards__grid {
   display: grid;
-  grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
-  grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
+
+  grid-template-columns: $side-padding--desktop 114px 1fr auto $side-padding--desktop;
+  grid-template-rows: $spacing--lg 56px 48px 1fr $spacing--lg;
   grid-template-areas:
-    ".  .    .       .       .       .       .      ."
-    ".  logo title   title   title   title   user   ."
-    ".  .    title   title   title   title   .      ."
-    ".  .    switch  .       search  search  .      ."
-    ".  .    main    main    main    main    .      ."
-    ".  .    .       .       .       .       .      .";
+    ".  .      .      .     ."
+    ".  logo   title  user  ."
+    ".  .      title  .     ."
+    ".  .      main   .     ."
+    ".  .      .      .     .";
 
   height: 100vh;
+
+  &--with-view-options {
+    grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
+    grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
+    grid-template-areas:
+      ".  .    .       .       .       .       .      ."
+      ".  logo title   title   title   title   user   ."
+      ".  .    title   title   title   title   .      ."
+      ".  .    switch  .       search  search  .      ."
+      ".  .    main    main    main    main    .      ."
+      ".  .    .       .       .       .       .      .";
+  }
 }
 
 .boards__scrumlr-logo-container {
@@ -91,35 +103,25 @@ $side-padding--desktop: 14vw;
   display: flex;
   justify-content: stretch;
 
-  margin-top: $spacing--xl;
-
   overflow-y: hidden;
-  //overflow-x: visible;
-}
 
-@media (max-width: $breakpoint--desktop) {
-  .boards__grid {
-    grid-template-columns: $spacing--2xl 114px auto $spacing--base 1fr auto auto $spacing--2xl;
-    grid-template-areas:
-      ".  .    .       .       .       .       .      ."
-      ".  logo title   title   title   title   user   ."
-      ".  .    title   title   title   title   .      ."
-      ".  switch    switch  .       search  search  search      ."
-      ".  main    main    main    main    main    main      ."
-      ".  .    .       .       .       .       .      .";
+  &--extended-top {
+    margin-top: $spacing--xl;
   }
 }
 
 @media (max-width: $breakpoint--desktop) {
   .boards__grid {
-    grid-template-columns: $spacing--2xl 114px auto $spacing--base 1fr auto auto $spacing--2xl;
-    grid-template-areas:
-      ".  .    .       .       .       .       .      ."
-      ".  logo title   title   title   title   user   ."
-      ".  .    title   title   title   title   .      ."
-      ".  switch    switch  .       search  search  search      ."
-      ".  main    main    main    main    main    main      ."
-      ".  .    .       .       .       .       .      .";
+    &--with-view-options {
+      grid-template-columns: $spacing--2xl 114px auto $spacing--base 1fr auto auto $spacing--2xl;
+      grid-template-areas:
+        ".  .       .       .       .       .       .       ."
+        ".  logo    title   title   title   title   user    ."
+        ".  .       title   title   title   title   .       ."
+        ".  switch  switch  .       search  search  search  ."
+        ".  main    main    main    main    main    main    ."
+        ".  .       .       .       .       .       .       .";
+    }
   }
 }
 
@@ -127,6 +129,7 @@ $side-padding--desktop: 14vw;
   .boards {
   }
 
+  // TODO grid without extended view
   .boards__grid {
     // stretch main to full width
     grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;

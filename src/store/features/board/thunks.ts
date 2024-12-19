@@ -11,12 +11,18 @@ import {deletedNote, syncNotes, updatedNotes} from "../notes";
 import {addedReaction, deletedReaction, updatedReaction} from "../reactions";
 import {createdParticipant, setParticipants, updatedParticipant} from "../participants";
 import {createdVoting, updatedVoting} from "../votings";
-import {updatedVotes} from "../votes";
+import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
 import {EditBoardRequest} from "./types";
+import {TemplateWithColumns} from "../templates";
 
 let socket: Socket | null = null;
+
+// creates a board from a template and returns board id if successful
+export const createBoardFromTemplate = createAsyncThunk<string, TemplateWithColumns>("board/createBoardFromTemplate", async (payload) =>
+  API.createBoard(payload.template.name, {type: payload.template.accessPolicy}, payload.columns)
+);
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   if (socket) {
@@ -26,7 +32,13 @@ export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
 });
 
 // generic args: <returnArg, payloadArg, otherArgs(like state type)
-export const permittedBoardAccess = createAsyncThunk<void, string, {state: ApplicationState}>("board/permittedBoardAccess", async (boardId: string, {dispatch, getState}) => {
+export const permittedBoardAccess = createAsyncThunk<
+  void,
+  string,
+  {
+    state: ApplicationState;
+  }
+>("board/permittedBoardAccess", async (boardId: string, {dispatch, getState}) => {
   const {serverTimeOffset} = getState().view;
   const self = getState().auth.user!;
   socket = new Socket(`${SERVER_WEBSOCKET_URL}/boards/${boardId}`, {
@@ -120,9 +132,9 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
         dispatch(updatedVoting({voting: message.data.voting, notes: message.data.notes}));
       }
 
-      if (message.type === "VOTES_UPDATED") {
+      if (message.type === "VOTES_DELETED") {
         const votes = message.data;
-        dispatch(updatedVotes(votes));
+        dispatch(deletedVotes(votes));
       }
 
       if (message.type === "REQUEST_CREATED") {
@@ -139,7 +151,13 @@ export const permittedBoardAccess = createAsyncThunk<void, string, {state: Appli
   });
 });
 
-export const editBoard = createAsyncThunk<void, EditBoardRequest, {state: ApplicationState}>("board/editBoard", async (payload, {dispatch, getState}) => {
+export const editBoard = createAsyncThunk<
+  void,
+  EditBoardRequest,
+  {
+    state: ApplicationState;
+  }
+>("board/editBoard", async (payload, {dispatch, getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
   await retryable(
@@ -164,22 +182,46 @@ export const editBoard = createAsyncThunk<void, EditBoardRequest, {state: Applic
   );
 });
 
-export const setTimer = createAsyncThunk<void, number, {state: ApplicationState}>("board/setTimer", async (payload, {getState}) => {
+export const setTimer = createAsyncThunk<
+  void,
+  number,
+  {
+    state: ApplicationState;
+  }
+>("board/setTimer", async (payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.setTimer(id, payload);
 });
 
-export const cancelTimer = createAsyncThunk<void, void, {state: ApplicationState}>("board/cancelTimer", async (_payload, {getState}) => {
+export const cancelTimer = createAsyncThunk<
+  void,
+  void,
+  {
+    state: ApplicationState;
+  }
+>("board/cancelTimer", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.deleteTimer(id);
 });
 
-export const incrementTimer = createAsyncThunk<void, void, {state: ApplicationState}>("board/incrementTimer", async (_payload, {getState}) => {
+export const incrementTimer = createAsyncThunk<
+  void,
+  void,
+  {
+    state: ApplicationState;
+  }
+>("board/incrementTimer", async (_payload, {getState}) => {
   const {id} = getState().board.data!;
   await API.incrementTimer(id);
 });
 
-export const shareNote = createAsyncThunk<void, string, {state: ApplicationState}>("board/shareNote", async (payload, {dispatch, getState}) => {
+export const shareNote = createAsyncThunk<
+  void,
+  string,
+  {
+    state: ApplicationState;
+  }
+>("board/shareNote", async (payload, {dispatch, getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
   const note = getState().notes.find((n) => n.id === payload);
@@ -201,7 +243,13 @@ export const shareNote = createAsyncThunk<void, string, {state: ApplicationState
   );
 });
 
-export const stopSharing = createAsyncThunk<void, void, {state: ApplicationState}>("board/shareNote", async (_payload, {dispatch, getState}) => {
+export const stopSharing = createAsyncThunk<
+  void,
+  void,
+  {
+    state: ApplicationState;
+  }
+>("board/shareNote", async (_payload, {dispatch, getState}) => {
   const board = getState().board.data!;
   const {serverTimeOffset} = getState().view;
 
@@ -219,9 +267,23 @@ export const stopSharing = createAsyncThunk<void, void, {state: ApplicationState
   );
 });
 
-export const deleteBoard = createAsyncThunk<void, void, {state: ApplicationState}>("board/deleteBoard", async (_payload, {dispatch, getState}) => {
+export const deleteBoard = createAsyncThunk<
+  void,
+  void,
+  {
+    state: ApplicationState;
+  }
+>("board/deleteBoard", async (_payload, {dispatch, getState}) => {
   const {id} = getState().board.data!;
   retryable(() => API.deleteBoard(id), dispatch, deleteBoard, "deleteBoard").then(() => {
     document.location.pathname = "/";
   });
+});
+export const importBoard = createAsyncThunk<void, string, {state: ApplicationState}>("board/importBoard", async (payload, {dispatch}) => {
+  retryable(
+    () => API.importBoard(payload),
+    dispatch,
+    () => importBoard(payload),
+    "deleteBoard"
+  ).then((boardID) => window.location.assign(`/board/${boardID}`));
 });

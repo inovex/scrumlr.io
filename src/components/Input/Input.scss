@@ -3,7 +3,7 @@
 $padding--default: $spacing--base;
 $padding--mobile: 12.5px $spacing--base;
 
-.search-bar {
+.input {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -15,18 +15,27 @@ $padding--mobile: 12.5px $spacing--base;
 
   background-color: $gray--000;
 
+  &--height-normal {
+    height: 60px;
+  }
+
+  &--height-larger {
+    height: 64px;
+  }
+
   &:not(&--disabled) {
+    // TODO increase padding-left by 8px if no icon is present
     @include default-states($padding: $padding--default);
 
     // alternatively, this could be split up and put in their respective classes,
     // which might be more readable but also requires a little bit more code
     &:hover,
     &:focus-within {
-      .search-bar__icon-container--search-icon {
+      .input__icon-container--search-icon {
         color: $navy--600;
       }
 
-      .search-bar__input {
+      .input__input {
         color: $navy--600;
       }
     }
@@ -35,7 +44,7 @@ $padding--mobile: 12.5px $spacing--base;
   &--disabled {
     background-color: $gray--300;
 
-    .search-bar__icon-container {
+    .input__icon-container {
       &--search-icon,
       &--clear-icon {
         color: $gray--800;
@@ -44,7 +53,7 @@ $padding--mobile: 12.5px $spacing--base;
   }
 }
 
-.search-bar__icon-container {
+.input__icon-container {
   width: $icon--large;
   height: $icon--large;
 
@@ -57,7 +66,7 @@ $padding--mobile: 12.5px $spacing--base;
   }
 }
 
-.search-bar__input {
+.input__input {
   width: 100%;
   padding: 0;
   margin: 0;
@@ -65,9 +74,16 @@ $padding--mobile: 12.5px $spacing--base;
 
   font-size: $text--base;
   font-weight: 600;
+  line-height: $text--xl;
 
   color: $gray--800;
   background-color: $gray--000;
+
+  &[type="password"] {
+    font-size: $text--lg;
+    font-weight: 900;
+    letter-spacing: 0.125em;
+  }
 
   &:focus {
     outline: none;
@@ -77,6 +93,9 @@ $padding--mobile: 12.5px $spacing--base;
 
   &::placeholder {
     opacity: 100%;
+    font-size: $text--base;
+    font-weight: 600;
+    letter-spacing: initial;
   }
 
   &:disabled {
@@ -85,7 +104,7 @@ $padding--mobile: 12.5px $spacing--base;
 }
 
 @media screen and (max-width: $breakpoint--smartphone) {
-  .search-bar {
+  .input {
     padding: $padding--mobile;
 
     &:not(&--disabled) {
@@ -95,17 +114,17 @@ $padding--mobile: 12.5px $spacing--base;
 }
 
 [theme="dark"] {
-  .search-bar {
+  .input {
     background-color: $navy--400;
 
     &:not(&--disabled) {
       &:hover,
       &:focus-within {
-        .search-bar__icon-container--search-icon {
+        .input__icon-container--search-icon {
           color: $gray--000;
         }
 
-        .search-bar__input {
+        .input__input {
           color: $gray--000;
         }
       }
@@ -114,7 +133,7 @@ $padding--mobile: 12.5px $spacing--base;
     &--disabled {
       background-color: $navy--700;
 
-      .search-bar__icon-container {
+      .input__icon-container {
         &--search-icon,
         &--clear-icon {
           color: $navy--300;
@@ -123,7 +142,7 @@ $padding--mobile: 12.5px $spacing--base;
     }
   }
 
-  .search-bar__input {
+  .input__input {
     color: $blue--50;
     background-color: $navy--400;
 
@@ -133,7 +152,7 @@ $padding--mobile: 12.5px $spacing--base;
     }
   }
 
-  .search-bar__icon-container {
+  .input__icon-container {
     &--search-icon,
     &--clear-icon {
       color: $blue--50;

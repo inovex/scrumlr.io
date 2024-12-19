@@ -1,0 +1,126 @@
+@import "constants/style";
+
+$column-width: 158px;
+$column-height: 340px;
+
+.template-column {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xl;
+  flex-shrink: 0;
+  flex-grow: 1;
+
+  width: $column-width;
+  height: $column-height;
+
+  padding: $spacing--md $spacing--base;
+
+  border: $spacing--xxs solid var(--accent-color--light);
+
+  z-index: $base-z-index;
+
+  &--even {
+    background-color: $gray--200;
+  }
+  &--odd {
+    background-color: $gray--100;
+  }
+
+  // not the column that's currently being dragged, but actually where it was
+  &--active-drag {
+    background-color: rgba(var(--accent-color--100-rgb, 0.5));
+    border: $spacing--xxs dashed var(--accent-color--light);
+    z-index: $base-z-index + $base-z-index-step; // display dragged item above others
+  }
+
+  &--active-drop {
+    background-color: rgba(var(--accent-color--100-rgb, 0.5));
+    border: $spacing--xxs dashed var(--accent-color--light);
+  }
+
+  &--hidden {
+    background-image: $column-stripes--light;
+  }
+
+  // deactivate borders depending on position
+  &--border {
+    &-first {
+      border-right: none;
+    }
+    &-center {
+      border-left: none;
+      border-right: none;
+    }
+    &-last {
+      border-left: none;
+    }
+  }
+}
+
+// TODO input style wip
+.template-column__name {
+  all: unset;
+
+  align-self: flex-start; // only take as much space as needed
+  // extend border to bottom and right
+  padding: 0 $spacing--xs $spacing--xs 0;
+  max-width: 100%;
+
+  font-size: $text--base;
+  font-weight: 600;
+  color: $gray--800;
+  border-bottom: 2px solid var(--accent-color--light);
+}
+
+.template-column__menu {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xl; // TODO proper gaps
+  align-items: center;
+}
+
+.template-column__icon {
+  width: $icon--large;
+  height: $icon--large;
+
+  &--dnd {
+    width: 22px;
+    height: 15px;
+  }
+}
+
+.template-column__drag-element {
+  cursor: grab;
+
+  &--dragging {
+    cursor: grabbing;
+  }
+}
+
+// temporary!
+.template-column__color {
+  width: 20px;
+  height: 20px;
+  border-radius: $rounded--full;
+  background-color: var(--accent-color--light);
+}
+
+[theme="dark"] {
+  .template-column {
+    border-color: var(--accent-color--dark);
+
+    &--active-drag {
+      background-color: rgba(var(--accent-color--200-rgb, 0.5));
+      border-color: var(--accent-color--dark);
+    }
+
+    &--active-drop {
+      background-color: rgba(var(--accent-color--200-rgb, 0.5));
+      border-color: var(--accent-color--dark);
+    }
+  }
+
+  .template-column__color {
+    background-color: var(--accent-color--dark);
+  }
+}

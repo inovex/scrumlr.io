@@ -25,14 +25,8 @@ type BoardTemplate struct {
 
 type BoardTemplateFull struct {
 	bun.BaseModel   `bun:"table:board_templates"`
-	ID              uuid.UUID
-	Creator         uuid.UUID
-	Name            *string
-	Description     *string
-	AccessPolicy    types.AccessPolicy
-	Favourite       *bool
+	Template        BoardTemplate
 	ColumnTemplates []ColumnTemplate
-	CreatedAt       time.Time
 }
 
 type BoardTemplateInsert struct {
@@ -93,6 +87,7 @@ func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
 func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error) {
 	var tBoards []BoardTemplate
 
+	// FIXME don't return nil if empty
 	err := d.db.NewSelect().Model(&tBoards).Where("creator = ?", user).Order("created_at ASC").Scan(context.Background())
 	if err != nil {
 		return []BoardTemplateFull{}, err
@@ -107,13 +102,7 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error
 		}
 
 		dbBoardTemplate := BoardTemplateFull{
-			ID:              board.ID,
-			Creator:         board.Creator,
-			Name:            board.Name,
-			Description:     board.Description,
-			AccessPolicy:    board.AccessPolicy,
-			Favourite:       board.Favourite,
-			CreatedAt:       board.CreatedAt,
+			Template:        board,
 			ColumnTemplates: cols,
 		}
 		templates = append(templates, dbBoardTemplate)

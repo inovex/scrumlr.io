@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,6 +11,8 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/services/health"
 
+	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/migrations"
@@ -24,10 +27,6 @@ import (
 	"scrumlr.io/server/services/reactions"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
-
-	"github.com/pkg/errors"
-	"github.com/urfave/cli/v2"
-	"github.com/urfave/cli/v2/altsrc"
 )
 
 func main() {
@@ -107,6 +106,13 @@ func main() {
 				Name:     "disable-anonymous-login",
 				EnvVars:  []string{"SCRUMLR_DISABLE_ANONYMOUS_LOGIN"},
 				Usage:    "enables/disables the login of anonymous clients",
+				Required: false,
+				Value:    false,
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:     "auth-enable-experimental-file-system-store",
+				EnvVars:  []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
+				Usage:    "enables/disables experimental file system store, in order to allow larger session cookie sizes",
 				Required: false,
 				Value:    false,
 			}),
@@ -240,20 +246,18 @@ func main() {
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
-	// check if process is executed within docker environment
-	if _, err := os.Stat("/.dockerenv"); err != nil {
-		logger.EnableDevelopmentLogger()
-	}
-
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func run(c *cli.Context) error {
+	if c.Bool("verbose") {
+		logger.EnableDevelopmentLogger()
+	}
 	db, err := migrations.MigrateDatabase(c.String("database"))
 	if err != nil {
-		return errors.Wrap(err, "unable to migrate database")
+		return fmt.Errorf("unable to migrate database: %w", err)
 	}
 
 	if !c.Bool("insecure") && c.String("key") == "" {
@@ -343,7 +347,7 @@ func run(c *cli.Context) error {
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
 	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
 	if err != nil {
-		return errors.Wrap(err, "unable to setup authentication")
+		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
 
 	boardService := boards.NewBoardService(dbConnection, rt)
@@ -376,6 +380,7 @@ func run(c *cli.Context) error {
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
 		c.Bool("disable-anonymous-login"),
+		c.Bool("auth-enable-experimental-file-system-store"),
 	)
 
 	port := fmt.Sprintf(":%d", c.Int("port"))
