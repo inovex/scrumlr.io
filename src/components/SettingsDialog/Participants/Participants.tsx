@@ -116,7 +116,7 @@ export const Participants = () => {
             .filter((participant) => participant.role === permissionFilter || permissionFilter === "ALL")
             .filter((participant) => participant.connected === onlineFilter)
             .map((participant) => (
-              <li key={participant.user.id} className={classNames("participants__list-item", {banned: participant.banned})}>
+              <li data-clarity-mask="True" key={participant.user.id} className={classNames("participants__list-item", {banned: participant.banned})}>
                 <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} ready={participant.ready} title={participant.user.name} />
                 <div className="participant__name-role-wrapper">
                   <span className="participant__name">{participant.user.name}</span>

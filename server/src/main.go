@@ -219,6 +219,12 @@ func main() {
 				Usage:   "JWT claim to request for the user name",
 				Value:   "profile",
 			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "session-secret",
+				EnvVars:  []string{"SESSION_SECRET"},
+				Usage:    "Session secret for the authentication provider. Must be provided if an authentication provider is used.",
+				Required: false,
+			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:    "verbose",
 				Aliases: []string{"v"},
@@ -255,6 +261,7 @@ func run(c *cli.Context) error {
 	if c.Bool("verbose") {
 		logger.EnableDevelopmentLogger()
 	}
+
 	db, err := migrations.MigrateDatabase(c.String("database"))
 	if err != nil {
 		return fmt.Errorf("unable to migrate database: %w", err)
@@ -266,6 +273,7 @@ func run(c *cli.Context) error {
 
 	var rt *realtime.Broker
 	if c.String("redis-address") != "" {
+		logger.Get().Infof("Connecting to redis at %v", c.String("redis-address"))
 		rt, err = realtime.NewRedis(realtime.RedisServer{
 			Addr:     c.String("redis-address"),
 			Username: c.String("redis-username"),
@@ -275,6 +283,7 @@ func run(c *cli.Context) error {
 			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
 		}
 	} else {
+		logger.Get().Infof("Connecting to nats at %v", c.String("nats"))
 		rt, err = realtime.NewNats(c.String("nats"))
 		if err != nil {
 			logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
@@ -294,28 +303,32 @@ func run(c *cli.Context) error {
 	}
 
 	providersMap := make(map[string]auth.AuthProviderConfiguration)
-	if c.IsSet("auth-google-client-id") && c.IsSet("auth-google-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-google-client-id") != "" && c.String("auth-google-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using google authentication")
 		providersMap[(string)(types.AccountTypeGoogle)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-google-client-id"),
 			ClientSecret: c.String("auth-google-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-github-client-id") && c.IsSet("auth-github-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-github-client-id") != "" && c.String("auth-github-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using github authentication")
 		providersMap[(string)(types.AccountTypeGitHub)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-github-client-id"),
 			ClientSecret: c.String("auth-github-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-microsoft-client-id") && c.IsSet("auth-microsoft-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-microsoft-client-id") != "" && c.String("auth-microsoft-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using microsoft authentication")
 		providersMap[(string)(types.AccountTypeMicrosoft)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-microsoft-client-id"),
 			ClientSecret: c.String("auth-microsoft-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-azure-ad-tenant-id") && c.IsSet("auth-azure-ad-client-id") && c.IsSet("auth-azure-ad-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-azure-ad-tenant-id") != "" && c.String("auth-azure-ad-client-id") != "" && c.String("auth-azure-ad-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using azure authentication")
 		providersMap[(string)(types.AccountTypeAzureAd)] = auth.AuthProviderConfiguration{
 			TenantId:     c.String("auth-azure-ad-tenant-id"),
 			ClientId:     c.String("auth-azure-ad-client-id"),
@@ -323,14 +336,16 @@ func run(c *cli.Context) error {
 			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-apple-client-id") && c.IsSet("auth-apple-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-apple-client-id") != "" && c.String("auth-apple-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using apple authentication.")
 		providersMap[(string)(types.AccountTypeApple)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-apple-client-id"),
 			ClientSecret: c.String("auth-apple-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
 		}
 	}
-	if c.IsSet("auth-oidc-discovery-url") && c.IsSet("auth-oidc-client-id") && c.IsSet("auth-oidc-client-secret") && c.IsSet("auth-callback-host") {
+	if c.String("auth-oidc-discovery-url") != "" && c.String("auth-oidc-client-id") != "" && c.String("auth-oidc-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using oicd authentication.")
 		providersMap[(string)(types.AccountTypeOIDC)] = auth.AuthProviderConfiguration{
 			ClientId:       c.String("auth-oidc-client-id"),
 			ClientSecret:   c.String("auth-oidc-client-secret"),
@@ -339,6 +354,10 @@ func run(c *cli.Context) error {
 			UserIdentScope: c.String("auth-oidc-user-ident-scope"),
 			UserNameScope:  c.String("auth-oidc-user-name-scope"),
 		}
+	}
+
+	if c.String("session-secret") == "" && len(providersMap) != 0 {
+		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
 
 	dbConnection := database.New(db, c.Bool("verbose"))

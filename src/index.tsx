@@ -1,6 +1,7 @@
 import React, {Suspense} from "react";
 import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
+import Clarity from "@microsoft/clarity";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import {store} from "store";
@@ -47,6 +48,8 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
 }
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
+
+Clarity.init("pffqg7itv6");
 
 root.render(
   <React.StrictMode>
