@@ -176,7 +176,7 @@
   },
   "PassphraseModal": {
     "title": "Assign new password",
-    "continuePublic": "Ohne Passwort fortfahren",
+    "continuePublic": "Continue without password",
     "newPassword": "Open Board",
     "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.",
     "submit": "Open board",
