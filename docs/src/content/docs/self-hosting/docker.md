@@ -26,7 +26,7 @@ For a new deployment the mandatory variables to fill out are `POSTGRES_PASSWORD`
 
 ### Postgres Password
 
-Make sure to set the `POSTGRES_PASSWORD`variable in your `.env` file to a secure password. For example you can generate a 64 characters long one from the terminal with the following command (if you have `pwgen` installed):
+Make sure to set the `POSTGRES_PASSWORD` variable in your `.env` file to a secure password. For example you can generate a 64 characters long one from the terminal with the following command (if you have `pwgen` installed):
 
 ```sh
 pwgen -s 64 1
@@ -46,6 +46,15 @@ Copy the result of this command and paste it into your `.env` file (with `\n` li
 
 ```ini
 SCRUMLR_PRIVATE_KEY="-----BEGIN EC PRIVATE KEY-----\n...\n-----END EC PRIVATE KEY-----\n"
+```
+
+### Session Secret
+
+Make sure to set the `SESSION_SECRET` variable in your `.env` file if you are using an authentication provider.
+You can generate a session secret with
+
+```sh
+pwgen -s 64 1
 ```
 
 ## Deployment

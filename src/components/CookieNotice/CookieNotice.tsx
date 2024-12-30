@@ -1,28 +1,41 @@
 import "./CookieNotice.scss";
-import React from "react";
+import {useState} from "react";
 import {Portal} from "components/Portal";
 import {useTranslation} from "react-i18next";
 import {COOKIE_CONSENT_STORAGE_KEY} from "constants/storage";
 import {getFromStorage, saveToStorage} from "utils/storage";
 import {CookiePolicy} from "./CookiePolicy";
 
+declare global {
+  interface Window {
+    clarity: (consent: string) => void;
+  }
+}
+
 export const CookieNotice = () => {
   const {t} = useTranslation();
 
-  const [showCookieNotice, setShowCookieNotice] = React.useState<boolean>(true);
-  const [showCookiePolicy, setShowCookiePolicy] = React.useState<boolean>(false);
+  const [showCookieNotice, setShowCookieNotice] = useState<boolean>(true);
+  const [showCookiePolicy, setShowCookiePolicy] = useState<boolean>(false);
   const toggleShowCookiePolicy = () => {
     setShowCookiePolicy((currValue) => !currValue);
   };
 
   // show cookie notice if there's no cookie in local storage
-  const shouldShowCookieNotice = !getFromStorage(COOKIE_CONSENT_STORAGE_KEY);
+  const cookieConsentValue = getFromStorage(COOKIE_CONSENT_STORAGE_KEY);
+
+  if (cookieConsentValue === "true" && Object.hasOwn(window, "clarity")) {
+    window.clarity("consent");
+  }
+
+  // prevents cookie notice from being shown if scrumlrCookieName is set in localStorage
+  if (cookieConsentValue != null || !showCookieNotice) return null;
 
   /**
    * Sets cookie consent value i.e. scrumlrCookieName true.
    */
   const accept = () => {
-    if (shouldShowCookieNotice) {
+    if (cookieConsentValue == null) {
       saveToStorage(COOKIE_CONSENT_STORAGE_KEY, "true");
       setShowCookieNotice(false);
     }
@@ -32,7 +45,7 @@ export const CookieNotice = () => {
    * Sets cookie consent value i.e. scrumlrCookieName false.
    */
   const decline = () => {
-    if (shouldShowCookieNotice) {
+    if (cookieConsentValue == null) {
       saveToStorage(COOKIE_CONSENT_STORAGE_KEY, "false");
       setShowCookieNotice(false);
     }
@@ -41,8 +54,6 @@ export const CookieNotice = () => {
   const openPolicy = () => {
     setShowCookiePolicy(true);
   };
-  // prevents cookie notice from being shown if scrumlrCookieName is set in localStorage
-  if (!shouldShowCookieNotice || !showCookieNotice) return null;
 
   return (
     <Portal
