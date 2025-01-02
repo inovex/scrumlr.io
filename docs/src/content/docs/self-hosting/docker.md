@@ -31,6 +31,7 @@ Make sure to set the `POSTGRES_PASSWORD` variable in your `.env` file to a secur
 ```sh
 pwgen -s 64 1
 ```
+
 ### JWT Private Key
 We use an ECDSA private key to sign the JWT tokens.
 ***Make sure to keep this key secure as it can be used to decrypt the tokens and generate new ones, potentially compromising your users' accounts.***
