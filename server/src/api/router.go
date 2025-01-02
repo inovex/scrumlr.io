@@ -1,6 +1,8 @@
 package api
 
 import (
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/markbates/goth/gothic"
 	"net/http"
 	"os"
@@ -8,7 +10,6 @@ import (
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
-	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
@@ -18,9 +19,6 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
-
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 type Server struct {
@@ -171,7 +169,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 func (s *Server) protectedRoutes(r chi.Router) {
 	r.Group(func(r chi.Router) {
 		r.Use(s.auth.Verifier())
-		r.Use(jwtauth.Authenticator)
+		r.Use(s.auth.Authenticator())
 		r.Use(auth.AuthContext)
 
 		r.With(s.BoardTemplateRateLimiter).Post("/templates", s.createBoardTemplate)
