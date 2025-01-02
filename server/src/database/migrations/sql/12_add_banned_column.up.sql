@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS board_sessions ADD COLUMN banned boolean NOT NULL DEFAULT false;
