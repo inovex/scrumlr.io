@@ -234,7 +234,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
 
       const editColumnsDispatches = columnsToBeEdited.map((col) => dispatch(editTemplateColumn({templateId, columnId: col.id, overwrite: {...col}})));
 
-      const deleteColumnsDispatches = columnsToBeEdited.map((col) => dispatch(deleteTemplateColumn({templateId, columnId: col.id})));
+      const deleteColumnsDispatches = columnsToBeDeleted.map((col) => dispatch(deleteTemplateColumn({templateId, columnId: col.id})));
 
       Promise.all([editTemplateDispatch, ...createColumnsDispatches, ...editColumnsDispatches, ...deleteColumnsDispatches]).then((r) => {
         console.log("success", r);

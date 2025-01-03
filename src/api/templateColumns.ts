@@ -64,7 +64,7 @@ export const TemplateColumnsAPI = {
       });
 
       if (response.status === 204) {
-        return;
+        return columnId;
       }
 
       throw new Error(`delete template column request resulted in status ${response.status}`);

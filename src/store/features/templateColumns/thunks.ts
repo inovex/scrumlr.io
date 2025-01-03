@@ -26,6 +26,6 @@ export const editTemplateColumn = createAsyncThunk<TemplateColumn, {templateId: 
 );
 
 export const deleteTemplateColumn = createAsyncThunk<string, {templateId: string; columnId: string}, {state: ApplicationState}>("templateColumns/deleteColumn", async (payload) => {
-  await API.deleteTemplateColumn(payload.templateId, payload.columnId);
-  return payload.columnId; // return column id to remove from state for good
+  const column = await API.deleteTemplateColumn(payload.templateId, payload.columnId);
+  return column; // return column id to remove from state for good
 });
