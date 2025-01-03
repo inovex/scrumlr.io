@@ -13,6 +13,7 @@ import {
   createTemplateColumn,
   editTemplateColumn,
   deleteTemplateColumn,
+  getTemplates,
 } from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
@@ -85,7 +86,7 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
   }, [basisTemplate, editableTemplate]);
 
   useEffect(() => {
-    if (basisColumns && !editableTemplateColumns) {
+    if (basisColumns && basisColumns.length > 0 && !editableTemplateColumns) {
       console.log("init columns to", basisColumns);
       setEditableTemplateColumns(basisColumns.map((bc) => ({...bc, persisted: true, mode: undefined})));
     }
@@ -235,7 +236,11 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
 
       const deleteColumnsDispatches = columnsToBeEdited.map((col) => dispatch(deleteTemplateColumn({templateId, columnId: col.id})));
 
-      Promise.all([editTemplateDispatch, ...createColumnsDispatches, ...editColumnsDispatches, ...deleteColumnsDispatches]).then((r) => console.log("success", r));
+      Promise.all([editTemplateDispatch, ...createColumnsDispatches, ...editColumnsDispatches, ...deleteColumnsDispatches]).then((r) => {
+        console.log("success", r);
+        dispatch(getTemplates());
+        navigate("/boards/templates");
+      });
     }
     /* if (!basisTemplate || !basisColumns) return;
     if (mode === "create") {
