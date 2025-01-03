@@ -242,51 +242,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
         navigate("/boards/templates");
       });
     }
-    /* if (!basisTemplate || !basisColumns) return;
-    if (mode === "create") {
-      // overwrite from form
-      const newTemplateWithColumns: TemplateWithColumns = {
-        template: {
-          ...basisTemplate,
-          name: nameInput,
-          description: descriptionInput,
-          accessPolicy: activeOptionKey,
-        },
-        columns: basisColumns,
-      };
-      // create and go back on success
-      dispatch(createTemplateWithColumns(newTemplateWithColumns))
-        .unwrap()
-        .then(() => navigate("/boards/templates"));
-    } else {
-      // edit => update existing columns, create missing columns
-      const editTemplateDispatch = dispatch(
-        editTemplate({
-          id: basisTemplate.id,
-          overwrite: {
-            name: nameInput,
-            description: descriptionInput,
-            accessPolicy: activeOptionKey,
-          },
-        })
-      );
-
-      const columnsToEditDispatches = basisColumns
-        .filter((tmplCol) => !tmplCol.temporaryFlag && !tmplCol.toBeDeletedFlag)
-        .map((ce) => dispatch(editTemplateColumn({templateId, columnId: ce.id, overwrite: ce})));
-      const columnsToCreateDispatches = basisColumns
-        .filter((tmplCol) => tmplCol.temporaryFlag && !tmplCol.toBeDeletedFlag)
-        .map((cc) => dispatch(createTemplateColumn({templateId, templateColumn: cc})));
-      const columnsToDeleteDispatches = basisColumns
-        .filter((tmplCol) => tmplCol.toBeDeletedFlag && !tmplCol.temporaryFlag)
-        .map((cd) => dispatch(deleteTemplateColumn({templateId, columnId: cd.id})));
-
-      Promise.all([editTemplateDispatch, ...columnsToEditDispatches, ...columnsToCreateDispatches, ...columnsToDeleteDispatches])
-        .then(() => navigate("/boards/templates"))
-        .catch((e) => {
-          throw new Error("Error while editing template", e);
-        });
-    } */
   };
 
   useEffect(() => {
