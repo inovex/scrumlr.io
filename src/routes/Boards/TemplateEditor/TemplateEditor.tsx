@@ -324,6 +324,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
           templateId={templateId}
           // filter out columns which are to be deleted, since we want to show the future state, not the current one
           columns={editableTemplateColumns.filter((c) => c.mode !== "delete")}
+          totalIncludingDeleted={editableTemplateColumns.length}
           addColumn={addColumn}
           moveColumn={moveColumn}
           editColumn={editColumn}
