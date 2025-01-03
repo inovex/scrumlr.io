@@ -1,7 +1,19 @@
 import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {AccessPolicy, TemplateColumn, EditableTemplateColumn, Template, TemplateWithColumns, createTemplateWithColumns, TemplateColumnAction} from "store/features";
+import {
+  AccessPolicy,
+  TemplateColumn,
+  EditableTemplateColumn,
+  Template,
+  TemplateWithColumns,
+  createTemplateWithColumns,
+  TemplateColumnAction,
+  editTemplate,
+  createTemplateColumn,
+  editTemplateColumn,
+  deleteTemplateColumn,
+} from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
@@ -198,7 +210,32 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
         .unwrap()
         .then(() => navigate("/boards/templates"));
     } else if (mode === "edit") {
+      // TODO WORK IN PROGRESS
       // collect which columns to create/edit/delete by comparing to current (store)
+      const columnsToBeCreated = editableTemplateColumns.filter((column) => column.mode === "create");
+      const columnsToBeEdited = editableTemplateColumns.filter((column) => column.mode === "edit");
+      const columnsToBeDeleted = editableTemplateColumns.filter((column) => column.mode === "delete");
+
+      console.log("create", columnsToBeCreated, "edit", columnsToBeEdited, "delete", columnsToBeDeleted);
+
+      const editTemplateDispatch = dispatch(
+        editTemplate({
+          id: templateId,
+          overwrite: {
+            name: nameInput,
+            description: descriptionInput,
+            accessPolicy: activeOptionKey,
+          },
+        })
+      );
+
+      const createColumnsDispatches = columnsToBeCreated.map((col) => dispatch(createTemplateColumn({templateId, templateColumn: {...col}})));
+
+      const editColumnsDispatches = columnsToBeEdited.map((col) => dispatch(editTemplateColumn({templateId, columnId: col.id, overwrite: {...col}})));
+
+      const deleteColumnsDispatches = columnsToBeEdited.map((col) => dispatch(deleteTemplateColumn({templateId, columnId: col.id})));
+
+      Promise.all([editTemplateDispatch, ...createColumnsDispatches, ...editColumnsDispatches, ...deleteColumnsDispatches]).then((r) => console.log("success", r));
     }
     /* if (!basisTemplate || !basisColumns) return;
     if (mode === "create") {
