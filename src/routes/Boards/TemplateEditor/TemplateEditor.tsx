@@ -45,12 +45,12 @@ const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
   }
 };
 
-type TemplateColumnProps = {mode: "create" | "edit"};
+type TemplateColumnProps = {mode: "create" | "edit"; debug?: boolean};
 
 // component to edit a template.
 // can be either used to edit an existing template (referred by their uuid) or create one from scratch.
 // changes will only be saved after clicking the button and are local till then.
-export const TemplateEditor = ({mode}: TemplateColumnProps) => {
+export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -339,28 +339,30 @@ export const TemplateEditor = ({mode}: TemplateColumnProps) => {
       <div className="template-editor__description">
         <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
       </div>
-      <div className="template-editor__debug">
-        <table>
-          <thead>
-            <tr>
-              <th>Column</th>
-              <th>Index</th>
-              <th>Persisted</th>
-              <th>Mode</th>
-            </tr>
-          </thead>
-          <tbody>
-            {editableTemplateColumns.map((etc) => (
+      {debug && (
+        <div className="template-editor__debug">
+          <table>
+            <thead>
               <tr>
-                <td>{etc.id}</td>
-                <td>{etc.index}</td>
-                <td>{String(etc.persisted)}</td>
-                <td>{String(etc.mode)}</td>
+                <th>Column</th>
+                <th>Index</th>
+                <th>Persisted</th>
+                <th>Mode</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {editableTemplateColumns.map((etc) => (
+                <tr>
+                  <td>{etc.id}</td>
+                  <td>{etc.index}</td>
+                  <td>{String(etc.persisted)}</td>
+                  <td>{String(etc.mode)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <div className="template-editor__columns-configurator-wrapper">
         <ColumnsConfigurator
           className="template-editor__columns-configurator"
