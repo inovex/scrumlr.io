@@ -3,17 +3,10 @@ import classNames from "classnames";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {t} from "i18next";
 import StanDark from "../../../assets/stan/Stan_OK_Cropped_Light.png";
-// import StanDark from "../../../assets/stan/Stan_OK_Dark.svg";
-import {EXAMPLESESSIONSFORSEARCHFCT /* EXAMPLE_CUSTOM_TEMPLATE */} from "../../../constants/templates";
-import {SessionCard} from "../../../components/Sessions/SessionCard/SessionCard";
-// import StanLight from "../../../assets/stan/Stan_OK_Light.svg";
-// import StanDark from "../../../assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
-// import {RECOMMENDED_TEMPLATES} from "../../../constants/templates";
-// import {TemplateCard} from "../../../components/Templates";
-import "./Sessions.scss";
 import StanLight from "../../../assets/stan/Stan_OK_Cropped_Light.png";
+import {SessionCard} from "../../../components/Sessions/SessionCard/SessionCard";
+import "./Sessions.scss";
 import {useAppSelector} from "../../../store";
-// import {AccessPolicy} from "store/features";
 
 export const Sessions = () => {
   const searchBarInput: string = useOutletContext();
@@ -40,13 +33,14 @@ export const Sessions = () => {
                 </div>
               </header>
               <div className="sessions__card-container">
-                {EXAMPLESESSIONSFORSEARCHFCT.filter(
-                  (template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase()) || template.description?.toLowerCase().includes(searchBarInput.toLowerCase())
-                ).map((template) => (
-                  <SessionCard template={template} />
-                ))}
-                {/* <SessionCard template={EXAMPLE_CUSTOM_TEMPLATE} /> */}
-                {/* <SessionCard template={EXAMPLE_CUSTOM_TEMPLATE} /> */}
+                {/* <SessionCard session={DEFAULT_SESSION} /> */}
+                {sessions
+                  .filter(
+                    (session) => session.name.toLowerCase().includes(searchBarInput.toLowerCase()) || session.description?.toLowerCase().includes(searchBarInput.toLowerCase())
+                  )
+                  .map((session) => (
+                    <SessionCard session={session} />
+                  ))}
               </div>
             </div>
           </div>

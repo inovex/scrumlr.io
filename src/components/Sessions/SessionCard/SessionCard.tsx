@@ -13,14 +13,14 @@ import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {ReactComponent as MultipleUserIcon} from "assets/icons/multiple-user.svg";
 import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
-import {BoardTemplate} from "constants/templates";
 import "./SessionCard.scss";
+import {Session} from "../../../store/features";
 
 type SessionCardProps = {
-  template: BoardTemplate;
+  session: Session;
 };
 
-export const SessionCard = ({template}: SessionCardProps) => {
+export const SessionCard = ({session}: SessionCardProps) => {
   const {t} = useTranslation();
 
   const [showMiniMenu, setShowMiniMenu] = useState(false);
@@ -49,46 +49,46 @@ export const SessionCard = ({template}: SessionCardProps) => {
 
   return (
     <div className="session-card">
-      <FavouriteButton className="session-card__favourite" active={template.favourite} onClick={() => {}} />
+      <FavouriteButton className="session-card__favourite" active={session.favourite} onClick={() => {}} />
       <div className={classNames("session-card__head")}>
-        <input className="session-card__title" type="text" value={template.name} disabled />
+        <input className="session-card__title" type="text" value={session.name} disabled />
       </div>
       {renderMenu()}
       <TextareaAutosize
         className={classNames("session-card__description")}
-        value={template.description}
+        value={session.description}
         disabled
         onPointerEnterCapture={undefined}
         onPointerLeaveCapture={undefined}
       />
       <ColumnsIcon className={classNames("session-card__icon", "session-card__icon--columns")} />
       <div className="session-card__columns">
-        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
+        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: session.columns.length})}</div>
         <div className="session-card__columns-subtitle">
-          {template.columns
-            .sort((a, b) => a.index - b.index)
-            .map((c) => c.name)
-            .join(", ")}
+          {/* {session.columns */}
+          {/*   .sort((a, b) => a.index - b.index) */}
+          {/*   .map((c) => c.name) */}
+          {/*   .join(", ")} */}
         </div>
       </div>
       <CalendarIcon className={classNames("session-card__icon", "session-card__icon--age")} />
       <div className="session-card__age">
-        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
+        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: session.columns.length})}</div>
         <div className="session-card__columns-subtitle">
-          {template.columns
-            .sort((a, b) => a.index - b.index)
-            .map((c) => c.name)
-            .join(", ")}
+          {/* {session.columns */}
+          {/*   .sort((a, b) => a.index - b.index) */}
+          {/*   .map((c) => c.name) */}
+          {/*   .join(", ")} */}
         </div>
       </div>
       <MultipleUserIcon className={classNames("session-card__icon", "session-card__icon--participants")} />
       <div className="session-card__participants">
-        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
+        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: session.columns.length})}</div>
         <div className="session-card__columns-subtitle">
-          {template.columns
-            .sort((a, b) => a.index - b.index)
-            .map((c) => c.name)
-            .join(", ")}
+          {/* {session.columns */}
+          {/*   .sort((a, b) => a.index - b.index) */}
+          {/*   .map((c) => c.name) */}
+          {/*   .join(", ")} */}
         </div>
       </div>
       <Button className={classNames("session-card__start-button", "session-card__start-button--start")} small icon={<NextIcon />}>
