@@ -192,5 +192,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   },
   templates: [],
   templatesColumns: [],
+  sessions: [],
   ...overwrite,
 });

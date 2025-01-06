@@ -12,6 +12,7 @@ import {UserAPI} from "api/user";
 import {BoardReactionAPI} from "api/boardReaction";
 import {TemplatesAPI} from "api/templates";
 import {TemplateColumnsAPI} from "api/templateColumns";
+import {SessionsAPI} from "api/sessions";
 
 /** This class lists all API functions of the server. */
 export const API = {
@@ -29,4 +30,5 @@ export const API = {
   ...BoardReactionAPI,
   ...TemplatesAPI,
   ...TemplateColumnsAPI,
+  ...SessionsAPI,
 };

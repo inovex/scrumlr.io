@@ -12,10 +12,15 @@ import {SessionCard} from "../../../components/Sessions/SessionCard/SessionCard"
 // import {TemplateCard} from "../../../components/Templates";
 import "./Sessions.scss";
 import StanLight from "../../../assets/stan/Stan_OK_Cropped_Light.png";
+import {useAppSelector} from "../../../store";
 // import {AccessPolicy} from "store/features";
 
 export const Sessions = () => {
   const searchBarInput: string = useOutletContext();
+  const sessions = useAppSelector((state) => state.sessions);
+
+  // TODO remove
+  console.log("Aktuelle Sessions: ", sessions);
 
   return (
     <>

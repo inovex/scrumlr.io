@@ -7,7 +7,7 @@ import {Input} from "components/Input/Input";
 import {Switch} from "components/Switch/Switch";
 import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import classNames from "classnames";
-import {getTemplates} from "store/features";
+import {getSessions, getTemplates} from "store/features";
 import {useAppDispatch} from "store";
 import "./Boards.scss";
 
@@ -50,9 +50,10 @@ export const Boards = () => {
     setBoardView(subRoute);
   }, [location]);
 
-  // init templates
+  // init templates & sessions
   useEffect(() => {
     dispatch(getTemplates());
+    dispatch(getSessions());
   }, [dispatch]);
 
   const renderTitle = () => {
