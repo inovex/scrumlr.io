@@ -102,8 +102,7 @@
 
   // lock scrolling
   max-width: 100%;
-  height: 340px; // TODO fix magic
-  overflow: hidden;
+  height: max-content; // correct height!
 }
 
 .template-editor__buttons {
