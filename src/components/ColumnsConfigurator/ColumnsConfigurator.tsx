@@ -112,7 +112,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     const newColumn: TemplateColumn = {
       id: uniqueId("col"),
       template: props.templateId,
-      name: "Column",
+      name: `Column ${props.columns.length + 1}`,
       description: "",
       color,
       visible: false,
