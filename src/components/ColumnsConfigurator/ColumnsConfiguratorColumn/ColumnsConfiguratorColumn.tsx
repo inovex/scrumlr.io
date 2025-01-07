@@ -59,6 +59,9 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     setOpenColorPicker(false);
   };
 
+  // disable delete if only one column remains
+  const disableDelete = !(props.allColumns.length > 1);
+
   const renderColorPicker = () =>
     openColorPicker ? (
       // TODO align properly, fix overflow
@@ -100,7 +103,13 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         ) : (
           <HiddenIcon className={classNames("template-column__icon", "template-column__icon--hidden")} />
         )}
-        <DeleteIcon className={classNames("template-column__icon", "template-column__icon--delete")} onClick={() => props.deleteColumn?.(props.column)} />
+        <button
+          className={classNames("template-column__button", {"template-column__button--disabled": disableDelete})}
+          onClick={() => props.deleteColumn?.(props.column)}
+          disabled={disableDelete}
+        >
+          <DeleteIcon className={classNames("template-column__icon", "template-column__icon--delete")} />
+        </button>
       </div>
     </div>
   );

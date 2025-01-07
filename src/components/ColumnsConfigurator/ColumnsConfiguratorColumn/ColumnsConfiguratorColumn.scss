@@ -105,6 +105,18 @@ $column-height: 340px;
   background-color: var(--accent-color--light);
 }
 
+.template-column__button {
+  all: unset;
+  cursor: pointer;
+  max-width: $icon--large;
+  max-height: $icon--large;
+
+  &:disabled {
+    color: $gray--800;
+    cursor: default;
+  }
+}
+
 [theme="dark"] {
   .template-column {
     border-color: var(--accent-color--dark);
