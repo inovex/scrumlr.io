@@ -30,7 +30,7 @@ require (
 	github.com/urfave/cli/v2 v2.27.5
 	github.com/weppos/publicsuffix-go v0.40.2
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.32.0
 )
 
 require (
