@@ -98,11 +98,16 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
           {...listeners}
         />
         {renderColorPicker()}
-        {props.column.visible ? (
-          <VisibleIcon className={classNames("template-column__icon", "template-column__icon--visible")} />
-        ) : (
-          <HiddenIcon className={classNames("template-column__icon", "template-column__icon--hidden")} />
-        )}
+        <button
+          className={classNames("template-column__button", {"template-column__button--disabled": false})}
+          onClick={() => props.editColumn?.(props.column, {visible: !props.column.visible})}
+        >
+          {props.column.visible ? (
+            <VisibleIcon className={classNames("template-column__icon", "template-column__icon--visible")} />
+          ) : (
+            <HiddenIcon className={classNames("template-column__icon", "template-column__icon--hidden")} />
+          )}
+        </button>
         <button
           className={classNames("template-column__button", {"template-column__button--disabled": disableDelete})}
           onClick={() => props.deleteColumn?.(props.column)}
