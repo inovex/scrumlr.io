@@ -19,6 +19,7 @@
 .columns-configurator__wrapper {
   display: flex;
   flex-direction: column;
+  gap: $spacing--lg;
 }
 
 .columns-configurator__mini-view {
