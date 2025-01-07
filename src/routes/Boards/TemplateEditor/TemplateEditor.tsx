@@ -75,7 +75,8 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   // the `mode` property will be later used to determine how the backend should handle each column
   const [editableTemplate, setEditableTemplate] = useState<Template>();
   const [editableTemplateColumns, setEditableTemplateColumns] = useState<EditableTemplateColumn[]>();
-  // TODO add state keeping track of to be deleted columns (maybe not required since in flagged in above array)
+  // separate to keep track of columns which will be deleted in the future
+  const [deleteColumns, setDeleteColumns] = useState<EditableTemplateColumn[]>([]);
 
   useEffect(() => {
     if (basisTemplate && !editableTemplate) {
@@ -169,22 +170,17 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
     // dispatch(deleteTemplateColumnOptimistically({columnId: templateColumn.id}));
     if (!editableTemplateColumns) return;
 
-    let updated: EditableTemplateColumn[];
+    templateColumn.mode = nextMode("delete", templateColumn.mode);
+    const updatedColumnsWithoutDeleted = editableTemplateColumns.filter((col) => col.id !== templateColumn.id).map(updateIndex);
+
+    // already persisted columns are added to this state, to be deleted later
     if (templateColumn.persisted) {
-      // only mark as deleted
-      // TODO how are indices handled if we filter these out visually but still remain in array?
-      templateColumn.mode = nextMode("delete", templateColumn.mode);
-      updated = editableTemplateColumns.map((col) => (col.id === templateColumn.id ? templateColumn : col)); // may be not required since it's already part of array
-      console.log("flag as deleted", updated);
-    } else {
-      // actually delete
-      updated = editableTemplateColumns.map((col) => (col.id !== templateColumn.id ? col : null)).filter((col) => col !== null);
+      console.log("add to delete later", templateColumn);
+      setDeleteColumns((delCols) => [...delCols, templateColumn]);
     }
 
-    updated = updated.map(updateIndex);
-
-    console.log("delete column", diff(editableTemplateColumns, updated));
-    setEditableTemplateColumns(updated);
+    console.log("delete column", diff(editableTemplateColumns, updatedColumnsWithoutDeleted));
+    setEditableTemplateColumns(updatedColumnsWithoutDeleted);
   };
 
   const cancelAndGoBack = () => navigate("/boards/templates");
@@ -215,7 +211,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
       // collect which columns to create/edit/delete by comparing to current (store)
       const columnsToBeCreated = editableTemplateColumns.filter((column) => column.mode === "create");
       const columnsToBeEdited = editableTemplateColumns.filter((column) => column.mode === "edit");
-      const columnsToBeDeleted = editableTemplateColumns.filter((column) => column.mode === "delete");
+      const columnsToBeDeleted = deleteColumns.filter((column) => column.mode === "delete"); // filter shouldn't filter anything out
 
       console.log("create", columnsToBeCreated, "edit", columnsToBeEdited, "delete", columnsToBeDeleted);
 
