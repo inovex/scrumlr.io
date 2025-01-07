@@ -303,7 +303,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
             </thead>
             <tbody>
               {editableTemplateColumns.map((etc) => (
-                <tr>
+                <tr key={etc.id}>
                   <td>{etc.id}</td>
                   <td>{etc.index}</td>
                   <td>{String(etc.persisted)}</td>
