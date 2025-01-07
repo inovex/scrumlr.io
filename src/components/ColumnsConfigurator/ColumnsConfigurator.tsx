@@ -13,7 +13,6 @@ type ColumnsConfiguratorProps = {
   className: string;
   templateId: string;
   columns: EditableTemplateColumn[]; // without deleted cols
-  totalIncludingDeleted: number; // incuding all
   addColumn: (templateColumn: TemplateColumn, index: number) => void;
   moveColumn: (fromIndex: number, toIndex: number) => void;
   editColumn: (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void;
@@ -122,7 +121,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
 
     // target index for the right has to take deleted cols which are still part of the array into account,
     // which is why we use the total col amount as new index
-    const index = alignment === "left" ? 0 : props.totalIncludingDeleted;
+    const index = alignment === "left" ? 0 : props.columns.length;
 
     // TODO can illegal indices happen? apparently so
 
