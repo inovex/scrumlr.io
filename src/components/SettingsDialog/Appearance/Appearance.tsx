@@ -17,6 +17,9 @@ export const Appearance = () => {
   const activeMenuItem: MenuItemConfig = useOutletContext();
   const currentMonth = new Date().getMonth();
 
+  // Snowfall is enabled only in December and January
+  const isDecemberOrJanuary = currentMonth === 11 || currentMonth === 0;
+
   return (
     <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <header className="settings-dialog__header">
@@ -25,7 +28,7 @@ export const Appearance = () => {
       <div className="appearance-container">
         <ThemeSettings />
         {/** Since snowfall is only enabled in December, we only show the snowfall settings in December too */}
-        {currentMonth === 11 && <SnowfallSettings />}
+        {isDecemberOrJanuary && <SnowfallSettings />}
         <NotificationSettings />
         <BoardReactionsSettings />
         <SkinToneSelector />
