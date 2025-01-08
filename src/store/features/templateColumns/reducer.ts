@@ -7,7 +7,6 @@ import {createTemplateColumn, deleteTemplateColumn, editTemplateColumn, getTempl
 
 const initialState: TemplateColumnsState = [...DEFAULT_TEMPLATE.columns];
 
-/* FIXME fuck all of this, it's just generally a bad idea trying to synchronize frontend/backend state manually. */
 export const templateColumnsReducer = createReducer(initialState, (builder) => {
   builder
     // each full template has a column prop which is an array, so we need to map out the columns prop and also flatten the array
@@ -32,52 +31,6 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
           [...state]
         ) // start with a copy of the existing state
     )
-    /* .addCase(addTemplateOptimistically, (state, action) => [...state, ...action.payload.columns])
-    .addCase(addTemplateColumnOptimistically, (state, action) => {
-      action.payload.templateColumn.temporaryFlag = true; // tag as temporary, so it can be properly persisted later
-      // since we potentially have template columns by many different templates here, we need to differentiate them.
-      // after adding/moving, it is asserted that the indices are correct afterward.
-      const unrelatedColumns = state.filter((column) => column.template !== action.payload.templateColumn.template);
-      const relatedColumns = state
-        .filter((column) => column.template === action.payload.templateColumn.template)
-        // insert the new column at the specified index in the related columns
-        .toSpliced(action.payload.index, 0, action.payload.templateColumn)
-        // update the index for each column in the related group
-        .map((column, i) => ({
-          ...column,
-          index: i,
-        }));
-
-      // combine unrelated columns with updated related columns
-      return [...unrelatedColumns, ...relatedColumns];
-    })
-    .addCase(moveTemplateColumnOptimistically, (state, action) => {
-      const relatedColumns = state.filter((column) => column.template === action.payload.templateId);
-      const unrelatedColumns = state.filter((column) => column.template !== action.payload.templateId);
-
-      const updatedRelatedColumns = arrayMove(relatedColumns, action.payload.fromIndex, action.payload.toIndex);
-
-      const updatedColumnsWithIndices = updatedRelatedColumns.map((column, index) => ({
-        ...column,
-        index,
-      }));
-      return [...unrelatedColumns, ...updatedColumnsWithIndices];
-    })
-    .addCase(editTemplateColumnOptimistically, (state, action) => state.map((t) => (t.id === action.payload.columnId ? {...t, ...action.payload.overwrite} : t)))
-    // deleting: if column is local, actually delete, otherwise just flag it as to be deleted
-    .addCase(
-      deleteTemplateColumnOptimistically,
-      (state, action) =>
-        state
-          .map((t) => {
-            if (t.id === action.payload.columnId) {
-              return t.temporaryFlag ? null : {...t, toBeDeletedFlag: true}; // mark for removal or update with flag
-            }
-            return t;
-          })
-          .filter((t) => t !== null) // remove items marked as such
-    )
-     */
     .addCase(createTemplateColumn.fulfilled, (state, action) =>
       state.map(
         // reset temporary (flag and id), as this is now officially from the backend
