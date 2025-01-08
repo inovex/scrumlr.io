@@ -31,7 +31,8 @@ import {Button} from "components/Button";
 import {useNavigate, useParams} from "react-router";
 import "./TemplateEditor.scss";
 import {arrayMove} from "@dnd-kit/sortable";
-import {diff} from "deep-object-diff"; // for debug purposes
+import {diff} from "deep-object-diff";
+import {ColumnsMiniView} from "../../../components/ColumnsConfigurator/ColumnsMiniView/ColumnsMiniView"; // for debug purposes
 
 // todo maybe just change the translation keys to AccessPolicy => lowercase
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
@@ -324,6 +325,9 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
           editColumn={editColumn}
           deleteColumn={deleteColumn}
         />
+      </div>
+      <div className="template-editor__columns-mini-view-wrapper">
+        <ColumnsMiniView className="columns-configurator__mini-view" columns={editableTemplateColumns} />
       </div>
       <div className="template-editor__buttons">
         <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary" onClick={cancelAndGoBack}>

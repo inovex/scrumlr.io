@@ -14,7 +14,9 @@
     auto // <- description
     46px
     auto // <- debug
-    auto // <- column
+    auto // <- columns config
+    16px
+    auto // <- mini columns
     56px
     52px // <- buttons
     $spacing--xs;
@@ -30,6 +32,8 @@
     ".          .           .         .         ."
     ".          debug        debug      debug      ."
     ".          columns     columns   columns   ."
+    ".          .           .         .         ."
+    ".          mini        mini      mini      ."
     ".          .           .         .         ."
     ".          buttons     buttons   buttons   ."
     ".          .           .         .         .";
@@ -103,6 +107,11 @@
   // lock scrolling
   max-width: 100%;
   height: max-content; // correct height!
+}
+
+.template-editor__columns-mini-view-wrapper {
+  grid-area: mini;
+  justify-self: center;
 }
 
 .template-editor__buttons {

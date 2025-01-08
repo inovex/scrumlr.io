@@ -6,7 +6,6 @@ import {Color, getColorClassName, getNextColor, getPreviousColor} from "constant
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {ColumnsConfiguratorColumn} from "./ColumnsConfiguratorColumn/ColumnsConfiguratorColumn";
-import {ColumnsMiniView} from "./ColumnsMiniView/ColumnsMiniView";
 import {AddTemplateColumn} from "./AddTemplateColumn/AddTemplateColumn";
 import "./ColumnsConfigurator.scss";
 
@@ -134,39 +133,34 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   }
 
   return (
-    // TODO possibly move to its own component to clean this up
-    <div className="columns-configurator__wrapper">
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
-        <SortableContext items={props.columns} strategy={horizontalListSortingStrategy}>
-          <div className={classNames(props.className, "columns-configurator", getColorClassName("backlog-blue"))}>
-            <AddTemplateColumn alignment="left" color={getPreviousColor(props.columns[0].color)} onClick={addTemplateColumn} />
-            <div className="columns-configurator__columns-wrapper">
-              {props.columns.map((column, index) => {
-                const potentialIndex = getPotentialIndex(index);
-                return (
-                  <ColumnsConfiguratorColumn
-                    className="columns-configurator__column"
-                    key={column.id}
-                    column={column}
-                    index={potentialIndex}
-                    activeDrag={column.id === activeElementId}
-                    activeDrop={column.id === dropElementId}
-                    placement={calcPlacement(potentialIndex)}
-                    allColumns={props.columns}
-                    editColumn={props.editColumn}
-                    deleteColumn={props.deleteColumn}
-                  />
-                );
-              })}
-            </div>
-            <AddTemplateColumn alignment="right" color={getNextColor(props.columns[props.columns.length - 1].color)} onClick={addTemplateColumn} />
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
+      <SortableContext items={props.columns} strategy={horizontalListSortingStrategy}>
+        <div className={classNames(props.className, "columns-configurator", getColorClassName("backlog-blue"))}>
+          <AddTemplateColumn alignment="left" color={getPreviousColor(props.columns[0].color)} onClick={addTemplateColumn} />
+          <div className="columns-configurator__columns-wrapper">
+            {props.columns.map((column, index) => {
+              const potentialIndex = getPotentialIndex(index);
+              return (
+                <ColumnsConfiguratorColumn
+                  className="columns-configurator__column"
+                  key={column.id}
+                  column={column}
+                  index={potentialIndex}
+                  activeDrag={column.id === activeElementId}
+                  activeDrop={column.id === dropElementId}
+                  placement={calcPlacement(potentialIndex)}
+                  allColumns={props.columns}
+                  editColumn={props.editColumn}
+                  deleteColumn={props.deleteColumn}
+                />
+              );
+            })}
           </div>
-        </SortableContext>
+          <AddTemplateColumn alignment="right" color={getNextColor(props.columns[props.columns.length - 1].color)} onClick={addTemplateColumn} />
+        </div>
+      </SortableContext>
 
-        <DragOverlay>{renderDragOverlay()}</DragOverlay>
-      </DndContext>
-
-      <ColumnsMiniView className="columns-configurator__mini-view" columns={props.columns} />
-    </div>
+      <DragOverlay>{renderDragOverlay()}</DragOverlay>
+    </DndContext>
   );
 };
