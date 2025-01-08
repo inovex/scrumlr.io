@@ -1,7 +1,7 @@
 import {createReducer} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
 import {TemplateColumnsState} from "./types";
-import {getTemplates} from "../templates";
+import {deleteTemplate, getTemplates} from "../templates";
 // import {addTemplateColumnOptimistically, deleteTemplateColumnOptimistically, editTemplateColumnOptimistically, moveTemplateColumnOptimistically} from "./actions";
 import {createTemplateColumn, deleteTemplateColumn, editTemplateColumn, getTemplateColumns} from "./thunks";
 
@@ -33,5 +33,6 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
     )
     .addCase(createTemplateColumn.fulfilled, (state, action) => [...state, action.payload.column])
     .addCase(editTemplateColumn.fulfilled, (state, action) => state.map((t) => (t.id === action.payload.id ? {...action.payload} : t)))
-    .addCase(deleteTemplateColumn.fulfilled, (state, action) => state.filter((c) => c.id !== action.payload));
+    .addCase(deleteTemplateColumn.fulfilled, (state, action) => state.filter((c) => c.id !== action.payload))
+    .addCase(deleteTemplate.fulfilled, (state, action) => state.filter((column) => column.template !== action.payload));
 });

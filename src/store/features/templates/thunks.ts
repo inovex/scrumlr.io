@@ -46,3 +46,8 @@ export const setTemplateFavourite = createAsyncThunk<Template, {id: string; favo
     return unwrapResult(result);
   }
 );
+
+export const deleteTemplate = createAsyncThunk<string, {id: string}, {state: ApplicationState}>("templates/deleteTemplate", async (payload) => {
+  await API.deleteTemplate(payload.id);
+  return payload.id; // return former id to remove entries from store
+});

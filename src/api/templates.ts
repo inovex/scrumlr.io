@@ -77,4 +77,21 @@ export const TemplatesAPI = {
       throw new Error(`unable to get all templates with error: ${error}`);
     }
   },
+
+  deleteTemplate: async (templateId: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+
+      if (response.status === 204) {
+        return;
+      }
+
+      throw new Error(`get all templates request resulted in status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to get all templates with error: ${error}`);
+    }
+  },
 };
