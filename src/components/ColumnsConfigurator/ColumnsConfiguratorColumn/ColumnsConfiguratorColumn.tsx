@@ -65,7 +65,14 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
   const renderColorPicker = () =>
     openColorPicker ? (
       // TODO align properly, fix overflow
-      <ColorPicker open={openColorPicker} colors={COLOR_ORDER} activeColor={props.column.color} selectColor={editColor} closeColorPicker={() => setOpenColorPicker(false)} />
+      <ColorPicker
+        className={classNames("columns-configurator-column__color-picker", `columns-configurator-column__color-picker--column-${props.placement}`)}
+        open={openColorPicker}
+        colors={COLOR_ORDER}
+        activeColor={props.column.color}
+        selectColor={editColor}
+        closeColorPicker={() => setOpenColorPicker(false)}
+      />
     ) : (
       <div className="template-column__color" role="button" tabIndex={0} onClick={() => setOpenColorPicker(true)} />
     );

@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import {useEffect} from "react";
 import {uniqueId} from "underscore";
 import ReactFocusLock from "react-focus-lock";
@@ -6,6 +7,7 @@ import {Tooltip} from "components/Tooltip";
 import "./ColorPicker.scss";
 
 type ColorPickerProps = {
+  className?: string;
   open: boolean;
   colors: Color[];
   activeColor: Color;
@@ -35,7 +37,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
 
   return (
     <ReactFocusLock autoFocus className="fix-focus-lock-placement">
-      <ul className="color-picker">
+      <ul className={classNames(props.className, "color-picker")}>
         <li className={`${getColorClassName(props.activeColor)} color-picker__item`}>
           <button
             id={primColorAnchor}

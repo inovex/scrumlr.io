@@ -73,6 +73,7 @@ $column-height: 340px;
 }
 
 .template-column__menu {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: $spacing--xl; // TODO proper gaps
@@ -97,12 +98,27 @@ $column-height: 340px;
   }
 }
 
-// temporary!
 .template-column__color {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--accent-color--200);
   border-radius: $rounded--full;
   background-color: var(--accent-color--light);
+
+  cursor: pointer;
+}
+
+// TODO subject to change with column
+.columns-configurator-column__color-picker {
+  position: absolute;
+  // some precise but hardcoded positioning values so it fits exactly on top of the active color
+  // varying by column position (left, center, right) probably because of borders ig
+  top: 40px - 1px;
+  left: 40px + 1px;
+
+  &--column-center {
+    left: 40px + 3px;
+  }
 }
 
 .template-column__button {
