@@ -13,7 +13,6 @@ import {
   createTemplateColumn,
   editTemplateColumn,
   deleteTemplateColumn,
-  getTemplates,
 } from "store/features";
 import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
@@ -208,7 +207,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
         .unwrap()
         .then(() => navigate("/boards/templates"));
     } else if (mode === "edit") {
-      // TODO WORK IN PROGRESS
       // collect which columns to create/edit/delete by comparing to current (store)
       const columnsToBeCreated = editableTemplateColumns.filter((column) => column.mode === "create");
       const columnsToBeEdited = editableTemplateColumns.filter((column) => column.mode === "edit");
@@ -235,7 +233,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
 
       Promise.all([editTemplateDispatch, ...createColumnsDispatches, ...editColumnsDispatches, ...deleteColumnsDispatches]).then((r) => {
         console.log("success", r);
-        dispatch(getTemplates());
         navigate("/boards/templates");
       });
     }
