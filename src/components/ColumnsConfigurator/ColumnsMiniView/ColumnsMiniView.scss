@@ -33,6 +33,11 @@ $mini-column-height: 91px;
       border-left: none;
     }
   }
+
+  &--hidden {
+    // TODO thinner stripes
+    background-image: $column-stripes--light;
+  }
 }
 
 .columns-mini-view__column-index {
