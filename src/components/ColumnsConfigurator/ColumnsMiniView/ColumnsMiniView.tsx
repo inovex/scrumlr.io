@@ -22,8 +22,8 @@ export const ColumnsMiniView = (props: ColumnsMiniViewProps) => {
   return (
     <div className={classNames(props.className, "columns-mini-view")}>
       {props.columns.map((column) => (
-        <div className={classNames("columns-mini-view__column", `columns-mini-view__column--${calcPlacement(column.index)}`, getColorClassName(column.color))}>
-          {column.index + 1}
+        <div className={classNames("columns-mini-view__column", `columns-mini-view__column--border-${calcPlacement(column.index)}`, getColorClassName(column.color))}>
+          <span className="columns-mini-view__column-index">{column.index + 1}</span>
         </div>
       ))}
     </div>
