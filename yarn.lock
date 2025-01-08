@@ -10178,10 +10178,10 @@ react-snowfall@^2.2.0:
   dependencies:
     react-fast-compare "^3.2.2"
 
-react-to-print@^2.15.1:
-  version "2.15.1"
-  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.15.1.tgz#c9a6732cadf1118fc90d886b54a9388c419561b9"
-  integrity sha512-1foogIFbCpzAVxydkhBiDfMiFYhIMphiagDOfcG4X/EcQ+fBPqJ0rby9Wv/emzY1YLkIQy/rEgOrWQT+rBKhjw==
+react-to-print@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-3.0.4.tgz#c5efd89721d6298837f1cc53a2ec485e7ca09906"
+  integrity sha512-33opQsuskUs0UyK1OLAAN2Ziy1GPneeTLvypRYjT6E9bl2NDxZtEr0KYMOxszcBY0bs+XlWOkGNlyla55GQjuA==
 
 react-toastify@^11.0.2:
   version "11.0.2"
