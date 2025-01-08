@@ -57,8 +57,8 @@ const Router = () => {
               <Route path="profile" element={<ProfileSettings />} />
             </Route>
           </Route>
-          <Route path="create" element={<TemplateEditor mode="create" debug />} />
-          <Route path="edit/:id" element={<TemplateEditor mode="edit" debug />} />
+          <Route path="create" element={<TemplateEditor mode="create" />} />
+          <Route path="edit/:id" element={<TemplateEditor mode="edit" />} />
           <Route path="sessions" element={<Sessions />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />
