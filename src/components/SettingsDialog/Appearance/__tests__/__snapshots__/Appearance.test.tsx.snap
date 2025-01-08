@@ -112,6 +112,24 @@ exports[`Appearance should render all Settings correctly 1`] = `
     </div>
     <section>
       <button
+        aria-checked="false"
+        aria-label="Show snowfall"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show snowfall
+        </span>
+        <div
+          class="toggle"
+        />
+      </button>
+    </section>
+    <section>
+      <button
         aria-checked="true"
         aria-label="Show hotkey notifications"
         class="settings-option-button"
