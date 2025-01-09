@@ -1,10 +1,13 @@
 import classNames from "classnames";
 import {EditableTemplateColumn} from "store/features";
+import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
+import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
 import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
 import {ReactComponent as DnDIcon} from "assets/icons/drag-and-drop.svg";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
+import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {TextArea} from "components/TextArea/TextArea";
 import {Color, COLOR_ORDER, getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
@@ -52,6 +55,15 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  const descriptionConfirmMiniMenu: MiniMenuItem[] = [
+    {
+      element: <CloseIcon />,
+      label: "Cancel",
+      onClick(): void {},
+    },
+    {element: <CheckDoneIcon />, label: "Save", onClick(): void {}},
+  ];
 
   // update offset when dragging or columns change
   useEffect(() => {
@@ -103,8 +115,9 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       <div className="template-column__name-wrapper">
         <input className="template-column__name" value={props.column.name} onInput={(e) => props.editColumn?.(props.column, {name: e.currentTarget.value})} />
         {editingDescription ? (
-          <div className="template-column__description">
-            <TextArea input={description} setInput={setDescription} embedded />
+          <div className="template-column__description-wrapper">
+            <TextArea className="template-column__description-text-area" input={description} setInput={setDescription} embedded />
+            <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} />
           </div>
         ) : (
           <div className="template-column__inline-description" role="button" onClick={() => setEditingDescription(true)}>

@@ -88,6 +88,15 @@ $column-height: 340px;
   font-weight: 500;
 }
 
+.template-column__description-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.template-column__description-mini-menu {
+  margin-left: auto; // couldn't get align-self: flex-end to work so whatever
+}
+
 .template-column__menu {
   position: relative;
   display: flex;
