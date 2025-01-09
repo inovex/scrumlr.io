@@ -1,8 +1,8 @@
 import {ReactNode} from "react";
 import classNames from "classnames";
 import {uniqueId} from "underscore";
+import FocusLock, {MoveFocusInside} from "react-focus-lock";
 import "./MiniMenu.scss";
-import ReactFocusLock from "react-focus-lock";
 
 export type MiniMenuItem = {
   element: ReactNode; // an Icon in most cases, but can also be a complex element (e.g. ColorPicker)
@@ -13,12 +13,14 @@ export type MiniMenuItem = {
 
 type MiniMenuProps = {
   className?: string;
+  focusBehaviour?: "trap" | "moveFocus";
   items: MiniMenuItem[];
+  onBlur?: () => void;
 };
 
-export const MiniMenu = ({className, items}: MiniMenuProps) => (
-  <ReactFocusLock autoFocus>
-    <div className={classNames(className, "mini-menu")}>
+export const MiniMenu = ({className, focusBehaviour, items, onBlur}: MiniMenuProps) => {
+  const renderMenu = () => (
+    <div className={classNames(className, "mini-menu")} onBlur={onBlur}>
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
         return (
@@ -36,5 +38,17 @@ export const MiniMenu = ({className, items}: MiniMenuProps) => (
         );
       })}
     </div>
-  </ReactFocusLock>
-);
+  );
+
+  // depending on use case we want to trap the focus or not
+  // trapping means we cannot interact with other component till menu is closed,
+  // and also the focus will return to the beginning instead of going to the next component
+  switch (focusBehaviour) {
+    case "trap":
+      return <FocusLock autoFocus>{renderMenu()}</FocusLock>;
+    case "moveFocus":
+      return <MoveFocusInside>{renderMenu()}</MoveFocusInside>;
+    default:
+      return <>{renderMenu()}</>;
+  }
+};

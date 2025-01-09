@@ -73,6 +73,8 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
           {label: "Edit", element: <EditIcon />, onClick: navigateToEdit},
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
+        focusBehaviour="moveFocus"
+        // onBlur={()=>setShowMiniMenu(false)}
       />
     ) : (
       <MenuIcon className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />

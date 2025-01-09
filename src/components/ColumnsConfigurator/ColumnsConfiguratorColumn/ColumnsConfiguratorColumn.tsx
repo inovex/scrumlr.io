@@ -60,9 +60,17 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     {
       element: <CloseIcon />,
       label: "Cancel",
-      onClick(): void {},
+      onClick(): void {
+        console.log("Cancel");
+      },
     },
-    {element: <CheckDoneIcon />, label: "Save", onClick(): void {}},
+    {
+      element: <CheckDoneIcon />,
+      label: "Save",
+      onClick(): void {
+        console.log("save");
+      },
+    },
   ];
 
   // update offset when dragging or columns change
