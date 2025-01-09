@@ -54,10 +54,14 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   };
 
   const calcPlacement = (index: number) => {
+    const {length} = props.columns;
+    if (length === 1) {
+      return "all";
+    }
     if (index === 0) {
       return "first";
     }
-    if (index === props.columns.length - 1) {
+    if (index === length - 1) {
       return "last";
     }
     return "center";

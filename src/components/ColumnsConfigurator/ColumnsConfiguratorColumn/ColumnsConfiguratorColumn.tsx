@@ -20,7 +20,7 @@ type ColumnsConfiguratorColumnProps = {
   className?: string;
   column: EditableTemplateColumn;
   index: number;
-  placement?: "first" | "center" | "last";
+  placement?: "first" | "center" | "last" | "all";
   activeDrag?: boolean;
   activeDrop?: boolean;
   allColumns: EditableTemplateColumn[];
