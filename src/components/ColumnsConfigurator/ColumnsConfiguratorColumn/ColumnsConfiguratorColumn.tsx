@@ -61,14 +61,15 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       element: <CloseIcon />,
       label: "Cancel",
       onClick(): void {
-        console.log("Cancel");
+        setEditingDescription(false);
       },
     },
     {
       element: <CheckDoneIcon />,
       label: "Save",
       onClick(): void {
-        console.log("save");
+        props.editColumn?.(props.column, {description});
+        setEditingDescription(false);
       },
     },
   ];
@@ -77,6 +78,11 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
   useEffect(() => {
     updateOffset();
   }, [props.activeDrag, props.activeDrop, props.allColumns, updateOffset]);
+
+  const openDescriptionEditor = () => {
+    setDescription(props.column.description); // init with current value
+    setEditingDescription(true);
+  };
 
   const editColor = (color: Color) => {
     props.editColumn?.(props.column, {color});
@@ -128,8 +134,8 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} />
           </div>
         ) : (
-          <div className="template-column__inline-description" role="button" onClick={() => setEditingDescription(true)}>
-            {props.column.description ? props.column.description : "Description (optional)"}
+          <div className="template-column__inline-description" role="button" tabIndex={0} onClick={openDescriptionEditor}>
+            {props.column.description ? props.column.description : "Description (optional)"} {/* TODO localization */}
           </div>
         )}
       </div>
