@@ -119,7 +119,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
       name: `Column ${props.columns.length + 1}`,
       description: "",
       color,
-      visible: false,
+      visible: true,
       index: -1, // will be overwritten anyway
     };
 
