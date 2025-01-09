@@ -58,7 +58,8 @@ export const ColorPicker = (props: ColorPickerProps) => {
                 id={anchor}
                 aria-label={formatColorName(color)}
                 title={formatColorName(color)}
-                onClick={() => props.selectColor(color)}
+                // onMouseDown instead of onClick because onBlur has priority, and it might get closed before firing the event
+                onMouseDown={() => props.selectColor(color)}
                 className={`${color.toString()} color-picker__item-button`}
               >
                 <div className={`color-picker__color-option color-picker__color-option--${color.toString()}`} />
