@@ -1,4 +1,4 @@
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import classNames from "classnames";
 import {uniqueId} from "underscore";
 import FocusLock, {MoveFocusInside} from "react-focus-lock";
@@ -19,6 +19,11 @@ type MiniMenuProps = {
 };
 
 export const MiniMenu = ({className, focusBehaviour, items, onBlur}: MiniMenuProps) => {
+  const onClickItem = (e: React.MouseEvent, item: MiniMenuItem) => {
+    e.preventDefault(); // fix some issues
+    item.onClick?.();
+  };
+
   const renderMenu = () => (
     <div className={classNames(className, "mini-menu")} onBlur={onBlur}>
       {items.map((item) => {
@@ -32,7 +37,7 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur}: MiniMenuPro
             className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})}
             key={item.label}
             // mouse down instead of click because it has precedence over blur
-            onMouseDown={item.onClick}
+            onMouseDown={(e) => onClickItem(e, item)}
           >
             {item.element}
           </button>
