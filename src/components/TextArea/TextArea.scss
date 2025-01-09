@@ -1,6 +1,7 @@
 @import "constants/style";
 
 $padding--default: 16px;
+$padding--small: 8px;
 
 $height--default: calc(6.5 * $text--base + 2 * $padding--default);
 
@@ -23,6 +24,9 @@ $height--default: calc(6.5 * $text--base + 2 * $padding--default);
   background-color: $gray--000;
 
   &:not(&--embedded) {
+    @include default-states($padding: $padding--small);
+  }
+  &:not(&--embedded):not(&--small) {
     @include default-states($padding: $padding--default);
   }
 
@@ -45,6 +49,12 @@ $height--default: calc(6.5 * $text--base + 2 * $padding--default);
   &--embedded {
     background: none;
     border: 2px dashed var(--accent-color--light);
+  }
+
+  &--small {
+    font-size: $text--xs;
+    padding: $padding--small;
+    border-radius: 5px;
   }
 }
 
