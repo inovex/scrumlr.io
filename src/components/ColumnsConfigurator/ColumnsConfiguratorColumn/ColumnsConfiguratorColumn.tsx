@@ -5,6 +5,7 @@ import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
 import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
 import {ReactComponent as DnDIcon} from "assets/icons/drag-and-drop.svg";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
+import {TextArea} from "components/TextArea/TextArea";
 import {Color, COLOR_ORDER, getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
 import {CSSProperties, useCallback, useEffect, useState} from "react";
@@ -27,6 +28,8 @@ type ColumnsConfiguratorColumnProps = {
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
   const [openColorPicker, setOpenColorPicker] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
+  // temporary state for description text as the changes have to be confirmed before applying
+  const [description, setDescription] = useState("");
 
   const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: props.column.id});
   const {
@@ -100,7 +103,9 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       <div className="template-column__name-wrapper">
         <input className="template-column__name" value={props.column.name} onInput={(e) => props.editColumn?.(props.column, {name: e.currentTarget.value})} />
         {editingDescription ? (
-          <div>editing</div>
+          <div className="template-column__description">
+            <TextArea input={description} setInput={setDescription} embedded />
+          </div>
         ) : (
           <div className="template-column__inline-description" role="button" onClick={() => setEditingDescription(true)}>
             {props.column.description ? props.column.description : "Description (optional)"}

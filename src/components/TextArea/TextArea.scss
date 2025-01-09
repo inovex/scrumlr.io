@@ -22,7 +22,9 @@ $height--default: calc(6.5 * $text--base + 2 * $padding--default);
   color: $gray--800;
   background-color: $gray--000;
 
-  @include default-states($padding: $padding--default);
+  &:not(&--embedded) {
+    @include default-states($padding: $padding--default);
+  }
 
   &::placeholder {
     color: $gray--800;
@@ -38,6 +40,11 @@ $height--default: calc(6.5 * $text--base + 2 * $padding--default);
 
   &:not(&--extendable) {
     max-height: $height--default;
+  }
+
+  &--embedded {
+    background: none;
+    border: 2px dashed var(--accent-color--light);
   }
 }
 

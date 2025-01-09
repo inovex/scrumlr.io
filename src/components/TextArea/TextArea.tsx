@@ -9,6 +9,9 @@ type TextAreaProps = {
   setInput: Dispatch<SetStateAction<string>>;
 
   extendable?: boolean;
+  // embedded:      to be used inside another component
+  // not embedded:  form component like input
+  embedded?: boolean;
   // minLines?: number;
 
   placeholder?: string;
@@ -19,7 +22,7 @@ export const TextArea = (props: TextAreaProps) => {
 
   return (
     <TextareaAutosize
-      className={classNames(props.className, "text-area", {"text-area--extendable": props.extendable})}
+      className={classNames(props.className, "text-area", {"text-area--extendable": props.extendable, "text-area--embedded": props.embedded})}
       value={props.input}
       onInput={updateInput}
       placeholder={props.placeholder}
