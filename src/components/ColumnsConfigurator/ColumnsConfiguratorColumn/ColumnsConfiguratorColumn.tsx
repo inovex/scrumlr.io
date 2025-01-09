@@ -26,6 +26,7 @@ type ColumnsConfiguratorColumnProps = {
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
   const [openColorPicker, setOpenColorPicker] = useState(false);
+  const [editingDescription, setEditingDescription] = useState(false);
 
   const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: props.column.id});
   const {
@@ -96,33 +97,44 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       style={style}
       {...attributes}
     >
-      <input className="template-column__name" value={props.column.name} onInput={(e) => props.editColumn?.(props.column, {name: e.currentTarget.value})} />
-      <div className="template-column__menu">
-        <DnDIcon
-          className={classNames("template-column__icon", "template-column__icon--dnd", "template-column__drag-element", {
-            "template-column__drag-element--dragging": props.activeDrag,
-          })}
-          {...listeners}
-        />
-        {renderColorPicker()}
-        <button
-          className={classNames("template-column__button", {"template-column__button--disabled": false})}
-          onClick={() => props.editColumn?.(props.column, {visible: !props.column.visible})}
-        >
-          {props.column.visible ? (
-            <VisibleIcon className={classNames("template-column__icon", "template-column__icon--visible")} />
-          ) : (
-            <HiddenIcon className={classNames("template-column__icon", "template-column__icon--hidden")} />
-          )}
-        </button>
-        <button
-          className={classNames("template-column__button", {"template-column__button--disabled": disableDelete})}
-          onClick={() => props.deleteColumn?.(props.column)}
-          disabled={disableDelete}
-        >
-          <DeleteIcon className={classNames("template-column__icon", "template-column__icon--delete")} />
-        </button>
+      <div className="template-column__name-wrapper">
+        <input className="template-column__name" value={props.column.name} onInput={(e) => props.editColumn?.(props.column, {name: e.currentTarget.value})} />
+        {editingDescription ? (
+          <div>editing</div>
+        ) : (
+          <div className="template-column__inline-description" role="button" onClick={() => setEditingDescription(true)}>
+            {props.column.description ? props.column.description : "Description (optional)"}
+          </div>
+        )}
       </div>
+      {!editingDescription && (
+        <div className="template-column__menu">
+          <DnDIcon
+            className={classNames("template-column__icon", "template-column__icon--dnd", "template-column__drag-element", {
+              "template-column__drag-element--dragging": props.activeDrag,
+            })}
+            {...listeners}
+          />
+          {renderColorPicker()}
+          <button
+            className={classNames("template-column__button", {"template-column__button--disabled": false})}
+            onClick={() => props.editColumn?.(props.column, {visible: !props.column.visible})}
+          >
+            {props.column.visible ? (
+              <VisibleIcon className={classNames("template-column__icon", "template-column__icon--visible")} />
+            ) : (
+              <HiddenIcon className={classNames("template-column__icon", "template-column__icon--hidden")} />
+            )}
+          </button>
+          <button
+            className={classNames("template-column__button", {"template-column__button--disabled": disableDelete})}
+            onClick={() => props.deleteColumn?.(props.column)}
+            disabled={disableDelete}
+          >
+            <DeleteIcon className={classNames("template-column__icon", "template-column__icon--delete")} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

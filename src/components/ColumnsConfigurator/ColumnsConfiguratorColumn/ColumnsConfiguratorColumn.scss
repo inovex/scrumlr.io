@@ -6,7 +6,7 @@ $column-height: 340px;
 .template-column {
   display: flex;
   flex-direction: column;
-  gap: $spacing--xl;
+  gap: $spacing--md;
   flex-shrink: 0;
   flex-grow: 1;
 
@@ -57,6 +57,12 @@ $column-height: 340px;
   }
 }
 
+.template-column__name-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xs;
+}
+
 // TODO input style wip
 .template-column__name {
   all: unset;
@@ -74,6 +80,12 @@ $column-height: 340px;
   &:focus {
     border-bottom-style: dashed; // TODO dash spacing
   }
+}
+
+.template-column__inline-description {
+  color: $gray--800;
+  font-size: $text--xs;
+  font-weight: 500;
 }
 
 .template-column__menu {
