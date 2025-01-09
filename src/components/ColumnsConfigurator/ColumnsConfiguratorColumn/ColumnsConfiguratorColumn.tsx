@@ -131,7 +131,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         {editingDescription ? (
           <div className="template-column__description-wrapper">
             <TextArea className="template-column__description-text-area" input={description} setInput={setDescription} embedded small />
-            <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} />
+            <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
           </div>
         ) : (
           <div className="template-column__inline-description" role="button" tabIndex={0} onClick={openDescriptionEditor}>

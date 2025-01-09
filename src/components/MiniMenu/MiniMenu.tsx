@@ -16,16 +16,20 @@ type MiniMenuProps = {
   focusBehaviour?: "trap" | "moveFocus";
   items: MiniMenuItem[];
   onBlur?: () => void;
+
+  small?: boolean; // smaller icons
+  wrapToColumn?: boolean; // render as column in small screen sizes
+  transparent?: boolean; // no background
 };
 
-export const MiniMenu = ({className, focusBehaviour, items, onBlur}: MiniMenuProps) => {
+export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapToColumn, transparent}: MiniMenuProps) => {
   const onClickItem = (e: React.MouseEvent, item: MiniMenuItem) => {
     e.preventDefault(); // fix some issues
     item.onClick?.();
   };
 
   const renderMenu = () => (
-    <div className={classNames(className, "mini-menu")} onBlur={onBlur}>
+    <div className={classNames(className, "mini-menu", {"mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})} onBlur={onBlur}>
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
         return (
@@ -34,7 +38,7 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur}: MiniMenuPro
             data-tooltip-content={item.label}
             aria-label={item.label}
             id={anchor}
-            className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})}
+            className={classNames("mini-menu__item", {"mini-menu__item--active": item.active, "mini-menu__item--small": small})}
             key={item.label}
             // mouse down instead of click because it has precedence over blur
             onMouseDown={(e) => onClickItem(e, item)}
