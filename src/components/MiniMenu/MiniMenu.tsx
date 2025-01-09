@@ -31,7 +31,8 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur}: MiniMenuPro
             id={anchor}
             className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})}
             key={item.label}
-            onClick={item?.onClick}
+            // mouse down instead of click because it has precedence over blur
+            onMouseDown={item.onClick}
           >
             {item.element}
           </button>
