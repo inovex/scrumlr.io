@@ -15,6 +15,9 @@ type TextAreaProps = {
   // minLines?: number;
 
   placeholder?: string;
+
+  onFocus?: () => void;
+  onBlur?: () => void;
 };
 
 export const TextArea = (props: TextAreaProps) => {
@@ -26,6 +29,8 @@ export const TextArea = (props: TextAreaProps) => {
       value={props.input}
       onInput={updateInput}
       placeholder={props.placeholder}
+      onFocus={props.onFocus}
+      onBlur={props.onBlur}
       onPointerEnterCapture={undefined}
       onPointerLeaveCapture={undefined}
     />
