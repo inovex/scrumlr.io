@@ -35,7 +35,7 @@ $padding--mobile: 12.5px $spacing--base;
   &--disabled {
     background-color: $gray--300;
 
-    .search-bar__icon-container {
+    .search-bar__button {
       &--search-icon,
       &--clear-icon {
         color: $gray--800;
@@ -44,7 +44,8 @@ $padding--mobile: 12.5px $spacing--base;
   }
 }
 
-.search-bar__icon-container {
+.search-bar__button {
+  all: unset;
   width: $icon--large;
   height: $icon--large;
 
@@ -114,7 +115,7 @@ $padding--mobile: 12.5px $spacing--base;
     &--disabled {
       background-color: $navy--700;
 
-      .search-bar__icon-container {
+      .search-bar__button {
         &--search-icon,
         &--clear-icon {
           color: $navy--300;
@@ -133,7 +134,7 @@ $padding--mobile: 12.5px $spacing--base;
     }
   }
 
-  .search-bar__icon-container {
+  .search-bar__button {
     &--search-icon,
     &--clear-icon {
       color: $blue--50;
