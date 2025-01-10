@@ -62,7 +62,7 @@ export const Boards = () => {
         />
 
         {/* desktop search  bar */}
-        <SearchBar className="boards__search-bar" input={searchBarInput} setInput={setSearchBarInput} />
+        <SearchBar className="boards__search-bar" value={searchBarInput} handleValueChange={setSearchBarInput} />
 
         {/* mobile search button + search bar (row below) */}
         <button className="boards__search-button" onClick={toggleMobileSearchBar}>
@@ -70,7 +70,7 @@ export const Boards = () => {
             <SearchIcon className="new-board__search-button-icon" aria-label="icon of magnifying glass" />
           </div>
         </button>
-        {showMobileSearchBar && <SearchBar className="boards__mobile-search-bar" input={searchBarInput} setInput={setSearchBarInput} />}
+        {showMobileSearchBar && <SearchBar className="boards__mobile-search-bar" value={searchBarInput} handleValueChange={setSearchBarInput} />}
 
         <main className="boards__outlet">
           <Outlet />
