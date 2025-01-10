@@ -16,7 +16,7 @@ COPY .env .
 
 RUN yarn build
 
-FROM nginxinc/nginx-unprivileged:1.21-alpine
+FROM nginxinc/nginx-unprivileged:1.27-alpine
 
 # Toggle visibility of cookie policy, privacy policy, and terms & conditions
 ENV SCRUMLR_SHOW_LEGAL_DOCUMENTS=''
