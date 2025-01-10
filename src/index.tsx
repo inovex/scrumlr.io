@@ -50,7 +50,7 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
 
 // If clarity ID is set and not empty in env variables, initialize Clarity
-if (CLARITY_ID && CLARITY_ID != "") {
+if (CLARITY_ID && CLARITY_ID !== "") {
   Clarity.init(CLARITY_ID);
 }
 
