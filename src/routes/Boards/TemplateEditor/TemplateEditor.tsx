@@ -18,6 +18,7 @@ import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
 import {ColumnsConfigurator} from "components/ColumnsConfigurator/ColumnsConfigurator";
+import {ColumnsMiniView} from "components/ColumnsConfigurator/ColumnsMiniView/ColumnsMiniView"; // for debug purposes
 import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
 import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
@@ -28,10 +29,8 @@ import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import classNames from "classnames";
 import {Button} from "components/Button";
 import {useNavigate, useParams} from "react-router";
-import "./TemplateEditor.scss";
 import {arrayMove} from "@dnd-kit/sortable";
-import {diff} from "deep-object-diff";
-import {ColumnsMiniView} from "../../../components/ColumnsConfigurator/ColumnsMiniView/ColumnsMiniView"; // for debug purposes
+import "./TemplateEditor.scss";
 
 // todo maybe just change the translation keys to AccessPolicy => lowercase
 const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
@@ -65,8 +64,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   // no columns found? use from default template. keep in mind this is also true if template is valid, but the array is empty! logic to avoid empty array has to be checked
   // template columns are displayed in order of their index.
   const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === templateId))
-    // remove columns that are flagged to be deleted TODO maybe irrelevant?
-    // .filter((c) => !c.deleteFlag)
     // presort by index for DnD
     .sort((a, b) => a.index - b.index);
 
@@ -79,16 +76,14 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   const [deleteColumns, setDeleteColumns] = useState<EditableTemplateColumn[]>([]);
 
   useEffect(() => {
+    // safeguard so it only gets set once
     if (basisTemplate && !editableTemplate) {
-      // safeguard so it only gets set once
-      console.log("init template to", basisTemplate);
       setEditableTemplate({...basisTemplate}); // shallow copy
     }
   }, [basisTemplate, editableTemplate]);
 
   useEffect(() => {
     if (basisColumns && basisColumns.length > 0 && !editableTemplateColumns) {
-      console.log("init columns to", basisColumns);
       setEditableTemplateColumns(basisColumns.map((bc) => ({...bc, persisted: true, mode: undefined})));
     }
   }, [basisColumns, editableTemplateColumns]);
@@ -97,7 +92,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>("PUBLIC");
 
   // states to keep track of changes of the form.
-  // could be changed to directly refer to the basisTemplate, but that would probably cause a lot of dispatches
   const [passwordInput, setPasswordInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
@@ -118,7 +112,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
       : {...column, index, mode: nextMode("edit", column.mode)}; // update index and mode
 
   const addColumn = (templateColumn: TemplateColumn, index: number) => {
-    // dispatch(addTemplateColumnOptimistically({templateColumn, index}));
     if (!editableTemplateColumns) return;
 
     const updated = editableTemplateColumns
@@ -127,41 +120,34 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
       // reset indices
       .map(updateIndex);
 
-    console.log("add column", diff(editableTemplateColumns, updated));
     setEditableTemplateColumns(updated);
   };
 
   const moveColumn = (fromIndex: number, toIndex: number) => {
-    // dispatch(moveTemplateColumnOptimistically({templateId, fromIndex, toIndex}));
     if (!editableTemplateColumns) return;
 
     const fromColumn = editableTemplateColumns[fromIndex];
     const toColumn = editableTemplateColumns[toIndex];
 
-    // TODO change using setter func instead of direct access?
     fromColumn.mode = nextMode("edit", fromColumn.mode);
     toColumn.mode = nextMode("edit", toColumn.mode);
 
     const updated = arrayMove(editableTemplateColumns, fromIndex, toIndex).map(updateIndex);
 
-    console.log("move column", diff(editableTemplateColumns, updated));
     setEditableTemplateColumns(updated);
   };
 
   // edit column and mark as edited
   const editColumn = (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => {
-    // dispatch(editTemplateColumnOptimistically({columnId: templateColumn.id, overwrite}));
     if (!editableTemplateColumns) return;
     const updated = editableTemplateColumns.map((col) =>
       col.id === templateColumn.id ? ({...col, ...overwrite, mode: nextMode("edit", col.mode)} as EditableTemplateColumn) : col
     );
 
-    console.log("edit column", diff(editableTemplateColumns, updated));
     setEditableTemplateColumns(updated);
   };
 
   const deleteColumn = (templateColumn: EditableTemplateColumn) => {
-    // dispatch(deleteTemplateColumnOptimistically({columnId: templateColumn.id}));
     if (!editableTemplateColumns) return;
 
     templateColumn.mode = nextMode("delete", templateColumn.mode);
@@ -169,19 +155,15 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
 
     // already persisted columns are added to this state, to be deleted later
     if (templateColumn.persisted) {
-      console.log("add to delete later", templateColumn);
       setDeleteColumns((delCols) => [...delCols, templateColumn]);
     }
 
-    console.log("delete column", diff(editableTemplateColumns, updatedColumnsWithoutDeleted));
     setEditableTemplateColumns(updatedColumnsWithoutDeleted);
   };
 
   const cancelAndGoBack = () => navigate("/boards/templates");
 
-  // TODO revise
   const saveTemplate = () => {
-    // throw new Error("save not implemented yet");
     if (!editableTemplateColumns || !editableTemplate) return;
 
     if (mode === "create") {
@@ -206,8 +188,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
       const columnsToBeEdited = editableTemplateColumns.filter((column) => column.mode === "edit");
       const columnsToBeDeleted = deleteColumns.filter((column) => column.mode === "delete"); // filter shouldn't filter anything out
 
-      console.log("create", columnsToBeCreated, "edit", columnsToBeEdited, "delete", columnsToBeDeleted);
-
       const editTemplateDispatch = dispatch(
         editTemplate({
           id: templateId,
@@ -225,8 +205,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
 
       const deleteColumnsDispatches = columnsToBeDeleted.map((col) => dispatch(deleteTemplateColumn({templateId, columnId: col.id})));
 
-      Promise.all([editTemplateDispatch, ...createColumnsDispatches, ...editColumnsDispatches, ...deleteColumnsDispatches]).then((r) => {
-        console.log("success", r);
+      Promise.all([editTemplateDispatch, ...createColumnsDispatches, ...editColumnsDispatches, ...deleteColumnsDispatches]).then(() => {
         navigate("/boards/templates");
       });
     }
@@ -239,7 +218,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
       setNameInput(basisTemplate.name);
       setDescriptionInput(basisTemplate.description);
     }
-    // todo handle error if id ends up not referring to an actual template
   }, [basisTemplate, id]);
 
   const toggleDropDown = () => setOpenDropdown((curr) => !curr);
