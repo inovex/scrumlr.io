@@ -21,6 +21,8 @@ export const Homepage = withTranslation()(() => {
   const {user} = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
 
+  const currentYear = new Date().getFullYear();
+
   const changeLanguage = (language: string) => () => {
     i18n.changeLanguage(language).then(() => {
       document.documentElement.lang = i18n.language;
@@ -102,6 +104,7 @@ export const Homepage = withTranslation()(() => {
               components={{
                 inovex: <InovexAnchor />,
               }}
+              values={{currentYear}}
             />
           </span>
         </div>
