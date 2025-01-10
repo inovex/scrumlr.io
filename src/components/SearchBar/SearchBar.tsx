@@ -27,9 +27,9 @@ export const SearchBar = (props: SearchBarProps) => {
       <div className="search-bar__button search-bar__icon-container--search-icon">
         <SearchIcon className="search-bar__icon" aria-label="logo of magnifying glass" />
       </div>
-      <input className="search-bar__input" type="text" placeholder={t("SearchBar.placeholder")} disabled={props.disabled} tabIndex={0} value={props.value} onInput={updateInput} />
+      <input className="search-bar__input" type="text" placeholder={t("SearchBar.placeholder")} disabled={props.disabled} value={props.value} onInput={updateInput} />
       {props.value && (
-        <button className="search-bar__button search-bar__button--clear-icon" tabIndex={0} onClick={clearInput}>
+        <button className="search-bar__button search-bar__button--clear-icon" onClick={clearInput}>
           <ClearIcon className="search-bar__icon" aria-label="clear button" />
         </button>
       )}
