@@ -102,19 +102,13 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
 
+  // sets the next mode for a template column, so we later know what to with a column: edit, delete or create
   const nextMode = (action: TemplateColumnAction, currentMode?: TemplateColumnAction): TemplateColumnAction => {
     if (!currentMode) return action;
 
-    switch (action) {
-      case "delete":
-        return "delete";
-      case "create":
-        return "create";
-      case "edit":
-      default:
-        // if col is to be created or deleted, editing it doesn't change the fact
-        return currentMode;
-    }
+    // if col is to be created or deleted, editing it doesn't change the fact
+    if (action === "edit") return currentMode;
+    return action;
   };
 
   // update index of column. if index changed, also update mode.
