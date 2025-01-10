@@ -3,7 +3,7 @@ version: "3.8"
 services:
   scrumlr-backend:
     restart: always
-    image: ghcr.io/inovex/scrumlr.io/scrumlr-server:3.9.0
+    image: ghcr.io/inovex/scrumlr.io/scrumlr-server:3.10.1
     command:
       - "/app/main"
       - "-disable-check-origin"
@@ -44,7 +44,7 @@ services:
 
   scrumlr-frontend:
     restart: always
-    image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:3.9.0
+    image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend:3.10.1
     environment:
       SCRUMLR_SERVER_URL: "${SCRUMLR_SERVER_URL}"
       SCRUMLR_WEBSOCKET_URL: "${SCRUMLR_WEBSOCKET_URL}"
@@ -53,6 +53,7 @@ services:
       SCRUMLR_LISTEN_PORT: "${SCRUMLR_LISTEN_PORT:-8080}"
       SCRUMLR_ANALYTICS_DATA_DOMAIN: "${ANALYTICS_DATA_DOMAIN}"
       SCRUMLR_ANALYTICS_SRC: "${ANALYTICS_SRC}"
+      SCRUMLR_CLARITY_ID: "${SCRUMLR_CLARITY_ID}"
     ports:
       - "9090:8080"
 
