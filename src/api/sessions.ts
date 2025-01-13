@@ -4,7 +4,7 @@ import {SERVER_HTTP_URL} from "config";
 export const SessionsAPI = {
   getSessions: async () => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/sessions`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
         method: "GET",
         credentials: "include",
       });
