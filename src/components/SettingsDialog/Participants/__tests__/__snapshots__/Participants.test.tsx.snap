@@ -2,7 +2,7 @@
 
 exports[`Participants should render filter and participants correctly 1`] = `
 <section
-  class="settings-dialog__container accent-color__value-violet"
+  class="settings-dialog__container accent-color__backlog-blue"
 >
   <header
     class="settings-dialog__header"
@@ -65,6 +65,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
     >
       <li
         class="participants__list-item"
+        data-clarity-mask="True"
       >
         <div
           class="user-avatar participant__avatar"
@@ -560,6 +561,7 @@ exports[`Participants should render filter and participants correctly 1`] = `
       </li>
       <li
         class="participants__list-item"
+        data-clarity-mask="True"
       >
         <div
           class="user-avatar participant__avatar"

@@ -6,17 +6,17 @@ import {Participant} from "types/participant";
 import {render} from "testUtils";
 import getTestParticipant from "utils/test/getTestParticipant";
 
-const AUTHOR1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}});
-const AUTHOR2: Participant = getTestParticipant({user: {id: "test-participant-id-2", name: "test-participant-name-2"}});
-const AUTHOR3: Participant = getTestParticipant({user: {id: "test-participant-id-3", name: "test-participant-name-3"}});
-const AUTHOR4: Participant = getTestParticipant({user: {id: "test-participant-id-4", name: "test-participant-name-4"}});
-const AUTHOR5: Participant = getTestParticipant({user: {id: "test-participant-id-5", name: "test-participant-name-5"}});
-const VIEWER1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1"}});
+const AUTHOR1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1", isAnonymous: false}});
+const AUTHOR2: Participant = getTestParticipant({user: {id: "test-participant-id-2", name: "test-participant-name-2", isAnonymous: false}});
+const AUTHOR3: Participant = getTestParticipant({user: {id: "test-participant-id-3", name: "test-participant-name-3", isAnonymous: false}});
+const AUTHOR4: Participant = getTestParticipant({user: {id: "test-participant-id-4", name: "test-participant-name-4", isAnonymous: false}});
+const AUTHOR5: Participant = getTestParticipant({user: {id: "test-participant-id-5", name: "test-participant-name-5", isAnonymous: false}});
+const VIEWER1: Participant = getTestParticipant({user: {id: "test-participant-id-1", name: "test-participant-name-1", isAnonymous: false}});
 
 const createNoteAuthorList = (authors: Participant[], showAuthors: boolean, overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
-      <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={VIEWER1} />
+      <NoteAuthorList authors={authors} authorID={""} showAuthors={showAuthors} viewer={VIEWER1} />
     </Provider>
   );
 };

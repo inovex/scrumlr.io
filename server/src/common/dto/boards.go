@@ -142,3 +142,33 @@ type BoardOverview struct {
 	CreatedAt    time.Time `json:"createdAt"`
 	Participants int       `json:"participants"`
 }
+
+type ImportBoardRequest struct {
+	Board   *CreateBoardRequest `json:"board"`
+	Columns []Column            `json:"columns"`
+	Notes   []Note              `json:"notes"`
+	Votings []Voting            `json:"votings"`
+}
+
+type FullBoard struct {
+	Board                *Board                 `json:"board"`
+	BoardSessionRequests []*BoardSessionRequest `json:"requests"`
+	BoardSessions        []*BoardSession        `json:"participants"`
+	Columns              []*Column              `json:"columns"`
+	Notes                []*Note                `json:"notes"`
+	Reactions            []*Reaction            `json:"reactions"`
+	Votings              []*Voting              `json:"votings"`
+	Votes                []*Vote                `json:"votes"`
+}
+
+func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
+	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
+	dtoFullBoard.BoardSessionRequests = BoardSessionRequests(dbFullBoard.BoardSessionRequests)
+	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions)
+	dtoFullBoard.Columns = Columns(dbFullBoard.Columns)
+	dtoFullBoard.Notes = Notes(dbFullBoard.Notes)
+	dtoFullBoard.Reactions = Reactions(dbFullBoard.Reactions)
+	dtoFullBoard.Votings = Votings(dbFullBoard.Votings, dbFullBoard.Votes)
+	dtoFullBoard.Votes = Votes(dbFullBoard.Votes)
+	return dtoFullBoard
+}

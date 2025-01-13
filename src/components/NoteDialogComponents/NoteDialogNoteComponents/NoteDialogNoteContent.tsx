@@ -1,10 +1,9 @@
 import {FC, useState} from "react";
-import {Actions} from "store/action";
-import {useDispatch} from "react-redux";
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/types";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {addProtocol} from "utils/images";
-import {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
+import {editNote, onNoteBlur, onNoteFocus} from "store/features";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
 import classNames from "classnames";
@@ -26,7 +25,7 @@ type NoteDialogNoteContentProps = {
 
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, isStackedNote}: NoteDialogNoteContentProps) => {
   const [imageZoom, setImageZoom] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
@@ -35,8 +34,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const note = useAppSelector((state) => state.notes.find((n) => n.id === noteId));
 
   const author = useAppSelector((state) => {
-    const noteAuthor = state.participants?.others.find((p) => p.user.id === authorId) ?? state.participants?.self;
-    const isSelf = noteAuthor?.user.id === state.participants?.self.user.id;
+    const noteAuthor = state.participants?.others?.find((p) => p.user.id === authorId) ?? state.participants?.self;
+    const isSelf = noteAuthor?.user.id === state.participants?.self!.user.id;
     const displayName = isSelf ? t("Note.me") : noteAuthor!.user.name;
     return {
       ...noteAuthor,
@@ -46,23 +45,30 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   }, isEqual);
 
   const onFocus = () => {
-    dispatch(Actions.onNoteFocus());
+    dispatch(onNoteFocus());
   };
 
   const onEdit = (id: string, newText: string) => {
     if (editable && newText !== text && newText.length > 0) {
-      dispatch(Actions.editNote(id, {text: newText}));
+      dispatch(
+        editNote({
+          noteId: id,
+          request: {
+            text: newText,
+          },
+        })
+      );
     } else if (editable && newText.length === 0) {
       Toast.info({
         title: i18n.t("Toast.emptyNoteDialog"),
       });
     }
-    dispatch(Actions.onNoteBlur());
+    dispatch(onNoteBlur());
   };
 
   const isImage = useImageChecker(text);
 
-  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({
+  const {...emoji} = useEmojiAutocomplete<HTMLDivElement>({
     initialValue: text,
     suggestionsHidden: isStackedNote,
   });
@@ -95,6 +101,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       ) : (
         <>
           <TextareaAutosize
+            data-clarity-mask="True"
             className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
             disabled={!editable || (!isModerator && boardLocked)}
             onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}

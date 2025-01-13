@@ -1,6 +1,6 @@
 import {FC, useState} from "react";
 import "./AccessPolicySelection.scss";
-import {AccessPolicy} from "types/board";
+import {AccessPolicy} from "store/features/board/types";
 import {generateRandomString} from "utils/random";
 import {useTranslation} from "react-i18next";
 import {Visible, Hidden, Duplicate, Refresh} from "components/Icon";
@@ -22,16 +22,10 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
   const {t} = useTranslation();
   const [visiblePassphrase, setVisiblePassphrase] = useState(true);
 
-  const handlePolicyChange = (newAccessPolicy: AccessPolicy) => {
-    if (newAccessPolicy >= 0 && newAccessPolicy <= 2) {
-      onAccessPolicyChange(newAccessPolicy);
-    }
-  };
-
   let AccessPolicyDescription;
   let AdditionalAccessPolicySettings;
   switch (accessPolicy) {
-    case AccessPolicy.BY_PASSPHRASE:
+    case "BY_PASSPHRASE":
       AccessPolicyDescription = <span>{t("AccessPolicySelection.byPassphrase")}</span>;
       AdditionalAccessPolicySettings = (
         <>
@@ -68,10 +62,10 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
         </>
       );
       break;
-    case AccessPolicy.BY_INVITE:
+    case "BY_INVITE":
       AccessPolicyDescription = <span>{t("AccessPolicySelection.manualVerification")}</span>;
       break;
-    case AccessPolicy.PUBLIC:
+    case "PUBLIC":
     default:
       AccessPolicyDescription = <span>{t("AccessPolicySelection.public")}</span>;
       break;
@@ -82,24 +76,20 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       <h2 className="access-policy-selection__title">{t("AccessPolicySelection.title")}</h2>
 
       <div className="access-policy-selection__tabs">
-        <Button
-          className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.PUBLIC ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.PUBLIC)}
-        >
+        <Button className="access-policy-selection__access-policy" variant={accessPolicy === "PUBLIC" ? "contained" : "outlined"} onClick={() => onAccessPolicyChange("PUBLIC")}>
           {t("AccessPolicySelection.publicTitle")}
         </Button>
         <Button
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.BY_PASSPHRASE ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.BY_PASSPHRASE)}
+          variant={accessPolicy === "BY_PASSPHRASE" ? "contained" : "outlined"}
+          onClick={() => onAccessPolicyChange("BY_PASSPHRASE")}
         >
           {t("AccessPolicySelection.byPassphraseTitle")}
         </Button>
         <Button
           className="access-policy-selection__access-policy"
-          variant={accessPolicy === AccessPolicy.BY_INVITE ? "contained" : "outlined"}
-          onClick={() => handlePolicyChange(AccessPolicy.BY_INVITE)}
+          variant={accessPolicy === "BY_INVITE" ? "contained" : "outlined"}
+          onClick={() => onAccessPolicyChange("BY_INVITE")}
         >
           {t("AccessPolicySelection.manualVerificationTitle")}
         </Button>

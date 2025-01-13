@@ -25,6 +25,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           </svg>
           <h2
             class="column__header-text column__header-text--hidden"
+            data-clarity-mask="True"
             id="column-test-columns-id-1"
           >
             Testheader 1
@@ -42,9 +43,11 @@ exports[`Column should have correct style show column with correct style 1`] = `
         >
           <svg
             class="column__header-edit-button-icon"
+            style="transform: rotate(90deg);"
           >
             three-dots.svg
           </svg>
+           
         </button>
       </div>
       <form
@@ -52,6 +55,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
       >
         <textarea
           class="note-input__input"
+          data-clarity-mask="True"
           maxlength="1024"
           placeholder="Add your note..."
           rows="1"
@@ -111,6 +115,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__author-container"
+                  data-clarity-mask="True"
                 >
                   <div
                     class="note-author-list"
@@ -600,6 +605,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__text"
+                  data-clarity-mask="True"
                 >
                   Lorem Ipsum
                 </div>
@@ -690,6 +696,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__author-container"
+                  data-clarity-mask="True"
                 >
                   <div
                     class="note-author-list"
@@ -1160,6 +1167,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__text"
+                  data-clarity-mask="True"
                 >
                   Lorem Ipsum
                 </div>

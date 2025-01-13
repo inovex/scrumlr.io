@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
@@ -96,6 +95,21 @@ func parseParticipantUpdated(data interface{}) (*dto.BoardSession, error) {
 	return ret, nil
 }
 
+func parseVotesDeleted(data interface{}) ([]*dto.Vote, error) {
+	var ret []*dto.Vote
+
+	b, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(b, &ret)
+	if err != nil {
+		return nil, err
+	}
+	return ret, nil
+
+}
+
 func filterColumns(eventColumns []*dto.Column) []*dto.Column {
 	var visibleColumns = make([]*dto.Column, 0, len(eventColumns))
 	for _, column := range eventColumns {
@@ -108,7 +122,7 @@ func filterColumns(eventColumns []*dto.Column) []*dto.Column {
 }
 
 func filterNotes(eventNotes []*dto.Note, userID uuid.UUID, boardSettings *dto.Board, columns []*dto.Column) []*dto.Note {
-	var visibleNotes = make([]*dto.Note, 0, len(eventNotes))
+	var visibleNotes = make([]*dto.Note, 0)
 	for _, note := range eventNotes {
 		for _, column := range columns {
 			if (note.Position.Column == column.ID) && column.Visible {
@@ -306,46 +320,87 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 		}
 	}
 
+	if event.Type == realtime.BoardEventVotesDeleted {
+		//filter deleted votes after user
+		votes, err := parseVotesDeleted(event.Data)
+		if err != nil {
+			logger.Get().Errorw("unable to parse deleteVotes in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
+		}
+		userVotes := make([]*dto.Vote, 0)
+		for _, v := range votes {
+			if v.User == userID {
+				userVotes = append(userVotes, v)
+			}
+		}
+
+		ret := realtime.BoardEvent{
+			Type: event.Type,
+			Data: userVotes,
+		}
+
+		return &ret
+	}
+
 	// returns, if no filter match occured
 	return event
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	isMod := isModerator(clientID, event.Data.Sessions)
+	isMod := isModerator(clientID, event.Data.BoardSessions)
+
+	// filter to only respond with the latest voting and its votes
+	if len(event.Data.Votings) != 0 {
+		latestVoting := make([]*dto.Voting, 0)
+		activeNotes := make([]*dto.Vote, 0)
+
+		latestVoting = append(latestVoting, event.Data.Votings[0])
+
+		for _, v := range event.Data.Votes {
+			if v.Voting == latestVoting[0].ID {
+				if latestVoting[0].Status == types.VotingStatusOpen {
+					if v.User == clientID {
+						activeNotes = append(activeNotes, v)
+					}
+				} else {
+					activeNotes = append(activeNotes, v)
+				}
+			}
+		}
+		event.Data.Votings = latestVoting
+		event.Data.Votes = activeNotes
+	}
+
 	if isMod {
 		return event
 	}
 
 	retEvent := InitEvent{
 		Type: event.Type,
-		Data: EventData{
-			Board:     event.Data.Board,
-			Notes:     nil,
-			Reactions: event.Data.Reactions,
-			Columns:   nil,
-			Votings:   event.Data.Votings,
-			Votes:     event.Data.Votes,
-			Sessions:  event.Data.Sessions,
-			Requests:  event.Data.Requests,
+		Data: dto.FullBoard{
+			Board:                event.Data.Board,
+			BoardSessions:        event.Data.BoardSessions,
+			BoardSessionRequests: event.Data.BoardSessionRequests,
+			Notes:                nil,
+			Reactions:            event.Data.Reactions,
+			Columns:              nil,
+			Votings:              event.Data.Votings,
+			Votes:                event.Data.Votes,
 		},
 	}
+
 	// Columns
 	filteredColumns := filterColumns(event.Data.Columns)
-
-	// Notes
+	// Notes TODO: make to map for easier checks
 	filteredNotes := filterNotes(event.Data.Notes, clientID, event.Data.Board, event.Data.Columns)
-
+	notesMap := make(map[uuid.UUID]*dto.Note)
+	for _, n := range filteredNotes {
+		notesMap[n.ID] = n
+	}
 	// Votes
 	visibleVotes := make([]*dto.Vote, 0)
-	for _, v := range event.Data.Votes {
-		for _, n := range filteredNotes {
-			if v.Note == n.ID {
-				aVote := dto.Vote{
-					Voting: v.Voting,
-					Note:   n.ID,
-				}
-				visibleVotes = append(visibleVotes, &aVote)
-			}
+	for _, vote := range event.Data.Votes {
+		if _, exists := notesMap[vote.Note]; exists {
+			visibleVotes = append(visibleVotes, vote)
 		}
 	}
 	// Votings

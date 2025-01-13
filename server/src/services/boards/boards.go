@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"time"
 
-	"scrumlr.io/server/identifiers"
-
 	"github.com/google/uuid"
 
 	"scrumlr.io/server/common/dto"
@@ -32,20 +30,25 @@ func NewBoardService(db *database.Database, rt *realtime.Broker) services.Boards
 	return b
 }
 
-func (s *BoardService) Get(_ context.Context, id uuid.UUID) (*dto.Board, error) {
+func (s *BoardService) Get(ctx context.Context, id uuid.UUID) (*dto.Board, error) {
+	log := logger.FromContext(ctx)
 	board, err := s.database.GetBoard(id)
 	if err != nil {
+		log.Errorw("unable to get board", "boardID", id, "err", err)
 		return nil, err
 	}
 	return new(dto.Board).From(board), err
 }
 
 // get all associated boards of a given user
-func (s *BoardService) GetBoards(_ context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
+func (s *BoardService) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
+	log := logger.FromContext(ctx)
 	boards, err := s.database.GetBoards(userID)
 	if err != nil {
+		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
 		return nil, err
 	}
+
 	result := make([]uuid.UUID, len(boards))
 	for i, board := range boards {
 		result[i] = board.ID
@@ -92,27 +95,24 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	return new(dto.Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error) {
-	board, requests, sessions, columns, notes, reactions, votings, votes, err := s.database.Get(boardID)
+func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error) {
+	log := logger.FromContext(ctx)
+	fullBoard, err := s.database.Get(boardID)
 	if err != nil {
-		return nil, nil, nil, nil, nil, nil, nil, nil, err
+		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
+		return nil, err
 	}
 
-	personalVotes := []*dto.Vote{}
-	for _, vote := range votes {
-		if vote.User == ctx.Value(identifiers.UserIdentifier).(uuid.UUID) {
-			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
-		}
-	}
-
-	return new(dto.Board).From(board), dto.BoardSessionRequests(requests), dto.BoardSessions(sessions), dto.Columns(columns), dto.Notes(notes), dto.Reactions(reactions), dto.Votings(votings, votes), personalVotes, err
+	return new(dto.FullBoard).From(fullBoard), err
 }
 
-func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error) {
+func (s *BoardService) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error) {
+	log := logger.FromContext(ctx)
 	OverviewBoards := make([]*dto.BoardOverview, len(boardIDs))
 	for i, id := range boardIDs {
 		board, sessions, columns, err := s.database.GetBoardOverview(id)
 		if err != nil {
+			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
 		participantNum := len(sessions)
@@ -133,10 +133,11 @@ func (s *BoardService) BoardOverview(_ context.Context, boardIDs []uuid.UUID, us
 	return OverviewBoards, nil
 }
 
-func (s *BoardService) Delete(_ context.Context, id uuid.UUID) error {
+func (s *BoardService) Delete(ctx context.Context, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
 	err := s.database.DeleteBoard(id)
 	if err != nil {
-		logger.Get().Errorw("unable to delete board", "err", err)
+		log.Errorw("unable to delete board", "err", err)
 	}
 	return err
 }
@@ -185,7 +186,8 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 	return new(dto.Board).From(board), err
 }
 
-func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error) {
+func (s *BoardService) SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error) {
+	log := logger.FromContext(ctx)
 	timerStart := time.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(minutes))
 	update := database.BoardTimerUpdate{
@@ -195,7 +197,7 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
-		logger.Get().Errorw("unable to update board timer", "err", err)
+		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
 	s.UpdatedBoardTimer(board)
@@ -203,7 +205,8 @@ func (s *BoardService) SetTimer(_ context.Context, id uuid.UUID, minutes uint8) 
 	return new(dto.Board).From(board), err
 }
 
-func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board, error) {
+func (s *BoardService) DeleteTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error) {
+	log := logger.FromContext(ctx)
 	update := database.BoardTimerUpdate{
 		ID:         id,
 		TimerStart: nil,
@@ -211,7 +214,7 @@ func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board,
 	}
 	board, err := s.database.UpdateBoardTimer(update)
 	if err != nil {
-		logger.Get().Errorw("unable to update board timer", "err", err)
+		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
 	s.UpdatedBoardTimer(board)
@@ -219,9 +222,11 @@ func (s *BoardService) DeleteTimer(_ context.Context, id uuid.UUID) (*dto.Board,
 	return new(dto.Board).From(board), err
 }
 
-func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Board, error) {
+func (s *BoardService) IncrementTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error) {
+	log := logger.FromContext(ctx)
 	board, err := s.database.GetBoard(id)
 	if err != nil {
+		log.Errorw("unable to get board", "boardID", id, "err", err)
 		return nil, err
 	}
 
@@ -246,7 +251,7 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 
 	board, err = s.database.UpdateBoardTimer(update)
 	if err != nil {
-		logger.Get().Errorw("unable to update board timer", "err", err)
+		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
 	s.UpdatedBoardTimer(board)
@@ -255,26 +260,19 @@ func (s *BoardService) IncrementTimer(_ context.Context, id uuid.UUID) (*dto.Boa
 }
 
 func (s *BoardService) UpdatedBoardTimer(board database.Board) {
-	err := s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardTimerUpdated,
 		Data: new(dto.Board).From(board),
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated timer", "err", err)
-	}
 }
 
 func (s *BoardService) UpdatedBoard(board database.Board) {
-	err := s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardUpdated,
 		Data: new(dto.Board).From(board),
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated board", "err", err)
-	}
 
-	var err_msg string
-	err_msg, err = s.SyncBoardSettingChange(board.ID)
+	err_msg, err := s.SyncBoardSettingChange(board.ID)
 	if err != nil {
 		logger.Get().Errorw(err_msg, "err", err)
 	}
@@ -310,10 +308,7 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 }
 
 func (s *BoardService) DeletedBoard(board uuid.UUID) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardDeleted,
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast deleted board", "err", err)
-	}
 }

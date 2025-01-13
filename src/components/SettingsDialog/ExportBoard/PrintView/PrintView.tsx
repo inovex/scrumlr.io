@@ -1,16 +1,15 @@
 import {ReactElement, useEffect, useRef, useState} from "react";
 import {API} from "api";
 import {useNavigate} from "react-router";
-import "./PrintView.scss";
 import {useReactToPrint} from "react-to-print";
 import {ReactComponent as ScrumlrLogo} from "assets/scrumlr-logo-light.svg";
 import {Close, Printer} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {getColorClassName} from "constants/colors";
-import {compareNotes, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
+import {ExportBoardDataType, compareNotes, getAuthorName, getChildNotes, getNoteVotes} from "utils/export";
 import {DEFAULT_URL} from "constants/misc";
-import {BoardDataType} from "../types";
+import "./PrintView.scss";
 
 interface PrintViewProps {
   boardId: string;
@@ -21,7 +20,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
 
-  const [boardData, setBoardData] = useState<BoardDataType>();
+  const [boardData, setBoardData] = useState<ExportBoardDataType>();
 
   const pageStyle = `
       @page {
@@ -49,7 +48,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
 
   useEffect(() => {
     if (boardData) {
-      handlePrint(null, () => printRef.current);
+      handlePrint(() => printRef.current);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [boardData]);
@@ -89,7 +88,7 @@ export const PrintView = ({boardId, boardName}: PrintViewProps) => {
   return (
     <div className="print-view__container">
       <div className="print-view__button-container">
-        <button className="print-view__button" onClick={() => handlePrint(null, () => printRef.current)} aria-label={t("PrintView.Print")}>
+        <button className="print-view__button" onClick={() => handlePrint(() => printRef.current)} aria-label={t("PrintView.Print")}>
           <Printer className="print-view__icon-print" />
         </button>
         <button className="print-view__button" onClick={handleClose} aria-label={t("PrintView.Close")}>

@@ -39,6 +39,12 @@ SCRUMLR_ANALYTICS_DATA_DOMAIN=''
 SCRUMLR_ANALYTICS_SRC=''
 ```
 
+### Clarity id
+The clarity id to use [Clarity](https://clarity.microsoft.com/).
+```bash
+SCRUMLR_CLARITY_ID=''
+```
+
 ## Backend
 
 ### Server Port
@@ -92,6 +98,22 @@ The base path of the API. The default is `/`.
 SCRUMLR_BASE_PATH=''
 ```
 
+### Disable Anonymous Login
+If set to `true`, users won't be able to log in anonymously, forcing them to use a provider (any OAuth or OIDC).
+Note that if this is set to `true`, and no valid providers are available, login won't be possible at all.
+Default is `false`.
+```bash
+SCRUMLR_DISABLE_ANONYMOUS_LOGIN=false
+```
+
+### Enable Experimental File System Store
+Enables an experimental file store for session cookies, which is used during OAuth authentication to store session info while on the provider page.
+Required for some OIDC providers, since their session cookies exceed the size limit of 4KB.
+Default is `false`.
+```bash
+SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE=false
+```
+
 ### Auth Callback Host
 The host to which the OAuth callback should redirect.
 ```bash
@@ -135,8 +157,27 @@ SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET=''
 Required Apple OAuth credentials.
 Only configure if you wish to use Apple OAuth.
 ```bash
-SCRUMLR_AUTH_APPLE_CLIENT_ID
-SCRUMLR_AUTH_APPLE_CLIENT_SECRET
+SCRUMLR_AUTH_APPLE_CLIENT_ID=''
+SCRUMLR_AUTH_APPLE_CLIENT_SECRET=''
+```
+
+### OpenID Connect OAuth
+Required OIDC credentials.
+Only configure if you wish to use generic OpenID Connect Authentication.
+```bash
+SCRUMLR_AUTH_OIDC_CLIENT_ID=''
+SCRUMLR_AUTH_OIDC_CLIENT_SECRET=''
+SCRUMLR_AUTH_OIDC_DISCOVERY_URL=''
+SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE=''
+SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE=''
+```
+Note: Might require larger session store to be active, see [SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE](#enable-experimental-file-system-store)
+
+### Session Secret
+The secret for the session. This secret is used by gothic.
+This needs to be configured if you are using an authentication provider.
+```bash
+SESSION_SECRET=''
 ```
 
 ### Feedback Webhook URL
@@ -149,6 +190,6 @@ SCRUMLR_FEEDBACK_WEBHOOK_URL=''
 ### Scrumlr Config Path
 The path to the Scrumlr configuration file.
 ```bash
-SCRUMLR_CONFIG_PATH
+SCRUMLR_CONFIG_PATH=''
 ```
 

@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 	"scrumlr.io/server/services"
 	"strings"
 	"testing"
@@ -187,8 +188,11 @@ func (suite *NotesTestSuite) TestCreateNote() {
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"column": "%s",
 				"text" : "%s"
-				}`, colId.String(), testText))).
-				AddToContext(identifiers.BoardIdentifier, boardId).
+				}`, colId.String(), testText)))
+
+			req.req = logger.InitTestLoggerRequest(req.Request())
+
+			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 			rr := httptest.NewRecorder()
 
@@ -313,6 +317,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			}
 
 			req := NewTestRequestBuilder("DELETE", fmt.Sprintf("/notes/%s", noteID.String()), strings.NewReader(`{"deleteStack": false}`))
+			req.req = logger.InitTestLoggerRequest(req.Request())
 			rctx := chi.NewRouteContext()
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)

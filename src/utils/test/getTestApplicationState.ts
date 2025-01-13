@@ -1,4 +1,4 @@
-import {ApplicationState} from "../../types";
+import {ApplicationState} from "store";
 
 export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   auth: {user: {id: "test-auth-user-id", name: "test-auth-user-name", isAnonymous: true}, initializationSucceeded: true},
@@ -64,7 +64,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         role: "PARTICIPANT",
       },
     ],
-    focusInitiator: null,
   },
   columns: [
     {
@@ -183,6 +182,8 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     hotkeysAreActive: true,
     noteFocused: false,
     showBoardReactions: true,
+    snowfallEnabled: false,
+    snowfallNotificationEnabled: false,
   },
   boardReactions: [],
   skinTone: {

@@ -8,7 +8,10 @@
     "extendedConfigurationButton": "Erweiterte Einstellungen",
     "basicConfigurationButton": "Vorlagenauswahl",
     "extendedConfigurationTitle": "Erweiterte Einstellungen",
-    "basicConfigurationTitle": "Wähle eine Vorlage"
+    "basicConfigurationTitle": "Wähle eine Vorlage",
+    "importBoard": "JSON Importieren",
+    "uploadFile": "Datei hochladen oder hierher ziehen",
+    "importNewBoard": "Jetzt importieren"
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
@@ -125,7 +128,8 @@
     "addColumnRight": "Rechts einfügen",
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
     "notes_one": "{{count}} Kärtchen",
-    "notes_other": "{{count}} Kärtchen"
+    "notes_other": "{{count}} Kärtchen",
+    "color": "Farbe ändern"
   },
   "ErrorPage": {
     "navigateHome": "Startseite",
@@ -154,7 +158,8 @@
     "signInWithGitHub": "Einloggen mit Github",
     "signInWithMicrosoft": "Einloggen mit Microsoft",
     "signInWithAzureAd": "Einloggen mit Azure AD",
-    "signInWithApple": "Einloggen mit Apple"
+    "signInWithApple": "Einloggen mit Apple",
+    "signInWithOIDC": "Einloggen mit OpenID Connect"
   },
   "NoteInput": {
     "placeholder": "Füge ein Kärtchen hinzu...",
@@ -168,6 +173,15 @@
     "submit": "Board öffnen",
     "inputPlaceholder": "Passwort",
     "incorrectPassphrase": "Ups, das war das falsche Passwort. Versuch's nochmal!"
+  },
+  "PassphraseModal": {
+    "title": "Neues Passwort vergeben",
+    "continuePublic": "Ohne Passwort fortfahren",
+    "newPassword": "Board Öffnen",
+    "info": "Dieses Board war einst passwortgeschützt. Gib ein neues Passwort ein, um den Schutz fortzusetzen, oder fahre ohne Passwort fort. Du kannst alle Einstellungen jederzeit ändern.",
+    "submit": "Board öffnen",
+    "inputPlaceholder": "Passwort",
+    "showPassword": "Zeige das Passwort"
   },
   "Timer": {
     "endTimer": "Timer beenden",
@@ -298,14 +312,15 @@
     "ready": "Bist du fertig?",
     "readyButton": "Fertig!",
     "boardReactionsDisabled": "Board-Reaktionen sind deaktiviert",
-    "enable": "Aktivieren"
+    "enable": "Aktivieren",
+    "failedImport": "Fehler beim importieren der Datei"
   },
   "Language": {
     "german": "Deutsch",
     "english": "Englisch"
   },
   "Homepage": {
-    "developers": "© 2021-2023, mit ❤️ von <inovex>inovex</inovex>",
+    "developers": "© 2021-{{currentYear}}, mit ❤️ von <inovex>inovex</inovex>",
     "teaserTitle": "Bringe dich & dein <team>Team</team> ans Ziel mit der <retrospective>Retrospektive.</retrospective>",
     "teaserText": "Starte in kürzester Zeit deine Retrospektive – es ist keine Registrierung notwendig und komplett kostenlos.",
     "startButton": "Jetzt loslegen",
@@ -399,7 +414,8 @@
     "colorSchemeLight": "Hell",
     "colorSchemeDark": "Dunkel",
     "showHotkeyNotifications": "Zeige Hotkey-Notifikationen",
-    "showBoardReactions": "Zeige Board-Reaktionen"
+    "showBoardReactions": "Zeige Board-Reaktionen",
+    "showSnowfall": "Zeige Schneefall"
   },
   "Feedback": {
     "PraiseInputLabel": "Möchtest Du uns noch etwas mitteilen?",
@@ -657,5 +673,9 @@
     "AddVote": "Stimme hinzufügen",
     "RemoveVote": "Stimme entfernen",
     "VotesOnNote": "{{votes}} Stimme(n)"
+  },
+  "Snowfall": {
+    "toastTitle": "Frohe Feiertage 🎄",
+    "toastMessage": "Frohe Feiertage vom Scrumlr-Team! Du kannst die Schneeanimationen in den Erscheinungseinstellungen deaktivieren."
   }
 }

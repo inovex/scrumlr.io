@@ -28,7 +28,7 @@ export const Votes: FC<VotesProps> = (props) => {
         ? state.notes.filter((n) => n.position.stack === props.noteId).reduce((sum, curr) => sum + (state.votings.past[0]?.votes?.votesPerNote[curr.id]?.total ?? 0), 0)
         : 0)
   );
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self.role));
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 
   /**
@@ -41,7 +41,9 @@ export const Votes: FC<VotesProps> = (props) => {
 
   return voting || allPastVotes > 0 ? (
     <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
+      {/* standard display for votes */}
       {!voting && allPastVotes > 0 && <VoteButtons.Remove noteId={props.noteId} numberOfVotes={allPastVotes} disabled />}
+      {/* display for votes when voting is open */}
       {voting && ongoingVotes.note > 0 && <VoteButtons.Remove disabled={boardLocked && !isModerator} noteId={props.noteId} numberOfVotes={ongoingVotes.note} />}
       {voting && (isModerator || !boardLocked) && (
         <VoteButtons.Add noteId={props.noteId} disabled={ongoingVotes.total === voting.voteLimit || (ongoingVotes.note > 0 && !voting.allowMultipleVotes)} />

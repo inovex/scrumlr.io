@@ -42,7 +42,7 @@ func (s *UserService) Get(ctx context.Context, userID uuid.UUID) (*dto.User, err
 	return new(dto.User).From(user), err
 }
 
-func (s *UserService) LoginAnonymous(_ context.Context, name string) (*dto.User, error) {
+func (s *UserService) LoginAnonymous(ctx context.Context, name string) (*dto.User, error) {
 	user, err := s.database.CreateAnonymousUser(name)
 	return new(dto.User).From(user), err
 }
@@ -72,18 +72,29 @@ func (s *UserService) CreateAppleUser(_ context.Context, id, name, avatarUrl str
 	return new(dto.User).From(user), err
 }
 
-func (s *UserService) Update(_ context.Context, body dto.UserUpdateRequest) (*dto.User, error) {
+func (s *UserService) CreateOIDCUser(_ context.Context, id, name, avatarUrl string) (*dto.User, error) {
+	user, err := s.database.CreateOIDCUser(id, name, avatarUrl)
+	return new(dto.User).From(user), err
+}
+
+func (s *UserService) Update(ctx context.Context, body dto.UserUpdateRequest) (*dto.User, error) {
+	log := logger.FromContext(ctx)
 	user, err := s.database.UpdateUser(database.UserUpdate{
 		ID:     body.ID,
 		Name:   body.Name,
 		Avatar: body.Avatar,
 	})
-	s.UpdatedUser(user)
 
+	if err != nil {
+		log.Errorw("unable to update user", "user", body.ID, "err", err)
+		return nil, err
+	}
+	s.UpdatedUser(user)
 	return new(dto.User).From(user), err
 }
 
 func (s *UserService) UpdatedUser(user database.User) {
+
 	connectedBoards, err := s.database.GetSingleUserConnectedBoards(user.ID)
 	if err != nil {
 		return
@@ -93,13 +104,9 @@ func (s *UserService) UpdatedUser(user database.User) {
 		if err != nil {
 			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID(), "err", err)
 		}
-		err = s.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
+		_ = s.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
 			Type: realtime.BoardEventParticipantUpdated,
 			Data: new(dto.BoardSession).From(session),
 		})
-
-		if err != nil {
-			logger.Get().Errorw("unable to broadcast updated user", "err", err)
-		}
 	}
 }

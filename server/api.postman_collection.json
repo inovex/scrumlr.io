@@ -1,8 +1,8 @@
 {
 	"info": {
-		"_postman_id": "42d60e2e-95bb-4336-8893-afed92d835c3",
+		"_postman_id": "80a95c37-7852-4687-af86-b1d585417c2e",
 		"name": "scrumlr.io",
-		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](https://info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the _User_ section for more information.\n\n1. A user signs into the application (see _Login_ section)\n2. The user creates a new board (`POST` on `/boards`, checkout _Boards_ section)\n3. Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout _Participants_ section)\n    1. If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n    2. If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n    3. If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section _Realtime_ to see how you can open websockets and listen to live updates on the data.",
+		"description": "This is the documentation for the REST API server of the application [scrumlr.io](https://scrumlr.io). You get in touch with us and send an email to [info@scrumlr.io](https://info@scrumlr.io). The software is [MIT licensed](https://opensource.org/licenses/MIT) so do whatever you want with it. If you want to checkout the progress of our development and take a peek into our backlog you can checkout our [GitHub repository](https://github.com/inovex/scrumlr.io). By the way, this already the third iteration of our server and we're still working on the interface and on further improvements. Since the API is mainly intended for our web client we won't start with API versions at the moment so breaking changes may be incoming. Once it got stable we'll maybe start with that.\n\nIf you're using the postman collection in order to explore the different resources you should also checkout the variables of the collection. Anytime you'll create new resources (e.g. your login or a board) variables will be stored and used for subsequent calls on other resources.\n\nAccess to protected resources will be authorized if a bearer token is sent or it is included in the `jwt` Cookie, which will be automatically set upon login.\n\n## Getting started\n\nLet's try to explain the basic flow of how a new board can will be created and someone tries to join the board as a participant.\n\nFirst you can check whether you are already logged in by a `GET` request on `/user`. See the _User_ section for more information.\n\n1. A user signs into the application (see _Login_ section)\n    \n2. The user creates a new board (`POST` on `/boards`, checkout _Boards_ section)\n    \n3. Another logged in user tries to join the board (`POST` on `/boards/{id}/participants`, checkout _Participants_ section)\n    1. If the boards access policy is set to `PUBLIC` the participant will be added to the board and afterwards all resources will be available\n        \n    2. If the board requires a passphrase and the access policy is set to `BY_PASSPHRASE` a client error will be reported until the user sends the correct passphrase within the payload of the request\n        \n    3. If the boards access policy is set to `BY_INVITE` a session request will be created instead and the user will be redirected to the new resource. The board owner now needs to accept or reject the request until the user can continue\n        \n\nThese are just the basic steps of how sessions can be created. You can also have a look into the section _Realtime_ to see how you can open websockets and listen to live updates on the data.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32423964"
 	},
@@ -233,6 +233,35 @@
 							"path": [
 								"login",
 								"apple"
+							],
+							"query": [
+								{
+									"key": "state",
+									"value": "",
+									"description": "URL to redirect to on successful authentication",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign-in with OIDC",
+					"protocolProfileBehavior": {
+						"followRedirects": false
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/login/oidc",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login",
+								"oidc"
 							],
 							"query": [
 								{
@@ -514,12 +543,8 @@
 											"    pm.expect(res.name).to.exist;",
 											"})",
 											"",
-											"const jsonData = pm.response.json();",
 											"pm.collectionVariables.set(\"board_template_id\", res.id);",
-											"",
-											"// set two column ids",
-											"pm.collectionVariables.set(\"board_template_column_id_one\", res.templateColumns[0].id)",
-											"pm.collectionVariables.set(\"board_template_column_id_two\", res.templateColumns[1].id)"
+											""
 										],
 										"type": "text/javascript",
 										"packages": {}
@@ -531,7 +556,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"My board template\",\n    \"description\": \"This is a test description for a board template\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"favourite\": true,\n    \"columns\": [ \n        { \n            \"name\": \"Lean coffee\", \n            \"description\":\"A template column description\", \n            \"visible\": true,\n            \"color\": \"backlog-blue\"\n        },\n        { \n            \"name\": \"Actions\", \n            \"description\":\"A template column description\", \n            \"visible\": false, \n            \"color\": \"planning-pink\"\n        }\n    ]\n}",
+									"raw": "{\n    \"name\": \"My board template\",\n    \"description\": \"This is a test description for a board template\",\n    \"accessPolicy\": \"PUBLIC\",\n    \"favourite\": true,\n    \"columnTemplates\": [ \n        { \n            \"name\": \"Lean coffee\", \n            \"description\":\"A template column description\", \n            \"visible\": true,\n            \"color\": \"backlog-blue\"\n        },\n        { \n            \"name\": \"Actions\", \n            \"description\":\"A template column description\", \n            \"visible\": false, \n            \"color\": \"planning-pink\"\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -885,7 +910,7 @@
 							"response": []
 						},
 						{
-							"name": "Update Favourite status",
+							"name": "Update Board Template favourite status",
 							"event": [
 								{
 									"listen": "test",
@@ -920,75 +945,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\n    \"favourite\": false\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/templates/{{board_template_id}}",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"templates",
-										"{{board_template_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update Board Template columns",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"const res = pm.response.json();",
-											"",
-											"pm.test(\"Successful POST request\", () => {",
-											"    pm.expect(pm.response).to.have.status(200);",
-											"});",
-											"",
-											"pm.test(\"Check id is included\", () => {",
-											"    pm.expect(res.id).to.exist;",
-											"})",
-											"",
-											"pm.test(\"Check name is included\", () => {",
-											"    pm.expect(res.name).to.exist;",
-											"})",
-											"",
-											"pm.test(\"Check if column #1 changed\", () => {",
-											"    const columnOne = res.templateColumns[0];",
-											"    pm.expect(columnOne.description).to.equal(\"Updated Column #1 Template Description\");",
-											"    pm.expect(columnOne.name).to.equal(\"Updated Lean coffee\");",
-											"    pm.expect(columnOne.color).to.equal(\"planning-pink\");",
-											"    pm.expect(columnOne.index).to.equal(1);",
-											"    pm.expect(columnOne.visible).to.equal(false);",
-											"})",
-											"",
-											"pm.test(\"Check if column #2 changed\", () => {",
-											"    const columnTwo = pm.response.json().templateColumns[1];",
-											"    pm.expect(columnTwo.description).to.equal(\"Updated Column #2 Template Description\");",
-											"    pm.expect(columnTwo.name).to.equal(\"Updated Actions\");",
-											"    pm.expect(columnTwo.color).to.equal(\"backlog-blue\");",
-											"    pm.expect(columnTwo.index).to.equal(0);",
-											"    pm.expect(columnTwo.visible).to.equal(true);",
-											"})"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"name\": \"Updated: Columns\",\n    \"templateColumns\": [\n        {\n            \"id\": \"{{board_template_column_id_one}}\",\n            \"name\": \"Updated Lean coffee\",\n            \"description\": \"Updated Column #1 Template Description\",\n            \"color\": \"planning-pink\",\n            \"visible\": false,\n            \"index\": 1\n        },\n        {\n            \"id\": \"{{board_template_column_id_two}}\",\n            \"name\": \"Updated Actions\",\n            \"description\": \"Updated Column #2 Template Description\",\n            \"color\": \"backlog-blue\",\n            \"visible\": true,\n            \"index\": 0\n        }\n    ]\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1061,12 +1017,25 @@
 								"exec": [
 									"const res = pm.response.json();",
 									"",
-									"pm.test(\"Successful POST request\", () => {",
+									"pm.test(\"Successful GET request\", () => {",
 									"    pm.expect(pm.response).to.have.status(200);",
 									"});",
 									"",
 									"pm.test(\"Check that an array of board templates are returned\", () => {",
 									"    pm.expect(res).to.be.an('array');",
+									"})",
+									"",
+									"",
+									"pm.test(\"Check that first entry of array includes column templates\", () => {",
+									"    pm.expect(res[0].ColumnTemplates).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check that column template is not null\", () => {",
+									"    pm.expect(res[0].ColumnTemplates).to.not.be.null;",
+									"})",
+									"",
+									"pm.test(\"Check that column template is an array\", () => {",
+									"    pm.expect(res[0].ColumnTemplates).to.be.an('array');",
 									"})"
 								],
 								"type": "text/javascript",
@@ -1117,6 +1086,295 @@
 							"path": [
 								"templates",
 								"{{board_template_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ColumnTemplates",
+			"item": [
+				{
+					"name": "Create column template",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful POST request\", () => {",
+									"    pm.expect(pm.response).to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check name is included\", () => {",
+									"    pm.expect(res.name).to.exist;",
+									"})",
+									"",
+									"pm.collectionVariables.set(\"column_template_id\", res.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let body = ",
+									"    {",
+									"        \"name\": \"My new board template\",",
+									"        \"description\": \"This is a new test description for a board template\",",
+									"        \"accessPolicy\": \"PUBLIC\",",
+									"        \"favourite\": true,",
+									"        \"columnTemplates\": [ ",
+									"            { ",
+									"                \"name\": \"Lean coffee\", ",
+									"                \"description\":\"A template column description\", ",
+									"                \"visible\": true,",
+									"                \"color\": \"backlog-blue\"",
+									"            },",
+									"            { ",
+									"                \"name\": \"Actions\", ",
+									"                \"description\":\"A template column description\", ",
+									"                \"visible\": false, ",
+									"                \"color\": \"planning-pink\"",
+									"            }",
+									"        ]",
+									"    };",
+									"",
+									"body = JSON.stringify(body)",
+									"",
+									"pm.sendRequest({",
+									"    url: pm.variables.get(\"base_url\") + \"/templates\",",
+									"    method: 'POST',",
+									"    header: {",
+									"        \"Content-Type\": \"application/json; charset=utf-8\",",
+									"        \"Authorization\": pm.collectionVariables.get(\"jwt\"),",
+									"    },",
+									"    body: body",
+									"   ",
+									"}, function (err, response) {",
+									"    const res = response.json();",
+									"",
+									"    pm.test(\"PreRequestScript – Successful POST request (createBoardTemplate)\", () => {",
+									"        pm.expect(response.code).to.be.equal(201);",
+									"    });",
+									"    ",
+									"    pm.test(\"PreRequestScript – Check id\", () => {",
+									"        pm.expect(res.id).to.exist;",
+									"    })",
+									"",
+									"    pm.collectionVariables.set(\"board_template_id\", res.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"A created column\",\n    \"description\": \"A created column description\",\n    \"color\": \"backlog-blue\",\n    \"visible\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/templates/{{board_template_id}}/columns",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"templates",
+								"{{board_template_id}}",
+								"columns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get column templates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check that an array of board templates are returned\", () => {",
+									"    pm.expect(res).to.be.an('array');",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/templates/{{board_template_id}}/columns",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"templates",
+								"{{board_template_id}}",
+								"columns"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get column template",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful GET request\", () => {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check name is included\", () => {",
+									"    pm.expect(res.name).to.exist;",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/templates/{{board_template_id}}/columns/{{column_template_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"templates",
+								"{{board_template_id}}",
+								"columns",
+								"{{column_template_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update column template",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json();",
+									"",
+									"pm.test(\"Successful PUT request\", () => {",
+									"    pm.expect(pm.response).to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check id is included\", () => {",
+									"    pm.expect(res.id).to.exist;",
+									"})",
+									"",
+									"pm.test(\"Check if column changed\", () => {",
+									"    pm.expect(res.name).to.equal(\"Updated Column Template Name\");",
+									"    pm.expect(res.description).to.equal(\"Updated Column Template Description\");",
+									"    pm.expect(res.color).to.equal(\"goal-green\");",
+									"    pm.expect(res.visible).to.equal(false);",
+									"    pm.expect(res.index).to.equal(0);",
+									"})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Updated Column Template Name\",\n    \"description\": \"Updated Column Template Description\",\n    \"color\": \"goal-green\",\n    \"visible\": false,\n    \"index\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/templates/{{board_template_id}}/columns/{{column_template_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"templates",
+								"{{board_template_id}}",
+								"columns",
+								"{{column_template_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete column template",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", () => {",
+									"    pm.expect(pm.response).to.have.status(204);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/templates/{{board_template_id}}/columns/{{column_template_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"templates",
+								"{{board_template_id}}",
+								"columns",
+								"{{column_template_id}}"
 							]
 						}
 					},
@@ -5518,14 +5776,8 @@
 			"type": "string"
 		},
 		{
-			"key": "board_template_column_id_one",
-			"value": "{board_template_column_id_one}",
-			"type": "string"
-		},
-		{
-			"key": "board_template_column_id_two",
-			"value": "{board_template_column_id_two}",
-			"type": "string"
+			"key": "column_template_id",
+			"value": "{column_template_id}"
 		}
 	]
 }

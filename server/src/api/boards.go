@@ -21,11 +21,12 @@ import (
 
 // createBoard creates a new board
 func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-
 	// parse request
 	var body dto.CreateBoardRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -63,18 +64,15 @@ func (s *Server) deleteBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getBoards(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	boardIDs, err := s.boards.GetBoards(r.Context(), user)
 	if err != nil {
-		log.Errorw("unable to get board ids for this user", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 	OverviewBoards, err := s.boards.BoardOverview(r.Context(), boardIDs, user)
 	if err != nil {
-		log.Errorw("unable to get board overview", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -121,6 +119,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	boardParam := chi.URLParam(r, "id")
 	board, err := uuid.Parse(boardParam)
 	if err != nil {
+		log.Errorw("Wrong board id", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -128,7 +127,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 	exists, err := s.sessions.SessionExists(r.Context(), board, user)
 	if err != nil {
-		log.Errorw("unable to check preexisting sessions", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -136,7 +134,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if exists {
 		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
 		if err != nil {
-			log.Errorw("unable to check if participant is banned", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -164,7 +161,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	if b.AccessPolicy == types.AccessPolicyPublic {
 		_, err := s.sessions.Create(r.Context(), board, user)
 		if err != nil {
-			log.Errorw("unable to add participant", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
@@ -192,7 +188,6 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		if encodedPassphrase == *b.Passphrase {
 			_, err := s.sessions.Create(r.Context(), board, user)
 			if err != nil {
-				log.Errorw("unable to create board session", "err", err)
 				common.Throw(w, r, common.InternalServerError)
 				return
 			}
@@ -245,10 +240,12 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 
 // updateBoard updates a board
 func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body dto.BoardUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
 	}
@@ -265,10 +262,12 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body dto.SetTimerRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -310,21 +309,21 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	board, _, sessions, columns, notes, _, votings, _, err := s.boards.FullBoard(r.Context(), boardId)
+	fullBoard, err := s.boards.FullBoard(r.Context(), boardId)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
 	}
 
 	visibleColumns := []*dto.Column{}
-	for _, column := range columns {
+	for _, column := range fullBoard.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 		}
 	}
 
 	visibleNotes := []*dto.Note{}
-	for _, note := range notes {
+	for _, note := range fullBoard.Notes {
 		for _, column := range visibleColumns {
 			if note.Position.Column == column.ID {
 				visibleNotes = append(visibleNotes, note)
@@ -341,16 +340,16 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			Notes        []*dto.Note         `json:"notes"`
 			Votings      []*dto.Voting       `json:"votings"`
 		}{
-			Board:        board,
-			Participants: sessions,
+			Board:        fullBoard.Board,
+			Participants: fullBoard.BoardSessions,
 			Columns:      visibleColumns,
 			Notes:        visibleNotes,
-			Votings:      votings,
+			Votings:      fullBoard.Votings,
 		})
 		return
 	} else if r.Header.Get("Accept") == "text/csv" {
 		header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-		for index, voting := range votings {
+		for index, voting := range fullBoard.Votings {
 			if voting.Status == types.VotingStatusClosed {
 				header = append(header, fmt.Sprintf("voting_%d", index))
 			}
@@ -364,7 +363,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			}
 
 			author := note.Author.String()
-			for _, session := range sessions {
+			for _, session := range fullBoard.BoardSessions {
 				if session.User.ID == note.Author {
 					author = session.User.Name
 				}
@@ -388,7 +387,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 				stack,
 			}
 
-			for _, voting := range votings {
+			for _, voting := range fullBoard.Votings {
 				if voting.Status == types.VotingStatusClosed {
 					if voting.VotingResults != nil {
 						resultOnNote = append(resultOnNote, strconv.Itoa(voting.VotingResults.Votes[note.ID].Total))
@@ -414,4 +413,119 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	render.Status(r, http.StatusNotAcceptable)
 	render.Respond(w, r, nil)
+}
+
+func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
+	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	var body dto.ImportBoardRequest
+	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("Could not read body", "err", err)
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+
+	body.Board.Owner = owner
+
+	columns := make([]dto.ColumnRequest, 0, len(body.Notes))
+
+	for _, column := range body.Columns {
+		columns = append(columns, dto.ColumnRequest{
+			Name:    column.Name,
+			Color:   column.Color,
+			Visible: &column.Visible,
+			Index:   &column.Index,
+		})
+	}
+	b, err := s.boards.Create(r.Context(), dto.CreateBoardRequest{
+		Name:         body.Board.Name,
+		Description:  body.Board.Description,
+		AccessPolicy: body.Board.AccessPolicy,
+		Passphrase:   body.Board.Passphrase,
+		Columns:      columns,
+		Owner:        owner,
+	})
+
+	if err != nil {
+		log.Errorw("Could not import board", "err", err)
+		common.Throw(w, r, err)
+		return
+	}
+
+	cols, err := s.boards.ListColumns(r.Context(), b.ID)
+	if err != nil {
+		_ = s.boards.Delete(r.Context(), b.ID)
+
+	}
+
+	type ParentChildNotes struct {
+		Parent   dto.Note
+		Children []dto.Note
+	}
+	parentNotes := make(map[uuid.UUID]dto.Note)
+	childNotes := make(map[uuid.UUID][]dto.Note)
+
+	for _, note := range body.Notes {
+		if !note.Position.Stack.Valid {
+			parentNotes[note.ID] = note
+		} else {
+			childNotes[note.Position.Stack.UUID] = append(childNotes[note.Position.Stack.UUID], note)
+		}
+	}
+
+	var organizedNotes []ParentChildNotes
+	for parentID, parentNote := range parentNotes {
+		for i, column := range body.Columns {
+			if parentNote.Position.Column == column.ID {
+
+				note, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+					Text: parentNote.Text,
+					Position: dto.NotePosition{
+						Column: cols[i].ID,
+						Stack:  uuid.NullUUID{},
+						Rank:   0,
+					},
+					Board: b.ID,
+					User:  parentNote.Author,
+				})
+				if err != nil {
+					_ = s.boards.Delete(r.Context(), b.ID)
+					common.Throw(w, r, err)
+					return
+				}
+				parentNote = *note
+			}
+		}
+		organizedNotes = append(organizedNotes, ParentChildNotes{
+			Parent:   parentNote,
+			Children: childNotes[parentID],
+		})
+	}
+
+	for _, node := range organizedNotes {
+		for _, note := range node.Children {
+			_, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+				Text:  note.Text,
+				Board: b.ID,
+				User:  note.Author,
+				Position: dto.NotePosition{
+					Column: node.Parent.Position.Column,
+					Rank:   note.Position.Rank,
+					Stack: uuid.NullUUID{
+						UUID:  node.Parent.ID,
+						Valid: true,
+					},
+				},
+			})
+			if err != nil {
+				_ = s.boards.Delete(r.Context(), b.ID)
+				common.Throw(w, r, err)
+				return
+			}
+
+		}
+	}
+
+	render.Status(r, http.StatusCreated)
+	render.Respond(w, r, b)
 }

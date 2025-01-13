@@ -69,6 +69,10 @@ func (d *Database) CreateAppleUser(id, name, avatarUrl string) (User, error) {
 	return d.createExternalUser(id, name, avatarUrl, types.AccountTypeApple, "apple_users")
 }
 
+func (d *Database) CreateOIDCUser(id, name, avatarUrl string) (User, error) {
+	return d.createExternalUser(id, name, avatarUrl, types.AccountTypeOIDC, "oidc_users")
+}
+
 func (d *Database) createExternalUser(id, name, avatarUrl string, accountType types.AccountType, table string) (User, error) {
 	if err := validateUsername(name); err != nil {
 		return User{}, err

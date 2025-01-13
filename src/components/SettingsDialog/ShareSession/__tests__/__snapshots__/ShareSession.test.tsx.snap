@@ -6,21 +6,21 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="settings-dialog__container"
+        class="settings-dialog__container accent-color__backlog-blue"
         data-testid="qrcode"
       >
         <div
           class="settings-dialog__header"
         >
           <h2
-            class="settings-dialog__header-text accent-color__planning-pink"
+            class="settings-dialog__header-text"
           >
              
             Share Session
           </h2>
         </div>
         <div
-          class="share-session__container accent-color__planning-pink"
+          class="share-session__container"
         >
           <div
             class="share-session__background"
@@ -28,6 +28,7 @@ Object {
             <canvas
               class="share-qr-code-option__qrcode"
               height="1024"
+              role="img"
               style="height: 1024px; width: 1024px;"
               width="1024"
             />
@@ -43,21 +44,21 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="settings-dialog__container"
+      class="settings-dialog__container accent-color__backlog-blue"
       data-testid="qrcode"
     >
       <div
         class="settings-dialog__header"
       >
         <h2
-          class="settings-dialog__header-text accent-color__planning-pink"
+          class="settings-dialog__header-text"
         >
            
           Share Session
         </h2>
       </div>
       <div
-        class="share-session__container accent-color__planning-pink"
+        class="share-session__container"
       >
         <div
           class="share-session__background"
@@ -65,6 +66,7 @@ Object {
           <canvas
             class="share-qr-code-option__qrcode"
             height="1024"
+            role="img"
             style="height: 1024px; width: 1024px;"
             width="1024"
           />
