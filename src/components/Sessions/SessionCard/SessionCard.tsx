@@ -14,7 +14,8 @@ import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {ReactComponent as MultipleUserIcon} from "assets/icons/multiple-user.svg";
 // import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
 import "./SessionCard.scss";
-import {deleteSession, Session} from "../../../store/features";
+import {useNavigate} from "react-router";
+import {createBoardFromSession, deleteSession, Session} from "../../../store/features";
 import {useAppDispatch} from "../../../store";
 
 type SessionCardProps = {
@@ -24,6 +25,8 @@ type SessionCardProps = {
 export const SessionCard = ({session}: SessionCardProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const closeMenu = () => {
@@ -38,11 +41,11 @@ export const SessionCard = ({session}: SessionCardProps) => {
     dispatch(deleteSession({id: session.id}));
   };
 
-  // const createBoard = () => {
-  //   dispatch(createBoardFromTemplate(template))
-  //     .unwrap()
-  //     .then((boardId) => navigate(`/board/${boardId}`));
-  // };
+  const createBoard = () => {
+    dispatch(createBoardFromSession(session))
+      .unwrap()
+      .then((boardId) => navigate(`/board/${boardId}`));
+  };
 
   const renderMenu = () =>
     showMiniMenu ? (
@@ -102,7 +105,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
           {/*   .join(", ")} */}
         </div>
       </div>
-      <Button className={classNames("session-card__start-button", "session-card__start-button--start")} small icon={<NextIcon />}>
+      <Button className={classNames("session-card__start-button", "session-card__start-button--start")} small icon={<NextIcon />} onClick={createBoard}>
         Go to Session{/* TODO: {t("Templates.TemplateCard.start")} */}
       </Button>
     </div>

@@ -14,3 +14,8 @@ export const deleteSession = createAsyncThunk<string, {id: string}, {state: Appl
   await API.deleteSession(payload.id);
   return payload.id; // return former id to remove entries from store
 });
+
+// TODO: hier muessen auch die ganzen anderen notes usw reingeladen werden, die vorherigen participants maybe?
+export const createBoardFromSession = createAsyncThunk<string, Session>("board/createBoardFromSession", async (payload) =>
+  API.createBoard(payload.name, {type: payload.accessPolicy}, payload.columns)
+);
