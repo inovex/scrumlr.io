@@ -98,12 +98,14 @@
 
 @media #{$smartphone} {
   .color-picker {
-    flex-direction: row-reverse;
-    position: absolute;
-    right: 0;
-    margin: auto;
-    justify-self: center;
-    padding-right: $spacing--xxs;
+    &--allow-vertical {
+      flex-direction: row-reverse;
+      position: absolute;
+      right: 0;
+      margin: auto;
+      justify-self: center;
+      padding-right: $spacing--xxs;
+    }
   }
 
   .fix-focus-lock-placement {

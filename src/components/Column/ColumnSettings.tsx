@@ -75,6 +75,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
           activeColor={props.column.color}
           selectColor={onSelectColor}
           closeColorPicker={() => setOpenedColorPicker(false)}
+          allowVertical
         />
       ),
       onClick: () => setOpenedColorPicker((o) => !o),

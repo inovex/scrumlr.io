@@ -13,6 +13,8 @@ type ColorPickerProps = {
   activeColor: Color;
   selectColor: (color: Color) => void;
   closeColorPicker: () => void;
+
+  allowVertical?: boolean;
 };
 
 export const ColorPicker = (props: ColorPickerProps) => {
@@ -37,7 +39,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
 
   return (
     <ReactFocusLock autoFocus className="fix-focus-lock-placement">
-      <ul className={classNames(props.className, "color-picker")}>
+      <ul className={classNames(props.className, "color-picker", {"color-picker--allow-vertical": props.allowVertical})}>
         <li className={`${getColorClassName(props.activeColor)} color-picker__item`}>
           <button
             id={primColorAnchor}
