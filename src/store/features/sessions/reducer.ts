@@ -7,5 +7,5 @@ import {EXAMPLE_SESSIONS_FOR_SEARCH_FCT} from "../../../constants/templates";
 const initialState: SessionsState = EXAMPLE_SESSIONS_FOR_SEARCH_FCT;
 
 export const sessionsReducer = createReducer(initialState, (builder) => {
-  builder.addCase(getSessions.fulfilled, (_state, action) => [...action.payload.map((twc) => twc)]);
+  builder.addCase(getSessions.fulfilled, (_state, action) => [...EXAMPLE_SESSIONS_FOR_SEARCH_FCT, ...action.payload.map((twc) => twc)]);
 });
