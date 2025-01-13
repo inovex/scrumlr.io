@@ -77,6 +77,14 @@ $column-height: 340px;
   color: $gray--800;
   border-bottom: 2px solid var(--accent-color--light);
 
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:hover {
+    color: $navy--400;
+  }
+
   &:focus {
     border-bottom-style: dashed; // TODO dash spacing
   }
