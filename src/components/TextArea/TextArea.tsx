@@ -17,6 +17,7 @@ type TextAreaProps = {
 
   placeholder?: string;
 
+  autoFocus?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
 };
@@ -30,6 +31,7 @@ export const TextArea = (props: TextAreaProps) => {
       value={props.input}
       onInput={updateInput}
       placeholder={props.placeholder}
+      autoFocus={props.autoFocus}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
       onPointerEnterCapture={undefined}
