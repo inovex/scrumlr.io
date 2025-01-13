@@ -86,6 +86,14 @@ $column-height: 340px;
   color: $gray--800;
   font-size: $text--xs;
   font-weight: 500;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:hover {
+    color: $navy--400;
+  }
 }
 
 .template-column__description-wrapper {
