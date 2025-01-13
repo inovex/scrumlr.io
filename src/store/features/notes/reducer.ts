@@ -2,6 +2,7 @@ import {createReducer, isAnyOf} from "@reduxjs/toolkit";
 import {NotesState} from "./types";
 import {initializeBoard} from "../board";
 import {deletedNote, syncNotes, updatedNotes} from "./actions";
+import {updatedVoting} from "../votings";
 
 const initialState: NotesState = [];
 
@@ -81,6 +82,6 @@ export const notesReducer = createReducer(initialState, (builder) =>
         return n;
       });
     })
-
+    .addCase(updatedVoting, (_state, action) => action.payload.notes)
     .addMatcher(isAnyOf(updatedNotes, syncNotes), (_state, action) => action.payload)
 );

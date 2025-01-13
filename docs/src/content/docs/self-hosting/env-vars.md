@@ -39,6 +39,12 @@ SCRUMLR_ANALYTICS_DATA_DOMAIN=''
 SCRUMLR_ANALYTICS_SRC=''
 ```
 
+### Clarity id
+The clarity id to use [Clarity](https://clarity.microsoft.com/).
+```bash
+SCRUMLR_CLARITY_ID=''
+```
+
 ## Backend
 
 ### Server Port
