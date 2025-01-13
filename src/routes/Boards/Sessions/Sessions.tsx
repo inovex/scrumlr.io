@@ -45,8 +45,8 @@ export const Sessions = () => {
             </div>
           </div>
           <div className="sessions__stan-container">
-            <img className={classNames("sessions__stan", "sessions__stan--dark")} src={StanLight} alt="Stan giving you his approval" />
-            <img className={classNames("sessions__stan", "sessions__stan--light")} src={StanDark} alt="Stan giving you his approval" />
+            <img className={classNames("sessions__stan", "sessions__stan--dark", "sessions__stan-fixed")} src={StanLight} alt="Stan giving you his approval" />
+            <img className={classNames("sessions__stan", "sessions__stan--light", "sessions__stan-fixed")} src={StanDark} alt="Stan giving you his approval" />
           </div>
         </div>
       </div>

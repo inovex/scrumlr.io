@@ -92,7 +92,7 @@ $max-card-width: 500px;
   // align right edge of stan to the left edge of the container
   right: 0;
   top: 0;
-  transform: translateX(100%);
+  //transform: translateX(-100%);
 }
 
 .sessions__stan {
@@ -105,6 +105,11 @@ $max-card-width: 500px;
   &--light {
     display: none;
   }
+}
+
+.sessions__stan-fixed {
+  position: fixed;
+  height: inherit;
 }
 
 @media screen and (max-width: $breakpoint--desktop) {
