@@ -12,7 +12,7 @@ import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {ReactComponent as MultipleUserIcon} from "assets/icons/multiple-user.svg";
-import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
+// import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
 import "./SessionCard.scss";
 import {Session} from "../../../store/features";
 
@@ -71,9 +71,9 @@ export const SessionCard = ({session}: SessionCardProps) => {
           {/*   .join(", ")} */}
         </div>
       </div>
-      <CalendarIcon className={classNames("session-card__icon", "session-card__icon--age")} />
+      <ColumnsIcon className={classNames("session-card__icon", "session-card__icon--age")} />
       <div className="session-card__age">
-        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: session.columns.length})}</div>
+        <div className="session-card__columns-title">2 Weeks ago{/* TODO: {t("Templates.TemplateCard.column", {count: session.columns.length})} */}</div>
         <div className="session-card__columns-subtitle">
           {/* {session.columns */}
           {/*   .sort((a, b) => a.index - b.index) */}
@@ -83,7 +83,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
       </div>
       <MultipleUserIcon className={classNames("session-card__icon", "session-card__icon--participants")} />
       <div className="session-card__participants">
-        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: session.columns.length})}</div>
+        <div className="session-card__columns-title">10 Participants{/* TODO: {t("Templates.TemplateCard.column", {count: session.columns.length})} */}</div>
         <div className="session-card__columns-subtitle">
           {/* {session.columns */}
           {/*   .sort((a, b) => a.index - b.index) */}
@@ -92,7 +92,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
         </div>
       </div>
       <Button className={classNames("session-card__start-button", "session-card__start-button--start")} small icon={<NextIcon />}>
-        {t("Templates.TemplateCard.start")}
+        Go to Session{/* TODO: {t("Templates.TemplateCard.start")} */}
       </Button>
     </div>
   );

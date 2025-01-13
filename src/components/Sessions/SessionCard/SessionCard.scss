@@ -164,6 +164,7 @@ $card-height: 220px;
 .session-card__start-button {
   grid-area: start;
   justify-self: end;
+  white-space: nowrap;
 }
 
 [theme="dark"] {
