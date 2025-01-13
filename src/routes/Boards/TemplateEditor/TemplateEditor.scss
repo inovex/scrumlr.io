@@ -109,7 +109,7 @@
   grid-area: mini;
   justify-self: center;
 
-  visibility: hidden;
+  display: none;
 }
 
 .template-editor__buttons {
@@ -160,6 +160,6 @@
   }
 
   .template-editor__columns-mini-view-wrapper {
-    visibility: visible;
+    display: initial;
   }
 }
