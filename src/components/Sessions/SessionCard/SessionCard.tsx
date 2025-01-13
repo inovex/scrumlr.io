@@ -14,7 +14,8 @@ import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {ReactComponent as MultipleUserIcon} from "assets/icons/multiple-user.svg";
 // import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
 import "./SessionCard.scss";
-import {Session} from "../../../store/features";
+import {deleteSession, Session} from "../../../store/features";
+import {useAppDispatch} from "../../../store";
 
 type SessionCardProps = {
   session: Session;
@@ -22,7 +23,7 @@ type SessionCardProps = {
 
 export const SessionCard = ({session}: SessionCardProps) => {
   const {t} = useTranslation();
-
+  const dispatch = useAppDispatch();
   const [showMiniMenu, setShowMiniMenu] = useState(false);
 
   const closeMenu = () => {
@@ -33,12 +34,22 @@ export const SessionCard = ({session}: SessionCardProps) => {
     // TODO
   };
 
+  const deleteSessionInCard = () => {
+    dispatch(deleteSession({id: session.id}));
+  };
+
+  // const createBoard = () => {
+  //   dispatch(createBoardFromTemplate(template))
+  //     .unwrap()
+  //     .then((boardId) => navigate(`/board/${boardId}`));
+  // };
+
   const renderMenu = () =>
     showMiniMenu ? (
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
-          {label: "Delete", element: <TrashIcon />, onClick: closeMenu},
+          {label: "Delete", element: <TrashIcon />, onClick: deleteSessionInCard},
           {label: "Edit", element: <EditIcon />, onClick: navigateToEdit},
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
