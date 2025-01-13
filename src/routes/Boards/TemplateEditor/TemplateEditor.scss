@@ -14,7 +14,7 @@
     auto // <- description
     46px
     auto // <- debug
-    auto // <- column
+    auto // <- columns config
     56px
     52px // <- buttons
     $spacing--xs;
@@ -102,8 +102,14 @@
 
   // lock scrolling
   max-width: 100%;
-  height: 340px; // TODO fix magic
-  overflow: hidden;
+  height: max-content; // correct height!
+}
+
+.template-editor__columns-mini-view-wrapper {
+  grid-area: mini;
+  justify-self: center;
+
+  display: none;
 }
 
 .template-editor__buttons {
@@ -113,4 +119,47 @@
   display: flex;
   flex-direction: row;
   gap: $spacing--base;
+}
+
+@media (screen and max-width: $breakpoint--smartphone) {
+  .template-editor {
+    grid-template-rows:
+      $spacing--xs
+      60px // <- dropdown
+      14px
+      auto // <- info
+      26px
+      auto // <- name
+      20px
+      auto // <- description
+      46px
+      auto // <- debug
+      auto // <- columns config
+      16px
+      auto // <- mini columns
+      56px
+      52px // <- buttons
+      $spacing--xs;
+    grid-template-areas:
+      ".          .           .         .         ."
+      ".          dropdown    .         password  ."
+      ".          .           .         .         ."
+      ".          info        info      info      ."
+      ".          .           .         .         ."
+      ".          name        name      name      ."
+      ".          .           .         .         ."
+      ".          description description description ."
+      ".          .           .         .         ."
+      ".          debug        debug      debug      ."
+      ".          columns     columns   columns   ."
+      ".          .           .         .         ."
+      ".          mini        mini      mini      ."
+      ".          .           .         .         ."
+      ".          buttons     buttons   buttons   ."
+      ".          .           .         .         .";
+  }
+
+  .template-editor__columns-mini-view-wrapper {
+    display: initial;
+  }
 }

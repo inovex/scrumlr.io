@@ -12,7 +12,7 @@ import "./ColumnsConfigurator.scss";
 type ColumnsConfiguratorProps = {
   className: string;
   templateId: string;
-  columns: EditableTemplateColumn[];
+  columns: EditableTemplateColumn[]; // without deleted cols
   addColumn: (templateColumn: TemplateColumn, index: number) => void;
   moveColumn: (fromIndex: number, toIndex: number) => void;
   editColumn: (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void;
@@ -54,10 +54,14 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   };
 
   const calcPlacement = (index: number) => {
+    const {length} = props.columns;
+    if (length === 1) {
+      return "all";
+    }
     if (index === 0) {
       return "first";
     }
-    if (index === props.columns.length - 1) {
+    if (index === length - 1) {
       return "last";
     }
     return "center";
@@ -112,14 +116,18 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     const newColumn: TemplateColumn = {
       id: uniqueId("col"),
       template: props.templateId,
-      name: "Column",
+      name: `Column ${props.columns.length + 1}`,
       description: "",
       color,
-      visible: false,
-      index: -1, // will be overwritten by reducer
+      visible: true,
+      index: -1, // will be overwritten anyway
     };
 
+    // target index for the right has to take deleted cols which are still part of the array into account,
+    // which is why we use the total col amount as new index
     const index = alignment === "left" ? 0 : props.columns.length;
+
+    // TODO can illegal indices happen? apparently so
 
     props.addColumn(newColumn, index);
   };

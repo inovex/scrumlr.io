@@ -6,7 +6,7 @@ $column-height: 340px;
 .template-column {
   display: flex;
   flex-direction: column;
-  gap: $spacing--xl;
+  gap: $spacing--md;
   flex-shrink: 0;
   flex-grow: 1;
 
@@ -57,6 +57,12 @@ $column-height: 340px;
   }
 }
 
+.template-column__name-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xs;
+}
+
 // TODO input style wip
 .template-column__name {
   all: unset;
@@ -70,9 +76,45 @@ $column-height: 340px;
   font-weight: 600;
   color: $gray--800;
   border-bottom: 2px solid var(--accent-color--light);
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:hover {
+    color: $navy--400;
+  }
+
+  &:focus {
+    border-bottom-style: dashed; // TODO dash spacing
+  }
+}
+
+.template-column__inline-description {
+  color: $gray--800;
+  font-size: $text--xs;
+  font-weight: 500;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:hover {
+    color: $navy--400;
+  }
+}
+
+.template-column__description-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.template-column__description-mini-menu {
+  margin-left: auto; // couldn't get align-self: flex-end to work so whatever
 }
 
 .template-column__menu {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: $spacing--xl; // TODO proper gaps
@@ -97,12 +139,39 @@ $column-height: 340px;
   }
 }
 
-// temporary!
 .template-column__color {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--accent-color--200);
   border-radius: $rounded--full;
   background-color: var(--accent-color--light);
+
+  cursor: pointer;
+}
+
+// TODO subject to change with column
+.columns-configurator-column__color-picker {
+  position: absolute;
+  // some precise but hardcoded positioning values so it fits exactly on top of the active color
+  // varying by column position (left, center, right) probably because of borders ig
+  top: 40px - 1px;
+  left: 40px + 1px;
+
+  &--column-center {
+    left: 40px + 3px;
+  }
+}
+
+.template-column__button {
+  all: unset;
+  cursor: pointer;
+  max-width: $icon--large;
+  max-height: $icon--large;
+
+  &:disabled {
+    color: $gray--800;
+    cursor: default;
+  }
 }
 
 [theme="dark"] {

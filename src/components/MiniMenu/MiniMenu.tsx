@@ -1,8 +1,8 @@
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import classNames from "classnames";
 import {uniqueId} from "underscore";
+import FocusLock, {MoveFocusInside} from "react-focus-lock";
 import "./MiniMenu.scss";
-import ReactFocusLock from "react-focus-lock";
 
 export type MiniMenuItem = {
   element: ReactNode; // an Icon in most cases, but can also be a complex element (e.g. ColorPicker)
@@ -13,12 +13,23 @@ export type MiniMenuItem = {
 
 type MiniMenuProps = {
   className?: string;
+  focusBehaviour?: "trap" | "moveFocus";
   items: MiniMenuItem[];
+  onBlur?: () => void;
+
+  small?: boolean; // smaller icons
+  wrapToColumn?: boolean; // render as column in small screen sizes
+  transparent?: boolean; // no background
 };
 
-export const MiniMenu = ({className, items}: MiniMenuProps) => (
-  <ReactFocusLock autoFocus>
-    <div className={classNames(className, "mini-menu")}>
+export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapToColumn, transparent}: MiniMenuProps) => {
+  const onClickItem = (e: React.MouseEvent, item: MiniMenuItem) => {
+    e.preventDefault(); // fix some issues
+    item.onClick?.();
+  };
+
+  const renderMenu = () => (
+    <div className={classNames(className, "mini-menu", {"mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})} onBlur={onBlur}>
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
         return (
@@ -27,14 +38,27 @@ export const MiniMenu = ({className, items}: MiniMenuProps) => (
             data-tooltip-content={item.label}
             aria-label={item.label}
             id={anchor}
-            className={classNames("mini-menu__item", {"mini-menu__item--active": item.active})}
+            className={classNames("mini-menu__item", {"mini-menu__item--active": item.active, "mini-menu__item--small": small})}
             key={item.label}
-            onClick={item?.onClick}
+            // mouse down instead of click because it has precedence over blur
+            onMouseDown={(e) => onClickItem(e, item)}
           >
             {item.element}
           </button>
         );
       })}
     </div>
-  </ReactFocusLock>
-);
+  );
+
+  // depending on use case we want to trap the focus or not
+  // trapping means we cannot interact with other component till menu is closed,
+  // and also the focus will return to the beginning instead of going to the next component
+  switch (focusBehaviour) {
+    case "trap":
+      return <FocusLock autoFocus>{renderMenu()}</FocusLock>;
+    case "moveFocus":
+      return <MoveFocusInside>{renderMenu()}</MoveFocusInside>;
+    default:
+      return <>{renderMenu()}</>;
+  }
+};

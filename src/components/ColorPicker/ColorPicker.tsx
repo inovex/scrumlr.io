@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import {useEffect} from "react";
 import {uniqueId} from "underscore";
 import ReactFocusLock from "react-focus-lock";
@@ -6,11 +7,14 @@ import {Tooltip} from "components/Tooltip";
 import "./ColorPicker.scss";
 
 type ColorPickerProps = {
+  className?: string;
   open: boolean;
   colors: Color[];
   activeColor: Color;
   selectColor: (color: Color) => void;
   closeColorPicker: () => void;
+
+  allowVertical?: boolean;
 };
 
 export const ColorPicker = (props: ColorPickerProps) => {
@@ -35,7 +39,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
 
   return (
     <ReactFocusLock autoFocus className="fix-focus-lock-placement">
-      <ul className="color-picker">
+      <ul className={classNames(props.className, "color-picker", {"color-picker--allow-vertical": props.allowVertical})}>
         <li className={`${getColorClassName(props.activeColor)} color-picker__item`}>
           <button
             id={primColorAnchor}
@@ -56,7 +60,8 @@ export const ColorPicker = (props: ColorPickerProps) => {
                 id={anchor}
                 aria-label={formatColorName(color)}
                 title={formatColorName(color)}
-                onClick={() => props.selectColor(color)}
+                // onMouseDown instead of onClick because onBlur has priority, and it might get closed before firing the event
+                onMouseDown={() => props.selectColor(color)}
                 className={`${color.toString()} color-picker__item-button`}
               >
                 <div className={`color-picker__color-option color-picker__color-option--${color.toString()}`} />

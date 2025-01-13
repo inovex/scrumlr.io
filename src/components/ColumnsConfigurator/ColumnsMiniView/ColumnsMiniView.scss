@@ -1,0 +1,47 @@
+@import "constants/style";
+
+// magic w/h
+$mini-column-width: 46px;
+$mini-column-height: 91px;
+
+.columns-mini-view {
+  display: flex;
+  flex-direction: row;
+}
+
+.columns-mini-view__column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: $mini-column-width;
+  height: $mini-column-height;
+
+  border: 2px solid var(--accent-color--light);
+
+  // deactivate borders depending on position
+  // TODO maybe different borders
+  &--border {
+    &-first {
+      border-right: none;
+    }
+    &-center {
+      border-left: none;
+      border-right: none;
+    }
+    &-last {
+      border-left: none;
+    }
+  }
+
+  &--hidden {
+    // TODO thinner stripes
+    background-image: $column-stripes--light;
+  }
+}
+
+.columns-mini-view__column-index {
+  color: $navy--400;
+  font-size: $text--base;
+  font-weight: 600;
+}
