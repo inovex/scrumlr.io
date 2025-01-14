@@ -96,6 +96,9 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
 
+  // all mandatory inputs, i.e. template name and column names must have content (whitespace doesn't count)
+  const validForm = !!nameInput.trim() && (editableTemplateColumns?.every((column) => column.name.trim()) ?? true);
+
   // sets the next mode for a template column, so we later know what to with a column: edit, delete or create
   const nextMode = (action: TemplateColumnAction, currentMode?: TemplateColumnAction): TemplateColumnAction => {
     if (!currentMode) return action;
@@ -302,13 +305,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
         <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary" onClick={cancelAndGoBack}>
           {t("Templates.TemplateEditor.cancel")}
         </Button>
-        <Button
-          className={classNames("template-editor__button", "template-editor__button--create")}
-          type="primary"
-          icon={<AddIcon />}
-          onClick={saveTemplate}
-          disabled={!nameInput.trim()}
-        >
+        <Button className={classNames("template-editor__button", "template-editor__button--create")} type="primary" icon={<AddIcon />} onClick={saveTemplate} disabled={!validForm}>
           {t(`Templates.TemplateEditor.save${mode === "create" ? "Create" : "Edit"}`)}
         </Button>
       </div>
