@@ -7,7 +7,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(var(--accent-color--light-rgb), 0.2);
+  // no background
+  background-color: transparent !important;
   color: var(--accent-color--light);
   transition:
     background-color 150ms ease-in-out,

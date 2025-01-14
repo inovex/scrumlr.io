@@ -14,9 +14,6 @@
   transition:
     background-color 80ms ease-in-out,
     color 80ms ease-in-out;
-  box-shadow:
-    0 1px 3px 0 rgba(var(--accent-color--light-rgb), 0.1),
-    0 1px 2px -1px rgba(var(--accent-color--light-rgb), 0.1);
 }
 .vote-button-add:disabled {
   opacity: 0.5;
@@ -40,7 +37,6 @@
   .vote-button-add {
     background-color: rgba(var(--accent-color--dark-rgb), 0.6);
     color: var(--accent-color--dark);
-    filter: drop-shadow(0 3px 4px rgba($navy--900, 0.16));
 
     &:enabled:hover {
       background-color: var(--accent-color--dark);

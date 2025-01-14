@@ -41,6 +41,8 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
       onAnimationEnd={() => {
         setDoBump(false);
       }}
+      dataTooltipId="scrumlr-tooltip"
+      dataTooltipContent={t("Votes.RemoveVote")}
     >
       <span className="vote-button-remove__folded-corner" />
       <Minus className="vote-button-remove__icon" />
