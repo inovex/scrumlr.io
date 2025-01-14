@@ -122,6 +122,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
               className="template-column__description-text-area"
               input={description}
               setInput={setDescription}
+              placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
               embedded
               small
               autoFocus

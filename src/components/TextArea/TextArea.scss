@@ -39,7 +39,7 @@ $height--default: calc(8.75 * $text--base + 2 * $padding--default); // = 172px
   &:focus-within {
     color: $navy--400;
     &::placeholder {
-      color: $navy--400;
+      color: $gray--800;
     }
   }
 
