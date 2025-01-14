@@ -7,6 +7,15 @@ $mini-column-height: 91px;
 .columns-mini-view {
   display: flex;
   flex-direction: row;
+  align-items: center;
+
+  // allow horizontal scroll
+  overflow: auto hidden;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+
+  scrollbar-width: none; // TODO not sure whether to hide, will decide later
 }
 
 .columns-mini-view__column {
@@ -15,6 +24,7 @@ $mini-column-height: 91px;
   align-items: center;
 
   width: $mini-column-width;
+  min-width: $mini-column-width;
   height: $mini-column-height;
 
   border: 2px solid var(--accent-color--light);
