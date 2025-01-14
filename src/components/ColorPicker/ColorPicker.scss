@@ -13,6 +13,12 @@
   margin-top: auto;
   border-radius: $rounded--full;
 
+  // not sure why this doesn't use gap/padding properly in the first place but i'm just gonna override it
+  &--fitted {
+    gap: 4px;
+    padding: 8px;
+  }
+
   &__item {
     display: flex;
     justify-content: center;
@@ -28,6 +34,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      // another override because we actually don't want to use the buttons' width+height as delimitation but padding+gap
+      &--fitted {
+        width: auto;
+        height: auto;
+      }
 
       &:focus-within {
         > .color-picker__color-option {

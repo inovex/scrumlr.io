@@ -14,6 +14,7 @@ type ColorPickerProps = {
   selectColor: (color: Color) => void;
   closeColorPicker: () => void;
 
+  fitted?: boolean; // elements more narrow
   allowVertical?: boolean;
 };
 
@@ -39,14 +40,14 @@ export const ColorPicker = (props: ColorPickerProps) => {
 
   return (
     <ReactFocusLock autoFocus className="fix-focus-lock-placement">
-      <ul className={classNames(props.className, "color-picker", {"color-picker--allow-vertical": props.allowVertical})}>
+      <ul className={classNames(props.className, "color-picker", {"color-picker--allow-vertical": props.allowVertical, "color-picker--fitted": props.fitted})}>
         <li className={`${getColorClassName(props.activeColor)} color-picker__item`}>
           <button
             id={primColorAnchor}
             aria-label={formatColorName(props.activeColor)}
             title={formatColorName(props.activeColor)}
             onClick={() => props.selectColor(props.activeColor)}
-            className="color-picker__item-button"
+            className={classNames("color-picker__item-button", {"color-picker__item-button--fitted": props.fitted})}
           >
             <div className="color-picker__color-option color-picker__color-option--selected" />
           </button>
@@ -62,7 +63,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
                 title={formatColorName(color)}
                 // onMouseDown instead of onClick because onBlur has priority, and it might get closed before firing the event
                 onMouseDown={() => props.selectColor(color)}
-                className={`${color.toString()} color-picker__item-button`}
+                className={classNames(color.toString, "color-picker__item-button", {"color-picker__item-button--fitted": props.fitted})}
               >
                 <div className={`color-picker__color-option color-picker__color-option--${color.toString()}`} />
               </button>

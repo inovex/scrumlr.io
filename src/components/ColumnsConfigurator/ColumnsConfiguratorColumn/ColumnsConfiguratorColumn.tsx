@@ -105,6 +105,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         activeColor={props.column.color}
         selectColor={editColor}
         closeColorPicker={() => setOpenColorPicker(false)}
+        fitted
       />
     ) : (
       <div className="template-column__color" role="button" tabIndex={0} onClick={() => setOpenColorPicker(true)} />
