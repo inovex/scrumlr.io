@@ -95,19 +95,6 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
   // disable delete if only one column remains
   const disableDelete = !(props.allColumns.length > 1);
 
-  const renderColorPicker = () => (
-    <ColorPicker
-      className={classNames("columns-configurator-column__color-picker", `columns-configurator-column__color-picker--column-${props.placement}`)}
-      open={openColorPicker}
-      colors={COLOR_ORDER}
-      activeColor={props.column.color}
-      selectColor={editColor}
-      attemptOpenColorPicker={() => setOpenColorPicker(true)} // always allow to open
-      closeColorPicker={() => setOpenColorPicker(false)}
-      fitted
-    />
-  );
-
   return (
     <div
       className={classNames(
@@ -156,7 +143,16 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             })}
             {...listeners}
           />
-          {renderColorPicker()}
+          <ColorPicker
+            className={classNames("columns-configurator-column__color-picker", `columns-configurator-column__color-picker--column-${props.placement}`)}
+            open={openColorPicker}
+            colors={COLOR_ORDER}
+            activeColor={props.column.color}
+            selectColor={editColor}
+            attemptOpenColorPicker={() => setOpenColorPicker(true)} // always allow to open
+            closeColorPicker={() => setOpenColorPicker(false)}
+            fitted
+          />
           <button
             className={classNames("template-column__button", {"template-column__button--disabled": false})}
             onClick={() => props.editColumn?.(props.column, {visible: !props.column.visible})}
