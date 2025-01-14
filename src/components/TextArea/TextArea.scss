@@ -3,7 +3,7 @@
 $padding--default: 16px;
 $padding--small: 8px;
 
-$height--default: calc(6.5 * $text--base + 2 * $padding--default);
+$height--default: calc(8.75 * $text--base + 2 * $padding--default); // = 172px
 
 .text-area {
   resize: none;
