@@ -5,16 +5,16 @@
   grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
   grid-template-rows:
     $spacing--xs
-    60px // <- dropdown
+    min-content // <- dropdown
     14px
-    auto // <- info
+    min-content // <- info
     16px
-    60px // <- name
+    min-content // <- name
     16px
-    auto // <- description
+    min-content // <- description
     36px
-    auto // <- debug
-    auto // <- columns config
+    min-content // <- debug
+    min-content // <- columns config
     56px
     52px // <- buttons
     $spacing--xs;
@@ -68,6 +68,8 @@
   display: flex;
   align-items: center;
   gap: $spacing--xs;
+
+  height: min-content;
 
   &-icon {
     width: 28px;
@@ -125,18 +127,18 @@
   .template-editor {
     grid-template-rows:
       $spacing--xs
-      60px // <- dropdown
+      min-content // <- dropdown
       14px
-      auto // <- info
+      min-content // <- info
       16px
-      60px // <- name
+      min-content // <- name
       20px
-      auto // <- description
+      min-content // <- description
       46px
-      auto // <- debug
-      auto // <- columns config
+      min-content // <- debug
+      min-content // <- columns config
       16px
-      auto // <- mini columns
+      min-content // <- mini columns
       56px
       52px // <- buttons
       $spacing--xs;
