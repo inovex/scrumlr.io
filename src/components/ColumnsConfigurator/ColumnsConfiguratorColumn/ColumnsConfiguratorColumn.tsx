@@ -15,6 +15,7 @@ import {CSSProperties, useCallback, useEffect, useState} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import "./ColumnsConfiguratorColumn.scss";
+import {useTranslation} from "react-i18next";
 
 type ColumnsConfiguratorColumnProps = {
   className?: string;
@@ -29,6 +30,8 @@ type ColumnsConfiguratorColumnProps = {
 };
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
+  const {t} = useTranslation();
+
   const [openColorPicker, setOpenColorPicker] = useState(false);
   const [editingDescription, setEditingDescription] = useState(false);
   // temporary state for description text as the changes have to be confirmed before applying
@@ -59,14 +62,14 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
   const descriptionConfirmMiniMenu: MiniMenuItem[] = [
     {
       element: <CloseIcon />,
-      label: "Cancel",
+      label: t("Templates.ColumnsConfiguratorColumn.cancel"),
       onClick(): void {
         setEditingDescription(false);
       },
     },
     {
       element: <CheckDoneIcon />,
-      label: "Save",
+      label: t("Templates.ColumnsConfiguratorColumn.save"),
       onClick(): void {
         props.editColumn?.(props.column, {description});
         setEditingDescription(false);
@@ -143,7 +146,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
           </div>
         ) : (
           <div className="template-column__inline-description" role="button" tabIndex={0} onClick={openDescriptionEditor}>
-            {props.column.description ? props.column.description : "Description (optional)"} {/* TODO localization */}
+            {props.column.description ? props.column.description : t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
           </div>
         )}
       </div>

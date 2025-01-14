@@ -36,7 +36,14 @@
       "createTitle": "Create a Template",
       "editTitle": "Edit a Template",
       "cancel": "Cancel",
-      "save": "Save"
+      "saveEdit": "Save",
+      "saveCreate": "Create template"
+    },
+
+    "ColumnsConfiguratorColumn": {
+      "descriptionPlaceholder": "Description (optional)",
+      "save": "Save",
+      "cancel": "Cancel"
     }
   },
   "Sessions": {

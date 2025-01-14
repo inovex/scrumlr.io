@@ -36,7 +36,14 @@
       "create": "Erstelle eine Vorlage",
       "edit": "Bearbeite eine Vorlage",
       "cancel": "Abbrechen",
-      "save": "Speichern"
+      "saveEdit": "Speichern",
+      "saveCreate": "Template erstellen"
+    },
+
+    "ColumnsConfiguratorColumn": {
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
     }
   },
   "Sessions": {

@@ -303,7 +303,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
           {t("Templates.TemplateEditor.cancel")}
         </Button>
         <Button className={classNames("template-editor__button", "template-editor__button--create")} type="primary" icon={<AddIcon />} onClick={saveTemplate}>
-          {t("Templates.TemplateEditor.save")}
+          {t(`Templates.TemplateEditor.save${mode === "create" ? "Create" : "Edit"}`)}
         </Button>
       </div>
     </div>
