@@ -133,6 +133,7 @@ $column-height: 340px;
 
 .template-column__drag-element {
   cursor: grab;
+  touch-action: none; // prevent funky mobile dnd behaviour
 
   &--dragging {
     cursor: grabbing;
