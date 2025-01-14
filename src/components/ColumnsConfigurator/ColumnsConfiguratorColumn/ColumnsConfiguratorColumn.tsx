@@ -95,21 +95,18 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
   // disable delete if only one column remains
   const disableDelete = !(props.allColumns.length > 1);
 
-  const renderColorPicker = () =>
-    openColorPicker ? (
-      // TODO align properly, fix overflow
-      <ColorPicker
-        className={classNames("columns-configurator-column__color-picker", `columns-configurator-column__color-picker--column-${props.placement}`)}
-        open={openColorPicker}
-        colors={COLOR_ORDER}
-        activeColor={props.column.color}
-        selectColor={editColor}
-        closeColorPicker={() => setOpenColorPicker(false)}
-        fitted
-      />
-    ) : (
-      <div className="template-column__color" role="button" tabIndex={0} onClick={() => setOpenColorPicker(true)} />
-    );
+  const renderColorPicker = () => (
+    <ColorPicker
+      className={classNames("columns-configurator-column__color-picker", `columns-configurator-column__color-picker--column-${props.placement}`)}
+      open={openColorPicker}
+      colors={COLOR_ORDER}
+      activeColor={props.column.color}
+      selectColor={editColor}
+      attemptOpenColorPicker={() => setOpenColorPicker(true)} // always allow to open
+      closeColorPicker={() => setOpenColorPicker(false)}
+      fitted
+    />
+  );
 
   return (
     <div

@@ -77,6 +77,8 @@
   background-color: var(--accent-color--400);
   border: 3px solid $gray--300;
 
+  cursor: pointer;
+
   &--selected {
     background-color: var(--accent-color--400);
     border: 3px solid var(--accent-color--200);

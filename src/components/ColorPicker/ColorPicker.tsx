@@ -12,6 +12,7 @@ type ColorPickerProps = {
   colors: Color[];
   activeColor: Color;
   selectColor: (color: Color) => void;
+  attemptOpenColorPicker?: () => void; // get fired if color picker is closed and is clicked
   closeColorPicker: () => void;
 
   fitted?: boolean; // elements more narrow
@@ -35,7 +36,15 @@ export const ColorPicker = (props: ColorPickerProps) => {
   }, [props]);
 
   if (!props.open) {
-    return <span className="color-picker__color-option color-picker__color-option--selected" />;
+    return (
+      <span
+        className="color-picker__color-option color-picker__color-option--selected"
+        aria-label={`current color${formatColorName(props.activeColor)}`}
+        tabIndex={0}
+        role="button"
+        onClick={props.attemptOpenColorPicker}
+      />
+    );
   }
 
   return (
