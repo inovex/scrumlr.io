@@ -139,16 +139,6 @@ $column-height: 340px;
   }
 }
 
-.template-column__color {
-  width: 24px;
-  height: 24px;
-  border: 3px solid var(--accent-color--200);
-  border-radius: $rounded--full;
-  background-color: var(--accent-color--light);
-
-  cursor: pointer;
-}
-
 // TODO subject to change with column
 .columns-configurator-column__color-picker {
   position: absolute;
@@ -187,9 +177,5 @@ $column-height: 340px;
       background-color: rgba(var(--accent-color--200-rgb, 0.5));
       border-color: var(--accent-color--dark);
     }
-  }
-
-  .template-column__color {
-    background-color: var(--accent-color--dark);
   }
 }
