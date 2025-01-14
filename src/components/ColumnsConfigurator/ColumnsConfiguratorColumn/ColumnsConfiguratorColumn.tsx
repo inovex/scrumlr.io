@@ -130,7 +130,15 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         <input className="template-column__name" value={props.column.name} onInput={(e) => props.editColumn?.(props.column, {name: e.currentTarget.value})} />
         {editingDescription ? (
           <div className="template-column__description-wrapper">
-            <TextArea className="template-column__description-text-area" input={description} setInput={setDescription} embedded small autoFocus />
+            <TextArea
+              className="template-column__description-text-area"
+              input={description}
+              setInput={setDescription}
+              embedded
+              small
+              autoFocus
+              onBlur={() => setEditingDescription(false)}
+            />
             <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
           </div>
         ) : (
