@@ -39,7 +39,7 @@ export const Timer = (props: TimerProps) => {
   const boardId = useAppSelector((state) => state.board.data!.id);
   const me = useAppSelector((state) => state.participants?.self);
 
-  const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/timer_finished.mp3`, {volume: 0.5, interrupt: true});
+  const [playTimesUpSound, {sound: timesUpSoundObject}] = useSound(`${process.env.PUBLIC_URL}/assets/timer_finished.mp3`, {volume: 0.5, interrupt: true});
   const [timeLeft, setTimeLeft] = useState<{h: number; m: number; s: number}>(TimerUtils.calculateTimeLeft(props.endTime));
   const [elapsedTimePercentage, setElapsedTimePercentage] = useState<number>(TimerUtils.calculateElapsedTimePercentage(props.startTime, props.endTime));
   const [timesUpShouldPlay, setTimesUpShouldPlay] = useState(false);
