@@ -30,6 +30,7 @@ import classNames from "classnames";
 import {Button} from "components/Button";
 import {useNavigate, useParams} from "react-router";
 import {arrayMove} from "@dnd-kit/sortable";
+import {TemplatesNavigationState} from "../Templates";
 import "./TemplateEditor.scss";
 
 // todo maybe just change the translation keys to AccessPolicy => lowercase
@@ -184,7 +185,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
       // create and go back on success
       dispatch(createTemplateWithColumns(newTemplateWithColumns))
         .unwrap()
-        .then(() => navigate("/boards/templates"));
+        .then(() => navigate("/boards/templates", {state: {scrollToSaved: true} as TemplatesNavigationState}));
     } else if (mode === "edit") {
       // collect which columns to create/edit/delete by comparing to current (store)
       const columnsToBeCreated = editableTemplateColumns.filter((column) => column.mode === "create");
@@ -209,7 +210,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
       const deleteColumnsDispatches = columnsToBeDeleted.map((col) => dispatch(deleteTemplateColumn({templateId, columnId: col.id})));
 
       Promise.all([editTemplateDispatch, ...createColumnsDispatches, ...editColumnsDispatches, ...deleteColumnsDispatches]).then(() => {
-        navigate("/boards/templates");
+        navigate("/boards/templates", {state: {scrollToSaved: true} as TemplatesNavigationState});
       });
     }
   };
