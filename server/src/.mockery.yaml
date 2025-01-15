@@ -8,6 +8,9 @@ issue-845-fix: true
 packages:
   # configuration on package level
   scrumlr.io/server/services:
-    config:
-      # generate for all interfaces in services a mock (for example: mock_Boards)
-      all: true
+    # configuration on interface level
+    interfaces:
+      Boards:
+        all: true
+      BoardSessions:
+        all: true
