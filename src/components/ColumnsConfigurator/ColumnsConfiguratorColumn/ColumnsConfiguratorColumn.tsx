@@ -115,7 +115,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     >
       <div className="template-column__name-wrapper">
         <input
-          className="template-column__name"
+          className={classNames("template-column__name", {"template-column__name--editing": editingDescription !== "closed"})}
           value={name}
           onFocus={() => setEditingDescription("nameFirst")}
           onInput={(e) => setName(e.currentTarget.value)}

@@ -93,7 +93,8 @@ $column-height: 340px;
     // color: $navy--400;
   }
 
-  &:focus {
+  // not only when focused, but also when description is being edited
+  &--editing {
     border-bottom-style: dashed; // TODO dash spacing
   }
 }
