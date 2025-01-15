@@ -70,7 +70,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
       <input
         className={classNames("column-configurator-column-name-details__name", {"column-configurator-column-name-details__name--editing": props.openState !== "closed"})}
         value={name}
-        placeholder="todo placeholder"
+        placeholder={t("Templates.ColumnsConfiguratorColumn.namePlaceholder")}
         onInput={(e) => setName(e.currentTarget.value)}
         onFocus={() => props.setOpenState("nameFirst")}
         onBlur={handleBlurNameWrapperContents}

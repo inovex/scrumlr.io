@@ -41,6 +41,7 @@
     },
 
     "ColumnsConfiguratorColumn": {
+      "namePlaceholder": "Name",
       "descriptionPlaceholder": "Beschreibung (optional)",
       "save": "Speichern",
       "cancel": "Abbrechen"
