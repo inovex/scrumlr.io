@@ -570,8 +570,10 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   role="none"
                 >
                   <button
+                    aria-label="Remove vote"
                     class="dot-button vote-button-remove"
-                    title="Remove vote"
+                    data-tooltip-content="Remove vote"
+                    data-tooltip-id="scrumlr-tooltip"
                   >
                     <span
                       class="vote-button-remove__folded-corner"
@@ -588,9 +590,11 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     </span>
                   </button>
                   <button
+                    aria-label="Multiple votes are not allowed"
                     class="dot-button vote-button-add"
+                    data-tooltip-content="Multiple votes are not allowed"
+                    data-tooltip-id="scrumlr-tooltip"
                     disabled=""
-                    title="Add vote"
                   >
                     <svg
                       class="vote-button-add__icon"
@@ -1151,8 +1155,10 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   role="none"
                 >
                   <button
+                    aria-label="Add vote"
                     class="dot-button vote-button-add"
-                    title="Add vote"
+                    data-tooltip-content="Add vote"
+                    data-tooltip-id="scrumlr-tooltip"
                   >
                     <svg
                       class="vote-button-add__icon"

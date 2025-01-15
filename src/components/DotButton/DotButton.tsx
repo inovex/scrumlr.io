@@ -6,7 +6,6 @@ type DotButtonProps = {
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
-  title?: string;
   onAnimationEnd?: () => void;
   dataTooltipId?: string;
   dataTooltipContent?: string;
@@ -20,7 +19,7 @@ export const DotButton: FC<PropsWithChildren<DotButtonProps>> = (props) => (
       e.stopPropagation();
       props.onClick?.();
     }}
-    title={props.title}
+    aria-label={props.dataTooltipContent}
     onAnimationEnd={props.onAnimationEnd}
     data-tooltip-id={props.dataTooltipId}
     data-tooltip-content={props.dataTooltipContent}
