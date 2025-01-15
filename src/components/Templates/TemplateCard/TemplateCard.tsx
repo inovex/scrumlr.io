@@ -43,6 +43,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   };
 
   const deleteTemplateAndColumns = () => {
+    setShowMiniMenu(false); // close menu manually, because it stays open for some reason
     dispatch(deleteTemplate({id: template.template.id}));
   };
 
