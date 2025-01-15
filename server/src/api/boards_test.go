@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"github.com/go-chi/chi/v5"
@@ -13,60 +12,11 @@ import (
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/mocks/services"
 	"strings"
 	"testing"
 	"time"
 )
-
-func (m *BoardMock) Create(ctx context.Context, req dto.CreateBoardRequest) (*dto.Board, error) {
-	args := m.Called(req)
-	return args.Get(0).(*dto.Board), args.Error(1)
-}
-
-func (m *BoardMock) Delete(ctx context.Context, boardID uuid.UUID) error {
-	args := m.Called(boardID)
-	return args.Error(0)
-}
-
-func (m *BoardMock) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, userID uuid.UUID) ([]*dto.BoardOverview, error) {
-	args := m.Called(boardIDs, userID)
-	return args.Get(0).([]*dto.BoardOverview), args.Error(1)
-}
-
-func (m *BoardMock) Get(ctx context.Context, boardID uuid.UUID) (*dto.Board, error) {
-	args := m.Called(boardID)
-	return args.Get(0).(*dto.Board), args.Error(1)
-}
-
-func (m *BoardMock) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
-	args := m.Called(userID)
-	return args.Get(0).([]uuid.UUID), args.Error(1)
-}
-
-func (m *BoardMock) Update(ctx context.Context, req dto.BoardUpdateRequest) (*dto.Board, error) {
-	args := m.Called(req)
-	return args.Get(0).(*dto.Board), args.Error(1)
-}
-
-func (m *BoardMock) SetTimer(ctx context.Context, boardID uuid.UUID, minutes uint8) (*dto.Board, error) {
-	args := m.Called(boardID, minutes)
-	return args.Get(0).(*dto.Board), args.Error(1)
-}
-
-func (m *BoardMock) DeleteTimer(ctx context.Context, boardID uuid.UUID) (*dto.Board, error) {
-	args := m.Called(boardID)
-	return args.Get(0).(*dto.Board), args.Error(1)
-}
-
-func (m *BoardMock) IncrementTimer(ctx context.Context, boardID uuid.UUID) (*dto.Board, error) {
-	args := m.Called(boardID)
-	return args.Get(0).(*dto.Board), args.Error(1)
-}
-
-func (m *BoardMock) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.Board, []*dto.BoardSessionRequest, []*dto.BoardSession, []*dto.Column, []*dto.Note, []*dto.Reaction, []*dto.Voting, []*dto.Vote, error) {
-	args := m.Called(boardID)
-	return args.Get(0).(*dto.Board), args.Get(1).([]*dto.BoardSessionRequest), args.Get(2).([]*dto.BoardSession), args.Get(3).([]*dto.Column), args.Get(4).([]*dto.Note), args.Get(5).([]*dto.Reaction), args.Get(6).([]*dto.Voting), args.Get(7).([]*dto.Vote), args.Error(8)
-}
 
 type BoardTestSuite struct {
 	suite.Suite
@@ -76,42 +26,62 @@ func TestBoardTestSuite(t *testing.T) {
 	suite.Run(t, new(BoardTestSuite))
 }
 
-func (suite *BoardTestSuite) TestCreateBoard() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successfully create board",
-			expectedCode: http.StatusCreated,
-			err:          nil,
-		},
-		{
-			name:         "Failed creating board",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New("failed to create board"),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not create board",
-			},
-		},
+func (suite *BoardTestSuite) createBoard(boardName *string, boardDescription *string, accessPolicy types.AccessPolicy, passphrase *string, salt *string) *dto.Board {
+	return &dto.Board{
+		ID:                    uuid.New(),
+		Name:                  boardName,
+		Description:           boardDescription,
+		AccessPolicy:          accessPolicy,
+		ShowAuthors:           true,
+		ShowNotesOfOtherUsers: true,
+		ShowNoteReactions:     true,
+		AllowStacking:         true,
+		IsLocked:              true,
+		TimerStart:            nil,
+		TimerEnd:              nil,
+		SharedNote:            uuid.NullUUID{},
+		ShowVoting:            uuid.NullUUID{},
+		Passphrase:            passphrase,
+		Salt:                  salt,
 	}
+}
 
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
+func (suite *BoardTestSuite) TestCreateBoard() {
+
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successfully create board", http.StatusCreated, nil, false, false, nil).
+		Append("Failed creating board", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New("failed to create board"),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not create board",
+		}, false, false, nil)
+
+	for _, te := range testParameterBundles {
+		suite.Run(te.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			s.boards = mock
+			boardMock := services.NewMockBoards(suite.T())
+
+			s.boards = boardMock
 			accessPolicy := types.AccessPolicyPublic
 			visible := true
-			ownerID, _ := uuid.NewRandom()
 			colName := "Lean Coffee"
 			color := types.Color("backlog-blue")
-			boardID, _ := uuid.NewRandom()
+			ownerID := uuid.New()
 
-			mock.On("Create", dto.CreateBoardRequest{
+			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(` {
+       "accessPolicy": "%s",
+       "columns": [
+         {
+           "name": "%s",
+           "visible": %v,
+           "color": "%s"
+         }
+       ]
+      }`, accessPolicy, colName, visible, color))).
+				AddToContext(identifiers.UserIdentifier, ownerID)
+
+			boardMock.EXPECT().Create(req.req.Context(), dto.CreateBoardRequest{
 				Name:         nil,
 				Description:  nil,
 				AccessPolicy: accessPolicy,
@@ -127,167 +97,83 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 					},
 				},
 				Owner: ownerID,
-			}).Return(&dto.Board{
-				ID:                    boardID,
-				Name:                  nil,
-				Description:           nil,
-				AccessPolicy:          accessPolicy,
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            nil,
-				Salt:                  nil,
-			}, tt.err)
-
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(` {
-       "accessPolicy": "%s",
-       "columns": [
-         {
-           "name": "%s",
-           "visible": %v,
-           "color": "%s"
-         }
-       ]
-      }`, accessPolicy, colName, visible, color))).
-				AddToContext(identifiers.UserIdentifier, ownerID)
+			}).Return(suite.createBoard(nil, nil, accessPolicy, nil, nil), te.err)
 
 			rr := httptest.NewRecorder()
 
 			s.createBoard(rr, req.Request())
 
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			boardMock.AssertExpectations(suite.T())
 		})
 	}
 }
 
 func (suite *BoardTestSuite) TestDeleteBoard() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successfully deleted board",
-			expectedCode: http.StatusNoContent,
-			err:          nil,
-		},
-		{
-			name:         "Failed deleting board",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New("failed to delete board"),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not delete board",
-			},
-		},
-	}
 
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successfully deleted board", http.StatusNoContent, nil, false, false, nil).
+		Append("Failed deleting board", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New("failed to delete board"),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not delete board",
+		}, false, false, nil)
+
+	for _, te := range testParameterBundles {
+		suite.Run(te.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			s.boards = mock
-
-			boardID, _ := uuid.NewRandom()
-
-			mock.On("Delete", boardID).Return(tt.err)
+			boardMock := services.NewMockBoards(suite.T())
+			s.boards = boardMock
+			boardID := uuid.New()
 
 			req := NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
+			boardMock.EXPECT().Delete(req.req.Context(), boardID).Return(te.err)
 
 			rr := httptest.NewRecorder()
 
 			s.deleteBoard(rr, req.Request())
 
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			boardMock.AssertExpectations(suite.T())
 		})
 	}
 }
 
 func (suite *BoardTestSuite) TestGetBoards() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successfully received boards",
-			expectedCode: http.StatusOK,
-			err:          nil,
-		},
-		{
-			name:         "Failed receiving boards",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New("failed to receive boards"),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not receive boards",
-			},
-		},
-	}
 
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successfully received boards", http.StatusOK, nil, false, false, nil).
+		Append("Failed receiving boards", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New("failed to receive boards"),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not receive boards",
+		}, false, false, nil)
+
+	for _, te := range testParameterBundles {
+		suite.Run(te.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			s.boards = mock
-
-			userID, _ := uuid.NewRandom()
+			boardMock := services.NewMockBoards(suite.T())
+			s.boards = boardMock
+			userID := uuid.New()
 
 			boardName := "Test Name"
 			boardDescription := "Test Description"
-			firstBoard := &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          "",
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            nil,
-				Salt:                  nil,
-			}
+			firstBoard := suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)
 
 			boardName = "Test Board"
 			boardDescription = "Description for second board"
-			secondBoard := &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          "",
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            nil,
-				Salt:                  nil,
-			}
+			secondBoard := suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)
 			boardIDs := []uuid.UUID{firstBoard.ID, secondBoard.ID}
 
-			mock.On("GetBoards", userID).Return(boardIDs, tt.err)
-			if tt.err == nil {
-				mock.On("BoardOverview", boardIDs, userID).Return([]*dto.BoardOverview{{
+			req := NewTestRequestBuilder("POST", "/", nil).
+				AddToContext(identifiers.UserIdentifier, userID)
+
+			boardMock.EXPECT().GetBoards(req.req.Context(), userID).Return(boardIDs, te.err)
+			if te.err == nil {
+				boardMock.EXPECT().BoardOverview(req.req.Context(), boardIDs, userID).Return([]*dto.BoardOverview{{
 					Board:        firstBoard,
 					Columns:      1,
 					CreatedAt:    time.Time{},
@@ -299,84 +185,52 @@ func (suite *BoardTestSuite) TestGetBoards() {
 						CreatedAt:    time.Time{},
 						Participants: 4,
 					},
-				}, tt.err)
+				}, te.err)
 			}
-
-			req := NewTestRequestBuilder("POST", "/", nil).
-				AddToContext(identifiers.UserIdentifier, userID)
 
 			rr := httptest.NewRecorder()
 
 			s.getBoards(rr, req.Request())
 
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			boardMock.AssertExpectations(suite.T())
 		})
 	}
 }
 
 func (suite *BoardTestSuite) TestGetBoard() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successfully received boards",
-			expectedCode: http.StatusOK,
-			err:          nil,
-		},
-		{
-			name:         "Failed receiving boards",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New("failed to receive boards"),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not receive boards",
-			},
-		},
-	}
 
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successfully received boards", http.StatusOK, nil, false, false, nil).
+		Append("Failed receiving boards", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New("failed to receive boards"),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not receive boards",
+		}, false, false, nil)
+
+	for _, te := range testParameterBundles {
+		suite.Run(te.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			s.boards = mock
-
-			boardID, _ := uuid.NewRandom()
+			boardMock := services.NewMockBoards(suite.T())
+			s.boards = boardMock
+			boardID := uuid.New()
 
 			boardName := "Test Name"
 			boardDescription := "Test Description"
-			board := &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          "",
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            nil,
-				Salt:                  nil,
-			}
-
-			mock.On("Get", boardID).Return(board, tt.err)
+			board := suite.createBoard(&boardName, &boardDescription, "", nil, nil)
 
 			req := NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
+
+			boardMock.EXPECT().Get(req.req.Context(), boardID).Return(board, te.err)
 
 			rr := httptest.NewRecorder()
 
 			s.getBoard(rr, req.Request())
 
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			boardMock.AssertExpectations(suite.T())
 		})
 	}
 }
@@ -387,189 +241,29 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 	salt := "z9YcpBno6azI2ueA"
 	passphrase := common.Sha512BySalt("123", salt)
 
-	tests := []struct {
-		name                 string
-		expectedCode         int
-		err                  error
-		sessionExists        bool
-		sessionRequestExists bool
-		board                *dto.Board
-	}{
-		{
-			name:          "Successfully join board",
-			expectedCode:  http.StatusSeeOther,
-			err:           nil,
-			sessionExists: true,
-			board: &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          types.AccessPolicyPublic,
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            nil,
-				Salt:                  nil,
-			},
-		},
-		{
-			name:         "Failed joining board",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successfully join board", http.StatusSeeOther, nil, true, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)).
+		Append("Failed joining board", http.StatusInternalServerError,
+			&common.APIError{
 				Err:        errors.New("failed to join board"),
 				StatusCode: http.StatusInternalServerError,
 				StatusText: "no",
 				ErrorText:  "Could not join board",
-			},
-			sessionExists: true,
-			board: &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          types.AccessPolicyPublic,
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            nil,
-				Salt:                  nil,
-			},
-		},
-		{
-			name:          "Successfully joined board without session",
-			expectedCode:  http.StatusCreated,
-			err:           nil,
-			sessionExists: false,
-			board: &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          types.AccessPolicyPublic,
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            nil,
-				Salt:                  nil,
-			},
-		}, {
-			name:          "Successfully joined board with passphrase",
-			expectedCode:  http.StatusCreated,
-			err:           nil,
-			sessionExists: false,
-			board: &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          types.AccessPolicyByPassphrase,
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            &passphrase,
-				Salt:                  &salt,
-			},
-		},
-		{
-			name:          "Successfully join board by invite with existing session request",
-			expectedCode:  http.StatusSeeOther,
-			err:           nil,
-			sessionExists: false,
-			board: &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          types.AccessPolicyByInvite,
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            &passphrase,
-				Salt:                  &salt,
-			},
-			sessionRequestExists: true,
-		},
-		{
-			name:          "Successfully join board by invite with existing session request",
-			expectedCode:  http.StatusSeeOther,
-			err:           nil,
-			sessionExists: false,
-			board: &dto.Board{
-				ID:                    uuid.New(),
-				Name:                  &boardName,
-				Description:           &boardDescription,
-				AccessPolicy:          types.AccessPolicyByInvite,
-				ShowAuthors:           true,
-				ShowNotesOfOtherUsers: true,
-				ShowNoteReactions:     true,
-				AllowStacking:         true,
-				IsLocked:              true,
-				TimerStart:            nil,
-				TimerEnd:              nil,
-				SharedNote:            uuid.NullUUID{},
-				ShowVoting:            uuid.NullUUID{},
-				Passphrase:            &passphrase,
-				Salt:                  &salt,
-			},
-			sessionRequestExists: false,
-		},
-	}
+			}, true, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)).
+		Append("Successfully joined board without session", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)).
+		Append("Successfully joined board with passphrase", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyByPassphrase, &passphrase, &salt)).
+		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, true, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyByInvite, &passphrase, &salt)).
+		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyByInvite, &passphrase, &salt))
 
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
+	for _, te := range testParameterBundles {
+		suite.Run(te.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			sessionMock := new(SessionsMock)
-			s.boards = mock
+			boardMock := services.NewMockBoards(suite.T())
+			sessionMock := services.NewMockBoardSessions(suite.T())
+			s.boards = boardMock
 			s.sessions = sessionMock
-
-			boardID, _ := uuid.NewRandom()
-			userID, _ := uuid.NewRandom()
-			sessionMock.On("SessionExists", boardID, userID).Return(tt.sessionExists, nil)
-			if tt.sessionExists {
-				sessionMock.On("ParticipantBanned", boardID, userID).Return(false, tt.err)
-			} else {
-				//sessionMock.On("SessionExists", boardID, userID).Return(false, nil)
-				mock.On("Get", boardID).Return(tt.board, tt.err)
-			}
-
-			if tt.board.AccessPolicy == types.AccessPolicyByInvite {
-				sessionMock.On("SessionRequestExists", boardID, userID).Return(tt.sessionRequestExists, tt.err)
-				if !tt.sessionRequestExists {
-					sessionMock.On("CreateSessionRequest", boardID, userID).Return(new(dto.BoardSessionRequest), tt.err)
-				}
-			} else {
-				if !tt.sessionExists {
-					sessionMock.On("Create", boardID, userID).Return(new(dto.BoardSession), tt.err)
-				}
-
-			}
+			boardID := uuid.New()
+			userID := uuid.New()
 
 			req := NewTestRequestBuilder("POST", fmt.Sprintf("/%s", boardID), strings.NewReader(`{"passphrase": "123"}`)).
 				AddToContext(identifiers.UserIdentifier, userID)
@@ -577,49 +271,57 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)
 
+			sessionMock.EXPECT().SessionExists(req.req.Context(), boardID, userID).Return(te.sessionExists, nil)
+
+			if te.sessionExists {
+				sessionMock.EXPECT().ParticipantBanned(req.req.Context(), boardID, userID).Return(false, te.err)
+			} else {
+				boardMock.EXPECT().Get(req.req.Context(), boardID).Return(te.board, te.err)
+			}
+
+			if te.board.AccessPolicy == types.AccessPolicyByInvite {
+				sessionMock.EXPECT().SessionRequestExists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
+				if !te.sessionRequestExists {
+					sessionMock.EXPECT().CreateSessionRequest(req.req.Context(), boardID, userID).Return(new(dto.BoardSessionRequest), te.err)
+				}
+			} else {
+				if !te.sessionExists {
+					sessionMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(dto.BoardSession), te.err)
+				}
+
+			}
+
 			rr := httptest.NewRecorder()
 
 			s.joinBoard(rr, req.Request())
 
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			boardMock.AssertExpectations(suite.T())
 			sessionMock.AssertExpectations(suite.T())
 		})
 	}
 }
 
 func (suite *BoardTestSuite) TestUpdateBoards() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successfully updated boards",
-			expectedCode: http.StatusOK,
-			err:          nil,
-		},
-		{
-			name:         "Failed updating board",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New("failed to update board"),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not update board",
-			},
-		},
-	}
 
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successfully updated boards", http.StatusOK, nil, false, false, nil).
+		Append("Failed updating board", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New("failed to update board"),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not update board",
+		}, false, false, nil)
+
+	for _, te := range testParameterBundles {
+		suite.Run(te.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			s.boards = mock
+			boardMock := services.NewMockBoards(suite.T())
+			s.boards = boardMock
+			boardID := uuid.New()
 
 			newName := "UpdatedName"
 			newDescription := "UpdatedDescription"
-			boardID, _ := uuid.NewRandom()
 			accessPolicy := types.AccessPolicyPublic
 			boardReq := dto.BoardUpdateRequest{
 				Name:         &newName,
@@ -627,8 +329,6 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
 				AccessPolicy: &accessPolicy,
 				ID:           boardID,
 			}
-
-			mock.On("Update", boardReq).Return(new(dto.Board), tt.err)
 
 			req := NewTestRequestBuilder("PUT", fmt.Sprintf("/%s", boardID), strings.NewReader(fmt.Sprintf(`{
         "id": "%s",
@@ -638,152 +338,115 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
       }`, boardID, newName, newDescription))).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
+			boardMock.EXPECT().Update(req.req.Context(), boardReq).Return(new(dto.Board), te.err)
+
 			rr := httptest.NewRecorder()
 
 			s.updateBoard(rr, req.Request())
 
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			boardMock.AssertExpectations(suite.T())
 		})
 	}
 }
 
 func (suite *BoardTestSuite) TestSetTimer() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successfully set timer",
-			expectedCode: http.StatusOK,
-			err:          nil,
-		},
-		{
-			name:         "Failed set timer",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New("failed to set timer"),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not set timer",
-			},
-		},
-	}
 
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successfully set timer", http.StatusOK, nil, false, false, nil).
+		Append("Failed set timer", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New("failed to set timer"),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not set timer",
+		}, false, false, nil)
+
+	for _, te := range testParameterBundles {
+		suite.Run(te.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			s.boards = mock
-
-			boardID, _ := uuid.NewRandom()
+			boardMock := services.NewMockBoards(suite.T())
+			s.boards = boardMock
+			boardID := uuid.New()
 
 			minutes := uint8(4)
 
-			mock.On("SetTimer", boardID, minutes).Return(new(dto.Board), tt.err)
-
 			req := NewTestRequestBuilder("PUT", "/timer", strings.NewReader(fmt.Sprintf(`{"minutes": %d}`, minutes))).
 				AddToContext(identifiers.BoardIdentifier, boardID)
+
+			boardMock.EXPECT().SetTimer(req.req.Context(), boardID, minutes).Return(new(dto.Board), te.err)
 
 			rr := httptest.NewRecorder()
 
 			s.setTimer(rr, req.Request())
 
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			suite.Equal(te.expectedCode, rr.Result().StatusCode)
+			boardMock.AssertExpectations(suite.T())
 		})
 	}
 }
 
 func (suite *BoardTestSuite) TestDeleteTimer() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successfully deleted timer",
-			expectedCode: http.StatusOK,
-			err:          nil,
-		},
-		{
-			name:         "Failed deleting timer",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New("failed to delete timer"),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not delete timer",
-			},
-		},
-	}
 
-	for _, tt := range tests {
+	testParameterBundles := TestParameterBundles{}.
+		Append("Successfully deleted timer", http.StatusOK, nil, false, false, nil).
+		Append("Failed deleting timer", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New("failed to delete timer"),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not delete timer",
+		}, false, false, nil)
+
+	for _, tt := range *testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			s.boards = mock
-
-			boardID, _ := uuid.NewRandom()
-
-			mock.On("DeleteTimer", boardID).Return(new(dto.Board), tt.err)
+			boardMock := services.NewMockBoards(suite.T())
+			s.boards = boardMock
+			boardID := uuid.New()
 
 			req := NewTestRequestBuilder("DEL", "/timer", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
+
+			boardMock.EXPECT().DeleteTimer(req.req.Context(), boardID).Return(new(dto.Board), tt.err)
 
 			rr := httptest.NewRecorder()
 
 			s.deleteTimer(rr, req.Request())
 
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			boardMock.AssertExpectations(suite.T())
 		})
 	}
 }
 
 func (suite *BoardTestSuite) TestIncrementTimer() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successfully increment timer",
-			expectedCode: http.StatusOK,
-			err:          nil,
-		},
-		{
-			name:         "Failed incrementing timer",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New("failed to increment timer"),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not increment timer",
-			},
-		},
-	}
 
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successfully increment timer", http.StatusOK, nil, false, false, nil).
+		Append("Failed incrementing timer", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New("failed to increment timer"),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not increment timer",
+		}, false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			mock := new(BoardMock)
-			s.boards = mock
-
-			boardID, _ := uuid.NewRandom()
-
-			mock.On("IncrementTimer", boardID).Return(new(dto.Board), tt.err)
+			boardMock := services.NewMockBoards(suite.T())
+			s.boards = boardMock
+			boardID := uuid.New()
 
 			req := NewTestRequestBuilder("POST", "/timer/increment", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
+
+			boardMock.EXPECT().IncrementTimer(req.req.Context(), boardID).Return(new(dto.Board), tt.err)
 
 			rr := httptest.NewRecorder()
 
 			s.incrementTimer(rr, req.Request())
 
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			boardMock.AssertExpectations(suite.T())
 		})
 	}
 }
