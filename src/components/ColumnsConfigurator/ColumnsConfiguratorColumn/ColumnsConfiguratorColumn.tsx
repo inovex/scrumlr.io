@@ -28,7 +28,7 @@ type ColumnsConfiguratorColumnProps = {
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
   // const {t} = useTranslation();
 
-  const [nameDetailsOpen, setNameDetailsOpen] = useState<"closed" | "nameFirst" | "descriptionFirst">("closed");
+  const [titleEditState, setTitleEditState] = useState<"closed" | "nameFirst" | "descriptionFirst">("closed");
   const [openColorPicker, setOpenColorPicker] = useState(false);
 
   const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: props.column.id});
@@ -89,12 +89,12 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         className="columns-configurator-column__name-details"
         name={props.column.name}
         description={props.column.description}
-        openState={nameDetailsOpen}
-        setOpenState={setNameDetailsOpen}
+        openState={titleEditState}
+        setOpenState={setTitleEditState}
         updateColumnTitle={(name, description) => props.editColumn?.(props.column, {name, description})}
       />
       {/* TODO title and description are editable as one thing, can tab, show with timeout before saving. */}
-      {nameDetailsOpen === "closed" && (
+      {titleEditState === "closed" && (
         <div className="columns-configurator-column__menu">
           <DnDIcon
             className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--dnd", "columns-configurator-column__drag-element", {
