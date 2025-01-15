@@ -1,6 +1,6 @@
 import TextareaAutosize from "react-autosize-textarea";
 import classNames from "classnames";
-import {Dispatch, FormEvent, SetStateAction} from "react";
+import {Dispatch, FormEvent, ForwardedRef, forwardRef, SetStateAction} from "react";
 import "./TextArea.scss";
 
 type TextAreaProps = {
@@ -22,11 +22,13 @@ type TextAreaProps = {
   onBlur?: () => void;
 };
 
-export const TextArea = (props: TextAreaProps) => {
+// TODO forwardRef is deprecated in React 19, gotta change this bit here when we update
+export const TextArea = forwardRef((props: TextAreaProps, ref: ForwardedRef<HTMLTextAreaElement>) => {
   const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput(e.currentTarget.value);
 
   return (
     <TextareaAutosize
+      ref={ref}
       className={classNames(props.className, "text-area", {"text-area--extendable": props.extendable, "text-area--embedded": props.embedded, "text-area--small": props.small})}
       value={props.input}
       onInput={updateInput}
@@ -38,4 +40,4 @@ export const TextArea = (props: TextAreaProps) => {
       onPointerLeaveCapture={undefined}
     />
   );
-};
+});
