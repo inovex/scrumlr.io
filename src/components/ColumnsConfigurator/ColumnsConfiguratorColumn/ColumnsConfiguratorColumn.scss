@@ -3,7 +3,7 @@
 $column-width: 158px;
 $column-height: 340px;
 
-.template-column {
+.columns-configurator-column {
   display: flex;
   flex-direction: column;
   gap: $spacing--md;
@@ -57,7 +57,7 @@ $column-height: 340px;
   }
 }
 
-.template-column__menu {
+.columns-configurator-column__menu {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -65,7 +65,7 @@ $column-height: 340px;
   align-items: center;
 }
 
-.template-column__icon {
+.columns-configurator-column__icon {
   width: $icon--large;
   height: $icon--large;
 
@@ -75,7 +75,7 @@ $column-height: 340px;
   }
 }
 
-.template-column__drag-element {
+.columns-configurator-column__drag-element {
   cursor: grab;
   touch-action: none; // prevent funky mobile dnd behaviour
 
@@ -97,7 +97,7 @@ $column-height: 340px;
   }
 }
 
-.template-column__button {
+.columns-configurator-column__button {
   all: unset;
   cursor: pointer;
   max-width: $icon--large;
@@ -110,7 +110,7 @@ $column-height: 340px;
 }
 
 [theme="dark"] {
-  .template-column {
+  .columns-configurator-column {
     border-color: var(--accent-color--dark);
 
     &--active-drag {

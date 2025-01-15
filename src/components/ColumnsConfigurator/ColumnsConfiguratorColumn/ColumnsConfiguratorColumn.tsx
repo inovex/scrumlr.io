@@ -10,8 +10,8 @@ import {useSortable} from "@dnd-kit/sortable";
 import {CSSProperties, useCallback, useEffect, useState} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
-import "./ColumnsConfiguratorColumn.scss";
 import {ColumnConfiguratorColumnNameDetails} from "./ColumnConfiguratorColumnNameDetails/ColumnConfiguratorColumnNameDetails";
+import "./ColumnsConfiguratorColumn.scss";
 
 type ColumnsConfiguratorColumnProps = {
   className?: string;
@@ -70,14 +70,14 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     <div
       className={classNames(
         props.className,
-        "template-column",
-        `template-column--border-${props.placement ?? "ghost"}`,
+        "columns-configurator-column",
+        `columns-configurator-column--border-${props.placement ?? "ghost"}`,
         {
-          "template-column--even": props.index % 2 === 0,
-          "template-column--odd": props.index % 2 !== 0,
-          "template-column--hidden": !props.column.visible,
-          "template-column--active-drag": props.activeDrag,
-          "template-column--active-drop": props.activeDrop,
+          "columns-configurator-column--even": props.index % 2 === 0,
+          "columns-configurator-column--odd": props.index % 2 !== 0,
+          "columns-configurator-column--hidden": !props.column.visible,
+          "columns-configurator-column--active-drag": props.activeDrag,
+          "columns-configurator-column--active-drop": props.activeDrop,
         },
         getColorClassName(props.column.color)
       )}
@@ -86,7 +86,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       {...attributes}
     >
       <ColumnConfiguratorColumnNameDetails
-        className="template-column__name-details"
+        className="columns-configurator-column__name-details"
         name={props.column.name}
         description={props.column.description}
         editState={titleEditState}
@@ -95,10 +95,10 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       />
       {/* TODO title and description are editable as one thing, can tab, show with timeout before saving. */}
       {titleEditState === "closed" && (
-        <div className="template-column__menu">
+        <div className="columns-configurator-column__menu">
           <DnDIcon
-            className={classNames("template-column__icon", "template-column__icon--dnd", "template-column__drag-element", {
-              "template-column__drag-element--dragging": props.activeDrag,
+            className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--dnd", "columns-configurator-column__drag-element", {
+              "columns-configurator-column__drag-element--dragging": props.activeDrag,
             })}
             {...listeners}
           />
@@ -113,21 +113,21 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             fitted
           />
           <button
-            className={classNames("template-column__button", {"template-column__button--disabled": false})}
+            className={classNames("columns-configurator-column__button", {"columns-configurator-column__button--disabled": false})}
             onClick={() => props.editColumn?.(props.column, {visible: !props.column.visible})}
           >
             {props.column.visible ? (
-              <VisibleIcon className={classNames("template-column__icon", "template-column__icon--visible")} />
+              <VisibleIcon className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--visible")} />
             ) : (
-              <HiddenIcon className={classNames("template-column__icon", "template-column__icon--hidden")} />
+              <HiddenIcon className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--hidden")} />
             )}
           </button>
           <button
-            className={classNames("template-column__button", {"template-column__button--disabled": disableDelete})}
+            className={classNames("columns-configurator-column__button", {"columns-configurator-column__button--disabled": disableDelete})}
             onClick={() => props.deleteColumn?.(props.column)}
             disabled={disableDelete}
           >
-            <DeleteIcon className={classNames("template-column__icon", "template-column__icon--delete")} />
+            <DeleteIcon className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--delete")} />
           </button>
         </div>
       )}
