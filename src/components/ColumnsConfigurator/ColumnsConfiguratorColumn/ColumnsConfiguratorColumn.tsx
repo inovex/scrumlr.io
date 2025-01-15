@@ -32,8 +32,7 @@ type ColumnsConfiguratorColumnProps = {
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
   const {t} = useTranslation();
 
-  const inputNameRef = useRef<HTMLInputElement>(null);
-  const inputDescriptionRef = useRef<HTMLTextAreaElement>(null);
+  const nameWrapperRef = useRef<HTMLDivElement>(null);
 
   const [openColorPicker, setOpenColorPicker] = useState(false);
   // tertiary state so we know where to put the focus
@@ -86,10 +85,9 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
 
   // if we leave wrapper close
   const handleBlurTitleHeader = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const isNameInputFocused = e.relatedTarget === inputNameRef.current;
-    const isDescriptionInputFocused = e.relatedTarget === inputDescriptionRef.current;
+    const isFocusInsideTitleHeader = nameWrapperRef.current?.contains(e.relatedTarget);
 
-    if (!(isNameInputFocused || isDescriptionInputFocused)) {
+    if (!isFocusInsideTitleHeader) {
       setEditingDescription("closed");
     }
   };
@@ -126,9 +124,8 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       style={style}
       {...attributes}
     >
-      <div className="template-column__name-wrapper">
+      <div className="template-column__name-wrapper" ref={nameWrapperRef}>
         <input
-          ref={inputNameRef}
           className={classNames("template-column__name", {"template-column__name--editing": editingDescription !== "closed"})}
           value={name}
           onInput={(e) => setName(e.currentTarget.value)}
@@ -139,7 +136,6 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         {editingDescription !== "closed" ? (
           <div className="template-column__description-wrapper">
             <TextArea
-              ref={inputDescriptionRef}
               className="template-column__description-text-area"
               input={description}
               setInput={setDescription}
