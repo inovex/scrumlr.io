@@ -11,7 +11,7 @@ import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {TextArea} from "components/TextArea/TextArea";
 import {Color, COLOR_ORDER, getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
-import {CSSProperties, useCallback, useEffect, useState} from "react";
+import React, {CSSProperties, useCallback, useEffect, useRef, useState} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import "./ColumnsConfiguratorColumn.scss";
@@ -31,6 +31,9 @@ type ColumnsConfiguratorColumnProps = {
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
   const {t} = useTranslation();
+
+  const inputNameRef = useRef<HTMLInputElement>(null);
+  const inputDescriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const [openColorPicker, setOpenColorPicker] = useState(false);
   // tertiary state so we know where to put the focus
@@ -81,6 +84,16 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     },
   ];
 
+  // if we leave wrapper close
+  const handleBlurTitleHeader = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const isNameInputFocused = e.relatedTarget === inputNameRef.current;
+    const isDescriptionInputFocused = e.relatedTarget === inputDescriptionRef.current;
+
+    if (!(isNameInputFocused || isDescriptionInputFocused)) {
+      setEditingDescription("closed");
+    }
+  };
+
   // update offset when dragging or columns change
   useEffect(() => {
     updateOffset();
@@ -115,15 +128,18 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     >
       <div className="template-column__name-wrapper">
         <input
+          ref={inputNameRef}
           className={classNames("template-column__name", {"template-column__name--editing": editingDescription !== "closed"})}
           value={name}
-          onFocus={() => setEditingDescription("nameFirst")}
           onInput={(e) => setName(e.currentTarget.value)}
+          onFocus={() => setEditingDescription("nameFirst")}
+          onBlur={handleBlurTitleHeader}
           placeholder="todo placeholder"
         />
         {editingDescription !== "closed" ? (
           <div className="template-column__description-wrapper">
             <TextArea
+              ref={inputDescriptionRef}
               className="template-column__description-text-area"
               input={description}
               setInput={setDescription}
@@ -131,7 +147,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
               embedded
               small
               autoFocus={editingDescription === "descriptionFirst"}
-              onBlur={() => setEditingDescription("closed")}
+              onBlur={handleBlurTitleHeader}
             />
             <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
           </div>

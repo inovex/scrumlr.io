@@ -1,6 +1,6 @@
 import TextareaAutosize from "react-autosize-textarea";
 import classNames from "classnames";
-import {Dispatch, FormEvent, ForwardedRef, forwardRef, SetStateAction} from "react";
+import React, {Dispatch, FormEvent, ForwardedRef, forwardRef, SetStateAction} from "react";
 import "./TextArea.scss";
 
 type TextAreaProps = {
@@ -18,8 +18,8 @@ type TextAreaProps = {
   placeholder?: string;
 
   autoFocus?: boolean;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  onFocus?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
 };
 
 // TODO forwardRef is deprecated in React 19, gotta change this bit here when we update
