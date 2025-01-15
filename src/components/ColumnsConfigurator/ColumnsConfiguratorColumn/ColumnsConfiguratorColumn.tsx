@@ -142,7 +142,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         )}
       </div>
       {/* TODO title and description are editable as one thing, can tab, show with timeout before saving. */}
-      {!editingDescription && (
+      {editingDescription === "closed" && (
         <div className="template-column__menu">
           <DnDIcon
             className={classNames("template-column__icon", "template-column__icon--dnd", "template-column__drag-element", {
