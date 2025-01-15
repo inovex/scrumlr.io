@@ -1,21 +1,17 @@
 import classNames from "classnames";
 import {EditableTemplateColumn} from "store/features";
-import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
-import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as VisibleIcon} from "assets/icons/visible.svg";
 import {ReactComponent as HiddenIcon} from "assets/icons/hidden.svg";
 import {ReactComponent as DeleteIcon} from "assets/icons/trash.svg";
 import {ReactComponent as DnDIcon} from "assets/icons/drag-and-drop.svg";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
-import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
-import {TextArea} from "components/TextArea/TextArea";
 import {Color, COLOR_ORDER, getColorClassName} from "constants/colors";
 import {useSortable} from "@dnd-kit/sortable";
-import React, {CSSProperties, useCallback, useEffect, useRef, useState} from "react";
+import {CSSProperties, useCallback, useEffect, useState} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
-import {useTranslation} from "react-i18next";
 import "./ColumnsConfiguratorColumn.scss";
+import {ColumnConfiguratorColumnNameDetails} from "./ColumnConfiguratorColumnNameDetails/ColumnConfiguratorColumnNameDetails";
 
 type ColumnsConfiguratorColumnProps = {
   className?: string;
@@ -30,16 +26,10 @@ type ColumnsConfiguratorColumnProps = {
 };
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
-  const {t} = useTranslation();
+  // const {t} = useTranslation();
 
-  const nameWrapperRef = useRef<HTMLDivElement>(null);
-
+  const [titleEditState, setTitleEditState] = useState<"closed" | "nameFirst" | "descriptionFirst">("closed");
   const [openColorPicker, setOpenColorPicker] = useState(false);
-  // tertiary state so we know where to put the focus
-  const [editingDescription, setEditingDescription] = useState<"closed" | "nameFirst" | "descriptionFirst">("closed");
-  // temporary state for name and description text as the changes have to be confirmed before applying
-  const [name, setName] = useState(props.column.name);
-  const [description, setDescription] = useState(props.column.description);
 
   const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: props.column.id});
   const {
@@ -61,42 +51,6 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     ...stripeStyle,
     transform: CSS.Transform.toString(transform),
     transition,
-  };
-
-  const descriptionConfirmMiniMenu: MiniMenuItem[] = [
-    {
-      element: <CloseIcon />,
-      label: t("Templates.ColumnsConfiguratorColumn.cancel"),
-      onClick(): void {
-        setEditingDescription("closed");
-        (document.activeElement as HTMLElement)?.blur();
-      },
-    },
-    {
-      element: <CheckDoneIcon />,
-      label: t("Templates.ColumnsConfiguratorColumn.save"),
-      onClick(): void {
-        props.editColumn?.(props.column, {name, description});
-        setEditingDescription("closed");
-        (document.activeElement as HTMLElement)?.blur();
-      },
-    },
-  ];
-
-  // if we leave the wrapper close, otherwise leave open
-  const handleBlurNameWrapperContents = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const isFocusInsideTitleHeaderWrapper = nameWrapperRef.current?.contains(e.relatedTarget);
-
-    if (!isFocusInsideTitleHeaderWrapper) {
-      setEditingDescription("closed");
-    }
-  };
-
-  // note: description gets set to the actual value each time when opening,
-  // whereas the name input remains in its current state, meaning name will be visually saved even when canceling
-  const openDescriptionWithCurrentValue = () => {
-    setDescription(props.column.description);
-    setEditingDescription("descriptionFirst");
   };
 
   // update offset when dragging or columns change
@@ -131,37 +85,15 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       style={style}
       {...attributes}
     >
-      <div className="template-column__name-wrapper" ref={nameWrapperRef}>
-        <input
-          className={classNames("template-column__name", {"template-column__name--editing": editingDescription !== "closed"})}
-          value={name}
-          placeholder="todo placeholder"
-          onInput={(e) => setName(e.currentTarget.value)}
-          onFocus={() => setEditingDescription("nameFirst")}
-          onBlur={handleBlurNameWrapperContents}
-        />
-        {editingDescription !== "closed" ? (
-          <div className="template-column__description-wrapper">
-            <TextArea
-              className="template-column__description-text-area"
-              input={description}
-              setInput={setDescription}
-              placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
-              embedded
-              small
-              autoFocus={editingDescription === "descriptionFirst"}
-              onBlur={handleBlurNameWrapperContents}
-            />
-            <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
-          </div>
-        ) : (
-          <div className="template-column__inline-description" role="button" tabIndex={0} onClick={openDescriptionWithCurrentValue}>
-            {props.column.description ? props.column.description : t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
-          </div>
-        )}
-      </div>
+      <ColumnConfiguratorColumnNameDetails
+        name={props.column.name}
+        description={props.column.description}
+        editState={titleEditState}
+        setEditState={setTitleEditState}
+        updateColumnTitle={(name, description) => props.editColumn?.(props.column, {name, description})}
+      />
       {/* TODO title and description are editable as one thing, can tab, show with timeout before saving. */}
-      {editingDescription === "closed" && (
+      {titleEditState === "closed" && (
         <div className="template-column__menu">
           <DnDIcon
             className={classNames("template-column__icon", "template-column__icon--dnd", "template-column__drag-element", {
