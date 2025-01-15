@@ -86,6 +86,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       {...attributes}
     >
       <ColumnConfiguratorColumnNameDetails
+        className="template-column__name-details"
         name={props.column.name}
         description={props.column.description}
         editState={titleEditState}

@@ -1,0 +1,66 @@
+@import "constants/style";
+
+.column-configurator-column-name-details__name-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xs;
+
+  &:hover {
+    // affect both with prio
+    .column-configurator-column-name-details__name,
+    .column-configurator-column-name-details__inline-description {
+      color: $navy--400;
+    }
+  }
+}
+
+// TODO input style wip
+.column-configurator-column-name-details__name {
+  all: unset;
+
+  align-self: flex-start; // only take as much space as needed
+  // extend border to bottom and right
+  padding: 0 $spacing--xs $spacing--xs 0;
+  max-width: 100%;
+
+  font-size: $text--base;
+  font-weight: 600;
+  color: $gray--800;
+  border-bottom: 2px solid var(--accent-color--light);
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:hover {
+    // color: $navy--400;
+  }
+
+  // not only when focused, but also when description is being edited
+  &--editing {
+    border-bottom-style: dashed; // TODO dash spacing
+  }
+}
+
+.column-configurator-column-name-details__inline-description {
+  color: $gray--800;
+  font-size: $text--xs;
+  font-weight: 500;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &:hover {
+    // color: $navy--400;
+  }
+}
+
+.column-configurator-column-name-details__description-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.column-configurator-column-name-details__description-mini-menu {
+  margin-left: auto; // couldn't get align-self: flex-end to work so whatever
+}

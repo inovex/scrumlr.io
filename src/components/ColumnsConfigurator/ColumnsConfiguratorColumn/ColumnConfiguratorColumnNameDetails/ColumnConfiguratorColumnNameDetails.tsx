@@ -8,6 +8,8 @@ import {Dispatch, SetStateAction, useRef, useState, FocusEvent} from "react";
 import "./ColumnConfiguratorColumnNameDetails.scss";
 
 type ColumnConfiguratorColumnNameDetailsProps = {
+  className: string;
+
   name: string;
   description: string;
 
@@ -63,9 +65,9 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
     props.setEditState("descriptionFirst");
   };
   return (
-    <div className="template-column__name-wrapper" ref={nameWrapperRef}>
+    <div className={classNames(props.className, "column-configurator-column-name-details__name-wrapper")} ref={nameWrapperRef}>
       <input
-        className={classNames("template-column__name", {"template-column__name--editing": props.editState !== "closed"})}
+        className={classNames("column-configurator-column-name-details__name", {"column-configurator-column-name-details__name--editing": props.editState !== "closed"})}
         value={name}
         placeholder="todo placeholder"
         onInput={(e) => setName(e.currentTarget.value)}
@@ -73,9 +75,9 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         onBlur={handleBlurNameWrapperContents}
       />
       {props.editState !== "closed" ? (
-        <div className="template-column__description-wrapper">
+        <div className="column-configurator-column-name-details__description-wrapper">
           <TextArea
-            className="template-column__description-text-area"
+            className="column-configurator-column-name-details__description-text-area"
             input={description}
             setInput={setDescription}
             placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
@@ -84,10 +86,10 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             autoFocus={props.editState === "descriptionFirst"}
             onBlur={handleBlurNameWrapperContents}
           />
-          <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
+          <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
         </div>
       ) : (
-        <div className="template-column__inline-description" role="button" tabIndex={0} onClick={openDescriptionWithCurrentValue}>
+        <div className="column-configurator-column-name-details__inline-description" role="button" tabIndex={0} onClick={openDescriptionWithCurrentValue}>
           {props.description ? props.description : t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
         </div>
       )}
