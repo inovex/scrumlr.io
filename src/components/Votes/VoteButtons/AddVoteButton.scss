@@ -14,9 +14,20 @@
   transition:
     background-color 80ms ease-in-out,
     color 80ms ease-in-out;
-}
-.vote-button-add:disabled {
-  opacity: 0.5;
+
+  &:enabled:hover {
+    background-color: var(--accent-color--light);
+    color: $gray--000;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
+  }
+
+  &:disabled {
+    background-color: $gray--200;
+    color: $gray--600;
+  }
 }
 
 .vote-button-add__icon {
@@ -24,13 +35,6 @@
   width: $icon--medium;
   color: inherit;
   pointer-events: none;
-}
-.vote-button-add:enabled:hover {
-  background-color: var(--accent-color--light);
-  color: $gray--000;
-}
-.vote-button-add:focus-visible {
-  outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
 }
 
 [theme="dark"] {
@@ -40,6 +44,11 @@
 
     &:enabled:hover {
       background-color: var(--accent-color--dark);
+    }
+
+    &:disabled {
+      background-color: $navy--300;
+      color: $navy--100;
     }
   }
 }
