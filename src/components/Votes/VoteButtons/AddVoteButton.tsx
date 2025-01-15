@@ -9,9 +9,10 @@ import {addVote} from "store/features";
 type AddVoteProps = {
   noteId: string;
   disabled: boolean;
+  disabledReason?: string;
 };
 
-export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled}) => {
+export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled, disabledReason}) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
@@ -20,7 +21,13 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled}) => {
   };
 
   return (
-    <DotButton className="vote-button-add" onClick={dispatchAddVote} disabled={disabled} dataTooltipId="scrumlr-tooltip" dataTooltipContent={t("Votes.AddVote")}>
+    <DotButton
+      className="vote-button-add"
+      onClick={dispatchAddVote}
+      disabled={disabled}
+      dataTooltipId="scrumlr-tooltip"
+      dataTooltipContent={!disabled ? t("Votes.AddVote") : disabledReason}
+    >
       <Plus className="vote-button-add__icon" />
     </DotButton>
   );
