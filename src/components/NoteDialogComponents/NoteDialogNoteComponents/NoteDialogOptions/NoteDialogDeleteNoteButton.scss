@@ -7,9 +7,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  // no background
-  background-color: transparent !important;
-  color: var(--accent-color--light);
+  color: var(--accent-color--600);
   transition:
     background-color 150ms ease-in-out,
     color 150ms ease-in-out;
