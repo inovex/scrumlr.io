@@ -34,7 +34,6 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
 
   return (
     <DotButton
-      title={disabled ? t("Votes.VotesOnNote", {votes: numberOfVotes}) : t("Votes.RemoveVote")}
       className={classNames("vote-button-remove", {bump: doBump})}
       disabled={disabled}
       onClick={dispatchDeleteVote}
@@ -42,7 +41,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
         setDoBump(false);
       }}
       dataTooltipId="scrumlr-tooltip"
-      dataTooltipContent={t("Votes.RemoveVote")}
+      dataTooltipContent={disabled ? t("Votes.VotesOnNote", {count: numberOfVotes}) : t("Votes.RemoveVote")}
     >
       <span className="vote-button-remove__folded-corner" />
       <Minus className="vote-button-remove__icon" />

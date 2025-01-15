@@ -672,7 +672,8 @@
   "Votes": {
     "AddVote": "Stimme hinzufügen",
     "RemoveVote": "Stimme entfernen",
-    "VotesOnNote": "{{votes}} Stimme(n)"
+    "VotesOnNote_one": "{{count}} Stimme",
+    "VotesOnNote_other": "{{count}} Stimmen"
   },
   "Snowfall": {
     "toastTitle": "Frohe Feiertage 🎄",

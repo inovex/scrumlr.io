@@ -20,14 +20,7 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled}) => {
   };
 
   return (
-    <DotButton
-      title={t("Votes.AddVote")}
-      className="vote-button-add"
-      onClick={dispatchAddVote}
-      disabled={disabled}
-      dataTooltipId="scrumlr-tooltip"
-      dataTooltipContent={t("Votes.AddVote")}
-    >
+    <DotButton className="vote-button-add" onClick={dispatchAddVote} disabled={disabled} dataTooltipId="scrumlr-tooltip" dataTooltipContent={t("Votes.AddVote")}>
       <Plus className="vote-button-add__icon" />
     </DotButton>
   );
