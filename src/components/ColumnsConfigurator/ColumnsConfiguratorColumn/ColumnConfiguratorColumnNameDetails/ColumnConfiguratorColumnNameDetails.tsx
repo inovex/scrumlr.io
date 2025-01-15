@@ -35,7 +35,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
       label: t("Templates.ColumnsConfiguratorColumn.cancel"),
       onClick(): void {
         props.setOpenState("closed");
-        (document.activeElement as HTMLElement)?.blur();
+        (document.activeElement as HTMLElement)?.blur(); // leave input (or we can keep typing inside it)
       },
     },
     {
