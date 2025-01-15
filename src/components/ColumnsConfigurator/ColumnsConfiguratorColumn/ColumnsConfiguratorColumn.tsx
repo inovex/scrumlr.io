@@ -67,6 +67,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       label: t("Templates.ColumnsConfiguratorColumn.cancel"),
       onClick(): void {
         setEditingDescription("closed");
+        (document.activeElement as HTMLElement)?.blur();
       },
     },
     {
@@ -75,6 +76,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       onClick(): void {
         props.editColumn?.(props.column, {name, description});
         setEditingDescription("closed");
+        (document.activeElement as HTMLElement)?.blur();
       },
     },
   ];
