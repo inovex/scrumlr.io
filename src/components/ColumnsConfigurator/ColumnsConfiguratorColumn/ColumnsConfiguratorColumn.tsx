@@ -14,8 +14,8 @@ import {useSortable} from "@dnd-kit/sortable";
 import React, {CSSProperties, useCallback, useEffect, useRef, useState} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
-import "./ColumnsConfiguratorColumn.scss";
 import {useTranslation} from "react-i18next";
+import "./ColumnsConfiguratorColumn.scss";
 
 type ColumnsConfiguratorColumnProps = {
   className?: string;
@@ -83,11 +83,11 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     },
   ];
 
-  // if we leave wrapper close
-  const handleBlurTitleHeader = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const isFocusInsideTitleHeader = nameWrapperRef.current?.contains(e.relatedTarget);
+  // if we leave the wrapper close, otherwise leave open
+  const handleBlurNameWrapperContents = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const isFocusInsideTitleHeaderWrapper = nameWrapperRef.current?.contains(e.relatedTarget);
 
-    if (!isFocusInsideTitleHeader) {
+    if (!isFocusInsideTitleHeaderWrapper) {
       setEditingDescription("closed");
     }
   };
@@ -128,10 +128,10 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         <input
           className={classNames("template-column__name", {"template-column__name--editing": editingDescription !== "closed"})}
           value={name}
+          placeholder="todo placeholder"
           onInput={(e) => setName(e.currentTarget.value)}
           onFocus={() => setEditingDescription("nameFirst")}
-          onBlur={handleBlurTitleHeader}
-          placeholder="todo placeholder"
+          onBlur={handleBlurNameWrapperContents}
         />
         {editingDescription !== "closed" ? (
           <div className="template-column__description-wrapper">
@@ -143,7 +143,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
               embedded
               small
               autoFocus={editingDescription === "descriptionFirst"}
-              onBlur={handleBlurTitleHeader}
+              onBlur={handleBlurNameWrapperContents}
             />
             <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
           </div>
