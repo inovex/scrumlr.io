@@ -13,8 +13,9 @@ type ColumnConfiguratorColumnNameDetailsProps = {
   name: string;
   description: string;
 
-  editState: "closed" | "nameFirst" | "descriptionFirst";
-  setEditState: Dispatch<SetStateAction<"closed" | "nameFirst" | "descriptionFirst">>;
+  // name/description indicate that the editable section should be opened with focus on either the title or description input
+  openState: "closed" | "nameFirst" | "descriptionFirst";
+  setOpenState: Dispatch<SetStateAction<"closed" | "nameFirst" | "descriptionFirst">>;
 
   updateColumnTitle: (newName: string, newDescription: string) => void;
 };
@@ -33,7 +34,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
       element: <CloseIcon />,
       label: t("Templates.ColumnsConfiguratorColumn.cancel"),
       onClick(): void {
-        props.setEditState("closed");
+        props.setOpenState("closed");
         (document.activeElement as HTMLElement)?.blur();
       },
     },
@@ -43,7 +44,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
       onClick(): void {
         // props.editColumn?.(props.column, {name, description});
         props.updateColumnTitle(name, description);
-        props.setEditState("closed");
+        props.setOpenState("closed");
         (document.activeElement as HTMLElement)?.blur();
       },
     },
@@ -54,7 +55,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
     const isFocusInsideTitleHeaderWrapper = nameWrapperRef.current?.contains(e.relatedTarget);
 
     if (!isFocusInsideTitleHeaderWrapper) {
-      props.setEditState("closed");
+      props.setOpenState("closed");
     }
   };
 
@@ -62,19 +63,19 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
   // whereas the name input remains in its current state, meaning name will be visually saved even when canceling
   const openDescriptionWithCurrentValue = () => {
     setDescription(props.description);
-    props.setEditState("descriptionFirst");
+    props.setOpenState("descriptionFirst");
   };
   return (
     <div className={classNames(props.className, "column-configurator-column-name-details__name-wrapper")} ref={nameWrapperRef}>
       <input
-        className={classNames("column-configurator-column-name-details__name", {"column-configurator-column-name-details__name--editing": props.editState !== "closed"})}
+        className={classNames("column-configurator-column-name-details__name", {"column-configurator-column-name-details__name--editing": props.openState !== "closed"})}
         value={name}
         placeholder="todo placeholder"
         onInput={(e) => setName(e.currentTarget.value)}
-        onFocus={() => props.setEditState("nameFirst")}
+        onFocus={() => props.setOpenState("nameFirst")}
         onBlur={handleBlurNameWrapperContents}
       />
-      {props.editState !== "closed" ? (
+      {props.openState !== "closed" ? (
         <div className="column-configurator-column-name-details__description-wrapper">
           <TextArea
             className="column-configurator-column-name-details__description-text-area"
@@ -83,7 +84,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
             embedded
             small
-            autoFocus={props.editState === "descriptionFirst"}
+            autoFocus={props.openState === "descriptionFirst"}
             onBlur={handleBlurNameWrapperContents}
           />
           <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
