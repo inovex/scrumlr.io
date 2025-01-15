@@ -33,7 +33,8 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
   const {t} = useTranslation();
 
   const [openColorPicker, setOpenColorPicker] = useState(false);
-  const [editingDescription, setEditingDescription] = useState(false);
+  // tertiary state so we know where to put the focus
+  const [editingDescription, setEditingDescription] = useState<"closed" | "nameFirst" | "descriptionFirst">("closed");
   // temporary state for description text as the changes have to be confirmed before applying
   const [description, setDescription] = useState("");
 
@@ -64,7 +65,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       element: <CloseIcon />,
       label: t("Templates.ColumnsConfiguratorColumn.cancel"),
       onClick(): void {
-        setEditingDescription(false);
+        setEditingDescription("closed");
       },
     },
     {
@@ -72,7 +73,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       label: t("Templates.ColumnsConfiguratorColumn.save"),
       onClick(): void {
         props.editColumn?.(props.column, {description});
-        setEditingDescription(false);
+        setEditingDescription("closed");
       },
     },
   ];
@@ -84,7 +85,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
 
   const openDescriptionEditor = () => {
     setDescription(props.column.description); // init with current value
-    setEditingDescription(true);
+    setEditingDescription("descriptionFirst");
   };
 
   const editColor = (color: Color) => {
@@ -115,8 +116,13 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
       {...attributes}
     >
       <div className="template-column__name-wrapper">
-        <input className="template-column__name" value={props.column.name} onInput={(e) => props.editColumn?.(props.column, {name: e.currentTarget.value})} />
-        {editingDescription ? (
+        <input
+          className="template-column__name"
+          value={props.column.name}
+          onFocus={() => setEditingDescription("nameFirst")}
+          onInput={(e) => props.editColumn?.(props.column, {name: e.currentTarget.value})}
+        />
+        {editingDescription !== "closed" ? (
           <div className="template-column__description-wrapper">
             <TextArea
               className="template-column__description-text-area"
@@ -125,8 +131,8 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
               placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
               embedded
               small
-              autoFocus
-              onBlur={() => setEditingDescription(false)}
+              autoFocus={editingDescription === "descriptionFirst"}
+              onBlur={() => setEditingDescription("closed")}
             />
             <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
           </div>

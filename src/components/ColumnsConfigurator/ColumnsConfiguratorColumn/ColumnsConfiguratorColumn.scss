@@ -61,6 +61,14 @@ $column-height: 340px;
   display: flex;
   flex-direction: column;
   gap: $spacing--xs;
+
+  &:hover {
+    // affect both with prio
+    .template-column__name,
+    .template-column__inline-description {
+      color: $navy--400;
+    }
+  }
 }
 
 // TODO input style wip
@@ -82,7 +90,7 @@ $column-height: 340px;
   text-overflow: ellipsis;
 
   &:hover {
-    color: $navy--400;
+    // color: $navy--400;
   }
 
   &:focus {
@@ -100,7 +108,7 @@ $column-height: 340px;
   text-overflow: ellipsis;
 
   &:hover {
-    color: $navy--400;
+    // color: $navy--400;
   }
 }
 
