@@ -92,6 +92,8 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     }
   };
 
+  // note: description gets set to the actual value each time when opening,
+  // whereas the name input remains in its current state, meaning name will be visually saved even when canceling
   const openDescriptionWithCurrentValue = () => {
     setDescription(props.column.description);
     setEditingDescription("descriptionFirst");
