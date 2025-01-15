@@ -122,9 +122,9 @@ describe("Votes", () => {
       })
     );
 
-    expect(screen.getByLabelText(i18n.t("Votes.AddVote"))).toBeInTheDocument();
-    expect(screen.getByLabelText(i18n.t("Votes.RemoveVote"))).toBeInTheDocument();
-    expect(screen.getByLabelText(i18n.t("Votes.RemoveVote"))).not.toBeDisabled();
+    expect(screen.queryByLabelText(i18n.t("Votes.AddVote"))).toBeInTheDocument();
+    expect(screen.queryByLabelText(i18n.t("Votes.RemoveVote"))).toBeInTheDocument();
+    expect(screen.queryByLabelText(i18n.t("Votes.RemoveVote"))).not.toBeDisabled();
     expect(screen.queryByLabelText(i18n.t("Votes.VotesOnNote", {count: 1}))).not.toBeInTheDocument();
   });
 });
