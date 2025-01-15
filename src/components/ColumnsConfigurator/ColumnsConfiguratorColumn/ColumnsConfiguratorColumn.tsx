@@ -92,6 +92,11 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
     }
   };
 
+  const openDescriptionWithCurrentValue = () => {
+    setDescription(props.column.description);
+    setEditingDescription("descriptionFirst");
+  };
+
   // update offset when dragging or columns change
   useEffect(() => {
     updateOffset();
@@ -148,7 +153,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             <MiniMenu className="template-column__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
           </div>
         ) : (
-          <div className="template-column__inline-description" role="button" tabIndex={0} onClick={() => setEditingDescription("descriptionFirst")}>
+          <div className="template-column__inline-description" role="button" tabIndex={0} onClick={openDescriptionWithCurrentValue}>
             {props.column.description ? props.column.description : t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
           </div>
         )}
