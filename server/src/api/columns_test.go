@@ -25,28 +25,17 @@ func TestColumnTestSuite(t *testing.T) {
 }
 
 func (suite *ColumnTestSuite) TestCreateColumn() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successful created column",
-			expectedCode: http.StatusCreated,
-		},
-		{
-			name:         "Failed creating column",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New(""),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not create column",
-			},
-		},
-	}
 
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successful created column", http.StatusCreated, nil, false, false, nil).
+		Append("Failed creating column", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New(""),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not create column",
+		}, false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
@@ -89,28 +78,16 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 }
 
 func (suite *ColumnTestSuite) TestDeleteColumn() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successful deleted column",
-			expectedCode: http.StatusNoContent,
-		},
-		{
-			name:         "Failed deleting column",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New(""),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not delete column",
-			},
-		},
-	}
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successful deleted column", http.StatusNoContent, nil, false, false, nil).
+		Append("Failed deleting column", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New(""),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not delete column",
+		}, false, false, nil)
 
-	for _, tt := range tests {
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
@@ -136,28 +113,17 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 }
 
 func (suite *ColumnTestSuite) TestUpdateColumn() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successful updated column",
-			expectedCode: http.StatusOK,
-		},
-		{
-			name:         "Failed updating column",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New(""),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not update column",
-			},
-		},
-	}
 
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successful updated column", http.StatusOK, nil, false, false, nil).
+		Append("Failed updating column", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New(""),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not update column",
+		}, false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
@@ -201,28 +167,17 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 }
 
 func (suite *ColumnTestSuite) TestGetColumn() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successful get column",
-			expectedCode: http.StatusOK,
-		},
-		{
-			name:         "Failed getting column",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New(""),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not get column",
-			},
-		},
-	}
 
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successful get column", http.StatusOK, nil, false, false, nil).
+		Append("Failed getting column", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New(""),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not get column",
+		}, false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
@@ -260,28 +215,17 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 }
 
 func (suite *ColumnTestSuite) TestGetColumns() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "Successful get columns",
-			expectedCode: http.StatusOK,
-		},
-		{
-			name:         "Failed getting columns",
-			expectedCode: http.StatusInternalServerError,
-			err: &common.APIError{
-				Err:        errors.New(""),
-				StatusCode: http.StatusInternalServerError,
-				StatusText: "no",
-				ErrorText:  "Could not get columns",
-			},
-		},
-	}
 
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("Successful get columns", http.StatusOK, nil, false, false, nil).
+		Append("Failed getting columns", http.StatusInternalServerError, &common.APIError{
+			Err:        errors.New(""),
+			StatusCode: http.StatusInternalServerError,
+			StatusText: "no",
+			ErrorText:  "Could not get columns",
+		}, false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
