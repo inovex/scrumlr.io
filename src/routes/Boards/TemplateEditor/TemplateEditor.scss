@@ -5,10 +5,6 @@
   grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
   grid-template-rows:
     $spacing--xs
-    min-content // <- dropdown
-    14px
-    min-content // <- info
-    16px
     min-content // <- name
     16px
     min-content // <- description
@@ -19,10 +15,6 @@
     52px // <- buttons
     $spacing--xs;
   grid-template-areas:
-    ".          .           .         .         ."
-    ".          dropdown    .         password  ."
-    ".          .           .         .         ."
-    ".          info        info      info      ."
     ".          .           .         .         ."
     ".          name        name      name      ."
     ".          .           .         .         ."
@@ -41,45 +33,6 @@
   height: 100%;
 
   overflow: hidden auto;
-}
-
-.template-editor__dropdown {
-  grid-area: dropdown;
-}
-
-.template-editor__password-wrapper {
-  grid-area: password;
-
-  display: flex;
-  flex-direction: row;
-  gap: $spacing--base;
-  align-items: center;
-
-  .template-editor__shuffle-icon {
-    min-width: $icon--large;
-    min-height: $icon--large;
-
-    color: $navy--400;
-  }
-}
-
-.template-editor__info {
-  grid-area: info;
-  display: flex;
-  align-items: center;
-  gap: $spacing--xs;
-
-  height: min-content;
-
-  &-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  &-text {
-    font-size: $text--sm;
-    font-weight: 400;
-  }
 }
 
 .template-editor__name {
@@ -129,10 +82,6 @@
   .template-editor {
     grid-template-rows:
       $spacing--xs
-      min-content // <- dropdown
-      14px
-      min-content // <- info
-      16px
       min-content // <- name
       20px
       min-content // <- description
@@ -145,10 +94,6 @@
       52px // <- buttons
       $spacing--xs;
     grid-template-areas:
-      ".          .           .         .         ."
-      ".          dropdown    .         password  ."
-      ".          .           .         .         ."
-      ".          info        info      info      ."
       ".          .           .         .         ."
       ".          name        name      name      ."
       ".          .           .         .         ."

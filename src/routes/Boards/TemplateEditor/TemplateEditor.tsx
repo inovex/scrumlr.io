@@ -2,7 +2,6 @@ import {useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
 import {
-  AccessPolicy,
   TemplateColumn,
   EditableTemplateColumn,
   Template,
@@ -14,16 +13,10 @@ import {
   editTemplateColumn,
   deleteTemplateColumn,
 } from "store/features";
-import {Dropdown} from "components/Dropdown/Dropdown";
 import {Input} from "components/Input/Input";
 import {TextArea} from "components/TextArea/TextArea";
 import {ColumnsConfigurator} from "components/ColumnsConfigurator/ColumnsConfigurator";
 import {ColumnsMiniView} from "components/ColumnsConfigurator/ColumnsMiniView/ColumnsMiniView"; // for debug purposes
-import {ReactComponent as GlobeIcon} from "assets/icons/open.svg";
-import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
-import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
-import {ReactComponent as ShuffleIcon} from "assets/icons/shuffle.svg";
-import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
 import {ReactComponent as AddIcon} from "assets/icons/plus.svg";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import classNames from "classnames";
@@ -32,18 +25,6 @@ import {useNavigate, useParams} from "react-router";
 import {arrayMove} from "@dnd-kit/sortable";
 import {TemplatesNavigationState} from "../Templates";
 import "./TemplateEditor.scss";
-
-// todo maybe just change the translation keys to AccessPolicy => lowercase
-const getAccessPolicyTranslationKey = (policy: AccessPolicy) => {
-  switch (policy) {
-    case "PUBLIC":
-      return "open";
-    case "BY_PASSPHRASE":
-      return "password";
-    default:
-      return "approval";
-  }
-};
 
 type TemplateColumnProps = {mode: "create" | "edit"; debug?: boolean};
 
@@ -89,11 +70,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
     }
   }, [basisColumns, editableTemplateColumns]);
 
-  const [openDropdown, setOpenDropdown] = useState(false);
-  const [activeOptionKey, setActiveOptionKey] = useState<AccessPolicy>("PUBLIC");
-
   // states to keep track of changes of the form.
-  const [passwordInput, setPasswordInput] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [descriptionInput, setDescriptionInput] = useState("");
 
@@ -177,7 +154,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
           ...editableTemplate,
           name: nameInput,
           description: descriptionInput,
-          accessPolicy: activeOptionKey,
         },
         columns: editableTemplateColumns,
       };
@@ -198,7 +174,6 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
           overwrite: {
             name: nameInput,
             description: descriptionInput,
-            accessPolicy: activeOptionKey,
           },
         })
       );
@@ -218,46 +193,15 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   useEffect(() => {
     // after finding the basisTemplate template for editing, set the corresponding form values
     if (id && basisTemplate) {
-      setActiveOptionKey(basisTemplate.accessPolicy);
       setNameInput(basisTemplate.name);
       setDescriptionInput(basisTemplate.description);
     }
   }, [basisTemplate, id]);
 
-  const toggleDropDown = () => setOpenDropdown((curr) => !curr);
-  const selectDropdownOption = (key: AccessPolicy) => {
-    setActiveOptionKey(key);
-    setOpenDropdown(false);
-  };
-
   if (!editableTemplate || !editableTemplateColumns) return <div>Error loading template</div>;
 
   return (
     <div className="template-editor">
-      <Dropdown<AccessPolicy>
-        className="template-editor__dropdown"
-        open={openDropdown}
-        options={[
-          {key: "PUBLIC", label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey("PUBLIC")}`), icon: <GlobeIcon />},
-          {key: "BY_PASSPHRASE", label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey("BY_PASSPHRASE")}`), icon: <KeyIcon />},
-          {key: "BY_INVITE", label: t(`CreateBoard.dropdown.${getAccessPolicyTranslationKey("BY_INVITE")}`), icon: <LockIcon />},
-        ]}
-        activeKey={activeOptionKey}
-        onToggleMenu={toggleDropDown}
-        onSelect={selectDropdownOption}
-      />
-
-      {activeOptionKey === "BY_PASSPHRASE" && (
-        <div className="template-editor__password-wrapper">
-          <ShuffleIcon className="template-editor__shuffle-icon" />
-          <Input className="template-editor__password-wrapper" type="password" height="normal" input={passwordInput} setInput={setPasswordInput} placeholder="Password" />
-        </div>
-      )}
-
-      <div className="template-editor__info">
-        <InfoIcon className="template-editor__info-icon" />
-        <div className="template-editor__info-text">{t(`CreateBoard.info.${getAccessPolicyTranslationKey(activeOptionKey)}`)}</div>
-      </div>
       <div className="template-editor__name">
         <Input type="text" input={nameInput} setInput={setNameInput} height="normal" placeholder="Board name" />
       </div>
