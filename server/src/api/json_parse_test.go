@@ -80,9 +80,6 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 
-			//loggerConfig := zap.NewNop() // Use a no-op logger for testing
-			//_logger := loggerConfig.Sugar()
-
 			mockUUID := uuid.New()
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(`{
 				"id": %s
