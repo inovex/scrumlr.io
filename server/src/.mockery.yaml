@@ -14,3 +14,5 @@ packages:
         all: true
       BoardSessions:
         all: true
+      Notes:
+        all: true
