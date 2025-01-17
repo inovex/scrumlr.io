@@ -40,7 +40,7 @@
     "react-hotkeys-hook": "^4.6.1",
     "react-i18next": "^15.4.0",
     "react-redux": "^9.2.0",
-    "react-router": "^7.1.1",
+    "react-router": "^7.1.2",
     "react-snowfall": "^2.2.0",
     "react-to-print": "^3.0.4",
     "react-toastify": "^11.0.3",
