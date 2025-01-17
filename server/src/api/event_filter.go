@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
@@ -20,94 +19,9 @@ func isModerator(clientID uuid.UUID, sessions []*dto.BoardSession) bool {
 	return false
 }
 
-func parseColumnUpdated(data interface{}) ([]*dto.Column, error) {
-	var ret []*dto.Column
-
-	b, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &ret)
-	if err != nil {
-		return nil, err
-	}
-	return ret, nil
-}
-
-func parseNotesUpdated(data interface{}) ([]*dto.Note, error) {
-	var ret []*dto.Note
-
-	b, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &ret)
-	if err != nil {
-		return nil, err
-	}
-	return ret, nil
-}
-
-func parseBoardUpdated(data interface{}) (*dto.Board, error) {
-	var ret *dto.Board
-
-	b, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &ret)
-	if err != nil {
-		return nil, err
-	}
-	return ret, nil
-}
-
 type VotingUpdated struct {
 	Notes  []*dto.Note `json:"notes"`
 	Voting *dto.Voting `json:"voting"`
-}
-
-func parseVotingUpdated(data interface{}) (*VotingUpdated, error) {
-	var ret *VotingUpdated
-
-	b, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &ret)
-	if err != nil {
-		return nil, err
-	}
-	return ret, nil
-}
-
-func parseParticipantUpdated(data interface{}) (*dto.BoardSession, error) {
-	var ret *dto.BoardSession
-
-	b, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &ret)
-	if err != nil {
-		return nil, err
-	}
-	return ret, nil
-}
-
-func parseVotesDeleted(data interface{}) ([]*dto.Vote, error) {
-	var ret []*dto.Vote
-
-	b, err := json.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(b, &ret)
-	if err != nil {
-		return nil, err
-	}
-	return ret, nil
-
 }
 
 func filterColumns(eventColumns []*dto.Column) []*dto.Column {
@@ -182,7 +96,7 @@ func filterVotingUpdated(voting *VotingUpdated, userID uuid.UUID, boardSettings 
 	return filteredVoting
 }
 
-func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUID) *dto.Voting {
+func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note) *dto.Voting {
 	if voting.VotingResults == nil {
 		return voting
 	}
@@ -212,7 +126,7 @@ func filterVoting(voting *dto.Voting, filteredNotes []*dto.Note, userID uuid.UUI
 func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
 	isMod := isModerator(userID, boardSubscription.boardParticipants)
 	if event.Type == realtime.BoardEventColumnsUpdated {
-		columns, err := parseColumnUpdated(event.Data)
+		columns, err := unmarshalSlice[dto.Column](event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
@@ -232,7 +146,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	}
 
 	if event.Type == realtime.BoardEventNotesUpdated {
-		notes, err := parseNotesUpdated(event.Data)
+		notes, err := unmarshalSlice[dto.Note](event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
@@ -252,7 +166,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	}
 
 	if event.Type == realtime.BoardEventBoardUpdated {
-		boardSettings, err := parseBoardUpdated(event.Data)
+		boardSettings, err := unmarshal[dto.Board](event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
@@ -265,7 +179,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	}
 
 	if event.Type == realtime.BoardEventVotingUpdated {
-		voting, err := parseVotingUpdated(event.Data)
+		voting, err := unmarshal[VotingUpdated](event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
@@ -285,7 +199,8 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	}
 
 	if event.Type == realtime.BoardEventNotesSync {
-		notes, err := parseNotesUpdated(event.Data)
+		notes, err := unmarshalSlice[dto.Note](event.Data)
+
 		if err != nil {
 			logger.Get().Errorw("unable to parse notesUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
@@ -305,7 +220,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 	}
 
 	if event.Type == realtime.BoardEventParticipantUpdated {
-		participant, err := parseParticipantUpdated(event.Data)
+		participant, err := unmarshal[dto.BoardSession](event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse participantUpdated in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
@@ -322,7 +237,7 @@ func (boardSubscription *BoardSubscription) eventFilter(event *realtime.BoardEve
 
 	if event.Type == realtime.BoardEventVotesDeleted {
 		//filter deleted votes after user
-		votes, err := parseVotesDeleted(event.Data)
+		votes, err := unmarshalSlice[dto.Vote](event.Data)
 		if err != nil {
 			logger.Get().Errorw("unable to parse deleteVotes in event filter", "board", boardSubscription.boardSettings.ID, "session", userID, "err", err)
 		}
@@ -406,7 +321,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	// Votings
 	visibleVotings := make([]*dto.Voting, 0)
 	for _, v := range event.Data.Votings {
-		filteredVoting := filterVoting(v, filteredNotes, clientID)
+		filteredVoting := filterVoting(v, filteredNotes)
 		visibleVotings = append(visibleVotings, filteredVoting)
 	}
 
