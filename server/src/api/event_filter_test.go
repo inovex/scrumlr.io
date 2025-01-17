@@ -201,7 +201,7 @@ func testIsUnknownUuidModerator(t *testing.T) {
 
 func testParseBoardSettingsData(t *testing.T) {
 	expectedBoardSettings := boardSettings
-	actualBoardSettings, err := parseBoardUpdated(boardEvent.Data)
+	actualBoardSettings, err := unmarshal[dto.Board](boardEvent.Data)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, actualBoardSettings)
@@ -210,7 +210,7 @@ func testParseBoardSettingsData(t *testing.T) {
 
 func testParseColumnData(t *testing.T) {
 	expectedColumns := []*dto.Column{&aSeeableColumn, &aHiddenColumn}
-	actualColumns, err := parseColumnUpdated(columnEvent.Data)
+	actualColumns, err := unmarshalSlice[dto.Column](columnEvent.Data)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, actualColumns)
@@ -219,7 +219,7 @@ func testParseColumnData(t *testing.T) {
 
 func testParseNoteData(t *testing.T) {
 	expectedNotes := []*dto.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote}
-	actualNotes, err := parseNotesUpdated(noteEvent.Data)
+	actualNotes, err := unmarshalSlice[dto.Note](noteEvent.Data)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, actualNotes)
@@ -228,7 +228,7 @@ func testParseNoteData(t *testing.T) {
 
 func testParseVotingData(t *testing.T) {
 	expectedVoting := votingData
-	actualVoting, err := parseVotingUpdated(votingEvent.Data)
+	actualVoting, err := unmarshal[VotingUpdated](votingEvent.Data)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, actualVoting)
