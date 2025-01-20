@@ -1,10 +1,10 @@
 on:
     push:
       branches:
-        - main
+        - Sec_tools
     pull_request:
       branches:
-        - main
+        - Sec_tools
   
   jobs:
     security-scan:
