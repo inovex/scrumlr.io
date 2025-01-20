@@ -1,0 +1,53 @@
+on:
+    push:
+      branches:
+        - main
+    pull_request:
+      branches:
+        - main
+  
+  jobs:
+    security-scan:
+      runs-on: ubuntu-22.04  # Explizite Angabe der Ubuntu-Version
+  
+      steps:
+        # Checkout Code
+        - name: Checkout Code
+          uses: actions/checkout@v3
+  
+        # Run Semgrep
+        - name: Run Semgrep
+          uses: returntocorp/semgrep-action@v1
+          with:
+            config: "p/r2c-ci"
+  
+        # Run GoSec
+        - name: Run GoSec
+          run: |
+            curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
+            ./gosec ./...
+  
+         #Set up Snyk
+        - name: Set up Snyk
+  
+          with:
+            version: 'latest'
+          env:
+           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  
+        # Run Snyk Test
+         - name: Run Snyk Test
+           run: snyk test
+          env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+  
+        # Run SonarQube (if using SonarCloud)
+        - name: Run SonarQube Analysis
+          uses: sonarsource/sonarcloud-github-action@master
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          with:
+            args: >
+              -Dsonar.projectKey=key 
+              -Dsonar.organization=code_awasom 
+              -Dsonar.sources=.
