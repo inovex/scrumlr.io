@@ -1,53 +1,57 @@
+name: Security Tools Scan
+
 on:
-    push:
-      branches:
-        - Sec_tools
-    pull_request:
-      branches:
-        - Sec_tools
-  
-  jobs:
-    security-scan:
-      runs-on: ubuntu-22.04  # Explizite Angabe der Ubuntu-Version
-  
-      steps:
-        # Checkout Code
-        - name: Checkout Code
-          uses: actions/checkout@v3
-  
-        # Run Semgrep
-        - name: Run Semgrep
-          uses: returntocorp/semgrep-action@v1
-          with:
-            config: "p/r2c-ci"
-  
-        # Run GoSec
-        - name: Run GoSec
-          run: |
-            curl -sfL https://raw.githubusercontent.com/securego/gosec/master/install.sh | sh -s -- -b $GITHUB_WORKSPACE
-            ./gosec ./...
-  
-         #Set up Snyk
-        - name: Set up Snyk
-  
-          with:
-            version: 'latest'
-          env:
-           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  
-        # Run Snyk Test
-         - name: Run Snyk Test
-           run: snyk test
-          env:
-            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-  
-        # Run SonarQube (if using SonarCloud)
-        - name: Run SonarQube Analysis
-          uses: sonarsource/sonarcloud-github-action@master
-          env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          with:
-            args: >
-              -Dsonar.projectKey=key 
-              -Dsonar.organization=code_awasom 
-              -Dsonar.sources=.
+  push:
+    branches:
+      - Sec_tools
+  pull_request:
+    branches:
+      - Sec_tools
+
+jobs:
+  semgrep-scan:
+    runs-on: ubuntu-22.04
+    steps:
+      # 1. Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Run Semgrep
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: "p/r2c-ci"
+
+  gosec-scan:
+    runs-on: ubuntu-22.04
+    steps:
+      # 1. Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Install Go
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      # 3. Run GoSec
+      - name: Run GoSec
+        run: |
+          go install github.com/securego/gosec/v2/cmd/gosec@latest
+          $HOME/go/bin/gosec ./...
+
+  snyk-scan:
+    runs-on: ubuntu-22.04
+    steps:
+      # 1. Checkout Code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Run Snyk
+      - name: Run Snyk to Check for Vulnerabilities
+        uses: snyk/actions/golang@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
