@@ -6,7 +6,7 @@ on:
       - "feat/scan_tools"
   pull_request:
     branches:
-      - "feat/scan_tools"
+      - main
 
 jobs:
   semgrep-scan:
