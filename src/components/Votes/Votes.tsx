@@ -1,4 +1,5 @@
 import {FC} from "react";
+import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import _ from "underscore";
 import {useAppSelector} from "store";
@@ -13,6 +14,8 @@ type VotesProps = {
 };
 
 export const Votes: FC<VotesProps> = (props) => {
+  const {t} = useTranslation();
+
   const voting = useAppSelector((state) => state.votings.open);
   const ongoingVotes = useAppSelector(
     (state) => ({
@@ -31,6 +34,19 @@ export const Votes: FC<VotesProps> = (props) => {
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 
+  const addVotesDisabledReason = (): string => {
+    if (!voting) return "";
+
+    if (ongoingVotes.total === voting.voteLimit) {
+      return t("Votes.VoteLimitReached");
+    }
+    if (ongoingVotes.note > 0 && !voting.allowMultipleVotes) {
+      return t("Votes.MultipleVotesNotAllowed");
+    }
+
+    return "";
+  };
+
   /**
    * If there's no active voting going on and there are no casted votes for
    * this note from previous votings, we don't need to render anything.
@@ -46,7 +62,11 @@ export const Votes: FC<VotesProps> = (props) => {
       {/* display for votes when voting is open */}
       {voting && ongoingVotes.note > 0 && <VoteButtons.Remove disabled={boardLocked && !isModerator} noteId={props.noteId} numberOfVotes={ongoingVotes.note} />}
       {voting && (isModerator || !boardLocked) && (
-        <VoteButtons.Add noteId={props.noteId} disabled={ongoingVotes.total === voting.voteLimit || (ongoingVotes.note > 0 && !voting.allowMultipleVotes)} />
+        <VoteButtons.Add
+          noteId={props.noteId}
+          disabled={ongoingVotes.total === voting.voteLimit || (ongoingVotes.note > 0 && !voting.allowMultipleVotes)}
+          disabledReason={addVotesDisabledReason()}
+        />
       )}
     </div>
   ) : null;

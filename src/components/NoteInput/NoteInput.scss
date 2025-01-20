@@ -84,7 +84,7 @@ $note-input__input-right: 40px;
 .note-input__icon--add {
   width: $icon--large;
   height: $icon--large;
-  color: var(--accent-color--light);
+  color: var(--accent-color--600);
   align-self: center;
   transition: all 0.08s ease-out;
 }
@@ -132,6 +132,10 @@ $note-input__input-right: 40px;
 
   .note-input__input {
     color: $gray--000;
+  }
+
+  .note-input__icon--add {
+    color: var(--accent-color--500);
   }
 }
 
