@@ -3,10 +3,10 @@ name: Security Tools Scan
 on:
   push:
     branches:
-      - Sec_tools
+      - feat/scan_tools
   pull_request:
     branches:
-      - Sec_tools
+      - feat/scan_tools
 
 jobs:
   semgrep-scan:
