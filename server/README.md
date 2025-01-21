@@ -23,7 +23,7 @@ can also be set by environment variables so you don't have to worry about the ru
 each time.
 
 ## Configuration via TOML file
-You can also configure the server using a TOML file. To do this, pass the `--config` flag to the server executable, followed by the path to the TOML file. 
+You can also configure the server using a TOML file. To do this, pass the `--config` flag to the server executable, followed by the path to the TOML file.
 
 For example, to configure the server using a file named `config_example.toml`, you would run the following command:
 
@@ -31,7 +31,7 @@ For example, to configure the server using a file named `config_example.toml`, y
 go run . --config config_example.toml
 ```
 
-To see all values that can be set and what purpose they serve, take a look at the provided `config_example.toml` file. 
+To see all values that can be set and what purpose they serve, take a look at the provided `config_example.toml` file.
 
 ## API
 
@@ -41,3 +41,39 @@ resources and take a look at our documentation.
 
 Currently, you can also just open your browser on [http://localhost:8080](http://localhost:8080)
 to see our debug client. We'll disable it once everything got stable.
+
+## Structure Overview
+
+### Package-Layer-View
+
+The following diagram visualizes the relationships between the packages.
+As you can see, it is a rather technical separation where communication flows from top to bottom.
+
+```mermaid
+flowchart TD
+
+RealtimeNote["Redis or nats (NATS messaging)"]:::noteStyle
+
+Realtime -.uses.- RealtimeNote
+
+API --> Common
+API --> Services
+API --> Database
+API --> Identifiers
+API --> Realtime
+API --> Auth
+
+Common --> Database
+
+Auth --> Common
+Auth --> Database
+
+Services --> Common
+Services --> Database
+Services --> Realtime
+
+Database --> Common
+Database --> Identifiers
+
+classDef noteStyle fill:#a0a0a0,stroke:#333,stroke-width:1px;
+```
