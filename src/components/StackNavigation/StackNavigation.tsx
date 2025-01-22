@@ -10,8 +10,8 @@ import {StackNavigationDots} from "./Dots/StackNavigationDots";
 interface StackNavigationProps {
   stacks: Note[];
   currentStack: string;
-  prevColumnStack?: string;
-  nextColumnStack?: string;
+  prevColumnStack: string | undefined;
+  nextColumnStack: string | undefined;
   handleModeration: (stackId: string) => void;
 }
 
