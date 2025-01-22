@@ -28,12 +28,18 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
   };
 
   // takes the index of the stack we want to navigate to
-  // if the index is out of bounds, it will navigate to the previous or next column
+  // if the index is out of bounds, it will navigate to the previous or next column, animated using the View Transition API
   const handleNavigation = (index: number) => {
     const stackId = getStackId(index);
     if (stackId) {
-      handleModeration(stackId);
-      navigate(`../note/${stackId}/stack`);
+      if (stacks[index]) {
+        handleModeration(stackId);
+        navigate(`../note/${stackId}/stack`);
+      } else
+        document.startViewTransition(() => {
+          handleModeration(stackId);
+          navigate(`../note/${stackId}/stack`);
+        });
     }
   };
 
