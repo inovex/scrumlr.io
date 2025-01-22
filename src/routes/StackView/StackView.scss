@@ -39,7 +39,7 @@ $stack-view__min-height: 82px;
   width: 100vw;
   border-radius: $note__border-radius;
 
-  overflow: hidden;
+  overflow: visible;
 
   @include scrollbar();
 }
@@ -62,6 +62,7 @@ $stack-view__min-height: 82px;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  max-height: $stack-content-max-height;
   gap: $spacing--sm;
 }
 
