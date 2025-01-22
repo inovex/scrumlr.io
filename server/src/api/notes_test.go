@@ -28,32 +28,17 @@ func TestNotesTestSuite(t *testing.T) {
 
 func (suite *NotesTestSuite) TestCreateNote() {
 
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "all ok",
-			expectedCode: http.StatusCreated,
-		},
-		{
-			name:         "api err",
-			expectedCode: http.StatusConflict,
-			err: &common.APIError{
-				Err:        errors.New("test"),
-				StatusCode: http.StatusConflict,
-				StatusText: "no",
-				ErrorText:  "way",
-			},
-		},
-		{
-			name:         "unexpected err",
-			expectedCode: http.StatusInternalServerError,
-			err:          errors.New("oops"),
-		},
-	}
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("all ok", http.StatusCreated, nil, false, false, nil).
+		Append("api err", http.StatusConflict, &common.APIError{
+			Err:        errors.New("test"),
+			StatusCode: http.StatusConflict,
+			StatusText: "no",
+			ErrorText:  "way",
+		}, false, false, nil).
+		Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			noteMock := services.NewMockNotes(suite.T())
@@ -93,32 +78,17 @@ func (suite *NotesTestSuite) TestCreateNote() {
 }
 func (suite *NotesTestSuite) TestGetNote() {
 
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "all ok",
-			expectedCode: http.StatusOK,
-		},
-		{
-			name:         "api err",
-			expectedCode: http.StatusConflict,
-			err: &common.APIError{
-				Err:        errors.New("foo"),
-				StatusCode: http.StatusConflict,
-				StatusText: "no",
-				ErrorText:  "way",
-			},
-		},
-		{
-			name:         "unexpected err",
-			expectedCode: http.StatusInternalServerError,
-			err:          errors.New("oops"),
-		},
-	}
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("all ok", http.StatusOK, nil, false, false, nil).
+		Append("api err", http.StatusConflict, &common.APIError{
+			Err:        errors.New("test"),
+			StatusCode: http.StatusConflict,
+			StatusText: "no",
+			ErrorText:  "way",
+		}, false, false, nil).
+		Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 			noteMock := services.NewMockNotes(suite.T())
@@ -142,6 +112,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 	}
 }
 func (suite *NotesTestSuite) TestDeleteNote() {
+
 	tests := []struct {
 		name         string
 		expectedCode int

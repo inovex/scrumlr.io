@@ -16,3 +16,5 @@ packages:
         all: true
       Notes:
         all: true
+      Votings:
+        all: true
