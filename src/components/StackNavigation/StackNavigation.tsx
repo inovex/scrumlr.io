@@ -32,7 +32,7 @@ export const StackNavigation: FC<StackNavigationProps> = ({stacks, currentStack,
   const handleNavigation = (index: number) => {
     const stackId = getStackId(index);
     if (stackId) {
-      if (stacks[index]) {
+      if (stacks[index] || !document.startViewTransition) {
         handleModeration(stackId);
         navigate(`../note/${stackId}/stack`);
       } else
