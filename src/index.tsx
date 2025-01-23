@@ -1,7 +1,6 @@
 import React, {Suspense} from "react";
 import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
-import Clarity from "@microsoft/clarity";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import {store} from "store";
@@ -51,7 +50,8 @@ const root = createRoot(document.getElementById("root") as HTMLDivElement);
 
 // If clarity ID is set and not empty in env variables, initialize Clarity
 if (CLARITY_ID && CLARITY_ID !== "") {
-  Clarity.init(CLARITY_ID);
+  // TODO: tracking, including storing data using third party services has to be explicitly opt in!
+  // Clarity.init(CLARITY_ID);
 }
 
 root.render(
