@@ -14,31 +14,37 @@
   transition:
     background-color 80ms ease-in-out,
     color 80ms ease-in-out;
-}
 
-.vote-button-remove:disabled {
-  cursor: default;
-}
-
-.vote-button-remove:active {
-  transform: none;
-}
-
-.vote-button-remove:enabled:hover {
-  background-color: var(--accent-color--light);
-  color: $gray--000;
-  .vote-button-remove__count {
-    display: none;
+  &:disabled {
+    cursor: default;
   }
-  .vote-button-remove__icon {
-    display: block;
-  }
-}
 
-.vote-button-remove:focus-visible {
-  outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
-  .vote-button-remove__icon {
-    display: block;
+  &:active {
+    transform: none;
+  }
+
+  &:enabled {
+    &:focus-visible {
+      outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--accent-color--light);
+      color: $gray--000;
+
+      .vote-button-remove__count {
+        display: none;
+      }
+
+      .vote-button-remove__icon {
+        display: block;
+      }
+
+      > .vote-button-remove__folded-corner {
+        border-width: 12px 0 0 12px;
+      }
+    }
   }
 }
 
@@ -49,7 +55,7 @@
 }
 
 .bump {
-  animation: bump 0.2s linear;
+  animation: bump 0.2s ease-out;
 }
 
 @keyframes bump {
@@ -80,10 +86,6 @@
   border-radius: 0 0 0 16px;
   border-color: $gray--000 $gray--000 transparent transparent;
   transition: border-width 0.15s ease-in-out;
-}
-
-.vote-button-remove:enabled:hover > .vote-button-remove__folded-corner {
-  border-width: 12px 0 0 12px;
 }
 
 [theme="dark"] {
