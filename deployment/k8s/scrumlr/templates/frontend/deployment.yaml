@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment-frontend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-frontend
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-frontend
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-frontend
+    spec:
+      {{- if .Values.frontend.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range $val := .Values.frontend.image.pullSecrets }}
+        - name: {{ $val | quote }}
+      {{- end }}
+      {{- end}}
+      containers:
+        - name: {{ .Release.Name }}-frontend
+          image: {{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}
+          imagePullPolicy: {{ .Values.frontend.image.pullPolicy | quote }}
+          {{- if .Values.frontend.image.args }}
+          args: {{ range $val := .Values.frontend.image.args }}
+            - {{ $val | quote }} {{ end }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.frontend.config.listenPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-frontend-configmap
+            {{- if .Values.frontend.secretRef }}
+            - secretRef:
+                name: {{ .Values.frontend.secretRef }}
+            {{- else if .Values.frontend.secrets }}
+            - secretRef:
+                name: {{ .Release.Name }}-frontend-secrets
+            {{- end}}
+          {{- if .Values.frontend.resources }}
+          resources:
+            requests:
+              cpu: {{ .Values.frontend.resources.requests.cpu | quote | default "10m" }}
+              memory: {{ .Values.frontend.resources.requests.memory | quote | default "50Mi" }}
+            limits:
+              cpu: {{ .Values.frontend.resources.limits.cpu | default "20m" | quote }}
+              memory: {{ .Values.frontend.resources.limits.memory | default "100Mi" | quote }}
+          {{- end}}
+          {{- if .Values.frontend.customLivenessProbe }}
+          startupProbe: {{- range $check, $checkVals := .Values.frontend.customLivenessProbe }}
+            {{ $check }}:
+              {{- range $key, $val := $checkVals }}
+              {{ $key }}: {{ $val }}
+              {{- end}}
+            {{- end}}
+          {{- else }}
+          {{- if .Values.frontend.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.backend.config.serverPort }}
+            initialDelaySeconds: {{ .Values.frontend.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.frontend.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.frontend.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.frontend.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.frontend.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- end}}
+          {{- if .Values.frontend.customReadinessProbe }}
+          readinessProbe: {{- range $check, $checkVals := .Values.frontend.customReadinessProbe }}
+            {{ $check }}:
+              {{- range $key, $val := $checkVals }}
+              {{ $key }}: {{ $val }}
+              {{- end}}
+            {{- end}}
+          {{- else }}
+          {{- if .Values.frontend.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.backend.config.serverPort }}
+            initialDelaySeconds: {{ .Values.frontend.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.frontend.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.frontend.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.frontend.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.frontend.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- end}}
+          {{- if .Values.frontend.customLivenessProbe }}
+          livenessProbe: {{- range $check, $checkVals := .Values.frontend.customLivenessProbe }}
+            {{ $check }}:
+              {{- range $key, $val := $checkVals }}
+              {{ $key }}: {{ $val }}
+              {{- end}}
+            {{- end}}
+          {{- else }}
+          {{- if .Values.frontend.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.backend.config.serverPort }}
+            initialDelaySeconds: {{ .Values.frontend.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.frontend.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.frontend.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.frontend.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.frontend.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- end}}

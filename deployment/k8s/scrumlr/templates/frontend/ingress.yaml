@@ -1,0 +1,35 @@
+{{- if .Values.frontend.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-frontend-ingress
+  {{- if .Values.frontend.ingress.annotations }}
+  annotations:
+    {{- range $key, $value := .Values.frontend.ingress.annotations }}
+    {{ $key }}: {{ $value | quote}}
+    {{- end}}
+  {{ end }}
+spec:
+  {{- if .Values.frontend.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.frontend.ingress.ingressClassName }}
+  {{- end }}
+  rules:
+    - http:
+        paths:
+          - path: {{ .Values.frontend.ingress.path }}
+            pathType: {{ .Values.frontend.ingress.pathType }}
+            backend:
+              service:
+                name: {{ .Release.Name }}-frontend
+                port:
+                  number: 80
+      {{- if ne .Values.frontend.ingress.hostname "*" }}
+      host: {{ .Values.frontend.ingress.hostname }}
+      {{- end }}
+  {{- if .Values.frontend.ingress.tls }}
+  tls:
+    - hosts:
+      - {{ .Values.frontend.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.frontend.ingress.hostname }}
+  {{- end }}
+{{- end }}
