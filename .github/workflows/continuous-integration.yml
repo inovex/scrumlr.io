@@ -94,6 +94,35 @@ jobs:
         run: |
           make test
           make build-alpine
+      
+      - name: Cache coverage file
+        uses: actions/cache@v3
+        id: cache-file
+        with:
+          path: server/src/coverage.txt
+          key: ${{ runner.os }}-coverage-${{ github.run_id }}
+
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Restore coverage file
+        uses: actions/cache@v3
+        with:
+          path: server/src/coverage.txt
+          key: ${{ runner.os }}-mycache-${{ github.run_id }}
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarQube Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@v1
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
   package:
     needs: [test-frontend, test-backend]
