@@ -3,7 +3,7 @@ name: Security Tools Scan
 on:
   push:
     branches:
-      - "feat/scan-tools"
+      - "GA_Sec_tools"
   pull_request:
     branches:
       - main
