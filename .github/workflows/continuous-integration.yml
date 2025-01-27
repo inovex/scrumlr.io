@@ -134,9 +134,7 @@ jobs:
         working-directory: ./server
         run: |
           make test
-      
-      - name: debug
-        run: pwd && ls -la && tree -L 3
+          sed -i 's|scrumlr.io/server/|server/src/|g' src/coverage.txt
         
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
