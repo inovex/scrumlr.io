@@ -96,7 +96,7 @@ jobs:
           make build-alpine
       
       - name: Cache coverage file
-        uses: actions/cache@v3
+        uses: actions/cache/save@v4
         id: cache-file
         with:
           path: server/src/coverage.txt
@@ -111,7 +111,7 @@ jobs:
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Restore coverage file
-        uses: actions/cache@v3
+        uses: actions/cache/restore@v4
         with:
           path: server/src/coverage.txt
           key: ${{ runner.os }}-mycache-${{ github.run_id }}
