@@ -114,7 +114,7 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: server/src/coverage.txt
-          key: ${{ runner.os }}-mycache-${{ github.run_id }}
+          key: ${{ runner.os }}-coverage-${{ github.run_id }}
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
