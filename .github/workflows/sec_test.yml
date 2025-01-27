@@ -3,39 +3,59 @@ name: Security Tools Scan
 on:
   push:
     branches:
-      - "feat/scan_tools"
+      - "feat/scan-tools"
   pull_request:
     branches:
       - main
 
 jobs:
-  security-scans:
+  semgrep-scan:
     runs-on: ubuntu-22.04
     steps:
-      - name: Code auschecken
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Go installieren
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.20'
-
-      - name: Go Bin zum PATH hinzufügen
-        run: echo "$HOME/go/bin" >> $GITHUB_PATH
-
-      - name: Semgrep ausführen
+      - name: Run Semgrep
         uses: returntocorp/semgrep-action@v1
         with:
           config: "p/r2c-ci"
 
-      - name: GoSec installieren
-        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
+  gosec-scan:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-      - name: GoSec ausführen
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Add Go Bin to PATH
+        run: echo "$HOME/go/bin" >> $GITHUB_PATH
+
+      - name: Install GoSec
+        run: go install github.com/securego/gosec/v2/cmd/gosec@v2.17.0
+
+      - name: Run GoSec
         run: $HOME/go/bin/gosec ./...
 
-      - name: Go-Critic installieren
+  go-critic-scan:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Add Go Bin to PATH
+        run: echo "$HOME/go/bin" >> $GITHUB_PATH
+
+      - name: Install Go-Critic
         run: go install github.com/go-critic/go-critic/cmd/gocritic@latest
 
-      - name: Go-Critic ausführen
-        run: $HOME/go/bin/gocritic check-project ./... 
+      - name: Run Go-Critic
+        run: $HOME/go/bin/gocritic check-project ./...
