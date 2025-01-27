@@ -1,6 +1,6 @@
 import {FC, HTMLAttributes, PropsWithChildren} from "react";
 import FocusLock from "react-focus-lock";
-import ReactDOM from "react-dom";
+import {createPortal} from "react-dom";
 import {useWindowEvent} from "utils/hooks/useWindowEvent";
 import classNames from "classnames";
 import "./Portal.scss";
@@ -37,7 +37,7 @@ export const Portal: FC<PropsWithChildren<PortalProps>> = ({onClose, hiddenOverf
     return theme === "light" ? "accent-color__backlog-blue" : "accent-color__planning-pink";
   };
 
-  return ReactDOM.createPortal(
+  return createPortal(
     <div className={classNames("portal", className)} onClick={() => onClose?.()} role="dialog" {...otherProps}>
       <FocusLock autoFocus={false} returnFocus>
         <div
