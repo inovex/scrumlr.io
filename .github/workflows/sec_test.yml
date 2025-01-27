@@ -9,43 +9,33 @@ on:
       - main
 
 jobs:
-  semgrep-scan:
+  security-scans:
     runs-on: ubuntu-22.04
     steps:
-      # 1. Checkout Code
-      - name: Checkout Code
+      - name: Code auschecken
         uses: actions/checkout@v3
 
-      # 2. Run Semgrep
-      - name: Run Semgrep
+      - name: Go installieren
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.20'
+
+      - name: Go Bin zum PATH hinzufügen
+        run: echo "$HOME/go/bin" >> $GITHUB_PATH
+
+      - name: Semgrep ausführen
         uses: returntocorp/semgrep-action@v1
         with:
           config: "p/r2c-ci"
 
-  gosec-scan:
-    runs-on: ubuntu-22.04
-    steps:
-      # 1. Checkout Code
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: GoSec installieren
+        run: go install github.com/securego/gosec/v2/cmd/gosec@latest
 
-      # 2. Install Go
-      - name: Install Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.23'
+      - name: GoSec ausführen
+        run: $HOME/go/bin/gosec ./...
 
-      # 3. Run GoSec
-      - name: Run GoSec
-        run: |
-          go install github.com/securego/gosec/v2/cmd/gosec@latest
-          $HOME/go/bin/gosec ./...
-
-    # Step 3: Install go-critic
-      - name: Install go-critic
+      - name: Go-Critic installieren
         run: go install github.com/go-critic/go-critic/cmd/gocritic@latest
 
-   # Step 4: Run go-critic
-      - name: Run go-critic
-        run: gocritic check-project ./...
-
+      - name: Go-Critic ausführen
+        run: $HOME/go/bin/gocritic check-project ./...
