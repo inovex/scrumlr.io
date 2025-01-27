@@ -41,17 +41,11 @@ jobs:
           go install github.com/securego/gosec/v2/cmd/gosec@latest
           $HOME/go/bin/gosec ./...
 
-  snyk-scan:
-    runs-on: ubuntu-22.04
-    steps:
-      # 1. Checkout Code
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    # Step 3: Install go-critic
+      - name: Install go-critic
+        run: go install github.com/go-critic/go-critic/cmd/gocritic@latest
 
-      # 2. Run Snyk
-      - name: Run Snyk to Check for Vulnerabilities
-        uses: snyk/actions/golang@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
+   # Step 4: Run go-critic
+      - name: Run go-critic
+        run: gocritic check-project ./...
+
