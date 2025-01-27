@@ -108,7 +108,7 @@ export const Note = (props: NoteProps) => {
           <div data-clarity-mask="True" className="note__author-container">
             <NoteAuthorList authors={authors} authorID={note.author} showAuthors={showAuthors} viewer={props.viewer} />
           </div>
-          <Votes noteId={props.noteId!} aggregateVotes />
+          <Votes noteId={props.noteId!} aggregateVotes colorClassName={props.colorClassName} />
         </header>
         {isImage ? (
           <div className="note__image-wrapper">

@@ -11,6 +11,7 @@ type VotesProps = {
   noteId: string;
   // Aggregate the votes of the child notes
   aggregateVotes?: boolean;
+  colorClassName?: string;
 };
 
 export const Votes: FC<VotesProps> = (props) => {
@@ -58,14 +59,17 @@ export const Votes: FC<VotesProps> = (props) => {
   return voting || allPastVotes > 0 ? (
     <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
       {/* standard display for votes */}
-      {!voting && allPastVotes > 0 && <VoteButtons.Remove noteId={props.noteId} numberOfVotes={allPastVotes} disabled />}
+      {!voting && allPastVotes > 0 && <VoteButtons.Remove noteId={props.noteId} numberOfVotes={allPastVotes} disabled colorClassName={props.colorClassName} />}
       {/* display for votes when voting is open */}
-      {voting && ongoingVotes.note > 0 && <VoteButtons.Remove disabled={boardLocked && !isModerator} noteId={props.noteId} numberOfVotes={ongoingVotes.note} />}
+      {voting && ongoingVotes.note > 0 && (
+        <VoteButtons.Remove disabled={boardLocked && !isModerator} noteId={props.noteId} numberOfVotes={ongoingVotes.note} colorClassName={props.colorClassName} />
+      )}
       {voting && (isModerator || !boardLocked) && (
         <VoteButtons.Add
           noteId={props.noteId}
           disabled={ongoingVotes.total === voting.voteLimit || (ongoingVotes.note > 0 && !voting.allowMultipleVotes)}
           disabledReason={addVotesDisabledReason()}
+          colorClassName={props.colorClassName}
         />
       )}
     </div>

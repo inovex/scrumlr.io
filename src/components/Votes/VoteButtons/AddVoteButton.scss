@@ -42,6 +42,10 @@
     color: var(--accent-color--500);
     background-color: rgba(var(--accent-color--400-rgb), 0.24);
 
+    &--high-contrast {
+      color: var(--accent-color--200);
+    }
+
     &:enabled:hover {
       background-color: var(--accent-color--dark);
     }

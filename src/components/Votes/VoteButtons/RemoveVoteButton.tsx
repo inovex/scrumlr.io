@@ -6,14 +6,16 @@ import {Minus} from "components/Icon";
 import "./RemoveVoteButton.scss";
 import {useAppDispatch} from "store";
 import {deleteVote} from "store/features";
+import {needsHighContrast} from "constants/colors";
 
 type RemoveVoteProps = {
   noteId: string;
   disabled?: boolean;
   numberOfVotes: number;
+  colorClassName?: string;
 };
 
-export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes}) => {
+export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes, colorClassName}) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
@@ -34,7 +36,7 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
 
   return (
     <DotButton
-      className={classNames("vote-button-remove", {bump: doBump})}
+      className={classNames("vote-button-remove", {bump: doBump}, colorClassName && needsHighContrast(colorClassName) && "vote-button-remove--high-contrast")}
       disabled={disabled}
       onClick={dispatchDeleteVote}
       onAnimationEnd={() => {
