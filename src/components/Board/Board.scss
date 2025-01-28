@@ -68,6 +68,12 @@
 }
 
 [theme="dark"] {
+  .board__spacer-left {
+    @include inset-border($top: true, $left: true, $bottom: true, $color: var(--accent-color--400));
+  }
+  .board__spacer-right {
+    @include inset-border($top: true, $right: true, $bottom: true, $color: var(--accent-color--400));
+  }
   .board__spacer-left:nth-child(odd),
   .board__spacer-right:nth-child(odd) {
     background-color: $navy--600;

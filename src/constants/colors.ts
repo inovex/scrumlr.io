@@ -11,3 +11,5 @@ export function formatColorName(input: string): string {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+export const needsHighContrast = (color: string): boolean => [getColorClassName("backlog-blue"), getColorClassName("value-violet")].includes(color);
