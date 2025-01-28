@@ -27,5 +27,4 @@ func (b *TestRequestBuilder) AddToContext(key, val interface{}) *TestRequestBuil
 
 func (b *TestRequestBuilder) Request() *http.Request {
 	return b.req.Clone(b.req.Context())
-
 }
