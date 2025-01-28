@@ -6,21 +6,21 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="settings-dialog__container"
+        class="settings-dialog__container accent-color__backlog-blue"
         data-testid="export"
       >
         <div
           class="settings-dialog__header"
         >
           <h2
-            class="settings-dialog__header-text accent-color__backlog-blue"
+            class="settings-dialog__header-text"
           >
              
             Export board
           </h2>
         </div>
         <div
-          class="settings-dialog__group accent-color__backlog-blue"
+          class="settings-dialog__group"
         >
           <button
             aria-label="Export as JSON"
@@ -36,7 +36,7 @@ Object {
             <svg
               class="settings-option-button__icon"
             >
-              icon-export-json.svg
+              file-json.svg
             </svg>
           </button>
           <hr
@@ -56,7 +56,7 @@ Object {
             <svg
               class="settings-option-button__icon"
             >
-              icon-export-csv.svg
+              file-csv.svg
             </svg>
           </button>
           <hr
@@ -75,7 +75,7 @@ Object {
             <svg
               class="settings-option-button__icon"
             >
-              icon-print.svg
+              printer.svg
             </svg>
           </button>
           <hr
@@ -95,7 +95,7 @@ Object {
             <svg
               class="settings-option-button__icon"
             >
-              icon-clipboard.svg
+              duplicate.svg
             </svg>
           </button>
         </div>
@@ -104,21 +104,21 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="settings-dialog__container"
+      class="settings-dialog__container accent-color__backlog-blue"
       data-testid="export"
     >
       <div
         class="settings-dialog__header"
       >
         <h2
-          class="settings-dialog__header-text accent-color__backlog-blue"
+          class="settings-dialog__header-text"
         >
            
           Export board
         </h2>
       </div>
       <div
-        class="settings-dialog__group accent-color__backlog-blue"
+        class="settings-dialog__group"
       >
         <button
           aria-label="Export as JSON"
@@ -134,7 +134,7 @@ Object {
           <svg
             class="settings-option-button__icon"
           >
-            icon-export-json.svg
+            file-json.svg
           </svg>
         </button>
         <hr
@@ -154,7 +154,7 @@ Object {
           <svg
             class="settings-option-button__icon"
           >
-            icon-export-csv.svg
+            file-csv.svg
           </svg>
         </button>
         <hr
@@ -173,7 +173,7 @@ Object {
           <svg
             class="settings-option-button__icon"
           >
-            icon-print.svg
+            printer.svg
           </svg>
         </button>
         <hr
@@ -193,7 +193,7 @@ Object {
           <svg
             class="settings-option-button__icon"
           >
-            icon-clipboard.svg
+            duplicate.svg
           </svg>
         </button>
       </div>

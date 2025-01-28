@@ -1,0 +1,113 @@
+@import "constants/style";
+
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: $spacing--xxs;
+  box-shadow: 0 0 20px rgba($navy--400, 0.12);
+  background-color: $gray--300;
+  list-style: none;
+  padding-left: 0;
+  margin-top: auto;
+  border-radius: $rounded--full;
+
+  &__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      &:focus-within {
+        > .color-picker__color-option {
+          border: 3px solid var(--accent-color--100);
+        }
+      }
+
+      &:focus-visible {
+        border-radius: $rounded--full;
+        outline: none;
+      }
+    }
+  }
+}
+
+[theme="dark"] {
+  .color-picker {
+    background-color: $navy--600;
+
+    &__item {
+      &__button {
+        &:focus-visible {
+          border-radius: $rounded--full;
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+.color-picker__color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: $rounded--full;
+  background-color: var(--accent-color--400);
+  border: 3px solid $gray--300;
+
+  &--selected {
+    background-color: var(--accent-color--400);
+    border: 3px solid var(--accent-color--200);
+  }
+
+  &:hover,
+  &:focus-visible {
+    background-color: var(--accent-color--400);
+    border: 3px solid var(--accent-color--100);
+  }
+}
+
+[theme="dark"] {
+  .color-picker__color-option {
+    border: 3px solid $navy--600;
+
+    &--selected {
+      border: 3px solid var(--accent-color--200);
+    }
+
+    &:hover,
+    &:focus-visible {
+      border: 3px solid var(--accent-color--100);
+    }
+  }
+}
+
+.fix-focus-lock-placement {
+  margin-top: auto;
+}
+
+@media #{$smartphone} {
+  .color-picker {
+    flex-direction: row-reverse;
+    position: absolute;
+    right: 0;
+    margin: auto;
+    justify-self: center;
+    padding-right: $spacing--xxs;
+  }
+
+  .fix-focus-lock-placement {
+    margin-top: initial;
+    margin-bottom: auto;
+  }
+}

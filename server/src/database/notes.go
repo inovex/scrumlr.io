@@ -22,6 +22,7 @@ type Note struct {
 	Text          string
 	Stack         uuid.NullUUID
 	Rank          int
+	Edited        bool
 }
 
 type NoteInsert struct {
@@ -30,6 +31,14 @@ type NoteInsert struct {
 	Board         uuid.UUID
 	Column        uuid.UUID
 	Text          string
+}
+
+type NoteImport struct {
+	bun.BaseModel `bun:"table:notes"`
+	Author        uuid.UUID
+	Board         uuid.UUID
+	Text          string
+	Position      *NoteUpdatePosition `bun:",embed"`
 }
 
 type NoteUpdatePosition struct {
@@ -44,6 +53,7 @@ type NoteUpdate struct {
 	Board         uuid.UUID
 	Text          *string
 	Position      *NoteUpdatePosition `bun:"embed"`
+	Edited        bool
 }
 
 func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
@@ -53,6 +63,16 @@ func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
 		Value("rank", "coalesce((SELECT COUNT(*) as rank FROM notes WHERE board = ? AND \"column\" = ? AND stack IS NULL), 0)", insert.Board, insert.Column).
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
+	return note, err
+}
+
+func (d *Database) ImportNote(insert NoteImport) (Note, error) {
+	var note Note
+	query := d.db.NewInsert().
+		Model(&insert).
+		Returning("*")
+	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
+
 	return note, err
 }
 
@@ -70,6 +90,15 @@ func (d *Database) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]Note, erro
 	}
 	err := query.OrderExpr("\"column\", stack DESC, rank DESC").Scan(context.Background(), &notes)
 	return notes, err
+}
+
+func (d *Database) GetChildNotes(parentNote uuid.UUID) ([]Note, error) {
+	var notes []Note
+	err := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", parentNote).Scan(context.Background(), &notes)
+	if err != nil {
+		return nil, err
+	}
+	return notes, nil
 }
 
 func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error) {
@@ -123,7 +152,7 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 
 func (d *Database) updateNoteText(update NoteUpdate) (Note, error) {
 	var note Note
-	_, err := d.db.NewUpdate().Model(&update).Column("text").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
+	_, err := d.db.NewUpdate().Model(&update).Column("text", "edited").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 	if err != nil {
 		return note, err
 	}

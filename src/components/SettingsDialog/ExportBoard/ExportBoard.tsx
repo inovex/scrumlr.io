@@ -1,34 +1,35 @@
 import classNames from "classnames";
 import {useTranslation} from "react-i18next";
-import {ReactComponent as ExportCSV} from "assets/icon-export-csv.svg";
-import {ReactComponent as ExportJSON} from "assets/icon-export-json.svg";
-import {ReactComponent as PrintIcon} from "assets/icon-print.svg";
-import {ReactComponent as ClipboardIcon} from "assets/icon-clipboard.svg";
+import {FileCsv, FileJson, Duplicate, Printer} from "components/Icon";
 import {useAppSelector} from "store";
 import {exportAsJSON, exportAsCSV, getMarkdownExport} from "utils/export";
 import {Toast} from "utils/Toast";
 import {TOAST_TIMER_SHORT} from "constants/misc";
-import {SettingsButton} from "../Components/SettingsButton";
-import "./ExportBoard.scss";
-import "../SettingsDialog.scss";
+import {MenuItemConfig} from "constants/settings";
+import {useOutletContext} from "react-router";
+import {getColorClassName} from "constants/colors";
 import ExportHintHiddenContent from "./ExportHintHiddenContent/ExportHintHiddenContent";
+import {SettingsButton} from "../Components/SettingsButton";
+import "../SettingsDialog.scss";
+import "./ExportBoard.scss";
 
 export const ExportBoard = () => {
   const {t} = useTranslation();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
 
   const boardId = useAppSelector((state) => state.board.data!.id);
   const boardName = useAppSelector((state) => state.board.data!.name);
 
   return (
-    <div data-testid="export" className="settings-dialog__container">
+    <div data-testid="export" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <div className="settings-dialog__header">
-        <h2 className={classNames("settings-dialog__header-text", "accent-color__backlog-blue")}> {t("ExportBoardOption.title")}</h2>
+        <h2 className="settings-dialog__header-text"> {t("ExportBoardOption.title")}</h2>
       </div>
 
-      <div className={classNames("settings-dialog__group", "accent-color__backlog-blue")}>
+      <div className="settings-dialog__group">
         <SettingsButton
           label={t("ExportBoardOption.exportAsJson")}
-          icon={ExportJSON}
+          icon={FileJson}
           className="export-board__button-reverse-order"
           onClick={() => {
             exportAsJSON(boardId, boardName);
@@ -38,7 +39,7 @@ export const ExportBoard = () => {
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.exportAsCSV")}
-          icon={ExportCSV}
+          icon={FileCsv}
           className="export-board__button-reverse-order"
           onClick={() => {
             exportAsCSV(boardId, boardName);
@@ -48,7 +49,7 @@ export const ExportBoard = () => {
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.openPrintView")}
-          icon={PrintIcon}
+          icon={Printer}
           className="export-board__button-reverse-order export-board__button-print-view"
           onClick={() => {
             window.open(`/board/${boardId}/print`, "_blank");
@@ -57,7 +58,7 @@ export const ExportBoard = () => {
         <hr className="settings-dialog__separator" />
         <SettingsButton
           label={t("ExportBoardOption.exportToClipboard")}
-          icon={ClipboardIcon}
+          icon={Duplicate}
           className="export-board__button-reverse-order"
           onClick={() => {
             getMarkdownExport(boardId).then((result) => {

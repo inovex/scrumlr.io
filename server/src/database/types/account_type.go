@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 )
 
 // AccountType of users (e.g. the authentication provider)
@@ -26,18 +27,33 @@ const (
 
 	// AccountTypeApple users registered on Apple
 	AccountTypeApple AccountType = "APPLE"
+
+	// AccountTypeOIDC users registered on OIDC
+	AccountTypeOIDC AccountType = "OIDC"
 )
+
+func NewAccountType(s string) (result AccountType, err error) {
+	result = AccountType(strings.ToUpper(s))
+	switch result {
+	case AccountTypeAnonymous, AccountTypeGoogle, AccountTypeMicrosoft, AccountTypeAzureAd, AccountTypeGitHub, AccountTypeApple, AccountTypeOIDC:
+		return
+	}
+	err = errors.New("invalid account type")
+
+	return
+}
 
 func (accountType *AccountType) UnmarshalJSON(b []byte) error {
 	var s string
 	if err := json.Unmarshal(b, &s); err != nil {
 		return err
 	}
-	unmarshalledAccountType := AccountType(s)
-	switch unmarshalledAccountType {
-	case AccountTypeAnonymous, AccountTypeGoogle, AccountTypeMicrosoft, AccountTypeAzureAd, AccountTypeGitHub, AccountTypeApple:
-		*accountType = unmarshalledAccountType
-		return nil
+	unmarshalledAccountType, err := NewAccountType(s)
+	if err != nil {
+		return err
 	}
-	return errors.New("invalid account type")
+
+	*accountType = unmarshalledAccountType
+
+	return nil
 }

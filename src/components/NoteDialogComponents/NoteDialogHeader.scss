@@ -3,7 +3,7 @@
 
 .note-dialog__header {
   font-size: calc(24px + 0.8vw);
-  color: $color-white;
+  color: $gray--000;
   width: 100%;
   height: $stack-view__header-height;
   min-height: $stack-view__min-height;
@@ -24,7 +24,7 @@
       content: " ";
       display: block;
       height: 6px;
-      background: var(--accent-color);
+      background: var(--accent-color--light);
       border-radius: $rounded--full;
       margin-top: $spacing--base;
 

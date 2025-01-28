@@ -30,6 +30,8 @@ type Note struct {
 	// The text of the note.
 	Text string `json:"text"`
 
+	Edited bool `json:"edited"`
+
 	// The position of the note.
 	Position NotePosition `json:"position"`
 }
@@ -43,6 +45,7 @@ func (n *Note) From(note database.Note) *Note {
 		Stack:  note.Stack,
 		Rank:   note.Rank,
 	}
+	n.Edited = note.Edited
 	return n
 }
 
@@ -74,6 +77,15 @@ type NoteCreateRequest struct {
 	User  uuid.UUID `json:"-"`
 }
 
+type NoteImportRequest struct {
+	// The text of the note.
+	Text     string       `json:"text"`
+	Position NotePosition `json:"position"`
+
+	Board uuid.UUID `json:"-"`
+	User  uuid.UUID `json:"-"`
+}
+
 // NoteUpdateRequest represents the request to update a note.
 type NoteUpdateRequest struct {
 
@@ -83,8 +95,9 @@ type NoteUpdateRequest struct {
 	// The position of the note
 	Position *NotePosition `json:"position"`
 
-	ID    uuid.UUID `json:"-"`
-	Board uuid.UUID `json:"-"`
+	Edited bool      `json:"-"`
+	ID     uuid.UUID `json:"-"`
+	Board  uuid.UUID `json:"-"`
 }
 
 // NoteDeleteRequest represents the request to delete a note.

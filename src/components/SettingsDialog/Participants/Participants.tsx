@@ -1,24 +1,24 @@
-import {ReactComponent as ReadyCheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as UnbanIcon} from "assets/icon-join.svg";
-import {ReactComponent as BanIcon} from "assets/icon-kick-participant.svg";
-import {ReactComponent as MagnifyingGlassIcon} from "assets/icon-magnifying-glass.svg";
-import {ReactComponent as WifiIconDisabled} from "assets/icon-wifi-disabled.svg";
+import {Join, Kick, Search, Wifi, MarkAsDone} from "components/Icon";
 import classNames from "classnames";
 import {UserAvatar} from "components/BoardUsers";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
+import {useOutletContext} from "react-router";
+import {MenuItemConfig} from "constants/settings";
+import {getColorClassName} from "constants/colors";
 import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {Participant} from "types/participant";
+import {useAppDispatch, useAppSelector} from "store";
+import {Participant} from "store/features/participants/types";
 import _ from "underscore";
 import {useDebounce} from "utils/hooks/useDebounce";
 import "./Participants.scss";
+import {changePermission, setUserBanned, setUserReadyStatus} from "store/features";
 
 export const Participants = () => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+  const activeMenuItem: MenuItemConfig = useOutletContext();
   const [queryString, setQueryString] = useState<string>("");
   const debouncedQueryString = useDebounce(queryString);
   const [permissionFilter, setPermissionFilter] = useState<"ALL" | "OWNER" | "MODERATOR" | "PARTICIPANT">("ALL");
@@ -26,9 +26,9 @@ export const Participants = () => {
   const [isScrollable, setIsScrollable] = useState<boolean>(false);
   const listRef = useRef<HTMLUListElement>(null);
   const listWrapperRef = useRef<HTMLDivElement>(null);
-  const isModerator = useAppSelector((state) => state.participants!.self.role === "OWNER" || state.participants!.self.role === "MODERATOR");
-  const self = useAppSelector((state) => state.participants!.self);
-  const participants = useAppSelector((state) => [state.participants!.self, ...(state.participants?.others ?? [])], _.isEqual);
+  const isModerator = useAppSelector((state) => state.participants!.self?.role === "OWNER" || state.participants!.self?.role === "MODERATOR");
+  const self = useAppSelector((state) => state.participants.self)!;
+  const participants = useAppSelector((state) => [state.participants!.self!, ...(state.participants?.others ?? [])], _.isEqual);
   const existsAtLeastOneReadyUser = participants.some((p) => p.ready);
 
   const [showBanParticipantConfirmation, setShowBanParticipantConfirmation] = useState(false);
@@ -45,7 +45,7 @@ export const Participants = () => {
   }, [participants]);
 
   const resetReadyStateOfAllUsers = () => {
-    participants.forEach((p) => dispatch(Actions.setUserReadyStatus(p.user.id, false)));
+    participants.forEach((p) => dispatch(setUserReadyStatus({userId: p.user.id, ready: false})));
   };
 
   const banParticipant = (participant: Participant, banned: boolean) => {
@@ -59,18 +59,18 @@ export const Participants = () => {
   };
 
   const confirmBan = ({user}: Participant, banned: boolean) => {
-    dispatch(Actions.setUserBanned(user, banned));
+    dispatch(setUserBanned({userId: user.id, banned}));
     resetBanProcess();
   };
 
   return (
-    <section className="settings-dialog__container accent-color__poker-purple">
+    <section className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <header className="settings-dialog__header">
         <h2 className="settings-dialog__header-text">{t("Participants.Title")}</h2>
       </header>
       <div className="participants__search-input-wrapper">
         <input placeholder="Name..." className="participants__search-input" onChange={(e) => setQueryString(e.target.value)} />
-        <MagnifyingGlassIcon className="participants__search-icon" />
+        <Search className="participants__search-icon" />
       </div>
       <div className="participants__filter-buttons">
         <button
@@ -101,7 +101,7 @@ export const Participants = () => {
           onClick={() => setOnlineFilter((o) => !o)}
           title={t("Participants.OnlineFilterTooltip")}
         >
-          <WifiIconDisabled />
+          <Wifi />
         </button>
       </div>
       <div className={classNames("participants__list-wrapper", {"participants__list-scrollable": isScrollable})} ref={listWrapperRef}>
@@ -116,7 +116,7 @@ export const Participants = () => {
             .filter((participant) => participant.role === permissionFilter || permissionFilter === "ALL")
             .filter((participant) => participant.connected === onlineFilter)
             .map((participant) => (
-              <li key={participant.user.id} className={classNames("participants__list-item", {banned: participant.banned})}>
+              <li data-clarity-mask="True" key={participant.user.id} className={classNames("participants__list-item", {banned: participant.banned})}>
                 <UserAvatar avatar={participant.user.avatar} className="participant__avatar" id={participant.user.id} ready={participant.ready} title={participant.user.name} />
                 <div className="participant__name-role-wrapper">
                   <span className="participant__name">{participant.user.name}</span>
@@ -132,7 +132,7 @@ export const Participants = () => {
                       <button
                         className={classNames("participant__role", {"participant__role--active": participant.role === "MODERATOR"})}
                         disabled={participant.role === "MODERATOR"}
-                        onClick={() => dispatch(Actions.changePermission(participant.user.id, true))}
+                        onClick={() => dispatch(changePermission({userId: participant.user.id, moderator: true}))}
                         title={t("Participants.ChangeRoleToModeratorTooltip")}
                       >
                         {t("UserRole.Moderator")}
@@ -140,7 +140,7 @@ export const Participants = () => {
                       <button
                         className={classNames("participant__role", {"participant__role--active": participant.role === "PARTICIPANT"})}
                         disabled={participant.role === "PARTICIPANT"}
-                        onClick={() => dispatch(Actions.changePermission(participant.user.id, false))}
+                        onClick={() => dispatch(changePermission({userId: participant.user.id, moderator: false}))}
                         title={t("Participants.ChangeRoleToParticipantTooltip")}
                       >
                         {t("UserRole.Participant")}
@@ -158,7 +158,7 @@ export const Participants = () => {
                       className="participant__join-icon"
                       onClick={() => banParticipant(participant, false)}
                     >
-                      <UnbanIcon />
+                      <Join />
                     </button>
                   ) : (
                     <button
@@ -167,7 +167,7 @@ export const Participants = () => {
                       className="participant__kick-icon"
                       onClick={() => banParticipant(participant, true)}
                     >
-                      <BanIcon />
+                      <Kick />
                     </button>
                   ))}
               </li>
@@ -177,7 +177,7 @@ export const Participants = () => {
       {isModerator && (
         <footer className={classNames("participants-reset-state-banner__container", {"participants-reset-state-banner__container--is-active": existsAtLeastOneReadyUser})}>
           <div className="participants-reset-state-banner__icon-and-text">
-            <ReadyCheckIcon className="participants-reset-state-banner__check-icon" />
+            <MarkAsDone className="participants-reset-state-banner__check-icon" />
             <div className="participants-reset-state-banner__text">{t("Participants.ResetBannerText")}</div>
           </div>
           <button className="participants-reset-state-banner__button" onClick={resetReadyStateOfAllUsers}>
@@ -191,7 +191,7 @@ export const Participants = () => {
           title={t(selectedParticipant.banned ? "ConfirmationDialog.banParticipant" : "ConfirmationDialog.unbanParticipant", {user: selectedParticipant.participant.user.name})}
           onAccept={() => confirmBan(selectedParticipant.participant, selectedParticipant.banned)} // assertion: selectedParticipant is set
           onDecline={() => resetBanProcess()}
-          icon={BanIcon}
+          icon={Kick}
           className="participants__ban-dialog"
         />
       )}

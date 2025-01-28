@@ -1,12 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {ReactComponent as CancelIcon} from "assets/icon-cancel.svg";
-import {ReactComponent as TimerIcon} from "assets/icon-timer.svg";
-import {ReactComponent as CheckIcon} from "assets/icon-check.svg";
-import {ReactComponent as PlusOneIcon} from "assets/icon-plus-one.svg";
-import {ReactComponent as FlagIcon} from "assets/icon-flag.svg";
+import {useAppDispatch, useAppSelector} from "store";
+import {Close, Timer as TimerIcon, MarkAsDone, FlagFinish, PlusOne} from "components/Icon";
 import {useTranslation} from "react-i18next";
 import {Toast} from "utils/Toast";
 import useSound from "use-sound";
@@ -14,6 +9,7 @@ import {API} from "api";
 import {Timer as TimerUtils} from "utils/timer";
 import {TOAST_TIMER_DEFAULT} from "constants/misc";
 import "./Timer.scss";
+import {cancelTimer, incrementTimer, setUserReadyStatus} from "store/features";
 
 type TimerProps = {
   startTime: Date;
@@ -29,16 +25,17 @@ const usePrevious = (value: boolean) => {
 };
 
 export const Timer = (props: TimerProps) => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
   const allParticipantsReady = useAppSelector(
     (state) =>
-      state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").length &&
-      state.participants!.others.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready)
+      state.participants!.others?.filter((p) => p.connected && p.role === "PARTICIPANT").length &&
+      state.participants!.others?.filter((p) => p.connected && p.role === "PARTICIPANT").every((participant) => participant.ready)
   );
-  const anyReady = useAppSelector((state) => state.participants!.others.filter((p) => p.connected).some((participant) => participant.ready));
-  const isModerator = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
-  const isReady = useAppSelector((state) => state.participants?.self.ready);
+  const anyReady = useAppSelector((state) => state.participants!.others?.filter((p) => p.connected).some((participant) => participant.ready));
+  const isModerator = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
+  const isReady = useAppSelector((state) => state.participants?.self?.ready);
   const boardId = useAppSelector((state) => state.board.data!.id);
   const me = useAppSelector((state) => state.participants?.self);
 
@@ -65,7 +62,7 @@ export const Timer = (props: TimerProps) => {
         Toast.info({
           title: t("Toast.ready"),
           buttons: [t("Toast.readyButton")],
-          firstButtonOnClick: () => store.dispatch(Actions.setUserReadyStatus(me!.user.id, true)),
+          firstButtonOnClick: () => dispatch(setUserReadyStatus({userId: me!.user.id, ready: true})),
         });
       }
       if (isModerator && anyReady) {
@@ -118,9 +115,9 @@ export const Timer = (props: TimerProps) => {
                 data-tooltip-content={t("Timer.endTimer")}
                 aria-label={t("Timer.endTimer")}
                 className="short-action__button"
-                onClick={() => store.dispatch(Actions.cancelTimer())}
+                onClick={() => dispatch(cancelTimer())}
               >
-                <FlagIcon />
+                <FlagFinish className="short-action__flag-icon" />
               </button>
             </li>
           )}
@@ -130,10 +127,10 @@ export const Timer = (props: TimerProps) => {
               data-tooltip-content={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               aria-label={isReady ? t("MenuBars.unmarkAsDone") : t("MenuBars.markAsDone")}
               className={classNames("short-action__button", {"short-action__button--ready": isReady})}
-              onClick={() => store.dispatch(Actions.setUserReadyStatus(me!.user.id, !isReady))}
+              onClick={() => dispatch(setUserReadyStatus({userId: me!.user.id, ready: !isReady}))}
             >
-              <CheckIcon className="short-action__check-icon" />
-              <CancelIcon className="short-action__cancel-icon" />
+              <MarkAsDone className="short-action__check-icon" />
+              <Close className="short-action__cancel-icon" />
             </button>
           </li>
         </ul>
@@ -145,9 +142,9 @@ export const Timer = (props: TimerProps) => {
           data-tooltip-content={t("Timer.addOneMinute")}
           aria-label={t("Timer.addOneMinute")}
           className="timer__increment-button"
-          onClick={() => store.dispatch(Actions.incrementTimer())}
+          onClick={() => dispatch(incrementTimer())}
         >
-          <PlusOneIcon />
+          <PlusOne />
         </button>
       )}
     </div>

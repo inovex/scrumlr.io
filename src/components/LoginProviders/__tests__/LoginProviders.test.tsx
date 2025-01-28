@@ -7,7 +7,20 @@ import getTestStore from "utils/test/getTestStore";
 
 describe("check for all provider buttons", () => {
   const createLoginProviders = (providers?: string[]) => (
-    <Provider store={getTestStore({view: {enabledAuthProvider: providers ?? [], serverTimeOffset: 0, moderating: false}})}>
+    <Provider
+      store={getTestStore({
+        view: {
+          enabledAuthProvider: providers ?? [],
+          serverTimeOffset: 0,
+          moderating: false,
+          feedbackEnabled: false,
+          showBoardReactions: true,
+          noteFocused: false,
+          hotkeyNotificationsEnabled: true,
+          hotkeysAreActive: false,
+        },
+      })}
+    >
       <LoginProviders />
     </Provider>
   );
@@ -20,33 +33,22 @@ describe("check for all provider buttons", () => {
   test("google sign in", () => {
     const {container} = render(createLoginProviders(["GOOGLE"]));
     expect(container.querySelector("#google")).toBeInTheDocument();
-    expect(container.querySelector("#github")).not.toBeInTheDocument();
     expect(container.querySelector("#microsoft")).not.toBeInTheDocument();
-    expect(container.querySelector("#apple")).not.toBeInTheDocument();
-  });
-
-  test("github sign in", () => {
-    const {container} = render(createLoginProviders(["GITHUB"]));
-    expect(container.querySelector("#google")).not.toBeInTheDocument();
-    expect(container.querySelector("#github")).toBeInTheDocument();
-    expect(container.querySelector("#microsoft")).not.toBeInTheDocument();
-    expect(container.querySelector("#apple")).not.toBeInTheDocument();
+    expect(container.querySelector("#oidc")).not.toBeInTheDocument();
   });
 
   test("microsoft sign in", () => {
     const {container} = render(createLoginProviders(["MICROSOFT"]));
     expect(container.querySelector("#google")).not.toBeInTheDocument();
-    expect(container.querySelector("#github")).not.toBeInTheDocument();
     expect(container.querySelector("#microsoft")).toBeInTheDocument();
-    expect(container.querySelector("#apple")).not.toBeInTheDocument();
+    expect(container.querySelector("#oidc")).not.toBeInTheDocument();
   });
 
-  test("apple sign in", () => {
-    const {container} = render(createLoginProviders(["APPLE"]));
+  test("oidc sign in", () => {
+    const {container} = render(createLoginProviders(["OIDC"]));
     expect(container.querySelector("#google")).not.toBeInTheDocument();
-    expect(container.querySelector("#github")).not.toBeInTheDocument();
     expect(container.querySelector("#microsoft")).not.toBeInTheDocument();
-    expect(container.querySelector("#apple")).toBeInTheDocument();
+    expect(container.querySelector("#oidc")).toBeInTheDocument();
   });
 
   describe("click-handler", () => {
@@ -59,13 +61,6 @@ describe("check for all provider buttons", () => {
       expect(signInSpy).toHaveBeenCalledWith("google", expect.anything());
     });
 
-    test("github sign in", () => {
-      const {container} = render(createLoginProviders(["GITHUB"]));
-      const button = container.querySelector("#github");
-      fireEvent.click(button!);
-      expect(signInSpy).toHaveBeenCalledWith("github", expect.anything());
-    });
-
     test("microsoft sign in", () => {
       const {container} = render(createLoginProviders(["MICROSOFT"]));
       const button = container.querySelector("#microsoft");
@@ -73,11 +68,11 @@ describe("check for all provider buttons", () => {
       expect(signInSpy).toHaveBeenCalledWith("microsoft", expect.anything());
     });
 
-    test("apple sign in", () => {
-      const {container} = render(createLoginProviders(["APPLE"]));
-      const button = container.querySelector("#apple");
+    test("oidc sign in", () => {
+      const {container} = render(createLoginProviders(["OIDC"]));
+      const button = container.querySelector("#oidc");
       fireEvent.click(button!);
-      expect(signInSpy).toHaveBeenCalledWith("apple", expect.anything());
+      expect(signInSpy).toHaveBeenCalledWith("oidc", expect.anything());
     });
   });
 });

@@ -8,13 +8,18 @@
     "extendedConfigurationButton": "Extended configuration",
     "basicConfigurationButton": "Template selection",
     "extendedConfigurationTitle": "Extended configuration",
-    "basicConfigurationTitle": "Choose a template"
+    "basicConfigurationTitle": "Choose a template",
+    "importBoard": "Import JSON",
+    "uploadFile": "Upload file or drag here",
+    "importNewBoard": "Import now"
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
     "anonymousLogin": "Join board anonymously",
     "usernameValidationError": "Username may not be empty",
     "termsValidationError": "You must accept the terms and privacy policy",
+    "anonymousLoginDisabledError": "Anonymous accounts are disabled; please use one of the providers above",
+    "noLoginAvailable": "There isn't any valid login available",
     "errorOnRedirect": "An error occurred while redirecting you",
     "login": "Sign in",
     "acceptTerms": "I agree to the <terms>terms</terms> and <privacy>privacy policy</privacy>",
@@ -123,7 +128,8 @@
     "addColumnRight": "Add column right",
     "hiddenColumn": "Column is hidden for all participants",
     "notes_one": "{{count}} note",
-    "notes_other": "{{count}} notes"
+    "notes_other": "{{count}} notes",
+    "color": "Change color"
   },
   "ErrorPage": {
     "navigateHome": "Home",
@@ -152,7 +158,8 @@
     "signInWithGitHub": "Sign in with Github",
     "signInWithMicrosoft": "Sign in with Microsoft",
     "signInWithAzureAd": "Sign in with Azure AD",
-    "signInWithApple": "Sign in with Apple"
+    "signInWithApple": "Sign in with Apple",
+    "signInWithOIDC": "Sign in with OpenID Connect"
   },
   "NoteInput": {
     "placeholder": "Add your note...",
@@ -166,6 +173,15 @@
     "submit": "Open board",
     "inputPlaceholder": "Password",
     "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
+  },
+  "PassphraseModal": {
+    "title": "Assign new password",
+    "continuePublic": "Continue without password",
+    "newPassword": "Open Board",
+    "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.",
+    "submit": "Open board",
+    "inputPlaceholder": "Password",
+    "showPassword": "Show password"
   },
   "Timer": {
     "endTimer": "End timer",
@@ -287,6 +303,7 @@
     "moderatorResetReadyStatesButton": "Reset!",
     "bannedParticipant": "Participant '{{user}}' was removed",
     "unbannedParticipant": "The ban for participant '{{user}}' was revoked",
+    "lockedBoard": "The board is currently locked; only moderators can make changes to it.",
     "noteToHiddenColumn": "You just added a note to a hidden column!",
     "noteToHiddenColumnButton": "Reveal column",
     "noteMovedToStack": "The note was moved to a stack!",
@@ -295,14 +312,15 @@
     "ready": "Are you ready?",
     "readyButton": "Ready!",
     "boardReactionsDisabled": "Board reactions are disabled",
-    "enable": "Enable"
+    "enable": "Enable",
+    "failedImport": "Error importing the file"
   },
   "Language": {
     "german": "German",
     "english": "English"
   },
   "Homepage": {
-    "developers": "© 2021-2023, provided by <inovex>inovex</inovex> with ❤️",
+    "developers": "© 2021-{{currentYear}}, provided by <inovex>inovex</inovex> with ❤️",
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
     "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
     "startButton": "Start now",
@@ -313,7 +331,8 @@
   "Note": {
     "me": "Me",
     "you": "you",
-    "userImageAlt": "media provided by {{user}}"
+    "userImageAlt": "media provided by {{user}}",
+    "edited": "edited"
   },
   "StackView": {
     "prevNote": "Previous note",
@@ -362,6 +381,7 @@
     "ShowOtherUsersNotesOption": "Show notes of other users",
     "ShowNoteReactionsOptions": "Show note reactions",
     "AllowNoteRepositioningOption": "Allow note repositioning",
+    "IsLocked": "Lock Board",
     "generatePassword": "Generate password and protect",
     "save": "save",
     "edit": "edit"
@@ -394,7 +414,8 @@
     "colorSchemeLight": "Light",
     "colorSchemeDark": "Dark",
     "showHotkeyNotifications": "Show hotkey notifications",
-    "showBoardReactions": "Show board reactions"
+    "showBoardReactions": "Show board reactions",
+    "showSnowfall": "Show snowfall"
   },
   "Feedback": {
     "PraiseInputLabel": "Anything else you want to tell us?",
@@ -652,5 +673,9 @@
     "AddVote": "Add vote",
     "RemoveVote": "Remove vote",
     "VotesOnNote": "{{votes}} vote(s)"
+  },
+  "Snowfall": {
+    "toastTitle": "Happy Holidays 🎄",
+    "toastMessage": "Happy Holidays from the Scrumlr team! You can turn off the snow animations in the appearance settings."
   }
 }

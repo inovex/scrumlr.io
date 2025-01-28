@@ -1,27 +1,29 @@
 import classNames from "classnames";
-import {Participant, ParticipantExtendedInfo} from "types/participant";
+import {Participant, ParticipantExtendedInfo} from "store/features/";
 import {useTranslation} from "react-i18next";
-import {UserAvatar} from "../../BoardUsers";
-import "./NoteAuthorList.scss";
+import {UserAvatar} from "components/BoardUsers";
 import {NoteAuthorSkeleton} from "./NoteAuthorSkeleton/NoteAuthorSkeleton";
+import "./NoteAuthorList.scss";
 
 type NoteAuthorListProps = {
   authors: Participant[];
   showAuthors: boolean;
-  viewer: Participant;
+  viewer?: Participant;
+  authorID: string;
 };
+
 export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const {t} = useTranslation();
 
   if (!props.authors[0] || props.authors.length === 0) {
-    return <NoteAuthorSkeleton />;
+    return <NoteAuthorSkeleton authorID={props.authorID} />;
   }
 
   // next to the Participant object there's also helper properties (displayName, isSelf) for easier identification.
   const prepareAuthors = (authors: Participant[]): ParticipantExtendedInfo[] => {
     const allAuthors = authors
       .map((a) => {
-        const isSelf = a?.user.id === props.viewer.user.id; // assertion: viewer is self
+        const isSelf = a?.user.id === props.viewer?.user.id; // assertion: viewer is self
         const displayName = isSelf ? t("Note.me") : a.user.name;
         return {
           ...a,
@@ -41,12 +43,13 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
 
     // if showAuthors is disabled, we still want to see cards written by yourself if you're the stack author.
     // the other authors are excluded as we only require the stack author
-    if (!props.showAuthors && props.viewer.user.id === props.authors[0].user.id) {
+    if (!props.showAuthors && props.viewer?.user.id === props.authors[0].user.id) {
       return [allAuthors[0]]; // stack author is always first element
     }
 
     return allAuthors;
   };
+
   const authorExtendedInfo = prepareAuthors(props.authors);
   // expected behaviour:
   // 1 => avatar1 name
@@ -62,7 +65,7 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
   const restUsersExist = restAuthors.length > 0;
   const restUsersTitle = restAuthors.map((a) => a.displayName).join("\x0A"); // join names with line breaks
 
-  const authorVisible = props.showAuthors || stackAuthor.user.id === props.viewer.user.id;
+  const authorVisible = props.showAuthors || stackAuthor.user.id === props.viewer?.user.id;
   if (!authorVisible) {
     return <NoteAuthorSkeleton />;
   }
@@ -85,7 +88,6 @@ export const NoteAuthorList = (props: NoteAuthorListProps) => {
             avatarClassName="note__user-avatar"
           />
         </figure>
-
         <div className={classNames("note__author-name", {"note__author-name--self": stackAuthor.isSelf})}>{stackAuthor.displayName}</div>
       </div>
 

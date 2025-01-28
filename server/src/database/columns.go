@@ -3,9 +3,10 @@ package database
 import (
 	"context"
 	"fmt"
+	"math"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"math"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
@@ -17,6 +18,7 @@ type Column struct {
 	ID            uuid.UUID
 	Board         uuid.UUID
 	Name          string
+	Description   string
 	Color         types.Color
 	Visible       bool
 	Index         int
@@ -27,6 +29,7 @@ type ColumnInsert struct {
 	bun.BaseModel `bun:"table:columns"`
 	Board         uuid.UUID
 	Name          string
+	Description   string
 	Color         types.Color
 	Visible       *bool
 	Index         *int
@@ -38,6 +41,7 @@ type ColumnUpdate struct {
 	ID            uuid.UUID
 	Board         uuid.UUID
 	Name          string
+	Description   string
 	Color         types.Color
 	Visible       bool
 	Index         int

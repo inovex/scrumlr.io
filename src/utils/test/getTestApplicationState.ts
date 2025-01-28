@@ -1,7 +1,7 @@
-import {ApplicationState} from "../../types";
+import {ApplicationState} from "store";
 
 export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
-  auth: {user: {id: "test-auth-user-id", name: "test-auth-user-name"}, initializationSucceeded: true},
+  auth: {user: {id: "test-auth-user-id", name: "test-auth-user-name", isAnonymous: true}, initializationSucceeded: true},
   board: {
     status: "ready",
     data: {
@@ -12,6 +12,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       showNotesOfOtherUsers: true,
       showNoteReactions: true,
       allowStacking: true,
+      isLocked: true,
     },
   },
   requests: [
@@ -19,6 +20,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       user: {
         id: "test-requests-user-id-1",
         name: "test-requests-user-name-1",
+        isAnonymous: true,
       },
       status: "PENDING",
     },
@@ -28,6 +30,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       user: {
         id: "test-participants-self-user-id",
         name: "test-participants-self-user-name",
+        isAnonymous: true,
       },
       connected: true,
       ready: false,
@@ -40,6 +43,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         user: {
           id: "test-participants-others-user-id-1",
           name: "test-participants-others-user-name-1",
+          isAnonymous: true,
         },
         connected: true,
         ready: false,
@@ -51,6 +55,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         user: {
           id: "test-participants-others-user-id-2",
           name: "test-participants-others-user-name-2",
+          isAnonymous: true,
         },
         connected: false,
         ready: false,
@@ -59,7 +64,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         role: "PARTICIPANT",
       },
     ],
-    focusInitiator: null,
   },
   columns: [
     {
@@ -94,6 +98,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         column: "test-columns-id-1",
         rank: 0,
       },
+      edited: true,
     },
     {
       id: "test-notes-id-2",
@@ -104,6 +109,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         column: "test-columns-id-1",
         rank: 1,
       },
+      edited: false,
     },
     {
       id: "test-notes-id-3",
@@ -114,6 +120,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         column: "test-columns-id-2",
         rank: 0,
       },
+      edited: false,
     },
   ],
   reactions: [
@@ -165,14 +172,18 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     ],
   },
   view: {
+    theme: "auto",
     hotkeyNotificationsEnabled: true,
     moderating: false,
     serverTimeOffset: 0,
+    anonymousLoginDisabled: false,
     enabledAuthProvider: [],
     feedbackEnabled: false,
     hotkeysAreActive: true,
     noteFocused: false,
     showBoardReactions: true,
+    snowfallEnabled: false,
+    snowfallNotificationEnabled: false,
   },
   boardReactions: [],
   skinTone: {

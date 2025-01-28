@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 	"scrumlr.io/server/services"
 	"strings"
 	"testing"
@@ -187,8 +188,11 @@ func (suite *NotesTestSuite) TestCreateNote() {
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"column": "%s",
 				"text" : "%s"
-				}`, colId.String(), testText))).
-				AddToContext(identifiers.BoardIdentifier, boardId).
+				}`, colId.String(), testText)))
+
+			req.req = logger.InitTestLoggerRequest(req.Request())
+
+			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 			rr := httptest.NewRecorder()
 
@@ -254,12 +258,12 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 		name         string
 		expectedCode int
 		err          error
-		allowEditing bool
+		isLocked     bool
 	}{
 		{
 			name:         "Delete Note when board is unlocked",
 			expectedCode: http.StatusNoContent,
-			allowEditing: true,
+			isLocked:     true,
 		},
 		{
 			name:         "Delete Note when board is locked",
@@ -270,7 +274,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 				StatusText: "Bad request",
 				ErrorText:  "something",
 			},
-			allowEditing: false,
+			isLocked: false,
 		},
 	}
 	for _, tt := range tests {
@@ -289,8 +293,8 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			r := chi.NewRouter()
 			s.initNoteResources(r)
 			boardMock.On("Get", boardID).Return(&dto.Board{
-				ID:           boardID,
-				AllowEditing: tt.allowEditing,
+				ID:       boardID,
+				IsLocked: tt.isLocked,
 			}, nil)
 
 			// Mock the SessionExists method
@@ -302,17 +306,18 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			// Mock the ParticipantBanned method
 			sessionMock.On("ParticipantBanned", mock.Anything, boardID, userID).Return(false, nil)
 
-			if tt.allowEditing {
+			if tt.isLocked {
 				noteMock.On("Delete", mock.Anything, mock.Anything).Return(nil)
 			} else {
 				boardMock.On("Get", boardID).Return(&dto.Board{
-					ID:           boardID,
-					AllowEditing: tt.allowEditing,
+					ID:       boardID,
+					IsLocked: tt.isLocked,
 				}, tt.err)
 				noteMock.On("Delete", mock.Anything, mock.Anything).Return(tt.err)
 			}
 
 			req := NewTestRequestBuilder("DELETE", fmt.Sprintf("/notes/%s", noteID.String()), strings.NewReader(`{"deleteStack": false}`))
+			req.req = logger.InitTestLoggerRequest(req.Request())
 			rctx := chi.NewRouteContext()
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)

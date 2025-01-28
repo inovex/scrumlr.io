@@ -1,5 +1,5 @@
 import {Provider} from "react-redux";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import getTestStore from "utils/test/getTestStore";
 import {ComponentProps} from "react";
 import {render} from "@testing-library/react";
@@ -16,7 +16,7 @@ const mockEmojis: EmojiData[] = [
 ];
 
 function createSuggestions(props: Partial<EmojiSuggestionsProps> = {}, state?: Partial<ApplicationState>) {
-  const suggestionProps: EmojiSuggestionsProps = {
+  const suggestionAutocompleteProps: EmojiSuggestionsProps = {
     acceptSuggestion: jest.fn(),
     keyboardFocusedIndex: 0,
     suggestions: mockEmojis,
@@ -25,16 +25,12 @@ function createSuggestions(props: Partial<EmojiSuggestionsProps> = {}, state?: P
 
   return (
     <Provider store={getTestStore(state)}>
-      <EmojiSuggestions {...suggestionProps} />
+      <EmojiSuggestions {...suggestionAutocompleteProps} />
     </Provider>
   );
 }
 
 describe("EmojiSuggestions", () => {
-  beforeEach(() => {
-    Element.prototype.scrollIntoView = jest.fn();
-  });
-
   it("should match the snapshot", () => {
     const {container} = render(createSuggestions());
     expect(container.firstChild).toMatchSnapshot();

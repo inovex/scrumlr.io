@@ -7,12 +7,12 @@
   margin-right: calc(-1 * ($spacing--xs + 10px));
   padding-bottom: $settings-dialog-container--bottom;
 
+  @include scrollbar();
+
   &:focus-visible {
-    outline: 2px dashed rgba(var(--accent-color-rgb), 0.5);
+    outline: 2px dashed rgba(var(--accent-color--light-rgb), 0.5);
     border-radius: 8px;
   }
-
-  @include scrollbar();
 }
 
 @media screen and (min-width: 920px) {
@@ -73,15 +73,16 @@
   font-weight: bold;
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;
-  color: $color-placeholder;
+  color: $navy--800;
 }
 
 [theme="dark"] {
   .board-settings__board-name-button_input {
-    color: $color-white;
+    color: $gray--000;
   }
+
   .board-settings__board-name-button_input::placeholder {
-    color: $color-placeholder-dark;
+    color: $gray--000;
   }
 }
 
@@ -114,7 +115,7 @@
   letter-spacing: $letter-spacing--medium;
   font-size: $text-size--medium;
   letter-spacing: 0.5px;
-  color: $color-placeholder;
+  color: $navy--800;
 }
 
 @media screen and (max-width: 920px) {
@@ -126,14 +127,14 @@
 
 [theme="dark"] {
   .board-settings__policy-button_value span {
-    color: $color-placeholder-dark;
+    color: $gray--000;
   }
 }
 
 .board-settings__policy-button_value svg {
   width: $icon--medium;
   height: $icon--medium;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
 }
 
 .board-settings__password-button {
@@ -160,7 +161,7 @@
 }
 
 .board-settings__show-password-button--enabled {
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   cursor: pointer;
   transition: all 0.08s ease-out;
 
@@ -179,13 +180,13 @@
 }
 
 .board-settings__show-password-button--disabled {
-  color: $color-placeholder;
+  color: $navy--800;
   cursor: default;
 }
 
 [theme="dark"] {
   .board-settings__show-password-button--disabled {
-    color: $color-placeholder-dark;
+    color: $gray--000;
   }
 }
 
@@ -202,7 +203,7 @@
 
 [theme="dark"] {
   .board-settings__password-button_value-input {
-    color: $color-white;
+    color: $gray--000;
   }
 }
 
@@ -218,7 +219,7 @@
   height: 30px;
   border: none;
   background-color: inherit;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
   align-self: center;
 }
 
@@ -244,14 +245,14 @@
 .board-settings__remove-protection-button svg {
   width: $icon--medium;
   height: $icon--medium;
-  color: var(--accent-color);
+  color: var(--accent-color--light);
 }
 
 .board-settings__generate-password-button svg {
-  width: $icon--small;
-  height: $icon--small;
-  margin: 0 4px 2px 3px;
-  color: var(--accent-color);
+  // TODO remove margin when icon gets updated
+  width: $icon--medium;
+  height: $icon--medium;
+  color: var(--accent-color--light);
 }
 
 .board-settings__password-management-text {
@@ -262,18 +263,18 @@
 }
 
 .board-settings__delete-button span {
-  color: $color-retro-red;
+  color: $critical-carmine--light;
   font-weight: bold;
 }
 
 [theme="dark"] {
   .board-settings__delete-button span {
-    color: $color-retro-red;
+    color: $critical-carmine--light;
   }
 }
 
 .board-settings__delete-button svg {
-  color: $color-retro-red;
+  color: $critical-carmine--light;
 }
 
 .board-settings__confirmation-dialog {

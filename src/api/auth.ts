@@ -1,5 +1,5 @@
 import {SERVER_HTTP_URL} from "../config";
-import {Auth} from "../types/auth";
+import {AuthDto} from "../store/features/auth/types";
 
 export const AuthAPI = {
   /**
@@ -59,7 +59,7 @@ export const AuthAPI = {
       });
 
       if (response.status === 200) {
-        return (await response.json()) as Auth;
+        return (await response.json()) as AuthDto;
       }
     } catch (error) {
       throw new Error(`unable to fetch current user: ${error}`);

@@ -1,4 +1,4 @@
-@import "src/constants/style";
+@import "constants/style";
 
 $tooltip-max-width: 80%;
 
@@ -12,14 +12,14 @@ $tooltip-max-width: 80%;
 
 @mixin tooltip--light {
   @include tooltip;
-  color: $color-black;
-  background-color: $hover-background-light;
+  color: $navy--900;
+  background-color: $gray--300;
 }
 
 @mixin tooltip--dark {
   @include tooltip;
-  color: $color-white;
-  background-color: $hover-background-dark;
+  color: $gray--000;
+  background-color: $navy--300;
 }
 
 // selecting .tooltip-portal directly won't work because of CSS specificity

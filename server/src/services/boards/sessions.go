@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-
 	"github.com/google/uuid"
 
 	"scrumlr.io/server/common"
@@ -27,7 +26,6 @@ func NewBoardSessionService(db *database.Database, rt *realtime.Broker) services
 	b := new(BoardSessionService)
 	b.database = db
 	b.realtime = rt
-	b.database.AttachObserver((database.BoardSessionsObserver)(b))
 	return b
 }
 
@@ -55,23 +53,38 @@ func (s *BoardSessionService) List(_ context.Context, boardID uuid.UUID, filter 
 	return dto.BoardSessions(sessions), err
 }
 
-func (s *BoardSessionService) Connect(_ context.Context, boardID, userID uuid.UUID) error {
+func (s *BoardSessionService) Connect(ctx context.Context, boardID, userID uuid.UUID) error {
+	log := logger.FromContext(ctx)
 	var connected = true
-	_, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
+	updatedSession, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
 		Board:     boardID,
 		User:      userID,
 		Connected: &connected,
 	})
+
+	if err != nil {
+		log.Errorw("unable to connect to board session", "board", boardID, "user", userID, "error", err)
+		return err
+	}
+	s.UpdatedSession(boardID, updatedSession)
+
 	return err
 }
 
-func (s *BoardSessionService) Disconnect(_ context.Context, boardID, userID uuid.UUID) error {
+func (s *BoardSessionService) Disconnect(ctx context.Context, boardID, userID uuid.UUID) error {
+	log := logger.FromContext(ctx)
 	var connected = false
-	_, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
+	updatedSession, err := s.database.UpdateBoardSession(database.BoardSessionUpdate{
 		Board:     boardID,
 		User:      userID,
 		Connected: &connected,
 	})
+	if err != nil {
+		log.Errorw("unable to disconnect from board session", "board", boardID, "user", userID, "error", err)
+		return err
+	}
+	s.UpdatedSession(boardID, updatedSession)
+
 	return err
 }
 
@@ -88,13 +101,23 @@ func (s *BoardSessionService) Get(ctx context.Context, boardID, userID uuid.UUID
 	return new(dto.BoardSession).From(session), err
 }
 
-func (s *BoardSessionService) Update(_ context.Context, body dto.BoardSessionUpdateRequest) (*dto.BoardSession, error) {
-	sessionOfCaller, _ := s.database.GetBoardSession(body.Board, body.Caller)
+func (s *BoardSessionService) Update(ctx context.Context, body dto.BoardSessionUpdateRequest) (*dto.BoardSession, error) {
+	log := logger.FromContext(ctx)
+	sessionOfCaller, err := s.database.GetBoardSession(body.Board, body.Caller)
+	if err != nil {
+		log.Errorw("unable to get board session", "board", body.Board, "calling user", body.Caller, "error", err)
+		return nil, fmt.Errorf("unable to get session for board: %w", err)
+	}
 	if sessionOfCaller.Role == types.SessionRoleParticipant && body.User != body.Caller {
+
 		return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
 	}
 
-	sessionOfUserToModify, _ := s.database.GetBoardSession(body.Board, body.User)
+	sessionOfUserToModify, err := s.database.GetBoardSession(body.Board, body.User)
+	if err != nil {
+		log.Errorw("unable to get board session", "board", body.Board, "target user", body.User, "error", err)
+		return nil, fmt.Errorf("unable to get session for board: %w", err)
+	}
 	if body.Role != nil {
 		if sessionOfCaller.Role == types.SessionRoleParticipant && *body.Role != types.SessionRoleParticipant {
 			return nil, common.ForbiddenError(errors.New("cannot promote role"))
@@ -115,33 +138,43 @@ func (s *BoardSessionService) Update(_ context.Context, body dto.BoardSessionUpd
 		Banned:            body.Banned,
 	})
 	if err != nil {
+		log.Errorw("unable to update board session", "board", body.Board, "error", err)
 		return nil, err
-
 	}
+	s.UpdatedSession(body.Board, session)
+
 	return new(dto.BoardSession).From(session), err
 }
 
-func (s *BoardSessionService) UpdateAll(_ context.Context, body dto.BoardSessionsUpdateRequest) ([]*dto.BoardSession, error) {
+func (s *BoardSessionService) UpdateAll(ctx context.Context, body dto.BoardSessionsUpdateRequest) ([]*dto.BoardSession, error) {
+	log := logger.FromContext(ctx)
 	sessions, err := s.database.UpdateBoardSessions(database.BoardSessionUpdate{
 		Board:      body.Board,
 		Ready:      body.Ready,
 		RaisedHand: body.RaisedHand,
 	})
 	if err != nil {
+		log.Errorw("unable to update all sessions for a board", "board", body.Board, "error", err)
 		return nil, err
 	}
+	s.UpdatedSessions(body.Board, sessions)
+
 	return dto.BoardSessions(sessions), err
 }
 
-func (s *BoardSessionService) Create(_ context.Context, boardID, userID uuid.UUID) (*dto.BoardSession, error) {
+func (s *BoardSessionService) Create(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSession, error) {
+	log := logger.FromContext(ctx)
 	session, err := s.database.CreateBoardSession(database.BoardSessionInsert{
 		Board: boardID,
 		User:  userID,
 		Role:  types.SessionRoleParticipant,
 	})
 	if err != nil {
+		log.Errorw("unable to create board session", "board", boardID, "user", userID, "error", err)
 		return nil, err
 	}
+	s.CreatedSession(boardID, session)
+
 	return new(dto.BoardSession).From(session), err
 }
 
@@ -179,33 +212,38 @@ func (s *BoardSessionService) ListSessionRequest(ctx context.Context, boardID uu
 	return dto.BoardSessionRequests(requests), nil
 }
 
-func (s *BoardSessionService) CreateSessionRequest(_ context.Context, boardID, userID uuid.UUID) (*dto.BoardSessionRequest, error) {
+func (s *BoardSessionService) CreateSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSessionRequest, error) {
+	log := logger.FromContext(ctx)
 	request, err := s.database.CreateBoardSessionRequest(database.BoardSessionRequestInsert{
 		Board: boardID,
 		User:  userID,
 	})
 	if err != nil {
+		log.Errorw("unable to create BoardSessionRequest", "board", boardID, "user", userID, "error", err)
 		return nil, err
 	}
+	s.CreatedSessionRequest(boardID, request)
+
 	return new(dto.BoardSessionRequest).From(request), err
 }
 
-func (s *BoardSessionService) UpdateSessionRequest(_ context.Context, body dto.BoardSessionRequestUpdate) (*dto.BoardSessionRequest, error) {
+func (s *BoardSessionService) UpdateSessionRequest(ctx context.Context, body dto.BoardSessionRequestUpdate) (*dto.BoardSessionRequest, error) {
+	log := logger.FromContext(ctx)
 	request, err := s.database.UpdateBoardSessionRequest(database.BoardSessionRequestUpdate{Board: body.Board, User: body.User, Status: body.Status})
 	if err != nil {
+		log.Errorw("unable to update BoardSessionRequest", "board", body.Board, "user", body.User, "error", err)
 		return nil, err
 	}
+	s.UpdatedSessionRequest(body.Board, request)
+
 	return new(dto.BoardSessionRequest).From(request), err
 }
 
 func (s *BoardSessionService) CreatedSessionRequest(board uuid.UUID, request database.BoardSessionRequest) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestCreated,
 		Data: new(dto.BoardSessionRequest).From(request),
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast created board session request", "err", err)
-	}
 }
 
 func (s *BoardSessionService) UpdatedSessionRequest(board uuid.UUID, request database.BoardSessionRequest) {
@@ -217,40 +255,61 @@ func (s *BoardSessionService) UpdatedSessionRequest(board uuid.UUID, request dat
 	}
 
 	if status != "" {
-		err := s.realtime.BroadcastUpdateOnBoardSessionRequest(board, request.User, status)
-		if err != nil {
-			logger.Get().Errorw("unable to broadcast board session request with status", "status", status, "err", err)
-		}
+		_ = s.realtime.BroadcastUpdateOnBoardSessionRequest(board, request.User, status)
 	}
 
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestUpdated,
 		Data: new(dto.BoardSessionRequest).From(request),
 	})
 
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated board session request", "err", err)
-	}
 }
 
 func (s *BoardSessionService) CreatedSession(board uuid.UUID, session database.BoardSession) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantCreated,
 		Data: new(dto.BoardSession).From(session),
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast created board session", "err", err)
-	}
+
 }
 
 func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.BoardSession) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-		Type: realtime.BoardEventParticipantUpdated,
-		Data: new(dto.BoardSession).From(session),
-	})
+	connectedBoards, err := s.database.GetSingleUserConnectedBoards(session.User)
 	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated board session", "err", err)
+		logger.Get().Errorw("unable to get user connections", "session", session, "error", err)
+		return
 	}
+	for _, session := range connectedBoards {
+		userSession, err := s.database.GetBoardSession(session.Board, session.User)
+		if err != nil {
+			logger.Get().Errorw("unable to get board session of user", "board", session.Board, "user", session.User, "err", err)
+			return
+		}
+		_ = s.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
+			Type: realtime.BoardEventParticipantUpdated,
+			Data: new(dto.BoardSession).From(userSession),
+		})
+	}
+
+	// Sync columns
+	columns, err := s.database.GetColumns(board)
+	if err != nil {
+		logger.Get().Errorw("unable to get columns", "boardID", board, "err", err)
+	}
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventColumnsUpdated,
+		Data: dto.Columns(columns),
+	})
+
+	// Sync notes
+	notes, err := s.database.GetNotes(board)
+	if err != nil {
+		logger.Get().Errorw("unable to get notes on a updatedsession call", "err", err)
+	}
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: dto.Notes(notes),
+	})
 }
 
 func (s *BoardSessionService) UpdatedSessions(board uuid.UUID, sessions []database.BoardSession) {
@@ -258,11 +317,8 @@ func (s *BoardSessionService) UpdatedSessions(board uuid.UUID, sessions []databa
 	for index, session := range sessions {
 		eventSessions[index] = *new(dto.BoardSession).From(session)
 	}
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantsUpdated,
 		Data: eventSessions,
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated board sessions", "err", err)
-	}
 }

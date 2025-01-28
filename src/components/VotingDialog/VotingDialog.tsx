@@ -1,54 +1,34 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
-import {useNavigate} from "react-router-dom";
-import store, {useAppSelector} from "store";
+import {useNavigate} from "react-router";
+import {useAppDispatch, useAppSelector} from "store";
 import {Toggle} from "components/Toggle";
-import {ReactComponent as PlusIcon} from "assets/icon-plus.svg";
-import {ReactComponent as MinusIcon} from "assets/icon-minus.svg";
-import {Actions} from "store/action";
-import "./VotingDialog.scss";
 import {getNumberFromStorage, saveToStorage, getFromStorage} from "utils/storage";
 import {CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY} from "constants/storage";
+import {Plus, Minus} from "components/Icon";
+import "./VotingDialog.scss";
+import {closeVoting, createVoting} from "store/features";
 
 export const VotingDialog = () => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
+  const isAdmin = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
   const voting = useAppSelector((state) => state.votings.open?.id);
 
   const cumulativeVotingStorage = getFromStorage(CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY);
   const cumulativeVotingDefault = !(typeof cumulativeVotingStorage !== "undefined" && cumulativeVotingStorage !== null && cumulativeVotingStorage === "false");
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(cumulativeVotingDefault);
   const [numberOfVotes, setNumberOfVotes] = useState(getNumberFromStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, 5));
-  const [startPositionX, setStartPositionX] = useState(0);
-
-  useEffect(() => {
-    const onUpdate = (e: MouseEvent) => {
-      if (startPositionX) {
-        setNumberOfVotes(Math.min(99, Math.max(1, Math.abs(Math.floor((e.clientX - startPositionX) / 10)))));
-      }
-    };
-
-    const onEnd = () => {
-      setStartPositionX(0);
-    };
-
-    document.addEventListener("mousemove", onUpdate);
-    document.addEventListener("mouseup", onEnd);
-    return () => {
-      document.removeEventListener("mousemove", onUpdate);
-      document.removeEventListener("mouseup", onEnd);
-    };
-  }, [startPositionX]);
 
   if (!isAdmin) {
     navigate("..");
   }
 
   const startVoting = () => {
-    store.dispatch(
-      Actions.createVoting({
+    dispatch(
+      createVoting({
         voteLimit: numberOfVotes,
         showVotesOfOthers: false,
         allowMultipleVotes: allowCumulativeVoting,
@@ -60,7 +40,7 @@ export const VotingDialog = () => {
   };
 
   const stopVoting = () => {
-    store.dispatch(Actions.closeVoting(voting!));
+    dispatch(closeVoting(voting!));
     navigate("..");
   };
 
@@ -78,25 +58,25 @@ export const VotingDialog = () => {
           </button>
           <div className="dialog__button">
             <label>{t("VoteConfigurationButton.numberOfVotes")}</label>
-            <button
-              onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 1))}
-              className="voting-dialog__vote-button"
-              data-testid="voting-dialog__minus-button"
-              aria-label={t("VoteConfigurationButton.decreaseVotes")}
-            >
-              <MinusIcon />
-            </button>
-            <label className="voting-dialog__vote-label" onMouseDown={(e) => setStartPositionX(e.clientX)}>
-              {numberOfVotes}
-            </label>
-            <button
-              onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))}
-              className="voting-dialog__vote-button"
-              data-testid="voting-dialog__plus-button"
-              aria-label={t("VoteConfigurationButton.increaseVotes")}
-            >
-              <PlusIcon />
-            </button>
+            <div className="voting-dialog__votes-controls">
+              <button
+                onClick={() => setNumberOfVotes((prev) => Math.max(--prev, 1))}
+                className="voting-dialog__vote-button"
+                data-testid="voting-dialog__minus-button"
+                aria-label={t("VoteConfigurationButton.decreaseVotes")}
+              >
+                <Minus />
+              </button>
+              <label className="voting-dialog__vote-label">{numberOfVotes}</label>
+              <button
+                onClick={() => setNumberOfVotes((prev) => Math.min(++prev, 99))}
+                className="voting-dialog__vote-button"
+                data-testid="voting-dialog__plus-button"
+                aria-label={t("VoteConfigurationButton.increaseVotes")}
+              >
+                <Plus />
+              </button>
+            </div>
           </div>
           <button className="voting-dialog__start-button" data-testid="voting-dialog__start-button" onClick={() => startVoting()}>
             <label>{t("VoteConfigurationButton.startVoting")}</label>

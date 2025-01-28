@@ -4,13 +4,16 @@ import classNames from "classnames";
 import {SettingsButton} from "components/SettingsDialog/Components/SettingsButton";
 import {FeedbackAPI} from "api/feedback";
 import {useAppSelector} from "store";
-import {ReactComponent as BugIcon} from "assets/icon-bug.svg";
-import {ReactComponent as PraiseIcon} from "assets/icon-praise.svg";
-import {ReactComponent as AddFeatureIcon} from "assets/icon-add-feature.svg";
+import {TemplateGallery, Praise, Bug} from "components/Icon";
+import {useOutletContext} from "react-router";
+import {MenuItemConfig} from "constants/settings";
+import {getColorClassName} from "constants/colors";
 import "./Feedback.scss";
 
 export const Feedback: React.FC = () => {
   const {t} = useTranslation();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
+
   const [errorMessage, setErrorMessage] = useState<string>();
   const [feedbackTypeInput, setFeedbackTypeInput] = useState("PRAISE");
   const [feedbackInputLabel, setFeedbackInputLabel] = useState<string>(t("Feedback.PraiseInputLabel"));
@@ -70,7 +73,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("PRAISE")}
         />
         <label htmlFor="feedbackTypePraise" className="feedback-option__label">
-          <PraiseIcon />
+          <Praise />
           <span>Praise</span>
         </label>
       </div>
@@ -85,7 +88,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("FEATURE_REQUEST")}
         />
         <label htmlFor="feedbackTypeFeatureRequest" className="feedback-option__label">
-          <AddFeatureIcon />
+          <TemplateGallery />
           <span>Feature Request</span>
         </label>
       </div>
@@ -100,7 +103,7 @@ export const Feedback: React.FC = () => {
           onClick={() => setFeedbackTypeInput("BUG_REPORT")}
         />
         <label htmlFor="feedbackTypeBugReport" className="feedback-option__label">
-          <BugIcon />
+          <Bug />
           <span>Bug Report</span>
         </label>
       </div>
@@ -108,9 +111,9 @@ export const Feedback: React.FC = () => {
   );
 
   return (
-    <div className="settings-dialog__container accent-color__poker-purple">
+    <div className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <div className="settings-dialog__header">
-        <h2 className={classNames("settings-dialog__header-text", "accent-color__poker-purple")}>Feedback</h2>
+        <h2 className="settings-dialog__header-text">Feedback</h2>
       </div>
       {feedbackEnabled && (
         <form className="settings-dialog__feedback-form" onSubmit={onSubmitFeedback}>

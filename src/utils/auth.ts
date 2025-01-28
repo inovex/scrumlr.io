@@ -1,8 +1,8 @@
 import {Toast} from "utils/Toast";
 import {API} from "api";
 import i18n from "i18next";
-import store from "store";
-import {Actions} from "store/action";
+import {store} from "store";
+import {signIn} from "store/features";
 import {SERVER_HTTP_URL} from "../config";
 
 /**
@@ -16,7 +16,7 @@ const signInAnonymously = async (displayName: string) => {
   try {
     const user = await API.signInAnonymously(displayName);
     if (user) {
-      store.dispatch(Actions.signIn(user.id, user.name));
+      store.dispatch(signIn({id: user.id, name: user.name, isAnonymous: true}));
     }
     return true;
   } catch (err) {

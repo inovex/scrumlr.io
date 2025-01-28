@@ -2,7 +2,7 @@ import {Column} from "components/Column";
 import {render} from "testUtils";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import {CustomDndContext} from "components/DragAndDrop/CustomDndContext";
 
 jest.mock("utils/hooks/useImageChecker.ts", () => ({
@@ -36,6 +36,7 @@ describe("Column", () => {
         ({
           observe: jest.fn(),
           disconnect: jest.fn(),
+          unobserve: jest.fn(),
         }) as unknown as ResizeObserver
     );
   });

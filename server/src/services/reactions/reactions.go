@@ -2,6 +2,7 @@ package reactions
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
@@ -16,12 +17,7 @@ type ReactionService struct {
 	realtime *realtime.Broker
 }
 
-type Observer interface {
-	AttachObserver(observer database.Observer)
-}
-
 type DB interface {
-	Observer
 	GetReaction(id uuid.UUID) (database.Reaction, error)
 	GetReactions(board uuid.UUID) ([]database.Reaction, error)
 	CreateReaction(board uuid.UUID, insert database.ReactionInsert) (database.Reaction, error)
@@ -33,19 +29,27 @@ func NewReactionService(db DB, rt *realtime.Broker) services.Reactions {
 	b := new(ReactionService)
 	b.database = db
 	b.realtime = rt
-	b.database.AttachObserver((database.ReactionsObserver)(b))
 
 	return b
 }
 
-func (s *ReactionService) List(_ context.Context, boardID uuid.UUID) ([]*dto.Reaction, error) {
+func (s *ReactionService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Reaction, error) {
+	log := logger.FromContext(ctx)
 	reactions, err := s.database.GetReactions(boardID)
-
+	if err != nil {
+		log.Errorw("unable to get reactions", "boardID", boardID, "err", err)
+		return nil, err
+	}
 	return dto.Reactions(reactions), err
 }
 
-func (s *ReactionService) Get(_ context.Context, id uuid.UUID) (*dto.Reaction, error) {
+func (s *ReactionService) Get(ctx context.Context, id uuid.UUID) (*dto.Reaction, error) {
+	log := logger.FromContext(ctx)
 	reaction, err := s.database.GetReaction(id)
+	if err != nil {
+		log.Errorw("unable to get reaction", "userID", id, "err", err)
+		return nil, err
+	}
 	return new(dto.Reaction).From(reaction), err
 }
 
@@ -70,8 +74,18 @@ func (s *ReactionService) Create(ctx context.Context, board uuid.UUID, body dto.
 	return new(dto.Reaction).From(reaction), err
 }
 
-func (s *ReactionService) Delete(_ context.Context, board, user, id uuid.UUID) error {
-	return s.database.RemoveReaction(board, user, id)
+func (s *ReactionService) Delete(ctx context.Context, board, user, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	err := s.database.RemoveReaction(board, user, id)
+	if err != nil {
+		log.Errorw("unable to remove reaction", "board", board, "user", user, "reaction", id)
+		return err
+	}
+
+	// notify
+	s.DeletedReaction(board, id)
+
+	return nil
 }
 
 func (s *ReactionService) Update(ctx context.Context, board, user, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error) {
@@ -94,36 +108,24 @@ func (s *ReactionService) Update(ctx context.Context, board, user, id uuid.UUID,
 func (s *ReactionService) AddedReaction(board uuid.UUID, reaction database.Reaction) {
 	eventReaction := *new(dto.Reaction).From(reaction)
 
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventReactionAdded,
 		Data: eventReaction,
 	})
-
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated reactions", "err", err)
-	}
 }
 
 func (s *ReactionService) DeletedReaction(board, reaction uuid.UUID) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventReactionDeleted,
 		Data: reaction,
 	})
-
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast deleted reaction", "err", err)
-	}
 }
 
 func (s *ReactionService) UpdatedReaction(board uuid.UUID, reaction database.Reaction) {
 	eventReaction := *new(dto.Reaction).From(reaction)
 
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventReactionUpdated,
 		Data: eventReaction,
 	})
-
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated reaction", "err", err)
-	}
 }

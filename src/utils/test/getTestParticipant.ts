@@ -1,9 +1,10 @@
-import {Participant} from "types/participant";
+import {Participant} from "store/features/participants/types";
 
 export default (overwrite?: Partial<Participant>): Participant => ({
   user: {
     id: "test-participant-id",
     name: "test-participant-name",
+    isAnonymous: true,
   },
   connected: true,
   ready: false,

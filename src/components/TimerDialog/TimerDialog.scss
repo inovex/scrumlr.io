@@ -17,7 +17,7 @@
       top: 10px;
       border-width: 15px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-planning-pink;
+      border-color: transparent transparent transparent $pink--500;
     }
 
     .timer-dialog::after {
@@ -27,36 +27,32 @@
       top: 15px;
       border-width: 10px;
       border-style: solid;
-      border-color: transparent transparent transparent $color-white-one;
+      border-color: transparent transparent transparent $gray--100;
     }
   }
 
   [theme="dark"] {
     #portal .timer-dialog::after {
-      border-color: transparent transparent transparent $color-dark-mode;
+      border-color: transparent transparent transparent $navy--600;
     }
   }
 }
 
 .timer-dialog__time-button {
-  height: $icon--large;
-  width: $icon--large;
-  border: none;
-  border-radius: 16px;
+  height: $icon--medium;
+  width: $icon--medium;
+  border: 1px solid $pink--500;
+  border-radius: $rounded--full;
   background-color: transparent;
   cursor: pointer;
-  position: absolute;
-  top: 8px;
   padding: 0;
   transition: all 0.08s ease-out;
   outline: none;
+  color: $pink--500;
 
-  &:first-of-type {
-    right: 80px;
-  }
-
-  &:last-of-type {
-    right: 24px;
+  > svg {
+    height: 100%;
+    width: 100%;
   }
 
   &:hover {
@@ -74,22 +70,29 @@
 }
 
 .timer-dialog__time-label {
-  position: absolute;
-  top: 8px;
-  right: 56px;
-  height: 32px;
-  width: 24px;
   text-align: center;
-  line-height: 32px;
-  cursor: col-resize;
+  line-height: normal;
   font-size: $text-size--medium;
-  user-select: none;
-  -webkit-touch-callout: none;
-  -webit-user-select: none;
+  width: 20px;
+}
+[theme="dark"] .timer-dialog__time-label {
+  color: white;
 }
 
 .timer-dialog__button-icon {
-  position: absolute;
-  top: 8px;
-  right: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 24px;
+  width: 24px;
+  border: 1px solid $pink--500;
+  border-radius: 999px;
+  color: $pink--500;
+  font-size: 14px;
+}
+
+.timer-dialog__custom-time-controls {
+  display: flex;
+  align-items: center;
+  gap: $spacing--xs;
 }

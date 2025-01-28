@@ -12,7 +12,7 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     name: "Positive/Negative",
     columns: [
       {name: "Positive", hidden: false, color: "backlog-blue"},
-      {name: "Negative", hidden: false, color: "lean-lilac"},
+      {name: "Negative", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
   },
@@ -20,7 +20,7 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     name: "Start/Stop/Continue",
     columns: [
       {name: "Start", hidden: false, color: "backlog-blue"},
-      {name: "Stop", hidden: false, color: "grooming-green"},
+      {name: "Stop", hidden: false, color: "goal-green"},
       {name: "Continue", hidden: false, color: "online-orange"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
@@ -38,7 +38,7 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     name: "Plus/Delta",
     columns: [
       {name: "Plus", hidden: false, color: "backlog-blue"},
-      {name: "Delta", hidden: false, color: "lean-lilac"},
+      {name: "Delta", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
   },
@@ -47,8 +47,8 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     description: "Keep, Add, Less, More",
     columns: [
       {name: "Keep", hidden: false, color: "backlog-blue"},
-      {name: "Add", hidden: false, color: "retro-red"},
-      {name: "Less", hidden: false, color: "grooming-green"},
+      {name: "Add", hidden: false, color: "yielding-yellow"},
+      {name: "Less", hidden: false, color: "goal-green"},
       {name: "More", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
@@ -58,8 +58,8 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     description: "Liked, Learned, Lacked, Longed for",
     columns: [
       {name: "Liked", hidden: false, color: "backlog-blue"},
-      {name: "Learned", hidden: false, color: "retro-red"},
-      {name: "Lacked", hidden: false, color: "lean-lilac"},
+      {name: "Learned", hidden: false, color: "yielding-yellow"},
+      {name: "Lacked", hidden: false, color: "value-violet"},
       {name: "Longed for", hidden: false, color: "poker-purple"},
       {name: "Actions", hidden: true, color: "planning-pink"},
     ],
@@ -70,8 +70,8 @@ export const columnTemplates: {[id: string]: {name: string; description?: string
     columns: [
       {name: "Strengths", hidden: false, color: "backlog-blue"},
       {name: "Weaknesses", hidden: false, color: "online-orange"},
-      {name: "Opportunities", hidden: false, color: "grooming-green"},
-      {name: "Threats", hidden: false, color: "retro-red"},
+      {name: "Opportunities", hidden: false, color: "goal-green"},
+      {name: "Threats", hidden: false, color: "yielding-yellow"},
       {name: "Actions", hidden: true, color: "poker-purple"},
     ],
   },

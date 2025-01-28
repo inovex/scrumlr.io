@@ -27,15 +27,15 @@ $settings__item-height: 48px;
       margin-right: calc(-1 * (#{$spacing--xs} + 10px));
       padding-bottom: $settings-dialog-container--bottom;
 
+      @include scrollbar();
+
       @media screen and (min-width: 920px) {
         padding-right: $spacing--lg;
         margin-right: calc(-1 * (#{$spacing--lg} + 10px));
       }
 
-      @include scrollbar();
-
       &:focus-visible {
-        outline: 2px dashed rgba(var(--accent-color-rgb), 0.5);
+        outline: 2px dashed rgba(var(--accent-color--light-rgb), 0.5);
         border-radius: 8px;
       }
     }
@@ -65,7 +65,7 @@ $settings__item-height: 48px;
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: $color-dark-gray;
+  color: $gray--800;
   gap: $spacing--xs;
   margin: $spacing--xs;
   padding: $spacing--xs;
@@ -74,9 +74,6 @@ $settings__item-height: 48px;
   > svg {
     width: $icon--medium;
     height: $icon--medium;
-    path {
-      stroke: $color-dark-gray;
-    }
   }
 
   > p {
@@ -93,19 +90,16 @@ $settings__item-height: 48px;
 
   &:focus-visible {
     border-radius: $rounded--full;
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid var(--accent-color--light);
   }
 }
 
 [theme="dark"] {
   .profile-settings__open-cheat-sheet-button {
-    color: $color-middle-gray;
-    svg {
-      stroke: $color-middle-gray;
-    }
+    color: $gray--700;
 
     &:focus-visible {
-      outline: 2px solid rgba(var(--accent-color-rgb), 0.5);
+      outline: 2px solid rgba(var(--accent-color--light-rgb), 0.5);
     }
   }
 }

@@ -1,9 +1,8 @@
 import "./Request.scss";
-import {ReactComponent as HandIcon} from "assets/icon-hand.svg";
-import {ReactComponent as JoinIcon} from "assets/icon-join.svg";
+import {RaiseHand, Join} from "components/Icon";
 import {useTranslation} from "react-i18next";
+import {Auth} from "store/features";
 import {UserAvatar} from "../../BoardUsers";
-import {Auth} from "../../../types/auth";
 
 type RequestType = "JOIN" | "RAISE_HAND";
 
@@ -50,7 +49,7 @@ export const Request = ({type, participant, handleClick}: RequestProps) => {
         <div className="request__button-container">{renderButtons()}</div>
       </div>
 
-      <div className="request__icon-container">{type === "JOIN" ? <JoinIcon className="request-icon" /> : <HandIcon className="request-icon" />}</div>
+      <div className="request__icon-container">{type === "JOIN" ? <Join className="request-icon" /> : <RaiseHand className="request-icon" />}</div>
     </div>
   );
 };

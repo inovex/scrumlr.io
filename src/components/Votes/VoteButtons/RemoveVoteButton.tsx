@@ -1,11 +1,11 @@
 import {FC, useEffect, useRef, useState} from "react";
-import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
-import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
-import {ReactComponent as RemoveIcon} from "assets/icon-remove.svg";
+import {Minus} from "components/Icon";
 import "./RemoveVoteButton.scss";
+import {useAppDispatch} from "store";
+import {deleteVote} from "store/features";
 
 type RemoveVoteProps = {
   noteId: string;
@@ -14,11 +14,11 @@ type RemoveVoteProps = {
 };
 
 export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes}) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
-  const deleteVote = () => {
-    dispatch(Actions.deleteVote(noteId));
+  const dispatchDeleteVote = () => {
+    dispatch(deleteVote(noteId));
   };
 
   const [doBump, setDoBump] = useState(false);
@@ -37,13 +37,13 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
       title={disabled ? t("Votes.VotesOnNote", {votes: numberOfVotes}) : t("Votes.RemoveVote")}
       className={classNames("vote-button-remove", {bump: doBump})}
       disabled={disabled}
-      onClick={deleteVote}
+      onClick={dispatchDeleteVote}
       onAnimationEnd={() => {
         setDoBump(false);
       }}
     >
       <span className="vote-button-remove__folded-corner" />
-      <RemoveIcon className="vote-button-remove__icon" />
+      <Minus className="vote-button-remove__icon" />
       <span className="vote-button-remove__count">{numberOfVotes}</span>
     </DotButton>
   );

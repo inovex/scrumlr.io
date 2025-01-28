@@ -1,13 +1,12 @@
 import classNames from "classnames";
 import {KeyboardEvent, useEffect, useRef} from "react";
-import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router";
 import {useTranslation} from "react-i18next";
 import {isEqual} from "underscore";
 import {Votes} from "components/Votes";
-import {useAppSelector} from "store";
-import {Actions} from "store/action";
-import {Participant} from "types/participant";
+import {useAppDispatch, useAppSelector} from "store";
+import {shareNote} from "store/features";
+import {Participant} from "store/features/participants/types";
 import {addProtocol} from "utils/images";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {useSize} from "utils/hooks/useSize";
@@ -19,14 +18,14 @@ import "./Note.scss";
 
 interface NoteProps {
   noteId: string;
-  viewer: Participant;
+  viewer?: Participant;
   setItems?: (items: string[]) => void;
   colorClassName?: string;
 }
 
 export const Note = (props: NoteProps) => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const noteRef = useRef<HTMLDivElement>(null);
 
@@ -34,16 +33,18 @@ export const Note = (props: NoteProps) => {
   const isStack = useAppSelector((state) => state.notes.filter((n) => n.position.stack === props.noteId).length > 0);
   const isShared = useAppSelector((state) => state.board.data?.sharedNote === props.noteId);
   const allowStacking = useAppSelector((state) => state.board.data?.allowStacking ?? true);
+  const boardIsLocked = useAppSelector((state) => state.board.data!.isLocked);
   const showNoteReactions = useAppSelector((state) => state.board.data?.showNoteReactions ?? true);
   const showAuthors = useAppSelector((state) => !!state.board.data?.showAuthors);
-  const me = useAppSelector((state) => state.participants?.self);
+  const me = useAppSelector((state) => state.participants?.self)!;
+  const others = useAppSelector((state) => state.participants?.others) ?? [];
   const moderating = useAppSelector((state) => state.view.moderating);
-  const isModerator = props.viewer.role === "MODERATOR" || props.viewer.role === "OWNER";
+  const isModerator = props.viewer?.role === "MODERATOR" || props.viewer?.role === "OWNER";
 
   // all authors of a note, including its children if it's a stack.
   const authors = useAppSelector((state) => {
-    const allUsers = state.participants?.others.concat(state.participants?.self);
-    const noteAuthor = allUsers?.find((p) => p.user.id === note?.author);
+    const allUsers = [me, ...others];
+    const noteAuthor = allUsers.find((p) => p.user.id === note?.author);
     const childrenNoteAuthors = state.notes
       // get all notes which are in the same stack as the main note
       .filter((n) => n.position.stack === props.noteId)
@@ -78,7 +79,7 @@ export const Note = (props: NoteProps) => {
 
   const handleClick = () => {
     if (moderating && isModerator) {
-      dispatch(Actions.shareNote(props.noteId));
+      dispatch(shareNote(props.noteId));
     }
     navigate(`note/${props.noteId}/stack`);
   };
@@ -92,7 +93,6 @@ export const Note = (props: NoteProps) => {
   // TODO: replace with stack setting from state when implemented. thanks, love u <3
   // de-activated in css for now
   const stackSetting: "stackOntop" | "stackBetween" | "stackBelow" = "stackBetween";
-
   if (!note) return null;
 
   return (
@@ -101,12 +101,12 @@ export const Note = (props: NoteProps) => {
       id={props.noteId}
       columnId={note.position.column}
       className={classNames("note__root", props.colorClassName)}
-      disabled={!(isModerator || allowStacking)}
+      disabled={!isModerator && (!allowStacking || boardIsLocked)}
     >
       <div tabIndex={0} role="button" className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
-          <div className="note__author-container">
-            <NoteAuthorList authors={authors} showAuthors={showAuthors} viewer={props.viewer} />
+          <div data-clarity-mask="True" className="note__author-container">
+            <NoteAuthorList authors={authors} authorID={note.author} showAuthors={showAuthors} viewer={props.viewer} />
           </div>
           <Votes noteId={props.noteId!} aggregateVotes />
         </header>
@@ -120,10 +120,14 @@ export const Note = (props: NoteProps) => {
             />
           </div>
         ) : (
-          <main className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
-            <NoteTextContent text={note.text} truncate />
+          <main className={classNames("note__container")}>
+            <div data-clarity-mask="True" className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
+              <NoteTextContent text={note.text} truncate />
+            </div>
+            {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}
           </main>
         )}
+
         <footer className={classNames("note__footer", {"note__footer--collapsed": !showNoteReactions})}>
           <NoteReactionList noteId={props.noteId} dimensions={dimensions} colorClassName={props.colorClassName} show={showNoteReactions} />
         </footer>

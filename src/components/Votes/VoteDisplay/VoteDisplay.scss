@@ -12,15 +12,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 .vote-display {
   height: 100%;
   width: $vote-display-width;
-  color: $color-dark-mode-note;
-  background-color: $menu-icon-background-color--light;
+  color: $navy--500;
+  background-color: $gray--000;
   border-radius: $rounded--full;
   position: relative;
-  border: 2px solid $menu-icon-background-color--light;
+  border: 2px solid $gray--000;
   box-shadow: $box-shadow--light;
 
   &:has(:focus-visible) {
-    outline: 2px solid $color-backlog-blue;
+    outline: 2px solid $blue--500;
   }
 }
 
@@ -28,8 +28,8 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   position: absolute;
   height: $vote-display__content-height;
   width: $vote-display__content-height;
-  background-color: $color-dark-mode-note;
-  color: $color-white;
+  background-color: $navy--500;
+  color: $gray--000;
   border-radius: 100%;
 }
 
@@ -71,7 +71,7 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   width: 100%;
   position: absolute;
   border-radius: $rounded--full;
-  background-color: $menu-icon-background-color--light;
+  background-color: $gray--000;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -87,12 +87,19 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   opacity: 1;
 }
 
+.short-actions__short-action {
+  position: relative;
+  height: $vote-display__short-actions-height;
+  width: $vote-display__short-actions-height;
+  border-radius: $rounded--full;
+}
+
 .short-action__button {
   height: $vote-display__short-actions-height;
   width: $vote-display__short-actions-height;
   border-radius: $rounded--full;
-  background-color: $color-lighter-gray;
-  color: $color-dark-mode-note;
+  background-color: $gray--300;
+  color: $navy--500;
   border: none;
   padding: 0;
   cursor: pointer;
@@ -102,22 +109,22 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   transition: background-color 150ms linear;
 
   &:hover {
-    background-color: getLightHoverBackground($color-lighter-gray);
+    background-color: getLightHoverBackground($gray--300);
   }
 
   &:focus-visible {
-    outline: 2px solid $color-backlog-blue;
+    outline: 2px solid $blue--500;
   }
 }
 
 .short-action__button > svg {
   position: absolute;
-  height: $icon--small;
-  width: $icon--small;
+  height: 100%;
+  width: 100%;
 }
-.short-action__button > .short-action__check-icon {
-  height: $vote-display__short-actions-height;
-  width: $vote-display__short-actions-height;
+.short-action__button > .short-action__flag-icon {
+  height: $icon--medium;
+  width: $icon--medium;
 }
 .short-action__cancel-icon {
   visibility: hidden;
@@ -133,22 +140,22 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
 
 [theme="dark"] {
   .vote-display {
-    color: $color-white;
-    background-color: $menu-icon-background-color--dark;
-    border-color: $menu-icon-background-color--dark;
+    color: $gray--000;
+    background-color: $navy--500;
+    border-color: $navy--500;
 
     &:has(:focus-visible) {
-      outline: 2px solid $color-planning-pink;
+      outline: 2px solid $pink--500;
     }
   }
 
   .vote-display > svg {
-    background-color: $color-white;
-    color: $color-dark-mode-note;
+    background-color: $gray--000;
+    color: $navy--500;
   }
 
   .vote-display__short-actions {
-    background-color: $menu-icon-background-color--dark;
+    background-color: $navy--500;
   }
 
   .vote-display--votes-depleted .vote-display__progress-bar {
@@ -156,15 +163,15 @@ $vote-display__progress-bar-color--depleted-dark: #4ae89f;
   }
 
   .short-action__button {
-    background-color: $color-dark-one;
-    color: $color-white;
+    background-color: $navy--600;
+    color: $gray--000;
 
     &:hover {
-      background-color: getDarkHoverBackground($color-dark-one);
+      background-color: getDarkHoverBackground($navy--600);
     }
 
     &:focus-visible {
-      outline: 2px solid $color-planning-pink;
+      outline: 2px solid $pink--500;
     }
   }
 }

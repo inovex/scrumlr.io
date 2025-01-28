@@ -10,11 +10,10 @@
   gap: 8px;
 
   // total dimensions: 50x28
-  width: 35px;
   height: 18px;
   padding: 5px 8px 5px 7px;
   border-radius: $rounded--full;
-  background-color: $color-lighter-gray;
+  background-color: $gray--300;
 
   font-size: $text--base;
 
@@ -22,7 +21,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: $hover-background-light;
+    background-color: $gray--500;
   }
 }
 
@@ -34,56 +33,55 @@
   font-size: $text--sm;
   font-weight: 600;
   line-height: 18px;
-  color: $color-black;
+  color: $navy--900;
 }
 
 .note-reaction-chip__root--self {
-  background-color: var(--accent-color--desaturated-light);
+  background-color: var(--accent-color--100);
 
   &:hover {
-    background-color: var(--accent-color--desaturated-light-hover);
+    background-color: var(--accent-color--200);
   }
 }
 
 // override
 .note-reaction-chip__root--override-active {
-  background-color: var(--accent-color);
+  background-color: var(--accent-color--light);
 
   .note-reaction-chip__amount {
-    color: $color-white;
+    color: $gray--000;
   }
 
   &:hover {
-    background-color: var(--accent-color); // essentially no hover color when active.
+    background-color: var(--accent-color--light); // essentially no hover color when active.
   }
 }
 
 [theme="dark"] {
   .note-reaction-chip__root {
-    background-color: $color-dark-one;
+    background-color: $navy--600;
 
     &:hover {
-      background-color: $hover-background-dark;
+      background-color: $navy--300;
     }
   }
 
   .note-reaction-chip__root--self {
-    background-color: var(--accent-color--desaturated-dark);
+    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
 
     &:hover {
-      background-color: var(--accent-color--desaturated-dark-hover);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
   }
 
   .note-reaction-chip__root--override-active {
-    background-color: var(--accent-color--desaturated-dark-hover);
-
+    background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     &:hover {
-      background-color: var(--accent-color--desaturated-dark-hover);
+      background-color: rgba(var(--accent-color--dark-rgb), 0.8);
     }
   }
 
   .note-reaction-chip__amount {
-    color: $color-white;
+    color: $gray--000;
   }
 }

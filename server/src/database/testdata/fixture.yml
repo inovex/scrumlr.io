@@ -31,6 +31,17 @@
       account_type: ANONYMOUS
       created_at: '{{ now }}'
 
+- model: BoardTemplate
+  rows:
+    - _id: columnTemplatesTestBoard
+      id: "3113b096-986c-4e23-adf7-b3fa19224bd4"
+      creator: "62e0ea41-6fbf-49a3-8921-1d2f4e5ae316"
+      name: John's template board
+      description: Board template test 
+      access_policy: PUBLIC
+      favourite: false
+      created_at: '{{ now }}'
+
 - model: Board
   rows:
     - _id: columnsTestBoard
@@ -57,6 +68,7 @@
     - _id: boardTestBoard
       id: "5113b096-986c-4e23-adf7-c3fa19224bd4"
       name: Board test
+      description: Description test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
@@ -99,48 +111,6 @@
     - _id: notesTestBoard
       id: "2813b096-986c-4e23-adf7-c3fa19224bd4"
       name: Notes test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: columnsObserverTestBoard
-      id: "2813b096-986c-0000-0000-c3fa19224bd4"
-      name: Columns observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: boardsObserverTestBoard
-      id: "2813b096-986c-0000-0001-c3fa19224bd4"
-      name: Boards observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: boardSessionsObserverTestBoard
-      id: "2813b096-986c-0000-0002-c3fa19224bd4"
-      name: Board sessions observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: boardSessionRequestsObserverTestBoard
-      id: "2813b096-986c-0000-0003-c3fa19224bd4"
-      name: Board sessions observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: notesObserverTestBoard
-      id: "2813b096-986c-0000-0004-c3fa19224bd4"
-      name: Notes sessions observer test
-      access_policy: PUBLIC
-      show_authors: true
-      show_notes_of_other_users: true
-      created_at: '{{ now }}'
-    - _id: votingObserverTestBoard
-      id: "2813b096-986c-0000-0005-c3fa19224bd4"
-      name: Voting observer test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
@@ -202,14 +172,6 @@
       board: '{{ $.Board.notesTestBoard.ID }}'
       user: '{{ $.User.jack.ID }}'
       role: OWNER
-    - _id: jacksSessionOnNotesObserverTestBoard
-      board: '{{ $.Board.notesObserverTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
-      role: OWNER
-    - _id: jaysSessionOnBoardSessionsObserverTestBoard
-      board: '{{ $.Board.boardSessionsObserverTestBoard.ID }}'
-      user: '{{ $.User.jay.ID }}'
-      role: OWNER
     - _id: justinSessionOnVotingSortingTestBoard
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       user: '{{ $.User.justin.ID }}'
@@ -218,6 +180,33 @@
       board: '{{ $.Board.stackTestBoard.ID }}'
       user: '{{ $.User.justin.ID }}'
       role: OWNER
+
+- model: ColumnTemplate
+  rows:
+    - _id: firstColumnTemplate
+      id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: First column
+      description: Fist column description 
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: secondColumnTemplate
+      id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: Second column
+      description: Second column description
+      color: backlog-blue
+      visible: true
+      index: 1
+    - _id: thirdColumnTemplate
+      id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: Third column
+      description: Third column description
+      color: backlog-blue
+      visible: true
+      index: 2
 
 - model: Column
   rows:
@@ -295,13 +284,6 @@
       id: "2cf7f80e-d3ed-4606-be72-59f5dc05ec47"
       board: '{{ $.Board.notesTestBoard.ID }}'
       name: C
-      color: backlog-blue
-      visible: true
-      index: 0
-    - _id: notesObserverTestColumn
-      id: "3113b196-986c-2951-adf7-c3fa19224bd4"
-      board: '{{ $.Board.notesObserverTestBoard.ID }}'
-      name: B
       color: backlog-blue
       visible: true
       index: 0

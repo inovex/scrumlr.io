@@ -1,4 +1,4 @@
-import {Auth} from "types/auth";
+import {Auth} from "store/features/auth/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const UserAPI = {

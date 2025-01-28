@@ -27,35 +27,11 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
             y2="0"
           >
             <stop
-              class="accent-color--blue scrumlr-logo__stop"
+              class="scrumlr-logo__stop accent-color__backlog-blue"
               offset="0"
             />
             <stop
-              class="accent-color--blue scrumlr-logo__stop"
-              offset="0.25"
-            />
-            <stop
-              class="accent-color--purple scrumlr-logo__stop"
-              offset="0.25"
-            />
-            <stop
-              class="accent-color--purple scrumlr-logo__stop"
-              offset="0.5"
-            />
-            <stop
-              class="accent-color--lilac scrumlr-logo__stop"
-              offset="0.5"
-            />
-            <stop
-              class="accent-color--lilac scrumlr-logo__stop"
-              offset="0.75"
-            />
-            <stop
-              class="accent-color--pink scrumlr-logo__stop"
-              offset="0.75"
-            />
-            <stop
-              class="accent-color--pink scrumlr-logo__stop"
+              class="scrumlr-logo__stop accent-color__backlog-blue"
               offset="1"
             />
           </lineargradient>
@@ -97,7 +73,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
       <svg
         class="form__icon"
       >
-        icon-key.svg
+        key-protected.svg
       </svg>
       <label
         class="form__label"
@@ -122,7 +98,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
             type="button"
           >
             <svg>
-              icon-visible.svg
+              visible.svg
             </svg>
           </button>
         </div>
@@ -133,7 +109,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
           type="submit"
         >
           <svg>
-            icon-arrow-right.svg
+            arrow-right.svg
           </svg>
         </button>
       </div>

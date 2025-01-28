@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
-import {Link} from "react-router-dom";
+import {Link} from "react-router";
 import _ from "underscore";
-import {ReactComponent as ShareIcon} from "assets/icon-share.svg";
+import {Share} from "components/Icon";
 import {Timer} from "components/Timer";
 import {Tooltip} from "components/Tooltip";
 import {VoteDisplay} from "components/Votes/VoteDisplay";
@@ -29,7 +29,7 @@ export const InfoBar = () => {
     <aside className="info-bar">
       {state.startTime && state.endTime && <Timer startTime={state.startTime} endTime={state.endTime} />}
       {state.activeVoting && <VoteDisplay usedVotes={state.usedVotes} possibleVotes={state.possibleVotes!} />}
-      {state.sharedNote && viewer.user.id !== focusInitiator?.user.id && (
+      {state.sharedNote && viewer?.user.id !== focusInitiator?.user.id && (
         <Link
           aria-label={t("InfoBar.ReturnToPresentedNote")}
           className="info-bar__return-to-shared-note-button"
@@ -37,7 +37,7 @@ export const InfoBar = () => {
           data-tooltip-content={t("InfoBar.ReturnToPresentedNote")}
           to={`note/${state.sharedNote}/stack`}
         >
-          <ShareIcon />
+          <Share />
         </Link>
       )}
       <Tooltip id="info-bar__tooltip" />
