@@ -41,6 +41,8 @@ export interface View {
 
   showBoardReactions: boolean;
 
+  readonly legacyCreateBoard?: boolean;
+
   snowfallEnabled: boolean;
 
   snowfallNotificationEnabled: boolean;
