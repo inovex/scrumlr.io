@@ -56,6 +56,10 @@
       }
     }
   }
+
+  .color-picker__color-option {
+    background-color: var(--accent-color--400);
+  }
 }
 
 .color-picker__color-option {
