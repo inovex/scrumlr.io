@@ -18,7 +18,7 @@
     "@microsoft/clarity": "^1.0.0",
     "@react-hook/resize-observer": "^2.0.2",
     "@react-spring/web": "^9.7.5",
-    "@reduxjs/toolkit": "^2.5.0",
+    "@reduxjs/toolkit": "^2.5.1",
     "avataaars": "^2.0.0",
     "classnames": "^2.5.1",
     "file-saver": "^2.0.5",
