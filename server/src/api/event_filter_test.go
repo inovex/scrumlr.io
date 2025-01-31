@@ -135,10 +135,6 @@ var (
 			},
 		},
 	}
-	participantUpdated = &realtime.BoardEvent{
-		Type: realtime.BoardEventParticipantUpdated,
-		Data: participantBoardSession,
-	}
 	votingEvent = &realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: votingData,
