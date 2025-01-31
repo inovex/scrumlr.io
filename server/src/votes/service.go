@@ -1,11 +1,18 @@
-package dto
+package votes
 
 import (
 	"github.com/google/uuid"
 	"net/http"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/technical_helper"
 )
+
+type VotingUpdated struct {
+	Notes  notes.NoteSlice `json:"notes"`
+	Voting *Voting         `json:"voting"`
+}
 
 // Voting is the response for all voting requests.
 type Voting struct {
@@ -15,21 +22,6 @@ type Voting struct {
 	ShowVotesOfOthers  bool               `json:"showVotesOfOthers"`
 	Status             types.VotingStatus `json:"status"`
 	VotingResults      *VotingResults     `json:"votes,omitempty"`
-}
-
-type VotingResultsPerUser struct {
-	ID    uuid.UUID `json:"id"`
-	Total int       `json:"total"`
-}
-
-type VotingResultsPerNote struct {
-	Total int                     `json:"total"`
-	Users *[]VotingResultsPerUser `json:"userVotes,omitempty"`
-}
-
-type VotingResults struct {
-	Total int                                `json:"total"`
-	Votes map[uuid.UUID]VotingResultsPerNote `json:"votesPerNote"`
 }
 
 func (v *Voting) From(voting database.Voting, votes []database.Vote) *Voting {
@@ -58,19 +50,30 @@ func Votings(votings []database.Voting, votes []database.Vote) []*Voting {
 	return list
 }
 
-// VotingCreateRequest represents the request to create a new voting session.
-type VotingCreateRequest struct {
-	Board              uuid.UUID `json:"-"`
-	VoteLimit          int       `json:"voteLimit"`
-	AllowMultipleVotes bool      `json:"allowMultipleVotes"`
-	ShowVotesOfOthers  bool      `json:"showVotesOfOthers"`
+func (v *Voting) UpdateVoting(notes notes.NoteSlice) *VotingUpdated {
+	if v.hasNoResults() {
+		return &VotingUpdated{
+			Notes:  notes,
+			Voting: v,
+		}
+	}
+
+	v.VotingResults = v.calculateVoteCounts(notes)
+
+	return &VotingUpdated{
+		Notes:  notes,
+		Voting: v,
+	}
 }
 
-// VotingUpdateRequest represents the request to u pdate a voting session.
-type VotingUpdateRequest struct {
-	ID     uuid.UUID          `json:"-"`
-	Board  uuid.UUID          `json:"-"`
-	Status types.VotingStatus `json:"status"`
+func UnmarshallVoteData(data interface{}) (*VotingUpdated, error) {
+	vote, err := technical_helper.Unmarshal[VotingUpdated](data)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return vote, nil
 }
 
 func getVotingWithResults(voting database.Voting, votes []database.Vote) *VotingResults {
@@ -78,7 +81,7 @@ func getVotingWithResults(voting database.Voting, votes []database.Vote) *Voting
 		return nil
 	}
 
-	votesForVoting := []database.Vote{}
+	var votesForVoting []database.Vote
 	for _, vote := range votes {
 		if vote.Voting == voting.ID {
 			votesForVoting = append(votesForVoting, vote)
@@ -129,4 +132,29 @@ func getVotingWithResults(voting database.Voting, votes []database.Vote) *Voting
 		return &votingResult
 	}
 	return nil
+}
+
+func (v *Voting) calculateVoteCounts(notes notes.NoteSlice) *VotingResults {
+	totalVotingCount := 0
+	votingResultsPerNode := &VotingResults{
+		Votes: make(map[uuid.UUID]VotingResultsPerNote),
+	}
+
+	for _, note := range notes {
+		if voteResults, ok := v.VotingResults.Votes[note.ID]; ok { // Check if note was voted on
+			votingResultsPerNode.Votes[note.ID] = VotingResultsPerNote{
+				Total: voteResults.Total,
+				Users: voteResults.Users,
+			}
+			totalVotingCount += v.VotingResults.Votes[note.ID].Total
+		}
+	}
+
+	votingResultsPerNode.Total = totalVotingCount
+
+	return votingResultsPerNode
+}
+
+func (v *Voting) hasNoResults() bool {
+	return v.VotingResults == nil
 }
