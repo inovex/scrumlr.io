@@ -58,3 +58,10 @@ func TestNil(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Nil(t, actual)
 }
+
+func TestErrorWithMarshalling(t *testing.T) {
+	actual, err := Unmarshal[TestStruct]("lorem ipsum")
+
+	assert.Error(t, err)
+	assert.Nil(t, actual)
+}
