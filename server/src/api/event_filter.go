@@ -146,7 +146,7 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 
 	if isMod {
 		// Cache the changes of when a participant got updated
-		updatedSessions := technical_helper.Map(bs.boardParticipants, func(boardSession *dto.BoardSession) *dto.BoardSession {
+		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *dto.BoardSession) *dto.BoardSession {
 			if boardSession.User.ID == participantSession.User.ID {
 				return participantSession
 			} else {

@@ -31,3 +31,33 @@ func TestNoMatch(t *testing.T) {
 
 	assert.Equal(t, nilSlice, ret)
 }
+
+func TestMapNilSliceShouldProduceEmptySlice(t *testing.T) {
+	var nilSlice []int
+
+	ret := MapSlice[int, int](nilSlice, func(i int) int {
+		return i
+	})
+
+	assert.Empty(t, ret)
+}
+
+func TestMapEmptySliceShouldProduceEmptySlice(t *testing.T) {
+	emptySlice := make([]int, 0)
+
+	ret := MapSlice[int, int](emptySlice, func(i int) int {
+		return i
+	})
+
+	assert.Empty(t, ret)
+}
+
+func TestMapSliceShouldProduceMappedSlice(t *testing.T) {
+	slice := []int{1, 2, 3}
+
+	ret := MapSlice[int, int](slice, func(i int) int {
+		return i
+	})
+
+	assert.Equal(t, slice, ret)
+}
