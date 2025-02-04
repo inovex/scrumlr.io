@@ -81,57 +81,55 @@ func getVotingWithResults(voting database.Voting, votes []database.Vote) *Voting
 		return nil
 	}
 
-	var votesForVoting []database.Vote
-	for _, vote := range votes {
-		if vote.Voting == voting.ID {
-			votesForVoting = append(votesForVoting, vote)
+	relevantVoting := technical_helper.Filter[database.Vote](votes, func(vote database.Vote) bool {
+		return vote.Voting == voting.ID
+	})
+
+	if len(relevantVoting) <= 0 {
+		return nil
+	}
+
+	votingResult := VotingResults{Total: len(relevantVoting), Votes: map[uuid.UUID]VotingResultsPerNote{}}
+	totalVotePerNote := map[uuid.UUID]int{}
+	votesPerUser := map[uuid.UUID][]uuid.UUID{}
+	for _, vote := range relevantVoting {
+		if _, ok := totalVotePerNote[vote.Note]; ok {
+			totalVotePerNote[vote.Note] = totalVotePerNote[vote.Note] + 1
+			votesPerUser[vote.Note] = append(votesPerUser[vote.Note], vote.User)
+		} else {
+			totalVotePerNote[vote.Note] = 1
+			votesPerUser[vote.Note] = []uuid.UUID{vote.User}
 		}
 	}
 
-	if len(votesForVoting) > 0 {
-		votingResult := VotingResults{Total: len(votesForVoting), Votes: map[uuid.UUID]VotingResultsPerNote{}}
-		totalVotePerNote := map[uuid.UUID]int{}
-		votesPerUser := map[uuid.UUID][]uuid.UUID{}
-		for _, vote := range votesForVoting {
-			if _, ok := totalVotePerNote[vote.Note]; ok {
-				totalVotePerNote[vote.Note] = totalVotePerNote[vote.Note] + 1
-				votesPerUser[vote.Note] = append(votesPerUser[vote.Note], vote.User)
-			} else {
-				totalVotePerNote[vote.Note] = 1
-				votesPerUser[vote.Note] = []uuid.UUID{vote.User}
+	for note, total := range totalVotePerNote {
+		result := VotingResultsPerNote{
+			Total: total,
+		}
+		if voting.ShowVotesOfOthers {
+			userVotes := map[uuid.UUID]int{}
+			for _, user := range votesPerUser[note] {
+				if _, ok := userVotes[user]; ok {
+					userVotes[user] = userVotes[user] + 1
+				} else {
+					userVotes[user] = 1
+				}
 			}
+
+			var votingResultsPerUser []VotingResultsPerUser
+			for user, total := range userVotes {
+				votingResultsPerUser = append(votingResultsPerUser, VotingResultsPerUser{
+					ID:    user,
+					Total: total,
+				})
+			}
+
+			result.Users = &votingResultsPerUser
 		}
 
-		for note, total := range totalVotePerNote {
-			result := VotingResultsPerNote{
-				Total: total,
-			}
-			if voting.ShowVotesOfOthers {
-				userVotes := map[uuid.UUID]int{}
-				for _, user := range votesPerUser[note] {
-					if _, ok := userVotes[user]; ok {
-						userVotes[user] = userVotes[user] + 1
-					} else {
-						userVotes[user] = 1
-					}
-				}
-
-				var votingResultsPerUser []VotingResultsPerUser
-				for user, total := range userVotes {
-					votingResultsPerUser = append(votingResultsPerUser, VotingResultsPerUser{
-						ID:    user,
-						Total: total,
-					})
-				}
-
-				result.Users = &votingResultsPerUser
-			}
-
-			votingResult.Votes[note] = result
-		}
-		return &votingResult
+		votingResult.Votes[note] = result
 	}
-	return nil
+	return &votingResult
 }
 
 func (v *Voting) calculateVoteCounts(notes notes.NoteSlice) *VotingResults {
