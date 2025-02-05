@@ -6,6 +6,7 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/notes"
 	"testing"
 	"time"
 )
@@ -113,6 +114,43 @@ func TestMultipleVotesForOneNoteFromOneUser(t *testing.T) {
 	assert.Equal(t, 2, res.Votes[noteId].Total)
 	assert.Equal(t, 2, users[0].Total)
 	assert.Equal(t, userId, users[0].ID)
+}
+
+func TestCalculateVoteCountsWithEmptySlice(t *testing.T) {
+
+	var noteSlice notes.NoteSlice
+	var voting Voting
+
+	votingCountResult := voting.calculateTotalVoteCount(noteSlice)
+
+	assert.Equal(t, 0, votingCountResult.Total)
+	assert.Empty(t, votingCountResult.Votes)
+}
+
+func TestCalculateVoteCountForSpecificNote(t *testing.T) {
+
+	voteId := uuid.New()
+	noteId := uuid.New()
+	userId := uuid.New()
+
+	noteSlice := notes.NoteSlice{buildNote(noteId)}
+	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+
+	votingCountResult := voting.calculateTotalVoteCount(noteSlice)
+
+	assert.Equal(t, voting.VotingResults.Total, votingCountResult.Total)
+	assert.Equal(t, voting.VotingResults.Votes[noteId].Total, votingCountResult.Votes[noteId].Total)
+	assert.Equal(t, (*voting.VotingResults.Votes[noteId].Users)[0].Total, (*votingCountResult.Votes[noteId].Users)[0].Total)
+}
+
+func buildNote(noteId uuid.UUID) *notes.Note {
+	return &notes.Note{
+		ID:       noteId,
+		Author:   uuid.UUID{},
+		Text:     "",
+		Edited:   false,
+		Position: notes.NotePosition{},
+	}
 }
 
 func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *database.Vote {

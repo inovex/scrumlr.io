@@ -9,21 +9,6 @@ import (
 	"scrumlr.io/server/technical_helper"
 )
 
-type VotingUpdated struct {
-	Notes  notes.NoteSlice `json:"notes"`
-	Voting *Voting         `json:"voting"`
-}
-
-// Voting is the response for all voting requests.
-type Voting struct {
-	ID                 uuid.UUID          `json:"id"`
-	VoteLimit          int                `json:"voteLimit"`
-	AllowMultipleVotes bool               `json:"allowMultipleVotes"`
-	ShowVotesOfOthers  bool               `json:"showVotesOfOthers"`
-	Status             types.VotingStatus `json:"status"`
-	VotingResults      *VotingResults     `json:"votes,omitempty"`
-}
-
 func (v *Voting) From(voting database.Voting, votes []database.Vote) *Voting {
 	v.ID = voting.ID
 	v.VoteLimit = voting.VoteLimit
@@ -58,7 +43,7 @@ func (v *Voting) UpdateVoting(notes notes.NoteSlice) *VotingUpdated {
 		}
 	}
 
-	v.VotingResults = v.calculateVoteCounts(notes)
+	v.VotingResults = v.calculateTotalVoteCount(notes)
 
 	return &VotingUpdated{
 		Notes:  notes,
@@ -132,7 +117,7 @@ func getVotingWithResults(voting database.Voting, votes []database.Vote) *Voting
 	return &votingResult
 }
 
-func (v *Voting) calculateVoteCounts(notes notes.NoteSlice) *VotingResults {
+func (v *Voting) calculateTotalVoteCount(notes notes.NoteSlice) *VotingResults {
 	totalVotingCount := 0
 	votingResultsPerNode := &VotingResults{
 		Votes: make(map[uuid.UUID]VotingResultsPerNote),
