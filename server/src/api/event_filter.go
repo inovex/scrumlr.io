@@ -164,24 +164,12 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {
-		latestVoting := make([]*votes.Voting, 0)
-		activeNotes := make([]*dto.Vote, 0)
+		latestVoting := event.Data.Votings[0]
 
-		latestVoting = append(latestVoting, event.Data.Votings[0])
-
-		for _, v := range event.Data.Votes {
-			if v.Voting == latestVoting[0].ID {
-				if latestVoting[0].Status == types.VotingStatusOpen {
-					if v.User == clientID {
-						activeNotes = append(activeNotes, v)
-					}
-				} else {
-					activeNotes = append(activeNotes, v)
-				}
-			}
-		}
-		event.Data.Votings = latestVoting
-		event.Data.Votes = activeNotes
+		event.Data.Votings = []*votes.Voting{latestVoting}
+		event.Data.Votes = technical_helper.Filter[*dto.Vote](event.Data.Votes, func(vote *dto.Vote) bool {
+			return vote.Voting == latestVoting.ID && (latestVoting.Status != types.VotingStatusOpen || vote.User == clientID)
+		})
 	}
 
 	if isMod {

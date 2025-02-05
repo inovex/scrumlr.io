@@ -1,18 +1,18 @@
 package api
 
 import (
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"math/rand"
 	"scrumlr.io/server/columns"
+	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/session_helper"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votes"
 	"testing"
-
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
-	"scrumlr.io/server/realtime"
 )
 
 var (
@@ -444,4 +444,207 @@ func testInitFilterAsParticipant(t *testing.T) {
 	returnedInitEvent := eventInitFilter(initEvent, participantBoardSession.User.ID)
 
 	assert.Equal(t, expectedInitEvent, returnedInitEvent)
+}
+
+func TestShouldFailBecauseOfInvalidBordData(t *testing.T) {
+
+	event := buildBoardEvent(buildBoardDto(nil, nil, "lorem ipsum"), realtime.BoardEventBoardUpdated)
+	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+
+	_, success := bordSubscription.boardUpdated(event, false)
+
+	assert.False(t, success)
+}
+
+func TestShouldUpdateBordSubscriptionAsModerator(t *testing.T) {
+
+	nameForUpdate := randSeq(10)
+	descriptionForUpdate := randSeq(10)
+
+	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic), realtime.BoardEventBoardUpdated)
+	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+
+	_, success := bordSubscription.boardUpdated(event, true)
+
+	assert.Equal(t, nameForUpdate, bordSubscription.boardSettings.Name)
+	assert.Equal(t, descriptionForUpdate, bordSubscription.boardSettings.Description)
+	assert.True(t, success)
+}
+
+func TestShouldNotUpdateBordSubscriptionWithoutModeratorRights(t *testing.T) {
+
+	nameForUpdate := randSeq(10)
+	descriptionForUpdate := randSeq(10)
+
+	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic), realtime.BoardEventBoardUpdated)
+	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+
+	_, success := bordSubscription.boardUpdated(event, false)
+
+	assert.Nil(t, bordSubscription.boardSettings.Name)
+	assert.Nil(t, bordSubscription.boardSettings.Description)
+	assert.True(t, success)
+}
+
+func TestShouldOnlyInsertLatestVotingInInitEventStatusClosed(t *testing.T) {
+
+	latestVotingId := uuid.New()
+	newestVotingId := uuid.New()
+	clientId := uuid.New()
+
+	initEvent := InitEvent{
+		Type: "",
+		Data: dto.FullBoard{
+			BoardSessions: []*dto.BoardSession{
+				{
+					Role: types.SessionRoleModerator,
+					User: dto.User{ID: clientId},
+				},
+			},
+			Votings: []*votes.Voting{
+				buildVoting(latestVotingId, types.VotingStatusClosed),
+				buildVoting(newestVotingId, types.VotingStatusClosed),
+			},
+			Votes: []*dto.Vote{
+				buildVote(latestVotingId, uuid.New()),
+				buildVote(newestVotingId, uuid.New()),
+			},
+		},
+	}
+
+	updatedInitEvent := eventInitFilter(initEvent, clientId)
+
+	assert.Equal(t, latestVotingId, updatedInitEvent.Data.Votes[0].Voting)
+	assert.Equal(t, latestVotingId, updatedInitEvent.Data.Votings[0].ID)
+}
+
+func TestShouldOnlyInsertLatestVotingInInitEventStatusOpen(t *testing.T) {
+
+	latestVotingId := uuid.New()
+	newestVotingId := uuid.New()
+	clientId := uuid.New()
+
+	initEvent := InitEvent{
+		Type: "",
+		Data: dto.FullBoard{
+			BoardSessions: []*dto.BoardSession{
+				{
+					Role: types.SessionRoleModerator,
+					User: dto.User{ID: clientId},
+				},
+			},
+			Votings: []*votes.Voting{
+				buildVoting(latestVotingId, types.VotingStatusOpen),
+				buildVoting(newestVotingId, types.VotingStatusClosed),
+			},
+			Votes: []*dto.Vote{
+				buildVote(latestVotingId, clientId),
+				buildVote(newestVotingId, uuid.New()),
+			},
+		},
+	}
+
+	updatedInitEvent := eventInitFilter(initEvent, clientId)
+
+	assert.Equal(t, latestVotingId, updatedInitEvent.Data.Votes[0].Voting)
+	assert.Equal(t, latestVotingId, updatedInitEvent.Data.Votings[0].ID)
+}
+
+func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
+
+	clientId := uuid.New()
+	latestVotingId := uuid.New()
+
+	orgVoting := []*votes.Voting{
+		buildVoting(latestVotingId, types.VotingStatusOpen),
+		buildVoting(uuid.New(), types.VotingStatusClosed),
+	}
+	orgVote := []*dto.Vote{
+		buildVote(uuid.New(), uuid.New()),
+		buildVote(uuid.New(), uuid.New()),
+	}
+
+	initEvent := InitEvent{
+		Type: "",
+		Data: dto.FullBoard{
+			BoardSessions: []*dto.BoardSession{
+				{
+					Role: types.SessionRoleModerator,
+					User: dto.User{ID: clientId},
+				},
+			},
+			Votings: orgVoting,
+			Votes:   orgVote,
+		},
+	}
+
+	updatedInitEvent := eventInitFilter(initEvent, clientId)
+
+	assert.Empty(t, updatedInitEvent.Data.Votes)
+	assert.Equal(t, latestVotingId, updatedInitEvent.Data.Votings[0].ID)
+}
+
+func buildVote(votingId uuid.UUID, userId uuid.UUID) *dto.Vote {
+	return &dto.Vote{
+		Voting: votingId,
+		User:   userId,
+	}
+}
+
+func buildVoting(id uuid.UUID, status types.VotingStatus) *votes.Voting {
+	return &votes.Voting{
+		ID:     id,
+		Status: status,
+	}
+}
+
+func buildBordSubscription(accessPolicy types.AccessPolicy) BoardSubscription {
+	return BoardSubscription{
+		subscription:      nil,
+		clients:           nil,
+		boardParticipants: nil,
+		boardSettings:     buildBoardDto(nil, nil, accessPolicy),
+		boardColumns:      nil,
+		boardNotes:        nil,
+		boardReactions:    nil,
+	}
+}
+
+func buildBoardEvent(data interface{}, eventType realtime.BoardEventType) *realtime.BoardEvent {
+	return &realtime.BoardEvent{
+		Type: eventType,
+		Data: data,
+	}
+}
+
+func buildBoardDto(name *string, description *string, accessPolicy types.AccessPolicy) *dto.Board {
+	return &dto.Board{
+		ID:                    uuid.UUID{},
+		Name:                  name,
+		Description:           description,
+		AccessPolicy:          accessPolicy,
+		ShowAuthors:           false,
+		ShowNotesOfOtherUsers: false,
+		ShowNoteReactions:     false,
+		AllowStacking:         false,
+		IsLocked:              false,
+		TimerStart:            nil,
+		TimerEnd:              nil,
+		SharedNote:            uuid.NullUUID{},
+		ShowVoting:            uuid.NullUUID{},
+		Passphrase:            nil,
+		Salt:                  nil,
+	}
+}
+
+func randSeq(n int) *string {
+	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+
+	s := string(b)
+	return &s
 }

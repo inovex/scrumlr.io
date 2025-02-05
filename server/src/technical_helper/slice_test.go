@@ -23,13 +23,13 @@ func TestOneMatch(t *testing.T) {
 
 func TestNoMatch(t *testing.T) {
 
-	var nilSlice []int
+	emptySlice := make([]int, 0)
 
 	ret := Filter[int]([]int{1, 2, 3}, func(i int) bool {
 		return i == 4
 	})
 
-	assert.Equal(t, nilSlice, ret)
+	assert.Equal(t, emptySlice, ret)
 }
 
 func TestMapNilSliceShouldProduceEmptySlice(t *testing.T) {
