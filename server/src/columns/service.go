@@ -33,14 +33,9 @@ type Column struct {
 }
 
 func (c ColumnSlice) FilterVisibleColumns() []*Column {
-	var visibleColumns = make([]*Column, 0, len(c))
-	for _, column := range c {
-		if column.Visible {
-			visibleColumns = append(visibleColumns, column)
-		}
-	}
-
-	return visibleColumns
+	return technical_helper.Filter[*Column](c, func(column *Column) bool {
+		return column.Visible
+	})
 }
 
 func UnmarshallColumnData(data interface{}) (ColumnSlice, error) {
@@ -72,9 +67,7 @@ func Columns(columns []database.Column) []*Column {
 		return nil
 	}
 
-	list := make([]*Column, len(columns))
-	for index, column := range columns {
-		list[index] = new(Column).From(column)
-	}
-	return list
+	return technical_helper.MapSlice[database.Column, *Column](columns, func(column database.Column) *Column {
+		return new(Column).From(column)
+	})
 }
