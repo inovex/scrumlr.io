@@ -77,10 +77,31 @@ func TestColumnDatabaseMappingNil(t *testing.T) {
 	assert.Nil(t, mappedColumns)
 }
 
+func TestUnmarshallColumnData(t *testing.T) {
+
+	columns := ColumnSlice{buildColumn(uuid.New(), true)}
+
+	columnSlice, err := UnmarshallColumnData(columns)
+
+	assert.NoError(t, err)
+	assert.NotEmpty(t, columnSlice)
+}
+
+func TestShouldReturnWithErrorUnmarshallColumnData(t *testing.T) {
+
+	column := buildColumn(uuid.New(), true)
+
+	columnSlice, err := UnmarshallColumnData(column)
+
+	assert.Error(t, err)
+	assert.Empty(t, columnSlice)
+}
+
 func buildColumn(id uuid.UUID, visible bool) *Column {
 	return &Column{
 		ID:      id,
 		Visible: visible,
+		Color:   types.ColorBacklogBlue,
 	}
 }
 
