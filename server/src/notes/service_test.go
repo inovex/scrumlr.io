@@ -60,6 +60,26 @@ func TestNilMapping(t *testing.T) {
 	assert.Nil(t, note)
 }
 
+func TestUnmarshallNoteData(t *testing.T) {
+
+	notes := NoteSlice{buildNote(uuid.New(), uuid.New())}
+
+	notesSlice, err := UnmarshallNotaData(notes)
+
+	assert.NoError(t, err)
+	assert.NotEmpty(t, notesSlice)
+}
+
+func TestShouldReturnWithErrorUnmarshallColumnData(t *testing.T) {
+
+	note := buildNote(uuid.New(), uuid.New())
+
+	notesSlice, err := UnmarshallNotaData(note)
+
+	assert.Error(t, err)
+	assert.Empty(t, notesSlice)
+}
+
 func buildColumn(visible bool) *columnService.Column {
 	return &columnService.Column{
 		ID:          uuid.UUID{},
