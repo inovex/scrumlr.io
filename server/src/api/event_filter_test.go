@@ -584,6 +584,39 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 	assert.Equal(t, latestVotingId, updatedInitEvent.Data.Votings[0].ID)
 }
 
+func TestShouldFailBecauseOfInvalidVoteData(t *testing.T) {
+
+	event := buildBoardEvent(*buildVote(uuid.New(), uuid.New()), realtime.BoardEventVotesDeleted)
+	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+
+	_, success := bordSubscription.votesDeleted(event, uuid.New())
+
+	assert.False(t, success)
+}
+
+func TestShouldReturnEmptyVotesBecauseUserIdNotMatched(t *testing.T) {
+
+	event := buildBoardEvent([]dto.Vote{*buildVote(uuid.New(), uuid.New())}, realtime.BoardEventVotesDeleted)
+	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+
+	updatedBordEvent, success := bordSubscription.votesDeleted(event, uuid.New())
+
+	assert.True(t, success)
+	assert.Equal(t, 0, len(updatedBordEvent.Data.([]*dto.Vote)))
+}
+
+func TestVotesDeleted(t *testing.T) {
+
+	userId := uuid.New()
+	event := buildBoardEvent([]dto.Vote{*buildVote(uuid.New(), userId)}, realtime.BoardEventVotesDeleted)
+	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+
+	updatedBordEvent, success := bordSubscription.votesDeleted(event, userId)
+
+	assert.True(t, success)
+	assert.Equal(t, 1, len(updatedBordEvent.Data.([]*dto.Vote)))
+}
+
 func buildVote(votingId uuid.UUID, userId uuid.UUID) *dto.Vote {
 	return &dto.Vote{
 		Voting: votingId,
