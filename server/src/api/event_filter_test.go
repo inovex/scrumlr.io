@@ -448,7 +448,7 @@ func testInitFilterAsParticipant(t *testing.T) {
 
 func TestShouldFailBecauseOfInvalidBordData(t *testing.T) {
 
-	event := buildBoardEvent(buildBoardDto(nil, nil, "lorem ipsum"), realtime.BoardEventBoardUpdated)
+	event := buildBoardEvent(buildBoardDto(nil, nil, "lorem ipsum", false), realtime.BoardEventBoardUpdated)
 	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
 
 	_, success := bordSubscription.boardUpdated(event, false)
@@ -461,7 +461,7 @@ func TestShouldUpdateBordSubscriptionAsModerator(t *testing.T) {
 	nameForUpdate := randSeq(10)
 	descriptionForUpdate := randSeq(10)
 
-	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic), realtime.BoardEventBoardUpdated)
+	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic, false), realtime.BoardEventBoardUpdated)
 	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
 
 	_, success := bordSubscription.boardUpdated(event, true)
@@ -476,7 +476,7 @@ func TestShouldNotUpdateBordSubscriptionWithoutModeratorRights(t *testing.T) {
 	nameForUpdate := randSeq(10)
 	descriptionForUpdate := randSeq(10)
 
-	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic), realtime.BoardEventBoardUpdated)
+	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic, false), realtime.BoardEventBoardUpdated)
 	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
 
 	_, success := bordSubscription.boardUpdated(event, false)
@@ -506,8 +506,8 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusClosed(t *testing.T) {
 				buildVoting(newestVotingId, types.VotingStatusClosed),
 			},
 			Votes: []*dto.Vote{
-				buildVote(latestVotingId, uuid.New()),
-				buildVote(newestVotingId, uuid.New()),
+				buildVote(latestVotingId, uuid.New(), uuid.New()),
+				buildVote(newestVotingId, uuid.New(), uuid.New()),
 			},
 		},
 	}
@@ -538,8 +538,8 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusOpen(t *testing.T) {
 				buildVoting(newestVotingId, types.VotingStatusClosed),
 			},
 			Votes: []*dto.Vote{
-				buildVote(latestVotingId, clientId),
-				buildVote(newestVotingId, uuid.New()),
+				buildVote(latestVotingId, clientId, uuid.New()),
+				buildVote(newestVotingId, uuid.New(), uuid.New()),
 			},
 		},
 	}
@@ -560,8 +560,8 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 		buildVoting(uuid.New(), types.VotingStatusClosed),
 	}
 	orgVote := []*dto.Vote{
-		buildVote(uuid.New(), uuid.New()),
-		buildVote(uuid.New(), uuid.New()),
+		buildVote(uuid.New(), uuid.New(), uuid.New()),
+		buildVote(uuid.New(), uuid.New(), uuid.New()),
 	}
 
 	initEvent := InitEvent{
@@ -584,9 +584,48 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 	assert.Equal(t, latestVotingId, updatedInitEvent.Data.Votings[0].ID)
 }
 
+func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *testing.T) {
+
+	latestVotingId := uuid.New()
+	newestVotingId := uuid.New()
+	noteId := uuid.New()
+	columnId := uuid.New()
+	clientId := uuid.New()
+	nameForUpdate := randSeq(10)
+	descriptionForUpdate := randSeq(10)
+
+	initEvent := InitEvent{
+		Type: "",
+		Data: dto.FullBoard{
+			Columns: []*columns.Column{buildColumn(columnId, true)},
+			Board:   buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic, true),
+			Notes:   []*notes.Note{buildNote(noteId, columnId)},
+			BoardSessions: []*dto.BoardSession{
+				{
+					Role: types.SessionRoleParticipant,
+					User: dto.User{ID: clientId},
+				},
+			},
+			Votings: []*votes.Voting{
+				buildVoting(latestVotingId, types.VotingStatusOpen),
+				buildVoting(newestVotingId, types.VotingStatusClosed),
+			},
+			Votes: []*dto.Vote{
+				buildVote(latestVotingId, clientId, noteId),
+				buildVote(newestVotingId, uuid.New(), uuid.New()),
+			},
+		},
+	}
+
+	updatedInitEvent := eventInitFilter(initEvent, clientId)
+
+	assert.Equal(t, noteId, updatedInitEvent.Data.Votes[0].Note)
+	assert.Equal(t, clientId, updatedInitEvent.Data.Votes[0].User)
+}
+
 func TestShouldFailBecauseOfInvalidVoteData(t *testing.T) {
 
-	event := buildBoardEvent(*buildVote(uuid.New(), uuid.New()), realtime.BoardEventVotesDeleted)
+	event := buildBoardEvent(*buildVote(uuid.New(), uuid.New(), uuid.New()), realtime.BoardEventVotesDeleted)
 	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
 
 	_, success := bordSubscription.votesDeleted(event, uuid.New())
@@ -596,7 +635,7 @@ func TestShouldFailBecauseOfInvalidVoteData(t *testing.T) {
 
 func TestShouldReturnEmptyVotesBecauseUserIdNotMatched(t *testing.T) {
 
-	event := buildBoardEvent([]dto.Vote{*buildVote(uuid.New(), uuid.New())}, realtime.BoardEventVotesDeleted)
+	event := buildBoardEvent([]dto.Vote{*buildVote(uuid.New(), uuid.New(), uuid.New())}, realtime.BoardEventVotesDeleted)
 	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
 
 	updatedBordEvent, success := bordSubscription.votesDeleted(event, uuid.New())
@@ -608,7 +647,7 @@ func TestShouldReturnEmptyVotesBecauseUserIdNotMatched(t *testing.T) {
 func TestVotesDeleted(t *testing.T) {
 
 	userId := uuid.New()
-	event := buildBoardEvent([]dto.Vote{*buildVote(uuid.New(), userId)}, realtime.BoardEventVotesDeleted)
+	event := buildBoardEvent([]dto.Vote{*buildVote(uuid.New(), userId, uuid.New())}, realtime.BoardEventVotesDeleted)
 	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
 
 	updatedBordEvent, success := bordSubscription.votesDeleted(event, userId)
@@ -617,10 +656,35 @@ func TestVotesDeleted(t *testing.T) {
 	assert.Equal(t, 1, len(updatedBordEvent.Data.([]*dto.Vote)))
 }
 
-func buildVote(votingId uuid.UUID, userId uuid.UUID) *dto.Vote {
+func buildNote(id uuid.UUID, columnId uuid.UUID) *notes.Note {
+	return &notes.Note{
+		ID:     id,
+		Author: uuid.New(),
+		Text:   "lorem in ipsum",
+		Edited: false,
+		Position: notes.NotePosition{
+			Column: columnId,
+			Stack: uuid.NullUUID{
+				UUID:  uuid.New(),
+				Valid: true,
+			},
+			Rank: 0,
+		},
+	}
+}
+
+func buildColumn(id uuid.UUID, visible bool) *columns.Column {
+	return &columns.Column{
+		ID:      id,
+		Visible: visible,
+	}
+}
+
+func buildVote(votingId uuid.UUID, userId uuid.UUID, noteId uuid.UUID) *dto.Vote {
 	return &dto.Vote{
 		Voting: votingId,
 		User:   userId,
+		Note:   noteId,
 	}
 }
 
@@ -636,7 +700,7 @@ func buildBordSubscription(accessPolicy types.AccessPolicy) BoardSubscription {
 		subscription:      nil,
 		clients:           nil,
 		boardParticipants: nil,
-		boardSettings:     buildBoardDto(nil, nil, accessPolicy),
+		boardSettings:     buildBoardDto(nil, nil, accessPolicy, false),
 		boardColumns:      nil,
 		boardNotes:        nil,
 		boardReactions:    nil,
@@ -650,14 +714,14 @@ func buildBoardEvent(data interface{}, eventType realtime.BoardEventType) *realt
 	}
 }
 
-func buildBoardDto(name *string, description *string, accessPolicy types.AccessPolicy) *dto.Board {
+func buildBoardDto(name *string, description *string, accessPolicy types.AccessPolicy, showNotesOfOtherUsers bool) *dto.Board {
 	return &dto.Board{
 		ID:                    uuid.UUID{},
 		Name:                  name,
 		Description:           description,
 		AccessPolicy:          accessPolicy,
 		ShowAuthors:           false,
-		ShowNotesOfOtherUsers: false,
+		ShowNotesOfOtherUsers: showNotesOfOtherUsers,
 		ShowNoteReactions:     false,
 		AllowStacking:         false,
 		IsLocked:              false,

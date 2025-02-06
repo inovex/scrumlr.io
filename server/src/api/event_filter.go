@@ -176,45 +176,29 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		return event
 	}
 
-	retEvent := InitEvent{
+	filteredNotes := notes.NoteSlice(event.Data.Notes).FilterNotesByBoardSettingsOrAuthorInformation(clientID, event.Data.Board.ShowNotesOfOtherUsers, event.Data.Board.ShowAuthors, event.Data.Columns)
+
+	notesMap := make(map[uuid.UUID]*notes.Note)
+	for _, n := range filteredNotes {
+		notesMap[n.ID] = n
+	}
+
+	return InitEvent{
 		Type: event.Type,
 		Data: dto.FullBoard{
 			Board:                event.Data.Board,
 			BoardSessions:        event.Data.BoardSessions,
 			BoardSessionRequests: event.Data.BoardSessionRequests,
-			Notes:                nil,
+			Notes:                filteredNotes,
 			Reactions:            event.Data.Reactions,
-			Columns:              nil,
-			Votings:              event.Data.Votings,
-			Votes:                event.Data.Votes,
+			Columns:              columnService.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
+			Votings: technical_helper.MapSlice[*votes.Voting, *votes.Voting](event.Data.Votings, func(voting *votes.Voting) *votes.Voting {
+				return voting.UpdateVoting(filteredNotes).Voting
+			}),
+			Votes: technical_helper.Filter[*dto.Vote](event.Data.Votes, func(vote *dto.Vote) bool {
+				_, exists := notesMap[vote.Note]
+				return exists
+			}),
 		},
 	}
-
-	// Columns
-	filteredColumns := columnService.ColumnSlice(event.Data.Columns).FilterVisibleColumns()
-	// Notes TODO: make to map for easier checks
-	filteredNotes := notes.NoteSlice(event.Data.Notes).FilterNotesByBoardSettingsOrAuthorInformation(clientID, event.Data.Board.ShowNotesOfOtherUsers, event.Data.Board.ShowAuthors, event.Data.Columns)
-	notesMap := make(map[uuid.UUID]*notes.Note)
-	for _, n := range filteredNotes {
-		notesMap[n.ID] = n
-	}
-	// Votes
-	visibleVotes := make([]*dto.Vote, 0)
-	for _, vote := range event.Data.Votes {
-		if _, exists := notesMap[vote.Note]; exists {
-			visibleVotes = append(visibleVotes, vote)
-		}
-	}
-	// Votings
-	visibleVotings := make([]*votes.Voting, 0)
-	for _, v := range event.Data.Votings {
-		visibleVotings = append(visibleVotings, v.UpdateVoting(filteredNotes).Voting)
-	}
-
-	retEvent.Data.Columns = filteredColumns
-	retEvent.Data.Notes = filteredNotes
-	retEvent.Data.Votes = visibleVotes
-	retEvent.Data.Votings = visibleVotings
-
-	return retEvent
 }
