@@ -143,6 +143,61 @@ func TestCalculateVoteCountForSpecificNote(t *testing.T) {
 	assert.Equal(t, (*voting.VotingResults.Votes[noteId].Users)[0].Total, (*votingCountResult.Votes[noteId].Users)[0].Total)
 }
 
+func TestShouldReturnNoVotingResultsBecauseVotingIsStillOpen(t *testing.T) {
+
+	voteId := uuid.New()
+	noteId := uuid.New()
+
+	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusOpen, true)}, []database.Vote{})[0]
+	noteSlice := notes.NoteSlice{buildNote(noteId)}
+
+	updatedVoting := voting.UpdateVoting(noteSlice)
+
+	assert.Nil(t, updatedVoting.Voting.VotingResults)
+
+	assert.Equal(t, noteSlice, updatedVoting.Notes)
+	assert.Equal(t, voting, updatedVoting.Voting)
+}
+
+func TestShouldReturnVotingResults(t *testing.T) {
+
+	voteId := uuid.New()
+	noteId := uuid.New()
+	userId := uuid.New()
+
+	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+	noteSlice := notes.NoteSlice{buildNote(noteId)}
+
+	updatedVoting := voting.UpdateVoting(noteSlice)
+
+	assert.NotNil(t, updatedVoting.Voting.VotingResults)
+
+	assert.Equal(t, noteSlice, updatedVoting.Notes)
+	assert.Equal(t, voting, updatedVoting.Voting)
+}
+
+func TestShouldUnmarshallVoteData(t *testing.T) {
+
+	voteId := uuid.New()
+	noteId := uuid.New()
+	userId := uuid.New()
+
+	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+	noteSlice := notes.NoteSlice{buildNote(noteId)}
+
+	updatedVoting := voting.UpdateVoting(noteSlice)
+	_, err := UnmarshallVoteData(updatedVoting)
+
+	assert.NoError(t, err)
+}
+
+func TestShouldFailUnmarshallingVoteData(t *testing.T) {
+
+	_, err := UnmarshallVoteData("lorem ipsum")
+
+	assert.Error(t, err)
+}
+
 func buildNote(noteId uuid.UUID) *notes.Note {
 	return &notes.Note{
 		ID:       noteId,
