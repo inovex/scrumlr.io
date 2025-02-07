@@ -77,7 +77,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
       />
       <ColumnsIcon className={classNames("session-card__icon", "session-card__icon--columns")} />
       <div className="session-card__columns">
-        <div className="session-card__columns-title">{t("Templates.TemplateCard.column", {count: session.columns.length})}</div>
+        <div className="session-card__columns-title">{t("Sessions.SessionsCard.column", {count: session.columns.length})}</div>
         <div className="session-card__columns-subtitle">
           {/* {session.columns */}
           {/*   .sort((a, b) => a.index - b.index) */}
@@ -106,7 +106,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
         </div>
       </div>
       <Button className={classNames("session-card__start-button", "session-card__start-button--start")} small icon={<NextIcon />} onClick={createBoard}>
-        Go to Session{/* TODO: {t("Templates.TemplateCard.start")} */}
+        {t("Sessions.SessionsCard.goToSession")}
       </Button>
     </div>
   );
