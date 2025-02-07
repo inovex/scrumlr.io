@@ -23,26 +23,26 @@ export const Sessions = () => {
         <div className="sessions__interior">
           <div className="sessions__container">
             {/* <img className={classNames("templates__stan", "templates__stan--light")} src={StanLight} alt="Stan giving you his approval" /> */}
-            <div className="sessions__card-container">
-              <header className="sessions__container-header">
-                <button className="sessions__container-arrow-button">
-                  <ArrowLeft className={classNames("sessions__container-arrow", "sessions__container-arrow--left")} />
-                </button>
-                <div className="sessions__container-title" role="button">
-                  {t("Sessions.savedSessions")}
-                </div>
-              </header>
-              <div className="sessions__card-container">
-                {/* <SessionCard session={DEFAULT_SESSION} /> */}
-                {sessions
-                  .filter(
-                    (session) => session.name?.toLowerCase().includes(searchBarInput.toLowerCase()) || session.description?.toLowerCase().includes(searchBarInput.toLowerCase())
-                  )
-                  .map((session) => (
-                    <SessionCard session={session} />
-                  ))}
+            {/* <div className="sessions__card-container"> */}
+            <header className="sessions__container-header">
+              <button className="sessions__container-arrow-button">
+                <ArrowLeft className={classNames("sessions__container-arrow", "sessions__container-arrow--left")} />
+              </button>
+              <div className="sessions__container-title" role="button">
+                {t("Sessions.savedSessions")}
               </div>
+            </header>
+            <div className="sessions__card-container">
+              {/* <SessionCard session={DEFAULT_SESSION} /> */}
+              {sessions
+                .filter(
+                  (session) => session.name?.toLowerCase().includes(searchBarInput.toLowerCase()) || session.description?.toLowerCase().includes(searchBarInput.toLowerCase())
+                )
+                .map((session) => (
+                  <SessionCard session={session} />
+                ))}
             </div>
+            {/* </div> */}
           </div>
           <div className="sessions__stan-container">
             <img className={classNames("sessions__stan", "sessions__stan--dark", "sessions__stan-fixed")} src={StanLight} alt="Stan giving you his approval" />
