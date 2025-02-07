@@ -42,7 +42,15 @@
   "Sessions": {
     "switchTitle": "Sessions",
     "title": "Choose a session",
-    "savedSessions": "Your saved Sessions"
+    "savedSessions": "Your saved Sessions",
+
+    "SessionsCard": {
+      "addFavourite": "Mark as Favourite",
+      "removeFavourite": "Remove Favourite",
+      "column_one": "{{count}} Column",
+      "column_other": "{{count}} Columns",
+      "goToSession": "Go to Session"
+    }
   },
   "CreateBoard": {
     "title": "Create a new Board",
