@@ -18,14 +18,20 @@ import {ReactComponent as ShareIcon} from "assets/icons/share.svg";
 // import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
 import "./SessionCard.scss";
 import {useNavigate} from "react-router";
-import {createBoardFromSession, deleteBoard, deleteSession, Session} from "../../../store/features";
+import {createBoardFromSession, deleteBoard, Session} from "../../../store/features";
 import {useAppDispatch} from "../../../store";
+import {ConfirmationDialog} from "../../ConfirmationDialog";
+import {Trash} from "../../Icon";
+
+// import {Printer} from "../../Icon";
+// import {SettingsButton} from "../../SettingsDialog/Components/SettingsButton";
 
 type SessionCardProps = {
   session: Session;
 };
 
 export const SessionCard = ({session}: SessionCardProps) => {
+  const [showConfirmationDialog, setShowConfirmationDialog] = useState<boolean>(false);
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -36,14 +42,10 @@ export const SessionCard = ({session}: SessionCardProps) => {
     setShowMiniMenu(false);
   };
 
-  const navigateToEdit = () => {
-    // dispatch(editBoard(session.id)); // TODO
-  };
-
-  const deleteSessionInCard = () => {
-    dispatch(deleteSession({id: session.id})); // TODO
-    dispatch(deleteBoard());
-  };
+  // const deleteSessionInCard = () => {
+  //   dispatch(deleteSession({id: session.id})); // TODO
+  //   dispatch(deleteBoard());
+  // };
 
   const createBoard = () => {
     dispatch(createBoardFromSession(session))
@@ -51,18 +53,23 @@ export const SessionCard = ({session}: SessionCardProps) => {
       .then((boardId) => navigate(`/board/${boardId}`));
   };
 
-  const exportBoard = () => {
-    dispatch(deleteBoard());
+  const navigateToEdit = () => {
+    //   createBoard();
+    //   dispatch(editBoard(session.id)); // TODO
   };
+
+  // const exportBoard = () => {
+  //   dispatch(deleteBoard());
+  // };
 
   const renderMenu = () =>
     showMiniMenu ? (
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
-          {label: "Delete", element: <TrashIcon />, onClick: deleteSessionInCard},
-          {label: "Pdf", element: <FilePdfIcon />, onClick: deleteSessionInCard},
-          {label: "Pdf", element: <ShareIcon />, onClick: exportBoard},
+          {label: "Delete", element: <TrashIcon />, onClick: () => setShowConfirmationDialog(true)}, // TODO: deleteSessionInCard
+          {label: t("ExportBoardOption.openPrintView"), element: <FilePdfIcon />, onClick: () => navigate("settings/export")},
+          {label: "Share", element: <ShareIcon />, onClick: () => navigate("settings/share")},
           {label: "Edit", element: <EditIcon />, onClick: navigateToEdit}, // TODO: editBoard
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
@@ -118,6 +125,16 @@ export const SessionCard = ({session}: SessionCardProps) => {
       <Button className={classNames("session-card__start-button", "session-card__start-button--start")} small icon={<NextIcon />} onClick={createBoard}>
         {t("Sessions.SessionsCard.goToSession")}
       </Button>
+
+      {showConfirmationDialog && (
+        <ConfirmationDialog
+          title={t("ConfirmationDialog.deleteBoard")}
+          onAccept={() => dispatch(deleteBoard())}
+          onDecline={() => setShowConfirmationDialog(false)}
+          icon={Trash}
+          warning
+        />
+      )}
     </div>
   );
 };

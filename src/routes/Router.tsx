@@ -77,8 +77,9 @@ const Router = () => {
           />
 
           <Route path="sessions" element={<Sessions />}>
-            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
-              <Route path="appearance" element={<Appearance />} />
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{feedback: feedbackEnabled, profile: true, share: true, export: true}} />}>
+              <Route path="share" element={<ShareSession />} />
+              <Route path="export" element={<ExportBoard />} />
               <Route path="feedback" element={<Feedback />} />
               <Route path="profile" element={<ProfileSettings />} />
             </Route>
