@@ -50,7 +50,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
   const createBoard = () => {
     dispatch(createBoardFromSession(session))
       .unwrap()
-      .then((boardId) => navigate(`/board/${boardId}`));
+      .then((boardId) => navigate(`/board/${boardId}`)); // TODO: this creates a new id each time, it should use the session id tho
   };
 
   const navigateToEdit = () => {
@@ -68,7 +68,15 @@ export const SessionCard = ({session}: SessionCardProps) => {
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
           {label: "Delete", element: <TrashIcon />, onClick: () => setShowConfirmationDialog(true)}, // TODO: deleteSessionInCard
-          {label: t("ExportBoardOption.openPrintView"), element: <FilePdfIcon />, onClick: () => navigate("settings/export")},
+          {
+            label: t("ExportBoardOption.openPrintView"),
+            element: <FilePdfIcon />,
+            onClick: () => {
+              createBoard(); // TODO: how do i fix this? this now creates a board first and when you then navigate back with the browsers navigation or directly over the url you
+              // TODO: get the correct settings dialog displayed. without the createboard the boardid is missing
+              navigate("settings/export");
+            },
+          },
           {label: "Share", element: <ShareIcon />, onClick: () => navigate("settings/share")},
           {label: "Edit", element: <EditIcon />, onClick: navigateToEdit}, // TODO: editBoard
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},

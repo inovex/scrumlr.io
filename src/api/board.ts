@@ -35,6 +35,24 @@ export const BoardAPI = {
       throw new Error(`unable to create board: ${error}`);
     }
   },
+
+  openBoard: async (id: string) => {
+    try {
+      const response = await fetch(`${SERVER_HTTP_URL}/boards/${id}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.status === 200) {
+        return await response.json();
+      }
+
+      throw new Error(`unable to open board with response status ${response.status}`);
+    } catch (error) {
+      throw new Error(`unable to open board: ${error}`);
+    }
+  },
+
   importBoard: async (boardJson: string) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/import`, {

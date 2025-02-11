@@ -15,6 +15,9 @@ export const deleteSession = createAsyncThunk<string, {id: string}, {state: Appl
 });
 
 // TODO: hier muessen auch die ganzen anderen notes usw reingeladen werden, die vorherigen participants maybe?
-export const createBoardFromSession = createAsyncThunk<string, Session>("board/createBoardFromSession", async (payload) =>
-  API.createBoard(payload.name, {type: payload.accessPolicy}, payload.columns)
+export const createBoardFromSession = createAsyncThunk<string, Session>(
+  "board/createBoardFromSession",
+  async (payload) =>
+    // API.createBoard(payload.name, {type: payload.accessPolicy}, payload.columns)
+    API.openBoard(payload.id) // TODO: in openBoard muss ich mal sehen, wie ich ein get zu einem bestehenden board machen kann
 );
