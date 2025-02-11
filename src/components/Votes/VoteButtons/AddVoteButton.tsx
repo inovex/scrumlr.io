@@ -8,12 +8,7 @@ import {addVote} from "store/features";
 import classNames from "classnames";
 import {needsHighContrast} from "constants/colors";
 
-type AddVoteProps = {
-  noteId: string;
-  disabled: boolean;
-  disabledReason?: string;
-  colorClassName?: string;
-};
+type AddVoteProps = {noteId: string; disabled: boolean; disabledReason?: string; colorClassName?: string};
 
 export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled, disabledReason, colorClassName}) => {
   const dispatch = useAppDispatch();
@@ -25,7 +20,7 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled, disabledReaso
 
   return (
     <DotButton
-      className={classNames("vote-button-add", colorClassName && needsHighContrast(colorClassName) && "vote-button-add--high-contrast")}
+      className={classNames("vote-button-add", {"vote-button-add--high-contrast": needsHighContrast(colorClassName)})}
       onClick={dispatchAddVote}
       disabled={disabled}
       dataTooltipId="scrumlr-tooltip"

@@ -12,4 +12,5 @@ export function formatColorName(input: string): string {
     .join(" ");
 }
 
-export const needsHighContrast = (color: string): boolean => [getColorClassName("backlog-blue"), getColorClassName("value-violet")].includes(color);
+export const needsHighContrast = (color: string | undefined): boolean =>
+  color !== undefined && [getColorClassName("backlog-blue"), getColorClassName("value-violet")].includes(color);
