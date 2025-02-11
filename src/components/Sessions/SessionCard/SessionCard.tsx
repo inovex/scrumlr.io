@@ -12,10 +12,13 @@ import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {ReactComponent as MultipleUserIcon} from "assets/icons/multiple-user.svg";
+import {ReactComponent as FilePdfIcon} from "assets/icons/file-pdf.svg";
+import {ReactComponent as ShareIcon} from "assets/icons/share.svg";
+
 // import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
 import "./SessionCard.scss";
 import {useNavigate} from "react-router";
-import {createBoardFromSession, deleteSession, Session} from "../../../store/features";
+import {createBoardFromSession, deleteBoard, deleteSession, Session} from "../../../store/features";
 import {useAppDispatch} from "../../../store";
 
 type SessionCardProps = {
@@ -34,11 +37,12 @@ export const SessionCard = ({session}: SessionCardProps) => {
   };
 
   const navigateToEdit = () => {
-    // TODO
+    // dispatch(editBoard(session.id)); // TODO
   };
 
   const deleteSessionInCard = () => {
-    dispatch(deleteSession({id: session.id}));
+    dispatch(deleteSession({id: session.id})); // TODO
+    dispatch(deleteBoard());
   };
 
   const createBoard = () => {
@@ -47,13 +51,19 @@ export const SessionCard = ({session}: SessionCardProps) => {
       .then((boardId) => navigate(`/board/${boardId}`));
   };
 
+  const exportBoard = () => {
+    dispatch(deleteBoard());
+  };
+
   const renderMenu = () =>
     showMiniMenu ? (
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
           {label: "Delete", element: <TrashIcon />, onClick: deleteSessionInCard},
-          {label: "Edit", element: <EditIcon />, onClick: navigateToEdit},
+          {label: "Pdf", element: <FilePdfIcon />, onClick: deleteSessionInCard},
+          {label: "Pdf", element: <ShareIcon />, onClick: exportBoard},
+          {label: "Edit", element: <EditIcon />, onClick: navigateToEdit}, // TODO: editBoard
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
       />
