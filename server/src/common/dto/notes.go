@@ -1,69 +1,9 @@
 package dto
 
 import (
-	"net/http"
-
 	"github.com/google/uuid"
-	"scrumlr.io/server/database"
+	"scrumlr.io/server/notes"
 )
-
-type NotePosition struct {
-
-	// The column of the note.
-	Column uuid.UUID `json:"column"`
-
-	// The parent note for this note in a stack.
-	Stack uuid.NullUUID `json:"stack"`
-
-	// The note rank.
-	Rank int `json:"rank"`
-}
-
-// Note is the response for all note requests.
-type Note struct {
-	// The id of the note
-	ID uuid.UUID `json:"id"`
-
-	// The author of the note.
-	Author uuid.UUID `json:"author"`
-
-	// The text of the note.
-	Text string `json:"text"`
-
-	Edited bool `json:"edited"`
-
-	// The position of the note.
-	Position NotePosition `json:"position"`
-}
-
-func (n *Note) From(note database.Note) *Note {
-	n.ID = note.ID
-	n.Author = note.Author
-	n.Text = note.Text
-	n.Position = NotePosition{
-		Column: note.Column,
-		Stack:  note.Stack,
-		Rank:   note.Rank,
-	}
-	n.Edited = note.Edited
-	return n
-}
-
-func (*Note) Render(_ http.ResponseWriter, _ *http.Request) error {
-	return nil
-}
-
-func Notes(notes []database.Note) []*Note {
-	if notes == nil {
-		return nil
-	}
-
-	list := make([]*Note, len(notes))
-	for index, note := range notes {
-		list[index] = new(Note).From(note)
-	}
-	return list
-}
 
 // NoteCreateRequest represents the request to create a new note.
 type NoteCreateRequest struct {
@@ -79,8 +19,8 @@ type NoteCreateRequest struct {
 
 type NoteImportRequest struct {
 	// The text of the note.
-	Text     string       `json:"text"`
-	Position NotePosition `json:"position"`
+	Text     string             `json:"text"`
+	Position notes.NotePosition `json:"position"`
 
 	Board uuid.UUID `json:"-"`
 	User  uuid.UUID `json:"-"`
@@ -93,7 +33,7 @@ type NoteUpdateRequest struct {
 	Text *string `json:"text"`
 
 	// The position of the note
-	Position *NotePosition `json:"position"`
+	Position *notes.NotePosition `json:"position"`
 
 	Edited bool      `json:"-"`
 	ID     uuid.UUID `json:"-"`
