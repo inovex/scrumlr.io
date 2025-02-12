@@ -36,7 +36,7 @@ $stack-view__min-height: 82px;
 .stack-view__content {
   position: relative;
 
-  height: auto;
+  height: calc(100vh - $stack-view__header-height - $stack-view__navigation-height);
   width: 100vw;
   border-radius: $note__border-radius;
 
