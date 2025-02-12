@@ -11,6 +11,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/services"
+	"scrumlr.io/server/votes"
 	"strings"
 	"testing"
 
@@ -40,19 +41,19 @@ func (m *VotingMock) GetVotes(ctx context.Context, f filter.VoteFilter) ([]*dto.
 	args := m.Called(f.Board, f.Voting)
 	return args.Get(0).([]*dto.Vote), args.Error(1)
 }
-func (m *VotingMock) Get(ctx context.Context, boardID, id uuid.UUID) (*dto.Voting, error) {
+func (m *VotingMock) Get(ctx context.Context, boardID, id uuid.UUID) (*votes.Voting, error) {
 	args := m.Called(boardID, id)
-	return args.Get(0).(*dto.Voting), args.Error(1)
+	return args.Get(0).(*votes.Voting), args.Error(1)
 }
 
-func (m *VotingMock) Update(ctx context.Context, body dto.VotingUpdateRequest) (*dto.Voting, error) {
+func (m *VotingMock) Update(ctx context.Context, body votes.VotingUpdateRequest) (*votes.Voting, error) {
 	args := m.Called(body)
-	return args.Get(0).(*dto.Voting), args.Error(1)
+	return args.Get(0).(*votes.Voting), args.Error(1)
 }
 
-func (m *VotingMock) Create(ctx context.Context, body dto.VotingCreateRequest) (*dto.Voting, error) {
+func (m *VotingMock) Create(ctx context.Context, body votes.VotingCreateRequest) (*votes.Voting, error) {
 	args := m.Called(body)
-	return args.Get(0).(*dto.Voting), args.Error(1)
+	return args.Get(0).(*votes.Voting), args.Error(1)
 }
 
 type VotingTestSuite struct {
@@ -91,12 +92,12 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 			mock := new(VotingMock)
 
 			boardId, _ := uuid.NewRandom()
-			mock.On("Create", dto.VotingCreateRequest{
+			mock.On("Create", votes.VotingCreateRequest{
 				VoteLimit:          4,
 				AllowMultipleVotes: false,
 				ShowVotesOfOthers:  false,
 				Board:              boardId,
-			}).Return(&dto.Voting{
+			}).Return(&votes.Voting{
 				AllowMultipleVotes: false,
 				ShowVotesOfOthers:  false,
 			}, tt.err)
@@ -146,11 +147,11 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 			boardId, _ := uuid.NewRandom()
 			votingId, _ := uuid.NewRandom()
 
-			mock.On("Update", dto.VotingUpdateRequest{
+			mock.On("Update", votes.VotingUpdateRequest{
 				Board:  boardId,
 				ID:     votingId,
 				Status: types.VotingStatusClosed,
-			}).Return(&dto.Voting{
+			}).Return(&votes.Voting{
 				Status: types.VotingStatusClosed,
 			}, tt.err)
 
@@ -180,7 +181,7 @@ func (suite *VotingTestSuite) TestGetVoting() {
 	boardId, _ := uuid.NewRandom()
 	votingId, _ := uuid.NewRandom()
 
-	mock.On("Get", boardId, votingId).Return(&dto.Voting{
+	mock.On("Get", boardId, votingId).Return(&votes.Voting{
 		ID:     votingId,
 		Status: types.VotingStatusClosed,
 	}, nil)

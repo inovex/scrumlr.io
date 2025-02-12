@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	notes2 "scrumlr.io/server/notes"
 	"time"
 
 	"github.com/google/uuid"
@@ -298,7 +299,7 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 
 	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
-		Data: dto.Notes(notes),
+		Data: notes2.Notes(notes),
 	})
 	if err != nil {
 		err_msg = "unable to broadcast notes, following a updated board call"
