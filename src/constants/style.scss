@@ -252,3 +252,14 @@ $column-stripes--dark: repeating-linear-gradient(
     }
   }
 }
+
+@mixin invalid-state($border-size: 1.5px, $padding, $compensate-padding: true) {
+  border: $border-size solid $critical-carmine--light;
+  @if $compensate-padding == true {
+    @include compensate-padding($padding, $border-size);
+  }
+
+  [theme="dark"] & {
+    border-color: $critical-carmine--dark;
+  }
+}

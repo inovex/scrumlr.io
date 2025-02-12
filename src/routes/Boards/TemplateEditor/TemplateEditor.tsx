@@ -203,7 +203,7 @@ export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
   return (
     <div className="template-editor">
       <div className="template-editor__name">
-        <Input type="text" input={nameInput} setInput={setNameInput} height="normal" placeholder="Board name" />
+        <Input type="text" input={nameInput} setInput={setNameInput} height="normal" placeholder="Board name" required />
       </div>
       <div className="template-editor__description">
         <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />

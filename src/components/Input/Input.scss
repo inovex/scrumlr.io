@@ -39,6 +39,10 @@ $padding--mobile: 12.5px $spacing--base;
         color: $navy--600;
       }
     }
+
+    &:has(.input__input:user-invalid) {
+      @include invalid-state($padding: $padding--default);
+    }
   }
 
   &--disabled {

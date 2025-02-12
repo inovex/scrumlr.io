@@ -9,14 +9,18 @@ import "./Input.scss";
 type InputType = "text" | "search" | "password";
 
 type SearchBarProps = {
+  // technical
   className?: string;
   type: InputType;
   disabled?: boolean;
   input: string;
   setInput: Dispatch<SetStateAction<string>>;
 
-  placeholder?: string;
+  // validation
+  required?: boolean;
 
+  // style
+  placeholder?: string;
   height: "normal" | "larger"; // normal e.g. TemplateEditor, larger e.g. Boards
 };
 
@@ -72,6 +76,7 @@ export const Input = (props: SearchBarProps) => {
         tabIndex={0}
         value={props.input}
         onInput={updateInput}
+        required={props.required}
       />
       {renderRightIcon()}
     </div>
