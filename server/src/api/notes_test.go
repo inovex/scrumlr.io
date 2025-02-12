@@ -15,6 +15,7 @@ import (
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/services"
 	"strings"
 	"testing"
@@ -25,13 +26,13 @@ type NotesMock struct {
 	mock.Mock
 }
 
-func (m *NotesMock) Create(ctx context.Context, req dto.NoteCreateRequest) (*dto.Note, error) {
+func (m *NotesMock) Create(ctx context.Context, req dto.NoteCreateRequest) (*notes.Note, error) {
 	args := m.Called(req)
-	return args.Get(0).(*dto.Note), args.Error(1)
+	return args.Get(0).(*notes.Note), args.Error(1)
 }
-func (m *NotesMock) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) {
+func (m *NotesMock) Get(ctx context.Context, id uuid.UUID) (*notes.Note, error) {
 	args := m.Called(id)
-	return args.Get(0).(*dto.Note), args.Error(1)
+	return args.Get(0).(*notes.Note), args.Error(1)
 }
 func (m *NotesMock) Delete(ctx context.Context, req dto.NoteDeleteRequest, id uuid.UUID) error {
 	args := m.Called(id)
@@ -179,7 +180,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
 				User:   userId,
 				Text:   testText,
 				Column: colId,
-			}).Return(&dto.Note{
+			}).Return(&notes.Note{
 				Text: testText,
 			}, tt.err)
 
@@ -238,7 +239,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 
 			noteID, _ := uuid.NewRandom()
 
-			mock.On("Get", noteID).Return(&dto.Note{
+			mock.On("Get", noteID).Return(&notes.Note{
 				ID: noteID,
 			}, tt.err)
 

@@ -6,6 +6,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
+	columns2 "scrumlr.io/server/columns"
+	notes2 "scrumlr.io/server/notes"
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
@@ -298,7 +300,7 @@ func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.B
 	}
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
-		Data: dto.Columns(columns),
+		Data: columns2.Columns(columns),
 	})
 
 	// Sync notes
@@ -308,7 +310,7 @@ func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.B
 	}
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
-		Data: dto.Notes(notes),
+		Data: notes2.Notes(notes),
 	})
 }
 
