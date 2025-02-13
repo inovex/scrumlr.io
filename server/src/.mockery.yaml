@@ -1,0 +1,20 @@
+with-expecter: true
+dir: mocks/{{ replaceAll .InterfaceDirRelative "internal" "internal_" }}
+mockname: "Mock{{.InterfaceName}}"
+outpkg: "{{.PackageName}}"
+filename: "mock_{{.InterfaceName}}.go"
+resolve-type-alias: false
+issue-845-fix: true
+packages:
+  # configuration on package level
+  scrumlr.io/server/services:
+    # configuration on interface level
+    interfaces:
+      Boards:
+        all: true
+      BoardSessions:
+        all: true
+      Notes:
+        all: true
+      Votings:
+        all: true
