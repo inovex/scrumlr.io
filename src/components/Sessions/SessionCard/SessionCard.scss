@@ -83,7 +83,7 @@ $card-height: 220px;
 
   &--open {
     // position menu over icon
-    transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+    transform: translate(calc(-67% - $spacing--xl), 2 * -$spacing--xxs);
 
     box-shadow: 0 2px 20px 0 rgba(var($navy--400), 0.12);
   }

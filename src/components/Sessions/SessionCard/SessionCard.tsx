@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-autosize-textarea";
-import {FavouriteButton} from "components/Templates";
+import {FavouriteButton} from "components/Templates"; // TODO
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -65,7 +65,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
   const renderMenu = () =>
     showMiniMenu ? (
       <MiniMenu
-        className={classNames("template-card__menu", "template-card__menu--open")}
+        className={classNames("session-card__menu", "session-card__menu--open")}
         items={[
           {label: "Delete", element: <TrashIcon />, onClick: () => setShowConfirmationDialog(true)}, // TODO: deleteSessionInCard
           {
