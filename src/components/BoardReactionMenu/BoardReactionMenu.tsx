@@ -53,7 +53,7 @@ export const BoardReactionMenu = forwardRef((props: BoardReactionMenuProps, ref:
     from: {opacity: 0, transform: "scale(0.3, 0.9) translateY(100%)", "pointer-events": "none"},
     enter: {opacity: 1, transform: "scale(1, 1) translateY(0%)", "pointer-events": "auto"},
     leave: {opacity: 0, transform: "scale(0.3, 0.9) translateY(100%)", "pointer-events": "none"},
-    config: {mass: 1, friction: 20, tension: 380},
+    config: {mass: 1, friction: 30, tension: 380},
   });
 
   return menuTransition(
