@@ -267,7 +267,7 @@ export const StackView = () => {
               ) => (
                 <animated.div style={styles} className="stack-view__animation-wrapper">
                   {item.parent && item.parent.position.column === column?.id && (
-                    <>
+                    <div className="stack-view__notes">
                       <NoteDialogComponents.Note
                         key={item.parent.id}
                         noteId={item.parent.id}
@@ -306,7 +306,7 @@ export const StackView = () => {
                           ))}
                         </NoteDialogComponents.Wrapper>
                       ) : null}
-                    </>
+                    </div>
                   )}
                 </animated.div>
               )}
