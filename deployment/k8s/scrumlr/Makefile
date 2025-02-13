@@ -22,6 +22,13 @@ clean:
 readme:
 	@readme-generator --values values.yaml --readme README.md
 
+.PHONY: tilt-up
+tilt-up:
+	@tilt up --file ./tilt/Tiltfile
+
+.PHONY: tilt-down
+tilt-down:
+	@tilt down --file ./tilt/Tiltfile
 .PHONY: help
 help:
 	@echo "List of available tasks:\n"
