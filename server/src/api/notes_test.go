@@ -14,6 +14,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/mocks/services"
+	"scrumlr.io/server/notes"
 	"strings"
 	"testing"
 )
@@ -63,7 +64,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
 				User:   userId,
 				Text:   testText,
 				Column: colId,
-			}).Return(&dto.Note{
+			}).Return(&notes.Note{
 				Text: testText,
 			}, tt.err)
 
@@ -99,7 +100,7 @@ func (suite *NotesTestSuite) TestGetNote() {
 			req := NewTestRequestBuilder("GET", "/", nil).
 				AddToContext(identifiers.NoteIdentifier, noteID)
 
-			noteMock.EXPECT().Get(req.req.Context(), noteID).Return(&dto.Note{
+			noteMock.EXPECT().Get(req.req.Context(), noteID).Return(&notes.Note{
 				ID: noteID,
 			}, tt.err)
 
