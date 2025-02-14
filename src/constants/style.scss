@@ -125,6 +125,8 @@ $desktop: "screen and (min-width : 1280px)";
 $menu-mobile: "screen and (max-width: 1343px)";
 $menu-desktop: "screen and (min-width: 1344px)";
 
+$breakpoint--smartphone: 768px;
+
 // responsive: @container query
 $container__note: "note (max-width: 300px)";
 
@@ -200,4 +202,53 @@ $column-stripes--dark: repeating-linear-gradient(
   @include tooltip;
   color: $gray--000;
   background-color: $navy--200;
+}
+
+// this mixin is used to decrease an element's padding,
+// in order to keep it the same size if the borders change.
+@mixin compensate-padding($padding, $decrement) {
+  $new-padding: ();
+  @each $value in $padding {
+    $new-padding: append($new-padding, $value - $decrement);
+  }
+  padding: $new-padding;
+}
+
+// add some default css for hover, focus, and active states.
+@mixin default-states($border-size: 1.5px, $padding, $compensate-padding: true) {
+  &:hover {
+    box-shadow: 0 3px 12px 0 color.change($navy--700, $alpha: 0.12);
+  }
+
+  &:focus,
+  &:focus-within {
+    border: $border-size solid $blue--500;
+    @if $compensate-padding == true {
+      @include compensate-padding($padding, $border-size);
+    }
+  }
+
+  &:active {
+    border: $border-size solid $navy--400;
+    @if $compensate-padding == true {
+      @include compensate-padding($padding, $border-size);
+    }
+  }
+
+  [theme="dark"] & {
+    &:focus,
+    &:focus-within {
+      border: $border-size solid $blue--400;
+      @if $compensate-padding == true {
+        @include compensate-padding($padding, $border-size);
+      }
+    }
+
+    &:active {
+      border: $border-size solid $gray--000;
+      @if $compensate-padding == true {
+        @include compensate-padding($padding, $border-size);
+      }
+    }
+  }
 }
