@@ -18,6 +18,7 @@ type SettingsDialogProps = {
   overwrite?: MenuItemConfigOverride;
 };
 
+// create a merged item config allowing partial overwriting of properties while retaining type safety
 const mergeMenuItemConfig = (defaultConfig: Record<MenuItemKey, MenuItemConfig>, overrides?: MenuItemConfigOverride): Record<MenuItemKey, MenuItemConfig> =>
   Object.entries(defaultConfig).reduce(
     (acc, [key, value]) => {
@@ -28,6 +29,7 @@ const mergeMenuItemConfig = (defaultConfig: Record<MenuItemKey, MenuItemConfig>,
     {} as Record<MenuItemKey, MenuItemConfig>
   );
 
+// create an iterable menu entry array to be used for easier HOF use (map, find, etc.)
 const createMenuEntries = (settingsConfig: Record<MenuItemKey, MenuItemConfig>) => Object.entries(settingsConfig).map(([key, value]) => ({key, value}) as MenuEntry);
 
 export const SettingsDialog = (props: SettingsDialogProps) => {
@@ -46,10 +48,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     items: true,
   };
 
+  // overwrite standard config with optional record and set state
   useEffect(() => {
     const mergedMenuConfig = mergeMenuItemConfig(MENU_ITEM_CONFIG, props.overwrite);
     const newMenuEntries = createMenuEntries(mergedMenuConfig);
-    console.log(newMenuEntries);
     setMenuEntries(newMenuEntries);
   }, [props.overwrite]);
 
@@ -100,7 +102,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
       goToFirstAllowedMenuEntry();
     }
     // else, do nothing if no submenu and mobile
-  }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems, location.pathname]);
+  }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems, location.pathname, menuEntries]);
 
   /* renders a menu item.
    * condition: menu item is enabled and user has authorization
