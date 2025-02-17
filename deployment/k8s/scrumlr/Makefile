@@ -29,6 +29,11 @@ tilt-up:
 .PHONY: tilt-down
 tilt-down:
 	@tilt down --file ./tilt/Tiltfile
+
+.PHONY: test
+test:
+	@helm unittest --file 'tests/**/*.yaml' ../scrumlr
+
 .PHONY: help
 help:
 	@echo "List of available tasks:\n"
