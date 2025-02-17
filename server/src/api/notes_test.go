@@ -241,12 +241,12 @@ func (suite *NotesTestSuite) TestEditNote() {
       buf := new(bytes.Buffer)
       _, err := buf.ReadFrom(rr.Result().Body)
       if err != nil {
-        return
+        suite.Fail("could not read response body")
       }
       note := new(notes.Note)
       err = json.Unmarshal(buf.Bytes(), &note)
       if err != nil {
-        return
+        suite.Fail("could not unmarshal response body")
       }
 
       suite.Equal(tt.expectedCode, rr.Result().StatusCode)
