@@ -18,7 +18,7 @@ import {ReactComponent as ShareIcon} from "assets/icons/share.svg";
 // import {ReactComponent as CalendarIcon} from "assets/icons/calendar-days.svg";
 import "./SessionCard.scss";
 import {useNavigate} from "react-router";
-import {createBoardFromSession, deleteBoard, Session} from "../../../store/features";
+import {deleteBoard, joinSession, Session} from "../../../store/features";
 import {useAppDispatch} from "../../../store";
 import {ConfirmationDialog} from "../../ConfirmationDialog";
 import {Trash} from "../../Icon";
@@ -48,7 +48,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
   // };
 
   const createBoard = () => {
-    dispatch(createBoardFromSession(session))
+    dispatch(joinSession({boardId: session.id}))
       .unwrap()
       .then((boardId) => navigate(`/board/${boardId}`)); // TODO: this creates a new id each time, it should use the session id tho
   };
