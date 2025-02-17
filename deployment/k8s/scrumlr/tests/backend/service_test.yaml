@@ -1,0 +1,44 @@
+---
+suite: test backend service
+templates:
+  - /backend/service.yaml
+tests:
+  - it: should set name, namespace, apiVersion, kind and app selector
+    release: 
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: scrumlr-backend
+          namespace: scrumlr
+      - equal:
+          path: spec.selector.app
+          value: scrumlr-backend
+
+  - it: should set default target port
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - equal:
+          path: spec.ports[0].port
+          value: 80
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 8080
+
+  - it: should set target port
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      backend.config.serverPort: 9090
+    asserts:
+      - equal:
+          path: spec.ports[0].port
+          value: 80
+      - equal:
+          path: spec.ports[0].targetPort
+          value: 9090

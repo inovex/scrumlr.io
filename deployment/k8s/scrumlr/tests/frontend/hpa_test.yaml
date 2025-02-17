@@ -1,0 +1,194 @@
+---
+suite: test frontend hpa
+templates:
+  - /frontend/hpa.yaml
+tests:
+  - it: should set name, namespace, apiVersion and kind
+    release: 
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+    asserts:
+      - containsDocument:
+          kind: HorizontalPodAutoscaler
+          apiVersion: autoscaling/v2
+          name: scrumlr-frontend-autoscaling
+          namespace: scrumlr
+
+  - it: should not set hpa if not enabled
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should set scale target
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+    asserts:
+      - equal:
+          path: spec.scaletargetRef.apiVersion
+          value: apps/v1
+      - equal:
+          path: spec.scaletargetRef.kind
+          value: Deployment
+      - equal:
+          path: spec.scaletargetRef.name
+          value: scrumlr-deployment-frontend
+
+  - it: should set default replicas
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+    asserts:
+      - equal:
+          path: spec.minReplicas
+          value: 1
+      - equal:
+          path: spec.maxReplicas
+          value: 3
+
+  - it: should set replicas
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+      frontend.autoscaling.minReplicas: 3
+      frontend.autoscaling.maxReplicas: 6
+    asserts:
+      - equal:
+          path: spec.minReplicas
+          value: 3
+      - equal:
+          path: spec.maxReplicas
+          value: 6
+
+  - it: should set default cpu metrics
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+    asserts:
+      - equal:
+          path: spec.metrics[0].type
+          value: Resource
+      - equal:
+          path: spec.metrics[0].resource.name
+          value: cpu
+      - equal:
+          path: spec.metrics[0].resource.target.type
+          value: Utilization
+      - equal:
+          path: spec.metrics[0].resource.target.averageUtilization
+          value: 60
+
+  - it: should set default memory metrics
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+    asserts:
+      - equal:
+          path: spec.metrics[1].type
+          value: Resource
+      - equal:
+          path: spec.metrics[1].resource.name
+          value: memory
+      - equal:
+          path: spec.metrics[1].resource.target.type
+          value: Utilization
+      - equal:
+          path: spec.metrics[1].resource.target.averageUtilization
+          value: 60
+
+  - it: should set default cpu metrics
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+      frontend.autoscaling.cpuUtilization: 90
+    asserts:
+      - equal:
+          path: spec.metrics[0].type
+          value: Resource
+      - equal:
+          path: spec.metrics[0].resource.name
+          value: cpu
+      - equal:
+          path: spec.metrics[0].resource.target.type
+          value: Utilization
+      - equal:
+          path: spec.metrics[0].resource.target.averageUtilization
+          value: 90
+
+  - it: should set default memory metrics
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+      frontend.autoscaling.memoryUtilization: 90
+    asserts:
+      - equal:
+          path: spec.metrics[1].type
+          value: Resource
+      - equal:
+          path: spec.metrics[1].resource.name
+          value: memory
+      - equal:
+          path: spec.metrics[1].resource.target.type
+          value: Utilization
+      - equal:
+          path: spec.metrics[1].resource.target.averageUtilization
+          value: 90
+
+  - it: should set scale down behavior
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+    asserts:
+      - equal:
+          path: spec.behavior.scaleDown.stabilizationWindowSeconds
+          value: 0
+      - equal:
+          path: spec.behavior.scaleDown.policies[0].type
+          value: Pods
+      - equal:
+          path: spec.behavior.scaleDown.policies[0].value
+          value: 1
+      - equal:
+          path: spec.behavior.scaleDown.policies[0].periodSeconds
+          value: 60
+
+  - it: should set scale up behavior
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      frontend.autoscaling.enabled: true
+    asserts:
+      - equal:
+          path: spec.behavior.scaleUp.stabilizationWindowSeconds
+          value: 60
+      - equal:
+          path: spec.behavior.scaleUp.policies[0].type
+          value: Pods
+      - equal:
+          path: spec.behavior.scaleUp.policies[0].value
+          value: 1
+      - equal:
+          path: spec.behavior.scaleUp.policies[0].periodSeconds
+          value: 60

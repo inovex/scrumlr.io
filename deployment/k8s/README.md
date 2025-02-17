@@ -6,6 +6,7 @@
 
 - [helm](https://helm.sh)
 - [readme generator](https://github.com/bitnami/readme-generator-for-helm)
+- [helm unittests](https://github.com/helm-unittest/helm-unittest)
 - [tilt](https://tilt.dev/) (optional)
 - kubernetes cluster (optional)
 - make (optional)
@@ -21,6 +22,24 @@ We provide a [Makefile](./scrumlr/Makefile) with the most commen commands you ne
 - `make readme`: generates the Readme for the values file
 - `make tilt-up`: starts tilt to deploy scrumlr to a test cluster
 - `make tilt-down`: cleans the tilt deployment
+- `make test`: runs the helm unittests
+
+#### Unittests
+
+To run the unittests for the hel chart you must install [helm unittests](https://github.com/helm-unittest/helm-unittest).
+After that you can run
+
+```bash
+make test
+```
+
+or
+
+```bash
+helm unittest --file 'tests/**/*.yaml' ../scrumlr
+```
+
+to execute the tests.
 
 #### Tilt
 
