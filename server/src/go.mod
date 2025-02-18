@@ -23,7 +23,7 @@ require (
 	github.com/nats-io/nats.go v1.39.0
 	github.com/ory/dockertest/v3 v3.11.0
 	github.com/stretchr/testify v1.10.0
-	github.com/uptrace/bun v1.2.9
+	github.com/uptrace/bun v1.2.10
 	github.com/uptrace/bun/dbfixture v1.2.9
 	github.com/uptrace/bun/dialect/pgdialect v1.2.9
 	github.com/uptrace/bun/extra/bundebug v1.2.9
@@ -85,7 +85,7 @@ require (
 	github.com/opencontainers/runc v1.2.4 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/puzpuzpuz/xsync/v3 v3.5.0 // indirect
+	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
