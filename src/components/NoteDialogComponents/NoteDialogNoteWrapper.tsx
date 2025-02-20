@@ -2,7 +2,7 @@ import {PropsWithChildren, useEffect, useRef} from "react";
 import "./NoteDialogNoteWrapper.scss";
 
 export const NoteDialogNoteWrapper = ({children}: PropsWithChildren) => {
-  const scrollContainer = useRef<HTMLDivElement>(null);
+  const scrollContainer = useRef<HTMLDivElement>(null); // TODO: what's this for?
 
   // display notes within full view with full opacity.
   // the more it goes out of the view (i.e. intersectionRatio), the less opaque it becomes
@@ -38,10 +38,10 @@ export const NoteDialogNoteWrapper = ({children}: PropsWithChildren) => {
   }, [children]);
 
   return (
-    <div className="note-dialog__scrollbar">
-      <div className="note-dialog__inner-scrollbar" ref={scrollContainer}>
-        <div className="note-dialog__note-wrapper">{children}</div>
-      </div>
+    // <div className="note-dialog__scrollbar">
+    <div className="note-dialog__inner-scrollbar" ref={scrollContainer}>
+      <div className="note-dialog__note-wrapper">{children}</div>
     </div>
+    // </div>
   );
 };
