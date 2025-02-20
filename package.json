@@ -48,7 +48,7 @@
     "sockette": "^2.0.6",
     "underscore": "^1.13.7",
     "use-long-press": "^3.2.0",
-    "use-sound": "^4.0.3"
+    "use-sound": "^5.0.0"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
