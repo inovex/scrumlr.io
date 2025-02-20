@@ -7,7 +7,6 @@
   border-radius: $note__border-radius;
 
   overflow: hidden;
-  @include scrollbar();
 }
 
 // inner container preventing scrollbar flowing over border radius
@@ -16,6 +15,9 @@
   height: 100%;
   overflow: hidden scroll;
   box-sizing: border-box;
+  border-radius: $note__border-radius;
+  @include scrollbar();
+  scrollbar-color: var(--accent-color--200) rgba(255, 255, 255, 0);
 }
 
 .note-dialog__note-wrapper {

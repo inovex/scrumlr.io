@@ -51,6 +51,7 @@ $min-lines: 3;
   transition: border-color 150ms ease-in-out;
 
   @include scrollbar();
+  scrollbar-color: var(--accent-color--200) rgba(255, 255, 255, 0);
 
   // also subtract edited marker
   &--edited {

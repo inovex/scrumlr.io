@@ -43,6 +43,7 @@ $stack-view__min-height: 82px;
   overflow: visible;
 
   @include scrollbar();
+  scrollbar-color: var(--accent-color--200) rgba(255, 255, 255, 0);
 }
 
 // inner container preventing scrollbar flowing over border radius
