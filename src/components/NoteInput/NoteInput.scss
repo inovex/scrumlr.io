@@ -49,6 +49,8 @@ $note-input__input-right: 40px;
   &:focus::placeholder {
     color: transparent;
   }
+
+  @include scrollbar();
 }
 
 @container (width > 280px) {

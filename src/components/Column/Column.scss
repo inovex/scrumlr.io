@@ -9,6 +9,8 @@
   height: 100%;
   overflow-y: auto;
   display: flex;
+
+  @include scrollbar();
 }
 .column__moderation-isActive {
   @include inset-border($top: true, $bottom: true, $color: $victory-verde--light);
