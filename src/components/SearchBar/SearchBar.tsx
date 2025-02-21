@@ -26,7 +26,7 @@ export const SearchBar = (props: SearchBarProps) => {
   const clearInput = () => props.handleValueChange("");
 
   return (
-    <div className={classNames(props.className, "search-bar", {"search-bar--disabled": props.disabled})} onClick={focusInput}>
+    <div className={classNames(props.className, "search-bar", {"search-bar--disabled": props.disabled})} onClick={focusInput} role="search">
       <div className="search-bar__button search-bar__icon-container--search-icon">
         <SearchIcon className="search-bar__icon" aria-label="logo of magnifying glass" />
       </div>
