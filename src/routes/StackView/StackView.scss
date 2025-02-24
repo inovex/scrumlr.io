@@ -66,6 +66,7 @@ $stack-view__min-height: 82px;
   justify-content: flex-start;
   max-height: $stack-content-max-height;
   gap: $spacing--sm;
+  border-radius: $note__border-radius;
 }
 
 .stack-view__disabled-click {

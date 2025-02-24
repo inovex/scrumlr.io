@@ -32,7 +32,7 @@ $min-lines: 3;
   max-height: calc($stack-content-max-height - 36px - 36px - 2 * ($spacing--base + $spacing--sm));
   margin: 0;
   padding: 0 $spacing--xxs;
-  overflow-y: scroll;
+  //overflow-y: scroll;
   resize: none;
   word-wrap: break-word;
 
@@ -51,7 +51,20 @@ $min-lines: 3;
   transition: border-color 150ms ease-in-out;
 
   @include scrollbar();
-  scrollbar-color: var(--accent-color--200) rgba(255, 255, 255, 0);
+  scrollbar-color: rgba(255, 255, 255, 0) rgba(255, 255, 255, 0);
+  // rgba(var(--accent-color--dark-rgb), .8) rgba(var(--accent-color--dark-rgb), .6); in scrollbar normalerweise
+  &.scrolling {
+    scrollbar-color: var(--accent-color--200) rgba(255, 255, 255, 0);
+  }
+  //
+  //&::-webkit-scrollbar {
+  //  opacity: 0; // Initially hide the scrollbar
+  //  transition: opacity 0.3s; // Smooth transition for visibility
+  //}
+  //
+  //&:hover::-webkit-scrollbar {
+  //  opacity: 1; // Show scrollbar on hover
+  //}
 
   // also subtract edited marker
   &--edited {
