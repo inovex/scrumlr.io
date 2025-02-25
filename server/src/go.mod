@@ -1,8 +1,8 @@
 module scrumlr.io/server
 
-go 1.23
+go 1.23.0
 
-toolchain go1.23rc1
+toolchain go1.23.6
 
 // https://github.com/inovex/scrumlr.io/security/dependabot/108
 replace github.com/opencontainers/runc v1.1.0 => github.com/opencontainers/runc v1.1.2
@@ -30,7 +30,7 @@ require (
 	github.com/urfave/cli/v2 v2.27.5
 	github.com/weppos/publicsuffix-go v0.40.2
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.35.0
 )
 
 require (
