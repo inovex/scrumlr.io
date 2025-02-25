@@ -663,7 +663,7 @@
       user: '{{ $.User.justin.ID }}'
       note: '{{ $.Note.votingSortingNote6.ID }}'
 
-- model: Reaction
+- model: DatabaseReaction
   rows:
     # A: board A, note A, user A
     - _id: reactionA

@@ -18,13 +18,13 @@ import (
 	"scrumlr.io/server/database/migrations"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
 	"scrumlr.io/server/services/notes"
-	"scrumlr.io/server/services/reactions"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
 )
@@ -361,6 +361,7 @@ func run(c *cli.Context) error {
 	}
 
 	dbConnection := database.New(db, c.Bool("verbose"))
+	reactionsDb := reactions.NewReactionsDatabase(db, c.Bool("verbose"))
 
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
@@ -374,7 +375,7 @@ func run(c *cli.Context) error {
 	votingService := votings.NewVotingService(dbConnection, rt)
 	userService := users.NewUserService(dbConnection, rt)
 	noteService := notes.NewNoteService(dbConnection, rt)
-	reactionService := reactions.NewReactionService(dbConnection, rt)
+	reactionService := reactions.NewReactionService(reactionsDb, rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
