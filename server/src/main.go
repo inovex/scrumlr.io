@@ -9,16 +9,15 @@ import (
 	"strings"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/services/health"
 
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
 	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/migrations"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/board_templates"
@@ -262,7 +261,7 @@ func run(c *cli.Context) error {
 		logger.EnableDevelopmentLogger()
 	}
 
-	db, err := migrations.MigrateDatabase(c.String("database"))
+	db, err := initialize.InitializeDatabase(c.String("database"))
 	if err != nil {
 		return fmt.Errorf("unable to migrate database: %w", err)
 	}
@@ -360,8 +359,8 @@ func run(c *cli.Context) error {
 		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
 
-	dbConnection := database.New(db, c.Bool("verbose"))
-	reactionsDb := reactions.NewReactionsDatabase(db, c.Bool("verbose"))
+	bun := initialize.InitializeBun(db, c.Bool("verbose"))
+	dbConnection := database.New(bun)
 
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
@@ -375,7 +374,7 @@ func run(c *cli.Context) error {
 	votingService := votings.NewVotingService(dbConnection, rt)
 	userService := users.NewUserService(dbConnection, rt)
 	noteService := notes.NewNoteService(dbConnection, rt)
-	reactionService := reactions.NewReactionService(reactionsDb, rt)
+	reactionService := initialize.InitializeReactionService(bun, rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
