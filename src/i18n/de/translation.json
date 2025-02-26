@@ -1,6 +1,8 @@
 {
   "InfoBar": {
-    "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
+    "ReturnToPresentedNote": "Zurück zur präsentierten Karte",
+    "VotingIsAnonymous": "Abstimmung ist anonym",
+    "VotingIsNotAnonymous": "Abstimmung ist nicht anonym"
   },
   "NewBoard": {
     "boardName": "Sitzungsname",

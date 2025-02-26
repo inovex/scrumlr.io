@@ -21,6 +21,7 @@ export const VotingDialog = () => {
   const cumulativeVotingDefault = !(typeof cumulativeVotingStorage !== "undefined" && cumulativeVotingStorage !== null && cumulativeVotingStorage === "false");
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(cumulativeVotingDefault);
   const [numberOfVotes, setNumberOfVotes] = useState(getNumberFromStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, 5));
+  const [isAnonymous, setIsAnonymous] = useState(true);
 
   if (!isAdmin) {
     navigate("..");
@@ -32,6 +33,7 @@ export const VotingDialog = () => {
         voteLimit: numberOfVotes,
         showVotesOfOthers: false,
         allowMultipleVotes: allowCumulativeVoting,
+        isAnonymous,
       })
     );
     saveToStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, String(numberOfVotes));
@@ -52,6 +54,17 @@ export const VotingDialog = () => {
         </button>
       ) : (
         <>
+          <button
+            className="dialog__button"
+            data-testid="voting-dialog__anonymous-voting-button"
+            onClick={() => {
+              setIsAnonymous((prev) => !prev);
+            }}
+          >
+            <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label>
+            <Toggle active={isAnonymous} className="voting-dialog__toggle" />
+          </button>
+
           <button className="dialog__button" data-testid="voting-dialog__cumulative-voting-button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
             <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
             <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />
