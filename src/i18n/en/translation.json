@@ -1,6 +1,8 @@
 {
   "InfoBar": {
-    "ReturnToPresentedNote": "Return to presented note"
+    "ReturnToPresentedNote": "Return to presented note",
+    "VotingIsAnonymous": "Voting is anonymous",
+    "VotingIsNotAnonymous": "Voting is not anonymous"
   },
   "NewBoard": {
     "boardName": "Board name",
