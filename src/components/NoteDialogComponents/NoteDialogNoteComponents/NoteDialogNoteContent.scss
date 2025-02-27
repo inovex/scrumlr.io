@@ -36,6 +36,8 @@ $min-lines: 3;
   resize: none;
   word-wrap: break-word;
 
+  white-space: pre; // important to enable white spaces like new lines
+
   color: $navy--900;
   letter-spacing: $letter-spacing--medium;
   font-size: $text--md;
@@ -119,5 +121,18 @@ $min-lines: 3;
 [theme="dark"] {
   .note-dialog__note-content-text {
     color: $gray--000;
+  }
+}
+
+.note-text-content-url {
+  display: inline-block;
+
+  &--truncate {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top; /* align with the rest of the text */
+    color: var(--accent-color--light);
   }
 }
