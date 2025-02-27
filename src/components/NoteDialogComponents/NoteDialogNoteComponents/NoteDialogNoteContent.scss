@@ -126,6 +126,7 @@ $min-lines: 3;
 
 .note-text-content-url {
   display: inline-block;
+  cursor: pointer;
 
   &--truncate {
     max-width: 100%;
