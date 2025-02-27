@@ -96,7 +96,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         title={url}
         target="_blank"
         rel="noopener noreferrer"
-        className={classNames("note-text-content-url", {"note-text-content-url--truncate": true})}
+        className={classNames("note-dialog__url", "note-dialog__url--truncate")}
         onClick={(e) => {
           // in board view, the anchor element works as expected, but in stack view some problems,
           // I'm guessing because of event order arise. but manually opening the link seems to do the trick

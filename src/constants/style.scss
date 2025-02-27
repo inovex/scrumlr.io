@@ -201,3 +201,17 @@ $column-stripes--dark: repeating-linear-gradient(
   color: $gray--000;
   background-color: $navy--200;
 }
+
+@mixin custom-url($truncate: false) {
+  display: inline-block;
+  cursor: pointer;
+  color: var(--accent-color--light);
+
+  @if $truncate {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top; /* align with the rest of the text */
+  }
+}
