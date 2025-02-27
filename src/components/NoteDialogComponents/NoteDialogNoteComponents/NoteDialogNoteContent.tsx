@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, FocusEvent, useState} from "react";
 import {Participant} from "store/features/participants/types";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {addProtocol} from "utils/images";
@@ -11,7 +11,6 @@ import {createPortal} from "react-dom";
 import {Toast} from "utils/Toast";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
-import TextareaAutosize from "react-textarea-autosize";
 import i18n from "i18n";
 import Linkify from "linkify-react";
 import "./NoteDialogNoteContent.scss";
@@ -46,10 +45,6 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     };
   }, isEqual);
 
-  const onFocus = () => {
-    dispatch(onNoteFocus());
-  };
-
   const onEdit = (id: string, newText: string) => {
     if (editable && newText !== text && newText.length > 0) {
       dispatch(
@@ -68,12 +63,23 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     dispatch(onNoteBlur());
   };
 
+  const onFocus = () => {
+    dispatch(onNoteFocus());
+  };
+
+  const onBlur = (e: FocusEvent<HTMLDivElement>) => {
+    onEdit(noteId!, e.target.innerText ?? "");
+    setEditing(false);
+  };
+
   const isImage = useImageChecker(text);
 
   const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({
     initialValue: text,
     suggestionsHidden: isStackedNote,
   });
+
+  const {onClick, ...inputBindings} = emoji.inputBindings;
 
   // TODO move to util
   const renderLink = (content: {content: string}) => {
@@ -99,51 +105,54 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     setEditing(true);
   };
 
-  // return either
-  // - editable textarea (pure)
-  // - viewable div (prettified)
-  const renderContentContainer = () =>
-    editing ? (
-      <TextareaAutosize
-        data-clarity-mask="True"
-        className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
-        disabled={!editable || (!isModerator && boardLocked)}
-        onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
-        onFocus={onFocus}
-        {...emoji.inputBindings}
-        onKeyDown={(e) => {
-          emoji.inputBindings.onKeyDown(e);
-          if (e.defaultPrevented) return;
-
-          if (e.key === "Enter" && !e.shiftKey) {
-            e.preventDefault();
-            e.currentTarget.blur();
-            setEditing(false);
-          }
-
-          if (e.key === "Escape") {
-            e.currentTarget.blur();
-            e.stopPropagation();
-            setEditing(false);
-          }
-        }}
-      />
+  const renderContent = () => editing ? (
+      value
     ) : (
-      <div
-        className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
-        onFocus={onFocus}
-        onClick={tryEnablingEditMode}
-        role="textbox"
+      <Linkify
+        options={{
+          render: renderLink,
+        }}
       >
-        <Linkify
-          options={{
-            render: renderLink,
-          }}
-        >
-          {value}
-        </Linkify>
-      </div>
+        {value}
+      </Linkify>
     );
+
+  // content container modes:
+  // - viewable (prettified, URLs)
+  // - editable (pure content)
+  const renderContentContainer = () => (
+    <div
+      className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
+      contentEditable={!(!editable || (!isModerator && boardLocked))}
+      tabIndex={0}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      onClick={(e) => {
+        onClick(e); // emoji binding
+        tryEnablingEditMode();
+      }}
+      role="textbox"
+      {...inputBindings}
+      onKeyDown={(e) => {
+        inputBindings.onKeyDown(e);
+        if (e.defaultPrevented) return;
+
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          e.currentTarget.blur();
+          setEditing(false);
+        }
+
+        if (e.key === "Escape") {
+          e.currentTarget.blur();
+          e.stopPropagation();
+          setEditing(false);
+        }
+      }}
+    >
+      {renderContent()}
+    </div>
+  );
 
   return (
     <div className="note-dialog__note-content" ref={emoji.containerRef}>
