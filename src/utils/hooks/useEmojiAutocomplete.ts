@@ -138,6 +138,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
 
   // handle: update input, update suggestions
   // FormEventHandler for TextareaAutosize
+  // TODO contentEditable divs don't fire change events
   const handleChange: FormEventHandler<InputElement> & ChangeEventHandler<InputElement> = useCallback(
     (e) => {
       const target = e.currentTarget;

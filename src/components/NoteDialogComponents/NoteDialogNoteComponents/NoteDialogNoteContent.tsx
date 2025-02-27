@@ -141,6 +141,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       tabIndex={0}
       onFocus={onFocus}
       onBlur={onBlur}
+      // TODO cursor location (clicking on div with specific location should retain cursor at the position)
       onClick={(e) => {
         onClick(e); // emoji binding
         tryEnablingEditMode();
