@@ -105,7 +105,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     setEditing(true);
   };
 
-  const renderContent = () => editing ? (
+  const renderContent = () =>
+    editing ? (
       value
     ) : (
       <Linkify
@@ -124,6 +125,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     <div
       className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
       contentEditable={!(!editable || (!isModerator && boardLocked))}
+      suppressContentEditableWarning // yes, I know what I'm doing (hopefully)
       tabIndex={0}
       onFocus={onFocus}
       onBlur={onBlur}
