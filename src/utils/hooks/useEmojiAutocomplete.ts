@@ -144,7 +144,7 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
       let newVal = "";
       if (target instanceof HTMLTextAreaElement || target instanceof HTMLInputElement) newVal = target.value;
       else if (target instanceof HTMLDivElement) {
-        newVal = target.getAttribute("value") ?? "";
+        newVal = target.innerText ?? "";
       }
       // prevent exceeding max input length by slicing the input
       if (maxInputLength !== undefined && newVal.length > maxInputLength) setValue(newVal.slice(0, maxInputLength));
