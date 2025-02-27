@@ -11,7 +11,7 @@ import {createPortal} from "react-dom";
 import {Toast} from "utils/Toast";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
-import TextareaAutosize from "react-textarea-autosize";
+// import TextareaAutosize from "react-textarea-autosize";
 import i18n from "../../../i18n";
 import "./NoteDialogNoteContent.scss";
 
@@ -68,7 +68,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(text);
 
-  const {...emoji} = useEmojiAutocomplete<HTMLDivElement>({
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({
     initialValue: text,
     suggestionsHidden: isStackedNote,
   });
@@ -100,7 +100,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         </>
       ) : (
         <>
-          <TextareaAutosize
+          {/* <TextareaAutosize
             data-clarity-mask="True"
             className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
             disabled={!editable || (!isModerator && boardLocked)}
@@ -121,7 +121,32 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
                 e.stopPropagation();
               }
             }}
-          />
+          /> */}
+
+          <div
+            className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
+            contentEditable={!(!editable || (!isModerator && boardLocked))}
+            onBlur={(e) => onEdit(noteId!, e.target.getAttribute("value") ?? "")}
+            onFocus={onFocus}
+            onKeyDown={(e) => {
+              emoji.inputBindings.onKeyDown(e);
+              if (e.defaultPrevented) return;
+
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                e.currentTarget.blur();
+              }
+
+              if (e.key === "Escape") {
+                e.currentTarget.blur();
+                e.stopPropagation();
+              }
+            }}
+            {...emoji}
+            role="textbox"
+          >
+            {value}
+          </div>
 
           {note?.edited && <div className="note-dialog__marker-edited">({t("Note.edited")})</div>}
           {!isStackedNote && <EmojiSuggestions {...emoji.suggestionsProps} />}
