@@ -81,6 +81,12 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const {onClick, ...inputBindings} = emoji.inputBindings;
 
+  // from https://stackoverflow.com/a/63627688
+  const openInNewTab = (url: string): void => {
+    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+    if (newWindow) newWindow.opener = null;
+  };
+
   // TODO move to util
   const renderLink = (content: {content: string}) => {
     const url = addProtocol(content.content);
@@ -91,7 +97,13 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         target="_blank"
         rel="noopener noreferrer"
         className={classNames("note-text-content-url", {"note-text-content-url--truncate": true})}
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          // in board view, the anchor element works as expected, but in stack view some problems,
+          // I'm guessing because of event order arise. but manually opening the link seems to do the trick
+          // need to maybe keep in mind this might be considered a pop-up but idk
+          e.stopPropagation();
+          openInNewTab(url);
+        }}
       >
         {content.content}
       </a>
