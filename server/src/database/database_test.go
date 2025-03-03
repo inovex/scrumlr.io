@@ -109,7 +109,7 @@ func initDatabase() (string, func(), error) {
 }
 
 func loadTestdata() error {
-	testDb.db.RegisterModel(
+	testDb.Db.RegisterModel(
 		(*User)(nil),
 		(*Board)(nil),
 		(*BoardSessionInsert)(nil),
@@ -121,6 +121,6 @@ func loadTestdata() error {
 		(*BoardTemplate)(nil),
 		(*ColumnTemplate)(nil),
 	)
-	fixture = dbfixture.New(testDb.db)
+	fixture = dbfixture.New(testDb.Db)
 	return fixture.Load(context.Background(), os.DirFS("testdata"), "fixture.yml")
 }

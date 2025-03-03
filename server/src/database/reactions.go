@@ -33,7 +33,7 @@ type ReactionUpdate struct {
 // GetReaction gets a specific Reaction
 func (d *Database) GetReaction(id uuid.UUID) (Reaction, error) {
 	var reaction Reaction
-	err := d.db.
+	err := d.Db.
 		NewSelect().
 		Model((*Reaction)(nil)).
 		Where("id = ?", id).
@@ -46,7 +46,7 @@ func (d *Database) GetReaction(id uuid.UUID) (Reaction, error) {
 // SELECT r.* FROM reactions r JOIN notes n ON r.note = n.id WHERE n.board = ?;
 func (d *Database) GetReactions(board uuid.UUID) ([]Reaction, error) {
 	var reactions []Reaction
-	err := d.db.
+	err := d.Db.
 		NewSelect().
 		Model(&reactions).
 		Join("JOIN notes ON notes.id = reaction.note"). // important: 'reaction.note' instead of 'reactions.note'
@@ -58,7 +58,7 @@ func (d *Database) GetReactions(board uuid.UUID) ([]Reaction, error) {
 // GetReactionsForNote gets all reactions for a specific note
 func (d *Database) GetReactionsForNote(note uuid.UUID) ([]Reaction, error) {
 	var reactions []Reaction
-	err := d.db.
+	err := d.Db.
 		NewSelect().
 		Model(&reactions).
 		Where("note = ?", note).
@@ -81,7 +81,7 @@ func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (React
 	}
 
 	var reaction Reaction
-	_, err = d.db.NewInsert().
+	_, err = d.Db.NewInsert().
 		Model(&insert).
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board), &reaction)
@@ -98,7 +98,7 @@ func (d *Database) RemoveReaction(board, user, id uuid.UUID) error {
 	if r.User != user {
 		return common.ForbiddenError(errors.New("forbidden"))
 	}
-	_, err = d.db.NewDelete().
+	_, err = d.Db.NewDelete().
 		Model((*Reaction)(nil)).
 		Where("id = ?", id).
 		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.ReactionIdentifier, id))
@@ -117,7 +117,7 @@ func (d *Database) UpdateReaction(board, user, id uuid.UUID, update ReactionUpda
 	}
 
 	var reaction Reaction
-	_, err = d.db.
+	_, err = d.Db.
 		NewUpdate().
 		Model(&reaction).
 		Set("reaction_type = ?", update.ReactionType).

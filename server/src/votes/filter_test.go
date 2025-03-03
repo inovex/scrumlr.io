@@ -134,7 +134,7 @@ func TestCalculateVoteCountForSpecificNote(t *testing.T) {
 	userId := uuid.New()
 
 	noteSlice := notes.NoteSlice{buildNote(noteId)}
-	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+	voting := VotingWithVotes([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
 
 	votingCountResult := voting.calculateTotalVoteCount(noteSlice)
 
@@ -148,7 +148,7 @@ func TestShouldReturnNoVotingResultsBecauseVotingIsStillOpen(t *testing.T) {
 	voteId := uuid.New()
 	noteId := uuid.New()
 
-	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusOpen, true)}, []database.Vote{})[0]
+	voting := VotingWithVotes([]database.Voting{*buildVoting(voteId, types.VotingStatusOpen, true)}, []database.Vote{})[0]
 	noteSlice := notes.NoteSlice{buildNote(noteId)}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
@@ -165,7 +165,7 @@ func TestShouldReturnVotingResults(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 
-	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+	voting := VotingWithVotes([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
 	noteSlice := notes.NoteSlice{buildNote(noteId)}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
@@ -182,7 +182,7 @@ func TestShouldUnmarshallVoteData(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 
-	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+	voting := VotingWithVotes([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
 	noteSlice := notes.NoteSlice{buildNote(noteId)}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)

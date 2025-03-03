@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"scrumlr.io/server/database"
 	"strings"
 
 	"scrumlr.io/server/auth"
@@ -14,7 +15,6 @@ import (
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/migrations"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
@@ -26,7 +26,6 @@ import (
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/reactions"
 	"scrumlr.io/server/services/users"
-	"scrumlr.io/server/services/votings"
 )
 
 func main() {
@@ -371,7 +370,7 @@ func run(c *cli.Context) error {
 
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
-	votingService := votings.NewVotingService(dbConnection, rt)
+	//votingService := votings.NewVotingService(dbConnection, rt)
 	userService := users.NewUserService(dbConnection, rt)
 	noteService := notes.NewNoteService(dbConnection, rt)
 	reactionService := reactions.NewReactionService(dbConnection, rt)
@@ -386,7 +385,7 @@ func run(c *cli.Context) error {
 		authConfig,
 
 		boardService,
-		votingService,
+		dbConnection,
 		userService,
 		noteService,
 		reactionService,
