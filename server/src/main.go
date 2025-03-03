@@ -371,7 +371,7 @@ func run(c *cli.Context) error {
 
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
-	votingService := votings.NewVotingService(dbConnection, rt)
+	//votingService := votings.NewVotingService(dbConnection, rt)
 	userService := users.NewUserService(dbConnection, rt)
 	noteService := notes.NewNotesService(initialize.InitializeNotesService(bun), rt)
 	reactionService := reactions.NewReactionService(initialize.InitializeReactionService(bun), rt)
@@ -386,7 +386,7 @@ func run(c *cli.Context) error {
 		authConfig,
 
 		boardService,
-		votingService,
+		dbConnection,
 		userService,
 		noteService,
 		reactionService,
