@@ -45,7 +45,7 @@ func (d *Database) CreateAnonymousUser(name string) (User, error) {
 	}
 	var user User
 	insert := UserInsert{Name: strings.TrimSpace(name), AccountType: types.AccountTypeAnonymous}
-	_, err := d.db.NewInsert().Model(&insert).Returning("*").Exec(context.Background(), &user)
+	_, err := d.Db.NewInsert().Model(&insert).Returning("*").Exec(context.Background(), &user)
 	return user, err
 }
 
@@ -78,16 +78,16 @@ func (d *Database) createExternalUser(id, name, avatarUrl string, accountType ty
 		return User{}, err
 	}
 
-	existingUser := d.db.NewSelect().TableExpr(table).ColumnExpr("*").Where("id = ?", id)
-	existsCheck := d.db.NewSelect().ColumnExpr("CASE WHEN (SELECT COUNT(*) as count FROM \"existing_user\")=1 THEN true ELSE false END AS user_exists")
-	updateName := d.db.NewUpdate().Model((*User)(nil)).Column("name").Set("name = ?", name).Where("(SELECT user_exists FROM exists_check)").Where("id=(SELECT \"user\" FROM \"existing_user\")").Where("name=(SELECT name FROM \"existing_user\")")
-	createNewUser := d.db.NewInsert().Model((*User)(nil)).ColumnExpr("name, account_type").TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query WHERE (SELECT NOT user_exists FROM exists_check)", accountType), name).Returning("id")
-	selectUser := d.db.NewSelect().ColumnExpr("CASE WHEN (SELECT user_exists FROM exists_check) IS TRUE THEN (SELECT \"user\" FROM \"existing_user\") ELSE (SELECT id FROM \"create_new_user\") END AS id")
-	insertExternalUser := d.db.NewInsert().TableExpr(table).ColumnExpr("\"user\", id, name, avatar_url").TableExpr("(SELECT (SELECT id::uuid FROM select_user) as \"user\", ? as id, ? as name, ? as avatar_url) as sub_query", id, name, avatarUrl).On("CONFLICT (id) DO UPDATE SET name=?, avatar_url=?", name, avatarUrl)
-	selectExistingUser := d.db.NewSelect().Model((*User)(nil)).Where("id=(SELECT id FROM select_user)")
+	existingUser := d.Db.NewSelect().TableExpr(table).ColumnExpr("*").Where("id = ?", id)
+	existsCheck := d.Db.NewSelect().ColumnExpr("CASE WHEN (SELECT COUNT(*) as count FROM \"existing_user\")=1 THEN true ELSE false END AS user_exists")
+	updateName := d.Db.NewUpdate().Model((*User)(nil)).Column("name").Set("name = ?", name).Where("(SELECT user_exists FROM exists_check)").Where("id=(SELECT \"user\" FROM \"existing_user\")").Where("name=(SELECT name FROM \"existing_user\")")
+	createNewUser := d.Db.NewInsert().Model((*User)(nil)).ColumnExpr("name, account_type").TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query WHERE (SELECT NOT user_exists FROM exists_check)", accountType), name).Returning("id")
+	selectUser := d.Db.NewSelect().ColumnExpr("CASE WHEN (SELECT user_exists FROM exists_check) IS TRUE THEN (SELECT \"user\" FROM \"existing_user\") ELSE (SELECT id FROM \"create_new_user\") END AS id")
+	insertExternalUser := d.Db.NewInsert().TableExpr(table).ColumnExpr("\"user\", id, name, avatar_url").TableExpr("(SELECT (SELECT id::uuid FROM select_user) as \"user\", ? as id, ? as name, ? as avatar_url) as sub_query", id, name, avatarUrl).On("CONFLICT (id) DO UPDATE SET name=?, avatar_url=?", name, avatarUrl)
+	selectExistingUser := d.Db.NewSelect().Model((*User)(nil)).Where("id=(SELECT id FROM select_user)")
 
 	var user User
-	err := d.db.NewSelect().
+	err := d.Db.NewSelect().
 		With("existing_user", existingUser).
 		With("exists_check", existsCheck).
 		With("update_name", updateName).
@@ -106,12 +106,12 @@ func (d *Database) createExternalUser(id, name, avatarUrl string, accountType ty
 // GetUser returns the user by the specified id
 func (d *Database) GetUser(id uuid.UUID) (User, error) {
 	var user User
-	err := d.db.NewSelect().Model(&user).Where("id = ?", id).Scan(context.Background())
+	err := d.Db.NewSelect().Model(&user).Where("id = ?", id).Scan(context.Background())
 	return user, err
 }
 
 func (d *Database) IsUserAnonymous(id uuid.UUID) (bool, error) {
-	count, err := d.db.NewSelect().
+	count, err := d.Db.NewSelect().
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
@@ -124,7 +124,7 @@ func (d *Database) IsUserAnonymous(id uuid.UUID) (bool, error) {
 }
 
 func (d *Database) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
-	count, err := d.db.NewSelect().
+	count, err := d.Db.NewSelect().
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
@@ -139,7 +139,7 @@ func (d *Database) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
 
 func (d *Database) SetKeyMigration(id uuid.UUID) (User, error) {
 	var user User
-	_, err := d.db.NewUpdate().
+	_, err := d.Db.NewUpdate().
 		Table("users").
 		Set("key_migration = ?", time.Now()).
 		Where("id = ?", id).
@@ -154,7 +154,7 @@ func (d *Database) UpdateUser(update UserUpdate) (User, error) {
 	}
 	update.Name = strings.TrimSpace(update.Name)
 	var user User
-	_, err := d.db.NewUpdate().
+	_, err := d.Db.NewUpdate().
 		Model(&update).
 		Where("id = ?", update.ID).
 		Returning("*").

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	columns2 "scrumlr.io/server/columns"
 	notes2 "scrumlr.io/server/notes"
-	"scrumlr.io/server/votes"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -33,15 +32,15 @@ func (s *BoardService) CreateColumn(ctx context.Context, body dto.ColumnRequest)
 func (s *BoardService) DeleteColumn(ctx context.Context, board, column, user uuid.UUID) error {
 	log := logger.FromContext(ctx)
 
-	voting, err := s.votingsService.GetOpenVoting(ctx, board)
-	var toBeDeletedVotes []*votes.Vote
+	voting, err := s.database.GetOpenVoting(board)
+	var toBeDeletedVotes []database.Vote
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
 			log.Errorw("unable to get open voting", "board", board, "err", err)
 			return err
 		}
 	} else {
-		toBeDeletedVotes, err = s.votingsService.GetVotes(ctx, filter.VoteFilter{Board: board, Voting: &voting.ID})
+		toBeDeletedVotes, err = s.database.GetVotes(filter.VoteFilter{Board: board, Voting: &voting.ID})
 		if err != nil {
 			logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err, "board", board, "column", column)
 			return err
