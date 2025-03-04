@@ -28,7 +28,7 @@ var reactionUserJay *User
 var reactionUserJack *User
 
 func testGetReaction(t *testing.T) {
-	reaction := fixture.MustRow("Reaction.reactionA").(*reactions.DatabaseReaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 	r, err := reactionDb.GetReaction(reaction.ID)
 
 	assert.Nil(t, err)
@@ -90,7 +90,7 @@ func testUpdateReaction(t *testing.T) {
 	newReactionType := reactions.ReactionCelebration
 	board := fixture.MustRow("Board.notesTestBoard").(*Board) // cannot reuse vars here
 	user := fixture.MustRow("User.jack").(*User)
-	reaction := fixture.MustRow("Reaction.reactionA").(*reactions.DatabaseReaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
 	r, err := reactionDb.UpdateReaction(board.ID, user.ID, reaction.ID, reactions.DatabaseReactionUpdate{
 		ReactionType: newReactionType,
@@ -106,7 +106,7 @@ func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
 	newReactionType := reactions.ReactionCelebration
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
 	wrongUser := fixture.MustRow("User.jane").(*User)
-	reaction := fixture.MustRow("Reaction.reactionA").(*reactions.DatabaseReaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
 	_, err := reactionDb.UpdateReaction(board.ID, wrongUser.ID, reaction.ID, reactions.DatabaseReactionUpdate{
 		ReactionType: newReactionType,
@@ -120,7 +120,7 @@ func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
 func testDeleteReaction(t *testing.T) {
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
-	reaction := fixture.MustRow("Reaction.reactionB").(*reactions.DatabaseReaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionB").(*reactions.DatabaseReaction)
 
 	err := reactionDb.RemoveReaction(board.ID, user.ID, reaction.ID)
 
@@ -130,7 +130,7 @@ func testDeleteReaction(t *testing.T) {
 func testDeleteReactionFailsBecauseForbidden(t *testing.T) {
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
 	wrongUser := fixture.MustRow("User.jane").(*User)
-	reaction := fixture.MustRow("Reaction.reactionA").(*reactions.DatabaseReaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
 	err := reactionDb.RemoveReaction(board.ID, wrongUser.ID, reaction.ID)
 
