@@ -253,7 +253,7 @@
   },
   "VoteConfigurationButton": {
     "label": "Voting",
-    "showVotesOfOthers": "Anonymous voting",
+    "isAnonymous": "Anonymous voting",
     "allowMultipleVotesPerNote": "Allow cumulative voting",
     "numberOfVotes": "Number of votes",
     "increaseVotes": "Increase number of votes",

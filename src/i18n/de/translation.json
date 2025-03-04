@@ -253,7 +253,7 @@
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",
-    "showVotesOfOthers": "Anonyme Abstimmung",
+    "isAnonymous": "Anonyme Abstimmung",
     "allowMultipleVotesPerNote": "Erlaube Stimmhäufung",
     "numberOfVotes": "Anzahl Stimmen",
     "increaseVotes": "Anzahl Stimmen erhöhen",

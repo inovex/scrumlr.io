@@ -84,13 +84,7 @@ export const Votes: FC<VotesProps> = (props) => {
       )}
       {/* display for votes when voting is open */}
       {voting && ongoingVotes.note > 0 && (
-        <VoteButtons.Remove
-          disabled={boardLocked && !isModerator}
-          noteId={props.noteId}
-          numberOfVotes={ongoingVotes.note}
-          colorClassName={props.colorClassName}
-          participantNames="öalskdfj asdfkja sdölfkjas ölfk"
-        />
+        <VoteButtons.Remove disabled={boardLocked && !isModerator} noteId={props.noteId} numberOfVotes={ongoingVotes.note} colorClassName={props.colorClassName} />
       )}
       {voting && (isModerator || !boardLocked) && (
         <VoteButtons.Add
