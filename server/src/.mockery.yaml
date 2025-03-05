@@ -18,3 +18,9 @@ packages:
         all: true
       Votings:
         all: true
+  scrumlr.io/server/VotingDatabase:
+    interfaces:
+      VotingDatabase:
+        all: true
+      VotingService:
+        all: true
