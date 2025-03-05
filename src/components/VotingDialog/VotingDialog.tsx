@@ -31,7 +31,7 @@ export const VotingDialog = () => {
     dispatch(
       createVoting({
         voteLimit: numberOfVotes,
-        showVotesOfOthers: false,
+        // showVotesOfOthers: false,
         allowMultipleVotes: allowCumulativeVoting,
         isAnonymous,
       })
@@ -61,7 +61,7 @@ export const VotingDialog = () => {
               setIsAnonymous((prev) => !prev);
             }}
           >
-            <label>{t("VoteConfigurationButton.showVotesOfOthers")}</label>
+            <label>{t("VoteConfigurationButton.isAnonymous")}</label>
             <Toggle active={isAnonymous} className="voting-dialog__toggle" />
           </button>
 
