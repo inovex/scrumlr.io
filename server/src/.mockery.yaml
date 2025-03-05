@@ -4,10 +4,14 @@ mockname: "Mock{{.InterfaceName}}"
 outpkg: "{{.PackageName}}"
 filename: "mock_{{.InterfaceName}}.go"
 resolve-type-alias: false
-force-write-file: true
 issue-845-fix: true
 packages:
   # configuration on package level
+  net/http:
+    interfaces:
+      ResponseWriter:
+        all: true
+
   scrumlr.io/server/services:
     # configuration on interface level
     interfaces:
@@ -19,10 +23,12 @@ packages:
         all: true
       Votings:
         all: true
+
   scrumlr.io/server/realtime:
     interfaces:
       Client:
         all: true
+
   scrumlr.io/server/reactions:
     config:
       dir: "{{.InterfaceDir}}"
@@ -32,6 +38,7 @@ packages:
         all: true
       ReactionDatabase:
         all: true
+
   scrumlr.io/server/health:
     config:
       dir: "{{.InterfaceDir}}"
@@ -41,12 +48,25 @@ packages:
         all: true
       HealthDatabase:
         all: true
-  scrumlr.io/server/notes:
+
+  scrumlr.io/server/sessions:
     config:
       dir: "{{.InterfaceDir}}"
       inpackage: true
     interfaces:
-      NotesService:
+      SessionService:
         all: true
-      NotesDatabase:
+      SessionDatabase:
+        all: true
+
+  scrumlr.io/server/sessionrequests:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      SessionRequestService:
+        all: true
+      SessionRequestDatabase:
+        all: true
+      Websocket:
         all: true
