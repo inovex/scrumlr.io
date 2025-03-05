@@ -2,6 +2,11 @@ package services
 
 import (
 	"context"
+
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common/dto"
@@ -75,25 +80,6 @@ type Notes interface {
 	List(ctx context.Context, id uuid.UUID) ([]*notes.Note, error)
 	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
 }
-
-type Reactions interface {
-	Get(ctx context.Context, id uuid.UUID) (*dto.Reaction, error)
-	List(ctx context.Context, boardID uuid.UUID) ([]*dto.Reaction, error)
-	Create(ctx context.Context, board uuid.UUID, body dto.ReactionCreateRequest) (*dto.Reaction, error)
-	Delete(ctx context.Context, board, user, id uuid.UUID) error
-	Update(ctx context.Context, board, user, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error)
-}
-
-//type Votings interface {
-//	Create(ctx context.Context, body votes.VotingCreateRequest) (*votes.Voting, error)
-//	Update(ctx context.Context, body votes.VotingUpdateRequest) (*votes.Voting, error)
-//	Get(ctx context.Context, board, id uuid.UUID) (*votes.Voting, error)
-//	List(ctx context.Context, board uuid.UUID) ([]*votes.Voting, error)
-//
-//	AddVote(ctx context.Context, req dto.VoteRequest) (*dto.Vote, error)
-//	RemoveVote(ctx context.Context, req dto.VoteRequest) error
-//	GetVotes(ctx context.Context, f filter.VoteFilter) ([]*dto.Vote, error)
-//}
 
 type Health interface {
 	IsDatabaseHealthy() bool

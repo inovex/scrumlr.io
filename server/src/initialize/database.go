@@ -29,7 +29,7 @@ func InitializeDatabase(databaseUrl string) (*sql.DB, error) {
 		return nil, err
 	}
 
-	source, err := httpfs.New(http.FS(Migrations), "sql")
+	source, err := httpfs.New(http.FS(Migrations), "migrations/sql")
 	if err != nil {
 		return nil, err
 	}

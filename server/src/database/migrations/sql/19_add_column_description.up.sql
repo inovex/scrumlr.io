@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS columns ADD COLUMN "description" VARCHAR(128) DEFAULT '';

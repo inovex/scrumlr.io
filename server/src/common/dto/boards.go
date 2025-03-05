@@ -159,7 +159,7 @@ type FullBoard struct {
 	BoardSessions        []*BoardSession        `json:"participants"`
 	Columns              []*columns.Column      `json:"columns"`
 	Notes                []*notes.Note          `json:"notes"`
-	Reactions            []*Reaction            `json:"reactions"`
+	Reactions            []*reactions.Reaction  `json:"reactions"`
 	Votings              []*votes.Voting        `json:"votings"`
 	Votes                []*Vote                `json:"votes"`
 }
@@ -170,8 +170,8 @@ func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
 	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions)
 	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
 	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
-	dtoFullBoard.Reactions = Reactions(dbFullBoard.Reactions)
-	dtoFullBoard.Votings = votes.VotingWithVotes(dbFullBoard.Votings, dbFullBoard.Votes)
+	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)
+	dtoFullBoard.Votings = votes.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
 	dtoFullBoard.Votes = Votes(dbFullBoard.Votes)
 	return dtoFullBoard
 }

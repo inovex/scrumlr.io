@@ -1,3 +1,0 @@
-DROP TABLE IF EXISTS reactions;
-
-ALTER TABLE IF EXISTS boards DROP COLUMN IF EXISTS show_note_reactions;

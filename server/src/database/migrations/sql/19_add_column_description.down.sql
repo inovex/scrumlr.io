@@ -1,1 +1,0 @@
-ALTER TABLE IF EXISTS columns DROP COLUMN IF EXISTS "description";

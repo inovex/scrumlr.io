@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"net/http"
+
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/votes"
@@ -13,6 +14,7 @@ import (
 	"github.com/gorilla/websocket"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 )
 
@@ -23,7 +25,7 @@ type BoardSubscription struct {
 	boardSettings     *dto.Board
 	boardColumns      []*columns.Column
 	boardNotes        []*notes.Note
-	boardReactions    []*dto.Reaction
+	boardReactions    []*reactions.Reaction
 }
 
 type InitEvent struct {
@@ -35,7 +37,7 @@ type EventData struct {
 	Board     *dto.Board                 `json:"board"`
 	Columns   []*columns.Column          `json:"columns"`
 	Notes     []*notes.Note              `json:"notes"`
-	Reactions []*dto.Reaction            `json:"reactions"`
+	Reactions []*reactions.Reaction      `json:"reactions"`
 	Votings   []*votes.Voting            `json:"votings"`
 	Votes     []*dto.Vote                `json:"votes"`
 	Sessions  []*dto.BoardSession        `json:"participants"`
