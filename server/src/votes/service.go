@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	notes2 "scrumlr.io/server/notes"
@@ -160,14 +161,14 @@ func (s *Service) createdVoting(board, voting uuid.UUID) {
 
 func (s *Service) updatedVoting(board, voting uuid.UUID) {
 	//todo: fix notes
-	var notes []Note
+	var notes []database.Note
 	dbVoting, dbVotes, err := s.database.GetVoting(board, voting)
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve voting in updated voting", "err", err)
 		return
 	}
 	if dbVoting.Status == types.VotingStatusClosed {
-		notes, err = s.database.GetNotes(board)
+		//notes, err = s.database.GetNotes(board)
 		if err != nil {
 			logger.Get().Errorw("unable to retrieve notes in updated voting", "err", err)
 		}
