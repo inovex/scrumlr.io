@@ -1,4 +1,3 @@
----
 with-expecter: true
 dir: mocks/{{ replaceAll .InterfaceDirRelative "internal" "internal_" }}
 mockname: "Mock{{.InterfaceName}}"
