@@ -49,9 +49,9 @@ func (s *VotingService) Create(ctx context.Context, body votes.VotingCreateReque
 		Board:              body.Board,
 		VoteLimit:          body.VoteLimit,
 		AllowMultipleVotes: body.AllowMultipleVotes,
-		ShowVotesOfOthers:  body.ShowVotesOfOthers,
-		IsAnonymous:        body.IsAnonymous,
-		Status:             types.VotingStatusOpen,
+		//ShowVotesOfOthers:  body.ShowVotesOfOthers,
+		IsAnonymous: body.IsAnonymous,
+		Status:      types.VotingStatusOpen,
 	})
 
 	if err != nil {
