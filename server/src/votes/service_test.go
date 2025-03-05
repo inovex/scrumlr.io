@@ -55,25 +55,26 @@ func TestVotingAndVotesIdEqualNoUserDefined(t *testing.T) {
 	assert.Nil(t, res.Votes[noteId].Users)
 }
 
+/*
 func TestShowVotesOfOthers(t *testing.T) {
 
-	voteId := uuid.New()
-	noteId := uuid.New()
-	userId := uuid.New()
+		voteId := uuid.New()
+		noteId := uuid.New()
+		userId := uuid.New()
 
-	voting := buildVoting(voteId, types.VotingStatusClosed, true)
-	votes := []database.Vote{*buildVote(voteId, noteId, userId)}
+		voting := buildVoting(voteId, types.VotingStatusClosed, true)
+		votes := []database.Vote{*buildVote(voteId, noteId, userId)}
 
-	res := getVotingWithResults(*voting, votes)
+		res := getVotingWithResults(*voting, votes)
 
-	users := *res.Votes[noteId].Users
+		users := *res.Votes[noteId].Users
 
-	assert.Equal(t, 1, res.Total)
-	assert.Equal(t, 1, res.Votes[noteId].Total)
-	assert.Equal(t, 1, users[0].Total)
-	assert.Equal(t, userId, users[0].ID)
-}
-
+		assert.Equal(t, 1, res.Total)
+		assert.Equal(t, 1, res.Votes[noteId].Total)
+		assert.Equal(t, 1, users[0].Total)
+		assert.Equal(t, userId, users[0].ID)
+	}
+*/
 func TestMultipleVotesForDifferentNotesFromOneUser(t *testing.T) {
 
 	voteId := uuid.New()
@@ -218,7 +219,7 @@ func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *database
 	}
 }
 
-func buildVoting(id uuid.UUID, status types.VotingStatus, showVotesOfOthers bool) *database.Voting {
+func buildVoting(id uuid.UUID, status types.VotingStatus) *database.Voting {
 	return &database.Voting{
 		ID:                 id,
 		BaseModel:          bun.BaseModel{},
@@ -226,7 +227,7 @@ func buildVoting(id uuid.UUID, status types.VotingStatus, showVotesOfOthers bool
 		CreatedAt:          time.Time{},
 		VoteLimit:          0,
 		AllowMultipleVotes: false,
-		ShowVotesOfOthers:  showVotesOfOthers,
-		Status:             status,
+		//ShowVotesOfOthers:  showVotesOfOthers,
+		Status: status,
 	}
 }

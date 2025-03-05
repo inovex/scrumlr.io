@@ -114,8 +114,8 @@ var (
 			ID:                 votingID,
 			VoteLimit:          5,
 			AllowMultipleVotes: true,
-			ShowVotesOfOthers:  false,
-			Status:             "CLOSED",
+			//ShowVotesOfOthers:  false,
+			Status: "CLOSED",
 			VotingResults: &votes.VotingResults{
 				Total: 5,
 				Votes: map[uuid.UUID]votes.VotingResultsPerNote{
@@ -375,8 +375,8 @@ func testFilterVotingUpdatedAsParticipant(t *testing.T) {
 			ID:                 votingID,
 			VoteLimit:          5,
 			AllowMultipleVotes: true,
-			ShowVotesOfOthers:  false,
-			Status:             "CLOSED",
+			//ShowVotesOfOthers:  false,
+			Status: "CLOSED",
 			VotingResults: &votes.VotingResults{
 				Total: 2,
 				Votes: map[uuid.UUID]votes.VotingResultsPerNote{
@@ -417,8 +417,8 @@ func testInitFilterAsParticipant(t *testing.T) {
 		ID:                 votingID,
 		VoteLimit:          5,
 		AllowMultipleVotes: true,
-		ShowVotesOfOthers:  false,
-		Status:             "CLOSED",
+		//ShowVotesOfOthers:  false,
+		Status: "CLOSED",
 		VotingResults: &votes.VotingResults{
 			Total: 2,
 			Votes: map[uuid.UUID]votes.VotingResultsPerNote{

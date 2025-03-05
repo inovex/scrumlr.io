@@ -124,7 +124,7 @@ create table votings
     "board"              uuid          not null references boards ON DELETE CASCADE,
     vote_limit           int           not null,
     allow_multiple_votes boolean       not null DEFAULT true,
-    show_votes_of_others boolean       not null DEFAULT false,
+
     "status"             voting_status not null DEFAULT 'OPEN'
 );
 

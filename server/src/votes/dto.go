@@ -11,7 +11,8 @@ type VotingCreateRequest struct {
 	Board              uuid.UUID `json:"-"`
 	VoteLimit          int       `json:"voteLimit"`
 	AllowMultipleVotes bool      `json:"allowMultipleVotes"`
-	ShowVotesOfOthers  bool      `json:"showVotesOfOthers"`
+	//	ShowVotesOfOthers  bool      `json:"showVotesOfOthers"`
+	IsAnonymous bool `json:"isAnonymous"`
 }
 
 // VotingUpdateRequest represents the request to update a voting session.
@@ -23,12 +24,13 @@ type VotingUpdateRequest struct {
 
 // Voting is the response for all voting requests.
 type Voting struct {
-	ID                 uuid.UUID          `json:"id"`
-	VoteLimit          int                `json:"voteLimit"`
-	AllowMultipleVotes bool               `json:"allowMultipleVotes"`
-	ShowVotesOfOthers  bool               `json:"showVotesOfOthers"`
-	Status             types.VotingStatus `json:"status"`
-	VotingResults      *VotingResults     `json:"votes,omitempty"`
+	ID                 uuid.UUID `json:"id"`
+	VoteLimit          int       `json:"voteLimit"`
+	AllowMultipleVotes bool      `json:"allowMultipleVotes"`
+	//ShowVotesOfOthers  bool               `json:"showVotesOfOthers"`
+	Status        types.VotingStatus `json:"status"`
+	VotingResults *VotingResults     `json:"votes,omitempty"`
+	IsAnonymous   bool               `json:"isAnonymous"`
 }
 
 type VotingResults struct {

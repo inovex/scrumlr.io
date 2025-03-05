@@ -19,8 +19,9 @@ type Voting struct {
 	CreatedAt          time.Time
 	VoteLimit          int
 	AllowMultipleVotes bool
-	ShowVotesOfOthers  bool
-	Status             types.VotingStatus
+	//ShowVotesOfOthers  bool
+	IsAnonymous bool
+	Status      types.VotingStatus
 }
 
 type VotingInsert struct {
@@ -28,8 +29,9 @@ type VotingInsert struct {
 	Board              uuid.UUID
 	VoteLimit          int
 	AllowMultipleVotes bool
-	ShowVotesOfOthers  bool
-	Status             types.VotingStatus
+	//ShowVotesOfOthers  bool
+	IsAnonymous bool
+	Status      types.VotingStatus
 }
 
 type VotingUpdate struct {
@@ -54,8 +56,9 @@ func (d *Database) CreateVoting(insert VotingInsert) (Voting, error) {
 	values := d.db.NewSelect().
 		ColumnExpr("uuid(?) as board", insert.Board).
 		ColumnExpr("? as vote_limit", insert.VoteLimit).
-		ColumnExpr("? as show_votes_of_others", insert.ShowVotesOfOthers).
+		//ColumnExpr("? as show_votes_of_others", insert.ShowVotesOfOthers).
 		ColumnExpr("? as allow_multiple_votes", insert.AllowMultipleVotes).
+		ColumnExpr("? as is_anonymous", insert.IsAnonymous).
 		ColumnExpr("?::voting_status as status", insert.Status).
 		Where("(SELECT count FROM \"countOpenVotings\") = 0")
 
@@ -68,7 +71,7 @@ func (d *Database) CreateVoting(insert VotingInsert) (Voting, error) {
 		With("_values", values).
 		Model(&insert).
 		TableExpr("_values").
-		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status").
+		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status", "is_anonymous").
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
 	return voting, err

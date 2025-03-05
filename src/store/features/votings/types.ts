@@ -7,7 +7,8 @@ export interface Voting {
   id: string;
   voteLimit: number;
   allowMultipleVotes: boolean;
-  showVotesOfOthers: boolean;
+  // FshowVotesOfOthers: boolean;
+  isAnonymous: boolean;
   status: VotingStatus;
   votes?: {
     total: number;
@@ -26,7 +27,8 @@ export interface Voting {
 export interface CreateVotingRequest {
   voteLimit: number;
   allowMultipleVotes: boolean;
-  showVotesOfOthers: boolean;
+  // showVotesOfOthers: boolean;
+  isAnonymous: boolean;
 }
 
 export interface VotingsState {

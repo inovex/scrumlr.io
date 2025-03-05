@@ -13,9 +13,11 @@ func (v *Voting) From(voting database.Voting, votes []database.Vote) *Voting {
 	v.ID = voting.ID
 	v.VoteLimit = voting.VoteLimit
 	v.AllowMultipleVotes = voting.AllowMultipleVotes
-	v.ShowVotesOfOthers = voting.ShowVotesOfOthers
+	//v.ShowVotesOfOthers = voting.ShowVotesOfOthers
 	v.Status = voting.Status
 	v.VotingResults = getVotingWithResults(voting, votes)
+	v.IsAnonymous = voting.IsAnonymous
+
 	return v
 }
 
@@ -91,7 +93,7 @@ func getVotingWithResults(voting database.Voting, votes []database.Vote) *Voting
 		result := VotingResultsPerNote{
 			Total: total,
 		}
-		if voting.ShowVotesOfOthers {
+		if !voting.IsAnonymous {
 			userVotes := map[uuid.UUID]int{}
 			for _, user := range votesPerUser[note] {
 				if _, ok := userVotes[user]; ok {
