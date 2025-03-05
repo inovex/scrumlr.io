@@ -1,41 +1,32 @@
-package database
+package reactions
 
 import (
 	"context"
 	"errors"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 )
 
-type Reaction struct {
-	bun.BaseModel `bun:"table:reactions"`
-	ID            uuid.UUID
-	Note          uuid.UUID
-	User          uuid.UUID
-	ReactionType  types.Reaction
+type DB struct {
+	db *bun.DB
 }
 
-type ReactionInsert struct {
-	bun.BaseModel `bun:"table:reactions"`
-	Note          uuid.UUID
-	User          uuid.UUID
-	ReactionType  types.Reaction
-}
+func NewReactionsDatabase(database *bun.DB) ReactionDatabase {
+	db := new(DB)
+	db.db = database
 
-type ReactionUpdate struct {
-	bun.BaseModel `bun:"table:reactions"`
-	ReactionType  types.Reaction
+	return db
 }
 
 // GetReaction gets a specific Reaction
-func (d *Database) GetReaction(id uuid.UUID) (Reaction, error) {
-	var reaction Reaction
+func (d *DB) GetReaction(id uuid.UUID) (DatabaseReaction, error) {
+	var reaction DatabaseReaction
 	err := d.db.
 		NewSelect().
-		Model((*Reaction)(nil)).
+		Model((*DatabaseReaction)(nil)).
 		Where("id = ?", id).
 		Scan(context.Background(), &reaction)
 	return reaction, err
@@ -44,8 +35,8 @@ func (d *Database) GetReaction(id uuid.UUID) (Reaction, error) {
 // GetReactions gets all reactions for a specific board
 // query:
 // SELECT r.* FROM reactions r JOIN notes n ON r.note = n.id WHERE n.board = ?;
-func (d *Database) GetReactions(board uuid.UUID) ([]Reaction, error) {
-	var reactions []Reaction
+func (d *DB) GetReactions(board uuid.UUID) ([]DatabaseReaction, error) {
+	var reactions []DatabaseReaction
 	err := d.db.
 		NewSelect().
 		Model(&reactions).
@@ -56,8 +47,8 @@ func (d *Database) GetReactions(board uuid.UUID) ([]Reaction, error) {
 }
 
 // GetReactionsForNote gets all reactions for a specific note
-func (d *Database) GetReactionsForNote(note uuid.UUID) ([]Reaction, error) {
-	var reactions []Reaction
+func (d *DB) GetReactionsForNote(note uuid.UUID) ([]DatabaseReaction, error) {
+	var reactions []DatabaseReaction
 	err := d.db.
 		NewSelect().
 		Model(&reactions).
@@ -68,19 +59,19 @@ func (d *Database) GetReactionsForNote(note uuid.UUID) ([]Reaction, error) {
 }
 
 // CreateReaction inserts a new reaction
-func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (Reaction, error) {
+func (d *DB) CreateReaction(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error) {
 	var currentNoteReactions, err = d.GetReactionsForNote(insert.Note)
 	if err != nil {
-		return Reaction{}, err
+		return DatabaseReaction{}, err
 	}
 	// check if user has already made a reaction on this note
 	for _, r := range currentNoteReactions {
 		if r.User == insert.User {
-			return Reaction{}, errors.New("cannot make multiple reactions on the same note by the same user")
+			return DatabaseReaction{}, errors.New("cannot make multiple reactions on the same note by the same user")
 		}
 	}
 
-	var reaction Reaction
+	var reaction DatabaseReaction
 	_, err = d.db.NewInsert().
 		Model(&insert).
 		Returning("*").
@@ -90,7 +81,7 @@ func (d *Database) CreateReaction(board uuid.UUID, insert ReactionInsert) (React
 }
 
 // RemoveReaction deletes a reaction
-func (d *Database) RemoveReaction(board, user, id uuid.UUID) error {
+func (d *DB) RemoveReaction(board, user, id uuid.UUID) error {
 	var r, err = d.GetReaction(id)
 	if err != nil {
 		return err
@@ -99,7 +90,7 @@ func (d *Database) RemoveReaction(board, user, id uuid.UUID) error {
 		return common.ForbiddenError(errors.New("forbidden"))
 	}
 	_, err = d.db.NewDelete().
-		Model((*Reaction)(nil)).
+		Model((*DatabaseReaction)(nil)).
 		Where("id = ?", id).
 		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, board, identifiers.ReactionIdentifier, id))
 
@@ -107,16 +98,16 @@ func (d *Database) RemoveReaction(board, user, id uuid.UUID) error {
 }
 
 // UpdateReaction updates the reaction type
-func (d *Database) UpdateReaction(board, user, id uuid.UUID, update ReactionUpdate) (Reaction, error) {
+func (d *DB) UpdateReaction(board, user, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
 	var r, err = d.GetReaction(id)
 	if err != nil {
-		return Reaction{}, err
+		return DatabaseReaction{}, err
 	}
 	if r.User != user {
-		return Reaction{}, common.ForbiddenError(errors.New("forbidden"))
+		return DatabaseReaction{}, common.ForbiddenError(errors.New("forbidden"))
 	}
 
-	var reaction Reaction
+	var reaction DatabaseReaction
 	_, err = d.db.
 		NewUpdate().
 		Model(&reaction).

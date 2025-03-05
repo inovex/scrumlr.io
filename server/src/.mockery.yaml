@@ -1,3 +1,4 @@
+---
 with-expecter: true
 dir: mocks/{{ replaceAll .InterfaceDirRelative "internal" "internal_" }}
 mockname: "Mock{{.InterfaceName}}"
@@ -17,4 +18,17 @@ packages:
       Notes:
         all: true
       Votings:
+        all: true
+  scrumlr.io/server/realtime:
+    interfaces:
+      Client:
+        all: true
+  scrumlr.io/server/reactions:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      ReactionService:
+        all: true
+      ReactionDatabase:
         all: true

@@ -1,9 +1,10 @@
 package database
 
 import (
-	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/database/types"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"scrumlr.io/server/reactions"
 )
 
 func TestRunnerForReactions(t *testing.T) {
@@ -27,8 +28,8 @@ var reactionUserJay *User
 var reactionUserJack *User
 
 func testGetReaction(t *testing.T) {
-	reaction := fixture.MustRow("Reaction.reactionA").(*Reaction)
-	r, err := testDb.GetReaction(reaction.ID)
+	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
+	r, err := reactionDb.GetReaction(reaction.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, reaction.ID, r.ID)
@@ -39,7 +40,7 @@ func testGetReaction(t *testing.T) {
 
 func testGetReactionsForNote(t *testing.T) {
 	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
-	r, err := testDb.GetReactionsForNote(notesTestA1.ID)
+	r, err := reactionDb.GetReactionsForNote(notesTestA1.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(r))
@@ -47,7 +48,7 @@ func testGetReactionsForNote(t *testing.T) {
 
 func testGetReactions(t *testing.T) {
 	boardTestBoard = fixture.MustRow("Board.notesTestBoard").(*Board)
-	r, err := testDb.GetReactions(boardTestBoard.ID)
+	r, err := reactionDb.GetReactions(boardTestBoard.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(r))
@@ -58,16 +59,16 @@ func testCreateReaction(t *testing.T) {
 	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
 	reactionUserJay = fixture.MustRow("User.jay").(*User)
 
-	reaction, err := testDb.CreateReaction(boardTestBoard.ID, ReactionInsert{
+	reaction, err := reactionDb.CreateReaction(boardTestBoard.ID, reactions.DatabaseReactionInsert{
 		Note:         notesTestA1.ID,
 		User:         reactionUserJay.ID,
-		ReactionType: types.ReactionLike,
+		ReactionType: reactions.ReactionLike,
 	})
 
 	assert.Nil(t, err)
 	assert.Equal(t, notesTestA1.ID, reaction.Note)
 	assert.Equal(t, reactionUserJay.ID, reaction.User)
-	assert.Equal(t, types.ReactionLike, reaction.ReactionType)
+	assert.Equal(t, reactions.ReactionLike, reaction.ReactionType)
 }
 
 func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
@@ -75,10 +76,10 @@ func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
 	reactionUserJack = fixture.MustRow("User.jack").(*User)
 
-	_, err := testDb.CreateReaction(boardTestBoard.ID, ReactionInsert{
+	_, err := reactionDb.CreateReaction(boardTestBoard.ID, reactions.DatabaseReactionInsert{
 		Note:         notesTestA1.ID,
 		User:         reactionUserJack.ID,
-		ReactionType: types.ReactionLike,
+		ReactionType: reactions.ReactionLike,
 	})
 
 	assert.NotNil(t, err)
@@ -86,12 +87,12 @@ func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 }
 
 func testUpdateReaction(t *testing.T) {
-	newReactionType := types.ReactionCelebration
+	newReactionType := reactions.ReactionCelebration
 	board := fixture.MustRow("Board.notesTestBoard").(*Board) // cannot reuse vars here
 	user := fixture.MustRow("User.jack").(*User)
-	reaction := fixture.MustRow("Reaction.reactionA").(*Reaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	r, err := testDb.UpdateReaction(board.ID, user.ID, reaction.ID, ReactionUpdate{
+	r, err := reactionDb.UpdateReaction(board.ID, user.ID, reaction.ID, reactions.DatabaseReactionUpdate{
 		ReactionType: newReactionType,
 	})
 
@@ -102,12 +103,12 @@ func testUpdateReaction(t *testing.T) {
 }
 
 func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
-	newReactionType := types.ReactionCelebration
+	newReactionType := reactions.ReactionCelebration
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
 	wrongUser := fixture.MustRow("User.jane").(*User)
-	reaction := fixture.MustRow("Reaction.reactionA").(*Reaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	_, err := testDb.UpdateReaction(board.ID, wrongUser.ID, reaction.ID, ReactionUpdate{
+	_, err := reactionDb.UpdateReaction(board.ID, wrongUser.ID, reaction.ID, reactions.DatabaseReactionUpdate{
 		ReactionType: newReactionType,
 	})
 
@@ -119,9 +120,9 @@ func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
 func testDeleteReaction(t *testing.T) {
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
-	reaction := fixture.MustRow("Reaction.reactionB").(*Reaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionB").(*reactions.DatabaseReaction)
 
-	err := testDb.RemoveReaction(board.ID, user.ID, reaction.ID)
+	err := reactionDb.RemoveReaction(board.ID, user.ID, reaction.ID)
 
 	assert.Nil(t, err)
 }
@@ -129,9 +130,9 @@ func testDeleteReaction(t *testing.T) {
 func testDeleteReactionFailsBecauseForbidden(t *testing.T) {
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
 	wrongUser := fixture.MustRow("User.jane").(*User)
-	reaction := fixture.MustRow("Reaction.reactionA").(*Reaction)
+	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	err := testDb.RemoveReaction(board.ID, wrongUser.ID, reaction.ID)
+	err := reactionDb.RemoveReaction(board.ID, wrongUser.ID, reaction.ID)
 
 	assert.NotNil(t, err)
 	assert.Error(t, err)

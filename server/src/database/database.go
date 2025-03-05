@@ -1,18 +1,16 @@
 package database
 
 import (
-	"database/sql"
-	"runtime"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/pgdialect"
-	"github.com/uptrace/bun/extra/bundebug"
+
+	"scrumlr.io/server/reactions"
 )
 
 // Database is the main class within this package and will be extended by several receiver functions
 type Database struct {
-	db *bun.DB
+	db          *bun.DB
+	reactionsDb reactions.ReactionDatabase
 }
 
 type FullBoard struct {
@@ -21,24 +19,16 @@ type FullBoard struct {
 	BoardSessionRequests []BoardSessionRequest
 	Columns              []Column
 	Notes                []Note
-	Reactions            []Reaction
+	Reactions            []reactions.DatabaseReaction
 	Votings              []Voting
 	Votes                []Vote
 }
 
 // New creates a new instance of Database
-func New(db *sql.DB, verbose bool) *Database {
+func New(db *bun.DB) *Database {
 	d := new(Database)
-	d.db = bun.NewDB(db, pgdialect.New())
-
-	// configuration of database
-	maxOpenConnections := 4 * runtime.GOMAXPROCS(0)
-	d.db.SetMaxOpenConns(maxOpenConnections)
-	d.db.SetMaxIdleConns(maxOpenConnections)
-
-	if verbose {
-		d.db.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
-	}
+	d.db = db
+	d.reactionsDb = reactions.NewReactionsDatabase(db) //TODO remove
 
 	return d
 }
@@ -50,7 +40,7 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		requests  []BoardSessionRequest
 		columns   []Column
 		notes     []Note
-		reactions []Reaction
+		reactions []reactions.DatabaseReaction
 		votings   []Voting
 		votes     []Vote
 		err       error
@@ -82,7 +72,7 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getNotes:
 			notes, err = d.GetNotes(id)
 		case getReactions:
-			reactions, err = d.GetReactions(id)
+			reactions, err = d.reactionsDb.GetReactions(id)
 		case getVotings:
 			votings, votes, err = d.GetVotings(id)
 		}

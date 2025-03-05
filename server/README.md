@@ -46,14 +46,40 @@ to see our debug client. We'll disable it once everything got stable.
 ## Testing and Mockery
 
 At a certain point, it is more convenient to use a framework to generate mocks for interfaces.
-This is where the use of Mockery comes into play (https://vektra.github.io/mockery/latest/installation/).
-Depending on the operating system (macOS via Homebrew),
-install Mockery and run it in the directory with .mockery.yaml (mockery). The mocks in the mocks directory will be automatically regenerated.
+This is where the use of [Mockery](https://vektra.github.io/mockery/latest/) comes into play.
+
+### Install
+
+#### MacOS
+
+On macOs install mockery via Homebrew like it is described in th [installation docs](https://vektra.github.io/mockery/latest/installation/).
+
+```bash
+brew install mockery
+brew upgrade mockery
+```
+
+#### Linux
+
+For Linux ownload the latest release from the [github release page](https://github.com/vektra/mockery/releases) for your system.
+After that unpack the downloaded file and copy it to `/usr/local/bin`
+
+```bash
+tar -C /usr/local/bin -xzf <mockery.tar.gz>
+```
+
+*Note*: you may need to run this as sudo
+
+### Run
+
+After you installed mockery you can run it in the `src` directory.
 
 ```bash
 # switch to src directory
+cd src
 # and just run mockery to refresh the mocks
 mockery
 ```
 
-Configuration of mockery is described in the .mockery.yaml file.
+This will create the mocks if they do not exists or will refresh them if they exists.
+Mockery is configured via the [.mockery.yaml](./src/.mockery.yaml) file in the `src` directory.
