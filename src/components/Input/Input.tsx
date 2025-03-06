@@ -1,7 +1,7 @@
 import {Dispatch, FormEvent, SetStateAction, useRef, useState} from "react";
 import classNames from "classnames";
-import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
-import {ReactComponent as ClearIcon} from "assets/icons/close.svg";
+import {ReactComponent as IconSearch} from "assets/icons/search.svg";
+import {ReactComponent as IconClear} from "assets/icons/close.svg";
 import {ReactComponent as IconVisible} from "assets/icons/visible.svg";
 import {ReactComponent as IconHidden} from "assets/icons/hidden.svg";
 import {ReactComponent as IconError} from "assets/icons/warning.svg";
@@ -73,7 +73,7 @@ export const Input = (props: SearchBarProps) => {
     }
     return (
       <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
-        <ClearIcon className="input__icon" aria-label="clear input" />
+        <IconClear className="input__icon" aria-label="clear input" />
       </div>
     );
   };
@@ -94,7 +94,7 @@ export const Input = (props: SearchBarProps) => {
       >
         {props.type === "search" && (
           <div className="input__icon-container input__icon-container--search-icon">
-            <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />
+            <IconSearch className="input__icon" aria-label="logo of magnifying glass" />
           </div>
         )}
         <input
