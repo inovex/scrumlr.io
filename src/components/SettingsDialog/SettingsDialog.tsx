@@ -102,7 +102,9 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
       >
         {Icon === "profile" ? <Avatar seed={me?.id} avatar={me?.avatar} className="navigation-item__icon" /> : <Icon className="navigation-item__icon" />}
         <div className="navigation-item__content">
-          <p className="navigation-item__name">{menuEntry.value.localizationKey === "Profile" ? me?.name : t(`SettingsDialog.${menuEntry.value.localizationKey}`)}</p>
+          <p data-clarity-mask={menuEntry.value.localizationKey === "Profile" ? "True" : "False"} className="navigation-item__name">
+            {menuEntry.value.localizationKey === "Profile" ? me?.name : t(`SettingsDialog.${menuEntry.value.localizationKey}`)}
+          </p>
           <p className="navigation-item__description">{t(`SettingsDialog.${menuEntry.value.localizationKey}Description`)}</p>
         </div>
       </Link>

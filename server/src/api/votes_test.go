@@ -9,6 +9,7 @@ import (
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/mocks/services"
 	"strings"
 	"testing"
 
@@ -27,48 +28,26 @@ func TestVoteTestSuite(t *testing.T) {
 
 func (suite *VoteTestSuite) TestAddVote() {
 
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "all ok",
-			expectedCode: http.StatusCreated,
-		},
-		{
-			name:         "specific error",
-			expectedCode: http.StatusTeapot,
-			err: &common.APIError{
-				Err:        errors.New("check"),
-				StatusCode: http.StatusTeapot,
-				StatusText: "teapot",
-				ErrorText:  "Error",
-			},
-		},
-		{
-			name:         "unexpected error",
-			expectedCode: http.StatusInternalServerError,
-			err:          errors.New("teapot?"),
-		},
-	}
-	for _, tt := range tests {
+	testParameterBundles := *TestParameterBundles{}.
+		Append("all ok", http.StatusCreated, nil, false, false, nil).
+		Append("specific error", http.StatusTeapot, &common.APIError{
+			Err:        errors.New("check"),
+			StatusCode: http.StatusTeapot,
+			StatusText: "teapot",
+			ErrorText:  "Error",
+		}, false, false, nil).
+		Append("unexpected error", http.StatusInternalServerError, errors.New("teapot?"), false, false, nil)
+
+	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			mock := new(VotingMock)
+			votingMock := services.NewMockVotings(suite.T())
 
 			boardId, _ := uuid.NewRandom()
 			userId, _ := uuid.NewRandom()
 			noteId, _ := uuid.NewRandom()
-			mock.On("AddVote", dto.VoteRequest{
-				Board: boardId,
-				User:  userId,
-				Note:  noteId,
-			}).Return(&dto.Vote{
-				Note: noteId,
-			}, tt.err)
 
-			s.votings = mock
+			s.votings = votingMock
 
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"note": "%s"
@@ -77,10 +56,18 @@ func (suite *VoteTestSuite) TestAddVote() {
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
+			votingMock.EXPECT().AddVote(req.req.Context(), dto.VoteRequest{
+				Board: boardId,
+				User:  userId,
+				Note:  noteId,
+			}).Return(&dto.Vote{
+				Note: noteId,
+			}, tt.err)
+
 			rr := httptest.NewRecorder()
 			s.addVote(rr, req.Request())
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
+			votingMock.AssertExpectations(suite.T())
 		})
 	}
 

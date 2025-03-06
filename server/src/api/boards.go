@@ -6,6 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
 	"strconv"
 
 	"scrumlr.io/server/identifiers"
@@ -35,7 +38,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 
 	b, err := s.boards.Create(r.Context(), body)
 	if err != nil {
-		common.Throw(w, r, common.BadRequestError(err))
+		common.Throw(w, r, err)
 		return
 	}
 
@@ -315,14 +318,14 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	visibleColumns := []*dto.Column{}
+	visibleColumns := make([]*columns.Column, 0)
 	for _, column := range fullBoard.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 		}
 	}
 
-	visibleNotes := []*dto.Note{}
+	visibleNotes := make([]*notes.Note, 0)
 	for _, note := range fullBoard.Notes {
 		for _, column := range visibleColumns {
 			if note.Position.Column == column.ID {
@@ -336,9 +339,9 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		render.Respond(w, r, struct {
 			Board        *dto.Board          `json:"board"`
 			Participants []*dto.BoardSession `json:"participants"`
-			Columns      []*dto.Column       `json:"columns"`
-			Notes        []*dto.Note         `json:"notes"`
-			Votings      []*dto.Voting       `json:"votings"`
+			Columns      []*columns.Column   `json:"columns"`
+			Notes        []*notes.Note       `json:"notes"`
+			Votings      []*votes.Voting     `json:"votings"`
 		}{
 			Board:        fullBoard.Board,
 			Participants: fullBoard.BoardSessions,
@@ -459,11 +462,11 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type ParentChildNotes struct {
-		Parent   dto.Note
-		Children []dto.Note
+		Parent   notes.Note
+		Children []notes.Note
 	}
-	parentNotes := make(map[uuid.UUID]dto.Note)
-	childNotes := make(map[uuid.UUID][]dto.Note)
+	parentNotes := make(map[uuid.UUID]notes.Note)
+	childNotes := make(map[uuid.UUID][]notes.Note)
 
 	for _, note := range body.Notes {
 		if !note.Position.Stack.Valid {
@@ -480,7 +483,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 				note, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
 					Text: parentNote.Text,
-					Position: dto.NotePosition{
+					Position: notes.NotePosition{
 						Column: cols[i].ID,
 						Stack:  uuid.NullUUID{},
 						Rank:   0,
@@ -508,7 +511,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 				Text:  note.Text,
 				Board: b.ID,
 				User:  note.Author,
-				Position: dto.NotePosition{
+				Position: notes.NotePosition{
 					Column: node.Parent.Position.Column,
 					Rank:   note.Position.Rank,
 					Stack: uuid.NullUUID{

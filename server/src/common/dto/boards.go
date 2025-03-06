@@ -4,9 +4,14 @@ import (
 	"net/http"
 	"time"
 
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/reactions"
 )
 
 // Board is the response for all board requests.
@@ -145,19 +150,19 @@ type BoardOverview struct {
 
 type ImportBoardRequest struct {
 	Board   *CreateBoardRequest `json:"board"`
-	Columns []Column            `json:"columns"`
-	Notes   []Note              `json:"notes"`
-	Votings []Voting            `json:"votings"`
+	Columns []columns.Column    `json:"columns"`
+	Notes   []notes.Note        `json:"notes"`
+	Votings []votes.Voting      `json:"votings"`
 }
 
 type FullBoard struct {
 	Board                *Board                 `json:"board"`
 	BoardSessionRequests []*BoardSessionRequest `json:"requests"`
 	BoardSessions        []*BoardSession        `json:"participants"`
-	Columns              []*Column              `json:"columns"`
-	Notes                []*Note                `json:"notes"`
-	Reactions            []*Reaction            `json:"reactions"`
-	Votings              []*Voting              `json:"votings"`
+	Columns              []*columns.Column      `json:"columns"`
+	Notes                []*notes.Note          `json:"notes"`
+	Reactions            []*reactions.Reaction  `json:"reactions"`
+	Votings              []*votes.Voting        `json:"votings"`
 	Votes                []*Vote                `json:"votes"`
 }
 
@@ -165,10 +170,10 @@ func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
 	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
 	dtoFullBoard.BoardSessionRequests = BoardSessionRequests(dbFullBoard.BoardSessionRequests)
 	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions)
-	dtoFullBoard.Columns = Columns(dbFullBoard.Columns)
-	dtoFullBoard.Notes = Notes(dbFullBoard.Notes)
-	dtoFullBoard.Reactions = Reactions(dbFullBoard.Reactions)
-	dtoFullBoard.Votings = Votings(dbFullBoard.Votings, dbFullBoard.Votes)
+	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
+	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
+	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)
+	dtoFullBoard.Votings = votes.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
 	dtoFullBoard.Votes = Votes(dbFullBoard.Votes)
 	return dtoFullBoard
 }

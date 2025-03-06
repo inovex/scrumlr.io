@@ -6,10 +6,9 @@ exports[`Note Input should render correctly 1`] = `
 >
   <textarea
     class="note-input__input"
+    data-clarity-mask="True"
     maxlength="1024"
     placeholder="Add your note..."
-    rows="1"
-    style="overflow-x: hidden; word-wrap: break-word; overflow-y: hidden;"
   />
   <div
     class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"

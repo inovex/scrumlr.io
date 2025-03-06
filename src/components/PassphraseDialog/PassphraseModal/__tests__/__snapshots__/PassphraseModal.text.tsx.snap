@@ -110,7 +110,7 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
         <span
           class="button__label"
         >
-          Ohne Passwort fortfahren
+          Continue without password
         </span>
       </button>
     </div>

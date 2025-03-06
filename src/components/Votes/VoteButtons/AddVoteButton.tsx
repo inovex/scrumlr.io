@@ -5,13 +5,12 @@ import {Plus} from "components/Icon";
 import "./AddVoteButton.scss";
 import {useAppDispatch} from "store";
 import {addVote} from "store/features";
+import classNames from "classnames";
+import {needsHighContrast} from "constants/colors";
 
-type AddVoteProps = {
-  noteId: string;
-  disabled: boolean;
-};
+type AddVoteProps = {noteId: string; disabled: boolean; disabledReason?: string; colorClassName?: string};
 
-export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled}) => {
+export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled, disabledReason, colorClassName}) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
@@ -20,7 +19,13 @@ export const AddVoteButton: FC<AddVoteProps> = ({noteId, disabled}) => {
   };
 
   return (
-    <DotButton title={t("Votes.AddVote")} className="vote-button-add" onClick={dispatchAddVote} disabled={disabled}>
+    <DotButton
+      className={classNames("vote-button-add", {"vote-button-add--high-contrast": needsHighContrast(colorClassName)})}
+      onClick={dispatchAddVote}
+      disabled={disabled}
+      dataTooltipId="scrumlr-tooltip"
+      dataTooltipContent={!disabled ? t("Votes.AddVote") : disabledReason}
+    >
       <Plus className="vote-button-add__icon" />
     </DotButton>
   );

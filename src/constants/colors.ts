@@ -19,3 +19,6 @@ export const getRandomColor = () => getColorForIndex(Math.floor(Math.random() * 
 // assuming the array is like a rainbow spectrum
 export const getNextColor = (color: Color) => getColorForIndex(getColorIndex(color), 1);
 export const getPreviousColor = (color: Color) => getColorForIndex(getColorIndex(color), -1);
+
+export const needsHighContrast = (color: string | undefined): boolean =>
+  color !== undefined && [getColorClassName("backlog-blue"), getColorClassName("value-violet")].includes(color);

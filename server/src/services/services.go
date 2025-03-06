@@ -3,6 +3,10 @@ package services
 import (
 	"context"
 
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
@@ -35,11 +39,11 @@ type Boards interface {
 	DeleteTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error)
 	IncrementTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error)
 
-	CreateColumn(ctx context.Context, body dto.ColumnRequest) (*dto.Column, error)
+	CreateColumn(ctx context.Context, body dto.ColumnRequest) (*columns.Column, error)
 	DeleteColumn(ctx context.Context, board, column, user uuid.UUID) error
-	UpdateColumn(ctx context.Context, body dto.ColumnUpdateRequest) (*dto.Column, error)
-	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*dto.Column, error)
-	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*dto.Column, error)
+	UpdateColumn(ctx context.Context, body dto.ColumnUpdateRequest) (*columns.Column, error)
+	GetColumn(ctx context.Context, boardID, columnID uuid.UUID) (*columns.Column, error)
+	ListColumns(ctx context.Context, boardID uuid.UUID) ([]*columns.Column, error)
 
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error)
 	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error)
@@ -67,27 +71,19 @@ type BoardSessions interface {
 }
 
 type Notes interface {
-	Create(ctx context.Context, body dto.NoteCreateRequest) (*dto.Note, error)
-	Import(ctx context.Context, body dto.NoteImportRequest) (*dto.Note, error)
-	Get(ctx context.Context, id uuid.UUID) (*dto.Note, error)
-	Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error)
-	List(ctx context.Context, id uuid.UUID) ([]*dto.Note, error)
+	Create(ctx context.Context, body dto.NoteCreateRequest) (*notes.Note, error)
+	Import(ctx context.Context, body dto.NoteImportRequest) (*notes.Note, error)
+	Get(ctx context.Context, id uuid.UUID) (*notes.Note, error)
+	Update(ctx context.Context, body dto.NoteUpdateRequest) (*notes.Note, error)
+	List(ctx context.Context, id uuid.UUID) ([]*notes.Note, error)
 	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
 }
 
-type Reactions interface {
-	Get(ctx context.Context, id uuid.UUID) (*dto.Reaction, error)
-	List(ctx context.Context, boardID uuid.UUID) ([]*dto.Reaction, error)
-	Create(ctx context.Context, board uuid.UUID, body dto.ReactionCreateRequest) (*dto.Reaction, error)
-	Delete(ctx context.Context, board, user, id uuid.UUID) error
-	Update(ctx context.Context, board, user, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error)
-}
-
 type Votings interface {
-	Create(ctx context.Context, body dto.VotingCreateRequest) (*dto.Voting, error)
-	Update(ctx context.Context, body dto.VotingUpdateRequest) (*dto.Voting, error)
-	Get(ctx context.Context, board, id uuid.UUID) (*dto.Voting, error)
-	List(ctx context.Context, board uuid.UUID) ([]*dto.Voting, error)
+	Create(ctx context.Context, body votes.VotingCreateRequest) (*votes.Voting, error)
+	Update(ctx context.Context, body votes.VotingUpdateRequest) (*votes.Voting, error)
+	Get(ctx context.Context, board, id uuid.UUID) (*votes.Voting, error)
+	List(ctx context.Context, board uuid.UUID) ([]*votes.Voting, error)
 
 	AddVote(ctx context.Context, req dto.VoteRequest) (*dto.Vote, error)
 	RemoveVote(ctx context.Context, req dto.VoteRequest) error

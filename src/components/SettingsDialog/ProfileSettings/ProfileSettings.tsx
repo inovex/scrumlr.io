@@ -33,6 +33,7 @@ export const ProfileSettings = () => {
       <div className="profile-settings__container-wrapper">
         <div className="profile-settings__container">
           <SettingsInput
+            data-clarity-mask="True"
             id="profileSettingsUserName"
             label={t("ProfileSettings.UserName")}
             value={userName}
