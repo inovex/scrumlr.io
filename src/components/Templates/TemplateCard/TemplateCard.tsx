@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
-import TextareaAutosize from "react-autosize-textarea";
+import TextareaAutosize from "react-textarea-autosize";
 import {FavouriteButton} from "components/Templates";
 import {useAppDispatch} from "store";
 import {AccessPolicy, createBoardFromTemplate, deleteTemplate, setTemplateFavourite, TemplateWithColumns} from "store/features";
@@ -91,13 +91,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
         <div className="template-card__access-policy">{renderAccessPolicy(template.template.accessPolicy)}</div>
       </div>
       {renderMenu()}
-      <TextareaAutosize
-        className={classNames("template-card__description")}
-        value={template.template.description}
-        disabled
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
-      />
+      <TextareaAutosize className={classNames("template-card__description")} value={template.template.description} disabled />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>

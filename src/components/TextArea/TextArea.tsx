@@ -1,4 +1,4 @@
-import TextareaAutosize from "react-autosize-textarea";
+import TextareaAutosize from "react-textarea-autosize";
 import classNames from "classnames";
 import React, {Dispatch, FormEvent, SetStateAction} from "react";
 import "./TextArea.scss";
@@ -34,8 +34,6 @@ export const TextArea = (props: TextAreaProps) => {
       autoFocus={props.autoFocus}
       onFocus={props.onFocus}
       onBlur={props.onBlur}
-      onPointerEnterCapture={undefined}
-      onPointerLeaveCapture={undefined}
     />
   );
 };
