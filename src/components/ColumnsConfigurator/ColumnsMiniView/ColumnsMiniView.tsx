@@ -27,6 +27,7 @@ export const ColumnsMiniView = (props: ColumnsMiniViewProps) => {
     <div className={classNames(props.className, "columns-mini-view")}>
       {props.columns.map((column) => (
         <div
+          key={column.id}
           className={classNames(
             "columns-mini-view__column",
             {"columns-mini-view__column--hidden": !column.visible},
