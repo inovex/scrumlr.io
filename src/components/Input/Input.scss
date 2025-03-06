@@ -41,6 +41,7 @@ $padding--mobile: 12.5px $spacing--base;
     }
 
     &:has(.input__input:user-invalid) {
+      // could also check for a custom class with the hook error value here
       @include invalid-state($padding: $padding--default);
     }
   }
