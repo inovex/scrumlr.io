@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 
 enum ValidationErrorType {
   REQUIRED = "REQUIRED",
+  // additional error types can be added here
 }
 
 type ValidationOptions = {
@@ -11,44 +12,30 @@ type ValidationOptions = {
 
 type InputValidationResult = {errorType: ValidationErrorType | null; errorMessage: string};
 
-export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, options?: ValidationOptions, userInteracted?: boolean): InputValidationResult => {
+export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputValue: string, options?: ValidationOptions, userInteracted?: boolean): InputValidationResult => {
   const {t} = useTranslation();
   const [validationError, setValidationError] = useState<ValidationErrorType | null>(null);
 
   useEffect(() => {
-    const validateInput = () => {
-      if (!inputRef.current) return;
+    if (!inputRef.current) return;
 
-      const {current} = inputRef;
-      const {validity} = current;
+    const {current} = inputRef;
+    const {validity} = current;
 
-      // check if user interaction is required
-      if (options?.requireInteraction && !userInteracted) {
-        setValidationError(null);
-        return;
-      }
-      // validation (add as required)
-      if (validity.valueMissing) {
-        setValidationError(ValidationErrorType.REQUIRED);
-      } else {
-        setValidationError(null);
-      }
-    };
-
-    const inputElement = inputRef.current;
-
-    if (inputElement) {
-      inputElement.addEventListener("input", validateInput);
+    // check if user interaction is required
+    if (options?.requireInteraction && !userInteracted) {
+      // setValidationError(null);
+      return;
     }
 
-    validateInput();
-
-    return () => {
-      if (inputElement) {
-        inputElement.removeEventListener("input", validateInput);
-      }
-    };
-  }, [inputRef, options?.requireInteraction, userInteracted]);
+    // validate based on input value
+    if (validity.valueMissing) {
+      setValidationError(ValidationErrorType.REQUIRED);
+      // add more checks here
+    } else {
+      setValidationError(null);
+    }
+  }, [inputRef, inputValue, options?.requireInteraction, userInteracted]);
 
   const getErrorMessage = (): string => {
     if (!validationError) return "";
