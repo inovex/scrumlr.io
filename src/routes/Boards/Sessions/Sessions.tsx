@@ -36,7 +36,7 @@ export const Sessions = () => {
               {/* <SessionCard session={DEFAULT_SESSION} /> */}
               {sessions
                 .filter(
-                  (session) => session.name?.toLowerCase().includes(searchBarInput.toLowerCase()) || session.description?.toLowerCase().includes(searchBarInput.toLowerCase())
+                  (session) => session.board.name?.toLowerCase().includes(searchBarInput.toLowerCase()) || session.description?.toLowerCase().includes(searchBarInput.toLowerCase())
                 )
                 .map((session) => (
                   <SessionCard session={session} />

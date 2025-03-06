@@ -24,7 +24,7 @@ export const createBoardFromSession = createAsyncThunk<string, Session>(
   "board/createBoardFromSession",
   async (payload) =>
     // API.createBoard(payload.name, {type: payload.accessPolicy}, payload.columns)
-    API.openBoard(payload.id) // TODO: in openBoard muss ich mal sehen, wie ich ein get zu einem bestehenden board machen kann
+    API.openBoard(payload.board.id) // TODO: in openBoard muss ich mal sehen, wie ich ein get zu einem bestehenden board machen kann
   // API.joinBoard(payload.id);
 );
 

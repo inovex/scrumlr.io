@@ -48,7 +48,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
   // };
 
   const createBoard = () => {
-    dispatch(joinSession({boardId: session.id}))
+    dispatch(joinSession({boardId: session.board.id}))
       .unwrap()
       .then((boardId) => navigate(`/board/${boardId}`)); // TODO: this creates a new id each time, it should use the session id tho
   };
@@ -90,7 +90,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
     <div className="session-card">
       <FavouriteButton className="session-card__favourite" active={session.favourite} onClick={() => {}} />
       <div className={classNames("session-card__head")}>
-        <input className="session-card__title" type="text" value={session.name} disabled />
+        <input className="session-card__title" type="text" value={session.board.name} disabled />
       </div>
       {renderMenu()}
       <TextareaAutosize
@@ -102,7 +102,7 @@ export const SessionCard = ({session}: SessionCardProps) => {
       />
       <ColumnsIcon className={classNames("session-card__icon", "session-card__icon--columns")} />
       <div className="session-card__columns">
-        <div className="session-card__columns-title">{t("Sessions.SessionsCard.column", {count: session.columns.length})}</div>
+        <div className="session-card__columns-title">{t("Sessions.SessionsCard.column", {count: 3})}</div> {/* session.columns.length})}</div> TODO: remove hard coding */}
         <div className="session-card__columns-subtitle">
           {/* {session.columns */}
           {/*   .sort((a, b) => a.index - b.index) */}

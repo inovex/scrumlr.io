@@ -1,17 +1,35 @@
-import {AccessPolicy} from "../board";
+import {Board} from "../board";
 import {Column} from "../columns";
+import {Participant} from "../participants";
+import {Request} from "../requests";
+import {Note} from "../notes";
+import {Reaction} from "../reactions";
+import {Vote} from "../votes";
+import {Voting} from "../votings";
+
+// export type Session = {
+//   id: string; // UUID
+//   creator: string; // UUID
+//   name: string;
+//   description: string;
+//   accessPolicy: AccessPolicy;
+//   favourite: boolean;
+//   columns: Column[];
+// };
 
 export type Session = {
-  id: string; // UUID
-  creator: string; // UUID
-  name: string;
-  description: string;
-  accessPolicy: AccessPolicy;
-  favourite: boolean;
+  board: Board;
+  participants: Participant[];
+  requests: Request[];
   columns: Column[];
+  notes: Note[];
+  reactions: Reaction[];
+  votes: Vote[];
+  votings: Voting[];
+  favourite: boolean;
+  description: string; // TODO: do i find description in board type?
 };
 
-// TODO: which of these do I need?
 // export interface Board {
 //   id: string;
 //
@@ -28,19 +46,6 @@ export type Session = {
 //   sharedNote?: string;
 //   showVoting?: string;
 // }
-//
-// export type BoardImportData = {
-//   board: {
-//     name: string;
-//     description?: string;
-//     accessPolicy: string;
-//     passphrase?: string;
-//   };
-//   columns: Column[];
-//   notes: Note[];
-//   participants: Participant;
-//   voting: Voting;
-// };
 
 // used in store
 export type SessionsState = Session[];
