@@ -14,7 +14,7 @@ import {Tooltip} from "components/Tooltip";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import Plausible from "plausible-tracker";
-import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC} from "./config";
+import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID} from "./config";
 import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
 
@@ -47,6 +47,12 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
 }
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
+
+// If clarity ID is set and not empty in env variables, initialize Clarity
+if (CLARITY_ID && CLARITY_ID !== "") {
+  // TODO: tracking, including storing data using third party services has to be explicitly opt in!
+  // Clarity.init(CLARITY_ID);
+}
 
 root.render(
   <React.StrictMode>

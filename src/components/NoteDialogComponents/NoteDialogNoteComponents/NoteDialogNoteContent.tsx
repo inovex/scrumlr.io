@@ -11,7 +11,7 @@ import {createPortal} from "react-dom";
 import {Toast} from "utils/Toast";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
-import TextareaAutosize from "react-autosize-textarea";
+import TextareaAutosize from "react-textarea-autosize";
 import i18n from "../../../i18n";
 import "./NoteDialogNoteContent.scss";
 
@@ -101,6 +101,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       ) : (
         <>
           <TextareaAutosize
+            data-clarity-mask="True"
             className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
             disabled={!editable || (!isModerator && boardLocked)}
             onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
@@ -120,9 +121,6 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
                 e.stopPropagation();
               }
             }}
-            // required for some reason
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
           />
 
           {note?.edited && <div className="note-dialog__marker-edited">({t("Note.edited")})</div>}

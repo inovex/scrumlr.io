@@ -4,7 +4,7 @@ import {useTranslation} from "react-i18next";
 import {useHotkeys} from "react-hotkeys-hook";
 import {Toast} from "utils/Toast";
 import {useImageChecker} from "utils/hooks/useImageChecker";
-import TextareaAutosize from "react-autosize-textarea";
+import TextareaAutosize from "react-textarea-autosize";
 import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
@@ -70,6 +70,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
     >
       {!isModerator && boardLocked && <LockClosed className="note-input__lock-icon" />}
       <TextareaAutosize
+        data-clarity-mask="True"
         disabled={!isModerator && boardLocked}
         ref={noteInputRef}
         className="note-input__input"
@@ -90,9 +91,6 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
             e.currentTarget.blur();
           }
         }}
-        // required for some reason
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
       />
       <EmojiSuggestions {...emoji.suggestionsProps} />
       {isImage && (

@@ -4,12 +4,17 @@ import (
 	"context"
 	"net/http"
 
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
+
 	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 )
 
@@ -18,9 +23,9 @@ type BoardSubscription struct {
 	clients           map[uuid.UUID]*websocket.Conn
 	boardParticipants []*dto.BoardSession
 	boardSettings     *dto.Board
-	boardColumns      []*dto.Column
-	boardNotes        []*dto.Note
-	boardReactions    []*dto.Reaction
+	boardColumns      []*columns.Column
+	boardNotes        []*notes.Note
+	boardReactions    []*reactions.Reaction
 }
 
 type InitEvent struct {
@@ -30,10 +35,10 @@ type InitEvent struct {
 
 type EventData struct {
 	Board     *dto.Board                 `json:"board"`
-	Columns   []*dto.Column              `json:"columns"`
-	Notes     []*dto.Note                `json:"notes"`
-	Reactions []*dto.Reaction            `json:"reactions"`
-	Votings   []*dto.Voting              `json:"votings"`
+	Columns   []*columns.Column          `json:"columns"`
+	Notes     []*notes.Note              `json:"notes"`
+	Reactions []*reactions.Reaction      `json:"reactions"`
+	Votings   []*votes.Voting            `json:"votings"`
 	Votes     []*dto.Vote                `json:"votes"`
 	Sessions  []*dto.BoardSession        `json:"participants"`
 	Requests  []*dto.BoardSessionRequest `json:"requests"`
@@ -119,11 +124,11 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 	}
 }
 
-func (b *BoardSubscription) startListeningOnBoard() {
-	for msg := range b.subscription {
+func (bs *BoardSubscription) startListeningOnBoard() {
+	for msg := range bs.subscription {
 		logger.Get().Debugw("message received", "message", msg)
-		for id, conn := range b.clients {
-			filteredMsg := b.eventFilter(msg, id)
+		for id, conn := range bs.clients {
+			filteredMsg := bs.eventFilter(msg, id)
 			if err := conn.WriteJSON(filteredMsg); err != nil {
 				logger.Get().Warnw("failed to send message", "message", filteredMsg, "err", err)
 			}

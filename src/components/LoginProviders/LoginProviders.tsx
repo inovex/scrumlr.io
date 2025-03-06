@@ -1,6 +1,6 @@
 import {Auth} from "utils/auth";
 import {useTranslation} from "react-i18next";
-import {Google, Microsoft, OpenID} from "components/Icon";
+import {Apple, Azure, Google, Microsoft, OpenID} from "components/Icon";
 import {useAppSelector} from "store";
 import {LegacyButton} from "../Button";
 import "./LoginProviders.scss";
@@ -32,6 +32,16 @@ export const LoginProviders = ({originURL = window.location.href}) => {
         <LegacyButton id="microsoft" className="login-providers__button" onClick={signIn("microsoft")} leftIcon={<Microsoft className="login-providers__icon" />}>
           {t("LoginProviders.signInWithMicrosoft")}
         </LegacyButton>
+      )}
+      {providers.some((provider) => provider === "AZURE_AD") && (
+        <Button id="azure-ad" className="login-providers__button" onClick={signIn("azure_ad")} leftIcon={<Azure className="login-providers__icon" />}>
+          {t("LoginProviders.signInWithAzureAd")}
+        </Button>
+      )}
+      {providers.some((provider) => provider === "APPLE") && (
+        <Button id="apple" className="login-providers__button" onClick={signIn("apple")} leftIcon={<Apple className="login-providers__icon" />}>
+          {t("LoginProviders.signInWithApple")}
+        </Button>
       )}
       {providers.some((provider) => provider === "OIDC") && (
         <LegacyButton id="oidc" className="login-providers__button" onClick={signIn("oidc")} leftIcon={<OpenID className="login-providers__icon" />}>

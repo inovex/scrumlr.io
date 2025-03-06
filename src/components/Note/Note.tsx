@@ -105,10 +105,10 @@ export const Note = (props: NoteProps) => {
     >
       <div tabIndex={0} role="button" className={`note note--${stackSetting}`} onClick={handleClick} onKeyDown={handleKeyPress} ref={noteRef}>
         <header className="note__header">
-          <div className="note__author-container">
+          <div data-clarity-mask="True" className="note__author-container">
             <NoteAuthorList authors={authors} authorID={note.author} showAuthors={showAuthors} viewer={props.viewer} />
           </div>
-          <Votes noteId={props.noteId!} aggregateVotes />
+          <Votes noteId={props.noteId!} aggregateVotes colorClassName={props.colorClassName} />
         </header>
         {isImage ? (
           <div className="note__image-wrapper">
@@ -121,7 +121,7 @@ export const Note = (props: NoteProps) => {
           </div>
         ) : (
           <main className={classNames("note__container")}>
-            <div className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
+            <div data-clarity-mask="True" className={classNames("note__text", {"note__text--extended": !showNoteReactions})}>
               <NoteTextContent text={note.text} truncate />
             </div>
             {note.edited && <div className="note__marker-edited">({t("Note.edited")})</div>}

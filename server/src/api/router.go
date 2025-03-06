@@ -1,14 +1,16 @@
 package api
 
 import (
-	"github.com/markbates/goth/gothic"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/markbates/goth/gothic"
+
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
-	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	gorillaSessions "github.com/gorilla/sessions"
@@ -16,11 +18,9 @@ import (
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
-
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 type Server struct {
@@ -33,7 +33,7 @@ type Server struct {
 	votings        services.Votings
 	users          services.Users
 	notes          services.Notes
-	reactions      services.Reactions
+	reactions      reactions.ReactionService
 	sessions       services.BoardSessions
 	health         services.Health
 	feedback       services.Feedback
@@ -60,7 +60,7 @@ func New(
 	votings services.Votings,
 	users services.Users,
 	notes services.Notes,
-	reactions services.Reactions,
+	reactions reactions.ReactionService,
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,
@@ -171,7 +171,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 func (s *Server) protectedRoutes(r chi.Router) {
 	r.Group(func(r chi.Router) {
 		r.Use(s.auth.Verifier())
-		r.Use(jwtauth.Authenticator)
+		r.Use(s.auth.Authenticator())
 		r.Use(auth.AuthContext)
 
 		r.With(s.BoardTemplateRateLimiter).Post("/templates", s.createBoardTemplate)

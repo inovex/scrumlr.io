@@ -1,335 +1,260 @@
 package api
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"github.com/go-chi/chi/v5"
-	"github.com/google/uuid"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/suite"
-	"net/http"
-	"net/http/httptest"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/common/filter"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/services"
-	"strings"
-	"testing"
+  "bytes"
+  "encoding/json"
+  "errors"
+  "fmt"
+  "github.com/go-chi/chi/v5"
+  "github.com/google/uuid"
+  "github.com/stretchr/testify/mock"
+  "github.com/stretchr/testify/suite"
+  "net/http"
+  "net/http/httptest"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/common/dto"
+  "scrumlr.io/server/identifiers"
+  "scrumlr.io/server/logger"
+  "scrumlr.io/server/mocks/services"
+  "scrumlr.io/server/notes"
+  "strings"
+  "testing"
 )
 
-type NotesMock struct {
-	services.Notes
-	mock.Mock
-}
-
-func (m *NotesMock) Create(ctx context.Context, req dto.NoteCreateRequest) (*dto.Note, error) {
-	args := m.Called(req)
-	return args.Get(0).(*dto.Note), args.Error(1)
-}
-func (m *NotesMock) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) {
-	args := m.Called(id)
-	return args.Get(0).(*dto.Note), args.Error(1)
-}
-func (m *NotesMock) Delete(ctx context.Context, req dto.NoteDeleteRequest, id uuid.UUID) error {
-	args := m.Called(id)
-	return args.Error(0)
-
-}
-
-type BoardsMock struct {
-	services.Boards
-	mock.Mock
-}
-
-type SessionsMock struct {
-	mock.Mock
-}
-
-func (m *SessionsMock) SessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
-	args := m.Called(ctx, boardID, userID)
-	return args.Bool(0), args.Error(1)
-}
-
-func (m *SessionsMock) ParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
-	args := m.Called(ctx, boardID, userID)
-	return args.Bool(0), args.Error(1)
-}
-
-func (m *SessionsMock) Connect(ctx context.Context, boardID, userID uuid.UUID) error {
-	args := m.Called(ctx, boardID, userID)
-	return args.Error(0)
-}
-
-func (m *SessionsMock) Create(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSession, error) {
-	args := m.Called(ctx, boardID, userID)
-	return args.Get(0).(*dto.BoardSession), args.Error(1)
-}
-
-// Add other missing methods here
-func (m *SessionsMock) Get(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSession, error) {
-	args := m.Called(ctx, boardID, userID)
-	return args.Get(0).(*dto.BoardSession), args.Error(1)
-}
-
-func (m *SessionsMock) Update(ctx context.Context, body dto.BoardSessionUpdateRequest) (*dto.BoardSession, error) {
-	args := m.Called(ctx, body)
-	return args.Get(0).(*dto.BoardSession), args.Error(1)
-}
-
-func (m *SessionsMock) UpdateAll(ctx context.Context, body dto.BoardSessionsUpdateRequest) ([]*dto.BoardSession, error) {
-	args := m.Called(ctx, body)
-	return args.Get(0).([]*dto.BoardSession), args.Error(1)
-}
-
-func (m *SessionsMock) List(ctx context.Context, boardID uuid.UUID, f filter.BoardSessionFilter) ([]*dto.BoardSession, error) {
-	args := m.Called(ctx, boardID, f)
-	return args.Get(0).([]*dto.BoardSession), args.Error(1)
-}
-
-func (m *SessionsMock) Disconnect(ctx context.Context, boardID, userID uuid.UUID) error {
-	args := m.Called(ctx, boardID, userID)
-	return args.Error(0)
-}
-
-func (m *SessionsMock) GetSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSessionRequest, error) {
-	args := m.Called(ctx, boardID, userID)
-	return args.Get(0).(*dto.BoardSessionRequest), args.Error(1)
-}
-
-func (m *SessionsMock) CreateSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSessionRequest, error) {
-	args := m.Called(ctx, boardID, userID)
-	return args.Get(0).(*dto.BoardSessionRequest), args.Error(1)
-}
-
-func (m *SessionsMock) ListSessionRequest(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*dto.BoardSessionRequest, error) {
-	args := m.Called(ctx, boardID, statusQuery)
-	return args.Get(0).([]*dto.BoardSessionRequest), args.Error(1)
-}
-
-func (m *SessionsMock) UpdateSessionRequest(ctx context.Context, body dto.BoardSessionRequestUpdate) (*dto.BoardSessionRequest, error) {
-	args := m.Called(ctx, body)
-	return args.Get(0).(*dto.BoardSessionRequest), args.Error(1)
-}
-
-func (m *SessionsMock) ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
-	args := m.Called(ctx, boardID, userID)
-	return args.Bool(0), args.Error(1)
-}
-
-func (m *SessionsMock) SessionRequestExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
-	args := m.Called(ctx, boardID, userID)
-	return args.Bool(0), args.Error(1)
-}
-
-func (m *BoardsMock) Get(ctx context.Context, id uuid.UUID) (*dto.Board, error) {
-	args := m.Called(id)
-	return args.Get(0).(*dto.Board), args.Error(1)
-}
-
 type NotesTestSuite struct {
-	suite.Suite
+  suite.Suite
 }
 
 func TestNotesTestSuite(t *testing.T) {
-	suite.Run(t, new(NotesTestSuite))
+  suite.Run(t, new(NotesTestSuite))
 }
 
 func (suite *NotesTestSuite) TestCreateNote() {
 
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "all ok",
-			expectedCode: http.StatusCreated,
-		},
-		{
-			name:         "api err",
-			expectedCode: http.StatusConflict,
-			err: &common.APIError{
-				Err:        errors.New("test"),
-				StatusCode: http.StatusConflict,
-				StatusText: "no",
-				ErrorText:  "way",
-			},
-		},
-		{
-			name:         "unexpected err",
-			expectedCode: http.StatusInternalServerError,
-			err:          errors.New("oops"),
-		},
-	}
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
-			s := new(Server)
-			mock := new(NotesMock)
-			testText := "asdf"
+  testParameterBundles := *TestParameterBundles{}.
+    Append("all ok", http.StatusCreated, nil, false, false, nil).
+    Append("api err", http.StatusConflict, &common.APIError{
+      Err:        errors.New("test"),
+      StatusCode: http.StatusConflict,
+      StatusText: "no",
+      ErrorText:  "way",
+    }, false, false, nil).
+    Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
 
-			boardId, _ := uuid.NewRandom()
-			userId, _ := uuid.NewRandom()
-			colId, _ := uuid.NewRandom()
+  for _, tt := range testParameterBundles {
+    suite.Run(tt.name, func() {
+      s := new(Server)
+      noteMock := services.NewMockNotes(suite.T())
+      testText := "asdf"
 
-			mock.On("Create", dto.NoteCreateRequest{
-				Board:  boardId,
-				User:   userId,
-				Text:   testText,
-				Column: colId,
-			}).Return(&dto.Note{
-				Text: testText,
-			}, tt.err)
+      boardId, _ := uuid.NewRandom()
+      userId, _ := uuid.NewRandom()
+      colId, _ := uuid.NewRandom()
 
-			s.notes = mock
+      s.notes = noteMock
 
-			req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
+      req := NewTestRequestBuilder("POST", "/", strings.NewReader(fmt.Sprintf(`{
 				"column": "%s",
 				"text" : "%s"
 				}`, colId.String(), testText)))
+      req.req = logger.InitTestLoggerRequest(req.Request())
+      req.AddToContext(identifiers.BoardIdentifier, boardId).
+        AddToContext(identifiers.UserIdentifier, userId)
 
-			req.req = logger.InitTestLoggerRequest(req.Request())
+      noteMock.EXPECT().Create(req.req.Context(), dto.NoteCreateRequest{
+        Board:  boardId,
+        User:   userId,
+        Text:   testText,
+        Column: colId,
+      }).Return(&notes.Note{
+        Text: testText,
+      }, tt.err)
 
-			req.AddToContext(identifiers.BoardIdentifier, boardId).
-				AddToContext(identifiers.UserIdentifier, userId)
-			rr := httptest.NewRecorder()
+      rr := httptest.NewRecorder()
 
-			s.createNote(rr, req.Request())
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
-		})
-	}
+      s.createNote(rr, req.Request())
+      suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+      noteMock.AssertExpectations(suite.T())
+    })
+  }
 
 }
 func (suite *NotesTestSuite) TestGetNote() {
 
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-	}{
-		{
-			name:         "all ok",
-			expectedCode: http.StatusOK,
-		},
-		{
-			name:         "api err",
-			expectedCode: http.StatusConflict,
-			err: &common.APIError{
-				Err:        errors.New("foo"),
-				StatusCode: http.StatusConflict,
-				StatusText: "no",
-				ErrorText:  "way",
-			},
-		},
-		{
-			name:         "unexpected err",
-			expectedCode: http.StatusInternalServerError,
-			err:          errors.New("oops"),
-		},
-	}
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
-			s := new(Server)
-			mock := new(NotesMock)
-			s.notes = mock
+  testParameterBundles := *TestParameterBundles{}.
+    Append("all ok", http.StatusOK, nil, false, false, nil).
+    Append("api err", http.StatusConflict, &common.APIError{
+      Err:        errors.New("test"),
+      StatusCode: http.StatusConflict,
+      StatusText: "no",
+      ErrorText:  "way",
+    }, false, false, nil).
+    Append("unexpected err", http.StatusInternalServerError, errors.New("oops"), false, false, nil)
 
-			noteID, _ := uuid.NewRandom()
+  for _, tt := range testParameterBundles {
+    suite.Run(tt.name, func() {
+      s := new(Server)
+      noteMock := services.NewMockNotes(suite.T())
+      s.notes = noteMock
 
-			mock.On("Get", noteID).Return(&dto.Note{
-				ID: noteID,
-			}, tt.err)
+      noteID, _ := uuid.NewRandom()
 
-			req := NewTestRequestBuilder("GET", "/", nil).
-				AddToContext(identifiers.NoteIdentifier, noteID)
+      req := NewTestRequestBuilder("GET", "/", nil).
+        AddToContext(identifiers.NoteIdentifier, noteID)
 
-			rr := httptest.NewRecorder()
+      noteMock.EXPECT().Get(req.req.Context(), noteID).Return(&notes.Note{
+        ID: noteID,
+      }, tt.err)
 
-			s.getNote(rr, req.Request())
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			mock.AssertExpectations(suite.T())
-		})
-	}
+      rr := httptest.NewRecorder()
+
+      s.getNote(rr, req.Request())
+      suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+      noteMock.AssertExpectations(suite.T())
+    })
+  }
 }
 func (suite *NotesTestSuite) TestDeleteNote() {
-	tests := []struct {
-		name         string
-		expectedCode int
-		err          error
-		isLocked     bool
-	}{
-		{
-			name:         "Delete Note when board is unlocked",
-			expectedCode: http.StatusNoContent,
-			isLocked:     true,
-		},
-		{
-			name:         "Delete Note when board is locked",
-			expectedCode: http.StatusBadRequest,
-			err: &common.APIError{
-				Err:        errors.New("not allowed to edit a locked board"),
-				StatusCode: http.StatusBadRequest,
-				StatusText: "Bad request",
-				ErrorText:  "something",
-			},
-			isLocked: false,
-		},
-	}
-	for _, tt := range tests {
-		suite.Run(tt.name, func() {
-			s := new(Server)
-			noteMock := new(NotesMock)
-			s.notes = noteMock
-			boardMock := new(BoardsMock)
-			s.boards = boardMock
-			sessionMock := new(SessionsMock)
-			s.sessions = sessionMock
 
-			boardID, _ := uuid.NewRandom()
-			userID, _ := uuid.NewRandom()
-			noteID, _ := uuid.NewRandom()
-			r := chi.NewRouter()
-			s.initNoteResources(r)
-			boardMock.On("Get", boardID).Return(&dto.Board{
-				ID:       boardID,
-				IsLocked: tt.isLocked,
-			}, nil)
+  tests := []struct {
+    name         string
+    expectedCode int
+    err          error
+    isLocked     bool
+  }{
+    {
+      name:         "Delete Note when board is unlocked",
+      expectedCode: http.StatusNoContent,
+      isLocked:     true,
+    },
+    {
+      name:         "Delete Note when board is locked",
+      expectedCode: http.StatusBadRequest,
+      err: &common.APIError{
+        Err:        errors.New("not allowed to edit a locked board"),
+        StatusCode: http.StatusBadRequest,
+        StatusText: "Bad request",
+        ErrorText:  "something",
+      },
+      isLocked: false,
+    },
+  }
+  for _, tt := range tests {
+    suite.Run(tt.name, func() {
+      s := new(Server)
 
-			// Mock the SessionExists method
-			sessionMock.On("SessionExists", mock.Anything, boardID, userID).Return(true, nil)
+      noteMock := services.NewMockNotes(suite.T())
+      boardMock := services.NewMockBoards(suite.T())
+      sessionMock := services.NewMockBoardSessions(suite.T())
 
-			// Mock the ModeratorSessionExists method
-			sessionMock.On("ModeratorSessionExists", mock.Anything, boardID, userID).Return(true, nil)
+      s.notes = noteMock
+      s.boards = boardMock
+      s.sessions = sessionMock
 
-			// Mock the ParticipantBanned method
-			sessionMock.On("ParticipantBanned", mock.Anything, boardID, userID).Return(false, nil)
+      boardID, _ := uuid.NewRandom()
+      userID, _ := uuid.NewRandom()
+      noteID, _ := uuid.NewRandom()
 
-			if tt.isLocked {
-				noteMock.On("Delete", mock.Anything, mock.Anything).Return(nil)
-			} else {
-				boardMock.On("Get", boardID).Return(&dto.Board{
-					ID:       boardID,
-					IsLocked: tt.isLocked,
-				}, tt.err)
-				noteMock.On("Delete", mock.Anything, mock.Anything).Return(tt.err)
-			}
+      r := chi.NewRouter()
+      s.initNoteResources(r)
 
-			req := NewTestRequestBuilder("DELETE", fmt.Sprintf("/notes/%s", noteID.String()), strings.NewReader(`{"deleteStack": false}`))
-			req.req = logger.InitTestLoggerRequest(req.Request())
-			rctx := chi.NewRouteContext()
-			rctx.URLParams.Add("id", boardID.String())
-			req.AddToContext(chi.RouteCtxKey, rctx)
-			req.AddToContext(identifiers.UserIdentifier, userID)
+      req := NewTestRequestBuilder("DELETE", fmt.Sprintf("/notes/%s", noteID.String()), strings.NewReader(`{"deleteStack": false}`))
+      req.req = logger.InitTestLoggerRequest(req.Request())
+      rctx := chi.NewRouteContext()
+      rctx.URLParams.Add("id", boardID.String())
+      req.AddToContext(chi.RouteCtxKey, rctx)
+      req.AddToContext(identifiers.UserIdentifier, userID)
 
-			rr := httptest.NewRecorder()
-			r.ServeHTTP(rr, req.Request())
+      boardMock.EXPECT().Get(mock.Anything, boardID).Return(&dto.Board{
+        ID:       boardID,
+        IsLocked: tt.isLocked,
+      }, nil)
 
-			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			noteMock.AssertExpectations(suite.T())
-			boardMock.AssertExpectations(suite.T())
-			sessionMock.AssertExpectations(suite.T())
-		})
-	}
+      // Mock the SessionExists method
+      sessionMock.EXPECT().SessionExists(req.req.Context(), boardID, userID).Return(true, nil)
+
+      // Mock the ModeratorSessionExists method
+      sessionMock.EXPECT().ModeratorSessionExists(mock.Anything, boardID, userID).Return(true, nil)
+
+      // Mock the ParticipantBanned method
+      sessionMock.EXPECT().ParticipantBanned(req.req.Context(), boardID, userID).Return(false, nil)
+
+      if tt.isLocked {
+        noteMock.EXPECT().Delete(mock.Anything, dto.NoteDeleteRequest{DeleteStack: false}, noteID).Return(nil)
+      } else {
+        noteMock.EXPECT().Delete(mock.Anything, dto.NoteDeleteRequest{DeleteStack: false}, noteID).Return(tt.err)
+      }
+
+      rr := httptest.NewRecorder()
+      r.ServeHTTP(rr, req.Request())
+
+      suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+      noteMock.AssertExpectations(suite.T())
+      boardMock.AssertExpectations(suite.T())
+      sessionMock.AssertExpectations(suite.T())
+    })
+  }
+}
+
+func (suite *NotesTestSuite) TestEditNote() {
+  testParameterBundles := *TestParameterBundles{}.
+    Append("all ok", http.StatusOK, nil, false, false, nil).
+    Append("api err", http.StatusForbidden, &common.APIError{
+      Err:        errors.New("test"),
+      StatusCode: http.StatusForbidden,
+      StatusText: "no",
+      ErrorText:  "way",
+    }, false, false, nil)
+
+  for _, tt := range testParameterBundles {
+    suite.Run(tt.name, func() {
+      s := new(Server)
+      noteMock := services.NewMockNotes(suite.T())
+      updatedText := "This note has been edited"
+
+      boardId, _ := uuid.NewRandom()
+      noteId, _ := uuid.NewRandom()
+
+      s.notes = noteMock
+
+      req := NewTestRequestBuilder("PUT", fmt.Sprintf("/notes/%s", noteId.String()), strings.NewReader(fmt.Sprintf(`{
+				"text": "%s"}`, updatedText)))
+      req.req = logger.InitTestLoggerRequest(req.Request())
+      req.AddToContext(identifiers.BoardIdentifier, boardId).
+        AddToContext(identifiers.NoteIdentifier, noteId)
+
+      noteMock.EXPECT().Update(req.req.Context(), dto.NoteUpdateRequest{
+        Text:     &updatedText,
+        Position: nil,
+        Edited:   false,
+        ID:       noteId,
+        Board:    boardId,
+      }).Return(&notes.Note{
+        Text: updatedText,
+      }, tt.err)
+
+      rr := httptest.NewRecorder()
+
+      s.updateNote(rr, req.Request())
+
+      // parse response to Note
+      buf := new(bytes.Buffer)
+      _, err := buf.ReadFrom(rr.Result().Body)
+      if err != nil {
+        suite.Fail("could not read response body")
+      }
+      note := new(notes.Note)
+      err = json.Unmarshal(buf.Bytes(), &note)
+      if err != nil {
+        suite.Fail("could not unmarshal response body")
+      }
+
+      suite.Equal(tt.expectedCode, rr.Result().StatusCode)
+      if tt.err == nil {
+        suite.Equal(updatedText, note.Text)
+      }
+      noteMock.AssertExpectations(suite.T())
+
+    })
+  }
 }

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	notes2 "scrumlr.io/server/notes"
 	"scrumlr.io/server/services"
 
 	"github.com/google/uuid"
@@ -40,7 +41,7 @@ func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
 	return b
 }
 
-func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*dto.Note, error) {
+func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 	note, err := s.database.CreateNote(database.NoteInsert{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
 	if err != nil {
@@ -48,10 +49,10 @@ func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*
 		return nil, common.InternalServerError
 	}
 	s.UpdatedNotes(body.Board)
-	return new(dto.Note).From(note), err
+	return new(notes2.Note).From(note), err
 }
 
-func (s *NoteService) Import(ctx context.Context, body dto.NoteImportRequest) (*dto.Note, error) {
+func (s *NoteService) Import(ctx context.Context, body dto.NoteImportRequest) (*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 
 	note, err := s.database.ImportNote(database.NoteImport{
@@ -68,10 +69,10 @@ func (s *NoteService) Import(ctx context.Context, body dto.NoteImportRequest) (*
 		log.Errorw("Could not import notes", "err", err)
 		return nil, err
 	}
-	return new(dto.Note).From(note), err
+	return new(notes2.Note).From(note), err
 }
 
-func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) {
+func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 	note, err := s.database.GetNote(id)
 	if err != nil {
@@ -81,10 +82,10 @@ func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) 
 		log.Errorw("unable to get note", "note", id, "error", err)
 		return nil, common.InternalServerError
 	}
-	return new(dto.Note).From(note), err
+	return new(notes2.Note).From(note), err
 }
 
-func (s *NoteService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Note, error) {
+func (s *NoteService) List(ctx context.Context, boardID uuid.UUID) ([]*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 	notes, err := s.database.GetNotes(boardID)
 	if err != nil {
@@ -93,10 +94,10 @@ func (s *NoteService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Note,
 		}
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
 	}
-	return dto.Notes(notes), err
+	return notes2.Notes(notes), err
 }
 
-func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error) {
+func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 	var positionUpdate *database.NoteUpdatePosition
 	edited := body.Text != nil
@@ -120,7 +121,7 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 		return nil, common.InternalServerError
 	}
 	s.UpdatedNotes(body.Board)
-	return new(dto.Note).From(note), err
+	return new(notes2.Note).From(note), err
 }
 
 func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
@@ -168,9 +169,9 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID) {
 		logger.Get().Errorw("unable to retrieve notes in UpdatedNotes call", "boardID", board, "err", err)
 	}
 
-	eventNotes := make([]dto.Note, len(notes))
+	eventNotes := make([]notes2.Note, len(notes))
 	for index, note := range notes {
-		eventNotes[index] = *new(dto.Note).From(note)
+		eventNotes[index] = *new(notes2.Note).From(note)
 	}
 
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
