@@ -15,6 +15,14 @@ type ValidationOptions = {
 
 type InputValidationResult = {errorType: ValidationErrorType | null; errorMessage: string};
 
+/**
+ * hook which validates a HTMLInputElement.
+ * @param inputRef the ref to the element
+ * @param inputValue the current input value of the element (you need to keep track of it yourself)
+ * @param options object with options; like whether validation requires interaction by the user first
+ * @param userInteracted value if user has interacted with the input
+ * @returns object containing `errorType` and localized `errorMessage`; if input is valid `errorType` equals `null`.
+ */
 export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputValue: string, options?: ValidationOptions, userInteracted?: boolean): InputValidationResult => {
   const {t} = useTranslation();
   const [validationError, setValidationError] = useState<ValidationErrorType | null>(null);
@@ -47,7 +55,7 @@ export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputV
     }
   }, [inputRef, inputValue, options?.requireInteraction, userInteracted]);
 
-  const getErrorMessage = (): string => validationError ? t(`Validation.${validationError}`) : "";
+  const getErrorMessage = (): string => (validationError ? t(`Validation.${validationError}`) : "");
 
   return {
     errorType: validationError,
