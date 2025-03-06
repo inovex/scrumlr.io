@@ -110,7 +110,7 @@ func (suite *votingServiceTestSuite) TestCreate() {
 		Board:              boardId, // boardId is nulled
 		VoteLimit:          0,
 		AllowMultipleVotes: false,
-		//ShowVotesOfOthers:  false,
+		ShowVotesOfOthers:  false,
 	}
 
 	// Mocks for realtime
@@ -144,8 +144,8 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 		CreatedAt:          time.Now(),
 		VoteLimit:          voteLimit,
 		AllowMultipleVotes: false,
-		//ShowVotesOfOthers:  false,
-		Status: types.VotingStatusClosed,
+		ShowVotesOfOthers:  false,
+		Status:             types.VotingStatusClosed,
 	}
 	tests := []struct {
 		name         string

@@ -35,7 +35,7 @@ func testGetVotingForClosed(t *testing.T) {
 	assert.Equal(t, voting.Board, got.Board)
 	assert.Equal(t, voting.Status, got.Status)
 	assert.Equal(t, voting.VoteLimit, got.VoteLimit)
-	//assert.Equal(t, voting.ShowVotesOfOthers, got.ShowVotesOfOthers)
+	assert.Equal(t, voting.ShowVotesOfOthers, got.ShowVotesOfOthers)
 	assert.Equal(t, voting.AllowMultipleVotes, got.AllowMultipleVotes)
 }
 func testGetVotingForAborted(t *testing.T) {
@@ -46,7 +46,7 @@ func testGetVotingForAborted(t *testing.T) {
 	assert.Equal(t, voting.Board, got.Board)
 	assert.Equal(t, voting.Status, got.Status)
 	assert.Equal(t, voting.VoteLimit, got.VoteLimit)
-	//assert.Equal(t, voting.ShowVotesOfOthers, got.ShowVotesOfOthers)
+	assert.Equal(t, voting.ShowVotesOfOthers, got.ShowVotesOfOthers)
 	assert.Equal(t, voting.AllowMultipleVotes, got.AllowMultipleVotes)
 }
 func testGetVotingForOpen(t *testing.T) {
@@ -117,7 +117,7 @@ func testCloseVoting(t *testing.T) {
 	assert.Equal(t, voting.Board, result.Board)
 	assert.Equal(t, types.VotingStatusClosed, result.Status)
 	assert.Equal(t, voting.VoteLimit, result.VoteLimit)
-	//assert.Equal(t, voting.ShowVotesOfOthers, result.ShowVotesOfOthers)
+	assert.Equal(t, voting.ShowVotesOfOthers, result.ShowVotesOfOthers)
 	assert.Equal(t, voting.AllowMultipleVotes, result.AllowMultipleVotes)
 }
 
@@ -127,8 +127,8 @@ func testCreateVotingWithNegativeVoteLimitShouldFail(t *testing.T) {
 		Board:              board.ID,
 		VoteLimit:          -100,
 		AllowMultipleVotes: false,
-		//ShowVotesOfOthers:  false,
-		Status: types.VotingStatusOpen,
+		ShowVotesOfOthers:  false,
+		Status:             types.VotingStatusOpen,
 	})
 	assert.NotNil(t, err)
 }
@@ -138,8 +138,8 @@ func testCreateVotingWithVoteLimitGreater99ShouldFail(t *testing.T) {
 		Board:              board.ID,
 		VoteLimit:          100,
 		AllowMultipleVotes: false,
-		//	ShowVotesOfOthers:  false,
-		Status: types.VotingStatusOpen,
+		ShowVotesOfOthers:  false,
+		Status:             types.VotingStatusOpen,
 	})
 	assert.NotNil(t, err)
 }
@@ -157,7 +157,7 @@ func testCreateVoting(t *testing.T) {
 	assert.Equal(t, types.VotingStatusOpen, voting.Status)
 	assert.Equal(t, 10, voting.VoteLimit)
 	assert.Equal(t, false, voting.AllowMultipleVotes)
-	// assert.Equal(t, false, voting.ShowVotesOfOthers)
+	assert.Equal(t, false, voting.ShowVotesOfOthers)
 }
 func testCreateVotingWhenOpenShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.votingTestBoard").(*Board)
@@ -165,8 +165,8 @@ func testCreateVotingWhenOpenShouldFail(t *testing.T) {
 		Board:              board.ID,
 		VoteLimit:          10,
 		AllowMultipleVotes: false,
-		//	ShowVotesOfOthers:  false,
-		Status: types.VotingStatusOpen,
+		ShowVotesOfOthers:  false,
+		Status:             types.VotingStatusOpen,
 	})
 	assert.NotNil(t, err)
 }

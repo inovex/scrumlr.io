@@ -51,11 +51,11 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 			votingMock.EXPECT().Create(req.req.Context(), votes.VotingCreateRequest{
 				VoteLimit:          4,
 				AllowMultipleVotes: false,
-				//ShowVotesOfOthers:  false,
-				Board: boardId,
+				ShowVotesOfOthers:  false,
+				Board:              boardId,
 			}).Return(&votes.Voting{
 				AllowMultipleVotes: false,
-				//ShowVotesOfOthers:  false,
+				ShowVotesOfOthers:  false,
 			}, tt.err)
 
 			rr := httptest.NewRecorder()

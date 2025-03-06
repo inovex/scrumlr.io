@@ -31,7 +31,7 @@ export const VotingDialog = () => {
     dispatch(
       createVoting({
         voteLimit: numberOfVotes,
-        // showVotesOfOthers: false,
+        showVotesOfOthers: false,
         allowMultipleVotes: allowCumulativeVoting,
         isAnonymous,
       })
