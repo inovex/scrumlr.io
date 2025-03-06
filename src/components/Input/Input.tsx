@@ -79,7 +79,12 @@ export const Input = (props: SearchBarProps) => {
 
   return (
     <div className="input__root">
-      <div className={classNames(props.className, "input", `input--${props.type}`, `input--height-${props.height}`, {"input--disabled": props.disabled})}>
+      <div
+        className={classNames(props.className, "input", `input--${props.type}`, `input--height-${props.height}`, {
+          "input--disabled": props.disabled,
+          "input__input--invalid": !!errorType,
+        })}
+      >
         {props.type === "search" && (
           <div className="input__icon-container input__icon-container--search-icon">
             <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />
@@ -87,7 +92,7 @@ export const Input = (props: SearchBarProps) => {
         )}
         <input
           ref={inputRef}
-          className={classNames("input__input", `input__input--${props.type}`)}
+          className={classNames("input__input", `input__input--${props.type}`, {"input__input--invalid": !!errorType})}
           type={inputDisplayType}
           placeholder={props.placeholder}
           disabled={props.disabled}
