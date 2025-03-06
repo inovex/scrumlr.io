@@ -523,6 +523,9 @@
     "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
     "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
   },
+  "Validation": {
+    "REQUIRED": "benötigt"
+  },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",
     "prevOption": "Vorherige Option",

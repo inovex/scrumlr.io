@@ -523,6 +523,9 @@
     "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
     "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
   },
+  "Validation": {
+    "REQUIRED": "required"
+  },
   "Avatar": {
     "random": "Generate random avatar",
     "prevOption": "Previous option",
