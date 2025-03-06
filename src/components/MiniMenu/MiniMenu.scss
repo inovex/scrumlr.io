@@ -73,7 +73,9 @@
     color: $gray--000;
 
     &:hover {
-      background-color: $navy--600;
+      // TODO check if designs aligns with the other employed mini menus
+      color: $navy--400;
+      background-color: $gray--000;
     }
 
     &:focus-visible {
@@ -91,6 +93,10 @@
   }
   .mini-menu {
     background-color: $navy--400;
+
+    &--transparent {
+      background: none; // reset transparent bgc
+    }
   }
 }
 
