@@ -47,11 +47,7 @@ export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputV
     }
   }, [inputRef, inputValue, options?.requireInteraction, userInteracted]);
 
-  const getErrorMessage = (): string => {
-    if (!validationError) return "";
-
-    return t(`Validation.${validationError}`);
-  };
+  const getErrorMessage = (): string => validationError ? t(`Validation.${validationError}`) : "";
 
   return {
     errorType: validationError,
