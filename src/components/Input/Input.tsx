@@ -1,9 +1,10 @@
-import {Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
+import {Dispatch, FormEvent, SetStateAction, useRef, useState} from "react";
 import classNames from "classnames";
 import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import {ReactComponent as ClearIcon} from "assets/icons/close.svg";
 import {ReactComponent as IconVisible} from "assets/icons/visible.svg";
 import {ReactComponent as IconHidden} from "assets/icons/hidden.svg";
+import {useInputValidation} from "utils/hooks/useInputValidation";
 import "./Input.scss";
 
 type InputType = "text" | "search" | "password";
@@ -33,6 +34,8 @@ export const Input = (props: SearchBarProps) => {
 
   const [userInteracted, setUserInteracted] = useState(false);
 
+  const {errorType, errorMessage} = useInputValidation(inputRef, props.input, {requireInteraction: true}, userInteracted);
+
   const [passwordHidden, setPasswordHidden] = useState(true);
   // password input type is text when it's not hidden
   const inputDisplayType = props.type === "password" && passwordHidden ? "password" : "text";
@@ -42,22 +45,6 @@ export const Input = (props: SearchBarProps) => {
     props.setInput(e.currentTarget.value);
   };
   const clearInput = () => props.setInput("");
-
-  useEffect(() => {
-    if (!inputRef || !inputRef.current) return;
-    if (!userInteracted) return;
-
-    const {current} = inputRef;
-    const {validity} = current;
-
-    if (validity.valueMissing) {
-      current.setCustomValidity("required");
-    } else {
-      current.setCustomValidity("");
-    }
-
-    // console.log("valid", current.reportValidity(), "interacted", userInteracted, current.validationMessage);
-  }, [props.input, inputRef, userInteracted]);
 
   const togglePasswordHidden = () => setPasswordHidden((curr) => !curr);
 
@@ -84,25 +71,35 @@ export const Input = (props: SearchBarProps) => {
     );
   };
 
+  const renderErrorMessage = () => {
+    if (!errorType) return null;
+
+    return <div className="input__error">{errorMessage}</div>;
+  };
+
   return (
-    <div className={classNames(props.className, "input", `input--${props.type}`, `input--height-${props.height}`, {"input--disabled": props.disabled})}>
-      {props.type === "search" && (
-        <div className="input__icon-container input__icon-container--search-icon">
-          <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />
-        </div>
-      )}
-      <input
-        ref={inputRef}
-        className={classNames("input__input", `input__input--${props.type}`)}
-        type={inputDisplayType}
-        placeholder={props.placeholder}
-        disabled={props.disabled}
-        tabIndex={0}
-        value={props.input}
-        onInput={updateInput}
-        required={props.required}
-      />
-      {renderRightIcon()}
+    <div className="input__root">
+      <div className={classNames(props.className, "input", `input--${props.type}`, `input--height-${props.height}`, {"input--disabled": props.disabled})}>
+        {props.type === "search" && (
+          <div className="input__icon-container input__icon-container--search-icon">
+            <SearchIcon className="input__icon" aria-label="logo of magnifying glass" />
+          </div>
+        )}
+        <input
+          ref={inputRef}
+          className={classNames("input__input", `input__input--${props.type}`)}
+          type={inputDisplayType}
+          placeholder={props.placeholder}
+          disabled={props.disabled}
+          tabIndex={0}
+          value={props.input}
+          onInput={updateInput}
+          required={props.required}
+        />
+        {renderRightIcon()}
+      </div>
+
+      {renderErrorMessage()}
     </div>
   );
 };
