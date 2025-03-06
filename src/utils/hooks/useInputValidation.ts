@@ -14,7 +14,7 @@ type ValidationOptions = {
   requireInteraction?: boolean;
 };
 
-type InputValidationResult = {errorType: ValidationErrorType | null; errorMessage: string};
+type InputValidationResult = {errorType: ValidationErrorType | null; genericErrorMessage: string};
 
 /**
  * hook which validates a HTMLInputElement.
@@ -23,6 +23,7 @@ type InputValidationResult = {errorType: ValidationErrorType | null; errorMessag
  * @param options object with options; like whether validation requires interaction by the user first
  * @param userInteracted value if user has interacted with the input
  * @returns object containing `errorType` and localized `errorMessage`; if input is valid `errorType` equals `null`.
+ * The error message is generic, so if you want more specific once you can use the error type for that.
  */
 export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputValue: string, options?: ValidationOptions, userInteracted?: boolean): InputValidationResult => {
   const {t} = useTranslation();
@@ -56,10 +57,10 @@ export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputV
     }
   }, [inputRef, inputValue, options?.requireInteraction, userInteracted]);
 
-  const getErrorMessage = (): string => (validationError ? t(`Validation.${validationError}`) : "");
+  const getGenericErrorMessage = (): string => (validationError ? t(`Validation.${validationError}`) : "");
 
   return {
     errorType: validationError,
-    errorMessage: getErrorMessage(),
+    genericErrorMessage: getGenericErrorMessage(),
   };
 };
