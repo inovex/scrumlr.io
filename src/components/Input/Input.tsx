@@ -4,6 +4,7 @@ import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import {ReactComponent as ClearIcon} from "assets/icons/close.svg";
 import {ReactComponent as IconVisible} from "assets/icons/visible.svg";
 import {ReactComponent as IconHidden} from "assets/icons/hidden.svg";
+import {ReactComponent as IconError} from "assets/icons/warning.svg";
 import {useInputValidation} from "utils/hooks/useInputValidation";
 import "./Input.scss";
 
@@ -49,24 +50,30 @@ export const Input = (props: SearchBarProps) => {
   const togglePasswordHidden = () => setPasswordHidden((curr) => !curr);
 
   const renderRightIcon = () => {
+    if (errorType)
+      return (
+        <div className="input__icon-container input__icon-container--error">
+          <IconError className="input__icon" aria-label="validation error" />
+        </div>
+      );
     if (!props.input) return null;
     if (props.type === "password") {
       if (passwordHidden) {
         return (
           <div className="input__icon-container input__icon-container--password-hidden" role="button" tabIndex={0} onClick={togglePasswordHidden}>
-            <IconHidden className="input__icon" aria-label="clear button" />
+            <IconHidden className="input__icon" aria-label="password is hidden" />
           </div>
         );
       }
       return (
         <div className="input__icon-container input__icon-container--password-visible" role="button" tabIndex={0} onClick={togglePasswordHidden}>
-          <IconVisible className="input__icon" aria-label="clear button" />
+          <IconVisible className="input__icon" aria-label="password is visible" />
         </div>
       );
     }
     return (
       <div className="input__icon-container input__icon-container--clear-icon" role="button" tabIndex={0} onClick={clearInput}>
-        <ClearIcon className="input__icon" aria-label="clear button" />
+        <ClearIcon className="input__icon" aria-label="clear input" />
       </div>
     );
   };

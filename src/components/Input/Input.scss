@@ -33,6 +33,12 @@ $padding--mobile: 12.5px $spacing--base;
     // TODO increase padding-left by 8px if no icon is present
     @include default-states($padding: $padding--default);
 
+    .input__icon-container {
+      &--error {
+        color: $critical-carmine--light;
+      }
+    }
+
     // alternatively, this could be split up and put in their respective classes,
     // which might be more readable but also requires a little bit more code
     &:hover,
@@ -47,7 +53,6 @@ $padding--mobile: 12.5px $spacing--base;
     }
 
     &:has(.input__input--invalid) {
-      // could also check for a custom class with the hook error value here
       @include invalid-state($padding: $padding--default);
     }
   }
@@ -137,6 +142,12 @@ $padding--mobile: 12.5px $spacing--base;
     background-color: $navy--400;
 
     &:not(&--disabled) {
+      .input__icon-container {
+        &--error {
+          color: $critical-carmine--dark;
+        }
+      }
+
       &:hover,
       &:focus-within {
         .input__icon-container--search-icon {
