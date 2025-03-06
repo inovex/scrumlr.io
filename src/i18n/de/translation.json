@@ -62,6 +62,9 @@
       "open": "TBA",
       "password": "TBA",
       "approval": "TBA"
+    },
+    "validation": {
+      "REQUIRED": "Board-Name ist erforderlich."
     }
   },
   "LoginBoard": {

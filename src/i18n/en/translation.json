@@ -62,6 +62,9 @@
       "open": "Access for all participants is possible via the URL. This should be secure enough in most cases, as the URLs are difficult to guess.",
       "password": "Access via the URL is protected with a password. This is suitable when not collaborating simultaneously with a group, allowing users to join at any time.",
       "approval": "TBA"
+    },
+    "validation": {
+      "REQUIRED": "Board name is required."
     }
   },
   "LoginBoard": {

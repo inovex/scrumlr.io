@@ -1,6 +1,7 @@
 import {RefObject, useEffect, useState} from "react";
 
-enum ValidationErrorType {
+// possible TODO: union type is probably better here
+export enum ValidationErrorType {
   REQUIRED = "REQUIRED",
   BAD_INPUT = "BAD_INPUT",
   PATTERN_MISMATCH = "PATTERN_MISMATCH",

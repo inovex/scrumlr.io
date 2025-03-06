@@ -1,11 +1,12 @@
 import {Dispatch, FormEvent, SetStateAction, useRef, useState} from "react";
+import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {ReactComponent as IconSearch} from "assets/icons/search.svg";
 import {ReactComponent as IconClear} from "assets/icons/close.svg";
 import {ReactComponent as IconVisible} from "assets/icons/visible.svg";
 import {ReactComponent as IconHidden} from "assets/icons/hidden.svg";
 import {ReactComponent as IconError} from "assets/icons/warning.svg";
-import {useInputValidation} from "utils/hooks/useInputValidation";
+import {useInputValidation, ValidationErrorType} from "utils/hooks/useInputValidation";
 import "./Input.scss";
 
 type InputType = "text" | "search" | "password";
@@ -33,9 +34,11 @@ type SearchBarProps = {
 export const Input = (props: SearchBarProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const {t} = useTranslation();
+
   const [userInteracted, setUserInteracted] = useState(false);
 
-  const {errorType, errorMessage} = useInputValidation(inputRef, props.input, {requireInteraction: true}, userInteracted);
+  const errorType = useInputValidation(inputRef, props.input, {requireInteraction: true}, userInteracted);
 
   const [passwordHidden, setPasswordHidden] = useState(true);
   // password input type is text when it's not hidden
@@ -79,9 +82,10 @@ export const Input = (props: SearchBarProps) => {
   };
 
   const renderErrorMessage = () => {
-    if (!errorType) return null;
+    // this comparison is on purpose to confine the type, otherwise all validation errors have to be localized even if not tested for
+    if (errorType !== ValidationErrorType.REQUIRED) return null;
 
-    return <div className="input__error">{errorMessage}</div>;
+    return <div className="input__error">{t(`CreateBoard.validation.${errorType}`)}</div>;
   };
 
   return (
