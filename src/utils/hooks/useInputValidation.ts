@@ -1,5 +1,4 @@
 import {RefObject, useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
 
 enum ValidationErrorType {
   REQUIRED = "REQUIRED",
@@ -13,7 +12,7 @@ type ValidationOptions = {
   requireInteraction?: boolean;
 };
 
-type InputValidationResult = {errorType: ValidationErrorType | null; errorMessage: string};
+type InputValidationResult = ValidationErrorType | null;
 
 /**
  * hook which validates a HTMLInputElement.
@@ -21,10 +20,9 @@ type InputValidationResult = {errorType: ValidationErrorType | null; errorMessag
  * @param inputValue the current input value of the element (you need to keep track of it yourself)
  * @param options object with options; like whether validation requires interaction by the user first
  * @param userInteracted value if user has interacted with the input
- * @returns object containing `errorType` and localized `errorMessage`; if input is valid `errorType` equals `null`.
+ * @returns object containing `errorType`; if input is valid `errorType` equals `null`.
  */
 export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputValue: string, options?: ValidationOptions, userInteracted?: boolean): InputValidationResult => {
-  const {t} = useTranslation();
   const [validationError, setValidationError] = useState<ValidationErrorType | null>(null);
 
   useEffect(() => {
@@ -54,11 +52,5 @@ export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputV
       setValidationError(null);
     }
   }, [inputRef, inputValue, options?.requireInteraction, userInteracted]);
-
-  const getErrorMessage = (): string => (validationError ? t(`Validation.${validationError}`) : "");
-
-  return {
-    errorType: validationError,
-    errorMessage: getErrorMessage(),
-  };
+  return validationError;
 };
