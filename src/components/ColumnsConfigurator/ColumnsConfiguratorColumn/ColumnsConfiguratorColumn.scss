@@ -129,6 +129,10 @@ $column-height: 340px;
       background-color: rgba(var(--accent-color--200-rgb, 0.5));
       border-color: var(--accent-color--dark);
     }
+
+    &--hidden {
+      background-image: $column-stripes--dark;
+    }
   }
 
   .columns-configurator-column__icon {
