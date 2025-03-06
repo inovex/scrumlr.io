@@ -3,6 +3,7 @@ package notes
 import (
 	"context"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
 
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/realtime"
@@ -107,7 +108,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 	publishSubject := "board." + boardID.String()
 	publishEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
-		Data: []dto.Note{},
+		Data: []notes.Note{},
 	}
 
 	mock.On("CreateNote", database.NoteInsert{
@@ -180,7 +181,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	colID, _ := uuid.NewRandom()
 	stackID := uuid.NullUUID{Valid: true, UUID: uuid.New()}
 	txt := "Updated text"
-	pos := dto.NotePosition{
+	pos := notes.NotePosition{
 		Column: colID,
 		Rank:   0,
 		Stack:  stackID,
@@ -194,7 +195,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	publishSubject := "board." + boardID.String()
 	publishEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
-		Data: []dto.Note{},
+		Data: []notes.Note{},
 	}
 	clientMock.On("Publish", publishSubject, publishEvent).Return(nil)
 	// Mock for the updatedNotes call, which internally calls GetNotes

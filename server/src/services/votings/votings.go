@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	notes2 "scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
 
 	"github.com/google/uuid"
 
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
@@ -42,7 +43,7 @@ func NewVotingService(db DB, rt *realtime.Broker) services.Votings {
 	return b
 }
 
-func (s *VotingService) Create(ctx context.Context, body dto.VotingCreateRequest) (*dto.Voting, error) {
+func (s *VotingService) Create(ctx context.Context, body votes.VotingCreateRequest) (*votes.Voting, error) {
 	log := logger.FromContext(ctx)
 	voting, err := s.database.CreateVoting(database.VotingInsert{
 		Board:              body.Board,
@@ -61,10 +62,10 @@ func (s *VotingService) Create(ctx context.Context, body dto.VotingCreateRequest
 	}
 	s.CreatedVoting(body.Board, voting.ID)
 
-	return new(dto.Voting).From(voting, nil), err
+	return new(votes.Voting).From(voting, nil), err
 }
 
-func (s *VotingService) Update(ctx context.Context, body dto.VotingUpdateRequest) (*dto.Voting, error) {
+func (s *VotingService) Update(ctx context.Context, body votes.VotingUpdateRequest) (*votes.Voting, error) {
 	log := logger.FromContext(ctx)
 	if body.Status == types.VotingStatusOpen {
 		return nil, common.BadRequestError(errors.New("not allowed ot change to open state"))
@@ -84,19 +85,19 @@ func (s *VotingService) Update(ctx context.Context, body dto.VotingUpdateRequest
 	}
 
 	if voting.Status == types.VotingStatusClosed {
-		votes, err := s.getVotes(ctx, body.Board, body.ID)
+		receivedVotes, err := s.getVotes(ctx, body.Board, body.ID)
 		if err != nil {
 			log.Errorw("unable to get votes", "err", err)
 			return nil, err
 		}
 		s.UpdatedVoting(body.Board, voting.ID)
-		return new(dto.Voting).From(voting, votes), err
+		return new(votes.Voting).From(voting, receivedVotes), err
 	}
 	s.UpdatedVoting(body.Board, voting.ID)
-	return new(dto.Voting).From(voting, nil), err
+	return new(votes.Voting).From(voting, nil), err
 }
 
-func (s *VotingService) Get(ctx context.Context, boardID, id uuid.UUID) (*dto.Voting, error) {
+func (s *VotingService) Get(ctx context.Context, boardID, id uuid.UUID) (*votes.Voting, error) {
 	log := logger.FromContext(ctx)
 	voting, _, err := s.database.GetVoting(boardID, id)
 	if err != nil {
@@ -108,24 +109,24 @@ func (s *VotingService) Get(ctx context.Context, boardID, id uuid.UUID) (*dto.Vo
 	}
 
 	if voting.Status == types.VotingStatusClosed {
-		votes, err := s.getVotes(ctx, boardID, id)
+		receivedVotes, err := s.getVotes(ctx, boardID, id)
 		if err != nil {
 			log.Errorw("unable to get votes", "voting", id, "error", err)
 			return nil, err
 		}
-		return new(dto.Voting).From(voting, votes), err
+		return new(votes.Voting).From(voting, receivedVotes), err
 	}
-	return new(dto.Voting).From(voting, nil), err
+	return new(votes.Voting).From(voting, nil), err
 }
 
-func (s *VotingService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Voting, error) {
+func (s *VotingService) List(ctx context.Context, boardID uuid.UUID) ([]*votes.Voting, error) {
 	log := logger.FromContext(ctx)
-	votings, votes, err := s.database.GetVotings(boardID)
+	votings, receivedVotes, err := s.database.GetVotings(boardID)
 	if err != nil {
 		log.Errorw("unable to get votings", "board", boardID, "error", err)
 		return nil, err
 	}
-	return dto.Votings(votings, votes), err
+	return votes.Votings(votings, receivedVotes), err
 }
 
 func (s *VotingService) getVotes(ctx context.Context, boardID, id uuid.UUID) ([]database.Vote, error) {
@@ -147,7 +148,7 @@ func (s *VotingService) CreatedVoting(board, voting uuid.UUID) {
 
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingCreated,
-		Data: new(dto.Voting).From(dbVoting, nil),
+		Data: new(votes.Voting).From(dbVoting, nil),
 	})
 }
 
@@ -168,11 +169,11 @@ func (s *VotingService) UpdatedVoting(board, voting uuid.UUID) {
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: struct {
-			Voting *dto.Voting `json:"voting"`
-			Notes  []*dto.Note `json:"notes"`
+			Voting *votes.Voting  `json:"voting"`
+			Notes  []*notes2.Note `json:"notes"`
 		}{
-			Voting: new(dto.Voting).From(dbVoting, dbVotes),
-			Notes:  dto.Notes(notes),
+			Voting: new(votes.Voting).From(dbVoting, dbVotes),
+			Notes:  notes2.Notes(notes),
 		},
 	})
 

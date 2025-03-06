@@ -685,7 +685,10 @@
   "Votes": {
     "AddVote": "Add vote",
     "RemoveVote": "Remove vote",
-    "VotesOnNote": "{{votes}} vote(s)"
+    "VotesOnNote_one": "{{count}} vote",
+    "VotesOnNote_other": "{{count}} votes",
+    "VoteLimitReached": "Maximum number of votes reached",
+    "MultipleVotesNotAllowed": "Multiple votes are not allowed"
   },
   "Snowfall": {
     "toastTitle": "Happy Holidays 🎄",
