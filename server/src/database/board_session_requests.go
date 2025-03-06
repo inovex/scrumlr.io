@@ -40,8 +40,8 @@ type BoardSessionRequestUpdate struct {
 // CreateBoardSessionRequest creates a new board session request with the state 'PENDING' and does nothing if it already exists
 func (d *Database) CreateBoardSessionRequest(request BoardSessionRequestInsert) (BoardSessionRequest, error) {
 	r := BoardSessionRequest{Board: request.Board, User: request.User, Status: types.BoardSessionRequestStatusPending}
-	insertQuery := d.db.NewInsert().Model(&r).ExcludeColumn("name").On("CONFLICT (\"user\", board) DO UPDATE SET board=?", request.Board).Returning("*")
-	err := d.db.NewSelect().
+	insertQuery := d.Db.NewInsert().Model(&r).ExcludeColumn("name").On("CONFLICT (\"user\", board) DO UPDATE SET board=?", request.Board).Returning("*")
+	err := d.Db.NewSelect().
 		With("insertQuery", insertQuery).
 		Model((*BoardSessionRequest)(nil)).
 		ModelTableExpr("\"insertQuery\" AS s").
@@ -58,20 +58,20 @@ func (d *Database) CreateBoardSessionRequest(request BoardSessionRequestInsert) 
 }
 
 func (d *Database) BoardSessionRequestExists(board, user uuid.UUID) (bool, error) {
-	return d.db.NewSelect().Table("board_session_requests").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Exists(context.Background())
+	return d.Db.NewSelect().Table("board_session_requests").Where("\"board\" = ?", board).Where("\"user\" = ?", user).Exists(context.Background())
 }
 
 // UpdateBoardSessionRequest updates an existing board session request
 func (d *Database) UpdateBoardSessionRequest(update BoardSessionRequestUpdate) (BoardSessionRequest, error) {
 	var r BoardSessionRequest
-	updateQuery := d.db.NewUpdate().
+	updateQuery := d.Db.NewUpdate().
 		Model(&update).
 		Where("board = ?", update.Board).
 		Where("\"user\" = ?", update.User).
 		Where("status = ?", types.BoardSessionRequestStatusPending).
 		Returning("*")
 
-	err := d.db.NewSelect().
+	err := d.Db.NewSelect().
 		With("updateQuery", updateQuery).
 		Model((*BoardSessionRequest)(nil)).
 		ModelTableExpr("\"updateQuery\" AS s").
@@ -111,7 +111,7 @@ func (d *Database) UpdateBoardSessionRequest(update BoardSessionRequestUpdate) (
 // GetBoardSessionRequest returns the board session request for the specified board and user
 func (d *Database) GetBoardSessionRequest(board, user uuid.UUID) (BoardSessionRequest, error) {
 	var request BoardSessionRequest
-	err := d.db.NewSelect().
+	err := d.Db.NewSelect().
 		Model(&request).
 		ModelTableExpr("board_session_requests AS s").
 		ColumnExpr("s.board, s.user, u.name, s.status, s.created_at").
@@ -125,7 +125,7 @@ func (d *Database) GetBoardSessionRequest(board, user uuid.UUID) (BoardSessionRe
 // GetBoardSessionRequests returns the list of all board session requests filtered by the status
 func (d *Database) GetBoardSessionRequests(board uuid.UUID, status ...types.BoardSessionRequestStatus) ([]BoardSessionRequest, error) {
 	var requests []BoardSessionRequest
-	query := d.db.NewSelect().
+	query := d.Db.NewSelect().
 		Model(&requests).
 		ModelTableExpr("board_session_requests AS s").
 		ColumnExpr("s.board, s.user, u.name, s.status, s.created_at")

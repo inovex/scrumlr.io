@@ -2,7 +2,6 @@ package board_templates
 
 import (
 	"context"
-
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database"
