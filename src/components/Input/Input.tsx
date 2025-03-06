@@ -1,4 +1,4 @@
-import {Dispatch, FormEvent, SetStateAction, useState} from "react";
+import {Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import {ReactComponent as ClearIcon} from "assets/icons/close.svg";
@@ -29,12 +29,35 @@ type SearchBarProps = {
  * if the input is not empty, it's clearable using the X button
  */
 export const Input = (props: SearchBarProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [userInteracted, setUserInteracted] = useState(false);
+
   const [passwordHidden, setPasswordHidden] = useState(true);
   // password input type is text when it's not hidden
   const inputDisplayType = props.type === "password" && passwordHidden ? "password" : "text";
 
-  const updateInput = (e: FormEvent<HTMLInputElement>) => props.setInput(e.currentTarget.value);
+  const updateInput = (e: FormEvent<HTMLInputElement>) => {
+    setUserInteracted(true);
+    props.setInput(e.currentTarget.value);
+  };
   const clearInput = () => props.setInput("");
+
+  useEffect(() => {
+    if (!inputRef || !inputRef.current) return;
+    if (!userInteracted) return;
+
+    const {current} = inputRef;
+    const {validity} = current;
+
+    if (validity.valueMissing) {
+      current.setCustomValidity("required");
+    } else {
+      current.setCustomValidity("");
+    }
+
+    // console.log("valid", current.reportValidity(), "interacted", userInteracted, current.validationMessage);
+  }, [props.input, inputRef, userInteracted]);
 
   const togglePasswordHidden = () => setPasswordHidden((curr) => !curr);
 
@@ -69,6 +92,7 @@ export const Input = (props: SearchBarProps) => {
         </div>
       )}
       <input
+        ref={inputRef}
         className={classNames("input__input", `input__input--${props.type}`)}
         type={inputDisplayType}
         placeholder={props.placeholder}
