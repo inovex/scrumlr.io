@@ -89,9 +89,9 @@ export const Input = (props: SearchBarProps) => {
   };
 
   return (
-    <div className="input__root">
+    <div className={classNames(props.className, "input__root")}>
       <div
-        className={classNames(props.className, "input", `input--${props.type}`, `input--height-${props.height}`, {
+        className={classNames("input", `input--${props.type}`, `input--height-${props.height}`, {
           "input--disabled": props.disabled,
           "input__input--invalid": !!errorType,
         })}
