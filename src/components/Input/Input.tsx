@@ -38,7 +38,7 @@ export const Input = (props: SearchBarProps) => {
 
   const [userInteracted, setUserInteracted] = useState(false);
 
-  const errorType = useInputValidation(inputRef, props.input, {requireInteraction: true}, userInteracted);
+  const {errorType} = useInputValidation(inputRef, props.input, {requireInteraction: true}, userInteracted);
 
   const [passwordHidden, setPasswordHidden] = useState(true);
   // password input type is text when it's not hidden
