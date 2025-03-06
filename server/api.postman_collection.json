@@ -2273,7 +2273,7 @@
 							"_postman_previewlanguage": "Text",
 							"header": [],
 							"cookie": [],
-							"body": "[\n    {\n        \"board\": {\n            \"id\": \"4b08e0e9-f141-49b0-a75f-17d181f96969\",\n            \"name\": \"My board\",\n            \"description\": \"This is a test description\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"isAnonymous\": true,\n            \"showNoteReactions\": true,\n            \"allowStacking\": true,\n            \"allowEditing\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columnsNumber\": 2,\n        \"createdAt\": \"0001-01-01T00:00:00Z\",\n        \"participants\": 1\n    }\n]"
+							"body": "[\n    {\n        \"board\": {\n            \"id\": \"4b08e0e9-f141-49b0-a75f-17d181f96969\",\n            \"name\": \"My board\",\n            \"description\": \"This is a test description\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"showVotesOfOthers\": true,\n            \"showNoteReactions\": true,\n            \"allowStacking\": true,\n            \"allowEditing\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columnsNumber\": 2,\n        \"createdAt\": \"0001-01-01T00:00:00Z\",\n        \"participants\": 1\n    }\n]"
 						}
 					]
 				},
@@ -2382,7 +2382,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"board\": {\n        \"id\": \"85ec5a10-9788-4df2-9647-0c7260cb07f7\",\n        \"name\": \"My board\",\n        \"description\": \"This is a test description\",\n        \"accessPolicy\": \"PUBLIC\",\n        \"showAuthors\": true,\n        \"showNotesOfOtherUsers\": true,\n        \"allowStacking\": true,\n        \"sharedNote\": null,\n        \"showVoting\": \"71c8556d-5148-41dd-ad50-f96930af2f83\"\n    },\n    \"participants\": [\n        {\n            \"user\": {\n                \"id\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n                \"name\": \"John Doe\"\n            },\n            \"connected\": false,\n            \"ready\": false,\n            \"raisedHand\": false,\n            \"role\": \"OWNER\"\n        }\n    ],\n    \"columns\": [\n        {\n            \"id\": \"851f600a-77f8-489a-a25b-4e3f8f9a25c3\",\n            \"name\": \"Lean coffee\",\n            \"color\": \"backlog-blue\",\n            \"visible\": true,\n            \"index\": 0\n        },\n        {\n            \"id\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n            \"name\": \"My new column\",\n            \"color\": \"online-orange\",\n            \"visible\": false,\n            \"index\": 1\n        },\n        {\n            \"id\": \"4ebae212-80c9-46e4-abd9-e56b320ce937\",\n            \"name\": \"Actions\",\n            \"color\": \"planning-pink\",\n            \"visible\": false,\n            \"index\": 2\n        }\n    ],\n    \"notes\": [\n        {\n            \"id\": \"fdbc5abe-01f1-4a7d-b41d-06cb9915c608\",\n            \"author\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n            \"text\": \"Just a note\",\n            \"position\": {\n                \"column\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n                \"stack\": null,\n                \"rank\": 0\n            }\n        }\n    ],\n    \"votings\": [\n        {\n            \"id\": \"71c8556d-5148-41dd-ad50-f96930af2f83\",\n            \"voteLimit\": 5,\n            \"allowMultipleVotes\": true,\n            \"isAnonymous\": true,\n            \"status\": \"CLOSED\"\n        }\n    ]\n}"
+							"body": "{\n    \"board\": {\n        \"id\": \"85ec5a10-9788-4df2-9647-0c7260cb07f7\",\n        \"name\": \"My board\",\n        \"description\": \"This is a test description\",\n        \"accessPolicy\": \"PUBLIC\",\n        \"showAuthors\": true,\n        \"showNotesOfOtherUsers\": true,\n        \"allowStacking\": true,\n        \"sharedNote\": null,\n        \"showVoting\": \"71c8556d-5148-41dd-ad50-f96930af2f83\"\n    },\n    \"participants\": [\n        {\n            \"user\": {\n                \"id\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n                \"name\": \"John Doe\"\n            },\n            \"connected\": false,\n            \"ready\": false,\n            \"raisedHand\": false,\n            \"role\": \"OWNER\"\n        }\n    ],\n    \"columns\": [\n        {\n            \"id\": \"851f600a-77f8-489a-a25b-4e3f8f9a25c3\",\n            \"name\": \"Lean coffee\",\n            \"color\": \"backlog-blue\",\n            \"visible\": true,\n            \"index\": 0\n        },\n        {\n            \"id\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n            \"name\": \"My new column\",\n            \"color\": \"online-orange\",\n            \"visible\": false,\n            \"index\": 1\n        },\n        {\n            \"id\": \"4ebae212-80c9-46e4-abd9-e56b320ce937\",\n            \"name\": \"Actions\",\n            \"color\": \"planning-pink\",\n            \"visible\": false,\n            \"index\": 2\n        }\n    ],\n    \"notes\": [\n        {\n            \"id\": \"fdbc5abe-01f1-4a7d-b41d-06cb9915c608\",\n            \"author\": \"0d57fafe-76a4-4ae2-b643-a81af68fe487\",\n            \"text\": \"Just a note\",\n            \"position\": {\n                \"column\": \"b1391083-c333-4963-b6f1-af0b66e6826a\",\n                \"stack\": null,\n                \"rank\": 0\n            }\n        }\n    ],\n    \"votings\": [\n        {\n            \"id\": \"71c8556d-5148-41dd-ad50-f96930af2f83\",\n            \"voteLimit\": 5,\n            \"allowMultipleVotes\": true,\n            \"showVotesOfOthers\": true,\n            \"status\": \"CLOSED\"\n        }\n    ]\n}"
 						},
 						{
 							"name": "Success (CSV)",
@@ -4016,7 +4016,7 @@
 									"\r",
 									"    pm.expect(res.voteLimit).to.equal(5);\r",
 									"    pm.expect(res.allowMultipleVotes).to.equal(true);\r",
-									"    pm.expect(res.isAnonymous).to.equal(true);\r",
+									"    pm.expect(res.showVotesOfOthers).to.equal(true);\r",
 									"    pm.expect(res.status).to.equal(\"OPEN\");\r",
 									"})"
 								],
@@ -4030,7 +4030,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"voteLimit\": 5,\r\n    \"allowMultipleVotes\": true,\r\n    \"isAnonymous\": true\r\n}",
+							"raw": "{\r\n    \"voteLimit\": 5,\r\n    \"allowMultipleVotes\": true,\r\n    \"showVotesOfOthers\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4057,7 +4057,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"voteLimit\": 5,\r\n    \"allowMultipleVotes\": true,\r\n    \"isAnonymous\": false\r\n}",
+									"raw": "{\r\n    \"voteLimit\": 5,\r\n    \"allowMultipleVotes\": true,\r\n    \"showVotesOfOthers\": false\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4098,7 +4098,8 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"isAnonymous\": false,\n    \"status\": \"OPEN\"\n}"
+							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"OPEN\"\n}",
+
 						}
 					]
 				},
@@ -4177,7 +4178,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "[\n    {\n        \"id\": \"3c3b64f1-5132-44c0-880d-82f545067cf3\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": false,\n        \"isAnonymous\": true,\n        \"status\": \"OPEN\"\n    },\n    {\n        \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"isAnonymous\": true,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5,\n                    \"userVotes\": [\n                        {\n                            \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                            \"total\": 5\n                        }\n                    ]\n                }\n            }\n        }\n    },\n    {\n        \"id\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"isAnonymous\": false,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5\n                }\n            }\n        }\n    }\n]"
+							"body": "[\n    {\n        \"id\": \"3c3b64f1-5132-44c0-880d-82f545067cf3\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": false,\n        \"showVotesOfOthers\": true,\n        \"status\": \"OPEN\"\n    },\n    {\n        \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": true,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5,\n                    \"userVotes\": [\n                        {\n                            \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                            \"total\": 5\n                        }\n                    ]\n                }\n            }\n        }\n    },\n    {\n        \"id\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n        \"voteLimit\": 5,\n        \"allowMultipleVotes\": true,\n        \"showVotesOfOthers\": false,\n        \"status\": \"CLOSED\",\n        \"votes\": {\n            \"total\": 5,\n            \"votesPerNote\": {\n                \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                    \"total\": 5\n                }\n            }\n        }\n    }\n]"
 						}
 					]
 				},
@@ -4200,7 +4201,7 @@
 									"",
 									"    pm.expect(res.voteLimit).to.equal(5);",
 									"    pm.expect(res.allowMultipleVotes).to.equal(true);",
-									"    pm.expect(res.isAnonymous).to.equal(true);",
+									"    pm.expect(res.showVotesOfOthers).to.equal(true);",
 									"    pm.expect(res.status).to.equal(\"OPEN\");",
 									"})"
 								],
@@ -4262,7 +4263,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"3c3b64f1-5132-44c0-880d-82f545067cf3\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": false,\n    \"isAnonymous\": true,\n    \"status\": \"OPEN\"\n}"
+							"body": "{\n    \"id\": \"3c3b64f1-5132-44c0-880d-82f545067cf3\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": false,\n    \"showVotesOfOthers\": true,\n    \"status\": \"OPEN\"\n}"
 						}
 					]
 				},
@@ -4359,7 +4360,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"isAnonymous\": false,\n    \"status\": \"CLOSED\",\n    \"votes\": {\n        \"total\": 5,\n        \"votesPerNote\": {\n            \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                \"total\": 5\n            }\n        }\n    }\n}"
+							"body": "{\n    \"id\": \"fa7fd5b4-4e3f-43c8-951b-48a692f97e23\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"CLOSED\",\n    \"votes\": {\n        \"total\": 5,\n        \"votesPerNote\": {\n            \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                \"total\": 5\n            }\n        }\n    }\n}"
 						},
 						{
 							"name": "Success with details",
@@ -4406,7 +4407,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"isAnonymous\": true,\n    \"status\": \"CLOSED\",\n    \"votes\": {\n        \"total\": 5,\n        \"votesPerNote\": {\n            \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                \"total\": 5,\n                \"userVotes\": [\n                    {\n                        \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                        \"total\": 5\n                    }\n                ]\n            }\n        }\n    }\n}"
+							"body": "{\n    \"id\": \"4fb423b1-5cc7-4a52-9643-0408cd25652a\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": true,\n    \"status\": \"CLOSED\",\n    \"votes\": {\n        \"total\": 5,\n        \"votesPerNote\": {\n            \"3ab898f7-01d7-477a-93ef-c023074849f5\": {\n                \"total\": 5,\n                \"userVotes\": [\n                    {\n                        \"id\": \"f62a0cb4-937d-4883-812b-9b5c5dda718a\",\n                        \"total\": 5\n                    }\n                ]\n            }\n        }\n    }\n}"
 						}
 					]
 				}
@@ -4474,7 +4475,7 @@
 									"let body = {",
 									"    \"voteLimit\": 5,",
 									"    \"allowMultipleVotes\": true,",
-									"    \"isAnonymous\": true",
+									"    \"showNotesOfOtherUsers\": true",
 									"}",
 									"body = JSON.stringify(body)",
 									"",

@@ -76,7 +76,7 @@
       "id": "8337b5a4-9011-46d2-a884-115668760be5",
       "voteLimit": 5,
       "allowMultipleVotes": true,
-      //"showVotesOfOthers": false,
+      "showVotesOfOthers": false,
       "status": "CLOSED",
       "votes": {
         "total": 5,
