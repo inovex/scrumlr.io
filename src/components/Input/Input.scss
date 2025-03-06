@@ -3,6 +3,12 @@
 $padding--default: $spacing--base;
 $padding--mobile: 12.5px $spacing--base;
 
+.input__root {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xs;
+}
+
 .input {
   display: flex;
   flex-direction: row;
@@ -108,6 +114,14 @@ $padding--mobile: 12.5px $spacing--base;
   }
 }
 
+.input__error {
+  font-size: $text--xs;
+  font-weight: 400;
+  line-height: $text--sm;
+
+  color: $critical-carmine--light;
+}
+
 @media screen and (max-width: $breakpoint--smartphone) {
   .input {
     padding: $padding--mobile;
@@ -162,5 +176,9 @@ $padding--mobile: 12.5px $spacing--base;
     &--clear-icon {
       color: $blue--50;
     }
+  }
+
+  .input__error {
+    color: $critical-carmine--dark;
   }
 }
