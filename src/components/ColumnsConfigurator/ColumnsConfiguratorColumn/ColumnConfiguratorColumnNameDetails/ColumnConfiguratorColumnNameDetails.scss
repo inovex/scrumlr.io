@@ -64,3 +64,25 @@
 .column-configurator-column-name-details__description-mini-menu {
   margin-left: auto; // couldn't get align-self: flex-end to work so whatever
 }
+
+[theme="dark"] {
+  .column-configurator-column-name-details__name-wrapper {
+    &:hover {
+      // affect both with prio
+      .column-configurator-column-name-details__name,
+      .column-configurator-column-name-details__inline-description {
+        color: $gray--000;
+      }
+    }
+  }
+
+  .column-configurator-column-name-details__name {
+    color: $gray--000;
+
+    border-bottom-color: var(--accent-color--dark);
+  }
+
+  .column-configurator-column-name-details__inline-description {
+    color: $gray--700;
+  }
+}
