@@ -3,7 +3,10 @@ import {useTranslation} from "react-i18next";
 
 enum ValidationErrorType {
   REQUIRED = "REQUIRED",
-  // additional error types can be added here
+  BAD_INPUT = "BAD_INPUT",
+  PATTERN_MISMATCH = "PATTERN_MISMATCH",
+  TYPE_MISMATCH = "TYPE_MISMATCH",
+  RANGE = "RANGE",
 }
 
 type ValidationOptions = {
@@ -31,7 +34,14 @@ export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputV
     // validate based on input value
     if (validity.valueMissing) {
       setValidationError(ValidationErrorType.REQUIRED);
-      // add more checks here
+    } else if (validity.badInput) {
+      setValidationError(ValidationErrorType.BAD_INPUT);
+    } else if (validity.patternMismatch) {
+      setValidationError(ValidationErrorType.PATTERN_MISMATCH);
+    } else if (validity.typeMismatch) {
+      setValidationError(ValidationErrorType.TYPE_MISMATCH);
+    } else if (validity.rangeUnderflow || validity.rangeOverflow || validity.tooShort || validity.tooLong || validity.stepMismatch) {
+      setValidationError(ValidationErrorType.RANGE);
     } else {
       setValidationError(null);
     }

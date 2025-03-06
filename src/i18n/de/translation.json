@@ -524,7 +524,11 @@
     "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
   },
   "Validation": {
-    "REQUIRED": "benötigt"
+    "REQUIRED": "required",
+    "BAD_INPUT": "bad input",
+    "PATTERN_MISMATCH": "pattern mismatch",
+    "TYPE_MISMATCH": "type mismatch",
+    "RANGE": "range"
   },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",
