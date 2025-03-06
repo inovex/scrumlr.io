@@ -113,6 +113,13 @@ $column-height: 340px;
   .columns-configurator-column {
     border-color: var(--accent-color--dark);
 
+    &--even {
+      background-color: $navy--600;
+    }
+    &--odd {
+      background-color: $navy--400;
+    }
+
     &--active-drag {
       background-color: rgba(var(--accent-color--200-rgb, 0.5));
       border-color: var(--accent-color--dark);
@@ -122,5 +129,9 @@ $column-height: 340px;
       background-color: rgba(var(--accent-color--200-rgb, 0.5));
       border-color: var(--accent-color--dark);
     }
+  }
+
+  .columns-configurator-column__icon {
+    color: $gray--000;
   }
 }

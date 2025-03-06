@@ -1,11 +1,11 @@
 <svg width="24" height="17" viewBox="0 0 24 17" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="Group 303">
 <g id="Group 301">
-<path id="Pfad 4028" d="M16 1V16" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
-<path id="Pfad 4029" d="M8 1V16" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
-<path id="Pfad 4031" d="M3.82929 5.17071C3.89229 5.10771 4 5.15233 4 5.24142V10.7586C4 10.8477 3.89229 10.8923 3.82929 10.8293L1.07071 8.07069C1.03166 8.03164 1.03166 7.96833 1.07071 7.92927L3.82929 5.17071Z" fill="#373E4F" stroke="#373E4F" stroke-linecap="round"/>
-<path id="Pfad 4032" d="M20.1707 10.8293C20.1077 10.8923 20 10.8477 20 10.7586V5.24142C20 5.15233 20.1077 5.10771 20.1707 5.17071L22.9293 7.92929C22.9683 7.96834 22.9683 8.03166 22.9293 8.07071L20.1707 10.8293Z" fill="#373E4F" stroke="#373E4F" stroke-linecap="round"/>
-<path id="Pfad 4033" d="M12 1V16" stroke="#373E4F" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Pfad 4028" d="M16 1V16" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Pfad 4029" d="M8 1V16" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
+<path id="Pfad 4031" d="M3.82929 5.17071C3.89229 5.10771 4 5.15233 4 5.24142V10.7586C4 10.8477 3.89229 10.8923 3.82929 10.8293L1.07071 8.07069C1.03166 8.03164 1.03166 7.96833 1.07071 7.92927L3.82929 5.17071Z" fill="currentColor" stroke="currentColor" stroke-linecap="round"/>
+<path id="Pfad 4032" d="M20.1707 10.8293C20.1077 10.8923 20 10.8477 20 10.7586V5.24142C20 5.15233 20.1077 5.10771 20.1707 5.17071L22.9293 7.92929C22.9683 7.96834 22.9683 8.03166 22.9293 8.07071L20.1707 10.8293Z" fill="currentColor" stroke="currentColor" stroke-linecap="round"/>
+<path id="Pfad 4033" d="M12 1V16" stroke="currentColor" stroke-opacity="0.5" stroke-width="1.5" stroke-linecap="round"/>
 </g>
 </g>
 </svg>
