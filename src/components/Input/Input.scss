@@ -7,6 +7,8 @@ $padding--mobile: 12.5px $spacing--base;
   display: flex;
   flex-direction: column;
   gap: $spacing--xs;
+
+  width: 100%;
 }
 
 .input {
