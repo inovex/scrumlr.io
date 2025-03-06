@@ -75,5 +75,9 @@ $height--default: calc(8.75 * $text--base + 2 * $padding--default); // = 172px
         color: $gray--300;
       }
     }
+
+    &--embedded {
+      border-color: var(--accent-color--dark);
+    }
   }
 }
