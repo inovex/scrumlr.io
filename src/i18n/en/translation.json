@@ -49,7 +49,8 @@
       "removeFavourite": "Remove Favourite",
       "column_one": "{{count}} Column",
       "column_other": "{{count}} Columns",
-      "goToSession": "Go to Session"
+      "goToSession": "Go to Session",
+      "Participants": "{{count}} Participants"
     }
   },
   "CreateBoard": {

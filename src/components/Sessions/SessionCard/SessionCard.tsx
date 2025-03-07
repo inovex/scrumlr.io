@@ -102,33 +102,22 @@ export const SessionCard = ({session}: SessionCardProps) => {
       />
       <ColumnsIcon className={classNames("session-card__icon", "session-card__icon--columns")} />
       <div className="session-card__columns">
-        <div className="session-card__columns-title">{t("Sessions.SessionsCard.column", {count: 3})}</div> {/* session.columns.length})}</div> TODO: remove hard coding */}
-        <div className="session-card__columns-subtitle">
-          {/* {session.columns */}
-          {/*   .sort((a, b) => a.index - b.index) */}
-          {/*   .map((c) => c.name) */}
-          {/*   .join(", ")} */}
-        </div>
+        {/* {session && session.columns && ( */}
+        <div className="session-card__columns-title">{t("Sessions.SessionsCard.column", {count: session.columnsNumber})}</div>
+        {/* )} */}
+        {/* <div className="session-card__columns-title">{t("Sessions.SessionsCard.column", {count: session.columns.length})}</div> /!* TODO: remove hard coding *!/ */}
+        <div className="session-card__columns-subtitle" />
       </div>
       <ColumnsIcon className={classNames("session-card__icon", "session-card__icon--age")} />
       <div className="session-card__age">
         <div className="session-card__columns-title">2 Weeks ago{/* TODO: {t("Templates.TemplateCard.column", {count: session.columns.length})} */}</div>
-        <div className="session-card__columns-subtitle">
-          {/* {session.columns */}
-          {/*   .sort((a, b) => a.index - b.index) */}
-          {/*   .map((c) => c.name) */}
-          {/*   .join(", ")} */}
-        </div>
+        <div className="session-card__columns-subtitle" />
       </div>
       <MultipleUserIcon className={classNames("session-card__icon", "session-card__icon--participants")} />
       <div className="session-card__participants">
-        <div className="session-card__columns-title">10 Participants{/* TODO: {t("Templates.TemplateCard.column", {count: session.columns.length})} */}</div>
-        <div className="session-card__columns-subtitle">
-          {/* {session.columns */}
-          {/*   .sort((a, b) => a.index - b.index) */}
-          {/*   .map((c) => c.name) */}
-          {/*   .join(", ")} */}
-        </div>
+        <div className="session-card__columns-title">{t("Sessions.SessionsCard.Participants", {count: session.participants})}</div>
+        {/* <div className="session-card__columns-title">10 Participants/!* TODO: {t("Templates.TemplateCard.column", {count: session.columns.length})} *!/</div> */}
+        <div className="session-card__columns-subtitle" />
       </div>
       <Button className={classNames("session-card__start-button", "session-card__start-button--start")} small icon={<NextIcon />} onClick={createBoard}>
         {t("Sessions.SessionsCard.goToSession")}

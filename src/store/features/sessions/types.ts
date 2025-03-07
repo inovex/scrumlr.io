@@ -1,6 +1,6 @@
 import {Board} from "../board";
 import {Column} from "../columns";
-import {Participant} from "../participants";
+// import {Participant} from "../participants";
 import {Request} from "../requests";
 import {Note} from "../notes";
 import {Reaction} from "../reactions";
@@ -19,7 +19,10 @@ import {Voting} from "../votings";
 
 export type Session = {
   board: Board;
-  participants: Participant[];
+  columnsNumber: number;
+  createdAt: string;
+  participants: number;
+  // participants: Participant[];
   requests: Request[];
   columns: Column[];
   notes: Note[];
