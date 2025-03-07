@@ -1,22 +1,21 @@
 import {API} from "api";
-import "routes/NewBoard/NewBoard.scss";
 import React, {useRef, useState} from "react";
-import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {AccessPolicy, BoardImportData} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
+import {useAppDispatch} from "store";
+import {importBoard} from "store/features";
+import {Toast} from "utils/Toast";
+import {AccessPolicySelection} from "components/AccessPolicySelection";
 import {TextInputLabel} from "components/TextInputLabel";
 import {TextInput} from "components/TextInput";
-import {Button} from "components/Button";
+import {LegacyButton} from "components/Button";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
-
 import {PassphraseModal} from "components/PassphraseDialog/PassphraseModal/PassphraseModal";
-import {importBoard} from "store/features";
-import {useAppDispatch} from "store";
-import {columnTemplates} from "./columnTemplates";
-import {Toast} from "../../utils/Toast";
+import {legacyColumnTemplates} from "./legacyColumnTemplates";
+import "./LegacyNewBoard.scss";
 
-export const NewBoard = () => {
+export const LegacyNewBoard = () => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -115,7 +114,7 @@ export const NewBoard = () => {
           type: accessPolicy,
           ...additionalAccessPolicyOptions,
         },
-        columnTemplates[columnTemplate].columns
+        legacyColumnTemplates[columnTemplate].columns
       );
       navigate(`/board/${boardId}`);
     }
@@ -133,10 +132,10 @@ export const NewBoard = () => {
 
           {!extendedConfiguration && (
             <div>
-              <h1>{t("NewBoard.basicConfigurationTitle")}</h1>
+              <h1>{t("LegacyNewBoard.basicConfigurationTitle")}</h1>
 
               <div className="new-board__mode-selection">
-                {Object.keys(columnTemplates).map((key) => (
+                {Object.keys(legacyColumnTemplates).map((key) => (
                   <label key={key} className="new-board__mode">
                     <input
                       className="new-board__mode-input"
@@ -149,8 +148,8 @@ export const NewBoard = () => {
                     />
                     <div className="new-board__mode-label">
                       <div>
-                        <div className="new-board__mode-name">{columnTemplates[key].name}</div>
-                        <div className="new-board__mode-description">{columnTemplates[key].description}</div>
+                        <div className="new-board__mode-name">{legacyColumnTemplates[key].name}</div>
+                        <div className="new-board__mode-description">{legacyColumnTemplates[key].description}</div>
                       </div>
                     </div>
                   </label>
@@ -177,8 +176,8 @@ export const NewBoard = () => {
                     }}
                   >
                     <div>
-                      <div className="new-board__mode-name">{t("NewBoard.importBoard")}</div>
-                      <div className="new-board__mode-description">{t("NewBoard.uploadFile")}</div>
+                      <div className="new-board__mode-name">{t("LegacyNewBoard.importBoard")}</div>
+                      <div className="new-board__mode-description">{t("LegacyNewBoard.uploadFile")}</div>
                     </div>
                   </div>
                 </label>
@@ -188,9 +187,9 @@ export const NewBoard = () => {
 
           {extendedConfiguration && (
             <div>
-              <h1>{t("NewBoard.extendedConfigurationTitle")}</h1>
+              <h1>{t("LegacyNewBoard.extendedConfigurationTitle")}</h1>
 
-              <TextInputLabel label={t("NewBoard.boardName")}>
+              <TextInputLabel label={t("LegacyNewBoard.boardName")}>
                 <TextInput onChange={(e) => setBoardName(e.target.value)} />
               </TextInputLabel>
 
@@ -201,24 +200,23 @@ export const NewBoard = () => {
       </div>
       <div className="new-board__actions">
         {!importFile ? (
-          <Button className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
-            {t("NewBoard.createNewBoard")}
-          </Button>
+          <LegacyButton className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+            {t("LegacyNewBoard.createNewBoard")}
+          </LegacyButton>
         ) : (
-          <Button className="new-board__action" onClick={onImportBoard} color="primary" disabled={isImportBoardDisabled}>
-            {t("NewBoard.importNewBoard")}
-          </Button>
+          <LegacyButton className="new-board__action" onClick={onImportBoard} color="primary" disabled={isImportBoardDisabled}>
+            {t("LegacyNewBoard.importNewBoard")}
+          </LegacyButton>
         )}
-
         {!extendedConfiguration && (
-          <Button className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
-            {t("NewBoard.extendedConfigurationButton")}
-          </Button>
+          <LegacyButton className="new-board__action" variant="outlined" color="primary" disabled={!columnTemplate} onClick={() => setExtendedConfiguration(true)}>
+            {t("LegacyNewBoard.extendedConfigurationButton")}
+          </LegacyButton>
         )}
         {extendedConfiguration && (
-          <Button className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
-            {t("NewBoard.basicConfigurationButton")}
-          </Button>
+          <LegacyButton className="new-board__action" variant="outlined" color="primary" onClick={() => setExtendedConfiguration(false)}>
+            {t("LegacyNewBoard.basicConfigurationButton")}
+          </LegacyButton>
         )}
       </div>
       {showPasswordModal && <PassphraseModal onPassphraseChange={setPassphrase} passphrase={passphrase} onSubmit={handlePasswordSubmit} onClose={closeModal} />}
