@@ -36,6 +36,8 @@ $min-lines: 3;
   resize: none;
   word-wrap: break-word;
 
+  white-space: pre; // important to enable white spaces like new lines
+
   color: $navy--900;
   letter-spacing: $letter-spacing--medium;
   font-size: $text--md;
@@ -63,6 +65,10 @@ $min-lines: 3;
       border-color: rgba(var(--accent-color--dark-rgb), 0.6);
     }
   }
+}
+
+.note-dialog__url {
+  @include custom-url($truncate: true);
 }
 
 .note-dialog__marker-edited {

@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, FocusEvent, useState} from "react";
 import {Participant} from "store/features/participants/types";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {addProtocol} from "utils/images";
@@ -11,8 +11,8 @@ import {createPortal} from "react-dom";
 import {Toast} from "utils/Toast";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
-import TextareaAutosize from "react-textarea-autosize";
-import i18n from "../../../i18n";
+import i18n from "i18n";
+import Linkify from "linkify-react";
 import "./NoteDialogNoteContent.scss";
 
 type NoteDialogNoteContentProps = {
@@ -27,6 +27,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
+  const [editing, setEditing] = useState(false);
   const editable = viewer.user.id === authorId || viewer.role === "OWNER" || viewer.role === "MODERATOR";
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const isModerator = viewer.role === "OWNER" || viewer.role === "MODERATOR";
@@ -43,10 +44,6 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       isSelf,
     };
   }, isEqual);
-
-  const onFocus = () => {
-    dispatch(onNoteFocus());
-  };
 
   const onEdit = (id: string, newText: string) => {
     if (editable && newText !== text && newText.length > 0) {
@@ -66,12 +63,111 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     dispatch(onNoteBlur());
   };
 
+  const onFocus = () => {
+    dispatch(onNoteFocus());
+  };
+
+  const onBlur = (e: FocusEvent<HTMLDivElement>) => {
+    onEdit(noteId!, e.target.innerText ?? "");
+    setEditing(false);
+  };
+
   const isImage = useImageChecker(text);
 
-  const {...emoji} = useEmojiAutocomplete<HTMLDivElement>({
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLDivElement>({
     initialValue: text,
     suggestionsHidden: isStackedNote,
   });
+
+  const {onClick, ...inputBindings} = emoji.inputBindings;
+
+  // from https://stackoverflow.com/a/63627688
+  const openInNewTab = (url: string): void => {
+    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+    if (newWindow) newWindow.opener = null;
+  };
+
+  // TODO move to util
+  const renderLink = (content: {content: string}) => {
+    const url = addProtocol(content.content);
+    return (
+      <a
+        href={url}
+        title={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={classNames("note-dialog__url", "note-dialog__url--truncate")}
+        onClick={(e) => {
+          // in board view, the anchor element works as expected, but in stack view some problems,
+          // I'm guessing because of event order arise. but manually opening the link seems to do the trick
+          // need to maybe keep in mind this might be considered a pop-up but idk
+          e.stopPropagation();
+          openInNewTab(url);
+        }}
+      >
+        {content.content}
+      </a>
+    );
+  };
+
+  // changes to edit move if user is eligible
+  const tryEnablingEditMode = () => {
+    if (!editable) return;
+
+    setEditing(true);
+  };
+
+  const renderContent = () =>
+    editing ? (
+      value
+    ) : (
+      <Linkify
+        options={{
+          render: renderLink,
+        }}
+      >
+        {value}
+      </Linkify>
+    );
+
+  // content container modes:
+  // - viewable (prettified, URLs)
+  // - editable (pure content)
+  const renderContentContainer = () => (
+    <div
+      className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
+      contentEditable={!(!editable || (!isModerator && boardLocked))}
+      suppressContentEditableWarning // yes, I know what I'm doing (hopefully)
+      tabIndex={0}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      // TODO cursor location (clicking on div with specific location should retain cursor at the position)
+      onClick={(e) => {
+        onClick(e); // emoji binding
+        tryEnablingEditMode();
+      }}
+      role="textbox"
+      {...inputBindings}
+      onKeyDown={(e) => {
+        inputBindings.onKeyDown(e);
+        if (e.defaultPrevented) return;
+
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          e.currentTarget.blur();
+          setEditing(false);
+        }
+
+        if (e.key === "Escape") {
+          e.currentTarget.blur();
+          e.stopPropagation();
+          setEditing(false);
+        }
+      }}
+    >
+      {renderContent()}
+    </div>
+  );
 
   return (
     <div className="note-dialog__note-content" ref={emoji.containerRef}>
@@ -100,28 +196,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
         </>
       ) : (
         <>
-          <TextareaAutosize
-            data-clarity-mask="True"
-            className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
-            disabled={!editable || (!isModerator && boardLocked)}
-            onBlur={(e) => onEdit(noteId!, e.target.value ?? "")}
-            onFocus={onFocus}
-            {...emoji.inputBindings}
-            onKeyDown={(e) => {
-              emoji.inputBindings.onKeyDown(e);
-              if (e.defaultPrevented) return;
-
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                e.currentTarget.blur();
-              }
-
-              if (e.key === "Escape") {
-                e.currentTarget.blur();
-                e.stopPropagation();
-              }
-            }}
-          />
+          {renderContentContainer()}
 
           {note?.edited && <div className="note-dialog__marker-edited">({t("Note.edited")})</div>}
           {!isStackedNote && <EmojiSuggestions {...emoji.suggestionsProps} />}

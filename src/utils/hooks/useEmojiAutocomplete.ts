@@ -9,7 +9,7 @@ export const emojiRegex = /^:([\w\d]+):?$/i;
 
 export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean, names: string[]];
 
-type InputElement = HTMLTextAreaElement | HTMLInputElement;
+type InputElement = HTMLTextAreaElement | HTMLInputElement | HTMLDivElement; // divs also work with `contentEditable attr`
 
 export function emojiWithSkinTone(emoji: string, skinTone: SkinToneComponent) {
   // the emoji with skin color support is assumed to be the first unicode character
@@ -138,9 +138,15 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
 
   // handle: update input, update suggestions
   // FormEventHandler for TextareaAutosize
+  // TODO contentEditable divs don't fire change events
   const handleChange: FormEventHandler<InputElement> & ChangeEventHandler<InputElement> = useCallback(
     (e) => {
-      const newVal = e.currentTarget.value;
+      const target = e.currentTarget;
+      let newVal = "";
+      if (target instanceof HTMLTextAreaElement || target instanceof HTMLInputElement) newVal = target.value;
+      else if (target instanceof HTMLDivElement) {
+        newVal = target.innerText ?? "";
+      }
       // prevent exceeding max input length by slicing the input
       if (maxInputLength !== undefined && newVal.length > maxInputLength) setValue(newVal.slice(0, maxInputLength));
       else setValue(newVal);
@@ -191,7 +197,19 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
   // - clicking -> onClick
   const handleUpdateCursor: ReactEventHandler<InputElement> = useCallback((e) => {
     const target = e.currentTarget;
-    setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null);
+    if (target instanceof HTMLTextAreaElement || target instanceof HTMLInputElement) {
+      setCursor(target.selectionStart === target.selectionEnd ? target.selectionStart : null);
+    } else if (target instanceof HTMLDivElement) {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        const preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(target);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        const cursorPosition = preCaretRange.toString().length;
+        setCursor(cursorPosition);
+      }
+    }
   }, []);
 
   const handleClickClearEmojiSuggestions: ReactEventHandler<InputElement> = useCallback(() => {
