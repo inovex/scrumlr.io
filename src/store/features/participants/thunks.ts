@@ -3,11 +3,23 @@ import {API} from "api";
 import {ApplicationState, retryable} from "store";
 import {Toast} from "utils/Toast";
 import i18n from "i18next";
-import {Auth} from "../auth";
+import {Auth, editUserOptimistically} from "store/features";
 
-export const editSelf = createAsyncThunk<Auth, Auth>("participants/editSelf", async (payload) => {
-  await API.editUser(payload);
-  return payload;
+export const editSelf = createAsyncThunk<
+  Auth,
+  {
+    auth: Auth;
+    applyOptimistically?: boolean;
+  },
+  {state: ApplicationState}
+>("participants/editSelf", async (payload, {dispatch}) => {
+  if (payload.applyOptimistically) {
+    // instantly apply changes (required when not in a board, since no event is retrieved)
+    dispatch(editUserOptimistically(payload.auth));
+  }
+
+  await API.editUser(payload.auth);
+  return payload.auth;
 });
 
 export const changePermission = createAsyncThunk<void, {userId: string; moderator: boolean}, {state: ApplicationState}>(
