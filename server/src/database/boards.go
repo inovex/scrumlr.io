@@ -86,12 +86,12 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 			columns[index].Index = &newColumnIndex
 		}
 
-		query = query.With("createdColumns", d.db.NewInsert().
+		query = query.With("createdColumns", d.Db.NewInsert().
 			Model(&columns).
 			Value("board", "(SELECT id FROM \"createdBoard\")"))
 	}
 	err := query.
-		With("createdSession", d.db.NewInsert().
+		With("createdSession", d.Db.NewInsert().
 			Model(&session).
 			Value("board", "(SELECT id FROM \"createdBoard\")")).
 		Table("createdBoard").

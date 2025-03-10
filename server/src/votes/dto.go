@@ -1,9 +1,10 @@
 package votes
 
 import (
+	"encoding/json"
+	"errors"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"time"
 )
@@ -18,19 +19,19 @@ type VotingCreateRequest struct {
 
 // VotingUpdateRequest represents the request to update a voting session.
 type VotingUpdateRequest struct {
-	ID     uuid.UUID          `json:"-"`
-	Board  uuid.UUID          `json:"-"`
-	Status types.VotingStatus `json:"status"`
+	ID     uuid.UUID    `json:"-"`
+	Board  uuid.UUID    `json:"-"`
+	Status VotingStatus `json:"status"`
 }
 
 // Voting is the response for all voting requests.
 type Voting struct {
-	ID                 uuid.UUID          `json:"id"`
-	VoteLimit          int                `json:"voteLimit"`
-	AllowMultipleVotes bool               `json:"allowMultipleVotes"`
-	ShowVotesOfOthers  bool               `json:"showVotesOfOthers"`
-	Status             types.VotingStatus `json:"status"`
-	VotingResults      *VotingResults     `json:"votes,omitempty"`
+	ID                 uuid.UUID      `json:"id"`
+	VoteLimit          int            `json:"voteLimit"`
+	AllowMultipleVotes bool           `json:"allowMultipleVotes"`
+	ShowVotesOfOthers  bool           `json:"showVotesOfOthers"`
+	Status             VotingStatus   `json:"status"`
+	VotingResults      *VotingResults `json:"votes,omitempty"`
 }
 
 type VotingResults struct {
@@ -82,7 +83,7 @@ type VotingDB struct {
 	VoteLimit          int
 	AllowMultipleVotes bool
 	ShowVotesOfOthers  bool
-	Status             types.VotingStatus
+	Status             VotingStatus
 }
 
 type VotingInsert struct {
@@ -91,14 +92,14 @@ type VotingInsert struct {
 	VoteLimit          int
 	AllowMultipleVotes bool
 	ShowVotesOfOthers  bool
-	Status             types.VotingStatus
+	Status             VotingStatus
 }
 
 type VotingUpdate struct {
 	bun.BaseModel `bun:"table:votings"`
 	ID            uuid.UUID
 	Board         uuid.UUID
-	Status        types.VotingStatus
+	Status        VotingStatus
 }
 
 type VoteDB struct {
@@ -126,4 +127,31 @@ func Votes(votes []VoteDB) []*Vote {
 		list[index] = new(Vote).From(vote)
 	}
 	return list
+}
+
+// VotingStatus is the state of a voting session and can be one of open, aborted or closed.
+type VotingStatus string
+
+const (
+	// VotingStatusOpen is the state for an open voting session, meaning that votes are allowed.
+	VotingStatusOpen VotingStatus = "OPEN"
+
+	// VotingStatusClosed is the state for a closed voting session.
+	//
+	// The results of the voting session are available to all participants of a board.
+	VotingStatusClosed VotingStatus = "CLOSED"
+)
+
+func (votingStatus *VotingStatus) UnmarshalJSON(b []byte) error {
+	var s string
+	if err := json.Unmarshal(b, &s); err != nil {
+		return err
+	}
+	unmarshalledVotingStatus := VotingStatus(s)
+	switch unmarshalledVotingStatus {
+	case VotingStatusOpen, VotingStatusClosed:
+		*votingStatus = unmarshalledVotingStatus
+		return nil
+	}
+	return errors.New("invalid session role")
 }

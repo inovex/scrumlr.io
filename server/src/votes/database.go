@@ -9,7 +9,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/notes"
 )
 
 type DB struct {
@@ -17,12 +17,42 @@ type DB struct {
 }
 
 func (d *DB) CreateVoting(insert VotingInsert) (VotingDB, error) {
-	//TODO implement me
-	panic("implement me")
+	if insert.Status != VotingStatusOpen {
+		return VotingDB{}, errors.New("unable to create voting with other state than 'OPEN'")
+	}
+
+	if insert.VoteLimit < 0 {
+		return VotingDB{}, errors.New("vote limit shall not be a negative number")
+	} else if insert.VoteLimit >= 100 {
+		return VotingDB{}, errors.New("vote limit shall not be greater than 99")
+	}
+
+	countOpenVotings := d.db.NewSelect().Model((*Voting)(nil)).ColumnExpr("COUNT(*) as count").Where("board = ?", insert.Board).Where("status = ?", VotingStatusOpen)
+	values := d.db.NewSelect().
+		ColumnExpr("uuid(?) as board", insert.Board).
+		ColumnExpr("? as vote_limit", insert.VoteLimit).
+		ColumnExpr("? as show_votes_of_others", insert.ShowVotesOfOthers).
+		ColumnExpr("? as allow_multiple_votes", insert.AllowMultipleVotes).
+		ColumnExpr("?::voting_status as status", insert.Status).
+		Where("(SELECT count FROM \"countOpenVotings\") = 0")
+
+	updateBoard := d.db.NewUpdate().Model((*database.Board)(nil)).Set("show_voting = null").Where("(SELECT count FROM \"countOpenVotings\") = 0")
+
+	var voting VotingDB
+	_, err := d.db.NewInsert().
+		With("countOpenVotings", countOpenVotings).
+		With("updateBoard", updateBoard).
+		With("_values", values).
+		Model(&insert).
+		TableExpr("_values").
+		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status").
+		Returning("*").
+		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
+	return voting, err
 }
 
 func (d *DB) UpdateVoting(update VotingUpdate) (VotingDB, error) {
-	if update.Status == types.VotingStatusOpen {
+	if update.Status == VotingStatusOpen {
 		return VotingDB{}, errors.New("only allowed to close or a abort a voting")
 	}
 
@@ -30,19 +60,18 @@ func (d *DB) UpdateVoting(update VotingUpdate) (VotingDB, error) {
 		Model(&update).
 		Where("id = ?", update.ID).
 		Where("board = ?", update.Board).
-		Where("status = ?", types.VotingStatusOpen).
+		Where("status = ?", VotingStatusOpen).
 		Returning("*")
 
 	var voting VotingDB
 	var err error
-	//todo: correct import of database Boards struct
-	if update.Status == types.VotingStatusClosed {
+	if update.Status == VotingStatusClosed {
 		updateBoard := d.db.NewUpdate().Model((*database.Board)(nil)).Set("show_voting = (SELECT id FROM \"updateQuery\")").Where("id = ?", update.Board)
 
 		err = d.db.NewSelect().
 			With("updateQuery", updateQuery).
 			With("updateBoard", updateBoard).
-			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
+			With("rankUpdate", d.GetRankUpdateQueryForClosedVoting("updateQuery")).
 			Model((*Voting)(nil)).
 			ModelTableExpr("\"updateQuery\" AS voting").
 			Scan(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
@@ -51,7 +80,7 @@ func (d *DB) UpdateVoting(update VotingUpdate) (VotingDB, error) {
 	return voting, err
 }
 
-func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery {
+func (d *DB) GetRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery {
 	newRankSelect := d.db.NewSelect().
 		TableExpr("notes as note").
 		ColumnExpr(fmt.Sprintf(
@@ -64,7 +93,7 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 
 	//todo: correct import of database note struct
 	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-		Model((*database.Note)(nil)).
+		Model((*notes.NoteDB)(nil)).
 		TableExpr("_data").
 		Set("rank = _data.new_rank").
 		WhereOr("note.id = _data.id").
@@ -77,7 +106,7 @@ func (d *DB) GetVoting(board, id uuid.UUID) (VotingDB, []VoteDB, error) {
 	var voting VotingDB
 	err := d.db.NewSelect().Model(&voting).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
 
-	if voting.Status == types.VotingStatusClosed {
+	if voting.Status == VotingStatusClosed {
 		votes, err := d.GetVotes(filter.VoteFilter{Board: board, Voting: &id})
 		return voting, votes, err
 	}
@@ -125,7 +154,7 @@ func (d *DB) AddVote(board, user, note uuid.UUID) (VoteDB, error) {
 		Model((*Voting)(nil)).
 		Column("id", "vote_limit", "allow_multiple_votes").
 		Where("board = ?", board).
-		Where("status = ?", types.VotingStatusOpen)
+		Where("status = ?", VotingStatusOpen)
 
 	currentVoteCount := d.db.NewSelect().
 		Model((*Vote)(nil)).ColumnExpr("note").
@@ -173,7 +202,7 @@ func (d *DB) AddVote(board, user, note uuid.UUID) (VoteDB, error) {
 }
 
 func (d *DB) RemoveVote(board, user, note uuid.UUID) error {
-	openVotingQuery := d.db.NewSelect().Model((*Voting)(nil)).Column("id").Where("board = ?", board).Where("status = ?", types.VotingStatusOpen)
+	openVotingQuery := d.db.NewSelect().Model((*Voting)(nil)).Column("id").Where("board = ?", board).Where("status = ?", VotingStatusOpen)
 	limitQuery := d.db.NewSelect().Model((*Vote)(nil)).Column("ctid").Where("voting = (SELECT id FROM \"openVotingQuery\")").Where("\"user\" = ?", user).Where("note = ?", note).Limit(1)
 
 	deleteQuery := VoteDB{Board: board, User: user, Note: note}

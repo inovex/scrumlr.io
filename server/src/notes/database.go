@@ -47,9 +47,9 @@ func (d DB) GetNote(id uuid.UUID) (NoteDB, error) {
   return note, err
 }
 
-func (d *Database) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error) {
+func (d *DB) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error) {
   var notes []NoteDB
-  query := d.Db.NewSelect().Model((*NoteDB)(nil)).Where("board = ?", board)
+  query := d.db.NewSelect().Model((*NoteDB)(nil)).Where("board = ?", board)
   if len(columns) > 0 {
     query = query.Where("\"column\" IN (?)", bun.In(columns))
   }
@@ -235,25 +235,25 @@ func (d *DB) updateNoteWithoutStack(update NoteUpdateDB) (NoteDB, error) {
   }
 
   // select previous configuration of note to update
-  previous := d.Db.NewSelect().Model((*Note)(nil)).Where("id = ?", update.ID).Where("board = ?", update.Board)
+  previous := d.db.NewSelect().Model((*NoteDB)(nil)).Where("id = ?", update.ID).Where("board = ?", update.Board)
   // select whether the note is moved into another column or out from a stack. This will change the COUNT(*) of notes to consider
-  rankAddition := d.Db.NewSelect().ColumnExpr("CASE WHEN (SELECT \"column\" FROM previous) <> ? OR (SELECT stack FROM previous) IS NOT NULL THEN 0 ELSE -1 END as max_rank_addition", update.Position.Column)
+  rankAddition := d.db.NewSelect().ColumnExpr("CASE WHEN (SELECT \"column\" FROM previous) <> ? OR (SELECT stack FROM previous) IS NOT NULL THEN 0 ELSE -1 END as max_rank_addition", update.Position.Column)
   // select the max rank allowed for the column of the note
-  rankRange := d.Db.NewSelect().Model((*Note)(nil)).ColumnExpr("(COUNT(*) + (SELECT max_rank_addition FROM rank_addition)) as max_rank").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("stack IS NULL")
+  rankRange := d.db.NewSelect().Model((*NoteDB)(nil)).ColumnExpr("(COUNT(*) + (SELECT max_rank_addition FROM rank_addition)) as max_rank").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("stack IS NULL")
   // select the new rank to set based on the preceding queries
-  rankSelection := d.Db.NewSelect().ColumnExpr("LEAST((SELECT max_rank FROM rank_range), ?) as new_rank", newRank)
+  rankSelection := d.db.NewSelect().ColumnExpr("LEAST((SELECT max_rank FROM rank_range), ?) as new_rank", newRank)
   // make room for this note (shift notes by +1 above the new rank) if this note will be moved into a new column or out of a stack
-  updateWhenPreviouslyStackedOrInOtherColumn := d.Db.NewUpdate().Model((*Note)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = 0").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)")
+  updateWhenPreviouslyStackedOrInOtherColumn := d.db.NewUpdate().Model((*NoteDB)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = 0").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)")
   // If the note is moved into a new column, decrease the ranks of the notes in the previous column that where above the note
-  decreaseRanksInPreviousColumn := d.Db.NewUpdate().Model((*Note)(nil)).Set("rank=rank-1").Where("\"column\" = (SELECT \"column\" FROM previous)").Where("board = ?", update.Board).Where("rank > (SELECT rank FROM previous)").Where("stack IS NULL").Where("\"column\" <> ?", update.Position.Column)
+  decreaseRanksInPreviousColumn := d.db.NewUpdate().Model((*NoteDB)(nil)).Set("rank=rank-1").Where("\"column\" = (SELECT \"column\" FROM previous)").Where("board = ?", update.Board).Where("rank > (SELECT rank FROM previous)").Where("stack IS NULL").Where("\"column\" <> ?", update.Position.Column)
   // shift notes within column if the new rank is lower than before
-  updateWhenNewIsLower := d.Db.NewUpdate().Model((*Note)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = -1").Where("(SELECT new_rank FROM rank_selection) < (SELECT rank FROM previous)").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)").Where("rank < (SELECT rank FROM previous)").Where("stack IS NULL")
+  updateWhenNewIsLower := d.db.NewUpdate().Model((*NoteDB)(nil)).Set("rank=rank+1").Where("(SELECT max_rank_addition FROM rank_addition) = -1").Where("(SELECT new_rank FROM rank_selection) < (SELECT rank FROM previous)").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank >= (SELECT new_rank FROM rank_selection)").Where("rank < (SELECT rank FROM previous)").Where("stack IS NULL")
   // shift notes within column if the new rank is higher than before
-  updateWhenNewIsHigher := d.Db.NewUpdate().Model((*Note)(nil)).Set("rank=rank-1").Where("(SELECT max_rank_addition FROM rank_addition) = -1").Where("(SELECT new_rank FROM rank_selection) > (SELECT rank FROM previous)").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank <= (SELECT new_rank FROM rank_selection)").Where("rank > (SELECT rank FROM previous)").Where("stack IS NULL")
+  updateWhenNewIsHigher := d.db.NewUpdate().Model((*NoteDB)(nil)).Set("rank=rank-1").Where("(SELECT max_rank_addition FROM rank_addition) = -1").Where("(SELECT new_rank FROM rank_selection) > (SELECT rank FROM previous)").Where("\"column\" = ?", update.Position.Column).Where("board = ?", update.Board).Where("rank <= (SELECT new_rank FROM rank_selection)").Where("rank > (SELECT rank FROM previous)").Where("stack IS NULL")
   // update column of child notes
-  updateChildNotes := d.Db.NewUpdate().Model((*Note)(nil)).Set("\"column\" = ?", update.Position.Column).Where("stack = ?", update.ID)
+  updateChildNotes := d.db.NewUpdate().Model((*NoteDB)(nil)).Set("\"column\" = ?", update.Position.Column).Where("stack = ?", update.ID)
 
-  query := d.Db.NewUpdate().Model(&update).
+  query := d.db.NewUpdate().Model(&update).
     With("previous", previous).
     With("rank_addition", rankAddition).
     With("rank_range", rankRange).

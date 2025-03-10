@@ -3,6 +3,7 @@ package votes
 import (
 	"context"
 	"github.com/google/uuid"
+	"github.com/uptrace/bun"
 	"scrumlr.io/server/common/filter"
 )
 
@@ -25,4 +26,5 @@ type VotingDatabase interface {
 	AddVote(board, user, note uuid.UUID) (VoteDB, error)
 	RemoveVote(board, user, note uuid.UUID) error
 	GetOpenVoting(board uuid.UUID) (VotingDB, error)
+	GetRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery
 }
