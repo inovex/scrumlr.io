@@ -4,7 +4,7 @@
 import { legacyColumnTemplates } from "../../src/routes/Boards/Legacy/legacyColumnTemplates"
 import translationEn from "../../src/i18n/en/translation.json"
 
-describe("Navigation from landing page to board", () => {
+describe("navigation from homepage", () => {
     it("should successfully login anonymously", () => {
       cy.login()
     })
