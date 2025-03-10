@@ -49,3 +49,15 @@ type VotingUpdated struct {
 	//Notes  notes.NoteSlice `json:"notes"`
 	Voting *Voting `json:"voting"`
 }
+
+func Votings(votings []VotingDB, votes []VoteDB) []*Voting {
+	if votings == nil {
+		return nil
+	}
+
+	list := make([]*Voting, len(votings))
+	for index, voting := range votings {
+		list[index] = new(Voting).From(voting, votes)
+	}
+	return list
+}

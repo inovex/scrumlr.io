@@ -15,6 +15,7 @@ type VotingService interface {
 	AddVote(ctx context.Context, req VoteRequest) (*Vote, error)
 	RemoveVote(ctx context.Context, req VoteRequest) error
 	GetVotes(ctx context.Context, f filter.VoteFilter) ([]*Vote, error)
+	GetOpenVoting(ctx context.Context, board uuid.UUID) (*Voting, error)
 }
 
 type VotingDatabase interface {

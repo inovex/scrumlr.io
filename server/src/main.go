@@ -6,26 +6,25 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/notes"
-	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/services/votings"
-
 	"strings"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
 
+	"github.com/gorilla/websocket"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
+	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
+	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
+	"scrumlr.io/server/services/votings"
 )
 
 func main() {
@@ -362,6 +361,11 @@ func run(c *cli.Context) error {
 	bun := initialize.InitializeBun(db, c.Bool("verbose"))
 	dbConnection := database.New(bun)
 
+	websocketUpgrader := websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}
+
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
 	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
@@ -369,12 +373,15 @@ func run(c *cli.Context) error {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
 
+	sessionService := initialize.InitializeSessionService(bun, rt)
+	websocket := initialize.InitializeWebsocket(websocketUpgrader, rt)
+	sessionRequestService := initialize.InitializeSessionRequestService(bun, rt, websocket, sessionService)
+	reactionService := initialize.InitializeReactionService(bun, rt)
+
 	boardService := boards.NewBoardService(dbConnection, rt)
-	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	votingService := votings.NewVotingService(dbConnection, rt)
-	userService := users.NewUserService(dbConnection, rt)
-	noteService := notes.NewNotesService(initialize.InitializeNotesService(bun), rt)
-	reactionService := reactions.NewReactionService(initialize.InitializeReactionService(bun), rt)
+	userService := users.NewUserService(dbConnection, rt, sessionService)
+	noteService := notes.NewNoteService(dbConnection, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
@@ -387,11 +394,11 @@ func run(c *cli.Context) error {
 
 		boardService,
 		votingService,
-		dbConnection,
 		userService,
 		noteService,
 		reactionService,
-		boardSessionService,
+		sessionService,
+		sessionRequestService,
 		healthService,
 		feedbackService,
 		boardReactionService,

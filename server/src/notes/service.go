@@ -155,7 +155,7 @@ func (s *NoteService) updatedNotes(board uuid.UUID) {
 	})
 }
 
-func (s *NoteService) deletedNote(user, board, note uuid.UUID, deletedVotes []*dto.Vote, deleteStack bool) {
+func (s *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*votes.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,
 		"deleteStack": deleteStack,
