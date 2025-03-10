@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/votes"
 	"time"
 
 	"github.com/google/uuid"
@@ -87,17 +86,17 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 			columns[index].Index = &newColumnIndex
 		}
 
-		query = query.With("createdColumns", d.db.NewInsert().
-			Model(&columns).
-			Value("board", "(SELECT id FROM \"createdBoard\")"))
-	}
-	err := query.
-		With("createdSession", d.db.NewInsert().
-			Model(&session).
-			Value("board", "(SELECT id FROM \"createdBoard\")")).
-		Table("createdBoard").
-		Column("*").
-		Scan(context.Background(), &b)
+    query = query.With("createdColumns", d.db.NewInsert().
+      Model(&columns).
+      Value("board", "(SELECT id FROM \"createdBoard\")"))
+  }
+  err := query.
+    With("createdSession", d.db.NewInsert().
+      Model(&session).
+      Value("board", "(SELECT id FROM \"createdBoard\")")).
+    Table("createdBoard").
+    Column("*").
+    Scan(context.Background(), &b)
 
 	return b, err
 }

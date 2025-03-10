@@ -64,8 +64,9 @@ func New(
 
 	boards services.Boards,
 	votings services.Votings,
+	db *database.Database,
 	users services.Users,
-	notes services.Notes,
+	notes notes.NotesService,
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
 	sessionRequests sessionrequests.SessionRequestService,

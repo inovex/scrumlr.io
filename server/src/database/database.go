@@ -3,7 +3,7 @@ package database
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
@@ -11,10 +11,10 @@ import (
 
 // Database is the main class within this package and will be extended by several receiver functions
 type Database struct {
-	db               *bun.DB
-	reactionsDb      reactions.ReactionDatabase
-	sessionDb        sessions.SessionDatabase
-	sessionRequestDb sessionrequests.SessionRequestDatabase
+	db          *bun.DB
+	reactionsDb reactions.ReactionDatabase
+	notesDB     notes.NotesDatabase
+	votingsDB   votes.VotingDatabase
 }
 
 type FullBoard struct {
@@ -32,12 +32,9 @@ type FullBoard struct {
 func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
-	// TODO Remove these databases.
-	// These need to exists for now because we still need full access to all tables
-	d.reactionsDb = reactions.NewReactionsDatabase(db)
-	d.sessionDb = sessions.NewSessionDatabase(db)
-	d.sessionRequestDb = sessionrequests.NewSessionRequestDatabase(db)
-
+	d.reactionsDb = reactions.NewReactionsDatabase(db) //TODO remove
+	d.votingsDB = votes.NewVotingDatabase(db)
+	d.notesDB = notes.NewNotesDatabase(db)
 	return d
 }
 
@@ -78,7 +75,7 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getColumns:
 			columns, err = d.GetColumns(id)
 		case getNotes:
-			notes, err = d.GetNotes(id)
+			notes, err = d.notesDB.GetNotes(id)
 		case getReactions:
 			reactions, err = d.reactionsDb.GetReactions(id)
 		case getVotings:
