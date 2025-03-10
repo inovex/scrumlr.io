@@ -7,7 +7,6 @@ $stan-height-factor: 93%;
   flex-direction: row;
   flex: 1;
   // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
-  // gap: $spacing--md;
 
   position: relative;
 }

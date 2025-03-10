@@ -108,9 +108,6 @@ $side-padding--desktop: 14vw;
 }
 
 @media screen and (max-width: $breakpoint--smartphone) {
-  .boards {
-  }
-
   .boards__grid {
     // stretch main to full width
     grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
