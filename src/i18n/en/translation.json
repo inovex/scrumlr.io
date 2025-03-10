@@ -43,6 +43,7 @@
     "switchTitle": "Sessions",
     "title": "Choose a session",
     "savedSessions": "Your saved Sessions",
+    "emptySessions": "To ensure your sessions are saved, a registered profile is required. You can easily sign in using your Google or Microsoft account.",
 
     "SessionsCard": {
       "addFavourite": "Mark as Favourite",
@@ -50,7 +51,8 @@
       "column_one": "{{count}} Column",
       "column_other": "{{count}} Columns",
       "goToSession": "Go to Session",
-      "Participants": "{{count}} Participants"
+      "Participants_one": "{{count}} Participant",
+      "Participants_other": "{{count}} Participants"
     }
   },
   "CreateBoard": {

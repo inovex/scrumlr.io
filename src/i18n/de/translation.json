@@ -43,6 +43,7 @@
     "switchTitle": "Sitzungen",
     "title": "Wähle eine Sitzung",
     "savedSessions": "Deine Sitzungen",
+    "emptySessions": "Um sicherzustellen, dass deine Sitzungen gespeichert werden, ist ein registriertes Profil erforderlich. Du kannst dich ganz einfach mit deinem Google- oder Microsoft-Konto anmelden.",
 
     "SessionsCard": {
       "addFavourite": "Favorit hinzufügen",
@@ -50,7 +51,8 @@
       "column_one": "{{count}} Spalte",
       "column_other": "{{count}} Spalten",
       "goToSession": "Zur Sitzung",
-      "Participants": "{{count}} Teilnehmer"
+      "Participants_one": "{{count}} Teilnehmer:in",
+      "Participants_other": "{{count}} Teilnehmer:innen"
     }
   },
   "CreateBoard": {
