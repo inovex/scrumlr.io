@@ -49,7 +49,7 @@ type ColumnTemplateUpdate struct {
 // CreateColumnTemplate creates a new column template. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
 func (d *Database) CreateColumnTemplate(column ColumnTemplateInsert) (ColumnTemplate, error) {
-	maxIndexSelect := d.Db.NewSelect().Model((*ColumnTemplate)(nil)).ColumnExpr("COUNT(*) as index").Where("board_template = ?", column.BoardTemplate)
+	maxIndexSelect := d.db.NewSelect().Model((*ColumnTemplate)(nil)).ColumnExpr("COUNT(*) as index").Where("board_template = ?", column.BoardTemplate)
 
 	newIndex := math.MaxInt
 	if column.Index != nil {
@@ -60,9 +60,9 @@ func (d *Database) CreateColumnTemplate(column ColumnTemplateInsert) (ColumnTemp
 		}
 	}
 
-	query := d.Db.NewInsert()
+	query := d.db.NewInsert()
 	if column.Index != nil {
-		indexUpdate := d.Db.NewUpdate().Model((*ColumnTemplate)(nil)).Set("index = index+1").Where("index >= ?", newIndex).Where("board_template = ?", column.BoardTemplate)
+		indexUpdate := d.db.NewUpdate().Model((*ColumnTemplate)(nil)).Set("index = index+1").Where("index >= ?", newIndex).Where("board_template = ?", column.BoardTemplate)
 		query = query.With("indexUpdate", indexUpdate)
 	}
 
@@ -80,13 +80,13 @@ func (d *Database) CreateColumnTemplate(column ColumnTemplateInsert) (ColumnTemp
 // GetColumnTemplate returns the column template for the specified id.
 func (d *Database) GetColumnTemplate(board, id uuid.UUID) (ColumnTemplate, error) {
 	var column ColumnTemplate
-	err := d.Db.NewSelect().Model(&column).Where("board_template = ?", board).Where("id = ?", id).Scan(context.Background())
+	err := d.db.NewSelect().Model(&column).Where("board_template = ?", board).Where("id = ?", id).Scan(context.Background())
 	return column, err
 }
 
 func (d *Database) ListColumnTemplates(tBoard uuid.UUID) ([]ColumnTemplate, error) {
 	var tColumns []ColumnTemplate
-	err := d.Db.NewSelect().Model(&tColumns).Where("board_template = ?", tBoard).Order("index ASC").Scan(context.Background())
+	err := d.db.NewSelect().Model(&tColumns).Where("board_template = ?", tBoard).Order("index ASC").Scan(context.Background())
 	return tColumns, err
 }
 
@@ -97,9 +97,9 @@ func (d *Database) UpdateColumnTemplate(column ColumnTemplateUpdate) (ColumnTemp
 		newIndex = 0
 	}
 
-	selectPrevious := d.Db.NewSelect().Model((*ColumnTemplate)(nil)).Column("board_template", "index").Where("id = ?", column.ID).Where("board_template = ?", column.BoardTemplate)
-	maxIndexSelect := d.Db.NewSelect().Model((*ColumnTemplate)(nil)).Column("index").Where("board_template = ?", column.BoardTemplate)
-	updateOnSmallerIndex := d.Db.NewUpdate().
+	selectPrevious := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("board_template", "index").Where("id = ?", column.ID).Where("board_template = ?", column.BoardTemplate)
+	maxIndexSelect := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("index").Where("board_template = ?", column.BoardTemplate)
+	updateOnSmallerIndex := d.db.NewUpdate().
 		Model((*ColumnTemplate)(nil)).
 		Column("index").
 		Set("index = index+1").
@@ -107,7 +107,7 @@ func (d *Database) UpdateColumnTemplate(column ColumnTemplateUpdate) (ColumnTemp
 		Where("board_template = ?", column.BoardTemplate).
 		Where("(SELECT index FROM \"selectPrevious\") > ?", newIndex).
 		Where("index >= ?", newIndex)
-	updateOnGreaterIndex := d.Db.NewUpdate().
+	updateOnGreaterIndex := d.db.NewUpdate().
 		Model((*ColumnTemplate)(nil)).
 		Column("index").
 		Set("index = index-1").
@@ -117,7 +117,7 @@ func (d *Database) UpdateColumnTemplate(column ColumnTemplateUpdate) (ColumnTemp
 		Where("index <= ?", newIndex)
 
 	var c ColumnTemplate
-	_, err := d.Db.NewUpdate().
+	_, err := d.db.NewUpdate().
 		With("selectPrevious", selectPrevious).
 		With("maxIndexSelect", maxIndexSelect).
 		With("updateOnSmallerIndex", updateOnSmallerIndex).
@@ -134,13 +134,13 @@ func (d *Database) UpdateColumnTemplate(column ColumnTemplateUpdate) (ColumnTemp
 // DeleteColumnTemplate  deletes a column template  and adapts all indices of the other columns.
 func (d *Database) DeleteColumnTemplate(board, column, user uuid.UUID) error {
 	var columns []ColumnTemplate
-	selectPreviousIndex := d.Db.NewSelect().Model((*ColumnTemplate)(nil)).Column("index", "board_template").Where("id = ?", column)
-	indexUpdate := d.Db.NewUpdate().
+	selectPreviousIndex := d.db.NewSelect().Model((*ColumnTemplate)(nil)).Column("index", "board_template").Where("id = ?", column)
+	indexUpdate := d.db.NewUpdate().
 		With("selectPreviousIndex", selectPreviousIndex).
 		Model((*ColumnTemplate)(nil)).Set("index = index-1").
 		Where("board_template = (SELECT board_template from \"selectPreviousIndex\")").
 		Where("index >= (SELECT index from \"selectPreviousIndex\")")
-	_, err := d.Db.NewDelete().
+	_, err := d.db.NewDelete().
 		With("indexUpdate", indexUpdate).
 		Model((*ColumnTemplate)(nil)).
 		Where("id = ?", column).
