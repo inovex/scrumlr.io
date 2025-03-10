@@ -5,7 +5,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 	columnService "scrumlr.io/server/columns"
-	"scrumlr.io/server/database"
 	"testing"
 	"time"
 )
@@ -43,7 +42,7 @@ func TestShouldShowNotesBecauseAuthorIdIsEqual(t *testing.T) {
 func TestMapping(t *testing.T) {
 	databaseNote := buildDatabaseNote()
 
-	note := Notes([]database.Note{databaseNote})[0]
+	note := Notes([]NoteDB{databaseNote})[0]
 
 	assert.Equal(t, databaseNote.ID, note.ID)
 	assert.Equal(t, databaseNote.Author, note.Author)
@@ -91,8 +90,8 @@ func buildColumn(visible bool) *columnService.Column {
 	}
 }
 
-func buildDatabaseNote() database.Note {
-	return database.Note{
+func buildDatabaseNote() NoteDB {
+	return NoteDB{
 		BaseModel: bun.BaseModel{},
 		ID:        uuid.UUID{},
 		CreatedAt: time.Time{},

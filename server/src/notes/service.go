@@ -1,77 +1,183 @@
 package notes
 
 import (
+	"context"
+	"database/sql"
 	"github.com/google/uuid"
-	"net/http"
-	columnService "scrumlr.io/server/columns"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/technical_helper"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/votes"
 )
 
-func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUID, showNotesOfOtherUsers bool, showAuthors bool, columns columnService.ColumnSlice) NoteSlice {
-
-	visibleNotes := technical_helper.Filter[*Note](n, func(note *Note) bool {
-		for _, column := range columns {
-			if (note.Position.Column == column.ID) && column.Visible {
-				// BoardSettings -> Remove other participant cards
-				if showNotesOfOtherUsers {
-					return true
-				} else if userID == note.Author {
-					return true
-				}
-			}
-		}
-		return false
-	})
-
-	n.hideOtherAuthors(userID, showAuthors, visibleNotes)
-
-	return visibleNotes
+type Service struct {
+	database     NotesDatabase
+	votesService *votes.Service
+	realtime     *realtime.Broker
 }
 
-func UnmarshallNotaData(data interface{}) (NoteSlice, error) {
-	notes, err := technical_helper.UnmarshalSlice[Note](data)
-
+func (s *Service) Create(ctx context.Context, body NoteCreateRequest) (*Note, error) {
+	log := logger.FromContext(ctx)
+	note, err := s.database.CreateNote(NoteInsertDB{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
 	if err != nil {
+		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
+		return nil, common.InternalServerError
+	}
+	s.updatedNotes(body.Board)
+	return new(Note).From(note), err
+}
+
+func (s *Service) Import(ctx context.Context, body NoteImportRequest) (*Note, error) {
+
+	log := logger.FromContext(ctx)
+
+	note, err := s.database.ImportNote(NoteImportDB{
+		Author: body.User,
+		Board:  body.Board,
+		Position: &NoteUpdatePosition{
+			Column: body.Position.Column,
+			Rank:   body.Position.Rank,
+			Stack:  body.Position.Stack,
+		},
+		Text: body.Text,
+	})
+	if err != nil {
+		log.Errorw("Could not import notes", "err", err)
 		return nil, err
 	}
-
-	return notes, nil
+	return new(Note).From(note), err
 }
 
-func (n *Note) From(note database.Note) *Note {
-	n.ID = note.ID
-	n.Author = note.Author
-	n.Text = note.Text
-	n.Position = NotePosition{
-		Column: note.Column,
-		Stack:  note.Stack,
-		Rank:   note.Rank,
+func (s *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
+	log := logger.FromContext(ctx)
+	note, err := s.database.GetNote(id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, common.NotFoundError
+		}
+		log.Errorw("unable to get note", "note", id, "error", err)
+		return nil, common.InternalServerError
 	}
-	n.Edited = note.Edited
-	return n
+	return new(Note).From(note), err
 }
 
-func (*Note) Render(_ http.ResponseWriter, _ *http.Request) error {
-	return nil
-}
-
-func Notes(notes []database.Note) []*Note {
-	if notes == nil {
-		return nil
-	}
-
-	list := make([]*Note, len(notes))
-	for index, note := range notes {
-		list[index] = new(Note).From(note)
-	}
-	return list
-}
-
-func (n NoteSlice) hideOtherAuthors(userID uuid.UUID, showAuthors bool, visibleNotes []*Note) {
-	for _, note := range visibleNotes {
-		if !showAuthors && note.Author != userID {
-			note.Author = uuid.Nil
+func (s *Service) Update(ctx context.Context, body NoteUpdateRequest) (*Note, error) {
+	log := logger.FromContext(ctx)
+	var positionUpdate *NoteUpdatePosition
+	edited := body.Text != nil
+	if body.Position != nil {
+		positionUpdate = &NoteUpdatePosition{
+			Column: body.Position.Column,
+			Rank:   body.Position.Rank,
+			Stack:  body.Position.Stack,
 		}
 	}
+
+	note, err := s.database.UpdateNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), NoteUpdateDB{
+		ID:       body.ID,
+		Board:    body.Board,
+		Text:     body.Text,
+		Position: positionUpdate,
+		Edited:   edited,
+	})
+	if err != nil {
+		log.Errorw("unable to update note", "error", err, "note", body.ID)
+		return nil, common.InternalServerError
+	}
+	s.updatedNotes(body.Board)
+	return new(Note).From(note), err
+}
+
+func (s *Service) List(ctx context.Context, boardID uuid.UUID) ([]*Note, error) {
+	log := logger.FromContext(ctx)
+	notes, err := s.database.GetNotes(boardID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, common.NotFoundError
+		}
+		log.Errorw("unable to get notes", "board", boardID, "error", err)
+	}
+	return Notes(notes), err
+}
+
+func (s *Service) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	note := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
+	voteFilter := filter.VoteFilter{
+		Board: board,
+		Note:  &note,
+	}
+	deletedVotes, err := s.votesService.GetVotes(ctx, voteFilter)
+	if body.DeleteStack {
+		stackedVotes, _ := s.database.GetChildNotes(note)
+		for _, n := range stackedVotes {
+			votes, err := s.votesService.GetVotes(ctx, filter.VoteFilter{
+				Board: board,
+				Note:  &n.ID,
+			})
+			if err != nil {
+				log.Errorw("unable to get votes of stacked notes", "note", n, "error", err)
+				return err
+			}
+			deletedVotes = append(deletedVotes, votes...)
+		}
+	}
+
+	if err != nil {
+		log.Errorw("unable to retrieve votes for a note delete", "err", err)
+	}
+
+	err = s.database.DeleteNote(user, board, id, body.DeleteStack)
+	if err != nil {
+		log.Errorw("unable to delete note", "note", body, "err", err)
+		return err
+	}
+
+	s.deletedNote(user, board, note, deletedVotes, body.DeleteStack)
+	return err
+}
+
+func (s *Service) updatedNotes(board uuid.UUID) {
+	notes, err := s.database.GetNotes(board)
+	if err != nil {
+		logger.Get().Errorw("unable to retrieve notes in UpdatedNotes call", "boardID", board, "err", err)
+	}
+
+	eventNotes := make([]Note, len(notes))
+	for index, note := range notes {
+		eventNotes[index] = *new(Note).From(note)
+	}
+
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesUpdated,
+		Data: eventNotes,
+	})
+}
+
+func (s *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*votes.Vote, deleteStack bool) {
+	noteData := map[string]interface{}{
+		"note":        note,
+		"deleteStack": deleteStack,
+	}
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNoteDeleted,
+		Data: noteData,
+	})
+
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventVotesDeleted,
+		Data: deletedVotes,
+	})
+
+}
+
+func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {
+	b := new(Service)
+	b.database = db
+	b.realtime = rt
+	return b
 }
