@@ -9,7 +9,7 @@ import (
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/votings"
+
 	"strings"
 
 	"scrumlr.io/server/auth"
@@ -380,10 +380,10 @@ func run(c *cli.Context) error {
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
 	boardTemplateService := board_templates.NewBoardTemplateService(dbConnection)
 
-	s := api.New(
-		basePath,
-		rt,
-		authConfig,
+  s := api.New(
+    basePath,
+    rt,
+    authConfig,
 
 		boardService,
 		dbConnection,
@@ -396,11 +396,11 @@ func run(c *cli.Context) error {
 		boardReactionService,
 		boardTemplateService,
 
-		c.Bool("verbose"),
-		!c.Bool("disable-check-origin"),
-		c.Bool("disable-anonymous-login"),
-		c.Bool("auth-enable-experimental-file-system-store"),
-	)
+    c.Bool("verbose"),
+    !c.Bool("disable-check-origin"),
+    c.Bool("disable-anonymous-login"),
+    c.Bool("auth-enable-experimental-file-system-store"),
+  )
 
 	port := fmt.Sprintf(":%d", c.Int("port"))
 	logger.Get().Infow("starting server", "base-path", basePath, "port", port)

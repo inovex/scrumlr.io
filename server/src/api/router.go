@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/notes"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -60,8 +61,9 @@ func New(
 
 	boards services.Boards,
 	votings services.Votings,
+	db *database.Database,
 	users services.Users,
-	notes services.Notes,
+	notes notes.NotesService,
 	reactions reactions.ReactionService,
 	sessions services.BoardSessions,
 	health health.HealthService,

@@ -5,14 +5,12 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/votes"
 )
 
 // Database is the main class within this package and will be extended by several receiver functions
 type Database struct {
 	db          *bun.DB
 	reactionsDb reactions.ReactionDatabase
-	votingsDB   votes.VotingDatabase
 	notesDB     notes.NotesDatabase
 }
 
@@ -23,8 +21,8 @@ type FullBoard struct {
 	Columns              []Column
 	Notes                []notes.NoteDB
 	Reactions            []reactions.DatabaseReaction
-	Votings              []votes.VotingDB
-	Votes                []votes.VoteDB
+	Votings              []Voting
+	Votes                []Vote
 }
 
 // New creates a new instance of Database
@@ -32,8 +30,7 @@ func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
 	d.reactionsDb = reactions.NewReactionsDatabase(db) //TODO remove
-	d.votingsDB = votes.NewVotingDatabase(db)
-	d.notesDB = notes.NewNotesDatabase(db)
+
 	return d
 }
 
@@ -45,8 +42,8 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		columns   []Column
 		notes     []notes.NoteDB
 		reactions []reactions.DatabaseReaction
-		votings   []votes.VotingDB
-		votes     []votes.VoteDB
+		votings   []Voting
+		votes     []Vote
 		err       error
 	)
 	type dataBaseOperation int
@@ -78,7 +75,7 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getReactions:
 			reactions, err = d.reactionsDb.GetReactions(id)
 		case getVotings:
-			votings, votes, err = d.votingsDB.GetVotings(id)
+			votings, votes, err = d.GetVotings(id)
 		}
 		if err != nil {
 			return FullBoard{}, err

@@ -105,6 +105,19 @@ func (s *Service) List(ctx context.Context, board uuid.UUID) ([]*Voting, error) 
 	return VotingWithVotes(votings, receivedVotes), err
 }
 
+func (s *Service) GetOpenVoting(ctx context.Context, board uuid.UUID) (*Voting, error) {
+	log := logger.FromContext(ctx)
+	voting, err := s.database.GetOpenVoting(board)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, common.NotFoundError
+		}
+		log.Errorw("unable to get open voting", "board", board, "error", err)
+		return nil, common.InternalServerError
+	}
+	return new(Voting).From(voting, nil), err
+}
+
 func (s *Service) AddVote(ctx context.Context, body VoteRequest) (*Vote, error) {
 	log := logger.FromContext(ctx)
 	v, err := s.database.AddVote(body.Board, body.User, body.Note)

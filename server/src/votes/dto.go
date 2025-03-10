@@ -155,3 +155,15 @@ func (votingStatus *VotingStatus) UnmarshalJSON(b []byte) error {
 	}
 	return errors.New("invalid session role")
 }
+
+func Votings(votings []VotingDB, votes []VoteDB) []*Voting {
+	if votings == nil {
+		return nil
+	}
+
+	list := make([]*Voting, len(votings))
+	for index, voting := range votings {
+		list[index] = new(Voting).From(voting, votes)
+	}
+	return list
+}
