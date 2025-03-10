@@ -83,7 +83,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
   };
 
   return (
-    <div className="template-card">
+    <div className="template-card" data-cy={`template-card__${templateType}`}>
       {/* TODO probably remove favourites from recommended cards, since these are constant and we'd need to keep track of it somewhere */}
       <FavouriteButton className="template-card__favourite" active={template.template.favourite} onClick={toggleFavourite} />
       <div className={classNames("template-card__head")}>
@@ -102,7 +102,13 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
             .join(", ")}
         </div>
       </div>
-      <Button className={classNames("template-card__start-button", "template-card__start-button--start")} small icon={<NextIcon />} onClick={createBoard}>
+      <Button
+        className={classNames("template-card__start-button", "template-card__start-button--start")}
+        small
+        icon={<NextIcon />}
+        onClick={createBoard}
+        dataCy="template-card__start-button"
+      >
         {t("Templates.TemplateCard.start")}
       </Button>
     </div>
