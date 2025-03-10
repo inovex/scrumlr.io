@@ -3,15 +3,14 @@ package initialize
 import (
 	"database/sql"
 	"embed"
-	"net/http"
-	"runtime"
-
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	"github.com/golang-migrate/migrate/v4/source/httpfs"
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
+	"net/http"
+	"runtime"
 	"scrumlr.io/server/logger"
 )
 
@@ -63,5 +62,16 @@ func InitializeBun(db *sql.DB, verbose bool) *bun.DB {
 		d.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 	}
 
+	return d
+}
+
+type Database struct {
+	db *bun.DB
+}
+
+// New creates a new instance of Database
+func New(db *bun.DB) *Database {
+	d := new(Database)
+	d.db = db
 	return d
 }

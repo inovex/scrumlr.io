@@ -90,9 +90,9 @@ func (s *Service) Update(ctx context.Context, body NoteUpdateRequest) (*Note, er
 	return new(Note).From(note), err
 }
 
-func (s *Service) List(ctx context.Context, boardID uuid.UUID) ([]*Note, error) {
+func (s *Service) List(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
 	log := logger.FromContext(ctx)
-	notes, err := s.database.GetNotes(boardID)
+	notes, err := s.database.GetNotes(boardID, columnID...)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, common.NotFoundError
@@ -175,9 +175,9 @@ func (s *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*votes
 
 }
 
-func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {
+func NewNotesService(db *NotesDatabase, rt *realtime.Broker) NotesService {
 	b := new(Service)
-	b.database = db
+	b.database = *db
 	b.realtime = rt
 	return b
 }

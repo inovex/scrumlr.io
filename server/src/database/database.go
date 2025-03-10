@@ -12,8 +12,8 @@ import (
 type Database struct {
 	db          *bun.DB
 	reactionsDb reactions.ReactionDatabase
-	notesDB     notes.NotesDatabase
 	votingsDB   votes.VotingDatabase
+	notesDB     notes.NotesDatabase
 }
 
 type FullBoard struct {

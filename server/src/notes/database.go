@@ -15,6 +15,12 @@ type DB struct {
 	db *bun.DB
 }
 
+func NewNotesDatabase(database *bun.DB) NotesDatabase {
+	db := new(DB)
+	db.db = database
+	return db
+}
+
 func (d DB) CreateNote(insert NoteInsertDB) (NoteDB, error) {
 	var note NoteDB
 	_, err := d.db.NewInsert().
@@ -23,7 +29,6 @@ func (d DB) CreateNote(insert NoteInsertDB) (NoteDB, error) {
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
 	return note, err
-
 }
 
 func (d DB) ImportNote(insert NoteImportDB) (NoteDB, error) {
@@ -210,12 +215,6 @@ func (d *DB) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteS
 	return errors.New("not permitted to delete note")
 }
 
-func NewNotesDatabase(database *bun.DB) NotesDatabase {
-	db := new(DB)
-	db.db = database
-	return db
-}
-
 func (d *DB) updateNoteText(update NoteUpdateDB) (NoteDB, error) {
 	var note NoteDB
 	_, err := d.db.NewUpdate().Model(&update).Column("text", "edited").Where("id = ?", update.ID).Where("board = ?", update.Board).Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
@@ -270,7 +269,7 @@ func (d *DB) updateNoteWithoutStack(update NoteUpdateDB) (NoteDB, error) {
 		query = query.Set("text = ?", &update.Text)
 	}
 
-	var note []Note
+	var note []NoteDB
 	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 	return note[0], err
 }

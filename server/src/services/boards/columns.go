@@ -7,6 +7,7 @@ import (
 	"fmt"
 	columns2 "scrumlr.io/server/columns"
 	notes2 "scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -25,23 +26,22 @@ func (s *BoardService) CreateColumn(ctx context.Context, body dto.ColumnRequest)
 		log.Errorw("unable to create column", "err", err)
 		return nil, err
 	}
-	s.database.
-		s.UpdatedColumns(body.Board)
+	s.UpdatedColumns(ctx, body.Board)
 	return new(columns2.Column).From(column), err
 }
 
 func (s *BoardService) DeleteColumn(ctx context.Context, board, column, user uuid.UUID) error {
 	log := logger.FromContext(ctx)
 
-	voting, err := s.database.GetOpenVoting(board)
-	var toBeDeletedVotes []database.Vote
+	voting, err := s.votingsService.GetOpenVoting(ctx, board)
+	var toBeDeletedVotes []*votes.Vote
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
 			log.Errorw("unable to get open voting", "board", board, "err", err)
 			return err
 		}
 	} else {
-		toBeDeletedVotes, err = s.database.GetVotes(filter.VoteFilter{Board: board, Voting: &voting.ID})
+		toBeDeletedVotes, err = s.votingsService.GetVotes(ctx, filter.VoteFilter{Board: board, Voting: &voting.ID})
 		if err != nil {
 			logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err, "board", board, "column", column)
 			return err
@@ -53,7 +53,7 @@ func (s *BoardService) DeleteColumn(ctx context.Context, board, column, user uui
 		log.Errorw("unable to delete column", "err", err)
 		return err
 	}
-	s.DeletedColumn(user, board, column, toBeDeletedVotes)
+	s.DeletedColumn(ctx, user, board, column, toBeDeletedVotes)
 	return err
 }
 
@@ -64,7 +64,7 @@ func (s *BoardService) UpdateColumn(ctx context.Context, body dto.ColumnUpdateRe
 		log.Errorw("unable to update column", "err", err)
 		return nil, err
 	}
-	s.UpdatedColumns(body.Board)
+	s.UpdatedColumns(ctx, body.Board)
 	return new(columns2.Column).From(column), err
 }
 
@@ -91,7 +91,7 @@ func (s *BoardService) ListColumns(ctx context.Context, boardID uuid.UUID) ([]*c
 	return columns2.Columns(columns), err
 }
 
-func (s *BoardService) UpdatedColumns(board uuid.UUID) {
+func (s *BoardService) UpdatedColumns(ctx context.Context, board uuid.UUID) {
 	dbColumns, err := s.database.GetColumns(board)
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve columns in updated notes", "err", err)
@@ -103,13 +103,13 @@ func (s *BoardService) UpdatedColumns(board uuid.UUID) {
 	})
 
 	var err_msg string
-	err_msg, err = s.SyncNotesOnColumnChange(board)
+	err_msg, err = s.SyncNotesOnColumnChange(ctx, board)
 	if err != nil {
 		logger.Get().Errorw(err_msg, "err", err)
 	}
 }
 
-func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error) {
+func (s *BoardService) SyncNotesOnColumnChange(ctx context.Context, boardID uuid.UUID) (string, error) {
 	var err_msg string
 	columns, err := s.database.GetColumns(boardID)
 	if err != nil {
@@ -121,7 +121,7 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 	for _, column := range columns {
 		columnsID = append(columnsID, column.ID)
 	}
-	notes, err := s.database.GetNotes(boardID, columnsID...)
+	notes, err := s.noteService.List(ctx, boardID, columnsID...)
 	if err != nil {
 		err_msg = "unable to retrieve notes, following a updated columns call"
 		return err_msg, err
@@ -129,7 +129,7 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 
 	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
-		Data: notes2.Notes(notes),
+		Data: notes,
 	})
 	if err != nil {
 		err_msg = "unable to broadcast notes, following a updated columns call"
@@ -138,20 +138,20 @@ func (s *BoardService) SyncNotesOnColumnChange(boardID uuid.UUID) (string, error
 	return "", err
 }
 
-func (s *BoardService) DeletedColumn(user, board, column uuid.UUID, toBeDeletedVotes []database.Vote) {
+func (s *BoardService) DeletedColumn(ctx context.Context, user, board, column uuid.UUID, toBeDeletedVotes []*votes.Vote) {
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
 		Data: column,
 	})
 
-	dbNotes, err := s.database.GetNotes(board)
+	dbNotes, err := s.noteService.List(ctx, board)
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve notes in deleted column", "err", err)
 		return
 	}
 	eventNotes := make([]notes2.Note, len(dbNotes))
 	for index, note := range dbNotes {
-		eventNotes[index] = *new(notes2.Note).From(note)
+		eventNotes[index] = *note
 	}
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,

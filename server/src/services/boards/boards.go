@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	notes2 "scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
 	"time"
 
 	"github.com/google/uuid"
@@ -20,8 +21,10 @@ import (
 )
 
 type BoardService struct {
-	database *database.Database
-	realtime *realtime.Broker
+	database       *database.Database
+	votingsService votes.VotingService
+	noteService    notes2.NotesService
+	realtime       *realtime.Broker
 }
 
 func NewBoardService(db *database.Database, rt *realtime.Broker) services.Boards {
@@ -182,7 +185,7 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		log.Errorw("unable to update board", "err", err)
 		return nil, err
 	}
-	s.UpdatedBoard(board)
+	s.UpdatedBoard(ctx, board)
 
 	return new(dto.Board).From(board), err
 }
@@ -267,19 +270,19 @@ func (s *BoardService) UpdatedBoardTimer(board database.Board) {
 	})
 }
 
-func (s *BoardService) UpdatedBoard(board database.Board) {
+func (s *BoardService) UpdatedBoard(ctx context.Context, board database.Board) {
 	_ = s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardUpdated,
 		Data: new(dto.Board).From(board),
 	})
 
-	err_msg, err := s.SyncBoardSettingChange(board.ID)
+	err_msg, err := s.SyncBoardSettingChange(ctx, board.ID)
 	if err != nil {
 		logger.Get().Errorw(err_msg, "err", err)
 	}
 }
 
-func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
+func (s *BoardService) SyncBoardSettingChange(ctx context.Context, boardID uuid.UUID) (string, error) {
 	var err_msg string
 	columns, err := s.database.GetColumns(boardID)
 	if err != nil {
@@ -291,7 +294,7 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 	for _, column := range columns {
 		columnsID = append(columnsID, column.ID)
 	}
-	notes, err := s.database.GetNotes(boardID, columnsID...)
+	notes, err := s.noteService.List(ctx, boardID, columnsID...)
 	if err != nil {
 		err_msg = "unable to retrieve notes, following a updated board call"
 		return err_msg, err
@@ -299,7 +302,7 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 
 	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
-		Data: notes2.Notes(notes),
+		Data: notes,
 	})
 	if err != nil {
 		err_msg = "unable to broadcast notes, following a updated board call"
