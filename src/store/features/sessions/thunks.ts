@@ -1,12 +1,12 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {ApplicationState, retryable} from "store";
 import {API} from "api";
-import Socket from "sockette";
+// import Socket from "sockette";
 import {Session} from "./types";
 import {bannedFromBoard, incorrectPassphrase, passphraseChallengeRequired, permittedBoardAccess, rejectedBoardAccess, tooManyJoinRequests} from "../board";
 import {pendingBoardAccessConfirmation} from "../requests";
 
-let socket: Socket | null = null;
+// let socket: Socket | null = null;
 
 export const getSessions = createAsyncThunk<Session[], void, {state: ApplicationState}>("sessions/getSessions", async () => {
   const sessions = await API.getSessions();
@@ -29,19 +29,24 @@ export const createBoardFromSession = createAsyncThunk<string, Session>(
 );
 
 export const joinSession = createAsyncThunk<void, {boardId: string; passphrase?: string}, {state: ApplicationState}>("requests/joinBoard", async (payload, {dispatch}) => {
+  // Log the payload being sent to the API
+  console.log("in sessions/thunks joinSession: Joining board with payload:", payload);
+  console.log("calling API.joinBoard from joinSessions with payload.boardId: ", payload.boardId);
   await retryable(
     () => API.joinBoard(payload.boardId, payload.passphrase),
     dispatch,
     () => joinSession({...payload}),
     "joinBoard"
   ).then((r) => {
+    console.log("the status returned from API call: ", r.status);
+    console.log("payload.boardId: ", payload.boardId);
     switch (r.status) {
       case "ACCEPTED":
         dispatch(permittedBoardAccess(payload.boardId));
-        if (socket) {
-          socket.close();
-          socket = null;
-        }
+        // if (socket) {
+        //   socket.close();
+        //   socket = null;
+        // }
         break;
       case "REJECTED":
         dispatch(rejectedBoardAccess());

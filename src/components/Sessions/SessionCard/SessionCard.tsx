@@ -50,7 +50,8 @@ export const SessionCard = ({session}: SessionCardProps) => {
   const createBoard = () => {
     dispatch(joinSession({boardId: session.board.id}))
       .unwrap()
-      .then((boardId) => navigate(`/board/${boardId}`)); // TODO: this creates a new id each time, it should use the session id tho
+      .then((boardId) => navigate(`/board/${boardId}`));
+    console.log("boardId: ", session.board.id);
   };
 
   const navigateToEdit = () => {

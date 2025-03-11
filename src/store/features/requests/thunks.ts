@@ -31,6 +31,8 @@ export const pendingBoardAccessConfirmation = createAsyncThunk<void, {board: str
 
 // was defined in board actions before
 export const joinBoard = createAsyncThunk<void, {boardId: string; passphrase?: string}, {state: ApplicationState}>("requests/joinBoard", async (payload, {dispatch}) => {
+  console.log("calling API.joinBoard from requests/thunks with payload.boardId: ", payload.boardId); // TODO: why is boardid here undefined?
+
   await retryable(
     () => API.joinBoard(payload.boardId, payload.passphrase),
     dispatch,

@@ -14,6 +14,7 @@ export const ParticipantsAPI = {
    * @returns `true` if the operation succeeded or throws an error otherwise
    */
   joinBoard: async (boardId: string, passphrase?: string) => {
+    console.log("in participants.ts call boardId: ", boardId);
     const response = await fetch(`${SERVER_HTTP_URL}/boards/${boardId}/participants`, {
       method: "POST",
       credentials: "include",

@@ -47,6 +47,7 @@ export const permittedBoardAccess = createAsyncThunk<
     onmessage: async (evt: MessageEvent<string>) => {
       const message: ServerEvent = JSON.parse(evt.data);
 
+      console.log("message.type: ", message.type);
       if (message.type === "INIT") {
         const {board, columns, participants, notes, reactions, votes, votings, requests} = message.data;
         dispatch(

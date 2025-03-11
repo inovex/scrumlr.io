@@ -17,13 +17,17 @@ interface BoardGuardProps {
 
 export const BoardGuard = ({printViewEnabled}: BoardGuardProps) => {
   const dispatch = useAppDispatch();
-  const {boardId} = useParams<"boardId">();
+  const {boardId} = useParams<"boardId">(); // TODO: wie funktioniert useParams? hier kommt die BoardId her die dann undefined ist wenn sie joinBoard called durch die Auswahl einer Session zum öffnen
   const {t} = useTranslation();
+  console.log("boardId in BoardGuard: ", boardId);
 
   const boardStatus = useAppSelector((state) => state.board.status);
   const boardName = useAppSelector((applicationState) => applicationState.board.data?.name);
+  console.log("boardstatus in BoardGuard: ", boardStatus); // TODO: alles undefined
+  console.log("boardname in BoardGuard: ", boardName);
 
   useEffect(() => {
+    console.log("boardguard.tsx calling joinboard in request/thunks with boardid: ", boardId);
     dispatch(joinBoard({boardId: boardId!}));
 
     return () => {
