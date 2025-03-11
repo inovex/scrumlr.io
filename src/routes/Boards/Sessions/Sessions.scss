@@ -55,12 +55,25 @@ $max-card-width: 500px;
 }
 
 .sessions__container-title {
-  word-break: break-word; // because the word "Recommendations" is too long, TODO find better solution for this
+  word-break: break-word;
   font-size: $text--lg;
   font-weight: 700;
   line-height: 32px; // TODO use constant
 
   color: $navy--600;
+}
+
+.sessions__empty {
+  font-size: $text--md;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing--xs;
+}
+
+.sessions__empty-icon {
+  width: $icon--extralarge * 1.5;
+  height: $icon--extralarge * 1.5; // TODO: which ones are the right sizing variables here?
 }
 
 .sessions__container-arrow-button {
@@ -157,6 +170,10 @@ $max-card-width: 500px;
   }
 
   .sessions__container-title {
+    color: $blue--50;
+  }
+
+  .sessions__empty {
     color: $blue--50;
   }
 

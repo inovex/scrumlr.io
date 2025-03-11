@@ -1,6 +1,7 @@
 import {Outlet, useOutletContext} from "react-router";
 import classNames from "classnames";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
+import {ReactComponent as Info} from "assets/icons/info.svg";
 import {t} from "i18next";
 import StanDark from "../../../assets/stan/Stan_OK_Cropped_Light.png";
 import StanLight from "../../../assets/stan/Stan_OK_Cropped_Light.png";
@@ -34,13 +35,19 @@ export const Sessions = () => {
             </header>
             <div className="sessions__card-container">
               {/* <SessionCard session={DEFAULT_SESSION} /> */}
-              {sessions
-                .filter(
-                  (session) => session.board.name?.toLowerCase().includes(searchBarInput.toLowerCase()) || session.description?.toLowerCase().includes(searchBarInput.toLowerCase())
-                )
-                .map((session) => (
-                  <SessionCard session={session} />
-                ))}
+              {sessions.length === 0 ? (
+                <div className="sessions__empty">
+                  <Info className="sessions__empty-icon" />
+                  <p>{t("Sessions.emptySessions")}</p>
+                </div>
+              ) : (
+                sessions
+                  .filter(
+                    (session) =>
+                      session.board.name?.toLowerCase().includes(searchBarInput.toLowerCase()) || session.description?.toLowerCase().includes(searchBarInput.toLowerCase())
+                  )
+                  .map((session) => <SessionCard session={session} />)
+              )}
             </div>
             {/* </div> */}
           </div>
