@@ -14,7 +14,7 @@ type ColumnTemplate struct {
 	ID uuid.UUID `json:"id"`
 
 	// The board template id, that this column template is bound to.
-	BoardTemplate uuid.UUID `json:"board_template"`
+	BoardTemplate uuid.UUID `json:"template"`
 
 	// The column template name.
 	Name string `json:"name"`
