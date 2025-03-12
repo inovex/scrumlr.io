@@ -20,8 +20,9 @@ import (
 )
 
 type BoardSessionService struct {
-	database *database.Database
-	realtime *realtime.Broker
+	database     *database.Database
+	notesService *notes2.NotesService
+	realtime     *realtime.Broker
 }
 
 func NewBoardSessionService(db *database.Database, rt *realtime.Broker) services.BoardSessions {
@@ -304,7 +305,7 @@ func (s *BoardSessionService) UpdatedSession(board uuid.UUID, session database.B
 	})
 
 	// Sync notes
-	notes, err := s.database.GetNotes(board)
+	notes, err := s.notesService.List(context.Background(), board)
 	if err != nil {
 		logger.Get().Errorw("unable to get notes on a updatedsession call", "err", err)
 	}

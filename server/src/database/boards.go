@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/votes"
 	"time"
 
 	"github.com/google/uuid"
@@ -151,15 +152,15 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 	var err error
 	if update.ShowVoting.Valid {
 		votingQuery := d.db.NewSelect().
-			Model((*Voting)(nil)).
+			Model((*votes.VotingDB)(nil)).
 			Column("id").
 			Where("board = ?", update.ID).
 			Where("id = ?", update.ShowVoting.UUID).
-			Where("status = ?", types.VotingStatusClosed)
+			Where("status = ?", votes.VotingStatusClosed)
 
 		_, err = query.
 			With("voting", votingQuery).
-			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("voting")).
+			With("rankUpdate", d.votingsDB.GetRankUpdateQueryForClosedVoting("voting")).
 			Set("voting = (SELECT \"id\" FROM \"voting\")").
 			Where("id = ?", update.ID).
 			Returning("*").

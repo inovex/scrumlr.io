@@ -3,14 +3,17 @@ package database
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/votes"
 )
 
 // Database is the main class within this package and will be extended by several receiver functions
 type Database struct {
 	db          *bun.DB
 	reactionsDb reactions.ReactionDatabase
+	votingsDB   votes.VotingDatabase
+	notesDB     notes.NotesDatabase
 }
 
 type FullBoard struct {
@@ -18,10 +21,10 @@ type FullBoard struct {
 	BoardSessions        []BoardSession
 	BoardSessionRequests []BoardSessionRequest
 	Columns              []Column
-	Notes                []Note
+	Notes                []notes.NoteDB
 	Reactions            []reactions.DatabaseReaction
-	Votings              []Voting
-	Votes                []Vote
+	Votings              []votes.VotingDB
+	Votes                []votes.VoteDB
 }
 
 // New creates a new instance of Database
@@ -29,7 +32,8 @@ func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
 	d.reactionsDb = reactions.NewReactionsDatabase(db) //TODO remove
-
+	d.votingsDB = votes.NewVotingDatabase(db)
+	d.notesDB = notes.NewNotesDatabase(db)
 	return d
 }
 
@@ -39,10 +43,10 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		sessions  []BoardSession
 		requests  []BoardSessionRequest
 		columns   []Column
-		notes     []Note
+		notes     []notes.NoteDB
 		reactions []reactions.DatabaseReaction
-		votings   []Voting
-		votes     []Vote
+		votings   []votes.VotingDB
+		votes     []votes.VoteDB
 		err       error
 	)
 	type dataBaseOperation int
@@ -70,11 +74,11 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getColumns:
 			columns, err = d.GetColumns(id)
 		case getNotes:
-			notes, err = d.GetNotes(id)
+			notes, err = d.notesDB.GetNotes(id)
 		case getReactions:
 			reactions, err = d.reactionsDb.GetReactions(id)
 		case getVotings:
-			votings, votes, err = d.GetVotings(id)
+			votings, votes, err = d.votingsDB.GetVotings(id)
 		}
 		if err != nil {
 			return FullBoard{}, err

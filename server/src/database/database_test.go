@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
 	"time"
 
 	"github.com/ory/dockertest/v3"
@@ -19,6 +21,7 @@ import (
 )
 
 var testDb *Database
+var noteDB notes.NotesDatabase
 var reactionDb reactions.ReactionDatabase
 var fixture *dbfixture.Fixture
 
@@ -46,6 +49,7 @@ func testMainWithDefer(m *testing.M) int {
 
 	testDb = New(bun)
 	reactionDb = reactions.NewReactionsDatabase(bun)
+	noteDB = notes.NewNotesDatabase(bun)
 	err = loadTestdata()
 	if err != nil {
 		println(fmt.Sprintf("unable to load testdata: %s", err))
@@ -119,9 +123,9 @@ func loadTestdata() error {
 		(*Board)(nil),
 		(*BoardSessionInsert)(nil),
 		(*Column)(nil),
-		(*Note)(nil),
-		(*Voting)(nil),
-		(*Vote)(nil),
+		(*notes.Note)(nil),
+		(*votes.Voting)(nil),
+		(*votes.Vote)(nil),
 		(*reactions.DatabaseReaction)(nil),
 		(*BoardTemplate)(nil),
 		(*ColumnTemplate)(nil),

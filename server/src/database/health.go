@@ -1,6 +1,8 @@
 package database
 
-import "context"
+import (
+	"context"
+)
 
 func (d *Database) IsHealthy() bool {
 	var result int

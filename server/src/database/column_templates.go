@@ -3,10 +3,9 @@ package database
 import (
 	"context"
 	"fmt"
-	"math"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"math"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"

@@ -6,6 +6,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"scrumlr.io/server/database"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/votes"
 	"strings"
 
 	"scrumlr.io/server/auth"
@@ -15,7 +19,6 @@ import (
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -23,9 +26,7 @@ import (
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
-	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
-	"scrumlr.io/server/services/votings"
 )
 
 func main() {
@@ -371,10 +372,10 @@ func run(c *cli.Context) error {
 
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
-	votingService := votings.NewVotingService(dbConnection, rt)
+	votingService := votes.NewVotingService(initialize.InitializeVotingService(bun), rt)
 	userService := users.NewUserService(dbConnection, rt)
-	noteService := notes.NewNoteService(dbConnection, rt)
-	reactionService := initialize.InitializeReactionService(bun, rt)
+	noteService := notes.NewNotesService(initialize.InitializeNotesService(bun), rt)
+	reactionService := reactions.NewReactionService(initialize.InitializeReactionService(bun), rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
 	healthService := health.NewHealthService(dbConnection, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)

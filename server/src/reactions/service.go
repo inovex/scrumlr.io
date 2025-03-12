@@ -23,9 +23,9 @@ type Service struct {
 	realtime *realtime.Broker
 }
 
-func NewReactionService(db ReactionDatabase, rt *realtime.Broker) ReactionService {
+func NewReactionService(db *ReactionDatabase, rt *realtime.Broker) ReactionService {
 	service := new(Service)
-	service.database = db
+	service.database = *db
 	service.realtime = rt
 
 	return service
