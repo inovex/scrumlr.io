@@ -1,0 +1,53 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ingress
+  namespace: {{ .Release.Name }}
+  {{- if .Values.ingress.annotations }}
+  annotations: 
+    {{- range $key, $value := .Values.ingress.annotations }}
+    {{ $key }}: {{ $value | quote}}
+    {{- end}}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.ingress.ingressClassName }}
+  {{- end }}
+  rules:
+    {{- if .Values.ingress.hostname }}
+    - http:
+        paths:
+          {{- if .Values.ingress.extraPaths }}
+          {{- toYaml .Values.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.ingress.path.backend }}
+            pathType: {{ .Values.ingress.pathType }}
+            backend:
+              service:
+                name: {{ .Release.Name }}-backend
+                port:
+                  number: 80
+          - path: {{ .Values.ingress.path.frontend }}
+            pathType: {{ .Values.ingress.pathType }}
+            backend:
+              service:
+                name: {{ .Release.Name }}-frontend
+                port:
+                  number: 80
+      {{- if ne .Values.ingress.hostname "*" }}
+      host: {{ .Values.ingress.hostname }}
+      {{- end }}
+    {{- end }}
+  {{- if or (and .Values.ingress.tls (or .Values.ingress.selfSigned (include "scrumlr.certManagerAnnotation" (dict "annotations" .Values.ingress.annotations)))) .Values.ingress.extraTls }}
+  tls:
+    {{- if or .Values.ingress.selfSigned (include "scrumlr.certManagerAnnotation" (dict "annotations" .Values.ingress.annotations)) }}
+    - hosts:
+      - {{ .Values.ingress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.ingress.extraTls }}
+    {{- toYaml .Values.ingress.extraTls | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}
