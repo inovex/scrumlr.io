@@ -1,0 +1,143 @@
+@import "constants/style";
+
+$padding--default: $spacing--base;
+$padding--mobile: 12.5px $spacing--base;
+
+.search-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing--xs;
+
+  width: 100%;
+  padding: $padding--default;
+  border-radius: $rounded--full;
+
+  background-color: $gray--000;
+
+  &:not(&--disabled) {
+    @include default-states($padding: $padding--default);
+
+    // alternatively, this could be split up and put in their respective classes,
+    // which might be more readable but also requires a little bit more code
+    &:hover,
+    &:focus-within {
+      .search-bar__icon-container--search-icon {
+        color: $navy--600;
+      }
+
+      .search-bar__input {
+        color: $navy--600;
+      }
+    }
+  }
+
+  &--disabled {
+    background-color: $gray--300;
+
+    .search-bar__button {
+      &--search-icon,
+      &--clear-icon {
+        color: $gray--800;
+      }
+    }
+  }
+}
+
+.search-bar__button {
+  all: unset;
+  width: $icon--large;
+  height: $icon--large;
+
+  &--search-icon {
+    color: $gray--800;
+  }
+
+  &--clear-icon {
+    cursor: pointer;
+  }
+}
+
+.search-bar__input {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+
+  font-size: $text--base;
+  font-weight: 600;
+
+  color: $gray--800;
+  background-color: $gray--000;
+
+  &:focus {
+    outline: none;
+
+    color: $navy--600;
+  }
+
+  &::placeholder {
+    opacity: 100%;
+  }
+
+  &:disabled {
+    background-color: $gray--300;
+  }
+}
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .search-bar {
+    padding: $padding--mobile;
+
+    &:not(&--disabled) {
+      @include default-states($padding: $padding--mobile);
+    }
+  }
+}
+
+[theme="dark"] {
+  .search-bar {
+    background-color: $navy--400;
+
+    &:not(&--disabled) {
+      &:hover,
+      &:focus-within {
+        .search-bar__icon-container--search-icon {
+          color: $gray--000;
+        }
+
+        .search-bar__input {
+          color: $gray--000;
+        }
+      }
+    }
+
+    &--disabled {
+      background-color: $navy--700;
+
+      .search-bar__button {
+        &--search-icon,
+        &--clear-icon {
+          color: $navy--300;
+        }
+      }
+    }
+  }
+
+  .search-bar__input {
+    color: $blue--50;
+    background-color: $navy--400;
+
+    &:disabled {
+      color: $navy--300;
+      background-color: $navy--700;
+    }
+  }
+
+  .search-bar__button {
+    &--search-icon,
+    &--clear-icon {
+      color: $blue--50;
+    }
+  }
+}
