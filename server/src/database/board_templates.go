@@ -54,10 +54,10 @@ type BoardTemplateUpdate struct {
 }
 
 func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []ColumnTemplateInsert) (BoardTemplate, error) {
-	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
+	boardInsert := d.Db.NewInsert().Model(&board).Returning("*")
 
 	var b BoardTemplate
-	query := d.db.NewSelect().With("createdBoardTemplate", boardInsert)
+	query := d.Db.NewSelect().With("createdBoardTemplate", boardInsert)
 	if len(columns) > 0 {
 		for index := range columns {
 			newColumnIndex := index
@@ -65,7 +65,7 @@ func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []Colu
 		}
 
 		// create columns
-		query = query.With("createdColumns", d.db.NewInsert().
+		query = query.With("createdColumns", d.Db.NewInsert().
 			Model(&columns).
 			Value("board_template", "(SELECT id FROM \"createdBoardTemplate\")"))
 	}
@@ -82,7 +82,7 @@ func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
 	var tBoard BoardTemplate
 
 	// Get settings
-	err := d.db.NewSelect().Model(&tBoard).Where("id = ?", id).Scan(context.Background())
+	err := d.Db.NewSelect().Model(&tBoard).Where("id = ?", id).Scan(context.Background())
 	if err != nil {
 		return BoardTemplate{}, err
 	}
@@ -93,7 +93,7 @@ func (d *Database) GetBoardTemplate(id uuid.UUID) (BoardTemplate, error) {
 func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error) {
 	var tBoards []BoardTemplate
 
-	err := d.db.NewSelect().Model(&tBoards).Where("creator = ?", user).Order("created_at ASC").Scan(context.Background())
+	err := d.Db.NewSelect().Model(&tBoards).Where("creator = ?", user).Order("created_at ASC").Scan(context.Background())
 	if err != nil {
 		return []BoardTemplateFull{}, err
 	}
@@ -101,7 +101,7 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error
 	var templates []BoardTemplateFull
 	for _, board := range tBoards {
 		var cols []ColumnTemplate
-		err = d.db.NewSelect().Model(&cols).Where("board_template = ?", board.ID).Scan(context.Background())
+		err = d.Db.NewSelect().Model(&cols).Where("board_template = ?", board.ID).Scan(context.Background())
 		if err != nil {
 			return []BoardTemplateFull{}, err
 		}
@@ -124,7 +124,7 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error
 
 func (d *Database) UpdateBoardTemplate(board BoardTemplateUpdate) (BoardTemplate, error) {
 	// General Settings
-	query_settings := d.db.NewUpdate().Model(&board)
+	query_settings := d.Db.NewUpdate().Model(&board)
 
 	if board.Name != nil {
 		query_settings.Column("name")
@@ -157,6 +157,6 @@ func (d *Database) UpdateBoardTemplate(board BoardTemplateUpdate) (BoardTemplate
 }
 
 func (d *Database) DeleteBoardTemplate(templateId uuid.UUID) error {
-	_, err := d.db.NewDelete().Model((*BoardTemplate)(nil)).Where("id = ?", templateId).Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, templateId))
+	_, err := d.Db.NewDelete().Model((*BoardTemplate)(nil)).Where("id = ?", templateId).Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardTemplateIdentifier, templateId))
 	return err
 }

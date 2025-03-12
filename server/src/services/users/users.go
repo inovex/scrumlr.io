@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"database/sql"
-
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/realtime"

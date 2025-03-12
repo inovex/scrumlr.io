@@ -25,7 +25,8 @@ func (s *BoardService) CreateColumn(ctx context.Context, body dto.ColumnRequest)
 		log.Errorw("unable to create column", "err", err)
 		return nil, err
 	}
-	s.UpdatedColumns(body.Board)
+	s.database.
+		s.UpdatedColumns(body.Board)
 	return new(columns2.Column).From(column), err
 }
 

@@ -3,6 +3,8 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/database"
+	"scrumlr.io/server/votes"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -29,8 +31,8 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards         services.Boards
-	votings        services.Votings
+	boards services.Boards
+	//votings        services.Votings
 	users          services.Users
 	notes          services.Notes
 	reactions      reactions.ReactionService
@@ -57,7 +59,8 @@ func New(
 	auth auth.Auth,
 
 	boards services.Boards,
-	votings services.Votings,
+	//votings services.Votings,
+	db *database.Database,
 	users services.Users,
 	notes services.Notes,
 	reactions reactions.ReactionService,
@@ -102,15 +105,15 @@ func New(
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
-		votings:                          votings,
-		users:                            users,
-		notes:                            notes,
-		reactions:                        reactions,
-		sessions:                         sessions,
-		health:                           health,
-		feedback:                         feedback,
-		boardReactions:                   boardReactions,
-		boardTemplates:                   boardTemplates,
+		//votings:                          votings,
+		users:          users,
+		notes:          notes,
+		reactions:      reactions,
+		sessions:       sessions,
+		health:         health,
+		feedback:       feedback,
+		boardReactions: boardReactions,
+		boardTemplates: boardTemplates,
 
 		anonymousLoginDisabled:      anonymousLoginDisabled,
 		experimentalFileSystemStore: experimentalFileSystemStore,
@@ -148,6 +151,8 @@ func New(
 			s.protectedRoutes(router)
 		})
 	}
+
+	votes.NewService(db, rt, r)
 	return r
 }
 

@@ -2,16 +2,14 @@ package dto
 
 import (
 	"net/http"
-	"time"
-
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/votes"
+	"time"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
-	"scrumlr.io/server/reactions"
 )
 
 // Board is the response for all board requests.

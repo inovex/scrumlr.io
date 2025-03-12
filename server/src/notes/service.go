@@ -8,37 +8,6 @@ import (
 	"scrumlr.io/server/technical_helper"
 )
 
-type NoteSlice []*Note
-
-// Note is the response for all note requests.
-type Note struct {
-	// The id of the note
-	ID uuid.UUID `json:"id"`
-
-	// The author of the note.
-	Author uuid.UUID `json:"author"`
-
-	// The text of the note.
-	Text string `json:"text"`
-
-	Edited bool `json:"edited"`
-
-	// The position of the note.
-	Position NotePosition `json:"position"`
-}
-
-type NotePosition struct {
-
-	// The column of the note.
-	Column uuid.UUID `json:"column"`
-
-	// The parent note for this note in a stack.
-	Stack uuid.NullUUID `json:"stack"`
-
-	// The note rank.
-	Rank int `json:"rank"`
-}
-
 func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUID, showNotesOfOtherUsers bool, showAuthors bool, columns columnService.ColumnSlice) NoteSlice {
 
 	visibleNotes := technical_helper.Filter[*Note](n, func(note *Note) bool {
