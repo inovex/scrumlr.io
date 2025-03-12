@@ -34,16 +34,26 @@ export const Votes: FC<VotesProps> = (props) => {
   );
 
   const {isAnonymous, participantsNames} = useAppSelector((state) => {
-    if (state.votings?.past[0]?.isAnonymous) {
+    // If it is available, retrieve the most recent previous voting entry
+    const lastVoting = state.votings?.past?.[0];
+    // If no voting data exists or it's anonymous, return default values
+    if (!lastVoting || lastVoting.isAnonymous) {
       return {participantsNames: "", isAnonymous: true};
     }
+    // Extract votes per note safely
+    const votesPerNote = lastVoting.votes?.votesPerNote ?? {};
+    const userVotes = votesPerNote[props.noteId]?.userVotes ?? [];
+    // Retrieve every participant, including oneself
     const others = state.participants?.others ?? [];
-    const participants = [state.participants?.self, ...others];
-    const names = state.votings.past[0]?.votes?.votesPerNote[props.noteId]?.userVotes?.map(
-      (userVote) => participants.find((p) => p?.user.id === userVote.id)?.user.name as string
-    ) as string[];
-    return {participantsNames: names?.join(", "), isAnonymous: false};
-  })!;
+    const selfParticipant = state.participants?.self;
+    const participants = selfParticipant ? [selfParticipant, ...others] : others;
+    // Extract participant names based on votes for the given noteId
+    const names = userVotes
+      .map((userVote) => participants.find((p) => p?.user.id === userVote.id)?.user.name ?? null)
+      .filter((name): name is string => name !== null) // Ensure only valid strings remain
+      .join(", ");
+    return {participantsNames: names, isAnonymous: false};
+  });
 
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
