@@ -1,7 +1,18 @@
-export interface Vote {
+export type VoteBase = {
   voting: string;
   note: string;
-  user?: string;
-}
+  isAnonymous: true;
+};
 
-export type VotesState = Vote[];
+export type VoteWithUser = {
+  voting: string;
+  note: string;
+  isAnonymous: false;
+  user: string;
+};
+
+export type Vote = VoteBase | VoteWithUser;
+
+export interface VotesState {
+  data: Vote[];
+}

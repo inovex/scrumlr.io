@@ -5,6 +5,7 @@ import _ from "underscore";
 import {useAppSelector} from "store";
 import {VoteButtons} from "./VoteButtons";
 import "./Votes.scss";
+import {Vote} from "../../store/features";
 
 type VotesProps = {
   className?: string;
@@ -20,8 +21,9 @@ export const Votes: FC<VotesProps> = (props) => {
   const voting = useAppSelector((state) => state.votings.open);
   const ongoingVotes = useAppSelector(
     (state) => ({
-      note: state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v) => v.note === props.noteId).length,
-      total: state.votes.filter((v) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).length,
+      note: state.votes.data.filter((v: Vote) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).filter((v: Vote) => v.note === props.noteId)
+        .length,
+      total: state.votes.data.filter((v: Vote) => v.voting === state.votings.open?.id || v.voting === state.board.data?.showVoting).length,
     }),
     _.isEqual
   );

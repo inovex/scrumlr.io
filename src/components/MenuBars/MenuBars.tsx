@@ -13,6 +13,7 @@ import {clearFocusInitiator, setFocusInitiator, setModerating, setRaisedHandStat
 import _ from "underscore";
 import {useTimer} from "../../utils/hooks/useTimerLeft";
 import "./MenuBars.scss";
+import type {Vote} from "store/features/votes/types";
 
 export interface MenuBarsProps {
   showPreviousColumn: boolean;
@@ -80,7 +81,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       hotkeysAreActive: rootState.view.hotkeysAreActive,
       activeTimer: !!rootState.board.data?.timerEnd,
       activeVoting: !!rootState.votings.open,
-      usedVotes: rootState.votes.filter((v) => v.voting === rootState.votings.open?.id).length,
+      usedVotes: rootState.votes.data.filter((v: Vote) => v.voting === rootState.votings.open?.id).length,
       possibleVotes: rootState.votings.open?.voteLimit,
       timerEnd: rootState.board.data?.timerEnd,
     }),

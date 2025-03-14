@@ -3,8 +3,8 @@ import {Vote} from "./types";
 
 export const createdVote = createAction<Vote>("votes/createdVote");
 
+export const deletedVote = createAction<Pick<Vote, "voting" | "note">>("votes/deletedVote");
+
 export const updatedVotes = createAction<Vote[]>("votes/updatedVotes");
 
-export const deletedVote = createAction<Vote>("votes/deletedVote");
-
-export const deletedVotes = createAction<Vote[]>("votes/deletedVotes");
+export const deletedVotes = createAction<Pick<Vote, "voting" | "note">[]>("votes/deletedVotes");

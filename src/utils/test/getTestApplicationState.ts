@@ -143,16 +143,20 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       reactionType: "heart",
     },
   ],
-  votes: [
-    {
-      voting: "test-votings-open-id-1",
-      note: "test-notes-id-1",
-    },
-    {
-      voting: "test-votings-past-id-1",
-      note: "test-notes-id-2",
-    },
-  ],
+  votes: {
+    data: [
+      {
+        voting: "test-votings-open-id-1",
+        note: "test-notes-id-1",
+        isAnonymous: true,
+      },
+      {
+        voting: "test-votings-past-id-1",
+        note: "test-notes-id-2",
+        isAnonymous: true,
+      },
+    ],
+  },
   votings: {
     open: {
       id: "test-votings-open-id-1",

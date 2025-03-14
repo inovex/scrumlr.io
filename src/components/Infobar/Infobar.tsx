@@ -7,6 +7,7 @@ import {Tooltip} from "components/Tooltip";
 import {VoteDisplay} from "components/Votes/VoteDisplay";
 import {useAppSelector} from "store";
 import "./Infobar.scss";
+import type {Vote} from "store/features/votes/types";
 
 export const InfoBar = () => {
   const {t} = useTranslation();
@@ -20,7 +21,7 @@ export const InfoBar = () => {
       activeVoting: Boolean(applicationState.votings.open),
       isVotingAnonymous: applicationState.votings.open?.isAnonymous,
       possibleVotes: applicationState.votings.open?.voteLimit,
-      usedVotes: applicationState.votes.filter((v) => v.voting === applicationState.votings.open?.id).length,
+      usedVotes: applicationState.votes.data.filter((v: Vote) => v.voting === applicationState.votings.open?.id).length,
       sharedNote: applicationState.board.data?.sharedNote,
     }),
     _.isEqual
