@@ -2,22 +2,22 @@ package api
 
 import (
 	"net/http"
+
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/sessions"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database"
 )
 
 // getBoardSessions get participants
 func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	filter := database.BoardSessionFilterTypeFromQueryString(r.URL.Query())
+	filter := s.sessions.BoardSessionFilterTypeFromQueryString(r.URL.Query())
 	sessions, err := s.sessions.List(r.Context(), board, filter)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
@@ -63,7 +63,7 @@ func (s *Server) updateBoardSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var body dto.BoardSessionUpdateRequest
+	var body sessions.BoardSessionUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
@@ -89,7 +89,7 @@ func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	var body dto.BoardSessionsUpdateRequest
+	var body sessions.BoardSessionsUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)

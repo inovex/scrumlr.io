@@ -3,19 +3,21 @@ package api
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
+	"time"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
-	"net/http"
-	"net/http/httptest"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/mocks/services"
-	"strings"
-	"testing"
-	"time"
+	"scrumlr.io/server/sessions"
 )
 
 type BoardTestSuite struct {
@@ -259,9 +261,11 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 		suite.Run(te.name, func() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
-			sessionMock := services.NewMockBoardSessions(suite.T())
+			sessionMock := sessions.NewMockSessionService(suite.T())
+			sessionRequestMock := sessions.NewMockSessionRequestService(suite.T())
 			s.boards = boardMock
 			s.sessions = sessionMock
+			s.sessionRequests = sessionRequestMock
 			boardID := uuid.New()
 			userID := uuid.New()
 
@@ -280,13 +284,13 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			}
 
 			if te.board.AccessPolicy == types.AccessPolicyByInvite {
-				sessionMock.EXPECT().SessionRequestExists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
+				sessionRequestMock.EXPECT().SessionRequestExists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
 				if !te.sessionRequestExists {
-					sessionMock.EXPECT().CreateSessionRequest(req.req.Context(), boardID, userID).Return(new(dto.BoardSessionRequest), te.err)
+					sessionRequestMock.EXPECT().CreateSessionRequest(req.req.Context(), boardID, userID).Return(new(sessions.BoardSessionRequest), te.err)
 				}
 			} else {
 				if !te.sessionExists {
-					sessionMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(dto.BoardSession), te.err)
+					sessionMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(sessions.BoardSession), te.err)
 				}
 
 			}

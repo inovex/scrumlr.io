@@ -6,10 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
+
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votes"
-	"strconv"
 
 	"scrumlr.io/server/identifiers"
 
@@ -208,7 +210,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == types.AccessPolicyByInvite {
-		sessionExists, err := s.sessions.SessionRequestExists(r.Context(), board, user)
+		sessionExists, err := s.sessionRequests.SessionRequestExists(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
 			return
@@ -224,7 +226,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		_, err = s.sessions.CreateSessionRequest(r.Context(), board, user)
+		_, err = s.sessionRequests.CreateSessionRequest(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
@@ -337,11 +339,11 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
-			Board        *dto.Board          `json:"board"`
-			Participants []*dto.BoardSession `json:"participants"`
-			Columns      []*columns.Column   `json:"columns"`
-			Notes        []*notes.Note       `json:"notes"`
-			Votings      []*votes.Voting     `json:"votings"`
+			Board        *dto.Board               `json:"board"`
+			Participants []*sessions.BoardSession `json:"participants"`
+			Columns      []*columns.Column        `json:"columns"`
+			Notes        []*notes.Note            `json:"notes"`
+			Votings      []*votes.Voting          `json:"votings"`
 		}{
 			Board:        fullBoard.Board,
 			Participants: fullBoard.BoardSessions,

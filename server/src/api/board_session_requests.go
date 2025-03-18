@@ -3,13 +3,14 @@ package api
 import (
 	"errors"
 	"net/http"
+
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/sessions"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/logger"
 )
 
@@ -30,11 +31,11 @@ func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) 
 	}
 
 	if len(r.Header["Upgrade"]) > 0 && r.Header["Upgrade"][0] == "websocket" {
-		s.openBoardSessionRequestSocket(w, r)
+		s.sessionRequests.OpenBoardSessionRequestSocket(w, r)
 		return
 	}
 
-	request, err := s.sessions.GetSessionRequest(r.Context(), board, user)
+	request, err := s.sessionRequests.GetSessionRequest(r.Context(), board, user)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
@@ -48,7 +49,7 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	statusQuery := r.URL.Query().Get("status")
 
-	requests, err := s.sessions.ListSessionRequest(r.Context(), board, statusQuery)
+	requests, err := s.sessionRequests.ListSessionRequest(r.Context(), board, statusQuery)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
@@ -70,7 +71,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	var body dto.BoardSessionRequestUpdate
+	var body sessions.BoardSessionRequestUpdate
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -79,7 +80,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 	body.Board = board
 	body.User = user
 
-	request, err := s.sessions.UpdateSessionRequest(r.Context(), body)
+	request, err := s.sessionRequests.UpdateSessionRequest(r.Context(), body)
 	if err != nil {
 		log.Errorw("failed to update board session request", "request", body, "err", err)
 		common.Throw(w, r, common.InternalServerError)

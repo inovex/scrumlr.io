@@ -19,6 +19,7 @@ import (
 func TestGetSession(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
+
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().GetBoardSession(boardId, userId).Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
 
@@ -39,6 +40,7 @@ func TestGetSession(t *testing.T) {
 func TestGetSession_NotFound(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
+
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().GetBoardSession(boardId, userId).Return(DatabaseBoardSession{}, sql.ErrNoRows)
 
@@ -58,7 +60,7 @@ func TestGetSession_NotFound(t *testing.T) {
 func TestGetSession_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
-	dbError := "nable to execute"
+	dbError := "unable to execute"
 
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().GetBoardSession(boardId, userId).Return(DatabaseBoardSession{}, errors.New(dbError))
@@ -81,6 +83,7 @@ func TestGetSessions(t *testing.T) {
 	firstUserId := uuid.New()
 	secondUserId := uuid.New()
 	filter := BoardSessionFilter{}
+
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().GetBoardSessions(boardId, filter).
 		Return([]DatabaseBoardSession{
