@@ -31,6 +31,7 @@ const renderLegacyRoute = (legacy: boolean) => (legacy ? <Route path="/new" elem
 const Router = () => {
   const legacyCreateBoard = !!useAppSelector((state) => state.view.legacyCreateBoard);
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
+  const allowAnonymousCustomTemplates = useAppSelector((state) => state.view.allowAnonymousCustomTemplates);
 
   return (
     <BrowserRouter>
@@ -61,7 +62,7 @@ const Router = () => {
           <Route
             path="create"
             element={
-              <VerifiedAccountGuard>
+              <VerifiedAccountGuard override={allowAnonymousCustomTemplates}>
                 <TemplateEditor mode="create" />
               </VerifiedAccountGuard>
             }
@@ -70,7 +71,7 @@ const Router = () => {
           <Route
             path="edit/:id"
             element={
-              <VerifiedAccountGuard>
+              <VerifiedAccountGuard override={allowAnonymousCustomTemplates}>
                 <TemplateEditor mode="edit" />
               </VerifiedAccountGuard>
             }
