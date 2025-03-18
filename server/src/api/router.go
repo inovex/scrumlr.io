@@ -47,8 +47,9 @@ type Server struct {
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
-	anonymousLoginDisabled      bool
-	experimentalFileSystemStore bool
+	anonymousLoginDisabled        bool
+	allowAnonymousCustomTemplates bool
+	experimentalFileSystemStore   bool
 }
 
 func New(
@@ -70,6 +71,7 @@ func New(
 	verbose bool,
 	checkOrigin bool,
 	anonymousLoginDisabled bool,
+	allowAnonymousCustomTemplates bool,
 	experimentalFileSystemStore bool,
 ) chi.Router {
 	r := chi.NewRouter()
@@ -112,8 +114,9 @@ func New(
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
 
-		anonymousLoginDisabled:      anonymousLoginDisabled,
-		experimentalFileSystemStore: experimentalFileSystemStore,
+		anonymousLoginDisabled:        anonymousLoginDisabled,
+		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
+		experimentalFileSystemStore:   experimentalFileSystemStore,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
