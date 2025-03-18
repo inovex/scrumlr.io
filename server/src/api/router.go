@@ -23,6 +23,7 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
+	"scrumlr.io/server/sessions"
 )
 
 type Server struct {
@@ -31,16 +32,17 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards         services.Boards
-	votings        services.Votings
-	users          services.Users
-	notes          services.Notes
-	reactions      reactions.ReactionService
-	sessions       services.BoardSessions
-	health         health.HealthService
-	feedback       feedback.FeedbackService
-	boardReactions services.BoardReactions
-	boardTemplates services.BoardTemplates
+	boards          services.Boards
+	votings         services.Votings
+	users           services.Users
+	notes           services.Notes
+	reactions       reactions.ReactionService
+	sessions        sessions.SessionService
+	sessionRequests sessions.SessionRequestService
+	health          health.HealthService
+	feedback        feedback.FeedbackService
+	boardReactions  services.BoardReactions
+	boardTemplates  services.BoardTemplates
 
 	upgrader websocket.Upgrader
 
@@ -63,7 +65,8 @@ func New(
 	users services.Users,
 	notes services.Notes,
 	reactions reactions.ReactionService,
-	sessions services.BoardSessions,
+	sessions sessions.SessionService,
+	sessionRequests sessions.SessionRequestService,
 	health health.HealthService,
 	feedback feedback.FeedbackService,
 	boardReactions services.BoardReactions,
@@ -109,6 +112,7 @@ func New(
 		notes:                            notes,
 		reactions:                        reactions,
 		sessions:                         sessions,
+		sessionRequests:                  sessionRequests,
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
