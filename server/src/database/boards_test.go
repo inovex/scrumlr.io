@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/sessions"
 )
 
 func TestRunnerForBoards(t *testing.T) {
@@ -97,9 +98,9 @@ func testCreateBoardAlsoGeneratesOwnerSession(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	session, err := testDb.GetBoardSession(board.ID, user.ID)
+	session, err := sessionDb.GetBoardSession(board.ID, user.ID)
 	assert.Nil(t, err)
-	assert.Equal(t, types.SessionRoleOwner, session.Role)
+	assert.Equal(t, sessions.SessionRoleOwner, session.Role)
 }
 
 func testCreateBoardAlsoGeneratesColumns(t *testing.T) {

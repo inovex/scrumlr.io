@@ -9,12 +9,13 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/session_helper"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votes"
 )
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
-	isMod := session_helper.CheckSessionRole(userID, bs.boardParticipants, []types.SessionRole{types.SessionRoleModerator, types.SessionRoleOwner})
+	isMod := session_helper.CheckSessionRole(userID, bs.boardParticipants, []sessions.SessionRole{sessions.SessionRoleModerator, sessions.SessionRoleOwner})
 
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
@@ -138,7 +139,7 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 }
 
 func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMod bool) bool {
-	participantSession, err := technical_helper.Unmarshal[dto.BoardSession](event.Data)
+	participantSession, err := technical_helper.Unmarshal[sessions.BoardSession](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse participantUpdated in event filter", "board", bs.boardSettings.ID, "err", err)
 		return false
@@ -146,7 +147,7 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 
 	if isMod {
 		// Cache the changes of when a participant got updated
-		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *dto.BoardSession) *dto.BoardSession {
+		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *sessions.BoardSession) *sessions.BoardSession {
 			if boardSession.User.ID == participantSession.User.ID {
 				return participantSession
 			} else {
@@ -160,7 +161,7 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	isMod := session_helper.CheckSessionRole(clientID, event.Data.BoardSessions, []types.SessionRole{types.SessionRoleModerator, types.SessionRoleOwner})
+	isMod := session_helper.CheckSessionRole(clientID, event.Data.BoardSessions, []sessions.SessionRole{sessions.SessionRoleModerator, sessions.SessionRoleOwner})
 
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {
