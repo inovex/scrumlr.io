@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/users"
 )
 
 func TestRunnerForBoardSessionRequests(t *testing.T) {
@@ -29,26 +30,26 @@ func testCreateBoardSessionRequest(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	_, err := sessionRequestDb.Create(sessionrequests.DatabaseBoardSessionRequestInsert{
 		Board: board.ID,
-		User:  fixture.MustRow("User.jane").(*User).ID,
+		User:  fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser).ID,
 	})
 	assert.Nil(t, err)
 
 	_, err = sessionRequestDb.Create(sessionrequests.DatabaseBoardSessionRequestInsert{
 		Board: board.ID,
-		User:  fixture.MustRow("User.jack").(*User).ID,
+		User:  fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser).ID,
 	})
 	assert.Nil(t, err)
 
 	_, err = sessionRequestDb.Create(sessionrequests.DatabaseBoardSessionRequestInsert{
 		Board: board.ID,
-		User:  fixture.MustRow("User.jennifer").(*User).ID,
+		User:  fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser).ID,
 	})
 	assert.Nil(t, err)
 }
 
 func testCreateBoardSessionRequestOnConflictDoesNothing(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
 	_, err := sessionRequestDb.Create(sessionrequests.DatabaseBoardSessionRequestInsert{
 		Board: board.ID,
@@ -59,7 +60,7 @@ func testCreateBoardSessionRequestOnConflictDoesNothing(t *testing.T) {
 
 func testUpdateOfBoardSessionRequestToAccepted(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
 	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
@@ -76,7 +77,7 @@ func testUpdateOfBoardSessionRequestToAccepted(t *testing.T) {
 
 func testUpdateOfBoardSessionToRejected(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
@@ -88,7 +89,7 @@ func testUpdateOfBoardSessionToRejected(t *testing.T) {
 
 func testUpdateOfRejectedSessionToPendingFails(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
@@ -100,7 +101,7 @@ func testUpdateOfRejectedSessionToPendingFails(t *testing.T) {
 
 func testUpdateOfAcceptedSessionToPendingFails(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
 	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
@@ -112,7 +113,7 @@ func testUpdateOfAcceptedSessionToPendingFails(t *testing.T) {
 
 func testUpdateOfAcceptedSessionToRejectedFails(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
 	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
@@ -124,7 +125,7 @@ func testUpdateOfAcceptedSessionToRejectedFails(t *testing.T) {
 
 func testGetBoardSessionRequest(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
 	request, err := sessionRequestDb.Get(board.ID, user.ID)
 	assert.Nil(t, err)

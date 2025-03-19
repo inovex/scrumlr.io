@@ -11,18 +11,6 @@ import (
 	"scrumlr.io/server/common/filter"
 )
 
-type Users interface {
-	Get(ctx context.Context, id uuid.UUID) (*dto.User, error)
-	LoginAnonymous(ctx context.Context, name string) (*dto.User, error)
-	CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	Update(ctx context.Context, body dto.UserUpdateRequest) (*dto.User, error)
-}
-
 type Boards interface {
 	Create(ctx context.Context, body dto.CreateBoardRequest) (*dto.Board, error)
 	Get(ctx context.Context, id uuid.UUID) (*dto.Board, error)

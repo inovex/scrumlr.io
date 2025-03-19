@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"net/http"
+
 	"scrumlr.io/server/notes"
 
 	"github.com/gorilla/websocket"
@@ -13,6 +14,7 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 )
 
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
@@ -54,6 +56,13 @@ func InitializeWebsocket(ws websocket.Upgrader, rt *realtime.Broker) sessionrequ
 	websocket := sessionrequests.NewWebsocket(ws, rt)
 
 	return websocket
+}
+
+func InitializeUserService(db *bun.DB, rt *realtime.Broker) users.UserService {
+	userDb := users.NewUserDatabase(db)
+	userService := users.NewUserService(userDb, rt)
+
+	return userService
 }
 
 func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService {
