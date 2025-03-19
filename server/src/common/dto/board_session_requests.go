@@ -1,19 +1,21 @@
 package dto
 
 import (
-	"github.com/google/uuid"
 	"net/http"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/users"
 )
 
 type BoardSessionRequest struct {
-	User   User                            `json:"user"`
+	User   users.User                      `json:"user"`
 	Status types.BoardSessionRequestStatus `json:"status"`
 }
 
 func (r *BoardSessionRequest) From(request database.BoardSessionRequest) *BoardSessionRequest {
-	r.User = User{
+	r.User = users.User{
 		ID:   request.User,
 		Name: request.Name,
 	}

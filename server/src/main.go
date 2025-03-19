@@ -22,7 +22,6 @@ import (
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/notes"
-	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
 )
 
@@ -360,9 +359,11 @@ func run(c *cli.Context) error {
 	bun := initialize.InitializeBun(db, c.Bool("verbose"))
 	dbConnection := database.New(bun)
 
+	userService := initialize.InitializeUserService(bun, rt)
+
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
+	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection, userService)
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
@@ -370,7 +371,6 @@ func run(c *cli.Context) error {
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	votingService := votings.NewVotingService(dbConnection, rt)
-	userService := users.NewUserService(dbConnection, rt)
 	noteService := notes.NewNoteService(dbConnection, rt)
 	reactionService := initialize.InitializeReactionService(bun, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))

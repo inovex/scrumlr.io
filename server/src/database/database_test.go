@@ -16,10 +16,12 @@ import (
 	"github.com/uptrace/bun/dbfixture"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/users"
 )
 
 var testDb *Database
 var reactionDb reactions.ReactionDatabase
+var userDb users.UserDatabase
 var fixture *dbfixture.Fixture
 
 const DatabaseUsernameAndPassword = "dbtest"
@@ -46,6 +48,8 @@ func testMainWithDefer(m *testing.M) int {
 
 	testDb = New(bun)
 	reactionDb = reactions.NewReactionsDatabase(bun)
+	userDb = users.NewUserDatabase(bun)
+
 	err = loadTestdata()
 	if err != nil {
 		println(fmt.Sprintf("unable to load testdata: %s", err))
@@ -115,7 +119,7 @@ func initDatabase() (string, func(), error) {
 
 func loadTestdata() error {
 	testDb.db.RegisterModel(
-		(*User)(nil),
+		(*users.DatabaseUser)(nil),
 		(*Board)(nil),
 		(*BoardSessionInsert)(nil),
 		(*Column)(nil),

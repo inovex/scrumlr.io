@@ -8,12 +8,14 @@ import (
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/users"
 )
 
 // TODO: create generic method to initialize services
 func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {
 	reactionsDb := reactions.NewReactionsDatabase(db)
 	reactionService := reactions.NewReactionService(reactionsDb, rt)
+
 	return reactionService
 }
 
@@ -28,4 +30,11 @@ func InitializeHealthService(db *bun.DB, rt *realtime.Broker) health.HealthServi
 	healthDb := health.NewHealthDatabase(db)
 	healthService := health.NewHealthService(healthDb, rt)
 	return healthService
+}
+
+func InitializeUserService(db *bun.DB, rt *realtime.Broker) users.UserService {
+	userDb := users.NewUserDatabase(db)
+	userService := users.NewUserService(userDb, rt)
+
+	return userService
 }

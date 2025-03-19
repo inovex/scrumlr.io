@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/users"
 )
 
 func TestRunnerForBoards(t *testing.T) {
@@ -39,7 +40,7 @@ func TestRunnerForBoards(t *testing.T) {
 }
 
 func testCreatePublicBoard(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -58,7 +59,7 @@ func testCreatePublicBoard(t *testing.T) {
 }
 
 func testCreatePublicBoardWithPassphraseShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	passphrase := "passphrase"
 	_, err := testDb.CreateBoard(user.ID, BoardInsert{
@@ -72,7 +73,7 @@ func testCreatePublicBoardWithPassphraseShouldFail(t *testing.T) {
 }
 
 func testCreatePublicBoardWithSaltShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	salt := "salt"
 	_, err := testDb.CreateBoard(user.ID, BoardInsert{
@@ -86,7 +87,7 @@ func testCreatePublicBoardWithSaltShouldFail(t *testing.T) {
 }
 
 func testCreateBoardAlsoGeneratesOwnerSession(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -103,7 +104,7 @@ func testCreateBoardAlsoGeneratesOwnerSession(t *testing.T) {
 }
 
 func testCreateBoardAlsoGeneratesColumns(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -133,7 +134,7 @@ func testCreateBoardAlsoGeneratesColumns(t *testing.T) {
 }
 
 func testCreateByPassphraseBoard(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	passphrase := "passphrase"
 	salt := "salt"
@@ -153,7 +154,7 @@ func testCreateByPassphraseBoard(t *testing.T) {
 }
 
 func testCreateByInviteBoard(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -170,7 +171,7 @@ func testCreateByInviteBoard(t *testing.T) {
 }
 
 func testCreateBoardWithName(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	name := "Board name"
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
@@ -185,7 +186,7 @@ func testCreateBoardWithName(t *testing.T) {
 }
 
 func testCreateBoardWithDescription(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	description := "A board description"
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
@@ -201,7 +202,7 @@ func testCreateBoardWithDescription(t *testing.T) {
 }
 
 func testChangePublicBoardToPassphraseBoard(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	name := "Board name"
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
@@ -230,7 +231,7 @@ func testChangePublicBoardToPassphraseBoard(t *testing.T) {
 }
 
 func testChangeToPassphraseBoardWithMissingPassphraseShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	name := "Board name"
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
@@ -255,7 +256,7 @@ func testChangeToPassphraseBoardWithMissingPassphraseShouldFail(t *testing.T) {
 }
 
 func testChangeToPassphraseBoardWithMissingSaltShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	name := "Board name"
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
@@ -280,7 +281,7 @@ func testChangeToPassphraseBoardWithMissingSaltShouldFail(t *testing.T) {
 }
 
 func testChangePassphraseBoardToPublicBoard(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	passphrase := "passphrase"
 	salt := "salt"
@@ -306,7 +307,7 @@ func testChangePassphraseBoardToPublicBoard(t *testing.T) {
 }
 
 func testChangePassphraseBoardToPublicBoardWithPassphraseShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	passphrase := "passphrase"
 	salt := "salt"
@@ -331,7 +332,7 @@ func testChangePassphraseBoardToPublicBoardWithPassphraseShouldFail(t *testing.T
 }
 
 func testChangePassphraseBoardToPublicBoardWithSaltShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	passphrase := "passphrase"
 	salt := "salt"
@@ -356,7 +357,7 @@ func testChangePassphraseBoardToPublicBoardWithSaltShouldFail(t *testing.T) {
 }
 
 func testChangePassphraseBoardToBoardByInviteShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	passphrase := "passphrase"
 	salt := "salt"
@@ -381,7 +382,7 @@ func testChangePassphraseBoardToBoardByInviteShouldFail(t *testing.T) {
 }
 
 func testChangeInviteBoardToPassphraseBoardShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -405,7 +406,7 @@ func testChangeInviteBoardToPassphraseBoardShouldFail(t *testing.T) {
 }
 
 func testChangeInviteBoardToPublicBoardShouldFail(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -427,7 +428,7 @@ func testChangeInviteBoardToPublicBoardShouldFail(t *testing.T) {
 }
 
 func testUpdateBoardName(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -447,7 +448,7 @@ func testUpdateBoardName(t *testing.T) {
 }
 
 func testUpdateBoardSettings(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -470,7 +471,7 @@ func testUpdateBoardSettings(t *testing.T) {
 }
 
 func testUpdateBoardDescription(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	board, err := testDb.CreateBoard(user.ID, BoardInsert{
 		Name:         nil,
@@ -506,7 +507,7 @@ func testGetBoard(t *testing.T) {
 }
 
 func testGetUserBoards(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	// Create some boards associated with the user
 	boardName1 := "Board 1"

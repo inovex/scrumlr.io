@@ -9,10 +9,10 @@ import (
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/users"
 
 	"github.com/go-chi/render"
 	"github.com/markbates/goth/gothic"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 )
 
@@ -33,7 +33,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.LoginAnonymous(r.Context(), body.Name)
+	user, err := s.users.CreateAnonymous(r.Context(), body.Name)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
@@ -99,7 +99,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var internalUser *dto.User
+	var internalUser *users.User
 	switch provider {
 	case types.AccountTypeGoogle:
 		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
