@@ -1,9 +1,11 @@
 package api
 
 import (
+	"math/rand"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"math/rand"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
@@ -11,21 +13,21 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/session_helper"
 	"scrumlr.io/server/technical_helper"
+	"scrumlr.io/server/users"
 	"scrumlr.io/server/votes"
-	"testing"
 )
 
 var (
 	moderatorBoardSession = dto.BoardSession{
-		User: dto.User{ID: uuid.New()},
+		User: users.User{ID: uuid.New()},
 		Role: types.SessionRoleModerator,
 	}
 	ownerBoardSession = dto.BoardSession{
-		User: dto.User{ID: uuid.New()},
+		User: users.User{ID: uuid.New()},
 		Role: types.SessionRoleOwner,
 	}
 	participantBoardSession = dto.BoardSession{
-		User: dto.User{
+		User: users.User{
 			ID:          uuid.New(),
 			AccountType: types.AccountTypeAnonymous,
 		},
@@ -188,7 +190,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 		Type: realtime.BoardEventParticipantUpdated,
 		Data: dto.BoardSession{
 			RaisedHand: true,
-			User: dto.User{
+			User: users.User{
 				ID:          originalParticipantSession.User.ID,
 				AccountType: types.AccountTypeAnonymous,
 			},
@@ -498,7 +500,7 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusClosed(t *testing.T) {
 			BoardSessions: []*dto.BoardSession{
 				{
 					Role: types.SessionRoleModerator,
-					User: dto.User{ID: clientId},
+					User: users.User{ID: clientId},
 				},
 			},
 			Votings: []*votes.Voting{
@@ -530,7 +532,7 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusOpen(t *testing.T) {
 			BoardSessions: []*dto.BoardSession{
 				{
 					Role: types.SessionRoleModerator,
-					User: dto.User{ID: clientId},
+					User: users.User{ID: clientId},
 				},
 			},
 			Votings: []*votes.Voting{
@@ -570,7 +572,7 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 			BoardSessions: []*dto.BoardSession{
 				{
 					Role: types.SessionRoleModerator,
-					User: dto.User{ID: clientId},
+					User: users.User{ID: clientId},
 				},
 			},
 			Votings: orgVoting,
@@ -603,7 +605,7 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 			BoardSessions: []*dto.BoardSession{
 				{
 					Role: types.SessionRoleParticipant,
-					User: dto.User{ID: clientId},
+					User: users.User{ID: clientId},
 				},
 			},
 			Votings: []*votes.Voting{

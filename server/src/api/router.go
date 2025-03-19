@@ -21,6 +21,7 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
+	"scrumlr.io/server/users"
 )
 
 type Server struct {
@@ -31,7 +32,7 @@ type Server struct {
 
 	boards         services.Boards
 	votings        services.Votings
-	users          services.Users
+	users          users.UserService
 	notes          services.Notes
 	reactions      reactions.ReactionService
 	sessions       services.BoardSessions
@@ -58,7 +59,7 @@ func New(
 
 	boards services.Boards,
 	votings services.Votings,
-	users services.Users,
+	users users.UserService,
 	notes services.Notes,
 	reactions reactions.ReactionService,
 	sessions services.BoardSessions,

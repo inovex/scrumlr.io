@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/users"
 )
 
 var boardForColumnsTest uuid.UUID
@@ -17,13 +18,13 @@ var columnInsertedSecond *Column
 var columnInsertedThird *Column
 var columnInsertedFourth *Column
 var columnInsertedFifth *Column
-var columnTestUser *User
+var columnTestUser *users.DatabaseUser
 
 func TestRunnerForColumns(t *testing.T) {
 	firstColumn = fixture.MustRow("Column.firstColumn").(*Column)
 	secondColumn = fixture.MustRow("Column.secondColumn").(*Column)
 	thirdColumn = fixture.MustRow("Column.thirdColumn").(*Column)
-	columnTestUser = fixture.MustRow("User.john").(*User)
+	columnTestUser = fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser)
 	boardForColumnsTest = firstColumn.Board
 
 	t.Run("Getter=0", testGetColumn)
@@ -224,7 +225,7 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 		Board:  boardForColumnsTest,
 		Column: columnInsertedSecond.ID,
 		Text:   "Lorem Ipsum",
-		Author: fixture.MustRow("User.john").(*User).ID,
+		Author: fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser).ID,
 	})
 	assert.Nil(t, createNoteError)
 

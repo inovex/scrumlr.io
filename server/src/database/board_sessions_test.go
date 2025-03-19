@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/users"
 )
 
 func TestRunnerForBoardSessions(t *testing.T) {
@@ -43,7 +44,7 @@ func TestRunnerForBoardSessions(t *testing.T) {
 
 func testCreateBoardSessionAsParticipant(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.john").(*User)
+	user := fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser)
 
 	session, err := testDb.CreateBoardSession(BoardSessionInsert{Board: board.ID, User: user.ID, Role: types.SessionRoleParticipant})
 	assert.Nil(t, err)
@@ -52,7 +53,7 @@ func testCreateBoardSessionAsParticipant(t *testing.T) {
 
 func testCreateBoardSessionAsModerator(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	session, err := testDb.CreateBoardSession(BoardSessionInsert{Board: board.ID, User: user.ID, Role: types.SessionRoleModerator})
 	assert.Nil(t, err)
@@ -61,7 +62,7 @@ func testCreateBoardSessionAsModerator(t *testing.T) {
 
 func testCreateDuplicateBoardSessionShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	_, err := testDb.CreateBoardSession(BoardSessionInsert{Board: board.ID, User: user.ID, Role: types.SessionRoleModerator})
 	assert.NotNil(t, err)
@@ -69,7 +70,7 @@ func testCreateDuplicateBoardSessionShouldFail(t *testing.T) {
 
 func testCreateBoardSessionAsOwnerShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	_, err := testDb.CreateBoardSession(BoardSessionInsert{Board: board.ID, User: user.ID, Role: types.SessionRoleOwner})
 	assert.NotNil(t, err)
@@ -77,7 +78,7 @@ func testCreateBoardSessionAsOwnerShouldFail(t *testing.T) {
 
 func testUpdateOfConnectedState(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	connected := true
 
@@ -107,7 +108,7 @@ func testUpdateOfConnectedState(t *testing.T) {
 
 func testUpdateOfReadyState(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	ready := true
 
@@ -137,7 +138,7 @@ func testUpdateOfReadyState(t *testing.T) {
 
 func testUpdateOfRaisedHandState(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	raisedHand := true
 
@@ -167,7 +168,7 @@ func testUpdateOfRaisedHandState(t *testing.T) {
 
 func testUpdateOfBannedState(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	banned := true
 
@@ -199,7 +200,7 @@ func testUpdateOfBannedState(t *testing.T) {
 
 func testUpdateOfParticipantToModerator(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	role := types.SessionRoleParticipant
 
@@ -229,7 +230,7 @@ func testUpdateOfParticipantToModerator(t *testing.T) {
 
 func testUpdateOfParticipantToOwnerShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	role := types.SessionRoleParticipant
 
@@ -258,7 +259,7 @@ func testUpdateOfParticipantToOwnerShouldFail(t *testing.T) {
 
 func testUpdateOfModeratorToOwnerShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	role := types.SessionRoleModerator
 
@@ -287,7 +288,7 @@ func testUpdateOfModeratorToOwnerShouldFail(t *testing.T) {
 
 func testBoardSessionExistsForParticipant(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	role := types.SessionRoleParticipant
 
@@ -308,7 +309,7 @@ func testBoardSessionExistsForParticipant(t *testing.T) {
 
 func testBoardSessionExistsForModerator(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	role := types.SessionRoleModerator
 
@@ -329,7 +330,7 @@ func testBoardSessionExistsForModerator(t *testing.T) {
 
 func testBoardSessionExistsForOwner(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
 	exists, err := testDb.BoardSessionExists(board.ID, user.ID)
 	assert.Nil(t, err)
@@ -338,7 +339,7 @@ func testBoardSessionExistsForOwner(t *testing.T) {
 
 func testBoardSessionDoesNotExist(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	exists, err := testDb.BoardSessionExists(board.ID, user.ID)
 	assert.Nil(t, err)
@@ -347,7 +348,7 @@ func testBoardSessionDoesNotExist(t *testing.T) {
 
 func testModeratorBoardSessionExistsForParticipantShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	role := types.SessionRoleParticipant
 
@@ -368,7 +369,7 @@ func testModeratorBoardSessionExistsForParticipantShouldFail(t *testing.T) {
 
 func testModeratorBoardSessionExistsForModerator(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jennifer").(*User)
+	user := fixture.MustRow("DatabaseUser.jennifer").(*users.DatabaseUser)
 
 	role := types.SessionRoleModerator
 
@@ -389,7 +390,7 @@ func testModeratorBoardSessionExistsForModerator(t *testing.T) {
 
 func testModeratorBoardSessionExistsForOwner(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
 	exists, err := testDb.BoardModeratorSessionExists(board.ID, user.ID)
 	assert.Nil(t, err)
@@ -398,7 +399,7 @@ func testModeratorBoardSessionExistsForOwner(t *testing.T) {
 
 func testModeratorBoardSessionDoesNotExist(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.john").(*User)
+	user := fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser)
 
 	exists, err := testDb.BoardModeratorSessionExists(board.ID, user.ID)
 	assert.Nil(t, err)
@@ -407,7 +408,7 @@ func testModeratorBoardSessionDoesNotExist(t *testing.T) {
 
 func testGetBoardSession(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
 	session, err := testDb.GetBoardSession(board.ID, user.ID)
 	assert.Nil(t, err)
