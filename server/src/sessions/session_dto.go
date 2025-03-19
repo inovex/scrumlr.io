@@ -1,17 +1,16 @@
-package dto
+package sessions
 
 import (
 	"net/http"
 	"time"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/common/dto"
 )
 
 // BoardSession is the response for all participant requests.
 type BoardSession struct {
-	User User `json:"user"`
+	User dto.User `json:"user"`
 
 	// Flag indicates whether user is online and connected to the board.
 	Connected bool `json:"connected"`
@@ -31,46 +30,14 @@ type BoardSession struct {
 	// can only view data, add notes and votes while the users with the other
 	// roles are able to promote users, change board settings, edit columns,
 	// start voting sessions etc.
-	Role types.SessionRole `json:"role"`
+	Role SessionRole `json:"role"`
 
 	//Reference for when board_session has been created
 	CreatedAt time.Time `json:"createdAt"`
 	// Flag indicates whether the user is banned
 	Banned bool `json:"banned"`
-}
 
-func (b *BoardSession) From(session database.BoardSession) *BoardSession {
-	user := User{
-		ID:          session.User,
-		Name:        session.Name,
-		Avatar:      session.Avatar,
-		AccountType: session.AccountType,
-	}
-	b.User = user
-	b.Connected = session.Connected
-	b.Ready = session.Ready
-	b.RaisedHand = session.RaisedHand
-	b.ShowHiddenColumns = session.ShowHiddenColumns
-	b.Role = session.Role
-	b.CreatedAt = session.CreatedAt
-	b.Banned = session.Banned
-	return b
-}
-
-func (*BoardSession) Render(_ http.ResponseWriter, _ *http.Request) error {
-	return nil
-}
-
-func BoardSessions(sessions []database.BoardSession) []*BoardSession {
-	if sessions == nil {
-		return nil
-	}
-
-	list := make([]*BoardSession, len(sessions))
-	for index, session := range sessions {
-		list[index] = new(BoardSession).From(session)
-	}
-	return list
+	Board uuid.UUID `json:"-"`
 }
 
 // BoardSessionUpdateRequest represents the request to update a single participant.
@@ -90,7 +57,7 @@ type BoardSessionUpdateRequest struct {
 	// Can be either 'PARTICIPANT', 'MODERATOR' or 'OWNER'.
 	// Only moderators and owners can promote other participants. A regular participant is not
 	// allowed to change the role.
-	Role *types.SessionRole `json:"role"`
+	Role *SessionRole `json:"role"`
 
 	// The banned state of the participant
 	Banned *bool `json:"banned"`
@@ -109,4 +76,39 @@ type BoardSessionsUpdateRequest struct {
 	RaisedHand *bool `json:"raisedHand"`
 
 	Board uuid.UUID `json:"-"`
+}
+
+func (b *BoardSession) From(session DatabaseBoardSession) *BoardSession {
+	user := dto.User{
+		ID:          session.User,
+		Name:        session.Name,
+		Avatar:      session.Avatar,
+		AccountType: session.AccountType,
+	}
+	b.User = user
+	b.Connected = session.Connected
+	b.Ready = session.Ready
+	b.RaisedHand = session.RaisedHand
+	b.ShowHiddenColumns = session.ShowHiddenColumns
+	b.Role = session.Role
+	b.CreatedAt = session.CreatedAt
+	b.Banned = session.Banned
+	b.Board = session.Board
+	return b
+}
+
+func (*BoardSession) Render(_ http.ResponseWriter, _ *http.Request) error {
+	return nil
+}
+
+func BoardSessions(sessions []DatabaseBoardSession) []*BoardSession {
+	if sessions == nil {
+		return nil
+	}
+
+	list := make([]*BoardSession, len(sessions))
+	for index, session := range sessions {
+		list[index] = new(BoardSession).From(session)
+	}
+	return list
 }

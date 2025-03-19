@@ -1,4 +1,4 @@
-package types
+package sessions
 
 import (
 	"encoding/json"
@@ -24,11 +24,13 @@ func (boardSessionRequestStatus *BoardSessionRequestStatus) UnmarshalJSON(b []by
 	if err := json.Unmarshal(b, &s); err != nil {
 		return err
 	}
+
 	unmarshalledBoardSessionRequestStatus := BoardSessionRequestStatus(s)
 	switch unmarshalledBoardSessionRequestStatus {
 	case BoardSessionRequestStatusPending, BoardSessionRequestStatusAccepted, BoardSessionRequestStatusRejected:
 		*boardSessionRequestStatus = unmarshalledBoardSessionRequestStatus
 		return nil
 	}
+
 	return errors.New("invalid board session request status")
 }

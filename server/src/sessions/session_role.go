@@ -1,4 +1,4 @@
-package types
+package sessions
 
 import (
 	"encoding/json"
@@ -24,11 +24,13 @@ func (sessionRole *SessionRole) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &s); err != nil {
 		return err
 	}
+
 	unmarshalledSessionRole := SessionRole(s)
 	switch unmarshalledSessionRole {
 	case SessionRoleParticipant, SessionRoleModerator, SessionRoleOwner:
 		*sessionRole = unmarshalledSessionRole
 		return nil
 	}
+
 	return errors.New("invalid session role")
 }

@@ -5,18 +5,21 @@ import (
 	"github.com/uptrace/bun"
 
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/sessions"
 )
 
 // Database is the main class within this package and will be extended by several receiver functions
 type Database struct {
-	db          *bun.DB
-	reactionsDb reactions.ReactionDatabase
+	db               *bun.DB
+	reactionsDb      reactions.ReactionDatabase
+	sessionDb        sessions.SessionDatabase
+	sessionRequestDb sessions.SessionRequestDatabase
 }
 
 type FullBoard struct {
 	Board                Board
-	BoardSessions        []BoardSession
-	BoardSessionRequests []BoardSessionRequest
+	BoardSessions        []sessions.DatabaseBoardSession
+	BoardSessionRequests []sessions.DatabaseBoardSessionRequest
 	Columns              []Column
 	Notes                []Note
 	Reactions            []reactions.DatabaseReaction
@@ -28,7 +31,9 @@ type FullBoard struct {
 func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
-	d.reactionsDb = reactions.NewReactionsDatabase(db) //TODO remove
+	d.reactionsDb = reactions.NewReactionsDatabase(db)          //TODO remove
+	d.sessionDb = sessions.NewSessionDatabase(db)               //TODO remove
+	d.sessionRequestDb = sessions.NewSessionRequestDatabase(db) //TODO remove
 
 	return d
 }
@@ -36,8 +41,8 @@ func New(db *bun.DB) *Database {
 func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 	var (
 		board     Board
-		sessions  []BoardSession
-		requests  []BoardSessionRequest
+		sessions  []sessions.DatabaseBoardSession
+		requests  []sessions.DatabaseBoardSessionRequest
 		columns   []Column
 		notes     []Note
 		reactions []reactions.DatabaseReaction
@@ -64,9 +69,9 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getBoard:
 			board, err = d.GetBoard(id)
 		case getRequests:
-			requests, err = d.GetBoardSessionRequests(id)
+			requests, err = d.sessionRequestDb.GetBoardSessionRequests(id)
 		case getSessions:
-			sessions, err = d.GetBoardSessions(id)
+			sessions, err = d.sessionDb.GetBoardSessions(id)
 		case getColumns:
 			columns, err = d.GetColumns(id)
 		case getNotes:

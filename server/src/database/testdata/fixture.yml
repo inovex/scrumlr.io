@@ -130,7 +130,7 @@
       show_notes_of_other_users: true
       created_at: '{{ now }}'
 
-- model: BoardSessionInsert
+- model: DatabaseBoardSessionInsert
   rows:
     - _id: johnsSessionOnColumnsTestBoard
       board: '{{ $.Board.columnsTestBoard.ID }}'
