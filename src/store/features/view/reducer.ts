@@ -34,6 +34,7 @@ const initialState: ViewState = {
   hotkeyNotificationsEnabled: getFromStorage(HOTKEY_NOTIFICATIONS_ENABLE_STORAGE_KEY) !== "false",
   showBoardReactions: getFromStorage(BOARD_REACTIONS_ENABLE_STORAGE_KEY) !== "false",
   theme: (getFromStorage(THEME_STORAGE_KEY) as Theme) ?? "auto",
+  legacyCreateBoard: process.env.REACT_APP_LEGACY_CREATE_BOARD === "true",
   snowfallEnabled: getFromStorage(SNOWFALL_STORAGE_KEY) !== "false",
   snowfallNotificationEnabled: getFromStorage(SNOWFALL_NOTIFICATION_STORAGE_KEY) !== "false",
 };

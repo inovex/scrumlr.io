@@ -1,0 +1,129 @@
+@use "sass:color";
+@import "constants/style";
+
+$padding--default: $spacing--xxs $spacing--md $spacing--xxs $spacing--xxs;
+$padding--mobile: 0 0 0 0;
+
+$size-mobile: 56px;
+
+.user-pill {
+  all: unset;
+  user-select: none;
+
+  height: $icon--huge;
+  padding: $padding--default;
+  border-radius: $rounded--large;
+
+  background-color: $gray--000;
+
+  &:enabled {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: $gray--300;
+
+    .user-pill__avatar-overlay {
+      background-color: color.change(#eeeff1, $alpha: 0.5);
+    }
+
+    .user-pill__name {
+      color: $gray--800;
+    }
+  }
+}
+
+.user-pill__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  gap: $spacing--sm;
+}
+
+.user-pill__avatar-container {
+  position: relative;
+
+  width: $icon--huge;
+  height: $icon--huge;
+  border-radius: 100%;
+  background-color: $blue--100;
+
+  user-select: none;
+}
+
+.user-pill__avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  border-radius: 100%;
+
+  background-color: transparent;
+}
+
+.user-pill__avatar {
+  width: $icon--huge;
+  height: $icon--huge;
+}
+
+.user-pill__name {
+  font-size: $text--base;
+  font-weight: 700;
+
+  color: $navy--600;
+}
+
+// desktop only styles
+@media screen and (min-width: calc($breakpoint--smartphone + 1px)) {
+  .user-pill:enabled {
+    // this is moved here as a desktop only style because it can't be overwritten by the mobile media query below
+    @include default-states($padding: $padding--default);
+  }
+}
+
+// mobile only styles
+@media screen and (max-width: $breakpoint--smartphone) {
+  .user-pill {
+    height: $size-mobile;
+    padding: $padding--mobile;
+  }
+
+  .user-pill__avatar-container,
+  .user-pill__avatar {
+    width: $size-mobile;
+    height: $size-mobile;
+  }
+
+  .user-pill__name {
+    display: none;
+  }
+}
+
+[theme="dark"] {
+  .user-pill {
+    background-color: $navy--400;
+
+    &:disabled {
+      background-color: $navy--400;
+
+      .user-pill__avatar-overlay {
+        background-color: color.change($navy--700, $alpha: 0.5);
+      }
+
+      .user-pill__name {
+        color: $navy--700;
+      }
+    }
+  }
+
+  .user-pill__avatar-container {
+    background-color: $navy--700;
+  }
+
+  .user-pill__name {
+    color: $gray--000;
+  }
+}
