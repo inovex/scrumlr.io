@@ -19,3 +19,8 @@ export type TemplateWithColumns = Template & {columns: TemplateColumn[]};
 
 // used in store
 export type TemplatesState = Template[];
+
+// used for importing, where information like ids will be set dynamically
+export type ReducedTemplateWithColumns = Omit<TemplateWithColumns, "id" | "creator" | "favourite"> & {
+  columns: Omit<TemplateColumn, "id" | "template" | "index">[];
+};
