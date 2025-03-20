@@ -90,7 +90,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
         <div className="template-card__columns-subtitle">
           {template.columns
-            .sort((a, b) => a.index - b.index)
+            .toSorted((a, b) => a.index - b.index)
             .map((c) => c.name)
             .join(", ")}
         </div>
