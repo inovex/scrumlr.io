@@ -77,8 +77,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
 
   return (
     <div className="template-card">
-      {/* TODO probably remove favourites from recommended cards, since these are constant and we'd need to keep track of it somewhere */}
-      <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={toggleFavourite} />
+      {templateType === "CUSTOM" ? <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={toggleFavourite} /> : null}
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.name} disabled />
         <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
