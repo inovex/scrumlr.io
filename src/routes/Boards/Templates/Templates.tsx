@@ -83,7 +83,7 @@ export const Templates = () => {
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
             {RECOMMENDED_TEMPLATES.filter(matchSearchInput).map((template) => (
-              <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(template, template.columns)} />
+              <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(template, template.columns)} key={template.id} />
             ))}
           </div>
         </section>
@@ -93,7 +93,7 @@ export const Templates = () => {
             <div className="templates__card-container">
               <CreateTemplateCard />
               {templates.filter(matchSearchInput).map((template) => (
-                <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} />
+                <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} key={template.id} />
               ))}
             </div>
           </section>
