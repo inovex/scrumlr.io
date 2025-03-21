@@ -144,7 +144,6 @@
   flex: 1;
   outline: none;
   scrollbar-width: 10px;
-  scrollbar-color: $gray--700 $gray--000;
 
   @include scrollbar();
 }
@@ -181,10 +180,6 @@
 
   .column__header-text-wrapper .column__tooltip {
     @include tooltip--dark;
-  }
-
-  .column__notes-wrapper {
-    scrollbar-color: $navy--700 $navy--500;
   }
 }
 
