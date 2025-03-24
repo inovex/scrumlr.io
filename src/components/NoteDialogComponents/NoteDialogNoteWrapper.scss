@@ -8,10 +8,6 @@
 
   overflow: hidden;
   @include scrollbar();
-
-  ::-webkit-scrollbar {
-    background-color: transparent;
-  }
 }
 
 // inner container preventing scrollbar flowing over border radius
