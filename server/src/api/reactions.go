@@ -1,13 +1,14 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"net/http"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 )
 
 func (s *Server) getReaction(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +42,7 @@ func (s *Server) createReaction(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body dto.ReactionCreateRequest
+	var body reactions.ReactionCreateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -80,7 +81,7 @@ func (s *Server) updateReaction(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
-	var body dto.ReactionUpdateTypeRequest
+	var body reactions.ReactionUpdateTypeRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))

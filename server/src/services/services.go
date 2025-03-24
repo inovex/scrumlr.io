@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/votes"
@@ -76,14 +77,6 @@ type Notes interface {
 	Update(ctx context.Context, body dto.NoteUpdateRequest) (*notes.Note, error)
 	List(ctx context.Context, id uuid.UUID) ([]*notes.Note, error)
 	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
-}
-
-type Reactions interface {
-	Get(ctx context.Context, id uuid.UUID) (*dto.Reaction, error)
-	List(ctx context.Context, boardID uuid.UUID) ([]*dto.Reaction, error)
-	Create(ctx context.Context, board uuid.UUID, body dto.ReactionCreateRequest) (*dto.Reaction, error)
-	Delete(ctx context.Context, board, user, id uuid.UUID) error
-	Update(ctx context.Context, board, user, id uuid.UUID, body dto.ReactionUpdateTypeRequest) (*dto.Reaction, error)
 }
 
 type Votings interface {

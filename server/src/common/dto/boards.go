@@ -2,14 +2,16 @@ package dto
 
 import (
 	"net/http"
+	"time"
+
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/votes"
-	"time"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/reactions"
 )
 
 // Board is the response for all board requests.
@@ -159,7 +161,7 @@ type FullBoard struct {
 	BoardSessions        []*BoardSession        `json:"participants"`
 	Columns              []*columns.Column      `json:"columns"`
 	Notes                []*notes.Note          `json:"notes"`
-	Reactions            []*Reaction            `json:"reactions"`
+	Reactions            []*reactions.Reaction  `json:"reactions"`
 	Votings              []*votes.Voting        `json:"votings"`
 	Votes                []*Vote                `json:"votes"`
 }
@@ -170,7 +172,7 @@ func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
 	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions)
 	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
 	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
-	dtoFullBoard.Reactions = Reactions(dbFullBoard.Reactions)
+	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)
 	dtoFullBoard.Votings = votes.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
 	dtoFullBoard.Votes = Votes(dbFullBoard.Votes)
 	return dtoFullBoard
