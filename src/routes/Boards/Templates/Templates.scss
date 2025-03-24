@@ -1,0 +1,133 @@
+@import "constants/style";
+
+$stan-height-factor: 93%;
+
+.templates {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
+
+  position: relative;
+}
+
+.templates__container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: $spacing--lg;
+
+  padding: $spacing--xl $spacing--xl 0 $spacing--xl;
+  border-radius: $rounded--default;
+
+  background-color: $blue--50;
+
+  &--saved {
+    margin-left: $spacing--md; // instead of gap, see above
+  }
+}
+
+.templates__container-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: $spacing--md;
+}
+
+.templates__container-title {
+  word-break: break-word; // because the word "Recommendations" is too long, TODO find better solution for this
+  font-size: $text--lg;
+  font-weight: 700;
+  line-height: 32px; // TODO use constant
+
+  color: $navy--600;
+}
+
+.templates__container-arrow-button {
+  all: unset;
+}
+
+.templates__container-arrow {
+  display: none;
+
+  &--disabled {
+    color: $gray--800;
+  }
+}
+
+.templates__stan {
+  position: absolute;
+
+  width: auto;
+  // TODO find a solution so stan never gets cut off
+  height: 100%;
+
+  // align right edge of stan to the left edge of the container
+  transform: translateX(-100%);
+
+  &--dark {
+    display: initial;
+  }
+
+  &--light {
+    display: none;
+  }
+}
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  // instead of the both containers sitting on one screen we want them to be full width each, and make the main container scrollable.
+  .templates {
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+  }
+
+  .templates__container {
+    flex: 0 0 100%; // no growing, no shrinking, and take up the whole width
+    scroll-snap-align: center;
+  }
+
+  .templates__container-header {
+    justify-content: center;
+  }
+
+  .templates__container-title {
+    font-size: $text--md;
+    line-height: 24px; // TODO use constant
+  }
+
+  .templates__container-arrow {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+[theme="dark"] {
+  .templates__container {
+    background-color: $navy--700;
+  }
+
+  .templates__container-title {
+    color: $blue--50;
+  }
+
+  .templates__stan {
+    height: $stan-height-factor;
+    &--dark {
+      display: none;
+    }
+
+    &--light {
+      display: initial;
+    }
+  }
+
+  .templates__container-arrow {
+    color: $blue--50;
+
+    &--disabled {
+      color: $navy--300;
+    }
+  }
+}

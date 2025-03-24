@@ -14,10 +14,12 @@ import (
 	"testing"
 
 	"github.com/uptrace/bun/dbfixture"
-	"scrumlr.io/server/database/migrations"
+	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/reactions"
 )
 
 var testDb *Database
+var reactionDb reactions.ReactionDatabase
 var fixture *dbfixture.Fixture
 
 const DatabaseUsernameAndPassword = "dbtest"
@@ -34,13 +36,16 @@ func testMainWithDefer(m *testing.M) int {
 	}
 
 	exitCode := 0
-	database, err := migrations.MigrateDatabase(databaseUrl)
+	database, err := initialize.InitializeDatabase(databaseUrl)
 	if err != nil {
 		println(fmt.Sprintf("unable to migrate database scheme: %s", err))
 		exitCode = 1
 	}
 
-	testDb = New(database, true)
+	bun := initialize.InitializeBun(database, true)
+
+	testDb = New(bun)
+	reactionDb = reactions.NewReactionsDatabase(bun)
 	err = loadTestdata()
 	if err != nil {
 		println(fmt.Sprintf("unable to load testdata: %s", err))
@@ -117,7 +122,7 @@ func loadTestdata() error {
 		(*Note)(nil),
 		(*Voting)(nil),
 		(*Vote)(nil),
-		(*Reaction)(nil),
+		(*reactions.DatabaseReaction)(nil),
 		(*BoardTemplate)(nil),
 		(*ColumnTemplate)(nil),
 	)

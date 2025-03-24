@@ -1,0 +1,166 @@
+@use "sass:color";
+@import "constants/style";
+
+$side-padding--desktop: 14vw;
+
+.boards {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(180deg, color.change($blue--500, $alpha: 0.075), color.change($gray--000, $alpha: 0.2));
+}
+
+.boards__grid {
+  display: grid;
+  grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
+  grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
+  grid-template-areas:
+    ".  .    .       .       .       .       .      ."
+    ".  logo title   title   title   title   user   ."
+    ".  .    title   title   title   title   .      ."
+    ".  .    switch  .       search  search  .      ."
+    ".  .    main    main    main    main    .      ."
+    ".  .    .       .       .       .       .      .";
+
+  height: 100vh;
+}
+
+.boards__scrumlr-logo-container {
+  grid-area: logo;
+}
+
+.boards__user-pill {
+  grid-area: user;
+  justify-self: flex-end;
+}
+
+.boards__title {
+  grid-area: title;
+  align-self: center;
+  justify-self: center;
+
+  font-size: $text--2xl;
+  font-weight: 700;
+  line-height: 48px; // TODO use constant
+  color: $navy--900;
+}
+
+.boards__switch {
+  grid-area: switch;
+}
+
+.boards__search-bar {
+  grid-area: search;
+  justify-self: flex-end;
+}
+
+.boards__search-button {
+  all: unset;
+  display: none;
+
+  grid-area: search;
+
+  cursor: pointer;
+}
+
+.boards__search-button-icon-container {
+  width: $icon--large;
+  height: $icon--large;
+  padding: $spacing--sm;
+  border-radius: 100%;
+
+  color: $navy--600;
+  background-color: $gray--000;
+
+  &--active {
+    color: $gray--000;
+    background-color: $navy--600;
+  }
+}
+
+.boards--search-button-logo {
+  width: $icon--large;
+  height: $icon--large;
+}
+
+.boards__mobile-search-bar {
+  display: none;
+}
+
+.boards__outlet {
+  grid-area: main;
+  display: flex;
+  justify-content: stretch;
+
+  margin-top: $spacing--xl;
+}
+
+@media (max-width: $breakpoint--desktop) {
+  .boards__grid {
+    grid-template-columns: $spacing--2xl 114px auto $spacing--base 1fr auto auto $spacing--2xl;
+    grid-template-areas:
+      ".  .    .       .       .       .       .      ."
+      ".  logo title   title   title   title   user   ."
+      ".  .    title   title   title   title   .      ."
+      ".  switch    switch  .       search  search  search      ."
+      ".  main    main    main    main    main    main      ."
+      ".  .    .       .       .       .       .      .";
+  }
+}
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .boards__grid {
+    // stretch main to full width
+    grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
+    // adds a row where the mobile search bar resides,
+    grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 57px $spacing--sm auto 1fr;
+    grid-template-areas:
+      ".    .        .       .       .       .        ."
+      ".    logo     .       .       .       user     ."
+      ".    .        .       .       .       .        ."
+      ".    title    title   title   title   title    ."
+      ".    .        .       .       .       .        ."
+      ".    switch   switch  .       search  search   ."
+      ".    .        .       .       .       .        ."
+      ".    search2  search2 search2 search2 search2  ."
+      "main main     main    main    main    main     main";
+  }
+
+  .boards__title {
+    font-size: $text--lg;
+    line-height: 32px; // TODO use constant
+  }
+
+  .boards__search-button {
+    display: inline-block;
+    margin-right: $spacing--sm;
+  }
+
+  .boards__search-bar {
+    display: none;
+  }
+
+  .boards__mobile-search-bar {
+    display: flex;
+    grid-area: search2;
+  }
+}
+
+[theme="dark"] {
+  .boards {
+    background: linear-gradient(161deg, $navy--600 16.78%, $navy--700 49.35%, $navy--800 81.65%);
+  }
+
+  .boards__title {
+    color: $gray--000;
+  }
+
+  .boards__search-button-icon-container {
+    color: $gray--000;
+    background-color: $navy--400;
+
+    &--active {
+      color: $navy--400;
+      background-color: $gray--000;
+    }
+  }
+}

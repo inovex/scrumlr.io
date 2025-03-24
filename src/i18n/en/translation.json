@@ -2,7 +2,7 @@
   "InfoBar": {
     "ReturnToPresentedNote": "Return to presented note"
   },
-  "NewBoard": {
+  "LegacyNewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
     "extendedConfigurationButton": "Extended configuration",
@@ -12,6 +12,16 @@
     "importBoard": "Import JSON",
     "uploadFile": "Upload file or drag here",
     "importNewBoard": "Import now"
+  },
+  "Templates": {
+    "switchTitle": "Templates",
+    "title": "Choose a template",
+    "savedTemplates": "Your Templates",
+    "recommendedTemplates": "Our Recommendations"
+  },
+  "Sessions": {
+    "switchTitle": "Sessions",
+    "title": "Choose a session"
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
@@ -353,6 +363,9 @@
   },
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
+  },
+  "SearchBar": {
+    "placeholder": "Search"
   },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
