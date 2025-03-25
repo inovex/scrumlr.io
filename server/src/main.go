@@ -10,7 +10,6 @@ import (
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
-	"scrumlr.io/server/services/health"
 
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
@@ -383,7 +382,7 @@ func run(c *cli.Context) error {
 	noteService := notes.NewNoteService(dbConnection, rt)
 	reactionService := initialize.InitializeReactionService(bun, rt)
 	feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
-	healthService := health.NewHealthService(dbConnection, rt)
+	healthService := initialize.InitializeHealthService(bun, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
 	boardTemplateService := board_templates.NewBoardTemplateService(dbConnection)
 
