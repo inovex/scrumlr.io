@@ -2,7 +2,7 @@ import {AnchorHTMLAttributes, ButtonHTMLAttributes, Children, cloneElement, Deta
 import classNames from "classnames";
 import "./LegacyButton.scss";
 
-export interface LecagyButtonProps
+export interface LegacyButtonProps
   extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement> & AnchorHTMLAttributes<HTMLAnchorElement>, HTMLButtonElement & HTMLAnchorElement> {
   color?: "primary" | "secondary";
   variant?: "contained" | "outlined" | "text-link";
@@ -15,7 +15,7 @@ export interface LecagyButtonProps
 /**
  * @deprecated since templates, use component Button instead
  */
-export const LegacyButton: FC<PropsWithChildren<LecagyButtonProps>> = ({
+export const LegacyButton: FC<PropsWithChildren<LegacyButtonProps>> = ({
   className,
   variant = "contained",
   color = "secondary",
