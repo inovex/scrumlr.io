@@ -10,7 +10,8 @@ import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
-import templatesJsonRaw from "constants/templates.json";
+import templatesJsonRaw from "constants/recommendedTemplates.json";
+import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import "./Templates.scss";
 
 type Side = "left" | "right";
