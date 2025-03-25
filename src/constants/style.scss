@@ -176,11 +176,15 @@ $column-stripes--dark: repeating-linear-gradient(
 @mixin scrollbar() {
   scrollbar-width: auto;
 
-  scrollbar-color: var(--accent-color--200) var(--accent-color--100);
+  scrollbar-color: var(--accent-color--200) transparent;
+
+  ::-webkit-scrollbar {
+    background-color: transparent;
+  }
 
   // ampersand to correctly scope the rule
   [theme="dark"] & {
-    scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) rgba(var(--accent-color--dark-rgb), 0.6);
+    scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) transparent;
   }
 }
 
