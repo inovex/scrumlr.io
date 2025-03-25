@@ -20,7 +20,7 @@ require (
 	github.com/gorilla/websocket v1.5.3
 	github.com/lestrrat-go/jwx/v2 v2.1.4
 	github.com/markbates/goth v1.80.0
-	github.com/nats-io/nats.go v1.39.1
+	github.com/nats-io/nats.go v1.40.0
 	github.com/ory/dockertest/v3 v3.11.0
 	github.com/stretchr/testify v1.10.0
 	github.com/uptrace/bun v1.2.11
@@ -63,7 +63,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/klauspost/compress v1.17.11 // indirect
+	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/lestrrat-go/backoff/v2 v2.0.8 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.2 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
