@@ -15,7 +15,7 @@ import "./SettingsDialog.scss";
 
 type SettingsDialogProps = {
   enabledMenuItems: Partial<Record<MenuItemKey, boolean>>;
-  overwrite?: MenuItemConfigOverride;
+  override?: MenuItemConfigOverride;
 };
 
 // create a merged item config allowing partial overwriting of properties while retaining type safety
@@ -50,10 +50,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
   // overwrite standard config with optional record and set state
   useEffect(() => {
-    const mergedMenuConfig = mergeMenuItemConfig(MENU_ITEM_CONFIG, props.overwrite);
+    const mergedMenuConfig = mergeMenuItemConfig(MENU_ITEM_CONFIG, props.override);
     const newMenuEntries = createMenuEntries(mergedMenuConfig);
     setMenuEntries(newMenuEntries);
-  }, [props.overwrite]);
+  }, [props.override]);
 
   useEffect(() => {
     const pathEnd = location.pathname.split("/").at(-1)!;
