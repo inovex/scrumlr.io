@@ -32,3 +32,13 @@ packages:
         all: true
       ReactionDatabase:
         all: true
+
+  scrumlr.io/server/health:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      HealthService:
+        all: true
+      HealthDatabase:
+        all: true
