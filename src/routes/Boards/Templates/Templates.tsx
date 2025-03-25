@@ -23,23 +23,29 @@ const convertJsonToFullTemplates = (reducedTemplates: ReducedTemplateWithColumns
   reducedTemplates.map(({columns, ...rest}, indexTemplate) => {
     const templateId = `template-${indexTemplate}`;
 
-    return {
+    const template: Template = {
       ...rest,
       id: templateId,
       creator: "scrumlr",
       favourite: false,
       accessPolicy: "PUBLIC", // this property will be removed in the next PR
-      columns: columns.map((column, indexColumn) => {
-        const columnId = `column-${indexTemplate}-${indexColumn}`;
+    };
 
-        return {
-          ...column,
-          id: columnId,
-          template: templateId,
-          index: indexColumn,
-        } as TemplateColumn;
-      }),
-    } as TemplateWithColumns;
+    const fullColumns: TemplateColumn[] = columns.map((column, indexColumn) => {
+      const columnId = `column-${indexTemplate}-${indexColumn}`;
+
+      return {
+        ...column,
+        id: columnId,
+        template: templateId,
+        index: indexColumn,
+      };
+    });
+
+    return {
+      template,
+      columns: fullColumns,
+    };
   });
 
 export const Templates = () => {
