@@ -3,8 +3,10 @@ package services
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
+	"scrumlr.io/server/votes"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 )
@@ -65,11 +67,6 @@ type BoardSessions interface {
 	ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	SessionRequestExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
 	ParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
-}
-
-type Health interface {
-	IsDatabaseHealthy() bool
-	IsRealtimeHealthy() bool
 }
 
 type BoardReactions interface {
