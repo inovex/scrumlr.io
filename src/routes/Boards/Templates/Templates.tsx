@@ -21,33 +21,21 @@ export type TemplatesNavigationState = {scrollToSaved?: boolean};
 // takes the template json data and converts it to the full template with columns type.
 // data like ids will be populated dynamically.
 const convertJsonToFullTemplates = (reducedTemplates: ReducedTemplateWithColumns[]): TemplateWithColumns[] =>
-  reducedTemplates.map(({columns, ...rest}, indexTemplate) => {
-    const templateId = `template-${indexTemplate}`;
-
-    const template: Template = {
+  reducedTemplates.map(({columns, ...rest}, indexTemplate) => ({
+    template: {
       ...rest,
-      id: templateId,
+      id: `template-${indexTemplate}`,
       creator: "scrumlr",
       favourite: false,
-      accessPolicy: "PUBLIC", // this property will be removed in the next PR
-    };
-
-    const fullColumns: TemplateColumn[] = columns.map((column, indexColumn) => {
-      const columnId = `column-${indexTemplate}-${indexColumn}`;
-
-      return {
-        ...column,
-        id: columnId,
-        template: templateId,
-        index: indexColumn,
-      };
-    });
-
-    return {
-      template,
-      columns: fullColumns,
-    };
-  });
+      accessPolicy: "PUBLIC", // this property will be removed soon
+    },
+    columns: columns.map((column, indexColumn) => ({
+      ...column,
+      id: `column-${indexTemplate}-${indexColumn}`,
+      template: `template-${indexTemplate}`,
+      index: indexColumn,
+    })),
+  }));
 
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
