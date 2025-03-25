@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import {Outlet, useOutletContext, useNavigate, useLocation} from "react-router";
 import {useAppSelector} from "store";
-import {Template, TemplateColumn, TemplateWithColumns} from "store/features";
+import {getTemplates, ReducedTemplateWithColumns, Template, TemplateColumn, TemplateWithColumns} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
@@ -10,12 +10,37 @@ import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
-import {DEFAULT_TEMPLATE_ID, RECOMMENDED_TEMPLATES} from "constants/templates";
+import templatesJsonRaw from "constants/templates.json";
 import "./Templates.scss";
 
 type Side = "left" | "right";
 
 export type TemplatesNavigationState = {scrollToSaved?: boolean};
+
+// takes the template json data and converts it to the full template with columns type.
+// data like ids will be populated dynamically.
+const convertJsonToFullTemplates = (reducedTemplates: ReducedTemplateWithColumns[]): TemplateWithColumns[] =>
+  reducedTemplates.map(({columns, ...rest}, indexTemplate) => {
+    const templateId = `template-${indexTemplate}`;
+
+    return {
+      ...rest,
+      id: templateId,
+      creator: "scrumlr",
+      favourite: false,
+      accessPolicy: "PUBLIC", // this property will be removed in the next PR
+      columns: columns.map((column, indexColumn) => {
+        const columnId = `column-${indexTemplate}-${indexColumn}`;
+
+        return {
+          ...column,
+          id: columnId,
+          template: templateId,
+          index: indexColumn,
+        } as TemplateColumn;
+      }),
+    } as TemplateWithColumns;
+  });
 
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
@@ -31,6 +56,14 @@ export const Templates = () => {
 
   const templates = useAppSelector((state) => state.templates);
   const templateColumns = useAppSelector((state) => state.templatesColumns);
+
+  const reducedRecommendedTemplates: ReducedTemplateWithColumns[] = templatesJsonRaw as ReducedTemplateWithColumns[];
+  const fullRecommendedTemplates = convertJsonToFullTemplates(reducedRecommendedTemplates);
+
+  // init templates
+  useEffect(() => {
+    dispatch(getTemplates());
+  }, [dispatch]);
 
   const scrollToSide = (side: Side, smooth: boolean) => {
     const screenWidth = document.documentElement.clientWidth;
@@ -93,9 +126,11 @@ export const Templates = () => {
         <section className="templates__container templates__container--recommended">
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
-            {RECOMMENDED_TEMPLATES.filter((rc) => matchSearchInput(rc.template)).map((templateFull) => (
-              <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)} />
-            ))}
+            {fullRecommendedTemplates
+              .filter((rc) => matchSearchInput(rc.template))
+              .map((templateFull) => (
+                <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)} key={template.id} />
+              ))}
           </div>
         </section>
         {!isAnonymous && (
@@ -107,7 +142,7 @@ export const Templates = () => {
                 .filter(matchSearchInput)
                 .filter(excludeDefaultTemplate)
                 .map((template) => (
-                  <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} />
+                  <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} key={template.id} />
                 ))}
             </div>
           </section>

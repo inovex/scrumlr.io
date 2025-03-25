@@ -1,8 +1,11 @@
 @import "constants/style";
 
+$icon-size: 36px;
+
 .favourite-button {
-  width: 36px;
-  height: 36px;
+  all: unset;
+  width: $icon-size;
+  height: $icon-size;
   border: 2px solid transparent;
   border-radius: $rounded--full;
 
@@ -28,6 +31,13 @@
       color: var(--accent-color--light);
     }
   }
+}
+
+.favourite-icon {
+  width: $icon-size;
+  height: $icon-size;
+
+  color: inherit;
 }
 
 [theme="dark"] {

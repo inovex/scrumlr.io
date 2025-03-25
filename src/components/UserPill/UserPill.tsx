@@ -13,7 +13,7 @@ type UserPillProps = {
 
 export const UserPill = (props: UserPillProps) => {
   const navigate = useNavigate();
-  const me = useAppSelector((state) => state.auth.user)!; // TODO omit this after #4270, since seed is optional then
+  const me = useAppSelector((state) => state.auth.user);
   const myName = useAppSelector((state) => state.auth.user?.name);
   const avatar = useAppSelector((state) => state.auth.user?.avatar);
 
@@ -22,7 +22,7 @@ export const UserPill = (props: UserPillProps) => {
   };
 
   const renderAvatar = () =>
-    avatar ? (
+    avatar && me ? (
       <Avatar seed={me.id} avatar={avatar} className={classNames("user-pill__avatar", "user-pill__avatar--own")} />
     ) : (
       <img src={StanAvatar} className={classNames("user-pill__avatar", "user-pill__avatar--stan")} alt="Stan Avatar" />

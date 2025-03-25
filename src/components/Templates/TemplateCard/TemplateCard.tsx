@@ -84,8 +84,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
 
   return (
     <div className="template-card">
-      {/* TODO probably remove favourites from recommended cards, since these are constant and we'd need to keep track of it somewhere */}
-      <FavouriteButton className="template-card__favourite" active={template.template.favourite} onClick={toggleFavourite} />
+      {templateType === "CUSTOM" ? <FavouriteButton className="template-card__favourite" active={template.template.favourite} onClick={toggleFavourite} /> : null}
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.template.name} disabled />
         <div className="template-card__access-policy">{renderAccessPolicy(template.template.accessPolicy)}</div>
@@ -97,7 +96,7 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>
         <div className="template-card__columns-subtitle">
           {template.columns
-            .sort((a, b) => a.index - b.index)
+            .toSorted((a, b) => a.index - b.index)
             .map((c) => c.name)
             .join(", ")}
         </div>

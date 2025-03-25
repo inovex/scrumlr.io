@@ -7,8 +7,6 @@ $max-card-width: 500px;
   display: flex;
   flex-direction: row;
   flex: 1;
-  // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
-  // gap: $spacing--md;
 }
 
 .templates__container {

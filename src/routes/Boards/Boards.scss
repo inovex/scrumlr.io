@@ -126,10 +126,6 @@ $side-padding--desktop: 14vw;
 }
 
 @media screen and (max-width: $breakpoint--smartphone) {
-  .boards {
-  }
-
-  // TODO grid without extended view
   .boards__grid {
     // stretch main to full width
     grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;

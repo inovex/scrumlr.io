@@ -117,7 +117,7 @@ Credentials are passed in the URL.
 If you havent configured postgres for TLS, you can use the `?sslmode=disable` parameter.
 
 ```ini
-SCRUMLR_SERVER_DATABASE_URL='psql://user:password@host:port/database'
+SCRUMLR_SERVER_DATABASE_URL='postgres://user:password@host:port/database'
 ```
 
 ### Base Path

@@ -72,9 +72,9 @@ export const TemplatesAPI = {
         return (await response.json()) as Template;
       }
 
-      throw new Error(`get all templates request resulted in status ${response.status}`);
+      throw new Error(`edit template request resulted in status ${response.status}`);
     } catch (error) {
-      throw new Error(`unable to get all templates with error: ${error}`);
+      throw new Error(`unable to edit template with error: ${error}`);
     }
   },
 
