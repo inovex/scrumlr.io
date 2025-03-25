@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/notes"
-	"time"
+  "scrumlr.io/server/database"
+  "time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -24,6 +24,7 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
+  "scrumlr.io/server/notes"
 )
 
 type Server struct {
