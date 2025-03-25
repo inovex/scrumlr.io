@@ -1,21 +1,20 @@
 package initialize
 
 import (
-	"github.com/uptrace/bun"
 	"net/http"
+
+	"github.com/gorilla/websocket"
+
+	"github.com/uptrace/bun"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/notes"
 )
-
-// TODO: create generic method to initialize services
-
-func InitializeNotesService(db *bun.DB) *notes.NotesDatabase {
-	notesDB := notes.NewNotesDatabase(db)
-	return &notesDB
-}
 
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
 	client := new(http.Client)
@@ -25,10 +24,15 @@ func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
 }
 
 func InitializeHealthService(db *bun.DB, rt *realtime.Broker) health.HealthService {
-	healthDb := health.NewHealthDatabase(db)
-	healthService := health.NewHealthService(healthDb, rt)
+  healthDb := health.NewHealthDatabase(db)
+  healthService := health.NewHealthService(healthDb, rt)
 
-	return healthService
+  return healthService
+}
+
+func InitializeNotesService(db *bun.DB) *notes.NotesDatabase {
+	notesDB := notes.NewNotesDatabase(db)
+	return &notesDB
 }
 
 func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {

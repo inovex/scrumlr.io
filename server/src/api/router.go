@@ -23,7 +23,8 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
-  "scrumlr.io/server/notes"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 )
 
 type Server struct {
