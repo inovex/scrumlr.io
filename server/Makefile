@@ -16,6 +16,10 @@ run-docker-dev:
 	docker-compose --profile dev up
 
 .ONESHELL:
+mockery:
+	cd src && mockery
+
+.ONESHELL:
 test:
 	cd src && go test ./... -cover -coverprofile=coverage.txt
 

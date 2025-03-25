@@ -90,11 +90,6 @@ type Votings interface {
 	GetVotes(ctx context.Context, f filter.VoteFilter) ([]*dto.Vote, error)
 }
 
-type Health interface {
-	IsDatabaseHealthy() bool
-	IsRealtimeHealthy() bool
-}
-
 type BoardReactions interface {
 	Create(ctx context.Context, board uuid.UUID, body dto.BoardReactionCreateRequest)
 }
