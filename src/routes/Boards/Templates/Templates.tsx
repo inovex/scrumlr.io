@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import {Outlet, useOutletContext, useNavigate, useLocation} from "react-router";
-import {useAppSelector} from "store";
+import {useAppSelector, useAppDispatch} from "store";
 import {getTemplates, ReducedTemplateWithColumns, Template, TemplateColumn, TemplateWithColumns} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef} from "react";
@@ -45,6 +45,7 @@ const convertJsonToFullTemplates = (reducedTemplates: ReducedTemplateWithColumns
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -129,7 +130,7 @@ export const Templates = () => {
             {fullRecommendedTemplates
               .filter((rc) => matchSearchInput(rc.template))
               .map((templateFull) => (
-                <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)} key={template.id} />
+                <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)} key={templateFull.template.id} />
               ))}
           </div>
         </section>
