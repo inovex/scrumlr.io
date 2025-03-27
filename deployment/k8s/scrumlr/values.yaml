@@ -1,0 +1,277 @@
+# Default values for scrumlr.
+
+## @section Frontend paramaters
+##
+frontend:
+  ## @param frontend.image.repository The scrumlr image to deploy
+  ## @param frontend.image.tag The image tag to use
+  ## @param frontend.image.pullSecrets Docker registry secret names as an array
+  ## @param frontend.image.pullPolicy The imagePullPolicy to use
+  ## @param frontend.image.args Aguments for the scrumlr backend
+  ##
+  image:
+    repository: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
+    tag: 3.10.3
+    pullSecrets: []
+    pullPolicy: IfNotPresent
+    args: []
+  ## @param frontend.replicaCount Set the replica count for the backend
+  ##
+  replicaCount: 1
+  ## @param frontend.autoscaling.enabled Enable autoscaling
+  ## @param frontend.autoscaling.minReplicas Min replics for autoscaling
+  ## @param frontend.autoscaling.maxReplicas Max replicas for autoscaling
+  ## @param frontend.autoscaling.cpuUtilization Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param frontend.autoscaling.memoryUtilization Define the memory target to trigger the scaling actions (utilization percentage)
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    cpuUtilization: 60
+    memoryUtilization: 60
+  ## @param frontend.config.listenPort Port for the frontend
+  ## @param frontend.config.serverUrl Server url for api calls
+  ##
+  config:
+    listenPort: 8080
+    serverUrl: /api
+  ## @param frontend.extraConfig Extra configuration values as a map
+  ##
+  extraConfig: {}
+  ## @param frontend.secrets Extra secrets values as a map
+  ##
+  secrets: {}
+  ## @param frontend.secretRef Name of existing secret. If set override the secrets.
+  ##
+  secretRef: ""
+  ## @param frontend.resources Set container requests and limits for different resources like CPU or memory
+  ##
+  resources: {}
+  ## @param frontend.startupProbe.enabled Enable/disable the startup probe
+  ## @param frontend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+  ## @param frontend.startupProbe.periodSeconds How often to perform the probe
+  ## @param frontend.startupProbe.timeoutSeconds When the probe times out
+  ## @param frontend.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed
+  ## @param frontend.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param frontend.readinessProbe.enabled Enable/disable the readiness probe
+  ## @param frontend.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+  ## @param frontend.readinessProbe.periodSeconds How often to perform the probe
+  ## @param frontend.readinessProbe.timeoutSeconds When the probe times out
+  ## @param frontend.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed
+  ## @param frontend.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param frontend.livenessProbe.enabled Enable/disable the liveness probe
+  ## @param frontend.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+  ## @param frontend.livenessProbe.periodSeconds How often to perform the probe
+  ## @param frontend.livenessProbe.timeoutSeconds When the probe times out
+  ## @param frontend.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed
+  ## @param frontend.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param frontend.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param frontend.customReadinessProbe Override default liveness probe
+  ##
+  customReadinessProbe: {}
+  ## @param frontend.customLivenessProbe Override default readiness probe
+  ##
+  customLivenessProbe: {}
+
+## @section Backend parameters
+##
+backend:
+  ## @param backend.image.repository The scrumlr image to deploy
+  ## @param backend.image.tag The image tag to use
+  ## @param backend.image.pullSecrets Docker registry secret names as an array
+  ## @param backend.image.pullPolicy The imagePullPolicy to use
+  ## @param backend.image.args Aguments for the scrumlr backend
+  ##
+  image:
+    repository: ghcr.io/inovex/scrumlr.io/scrumlr-server
+    tag: 3.10.3
+    pullSecrets: []
+    pullPolicy: IfNotPresent
+    args:
+      - "/app/main"
+      - "-disable-check-origin"
+  ## @param backend.replicaCount Set the replica count for the backend
+  ##
+  replicaCount: 1
+  ## @param backend.autoscaling.enabled Enable autoscaling
+  ## @param backend.autoscaling.minReplicas Min replics for autoscaling
+  ## @param backend.autoscaling.maxReplicas Max replicas for autoscaling
+  ## @param backend.autoscaling.cpuUtilization Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param backend.autoscaling.memoryUtilization Define the memory target to trigger the scaling actions (utilization percentage)
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    cpuUtilization: 60
+    memoryUtilization: 60
+  ## @param backend.config.serverPort Server port for the backend
+  ## @param backend.config.basePath Base path for the backend
+  ## @param backend.config.natsUrl Url to reach the nats server
+  ##
+  config:
+    serverPort: 8080
+    basePath: /api
+    natsUrl: 
+  ## @param backend.extraConfig Extra configuration values as a map
+  ##
+  extraConfig: {}
+  ## @param backend.secrets.privateKey Private key for the backend
+  ## @param backend.secrets.databaseUrl Url to the postgres database
+  ##
+  secrets:
+    privateKey: ""
+    databaseUrl: ""
+  ## @param backend.extraSecrets Extra secrets values as a map
+  ##
+  extraSecrets: {}
+  ## @param backend.secretRef Name of existing secret. If set override the secrets and extra secret.
+  ##
+  secretRef: ""
+  ## @param backend.resources Set container requests and limits for different resources like CPU or memory
+  ##
+  resources: {}
+  ## @param backend.startupProbe.enabled Enable/disable the startup probe
+  ## @param backend.startupProbe.initialDelaySeconds Delay before startup probe is initiated
+  ## @param backend.startupProbe.periodSeconds How often to perform the probe
+  ## @param backend.startupProbe.timeoutSeconds When the probe times out
+  ## @param backend.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed
+  ## @param backend.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param backend.readinessProbe.enabled Enable/disable the readiness probe
+  ## @param backend.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+  ## @param backend.readinessProbe.periodSeconds How often to perform the probe
+  ## @param backend.readinessProbe.timeoutSeconds When the probe times out
+  ## @param backend.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed
+  ## @param backend.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param backend.livenessProbe.enabled Enable/disable the liveness probe
+  ## @param backend.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+  ## @param backend.livenessProbe.periodSeconds How often to perform the probe
+  ## @param backend.livenessProbe.timeoutSeconds When the probe times out
+  ## @param backend.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed
+  ## @param backend.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param backend.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param backend.customReadinessProbe Override default liveness probe
+  ##
+  customReadinessProbe: {}
+  ## @param backend.customLivenessProbe Override default readiness probe
+  ##
+  customLivenessProbe: {}
+
+## @section Ingress parameters
+##
+ingress:
+  ## @param ingress.enabled Enable/disable the ingress
+  ##
+  enabled: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress
+  ##
+  ingressClassName: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: scrumlr.local
+  ## @param ingress.path.frontend Default path for the frontend ingress record
+  ## @param ingress.path.backend Default path for the backend ingress record
+  ##
+  path:
+    frontend: /
+    backend: /api
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: Prefix
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with the name "<ingress.hostname>-tls"
+  ## You can
+  ##  - Generate a self signed certificate with ingress.selfSigned: true
+  ##  - Add a secret with the name "<ingress.hostname>-tls" with ingress.secrets
+  ##  - Use cert-manager by setting annotations
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.extraPaths Additional path o add to the ingress
+  ## e.g.
+  ##  extraPath:
+  ##    - path: /*
+  ##      backend:
+  ##        serviceName: servicename
+  ##        servicePort: 8080
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostnames 
+  ## e.g.
+  ##  extraTls:
+  ##    - hosts:
+  ##      - hostname
+  ##    secretName: secretname
+  ##
+  extraTls: []
+  ## @param ingress.secrets Additional TLS-secrets for the extra TLS filed
+  ## e.g. 
+  ##  secrets:
+  ##    - name: secretname
+  ##      certificate: |- 
+  ##        -----BEGIN CERTIFICATE-----
+  ##        ...
+  ##        -----END CERTIFICATE-----
+  ##      key: |- 
+  ##        -----BEGIN RSA PRIVATE KEY-----
+  ##        ...
+  ##        -----END RSA PRIVATE KEY-----
+  ##
+  secrets: []

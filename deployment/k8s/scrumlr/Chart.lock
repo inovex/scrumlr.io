@@ -1,0 +1,9 @@
+dependencies:
+- name: cloudnative-pg
+  repository: https://cloudnative-pg.github.io/charts/
+  version: 0.23.0
+- name: nats
+  repository: https://nats-io.github.io/k8s/helm/charts/
+  version: 1.2.9
+digest: sha256:531a7ec1671728b8896dfa4add2e15109f5251959e3c836a61579c016652d4ff
+generated: "2025-01-17T11:09:40.634594882+01:00"
