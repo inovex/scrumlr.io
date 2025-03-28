@@ -1,10 +1,6 @@
 package initialize
 
 import (
-	"net/http"
-
-	"github.com/gorilla/websocket"
-
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
