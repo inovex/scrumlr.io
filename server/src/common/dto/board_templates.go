@@ -57,7 +57,7 @@ type BoardTemplateFull struct {
 	Favourite *bool `json:"favourite"`
 
 	// Board templates associated column templates
-	ColumnTemplates []*ColumnTemplate
+	ColumnTemplates []*ColumnTemplate `json:"columns"`
 }
 
 func (bt *BoardTemplateFull) From(board database.BoardTemplateFull) *BoardTemplateFull {

@@ -1,14 +1,12 @@
 @import "constants/style";
 
-$stan-height-factor: 93%;
+$stan-height: 70vh;
+$max-card-width: 500px;
 
 .templates {
   display: flex;
   flex-direction: row;
   flex: 1;
-  // use margin below instead to accommodate for stan, otherwise the --saved container would be missing the space
-
-  position: relative;
 }
 
 .templates__container {
@@ -17,8 +15,10 @@ $stan-height-factor: 93%;
   flex: 1;
   gap: $spacing--lg;
 
-  padding: $spacing--xl $spacing--xl 0 $spacing--xl;
+  padding: $spacing--xl;
   border-radius: $rounded--default;
+
+  overflow-y: scroll;
 
   background-color: $blue--50;
 
@@ -32,7 +32,7 @@ $stan-height-factor: 93%;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  gap: $spacing--md;
+  gap: 0;
 }
 
 .templates__container-title {
@@ -56,21 +56,35 @@ $stan-height-factor: 93%;
   }
 }
 
-.templates__stan {
+.templates__card-container {
+  display: grid;
+  // place cards next to each other if width limit is exceeded
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
+  gap: $spacing--md;
+}
+
+.templates__stan-container {
   position: absolute;
-
   width: auto;
-  // TODO find a solution so stan never gets cut off
-  height: 100%;
-
+  height: $stan-height;
   // align right edge of stan to the left edge of the container
   transform: translateX(-100%);
+}
+
+.templates__stan {
+  height: 100%;
 
   &--dark {
     display: initial;
   }
 
   &--light {
+    display: none;
+  }
+}
+
+@media screen and (max-width: $breakpoint--desktop) {
+  .templates__stan-container {
     display: none;
   }
 }
@@ -89,6 +103,7 @@ $stan-height-factor: 93%;
 
   .templates__container-header {
     justify-content: center;
+    gap: $spacing--md;
   }
 
   .templates__container-title {
@@ -113,7 +128,6 @@ $stan-height-factor: 93%;
   }
 
   .templates__stan {
-    height: $stan-height-factor;
     &--dark {
       display: none;
     }

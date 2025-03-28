@@ -17,7 +17,20 @@
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
     "savedTemplates": "Deine Vorlagen",
-    "recommendedTemplates": "Unsere Empfehlungen"
+    "recommendedTemplates": "Unsere Empfehlungen",
+
+    "CreateTemplateCard": {
+      "create": "Erstelle eine Vorlage"
+    },
+
+    "TemplateCard": {
+      "addFavourite": "Favorit hinzufügen",
+      "removeFavourite": "Favorit entfernen",
+      "column_one": "{{count}} Spalte",
+      "column_other": "{{count}} Spalten",
+      "start": "Starten",
+      "save": "Speichern"
+    }
   },
   "Sessions": {
     "switchTitle": "Sitzungen",

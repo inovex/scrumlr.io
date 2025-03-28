@@ -23,6 +23,7 @@ export const retryable = async <ResponseType, ActionReturnType, ActionPayload>(
   try {
     return await promiseFn();
   } catch (error) {
+    // TODO instead of redispatching, maybe it's better and easier to just recursively call retryable again?
     Toast.error({
       title: i18n.t(`Error.${errorKey}`),
       buttons: [i18n.t("Error.retry")],
