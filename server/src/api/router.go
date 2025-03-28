@@ -17,6 +17,7 @@ import (
 	"github.com/gorilla/websocket"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
@@ -37,7 +38,7 @@ type Server struct {
 	reactions      reactions.ReactionService
 	sessions       services.BoardSessions
 	health         health.HealthService
-	feedback       services.Feedback
+	feedback       feedback.FeedbackService
 	boardReactions services.BoardReactions
 	boardTemplates services.BoardTemplates
 
@@ -65,7 +66,7 @@ func New(
 	reactions reactions.ReactionService,
 	sessions services.BoardSessions,
 	health health.HealthService,
-	feedback services.Feedback,
+	feedback feedback.FeedbackService,
 	boardReactions services.BoardReactions,
 	boardTemplates services.BoardTemplates,
 
