@@ -1,13 +1,13 @@
 package session_helper
 
 import (
-	"github.com/google/uuid"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
 	"slices"
+
+	"github.com/google/uuid"
+	"scrumlr.io/server/sessions"
 )
 
-func CheckSessionRole(clientID uuid.UUID, sessions []*dto.BoardSession, sessionsRoles []types.SessionRole) bool {
+func CheckSessionRole(clientID uuid.UUID, sessions []*sessions.BoardSession, sessionsRoles []sessions.SessionRole) bool {
 	for _, session := range sessions {
 		if clientID == session.User.ID {
 			if slices.Contains(sessionsRoles, session.Role) {

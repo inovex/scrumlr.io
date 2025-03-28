@@ -1,9 +1,10 @@
-package types
+package sessions
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBoardSessionRequestStatusEnum(t *testing.T) {
