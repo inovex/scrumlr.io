@@ -23,11 +23,6 @@ type Users interface {
 	Update(ctx context.Context, body dto.UserUpdateRequest) (*dto.User, error)
 }
 
-type Feedback interface {
-	Create(ctx context.Context, feedbackType string, contact string, text string) error
-	Enabled() bool
-}
-
 type Boards interface {
 	Create(ctx context.Context, body dto.CreateBoardRequest) (*dto.Board, error)
 	Get(ctx context.Context, id uuid.UUID) (*dto.Board, error)

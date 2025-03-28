@@ -1,6 +1,8 @@
 package initialize
 
 import (
+	"net/http"
+
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/health"
@@ -17,6 +19,13 @@ func InitializeReactionService(db *bun.DB) *reactions.ReactionDatabase {
 func InitializeNotesService(db *bun.DB) *notes.NotesDatabase {
 	notesDB := notes.NewNotesDatabase(db)
 	return &notesDB
+}
+
+func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
+	client := new(http.Client)
+	feedbackService := feedback.NewFeedbackService(client, webhookUrl)
+
+	return feedbackService
 }
 
 func InitializeHealthService(db *bun.DB, rt *realtime.Broker) health.HealthService {

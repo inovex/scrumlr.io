@@ -9,7 +9,7 @@ import (
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/votes"
+	"scrumlr.io/server/votings"
 	"strings"
 
 	"scrumlr.io/server/auth"
@@ -371,7 +371,7 @@ func run(c *cli.Context) error {
 
 	boardService := boards.NewBoardService(dbConnection, rt)
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
-	votingService := votes.NewVotingService(initialize.InitializeVotingService(bun), rt)
+	votingService := votings.NewVotingService(dbConnection, rt)
 	userService := users.NewUserService(dbConnection, rt)
 	noteService := notes.NewNotesService(initialize.InitializeNotesService(bun), rt)
 	reactionService := reactions.NewReactionService(initialize.InitializeReactionService(bun), rt)
