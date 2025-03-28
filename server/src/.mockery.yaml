@@ -32,3 +32,12 @@ packages:
         all: true
       ReactionDatabase:
         all: true
+  scrumlr.io/server/notes:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      NotesService:
+        all: true
+      NotesDatabase:
+        all: true

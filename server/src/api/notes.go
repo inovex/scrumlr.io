@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
 )
 
 // createNote creates a new note
@@ -17,7 +19,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body dto.NoteCreateRequest
+	var body notes.NoteCreateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -75,7 +77,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 
-	var body dto.NoteUpdateRequest
+	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -97,16 +99,32 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 // deleteNote deletes a note
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-	note := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
-	var body dto.NoteDeleteRequest
+	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
+	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
-	if err := s.notes.Delete(r.Context(), body, note); err != nil {
+	noteStack, err := s.notes.GetStack(r.Context(), noteID)
+	if err != nil {
 		common.Throw(w, r, err)
+		return
+	}
+	var allVotes []*dto.Vote
+	for _, note := range noteStack {
+		votesOfNotes, err := s.votings.GetVotes(r.Context(), filter.VoteFilter{Board: boardID, Note: &note.ID})
+		if err != nil {
+			common.Throw(w, r, err)
+			return
+		}
+		allVotes = append(allVotes, votesOfNotes...)
+	}
+
+	err = s.notes.Delete(r.Context(), body, noteID, allVotes)
+	if err != nil {
 		return
 	}
 

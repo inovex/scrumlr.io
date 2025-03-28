@@ -69,9 +69,9 @@ func (m *DBMock) GetVotings(board uuid.UUID) ([]database.Voting, []database.Vote
 	return args.Get(0).([]database.Voting), args.Get(1).([]database.Vote), args.Error(2)
 }
 
-func (m *DBMock) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error) {
+func (m *DBMock) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]notes.NoteDB, error) {
 	args := m.Called(board, columns)
-	return args.Get(0).([]database.Note), args.Error(1)
+	return args.Get(0).([]notes.NoteDB), args.Error(1)
 }
 
 func (m *DBMock) GetVotes(f filter.VoteFilter) ([]database.Vote, error) {
