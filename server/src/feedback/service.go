@@ -5,24 +5,28 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/services"
 	"time"
+
+	"scrumlr.io/server/logger"
 )
 
-type FeedbackService struct {
+type Service struct {
+	client     *http.Client
 	webhookUrl string
 }
 
-func NewFeedbackService(webhookUrl string) services.Feedback {
-	b := new(FeedbackService)
-	b.webhookUrl = webhookUrl
-	return b
+func NewFeedbackService(client *http.Client, webhookUrl string) FeedbackService {
+	service := new(Service)
+	service.webhookUrl = webhookUrl
+	service.client = client
+
+	return service
 }
 
-func (s *FeedbackService) Create(ctx context.Context, feedbackType string, contact string, text string) error {
+func (service *Service) Create(ctx context.Context, feedbackType string, contact string, text string) error {
 	log := logger.FromContext(ctx)
-	log.Info("Webhook URL", s.webhookUrl)
+	log.Info("Webhook URL", service.webhookUrl)
+
 	var jsonData = []byte(fmt.Sprintf(`{
     "text": "Scrumlr hat neues Feedback erhalten!",
     "blocks": [
@@ -42,10 +46,12 @@ func (s *FeedbackService) Create(ctx context.Context, feedbackType string, conta
       }
     ]
   }`, feedbackType, time.Now().Format("02.01.2006 15:04"), contact, text))
-	_, err := http.Post(s.webhookUrl, "application/json", bytes.NewBuffer(jsonData))
+
+	_, err := service.client.Post(service.webhookUrl, "application/json", bytes.NewBuffer(jsonData))
+
 	return err
 }
 
-func (s *FeedbackService) Enabled() bool {
-	return s.webhookUrl != ""
+func (service *Service) Enabled() bool {
+	return service.webhookUrl != ""
 }
