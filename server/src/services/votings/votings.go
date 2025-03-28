@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	notes2 "scrumlr.io/server/notes"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/votes"
 
 	"github.com/google/uuid"
@@ -32,7 +32,7 @@ type DB interface {
 	GetVotes(f filter.VoteFilter) ([]database.Vote, error)
 	AddVote(board, user, note uuid.UUID) (database.Vote, error)
 	RemoveVote(board, user, note uuid.UUID) error
-	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
+	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]notes.NoteDB, error)
 	GetOpenVoting(board uuid.UUID) (database.Voting, error)
 }
 
@@ -153,14 +153,14 @@ func (s *VotingService) CreatedVoting(board, voting uuid.UUID) {
 }
 
 func (s *VotingService) UpdatedVoting(board, voting uuid.UUID) {
-	var notes []database.Note
+	var updatedNotes []notes.NoteDB
 	dbVoting, dbVotes, err := s.database.GetVoting(board, voting)
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve voting in updated voting", "err", err)
 		return
 	}
 	if dbVoting.Status == types.VotingStatusClosed {
-		notes, err = s.database.GetNotes(board)
+		updatedNotes, err = s.database.GetNotes(board)
 		if err != nil {
 			logger.Get().Errorw("unable to retrieve notes in updated voting", "err", err)
 		}
@@ -169,11 +169,11 @@ func (s *VotingService) UpdatedVoting(board, voting uuid.UUID) {
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: struct {
-			Voting *votes.Voting  `json:"voting"`
-			Notes  []*notes2.Note `json:"notes"`
+			Voting *votes.Voting `json:"voting"`
+			Notes  []*notes.Note `json:"notes"`
 		}{
 			Voting: new(votes.Voting).From(dbVoting, dbVotes),
-			Notes:  notes2.Notes(notes),
+			Notes:  notes.Notes(updatedNotes),
 		},
 	})
 

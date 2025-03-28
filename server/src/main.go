@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	notes2 "scrumlr.io/server/notes"
 	"strings"
 
 	"scrumlr.io/server/auth"
@@ -371,7 +372,7 @@ func run(c *cli.Context) error {
 	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	votingService := votings.NewVotingService(dbConnection, rt)
 	userService := users.NewUserService(dbConnection, rt)
-	noteService := notes.NewNoteService(dbConnection, rt)
+	noteService := notes2.NewNoteService(dbConnection, rt)
 	reactionService := initialize.InitializeReactionService(bun, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)

@@ -116,7 +116,7 @@ func (d *Database) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.Up
 		GroupExpr("id")
 
 	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-		Model((*Note)(nil)).
+		Model((nil)).
 		TableExpr("_data").
 		Set("rank = _data.new_rank").
 		WhereOr("note.id = _data.id").
