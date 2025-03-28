@@ -2,7 +2,7 @@
   "InfoBar": {
     "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
   },
-  "NewBoard": {
+  "LegacyNewBoard": {
     "boardName": "Sitzungsname",
     "createNewBoard": "Erstelle eine Sitzung",
     "extendedConfigurationButton": "Erweiterte Einstellungen",
@@ -12,6 +12,16 @@
     "importBoard": "JSON Importieren",
     "uploadFile": "Datei hochladen oder hierher ziehen",
     "importNewBoard": "Jetzt importieren"
+  },
+  "Templates": {
+    "switchTitle": "Vorlagen",
+    "title": "Wähle eine Vorlage",
+    "savedTemplates": "Deine Vorlagen",
+    "recommendedTemplates": "Unsere Empfehlungen"
+  },
+  "Sessions": {
+    "switchTitle": "Sitzungen",
+    "title": "Wähle eine Sitzung"
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
@@ -353,6 +363,9 @@
   },
   "NoteReactionsPopup": {
     "allReactionsTab": "Alle"
+  },
+  "SearchBar": {
+    "placeholder": "Suchen"
   },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",

@@ -41,3 +41,8 @@ packages:
         all: true
       NotesDatabase:
         all: true
+  scrumlr.io/server/health:
+      HealthService:
+        all: true
+      HealthDatabase:
+        all: true

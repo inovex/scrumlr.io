@@ -18,6 +18,8 @@ import (
 	"github.com/gorilla/websocket"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/feedback"
+	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -36,8 +38,8 @@ type Server struct {
 	notes          notes.NotesService
 	reactions      reactions.ReactionService
 	sessions       services.BoardSessions
-	health         services.Health
-	feedback       services.Feedback
+	health         health.HealthService
+	feedback       feedback.FeedbackService
 	boardReactions services.BoardReactions
 	boardTemplates services.BoardTemplates
 
@@ -63,8 +65,8 @@ func New(
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
 	sessions services.BoardSessions,
-	health services.Health,
-	feedback services.Feedback,
+	health health.HealthService,
+	feedback feedback.FeedbackService,
 	boardReactions services.BoardReactions,
 	boardTemplates services.BoardTemplates,
 

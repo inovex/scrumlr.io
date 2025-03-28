@@ -23,11 +23,6 @@ type Users interface {
 	Update(ctx context.Context, body dto.UserUpdateRequest) (*dto.User, error)
 }
 
-type Feedback interface {
-	Create(ctx context.Context, feedbackType string, contact string, text string) error
-	Enabled() bool
-}
-
 type Boards interface {
 	Create(ctx context.Context, body dto.CreateBoardRequest) (*dto.Board, error)
 	Get(ctx context.Context, id uuid.UUID) (*dto.Board, error)
@@ -78,11 +73,6 @@ type Votings interface {
 	AddVote(ctx context.Context, req dto.VoteRequest) (*dto.Vote, error)
 	RemoveVote(ctx context.Context, req dto.VoteRequest) error
 	GetVotes(ctx context.Context, f filter.VoteFilter) ([]*dto.Vote, error)
-}
-
-type Health interface {
-	IsDatabaseHealthy() bool
-	IsRealtimeHealthy() bool
 }
 
 type BoardReactions interface {
