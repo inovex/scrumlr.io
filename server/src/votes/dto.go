@@ -2,9 +2,48 @@ package votes
 
 import (
 	"github.com/google/uuid"
+	"github.com/uptrace/bun"
+	"net/http"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
+	"time"
 )
+
+type Vote struct {
+	Voting uuid.UUID `json:"voting"`
+	Note   uuid.UUID `json:"note"`
+	User   uuid.UUID `json:"user"`
+}
+
+func (v *Vote) From(vote VoteDB) *Vote {
+	v.Voting = vote.Voting
+	v.Note = vote.Note
+	v.User = vote.User
+	return v
+}
+
+func (*Vote) Render(_ http.ResponseWriter, _ *http.Request) error {
+	return nil
+}
+
+func Votes(votes []VoteDB) []*Vote {
+	if votes == nil {
+		return nil
+	}
+
+	list := make([]*Vote, len(votes))
+	for index, vote := range votes {
+		list[index] = new(Vote).From(vote)
+	}
+	return list
+}
+
+// VoteRequest represents the request to add or delete a vote.
+type VoteRequest struct {
+	Note  uuid.UUID `json:"note"`
+	Board uuid.UUID `json:"-"`
+	User  uuid.UUID `json:"-"`
+}
 
 // VotingCreateRequest represents the request to create a new voting session.
 type VotingCreateRequest struct {
@@ -31,6 +70,20 @@ type Voting struct {
 	VotingResults      *VotingResults     `json:"votes,omitempty"`
 }
 
+func (v *Voting) From(voting VotingDB, votes []VoteDB) *Voting {
+	v.ID = voting.ID
+	v.VoteLimit = voting.VoteLimit
+	v.AllowMultipleVotes = voting.AllowMultipleVotes
+	v.ShowVotesOfOthers = voting.ShowVotesOfOthers
+	v.Status = voting.Status
+	v.VotingResults = getVotingWithResults(voting, votes)
+	return v
+}
+
+func (*Voting) Render(_ http.ResponseWriter, _ *http.Request) error {
+	return nil
+}
+
 type VotingResults struct {
 	Total int                                `json:"total"`
 	Votes map[uuid.UUID]VotingResultsPerNote `json:"votesPerNote"`
@@ -49,4 +102,39 @@ type VotingResultsPerNote struct {
 type VotingUpdated struct {
 	Notes  notes.NoteSlice `json:"notes"`
 	Voting *Voting         `json:"voting"`
+}
+
+type VoteDB struct {
+	bun.BaseModel `bun:"table:votes"`
+	Board         uuid.UUID
+	Voting        uuid.UUID
+	User          uuid.UUID
+	Note          uuid.UUID
+}
+
+type VotingDB struct {
+	bun.BaseModel      `bun:"table:votings"`
+	ID                 uuid.UUID
+	Board              uuid.UUID
+	CreatedAt          time.Time
+	VoteLimit          int
+	AllowMultipleVotes bool
+	ShowVotesOfOthers  bool
+	Status             types.VotingStatus
+}
+
+type VotingInsert struct {
+	bun.BaseModel      `bun:"table:votings"`
+	Board              uuid.UUID
+	VoteLimit          int
+	AllowMultipleVotes bool
+	ShowVotesOfOthers  bool
+	Status             types.VotingStatus
+}
+
+type VotingUpdate struct {
+	bun.BaseModel `bun:"table:votings"`
+	ID            uuid.UUID
+	Board         uuid.UUID
+	Status        types.VotingStatus
 }

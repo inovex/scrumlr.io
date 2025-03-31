@@ -3,13 +3,11 @@ package services
 import (
 	"context"
 
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/notes"
-	"scrumlr.io/server/votes"
-
 	"github.com/google/uuid"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/notes"
 )
 
 type Users interface {
@@ -72,17 +70,6 @@ type Notes interface {
 	Update(ctx context.Context, body dto.NoteUpdateRequest) (*notes.Note, error)
 	List(ctx context.Context, id uuid.UUID) ([]*notes.Note, error)
 	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
-}
-
-type Votings interface {
-	Create(ctx context.Context, body votes.VotingCreateRequest) (*votes.Voting, error)
-	Update(ctx context.Context, body votes.VotingUpdateRequest) (*votes.Voting, error)
-	Get(ctx context.Context, board, id uuid.UUID) (*votes.Voting, error)
-	List(ctx context.Context, board uuid.UUID) ([]*votes.Voting, error)
-
-	AddVote(ctx context.Context, req dto.VoteRequest) (*dto.Vote, error)
-	RemoveVote(ctx context.Context, req dto.VoteRequest) error
-	GetVotes(ctx context.Context, f filter.VoteFilter) ([]*dto.Vote, error)
 }
 
 type BoardReactions interface {

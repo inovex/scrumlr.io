@@ -32,7 +32,6 @@ packages:
         all: true
       ReactionDatabase:
         all: true
-
   scrumlr.io/server/health:
     config:
       dir: "{{.InterfaceDir}}"
@@ -41,4 +40,13 @@ packages:
       HealthService:
         all: true
       HealthDatabase:
+        all: true
+  scrumlr.io/server/votes:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      VotingService:
+        all: true
+      VotingDatabase:
         all: true
