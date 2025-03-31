@@ -1,4 +1,4 @@
-package voting
+package votes
 
 import (
 	"context"

@@ -3,23 +3,13 @@ package services
 import (
 	"context"
 
-	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/notes"
-)
+	"scrumlr.io/server/votes"
 
-type Users interface {
-	Get(ctx context.Context, id uuid.UUID) (*dto.User, error)
-	LoginAnonymous(ctx context.Context, name string) (*dto.User, error)
-	CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (*dto.User, error)
-	Update(ctx context.Context, body dto.UserUpdateRequest) (*dto.User, error)
-}
+	"github.com/google/uuid"
+	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/common/filter"
+)
 
 type Boards interface {
 	Create(ctx context.Context, body dto.CreateBoardRequest) (*dto.Board, error)

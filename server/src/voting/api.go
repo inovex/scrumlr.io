@@ -1,4 +1,4 @@
-package voting
+package votes
 
 import (
   "context"
@@ -22,7 +22,7 @@ type VotingApi struct {
   service VotingService
 }
 
-func NewVotingApiApi(service VotingService) *VotingApi {
+func NewVotingApi(service VotingService) *VotingApi {
   api := new(VotingApi)
   api.service = service
 

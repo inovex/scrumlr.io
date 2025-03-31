@@ -82,3 +82,13 @@ packages:
       NotesDatabase:
         all: true
 
+
+  scrumlr.io/server/votes:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      VotingService:
+        all: true
+      VotingDatabase:
+        all: true
