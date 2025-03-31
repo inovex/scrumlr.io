@@ -1,12 +1,10 @@
 package services
 
 import (
-	"context"
-
-	"scrumlr.io/server/columns"
-
-	"github.com/google/uuid"
-	"scrumlr.io/server/common/dto"
+  "context"
+  "github.com/google/uuid"
+  "scrumlr.io/server/columns"
+  "scrumlr.io/server/common/dto"
 )
 
 type Boards interface {
