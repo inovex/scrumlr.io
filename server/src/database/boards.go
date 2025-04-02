@@ -78,7 +78,7 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 		return Board{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
 	}
 
-	session := sessions.DatabaseBoardSessionInsert{User: creator, Role: sessions.SessionRoleOwner}
+	session := sessions.DatabaseBoardSessionInsert{User: creator, Role: sessions.OwnerRole}
 
 	var b Board
 	query := d.db.NewSelect().With("createdBoard", boardInsert)

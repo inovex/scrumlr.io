@@ -1,4 +1,4 @@
-package sessions
+package sessionrequests
 
 import (
 	"net/http"
@@ -8,14 +8,14 @@ import (
 )
 
 type BoardSessionRequest struct {
-	User   dto.User                  `json:"user"`
-	Status BoardSessionRequestStatus `json:"status"`
+	User   dto.User      `json:"user"`
+	Status RequestStatus `json:"status"`
 }
 
 type BoardSessionRequestUpdate struct {
-	Status BoardSessionRequestStatus `json:"status"`
-	Board  uuid.UUID                 `json:"-"`
-	User   uuid.UUID                 `json:"-"`
+	Status RequestStatus `json:"status"`
+	Board  uuid.UUID     `json:"-"`
+	User   uuid.UUID     `json:"-"`
 }
 
 func (r *BoardSessionRequest) From(request DatabaseBoardSessionRequest) *BoardSessionRequest {

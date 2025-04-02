@@ -1,4 +1,4 @@
-package sessions
+package sessionrequests
 
 import (
 	"context"
@@ -23,7 +23,7 @@ func NewSessionRequestDatabase(database *bun.DB) SessionRequestDatabase {
 
 // CreateBoardSessionRequest creates a new board session request with the state 'PENDING' and does nothing if it already exists
 func (database *SessionRequestDB) CreateBoardSessionRequest(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error) {
-	r := DatabaseBoardSessionRequest{Board: request.Board, User: request.User, Status: RequestStatusPending}
+	r := DatabaseBoardSessionRequest{Board: request.Board, User: request.User, Status: RequestPending}
 	insertQuery := database.db.NewInsert().Model(&r).ExcludeColumn("name").On("CONFLICT (\"user\", board) DO UPDATE SET board=?", request.Board).Returning("*")
 	err := database.db.NewSelect().
 		With("insertQuery", insertQuery).
@@ -48,7 +48,7 @@ func (database *SessionRequestDB) UpdateBoardSessionRequest(update DatabaseBoard
 		Model(&update).
 		Where("board = ?", update.Board).
 		Where("\"user\" = ?", update.User).
-		Where("status = ?", RequestStatusPending).
+		Where("status = ?", RequestPending).
 		Returning("*")
 
 	err := database.db.NewSelect().
@@ -93,7 +93,7 @@ func (database *SessionRequestDB) GetBoardSessionRequest(board, user uuid.UUID) 
 }
 
 // GetBoardSessionRequests returns the list of all board session requests filtered by the status
-func (database *SessionRequestDB) GetBoardSessionRequests(board uuid.UUID, status ...BoardSessionRequestStatus) ([]DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) GetBoardSessionRequests(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error) {
 	var requests []DatabaseBoardSessionRequest
 	query := database.db.NewSelect().
 		Model(&requests).

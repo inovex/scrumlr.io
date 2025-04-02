@@ -100,7 +100,7 @@ func testCreateBoardAlsoGeneratesOwnerSession(t *testing.T) {
 
 	session, err := sessionDb.GetBoardSession(board.ID, user.ID)
 	assert.Nil(t, err)
-	assert.Equal(t, sessions.SessionRoleOwner, session.Role)
+	assert.Equal(t, sessions.OwnerRole, session.Role)
 }
 
 func testCreateBoardAlsoGeneratesColumns(t *testing.T) {

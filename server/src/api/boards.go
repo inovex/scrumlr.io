@@ -130,14 +130,14 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	exists, err := s.sessions.SessionExists(r.Context(), board, user)
+	exists, err := s.sessions.Exists(r.Context(), board, user)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
 	if exists {
-		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
+		banned, err := s.sessions.IsParticipantBanned(r.Context(), board, user)
 		if err != nil {
 			common.Throw(w, r, common.InternalServerError)
 			return

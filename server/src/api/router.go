@@ -23,6 +23,7 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 )
 
@@ -38,7 +39,7 @@ type Server struct {
 	notes           services.Notes
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
-	sessionRequests sessions.SessionRequestService
+	sessionRequests sessionrequests.SessionRequestService
 	health          health.HealthService
 	feedback        feedback.FeedbackService
 	boardReactions  services.BoardReactions
@@ -66,7 +67,7 @@ func New(
 	notes services.Notes,
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
-	sessionRequests sessions.SessionRequestService,
+	sessionRequests sessionrequests.SessionRequestService,
 	health health.HealthService,
 	feedback feedback.FeedbackService,
 	boardReactions services.BoardReactions,

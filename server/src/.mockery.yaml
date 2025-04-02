@@ -59,6 +59,12 @@ packages:
         all: true
       SessionDatabase:
         all: true
+        
+  scrumlr.io/server/sessionrequests:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces: 
       SessionRequestService:
         all: true
       SessionRequestDatabase:
