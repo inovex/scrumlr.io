@@ -344,6 +344,66 @@ func (_c *MockSessionService_Get_Call) RunAndReturn(run func(context.Context, uu
 	return _c
 }
 
+// GetAll provides a mock function with given fields: ctx, boardID, filter
+func (_m *MockSessionService) GetAll(ctx context.Context, boardID uuid.UUID, filter BoardSessionFilter) ([]*BoardSession, error) {
+	ret := _m.Called(ctx, boardID, filter)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAll")
+	}
+
+	var r0 []*BoardSession
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, BoardSessionFilter) ([]*BoardSession, error)); ok {
+		return rf(ctx, boardID, filter)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, BoardSessionFilter) []*BoardSession); ok {
+		r0 = rf(ctx, boardID, filter)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*BoardSession)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, BoardSessionFilter) error); ok {
+		r1 = rf(ctx, boardID, filter)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockSessionService_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockSessionService_GetAll_Call struct {
+	*mock.Call
+}
+
+// GetAll is a helper method to define mock.On call
+//   - ctx context.Context
+//   - boardID uuid.UUID
+//   - filter BoardSessionFilter
+func (_e *MockSessionService_Expecter) GetAll(ctx interface{}, boardID interface{}, filter interface{}) *MockSessionService_GetAll_Call {
+	return &MockSessionService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, boardID, filter)}
+}
+
+func (_c *MockSessionService_GetAll_Call) Run(run func(ctx context.Context, boardID uuid.UUID, filter BoardSessionFilter)) *MockSessionService_GetAll_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(BoardSessionFilter))
+	})
+	return _c
+}
+
+func (_c *MockSessionService_GetAll_Call) Return(_a0 []*BoardSession, _a1 error) *MockSessionService_GetAll_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockSessionService_GetAll_Call) RunAndReturn(run func(context.Context, uuid.UUID, BoardSessionFilter) ([]*BoardSession, error)) *MockSessionService_GetAll_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetUserConnectedBoards provides a mock function with given fields: ctx, user
 func (_m *MockSessionService) GetUserConnectedBoards(ctx context.Context, user uuid.UUID) ([]*BoardSession, error) {
 	ret := _m.Called(ctx, user)
@@ -399,66 +459,6 @@ func (_c *MockSessionService_GetUserConnectedBoards_Call) Return(_a0 []*BoardSes
 }
 
 func (_c *MockSessionService_GetUserConnectedBoards_Call) RunAndReturn(run func(context.Context, uuid.UUID) ([]*BoardSession, error)) *MockSessionService_GetUserConnectedBoards_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// Gets provides a mock function with given fields: ctx, boardID, filter
-func (_m *MockSessionService) Gets(ctx context.Context, boardID uuid.UUID, filter BoardSessionFilter) ([]*BoardSession, error) {
-	ret := _m.Called(ctx, boardID, filter)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Gets")
-	}
-
-	var r0 []*BoardSession
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, BoardSessionFilter) ([]*BoardSession, error)); ok {
-		return rf(ctx, boardID, filter)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, BoardSessionFilter) []*BoardSession); ok {
-		r0 = rf(ctx, boardID, filter)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*BoardSession)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, BoardSessionFilter) error); ok {
-		r1 = rf(ctx, boardID, filter)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockSessionService_Gets_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Gets'
-type MockSessionService_Gets_Call struct {
-	*mock.Call
-}
-
-// Gets is a helper method to define mock.On call
-//   - ctx context.Context
-//   - boardID uuid.UUID
-//   - filter BoardSessionFilter
-func (_e *MockSessionService_Expecter) Gets(ctx interface{}, boardID interface{}, filter interface{}) *MockSessionService_Gets_Call {
-	return &MockSessionService_Gets_Call{Call: _e.mock.On("Gets", ctx, boardID, filter)}
-}
-
-func (_c *MockSessionService_Gets_Call) Run(run func(ctx context.Context, boardID uuid.UUID, filter BoardSessionFilter)) *MockSessionService_Gets_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(BoardSessionFilter))
-	})
-	return _c
-}
-
-func (_c *MockSessionService_Gets_Call) Return(_a0 []*BoardSession, _a1 error) *MockSessionService_Gets_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockSessionService_Gets_Call) RunAndReturn(run func(context.Context, uuid.UUID, BoardSessionFilter) ([]*BoardSession, error)) *MockSessionService_Gets_Call {
 	_c.Call.Return(run)
 	return _c
 }

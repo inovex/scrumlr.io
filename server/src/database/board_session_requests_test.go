@@ -27,19 +27,19 @@ func TestRunnerForBoardSessionRequests(t *testing.T) {
 
 func testCreateBoardSessionRequest(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	_, err := sessionRequestDb.CreateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestInsert{
+	_, err := sessionRequestDb.Create(sessionrequests.DatabaseBoardSessionRequestInsert{
 		Board: board.ID,
 		User:  fixture.MustRow("User.jane").(*User).ID,
 	})
 	assert.Nil(t, err)
 
-	_, err = sessionRequestDb.CreateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestInsert{
+	_, err = sessionRequestDb.Create(sessionrequests.DatabaseBoardSessionRequestInsert{
 		Board: board.ID,
 		User:  fixture.MustRow("User.jack").(*User).ID,
 	})
 	assert.Nil(t, err)
 
-	_, err = sessionRequestDb.CreateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestInsert{
+	_, err = sessionRequestDb.Create(sessionrequests.DatabaseBoardSessionRequestInsert{
 		Board: board.ID,
 		User:  fixture.MustRow("User.jennifer").(*User).ID,
 	})
@@ -50,7 +50,7 @@ func testCreateBoardSessionRequestOnConflictDoesNothing(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
 
-	_, err := sessionRequestDb.CreateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestInsert{
+	_, err := sessionRequestDb.Create(sessionrequests.DatabaseBoardSessionRequestInsert{
 		Board: board.ID,
 		User:  user.ID,
 	})
@@ -61,7 +61,7 @@ func testUpdateOfBoardSessionRequestToAccepted(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
 
-	_, err := sessionRequestDb.UpdateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestUpdate{
+	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
 		User:   user.ID,
 		Status: sessionrequests.RequestAccepted,
@@ -69,7 +69,7 @@ func testUpdateOfBoardSessionRequestToAccepted(t *testing.T) {
 	assert.Nil(t, err)
 
 	// a board session should exist after accepting a board session request
-	exists, err := sessionDb.BoardSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.Exists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.True(t, exists)
 }
@@ -78,7 +78,7 @@ func testUpdateOfBoardSessionToRejected(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	user := fixture.MustRow("User.jack").(*User)
 
-	_, err := sessionRequestDb.UpdateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestUpdate{
+	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
 		User:   user.ID,
 		Status: sessionrequests.RequestPending,
@@ -90,7 +90,7 @@ func testUpdateOfRejectedSessionToPendingFails(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	user := fixture.MustRow("User.jack").(*User)
 
-	_, err := sessionRequestDb.UpdateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestUpdate{
+	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
 		User:   user.ID,
 		Status: sessionrequests.RequestPending,
@@ -102,7 +102,7 @@ func testUpdateOfAcceptedSessionToPendingFails(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
 
-	_, err := sessionRequestDb.UpdateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestUpdate{
+	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
 		User:   user.ID,
 		Status: sessionrequests.RequestPending,
@@ -114,7 +114,7 @@ func testUpdateOfAcceptedSessionToRejectedFails(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
 
-	_, err := sessionRequestDb.UpdateBoardSessionRequest(sessionrequests.DatabaseBoardSessionRequestUpdate{
+	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
 		User:   user.ID,
 		Status: sessionrequests.RequestRejected,
@@ -126,7 +126,7 @@ func testGetBoardSessionRequest(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
 
-	request, err := sessionRequestDb.GetBoardSessionRequest(board.ID, user.ID)
+	request, err := sessionRequestDb.Get(board.ID, user.ID)
 	assert.Nil(t, err)
 
 	assert.Equal(t, board.ID, request.Board)
@@ -136,14 +136,14 @@ func testGetBoardSessionRequest(t *testing.T) {
 
 func testGetBoardSessionRequests(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.GetBoardSessionRequests(board.ID)
+	requests, err := sessionRequestDb.Gets(board.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(requests))
 }
 
 func testGetBoardSessionRequestsWithAcceptedFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.GetBoardSessionRequests(board.ID, sessionrequests.RequestAccepted)
+	requests, err := sessionRequestDb.Gets(board.ID, sessionrequests.RequestAccepted)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(requests))
 	assert.Equal(t, sessionrequests.RequestAccepted, requests[0].Status)
@@ -151,7 +151,7 @@ func testGetBoardSessionRequestsWithAcceptedFilter(t *testing.T) {
 
 func testGetBoardSessionRequestsWithRejectedFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.GetBoardSessionRequests(board.ID, sessionrequests.RequestRejected)
+	requests, err := sessionRequestDb.Gets(board.ID, sessionrequests.RequestRejected)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(requests))
 	assert.Equal(t, sessionrequests.RequestRejected, requests[0].Status)
@@ -159,7 +159,7 @@ func testGetBoardSessionRequestsWithRejectedFilter(t *testing.T) {
 
 func testGetBoardSessionRequestsWithPendingFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.GetBoardSessionRequests(board.ID, sessionrequests.RequestPending)
+	requests, err := sessionRequestDb.Gets(board.ID, sessionrequests.RequestPending)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(requests))
 	assert.Equal(t, sessionrequests.RequestPending, requests[0].Status)
@@ -167,7 +167,7 @@ func testGetBoardSessionRequestsWithPendingFilter(t *testing.T) {
 
 func testGetBoardSessionRequestWithMultipleFilters(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.GetBoardSessionRequests(board.ID, sessionrequests.RequestAccepted, sessionrequests.RequestRejected)
+	requests, err := sessionRequestDb.Gets(board.ID, sessionrequests.RequestAccepted, sessionrequests.RequestRejected)
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(requests))
 }

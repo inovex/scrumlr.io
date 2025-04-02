@@ -24,69 +24,69 @@ func (_m *MockWebsocket) EXPECT() *MockWebsocket_Expecter {
 	return &MockWebsocket_Expecter{mock: &_m.Mock}
 }
 
-// OpenBoardSessionRequestSocket provides a mock function with given fields: w, r
-func (_m *MockWebsocket) OpenBoardSessionRequestSocket(w http.ResponseWriter, r *http.Request) {
+// OpenSocket provides a mock function with given fields: w, r
+func (_m *MockWebsocket) OpenSocket(w http.ResponseWriter, r *http.Request) {
 	_m.Called(w, r)
 }
 
-// MockWebsocket_OpenBoardSessionRequestSocket_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'OpenBoardSessionRequestSocket'
-type MockWebsocket_OpenBoardSessionRequestSocket_Call struct {
+// MockWebsocket_OpenSocket_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'OpenSocket'
+type MockWebsocket_OpenSocket_Call struct {
 	*mock.Call
 }
 
-// OpenBoardSessionRequestSocket is a helper method to define mock.On call
+// OpenSocket is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockWebsocket_Expecter) OpenBoardSessionRequestSocket(w interface{}, r interface{}) *MockWebsocket_OpenBoardSessionRequestSocket_Call {
-	return &MockWebsocket_OpenBoardSessionRequestSocket_Call{Call: _e.mock.On("OpenBoardSessionRequestSocket", w, r)}
+func (_e *MockWebsocket_Expecter) OpenSocket(w interface{}, r interface{}) *MockWebsocket_OpenSocket_Call {
+	return &MockWebsocket_OpenSocket_Call{Call: _e.mock.On("OpenSocket", w, r)}
 }
 
-func (_c *MockWebsocket_OpenBoardSessionRequestSocket_Call) Run(run func(w http.ResponseWriter, r *http.Request)) *MockWebsocket_OpenBoardSessionRequestSocket_Call {
+func (_c *MockWebsocket_OpenSocket_Call) Run(run func(w http.ResponseWriter, r *http.Request)) *MockWebsocket_OpenSocket_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(http.ResponseWriter), args[1].(*http.Request))
 	})
 	return _c
 }
 
-func (_c *MockWebsocket_OpenBoardSessionRequestSocket_Call) Return() *MockWebsocket_OpenBoardSessionRequestSocket_Call {
+func (_c *MockWebsocket_OpenSocket_Call) Return() *MockWebsocket_OpenSocket_Call {
 	_c.Call.Return()
 	return _c
 }
 
-func (_c *MockWebsocket_OpenBoardSessionRequestSocket_Call) RunAndReturn(run func(http.ResponseWriter, *http.Request)) *MockWebsocket_OpenBoardSessionRequestSocket_Call {
+func (_c *MockWebsocket_OpenSocket_Call) RunAndReturn(run func(http.ResponseWriter, *http.Request)) *MockWebsocket_OpenSocket_Call {
 	_c.Run(run)
 	return _c
 }
 
-// closeBoardSessionRequestSocket provides a mock function with given fields: conn
-func (_m *MockWebsocket) closeBoardSessionRequestSocket(conn *websocket.Conn) {
+// closeSocket provides a mock function with given fields: conn
+func (_m *MockWebsocket) closeSocket(conn *websocket.Conn) {
 	_m.Called(conn)
 }
 
-// MockWebsocket_closeBoardSessionRequestSocket_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'closeBoardSessionRequestSocket'
-type MockWebsocket_closeBoardSessionRequestSocket_Call struct {
+// MockWebsocket_closeSocket_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'closeSocket'
+type MockWebsocket_closeSocket_Call struct {
 	*mock.Call
 }
 
-// closeBoardSessionRequestSocket is a helper method to define mock.On call
+// closeSocket is a helper method to define mock.On call
 //   - conn *websocket.Conn
-func (_e *MockWebsocket_Expecter) closeBoardSessionRequestSocket(conn interface{}) *MockWebsocket_closeBoardSessionRequestSocket_Call {
-	return &MockWebsocket_closeBoardSessionRequestSocket_Call{Call: _e.mock.On("closeBoardSessionRequestSocket", conn)}
+func (_e *MockWebsocket_Expecter) closeSocket(conn interface{}) *MockWebsocket_closeSocket_Call {
+	return &MockWebsocket_closeSocket_Call{Call: _e.mock.On("closeSocket", conn)}
 }
 
-func (_c *MockWebsocket_closeBoardSessionRequestSocket_Call) Run(run func(conn *websocket.Conn)) *MockWebsocket_closeBoardSessionRequestSocket_Call {
+func (_c *MockWebsocket_closeSocket_Call) Run(run func(conn *websocket.Conn)) *MockWebsocket_closeSocket_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(*websocket.Conn))
 	})
 	return _c
 }
 
-func (_c *MockWebsocket_closeBoardSessionRequestSocket_Call) Return() *MockWebsocket_closeBoardSessionRequestSocket_Call {
+func (_c *MockWebsocket_closeSocket_Call) Return() *MockWebsocket_closeSocket_Call {
 	_c.Call.Return()
 	return _c
 }
 
-func (_c *MockWebsocket_closeBoardSessionRequestSocket_Call) RunAndReturn(run func(*websocket.Conn)) *MockWebsocket_closeBoardSessionRequestSocket_Call {
+func (_c *MockWebsocket_closeSocket_Call) RunAndReturn(run func(*websocket.Conn)) *MockWebsocket_closeSocket_Call {
 	_c.Run(run)
 	return _c
 }

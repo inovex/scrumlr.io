@@ -24,12 +24,12 @@ func (_m *MockSessionRequestService) EXPECT() *MockSessionRequestService_Expecte
 	return &MockSessionRequestService_Expecter{mock: &_m.Mock}
 }
 
-// CreateSessionRequest provides a mock function with given fields: ctx, boardID, userID
-func (_m *MockSessionRequestService) CreateSessionRequest(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) (*BoardSessionRequest, error) {
+// Create provides a mock function with given fields: ctx, boardID, userID
+func (_m *MockSessionRequestService) Create(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) (*BoardSessionRequest, error) {
 	ret := _m.Called(ctx, boardID, userID)
 
 	if len(ret) == 0 {
-		panic("no return value specified for CreateSessionRequest")
+		panic("no return value specified for Create")
 	}
 
 	var r0 *BoardSessionRequest
@@ -54,42 +54,100 @@ func (_m *MockSessionRequestService) CreateSessionRequest(ctx context.Context, b
 	return r0, r1
 }
 
-// MockSessionRequestService_CreateSessionRequest_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateSessionRequest'
-type MockSessionRequestService_CreateSessionRequest_Call struct {
+// MockSessionRequestService_Create_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Create'
+type MockSessionRequestService_Create_Call struct {
 	*mock.Call
 }
 
-// CreateSessionRequest is a helper method to define mock.On call
+// Create is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionRequestService_Expecter) CreateSessionRequest(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_CreateSessionRequest_Call {
-	return &MockSessionRequestService_CreateSessionRequest_Call{Call: _e.mock.On("CreateSessionRequest", ctx, boardID, userID)}
+func (_e *MockSessionRequestService_Expecter) Create(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_Create_Call {
+	return &MockSessionRequestService_Create_Call{Call: _e.mock.On("Create", ctx, boardID, userID)}
 }
 
-func (_c *MockSessionRequestService_CreateSessionRequest_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockSessionRequestService_CreateSessionRequest_Call {
+func (_c *MockSessionRequestService_Create_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockSessionRequestService_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(uuid.UUID))
 	})
 	return _c
 }
 
-func (_c *MockSessionRequestService_CreateSessionRequest_Call) Return(_a0 *BoardSessionRequest, _a1 error) *MockSessionRequestService_CreateSessionRequest_Call {
+func (_c *MockSessionRequestService_Create_Call) Return(_a0 *BoardSessionRequest, _a1 error) *MockSessionRequestService_Create_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionRequestService_CreateSessionRequest_Call) RunAndReturn(run func(context.Context, uuid.UUID, uuid.UUID) (*BoardSessionRequest, error)) *MockSessionRequestService_CreateSessionRequest_Call {
+func (_c *MockSessionRequestService_Create_Call) RunAndReturn(run func(context.Context, uuid.UUID, uuid.UUID) (*BoardSessionRequest, error)) *MockSessionRequestService_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// GetSessionRequest provides a mock function with given fields: ctx, boardID, userID
-func (_m *MockSessionRequestService) GetSessionRequest(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) (*BoardSessionRequest, error) {
+// Exists provides a mock function with given fields: ctx, boardID, userID
+func (_m *MockSessionRequestService) Exists(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) (bool, error) {
 	ret := _m.Called(ctx, boardID, userID)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetSessionRequest")
+		panic("no return value specified for Exists")
+	}
+
+	var r0 bool
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (bool, error)); ok {
+		return rf(ctx, boardID, userID)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) bool); ok {
+		r0 = rf(ctx, boardID, userID)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r1 = rf(ctx, boardID, userID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockSessionRequestService_Exists_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Exists'
+type MockSessionRequestService_Exists_Call struct {
+	*mock.Call
+}
+
+// Exists is a helper method to define mock.On call
+//   - ctx context.Context
+//   - boardID uuid.UUID
+//   - userID uuid.UUID
+func (_e *MockSessionRequestService_Expecter) Exists(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_Exists_Call {
+	return &MockSessionRequestService_Exists_Call{Call: _e.mock.On("Exists", ctx, boardID, userID)}
+}
+
+func (_c *MockSessionRequestService_Exists_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockSessionRequestService_Exists_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockSessionRequestService_Exists_Call) Return(_a0 bool, _a1 error) *MockSessionRequestService_Exists_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockSessionRequestService_Exists_Call) RunAndReturn(run func(context.Context, uuid.UUID, uuid.UUID) (bool, error)) *MockSessionRequestService_Exists_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// Get provides a mock function with given fields: ctx, boardID, userID
+func (_m *MockSessionRequestService) Get(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) (*BoardSessionRequest, error) {
+	ret := _m.Called(ctx, boardID, userID)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Get")
 	}
 
 	var r0 *BoardSessionRequest
@@ -114,42 +172,42 @@ func (_m *MockSessionRequestService) GetSessionRequest(ctx context.Context, boar
 	return r0, r1
 }
 
-// MockSessionRequestService_GetSessionRequest_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetSessionRequest'
-type MockSessionRequestService_GetSessionRequest_Call struct {
+// MockSessionRequestService_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type MockSessionRequestService_Get_Call struct {
 	*mock.Call
 }
 
-// GetSessionRequest is a helper method to define mock.On call
+// Get is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - userID uuid.UUID
-func (_e *MockSessionRequestService_Expecter) GetSessionRequest(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_GetSessionRequest_Call {
-	return &MockSessionRequestService_GetSessionRequest_Call{Call: _e.mock.On("GetSessionRequest", ctx, boardID, userID)}
+func (_e *MockSessionRequestService_Expecter) Get(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_Get_Call {
+	return &MockSessionRequestService_Get_Call{Call: _e.mock.On("Get", ctx, boardID, userID)}
 }
 
-func (_c *MockSessionRequestService_GetSessionRequest_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockSessionRequestService_GetSessionRequest_Call {
+func (_c *MockSessionRequestService_Get_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockSessionRequestService_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(uuid.UUID))
 	})
 	return _c
 }
 
-func (_c *MockSessionRequestService_GetSessionRequest_Call) Return(_a0 *BoardSessionRequest, _a1 error) *MockSessionRequestService_GetSessionRequest_Call {
+func (_c *MockSessionRequestService_Get_Call) Return(_a0 *BoardSessionRequest, _a1 error) *MockSessionRequestService_Get_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionRequestService_GetSessionRequest_Call) RunAndReturn(run func(context.Context, uuid.UUID, uuid.UUID) (*BoardSessionRequest, error)) *MockSessionRequestService_GetSessionRequest_Call {
+func (_c *MockSessionRequestService_Get_Call) RunAndReturn(run func(context.Context, uuid.UUID, uuid.UUID) (*BoardSessionRequest, error)) *MockSessionRequestService_Get_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// ListSessionRequest provides a mock function with given fields: ctx, boardID, statusQuery
-func (_m *MockSessionRequestService) ListSessionRequest(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*BoardSessionRequest, error) {
+// GetAll provides a mock function with given fields: ctx, boardID, statusQuery
+func (_m *MockSessionRequestService) GetAll(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*BoardSessionRequest, error) {
 	ret := _m.Called(ctx, boardID, statusQuery)
 
 	if len(ret) == 0 {
-		panic("no return value specified for ListSessionRequest")
+		panic("no return value specified for GetAll")
 	}
 
 	var r0 []*BoardSessionRequest
@@ -174,134 +232,76 @@ func (_m *MockSessionRequestService) ListSessionRequest(ctx context.Context, boa
 	return r0, r1
 }
 
-// MockSessionRequestService_ListSessionRequest_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ListSessionRequest'
-type MockSessionRequestService_ListSessionRequest_Call struct {
+// MockSessionRequestService_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockSessionRequestService_GetAll_Call struct {
 	*mock.Call
 }
 
-// ListSessionRequest is a helper method to define mock.On call
+// GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardID uuid.UUID
 //   - statusQuery string
-func (_e *MockSessionRequestService_Expecter) ListSessionRequest(ctx interface{}, boardID interface{}, statusQuery interface{}) *MockSessionRequestService_ListSessionRequest_Call {
-	return &MockSessionRequestService_ListSessionRequest_Call{Call: _e.mock.On("ListSessionRequest", ctx, boardID, statusQuery)}
+func (_e *MockSessionRequestService_Expecter) GetAll(ctx interface{}, boardID interface{}, statusQuery interface{}) *MockSessionRequestService_GetAll_Call {
+	return &MockSessionRequestService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, boardID, statusQuery)}
 }
 
-func (_c *MockSessionRequestService_ListSessionRequest_Call) Run(run func(ctx context.Context, boardID uuid.UUID, statusQuery string)) *MockSessionRequestService_ListSessionRequest_Call {
+func (_c *MockSessionRequestService_GetAll_Call) Run(run func(ctx context.Context, boardID uuid.UUID, statusQuery string)) *MockSessionRequestService_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(string))
 	})
 	return _c
 }
 
-func (_c *MockSessionRequestService_ListSessionRequest_Call) Return(_a0 []*BoardSessionRequest, _a1 error) *MockSessionRequestService_ListSessionRequest_Call {
+func (_c *MockSessionRequestService_GetAll_Call) Return(_a0 []*BoardSessionRequest, _a1 error) *MockSessionRequestService_GetAll_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionRequestService_ListSessionRequest_Call) RunAndReturn(run func(context.Context, uuid.UUID, string) ([]*BoardSessionRequest, error)) *MockSessionRequestService_ListSessionRequest_Call {
+func (_c *MockSessionRequestService_GetAll_Call) RunAndReturn(run func(context.Context, uuid.UUID, string) ([]*BoardSessionRequest, error)) *MockSessionRequestService_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// OpenBoardSessionRequestSocket provides a mock function with given fields: w, r
-func (_m *MockSessionRequestService) OpenBoardSessionRequestSocket(w http.ResponseWriter, r *http.Request) {
+// OpenSocket provides a mock function with given fields: w, r
+func (_m *MockSessionRequestService) OpenSocket(w http.ResponseWriter, r *http.Request) {
 	_m.Called(w, r)
 }
 
-// MockSessionRequestService_OpenBoardSessionRequestSocket_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'OpenBoardSessionRequestSocket'
-type MockSessionRequestService_OpenBoardSessionRequestSocket_Call struct {
+// MockSessionRequestService_OpenSocket_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'OpenSocket'
+type MockSessionRequestService_OpenSocket_Call struct {
 	*mock.Call
 }
 
-// OpenBoardSessionRequestSocket is a helper method to define mock.On call
+// OpenSocket is a helper method to define mock.On call
 //   - w http.ResponseWriter
 //   - r *http.Request
-func (_e *MockSessionRequestService_Expecter) OpenBoardSessionRequestSocket(w interface{}, r interface{}) *MockSessionRequestService_OpenBoardSessionRequestSocket_Call {
-	return &MockSessionRequestService_OpenBoardSessionRequestSocket_Call{Call: _e.mock.On("OpenBoardSessionRequestSocket", w, r)}
+func (_e *MockSessionRequestService_Expecter) OpenSocket(w interface{}, r interface{}) *MockSessionRequestService_OpenSocket_Call {
+	return &MockSessionRequestService_OpenSocket_Call{Call: _e.mock.On("OpenSocket", w, r)}
 }
 
-func (_c *MockSessionRequestService_OpenBoardSessionRequestSocket_Call) Run(run func(w http.ResponseWriter, r *http.Request)) *MockSessionRequestService_OpenBoardSessionRequestSocket_Call {
+func (_c *MockSessionRequestService_OpenSocket_Call) Run(run func(w http.ResponseWriter, r *http.Request)) *MockSessionRequestService_OpenSocket_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(http.ResponseWriter), args[1].(*http.Request))
 	})
 	return _c
 }
 
-func (_c *MockSessionRequestService_OpenBoardSessionRequestSocket_Call) Return() *MockSessionRequestService_OpenBoardSessionRequestSocket_Call {
+func (_c *MockSessionRequestService_OpenSocket_Call) Return() *MockSessionRequestService_OpenSocket_Call {
 	_c.Call.Return()
 	return _c
 }
 
-func (_c *MockSessionRequestService_OpenBoardSessionRequestSocket_Call) RunAndReturn(run func(http.ResponseWriter, *http.Request)) *MockSessionRequestService_OpenBoardSessionRequestSocket_Call {
+func (_c *MockSessionRequestService_OpenSocket_Call) RunAndReturn(run func(http.ResponseWriter, *http.Request)) *MockSessionRequestService_OpenSocket_Call {
 	_c.Run(run)
 	return _c
 }
 
-// SessionRequestExists provides a mock function with given fields: ctx, boardID, userID
-func (_m *MockSessionRequestService) SessionRequestExists(ctx context.Context, boardID uuid.UUID, userID uuid.UUID) (bool, error) {
-	ret := _m.Called(ctx, boardID, userID)
-
-	if len(ret) == 0 {
-		panic("no return value specified for SessionRequestExists")
-	}
-
-	var r0 bool
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (bool, error)); ok {
-		return rf(ctx, boardID, userID)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) bool); ok {
-		r0 = rf(ctx, boardID, userID)
-	} else {
-		r0 = ret.Get(0).(bool)
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
-		r1 = rf(ctx, boardID, userID)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockSessionRequestService_SessionRequestExists_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SessionRequestExists'
-type MockSessionRequestService_SessionRequestExists_Call struct {
-	*mock.Call
-}
-
-// SessionRequestExists is a helper method to define mock.On call
-//   - ctx context.Context
-//   - boardID uuid.UUID
-//   - userID uuid.UUID
-func (_e *MockSessionRequestService_Expecter) SessionRequestExists(ctx interface{}, boardID interface{}, userID interface{}) *MockSessionRequestService_SessionRequestExists_Call {
-	return &MockSessionRequestService_SessionRequestExists_Call{Call: _e.mock.On("SessionRequestExists", ctx, boardID, userID)}
-}
-
-func (_c *MockSessionRequestService_SessionRequestExists_Call) Run(run func(ctx context.Context, boardID uuid.UUID, userID uuid.UUID)) *MockSessionRequestService_SessionRequestExists_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockSessionRequestService_SessionRequestExists_Call) Return(_a0 bool, _a1 error) *MockSessionRequestService_SessionRequestExists_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockSessionRequestService_SessionRequestExists_Call) RunAndReturn(run func(context.Context, uuid.UUID, uuid.UUID) (bool, error)) *MockSessionRequestService_SessionRequestExists_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// UpdateSessionRequest provides a mock function with given fields: ctx, body
-func (_m *MockSessionRequestService) UpdateSessionRequest(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error) {
+// Update provides a mock function with given fields: ctx, body
+func (_m *MockSessionRequestService) Update(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error) {
 	ret := _m.Called(ctx, body)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateSessionRequest")
+		panic("no return value specified for Update")
 	}
 
 	var r0 *BoardSessionRequest
@@ -326,31 +326,31 @@ func (_m *MockSessionRequestService) UpdateSessionRequest(ctx context.Context, b
 	return r0, r1
 }
 
-// MockSessionRequestService_UpdateSessionRequest_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateSessionRequest'
-type MockSessionRequestService_UpdateSessionRequest_Call struct {
+// MockSessionRequestService_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type MockSessionRequestService_Update_Call struct {
 	*mock.Call
 }
 
-// UpdateSessionRequest is a helper method to define mock.On call
+// Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body BoardSessionRequestUpdate
-func (_e *MockSessionRequestService_Expecter) UpdateSessionRequest(ctx interface{}, body interface{}) *MockSessionRequestService_UpdateSessionRequest_Call {
-	return &MockSessionRequestService_UpdateSessionRequest_Call{Call: _e.mock.On("UpdateSessionRequest", ctx, body)}
+func (_e *MockSessionRequestService_Expecter) Update(ctx interface{}, body interface{}) *MockSessionRequestService_Update_Call {
+	return &MockSessionRequestService_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 
-func (_c *MockSessionRequestService_UpdateSessionRequest_Call) Run(run func(ctx context.Context, body BoardSessionRequestUpdate)) *MockSessionRequestService_UpdateSessionRequest_Call {
+func (_c *MockSessionRequestService_Update_Call) Run(run func(ctx context.Context, body BoardSessionRequestUpdate)) *MockSessionRequestService_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context), args[1].(BoardSessionRequestUpdate))
 	})
 	return _c
 }
 
-func (_c *MockSessionRequestService_UpdateSessionRequest_Call) Return(_a0 *BoardSessionRequest, _a1 error) *MockSessionRequestService_UpdateSessionRequest_Call {
+func (_c *MockSessionRequestService_Update_Call) Return(_a0 *BoardSessionRequest, _a1 error) *MockSessionRequestService_Update_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionRequestService_UpdateSessionRequest_Call) RunAndReturn(run func(context.Context, BoardSessionRequestUpdate) (*BoardSessionRequest, error)) *MockSessionRequestService_UpdateSessionRequest_Call {
+func (_c *MockSessionRequestService_Update_Call) RunAndReturn(run func(context.Context, BoardSessionRequestUpdate) (*BoardSessionRequest, error)) *MockSessionRequestService_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }

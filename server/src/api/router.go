@@ -49,7 +49,7 @@ type Server struct {
 
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
-	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
+	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
 	anonymousLoginDisabled      bool
@@ -105,7 +105,7 @@ func New(
 		basePath:                         basePath,
 		realtime:                         rt,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
-		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
+		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
 		votings:                          votings,

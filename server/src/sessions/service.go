@@ -15,14 +15,14 @@ import (
 )
 
 type SessionDatabase interface {
-	CreateBoardSession(boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error)
-	UpdateBoardSession(update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error)
-	UpdateBoardSessions(update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error)
-	BoardSessionExists(board, user uuid.UUID) (bool, error)
-	BoardModeratorSessionExists(board, user uuid.UUID) (bool, error)
-	ParticipantBanned(board, user uuid.UUID) (bool, error)
-	GetBoardSession(board, user uuid.UUID) (DatabaseBoardSession, error)
-	GetBoardSessions(board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
+	Create(boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error)
+	Update(update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error)
+	UpdateAll(update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error)
+	Exists(board, user uuid.UUID) (bool, error)
+	ModeratorExists(board, user uuid.UUID) (bool, error)
+	IsParticipantBanned(board, user uuid.UUID) (bool, error)
+	Get(board, user uuid.UUID) (DatabaseBoardSession, error)
+	GetAll(board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error)
 	GetUserConnectedBoards(user uuid.UUID) ([]DatabaseBoardSession, error)
 }
 
@@ -41,7 +41,7 @@ func NewSessionService(db SessionDatabase, rt *realtime.Broker) SessionService {
 
 func (service *BoardSessionService) Create(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error) {
 	log := logger.FromContext(ctx)
-	session, err := service.database.CreateBoardSession(DatabaseBoardSessionInsert{
+	session, err := service.database.Create(DatabaseBoardSessionInsert{
 		Board: boardID,
 		User:  userID,
 		Role:  ParticipantRole,
@@ -59,7 +59,7 @@ func (service *BoardSessionService) Create(ctx context.Context, boardID, userID 
 
 func (service *BoardSessionService) Update(ctx context.Context, body BoardSessionUpdateRequest) (*BoardSession, error) {
 	log := logger.FromContext(ctx)
-	sessionOfCaller, err := service.database.GetBoardSession(body.Board, body.Caller)
+	sessionOfCaller, err := service.database.Get(body.Board, body.Caller)
 	if err != nil {
 		log.Errorw("unable to get board session", "board", body.Board, "calling user", body.Caller, "error", err)
 		return nil, fmt.Errorf("unable to get session for board: %w", err)
@@ -70,7 +70,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
 	}
 
-	sessionOfUserToModify, err := service.database.GetBoardSession(body.Board, body.User)
+	sessionOfUserToModify, err := service.database.Get(body.Board, body.User)
 	if err != nil {
 		log.Errorw("unable to get board session", "board", body.Board, "target user", body.User, "error", err)
 		return nil, fmt.Errorf("unable to get session for board: %w", err)
@@ -86,7 +86,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		}
 	}
 
-	session, err := service.database.UpdateBoardSession(DatabaseBoardSessionUpdate{
+	session, err := service.database.Update(DatabaseBoardSessionUpdate{
 		Board:             body.Board,
 		User:              body.User,
 		Ready:             body.Ready,
@@ -108,7 +108,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 
 func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSessionsUpdateRequest) ([]*BoardSession, error) {
 	log := logger.FromContext(ctx)
-	sessions, err := service.database.UpdateBoardSessions(DatabaseBoardSessionUpdate{
+	sessions, err := service.database.UpdateAll(DatabaseBoardSessionUpdate{
 		Board:      body.Board,
 		Ready:      body.Ready,
 		RaisedHand: body.RaisedHand,
@@ -126,7 +126,7 @@ func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSes
 
 func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error) {
 	log := logger.FromContext(ctx)
-	session, err := service.database.GetBoardSession(boardID, userID)
+	session, err := service.database.Get(boardID, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, common.NotFoundError
@@ -138,8 +138,8 @@ func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uui
 	return new(BoardSession).From(session), err
 }
 
-func (service *BoardSessionService) Gets(_ context.Context, boardID uuid.UUID, filter BoardSessionFilter) ([]*BoardSession, error) {
-	sessions, err := service.database.GetBoardSessions(boardID, filter)
+func (service *BoardSessionService) GetAll(_ context.Context, boardID uuid.UUID, filter BoardSessionFilter) ([]*BoardSession, error) {
+	sessions, err := service.database.GetAll(boardID, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -159,7 +159,7 @@ func (service *BoardSessionService) GetUserConnectedBoards(ctx context.Context, 
 func (service *BoardSessionService) Connect(ctx context.Context, boardID, userID uuid.UUID) error {
 	log := logger.FromContext(ctx)
 	var connected = true
-	updatedSession, err := service.database.UpdateBoardSession(DatabaseBoardSessionUpdate{
+	updatedSession, err := service.database.Update(DatabaseBoardSessionUpdate{
 		Board:     boardID,
 		User:      userID,
 		Connected: &connected,
@@ -178,7 +178,7 @@ func (service *BoardSessionService) Connect(ctx context.Context, boardID, userID
 func (service *BoardSessionService) Disconnect(ctx context.Context, boardID, userID uuid.UUID) error {
 	log := logger.FromContext(ctx)
 	var connected = false
-	updatedSession, err := service.database.UpdateBoardSession(DatabaseBoardSessionUpdate{
+	updatedSession, err := service.database.Update(DatabaseBoardSessionUpdate{
 		Board:     boardID,
 		User:      userID,
 		Connected: &connected,
@@ -195,15 +195,15 @@ func (service *BoardSessionService) Disconnect(ctx context.Context, boardID, use
 }
 
 func (service *BoardSessionService) Exists(_ context.Context, boardID, userID uuid.UUID) (bool, error) {
-	return service.database.BoardSessionExists(boardID, userID)
+	return service.database.Exists(boardID, userID)
 }
 
 func (service *BoardSessionService) ModeratorSessionExists(_ context.Context, boardID, userID uuid.UUID) (bool, error) {
-	return service.database.BoardModeratorSessionExists(boardID, userID)
+	return service.database.ModeratorExists(boardID, userID)
 }
 
 func (service *BoardSessionService) IsParticipantBanned(_ context.Context, boardID, userID uuid.UUID) (bool, error) {
-	return service.database.ParticipantBanned(boardID, userID)
+	return service.database.IsParticipantBanned(boardID, userID)
 }
 
 func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query url.Values) BoardSessionFilter {
@@ -249,7 +249,7 @@ func (service *BoardSessionService) updatedSession(board uuid.UUID, session Data
 	}
 
 	for _, session := range connectedBoards {
-		userSession, err := service.database.GetBoardSession(session.Board, session.User)
+		userSession, err := service.database.Get(session.Board, session.User)
 		if err != nil {
 			logger.Get().Errorw("unable to get board session of user", "board", session.Board, "user", session.User, "err", err)
 			return

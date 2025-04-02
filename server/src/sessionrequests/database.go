@@ -22,7 +22,7 @@ func NewSessionRequestDatabase(database *bun.DB) SessionRequestDatabase {
 }
 
 // CreateBoardSessionRequest creates a new board session request with the state 'PENDING' and does nothing if it already exists
-func (database *SessionRequestDB) CreateBoardSessionRequest(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) Create(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error) {
 	r := DatabaseBoardSessionRequest{Board: request.Board, User: request.User, Status: RequestPending}
 	insertQuery := database.db.NewInsert().Model(&r).ExcludeColumn("name").On("CONFLICT (\"user\", board) DO UPDATE SET board=?", request.Board).Returning("*")
 	err := database.db.NewSelect().
@@ -42,7 +42,7 @@ func (database *SessionRequestDB) CreateBoardSessionRequest(request DatabaseBoar
 }
 
 // UpdateBoardSessionRequest updates an existing board session request
-func (database *SessionRequestDB) UpdateBoardSessionRequest(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) Update(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error) {
 	var r DatabaseBoardSessionRequest
 	updateQuery := database.db.NewUpdate().
 		Model(&update).
@@ -78,7 +78,7 @@ func (database *SessionRequestDB) UpdateBoardSessionRequest(update DatabaseBoard
 }
 
 // GetBoardSessionRequest returns the board session request for the specified board and user
-func (database *SessionRequestDB) GetBoardSessionRequest(board, user uuid.UUID) (DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) Get(board, user uuid.UUID) (DatabaseBoardSessionRequest, error) {
 	var request DatabaseBoardSessionRequest
 	err := database.db.NewSelect().
 		Model(&request).
@@ -93,7 +93,7 @@ func (database *SessionRequestDB) GetBoardSessionRequest(board, user uuid.UUID) 
 }
 
 // GetBoardSessionRequests returns the list of all board session requests filtered by the status
-func (database *SessionRequestDB) GetBoardSessionRequests(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) GetAll(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error) {
 	var requests []DatabaseBoardSessionRequest
 	query := database.db.NewSelect().
 		Model(&requests).
@@ -113,7 +113,7 @@ func (database *SessionRequestDB) GetBoardSessionRequests(board uuid.UUID, statu
 	return requests, err
 }
 
-func (database *SessionRequestDB) BoardSessionRequestExists(board, user uuid.UUID) (bool, error) {
+func (database *SessionRequestDB) Exists(board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_session_requests").
 		Where("\"board\" = ?", board).

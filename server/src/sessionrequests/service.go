@@ -16,17 +16,17 @@ import (
 )
 
 type SessionRequestDatabase interface {
-	CreateBoardSessionRequest(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)
-	UpdateBoardSessionRequest(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)
-	GetBoardSessionRequest(board, user uuid.UUID) (DatabaseBoardSessionRequest, error)
-	GetBoardSessionRequests(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error)
-	BoardSessionRequestExists(board, user uuid.UUID) (bool, error)
+	Create(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)
+	Update(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)
+	Get(board, user uuid.UUID) (DatabaseBoardSessionRequest, error)
+	GetAll(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error)
+	Exists(board, user uuid.UUID) (bool, error)
 }
 
 type Websocket interface {
-	OpenBoardSessionRequestSocket(w http.ResponseWriter, r *http.Request)
+	OpenSocket(w http.ResponseWriter, r *http.Request)
 	listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *websocket.Conn)
-	closeBoardSessionRequestSocket(conn *websocket.Conn)
+	closeSocket(conn *websocket.Conn)
 }
 
 type BoardSessionRequestService struct {
@@ -46,9 +46,9 @@ func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, we
 	return service
 }
 
-func (service *BoardSessionRequestService) CreateSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*BoardSessionRequest, error) {
+func (service *BoardSessionRequestService) Create(ctx context.Context, boardID, userID uuid.UUID) (*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
-	request, err := service.database.CreateBoardSessionRequest(DatabaseBoardSessionRequestInsert{
+	request, err := service.database.Create(DatabaseBoardSessionRequestInsert{
 		Board: boardID,
 		User:  userID,
 	})
@@ -62,9 +62,9 @@ func (service *BoardSessionRequestService) CreateSessionRequest(ctx context.Cont
 	return new(BoardSessionRequest).From(request), err
 }
 
-func (service *BoardSessionRequestService) UpdateSessionRequest(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error) {
+func (service *BoardSessionRequestService) Update(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
-	request, err := service.database.UpdateBoardSessionRequest(DatabaseBoardSessionRequestUpdate{Board: body.Board, User: body.User, Status: body.Status})
+	request, err := service.database.Update(DatabaseBoardSessionRequestUpdate{Board: body.Board, User: body.User, Status: body.Status})
 	if err != nil {
 		log.Errorw("unable to update BoardSessionRequest", "board", body.Board, "user", body.User, "error", err)
 		return nil, err
@@ -82,9 +82,9 @@ func (service *BoardSessionRequestService) UpdateSessionRequest(ctx context.Cont
 	return new(BoardSessionRequest).From(request), err
 }
 
-func (service *BoardSessionRequestService) GetSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*BoardSessionRequest, error) {
+func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
-	request, err := service.database.GetBoardSessionRequest(boardID, userID)
+	request, err := service.database.Get(boardID, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, common.NotFoundError
@@ -96,7 +96,7 @@ func (service *BoardSessionRequestService) GetSessionRequest(ctx context.Context
 	return new(BoardSessionRequest).From(request), err
 }
 
-func (service *BoardSessionRequestService) ListSessionRequest(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*BoardSessionRequest, error) {
+func (service *BoardSessionRequestService) GetAll(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
 	var filters []RequestStatus
 	if statusQuery != "" {
@@ -108,7 +108,7 @@ func (service *BoardSessionRequestService) ListSessionRequest(ctx context.Contex
 		}
 	}
 
-	requests, err := service.database.GetBoardSessionRequests(boardID, filters...)
+	requests, err := service.database.GetAll(boardID, filters...)
 	if err != nil {
 		log.Errorw("failed to load board session requests", "board", boardID, "err", err)
 		return nil, fmt.Errorf("failed to load board session requests: %w", err)
@@ -117,12 +117,12 @@ func (service *BoardSessionRequestService) ListSessionRequest(ctx context.Contex
 	return BoardSessionRequests(requests), nil
 }
 
-func (service *BoardSessionRequestService) SessionRequestExists(_ context.Context, boardID, userID uuid.UUID) (bool, error) {
-	return service.database.BoardSessionRequestExists(boardID, userID)
+func (service *BoardSessionRequestService) Exists(_ context.Context, boardID, userID uuid.UUID) (bool, error) {
+	return service.database.Exists(boardID, userID)
 }
 
-func (service *BoardSessionRequestService) OpenBoardSessionRequestSocket(w http.ResponseWriter, r *http.Request) {
-	service.websocket.OpenBoardSessionRequestSocket(w, r)
+func (service *BoardSessionRequestService) OpenSocket(w http.ResponseWriter, r *http.Request) {
+	service.websocket.OpenSocket(w, r)
 }
 
 func (service *BoardSessionRequestService) createdSessionRequest(board uuid.UUID, request DatabaseBoardSessionRequest) {

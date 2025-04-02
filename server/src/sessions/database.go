@@ -21,7 +21,7 @@ func NewSessionDatabase(database *bun.DB) SessionDatabase {
 	return db
 }
 
-func (database *SessionDB) CreateBoardSession(boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
+func (database *SessionDB) Create(boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
 	if boardSession.Role == OwnerRole {
 		return DatabaseBoardSession{}, errors.New("not allowed to create board session with owner role")
 	}
@@ -48,7 +48,7 @@ func (database *SessionDB) CreateBoardSession(boardSession DatabaseBoardSessionI
 	return session, err
 }
 
-func (database *SessionDB) UpdateBoardSession(update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error) {
+func (database *SessionDB) Update(update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error) {
 	updateQuery := database.db.NewUpdate().Model(&update)
 	if update.Connected != nil {
 		updateQuery = updateQuery.Column("connected")
@@ -93,7 +93,7 @@ func (database *SessionDB) UpdateBoardSession(update DatabaseBoardSessionUpdate)
 	return session, err
 }
 
-func (database *SessionDB) UpdateBoardSessions(update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error) {
+func (database *SessionDB) UpdateAll(update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error) {
 	updateQuery := database.db.NewUpdate().Model(&update)
 	if update.Ready != nil {
 		updateQuery = updateQuery.Column("ready")
@@ -117,7 +117,7 @@ func (database *SessionDB) UpdateBoardSessions(update DatabaseBoardSessionUpdate
 	return sessions, err
 }
 
-func (database *SessionDB) BoardSessionExists(board, user uuid.UUID) (bool, error) {
+func (database *SessionDB) Exists(board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
@@ -125,7 +125,7 @@ func (database *SessionDB) BoardSessionExists(board, user uuid.UUID) (bool, erro
 		Exists(context.Background())
 }
 
-func (database *SessionDB) BoardModeratorSessionExists(board, user uuid.UUID) (bool, error) {
+func (database *SessionDB) ModeratorExists(board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
@@ -134,7 +134,7 @@ func (database *SessionDB) BoardModeratorSessionExists(board, user uuid.UUID) (b
 		Exists(context.Background())
 }
 
-func (database *SessionDB) ParticipantBanned(board, user uuid.UUID) (bool, error) {
+func (database *SessionDB) IsParticipantBanned(board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
@@ -143,7 +143,7 @@ func (database *SessionDB) ParticipantBanned(board, user uuid.UUID) (bool, error
 		Exists(context.Background())
 }
 
-func (database *SessionDB) GetBoardSession(board, user uuid.UUID) (DatabaseBoardSession, error) {
+func (database *SessionDB) Get(board, user uuid.UUID) (DatabaseBoardSession, error) {
 	var session DatabaseBoardSession
 	err := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
@@ -155,7 +155,7 @@ func (database *SessionDB) GetBoardSession(board, user uuid.UUID) (DatabaseBoard
 	return session, err
 }
 
-func (database *SessionDB) GetBoardSessions(board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
+func (database *SessionDB) GetAll(board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
 	query := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
 		ColumnExpr("s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").

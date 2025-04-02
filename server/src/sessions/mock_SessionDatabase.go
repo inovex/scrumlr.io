@@ -20,126 +20,12 @@ func (_m *MockSessionDatabase) EXPECT() *MockSessionDatabase_Expecter {
 	return &MockSessionDatabase_Expecter{mock: &_m.Mock}
 }
 
-// BoardModeratorSessionExists provides a mock function with given fields: board, user
-func (_m *MockSessionDatabase) BoardModeratorSessionExists(board uuid.UUID, user uuid.UUID) (bool, error) {
-	ret := _m.Called(board, user)
-
-	if len(ret) == 0 {
-		panic("no return value specified for BoardModeratorSessionExists")
-	}
-
-	var r0 bool
-	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (bool, error)); ok {
-		return rf(board, user)
-	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) bool); ok {
-		r0 = rf(board, user)
-	} else {
-		r0 = ret.Get(0).(bool)
-	}
-
-	if rf, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) error); ok {
-		r1 = rf(board, user)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockSessionDatabase_BoardModeratorSessionExists_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'BoardModeratorSessionExists'
-type MockSessionDatabase_BoardModeratorSessionExists_Call struct {
-	*mock.Call
-}
-
-// BoardModeratorSessionExists is a helper method to define mock.On call
-//   - board uuid.UUID
-//   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) BoardModeratorSessionExists(board interface{}, user interface{}) *MockSessionDatabase_BoardModeratorSessionExists_Call {
-	return &MockSessionDatabase_BoardModeratorSessionExists_Call{Call: _e.mock.On("BoardModeratorSessionExists", board, user)}
-}
-
-func (_c *MockSessionDatabase_BoardModeratorSessionExists_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_BoardModeratorSessionExists_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uuid.UUID), args[1].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockSessionDatabase_BoardModeratorSessionExists_Call) Return(_a0 bool, _a1 error) *MockSessionDatabase_BoardModeratorSessionExists_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockSessionDatabase_BoardModeratorSessionExists_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (bool, error)) *MockSessionDatabase_BoardModeratorSessionExists_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// BoardSessionExists provides a mock function with given fields: board, user
-func (_m *MockSessionDatabase) BoardSessionExists(board uuid.UUID, user uuid.UUID) (bool, error) {
-	ret := _m.Called(board, user)
-
-	if len(ret) == 0 {
-		panic("no return value specified for BoardSessionExists")
-	}
-
-	var r0 bool
-	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (bool, error)); ok {
-		return rf(board, user)
-	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) bool); ok {
-		r0 = rf(board, user)
-	} else {
-		r0 = ret.Get(0).(bool)
-	}
-
-	if rf, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) error); ok {
-		r1 = rf(board, user)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockSessionDatabase_BoardSessionExists_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'BoardSessionExists'
-type MockSessionDatabase_BoardSessionExists_Call struct {
-	*mock.Call
-}
-
-// BoardSessionExists is a helper method to define mock.On call
-//   - board uuid.UUID
-//   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) BoardSessionExists(board interface{}, user interface{}) *MockSessionDatabase_BoardSessionExists_Call {
-	return &MockSessionDatabase_BoardSessionExists_Call{Call: _e.mock.On("BoardSessionExists", board, user)}
-}
-
-func (_c *MockSessionDatabase_BoardSessionExists_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_BoardSessionExists_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uuid.UUID), args[1].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockSessionDatabase_BoardSessionExists_Call) Return(_a0 bool, _a1 error) *MockSessionDatabase_BoardSessionExists_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockSessionDatabase_BoardSessionExists_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (bool, error)) *MockSessionDatabase_BoardSessionExists_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// CreateBoardSession provides a mock function with given fields: boardSession
-func (_m *MockSessionDatabase) CreateBoardSession(boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
+// Create provides a mock function with given fields: boardSession
+func (_m *MockSessionDatabase) Create(boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
 	ret := _m.Called(boardSession)
 
 	if len(ret) == 0 {
-		panic("no return value specified for CreateBoardSession")
+		panic("no return value specified for Create")
 	}
 
 	var r0 DatabaseBoardSession
@@ -162,40 +48,97 @@ func (_m *MockSessionDatabase) CreateBoardSession(boardSession DatabaseBoardSess
 	return r0, r1
 }
 
-// MockSessionDatabase_CreateBoardSession_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateBoardSession'
-type MockSessionDatabase_CreateBoardSession_Call struct {
+// MockSessionDatabase_Create_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Create'
+type MockSessionDatabase_Create_Call struct {
 	*mock.Call
 }
 
-// CreateBoardSession is a helper method to define mock.On call
+// Create is a helper method to define mock.On call
 //   - boardSession DatabaseBoardSessionInsert
-func (_e *MockSessionDatabase_Expecter) CreateBoardSession(boardSession interface{}) *MockSessionDatabase_CreateBoardSession_Call {
-	return &MockSessionDatabase_CreateBoardSession_Call{Call: _e.mock.On("CreateBoardSession", boardSession)}
+func (_e *MockSessionDatabase_Expecter) Create(boardSession interface{}) *MockSessionDatabase_Create_Call {
+	return &MockSessionDatabase_Create_Call{Call: _e.mock.On("Create", boardSession)}
 }
 
-func (_c *MockSessionDatabase_CreateBoardSession_Call) Run(run func(boardSession DatabaseBoardSessionInsert)) *MockSessionDatabase_CreateBoardSession_Call {
+func (_c *MockSessionDatabase_Create_Call) Run(run func(boardSession DatabaseBoardSessionInsert)) *MockSessionDatabase_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(DatabaseBoardSessionInsert))
 	})
 	return _c
 }
 
-func (_c *MockSessionDatabase_CreateBoardSession_Call) Return(_a0 DatabaseBoardSession, _a1 error) *MockSessionDatabase_CreateBoardSession_Call {
+func (_c *MockSessionDatabase_Create_Call) Return(_a0 DatabaseBoardSession, _a1 error) *MockSessionDatabase_Create_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionDatabase_CreateBoardSession_Call) RunAndReturn(run func(DatabaseBoardSessionInsert) (DatabaseBoardSession, error)) *MockSessionDatabase_CreateBoardSession_Call {
+func (_c *MockSessionDatabase_Create_Call) RunAndReturn(run func(DatabaseBoardSessionInsert) (DatabaseBoardSession, error)) *MockSessionDatabase_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// GetBoardSession provides a mock function with given fields: board, user
-func (_m *MockSessionDatabase) GetBoardSession(board uuid.UUID, user uuid.UUID) (DatabaseBoardSession, error) {
+// Exists provides a mock function with given fields: board, user
+func (_m *MockSessionDatabase) Exists(board uuid.UUID, user uuid.UUID) (bool, error) {
 	ret := _m.Called(board, user)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetBoardSession")
+		panic("no return value specified for Exists")
+	}
+
+	var r0 bool
+	var r1 error
+	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (bool, error)); ok {
+		return rf(board, user)
+	}
+	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) bool); ok {
+		r0 = rf(board, user)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	if rf, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) error); ok {
+		r1 = rf(board, user)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockSessionDatabase_Exists_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Exists'
+type MockSessionDatabase_Exists_Call struct {
+	*mock.Call
+}
+
+// Exists is a helper method to define mock.On call
+//   - board uuid.UUID
+//   - user uuid.UUID
+func (_e *MockSessionDatabase_Expecter) Exists(board interface{}, user interface{}) *MockSessionDatabase_Exists_Call {
+	return &MockSessionDatabase_Exists_Call{Call: _e.mock.On("Exists", board, user)}
+}
+
+func (_c *MockSessionDatabase_Exists_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_Exists_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(uuid.UUID), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockSessionDatabase_Exists_Call) Return(_a0 bool, _a1 error) *MockSessionDatabase_Exists_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockSessionDatabase_Exists_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (bool, error)) *MockSessionDatabase_Exists_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// Get provides a mock function with given fields: board, user
+func (_m *MockSessionDatabase) Get(board uuid.UUID, user uuid.UUID) (DatabaseBoardSession, error) {
+	ret := _m.Called(board, user)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Get")
 	}
 
 	var r0 DatabaseBoardSession
@@ -218,37 +161,37 @@ func (_m *MockSessionDatabase) GetBoardSession(board uuid.UUID, user uuid.UUID) 
 	return r0, r1
 }
 
-// MockSessionDatabase_GetBoardSession_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetBoardSession'
-type MockSessionDatabase_GetBoardSession_Call struct {
+// MockSessionDatabase_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type MockSessionDatabase_Get_Call struct {
 	*mock.Call
 }
 
-// GetBoardSession is a helper method to define mock.On call
+// Get is a helper method to define mock.On call
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) GetBoardSession(board interface{}, user interface{}) *MockSessionDatabase_GetBoardSession_Call {
-	return &MockSessionDatabase_GetBoardSession_Call{Call: _e.mock.On("GetBoardSession", board, user)}
+func (_e *MockSessionDatabase_Expecter) Get(board interface{}, user interface{}) *MockSessionDatabase_Get_Call {
+	return &MockSessionDatabase_Get_Call{Call: _e.mock.On("Get", board, user)}
 }
 
-func (_c *MockSessionDatabase_GetBoardSession_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_GetBoardSession_Call {
+func (_c *MockSessionDatabase_Get_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uuid.UUID), args[1].(uuid.UUID))
 	})
 	return _c
 }
 
-func (_c *MockSessionDatabase_GetBoardSession_Call) Return(_a0 DatabaseBoardSession, _a1 error) *MockSessionDatabase_GetBoardSession_Call {
+func (_c *MockSessionDatabase_Get_Call) Return(_a0 DatabaseBoardSession, _a1 error) *MockSessionDatabase_Get_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionDatabase_GetBoardSession_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (DatabaseBoardSession, error)) *MockSessionDatabase_GetBoardSession_Call {
+func (_c *MockSessionDatabase_Get_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (DatabaseBoardSession, error)) *MockSessionDatabase_Get_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// GetBoardSessions provides a mock function with given fields: board, filter
-func (_m *MockSessionDatabase) GetBoardSessions(board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
+// GetAll provides a mock function with given fields: board, filter
+func (_m *MockSessionDatabase) GetAll(board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
 	_va := make([]interface{}, len(filter))
 	for _i := range filter {
 		_va[_i] = filter[_i]
@@ -259,7 +202,7 @@ func (_m *MockSessionDatabase) GetBoardSessions(board uuid.UUID, filter ...Board
 	ret := _m.Called(_ca...)
 
 	if len(ret) == 0 {
-		panic("no return value specified for GetBoardSessions")
+		panic("no return value specified for GetAll")
 	}
 
 	var r0 []DatabaseBoardSession
@@ -284,20 +227,20 @@ func (_m *MockSessionDatabase) GetBoardSessions(board uuid.UUID, filter ...Board
 	return r0, r1
 }
 
-// MockSessionDatabase_GetBoardSessions_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetBoardSessions'
-type MockSessionDatabase_GetBoardSessions_Call struct {
+// MockSessionDatabase_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockSessionDatabase_GetAll_Call struct {
 	*mock.Call
 }
 
-// GetBoardSessions is a helper method to define mock.On call
+// GetAll is a helper method to define mock.On call
 //   - board uuid.UUID
 //   - filter ...BoardSessionFilter
-func (_e *MockSessionDatabase_Expecter) GetBoardSessions(board interface{}, filter ...interface{}) *MockSessionDatabase_GetBoardSessions_Call {
-	return &MockSessionDatabase_GetBoardSessions_Call{Call: _e.mock.On("GetBoardSessions",
+func (_e *MockSessionDatabase_Expecter) GetAll(board interface{}, filter ...interface{}) *MockSessionDatabase_GetAll_Call {
+	return &MockSessionDatabase_GetAll_Call{Call: _e.mock.On("GetAll",
 		append([]interface{}{board}, filter...)...)}
 }
 
-func (_c *MockSessionDatabase_GetBoardSessions_Call) Run(run func(board uuid.UUID, filter ...BoardSessionFilter)) *MockSessionDatabase_GetBoardSessions_Call {
+func (_c *MockSessionDatabase_GetAll_Call) Run(run func(board uuid.UUID, filter ...BoardSessionFilter)) *MockSessionDatabase_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		variadicArgs := make([]BoardSessionFilter, len(args)-1)
 		for i, a := range args[1:] {
@@ -310,12 +253,12 @@ func (_c *MockSessionDatabase_GetBoardSessions_Call) Run(run func(board uuid.UUI
 	return _c
 }
 
-func (_c *MockSessionDatabase_GetBoardSessions_Call) Return(_a0 []DatabaseBoardSession, _a1 error) *MockSessionDatabase_GetBoardSessions_Call {
+func (_c *MockSessionDatabase_GetAll_Call) Return(_a0 []DatabaseBoardSession, _a1 error) *MockSessionDatabase_GetAll_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionDatabase_GetBoardSessions_Call) RunAndReturn(run func(uuid.UUID, ...BoardSessionFilter) ([]DatabaseBoardSession, error)) *MockSessionDatabase_GetBoardSessions_Call {
+func (_c *MockSessionDatabase_GetAll_Call) RunAndReturn(run func(uuid.UUID, ...BoardSessionFilter) ([]DatabaseBoardSession, error)) *MockSessionDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -378,12 +321,12 @@ func (_c *MockSessionDatabase_GetUserConnectedBoards_Call) RunAndReturn(run func
 	return _c
 }
 
-// ParticipantBanned provides a mock function with given fields: board, user
-func (_m *MockSessionDatabase) ParticipantBanned(board uuid.UUID, user uuid.UUID) (bool, error) {
+// IsParticipantBanned provides a mock function with given fields: board, user
+func (_m *MockSessionDatabase) IsParticipantBanned(board uuid.UUID, user uuid.UUID) (bool, error) {
 	ret := _m.Called(board, user)
 
 	if len(ret) == 0 {
-		panic("no return value specified for ParticipantBanned")
+		panic("no return value specified for IsParticipantBanned")
 	}
 
 	var r0 bool
@@ -406,41 +349,98 @@ func (_m *MockSessionDatabase) ParticipantBanned(board uuid.UUID, user uuid.UUID
 	return r0, r1
 }
 
-// MockSessionDatabase_ParticipantBanned_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ParticipantBanned'
-type MockSessionDatabase_ParticipantBanned_Call struct {
+// MockSessionDatabase_IsParticipantBanned_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'IsParticipantBanned'
+type MockSessionDatabase_IsParticipantBanned_Call struct {
 	*mock.Call
 }
 
-// ParticipantBanned is a helper method to define mock.On call
+// IsParticipantBanned is a helper method to define mock.On call
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionDatabase_Expecter) ParticipantBanned(board interface{}, user interface{}) *MockSessionDatabase_ParticipantBanned_Call {
-	return &MockSessionDatabase_ParticipantBanned_Call{Call: _e.mock.On("ParticipantBanned", board, user)}
+func (_e *MockSessionDatabase_Expecter) IsParticipantBanned(board interface{}, user interface{}) *MockSessionDatabase_IsParticipantBanned_Call {
+	return &MockSessionDatabase_IsParticipantBanned_Call{Call: _e.mock.On("IsParticipantBanned", board, user)}
 }
 
-func (_c *MockSessionDatabase_ParticipantBanned_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_ParticipantBanned_Call {
+func (_c *MockSessionDatabase_IsParticipantBanned_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_IsParticipantBanned_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uuid.UUID), args[1].(uuid.UUID))
 	})
 	return _c
 }
 
-func (_c *MockSessionDatabase_ParticipantBanned_Call) Return(_a0 bool, _a1 error) *MockSessionDatabase_ParticipantBanned_Call {
+func (_c *MockSessionDatabase_IsParticipantBanned_Call) Return(_a0 bool, _a1 error) *MockSessionDatabase_IsParticipantBanned_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionDatabase_ParticipantBanned_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (bool, error)) *MockSessionDatabase_ParticipantBanned_Call {
+func (_c *MockSessionDatabase_IsParticipantBanned_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (bool, error)) *MockSessionDatabase_IsParticipantBanned_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// UpdateBoardSession provides a mock function with given fields: update
-func (_m *MockSessionDatabase) UpdateBoardSession(update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error) {
+// ModeratorExists provides a mock function with given fields: board, user
+func (_m *MockSessionDatabase) ModeratorExists(board uuid.UUID, user uuid.UUID) (bool, error) {
+	ret := _m.Called(board, user)
+
+	if len(ret) == 0 {
+		panic("no return value specified for ModeratorExists")
+	}
+
+	var r0 bool
+	var r1 error
+	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (bool, error)); ok {
+		return rf(board, user)
+	}
+	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) bool); ok {
+		r0 = rf(board, user)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	if rf, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) error); ok {
+		r1 = rf(board, user)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockSessionDatabase_ModeratorExists_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ModeratorExists'
+type MockSessionDatabase_ModeratorExists_Call struct {
+	*mock.Call
+}
+
+// ModeratorExists is a helper method to define mock.On call
+//   - board uuid.UUID
+//   - user uuid.UUID
+func (_e *MockSessionDatabase_Expecter) ModeratorExists(board interface{}, user interface{}) *MockSessionDatabase_ModeratorExists_Call {
+	return &MockSessionDatabase_ModeratorExists_Call{Call: _e.mock.On("ModeratorExists", board, user)}
+}
+
+func (_c *MockSessionDatabase_ModeratorExists_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionDatabase_ModeratorExists_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(uuid.UUID), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockSessionDatabase_ModeratorExists_Call) Return(_a0 bool, _a1 error) *MockSessionDatabase_ModeratorExists_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockSessionDatabase_ModeratorExists_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (bool, error)) *MockSessionDatabase_ModeratorExists_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// Update provides a mock function with given fields: update
+func (_m *MockSessionDatabase) Update(update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error) {
 	ret := _m.Called(update)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateBoardSession")
+		panic("no return value specified for Update")
 	}
 
 	var r0 DatabaseBoardSession
@@ -463,40 +463,40 @@ func (_m *MockSessionDatabase) UpdateBoardSession(update DatabaseBoardSessionUpd
 	return r0, r1
 }
 
-// MockSessionDatabase_UpdateBoardSession_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateBoardSession'
-type MockSessionDatabase_UpdateBoardSession_Call struct {
+// MockSessionDatabase_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type MockSessionDatabase_Update_Call struct {
 	*mock.Call
 }
 
-// UpdateBoardSession is a helper method to define mock.On call
+// Update is a helper method to define mock.On call
 //   - update DatabaseBoardSessionUpdate
-func (_e *MockSessionDatabase_Expecter) UpdateBoardSession(update interface{}) *MockSessionDatabase_UpdateBoardSession_Call {
-	return &MockSessionDatabase_UpdateBoardSession_Call{Call: _e.mock.On("UpdateBoardSession", update)}
+func (_e *MockSessionDatabase_Expecter) Update(update interface{}) *MockSessionDatabase_Update_Call {
+	return &MockSessionDatabase_Update_Call{Call: _e.mock.On("Update", update)}
 }
 
-func (_c *MockSessionDatabase_UpdateBoardSession_Call) Run(run func(update DatabaseBoardSessionUpdate)) *MockSessionDatabase_UpdateBoardSession_Call {
+func (_c *MockSessionDatabase_Update_Call) Run(run func(update DatabaseBoardSessionUpdate)) *MockSessionDatabase_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(DatabaseBoardSessionUpdate))
 	})
 	return _c
 }
 
-func (_c *MockSessionDatabase_UpdateBoardSession_Call) Return(_a0 DatabaseBoardSession, _a1 error) *MockSessionDatabase_UpdateBoardSession_Call {
+func (_c *MockSessionDatabase_Update_Call) Return(_a0 DatabaseBoardSession, _a1 error) *MockSessionDatabase_Update_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionDatabase_UpdateBoardSession_Call) RunAndReturn(run func(DatabaseBoardSessionUpdate) (DatabaseBoardSession, error)) *MockSessionDatabase_UpdateBoardSession_Call {
+func (_c *MockSessionDatabase_Update_Call) RunAndReturn(run func(DatabaseBoardSessionUpdate) (DatabaseBoardSession, error)) *MockSessionDatabase_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
-// UpdateBoardSessions provides a mock function with given fields: update
-func (_m *MockSessionDatabase) UpdateBoardSessions(update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error) {
+// UpdateAll provides a mock function with given fields: update
+func (_m *MockSessionDatabase) UpdateAll(update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error) {
 	ret := _m.Called(update)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateBoardSessions")
+		panic("no return value specified for UpdateAll")
 	}
 
 	var r0 []DatabaseBoardSession
@@ -521,30 +521,30 @@ func (_m *MockSessionDatabase) UpdateBoardSessions(update DatabaseBoardSessionUp
 	return r0, r1
 }
 
-// MockSessionDatabase_UpdateBoardSessions_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateBoardSessions'
-type MockSessionDatabase_UpdateBoardSessions_Call struct {
+// MockSessionDatabase_UpdateAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateAll'
+type MockSessionDatabase_UpdateAll_Call struct {
 	*mock.Call
 }
 
-// UpdateBoardSessions is a helper method to define mock.On call
+// UpdateAll is a helper method to define mock.On call
 //   - update DatabaseBoardSessionUpdate
-func (_e *MockSessionDatabase_Expecter) UpdateBoardSessions(update interface{}) *MockSessionDatabase_UpdateBoardSessions_Call {
-	return &MockSessionDatabase_UpdateBoardSessions_Call{Call: _e.mock.On("UpdateBoardSessions", update)}
+func (_e *MockSessionDatabase_Expecter) UpdateAll(update interface{}) *MockSessionDatabase_UpdateAll_Call {
+	return &MockSessionDatabase_UpdateAll_Call{Call: _e.mock.On("UpdateAll", update)}
 }
 
-func (_c *MockSessionDatabase_UpdateBoardSessions_Call) Run(run func(update DatabaseBoardSessionUpdate)) *MockSessionDatabase_UpdateBoardSessions_Call {
+func (_c *MockSessionDatabase_UpdateAll_Call) Run(run func(update DatabaseBoardSessionUpdate)) *MockSessionDatabase_UpdateAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(DatabaseBoardSessionUpdate))
 	})
 	return _c
 }
 
-func (_c *MockSessionDatabase_UpdateBoardSessions_Call) Return(_a0 []DatabaseBoardSession, _a1 error) *MockSessionDatabase_UpdateBoardSessions_Call {
+func (_c *MockSessionDatabase_UpdateAll_Call) Return(_a0 []DatabaseBoardSession, _a1 error) *MockSessionDatabase_UpdateAll_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockSessionDatabase_UpdateBoardSessions_Call) RunAndReturn(run func(DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error)) *MockSessionDatabase_UpdateBoardSessions_Call {
+func (_c *MockSessionDatabase_UpdateAll_Call) RunAndReturn(run func(DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error)) *MockSessionDatabase_UpdateAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
