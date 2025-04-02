@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/sessionrequests"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
@@ -71,7 +71,7 @@ func (s *Server) updateBoardSessionRequest(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	var body sessions.BoardSessionRequestUpdate
+	var body sessionrequests.BoardSessionRequestUpdate
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return

@@ -1,33 +1,33 @@
-package sessions
+package sessionrequests
 
 import (
 	"encoding/json"
 	"errors"
 )
 
-// BoardSessionRequestStatus indicates the status of a board session request
-type BoardSessionRequestStatus string
+// RequestStatus indicates the status of a board session request
+type RequestStatus string
 
 const (
 	// RequestStatusPending indicates a pending state of a board session request. A moderator has to either accept or reject the user.
-	RequestStatusPending BoardSessionRequestStatus = "PENDING"
+	RequestPending RequestStatus = "PENDING"
 
 	// RequestStatusAccepted indicates an accepted board session request
-	RequestStatusAccepted BoardSessionRequestStatus = "ACCEPTED"
+	RequestAccepted RequestStatus = "ACCEPTED"
 
 	// RequestStatusRejected indicates a rejected board session request
-	RequestStatusRejected BoardSessionRequestStatus = "REJECTED"
+	RequestRejected RequestStatus = "REJECTED"
 )
 
-func (boardSessionRequestStatus *BoardSessionRequestStatus) UnmarshalJSON(b []byte) error {
+func (boardSessionRequestStatus *RequestStatus) UnmarshalJSON(b []byte) error {
 	var s string
 	if err := json.Unmarshal(b, &s); err != nil {
 		return err
 	}
 
-	unmarshalledBoardSessionRequestStatus := BoardSessionRequestStatus(s)
+	unmarshalledBoardSessionRequestStatus := RequestStatus(s)
 	switch unmarshalledBoardSessionRequestStatus {
-	case RequestStatusPending, RequestStatusAccepted, RequestStatusRejected:
+	case RequestPending, RequestAccepted, RequestRejected:
 		*boardSessionRequestStatus = unmarshalledBoardSessionRequestStatus
 		return nil
 	}

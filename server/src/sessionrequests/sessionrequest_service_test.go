@@ -1,4 +1,4 @@
-package sessions
+package sessionrequests
 
 import (
 	"context"
@@ -16,6 +16,7 @@ import (
 	httpMock "scrumlr.io/server/mocks/net/http"
 	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/sessions"
 )
 
 func TestGetSessionRequest(t *testing.T) {
@@ -23,9 +24,9 @@ func TestGetSessionRequest(t *testing.T) {
 	userId := uuid.New()
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().GetBoardSessionRequest(boardId, userId).Return(DatabaseBoardSessionRequest{Board: boardId, User: userId, Status: RequestStatusAccepted}, nil)
+	mockSessionRequestDb.EXPECT().GetBoardSessionRequest(boardId, userId).Return(DatabaseBoardSessionRequest{Board: boardId, User: userId, Status: RequestAccepted}, nil)
 
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -40,7 +41,7 @@ func TestGetSessionRequest(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, sessionRequest)
 	assert.Same(t, userId, sessionRequest.User.ID)
-	assert.Same(t, RequestStatusAccepted, sessionRequest.Status)
+	assert.Same(t, RequestAccepted, sessionRequest.Status)
 }
 
 func TestGetSessionRequest_Notfound(t *testing.T) {
@@ -51,7 +52,7 @@ func TestGetSessionRequest_Notfound(t *testing.T) {
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
 	mockSessionRequestDb.EXPECT().GetBoardSessionRequest(boardId, userId).Return(DatabaseBoardSessionRequest{}, errors.New(dbError))
 
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -77,11 +78,11 @@ func TestGetSessionRequests_WithoutQuery(t *testing.T) {
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
 	mockSessionRequestDb.EXPECT().GetBoardSessionRequests(boardId).
 		Return([]DatabaseBoardSessionRequest{
-			{bun.BaseModel{}, boardId, firstUserId, "Test1", RequestStatusAccepted, time.Now()},
-			{bun.BaseModel{}, boardId, secondUserId, "Test2", RequestStatusPending, time.Now()},
+			{bun.BaseModel{}, boardId, firstUserId, "Test1", RequestAccepted, time.Now()},
+			{bun.BaseModel{}, boardId, secondUserId, "Test2", RequestPending, time.Now()},
 		}, nil)
 
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -97,10 +98,10 @@ func TestGetSessionRequests_WithoutQuery(t *testing.T) {
 	assert.Len(t, sessionRequests, 2)
 
 	assert.Same(t, firstUserId, sessionRequests[0].User.ID)
-	assert.Same(t, RequestStatusAccepted, sessionRequests[0].Status)
+	assert.Same(t, RequestAccepted, sessionRequests[0].Status)
 
 	assert.Same(t, secondUserId, sessionRequests[1].User.ID)
-	assert.Same(t, RequestStatusPending, sessionRequests[1].Status)
+	assert.Same(t, RequestPending, sessionRequests[1].Status)
 }
 
 func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
@@ -112,7 +113,7 @@ func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
 	mockSessionRequestDb.EXPECT().GetBoardSessionRequests(boardId).
 		Return([]DatabaseBoardSessionRequest{}, errors.New(dbError))
 
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -135,13 +136,13 @@ func TestListSessionRequests_WithQuery(t *testing.T) {
 	query := "PENDING"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().GetBoardSessionRequests(boardId, RequestStatusPending).
+	mockSessionRequestDb.EXPECT().GetBoardSessionRequests(boardId, RequestPending).
 		Return([]DatabaseBoardSessionRequest{
-			{bun.BaseModel{}, boardId, firstUserId, "Test1", RequestStatusPending, time.Now()},
-			{bun.BaseModel{}, boardId, secondUserId, "Test2", RequestStatusPending, time.Now()},
+			{bun.BaseModel{}, boardId, firstUserId, "Test1", RequestPending, time.Now()},
+			{bun.BaseModel{}, boardId, secondUserId, "Test2", RequestPending, time.Now()},
 		}, nil)
 
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -157,10 +158,10 @@ func TestListSessionRequests_WithQuery(t *testing.T) {
 	assert.Len(t, sessionRequests, 2)
 
 	assert.Same(t, firstUserId, sessionRequests[0].User.ID)
-	assert.Same(t, RequestStatusPending, sessionRequests[0].Status)
+	assert.Same(t, RequestPending, sessionRequests[0].Status)
 
 	assert.Same(t, secondUserId, sessionRequests[1].User.ID)
-	assert.Same(t, RequestStatusPending, sessionRequests[1].Status)
+	assert.Same(t, RequestPending, sessionRequests[1].Status)
 }
 
 func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
@@ -169,10 +170,10 @@ func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
 	query := "ACCEPTED"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionRequestDb.EXPECT().GetBoardSessionRequests(boardId, RequestStatusAccepted).
+	mockSessionRequestDb.EXPECT().GetBoardSessionRequests(boardId, RequestAccepted).
 		Return([]DatabaseBoardSessionRequest{}, errors.New(dbError))
 
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -193,7 +194,7 @@ func TestListSessionRequests_InvalideQuery(t *testing.T) {
 	query := "INVALIDE"
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -216,7 +217,7 @@ func TestSessionRequestExists(t *testing.T) {
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
 	mockSessionRequestDb.EXPECT().BoardSessionRequestExists(boardId, userId).Return(true, nil)
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -238,7 +239,7 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
 	mockSessionRequestDb.EXPECT().BoardSessionRequestExists(boardId, userId).Return(false, errors.New(dbError))
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -256,7 +257,7 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 
 func TestSessionOpenBoardSessionRequestSocket(t *testing.T) {
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
-	mockSessionService := NewMockSessionService(t)
+	mockSessionService := sessions.NewMockSessionService(t)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)

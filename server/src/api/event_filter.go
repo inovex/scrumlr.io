@@ -15,7 +15,7 @@ import (
 )
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
-	isMod := session_helper.CheckSessionRole(userID, bs.boardParticipants, []sessions.SessionRole{sessions.SessionRoleModerator, sessions.SessionRoleOwner})
+	isMod := session_helper.CheckSessionRole(userID, bs.boardParticipants, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
@@ -161,7 +161,7 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	isMod := session_helper.CheckSessionRole(clientID, event.Data.BoardSessions, []sessions.SessionRole{sessions.SessionRoleModerator, sessions.SessionRoleOwner})
+	isMod := session_helper.CheckSessionRole(clientID, event.Data.BoardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {

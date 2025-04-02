@@ -123,13 +123,13 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 
 	var note Note
 	if update.Text != nil && update.Position == nil {
-		if caller == precondition.Author || precondition.CallerRole == sessions.SessionRoleModerator || precondition.CallerRole == sessions.SessionRoleOwner {
+		if caller == precondition.Author || precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole {
 			note, err = d.updateNoteText(update)
 		} else {
 			err = errors.New("not permitted to change text of note")
 		}
 	} else if update.Position != nil {
-		if update.Text != nil && (caller != precondition.Author || precondition.CallerRole == sessions.SessionRoleParticipant) {
+		if update.Text != nil && (caller != precondition.Author || precondition.CallerRole == sessions.ParticipantRole) {
 			return Note{}, errors.New("not permitted to change text of note")
 		}
 
@@ -137,7 +137,7 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 			return Note{}, errors.New("stacking on self is not allowed")
 		}
 
-		if precondition.CallerRole == sessions.SessionRoleModerator || precondition.CallerRole == sessions.SessionRoleOwner || precondition.StackingAllowed {
+		if precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole || precondition.StackingAllowed {
 			if !update.Position.Stack.Valid {
 				note, err = d.updateNoteWithoutStack(update)
 			} else {
@@ -349,7 +349,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 		return err
 	}
 
-	if precondition.Author == caller || precondition.CallerRole == sessions.SessionRoleModerator || precondition.CallerRole == sessions.SessionRoleOwner {
+	if precondition.Author == caller || precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole {
 		previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board)
 
 		children := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id)

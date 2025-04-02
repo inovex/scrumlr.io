@@ -1,4 +1,4 @@
-package sessions
+package sessionrequests
 
 import (
 	"context"
@@ -12,13 +12,14 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/sessions"
 )
 
 type SessionRequestDatabase interface {
 	CreateBoardSessionRequest(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)
 	UpdateBoardSessionRequest(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)
 	GetBoardSessionRequest(board, user uuid.UUID) (DatabaseBoardSessionRequest, error)
-	GetBoardSessionRequests(board uuid.UUID, status ...BoardSessionRequestStatus) ([]DatabaseBoardSessionRequest, error)
+	GetBoardSessionRequests(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error)
 	BoardSessionRequestExists(board, user uuid.UUID) (bool, error)
 }
 
@@ -32,10 +33,10 @@ type BoardSessionRequestService struct {
 	database       SessionRequestDatabase
 	realtime       *realtime.Broker
 	websocket      Websocket
-	sessionService SessionService
+	sessionService sessions.SessionService
 }
 
-func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, websocket Websocket, sessionService SessionService) SessionRequestService {
+func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, websocket Websocket, sessionService sessions.SessionService) SessionRequestService {
 	service := new(BoardSessionRequestService)
 	service.database = db
 	service.realtime = rt
@@ -69,7 +70,7 @@ func (service *BoardSessionRequestService) UpdateSessionRequest(ctx context.Cont
 		return nil, err
 	}
 
-	if request.Status == RequestStatusAccepted {
+	if request.Status == RequestAccepted {
 		_, err := service.sessionService.Create(ctx, request.User, request.Board)
 		if err != nil {
 			return nil, err
@@ -97,10 +98,10 @@ func (service *BoardSessionRequestService) GetSessionRequest(ctx context.Context
 
 func (service *BoardSessionRequestService) ListSessionRequest(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
-	var filters []BoardSessionRequestStatus
+	var filters []RequestStatus
 	if statusQuery != "" {
-		if statusQuery == (string)(RequestStatusPending) || statusQuery == (string)(RequestStatusAccepted) || statusQuery == (string)(RequestStatusRejected) {
-			f := (BoardSessionRequestStatus)(statusQuery)
+		if statusQuery == (string)(RequestPending) || statusQuery == (string)(RequestAccepted) || statusQuery == (string)(RequestRejected) {
+			f := (RequestStatus)(statusQuery)
 			filters = append(filters, f)
 		} else {
 			return nil, common.BadRequestError(errors.New("invalid status filter"))
@@ -133,9 +134,9 @@ func (service *BoardSessionRequestService) createdSessionRequest(board uuid.UUID
 
 func (service *BoardSessionRequestService) updatedSessionRequest(board uuid.UUID, request DatabaseBoardSessionRequest) {
 	var status realtime.BoardSessionRequestEventType
-	if request.Status == RequestStatusAccepted {
+	if request.Status == RequestAccepted {
 		status = realtime.RequestAccepted
-	} else if request.Status == RequestStatusRejected {
+	} else if request.Status == RequestRejected {
 		status = realtime.RequestRejected
 	}
 

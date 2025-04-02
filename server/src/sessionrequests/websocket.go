@@ -1,4 +1,4 @@
-package sessions
+package sessionrequests
 
 import (
 	"net/http"

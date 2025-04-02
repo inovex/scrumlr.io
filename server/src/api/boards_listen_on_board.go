@@ -6,6 +6,7 @@ import (
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votes"
 
@@ -35,14 +36,14 @@ type InitEvent struct {
 }
 
 type EventData struct {
-	Board     *dto.Board                      `json:"board"`
-	Columns   []*columns.Column               `json:"columns"`
-	Notes     []*notes.Note                   `json:"notes"`
-	Reactions []*reactions.Reaction           `json:"reactions"`
-	Votings   []*votes.Voting                 `json:"votings"`
-	Votes     []*dto.Vote                     `json:"votes"`
-	Sessions  []*sessions.BoardSession        `json:"participants"`
-	Requests  []*sessions.BoardSessionRequest `json:"requests"`
+	Board     *dto.Board                             `json:"board"`
+	Columns   []*columns.Column                      `json:"columns"`
+	Notes     []*notes.Note                          `json:"notes"`
+	Reactions []*reactions.Reaction                  `json:"reactions"`
+	Votings   []*votes.Voting                        `json:"votings"`
+	Votes     []*dto.Vote                            `json:"votes"`
+	Sessions  []*sessions.BoardSession               `json:"participants"`
+	Requests  []*sessionrequests.BoardSessionRequest `json:"requests"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {

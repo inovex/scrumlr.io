@@ -1,4 +1,4 @@
-package sessions
+package sessionrequests
 
 import (
 	"time"
@@ -13,7 +13,7 @@ type DatabaseBoardSessionRequest struct {
 	Board         uuid.UUID
 	User          uuid.UUID
 	Name          string
-	Status        BoardSessionRequestStatus
+	Status        RequestStatus
 	CreatedAt     time.Time
 }
 
@@ -29,5 +29,5 @@ type DatabaseBoardSessionRequestUpdate struct {
 	bun.BaseModel `bun:"table:board_session_requests"`
 	Board         uuid.UUID
 	User          uuid.UUID
-	Status        BoardSessionRequestStatus
+	Status        RequestStatus
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/uptrace/bun"
 
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 )
 
@@ -13,13 +14,13 @@ type Database struct {
 	db               *bun.DB
 	reactionsDb      reactions.ReactionDatabase
 	sessionDb        sessions.SessionDatabase
-	sessionRequestDb sessions.SessionRequestDatabase
+	sessionRequestDb sessionrequests.SessionRequestDatabase
 }
 
 type FullBoard struct {
 	Board                Board
 	BoardSessions        []sessions.DatabaseBoardSession
-	BoardSessionRequests []sessions.DatabaseBoardSessionRequest
+	BoardSessionRequests []sessionrequests.DatabaseBoardSessionRequest
 	Columns              []Column
 	Notes                []Note
 	Reactions            []reactions.DatabaseReaction
@@ -31,9 +32,11 @@ type FullBoard struct {
 func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
-	d.reactionsDb = reactions.NewReactionsDatabase(db)          //TODO remove
-	d.sessionDb = sessions.NewSessionDatabase(db)               //TODO remove
-	d.sessionRequestDb = sessions.NewSessionRequestDatabase(db) //TODO remove
+	// TODO Remove these databases.
+	// These need to exists for now because we still need full access to all tables
+	d.reactionsDb = reactions.NewReactionsDatabase(db)
+	d.sessionDb = sessions.NewSessionDatabase(db)
+	d.sessionRequestDb = sessionrequests.NewSessionRequestDatabase(db)
 
 	return d
 }
@@ -42,7 +45,7 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 	var (
 		board     Board
 		sessions  []sessions.DatabaseBoardSession
-		requests  []sessions.DatabaseBoardSessionRequest
+		requests  []sessionrequests.DatabaseBoardSessionRequest
 		columns   []Column
 		notes     []Note
 		reactions []reactions.DatabaseReaction

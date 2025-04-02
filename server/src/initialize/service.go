@@ -10,15 +10,9 @@ import (
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 )
-
-// TODO: create generic method to initialize services
-func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {
-	reactionsDb := reactions.NewReactionsDatabase(db)
-	reactionService := reactions.NewReactionService(reactionsDb, rt)
-	return reactionService
-}
 
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
 	client := new(http.Client)
@@ -30,7 +24,15 @@ func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
 func InitializeHealthService(db *bun.DB, rt *realtime.Broker) health.HealthService {
 	healthDb := health.NewHealthDatabase(db)
 	healthService := health.NewHealthService(healthDb, rt)
+
 	return healthService
+}
+
+func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {
+	reactionsDb := reactions.NewReactionsDatabase(db)
+	reactionService := reactions.NewReactionService(reactionsDb, rt)
+
+	return reactionService
 }
 
 func InitializeSessionService(db *bun.DB, rt *realtime.Broker) sessions.SessionService {
@@ -40,15 +42,15 @@ func InitializeSessionService(db *bun.DB, rt *realtime.Broker) sessions.SessionS
 	return sessionService
 }
 
-func InitializeWebsocket(ws websocket.Upgrader, rt *realtime.Broker) sessions.Websocket {
-	websocket := sessions.NewWebsocket(ws, rt)
-
-	return websocket
-}
-
-func InitializeSessionRequestService(db *bun.DB, rt *realtime.Broker, websocket sessions.Websocket, sessionService sessions.SessionService) sessions.SessionRequestService {
-	sessionRequestDb := sessions.NewSessionRequestDatabase(db)
-	sessionRequestService := sessions.NewSessionRequestService(sessionRequestDb, rt, websocket, sessionService)
+func InitializeSessionRequestService(db *bun.DB, rt *realtime.Broker, websocket sessionrequests.Websocket, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
+	sessionRequestDb := sessionrequests.NewSessionRequestDatabase(db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, rt, websocket, sessionService)
 
 	return sessionRequestService
+}
+
+func InitializeWebsocket(ws websocket.Upgrader, rt *realtime.Broker) sessionrequests.Websocket {
+	websocket := sessionrequests.NewWebsocket(ws, rt)
+
+	return websocket
 }

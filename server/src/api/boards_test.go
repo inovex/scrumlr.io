@@ -17,6 +17,7 @@ import (
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/mocks/services"
+	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 )
 
@@ -262,7 +263,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
 			sessionMock := sessions.NewMockSessionService(suite.T())
-			sessionRequestMock := sessions.NewMockSessionRequestService(suite.T())
+			sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
 			s.boards = boardMock
 			s.sessions = sessionMock
 			s.sessionRequests = sessionRequestMock
@@ -275,10 +276,10 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)
 
-			sessionMock.EXPECT().SessionExists(req.req.Context(), boardID, userID).Return(te.sessionExists, nil)
+			sessionMock.EXPECT().Exists(req.req.Context(), boardID, userID).Return(te.sessionExists, nil)
 
 			if te.sessionExists {
-				sessionMock.EXPECT().ParticipantBanned(req.req.Context(), boardID, userID).Return(false, te.err)
+				sessionMock.EXPECT().IsParticipantBanned(req.req.Context(), boardID, userID).Return(false, te.err)
 			} else {
 				boardMock.EXPECT().Get(req.req.Context(), boardID).Return(te.board, te.err)
 			}
@@ -286,7 +287,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			if te.board.AccessPolicy == types.AccessPolicyByInvite {
 				sessionRequestMock.EXPECT().SessionRequestExists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
 				if !te.sessionRequestExists {
-					sessionRequestMock.EXPECT().CreateSessionRequest(req.req.Context(), boardID, userID).Return(new(sessions.BoardSessionRequest), te.err)
+					sessionRequestMock.EXPECT().CreateSessionRequest(req.req.Context(), boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
 				}
 			} else {
 				if !te.sessionExists {
