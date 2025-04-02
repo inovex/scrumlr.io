@@ -40,7 +40,7 @@ func (session *BoardSessionRequestSubscription) startListeningOnBoardSessionRequ
 	}
 }
 
-func (socket *WS) OpenBoardSessionRequestSocket(w http.ResponseWriter, r *http.Request) {
+func (socket *WS) OpenSocket(w http.ResponseWriter, r *http.Request) {
 	id := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
@@ -52,7 +52,7 @@ func (socket *WS) OpenBoardSessionRequestSocket(w http.ResponseWriter, r *http.R
 			"user", userID)
 		return
 	}
-	defer socket.closeBoardSessionRequestSocket(conn)
+	defer socket.closeSocket(conn)
 
 	socket.listenOnBoardSessionRequest(id, userID, conn)
 
@@ -87,6 +87,6 @@ func (socket *WS) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *w
 	}
 }
 
-func (socket *WS) closeBoardSessionRequestSocket(conn *websocket.Conn) {
+func (socket *WS) closeSocket(conn *websocket.Conn) {
 	_ = conn.Close()
 }

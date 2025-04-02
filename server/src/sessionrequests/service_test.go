@@ -36,7 +36,7 @@ func TestGetSessionRequest(t *testing.T) {
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 
-	sessionRequest, err := service.GetSessionRequest(context.Background(), boardId, userId)
+	sessionRequest, err := service.Get(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, sessionRequest)
@@ -62,7 +62,7 @@ func TestGetSessionRequest_Notfound(t *testing.T) {
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 
-	sessionRequest, err := service.GetSessionRequest(context.Background(), boardId, userId)
+	sessionRequest, err := service.Get(context.Background(), boardId, userId)
 
 	assert.Nil(t, sessionRequest)
 	assert.NotNil(t, err)
@@ -91,7 +91,7 @@ func TestGetSessionRequests_WithoutQuery(t *testing.T) {
 	mockWebSocket := NewMockWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	sessionRequests, err := service.ListSessionRequest(context.Background(), boardId, query)
+	sessionRequests, err := service.Gets(context.Background(), boardId, query)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, sessionRequests)
@@ -122,7 +122,7 @@ func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
 	mockWebSocket := NewMockWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	sessionRequest, err := service.ListSessionRequest(context.Background(), boardId, query)
+	sessionRequest, err := service.Gets(context.Background(), boardId, query)
 
 	assert.Nil(t, sessionRequest)
 	assert.NotNil(t, err)
@@ -151,7 +151,7 @@ func TestListSessionRequests_WithQuery(t *testing.T) {
 	mockWebSocket := NewMockWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	sessionRequests, err := service.ListSessionRequest(context.Background(), boardId, query)
+	sessionRequests, err := service.Gets(context.Background(), boardId, query)
 
 	assert.Nil(t, err)
 	assert.NotNil(t, sessionRequests)
@@ -182,7 +182,7 @@ func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
 	mockWebSocket := NewMockWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	sessionRequests, err := service.ListSessionRequest(context.Background(), boardId, query)
+	sessionRequests, err := service.Gets(context.Background(), boardId, query)
 
 	assert.Nil(t, sessionRequests)
 	assert.NotNil(t, err)
@@ -203,7 +203,7 @@ func TestListSessionRequests_InvalideQuery(t *testing.T) {
 	mockWebSocket := NewMockWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	sessionRequests, err := service.ListSessionRequest(context.Background(), boardId, query)
+	sessionRequests, err := service.Gets(context.Background(), boardId, query)
 
 	assert.Nil(t, sessionRequests)
 	mockSessionRequestDb.AssertNotCalled(t, "GetBoardSessionRequests")
@@ -226,7 +226,7 @@ func TestSessionRequestExists(t *testing.T) {
 	mockWebSocket := NewMockWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	exists, err := service.SessionRequestExists(context.Background(), boardId, userId)
+	exists, err := service.Exists(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
@@ -248,7 +248,7 @@ func TestSessionRequestExists_DbError(t *testing.T) {
 	mockWebSocket := NewMockWebsocket(t)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	exists, err := service.SessionRequestExists(context.Background(), boardId, userId)
+	exists, err := service.Exists(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, "database error", err.Error())
@@ -269,7 +269,7 @@ func TestSessionOpenBoardSessionRequestSocket(t *testing.T) {
 	mockWebSocket.EXPECT().OpenBoardSessionRequestSocket(mock.Anything, mock.Anything)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
-	service.OpenBoardSessionRequestSocket(mockResponseWriter, mockRequest)
+	service.OpenSocket(mockResponseWriter, mockRequest)
 
 	mockWebSocket.AssertCalled(t, "OpenBoardSessionRequestSocket", mockResponseWriter, mockRequest)
 }

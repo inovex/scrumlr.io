@@ -212,7 +212,7 @@ func (d *Database) GetBoardOverview(id uuid.UUID) (Board, []sessions.DatabaseBoa
 	if err != nil {
 		return Board{}, nil, nil, err
 	}
-	sessions, err = d.sessionDb.GetBoardSessions(id)
+	sessions, err = d.sessionDb.Gets(id)
 	if err != nil {
 		return Board{}, nil, nil, err
 	}

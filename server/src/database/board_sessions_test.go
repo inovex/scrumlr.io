@@ -44,7 +44,7 @@ func testCreateBoardSessionAsParticipant(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.john").(*User)
 
-	session, err := sessionDb.CreateBoardSession(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: sessions.ParticipantRole})
+	session, err := sessionDb.Create(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: sessions.ParticipantRole})
 	assert.Nil(t, err)
 	assert.NotEmpty(t, session)
 }
@@ -53,7 +53,7 @@ func testCreateBoardSessionAsModerator(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.jennifer").(*User)
 
-	session, err := sessionDb.CreateBoardSession(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: sessions.ModeratorRole})
+	session, err := sessionDb.Create(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: sessions.ModeratorRole})
 	assert.Nil(t, err)
 	assert.NotEmpty(t, session)
 }
@@ -62,7 +62,7 @@ func testCreateDuplicateBoardSessionShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.jennifer").(*User)
 
-	_, err := sessionDb.CreateBoardSession(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: sessions.ModeratorRole})
+	_, err := sessionDb.Create(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: sessions.ModeratorRole})
 	assert.NotNil(t, err)
 }
 
@@ -70,7 +70,7 @@ func testCreateBoardSessionAsOwnerShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.jack").(*User)
 
-	_, err := sessionDb.CreateBoardSession(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: sessions.ModeratorRole})
+	_, err := sessionDb.Create(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: sessions.ModeratorRole})
 	assert.NotNil(t, err)
 }
 
@@ -80,7 +80,7 @@ func testUpdateOfConnectedState(t *testing.T) {
 
 	connected := true
 
-	session, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  &connected,
@@ -92,7 +92,7 @@ func testUpdateOfConnectedState(t *testing.T) {
 	assert.Equal(t, connected, session.Connected)
 
 	connected = false
-	session, err = sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err = sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  &connected,
@@ -110,7 +110,7 @@ func testUpdateOfReadyState(t *testing.T) {
 
 	ready := true
 
-	session, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -122,7 +122,7 @@ func testUpdateOfReadyState(t *testing.T) {
 	assert.Equal(t, ready, session.Ready)
 
 	ready = false
-	session, err = sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err = sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -140,7 +140,7 @@ func testUpdateOfRaisedHandState(t *testing.T) {
 
 	raisedHand := true
 
-	session, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -152,7 +152,7 @@ func testUpdateOfRaisedHandState(t *testing.T) {
 	assert.Equal(t, raisedHand, session.RaisedHand)
 
 	raisedHand = false
-	session, err = sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err = sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -170,7 +170,7 @@ func testUpdateOfBannedState(t *testing.T) {
 
 	banned := true
 
-	session, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -183,7 +183,7 @@ func testUpdateOfBannedState(t *testing.T) {
 	assert.Equal(t, banned, session.Banned)
 
 	banned = false
-	session, err = sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err = sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -202,7 +202,7 @@ func testUpdateOfParticipantToModerator(t *testing.T) {
 
 	role := sessions.ParticipantRole
 
-	session, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -214,7 +214,7 @@ func testUpdateOfParticipantToModerator(t *testing.T) {
 	assert.Equal(t, role, session.Role)
 
 	role = sessions.ModeratorRole
-	session, err = sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err = sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -232,7 +232,7 @@ func testUpdateOfParticipantToOwnerShouldFail(t *testing.T) {
 
 	role := sessions.ParticipantRole
 
-	session, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -244,7 +244,7 @@ func testUpdateOfParticipantToOwnerShouldFail(t *testing.T) {
 	assert.Equal(t, role, session.Role)
 
 	role = sessions.OwnerRole
-	session, err = sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err = sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -261,7 +261,7 @@ func testUpdateOfModeratorToOwnerShouldFail(t *testing.T) {
 
 	role := sessions.ModeratorRole
 
-	session, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -273,7 +273,7 @@ func testUpdateOfModeratorToOwnerShouldFail(t *testing.T) {
 	assert.Equal(t, role, session.Role)
 
 	role = sessions.OwnerRole
-	session, err = sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	session, err = sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -290,7 +290,7 @@ func testBoardSessionExistsForParticipant(t *testing.T) {
 
 	role := sessions.ParticipantRole
 
-	_, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	_, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -300,7 +300,7 @@ func testBoardSessionExistsForParticipant(t *testing.T) {
 	})
 	assert.Nil(t, err)
 
-	exists, err := sessionDb.BoardSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.Exists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, true, exists)
 }
@@ -311,7 +311,7 @@ func testBoardSessionExistsForModerator(t *testing.T) {
 
 	role := sessions.ModeratorRole
 
-	_, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	_, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -321,7 +321,7 @@ func testBoardSessionExistsForModerator(t *testing.T) {
 	})
 	assert.Nil(t, err)
 
-	exists, err := sessionDb.BoardSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.Exists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, true, exists)
 }
@@ -330,7 +330,7 @@ func testBoardSessionExistsForOwner(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
 
-	exists, err := sessionDb.BoardSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.Exists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, true, exists)
 }
@@ -339,7 +339,7 @@ func testBoardSessionDoesNotExist(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.jack").(*User)
 
-	exists, err := sessionDb.BoardSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.Exists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, false, exists)
 }
@@ -350,7 +350,7 @@ func testModeratorBoardSessionExistsForParticipantShouldFail(t *testing.T) {
 
 	role := sessions.ParticipantRole
 
-	_, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	_, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -360,7 +360,7 @@ func testModeratorBoardSessionExistsForParticipantShouldFail(t *testing.T) {
 	})
 	assert.Nil(t, err)
 
-	exists, err := sessionDb.BoardModeratorSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.ModeratorExists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, false, exists)
 }
@@ -371,7 +371,7 @@ func testModeratorBoardSessionExistsForModerator(t *testing.T) {
 
 	role := sessions.ModeratorRole
 
-	_, err := sessionDb.UpdateBoardSession(sessions.DatabaseBoardSessionUpdate{
+	_, err := sessionDb.Update(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		User:       user.ID,
 		Connected:  nil,
@@ -381,7 +381,7 @@ func testModeratorBoardSessionExistsForModerator(t *testing.T) {
 	})
 	assert.Nil(t, err)
 
-	exists, err := sessionDb.BoardModeratorSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.ModeratorExists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, true, exists)
 }
@@ -390,7 +390,7 @@ func testModeratorBoardSessionExistsForOwner(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
 
-	exists, err := sessionDb.BoardModeratorSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.ModeratorExists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, true, exists)
 }
@@ -399,7 +399,7 @@ func testModeratorBoardSessionDoesNotExist(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.john").(*User)
 
-	exists, err := sessionDb.BoardModeratorSessionExists(board.ID, user.ID)
+	exists, err := sessionDb.ModeratorExists(board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, false, exists)
 }
@@ -408,7 +408,7 @@ func testGetBoardSession(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	user := fixture.MustRow("User.jane").(*User)
 
-	session, err := sessionDb.GetBoardSession(board.ID, user.ID)
+	session, err := sessionDb.Get(board.ID, user.ID)
 	assert.Nil(t, err)
 
 	assert.Equal(t, board.ID, session.Board)
@@ -418,7 +418,7 @@ func testGetBoardSession(t *testing.T) {
 
 func testGetBoardSessions(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	sessions, err := sessionDb.GetBoardSessions(board.ID)
+	sessions, err := sessionDb.Gets(board.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(sessions))
 }
@@ -426,7 +426,7 @@ func testGetBoardSessions(t *testing.T) {
 func testGetBoardSessionsWithReadyFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	readyFilter := true
-	sessions, err := sessionDb.GetBoardSessions(board.ID, sessions.BoardSessionFilter{Ready: &readyFilter})
+	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{Ready: &readyFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
 }
@@ -434,7 +434,7 @@ func testGetBoardSessionsWithReadyFilter(t *testing.T) {
 func testGetBoardSessionsWithRaisedHandFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	raisedHandFilter := true
-	sessions, err := sessionDb.GetBoardSessions(board.ID, sessions.BoardSessionFilter{RaisedHand: &raisedHandFilter})
+	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{RaisedHand: &raisedHandFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
 }
@@ -442,7 +442,7 @@ func testGetBoardSessionsWithRaisedHandFilter(t *testing.T) {
 func testGetBoardSessionsWithConnectedFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	connectedFilter := true
-	sessions, err := sessionDb.GetBoardSessions(board.ID, sessions.BoardSessionFilter{Connected: &connectedFilter})
+	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{Connected: &connectedFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
 }
@@ -450,7 +450,7 @@ func testGetBoardSessionsWithConnectedFilter(t *testing.T) {
 func testGetBoardSessionsWithRoleFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	roleFilter := sessions.OwnerRole
-	sessions, err := sessionDb.GetBoardSessions(board.ID, sessions.BoardSessionFilter{Role: &roleFilter})
+	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{Role: &roleFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(sessions))
 }
@@ -459,7 +459,7 @@ func testGetBoardSessionsWithMultipleFilters(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	roleFilter := sessions.OwnerRole
 	connectedFilter := true
-	sessions, err := sessionDb.GetBoardSessions(board.ID, sessions.BoardSessionFilter{Role: &roleFilter, Connected: &connectedFilter})
+	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{Role: &roleFilter, Connected: &connectedFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
 }
@@ -469,7 +469,7 @@ func testUpdateBoardSessions(t *testing.T) {
 
 	ready := true
 	raisedHand := true
-	boardSessions, err := sessionDb.UpdateBoardSessions(sessions.DatabaseBoardSessionUpdate{
+	boardSessions, err := sessionDb.UpdateAll(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		Ready:      &ready,
 		RaisedHand: &raisedHand,
@@ -483,7 +483,7 @@ func testUpdateBoardSessions(t *testing.T) {
 
 	ready = false
 	raisedHand = false
-	boardSessions, err = sessionDb.UpdateBoardSessions(sessions.DatabaseBoardSessionUpdate{
+	boardSessions, err = sessionDb.UpdateAll(sessions.DatabaseBoardSessionUpdate{
 		Board:      board.ID,
 		Ready:      &ready,
 		RaisedHand: &raisedHand,

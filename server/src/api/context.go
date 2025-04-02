@@ -27,7 +27,7 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 		}
 
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		exists, err := s.sessionRequests.SessionRequestExists(r.Context(), board, user)
+		exists, err := s.sessionRequests.Exists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)

@@ -210,7 +210,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == types.AccessPolicyByInvite {
-		sessionExists, err := s.sessionRequests.SessionRequestExists(r.Context(), board, user)
+		sessionExists, err := s.sessionRequests.Exists(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
 			return
@@ -226,7 +226,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		_, err = s.sessionRequests.CreateSessionRequest(r.Context(), board, user)
+		_, err = s.sessionRequests.Create(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
