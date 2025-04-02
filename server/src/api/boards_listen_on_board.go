@@ -6,6 +6,8 @@ import (
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votes"
 
 	"scrumlr.io/server/identifiers"
@@ -21,7 +23,7 @@ import (
 type BoardSubscription struct {
 	subscription      chan *realtime.BoardEvent
 	clients           map[uuid.UUID]*websocket.Conn
-	boardParticipants []*dto.BoardSession
+	boardParticipants []*sessions.BoardSession
 	boardSettings     *dto.Board
 	boardColumns      []*columns.Column
 	boardNotes        []*notes.Note
@@ -34,14 +36,14 @@ type InitEvent struct {
 }
 
 type EventData struct {
-	Board     *dto.Board                 `json:"board"`
-	Columns   []*columns.Column          `json:"columns"`
-	Notes     []*notes.Note              `json:"notes"`
-	Reactions []*reactions.Reaction      `json:"reactions"`
-	Votings   []*votes.Voting            `json:"votings"`
-	Votes     []*dto.Vote                `json:"votes"`
-	Sessions  []*dto.BoardSession        `json:"participants"`
-	Requests  []*dto.BoardSessionRequest `json:"requests"`
+	Board     *dto.Board                             `json:"board"`
+	Columns   []*columns.Column                      `json:"columns"`
+	Notes     []*notes.Note                          `json:"notes"`
+	Reactions []*reactions.Reaction                  `json:"reactions"`
+	Votings   []*votes.Voting                        `json:"votings"`
+	Votes     []*dto.Vote                            `json:"votes"`
+	Sessions  []*sessions.BoardSession               `json:"participants"`
+	Requests  []*sessionrequests.BoardSessionRequest `json:"requests"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {

@@ -3,19 +3,22 @@ package api
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
+	"time"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
-	"net/http"
-	"net/http/httptest"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/mocks/services"
-	"strings"
-	"testing"
-	"time"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 )
 
 type BoardTestSuite struct {
@@ -259,9 +262,11 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 		suite.Run(te.name, func() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
-			sessionMock := services.NewMockBoardSessions(suite.T())
+			sessionMock := sessions.NewMockSessionService(suite.T())
+			sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
 			s.boards = boardMock
 			s.sessions = sessionMock
+			s.sessionRequests = sessionRequestMock
 			boardID := uuid.New()
 			userID := uuid.New()
 
@@ -271,22 +276,22 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)
 
-			sessionMock.EXPECT().SessionExists(req.req.Context(), boardID, userID).Return(te.sessionExists, nil)
+			sessionMock.EXPECT().Exists(req.req.Context(), boardID, userID).Return(te.sessionExists, nil)
 
 			if te.sessionExists {
-				sessionMock.EXPECT().ParticipantBanned(req.req.Context(), boardID, userID).Return(false, te.err)
+				sessionMock.EXPECT().IsParticipantBanned(req.req.Context(), boardID, userID).Return(false, te.err)
 			} else {
 				boardMock.EXPECT().Get(req.req.Context(), boardID).Return(te.board, te.err)
 			}
 
 			if te.board.AccessPolicy == types.AccessPolicyByInvite {
-				sessionMock.EXPECT().SessionRequestExists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
+				sessionRequestMock.EXPECT().SessionRequestExists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
 				if !te.sessionRequestExists {
-					sessionMock.EXPECT().CreateSessionRequest(req.req.Context(), boardID, userID).Return(new(dto.BoardSessionRequest), te.err)
+					sessionRequestMock.EXPECT().CreateSessionRequest(req.req.Context(), boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
 				}
 			} else {
 				if !te.sessionExists {
-					sessionMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(dto.BoardSession), te.err)
+					sessionMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(sessions.BoardSession), te.err)
 				}
 
 			}

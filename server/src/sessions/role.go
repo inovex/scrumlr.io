@@ -1,4 +1,4 @@
-package types
+package sessions
 
 import (
 	"encoding/json"
@@ -9,14 +9,14 @@ import (
 type SessionRole string
 
 const (
-	// SessionRoleParticipant is the role for a regular participant of a board with limited permissions to manipulate data
-	SessionRoleParticipant SessionRole = "PARTICIPANT"
+	// ParticipantRole is the role for a regular participant of a board with limited permissions to manipulate data
+	ParticipantRole SessionRole = "PARTICIPANT"
 
 	// SessionRoleModerator is the role for a moderating user with all permissions to manipulate data
-	SessionRoleModerator SessionRole = "MODERATOR"
+	ModeratorRole SessionRole = "MODERATOR"
 
 	// SessionRoleOwner is the role for the creator of the board. This role should not be updated into something else
-	SessionRoleOwner SessionRole = "OWNER"
+	OwnerRole SessionRole = "OWNER"
 )
 
 func (sessionRole *SessionRole) UnmarshalJSON(b []byte) error {
@@ -24,11 +24,13 @@ func (sessionRole *SessionRole) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &s); err != nil {
 		return err
 	}
+
 	unmarshalledSessionRole := SessionRole(s)
 	switch unmarshalledSessionRole {
-	case SessionRoleParticipant, SessionRoleModerator, SessionRoleOwner:
+	case ParticipantRole, ModeratorRole, OwnerRole:
 		*sessionRole = unmarshalledSessionRole
 		return nil
 	}
+
 	return errors.New("invalid session role")
 }
