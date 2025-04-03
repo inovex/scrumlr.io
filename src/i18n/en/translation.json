@@ -17,11 +17,55 @@
     "switchTitle": "Templates",
     "title": "Choose a template",
     "savedTemplates": "Your Templates",
-    "recommendedTemplates": "Our Recommendations"
+    "recommendedTemplates": "Our Recommendations",
+
+    "CreateTemplateCard": {
+      "create": "Create a new Template"
+    },
+
+    "TemplateCard": {
+      "addFavourite": "Mark as Favourite",
+      "removeFavourite": "Remove Favourite",
+      "column_one": "{{count}} Column",
+      "column_other": "{{count}} Columns",
+      "start": "Start",
+      "save": "Save"
+    },
+
+    "TemplateEditor": {
+      "createTitle": "Create a Template",
+      "editTitle": "Edit a Template",
+      "cancel": "Cancel",
+      "saveEdit": "Save",
+      "saveCreate": "Create template"
+    },
+
+    "ColumnsConfiguratorColumn": {
+      "namePlaceholder": "Name",
+      "descriptionPlaceholder": "Description (optional)",
+      "save": "Save",
+      "cancel": "Cancel"
+    }
   },
   "Sessions": {
     "switchTitle": "Sessions",
     "title": "Choose a session"
+  },
+  "CreateBoard": {
+    "title": "Create a new Board",
+    "dropdown": {
+      "open": "Open",
+      "password": "Password",
+      "approval": "Approval"
+    },
+    "info": {
+      "open": "Access for all participants is possible via the URL. This should be secure enough in most cases, as the URLs are difficult to guess.",
+      "password": "Access via the URL is protected with a password. This is suitable when not collaborating simultaneously with a group, allowing users to join at any time.",
+      "approval": "TBA"
+    },
+    "validation": {
+      "REQUIRED": "Board name is required."
+    }
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
@@ -364,8 +408,10 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
   },
-  "SearchBar": {
-    "placeholder": "Search"
+  "Input": {
+    "placeholder": {
+      "search": "Suchen"
+    }
   },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
@@ -479,6 +525,13 @@
     "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
     "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
     "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
+  },
+  "Validation": {
+    "REQUIRED": "required",
+    "BAD_INPUT": "bad input",
+    "PATTERN_MISMATCH": "pattern mismatch",
+    "TYPE_MISMATCH": "type mismatch",
+    "RANGE": "range"
   },
   "Avatar": {
     "random": "Generate random avatar",
