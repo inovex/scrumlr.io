@@ -17,8 +17,8 @@ $icon-size: 80px;
   border-radius: $rounded--default;
   border: 3px dashed $blue--500;
 
-  box-sizing: border-box; // don't overflow
-  padding: 0 40px 14px 40px; // non standard, I know
+  box-sizing: border-box; // prevent overflow
+  padding: 0 40px 14px 40px;
   text-align: center;
 
   background-color: $blue--100;

@@ -1,6 +1,7 @@
 @import "constants/style";
 
 $card-height: 220px;
+$card-description-height: 4 * 20px;
 
 .template-card {
   display: grid;
@@ -95,8 +96,8 @@ $card-height: 220px;
   font-weight: 500;
   line-height: 20px;
 
-  height: 4 * 20px; // TODO always keep cards same height?
-  max-height: 4 * 20px;
+  height: $card-description-height;
+  max-height: $card-description-height;
   margin: 0;
   padding: 0;
   resize: none;

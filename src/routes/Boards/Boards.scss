@@ -24,7 +24,7 @@ $side-padding--desktop: 14vw;
   height: 100vh;
 
   &--with-view-options {
-    grid-template-columns: $side-padding--desktop 114px auto $spacing--base 1fr auto auto $side-padding--desktop;
+    grid-template-columns: $side-padding--desktop auto auto $spacing--base 1fr auto auto $side-padding--desktop;
     grid-template-rows: $spacing--lg 56px 48px 64px 1fr $spacing--lg; // using the actual component heights seems to yield the best results
     grid-template-areas:
       ".  .    .       .       .       .       .      ."
@@ -109,11 +109,23 @@ $side-padding--desktop: 14vw;
     margin-top: $spacing--xl;
   }
 }
+@media (max-width: $breakpoint--desktop) {
+  .boards__grid {
+    grid-template-columns: $spacing--2xl auto auto $spacing--base 1fr auto auto $spacing--2xl;
+    grid-template-areas:
+      ".  .    .       .       .       .       .      ."
+      ".  logo title   title   title   title   user   ."
+      ".  .    title   title   title   title   .      ."
+      ".  switch    switch  .       search  search  search      ."
+      ".  main    main    main    main    main    main      ."
+      ".  .    .       .       .       .       .      .";
+  }
+}
 
 @media (max-width: $breakpoint--desktop) {
   .boards__grid {
     &--with-view-options {
-      grid-template-columns: $spacing--2xl 114px auto $spacing--base 1fr auto auto $spacing--2xl;
+      grid-template-columns: $spacing--2xl auto auto $spacing--base 1fr auto auto $spacing--2xl;
       grid-template-areas:
         ".  .       .       .       .       .       .       ."
         ".  logo    title   title   title   title   user    ."
