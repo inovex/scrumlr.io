@@ -1,0 +1,144 @@
+@import "constants/style";
+
+.legacy-button {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  cursor: initial;
+
+  background: $blue--500;
+
+  color: $gray--000;
+  font-weight: bold;
+  text-decoration: none;
+
+  border: 0;
+  border-radius: 24px;
+  outline: 2px solid transparent;
+
+  height: 48px;
+  padding: $spacing--xs $spacing--base;
+
+  transition: all 0.08s ease-out;
+  box-shadow: 0 0 0 0 rgba($blue--500, 0.2);
+}
+
+.legacy-button:not(:disabled) {
+  cursor: pointer;
+}
+
+.legacy-button.legacy-button--outlined {
+  background: none;
+  color: $blue--500;
+  border: 1px solid $blue--500;
+  box-shadow: none;
+}
+
+.legacy-button.legacy-button--text-link {
+  border: none;
+  box-shadow: none;
+  background: none;
+  padding: 0;
+  height: auto;
+  color: $navy--900;
+}
+
+.legacy-button.legacy-button--text-link:focus-visible,
+.legacy-button.legacy-button--text-link:hover {
+  text-decoration: underline;
+}
+
+.legacy-button.legacy-button--primary.legacy-button--outlined {
+  color: $pink--500;
+  border-color: $pink--500;
+}
+
+.legacy-button--primary {
+  background: $pink--500;
+  box-shadow: 0 0 0 0 rgba($pink--500, 0.2);
+}
+
+.legacy-button--secondary {
+  background: $blue--500;
+}
+
+.legacy-button.legacy-button--text-link:disabled {
+  color: $gray--700;
+}
+
+.legacy-button:not(.legacy-button--text-link):disabled {
+  background: $gray--700;
+}
+
+.legacy-button.legacy-button--outlined:disabled {
+  background: none;
+  color: $gray--700;
+  border: 1px solid $gray--700;
+}
+
+.legacy-button--block {
+  display: flex;
+}
+
+.legacy-button:not(:disabled):not(.legacy-button--text-link):hover {
+  filter: brightness(1.05);
+  transform: scale(1.02);
+  box-shadow: 0 6px 9px 0 rgba($blue--500, 0.24);
+}
+
+.legacy-button:not(:disabled):not(.legacy-button--text-link).legacy-button--primary:hover {
+  filter: brightness(1.05);
+  transform: scale(1.02);
+  box-shadow: 0 6px 9px 0 rgba($pink--500, 0.24);
+}
+
+.legacy-button:not(:disabled):not(.legacy-button--text-link):active {
+  transform: scale(1);
+}
+
+.legacy-button:not(:disabled):not(.legacy-button--text-link).legacy-button--primary:active {
+  transform: scale(1);
+}
+
+.legacy-button:not(:disabled):not(.legacy-button--text-link):focus-visible {
+  outline: 2px solid rgba($blue--500, 0.4);
+}
+
+.legacy-button:not(:disabled):not(.legacy-button--text-link).legacy-button--primary:focus-visible {
+  outline: 2px solid rgba($pink--500, 0.4);
+}
+
+.legacy-button__label {
+  flex: 1 1 auto;
+}
+
+.legacy-button__label--hidden {
+  display: none;
+}
+
+.legacy-button__icon {
+  flex: 0 0 16px;
+
+  width: 16px;
+  height: 16px;
+}
+
+.button__label--shown {
+  min-width: 80px;
+}
+
+[theme="dark"] {
+  .legacy-button.legacy-button--outlined,
+  .legacy-button.legacy-button--text-link,
+  .legacy-button.legacy-button--primary.legacy-button--outlined {
+    color: $gray--000;
+  }
+
+  .legacy-button:not(:disabled):not(.legacy-button--text-link):focus-visible {
+    outline: 2px solid $gray--000;
+  }
+
+  .legacy-button:not(:disabled):not(.legacy-button--text-link).legacy-button--primary:focus-visible {
+    outline: 2px solid $gray--000;
+  }
+}
