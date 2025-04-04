@@ -395,6 +395,7 @@ func run(c *cli.Context) error {
 
 		boardService,
 		votingService,
+		dbConnection,
 		userService,
 		noteService,
 		reactionService,
