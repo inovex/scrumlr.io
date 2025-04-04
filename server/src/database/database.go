@@ -41,8 +41,8 @@ func New(db *bun.DB) *Database {
 func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 	var (
 		board     Board
-		sessions  []sessions.DatabaseBoardSession
-		requests  []sessionrequests.DatabaseBoardSessionRequest
+		sessions  []BoardSession
+		requests  []BoardSessionRequest
 		columns   []Column
 		notes     []notes.NoteDB
 		reactions []reactions.DatabaseReaction
@@ -85,5 +85,5 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 			return FullBoard{}, err
 		}
 	}
-	return FullBoard{board, sessions, requests, columns, notes, reactions, votings, votes}, nil
+	return FullBoard{board, sessions, requests, columns, reactions, votings, votes}, nil
 }
