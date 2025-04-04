@@ -3,7 +3,6 @@ package votes
 import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/database/types"
-	"scrumlr.io/server/notes"
 )
 
 // VotingCreateRequest represents the request to create a new voting session.
@@ -47,6 +46,6 @@ type VotingResultsPerNote struct {
 }
 
 type VotingUpdated struct {
-	Notes  notes.NoteSlice `json:"notes"`
-	Voting *Voting         `json:"voting"`
+	//Notes  notes.NoteSlice `json:"notes"`
+	Voting *Voting `json:"voting"`
 }

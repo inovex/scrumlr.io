@@ -4,7 +4,7 @@ import (
   "context"
   "errors"
   "scrumlr.io/server/identifiers"
-  "scrumlr.io/server/votes"
+
   "time"
 
   "github.com/google/uuid"
@@ -77,15 +77,15 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
     return Board{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
   }
 
-	session := BoardSessionInsert{User: creator, Role: types.SessionRoleOwner}
+  session := BoardSessionInsert{User: creator, Role: types.SessionRoleOwner}
 
-	var b Board
-	query := d.db.NewSelect().With("createdBoard", boardInsert)
-	if len(columns) > 0 {
-		for index := range columns {
-			newColumnIndex := index
-			columns[index].Index = &newColumnIndex
-		}
+  var b Board
+  query := d.db.NewSelect().With("createdBoard", boardInsert)
+  if len(columns) > 0 {
+    for index := range columns {
+      newColumnIndex := index
+      columns[index].Index = &newColumnIndex
+    }
 
     query = query.With("createdColumns", d.db.NewInsert().
       Model(&columns).
@@ -148,29 +148,29 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
     query.Column("is_locked")
   }
 
-	var board Board
-	var err error
-	if update.ShowVoting.Valid {
-		votingQuery := d.db.NewSelect().
-			Model((*Voting)(nil)).
-			Column("id").
-			Where("board = ?", update.ID).
-			Where("id = ?", update.ShowVoting.UUID).
-			Where("status = ?", types.VotingStatusClosed)
+  var board Board
+  var err error
+  if update.ShowVoting.Valid {
+    votingQuery := d.db.NewSelect().
+      Model((*Voting)(nil)).
+      Column("id").
+      Where("board = ?", update.ID).
+      Where("id = ?", update.ShowVoting.UUID).
+      Where("status = ?", types.VotingStatusClosed)
 
-		_, err = query.
-			With("voting", votingQuery).
-			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("voting")).
-			Set("voting = (SELECT \"id\" FROM \"voting\")").
-			Where("id = ?", update.ID).
-			Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
-	} else {
-		_, err = query.
-			Where("id = ?", update.ID).
-			Returning("*").
-			Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
-	}
+    _, err = query.
+      With("voting", votingQuery).
+      With("rankUpdate", d.getRankUpdateQueryForClosedVoting("voting")).
+      Set("voting = (SELECT \"id\" FROM \"voting\")").
+      Where("id = ?", update.ID).
+      Returning("*").
+      Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
+  } else {
+    _, err = query.
+      Where("id = ?", update.ID).
+      Returning("*").
+      Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
+  }
 
   return board, err
 

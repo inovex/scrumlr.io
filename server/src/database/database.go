@@ -3,7 +3,6 @@ package database
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 )
 
@@ -11,7 +10,7 @@ import (
 type Database struct {
 	db          *bun.DB
 	reactionsDb reactions.ReactionDatabase
-	notesDB     notes.NotesDatabase
+	//notesDB     notes.NotesDatabase
 }
 
 type FullBoard struct {
@@ -19,10 +18,10 @@ type FullBoard struct {
 	BoardSessions        []BoardSession
 	BoardSessionRequests []BoardSessionRequest
 	Columns              []Column
-	Notes                []notes.NoteDB
-	Reactions            []reactions.DatabaseReaction
-	Votings              []Voting
-	Votes                []Vote
+	//Notes                []notes.NoteDB
+	Reactions []reactions.DatabaseReaction
+	Votings   []Voting
+	Votes     []Vote
 }
 
 // New creates a new instance of Database
@@ -36,11 +35,11 @@ func New(db *bun.DB) *Database {
 
 func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 	var (
-		board     Board
-		sessions  []BoardSession
-		requests  []BoardSessionRequest
-		columns   []Column
-		notes     []notes.NoteDB
+		board    Board
+		sessions []BoardSession
+		requests []BoardSessionRequest
+		columns  []Column
+		//notes     []notes.NoteDB
 		reactions []reactions.DatabaseReaction
 		votings   []Voting
 		votes     []Vote
@@ -70,8 +69,8 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 			sessions, err = d.GetBoardSessions(id)
 		case getColumns:
 			columns, err = d.GetColumns(id)
-		case getNotes:
-			notes, err = d.notesDB.GetNotes(id)
+		//case getNotes:
+		//	notes, err = d.notesDB.GetNotes(id)
 		case getReactions:
 			reactions, err = d.reactionsDb.GetReactions(id)
 		case getVotings:
@@ -81,5 +80,5 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 			return FullBoard{}, err
 		}
 	}
-	return FullBoard{board, sessions, requests, columns, notes, reactions, votings, votes}, nil
+	return FullBoard{board, sessions, requests, columns, reactions, votings, votes}, nil
 }

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
+
 	"scrumlr.io/server/technical_helper"
 )
 

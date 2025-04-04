@@ -5,16 +5,17 @@ import (
   "database/sql"
   "github.com/google/uuid"
   "scrumlr.io/server/common"
-  "scrumlr.io/server/common/dto"
   "scrumlr.io/server/common/filter"
+  "scrumlr.io/server/database"
   "scrumlr.io/server/identifiers"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/realtime"
 )
 
-type Service struct {
-  database NotesDatabase
-  realtime *realtime.Broker
+type NoteService struct {
+  database        NotesDatabase
+  generalDatabase *database.Database
+  realtime        *realtime.Broker
 }
 
 type NotesDatabase interface {
@@ -27,7 +28,7 @@ type NotesDatabase interface {
   DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 }
 
-func (s *Service) Create(ctx context.Context, body NoteCreateRequest) (*Note, error) {
+func (s *NoteService) Create(ctx context.Context, body NoteCreateRequest) (*Note, error) {
   log := logger.FromContext(ctx)
   note, err := s.database.CreateNote(NoteInsertDB{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
   if err != nil {
@@ -38,7 +39,7 @@ func (s *Service) Create(ctx context.Context, body NoteCreateRequest) (*Note, er
   return new(Note).From(note), err
 }
 
-func (s *Service) Import(ctx context.Context, body NoteImportRequest) (*Note, error) {
+func (s *NoteService) Import(ctx context.Context, body NoteImportRequest) (*Note, error) {
 
   log := logger.FromContext(ctx)
 
@@ -59,7 +60,7 @@ func (s *Service) Import(ctx context.Context, body NoteImportRequest) (*Note, er
   return new(Note).From(note), err
 }
 
-func (s *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
+func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
   log := logger.FromContext(ctx)
   note, err := s.database.GetNote(id)
   if err != nil {
@@ -72,7 +73,7 @@ func (s *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
   return new(Note).From(note), err
 }
 
-func (s *Service) Update(ctx context.Context, body NoteUpdateRequest) (*Note, error) {
+func (s *NoteService) Update(ctx context.Context, body NoteUpdateRequest) (*Note, error) {
   log := logger.FromContext(ctx)
   var positionUpdate *NoteUpdatePosition
   edited := body.Text != nil
@@ -99,7 +100,7 @@ func (s *Service) Update(ctx context.Context, body NoteUpdateRequest) (*Note, er
   return new(Note).From(note), err
 }
 
-func (s *Service) List(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
+func (s *NoteService) List(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
   log := logger.FromContext(ctx)
   notes, err := s.database.GetNotes(boardID, columnID...)
   if err != nil {
@@ -111,7 +112,7 @@ func (s *Service) List(ctx context.Context, boardID uuid.UUID, columnID ...uuid.
   return Notes(notes), err
 }
 
-func (s *Service) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID) error {
+func (s *NoteService) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID) error {
   log := logger.FromContext(ctx)
   user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
   board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
@@ -120,11 +121,11 @@ func (s *Service) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UU
     Board: board,
     Note:  &note,
   }
-  deletedVotes, err := s.database.GetVotes(ctx, voteFilter)
+  deletedVotes, err := s.generalDatabase.GetVotes(voteFilter)
   if body.DeleteStack {
     stackedVotes, _ := s.database.GetChildNotes(note)
     for _, n := range stackedVotes {
-      votes, err := s.database.GetVotes(ctx, filter.VoteFilter{
+      votes, err := s.generalDatabase.GetVotes(filter.VoteFilter{
         Board: board,
         Note:  &n.ID,
       })
@@ -150,7 +151,7 @@ func (s *Service) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UU
   return err
 }
 
-func (s *Service) updatedNotes(board uuid.UUID) {
+func (s *NoteService) updatedNotes(board uuid.UUID) {
   notes, err := s.database.GetNotes(board)
   if err != nil {
     logger.Get().Errorw("unable to retrieve notes in UpdatedNotes call", "boardID", board, "err", err)
@@ -167,7 +168,7 @@ func (s *Service) updatedNotes(board uuid.UUID) {
   })
 }
 
-func (s *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*dto.Vote, deleteStack bool) {
+func (s *NoteService) deletedNote(user, board, note uuid.UUID, deletedVotes []database.Vote, deleteStack bool) {
   noteData := map[string]interface{}{
     "note":        note,
     "deleteStack": deleteStack,
@@ -185,7 +186,7 @@ func (s *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*dto.V
 }
 
 func NewNotesService(db *NotesDatabase, rt *realtime.Broker) NotesService {
-  b := new(Service)
+  b := new(NoteService)
   b.database = *db
   b.realtime = rt
   return b

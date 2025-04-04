@@ -6,7 +6,6 @@ import (
 	context "context"
 
 	mock "github.com/stretchr/testify/mock"
-	dto "scrumlr.io/server/common/dto"
 
 	notes "scrumlr.io/server/notes"
 
@@ -27,7 +26,7 @@ func (_m *MockNotes) EXPECT() *MockNotes_Expecter {
 }
 
 // Create provides a mock function with given fields: ctx, body
-func (_m *MockNotes) Create(ctx context.Context, body dto.NoteCreateRequest) (*notes.Note, error) {
+func (_m *MockNotes) Create(ctx context.Context, body notes.NoteCreateRequest) (*notes.Note, error) {
 	ret := _m.Called(ctx, body)
 
 	if len(ret) == 0 {
@@ -36,10 +35,10 @@ func (_m *MockNotes) Create(ctx context.Context, body dto.NoteCreateRequest) (*n
 
 	var r0 *notes.Note
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, dto.NoteCreateRequest) (*notes.Note, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, notes.NoteCreateRequest) (*notes.Note, error)); ok {
 		return rf(ctx, body)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, dto.NoteCreateRequest) *notes.Note); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, notes.NoteCreateRequest) *notes.Note); ok {
 		r0 = rf(ctx, body)
 	} else {
 		if ret.Get(0) != nil {
@@ -47,7 +46,7 @@ func (_m *MockNotes) Create(ctx context.Context, body dto.NoteCreateRequest) (*n
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, dto.NoteCreateRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, notes.NoteCreateRequest) error); ok {
 		r1 = rf(ctx, body)
 	} else {
 		r1 = ret.Error(1)
@@ -68,9 +67,9 @@ func (_e *MockNotes_Expecter) Create(ctx interface{}, body interface{}) *MockNot
 	return &MockNotes_Create_Call{Call: _e.mock.On("Create", ctx, body)}
 }
 
-func (_c *MockNotes_Create_Call) Run(run func(ctx context.Context, body dto.NoteCreateRequest)) *MockNotes_Create_Call {
+func (_c *MockNotes_Create_Call) Run(run func(ctx context.Context, body notes.NoteCreateRequest)) *MockNotes_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(dto.NoteCreateRequest))
+		run(args[0].(context.Context), args[1].(notes.NoteCreateRequest))
 	})
 	return _c
 }
@@ -80,13 +79,13 @@ func (_c *MockNotes_Create_Call) Return(_a0 *notes.Note, _a1 error) *MockNotes_C
 	return _c
 }
 
-func (_c *MockNotes_Create_Call) RunAndReturn(run func(context.Context, dto.NoteCreateRequest) (*notes.Note, error)) *MockNotes_Create_Call {
+func (_c *MockNotes_Create_Call) RunAndReturn(run func(context.Context, notes.NoteCreateRequest) (*notes.Note, error)) *MockNotes_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Delete provides a mock function with given fields: ctx, body, id
-func (_m *MockNotes) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
+func (_m *MockNotes) Delete(ctx context.Context, body notes.NoteDeleteRequest, id uuid.UUID) error {
 	ret := _m.Called(ctx, body, id)
 
 	if len(ret) == 0 {
@@ -94,7 +93,7 @@ func (_m *MockNotes) Delete(ctx context.Context, body dto.NoteDeleteRequest, id 
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, dto.NoteDeleteRequest, uuid.UUID) error); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, notes.NoteDeleteRequest, uuid.UUID) error); ok {
 		r0 = rf(ctx, body, id)
 	} else {
 		r0 = ret.Error(0)
@@ -116,9 +115,9 @@ func (_e *MockNotes_Expecter) Delete(ctx interface{}, body interface{}, id inter
 	return &MockNotes_Delete_Call{Call: _e.mock.On("Delete", ctx, body, id)}
 }
 
-func (_c *MockNotes_Delete_Call) Run(run func(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID)) *MockNotes_Delete_Call {
+func (_c *MockNotes_Delete_Call) Run(run func(ctx context.Context, body notes.NoteDeleteRequest, id uuid.UUID)) *MockNotes_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(dto.NoteDeleteRequest), args[2].(uuid.UUID))
+		run(args[0].(context.Context), args[1].(notes.NoteDeleteRequest), args[2].(uuid.UUID))
 	})
 	return _c
 }
@@ -128,7 +127,7 @@ func (_c *MockNotes_Delete_Call) Return(_a0 error) *MockNotes_Delete_Call {
 	return _c
 }
 
-func (_c *MockNotes_Delete_Call) RunAndReturn(run func(context.Context, dto.NoteDeleteRequest, uuid.UUID) error) *MockNotes_Delete_Call {
+func (_c *MockNotes_Delete_Call) RunAndReturn(run func(context.Context, notes.NoteDeleteRequest, uuid.UUID) error) *MockNotes_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -193,7 +192,7 @@ func (_c *MockNotes_Get_Call) RunAndReturn(run func(context.Context, uuid.UUID) 
 }
 
 // Import provides a mock function with given fields: ctx, body
-func (_m *MockNotes) Import(ctx context.Context, body dto.NoteImportRequest) (*notes.Note, error) {
+func (_m *MockNotes) Import(ctx context.Context, body notes.NoteImportRequest) (*notes.Note, error) {
 	ret := _m.Called(ctx, body)
 
 	if len(ret) == 0 {
@@ -202,10 +201,10 @@ func (_m *MockNotes) Import(ctx context.Context, body dto.NoteImportRequest) (*n
 
 	var r0 *notes.Note
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, dto.NoteImportRequest) (*notes.Note, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, notes.NoteImportRequest) (*notes.Note, error)); ok {
 		return rf(ctx, body)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, dto.NoteImportRequest) *notes.Note); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, notes.NoteImportRequest) *notes.Note); ok {
 		r0 = rf(ctx, body)
 	} else {
 		if ret.Get(0) != nil {
@@ -213,7 +212,7 @@ func (_m *MockNotes) Import(ctx context.Context, body dto.NoteImportRequest) (*n
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, dto.NoteImportRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, notes.NoteImportRequest) error); ok {
 		r1 = rf(ctx, body)
 	} else {
 		r1 = ret.Error(1)
@@ -234,9 +233,9 @@ func (_e *MockNotes_Expecter) Import(ctx interface{}, body interface{}) *MockNot
 	return &MockNotes_Import_Call{Call: _e.mock.On("Import", ctx, body)}
 }
 
-func (_c *MockNotes_Import_Call) Run(run func(ctx context.Context, body dto.NoteImportRequest)) *MockNotes_Import_Call {
+func (_c *MockNotes_Import_Call) Run(run func(ctx context.Context, body notes.NoteImportRequest)) *MockNotes_Import_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(dto.NoteImportRequest))
+		run(args[0].(context.Context), args[1].(notes.NoteImportRequest))
 	})
 	return _c
 }
@@ -246,7 +245,7 @@ func (_c *MockNotes_Import_Call) Return(_a0 *notes.Note, _a1 error) *MockNotes_I
 	return _c
 }
 
-func (_c *MockNotes_Import_Call) RunAndReturn(run func(context.Context, dto.NoteImportRequest) (*notes.Note, error)) *MockNotes_Import_Call {
+func (_c *MockNotes_Import_Call) RunAndReturn(run func(context.Context, notes.NoteImportRequest) (*notes.Note, error)) *MockNotes_Import_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -311,7 +310,7 @@ func (_c *MockNotes_List_Call) RunAndReturn(run func(context.Context, uuid.UUID)
 }
 
 // Update provides a mock function with given fields: ctx, body
-func (_m *MockNotes) Update(ctx context.Context, body dto.NoteUpdateRequest) (*notes.Note, error) {
+func (_m *MockNotes) Update(ctx context.Context, body notes.NoteUpdateRequest) (*notes.Note, error) {
 	ret := _m.Called(ctx, body)
 
 	if len(ret) == 0 {
@@ -320,10 +319,10 @@ func (_m *MockNotes) Update(ctx context.Context, body dto.NoteUpdateRequest) (*n
 
 	var r0 *notes.Note
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, dto.NoteUpdateRequest) (*notes.Note, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, notes.NoteUpdateRequest) (*notes.Note, error)); ok {
 		return rf(ctx, body)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, dto.NoteUpdateRequest) *notes.Note); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, notes.NoteUpdateRequest) *notes.Note); ok {
 		r0 = rf(ctx, body)
 	} else {
 		if ret.Get(0) != nil {
@@ -331,7 +330,7 @@ func (_m *MockNotes) Update(ctx context.Context, body dto.NoteUpdateRequest) (*n
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, dto.NoteUpdateRequest) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, notes.NoteUpdateRequest) error); ok {
 		r1 = rf(ctx, body)
 	} else {
 		r1 = ret.Error(1)
@@ -352,9 +351,9 @@ func (_e *MockNotes_Expecter) Update(ctx interface{}, body interface{}) *MockNot
 	return &MockNotes_Update_Call{Call: _e.mock.On("Update", ctx, body)}
 }
 
-func (_c *MockNotes_Update_Call) Run(run func(ctx context.Context, body dto.NoteUpdateRequest)) *MockNotes_Update_Call {
+func (_c *MockNotes_Update_Call) Run(run func(ctx context.Context, body notes.NoteUpdateRequest)) *MockNotes_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(dto.NoteUpdateRequest))
+		run(args[0].(context.Context), args[1].(notes.NoteUpdateRequest))
 	})
 	return _c
 }
@@ -364,7 +363,7 @@ func (_c *MockNotes_Update_Call) Return(_a0 *notes.Note, _a1 error) *MockNotes_U
 	return _c
 }
 
-func (_c *MockNotes_Update_Call) RunAndReturn(run func(context.Context, dto.NoteUpdateRequest) (*notes.Note, error)) *MockNotes_Update_Call {
+func (_c *MockNotes_Update_Call) RunAndReturn(run func(context.Context, notes.NoteUpdateRequest) (*notes.Note, error)) *MockNotes_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
