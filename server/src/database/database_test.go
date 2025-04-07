@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"scrumlr.io/server/notes"
-	"scrumlr.io/server/votes"
 	"time"
 
 	"github.com/ory/dockertest/v3"
@@ -123,9 +122,9 @@ func loadTestdata() error {
 		(*Board)(nil),
 		(*BoardSessionInsert)(nil),
 		(*Column)(nil),
-		(*notes.Note)(nil),
-		(*votes.Voting)(nil),
-		(*votes.Vote)(nil),
+		(*notes.NoteDB)(nil),
+		(*Voting)(nil),
+		(*Vote)(nil),
 		(*reactions.DatabaseReaction)(nil),
 		(*BoardTemplate)(nil),
 		(*ColumnTemplate)(nil),
