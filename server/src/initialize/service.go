@@ -1,13 +1,13 @@
 package initialize
 
 import (
-	"net/http"
-
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/notes"
+	"net/http"
+	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
-  "scrumlr.io/server/realtime"
+	"scrumlr.io/server/realtime"
 )
 
 // TODO: create generic method to initialize services

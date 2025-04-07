@@ -4,6 +4,7 @@ mockname: "Mock{{.InterfaceName}}"
 outpkg: "{{.PackageName}}"
 filename: "mock_{{.InterfaceName}}.go"
 resolve-type-alias: false
+force-write-file: true
 issue-845-fix: true
 packages:
   # configuration on package level

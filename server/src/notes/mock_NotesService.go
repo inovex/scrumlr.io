@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
+	"scrumlr.io/server/common/dto"
 )
 
 // NewMockNotesService creates a new instance of MockNotesService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -96,16 +97,16 @@ func (_c *MockNotesService_Create_Call) RunAndReturn(run func(ctx context.Contex
 }
 
 // Delete provides a mock function for the type MockNotesService
-func (_mock *MockNotesService) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID) error {
-	ret := _mock.Called(ctx, body, id)
+func (_mock *MockNotesService) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID, deletedVotes []*dto.Vote) error {
+	ret := _mock.Called(ctx, body, id, deletedVotes)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, NoteDeleteRequest, uuid.UUID) error); ok {
-		r0 = returnFunc(ctx, body, id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, NoteDeleteRequest, uuid.UUID, []*dto.Vote) error); ok {
+		r0 = returnFunc(ctx, body, id, deletedVotes)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -121,13 +122,14 @@ type MockNotesService_Delete_Call struct {
 //   - ctx
 //   - body
 //   - id
-func (_e *MockNotesService_Expecter) Delete(ctx interface{}, body interface{}, id interface{}) *MockNotesService_Delete_Call {
-	return &MockNotesService_Delete_Call{Call: _e.mock.On("Delete", ctx, body, id)}
+//   - deletedVotes
+func (_e *MockNotesService_Expecter) Delete(ctx interface{}, body interface{}, id interface{}, deletedVotes interface{}) *MockNotesService_Delete_Call {
+	return &MockNotesService_Delete_Call{Call: _e.mock.On("Delete", ctx, body, id, deletedVotes)}
 }
 
-func (_c *MockNotesService_Delete_Call) Run(run func(ctx context.Context, body NoteDeleteRequest, id uuid.UUID)) *MockNotesService_Delete_Call {
+func (_c *MockNotesService_Delete_Call) Run(run func(ctx context.Context, body NoteDeleteRequest, id uuid.UUID, deletedVotes []*dto.Vote)) *MockNotesService_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(NoteDeleteRequest), args[2].(uuid.UUID))
+		run(args[0].(context.Context), args[1].(NoteDeleteRequest), args[2].(uuid.UUID), args[3].([]*dto.Vote))
 	})
 	return _c
 }
@@ -137,7 +139,7 @@ func (_c *MockNotesService_Delete_Call) Return(err error) *MockNotesService_Dele
 	return _c
 }
 
-func (_c *MockNotesService_Delete_Call) RunAndReturn(run func(ctx context.Context, body NoteDeleteRequest, id uuid.UUID) error) *MockNotesService_Delete_Call {
+func (_c *MockNotesService_Delete_Call) RunAndReturn(run func(ctx context.Context, body NoteDeleteRequest, id uuid.UUID, deletedVotes []*dto.Vote) error) *MockNotesService_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -195,6 +197,63 @@ func (_c *MockNotesService_Get_Call) Return(note *Note, err error) *MockNotesSer
 }
 
 func (_c *MockNotesService_Get_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (*Note, error)) *MockNotesService_Get_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetStack provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {
+	ret := _mock.Called(ctx, note)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetStack")
+	}
+
+	var r0 []*Note
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]*Note, error)); ok {
+		return returnFunc(ctx, note)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) []*Note); ok {
+		r0 = returnFunc(ctx, note)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*Note)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, note)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockNotesService_GetStack_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetStack'
+type MockNotesService_GetStack_Call struct {
+	*mock.Call
+}
+
+// GetStack is a helper method to define mock.On call
+//   - ctx
+//   - note
+func (_e *MockNotesService_Expecter) GetStack(ctx interface{}, note interface{}) *MockNotesService_GetStack_Call {
+	return &MockNotesService_GetStack_Call{Call: _e.mock.On("GetStack", ctx, note)}
+}
+
+func (_c *MockNotesService_GetStack_Call) Run(run func(ctx context.Context, note uuid.UUID)) *MockNotesService_GetStack_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockNotesService_GetStack_Call) Return(notes []*Note, err error) *MockNotesService_GetStack_Call {
+	_c.Call.Return(notes, err)
+	return _c
+}
+
+func (_c *MockNotesService_GetStack_Call) RunAndReturn(run func(ctx context.Context, note uuid.UUID) ([]*Note, error)) *MockNotesService_GetStack_Call {
 	_c.Call.Return(run)
 	return _c
 }

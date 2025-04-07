@@ -2,6 +2,7 @@ package notes
 
 import (
   "context"
+  "scrumlr.io/server/common/dto"
   "scrumlr.io/server/identifiers"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/realtime"
@@ -16,7 +17,6 @@ import (
   "github.com/stretchr/testify/mock"
   "github.com/stretchr/testify/suite"
   "scrumlr.io/server/common"
-  "scrumlr.io/server/database"
 )
 
 type NoteServiceTestSuite struct {
@@ -195,14 +195,23 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
   callerID, _ := uuid.NewRandom()
   boardID, _ := uuid.NewRandom()
   noteID, _ := uuid.NewRandom()
+
+  votesToDelete := []*dto.Vote{
+    {
+      Voting: uuid.UUID{},
+      Note:   noteID,
+      User:   uuid.UUID{},
+    },
+    {
+      Voting: uuid.UUID{},
+      Note:   noteID,
+      User:   uuid.UUID{},
+    },
+  }
   deleteStack := true
   body := NoteDeleteRequest{
     DeleteStack: deleteStack,
   }
-  //voteFilter := filter.VoteFilter{
-  //	Board: boardID,
-  //	Note:  &noteID,
-  //}
 
   // Mocks only for the realtime stuff
   publishSubject := "board." + boardID.String()
@@ -216,7 +225,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
   }
   publishEventVotesDeleted := realtime.BoardEvent{
     Type: realtime.BoardEventVotesDeleted,
-    Data: []database.Vote{},
+    Data: votesToDelete,
   }
   clientMock.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
   clientMock.On("Publish", publishSubject, publishEventVotesDeleted).Return(nil)
@@ -226,14 +235,12 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
   ctx = context.WithValue(ctx, identifiers.BoardIdentifier, boardID)
   ctx = context.WithValue(ctx, identifiers.NoteIdentifier, noteID)
 
-  //mockDB.EXPECT().GetVotes(voteFilter).Return([]database.Vote{}, nil)
   if deleteStack {
-    mockDB.EXPECT().GetChildNotes(noteID).Return([]NoteDB{}, nil)
-    //mock.On("GetVotes", voteFilter).Return([]database.Vote{}, nil)
+    mockDB.EXPECT().GetStack(noteID).Return([]NoteDB{}, nil)
   }
   mockDB.EXPECT().DeleteNote(callerID, boardID, noteID, deleteStack).Return(nil)
 
-  err := s.Delete(ctx, body, noteID)
+  err := s.Delete(ctx, body, noteID, votesToDelete)
   assert.NoError(suite.T(), err)
   mockDB.AssertExpectations(suite.T())
 }

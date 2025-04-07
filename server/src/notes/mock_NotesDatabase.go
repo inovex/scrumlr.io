@@ -318,6 +318,62 @@ func (_c *MockNotesDatabase_GetNotes_Call) RunAndReturn(run func(board uuid.UUID
 	return _c
 }
 
+// GetStack provides a mock function for the type MockNotesDatabase
+func (_mock *MockNotesDatabase) GetStack(note uuid.UUID) ([]NoteDB, error) {
+	ret := _mock.Called(note)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetStack")
+	}
+
+	var r0 []NoteDB
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]NoteDB, error)); ok {
+		return returnFunc(note)
+	}
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) []NoteDB); ok {
+		r0 = returnFunc(note)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]NoteDB)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
+		r1 = returnFunc(note)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockNotesDatabase_GetStack_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetStack'
+type MockNotesDatabase_GetStack_Call struct {
+	*mock.Call
+}
+
+// GetStack is a helper method to define mock.On call
+//   - note
+func (_e *MockNotesDatabase_Expecter) GetStack(note interface{}) *MockNotesDatabase_GetStack_Call {
+	return &MockNotesDatabase_GetStack_Call{Call: _e.mock.On("GetStack", note)}
+}
+
+func (_c *MockNotesDatabase_GetStack_Call) Run(run func(note uuid.UUID)) *MockNotesDatabase_GetStack_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockNotesDatabase_GetStack_Call) Return(noteDBs []NoteDB, err error) *MockNotesDatabase_GetStack_Call {
+	_c.Call.Return(noteDBs, err)
+	return _c
+}
+
+func (_c *MockNotesDatabase_GetStack_Call) RunAndReturn(run func(note uuid.UUID) ([]NoteDB, error)) *MockNotesDatabase_GetStack_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // ImportNote provides a mock function for the type MockNotesDatabase
 func (_mock *MockNotesDatabase) ImportNote(insert NoteImportDB) (NoteDB, error) {
 	ret := _mock.Called(insert)

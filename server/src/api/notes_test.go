@@ -13,6 +13,7 @@ import (
   "net/http/httptest"
   "scrumlr.io/server/common"
   "scrumlr.io/server/common/dto"
+  "scrumlr.io/server/common/filter"
   "scrumlr.io/server/identifiers"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/mocks/services"
@@ -44,7 +45,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
   for _, tt := range testParameterBundles {
     suite.Run(tt.name, func() {
       s := new(Server)
-      noteMock := services.NewMockNotes(suite.T())
+      noteMock := notes.NewMockNotesService(suite.T())
       testText := "asdf"
 
       boardId, _ := uuid.NewRandom()
@@ -61,7 +62,7 @@ func (suite *NotesTestSuite) TestCreateNote() {
       req.AddToContext(identifiers.BoardIdentifier, boardId).
         AddToContext(identifiers.UserIdentifier, userId)
 
-      noteMock.EXPECT().Create(req.req.Context(), dto.NoteCreateRequest{
+      noteMock.EXPECT().Create(req.req.Context(), notes.NoteCreateRequest{
         Board:  boardId,
         User:   userId,
         Text:   testText,
@@ -94,7 +95,7 @@ func (suite *NotesTestSuite) TestGetNote() {
   for _, tt := range testParameterBundles {
     suite.Run(tt.name, func() {
       s := new(Server)
-      noteMock := services.NewMockNotes(suite.T())
+      noteMock := notes.NewMockNotesService(suite.T())
       s.notes = noteMock
 
       noteID, _ := uuid.NewRandom()
@@ -143,10 +144,10 @@ func (suite *NotesTestSuite) TestDeleteNote() {
     suite.Run(tt.name, func() {
       s := new(Server)
 
-      noteMock := services.NewMockNotes(suite.T())
+      noteMock := notes.NewMockNotesService(suite.T())
       boardMock := services.NewMockBoards(suite.T())
       sessionMock := services.NewMockBoardSessions(suite.T())
-
+      voteMock := services.NewMockVotings(suite.T())
       s.notes = noteMock
       s.boards = boardMock
       s.sessions = sessionMock
@@ -154,6 +155,16 @@ func (suite *NotesTestSuite) TestDeleteNote() {
       boardID, _ := uuid.NewRandom()
       userID, _ := uuid.NewRandom()
       noteID, _ := uuid.NewRandom()
+
+      notesToDelete := []*notes.Note{
+        {
+          ID:       uuid.UUID{},
+          Author:   uuid.UUID{},
+          Text:     "",
+          Edited:   false,
+          Position: notes.NotePosition{},
+        },
+      }
 
       r := chi.NewRouter()
       s.initNoteResources(r)
@@ -179,10 +190,23 @@ func (suite *NotesTestSuite) TestDeleteNote() {
       // Mock the ParticipantBanned method
       sessionMock.EXPECT().ParticipantBanned(req.req.Context(), boardID, userID).Return(false, nil)
 
+      noteMock.EXPECT().GetStack(mock.Anything, noteID).Return(notesToDelete, nil)
+
+      votesToDelete := []*dto.Vote{{
+        Voting: uuid.UUID{},
+        Note:   noteID,
+        User:   uuid.UUID{},
+      }}
+
+      for _, note := range notesToDelete {
+        voteMock.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardID, Note: &note.ID}).Return(votesToDelete, nil)
+
+      }
+
       if tt.isLocked {
-        noteMock.EXPECT().Delete(mock.Anything, dto.NoteDeleteRequest{DeleteStack: false}, noteID).Return(nil)
+        noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID, votesToDelete).Return(nil)
       } else {
-        noteMock.EXPECT().Delete(mock.Anything, dto.NoteDeleteRequest{DeleteStack: false}, noteID).Return(tt.err)
+        noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID, votesToDelete).Return(tt.err)
       }
 
       rr := httptest.NewRecorder()
@@ -209,7 +233,7 @@ func (suite *NotesTestSuite) TestEditNote() {
   for _, tt := range testParameterBundles {
     suite.Run(tt.name, func() {
       s := new(Server)
-      noteMock := services.NewMockNotes(suite.T())
+      noteMock := notes.NewMockNotesService(suite.T())
       updatedText := "This note has been edited"
 
       boardId, _ := uuid.NewRandom()
@@ -223,7 +247,7 @@ func (suite *NotesTestSuite) TestEditNote() {
       req.AddToContext(identifiers.BoardIdentifier, boardId).
         AddToContext(identifiers.NoteIdentifier, noteId)
 
-      noteMock.EXPECT().Update(req.req.Context(), dto.NoteUpdateRequest{
+      noteMock.EXPECT().Update(req.req.Context(), notes.NoteUpdateRequest{
         Text:     &updatedText,
         Position: nil,
         Edited:   false,
