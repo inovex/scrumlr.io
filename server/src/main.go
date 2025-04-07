@@ -9,7 +9,7 @@ import (
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/votings"
+
 	"strings"
 
 	"scrumlr.io/server/auth"
@@ -380,18 +380,20 @@ func run(c *cli.Context) error {
 	reactionService := initialize.InitializeReactionService(bun, rt)
 
 	boardService := boards.NewBoardService(dbConnection, rt)
+	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	votingService := votings.NewVotingService(dbConnection, rt)
-	userService := users.NewUserService(dbConnection, rt, sessionService)
-	noteService := notes.NewNoteService(dbConnection, rt)
+	userService := users.NewUserService(dbConnection, rt)
+	noteService := notes.NewNotesService(initialize.InitializeNotesService(bun), rt)
+	reactionService := reactions.NewReactionService(initialize.InitializeReactionService(bun), rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
 	boardTemplateService := board_templates.NewBoardTemplateService(dbConnection)
 
-	s := api.New(
-		basePath,
-		rt,
-		authConfig,
+  s := api.New(
+    basePath,
+    rt,
+    authConfig,
 
 		boardService,
 		votingService,
@@ -399,18 +401,17 @@ func run(c *cli.Context) error {
 		userService,
 		noteService,
 		reactionService,
-		sessionService,
-		sessionRequestService,
+		boardSessionService,
 		healthService,
 		feedbackService,
 		boardReactionService,
 		boardTemplateService,
 
-		c.Bool("verbose"),
-		!c.Bool("disable-check-origin"),
-		c.Bool("disable-anonymous-login"),
-		c.Bool("auth-enable-experimental-file-system-store"),
-	)
+    c.Bool("verbose"),
+    !c.Bool("disable-check-origin"),
+    c.Bool("disable-anonymous-login"),
+    c.Bool("auth-enable-experimental-file-system-store"),
+  )
 
 	port := fmt.Sprintf(":%d", c.Int("port"))
 	logger.Get().Infow("starting server", "base-path", basePath, "port", port)

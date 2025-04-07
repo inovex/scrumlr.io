@@ -22,13 +22,13 @@ func NewNotesDatabase(database *bun.DB) NotesDatabase {
 }
 
 func (d DB) CreateNote(insert NoteInsertDB) (NoteDB, error) {
-  var note NoteDB
-  _, err := d.db.NewInsert().
-    Model(&insert).
-    Value("rank", "coalesce((SELECT COUNT(*) as rank FROM notes WHERE board = ? AND \"column\" = ? AND stack IS NULL), 0)", insert.Board, insert.Column).
-    Returning("*").
-    Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
-  return note, err
+	var note NoteDB
+	_, err := d.db.NewInsert().
+		Model(&insert).
+		Value("rank", "coalesce((SELECT COUNT(*) as rank FROM notes WHERE board = ? AND \"column\" = ? AND stack IS NULL), 0)", insert.Board, insert.Column).
+		Returning("*").
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
+	return note, err
 }
 
 func (d DB) ImportNote(insert NoteImportDB) (NoteDB, error) {
@@ -269,9 +269,9 @@ func (d *DB) updateNoteWithoutStack(update NoteUpdateDB) (NoteDB, error) {
 		query = query.Set("text = ?", &update.Text)
 	}
 
-  var note []NoteDB
-  _, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
-  return note[0], err
+	var note []NoteDB
+	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
+	return note[0], err
 }
 
 func (d *DB) updateNoteWithStack(update NoteUpdateDB) (NoteDB, error) {

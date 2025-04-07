@@ -14,7 +14,6 @@ type Database struct {
 	db          *bun.DB
 	reactionsDb reactions.ReactionDatabase
 	notesDB     notes.NotesDatabase
-	votingsDB   votes.VotingDatabase
 }
 
 type FullBoard struct {
@@ -33,7 +32,6 @@ func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
 	d.reactionsDb = reactions.NewReactionsDatabase(db) //TODO remove
-	d.votingsDB = votes.NewVotingDatabase(db)
 	d.notesDB = notes.NewNotesDatabase(db)
 	return d
 }
