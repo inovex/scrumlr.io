@@ -8,9 +8,9 @@ import (
 type FeedbackType string
 
 const (
-	FeedbackTypeBugReport      FeedbackType = "BUG_REPORT"
-	FeedbackTypeFeatureRequest FeedbackType = "FEATURE_REQUEST"
-	FeedbackTypePraise         FeedbackType = "PRAISE"
+	TypeBugReport      FeedbackType = "BUG_REPORT"
+	TypeFeatureRequest FeedbackType = "FEATURE_REQUEST"
+	TypePraise         FeedbackType = "PRAISE"
 )
 
 type FeedbackRequest struct {
@@ -27,7 +27,7 @@ func (feedbackType *FeedbackType) UnmarshalJSON(b []byte) error {
 
 	unmarshalledFeedbackType := FeedbackType(s)
 	switch unmarshalledFeedbackType {
-	case FeedbackTypePraise, FeedbackTypeBugReport, FeedbackTypeFeatureRequest:
+	case TypePraise, TypeBugReport, TypeFeatureRequest:
 		*feedbackType = unmarshalledFeedbackType
 		return nil
 	}

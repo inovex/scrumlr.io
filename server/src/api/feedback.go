@@ -24,11 +24,11 @@ func (s *Server) createFeedback(w http.ResponseWriter, r *http.Request) {
 		str := "/"
 		body.Text = &str
 	}
-	if body.Type == feedback.FeedbackTypeFeatureRequest && *body.Text == "/" {
+	if body.Type == feedback.TypeFeatureRequest && *body.Text == "/" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	if body.Type == feedback.FeedbackTypeBugReport && *body.Text == "/" {
+	if body.Type == feedback.TypeBugReport && *body.Text == "/" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
