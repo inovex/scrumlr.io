@@ -16,6 +16,13 @@ import (
 	"scrumlr.io/server/sessions"
 )
 
+// TODO: create generic method to initialize services
+func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {
+	reactionsDb := reactions.NewReactionsDatabase(db)
+	reactionService := reactions.NewReactionService(reactionsDb, rt)
+	return reactionService
+}
+
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
 	client := new(http.Client)
 	feedbackService := feedback.NewFeedbackService(client, webhookUrl)
@@ -28,13 +35,6 @@ func InitializeHealthService(db *bun.DB, rt *realtime.Broker) health.HealthServi
 	healthService := health.NewHealthService(healthDb, rt)
 
 	return healthService
-}
-
-func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {
-	reactionsDb := reactions.NewReactionsDatabase(db)
-	reactionService := reactions.NewReactionService(reactionsDb, rt)
-
-	return reactionService
 }
 
 func InitializeSessionService(db *bun.DB, rt *realtime.Broker) sessions.SessionService {
@@ -70,3 +70,5 @@ func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService 
 
 	return notesService
 }
+
+
