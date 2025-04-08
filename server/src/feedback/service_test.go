@@ -23,7 +23,7 @@ func TestCreateFeedback(t *testing.T) {
 	client := server.Client()
 
 	feedbackService := NewFeedbackService(client, server.URL)
-	err := feedbackService.Create(context.Background(), string(FeedbackTypeFeatureRequest), "", "")
+	err := feedbackService.Create(context.Background(), string(FeatureRequest), "", "")
 
 	assert.Nil(t, err)
 }
@@ -42,7 +42,7 @@ func TestCreateFeedbackPostFailed(t *testing.T) {
 	client := server.Client()
 
 	feedbackService := NewFeedbackService(client, "")
-	err := feedbackService.Create(context.Background(), string(FeedbackTypeFeatureRequest), "", "")
+	err := feedbackService.Create(context.Background(), string(FeatureRequest), "", "")
 
 	assert.NotNil(t, err)
 }
