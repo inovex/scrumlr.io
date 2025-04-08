@@ -1,0 +1,166 @@
+@startuml BackendPackages
+
+node "Scrumlr Backend" {
+    node "API" as API{
+    }
+
+    node "Reactions" {
+        component API as ReactionsAPI
+        component Service as ReactionsService
+        component Database as ReactionsDB
+    }
+
+    node "Feedback" {
+        component API as FeedbackAPI
+        component Service as FeedbackService
+    }
+
+    node "Sessions" {
+        component API as SessionAPI
+        component Service as SessionService
+        component Database as SessionDB
+    }
+    
+    node "SessionRequests" {
+        component API as SessionRequestAPI
+        component Service as SessionRequestService
+        component Database as SessionRequestDB
+    }
+
+    node "User" {
+        component API as UserAPI
+        component Service as UserService
+        component Database as UserDB
+    }
+
+    node "Health" {
+        component API as HealthAPI
+        component Service as HealthService
+        component Database as HealthDB
+    }
+
+    node "Note" {
+        component API as NoteAPI
+        component Service as NoteService
+        component Database as NoteDB
+    }
+
+    node "Voting" {
+        component API as VotingAPI
+        component Service as VotingService
+        component Database as VotingDB
+    }
+
+    node "Column" {
+        component API as ColumnAPI
+        component Service as ColumnService
+        component Database as ColumnDB
+    }
+
+    node "Column Template" {
+        component API as ColumnTemplateAPI
+        component Service as ColumnTemplateService
+        component Database as ColumnTemplateDB
+    }
+
+    node "Board" {
+        component API as BoardAPI
+        component Service as BoardService
+        component Database as BoardDB
+    }
+
+    node "Board Template" {
+        component API as BoardTemplateAPI
+        component Service as BoardTemplateService
+        component Database as BoardTemplateDB
+    }
+
+    node "Board Reaction" {
+        component API as BoardReactionAPI
+        component Service as BoardReactionService
+    }
+}
+
+database "SQL Database" as db
+queue "Message Broker" as nats
+
+API --> SessionService
+API --> SessionRequestService
+API --> ReactionsService
+API --> UserService
+API --> FeedbackService
+API --> HealthService
+API --> NoteService
+API --> VotingService
+API --> BoardService
+API --> ColumnService
+API --> ColumnTemplateService
+API --> BoardService
+API --> BoardTemplateService
+API --> BoardReactionService
+
+SessionAPI --> SessionService
+SessionService --> SessionDB
+SessionService --> nats
+SessionDB --> db
+
+SessionRequestAPI --> SessionRequestService
+SessionRequestService --> SessionRequestDB
+SessionRequestService --> SessionService
+SessionRequestService --> nats
+SessionRequestDB --> db
+
+ReactionsAPI --> ReactionsService
+ReactionsService --> ReactionsDB
+ReactionsService --> nats
+ReactionsDB --> db
+
+UserAPI --> UserService
+UserService --> UserDB
+UserService --> nats
+UserDB --> db
+
+FeedbackAPI --> FeedbackService
+
+HealthAPI --> HealthService
+HealthService --> HealthDB
+HealthService --> nats
+HealthDB --> db
+
+NoteAPI --> NoteService
+NoteService --> NoteDB
+NoteService --> nats
+NoteDB --> db
+
+VotingAPI --> VotingService
+VotingService --> VotingDB
+VotingService --> nats
+VotingDB --> db
+
+ColumnAPI --> ColumnService
+ColumnService --> ColumnDB
+ColumnService --> NoteService
+ColumnService --> VotingService
+ColumnService --> nats
+ColumnDB --> db
+
+ColumnTemplateAPI --> ColumnTemplateService
+ColumnTemplateService --> ColumnTemplateDB
+ColumnTemplateDB --> db
+
+BoardAPI --> BoardService
+BoardService --> BoardDB
+BoardService --> ColumnService
+BoardService --> NoteService
+BoardService --> SessionService
+BoardService --> nats
+BoardDB --> db
+
+BoardTemplateAPI --> BoardTemplateService
+BoardTemplateService --> BoardTemplateDB
+BoardTemplateDB --> db
+
+BoardReactionAPI --> BoardReactionService
+BoardReactionService --> nats
+
+@enduml
