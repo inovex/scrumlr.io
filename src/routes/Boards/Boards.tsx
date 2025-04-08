@@ -73,7 +73,7 @@ export const Boards = () => {
         {showMobileSearchBar && <SearchBar className="boards__mobile-search-bar" value={searchBarInput} handleValueChange={setSearchBarInput} />}
 
         <main className="boards__outlet">
-          <Outlet />
+          <Outlet context={searchBarInput} />
         </main>
       </div>
     </div>

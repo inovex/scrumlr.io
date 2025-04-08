@@ -7,7 +7,7 @@ import {Visible, Hidden, Duplicate, Refresh} from "components/Icon";
 import {TextInputAdornment} from "components/TextInputAdornment";
 import {TextInputLabel} from "../TextInputLabel";
 import {TextInput} from "../TextInput";
-import {Button} from "../Button";
+import {LegacyButton} from "../Button";
 import {ValidationError} from "../ValidationError";
 import {TextInputAction} from "../TextInputAction";
 
@@ -76,23 +76,27 @@ export const AccessPolicySelection: FC<AccessPolicySelectionProps> = ({accessPol
       <h2 className="access-policy-selection__title">{t("AccessPolicySelection.title")}</h2>
 
       <div className="access-policy-selection__tabs">
-        <Button className="access-policy-selection__access-policy" variant={accessPolicy === "PUBLIC" ? "contained" : "outlined"} onClick={() => onAccessPolicyChange("PUBLIC")}>
+        <LegacyButton
+          className="access-policy-selection__access-policy"
+          variant={accessPolicy === "PUBLIC" ? "contained" : "outlined"}
+          onClick={() => onAccessPolicyChange("PUBLIC")}
+        >
           {t("AccessPolicySelection.publicTitle")}
-        </Button>
-        <Button
+        </LegacyButton>
+        <LegacyButton
           className="access-policy-selection__access-policy"
           variant={accessPolicy === "BY_PASSPHRASE" ? "contained" : "outlined"}
           onClick={() => onAccessPolicyChange("BY_PASSPHRASE")}
         >
           {t("AccessPolicySelection.byPassphraseTitle")}
-        </Button>
-        <Button
+        </LegacyButton>
+        <LegacyButton
           className="access-policy-selection__access-policy"
           variant={accessPolicy === "BY_INVITE" ? "contained" : "outlined"}
           onClick={() => onAccessPolicyChange("BY_INVITE")}
         >
           {t("AccessPolicySelection.manualVerificationTitle")}
-        </Button>
+        </LegacyButton>
       </div>
 
       <div className="access-policy__details">

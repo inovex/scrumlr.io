@@ -7,7 +7,7 @@ import {ArrowRight, Logout} from "components/Icon";
 import {Link, useHref} from "react-router";
 import {AppInfo} from "components/AppInfo";
 import {HeroIllustration} from "components/HeroIllustration";
-import {Button} from "components/Button";
+import {LegacyButton} from "components/Button";
 import {useAppDispatch, useAppSelector} from "store";
 import {Toast} from "utils/Toast";
 import {useEffect} from "react";
@@ -51,21 +51,21 @@ export const Homepage = withTranslation()(() => {
 
           <ul className="homepage__settings">
             <li>
-              <Button leftIcon={<German />} className="homepage__language" hideLabel onClick={changeLanguage("de")}>
+              <LegacyButton leftIcon={<German />} className="homepage__language" hideLabel onClick={changeLanguage("de")}>
                 Deutsch
-              </Button>
+              </LegacyButton>
             </li>
             <li>
-              <Button leftIcon={<English />} className="homepage__language" hideLabel onClick={changeLanguage("en")}>
+              <LegacyButton leftIcon={<English />} className="homepage__language" hideLabel onClick={changeLanguage("en")}>
                 English
-              </Button>
+              </LegacyButton>
             </li>
 
             {!!user && (
               <li>
-                <Button variant="text-link" onClick={onLogout} leftIcon={<Logout className="homepage__logout-button-icon" />} className="homepage__logout-button">
+                <LegacyButton variant="text-link" onClick={onLogout} leftIcon={<Logout className="homepage__logout-button-icon" />} className="homepage__logout-button">
                   Logout
-                </Button>
+                </LegacyButton>
               </li>
             )}
           </ul>
@@ -84,9 +84,9 @@ export const Homepage = withTranslation()(() => {
                 <Trans i18nKey="Homepage.teaserText" />
               </p>
 
-              <Button href={newHref} color="primary" className="homepage__start-button" rightIcon={<ArrowRight className="homepage__proceed-icon" />}>
+              <LegacyButton href={newHref} color="primary" className="homepage__start-button" rightIcon={<ArrowRight className="homepage__proceed-icon" />}>
                 <Trans i18nKey="Homepage.startButton" />
-              </Button>
+              </LegacyButton>
             </main>
 
             <HeroIllustration className="homepage__illustration" />

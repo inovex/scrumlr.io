@@ -1,78 +1,78 @@
 import {Color} from "constants/colors";
 
-export const legacyColumnTemplates: {[id: string]: {name: string; description?: string; columns: {name: string; hidden: boolean; color: Color}[]}} = {
+export const legacyColumnTemplates: {[id: string]: {name: string; description?: string; columns: {name: string; visible: boolean; color: Color}[]}} = {
   leanCoffee: {
     name: "Lean Coffee",
     columns: [
-      {name: "Lean Coffee", hidden: false, color: "backlog-blue"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
+      {name: "Lean Coffee", visible: true, color: "backlog-blue"},
+      {name: "Actions", visible: false, color: "planning-pink"},
     ],
   },
   positiveNegative: {
     name: "Positive/Negative",
     columns: [
-      {name: "Positive", hidden: false, color: "backlog-blue"},
-      {name: "Negative", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
+      {name: "Positive", visible: true, color: "backlog-blue"},
+      {name: "Negative", visible: true, color: "poker-purple"},
+      {name: "Actions", visible: false, color: "planning-pink"},
     ],
   },
   startStopContinue: {
     name: "Start/Stop/Continue",
     columns: [
-      {name: "Start", hidden: false, color: "backlog-blue"},
-      {name: "Stop", hidden: false, color: "goal-green"},
-      {name: "Continue", hidden: false, color: "online-orange"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
+      {name: "Start", visible: true, color: "backlog-blue"},
+      {name: "Stop", visible: true, color: "goal-green"},
+      {name: "Continue", visible: true, color: "online-orange"},
+      {name: "Actions", visible: false, color: "planning-pink"},
     ],
   },
   madSadGlad: {
     name: "Mad/Sad/Glad",
     columns: [
-      {name: "Mad", hidden: false, color: "backlog-blue"},
-      {name: "Sad", hidden: false, color: "online-orange"},
-      {name: "Glad", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
+      {name: "Mad", visible: true, color: "backlog-blue"},
+      {name: "Sad", visible: true, color: "online-orange"},
+      {name: "Glad", visible: true, color: "poker-purple"},
+      {name: "Actions", visible: false, color: "planning-pink"},
     ],
   },
   plusDelta: {
     name: "Plus/Delta",
     columns: [
-      {name: "Plus", hidden: false, color: "backlog-blue"},
-      {name: "Delta", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
+      {name: "Plus", visible: true, color: "backlog-blue"},
+      {name: "Delta", visible: true, color: "poker-purple"},
+      {name: "Actions", visible: false, color: "planning-pink"},
     ],
   },
   kalm: {
     name: "KALM",
     description: "Keep, Add, Less, More",
     columns: [
-      {name: "Keep", hidden: false, color: "backlog-blue"},
-      {name: "Add", hidden: false, color: "yielding-yellow"},
-      {name: "Less", hidden: false, color: "goal-green"},
-      {name: "More", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
+      {name: "Keep", visible: true, color: "backlog-blue"},
+      {name: "Add", visible: true, color: "yielding-yellow"},
+      {name: "Less", visible: true, color: "goal-green"},
+      {name: "More", visible: true, color: "poker-purple"},
+      {name: "Actions", visible: false, color: "planning-pink"},
     ],
   },
   fourL: {
     name: "4L",
     description: "Liked, Learned, Lacked, Longed for",
     columns: [
-      {name: "Liked", hidden: false, color: "backlog-blue"},
-      {name: "Learned", hidden: false, color: "yielding-yellow"},
-      {name: "Lacked", hidden: false, color: "value-violet"},
-      {name: "Longed for", hidden: false, color: "poker-purple"},
-      {name: "Actions", hidden: true, color: "planning-pink"},
+      {name: "Liked", visible: true, color: "backlog-blue"},
+      {name: "Learned", visible: true, color: "yielding-yellow"},
+      {name: "Lacked", visible: true, color: "value-violet"},
+      {name: "Longed for", visible: true, color: "poker-purple"},
+      {name: "Actions", visible: false, color: "planning-pink"},
     ],
   },
   swot: {
     name: "SWOT",
     description: "Strengths, Weaknesses, Opportunities, Threats",
     columns: [
-      {name: "Strengths", hidden: false, color: "backlog-blue"},
-      {name: "Weaknesses", hidden: false, color: "online-orange"},
-      {name: "Opportunities", hidden: false, color: "goal-green"},
-      {name: "Threats", hidden: false, color: "yielding-yellow"},
-      {name: "Actions", hidden: true, color: "poker-purple"},
+      {name: "Strengths", visible: true, color: "backlog-blue"},
+      {name: "Weaknesses", visible: true, color: "online-orange"},
+      {name: "Opportunities", visible: true, color: "goal-green"},
+      {name: "Threats", visible: true, color: "yielding-yellow"},
+      {name: "Actions", visible: false, color: "poker-purple"},
     ],
   },
 };
