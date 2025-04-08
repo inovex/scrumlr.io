@@ -5,18 +5,22 @@ import (
 	"github.com/uptrace/bun"
 
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 )
 
 // Database is the main class within this package and will be extended by several receiver functions
 type Database struct {
-	db          *bun.DB
-	reactionsDb reactions.ReactionDatabase
+	db               *bun.DB
+	reactionsDb      reactions.ReactionDatabase
+	sessionDb        sessions.SessionDatabase
+	sessionRequestDb sessionrequests.SessionRequestDatabase
 }
 
 type FullBoard struct {
 	Board                Board
-	BoardSessions        []BoardSession
-	BoardSessionRequests []BoardSessionRequest
+	BoardSessions        []sessions.DatabaseBoardSession
+	BoardSessionRequests []sessionrequests.DatabaseBoardSessionRequest
 	Columns              []Column
 	Notes                []Note
 	Reactions            []reactions.DatabaseReaction
@@ -28,7 +32,11 @@ type FullBoard struct {
 func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
-	d.reactionsDb = reactions.NewReactionsDatabase(db) //TODO remove
+	// TODO Remove these databases.
+	// These need to exists for now because we still need full access to all tables
+	d.reactionsDb = reactions.NewReactionsDatabase(db)
+	d.sessionDb = sessions.NewSessionDatabase(db)
+	d.sessionRequestDb = sessionrequests.NewSessionRequestDatabase(db)
 
 	return d
 }
@@ -36,8 +44,8 @@ func New(db *bun.DB) *Database {
 func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 	var (
 		board     Board
-		sessions  []BoardSession
-		requests  []BoardSessionRequest
+		sessions  []sessions.DatabaseBoardSession
+		requests  []sessionrequests.DatabaseBoardSessionRequest
 		columns   []Column
 		notes     []Note
 		reactions []reactions.DatabaseReaction
@@ -64,9 +72,9 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getBoard:
 			board, err = d.GetBoard(id)
 		case getRequests:
-			requests, err = d.GetBoardSessionRequests(id)
+			requests, err = d.sessionRequestDb.Gets(id)
 		case getSessions:
-			sessions, err = d.GetBoardSessions(id)
+			sessions, err = d.sessionDb.Gets(id)
 		case getColumns:
 			columns, err = d.GetColumns(id)
 		case getNotes:

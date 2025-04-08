@@ -1,13 +1,14 @@
-package types
+package sessions
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSessionRoleEnum(t *testing.T) {
-	values := []SessionRole{SessionRoleParticipant, SessionRoleModerator, SessionRoleOwner}
+	values := []SessionRole{ParticipantRole, ModeratorRole, OwnerRole}
 	for _, value := range values {
 		var sessionRole SessionRole
 		err := sessionRole.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))

@@ -1,10 +1,8 @@
-package filter
-
-import "scrumlr.io/server/database/types"
+package sessions
 
 type BoardSessionFilter struct {
 	Connected  *bool
 	Ready      *bool
 	RaisedHand *bool
-	Role       *types.SessionRole
+	Role       *SessionRole
 }
