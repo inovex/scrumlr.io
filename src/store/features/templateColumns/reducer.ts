@@ -2,7 +2,6 @@ import {createReducer} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
 import {TemplateColumnsState} from "./types";
 import {deleteTemplate, getTemplates} from "../templates";
-// import {addTemplateColumnOptimistically, deleteTemplateColumnOptimistically, editTemplateColumnOptimistically, moveTemplateColumnOptimistically} from "./actions";
 import {createTemplateColumn, deleteTemplateColumn, editTemplateColumn, getTemplateColumns} from "./thunks";
 
 const initialState: TemplateColumnsState = [...DEFAULT_TEMPLATE.columns];

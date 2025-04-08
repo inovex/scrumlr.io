@@ -9,12 +9,6 @@ export const getTemplates = createAsyncThunk<TemplateWithColumns[], void, {state
   return templates;
 });
 
-export const getTemplate = createAsyncThunk<Template, string, {state: ApplicationState}>("templates/getTemplate", async (payload, {dispatch}) => {
-  const template = await API.getTemplate(payload);
-  // dispatch(getTemplateColumns(payload)) // TODO dispatch automatically or manually?
-  return template;
-});
-
 export const createTemplateWithColumns = createAsyncThunk<Template, TemplateWithColumns, {state: ApplicationState}>(
   "templates/createTemplateWithColumns",
   async (payload, {dispatch}) => {
