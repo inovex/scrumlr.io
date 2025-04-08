@@ -26,7 +26,19 @@ import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
 import {TemplateEditor} from "./Boards/TemplateEditor/TemplateEditor";
 import {VerifiedAccountGuard} from "./Guards/VerifiedAccountGuard";
 
-const renderLegacyRoute = (legacy: boolean) => (legacy ? <Route path="/new" element={<LegacyNewBoard />} /> : <Route path="/new" element={<Navigate to="/boards" />} />);
+const renderLegacyRoute = (legacy: boolean) =>
+  legacy ? (
+    <Route
+      path="/new"
+      element={
+        <RequireAuthentication>
+          <LegacyNewBoard />
+        </RequireAuthentication>
+      }
+    />
+  ) : (
+    <Route path="/new" element={<Navigate to="/boards" />} />
+  );
 
 const Router = () => {
   const legacyCreateBoard = !!useAppSelector((state) => state.view.legacyCreateBoard);

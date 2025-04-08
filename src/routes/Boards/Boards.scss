@@ -12,7 +12,7 @@ $side-padding--desktop: 14vw;
 .boards__grid {
   display: grid;
 
-  grid-template-columns: $side-padding--desktop 114px 1fr auto $side-padding--desktop;
+  grid-template-columns: $side-padding--desktop auto 1fr auto $side-padding--desktop;
   grid-template-rows: $spacing--lg 56px 48px 1fr $spacing--lg;
   grid-template-areas:
     ".  .      .      .     ."
@@ -103,6 +103,8 @@ $side-padding--desktop: 14vw;
   display: flex;
   justify-content: stretch;
 
+  margin-top: $spacing--xl;
+
   overflow-y: hidden;
 
   &--extended-top {
@@ -124,16 +126,27 @@ $side-padding--desktop: 14vw;
 
 @media (max-width: $breakpoint--desktop) {
   .boards__grid {
-    &--with-view-options {
-      grid-template-columns: $spacing--2xl auto auto $spacing--base 1fr auto auto $spacing--2xl;
-      grid-template-areas:
-        ".  .       .       .       .       .       .       ."
-        ".  logo    title   title   title   title   user    ."
-        ".  .       title   title   title   title   .       ."
-        ".  switch  switch  .       search  search  search  ."
-        ".  main    main    main    main    main    main    ."
-        ".  .       .       .       .       .       .       .";
-    }
+    grid-template-columns: $spacing--2xl auto auto $spacing--base 1fr auto auto $spacing--2xl;
+    grid-template-areas:
+      ".  .    .       .       .       .       .      ."
+      ".  logo title   title   title   title   user   ."
+      ".  .    title   title   title   title   .      ."
+      ".  switch    switch  .       search  search  search      ."
+      ".  main    main    main    main    main    main      ."
+      ".  .    .       .       .       .       .      .";
+  }
+}
+
+@media (max-width: $breakpoint--desktop) {
+  .boards__grid {
+    grid-template-columns: $spacing--2xl auto auto $spacing--base 1fr auto auto $spacing--2xl;
+    grid-template-areas:
+      ".  .    .       .       .       .       .      ."
+      ".  logo title   title   title   title   user   ."
+      ".  .    title   title   title   title   .      ."
+      ".  switch    switch  .       search  search  search      ."
+      ".  main    main    main    main    main    main      ."
+      ".  .    .       .       .       .       .      .";
   }
 }
 
