@@ -1,8 +1,11 @@
-package notes
+package database
 
 import (
 	"context"
 	"errors"
+	"scrumlr.io/server/identifiers"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
@@ -15,10 +18,10 @@ type DB struct {
 	db *bun.DB
 }
 
-func NewNotesDatabase(database *bun.DB) NotesDatabase {
-	db := new(DB)
-	db.db = database
-	return db
+type NoteUpdatePosition struct {
+	Column uuid.UUID
+	Rank   int
+	Stack  uuid.NullUUID
 }
 
 func (d *DB) CreateNote(insert NoteInsertDB) (NoteDB, error) {
@@ -224,7 +227,7 @@ func (d *DB) updateNoteText(update NoteUpdateDB) (NoteDB, error) {
 	return note, nil
 }
 
-func (d *DB) updateNoteWithoutStack(update NoteUpdateDB) (NoteDB, error) {
+func (d *Database) updateNoteWithoutStack(update NoteUpdate) (Note, error) {
 	newRank := update.Position.Rank
 	if update.Position.Rank < 0 {
 		newRank = 0
