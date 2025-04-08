@@ -29,6 +29,7 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
       className={classNames("dropdown__option", {"dropdown__option--active": active})}
       key={String(option.key)}
       role="button"
+      tabIndex={0} // TODO check sonarQ when we use this
       onClick={active ? props.onToggleMenu : () => props.onSelect(option.key)}
     >
       <div className="dropdown__option-icon">{option.icon}</div>
