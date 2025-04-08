@@ -11,6 +11,7 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
 
+	"github.com/gorilla/websocket"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
@@ -367,6 +368,11 @@ func run(c *cli.Context) error {
 	bun := initialize.InitializeBun(db, c.Bool("verbose"))
 	dbConnection := database.New(bun)
 
+	websocketUpgrader := websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}
+
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
 	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
@@ -374,12 +380,15 @@ func run(c *cli.Context) error {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
 
-	boardService := boards.NewBoardService(dbConnection, rt)
-	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
-	votingService := votings.NewVotingService(dbConnection, rt)
-	userService := users.NewUserService(dbConnection, rt)
-	noteService := notes.NewNoteService(dbConnection, rt)
+	sessionService := initialize.InitializeSessionService(bun, rt)
+	websocket := initialize.InitializeWebsocket(websocketUpgrader, rt)
+	sessionRequestService := initialize.InitializeSessionRequestService(bun, rt, websocket, sessionService)
 	reactionService := initialize.InitializeReactionService(bun, rt)
+
+	boardService := boards.NewBoardService(dbConnection, rt)
+	votingService := votings.NewVotingService(dbConnection, rt)
+	userService := users.NewUserService(dbConnection, rt, sessionService)
+	noteService := notes.NewNoteService(dbConnection, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
@@ -395,7 +404,8 @@ func run(c *cli.Context) error {
 		userService,
 		noteService,
 		reactionService,
-		boardSessionService,
+		sessionService,
+		sessionRequestService,
 		healthService,
 		feedbackService,
 		boardReactionService,
