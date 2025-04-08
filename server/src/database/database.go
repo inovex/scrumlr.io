@@ -18,6 +18,8 @@ type Database struct {
 	sessionRequestDb sessionrequests.SessionRequestDatabase
 	votingDB         voting.VotingDatabase
 	notesDB          notes.NotesDatabase
+	sessionDb        sessions.SessionDatabase
+	sessionRequestDb sessionrequests.SessionRequestDatabase
 }
 
 type FullBoard struct {

@@ -3,12 +3,12 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/notes"
+
+  "github.com/go-chi/chi/v5"
 	"scrumlr.io/server/services/users"
+  "scrumlr.io/server/notes"
 	"scrumlr.io/server/voting"
 	"time"
-
-	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/markbates/goth/gothic"
 
@@ -66,7 +66,7 @@ func New(
 	auth auth.Auth,
 
 	boards services.Boards,
-	votings voting.VotingService,
+	votings services.Votings,
 	users users.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
