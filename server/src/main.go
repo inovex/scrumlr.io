@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/http"
 	"os"
@@ -12,6 +11,7 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
 
+	"github.com/gorilla/websocket"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
@@ -21,7 +21,6 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
-	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
 )
 
