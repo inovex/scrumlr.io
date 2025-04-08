@@ -4,11 +4,9 @@ import (
 	"context"
 
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/votes"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/common/filter"
 )
 
 type Boards interface {

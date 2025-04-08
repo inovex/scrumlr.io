@@ -12,6 +12,7 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
 
+	"github.com/gorilla/websocket"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
@@ -382,6 +383,7 @@ func run(c *cli.Context) error {
 	votingService := initialize.InitializeVotingService(bun, rt)
 	userService := users.NewUserService(dbConnection, rt, sessionService)
 	noteService := initialize.InitializeNotesService(bun, rt)
+	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)

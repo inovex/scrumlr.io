@@ -3,7 +3,6 @@ package database
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/voting"
 	"scrumlr.io/server/notes"
 
 	"scrumlr.io/server/reactions"
@@ -19,6 +18,8 @@ type Database struct {
 	sessionRequestDb sessionrequests.SessionRequestDatabase
 	votingDB         voting.VotingDatabase
 	notesDB          notes.NotesDatabase
+	sessionDb        sessions.SessionDatabase
+	sessionRequestDb sessionrequests.SessionRequestDatabase
 }
 
 type FullBoard struct {
@@ -37,11 +38,12 @@ func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
 	// TODO Remove these databases.
-  // These need to exists for now because we still need full access to all tables
+	// These need to exists for now because we still need full access to all tables
 	d.reactionsDb = reactions.NewReactionsDatabase(db)
 	d.sessionDb = sessions.NewSessionDatabase(db)
 	d.sessionRequestDb = sessionrequests.NewSessionRequestDatabase(db)
-	d.votingDB = voting.NewVotingDatabase(db)
+  d.notesDB = notes.NewNotesDatabase(db)
+  d.votingDB = voting.NewVotingDatabase(db)
 	return d
 }
 
