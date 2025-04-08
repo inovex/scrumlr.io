@@ -8,14 +8,13 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/session_helper"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votes"
 )
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
-	isMod := session_helper.CheckSessionRole(userID, bs.boardParticipants, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
@@ -161,7 +160,7 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	isMod := session_helper.CheckSessionRole(clientID, event.Data.BoardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(clientID, event.Data.BoardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {

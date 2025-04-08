@@ -11,7 +11,6 @@ import (
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/session_helper"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
@@ -223,7 +222,7 @@ func testParticipantUpdatedShouldHandleError(t *testing.T) {
 }
 
 func testIsModModerator(t *testing.T) {
-	isMod := session_helper.CheckSessionRole(moderatorBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(moderatorBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
@@ -231,7 +230,7 @@ func testIsModModerator(t *testing.T) {
 }
 
 func testIsOwnerModerator(t *testing.T) {
-	isMod := session_helper.CheckSessionRole(ownerBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(ownerBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
@@ -239,14 +238,14 @@ func testIsOwnerModerator(t *testing.T) {
 }
 
 func testIsParticipantModerator(t *testing.T) {
-	isMod := session_helper.CheckSessionRole(participantBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(participantBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
 }
 
 func testIsUnknownUuidModerator(t *testing.T) {
-	isMod := session_helper.CheckSessionRole(uuid.New(), boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(uuid.New(), boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
