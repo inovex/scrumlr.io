@@ -106,7 +106,7 @@ func New(
 		basePath:                         basePath,
 		realtime:                         rt,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
-		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
+		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
 		votings:                          votings,
@@ -114,7 +114,6 @@ func New(
 		notes:                            notes,
 		reactions:                        reactions,
 		sessions:                         sessions,
-		sessionRequests:                  sessionRequests,
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
@@ -257,7 +256,6 @@ func (s *Server) initVotingResources(r chi.Router) {
 		r.Route("/{voting}", func(r chi.Router) {
 			r.Use(s.VotingContext)
 			r.With(s.BoardParticipantContext).Get("/", s.getVoting)
-			// gets called when ending a voting
 			r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
 		})
 	})

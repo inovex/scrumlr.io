@@ -11,10 +11,7 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/votes"
-
 	"scrumlr.io/server/identifiers"
-
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -210,7 +207,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == types.AccessPolicyByInvite {
-		sessionExists, err := s.sessionRequests.Exists(r.Context(), board, user)
+		sessionExists, err := s.sessions.SessionRequestExists(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
 			return

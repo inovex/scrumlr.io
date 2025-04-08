@@ -55,6 +55,8 @@ func testMainWithDefer(m *testing.M) int {
 	sessionDb = sessions.NewSessionDatabase(bun)
 	sessionRequestDb = sessionrequests.NewSessionRequestDatabase(bun)
 	notesDB = notes.NewNotesDatabase(bun)
+	sessionDb = sessions.NewSessionDatabase(bun)
+	sessionRequestDb = sessionrequests.NewSessionRequestDatabase(bun)
 	err = loadTestdata()
 	if err != nil {
 		println(fmt.Sprintf("unable to load testdata: %s", err))

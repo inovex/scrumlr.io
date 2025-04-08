@@ -3,7 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
-	"log"
+  "github.com/gorilla/websocket"
+  "log"
 	"net/http"
 	"os"
 	"strings"
@@ -11,7 +12,6 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
 
-	"github.com/gorilla/websocket"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
@@ -24,6 +24,7 @@ import (
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
+	"scrumlr.io/server/services/votings"
 )
 
 func main() {

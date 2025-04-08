@@ -6,7 +6,6 @@ import (
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votes"
 
 	"github.com/google/uuid"
