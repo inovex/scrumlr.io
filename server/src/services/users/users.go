@@ -8,6 +8,7 @@ import (
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 
@@ -16,14 +17,16 @@ import (
 )
 
 type UserService struct {
-	database *database.Database
-	realtime *realtime.Broker
+	database       *database.Database
+	sessionService sessions.SessionService
+	realtime       *realtime.Broker
 }
 
-func NewUserService(db *database.Database, rt *realtime.Broker) services.Users {
+func NewUserService(db *database.Database, rt *realtime.Broker, sessionService sessions.SessionService) services.Users {
 	b := new(UserService)
 	b.database = db
 	b.realtime = rt
+	b.sessionService = sessionService
 	return b
 }
 
@@ -89,24 +92,24 @@ func (s *UserService) Update(ctx context.Context, body dto.UserUpdateRequest) (*
 		log.Errorw("unable to update user", "user", body.ID, "err", err)
 		return nil, err
 	}
-	s.UpdatedUser(user)
+	s.UpdatedUser(ctx, user)
 	return new(dto.User).From(user), err
 }
 
-func (s *UserService) UpdatedUser(user database.User) {
+func (s *UserService) UpdatedUser(ctx context.Context, user database.User) {
 
-	connectedBoards, err := s.database.GetSingleUserConnectedBoards(user.ID)
+	connectedBoards, err := s.sessionService.GetUserConnectedBoards(ctx, user.ID)
 	if err != nil {
 		return
 	}
 	for _, session := range connectedBoards {
-		userSession, err := s.database.GetBoardSession(session.Board, session.User)
+		userSession, err := s.sessionService.Get(ctx, session.Board, session.User.ID)
 		if err != nil {
-			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID(), "err", err)
+			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID, "err", err)
 		}
 		_ = s.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
 			Type: realtime.BoardEventParticipantUpdated,
-			Data: new(dto.BoardSession).From(session),
+			Data: session,
 		})
 	}
 }

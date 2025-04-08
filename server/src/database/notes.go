@@ -3,13 +3,14 @@ package database
 import (
 	"context"
 	"errors"
-	"scrumlr.io/server/identifiers"
 	"time"
+
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
 )
 
 type Note struct {
@@ -103,12 +104,12 @@ func (d *Database) GetChildNotes(parentNote uuid.UUID) ([]Note, error) {
 
 func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error) {
 	boardSelect := d.db.NewSelect().Model((*Board)(nil)).Column("allow_stacking").Where("id = ?", update.Board)
-	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", update.Board)
+	sessionSelect := d.db.NewSelect().Model((*sessions.DatabaseBoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", update.Board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", update.ID).Where("board = ?", update.Board)
 
 	var precondition struct {
 		StackingAllowed bool
-		CallerRole      types.SessionRole
+		CallerRole      sessions.SessionRole
 		Author          uuid.UUID
 	}
 	err := d.db.NewSelect().
@@ -122,13 +123,13 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 
 	var note Note
 	if update.Text != nil && update.Position == nil {
-		if caller == precondition.Author || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
+		if caller == precondition.Author || precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole {
 			note, err = d.updateNoteText(update)
 		} else {
 			err = errors.New("not permitted to change text of note")
 		}
 	} else if update.Position != nil {
-		if update.Text != nil && (caller != precondition.Author || precondition.CallerRole == types.SessionRoleParticipant) {
+		if update.Text != nil && (caller != precondition.Author || precondition.CallerRole == sessions.ParticipantRole) {
 			return Note{}, errors.New("not permitted to change text of note")
 		}
 
@@ -136,7 +137,7 @@ func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error)
 			return Note{}, errors.New("stacking on self is not allowed")
 		}
 
-		if precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner || precondition.StackingAllowed {
+		if precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole || precondition.StackingAllowed {
 			if !update.Position.Stack.Valid {
 				note, err = d.updateNoteWithoutStack(update)
 			} else {
@@ -332,12 +333,12 @@ func (d *Database) updateNoteWithStack(update NoteUpdate) (Note, error) {
 }
 
 func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
-	sessionSelect := d.db.NewSelect().Model((*BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
+	sessionSelect := d.db.NewSelect().Model((*sessions.DatabaseBoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
 
 	var precondition struct {
 		StackingAllowed bool
-		CallerRole      types.SessionRole
+		CallerRole      sessions.SessionRole
 		Author          uuid.UUID
 	}
 	err := d.db.NewSelect().
@@ -348,7 +349,7 @@ func (d *Database) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, d
 		return err
 	}
 
-	if precondition.Author == caller || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
+	if precondition.Author == caller || precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole {
 		previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board)
 
 		children := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id)

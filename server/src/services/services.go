@@ -45,26 +45,6 @@ type Boards interface {
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
 }
 
-type BoardSessions interface {
-	Get(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSession, error)
-	Create(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSession, error)
-	Update(ctx context.Context, body dto.BoardSessionUpdateRequest) (*dto.BoardSession, error)
-	UpdateAll(ctx context.Context, body dto.BoardSessionsUpdateRequest) ([]*dto.BoardSession, error)
-	List(ctx context.Context, boardID uuid.UUID, f filter.BoardSessionFilter) ([]*dto.BoardSession, error)
-	Connect(ctx context.Context, boardID, userID uuid.UUID) error
-	Disconnect(ctx context.Context, boardID, userID uuid.UUID) error
-
-	GetSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSessionRequest, error)
-	CreateSessionRequest(ctx context.Context, boardID, userID uuid.UUID) (*dto.BoardSessionRequest, error)
-	ListSessionRequest(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*dto.BoardSessionRequest, error)
-	UpdateSessionRequest(ctx context.Context, body dto.BoardSessionRequestUpdate) (*dto.BoardSessionRequest, error)
-
-	SessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
-	ModeratorSessionExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
-	SessionRequestExists(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
-	ParticipantBanned(ctx context.Context, boardID, userID uuid.UUID) (bool, error)
-}
-
 type Notes interface {
 	Create(ctx context.Context, body dto.NoteCreateRequest) (*notes.Note, error)
 	Import(ctx context.Context, body dto.NoteImportRequest) (*notes.Note, error)
