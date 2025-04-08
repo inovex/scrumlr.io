@@ -3,13 +3,15 @@ package database
 import (
 	"context"
 	"errors"
-	"scrumlr.io/server/identifiers"
 	"time"
+
+	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/sessions"
 )
 
 type Board struct {
@@ -76,7 +78,7 @@ func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []C
 		return Board{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
 	}
 
-	session := BoardSessionInsert{User: creator, Role: types.SessionRoleOwner}
+	session := sessions.DatabaseBoardSessionInsert{User: creator, Role: sessions.OwnerRole}
 
 	var b Board
 	query := d.db.NewSelect().With("createdBoard", boardInsert)
@@ -200,9 +202,9 @@ func (d *Database) GetBoards(userID uuid.UUID) ([]Board, error) {
 	return boards, err
 }
 
-func (d *Database) GetBoardOverview(id uuid.UUID) (Board, []BoardSession, []Column, error) {
+func (d *Database) GetBoardOverview(id uuid.UUID) (Board, []sessions.DatabaseBoardSession, []Column, error) {
 	var board Board
-	var sessions []BoardSession
+	var sessions []sessions.DatabaseBoardSession
 	var columns []Column
 	var err error
 
@@ -210,7 +212,7 @@ func (d *Database) GetBoardOverview(id uuid.UUID) (Board, []BoardSession, []Colu
 	if err != nil {
 		return Board{}, nil, nil, err
 	}
-	sessions, err = d.GetBoardSessions(id)
+	sessions, err = d.sessionDb.Gets(id)
 	if err != nil {
 		return Board{}, nil, nil, err
 	}

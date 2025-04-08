@@ -23,6 +23,8 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 )
 
 type Server struct {
@@ -31,22 +33,23 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards         services.Boards
-	votings        services.Votings
-	users          services.Users
-	notes          services.Notes
-	reactions      reactions.ReactionService
-	sessions       services.BoardSessions
-	health         health.HealthService
-	feedback       feedback.FeedbackService
-	boardReactions services.BoardReactions
-	boardTemplates services.BoardTemplates
+	boards          services.Boards
+	votings         services.Votings
+	users           services.Users
+	notes           services.Notes
+	reactions       reactions.ReactionService
+	sessions        sessions.SessionService
+	sessionRequests sessionrequests.SessionRequestService
+	health          health.HealthService
+	feedback        feedback.FeedbackService
+	boardReactions  services.BoardReactions
+	boardTemplates  services.BoardTemplates
 
 	upgrader websocket.Upgrader
 
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
-	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
+	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
 	anonymousLoginDisabled        bool
@@ -64,7 +67,8 @@ func New(
 	users services.Users,
 	notes services.Notes,
 	reactions reactions.ReactionService,
-	sessions services.BoardSessions,
+	sessions sessions.SessionService,
+	sessionRequests sessionrequests.SessionRequestService,
 	health health.HealthService,
 	feedback feedback.FeedbackService,
 	boardReactions services.BoardReactions,
@@ -103,7 +107,7 @@ func New(
 		basePath:                         basePath,
 		realtime:                         rt,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
-		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
+		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
 		votings:                          votings,
@@ -111,6 +115,7 @@ func New(
 		notes:                            notes,
 		reactions:                        reactions,
 		sessions:                         sessions,
+		sessionRequests:                  sessionRequests,
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
