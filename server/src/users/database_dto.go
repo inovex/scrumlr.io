@@ -11,8 +11,8 @@ import (
 // User model of the application
 type DatabaseUser struct {
 	bun.BaseModel `bun:"table:users"`
-	ID            uuid.UUID     `bun:"type:uuid"`
-	Avatar        *types.Avatar `bun:"type:jsonb,nullzero"`
+	ID            uuid.UUID `bun:"type:uuid"`
+	Avatar        *Avatar   `bun:"type:jsonb,nullzero"`
 	Name          string
 	AccountType   types.AccountType
 	KeyMigration  *time.Time
@@ -30,5 +30,5 @@ type DatabaseUserUpdate struct {
 	bun.BaseModel `bun:"table:users"`
 	ID            uuid.UUID `bun:"type:uuid"`
 	Name          string
-	Avatar        *types.Avatar `bun:"type:jsonb,nullzero"`
+	Avatar        *Avatar `bun:"type:jsonb,nullzero"`
 }
