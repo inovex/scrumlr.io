@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef, useState} from "react";
-// import {useTranslation} from "react-i18next";
+import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {DotButton} from "components/DotButton";
 import {Minus} from "components/Icon";
@@ -7,7 +7,7 @@ import "./RemoveVoteButton.scss";
 import {useAppDispatch} from "store";
 import {deleteVote} from "store/features";
 import {needsHighContrast} from "constants/colors";
-import {t} from "i18next";
+// import {t} from "i18next";
 
 type RemoveVoteProps = {
   noteId: string;
@@ -20,7 +20,7 @@ type RemoveVoteProps = {
 
 export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes, colorClassName, participantNames, isAnonymous}) => {
   const dispatch = useAppDispatch();
-  // const {t} = useTranslation();
+  const {t} = useTranslation();
 
   const dispatchDeleteVote = () => {
     dispatch(deleteVote(noteId));
