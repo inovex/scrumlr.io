@@ -6,6 +6,7 @@ import (
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votes"
 
 	"github.com/google/uuid"
@@ -156,20 +157,20 @@ type ImportBoardRequest struct {
 }
 
 type FullBoard struct {
-	Board                *Board                 `json:"board"`
-	BoardSessionRequests []*BoardSessionRequest `json:"requests"`
-	BoardSessions        []*BoardSession        `json:"participants"`
-	Columns              []*columns.Column      `json:"columns"`
-	Notes                []*notes.Note          `json:"notes"`
-	Reactions            []*reactions.Reaction  `json:"reactions"`
-	Votings              []*votes.Voting        `json:"votings"`
-	Votes                []*Vote                `json:"votes"`
+	Board                *Board                          `json:"board"`
+	BoardSessionRequests []*sessions.BoardSessionRequest `json:"requests"`
+	BoardSessions        []*sessions.BoardSession        `json:"participants"`
+	Columns              []*columns.Column               `json:"columns"`
+	Notes                []*notes.Note                   `json:"notes"`
+	Reactions            []*reactions.Reaction           `json:"reactions"`
+	Votings              []*votes.Voting                 `json:"votings"`
+	Votes                []*Vote                         `json:"votes"`
 }
 
 func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
 	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
-	dtoFullBoard.BoardSessionRequests = BoardSessionRequests(dbFullBoard.BoardSessionRequests)
-	dtoFullBoard.BoardSessions = BoardSessions(dbFullBoard.BoardSessions)
+	dtoFullBoard.BoardSessionRequests = sessions.BoardSessionRequests(dbFullBoard.BoardSessionRequests)
+	dtoFullBoard.BoardSessions = sessions.BoardSessions(dbFullBoard.BoardSessions)
 	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
 	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
 	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)

@@ -1,37 +1,39 @@
 package api
 
 import (
+	"math/rand"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"math/rand"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/session_helper"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votes"
-	"testing"
 )
 
 var (
-	moderatorBoardSession = dto.BoardSession{
+	moderatorBoardSession = sessions.BoardSession{
 		User: dto.User{ID: uuid.New()},
-		Role: types.SessionRoleModerator,
+		Role: sessions.ModeratorRole,
 	}
-	ownerBoardSession = dto.BoardSession{
+	ownerBoardSession = sessions.BoardSession{
 		User: dto.User{ID: uuid.New()},
-		Role: types.SessionRoleOwner,
+		Role: sessions.OwnerRole,
 	}
-	participantBoardSession = dto.BoardSession{
+	participantBoardSession = sessions.BoardSession{
 		User: dto.User{
 			ID:          uuid.New(),
 			AccountType: types.AccountTypeAnonymous,
 		},
-		Role: types.SessionRoleParticipant,
+		Role: sessions.ParticipantRole,
 	}
-	boardSessions = []*dto.BoardSession{
+	boardSessions = []*sessions.BoardSession{
 		&participantBoardSession,
 		&ownerBoardSession,
 		&moderatorBoardSession,
@@ -88,7 +90,7 @@ var (
 		},
 	}
 	boardSub = &BoardSubscription{
-		boardParticipants: []*dto.BoardSession{&moderatorBoardSession, &ownerBoardSession, &participantBoardSession},
+		boardParticipants: []*sessions.BoardSession{&moderatorBoardSession, &ownerBoardSession, &participantBoardSession},
 		boardColumns:      []*columns.Column{&aSeeableColumn, &aHiddenColumn},
 		boardNotes:        []*notes.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
 		boardSettings: &dto.Board{
@@ -148,7 +150,7 @@ var (
 			Votings:              []*votes.Voting{votingData.Voting},
 			Votes:                []*dto.Vote{},
 			BoardSessions:        boardSessions,
-			BoardSessionRequests: []*dto.BoardSessionRequest{},
+			BoardSessionRequests: []*sessionrequests.BoardSessionRequest{},
 		},
 	}
 )
@@ -180,25 +182,25 @@ func TestEventFilter(t *testing.T) {
 
 func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 
-	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *dto.BoardSession) bool {
+	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
 		return session.User.AccountType == types.AccountTypeAnonymous
 	})[0]
 
 	updateEvent := &realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantUpdated,
-		Data: dto.BoardSession{
+		Data: sessions.BoardSession{
 			RaisedHand: true,
 			User: dto.User{
 				ID:          originalParticipantSession.User.ID,
 				AccountType: types.AccountTypeAnonymous,
 			},
-			Role: types.SessionRoleParticipant,
+			Role: sessions.ParticipantRole,
 		},
 	}
 
 	isUpdated := boardSub.participantUpdated(updateEvent, true)
 
-	updatedParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *dto.BoardSession) bool {
+	updatedParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
 		return session.User.AccountType == types.AccountTypeAnonymous
 	})[0]
 
@@ -220,30 +222,30 @@ func testParticipantUpdatedShouldHandleError(t *testing.T) {
 }
 
 func testIsModModerator(t *testing.T) {
-	isMod := session_helper.CheckSessionRole(moderatorBoardSession.User.ID, boardSessions, []types.SessionRole{types.SessionRoleModerator, types.SessionRoleOwner})
+	isMod := sessions.CheckSessionRole(moderatorBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
-	assert.Equal(t, types.SessionRoleModerator, moderatorBoardSession.Role)
+	assert.Equal(t, sessions.ModeratorRole, moderatorBoardSession.Role)
 }
 
 func testIsOwnerModerator(t *testing.T) {
-	isMod := session_helper.CheckSessionRole(ownerBoardSession.User.ID, boardSessions, []types.SessionRole{types.SessionRoleModerator, types.SessionRoleOwner})
+	isMod := sessions.CheckSessionRole(ownerBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
-	assert.Equal(t, types.SessionRoleOwner, ownerBoardSession.Role)
+	assert.Equal(t, sessions.OwnerRole, ownerBoardSession.Role)
 }
 
 func testIsParticipantModerator(t *testing.T) {
-	isMod := session_helper.CheckSessionRole(participantBoardSession.User.ID, boardSessions, []types.SessionRole{types.SessionRoleModerator, types.SessionRoleOwner})
+	isMod := sessions.CheckSessionRole(participantBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
 }
 
 func testIsUnknownUuidModerator(t *testing.T) {
-	isMod := session_helper.CheckSessionRole(uuid.New(), boardSessions, []types.SessionRole{types.SessionRoleModerator, types.SessionRoleOwner})
+	isMod := sessions.CheckSessionRole(uuid.New(), boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
@@ -438,7 +440,7 @@ func testInitFilterAsParticipant(t *testing.T) {
 			Votings:              []*votes.Voting{&expectedVoting},
 			Votes:                []*dto.Vote{},
 			BoardSessions:        boardSessions,
-			BoardSessionRequests: []*dto.BoardSessionRequest{},
+			BoardSessionRequests: []*sessionrequests.BoardSessionRequest{},
 		},
 	}
 	returnedInitEvent := eventInitFilter(initEvent, participantBoardSession.User.ID)
@@ -495,9 +497,9 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusClosed(t *testing.T) {
 	initEvent := InitEvent{
 		Type: "",
 		Data: dto.FullBoard{
-			BoardSessions: []*dto.BoardSession{
+			BoardSessions: []*sessions.BoardSession{
 				{
-					Role: types.SessionRoleModerator,
+					Role: sessions.ModeratorRole,
 					User: dto.User{ID: clientId},
 				},
 			},
@@ -527,9 +529,9 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusOpen(t *testing.T) {
 	initEvent := InitEvent{
 		Type: "",
 		Data: dto.FullBoard{
-			BoardSessions: []*dto.BoardSession{
+			BoardSessions: []*sessions.BoardSession{
 				{
-					Role: types.SessionRoleModerator,
+					Role: sessions.ModeratorRole,
 					User: dto.User{ID: clientId},
 				},
 			},
@@ -567,9 +569,9 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 	initEvent := InitEvent{
 		Type: "",
 		Data: dto.FullBoard{
-			BoardSessions: []*dto.BoardSession{
+			BoardSessions: []*sessions.BoardSession{
 				{
-					Role: types.SessionRoleModerator,
+					Role: sessions.ModeratorRole,
 					User: dto.User{ID: clientId},
 				},
 			},
@@ -600,9 +602,9 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 			Columns: []*columns.Column{buildColumn(columnId, true)},
 			Board:   buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic, true),
 			Notes:   []*notes.Note{buildNote(noteId, columnId)},
-			BoardSessions: []*dto.BoardSession{
+			BoardSessions: []*sessions.BoardSession{
 				{
-					Role: types.SessionRoleParticipant,
+					Role: sessions.ParticipantRole,
 					User: dto.User{ID: clientId},
 				},
 			},
