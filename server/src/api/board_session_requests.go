@@ -49,7 +49,7 @@ func (s *Server) getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	statusQuery := r.URL.Query().Get("status")
 
-	requests, err := s.sessionRequests.Gets(r.Context(), board, statusQuery)
+	requests, err := s.sessionRequests.GetAll(r.Context(), board, statusQuery)
 	if err != nil {
 		common.Throw(w, r, err)
 		return

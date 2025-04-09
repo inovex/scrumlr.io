@@ -93,6 +93,7 @@ func (b *BoardSession) From(session DatabaseBoardSession) *BoardSession {
 	b.Role = session.Role
 	b.CreatedAt = session.CreatedAt
 	b.Banned = session.Banned
+	b.Board = session.Board
 	return b
 }
 
