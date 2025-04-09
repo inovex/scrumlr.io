@@ -697,6 +697,65 @@ func (_c *MockSessionService_UpdateAll_Call) RunAndReturn(run func(context.Conte
 	return _c
 }
 
+// UpdateUserBoards provides a mock function with given fields: ctx, body
+func (_m *MockSessionService) UpdateUserBoards(ctx context.Context, body BoardSessionUpdateRequest) ([]*BoardSession, error) {
+	ret := _m.Called(ctx, body)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateUserBoards")
+	}
+
+	var r0 []*BoardSession
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, BoardSessionUpdateRequest) ([]*BoardSession, error)); ok {
+		return rf(ctx, body)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, BoardSessionUpdateRequest) []*BoardSession); ok {
+		r0 = rf(ctx, body)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*BoardSession)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, BoardSessionUpdateRequest) error); ok {
+		r1 = rf(ctx, body)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockSessionService_UpdateUserBoards_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateUserBoards'
+type MockSessionService_UpdateUserBoards_Call struct {
+	*mock.Call
+}
+
+// UpdateUserBoards is a helper method to define mock.On call
+//   - ctx context.Context
+//   - body BoardSessionUpdateRequest
+func (_e *MockSessionService_Expecter) UpdateUserBoards(ctx interface{}, body interface{}) *MockSessionService_UpdateUserBoards_Call {
+	return &MockSessionService_UpdateUserBoards_Call{Call: _e.mock.On("UpdateUserBoards", ctx, body)}
+}
+
+func (_c *MockSessionService_UpdateUserBoards_Call) Run(run func(ctx context.Context, body BoardSessionUpdateRequest)) *MockSessionService_UpdateUserBoards_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(BoardSessionUpdateRequest))
+	})
+	return _c
+}
+
+func (_c *MockSessionService_UpdateUserBoards_Call) Return(_a0 []*BoardSession, _a1 error) *MockSessionService_UpdateUserBoards_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockSessionService_UpdateUserBoards_Call) RunAndReturn(run func(context.Context, BoardSessionUpdateRequest) ([]*BoardSession, error)) *MockSessionService_UpdateUserBoards_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // NewMockSessionService creates a new instance of MockSessionService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewMockSessionService(t interface {
