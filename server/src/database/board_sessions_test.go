@@ -419,7 +419,7 @@ func testGetBoardSession(t *testing.T) {
 
 func testGetBoardSessions(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
-	sessions, err := sessionDb.Gets(board.ID)
+	sessions, err := sessionDb.GetAll(board.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(sessions))
 }
@@ -427,7 +427,7 @@ func testGetBoardSessions(t *testing.T) {
 func testGetBoardSessionsWithReadyFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	readyFilter := true
-	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{Ready: &readyFilter})
+	sessions, err := sessionDb.GetAll(board.ID, sessions.BoardSessionFilter{Ready: &readyFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
 }
@@ -435,7 +435,7 @@ func testGetBoardSessionsWithReadyFilter(t *testing.T) {
 func testGetBoardSessionsWithRaisedHandFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	raisedHandFilter := true
-	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{RaisedHand: &raisedHandFilter})
+	sessions, err := sessionDb.GetAll(board.ID, sessions.BoardSessionFilter{RaisedHand: &raisedHandFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
 }
@@ -443,7 +443,7 @@ func testGetBoardSessionsWithRaisedHandFilter(t *testing.T) {
 func testGetBoardSessionsWithConnectedFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	connectedFilter := true
-	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{Connected: &connectedFilter})
+	sessions, err := sessionDb.GetAll(board.ID, sessions.BoardSessionFilter{Connected: &connectedFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
 }
@@ -451,7 +451,7 @@ func testGetBoardSessionsWithConnectedFilter(t *testing.T) {
 func testGetBoardSessionsWithRoleFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	roleFilter := sessions.OwnerRole
-	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{Role: &roleFilter})
+	sessions, err := sessionDb.GetAll(board.ID, sessions.BoardSessionFilter{Role: &roleFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(sessions))
 }
@@ -460,7 +460,7 @@ func testGetBoardSessionsWithMultipleFilters(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionsTestBoard").(*Board)
 	roleFilter := sessions.OwnerRole
 	connectedFilter := true
-	sessions, err := sessionDb.Gets(board.ID, sessions.BoardSessionFilter{Role: &roleFilter, Connected: &connectedFilter})
+	sessions, err := sessionDb.GetAll(board.ID, sessions.BoardSessionFilter{Role: &roleFilter, Connected: &connectedFilter})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(sessions))
 }
