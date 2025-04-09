@@ -506,6 +506,122 @@ func (_c *MockUserService_Get_Call) RunAndReturn(run func(context.Context, uuid.
 	return _c
 }
 
+// IsUserAvailableForKeyMigration provides a mock function with given fields: ctx, id
+func (_m *MockUserService) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for IsUserAvailableForKeyMigration")
+	}
+
+	var r0 bool
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) (bool, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) bool); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockUserService_IsUserAvailableForKeyMigration_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'IsUserAvailableForKeyMigration'
+type MockUserService_IsUserAvailableForKeyMigration_Call struct {
+	*mock.Call
+}
+
+// IsUserAvailableForKeyMigration is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id uuid.UUID
+func (_e *MockUserService_Expecter) IsUserAvailableForKeyMigration(ctx interface{}, id interface{}) *MockUserService_IsUserAvailableForKeyMigration_Call {
+	return &MockUserService_IsUserAvailableForKeyMigration_Call{Call: _e.mock.On("IsUserAvailableForKeyMigration", ctx, id)}
+}
+
+func (_c *MockUserService_IsUserAvailableForKeyMigration_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockUserService_IsUserAvailableForKeyMigration_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockUserService_IsUserAvailableForKeyMigration_Call) Return(_a0 bool, _a1 error) *MockUserService_IsUserAvailableForKeyMigration_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockUserService_IsUserAvailableForKeyMigration_Call) RunAndReturn(run func(context.Context, uuid.UUID) (bool, error)) *MockUserService_IsUserAvailableForKeyMigration_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// SetKeyMigration provides a mock function with given fields: ctx, id
+func (_m *MockUserService) SetKeyMigration(ctx context.Context, id uuid.UUID) (*User, error) {
+	ret := _m.Called(ctx, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for SetKeyMigration")
+	}
+
+	var r0 *User
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) (*User, error)); ok {
+		return rf(ctx, id)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) *User); ok {
+		r0 = rf(ctx, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*User)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockUserService_SetKeyMigration_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'SetKeyMigration'
+type MockUserService_SetKeyMigration_Call struct {
+	*mock.Call
+}
+
+// SetKeyMigration is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id uuid.UUID
+func (_e *MockUserService_Expecter) SetKeyMigration(ctx interface{}, id interface{}) *MockUserService_SetKeyMigration_Call {
+	return &MockUserService_SetKeyMigration_Call{Call: _e.mock.On("SetKeyMigration", ctx, id)}
+}
+
+func (_c *MockUserService_SetKeyMigration_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockUserService_SetKeyMigration_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockUserService_SetKeyMigration_Call) Return(_a0 *User, _a1 error) *MockUserService_SetKeyMigration_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockUserService_SetKeyMigration_Call) RunAndReturn(run func(context.Context, uuid.UUID) (*User, error)) *MockUserService_SetKeyMigration_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // Update provides a mock function with given fields: ctx, body
 func (_m *MockUserService) Update(ctx context.Context, body UserUpdateRequest) (*User, error) {
 	ret := _m.Called(ctx, body)
