@@ -157,7 +157,7 @@ func (service *Service) Update(ctx context.Context, body UserUpdateRequest) (*Us
 		return nil, err
 	}
 
-	service.updatedUser(user)
+	//service.updatedUser(ctx, user)
 
 	return new(User).From(user), err
 }
@@ -189,23 +189,23 @@ func (service *Service) SetKeyMigration(ctx context.Context, id uuid.UUID) (*Use
 	return new(User).From(user), nil
 }
 
-func (service *Service) updatedUser(user DatabaseUser) {
-	connectedBoards, err := service.database.GetSingleUserConnectedBoards(user.ID)
-	if err != nil {
-		return
-	}
-
-	for _, session := range connectedBoards {
-		userSession, err := service.database.GetBoardSession(session.Board, session.User)
-		if err != nil {
-			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID(), "err", err)
-		}
-		_ = service.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
-			Type: realtime.BoardEventParticipantUpdated,
-			Data: session,
-		})
-	}
-}
+// func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
+// 	connectedBoards, err := service.sessionService.GetUserConnectedBoards(ctx, user.ID)
+// 	if err != nil {
+// 		return
+// 	}
+//
+// 	for _, session := range connectedBoards {
+// 		userSession, err := service.sessionService.Get(ctx, session.Board, session.User.ID)
+// 		if err != nil {
+// 			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID(), "err", err)
+// 		}
+// 		_ = service.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
+// 			Type: realtime.BoardEventParticipantUpdated,
+// 			Data: session,
+// 		})
+// 	}
+// }
 
 func validateUsername(name string) error {
 	if strings.TrimSpace(name) == "" {

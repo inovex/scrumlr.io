@@ -124,6 +124,19 @@ func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSes
 	return BoardSessions(sessions), err
 }
 
+func (service *BoardSessionService) UpdateUserBoards(ctx context.Context, body BoardSessionUpdateRequest) ([]*BoardSession, error) {
+	connectedBoards, err := service.database.GetUserConnectedBoards(body.User)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, session := range connectedBoards {
+		service.updatedSession(session.Board, session)
+	}
+
+	return BoardSessions(connectedBoards), err
+}
+
 func (service *BoardSessionService) Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSession, error) {
 	log := logger.FromContext(ctx)
 	session, err := service.database.Get(boardID, userID)

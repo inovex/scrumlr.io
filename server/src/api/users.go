@@ -8,6 +8,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
 
@@ -43,6 +44,13 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
+
+	// because of a import cycle the boards are updated through the session service
+	// after a user update.
+	updateBoards := sessions.BoardSessionUpdateRequest{
+		User: user,
+	}
+	s.sessions.UpdateUserBoards(r.Context(), updateBoards)
 
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, updatedUser)
