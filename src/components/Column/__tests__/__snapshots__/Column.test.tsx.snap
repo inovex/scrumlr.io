@@ -644,7 +644,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   >
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-1-like79"
+                      id="reaction-test-notes-id-1-like81"
                     >
                       <div
                         class="note-reaction-chip__reaction"
@@ -659,7 +659,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     </button>
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-1-heart80"
+                      id="reaction-test-notes-id-1-heart82"
                     >
                       <div
                         class="note-reaction-chip__reaction"
@@ -1201,7 +1201,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   >
                     <button
                       class="note-reaction-chip__root note-reaction-chip__root--self"
-                      id="reaction-test-notes-id-2-like81"
+                      id="reaction-test-notes-id-2-like83"
                     >
                       <div
                         class="note-reaction-chip__reaction"

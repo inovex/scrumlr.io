@@ -23,6 +23,8 @@ import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
 import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
+import {TemplateEditor} from "./Boards/TemplateEditor/TemplateEditor";
+import {VerifiedAccountGuard} from "./Guards/VerifiedAccountGuard";
 
 const renderLegacyRoute = (legacy: boolean) =>
   legacy ? (
@@ -61,13 +63,31 @@ const Router = () => {
         >
           <Route index element={<Navigate to="templates" />} />
           <Route path="templates" element={<Templates />}>
-            {/* TODO extract settings routes to avoid repetition */}
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />
               <Route path="feedback" element={<Feedback />} />
               <Route path="profile" element={<ProfileSettings />} />
             </Route>
           </Route>
+
+          <Route
+            path="create"
+            element={
+              <VerifiedAccountGuard>
+                <TemplateEditor mode="create" />
+              </VerifiedAccountGuard>
+            }
+          />
+
+          <Route
+            path="edit/:id"
+            element={
+              <VerifiedAccountGuard>
+                <TemplateEditor mode="edit" />
+              </VerifiedAccountGuard>
+            }
+          />
+
           <Route path="sessions" element={<Sessions />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
               <Route path="appearance" element={<Appearance />} />
