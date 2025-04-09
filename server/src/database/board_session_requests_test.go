@@ -137,14 +137,14 @@ func testGetBoardSessionRequest(t *testing.T) {
 
 func testGetBoardSessionRequests(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.Gets(board.ID)
+	requests, err := sessionRequestDb.GetAll(board.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(requests))
 }
 
 func testGetBoardSessionRequestsWithAcceptedFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.Gets(board.ID, sessionrequests.RequestAccepted)
+	requests, err := sessionRequestDb.GetAll(board.ID, sessionrequests.RequestAccepted)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(requests))
 	assert.Equal(t, sessionrequests.RequestAccepted, requests[0].Status)
@@ -152,7 +152,7 @@ func testGetBoardSessionRequestsWithAcceptedFilter(t *testing.T) {
 
 func testGetBoardSessionRequestsWithRejectedFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.Gets(board.ID, sessionrequests.RequestRejected)
+	requests, err := sessionRequestDb.GetAll(board.ID, sessionrequests.RequestRejected)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(requests))
 	assert.Equal(t, sessionrequests.RequestRejected, requests[0].Status)
@@ -160,7 +160,7 @@ func testGetBoardSessionRequestsWithRejectedFilter(t *testing.T) {
 
 func testGetBoardSessionRequestsWithPendingFilter(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.Gets(board.ID, sessionrequests.RequestPending)
+	requests, err := sessionRequestDb.GetAll(board.ID, sessionrequests.RequestPending)
 	assert.Nil(t, err)
 	assert.Equal(t, 1, len(requests))
 	assert.Equal(t, sessionrequests.RequestPending, requests[0].Status)
@@ -168,7 +168,7 @@ func testGetBoardSessionRequestsWithPendingFilter(t *testing.T) {
 
 func testGetBoardSessionRequestWithMultipleFilters(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
-	requests, err := sessionRequestDb.Gets(board.ID, sessionrequests.RequestAccepted, sessionrequests.RequestRejected)
+	requests, err := sessionRequestDb.GetAll(board.ID, sessionrequests.RequestAccepted, sessionrequests.RequestRejected)
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(requests))
 }
