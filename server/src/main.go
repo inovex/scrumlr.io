@@ -24,7 +24,6 @@ import (
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
-	"scrumlr.io/server/services/votings"
 )
 
 func main() {
@@ -379,7 +378,7 @@ func run(c *cli.Context) error {
 	reactionService := initialize.InitializeReactionService(bun, rt)
 
 	boardService := boards.NewBoardService(dbConnection, rt)
-	votingService := votings.NewVotingService(dbConnection, rt)
+	votingService := initialize.InitializeVotingService(bun, rt)
 	userService := users.NewUserService(dbConnection, rt, sessionService)
 	noteService := notes.NewNoteService(dbConnection, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))

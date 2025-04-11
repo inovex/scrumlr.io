@@ -7,6 +7,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	notes2 "scrumlr.io/server/notes"
 	"scrumlr.io/server/services"
+	"scrumlr.io/server/voting"
 
 	"github.com/google/uuid"
 
@@ -30,7 +31,6 @@ type DB interface {
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
-	GetVotes(f filter.VoteFilter) ([]database.Vote, error)
 	GetChildNotes(parentNote uuid.UUID) ([]database.Note, error)
 }
 
@@ -133,7 +133,7 @@ func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id
 		Board: board,
 		Note:  &note,
 	}
-	deletedVotes, err := s.database.GetVotes(voteFilter)
+	deletedVotes, err := s.database.GetVotes(voteFilter) // refactored in decouple-notes branch
 	if body.DeleteStack {
 		stackedVotes, _ := s.database.GetChildNotes(note)
 		for _, n := range stackedVotes {
@@ -180,7 +180,7 @@ func (s *NoteService) UpdatedNotes(board uuid.UUID) {
 	})
 }
 
-func (s *NoteService) DeletedNote(user, board, note uuid.UUID, deletedVotes []database.Vote, deleteStack bool) {
+func (s *NoteService) DeletedNote(user, board, note uuid.UUID, deletedVotes []voting.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,
 		"deleteStack": deleteStack,

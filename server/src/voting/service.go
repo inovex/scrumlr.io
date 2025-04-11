@@ -195,3 +195,10 @@ func (s *Service) UpdatedVoting(board uuid.UUID, voting VotingDB, affectedNotes 
 	})
 
 }
+
+func NewVotingService(db *VotingDatabase, rt *realtime.Broker) VotingService {
+	service := new(Service)
+	service.database = *db
+	service.realtime = rt
+	return service
+}

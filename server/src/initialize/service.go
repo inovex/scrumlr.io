@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"net/http"
+	"scrumlr.io/server/voting"
 
 	"github.com/gorilla/websocket"
 
@@ -53,4 +54,11 @@ func InitializeWebsocket(ws websocket.Upgrader, rt *realtime.Broker) sessionrequ
 	websocket := sessionrequests.NewWebsocket(ws, rt)
 
 	return websocket
+}
+
+func InitializeVotingService(db *bun.DB, rt *realtime.Broker) voting.VotingService {
+	votingDB := voting.NewVotingDatabase(db)
+	votingService := voting.NewVotingService(&votingDB, rt)
+
+	return votingService
 }
