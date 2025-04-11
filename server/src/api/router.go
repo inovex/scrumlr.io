@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/notes"
-	"time"
+  "scrumlr.io/server/notes"
+  "time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
