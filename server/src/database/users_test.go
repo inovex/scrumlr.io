@@ -10,7 +10,16 @@ import (
 	"scrumlr.io/server/users"
 )
 
-func TestInsertUser(t *testing.T) {
+func TestRunnerForUser(t *testing.T) {
+	t.Run("Create=0", testInsertUser)
+
+	t.Run("Update=0", testUpdateUser)
+
+	t.Run("Get=0", testGetUser)
+	t.Run("Get=1", testGetUnknownUser)
+}
+
+func testInsertUser(t *testing.T) {
 	name := "Some user"
 	user, err := userDb.CreateAnonymousUser(name)
 	assert.Nil(t, err)
@@ -19,8 +28,8 @@ func TestInsertUser(t *testing.T) {
 	assert.Equal(t, name, user.Name)
 }
 
-func TestGetUser(t *testing.T) {
-	user := fixture.MustRow("User.john").(*users.DatabaseUser)
+func testGetUser(t *testing.T) {
+	user := fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser)
 
 	gotUser, err := userDb.GetUser(user.ID)
 	assert.Nil(t, err)
@@ -30,13 +39,13 @@ func TestGetUser(t *testing.T) {
 	assert.Equal(t, user.Name, gotUser.Name)
 }
 
-func TestGetUnknownUser(t *testing.T) {
+func testGetUnknownUser(t *testing.T) {
 	id, _ := uuid.Parse("123e4567-e89b-12d3-a456-426614174000")
 	_, err := userDb.GetUser(id)
 	assert.Equal(t, sql.ErrNoRows, err)
 }
 
-func TestUpdateUser(t *testing.T) {
+func testUpdateUser(t *testing.T) {
 	user, err := userDb.CreateAnonymousUser("Some name")
 	assert.Nil(t, err)
 
