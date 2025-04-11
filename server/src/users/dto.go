@@ -1,10 +1,9 @@
-package dto
+package users
 
 import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 )
 
@@ -17,13 +16,19 @@ type User struct {
 	Name string `json:"name"`
 
 	// The user's avatar configuration
-	Avatar *types.Avatar `json:"avatar,omitempty"`
+	Avatar *Avatar `json:"avatar,omitempty"`
 
 	// The user's account type configuration
 	AccountType types.AccountType `json:"accountType"`
 }
 
-func (u *User) From(user database.User) *User {
+type UserUpdateRequest struct {
+	ID     uuid.UUID `json:"-"`
+	Name   string    `json:"name"`
+	Avatar *Avatar   `json:"avatar,omitempty"`
+}
+
+func (u *User) From(user DatabaseUser) *User {
 	u.ID = user.ID
 	u.Name = user.Name
 	u.Avatar = user.Avatar
@@ -33,10 +38,4 @@ func (u *User) From(user database.User) *User {
 
 func (*User) Render(_ http.ResponseWriter, _ *http.Request) error {
 	return nil
-}
-
-type UserUpdateRequest struct {
-	ID     uuid.UUID     `json:"-"`
-	Name   string        `json:"name"`
-	Avatar *types.Avatar `json:"avatar,omitempty"`
 }

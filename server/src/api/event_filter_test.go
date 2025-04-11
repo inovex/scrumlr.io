@@ -14,20 +14,21 @@ import (
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
+	"scrumlr.io/server/users"
 	"scrumlr.io/server/votes"
 )
 
 var (
 	moderatorBoardSession = sessions.BoardSession{
-		User: dto.User{ID: uuid.New()},
+		User: users.User{ID: uuid.New()},
 		Role: sessions.ModeratorRole,
 	}
 	ownerBoardSession = sessions.BoardSession{
-		User: dto.User{ID: uuid.New()},
+		User: users.User{ID: uuid.New()},
 		Role: sessions.OwnerRole,
 	}
 	participantBoardSession = sessions.BoardSession{
-		User: dto.User{
+		User: users.User{
 			ID:          uuid.New(),
 			AccountType: types.AccountTypeAnonymous,
 		},
@@ -190,7 +191,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 		Type: realtime.BoardEventParticipantUpdated,
 		Data: sessions.BoardSession{
 			RaisedHand: true,
-			User: dto.User{
+			User: users.User{
 				ID:          originalParticipantSession.User.ID,
 				AccountType: types.AccountTypeAnonymous,
 			},
@@ -500,7 +501,7 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusClosed(t *testing.T) {
 			BoardSessions: []*sessions.BoardSession{
 				{
 					Role: sessions.ModeratorRole,
-					User: dto.User{ID: clientId},
+					User: users.User{ID: clientId},
 				},
 			},
 			Votings: []*votes.Voting{
@@ -532,7 +533,7 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusOpen(t *testing.T) {
 			BoardSessions: []*sessions.BoardSession{
 				{
 					Role: sessions.ModeratorRole,
-					User: dto.User{ID: clientId},
+					User: users.User{ID: clientId},
 				},
 			},
 			Votings: []*votes.Voting{
@@ -572,7 +573,7 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 			BoardSessions: []*sessions.BoardSession{
 				{
 					Role: sessions.ModeratorRole,
-					User: dto.User{ID: clientId},
+					User: users.User{ID: clientId},
 				},
 			},
 			Votings: orgVoting,
@@ -605,7 +606,7 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 			BoardSessions: []*sessions.BoardSession{
 				{
 					Role: sessions.ParticipantRole,
-					User: dto.User{ID: clientId},
+					User: users.User{ID: clientId},
 				},
 			},
 			Votings: []*votes.Voting{

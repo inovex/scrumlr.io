@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/users"
 )
 
 var boardForColumnTemplatesTest uuid.UUID
@@ -17,13 +18,13 @@ var columnTemplateInsertedSecond *ColumnTemplate
 var columnTemplateInsertedThird *ColumnTemplate
 var columnTemplateInsertedFourth *ColumnTemplate
 var columnTemplateInsertedFifth *ColumnTemplate
-var columnTemplateTestUser *User
+var columnTemplateTestUser *users.DatabaseUser
 
 func TestRunnerForColumnTemplates(t *testing.T) {
 	firstColumnTemplate = fixture.MustRow("ColumnTemplate.firstColumnTemplate").(*ColumnTemplate)
 	secondColumnTemplate = fixture.MustRow("ColumnTemplate.secondColumnTemplate").(*ColumnTemplate)
 	thirdColumnTemplate = fixture.MustRow("ColumnTemplate.thirdColumnTemplate").(*ColumnTemplate)
-	columnTemplateTestUser = fixture.MustRow("User.justin").(*User)
+	columnTemplateTestUser = fixture.MustRow("DatabaseUser.justin").(*users.DatabaseUser)
 	boardForColumnTemplatesTest = firstColumnTemplate.BoardTemplate
 
 	t.Run("Getter=0", testGetColumnTemplate)

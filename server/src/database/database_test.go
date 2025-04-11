@@ -18,12 +18,14 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 )
 
 var testDb *Database
 var reactionDb reactions.ReactionDatabase
 var sessionDb sessions.SessionDatabase
 var sessionRequestDb sessionrequests.SessionRequestDatabase
+var userDb users.UserDatabase
 var fixture *dbfixture.Fixture
 
 const DatabaseUsernameAndPassword = "dbtest"
@@ -52,6 +54,8 @@ func testMainWithDefer(m *testing.M) int {
 	reactionDb = reactions.NewReactionsDatabase(bun)
 	sessionDb = sessions.NewSessionDatabase(bun)
 	sessionRequestDb = sessionrequests.NewSessionRequestDatabase(bun)
+	userDb = users.NewUserDatabase(bun)
+
 	err = loadTestdata()
 	if err != nil {
 		println(fmt.Sprintf("unable to load testdata: %s", err))
@@ -121,7 +125,7 @@ func initDatabase() (string, func(), error) {
 
 func loadTestdata() error {
 	testDb.db.RegisterModel(
-		(*User)(nil),
+		(*users.DatabaseUser)(nil),
 		(*Board)(nil),
 		(*sessions.DatabaseBoardSessionInsert)(nil),
 		(*Column)(nil),
