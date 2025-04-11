@@ -153,7 +153,7 @@ type ImportBoardRequest struct {
 	Board   *CreateBoardRequest `json:"board"`
 	Columns []columns.Column    `json:"columns"`
 	Notes   []notes.Note        `json:"notes"`
-	Votings []votes.Voting      `json:"votings"`
+	Votings []voting.Voting     `json:"votings"`
 }
 
 type FullBoard struct {
@@ -163,7 +163,7 @@ type FullBoard struct {
 	Columns              []*columns.Column               `json:"columns"`
 	Notes                []*notes.Note                   `json:"notes"`
 	Reactions            []*reactions.Reaction           `json:"reactions"`
-	Votings              []*votes.Voting                 `json:"votings"`
+	Votings              []*voting.Voting                `json:"votings"`
 	Votes                []*Vote                         `json:"votes"`
 }
 
@@ -174,7 +174,7 @@ func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
 	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
 	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
 	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)
-	dtoFullBoard.Votings = votes.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
+	dtoFullBoard.Votings = voting.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
 	dtoFullBoard.Votes = Votes(dbFullBoard.Votes)
 	return dtoFullBoard
 }

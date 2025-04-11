@@ -116,7 +116,7 @@ func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uui
 }
 
 func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
-	voting, err := votes.UnmarshallVoteData(event.Data)
+	voting, err := voting.UnmarshallVoteData(event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
 		return nil, false
@@ -166,7 +166,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	if len(event.Data.Votings) != 0 {
 		latestVoting := event.Data.Votings[0]
 
-		event.Data.Votings = []*votes.Voting{latestVoting}
+		event.Data.Votings = []*voting.Voting{latestVoting}
 		event.Data.Votes = technical_helper.Filter[*dto.Vote](event.Data.Votes, func(vote *dto.Vote) bool {
 			return vote.Voting == latestVoting.ID && (latestVoting.Status != types.VotingStatusOpen || vote.User == clientID)
 		})
@@ -192,7 +192,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			Notes:                filteredNotes,
 			Reactions:            event.Data.Reactions,
 			Columns:              columnService.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
-			Votings: technical_helper.MapSlice[*votes.Voting, *votes.Voting](event.Data.Votings, func(voting *votes.Voting) *votes.Voting {
+			Votings: technical_helper.MapSlice[*voting.Voting, *voting.Voting](event.Data.Votings, func(voting *voting.Voting) *voting.Voting {
 				return voting.UpdateVoting(filteredNotes).Voting
 			}),
 			Votes: technical_helper.Filter[*dto.Vote](event.Data.Votes, func(vote *dto.Vote) bool {

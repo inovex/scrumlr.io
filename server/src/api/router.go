@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/voting"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -34,7 +35,7 @@ type Server struct {
 	auth     auth.Auth
 
 	boards          services.Boards
-	votings         services.Votings
+	votings         voting.VotingService
 	users           services.Users
 	notes           services.Notes
 	reactions       reactions.ReactionService
@@ -62,7 +63,7 @@ func New(
 	auth auth.Auth,
 
 	boards services.Boards,
-	votings services.Votings,
+	votings voting.VotingService,
 	users services.Users,
 	notes services.Notes,
 	reactions reactions.ReactionService,
@@ -256,6 +257,7 @@ func (s *Server) initVotingResources(r chi.Router) {
 		r.Route("/{voting}", func(r chi.Router) {
 			r.Use(s.VotingContext)
 			r.With(s.BoardParticipantContext).Get("/", s.getVoting)
+			// gets called when ending a voting
 			r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
 		})
 	})

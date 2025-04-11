@@ -106,7 +106,7 @@ func (suite *votingServiceTestSuite) TestCreate() {
 
 	var votingId uuid.UUID
 	var boardId uuid.UUID
-	votingRequest := votes.VotingCreateRequest{
+	votingRequest := voting.VotingCreateRequest{
 		Board:              boardId, // boardId is nulled
 		VoteLimit:          0,
 		AllowMultipleVotes: false,
@@ -117,7 +117,7 @@ func (suite *votingServiceTestSuite) TestCreate() {
 	publishSubject := "board." + boardId.String()
 	publishEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventVotingCreated,
-		Data: &votes.Voting{},
+		Data: &voting.Voting{},
 	}
 
 	mock.On("CreateVoting", database.VotingInsert{
@@ -152,7 +152,7 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 		err          error
 		votingStatus types.VotingStatus
 		voting       database.Voting
-		update       *votes.Voting
+		update       *voting.Voting
 	}{
 		{
 			name:         "Voting status open",
@@ -166,7 +166,7 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 			err:          nil,
 			votingStatus: types.VotingStatusClosed,
 			voting:       voting,
-			update:       new(votes.Voting).From(voting, nil),
+			update:       new(voting.Voting).From(voting, nil),
 		},
 	}
 
@@ -183,7 +183,7 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 			}
 			s.realtime = rtMock
 
-			updateVotingRequest := votes.VotingUpdateRequest{
+			updateVotingRequest := voting.VotingUpdateRequest{
 				ID:     votingID,
 				Board:  boardId,
 				Status: tt.votingStatus,
@@ -194,10 +194,10 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 			publishEvent := realtime.BoardEvent{
 				Type: realtime.BoardEventVotingUpdated,
 				Data: struct {
-					Voting *votes.Voting `json:"voting"`
-					Notes  []*notes.Note `json:"notes"`
+					Voting *voting.Voting `json:"voting"`
+					Notes  []*notes.Note  `json:"notes"`
 				}{
-					Voting: &votes.Voting{},
+					Voting: &voting.Voting{},
 					Notes:  nil,
 				},
 			}

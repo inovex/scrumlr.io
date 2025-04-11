@@ -1,4 +1,4 @@
-package votes
+package voting
 
 import (
 	"context"
@@ -7,10 +7,10 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
-	"scrumlr.io/server/database"
+
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
-	notes2 "scrumlr.io/server/notes"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
 
@@ -83,7 +83,7 @@ func (s *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting
 	return new(Voting).From(voting, nil), err
 }
 
-func (s *Service) Update(ctx context.Context, body VotingUpdateRequest) (*Voting, error) {
+func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*notes.Note) (*Voting, error) {
 	log := logger.FromContext(ctx)
 	if body.Status == types.VotingStatusOpen {
 		return nil, common.BadRequestError(errors.New("not allowed ot change to open state"))
@@ -108,10 +108,10 @@ func (s *Service) Update(ctx context.Context, body VotingUpdateRequest) (*Voting
 			log.Errorw("unable to get votes", "err", err)
 			return nil, err
 		}
-		s.UpdatedVoting(body.Board, voting.ID)
+		s.UpdatedVoting(body.Board, voting, affectedNotes)
 		return new(Voting).From(voting, receivedVotes), err
 	}
-	s.UpdatedVoting(body.Board, voting.ID)
+	s.UpdatedVoting(body.Board, voting, affectedNotes)
 	return new(Voting).From(voting, nil), err
 }
 
@@ -170,14 +170,13 @@ func (s *Service) CreatedVoting(board, voting uuid.UUID) {
 	})
 }
 
-func (s *Service) UpdatedVoting(board, voting uuid.UUID) {
-	var notes []database.Note
-	dbVoting, dbVotes, err := s.database.GetVoting(board, voting)
+func (s *Service) UpdatedVoting(board uuid.UUID, voting VotingDB, affectedNotes []*notes.Note) {
+	dbVoting, dbVotes, err := s.database.GetVoting(board, voting.ID)
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve voting in updated voting", "err", err)
 		return
 	}
-	if dbVoting.Status == types.VotingStatusClosed {
+	if voting.Status == types.VotingStatusClosed {
 		//notes, err = s.database.GetNotes(board) todo: umschreiben
 		if err != nil {
 			logger.Get().Errorw("unable to retrieve notes in updated voting", "err", err)
@@ -187,11 +186,11 @@ func (s *Service) UpdatedVoting(board, voting uuid.UUID) {
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: struct {
-			Voting *Voting        `json:"voting"`
-			Notes  []*notes2.Note `json:"notes"`
+			Voting *Voting       `json:"voting"`
+			Notes  []*notes.Note `json:"notes"`
 		}{
 			Voting: new(Voting).From(dbVoting, dbVotes),
-			Notes:  notes2.Notes(notes),
+			Notes:  affectedNotes,
 		},
 	})
 

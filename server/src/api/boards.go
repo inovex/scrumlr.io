@@ -343,7 +343,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			Participants []*sessions.BoardSession `json:"participants"`
 			Columns      []*columns.Column        `json:"columns"`
 			Notes        []*notes.Note            `json:"notes"`
-			Votings      []*votes.Voting          `json:"votings"`
+			Votings      []*voting.Voting         `json:"votings"`
 		}{
 			Board:        fullBoard.Board,
 			Participants: fullBoard.BoardSessions,

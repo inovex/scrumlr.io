@@ -40,7 +40,7 @@ type EventData struct {
 	Columns   []*columns.Column                      `json:"columns"`
 	Notes     []*notes.Note                          `json:"notes"`
 	Reactions []*reactions.Reaction                  `json:"reactions"`
-	Votings   []*votes.Voting                        `json:"votings"`
+	Votings   []*voting.Voting                       `json:"votings"`
 	Votes     []*dto.Vote                            `json:"votes"`
 	Sessions  []*sessions.BoardSession               `json:"participants"`
 	Requests  []*sessionrequests.BoardSessionRequest `json:"requests"`
