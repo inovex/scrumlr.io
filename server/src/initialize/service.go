@@ -92,3 +92,10 @@ func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService 
 
 	return notesService
 }
+
+func InitializeVotingService(db *bun.DB, rt *realtime.Broker) voting.VotingService {
+	votingDB := voting.NewVotingDatabase(db)
+	votingService := voting.NewVotingService(&votingDB, rt)
+
+	return votingService
+}
