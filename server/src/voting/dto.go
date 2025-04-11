@@ -1,10 +1,10 @@
-package voting
+package votes
 
 import (
 	"github.com/google/uuid"
+	"net/http"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
-	"time"
 )
 
 type Vote struct {
@@ -100,39 +100,4 @@ type VotingResultsPerNote struct {
 type VotingUpdated struct {
 	Notes  notes.NoteSlice `json:"notes"`
 	Voting *Voting         `json:"voting"`
-}
-
-type VoteDB struct {
-	bun.BaseModel `bun:"table:votes"`
-	Board         uuid.UUID
-	Voting        uuid.UUID
-	User          uuid.UUID
-	Note          uuid.UUID
-}
-
-type VotingDB struct {
-	bun.BaseModel      `bun:"table:votings"`
-	ID                 uuid.UUID
-	Board              uuid.UUID
-	CreatedAt          time.Time
-	VoteLimit          int
-	AllowMultipleVotes bool
-	ShowVotesOfOthers  bool
-	Status             types.VotingStatus
-}
-
-type VotingInsert struct {
-	bun.BaseModel      `bun:"table:votings"`
-	Board              uuid.UUID
-	VoteLimit          int
-	AllowMultipleVotes bool
-	ShowVotesOfOthers  bool
-	Status             types.VotingStatus
-}
-
-type VotingUpdate struct {
-	bun.BaseModel `bun:"table:votings"`
-	ID            uuid.UUID
-	Board         uuid.UUID
-	Status        types.VotingStatus
 }
