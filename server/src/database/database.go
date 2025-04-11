@@ -3,9 +3,8 @@ package database
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/notes"
-
-	"scrumlr.io/server/reactions"
+  "scrumlr.io/server/notes"
+  "scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 )
