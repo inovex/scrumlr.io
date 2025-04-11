@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/notes"
 	"scrumlr.io/server/votes"
 
 	"github.com/google/uuid"
@@ -43,15 +42,6 @@ type Boards interface {
 	FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error)
 	BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error)
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
-}
-
-type Notes interface {
-	Create(ctx context.Context, body dto.NoteCreateRequest) (*notes.Note, error)
-	Import(ctx context.Context, body dto.NoteImportRequest) (*notes.Note, error)
-	Get(ctx context.Context, id uuid.UUID) (*notes.Note, error)
-	Update(ctx context.Context, body dto.NoteUpdateRequest) (*notes.Note, error)
-	List(ctx context.Context, id uuid.UUID) ([]*notes.Note, error)
-	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
 }
 
 type Votings interface {
