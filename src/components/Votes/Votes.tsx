@@ -34,24 +34,25 @@ export const Votes: FC<VotesProps> = (props) => {
   );
 
   const {isAnonymous, participantsNames} = useAppSelector((state) => {
-    // If it is available, retrieve the most recent previous voting entry
     const lastVoting = state.votings?.past?.[0];
-    // If no voting data exists or it's anonymous, return default values
     if (!lastVoting || lastVoting.isAnonymous) {
       return {participantsNames: "", isAnonymous: true};
     }
-    // Extract votes per note safely
+
     const votesPerNote = lastVoting.votes?.votesPerNote ?? {};
     const userVotes = votesPerNote[props.noteId]?.userVotes ?? [];
-    // Retrieve every participant, including oneself
+
     const others = state.participants?.others ?? [];
     const selfParticipant = state.participants?.self;
     const participants = selfParticipant ? [selfParticipant, ...others] : others;
-    // Extract participant names based on votes for the given noteId
+
     const names = userVotes
-      .map((userVote) => participants.find((p) => p?.user.id === userVote.id)?.user.name ?? null)
-      .filter((name): name is string => name !== null) // Ensure only valid strings remain
+      .map((userVote) => participants.find((p) => p.user.id === userVote.id))
+      .filter((p) => p !== undefined)
+      .map((p) => p.user.name)
+      .toSorted((a, b) => a.localeCompare(b))
       .join(", ");
+
     return {participantsNames: names, isAnonymous: false};
   });
 
@@ -71,17 +72,12 @@ export const Votes: FC<VotesProps> = (props) => {
     return "";
   };
 
-  /**
-   * If there's no active voting going on and there are no casted votes for
-   * this note from previous votings, we don't need to render anything.
-   */
   if (!voting && allPastVotes === 0) {
     return null;
   }
 
   return voting || allPastVotes > 0 ? (
     <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
-      {/* standard display for votes */}
       {!voting && allPastVotes > 0 && (
         <VoteButtons.Remove
           noteId={props.noteId}
@@ -92,7 +88,6 @@ export const Votes: FC<VotesProps> = (props) => {
           participantNames={participantsNames}
         />
       )}
-      {/* display for votes when voting is open */}
       {voting && ongoingVotes.note > 0 && (
         <VoteButtons.Remove disabled={boardLocked && !isModerator} noteId={props.noteId} numberOfVotes={ongoingVotes.note} colorClassName={props.colorClassName} />
       )}
