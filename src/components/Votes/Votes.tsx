@@ -43,8 +43,8 @@ export const Votes: FC<VotesProps> = (props) => {
     const userVotes = votesPerNote[props.noteId]?.userVotes ?? [];
 
     const others = state.participants?.others ?? [];
-    const selfParticipant = state.participants?.self;
-    const participants = selfParticipant ? [selfParticipant, ...others] : others;
+    const selfParticipant = state.participants.self!;
+    const participants = [selfParticipant, ...others];
 
     const names = userVotes
       .map((userVote) => participants.find((p) => p.user.id === userVote.id))
