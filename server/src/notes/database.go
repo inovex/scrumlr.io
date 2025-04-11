@@ -7,8 +7,8 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/sessions"
 )
 
 type DB struct {
@@ -68,12 +68,12 @@ func (d DB) GetChildNotes(parentNote uuid.UUID) ([]NoteDB, error) {
 
 func (d DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error) {
 	boardSelect := d.db.NewSelect().Model((*database.Board)(nil)).Column("allow_stacking").Where("id = ?", update.Board)
-	sessionSelect := d.db.NewSelect().Model((*database.BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", update.Board)
+	sessionSelect := d.db.NewSelect().Model((*sessions.BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", update.Board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", update.ID).Where("board = ?", update.Board)
 
 	var precondition struct {
 		StackingAllowed bool
-		CallerRole      types.SessionRole
+		CallerRole      sessions.SessionRole
 		Author          uuid.UUID
 	}
 	err := d.db.NewSelect().
@@ -87,13 +87,13 @@ func (d DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error) {
 
 	var note NoteDB
 	if update.Text != nil && update.Position == nil {
-		if caller == precondition.Author || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
+		if caller == precondition.Author || precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole {
 			note, err = d.updateNoteText(update)
 		} else {
 			err = errors.New("not permitted to change text of note")
 		}
 	} else if update.Position != nil {
-		if update.Text != nil && (caller != precondition.Author || precondition.CallerRole == types.SessionRoleParticipant) {
+		if update.Text != nil && (caller != precondition.Author || precondition.CallerRole == sessions.ParticipantRole) {
 			return NoteDB{}, errors.New("not permitted to change text of note")
 		}
 
@@ -101,7 +101,7 @@ func (d DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error) {
 			return NoteDB{}, errors.New("stacking on self is not allowed")
 		}
 
-		if precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner || precondition.StackingAllowed {
+		if precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole || precondition.StackingAllowed {
 			if !update.Position.Stack.Valid {
 				note, err = d.updateNoteWithoutStack(update)
 			} else {
@@ -116,12 +116,12 @@ func (d DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error) {
 }
 
 func (d *DB) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
-	sessionSelect := d.db.NewSelect().Model((*database.BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
+	sessionSelect := d.db.NewSelect().Model((*sessions.DatabaseBoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
 
 	var precondition struct {
 		StackingAllowed bool
-		CallerRole      types.SessionRole
+		CallerRole      sessions.SessionRole
 		Author          uuid.UUID
 	}
 	err := d.db.NewSelect().
@@ -132,7 +132,7 @@ func (d *DB) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteS
 		return err
 	}
 
-	if precondition.Author == caller || precondition.CallerRole == types.SessionRoleModerator || precondition.CallerRole == types.SessionRoleOwner {
+	if precondition.Author == caller || precondition.CallerRole == sessions.ModeratorRole || precondition.CallerRole == sessions.OwnerRole {
 		previous := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Where("board = ?", board)
 
 		children := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id)

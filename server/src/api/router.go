@@ -20,12 +20,12 @@ import (
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-  "scrumlr.io/server/notes"
 )
 
 type Server struct {
@@ -64,7 +64,6 @@ func New(
 
 	boards services.Boards,
 	votings services.Votings,
-	db *database.Database,
 	users services.Users,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
@@ -85,6 +84,7 @@ func New(
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+	(render.SetContentType(render.ContentTypeJSON))
 
 	if !checkOrigin {
 		r.Use(cors.Handler(cors.Options{
@@ -107,7 +107,7 @@ func New(
 		basePath:                         basePath,
 		realtime:                         rt,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
-		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
+		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
 		votings:                          votings,
@@ -115,6 +115,7 @@ func New(
 		notes:                            notes,
 		reactions:                        reactions,
 		sessions:                         sessions,
+		sessionRequests:                  sessionRequests,
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
@@ -123,7 +124,6 @@ func New(
 		anonymousLoginDisabled:      anonymousLoginDisabled,
 		experimentalFileSystemStore: experimentalFileSystemStore,
 	}
-
 	// initialize websocket upgrader with origin check depending on options
 	s.upgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,

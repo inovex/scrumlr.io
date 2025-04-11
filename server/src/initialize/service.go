@@ -1,7 +1,9 @@
 package initialize
 
 import (
+	"github.com/gorilla/websocket"
 	"github.com/uptrace/bun"
+	"net/http"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/notes"
@@ -9,7 +11,6 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/notes"
 )
 
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
@@ -20,20 +21,21 @@ func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
 }
 
 func InitializeHealthService(db *bun.DB, rt *realtime.Broker) health.HealthService {
-  healthDb := health.NewHealthDatabase(db)
-  healthService := health.NewHealthService(healthDb, rt)
+	healthDb := health.NewHealthDatabase(db)
+	healthService := health.NewHealthService(healthDb, rt)
 
-  return healthService
+	return healthService
 }
 
-func InitializeNotesService(db *bun.DB) *notes.NotesDatabase {
+func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService {
 	notesDB := notes.NewNotesDatabase(db)
-	return &notesDB
+	notesService := notes.NewNotesService(&notesDB, rt)
+	return notesService
 }
 
 func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {
 	reactionsDb := reactions.NewReactionsDatabase(db)
-	reactionService := reactions.NewReactionService(reactionsDb, rt)
+	reactionService := reactions.NewReactionService(&reactionsDb, rt)
 
 	return reactionService
 }
