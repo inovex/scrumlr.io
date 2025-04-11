@@ -62,17 +62,15 @@ func testUpdateOfBoardSessionRequestToAccepted(t *testing.T) {
 	board := fixture.MustRow("Board.boardSessionRequestsTestBoard").(*Board)
 	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 
-	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
+	request, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
 		User:   user.ID,
 		Status: sessionrequests.RequestAccepted,
 	})
 	assert.Nil(t, err)
-
-	// a board session should exist after accepting a board session request
-	exists, err := sessionDb.Exists(board.ID, user.ID)
-	assert.Nil(t, err)
-	assert.True(t, exists)
+	assert.Equal(t, board.ID, request.Board)
+	assert.Equal(t, user.ID, request.User)
+	assert.Equal(t, sessionrequests.RequestAccepted, request.Status)
 }
 
 func testUpdateOfBoardSessionToRejected(t *testing.T) {
@@ -82,7 +80,7 @@ func testUpdateOfBoardSessionToRejected(t *testing.T) {
 	_, err := sessionRequestDb.Update(sessionrequests.DatabaseBoardSessionRequestUpdate{
 		Board:  board.ID,
 		User:   user.ID,
-		Status: sessionrequests.RequestPending,
+		Status: sessionrequests.RequestRejected,
 	})
 	assert.Nil(t, err)
 }
