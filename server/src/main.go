@@ -19,9 +19,12 @@ import (
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/votings"
+	"scrumlr.io/server/services/notes"
+	"scrumlr.io/server/services/users"
 )
 
 func main() {

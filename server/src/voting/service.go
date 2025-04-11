@@ -9,7 +9,6 @@ import (
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
 
@@ -107,10 +106,10 @@ func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affected
 			log.Errorw("unable to get votes", "err", err)
 			return nil, err
 		}
-		//s.UpdatedVoting(body.Board, voting, affectedNotes)
+		s.UpdatedVoting(body.Board, voting, affectedNotes)
 		return new(Voting).From(voting, receivedVotes), err
 	}
-	//s.UpdatedVoting(body.Board, voting, affectedNotes)
+	s.UpdatedVoting(body.Board, voting, affectedNotes)
 	return new(Voting).From(voting, nil), err
 }
 
