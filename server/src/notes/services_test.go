@@ -15,7 +15,6 @@ import (
 
   "github.com/google/uuid"
   "github.com/stretchr/testify/assert"
-  "github.com/stretchr/testify/mock"
   "github.com/stretchr/testify/suite"
   "scrumlr.io/server/common"
 )
@@ -63,7 +62,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
   })
   assert.NoError(suite.T(), err)
   mockDB.AssertExpectations(suite.T())
-  clientMock.AssertExpectations(suite.T())
+  mockBroker.AssertExpectations(suite.T())
 
 }
 
