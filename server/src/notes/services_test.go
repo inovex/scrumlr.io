@@ -5,6 +5,7 @@ import (
   "scrumlr.io/server/common/dto"
   "scrumlr.io/server/identifiers"
   "scrumlr.io/server/logger"
+  brokerMock "scrumlr.io/server/mocks/realtime"
   "scrumlr.io/server/realtime"
 
   "database/sql"
@@ -23,39 +24,16 @@ type NoteServiceTestSuite struct {
   suite.Suite
 }
 
-type mockRtClient struct {
-  mock.Mock
-}
-
-func (mc *mockRtClient) Publish(subject string, event interface{}) error {
-  args := mc.Called(subject, event)
-  return args.Error(0)
-}
-
-func (mc *mockRtClient) SubscribeToBoardSessionEvents(subject string) (chan *realtime.BoardSessionRequestEventType, error) {
-  args := mc.Called(subject)
-  return args.Get(0).(chan *realtime.BoardSessionRequestEventType), args.Error(1)
-}
-
-func (mc *mockRtClient) SubscribeToBoardEvents(subject string) (chan *realtime.BoardEvent, error) {
-  args := mc.Called(subject)
-  return args.Get(0).(chan *realtime.BoardEvent), args.Error(1)
-}
-
 func TestNoteServiceTestSuite(t *testing.T) {
   suite.Run(t, new(NoteServiceTestSuite))
 }
 
 func (suite *NoteServiceTestSuite) TestCreate() {
-  service := new(Service)
   mockDB := NewMockNotesDatabase(suite.T())
-  service.database = mockDB
-
-  clientMock := &mockRtClient{}
-  rtMock := &realtime.Broker{
-    Con: clientMock,
-  }
-  service.realtime = rtMock
+  mockBroker := brokerMock.NewMockClient(suite.T())
+  broker := new(realtime.Broker)
+  broker.Con = mockBroker
+  service := NewNotesService(mockDB, broker)
 
   authorID, _ := uuid.NewRandom()
   boardID, _ := uuid.NewRandom()
@@ -75,7 +53,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
   }).Return(NoteDB{}, nil)
   mockDB.EXPECT().GetNotes(boardID).Return([]NoteDB{}, nil)
 
-  clientMock.On("Publish", publishSubject, publishEvent).Return(nil)
+  mockBroker.On("Publish", publishSubject, publishEvent).Return(nil)
 
   _, err := service.Create(logger.InitTestLogger(context.Background()), NoteCreateRequest{
     User:   authorID,
@@ -90,10 +68,9 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 }
 
 func (suite *NoteServiceTestSuite) TestGetNote() {
-  service := new(Service)
   mockDB := NewMockNotesDatabase(suite.T())
-  service.database = mockDB
-
+  broker := new(realtime.Broker)
+  service := NewNotesService(mockDB, broker)
   noteID, _ := uuid.NewRandom()
 
   mockDB.EXPECT().GetNote(noteID).Return(NoteDB{
@@ -107,9 +84,9 @@ func (suite *NoteServiceTestSuite) TestGetNote() {
 }
 
 func (suite *NoteServiceTestSuite) TestGetNotes() {
-  service := new(Service)
   mockDB := NewMockNotesDatabase(suite.T())
-  service.database = mockDB
+  broker := new(realtime.Broker)
+  service := NewNotesService(mockDB, broker)
 
   boardID, _ := uuid.NewRandom()
 
@@ -122,15 +99,11 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 }
 
 func (suite *NoteServiceTestSuite) TestUpdateNote() {
-  service := new(Service)
   mockDB := NewMockNotesDatabase(suite.T())
-  service.database = mockDB
-
-  clientMock := &mockRtClient{}
-  rtMock := &realtime.Broker{
-    Con: clientMock,
-  }
-  service.realtime = rtMock
+  mockBroker := brokerMock.NewMockClient(suite.T())
+  broker := new(realtime.Broker)
+  broker.Con = mockBroker
+  service := NewNotesService(mockDB, broker)
 
   callerID, _ := uuid.NewRandom()
   noteID, _ := uuid.NewRandom()
@@ -154,7 +127,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
     Type: realtime.BoardEventNotesUpdated,
     Data: []Note{},
   }
-  clientMock.On("Publish", publishSubject, publishEvent).Return(nil)
+  mockBroker.On("Publish", publishSubject, publishEvent).Return(nil)
   // Mock for the updatedNotes call, which internally calls GetNotes
   mockDB.EXPECT().GetNotes(boardID).Return([]NoteDB{}, nil)
 
@@ -182,15 +155,11 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 }
 
 func (suite *NoteServiceTestSuite) TestDeleteNote() {
-  service := new(Service)
   mockDB := NewMockNotesDatabase(suite.T())
-  service.database = mockDB
-
-  clientMock := &mockRtClient{}
-  rtMock := &realtime.Broker{
-    Con: clientMock,
-  }
-  service.realtime = rtMock
+  mockBroker := brokerMock.NewMockClient(suite.T())
+  broker := new(realtime.Broker)
+  broker.Con = mockBroker
+  service := NewNotesService(mockDB, broker)
 
   callerID, _ := uuid.NewRandom()
   boardID, _ := uuid.NewRandom()
@@ -227,8 +196,8 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
     Type: realtime.BoardEventVotesDeleted,
     Data: votesToDelete,
   }
-  clientMock.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
-  clientMock.On("Publish", publishSubject, publishEventVotesDeleted).Return(nil)
+  mockBroker.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
+  mockBroker.On("Publish", publishSubject, publishEventVotesDeleted).Return(nil)
 
   ctx := logger.InitTestLogger(context.Background())
   ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
@@ -246,9 +215,9 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 }
 
 func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
-  service := new(Service)
   mockDB := NewMockNotesDatabase(suite.T())
-  service.database = mockDB
+  broker := new(realtime.Broker)
+  service := NewNotesService(mockDB, broker)
 
   authorID, _ := uuid.NewRandom()
   boardID, _ := uuid.NewRandom()
