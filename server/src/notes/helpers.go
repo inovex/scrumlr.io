@@ -38,33 +38,8 @@ func UnmarshallNotaData(data interface{}) (NoteSlice, error) {
 	return notes, nil
 }
 
-func (n *Note) From(note NoteDB) *Note {
-	n.ID = note.ID
-	n.Author = note.Author
-	n.Text = note.Text
-	n.Position = NotePosition{
-		Column: note.Column,
-		Stack:  note.Stack,
-		Rank:   note.Rank,
-	}
-	n.Edited = note.Edited
-	return n
-}
-
 func (*Note) Render(_ http.ResponseWriter, _ *http.Request) error {
 	return nil
-}
-
-func Notes(notes []NoteDB) []*Note {
-	if notes == nil {
-		return nil
-	}
-
-	list := make([]*Note, len(notes))
-	for index, note := range notes {
-		list[index] = new(Note).From(note)
-	}
-	return list
 }
 
 func (n NoteSlice) hideOtherAuthors(userID uuid.UUID, showAuthors bool, visibleNotes []*Note) {

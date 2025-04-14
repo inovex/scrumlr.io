@@ -2,8 +2,6 @@ package notes
 
 import (
 	"github.com/google/uuid"
-	"github.com/uptrace/bun"
-	"time"
 )
 
 // NoteCreateRequest represents the request to create a new note.
@@ -48,48 +46,10 @@ type NoteDeleteRequest struct {
 	DeleteStack bool `json:"deleteStack"`
 }
 
-type NoteDB struct {
-	bun.BaseModel `bun:"table:notes"`
-	ID            uuid.UUID
-	CreatedAt     time.Time
-	Author        uuid.UUID
-	Board         uuid.UUID
-	Column        uuid.UUID
-	Text          string
-	Stack         uuid.NullUUID
-	Rank          int
-	Edited        bool
-}
-
-type NoteInsertDB struct {
-	bun.BaseModel `bun:"table:notes"`
-	Author        uuid.UUID
-	Board         uuid.UUID
-	Column        uuid.UUID
-	Text          string
-}
-
-type NoteImportDB struct {
-	bun.BaseModel `bun:"table:notes"`
-	Author        uuid.UUID
-	Board         uuid.UUID
-	Text          string
-	Position      *NoteUpdatePosition `bun:",embed"`
-}
-
 type NoteUpdatePosition struct {
 	Column uuid.UUID
 	Rank   int
 	Stack  uuid.NullUUID
-}
-
-type NoteUpdateDB struct {
-	bun.BaseModel `bun:"table:notes"`
-	ID            uuid.UUID
-	Board         uuid.UUID
-	Text          *string
-	Position      *NoteUpdatePosition `bun:"embed"`
-	Edited        bool
 }
 
 type NoteSlice []*Note
@@ -121,4 +81,29 @@ type NotePosition struct {
 
 	// The note rank.
 	Rank int `json:"rank"`
+}
+
+func (n *Note) From(note NoteDB) *Note {
+	n.ID = note.ID
+	n.Author = note.Author
+	n.Text = note.Text
+	n.Position = NotePosition{
+		Column: note.Column,
+		Stack:  note.Stack,
+		Rank:   note.Rank,
+	}
+	n.Edited = note.Edited
+	return n
+}
+
+func Notes(notes []NoteDB) []*Note {
+	if notes == nil {
+		return nil
+	}
+
+	list := make([]*Note, len(notes))
+	for index, note := range notes {
+		list[index] = new(Note).From(note)
+	}
+	return list
 }

@@ -6,16 +6,14 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 )
 
 type Service struct {
-	database        NotesDatabase
-	generalDatabase *database.Database
-	realtime        *realtime.Broker
+	database NotesDatabase
+	realtime *realtime.Broker
 }
 
 type NotesDatabase interface {
@@ -172,9 +170,9 @@ func (s *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*dto.V
 
 }
 
-func NewNotesService(db *NotesDatabase, rt *realtime.Broker) NotesService {
+func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {
 	b := new(Service)
-	b.database = *db
+	b.database = db
 	b.realtime = rt
 	return b
 }

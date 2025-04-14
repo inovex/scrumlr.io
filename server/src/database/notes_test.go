@@ -78,7 +78,7 @@ var author *User
 var deleteStack bool
 
 func testGetNote(t *testing.T) {
-	note := fixture.MustRow("Note.notesTestA1").(*notes.NoteDB)
+	note := fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
 	n, err := notesDB.GetNote(note.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, note.ID, n.ID)
@@ -112,18 +112,18 @@ func testGetFilterByMultipleColumns(t *testing.T) {
 	assert.Equal(t, 8, len(notes))
 }
 func testGetNotesAndVerifyOrder(t *testing.T) {
-	noteA1 = fixture.MustRow("Note.notesTestA1").(*notes.NoteDB)
-	noteA2 = fixture.MustRow("Note.notesTestA2").(*notes.NoteDB)
-	noteA3 = fixture.MustRow("Note.notesTestA3").(*notes.NoteDB)
-	noteA4 = fixture.MustRow("Note.notesTestA4").(*notes.NoteDB)
-	noteA5 = fixture.MustRow("Note.notesTestA5").(*notes.NoteDB)
+	noteA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
+	noteA2 = fixture.MustRow("NoteDB.notesTestA2").(*notes.NoteDB)
+	noteA3 = fixture.MustRow("NoteDB.notesTestA3").(*notes.NoteDB)
+	noteA4 = fixture.MustRow("NoteDB.notesTestA4").(*notes.NoteDB)
+	noteA5 = fixture.MustRow("NoteDB.notesTestA5").(*notes.NoteDB)
 
 	notesOnBoard, _ := notesDB.GetNotes(notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, notesOnBoard, noteA1, noteA2, noteA4, noteA5, noteA3)
 
-	noteB1 = fixture.MustRow("Note.notesTestB1").(*notes.NoteDB)
-	noteB2 = fixture.MustRow("Note.notesTestB2").(*notes.NoteDB)
-	noteB3 = fixture.MustRow("Note.notesTestB3").(*notes.NoteDB)
+	noteB1 = fixture.MustRow("NoteDB.notesTestB1").(*notes.NoteDB)
+	noteB2 = fixture.MustRow("NoteDBnotesTestB2").(*notes.NoteDB)
+	noteB3 = fixture.MustRow("NoteDB.notesTestB3").(*notes.NoteDB)
 
 	notesOnBoard, _ = notesDB.GetNotes(notesTestBoard.ID, columnB.ID)
 	verifyNoteOrder(t, notesOnBoard, noteB1, noteB2, noteB3)
@@ -360,10 +360,10 @@ func testOrderWhenMergingStacks(t *testing.T) {
 func testChangeOrderWhenMoveWithinStackToLower(t *testing.T) {
 	stackTestBoard = fixture.MustRow("Board.stackTestBoard").(*Board)
 	stackTestColumnA = fixture.MustRow("Column.stackTestColumnA").(*Column)
-	stackA = fixture.MustRow("Note.stackTestNote1").(*notes.NoteDB)
-	stackB = fixture.MustRow("Note.stackTestNote2").(*notes.NoteDB)
-	stackC = fixture.MustRow("Note.stackTestNote3").(*notes.NoteDB)
-	stackD = fixture.MustRow("Note.stackTestNote4").(*notes.NoteDB)
+	stackA = fixture.MustRow("NoteDB.stackTestNote1").(*notes.NoteDB)
+	stackB = fixture.MustRow("NoteDB.stackTestNote2").(*notes.NoteDB)
+	stackC = fixture.MustRow("NoteDB.stackTestNote3").(*notes.NoteDB)
+	stackD = fixture.MustRow("NoteDB.stackTestNote4").(*notes.NoteDB)
 	stackUser = fixture.MustRow("User.justin").(*User)
 
 	/*
@@ -474,7 +474,7 @@ func testDeleteNote(t *testing.T) {
 }
 
 func testDeleteSharedNote(t *testing.T) {
-	noteC1 = fixture.MustRow("Note.notesTestC1").(*notes.NoteDB)
+	noteC1 = fixture.MustRow("NoteDB.notesTestC1").(*notes.NoteDB)
 
 	_, updateBoardError := testDb.UpdateBoard(BoardUpdate{
 		ID:         notesTestBoard.ID,
@@ -498,10 +498,10 @@ func testDeleteSharedNote(t *testing.T) {
 func testDeleteStackParent(t *testing.T) {
 	stackTestBoard = fixture.MustRow("Board.stackTestBoard").(*Board)
 	stackTestColumnB = fixture.MustRow("Column.stackTestColumnB").(*Column)
-	stackE = fixture.MustRow("Note.stackTestNote5").(*notes.NoteDB)
-	stackF = fixture.MustRow("Note.stackTestNote6").(*notes.NoteDB)
-	stackG = fixture.MustRow("Note.stackTestNote7").(*notes.NoteDB)
-	stackH = fixture.MustRow("Note.stackTestNote8").(*notes.NoteDB)
+	stackE = fixture.MustRow("NoteDB.stackTestNote5").(*notes.NoteDB)
+	stackF = fixture.MustRow("NoteDB.stackTestNote6").(*notes.NoteDB)
+	stackG = fixture.MustRow("NoteDB.stackTestNote7").(*notes.NoteDB)
+	stackH = fixture.MustRow("NoteDB.stackTestNote8").(*notes.NoteDB)
 	stackUser = fixture.MustRow("User.justin").(*User)
 	deleteStack = false
 
@@ -545,7 +545,7 @@ func testDeleteStackParent(t *testing.T) {
 func testDeleteStack(t *testing.T) {
 	stackTestBoard = fixture.MustRow("Board.stackTestBoard").(*Board)
 	stackTestColumnB = fixture.MustRow("Column.stackTestColumnB").(*Column)
-	stackH = fixture.MustRow("Note.stackTestNote8").(*notes.NoteDB)
+	stackH = fixture.MustRow("NoteDB.stackTestNote8").(*notes.NoteDB)
 	stackUser = fixture.MustRow("User.justin").(*User)
 
 	notesInStack, _ := notesDB.GetNotes(stackTestBoard.ID, stackTestColumnB.ID)
