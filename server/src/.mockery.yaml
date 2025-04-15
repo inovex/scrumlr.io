@@ -72,6 +72,17 @@ packages:
       Websocket:
         all: true
 
+  scrumlr.io/server/columns:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces: 
+      ColumnService:
+        all: true
+      ColumnDatabase:
+        all: true
+
+
   scrumlr.io/server/users:
     config:
       dir: "{{.InterfaceDir}}"
