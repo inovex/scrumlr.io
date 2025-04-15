@@ -1,5 +1,5 @@
 import {AccessPolicy} from "../board";
-import {TemplateColumn} from "../templateColumns/types";
+import {TemplateColumn} from "../templateColumns";
 
 // getTemplates returns all templates with columns, but is the only endpoint to do so.
 // All other template / column endpoints are handled separately, i.e. getting/updating a template
@@ -15,12 +15,12 @@ export type Template = {
   favourite: boolean;
 };
 
-export type TemplateWithColumns = Template & {columns: TemplateColumn[]};
+export type TemplateWithColumns = {template: Template; columns: TemplateColumn[]};
 
 // used in store
 export type TemplatesState = Template[];
 
 // used for importing, where information like ids will be set dynamically
-export type ReducedTemplateWithColumns = Omit<TemplateWithColumns, "id" | "creator" | "favourite"> & {
+export type ReducedTemplateWithColumns = Omit<Template, "id" | "creator" | "favourite"> & {
   columns: Omit<TemplateColumn, "id" | "template" | "index">[];
 };
