@@ -378,8 +378,9 @@ func run(c *cli.Context) error {
 	websocket := initialize.InitializeWebsocket(websocketUpgrader, rt)
 	sessionRequestService := initialize.InitializeSessionRequestService(bun, rt, websocket, sessionService)
 	reactionService := initialize.InitializeReactionService(bun, rt)
+	columnService := initialize.InitializeColumnService(bun, rt)
 
-	boardService := boards.NewBoardService(dbConnection, rt)
+	boardService := boards.NewBoardService(dbConnection, rt, columnService)
 	votingService := votings.NewVotingService(dbConnection, rt)
 	noteService := notes.NewNoteService(dbConnection, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
@@ -393,6 +394,7 @@ func run(c *cli.Context) error {
 		authConfig,
 
 		boardService,
+		columnService,
 		votingService,
 		userService,
 		noteService,

@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/reactions"
@@ -14,6 +15,13 @@ import (
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
+
+func InitializeColumnService(db *bun.DB, rt *realtime.Broker) columns.ColumnService {
+	columnDb := columns.NewColumnsDatabase(db)
+	columnService := columns.NewColumnService(columnDb, rt)
+
+	return columnService
+}
 
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
 	client := new(http.Client)

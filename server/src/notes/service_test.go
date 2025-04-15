@@ -1,18 +1,19 @@
 package notes
 
 import (
+	"testing"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
-	columnService "scrumlr.io/server/columns"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/database"
-	"testing"
-	"time"
 )
 
 func TestShouldShowAllNotesBecauseBoardSettingIsSet(t *testing.T) {
 	userId := uuid.New()
-	columns := columnService.ColumnSlice{buildColumn(true)}
+	columns := columns.ColumnSlice{buildColumn(true)}
 	notes := NoteSlice{buildNote(uuid.New(), columns[0].ID)}
 
 	filteredNotes := notes.FilterNotesByBoardSettingsOrAuthorInformation(userId, true, true, columns)
@@ -22,7 +23,7 @@ func TestShouldShowAllNotesBecauseBoardSettingIsSet(t *testing.T) {
 
 func TestShouldShowNoNotesBecauseBoardSettingIsNotSetAndAuthorIdIsNotEqual(t *testing.T) {
 	userId := uuid.New()
-	columns := columnService.ColumnSlice{buildColumn(true)}
+	columns := columns.ColumnSlice{buildColumn(true)}
 	notes := NoteSlice{buildNote(uuid.New(), columns[0].ID)}
 
 	filteredNotes := notes.FilterNotesByBoardSettingsOrAuthorInformation(userId, false, true, columns)
@@ -32,7 +33,7 @@ func TestShouldShowNoNotesBecauseBoardSettingIsNotSetAndAuthorIdIsNotEqual(t *te
 
 func TestShouldShowNotesBecauseAuthorIdIsEqual(t *testing.T) {
 	userId := uuid.New()
-	columns := columnService.ColumnSlice{buildColumn(true)}
+	columns := columns.ColumnSlice{buildColumn(true)}
 	notes := NoteSlice{buildNote(userId, columns[0].ID)}
 
 	filteredNotes := notes.FilterNotesByBoardSettingsOrAuthorInformation(userId, false, true, columns)
@@ -80,8 +81,8 @@ func TestShouldReturnWithErrorUnmarshallColumnData(t *testing.T) {
 	assert.Empty(t, notesSlice)
 }
 
-func buildColumn(visible bool) *columnService.Column {
-	return &columnService.Column{
+func buildColumn(visible bool) *columns.Column {
+	return &columns.Column{
 		ID:          uuid.UUID{},
 		Name:        "",
 		Description: "",

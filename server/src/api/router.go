@@ -17,6 +17,7 @@ import (
 	"github.com/gorilla/websocket"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
@@ -35,6 +36,7 @@ type Server struct {
 	auth     auth.Auth
 
 	boards          services.Boards
+	columns         columns.ColumnService
 	votings         services.Votings
 	users           users.UserService
 	notes           services.Notes
@@ -63,6 +65,7 @@ func New(
 	auth auth.Auth,
 
 	boards services.Boards,
+	columns columns.ColumnService,
 	votings services.Votings,
 	users users.UserService,
 	notes services.Notes,

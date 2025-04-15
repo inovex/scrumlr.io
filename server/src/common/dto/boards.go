@@ -92,7 +92,7 @@ type CreateBoardRequest struct {
 	Passphrase *string `json:"passphrase"`
 
 	// The columns to create for the board.
-	Columns []ColumnRequest `json:"columns"`
+	Columns []columns.ColumnRequest `json:"columns"`
 
 	Owner uuid.UUID `json:"-"`
 }

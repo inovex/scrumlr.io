@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	"github.com/uptrace/bun/dbfixture"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
@@ -25,6 +26,7 @@ var testDb *Database
 var reactionDb reactions.ReactionDatabase
 var sessionDb sessions.SessionDatabase
 var sessionRequestDb sessionrequests.SessionRequestDatabase
+var columnDb columns.ColumnDatabase
 var userDb users.UserDatabase
 var fixture *dbfixture.Fixture
 
@@ -54,6 +56,7 @@ func testMainWithDefer(m *testing.M) int {
 	reactionDb = reactions.NewReactionsDatabase(bun)
 	sessionDb = sessions.NewSessionDatabase(bun)
 	sessionRequestDb = sessionrequests.NewSessionRequestDatabase(bun)
+	columnDb = columns.NewColumnsDatabase(bun)
 	userDb = users.NewUserDatabase(bun)
 
 	err = loadTestdata()
@@ -128,7 +131,7 @@ func loadTestdata() error {
 		(*users.DatabaseUser)(nil),
 		(*Board)(nil),
 		(*sessions.DatabaseBoardSessionInsert)(nil),
-		(*Column)(nil),
+		(*columns.DatabaseColumn)(nil),
 		(*Note)(nil),
 		(*Voting)(nil),
 		(*Vote)(nil),

@@ -208,7 +208,7 @@
       visible: true
       index: 2
 
-- model: Column
+- model: DatabaseColumn
   rows:
     - _id: firstColumn
       id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
@@ -315,7 +315,7 @@
       id: "3113b888-986c-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.openMultipleVotesColumn.ID }}'
+      column: '{{ $.DatabaseColumn.openMultipleVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
@@ -323,7 +323,7 @@
       id: "3113b878-986c-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.openSingleVotesColumn.ID }}'
+      column: '{{ $.DatabaseColumn.openSingleVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
@@ -331,7 +331,7 @@
       id: "3113b889-986c-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.closedVotesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.closedVotesColumn.ID }}'
+      column: '{{ $.DatabaseColumn.closedVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
@@ -339,7 +339,7 @@
       id: "3113b899-986c-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.abortedVotesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.abortedVotesColumn.ID }}'
+      column: '{{ $.DatabaseColumn.abortedVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
@@ -347,7 +347,7 @@
       id: "3113b296-986c-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.votingTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jane.ID }}'
-      column: '{{ $.Column.votingColumn.ID }}'
+      column: '{{ $.DatabaseColumn.votingColumn.ID }}'
       text: "I'm the godfather"
       stack: null
       rank: 1
@@ -355,7 +355,7 @@
       id: "3113b396-986c-4e23-adf7-c3fa19224bd4"
       board: '{{ $.Board.votingTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.votingColumn.ID }}'
+      column: '{{ $.DatabaseColumn.votingColumn.ID }}'
       text: "Just do it!"
       stack: "3113b296-986c-4e23-adf7-c3fa19224bd4"
       rank: 0
@@ -363,7 +363,7 @@
       id: "00000000-0000-0000-0000-0000000000a1"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: null
       rank: 2
@@ -371,7 +371,7 @@
       id: "00000000-0000-0000-0000-0000000000a2"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: null
       rank: 1
@@ -379,7 +379,7 @@
       id: "00000000-0000-0000-0000-0000000000a3"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000a2"
       rank: 0
@@ -387,7 +387,7 @@
       id: "00000000-0000-0000-0000-0000000000a4"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: null
       rank: 0
@@ -395,7 +395,7 @@
       id: "00000000-0000-0000-0000-0000000000a5"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000a4"
       rank: 0
@@ -403,7 +403,7 @@
       id: "00000000-0000-0000-0000-0000000000b1"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnB.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnB.ID }}'
       text: "Just do it!"
       stack: null
       rank: 1
@@ -411,7 +411,7 @@
       id: "00000000-0000-0000-0000-0000000000b2"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnB.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnB.ID }}'
       text: "Just do it!"
       stack: null
       rank: 0
@@ -419,7 +419,7 @@
       id: "00000000-0000-0000-0000-0000000000b3"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnB.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnB.ID }}'
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000b2"
       rank: 0
@@ -427,7 +427,7 @@
       id: "00000000-0000-0000-0000-0000000000c1"
       board: '{{ $.Board.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
-      column: '{{ $.Column.notesColumnC.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnC.ID }}'
       text: "Godfather!"
       stack: null
       rank: 0
@@ -435,7 +435,7 @@
       id: "2638e01b-e38e-4360-a4ce-74af074ee0be"
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 1"
       stack: null
       rank: 0
@@ -443,7 +443,7 @@
       id: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 2"
       stack: null
       rank: 1
@@ -451,7 +451,7 @@
       id: "7840fe66-1a97-4841-ae75-40d87ee327ec"
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 3"
       stack: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
       rank: 1
@@ -459,7 +459,7 @@
       id: "1f6b22ba-ea68-4e9e-a9c9-4266e76b1051"
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 4"
       stack: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
       rank: 0
@@ -467,7 +467,7 @@
       id: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 5"
       stack: null
       rank: 2
@@ -475,7 +475,7 @@
       id: "c98dd4cd-66ae-4c59-a7de-b7fee44e452a"
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 6"
       stack: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
       rank: 0
@@ -483,7 +483,7 @@
       id: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
       board: '{{ $.Board.stackTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnA.ID }}'
       text: "A"
       stack: null
       rank: 1337
@@ -491,7 +491,7 @@
       id: "c98dd001-66ae-4c59-a7de-b7fee44e452a"
       board: '{{ $.Board.stackTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnA.ID }}'
       text: "B"
       stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
       rank: 0
@@ -499,7 +499,7 @@
       id: "c98dd002-66ae-4c59-a7de-b7fee44e452a"
       board: '{{ $.Board.stackTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnA.ID }}'
       text: "C"
       stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
       rank: 1
@@ -507,7 +507,7 @@
       id: "c98dd003-66ae-4c59-a7de-b7fee44e452a"
       board: '{{ $.Board.stackTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnA.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnA.ID }}'
       text: "D"
       stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
       rank: 2
@@ -515,7 +515,7 @@
       id: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
       board: '{{ $.Board.stackTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnB.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnB.ID }}'
       text: "E"
       stack: null
       rank: 1338
@@ -523,7 +523,7 @@
       id: "02d135da-0001-4a6f-8cb7-8c9f3d7c5416"
       board: '{{ $.Board.stackTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnB.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnB.ID }}'
       text: "F"
       stack: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
       rank: 0
@@ -531,7 +531,7 @@
       id: "02d135da-0002-4a6f-8cb7-8c9f3d7c5416"
       board: '{{ $.Board.stackTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnB.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnB.ID }}'
       text: "G"
       stack: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
       rank: 1
@@ -539,7 +539,7 @@
       id: "02d135da-0003-4a6f-8cb7-8c9f3d7c5416"
       board: '{{ $.Board.stackTestBoard.ID }}'
       author: '{{ $.DatabaseUser.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnB.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnB.ID }}'
       text: "H"
       stack: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
       rank: 2

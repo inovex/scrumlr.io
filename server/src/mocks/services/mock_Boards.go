@@ -5,11 +5,8 @@ package services
 import (
 	context "context"
 
-	columns "scrumlr.io/server/columns"
-
-	dto "scrumlr.io/server/common/dto"
-
 	mock "github.com/stretchr/testify/mock"
+	dto "scrumlr.io/server/common/dto"
 
 	uuid "github.com/google/uuid"
 )
@@ -146,65 +143,6 @@ func (_c *MockBoards_Create_Call) RunAndReturn(run func(context.Context, dto.Cre
 	return _c
 }
 
-// CreateColumn provides a mock function with given fields: ctx, body
-func (_m *MockBoards) CreateColumn(ctx context.Context, body dto.ColumnRequest) (*columns.Column, error) {
-	ret := _m.Called(ctx, body)
-
-	if len(ret) == 0 {
-		panic("no return value specified for CreateColumn")
-	}
-
-	var r0 *columns.Column
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, dto.ColumnRequest) (*columns.Column, error)); ok {
-		return rf(ctx, body)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, dto.ColumnRequest) *columns.Column); ok {
-		r0 = rf(ctx, body)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*columns.Column)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, dto.ColumnRequest) error); ok {
-		r1 = rf(ctx, body)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockBoards_CreateColumn_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateColumn'
-type MockBoards_CreateColumn_Call struct {
-	*mock.Call
-}
-
-// CreateColumn is a helper method to define mock.On call
-//   - ctx context.Context
-//   - body dto.ColumnRequest
-func (_e *MockBoards_Expecter) CreateColumn(ctx interface{}, body interface{}) *MockBoards_CreateColumn_Call {
-	return &MockBoards_CreateColumn_Call{Call: _e.mock.On("CreateColumn", ctx, body)}
-}
-
-func (_c *MockBoards_CreateColumn_Call) Run(run func(ctx context.Context, body dto.ColumnRequest)) *MockBoards_CreateColumn_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(dto.ColumnRequest))
-	})
-	return _c
-}
-
-func (_c *MockBoards_CreateColumn_Call) Return(_a0 *columns.Column, _a1 error) *MockBoards_CreateColumn_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockBoards_CreateColumn_Call) RunAndReturn(run func(context.Context, dto.ColumnRequest) (*columns.Column, error)) *MockBoards_CreateColumn_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // Delete provides a mock function with given fields: ctx, id
 func (_m *MockBoards) Delete(ctx context.Context, id uuid.UUID) error {
 	ret := _m.Called(ctx, id)
@@ -248,55 +186,6 @@ func (_c *MockBoards_Delete_Call) Return(_a0 error) *MockBoards_Delete_Call {
 }
 
 func (_c *MockBoards_Delete_Call) RunAndReturn(run func(context.Context, uuid.UUID) error) *MockBoards_Delete_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// DeleteColumn provides a mock function with given fields: ctx, board, column, user
-func (_m *MockBoards) DeleteColumn(ctx context.Context, board uuid.UUID, column uuid.UUID, user uuid.UUID) error {
-	ret := _m.Called(ctx, board, column, user)
-
-	if len(ret) == 0 {
-		panic("no return value specified for DeleteColumn")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, uuid.UUID) error); ok {
-		r0 = rf(ctx, board, column, user)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
-// MockBoards_DeleteColumn_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'DeleteColumn'
-type MockBoards_DeleteColumn_Call struct {
-	*mock.Call
-}
-
-// DeleteColumn is a helper method to define mock.On call
-//   - ctx context.Context
-//   - board uuid.UUID
-//   - column uuid.UUID
-//   - user uuid.UUID
-func (_e *MockBoards_Expecter) DeleteColumn(ctx interface{}, board interface{}, column interface{}, user interface{}) *MockBoards_DeleteColumn_Call {
-	return &MockBoards_DeleteColumn_Call{Call: _e.mock.On("DeleteColumn", ctx, board, column, user)}
-}
-
-func (_c *MockBoards_DeleteColumn_Call) Run(run func(ctx context.Context, board uuid.UUID, column uuid.UUID, user uuid.UUID)) *MockBoards_DeleteColumn_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(uuid.UUID), args[3].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockBoards_DeleteColumn_Call) Return(_a0 error) *MockBoards_DeleteColumn_Call {
-	_c.Call.Return(_a0)
-	return _c
-}
-
-func (_c *MockBoards_DeleteColumn_Call) RunAndReturn(run func(context.Context, uuid.UUID, uuid.UUID, uuid.UUID) error) *MockBoards_DeleteColumn_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -537,66 +426,6 @@ func (_c *MockBoards_GetBoards_Call) RunAndReturn(run func(context.Context, uuid
 	return _c
 }
 
-// GetColumn provides a mock function with given fields: ctx, boardID, columnID
-func (_m *MockBoards) GetColumn(ctx context.Context, boardID uuid.UUID, columnID uuid.UUID) (*columns.Column, error) {
-	ret := _m.Called(ctx, boardID, columnID)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetColumn")
-	}
-
-	var r0 *columns.Column
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (*columns.Column, error)); ok {
-		return rf(ctx, boardID, columnID)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) *columns.Column); ok {
-		r0 = rf(ctx, boardID, columnID)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*columns.Column)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
-		r1 = rf(ctx, boardID, columnID)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockBoards_GetColumn_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetColumn'
-type MockBoards_GetColumn_Call struct {
-	*mock.Call
-}
-
-// GetColumn is a helper method to define mock.On call
-//   - ctx context.Context
-//   - boardID uuid.UUID
-//   - columnID uuid.UUID
-func (_e *MockBoards_Expecter) GetColumn(ctx interface{}, boardID interface{}, columnID interface{}) *MockBoards_GetColumn_Call {
-	return &MockBoards_GetColumn_Call{Call: _e.mock.On("GetColumn", ctx, boardID, columnID)}
-}
-
-func (_c *MockBoards_GetColumn_Call) Run(run func(ctx context.Context, boardID uuid.UUID, columnID uuid.UUID)) *MockBoards_GetColumn_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(uuid.UUID), args[2].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockBoards_GetColumn_Call) Return(_a0 *columns.Column, _a1 error) *MockBoards_GetColumn_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockBoards_GetColumn_Call) RunAndReturn(run func(context.Context, uuid.UUID, uuid.UUID) (*columns.Column, error)) *MockBoards_GetColumn_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // IncrementTimer provides a mock function with given fields: ctx, id
 func (_m *MockBoards) IncrementTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error) {
 	ret := _m.Called(ctx, id)
@@ -652,65 +481,6 @@ func (_c *MockBoards_IncrementTimer_Call) Return(_a0 *dto.Board, _a1 error) *Moc
 }
 
 func (_c *MockBoards_IncrementTimer_Call) RunAndReturn(run func(context.Context, uuid.UUID) (*dto.Board, error)) *MockBoards_IncrementTimer_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// ListColumns provides a mock function with given fields: ctx, boardID
-func (_m *MockBoards) ListColumns(ctx context.Context, boardID uuid.UUID) ([]*columns.Column, error) {
-	ret := _m.Called(ctx, boardID)
-
-	if len(ret) == 0 {
-		panic("no return value specified for ListColumns")
-	}
-
-	var r0 []*columns.Column
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]*columns.Column, error)); ok {
-		return rf(ctx, boardID)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []*columns.Column); ok {
-		r0 = rf(ctx, boardID)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*columns.Column)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
-		r1 = rf(ctx, boardID)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockBoards_ListColumns_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'ListColumns'
-type MockBoards_ListColumns_Call struct {
-	*mock.Call
-}
-
-// ListColumns is a helper method to define mock.On call
-//   - ctx context.Context
-//   - boardID uuid.UUID
-func (_e *MockBoards_Expecter) ListColumns(ctx interface{}, boardID interface{}) *MockBoards_ListColumns_Call {
-	return &MockBoards_ListColumns_Call{Call: _e.mock.On("ListColumns", ctx, boardID)}
-}
-
-func (_c *MockBoards_ListColumns_Call) Run(run func(ctx context.Context, boardID uuid.UUID)) *MockBoards_ListColumns_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockBoards_ListColumns_Call) Return(_a0 []*columns.Column, _a1 error) *MockBoards_ListColumns_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockBoards_ListColumns_Call) RunAndReturn(run func(context.Context, uuid.UUID) ([]*columns.Column, error)) *MockBoards_ListColumns_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -830,65 +600,6 @@ func (_c *MockBoards_Update_Call) Return(_a0 *dto.Board, _a1 error) *MockBoards_
 }
 
 func (_c *MockBoards_Update_Call) RunAndReturn(run func(context.Context, dto.BoardUpdateRequest) (*dto.Board, error)) *MockBoards_Update_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// UpdateColumn provides a mock function with given fields: ctx, body
-func (_m *MockBoards) UpdateColumn(ctx context.Context, body dto.ColumnUpdateRequest) (*columns.Column, error) {
-	ret := _m.Called(ctx, body)
-
-	if len(ret) == 0 {
-		panic("no return value specified for UpdateColumn")
-	}
-
-	var r0 *columns.Column
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, dto.ColumnUpdateRequest) (*columns.Column, error)); ok {
-		return rf(ctx, body)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, dto.ColumnUpdateRequest) *columns.Column); ok {
-		r0 = rf(ctx, body)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*columns.Column)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, dto.ColumnUpdateRequest) error); ok {
-		r1 = rf(ctx, body)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockBoards_UpdateColumn_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateColumn'
-type MockBoards_UpdateColumn_Call struct {
-	*mock.Call
-}
-
-// UpdateColumn is a helper method to define mock.On call
-//   - ctx context.Context
-//   - body dto.ColumnUpdateRequest
-func (_e *MockBoards_Expecter) UpdateColumn(ctx interface{}, body interface{}) *MockBoards_UpdateColumn_Call {
-	return &MockBoards_UpdateColumn_Call{Call: _e.mock.On("UpdateColumn", ctx, body)}
-}
-
-func (_c *MockBoards_UpdateColumn_Call) Run(run func(ctx context.Context, body dto.ColumnUpdateRequest)) *MockBoards_UpdateColumn_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(dto.ColumnUpdateRequest))
-	})
-	return _c
-}
-
-func (_c *MockBoards_UpdateColumn_Call) Return(_a0 *columns.Column, _a1 error) *MockBoards_UpdateColumn_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockBoards_UpdateColumn_Call) RunAndReturn(run func(context.Context, dto.ColumnUpdateRequest) (*columns.Column, error)) *MockBoards_UpdateColumn_Call {
 	_c.Call.Return(run)
 	return _c
 }

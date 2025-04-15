@@ -2,11 +2,12 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"net/http"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
@@ -18,7 +19,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body dto.ColumnRequest
+	var body columns.ColumnRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
@@ -27,7 +28,7 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 	body.Board = board
 	body.User = user
-	column, err := s.boards.CreateColumn(r.Context(), body)
+	column, err := s.columns.Create(r.Context(), body)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
@@ -47,7 +48,7 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 	column := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	if err := s.boards.DeleteColumn(r.Context(), board, column, user); err != nil {
+	if err := s.columns.Delete(r.Context(), board, column, user); err != nil {
 		http.Error(w, "unable to delete column", http.StatusInternalServerError)
 		return
 	}
@@ -62,7 +63,7 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	columnId := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
 
-	var body dto.ColumnUpdateRequest
+	var body columns.ColumnUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
@@ -72,7 +73,7 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 	body.ID = columnId
 	body.Board = board
 
-	column, err := s.boards.UpdateColumn(r.Context(), body)
+	column, err := s.columns.Update(r.Context(), body)
 	if err != nil {
 		http.Error(w, "unable to update column", http.StatusInternalServerError)
 		return
@@ -87,7 +88,7 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
 
-	column, err := s.boards.GetColumn(r.Context(), board, id)
+	column, err := s.columns.Get(r.Context(), board, id)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
@@ -101,7 +102,7 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	columns, err := s.boards.ListColumns(r.Context(), board)
+	columns, err := s.columns.GetAll(r.Context(), board)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
