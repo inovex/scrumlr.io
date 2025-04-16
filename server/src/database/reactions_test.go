@@ -1,7 +1,6 @@
 package database
 
 import (
-	"scrumlr.io/server/notes"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,7 +22,7 @@ func TestRunnerForReactions(t *testing.T) {
 	t.Run("Delete=1", testDeleteReactionFailsBecauseForbidden)
 }
 
-var notesTestA1 *notes.NoteDB
+var notesTestA1 *Note
 var boardTestBoard *Board
 var reactionUserJay *User
 var reactionUserJack *User
@@ -42,6 +41,8 @@ func testGetReaction(t *testing.T) {
 func testGetReactionsForNote(t *testing.T) {
 	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
 	r, err := reactionDb.GetReactionsForNote(notesTestA1.ID)
+	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
+	r, err := reactionDb.GetAllForNote(notesTestA1.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(r))
@@ -49,7 +50,7 @@ func testGetReactionsForNote(t *testing.T) {
 
 func testGetReactions(t *testing.T) {
 	boardTestBoard = fixture.MustRow("Board.notesTestBoard").(*Board)
-	r, err := reactionDb.GetAll(boardTestBoard.ID)
+	r, err := reactionDb.GetReactions(boardTestBoard.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(r))
