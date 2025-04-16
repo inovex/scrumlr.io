@@ -72,9 +72,9 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getBoard:
 			board, err = d.GetBoard(id)
 		case getRequests:
-			requests, err = d.sessionRequestDb.Gets(id)
+			requests, err = d.sessionRequestDb.GetAll(id)
 		case getSessions:
-			sessions, err = d.sessionDb.Gets(id)
+			sessions, err = d.sessionDb.GetAll(id)
 		case getColumns:
 			columns, err = d.GetColumns(id)
 		case getNotes:

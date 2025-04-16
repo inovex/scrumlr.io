@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/users"
 )
 
 func TestRunnerForReactions(t *testing.T) {
@@ -24,8 +25,8 @@ func TestRunnerForReactions(t *testing.T) {
 
 var notesTestA1 *Note
 var boardTestBoard *Board
-var reactionUserJay *User
-var reactionUserJack *User
+var reactionUserJay *users.DatabaseUser
+var reactionUserJack *users.DatabaseUser
 
 func testGetReaction(t *testing.T) {
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
@@ -57,7 +58,7 @@ func testGetReactions(t *testing.T) {
 func testCreateReaction(t *testing.T) {
 	boardTestBoard = fixture.MustRow("Board.notesTestBoard").(*Board)
 	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
-	reactionUserJay = fixture.MustRow("User.jay").(*User)
+	reactionUserJay = fixture.MustRow("DatabaseUser.jay").(*users.DatabaseUser)
 
 	reaction, err := reactionDb.Create(boardTestBoard.ID, reactions.DatabaseReactionInsert{
 		Note:         notesTestA1.ID,
@@ -74,7 +75,7 @@ func testCreateReaction(t *testing.T) {
 func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 	boardTestBoard = fixture.MustRow("Board.notesTestBoard").(*Board)
 	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
-	reactionUserJack = fixture.MustRow("User.jack").(*User)
+	reactionUserJack = fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	_, err := reactionDb.Create(boardTestBoard.ID, reactions.DatabaseReactionInsert{
 		Note:         notesTestA1.ID,
@@ -89,7 +90,7 @@ func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 func testUpdateReaction(t *testing.T) {
 	newReactionType := reactions.Celebration
 	board := fixture.MustRow("Board.notesTestBoard").(*Board) // cannot reuse vars here
-	user := fixture.MustRow("User.jack").(*User)
+	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
 	r, err := reactionDb.Update(board.ID, user.ID, reaction.ID, reactions.DatabaseReactionUpdate{
@@ -105,7 +106,7 @@ func testUpdateReaction(t *testing.T) {
 func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
 	newReactionType := reactions.Celebration
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
-	wrongUser := fixture.MustRow("User.jane").(*User)
+	wrongUser := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
 	_, err := reactionDb.Update(board.ID, wrongUser.ID, reaction.ID, reactions.DatabaseReactionUpdate{
@@ -119,7 +120,7 @@ func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
 
 func testDeleteReaction(t *testing.T) {
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
-	user := fixture.MustRow("User.jane").(*User)
+	user := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 	reaction := fixture.MustRow("DatabaseReaction.reactionB").(*reactions.DatabaseReaction)
 
 	err := reactionDb.Delete(board.ID, user.ID, reaction.ID)
@@ -129,7 +130,7 @@ func testDeleteReaction(t *testing.T) {
 
 func testDeleteReactionFailsBecauseForbidden(t *testing.T) {
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
-	wrongUser := fixture.MustRow("User.jane").(*User)
+	wrongUser := fixture.MustRow("DatabaseUser.jane").(*users.DatabaseUser)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
 	err := reactionDb.Delete(board.ID, wrongUser.ID, reaction.ID)

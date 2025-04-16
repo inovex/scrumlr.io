@@ -71,7 +71,7 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 	}
 
 	if request.Status == RequestAccepted {
-		_, err := service.sessionService.Create(ctx, request.User, request.Board)
+		_, err := service.sessionService.Create(ctx, request.Board, request.User)
 		if err != nil {
 			return nil, err
 		}

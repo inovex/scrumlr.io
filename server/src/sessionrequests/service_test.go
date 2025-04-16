@@ -17,6 +17,7 @@ import (
 	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 )
 
 func TestGetSessionRequest(t *testing.T) {
@@ -40,8 +41,8 @@ func TestGetSessionRequest(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, sessionRequest)
-	assert.Same(t, userId, sessionRequest.User.ID)
-	assert.Same(t, RequestAccepted, sessionRequest.Status)
+	assert.Equal(t, userId, sessionRequest.User.ID)
+	assert.Equal(t, RequestAccepted, sessionRequest.Status)
 }
 
 func TestGetSessionRequest_Notfound(t *testing.T) {
@@ -97,11 +98,11 @@ func TestGetSessionRequests_WithoutQuery(t *testing.T) {
 	assert.NotNil(t, sessionRequests)
 	assert.Len(t, sessionRequests, 2)
 
-	assert.Same(t, firstUserId, sessionRequests[0].User.ID)
-	assert.Same(t, RequestAccepted, sessionRequests[0].Status)
+	assert.Equal(t, firstUserId, sessionRequests[0].User.ID)
+	assert.Equal(t, RequestAccepted, sessionRequests[0].Status)
 
-	assert.Same(t, secondUserId, sessionRequests[1].User.ID)
-	assert.Same(t, RequestPending, sessionRequests[1].Status)
+	assert.Equal(t, secondUserId, sessionRequests[1].User.ID)
+	assert.Equal(t, RequestPending, sessionRequests[1].Status)
 }
 
 func TestListSessionRequests_WithoutQuery_NotFound(t *testing.T) {
@@ -157,11 +158,11 @@ func TestListSessionRequests_WithQuery(t *testing.T) {
 	assert.NotNil(t, sessionRequests)
 	assert.Len(t, sessionRequests, 2)
 
-	assert.Same(t, firstUserId, sessionRequests[0].User.ID)
-	assert.Same(t, RequestPending, sessionRequests[0].Status)
+	assert.Equal(t, firstUserId, sessionRequests[0].User.ID)
+	assert.Equal(t, RequestPending, sessionRequests[0].Status)
 
-	assert.Same(t, secondUserId, sessionRequests[1].User.ID)
-	assert.Same(t, RequestPending, sessionRequests[1].Status)
+	assert.Equal(t, secondUserId, sessionRequests[1].User.ID)
+	assert.Equal(t, RequestPending, sessionRequests[1].Status)
 }
 
 func TestListSessionRequests_WithQuery_NotFound(t *testing.T) {
@@ -209,6 +210,108 @@ func TestListSessionRequests_InvalideQuery(t *testing.T) {
 	mockSessionRequestDb.AssertNotCalled(t, "GetBoardSessionRequests")
 	assert.NotNil(t, err)
 	assert.Equal(t, "invalid status filter", err.Error())
+}
+
+func TestCreateSessionRequest(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
+	mockSessionRequestDb.EXPECT().Create(DatabaseBoardSessionRequestInsert{Board: boardId, User: userId}).
+		Return(DatabaseBoardSessionRequest{Board: boardId, User: userId}, nil)
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockWebSocket := NewMockWebsocket(t)
+
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
+	request, err := service.Create(context.Background(), boardId, userId)
+
+	assert.NotNil(t, request)
+	assert.Nil(t, err)
+	assert.Equal(t, userId, request.User.ID)
+}
+
+func TestCreateSessionRequest_DBError(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	dbError := "Failed to execute"
+
+	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
+	mockSessionRequestDb.EXPECT().Create(DatabaseBoardSessionRequestInsert{Board: boardId, User: userId}).
+		Return(DatabaseBoardSessionRequest{}, errors.New(dbError))
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	mockBroker := brokerMock.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockWebSocket := NewMockWebsocket(t)
+
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
+	request, err := service.Create(context.Background(), boardId, userId)
+
+	assert.Nil(t, request)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestUpdatesessionRequest(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+
+	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
+	mockSessionRequestDb.EXPECT().Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted}).
+		Return(DatabaseBoardSessionRequest{Board: boardId, User: userId, Status: RequestAccepted}, nil)
+
+	mockSessionService := sessions.NewMockSessionService(t)
+	mockSessionService.EXPECT().Create(context.Background(), boardId, userId).
+		Return(&sessions.BoardSession{Board: boardId, User: users.User{ID: userId}}, nil)
+
+	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockWebSocket := NewMockWebsocket(t)
+
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
+	request, err := service.Update(context.Background(), BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
+
+	assert.NotNil(t, request)
+	assert.Nil(t, err)
+	assert.Equal(t, userId, request.User.ID)
+}
+
+func TestUpdatesessionRequest_DBError(t *testing.T) {
+	boardId := uuid.New()
+	userId := uuid.New()
+	dbError := "Failed to execute"
+
+	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
+	mockSessionRequestDb.EXPECT().Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted}).
+		Return(DatabaseBoardSessionRequest{}, errors.New(dbError))
+
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	mockBroker := brokerMock.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockWebSocket := NewMockWebsocket(t)
+
+	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
+	request, err := service.Update(context.Background(), BoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
+
+	assert.Nil(t, request)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
 }
 
 func TestSessionRequestExists(t *testing.T) {
@@ -265,11 +368,11 @@ func TestSessionOpenBoardSessionRequestSocket(t *testing.T) {
 
 	mockWebSocket := NewMockWebsocket(t)
 	mockResponseWriter := httpMock.NewMockResponseWriter(t)
-	mockRequest := httptest.NewRequest(http.MethodGet, "", nil)
+	mockRequest := httptest.NewRequest(http.MethodGet, "/test", nil)
 	mockWebSocket.EXPECT().OpenSocket(mock.Anything, mock.Anything)
 
 	service := NewSessionRequestService(mockSessionRequestDb, broker, mockWebSocket, mockSessionService)
 	service.OpenSocket(mockResponseWriter, mockRequest)
 
-	mockWebSocket.AssertCalled(t, "OpenBoardSessionRequestSocket", mockResponseWriter, mockRequest)
+	mockWebSocket.AssertCalled(t, "OpenSocket", mockResponseWriter, mockRequest)
 }

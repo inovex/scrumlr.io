@@ -285,9 +285,9 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			}
 
 			if te.board.AccessPolicy == types.AccessPolicyByInvite {
-				sessionRequestMock.EXPECT().SessionRequestExists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
+				sessionRequestMock.EXPECT().Exists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
 				if !te.sessionRequestExists {
-					sessionRequestMock.EXPECT().CreateSessionRequest(req.req.Context(), boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
+					sessionRequestMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
 				}
 			} else {
 				if !te.sessionExists {
