@@ -190,12 +190,12 @@ func (_c *MockReactionService_Get_Call) RunAndReturn(run func(context.Context, u
 	return _c
 }
 
-// List provides a mock function with given fields: ctx, boardId
-func (_m *MockReactionService) List(ctx context.Context, boardId uuid.UUID) ([]*Reaction, error) {
+// GetAll provides a mock function with given fields: ctx, boardId
+func (_m *MockReactionService) GetAll(ctx context.Context, boardId uuid.UUID) ([]*Reaction, error) {
 	ret := _m.Called(ctx, boardId)
 
 	if len(ret) == 0 {
-		panic("no return value specified for List")
+		panic("no return value specified for GetAll")
 	}
 
 	var r0 []*Reaction
@@ -220,31 +220,31 @@ func (_m *MockReactionService) List(ctx context.Context, boardId uuid.UUID) ([]*
 	return r0, r1
 }
 
-// MockReactionService_List_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'List'
-type MockReactionService_List_Call struct {
+// MockReactionService_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockReactionService_GetAll_Call struct {
 	*mock.Call
 }
 
-// List is a helper method to define mock.On call
+// GetAll is a helper method to define mock.On call
 //   - ctx context.Context
 //   - boardId uuid.UUID
-func (_e *MockReactionService_Expecter) List(ctx interface{}, boardId interface{}) *MockReactionService_List_Call {
-	return &MockReactionService_List_Call{Call: _e.mock.On("List", ctx, boardId)}
+func (_e *MockReactionService_Expecter) GetAll(ctx interface{}, boardId interface{}) *MockReactionService_GetAll_Call {
+	return &MockReactionService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, boardId)}
 }
 
-func (_c *MockReactionService_List_Call) Run(run func(ctx context.Context, boardId uuid.UUID)) *MockReactionService_List_Call {
+func (_c *MockReactionService_GetAll_Call) Run(run func(ctx context.Context, boardId uuid.UUID)) *MockReactionService_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(context.Context), args[1].(uuid.UUID))
 	})
 	return _c
 }
 
-func (_c *MockReactionService_List_Call) Return(_a0 []*Reaction, _a1 error) *MockReactionService_List_Call {
+func (_c *MockReactionService_GetAll_Call) Return(_a0 []*Reaction, _a1 error) *MockReactionService_GetAll_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockReactionService_List_Call) RunAndReturn(run func(context.Context, uuid.UUID) ([]*Reaction, error)) *MockReactionService_List_Call {
+func (_c *MockReactionService_GetAll_Call) RunAndReturn(run func(context.Context, uuid.UUID) ([]*Reaction, error)) *MockReactionService_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
