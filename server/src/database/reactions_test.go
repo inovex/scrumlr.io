@@ -3,11 +3,8 @@ package database
 import (
 	"testing"
 
-	"scrumlr.io/server/notes"
-
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/users"
 )
 
 func TestRunnerForReactions(t *testing.T) {
