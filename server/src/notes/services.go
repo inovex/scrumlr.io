@@ -99,7 +99,7 @@ func (service *Service) Update(ctx context.Context, body NoteUpdateRequest) (*No
   return new(Note).From(note), err
 }
 
-func (service *Service) List(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
+func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
   log := logger.FromContext(ctx)
   notes, err := service.database.GetNotes(boardID, columnID...)
   if err != nil {

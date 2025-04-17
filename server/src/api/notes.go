@@ -61,7 +61,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	notes, err := s.notes.List(r.Context(), board)
+	notes, err := s.notes.GetAll(r.Context(), board)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
