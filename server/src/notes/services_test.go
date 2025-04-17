@@ -103,12 +103,68 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 	service := NewNotesService(mockDB, broker)
 
 	boardID, _ := uuid.NewRandom()
+	noteID1, _ := uuid.NewRandom()
+	noteID2, _ := uuid.NewRandom()
+	authorID1, _ := uuid.NewRandom()
+	authorID2, _ := uuid.NewRandom()
+	columnID1, _ := uuid.NewRandom()
+	columnID2, _ := uuid.NewRandom()
 
-	mockDB.EXPECT().GetNotes(boardID).Return([]NoteDB{}, nil)
+	noteDBList := []NoteDB{
+		{
+			ID:     noteID1,
+			Author: authorID1,
+			Board:  boardID,
+			Column: columnID1,
+			Text:   "First note",
+			Stack:  uuid.NullUUID{},
+			Rank:   1,
+			Edited: false,
+		},
+		{
+			ID:     noteID2,
+			Author: authorID2,
+			Board:  boardID,
+			Column: columnID2,
+			Text:   "Second note",
+			Stack:  uuid.NullUUID{},
+			Rank:   2,
+			Edited: true,
+		},
+	}
 
-	_, err := service.List(logger.InitTestLogger(context.Background()), boardID)
+	mockDB.EXPECT().GetNotes(boardID).Return(noteDBList, nil)
+
+	notes, err := service.List(logger.InitTestLogger(context.Background()), boardID)
 
 	assert.NoError(suite.T(), err)
+
+	expectedNotes := []Note{
+		{
+			ID:     noteID1,
+			Author: authorID1,
+			Text:   "First note",
+			Edited: false,
+			Position: NotePosition{
+				Column: columnID1,
+				Stack:  uuid.NullUUID{},
+				Rank:   0,
+			},
+		},
+		{
+			ID:     noteID2,
+			Author: authorID2,
+			Text:   "Second note",
+			Edited: true,
+			Position: NotePosition{
+				Column: columnID2,
+				Stack:  uuid.NullUUID{},
+				Rank:   0,
+			},
+		},
+	}
+
+	assert.Equal(suite.T(), expectedNotes, notes)
 	mockDB.AssertExpectations(suite.T())
 }
 
