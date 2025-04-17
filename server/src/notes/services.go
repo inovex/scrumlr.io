@@ -19,8 +19,8 @@ type Service struct {
 type NotesDatabase interface {
   CreateNote(insert NoteInsertDB) (NoteDB, error)
   ImportNote(insert NoteImportDB) (NoteDB, error)
-  GetNote(id uuid.UUID) (NoteDB, error)
-  GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error)
+  Get(id uuid.UUID) (NoteDB, error)
+  GetAll(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error)
   GetChildNotes(parentNote uuid.UUID) ([]NoteDB, error)
   UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error)
   DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
@@ -61,7 +61,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 
 func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Note, error) {
   log := logger.FromContext(ctx)
-  note, err := service.database.GetNote(id)
+  note, err := service.database.Get(id)
   if err != nil {
     if err == sql.ErrNoRows {
       return nil, common.NotFoundError
@@ -101,7 +101,7 @@ func (service *Service) Update(ctx context.Context, body NoteUpdateRequest) (*No
 
 func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID ...uuid.UUID) ([]*Note, error) {
   log := logger.FromContext(ctx)
-  notes, err := service.database.GetNotes(boardID, columnID...)
+  notes, err := service.database.GetAll(boardID, columnID...)
   if err != nil {
     if err == sql.ErrNoRows {
       return nil, common.NotFoundError
@@ -137,7 +137,7 @@ func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, 
 }
 
 func (service *Service) updatedNotes(board uuid.UUID) {
-  notes, err := service.database.GetNotes(board)
+  notes, err := service.database.GetAll(board)
   if err != nil {
     logger.Get().Errorw("unable to retrieve notes in UpdatedNotes call", "boardID", board, "err", err)
   }

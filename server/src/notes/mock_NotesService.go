@@ -191,6 +191,80 @@ func (_c *MockNotesService_Get_Call) RunAndReturn(run func(context.Context, uuid
 	return _c
 }
 
+// GetAll provides a mock function with given fields: ctx, id, columns
+func (_m *MockNotesService) GetAll(ctx context.Context, id uuid.UUID, columns ...uuid.UUID) ([]*Note, error) {
+	_va := make([]interface{}, len(columns))
+	for _i := range columns {
+		_va[_i] = columns[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, ctx, id)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAll")
+	}
+
+	var r0 []*Note
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, ...uuid.UUID) ([]*Note, error)); ok {
+		return rf(ctx, id, columns...)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, ...uuid.UUID) []*Note); ok {
+		r0 = rf(ctx, id, columns...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*Note)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, ...uuid.UUID) error); ok {
+		r1 = rf(ctx, id, columns...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockNotesService_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockNotesService_GetAll_Call struct {
+	*mock.Call
+}
+
+// GetAll is a helper method to define mock.On call
+//   - ctx context.Context
+//   - id uuid.UUID
+//   - columns ...uuid.UUID
+func (_e *MockNotesService_Expecter) GetAll(ctx interface{}, id interface{}, columns ...interface{}) *MockNotesService_GetAll_Call {
+	return &MockNotesService_GetAll_Call{Call: _e.mock.On("GetAll",
+		append([]interface{}{ctx, id}, columns...)...)}
+}
+
+func (_c *MockNotesService_GetAll_Call) Run(run func(ctx context.Context, id uuid.UUID, columns ...uuid.UUID)) *MockNotesService_GetAll_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]uuid.UUID, len(args)-2)
+		for i, a := range args[2:] {
+			if a != nil {
+				variadicArgs[i] = a.(uuid.UUID)
+			}
+		}
+		run(args[0].(context.Context), args[1].(uuid.UUID), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_GetAll_Call) Return(_a0 []*Note, _a1 error) *MockNotesService_GetAll_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockNotesService_GetAll_Call) RunAndReturn(run func(context.Context, uuid.UUID, ...uuid.UUID) ([]*Note, error)) *MockNotesService_GetAll_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetStack provides a mock function with given fields: ctx, note
 func (_m *MockNotesService) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error) {
 	ret := _m.Called(ctx, note)
@@ -305,80 +379,6 @@ func (_c *MockNotesService_Import_Call) Return(_a0 *Note, _a1 error) *MockNotesS
 }
 
 func (_c *MockNotesService_Import_Call) RunAndReturn(run func(context.Context, NoteImportRequest) (*Note, error)) *MockNotesService_Import_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// List provides a mock function with given fields: ctx, id, columns
-func (_m *MockNotesService) List(ctx context.Context, id uuid.UUID, columns ...uuid.UUID) ([]*Note, error) {
-	_va := make([]interface{}, len(columns))
-	for _i := range columns {
-		_va[_i] = columns[_i]
-	}
-	var _ca []interface{}
-	_ca = append(_ca, ctx, id)
-	_ca = append(_ca, _va...)
-	ret := _m.Called(_ca...)
-
-	if len(ret) == 0 {
-		panic("no return value specified for List")
-	}
-
-	var r0 []*Note
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, ...uuid.UUID) ([]*Note, error)); ok {
-		return rf(ctx, id, columns...)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID, ...uuid.UUID) []*Note); ok {
-		r0 = rf(ctx, id, columns...)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*Note)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID, ...uuid.UUID) error); ok {
-		r1 = rf(ctx, id, columns...)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockNotesService_List_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'List'
-type MockNotesService_List_Call struct {
-	*mock.Call
-}
-
-// List is a helper method to define mock.On call
-//   - ctx context.Context
-//   - id uuid.UUID
-//   - columns ...uuid.UUID
-func (_e *MockNotesService_Expecter) List(ctx interface{}, id interface{}, columns ...interface{}) *MockNotesService_List_Call {
-	return &MockNotesService_List_Call{Call: _e.mock.On("List",
-		append([]interface{}{ctx, id}, columns...)...)}
-}
-
-func (_c *MockNotesService_List_Call) Run(run func(ctx context.Context, id uuid.UUID, columns ...uuid.UUID)) *MockNotesService_List_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := make([]uuid.UUID, len(args)-2)
-		for i, a := range args[2:] {
-			if a != nil {
-				variadicArgs[i] = a.(uuid.UUID)
-			}
-		}
-		run(args[0].(context.Context), args[1].(uuid.UUID), variadicArgs...)
-	})
-	return _c
-}
-
-func (_c *MockNotesService_List_Call) Return(_a0 []*Note, _a1 error) *MockNotesService_List_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockNotesService_List_Call) RunAndReturn(run func(context.Context, uuid.UUID, ...uuid.UUID) ([]*Note, error)) *MockNotesService_List_Call {
 	_c.Call.Return(run)
 	return _c
 }

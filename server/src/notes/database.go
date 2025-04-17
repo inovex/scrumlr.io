@@ -41,13 +41,13 @@ func (d *DB) ImportNote(insert NoteImportDB) (NoteDB, error) {
 	return note, err
 }
 
-func (d *DB) GetNote(id uuid.UUID) (NoteDB, error) {
+func (d *DB) Get(id uuid.UUID) (NoteDB, error) {
 	var note NoteDB
 	err := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Scan(context.Background(), &note)
 	return note, err
 }
 
-func (d *DB) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error) {
+func (d *DB) GetAll(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error) {
 	var notes []NoteDB
 	query := d.db.NewSelect().Model((*Note)(nil)).Where("board = ?", board)
 	if len(columns) > 0 {

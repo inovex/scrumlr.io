@@ -125,6 +125,135 @@ func (_c *MockNotesDatabase_DeleteNote_Call) RunAndReturn(run func(uuid.UUID, uu
 	return _c
 }
 
+// Get provides a mock function with given fields: id
+func (_m *MockNotesDatabase) Get(id uuid.UUID) (NoteDB, error) {
+	ret := _m.Called(id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Get")
+	}
+
+	var r0 NoteDB
+	var r1 error
+	if rf, ok := ret.Get(0).(func(uuid.UUID) (NoteDB, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(uuid.UUID) NoteDB); ok {
+		r0 = rf(id)
+	} else {
+		r0 = ret.Get(0).(NoteDB)
+	}
+
+	if rf, ok := ret.Get(1).(func(uuid.UUID) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockNotesDatabase_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type MockNotesDatabase_Get_Call struct {
+	*mock.Call
+}
+
+// Get is a helper method to define mock.On call
+//   - id uuid.UUID
+func (_e *MockNotesDatabase_Expecter) Get(id interface{}) *MockNotesDatabase_Get_Call {
+	return &MockNotesDatabase_Get_Call{Call: _e.mock.On("Get", id)}
+}
+
+func (_c *MockNotesDatabase_Get_Call) Run(run func(id uuid.UUID)) *MockNotesDatabase_Get_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockNotesDatabase_Get_Call) Return(_a0 NoteDB, _a1 error) *MockNotesDatabase_Get_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockNotesDatabase_Get_Call) RunAndReturn(run func(uuid.UUID) (NoteDB, error)) *MockNotesDatabase_Get_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAll provides a mock function with given fields: board, columns
+func (_m *MockNotesDatabase) GetAll(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error) {
+	_va := make([]interface{}, len(columns))
+	for _i := range columns {
+		_va[_i] = columns[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, board)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAll")
+	}
+
+	var r0 []NoteDB
+	var r1 error
+	if rf, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) ([]NoteDB, error)); ok {
+		return rf(board, columns...)
+	}
+	if rf, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) []NoteDB); ok {
+		r0 = rf(board, columns...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]NoteDB)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(uuid.UUID, ...uuid.UUID) error); ok {
+		r1 = rf(board, columns...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockNotesDatabase_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockNotesDatabase_GetAll_Call struct {
+	*mock.Call
+}
+
+// GetAll is a helper method to define mock.On call
+//   - board uuid.UUID
+//   - columns ...uuid.UUID
+func (_e *MockNotesDatabase_Expecter) GetAll(board interface{}, columns ...interface{}) *MockNotesDatabase_GetAll_Call {
+	return &MockNotesDatabase_GetAll_Call{Call: _e.mock.On("GetAll",
+		append([]interface{}{board}, columns...)...)}
+}
+
+func (_c *MockNotesDatabase_GetAll_Call) Run(run func(board uuid.UUID, columns ...uuid.UUID)) *MockNotesDatabase_GetAll_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		variadicArgs := make([]uuid.UUID, len(args)-1)
+		for i, a := range args[1:] {
+			if a != nil {
+				variadicArgs[i] = a.(uuid.UUID)
+			}
+		}
+		run(args[0].(uuid.UUID), variadicArgs...)
+	})
+	return _c
+}
+
+func (_c *MockNotesDatabase_GetAll_Call) Return(_a0 []NoteDB, _a1 error) *MockNotesDatabase_GetAll_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockNotesDatabase_GetAll_Call) RunAndReturn(run func(uuid.UUID, ...uuid.UUID) ([]NoteDB, error)) *MockNotesDatabase_GetAll_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetChildNotes provides a mock function with given fields: parentNote
 func (_m *MockNotesDatabase) GetChildNotes(parentNote uuid.UUID) ([]NoteDB, error) {
 	ret := _m.Called(parentNote)
@@ -179,135 +308,6 @@ func (_c *MockNotesDatabase_GetChildNotes_Call) Return(_a0 []NoteDB, _a1 error) 
 }
 
 func (_c *MockNotesDatabase_GetChildNotes_Call) RunAndReturn(run func(uuid.UUID) ([]NoteDB, error)) *MockNotesDatabase_GetChildNotes_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// GetNote provides a mock function with given fields: id
-func (_m *MockNotesDatabase) GetNote(id uuid.UUID) (NoteDB, error) {
-	ret := _m.Called(id)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetNote")
-	}
-
-	var r0 NoteDB
-	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID) (NoteDB, error)); ok {
-		return rf(id)
-	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID) NoteDB); ok {
-		r0 = rf(id)
-	} else {
-		r0 = ret.Get(0).(NoteDB)
-	}
-
-	if rf, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = rf(id)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockNotesDatabase_GetNote_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetNote'
-type MockNotesDatabase_GetNote_Call struct {
-	*mock.Call
-}
-
-// GetNote is a helper method to define mock.On call
-//   - id uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetNote(id interface{}) *MockNotesDatabase_GetNote_Call {
-	return &MockNotesDatabase_GetNote_Call{Call: _e.mock.On("GetNote", id)}
-}
-
-func (_c *MockNotesDatabase_GetNote_Call) Run(run func(id uuid.UUID)) *MockNotesDatabase_GetNote_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockNotesDatabase_GetNote_Call) Return(_a0 NoteDB, _a1 error) *MockNotesDatabase_GetNote_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockNotesDatabase_GetNote_Call) RunAndReturn(run func(uuid.UUID) (NoteDB, error)) *MockNotesDatabase_GetNote_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// GetNotes provides a mock function with given fields: board, columns
-func (_m *MockNotesDatabase) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error) {
-	_va := make([]interface{}, len(columns))
-	for _i := range columns {
-		_va[_i] = columns[_i]
-	}
-	var _ca []interface{}
-	_ca = append(_ca, board)
-	_ca = append(_ca, _va...)
-	ret := _m.Called(_ca...)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetNotes")
-	}
-
-	var r0 []NoteDB
-	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) ([]NoteDB, error)); ok {
-		return rf(board, columns...)
-	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) []NoteDB); ok {
-		r0 = rf(board, columns...)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]NoteDB)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(uuid.UUID, ...uuid.UUID) error); ok {
-		r1 = rf(board, columns...)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockNotesDatabase_GetNotes_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetNotes'
-type MockNotesDatabase_GetNotes_Call struct {
-	*mock.Call
-}
-
-// GetNotes is a helper method to define mock.On call
-//   - board uuid.UUID
-//   - columns ...uuid.UUID
-func (_e *MockNotesDatabase_Expecter) GetNotes(board interface{}, columns ...interface{}) *MockNotesDatabase_GetNotes_Call {
-	return &MockNotesDatabase_GetNotes_Call{Call: _e.mock.On("GetNotes",
-		append([]interface{}{board}, columns...)...)}
-}
-
-func (_c *MockNotesDatabase_GetNotes_Call) Run(run func(board uuid.UUID, columns ...uuid.UUID)) *MockNotesDatabase_GetNotes_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		variadicArgs := make([]uuid.UUID, len(args)-1)
-		for i, a := range args[1:] {
-			if a != nil {
-				variadicArgs[i] = a.(uuid.UUID)
-			}
-		}
-		run(args[0].(uuid.UUID), variadicArgs...)
-	})
-	return _c
-}
-
-func (_c *MockNotesDatabase_GetNotes_Call) Return(_a0 []NoteDB, _a1 error) *MockNotesDatabase_GetNotes_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockNotesDatabase_GetNotes_Call) RunAndReturn(run func(uuid.UUID, ...uuid.UUID) ([]NoteDB, error)) *MockNotesDatabase_GetNotes_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -60,7 +60,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 		Text:   txt,
 	}).Return(noteDB, nil)
 
-	mockDB.EXPECT().GetNotes(boardID).Return([]NoteDB{}, nil)
+	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
 
 	publishEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
@@ -133,9 +133,9 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 		},
 	}
 
-	mockDB.EXPECT().GetNotes(boardID).Return(noteDBList, nil)
+	mockDB.EXPECT().GetAll(boardID).Return(noteDBList, nil)
 
-	notes, err := service.List(logger.InitTestLogger(context.Background()), boardID)
+	notes, err := service.GetAll(logger.InitTestLogger(context.Background()), boardID)
 
 	assert.NoError(suite.T(), err)
 
@@ -200,7 +200,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
 
 	// Mock for the updatedNotes call, which internally calls GetNotes
-	mockDB.EXPECT().GetNotes(boardID).Return([]NoteDB{}, nil)
+	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
 
 	ctx := logger.InitTestLogger(context.Background())
 
@@ -327,7 +327,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 
 	boardID, _ := uuid.NewRandom()
 	expectedAPIError := &common.APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
-	mockDB.EXPECT().GetNote(boardID).Return(NoteDB{}, sql.ErrNoRows)
+	mockDB.EXPECT().Get(boardID).Return(NoteDB{}, sql.ErrNoRows)
 
 	_, err := service.Get(logger.InitTestLogger(context.Background()), boardID)
 
