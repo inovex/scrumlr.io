@@ -52,7 +52,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
   }).Return(NoteDB{}, nil)
   mockDB.EXPECT().GetNotes(boardID).Return([]NoteDB{}, nil)
 
-  mockBroker.On("Publish", publishSubject, publishEvent).Return(nil)
+  mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
 
   _, err := service.Create(logger.InitTestLogger(context.Background()), NoteCreateRequest{
     User:   authorID,
@@ -60,6 +60,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
     Column: colID,
     Text:   txt,
   })
+
   assert.NoError(suite.T(), err)
   mockDB.AssertExpectations(suite.T())
   mockBroker.AssertExpectations(suite.T())
@@ -126,7 +127,8 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
     Type: realtime.BoardEventNotesUpdated,
     Data: []Note{},
   }
-  mockBroker.On("Publish", publishSubject, publishEvent).Return(nil)
+  mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
+
   // Mock for the updatedNotes call, which internally calls GetNotes
   mockDB.EXPECT().GetNotes(boardID).Return([]NoteDB{}, nil)
 
@@ -195,8 +197,8 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
     Type: realtime.BoardEventVotesDeleted,
     Data: votesToDelete,
   }
-  mockBroker.On("Publish", publishSubject, publishEventNoteDeleted).Return(nil)
-  mockBroker.On("Publish", publishSubject, publishEventVotesDeleted).Return(nil)
+  mockBroker.EXPECT().Publish(publishSubject, publishEventNoteDeleted).Return(nil)
+  mockBroker.EXPECT().Publish(publishSubject, publishEventVotesDeleted).Return(nil)
 
   ctx := logger.InitTestLogger(context.Background())
   ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
@@ -277,8 +279,7 @@ func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
     {ID: uuid.New(), Text: "Note 2"},
   }
 
-  mockDB.On("GetStack", noteID).Return(expectedNotes, nil)
-
+  mockDB.EXPECT().GetStack(noteID).Return(expectedNotes, nil)
   result, err := service.GetStack(ctx, noteID)
 
   assert.NoError(suite.T(), err)
@@ -298,7 +299,7 @@ func (suite *NoteServiceTestSuite) TestGetStackError(t *testing.T) {
   noteID := uuid.New()
 
   mockErr := errors.New("database failure")
-  mockDB.On("GetStack", noteID).Return(nil, mockErr)
+  mockDB.EXPECT().GetStack(noteID).Return(nil, mockErr)
 
   result, err := service.GetStack(ctx, noteID)
 

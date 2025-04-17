@@ -1,6 +1,7 @@
 package database
 
 import (
+	"scrumlr.io/server/notes"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,7 +23,7 @@ func TestRunnerForReactions(t *testing.T) {
 	t.Run("Delete=1", testDeleteReactionFailsBecauseForbidden)
 }
 
-var notesTestA1 *Note
+var notesTestA1 *notes.NoteDB
 var boardTestBoard *Board
 var reactionUserJay *User
 var reactionUserJack *User
@@ -39,7 +40,7 @@ func testGetReaction(t *testing.T) {
 }
 
 func testGetReactionsForNote(t *testing.T) {
-	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
+	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
 	r, err := reactionDb.GetReactionsForNote(notesTestA1.ID)
 
 	assert.Nil(t, err)
@@ -56,7 +57,7 @@ func testGetReactions(t *testing.T) {
 
 func testCreateReaction(t *testing.T) {
 	boardTestBoard = fixture.MustRow("Board.notesTestBoard").(*Board)
-	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
+	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
 	reactionUserJay = fixture.MustRow("User.jay").(*User)
 
 	reaction, err := reactionDb.CreateReaction(boardTestBoard.ID, reactions.DatabaseReactionInsert{
@@ -73,7 +74,7 @@ func testCreateReaction(t *testing.T) {
 
 func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 	boardTestBoard = fixture.MustRow("Board.notesTestBoard").(*Board)
-	notesTestA1 = fixture.MustRow("Note.notesTestA1").(*Note)
+	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
 	reactionUserJack = fixture.MustRow("User.jack").(*User)
 
 	_, err := reactionDb.CreateReaction(boardTestBoard.ID, reactions.DatabaseReactionInsert{

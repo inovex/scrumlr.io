@@ -122,7 +122,7 @@ func testGetNotesAndVerifyOrder(t *testing.T) {
 	verifyNoteOrder(t, notesOnBoard, noteA1, noteA2, noteA4, noteA5, noteA3)
 
 	noteB1 = fixture.MustRow("NoteDB.notesTestB1").(*notes.NoteDB)
-	noteB2 = fixture.MustRow("NoteDBnotesTestB2").(*notes.NoteDB)
+	noteB2 = fixture.MustRow("NoteDB.notesTestB2").(*notes.NoteDB)
 	noteB3 = fixture.MustRow("NoteDB.notesTestB3").(*notes.NoteDB)
 
 	notesOnBoard, _ = notesDB.GetNotes(notesTestBoard.ID, columnB.ID)
