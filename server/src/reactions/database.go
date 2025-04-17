@@ -21,8 +21,8 @@ func NewReactionsDatabase(database *bun.DB) ReactionDatabase {
 	return db
 }
 
-// GetReaction gets a specific Reaction
-func (d *DB) GetReaction(id uuid.UUID) (DatabaseReaction, error) {
+// Get gets a specific Reaction
+func (d *DB) Get(id uuid.UUID) (DatabaseReaction, error) {
 	var reaction DatabaseReaction
 	err := d.db.
 		NewSelect().
@@ -32,10 +32,10 @@ func (d *DB) GetReaction(id uuid.UUID) (DatabaseReaction, error) {
 	return reaction, err
 }
 
-// GetReactions gets all reactions for a specific board
+// GetAll gets all reactions for a specific board
 // query:
 // SELECT r.* FROM reactions r JOIN notes n ON r.note = n.id WHERE n.board = ?;
-func (d *DB) GetReactions(board uuid.UUID) ([]DatabaseReaction, error) {
+func (d *DB) GetAll(board uuid.UUID) ([]DatabaseReaction, error) {
 	var reactions []DatabaseReaction
 	err := d.db.
 		NewSelect().
@@ -46,8 +46,8 @@ func (d *DB) GetReactions(board uuid.UUID) ([]DatabaseReaction, error) {
 	return reactions, err
 }
 
-// GetReactionsForNote gets all reactions for a specific note
-func (d *DB) GetReactionsForNote(note uuid.UUID) ([]DatabaseReaction, error) {
+// GetAllForNote gets all reactions for a specific note
+func (d *DB) GetAllForNote(note uuid.UUID) ([]DatabaseReaction, error) {
 	var reactions []DatabaseReaction
 	err := d.db.
 		NewSelect().
@@ -58,9 +58,9 @@ func (d *DB) GetReactionsForNote(note uuid.UUID) ([]DatabaseReaction, error) {
 	return reactions, err
 }
 
-// CreateReaction inserts a new reaction
-func (d *DB) CreateReaction(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error) {
-	var currentNoteReactions, err = d.GetReactionsForNote(insert.Note)
+// Create inserts a new reaction
+func (d *DB) Create(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error) {
+	var currentNoteReactions, err = d.GetAllForNote(insert.Note)
 	if err != nil {
 		return DatabaseReaction{}, err
 	}
@@ -80,9 +80,9 @@ func (d *DB) CreateReaction(board uuid.UUID, insert DatabaseReactionInsert) (Dat
 	return reaction, err
 }
 
-// RemoveReaction deletes a reaction
-func (d *DB) RemoveReaction(board, user, id uuid.UUID) error {
-	var r, err = d.GetReaction(id)
+// Delete deletes a reaction
+func (d *DB) Delete(board, user, id uuid.UUID) error {
+	var r, err = d.Get(id)
 	if err != nil {
 		return err
 	}
@@ -97,9 +97,9 @@ func (d *DB) RemoveReaction(board, user, id uuid.UUID) error {
 	return err
 }
 
-// UpdateReaction updates the reaction type
-func (d *DB) UpdateReaction(board, user, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
-	var r, err = d.GetReaction(id)
+// Update updates the reaction type
+func (d *DB) Update(board, user, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
+	var r, err = d.Get(id)
 	if err != nil {
 		return DatabaseReaction{}, err
 	}

@@ -30,7 +30,7 @@ var reactionUserJack *User
 
 func testGetReaction(t *testing.T) {
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
-	r, err := reactionDb.GetReaction(reaction.ID)
+	r, err := reactionDb.Get(reaction.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, reaction.ID, r.ID)
@@ -49,7 +49,7 @@ func testGetReactionsForNote(t *testing.T) {
 
 func testGetReactions(t *testing.T) {
 	boardTestBoard = fixture.MustRow("Board.notesTestBoard").(*Board)
-	r, err := reactionDb.GetReactions(boardTestBoard.ID)
+	r, err := reactionDb.GetAll(boardTestBoard.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(r))
@@ -60,16 +60,16 @@ func testCreateReaction(t *testing.T) {
 	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
 	reactionUserJay = fixture.MustRow("User.jay").(*User)
 
-	reaction, err := reactionDb.CreateReaction(boardTestBoard.ID, reactions.DatabaseReactionInsert{
+	reaction, err := reactionDb.Create(boardTestBoard.ID, reactions.DatabaseReactionInsert{
 		Note:         notesTestA1.ID,
 		User:         reactionUserJay.ID,
-		ReactionType: reactions.ReactionLike,
+		ReactionType: reactions.Like,
 	})
 
 	assert.Nil(t, err)
 	assert.Equal(t, notesTestA1.ID, reaction.Note)
 	assert.Equal(t, reactionUserJay.ID, reaction.User)
-	assert.Equal(t, reactions.ReactionLike, reaction.ReactionType)
+	assert.Equal(t, reactions.Like, reaction.ReactionType)
 }
 
 func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
@@ -77,10 +77,10 @@ func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
 	reactionUserJack = fixture.MustRow("User.jack").(*User)
 
-	_, err := reactionDb.CreateReaction(boardTestBoard.ID, reactions.DatabaseReactionInsert{
+	_, err := reactionDb.Create(boardTestBoard.ID, reactions.DatabaseReactionInsert{
 		Note:         notesTestA1.ID,
 		User:         reactionUserJack.ID,
-		ReactionType: reactions.ReactionLike,
+		ReactionType: reactions.Like,
 	})
 
 	assert.NotNil(t, err)
@@ -88,12 +88,12 @@ func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 }
 
 func testUpdateReaction(t *testing.T) {
-	newReactionType := reactions.ReactionCelebration
+	newReactionType := reactions.Celebration
 	board := fixture.MustRow("Board.notesTestBoard").(*Board) // cannot reuse vars here
 	user := fixture.MustRow("User.jack").(*User)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	r, err := reactionDb.UpdateReaction(board.ID, user.ID, reaction.ID, reactions.DatabaseReactionUpdate{
+	r, err := reactionDb.Update(board.ID, user.ID, reaction.ID, reactions.DatabaseReactionUpdate{
 		ReactionType: newReactionType,
 	})
 
@@ -104,12 +104,12 @@ func testUpdateReaction(t *testing.T) {
 }
 
 func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
-	newReactionType := reactions.ReactionCelebration
+	newReactionType := reactions.Celebration
 	board := fixture.MustRow("Board.notesTestBoard").(*Board)
 	wrongUser := fixture.MustRow("User.jane").(*User)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	_, err := reactionDb.UpdateReaction(board.ID, wrongUser.ID, reaction.ID, reactions.DatabaseReactionUpdate{
+	_, err := reactionDb.Update(board.ID, wrongUser.ID, reaction.ID, reactions.DatabaseReactionUpdate{
 		ReactionType: newReactionType,
 	})
 
@@ -123,7 +123,7 @@ func testDeleteReaction(t *testing.T) {
 	user := fixture.MustRow("User.jane").(*User)
 	reaction := fixture.MustRow("DatabaseReaction.reactionB").(*reactions.DatabaseReaction)
 
-	err := reactionDb.RemoveReaction(board.ID, user.ID, reaction.ID)
+	err := reactionDb.Delete(board.ID, user.ID, reaction.ID)
 
 	assert.Nil(t, err)
 }
@@ -133,7 +133,7 @@ func testDeleteReactionFailsBecauseForbidden(t *testing.T) {
 	wrongUser := fixture.MustRow("User.jane").(*User)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	err := reactionDb.RemoveReaction(board.ID, wrongUser.ID, reaction.ID)
+	err := reactionDb.Delete(board.ID, wrongUser.ID, reaction.ID)
 
 	assert.NotNil(t, err)
 	assert.Error(t, err)
