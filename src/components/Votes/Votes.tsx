@@ -40,13 +40,27 @@ export const Votes: FC<VotesProps> = (props) => {
     }
 
     const votesPerNote = lastVoting.votes?.votesPerNote ?? {};
-    const userVotes = votesPerNote[props.noteId]?.userVotes ?? [];
+
+    let userVotes: Array<{id: string}> = (votesPerNote[props.noteId]?.userVotes ?? []).map((v: any) => ({id: v.id}));
+    if (props.aggregateVotes) {
+      const childVotes: Array<{id: string}> = state.notes
+        .filter((n) => n.position.stack === props.noteId)
+        .reduce(
+          (acc, curr) => {
+            const childUserVotes = (votesPerNote[curr.id]?.userVotes ?? []).map((v: any) => ({id: v.id}));
+            return acc.concat(childUserVotes);
+          },
+          [] as Array<{id: string}>
+        );
+      userVotes = userVotes.concat(childVotes);
+    }
+    const uniqueUserVotes = _.uniq(userVotes, (vote) => vote.id);
 
     const others = state.participants?.others ?? [];
     const selfParticipant = state.participants.self!;
     const participants = [selfParticipant, ...others];
 
-    const names = userVotes
+    const names = uniqueUserVotes
       .map((userVote) => participants.find((p) => p.user.id === userVote.id))
       .filter((p) => p !== undefined)
       .map((p) => p.user.name)
