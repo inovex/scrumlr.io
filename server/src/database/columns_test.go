@@ -221,7 +221,7 @@ func testDeleteLastColumn(t *testing.T) {
 }
 
 func testDeleteColumnContainingSharedNote(t *testing.T) {
-  note, createNoteError := testDb.notesDB.CreateNote(notes.NoteInsertDB{
+  note, createNoteError := notesDB.CreateNote(notes.NoteInsertDB{
     Board:  boardForColumnsTest,
     Column: columnInsertedSecond.ID,
     Text:   "Lorem Ipsum",
