@@ -3,14 +3,11 @@ package database
 import (
 	"context"
 	"errors"
-	"scrumlr.io/server/identifiers"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database"
-	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/sessions"
 )
 
@@ -18,10 +15,10 @@ type DB struct {
 	db *bun.DB
 }
 
-type NoteUpdatePosition struct {
-	Column uuid.UUID
-	Rank   int
-	Stack  uuid.NullUUID
+func NewNotesDatabase(database *bun.DB) NotesDatabase {
+	db := new(DB)
+	db.db = database
+	return db
 }
 
 func (d *DB) CreateNote(insert NoteInsertDB) (NoteDB, error) {
@@ -120,7 +117,7 @@ func (d *DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error) {
 
 func (d *DB) DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error {
 	sessionSelect := d.db.NewSelect().Model((*sessions.DatabaseBoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", board)
-	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
+	noteSelect := d.db.NewSelect().Model((*NoteDB)(nil)).Column("author").Where("id = ?", id).Where("board = ?", board)
 
 	var precondition struct {
 		StackingAllowed bool
