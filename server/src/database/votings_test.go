@@ -4,6 +4,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/notes"
 	"testing"
 )
 
@@ -183,12 +184,12 @@ func testCloseVotingUpdateRank(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, types.VotingStatusClosed, closedVoting.Status)
 
-	note1, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote1").(*Note).ID)
-	note2, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote2").(*Note).ID)
-	note3, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote3").(*Note).ID)
-	note4, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote4").(*Note).ID)
-	note5, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote5").(*Note).ID)
-	note6, _ := testDb.GetNote(fixture.MustRow("Note.votingSortingNote6").(*Note).ID)
+	note1, _ := testDb.notesDB.GetNote(fixture.MustRow("NoteDB.votingSortingNote1").(*notes.NoteDB).ID)
+	note2, _ := testDb.notesDB.GetNote(fixture.MustRow("NoteDB.votingSortingNote2").(*notes.NoteDB).ID)
+	note3, _ := testDb.notesDB.GetNote(fixture.MustRow("NoteDB.votingSortingNote3").(*notes.NoteDB).ID)
+	note4, _ := testDb.notesDB.GetNote(fixture.MustRow("NoteDB.votingSortingNote4").(*notes.NoteDB).ID)
+	note5, _ := testDb.notesDB.GetNote(fixture.MustRow("NoteDB.votingSortingNote5").(*notes.NoteDB).ID)
+	note6, _ := testDb.notesDB.GetNote(fixture.MustRow("NoteDB.votingSortingNote6").(*notes.NoteDB).ID)
 
 	// Note 2 should be the highest rank with the most amount of votes
 	// Note 5 should be higher than Note 1 with equal amount of votes because the old rank has been higher
