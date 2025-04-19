@@ -20,7 +20,7 @@ var columnInsertedSecond *Column
 var columnInsertedThird *Column
 var columnInsertedFourth *Column
 var columnInsertedFifth *Column
-var columnTestUser *users.DatabaseUser
+var columnTestUser *User
 
 func TestRunnerForColumns(t *testing.T) {
 	firstColumn = fixture.MustRow("Column.firstColumn").(*Column)
@@ -231,23 +231,23 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 	})
 	assert.Nil(t, createNoteError)
 
-	_, updateBoardError := testDb.UpdateBoard(BoardUpdate{
-		ID:         boardForColumnsTest,
-		SharedNote: uuid.NullUUID{UUID: note.ID, Valid: true},
-		ShowVoting: uuid.NullUUID{Valid: false},
-	})
-	assert.Nil(t, updateBoardError)
+  _, updateBoardError := testDb.UpdateBoard(BoardUpdate{
+    ID:         boardForColumnsTest,
+    SharedNote: uuid.NullUUID{UUID: note.ID, Valid: true},
+    ShowVoting: uuid.NullUUID{Valid: false},
+  })
+  assert.Nil(t, updateBoardError)
 
-	board, getBoardError := testDb.GetBoard(boardForColumnsTest)
-	assert.Nil(t, getBoardError)
-	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: note.ID, Valid: true})
+  board, getBoardError := testDb.GetBoard(boardForColumnsTest)
+  assert.Nil(t, getBoardError)
+  assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: note.ID, Valid: true})
 
-	deleteColumnError := testDb.DeleteColumn(boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
-	assert.Nil(t, deleteColumnError)
+  deleteColumnError := testDb.DeleteColumn(boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
+  assert.Nil(t, deleteColumnError)
 
-	updatedBoard, getUpdatedBoardError := testDb.GetBoard(boardForColumnsTest)
-	assert.Nil(t, getUpdatedBoardError)
-	assert.Equal(t, updatedBoard.SharedNote, uuid.NullUUID{Valid: false})
+  updatedBoard, getUpdatedBoardError := testDb.GetBoard(boardForColumnsTest)
+  assert.Nil(t, getUpdatedBoardError)
+  assert.Equal(t, updatedBoard.SharedNote, uuid.NullUUID{Valid: false})
 }
 
 func testDeleteOthers(t *testing.T) {
