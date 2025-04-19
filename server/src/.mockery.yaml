@@ -7,9 +7,10 @@ filename: "mock_{{.InterfaceName}}.go"
 resolve-type-alias: false
 issue-845-fix: true
 packages:
+
   # configuration on package level
   net/http:
-    interfaces: 
+    interfaces:
       ResponseWriter:
         all: true
 
@@ -54,20 +55,31 @@ packages:
     config:
       dir: "{{.InterfaceDir}}"
       inpackage: true
-    interfaces: 
+    interfaces:
       SessionService:
         all: true
       SessionDatabase:
         all: true
-        
+
   scrumlr.io/server/sessionrequests:
     config:
       dir: "{{.InterfaceDir}}"
       inpackage: true
-    interfaces: 
+    interfaces:
       SessionRequestService:
         all: true
       SessionRequestDatabase:
         all: true
       Websocket:
         all: true
+
+  scrumlr.io/server/notes:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      NotesService:
+        all: true
+      NotesDatabase:
+        all: true
+

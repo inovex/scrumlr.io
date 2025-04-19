@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"net/http"
+	"scrumlr.io/server/notes"
 
 	"github.com/gorilla/websocket"
 
@@ -53,4 +54,11 @@ func InitializeWebsocket(ws websocket.Upgrader, rt *realtime.Broker) sessionrequ
 	websocket := sessionrequests.NewWebsocket(ws, rt)
 
 	return websocket
+}
+
+func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService {
+	notesDB := notes.NewNotesDatabase(db)
+	notesService := notes.NewNotesService(notesDB, rt)
+
+	return notesService
 }
