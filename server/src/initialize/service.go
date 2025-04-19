@@ -70,5 +70,3 @@ func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService 
 
 	return notesService
 }
-
-

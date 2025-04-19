@@ -1,6 +1,7 @@
 package database
 
 import (
+	"scrumlr.io/server/notes"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
