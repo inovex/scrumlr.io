@@ -71,3 +71,14 @@ packages:
         all: true
       Websocket:
         all: true
+
+  scrumlr.io/server/notes:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      NotesService:
+        all: true
+      NotesDatabase:
+        all: true
+

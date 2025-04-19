@@ -42,15 +42,6 @@ type Boards interface {
 	GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error)
 }
 
-type Notes interface {
-	Create(ctx context.Context, body dto.NoteCreateRequest) (*notes.Note, error)
-	Import(ctx context.Context, body dto.NoteImportRequest) (*notes.Note, error)
-	Get(ctx context.Context, id uuid.UUID) (*notes.Note, error)
-	Update(ctx context.Context, body dto.NoteUpdateRequest) (*notes.Note, error)
-	List(ctx context.Context, id uuid.UUID) ([]*notes.Note, error)
-	Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error
-}
-
 type BoardReactions interface {
 	Create(ctx context.Context, board uuid.UUID, body dto.BoardReactionCreateRequest)
 }

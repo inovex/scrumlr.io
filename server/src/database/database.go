@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/voting"
+	"scrumlr.io/server/notes"
 
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
@@ -17,6 +18,7 @@ type Database struct {
 	sessionDb        sessions.SessionDatabase
 	sessionRequestDb sessionrequests.SessionRequestDatabase
 	votingDB         voting.VotingDatabase
+	notesDB          notes.NotesDatabase
 }
 
 type FullBoard struct {
@@ -24,7 +26,7 @@ type FullBoard struct {
 	BoardSessions        []sessions.DatabaseBoardSession
 	BoardSessionRequests []sessionrequests.DatabaseBoardSessionRequest
 	Columns              []Column
-	Notes                []Note
+	Notes                []notes.NoteDB
 	Reactions            []reactions.DatabaseReaction
 	Votings              []voting.VotingDB
 	Votes                []voting.VoteDB
@@ -35,12 +37,11 @@ func New(db *bun.DB) *Database {
 	d := new(Database)
 	d.db = db
 	// TODO Remove these databases.
-	// These need to exists for now because we still need full access to all tables
+  // These need to exists for now because we still need full access to all tables
 	d.reactionsDb = reactions.NewReactionsDatabase(db)
 	d.sessionDb = sessions.NewSessionDatabase(db)
 	d.sessionRequestDb = sessionrequests.NewSessionRequestDatabase(db)
-	d.votingDB = voting.NewVotingDatabase(db) //todo remove? since we initialize in Initialize package
-
+	d.votingDB = voting.NewVotingDatabase(db)
 	return d
 }
 
@@ -50,7 +51,7 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		sessions  []sessions.DatabaseBoardSession
 		requests  []sessionrequests.DatabaseBoardSessionRequest
 		columns   []Column
-		notes     []Note
+		notes     []notes.NoteDB
 		reactions []reactions.DatabaseReaction
 		votings   []voting.VotingDB
 		votes     []voting.VoteDB
@@ -75,13 +76,13 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getBoard:
 			board, err = d.GetBoard(id)
 		case getRequests:
-			requests, err = d.sessionRequestDb.Gets(id)
+			requests, err = d.sessionRequestDb.GetAll(id)
 		case getSessions:
-			sessions, err = d.sessionDb.Gets(id)
+			sessions, err = d.sessionDb.GetAll(id)
 		case getColumns:
 			columns, err = d.GetColumns(id)
 		case getNotes:
-			notes, err = d.GetNotes(id)
+			notes, err = d.notesDB.GetAll(id)
 		case getReactions:
 			reactions, err = d.reactionsDb.GetAll(id)
 		case getVotings:
