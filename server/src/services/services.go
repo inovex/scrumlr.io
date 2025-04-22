@@ -34,10 +34,4 @@ type BoardTemplates interface {
 	List(ctx context.Context, user uuid.UUID) ([]*dto.BoardTemplateFull, error)
 	Update(ctx context.Context, body dto.BoardTemplateUpdateRequest) (*dto.BoardTemplate, error)
 	Delete(ctx context.Context, id uuid.UUID) error
-
-	CreateColumnTemplate(ctx context.Context, body dto.ColumnTemplateRequest) (*dto.ColumnTemplate, error)
-	GetColumnTemplate(ctx context.Context, boardID, columnID uuid.UUID) (*dto.ColumnTemplate, error)
-	ListColumnTemplates(ctx context.Context, board uuid.UUID) ([]*dto.ColumnTemplate, error)
-	UpdateColumnTemplate(ctx context.Context, body dto.ColumnTemplateUpdateRequest) (*dto.ColumnTemplate, error)
-	DeleteColumnTemplate(ctx context.Context, boar, column, user uuid.UUID) error
 }
