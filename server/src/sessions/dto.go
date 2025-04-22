@@ -5,12 +5,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/users"
 )
 
 // BoardSession is the response for all participant requests.
 type BoardSession struct {
-	User dto.User `json:"user"`
+	User users.User `json:"user"`
 
 	// Flag indicates whether user is online and connected to the board.
 	Connected bool `json:"connected"`
@@ -79,7 +79,7 @@ type BoardSessionsUpdateRequest struct {
 }
 
 func (b *BoardSession) From(session DatabaseBoardSession) *BoardSession {
-	user := dto.User{
+	user := users.User{
 		ID:          session.User,
 		Name:        session.Name,
 		Avatar:      session.Avatar,

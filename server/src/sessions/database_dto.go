@@ -6,13 +6,14 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/users"
 )
 
 type DatabaseBoardSession struct {
 	bun.BaseModel     `bun:"table:board_sessions"`
 	Board             uuid.UUID
 	User              uuid.UUID
-	Avatar            *types.Avatar
+	Avatar            *users.Avatar
 	Name              string
 	ShowHiddenColumns bool
 	Connected         bool

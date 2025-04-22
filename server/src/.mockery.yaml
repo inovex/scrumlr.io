@@ -83,3 +83,12 @@ packages:
       NotesDatabase:
         all: true
 
+  scrumlr.io/server/users:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      UserService:
+        all: true
+      UserDatabase:
+        all: true
