@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/voting"
 	"time"
 
 	"github.com/ory/dockertest/v3"
@@ -26,6 +27,7 @@ var notesDB notes.NotesDatabase
 var reactionDb reactions.ReactionDatabase
 var sessionDb sessions.SessionDatabase
 var sessionRequestDb sessionrequests.SessionRequestDatabase
+var votingDB voting.VotingDatabase
 var fixture *dbfixture.Fixture
 
 const DatabaseUsernameAndPassword = "dbtest"
@@ -131,8 +133,8 @@ func loadTestdata() error {
 		(*sessions.DatabaseBoardSessionInsert)(nil),
 		(*Column)(nil),
 		(*notes.NoteDB)(nil),
-		(*Voting)(nil),
-		(*Vote)(nil),
+		(*voting.VotingDB)(nil),
+		(*voting.VoteDB)(nil),
 		(*reactions.DatabaseReaction)(nil),
 		(*BoardTemplate)(nil),
 		(*ColumnTemplate)(nil),

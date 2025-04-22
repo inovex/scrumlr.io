@@ -5,6 +5,7 @@ import (
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/voting"
 	"testing"
 )
 
@@ -29,8 +30,8 @@ func TestRunnerForVoting(t *testing.T) {
 }
 
 func testGetVotingForClosed(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardClosedVoting").(*Voting)
-	got, _, err := testDb.GetVoting(voting.Board, voting.ID)
+	voting := fixture.MustRow("Voting.votingTestBoardClosedVoting").(*voting.VotingDB)
+	got, _, err := votingDB.GetVoting(voting.Board, voting.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, voting.ID, got.ID)
 	assert.Equal(t, voting.Board, got.Board)
@@ -40,8 +41,8 @@ func testGetVotingForClosed(t *testing.T) {
 	assert.Equal(t, voting.AllowMultipleVotes, got.AllowMultipleVotes)
 }
 func testGetVotingForAborted(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardAbortedVoting").(*Voting)
-	got, _, err := testDb.GetVoting(voting.Board, voting.ID)
+	voting := fixture.MustRow("Voting.votingTestBoardAbortedVoting").(*voting.VotingDB)
+	got, _, err := votingDB.GetVoting(voting.Board, voting.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, voting.ID, got.ID)
 	assert.Equal(t, voting.Board, got.Board)
@@ -51,8 +52,8 @@ func testGetVotingForAborted(t *testing.T) {
 	assert.Equal(t, voting.AllowMultipleVotes, got.AllowMultipleVotes)
 }
 func testGetVotingForOpen(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardOpenVoting").(*Voting)
-	got, _, err := testDb.GetVoting(voting.Board, voting.ID)
+	voting := fixture.MustRow("Voting.votingTestBoardOpenVoting").(*voting.VotingDB)
+	got, _, err := votingDB.GetVoting(voting.Board, voting.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, voting.ID, got.ID)
 	assert.Equal(t, voting.Board, got.Board)
@@ -62,34 +63,34 @@ func testGetVotingForOpen(t *testing.T) {
 	assert.Equal(t, voting.AllowMultipleVotes, got.AllowMultipleVotes)
 }
 func testGetVotesForClosedVoting(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardClosedVoting").(*Voting)
-	votes, err := testDb.GetVotes(filter.VoteFilter{Board: voting.Board, Voting: &voting.ID})
+	voting := fixture.MustRow("Voting.votingTestBoardClosedVoting").(*voting.VotingDB)
+	votes, err := votingDB.GetVotes(filter.VoteFilter{Board: voting.Board, Voting: &voting.ID})
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(votes))
 }
 func testGetVotesForOpenVoting(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardOpenVoting").(*Voting)
-	votes, err := testDb.GetVotes(filter.VoteFilter{Board: voting.Board, Voting: &voting.ID})
+	voting := fixture.MustRow("Voting.votingTestBoardOpenVoting").(*voting.VotingDB)
+	votes, err := votingDB.GetVotes(filter.VoteFilter{Board: voting.Board, Voting: &voting.ID})
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(votes))
 }
 func testGetVotesForAbortedVoting(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardAbortedVoting").(*Voting)
-	votes, err := testDb.GetVotes(filter.VoteFilter{Board: voting.Board, Voting: &voting.ID})
+	voting := fixture.MustRow("Voting.votingTestBoardAbortedVoting").(*voting.VotingDB)
+	votes, err := votingDB.GetVotes(filter.VoteFilter{Board: voting.Board, Voting: &voting.ID})
 	assert.Nil(t, err)
 	assert.Equal(t, 0, len(votes))
 }
 func testGetVotings(t *testing.T) {
 	board := fixture.MustRow("Board.votingTestBoard").(*Board)
-	votings, _, err := testDb.GetVotings(board.ID)
+	votings, _, err := votingDB.GetVotings(board.ID)
 	assert.Nil(t, err)
 	assert.Greater(t, len(votings), 0)
 	assert.Equal(t, types.VotingStatusOpen, votings[0].Status)
 }
 
 func testReopenClosedVotingShouldFail(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingTestBoardClosedVoting").(*Voting)
-	_, err := testDb.UpdateVoting(VotingUpdate{
+	voting := fixture.MustRow("Voting.votingTestBoardClosedVoting").(*voting.VotingDB)
+	_, err := votingDB.UpdateVoting(VotingUpdate{
 		ID:     voting.ID,
 		Board:  voting.Board,
 		Status: types.VotingStatusOpen,
@@ -98,7 +99,7 @@ func testReopenClosedVotingShouldFail(t *testing.T) {
 }
 func testReopenAbortedVotingShouldFail(t *testing.T) {
 	voting := fixture.MustRow("Voting.votingTestBoardAbortedVoting").(*Voting)
-	_, err := testDb.UpdateVoting(VotingUpdate{
+	_, err := votingDB.UpdateVoting(VotingUpdate{
 		ID:     voting.ID,
 		Board:  voting.Board,
 		Status: types.VotingStatusOpen,
@@ -108,7 +109,7 @@ func testReopenAbortedVotingShouldFail(t *testing.T) {
 
 func testCloseVoting(t *testing.T) {
 	voting := fixture.MustRow("Voting.votingTestBoardOpenVoting").(*Voting)
-	result, err := testDb.UpdateVoting(VotingUpdate{
+	result, err := votingDB.UpdateVoting(VotingUpdate{
 		ID:     voting.ID,
 		Board:  voting.Board,
 		Status: types.VotingStatusClosed,
@@ -124,7 +125,7 @@ func testCloseVoting(t *testing.T) {
 
 func testCreateVotingWithNegativeVoteLimitShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.votingTestBoard").(*Board)
-	_, err := testDb.CreateVoting(VotingInsert{
+	_, err := votingDB.CreateVoting(VotingInsert{
 		Board:              board.ID,
 		VoteLimit:          -100,
 		AllowMultipleVotes: false,
@@ -135,7 +136,7 @@ func testCreateVotingWithNegativeVoteLimitShouldFail(t *testing.T) {
 }
 func testCreateVotingWithVoteLimitGreater99ShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.votingTestBoard").(*Board)
-	_, err := testDb.CreateVoting(VotingInsert{
+	_, err := votingDB.CreateVoting(VotingInsert{
 		Board:              board.ID,
 		VoteLimit:          100,
 		AllowMultipleVotes: false,
@@ -146,7 +147,7 @@ func testCreateVotingWithVoteLimitGreater99ShouldFail(t *testing.T) {
 }
 func testCreateVoting(t *testing.T) {
 	board := fixture.MustRow("Board.votingTestBoard").(*Board)
-	voting, err := testDb.CreateVoting(VotingInsert{
+	voting, err := votingDB.CreateVoting(VotingInsert{
 		Board:              board.ID,
 		VoteLimit:          10,
 		AllowMultipleVotes: false,
@@ -162,7 +163,7 @@ func testCreateVoting(t *testing.T) {
 }
 func testCreateVotingWhenOpenShouldFail(t *testing.T) {
 	board := fixture.MustRow("Board.votingTestBoard").(*Board)
-	_, err := testDb.CreateVoting(VotingInsert{
+	_, err := votingDB.CreateVoting(VotingInsert{
 		Board:              board.ID,
 		VoteLimit:          10,
 		AllowMultipleVotes: false,
@@ -176,7 +177,7 @@ func testCloseVotingUpdateRank(t *testing.T) {
 	voting := fixture.MustRow("Voting.votingSortingTestBoardOpenVoting").(*Voting)
 
 	// Close voting
-	closedVoting, err := testDb.UpdateVoting(VotingUpdate{
+	closedVoting, err := votingDB.UpdateVoting(VotingUpdate{
 		ID:     voting.ID,
 		Board:  voting.Board,
 		Status: types.VotingStatusClosed,
