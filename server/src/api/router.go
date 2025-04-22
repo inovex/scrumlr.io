@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/boardreactions"
+	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
@@ -49,7 +50,7 @@ type Server struct {
 	health          health.HealthService
 	feedback        feedback.FeedbackService
 	boardReactions  boardreactions.BoardReactionService
-	boardTemplates  services.BoardTemplates
+	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
 
 	upgrader websocket.Upgrader
@@ -78,7 +79,7 @@ func New(
 	health health.HealthService,
 	feedback feedback.FeedbackService,
 	boardReactions boardreactions.BoardReactionService,
-	boardTemplates services.BoardTemplates,
+	boardTemplates boardtemplates.BoardTemplateService,
 	columntemplates columntemplates.ColumnTemplateService,
 
 	verbose bool,
