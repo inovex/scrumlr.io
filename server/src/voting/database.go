@@ -1,16 +1,16 @@
 package voting
 
 import (
-  "context"
-  "errors"
-  "fmt"
-  "github.com/google/uuid"
-  "github.com/uptrace/bun"
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/common/filter"
-  "scrumlr.io/server/database"
-  "scrumlr.io/server/database/types"
-  "scrumlr.io/server/notes"
+	"context"
+	"errors"
+	"fmt"
+	"github.com/google/uuid"
+	"github.com/uptrace/bun"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/common/filter"
+	"scrumlr.io/server/database"
+	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/notes"
 )
 
 type DB struct {
@@ -100,12 +100,12 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 		Where(fmt.Sprintf("stack IS NULL AND board = (SELECT board FROM \"%s\")", votingQuery)).
 		GroupExpr("id")
 
-  rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-    Model((*notes.NoteDB)(nil)).
-    TableExpr("_data").
-    Set("rank = _data.new_rank").
-    WhereOr("note.id = _data.id").
-    WhereOr("note.stack = _data.id")
+	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
+		Model((*notes.NoteDB)(nil)).
+		TableExpr("_data").
+		Set("rank = _data.new_rank").
+		WhereOr("note.id = _data.id").
+		WhereOr("note.stack = _data.id")
 
 	return rankUpdate
 }
