@@ -3,11 +3,13 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/voting"
 	"time"
+
+	"scrumlr.io/server/voting"
 
 	"scrumlr.io/server/boardreactions"
 	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
@@ -41,6 +43,7 @@ type Server struct {
 	auth     auth.Auth
 
 	boards          services.Boards
+	columns         columns.ColumnService
 	votings         voting.VotingService
 	users           users.UserService
 	notes           notes.NotesService
@@ -70,6 +73,7 @@ func New(
 	auth auth.Auth,
 
 	boards services.Boards,
+	columns columns.ColumnService,
 	votings services.Votings,
 	users users.UserService,
 	notes notes.NotesService,

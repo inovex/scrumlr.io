@@ -12,6 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/suite"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
@@ -89,7 +90,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 				Description:  nil,
 				AccessPolicy: accessPolicy,
 				Passphrase:   nil,
-				Columns: []dto.ColumnRequest{
+				Columns: []columns.ColumnRequest{
 					{
 						Name:    colName,
 						Color:   color,
