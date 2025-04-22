@@ -43,10 +43,6 @@ type Votings interface {
 	GetVotes(ctx context.Context, f filter.VoteFilter) ([]*dto.Vote, error)
 }
 
-type BoardReactions interface {
-	Create(ctx context.Context, board uuid.UUID, body dto.BoardReactionCreateRequest)
-}
-
 type BoardTemplates interface {
 	Create(ctx context.Context, body dto.CreateBoardTemplateRequest) (*dto.BoardTemplate, error)
 	Get(ctx context.Context, id uuid.UUID) (*dto.BoardTemplate, error)
