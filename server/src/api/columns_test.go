@@ -12,7 +12,6 @@ import (
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/mocks/services"
 )
@@ -41,7 +40,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 			s := new(Server)
 			boardMock := services.NewMockBoards(suite.T())
 			name := "TestColumn"
-			color := types.Color("backlog-blue")
+			color := columns.Color("backlog-blue")
 			visible := true
 			index := 0
 			boardID, _ := uuid.NewRandom()
@@ -132,7 +131,7 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 			columnID, _ := uuid.NewRandom()
 
 			colName := "TestColumn"
-			color := types.Color("online-orange")
+			color := columns.Color("online-orange")
 			visible := false
 			index := 0
 
@@ -186,7 +185,7 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 			columnID, _ := uuid.NewRandom()
 
 			colName := "Updated Column Name"
-			color := types.Color("online-orange")
+			color := columns.Color("online-orange")
 			visible := false
 			index := 0
 
@@ -234,7 +233,7 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 			columnID, _ := uuid.NewRandom()
 
 			colName := "TestColumn"
-			color := types.Color("online-orange")
+			color := columns.Color("online-orange")
 			visible := false
 			index := 0
 

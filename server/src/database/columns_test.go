@@ -8,7 +8,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/users"
 )
 
@@ -80,7 +79,7 @@ func testCreateColumnOnFirstIndex(t *testing.T) {
 	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "0 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -99,7 +98,7 @@ func testCreateColumnOnLastIndex(t *testing.T) {
 	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "4 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -118,7 +117,7 @@ func testCreateColumnOnNegativeIndex(t *testing.T) {
 	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "-99 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -137,7 +136,7 @@ func testCreateColumnWithExceptionallyHighIndex(t *testing.T) {
 	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "99 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -156,7 +155,7 @@ func testCreateColumnOnSecondIndex(t *testing.T) {
 	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "1 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -172,7 +171,7 @@ func testCreateColumnWithEmptyName(t *testing.T) {
 	_, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board: boardForColumnsTest,
 		Name:  "",
-		Color: types.ColorBacklogBlue,
+		Color: columns.ColorBacklogBlue,
 	})
 	assert.NotNil(t, err)
 }
@@ -191,7 +190,7 @@ func testCreateColumnWithDescription(t *testing.T) {
 	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:       boardForColumnsTest,
 		Name:        "Column",
-		Color:       types.ColorBacklogBlue,
+		Color:       columns.ColorBacklogBlue,
 		Description: aDescription,
 	})
 	assert.Nil(t, err)
@@ -262,7 +261,7 @@ func testUpdateName(t *testing.T) {
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "Updated name",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: false,
 		Index:   0,
 	})
@@ -275,12 +274,12 @@ func testUpdateColor(t *testing.T) {
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "Updated name",
-		Color:   types.ColorPlanningPink,
+		Color:   columns.ColorPlanningPink,
 		Visible: false,
 		Index:   0,
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, types.ColorPlanningPink, column.Color)
+	assert.Equal(t, columns.ColorPlanningPink, column.Color)
 }
 
 func testUpdateVisibility(t *testing.T) {
@@ -288,7 +287,7 @@ func testUpdateVisibility(t *testing.T) {
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   0,
 	})
@@ -301,7 +300,7 @@ func testMoveFirstColumnOnLastIndex(t *testing.T) {
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   100,
 	})
@@ -314,7 +313,7 @@ func testMoveLastColumnOnFirstIndex(t *testing.T) {
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   0,
 	})
@@ -327,7 +326,7 @@ func testMoveFirstColumnOnSecondIndex(t *testing.T) {
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   1,
 	})
@@ -340,7 +339,7 @@ func testMoveSecondColumnOnFirstIndex(t *testing.T) {
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   0,
 	})
@@ -367,7 +366,7 @@ func testUpdateDescription(t *testing.T) {
 		Board:       boardForColumnsTest,
 		Name:        "FirstColumn",
 		Description: "Updated Column Description",
-		Color:       types.ColorBacklogBlue,
+		Color:       columns.ColorBacklogBlue,
 		Visible:     true,
 		Index:       0,
 	})

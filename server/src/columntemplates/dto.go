@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/columns"
 )
 
 // ColumnTemplate is the response for all column template requests.
@@ -22,7 +22,7 @@ type ColumnTemplate struct {
 	Description string `json:"description"`
 
 	// The column template color.
-	Color types.Color `json:"color"`
+	Color columns.Color `json:"color"`
 
 	// The column template visibility.
 	Visible bool `json:"visible"`
@@ -40,7 +40,7 @@ type ColumnTemplateRequest struct {
 	Description string `json:"description"`
 
 	// The column template color to set.
-	Color types.Color `json:"color"`
+	Color columns.Color `json:"color"`
 
 	// Sets whether this column template should be visible to regular participants.
 	// The default value on creation is 'false'.
@@ -62,7 +62,7 @@ type ColumnTemplateUpdateRequest struct {
 	Description string `json:"description"`
 
 	// The column template color to set.
-	Color types.Color `json:"color"`
+	Color columns.Color `json:"color"`
 
 	// Sets whether this column template should be visible to regular participants.
 	Visible bool `json:"visible"`
