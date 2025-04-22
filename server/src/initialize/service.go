@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"net/http"
+
 	"scrumlr.io/server/notes"
 
 	"github.com/gorilla/websocket"
