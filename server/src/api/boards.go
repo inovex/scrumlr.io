@@ -483,7 +483,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		for i, column := range body.Columns {
 			if parentNote.Position.Column == column.ID {
 
-				note, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+				note, err := s.notes.Import(r.Context(), notes.NoteImportRequest{
 					Text: parentNote.Text,
 					Position: notes.NotePosition{
 						Column: cols[i].ID,
@@ -509,7 +509,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	for _, node := range organizedNotes {
 		for _, note := range node.Children {
-			_, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+			_, err := s.notes.Import(r.Context(), notes.NoteImportRequest{
 				Text:  note.Text,
 				Board: b.ID,
 				User:  note.Author,

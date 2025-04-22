@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
-	"time"
 )
 
 type Voting struct {
@@ -74,6 +75,7 @@ func (d *Database) CreateVoting(insert VotingInsert) (Voting, error) {
 		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status", "is_anonymous").
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
+
 	return voting, err
 }
 
