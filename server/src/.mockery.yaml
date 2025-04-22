@@ -7,6 +7,7 @@ filename: "mock_{{.InterfaceName}}.go"
 resolve-type-alias: false
 issue-845-fix: true
 packages:
+
   # configuration on package level
   net/http:
     interfaces:
@@ -90,4 +91,14 @@ packages:
       VotingService:
         all: true
       VotingDatabase:
+        all: true
+
+  scrumlr.io/server/users:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      UserService:
+        all: true
+      UserDatabase:
         all: true

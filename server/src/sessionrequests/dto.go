@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/users"
 )
 
 type BoardSessionRequest struct {
-	User   dto.User      `json:"user"`
+	User   users.User    `json:"user"`
 	Status RequestStatus `json:"status"`
 }
 
@@ -19,7 +19,7 @@ type BoardSessionRequestUpdate struct {
 }
 
 func (r *BoardSessionRequest) From(request DatabaseBoardSessionRequest) *BoardSessionRequest {
-	r.User = dto.User{
+	r.User = users.User{
 		ID:   request.User,
 		Name: request.Name,
 	}

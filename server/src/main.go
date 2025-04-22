@@ -23,6 +23,7 @@ import (
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/users"
+	"scrumlr.io/server/services/votings"
 )
 
 func main() {
@@ -364,9 +365,11 @@ func run(c *cli.Context) error {
 		WriteBufferSize: 1024,
 	}
 
+	userService := initialize.InitializeUserService(bun, rt)
+
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
+	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection, userService)
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
@@ -378,7 +381,6 @@ func run(c *cli.Context) error {
 
 	boardService := boards.NewBoardService(dbConnection, rt)
 	votingService := initialize.InitializeVotingService(bun, rt)
-	userService := users.NewUserService(dbConnection, rt, sessionService)
 	noteService := initialize.InitializeNotesService(bun, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)

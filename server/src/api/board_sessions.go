@@ -18,7 +18,7 @@ func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	filter := s.sessions.BoardSessionFilterTypeFromQueryString(r.URL.Query())
-	sessions, err := s.sessions.Gets(r.Context(), board, filter)
+	sessions, err := s.sessions.GetAll(r.Context(), board, filter)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return

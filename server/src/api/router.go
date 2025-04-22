@@ -28,6 +28,7 @@ import (
 	"scrumlr.io/server/services"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 )
 
 type Server struct {

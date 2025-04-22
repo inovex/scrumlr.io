@@ -506,7 +506,7 @@
     - _id: stackTestNote4
       id: "c98dd003-66ae-4c59-a7de-b7fee44e452a"
       board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
       column: '{{ $.Column.stackTestColumnA.ID }}'
       text: "D"
       stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
@@ -514,7 +514,7 @@
     - _id: stackTestNote5
       id: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
       board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
       column: '{{ $.Column.stackTestColumnB.ID }}'
       text: "E"
       stack: null
@@ -522,7 +522,7 @@
     - _id: stackTestNote6
       id: "02d135da-0001-4a6f-8cb7-8c9f3d7c5416"
       board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
       column: '{{ $.Column.stackTestColumnB.ID }}'
       text: "F"
       stack: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
@@ -538,7 +538,7 @@
     - _id: stackTestNote8
       id: "02d135da-0003-4a6f-8cb7-8c9f3d7c5416"
       board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
       column: '{{ $.Column.stackTestColumnB.ID }}'
       text: "H"
       stack: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
@@ -615,52 +615,52 @@
     - _id: jacksVoteOnStack
       board: '{{ $.Board.votingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingTestBoardClosedVoting.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       note: '{{ $.NoteDB.votingTestBoardParentNoteOfStack.ID }}'
     - _id: jacksVoteOnChild
       board: '{{ $.Board.votingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingTestBoardClosedVoting.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       note: '{{ $.NoteDB.votingTestBoardChildOfStack.ID }}'
     - _id: jacksVoteOnStackOpen
       board: '{{ $.Board.votingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       note: '{{ $.NoteDB.votingTestBoardParentNoteOfStack.ID }}'
     - _id: jacksVoteOnChildOpen
       board: '{{ $.Board.votingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       note: '{{ $.NoteDB.votingTestBoardChildOfStack.ID }}'
     - _id: janesVoteOnStack
       board: '{{ $.Board.votingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
-      user: '{{ $.User.jane.ID }}'
+      user: '{{ $.DatabaseUser.jane.ID }}'
       note: '{{ $.NoteDB.votingTestBoardParentNoteOfStack.ID }}'
     - _id: janesVoteOnChild
       board: '{{ $.Board.votingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
-      user: '{{ $.User.jane.ID }}'
+      user: '{{ $.DatabaseUser.jane.ID }}'
       note: '{{ $.NoteDB.votingTestBoardChildOfStack.ID }}'
     - _id: votingSortingBoardNote1Vote
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingSortingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.justin.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
       note: '{{ $.NoteDB.votingSortingNote1.ID }}'
     - _id: votingSortingBoardNote2Vote
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingSortingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.justin.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
       note: '{{ $.NoteDB.votingSortingNote2.ID }}'
     - _id: votingSortingBoardNote4Vote
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingSortingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.justin.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
       note: '{{ $.NoteDB.votingSortingNote4.ID }}'
     - _id: votingSortingBoardNote6Vote
       board: '{{ $.Board.votingSortingTestBoard.ID }}'
       voting: '{{ $.VotingDB.votingSortingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.justin.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
       note: '{{ $.NoteDB.votingSortingNote6.ID }}'
 
 - model: DatabaseReaction
@@ -669,23 +669,23 @@
     - _id: reactionA
       id: "0fb0a05b-9793-479e-9ac0-1a90b10880fa"
       note: '{{ $.NoteDB.notesTestA1.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       reaction_type: "like"
     # B: board A, note A, user B
     - _id: reactionB
       id: "98b92853-9f8e-42d4-8ec3-0ad8b6596eae"
       note: '{{ $.NoteDB.notesTestA1.ID }}'
-      user: '{{ $.User.jane.ID }}'
+      user: '{{ $.DatabaseUser.jane.ID }}'
       reaction_type: "heart"
     # C: board A, note B, user A
     - _id: reactionC
       id: "fee4f00e-9399-438f-b9bb-f3675d2b9eca"
       note: '{{ $.NoteDB.notesTestA2.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       reaction_type: "heart"
     # D: board B, note C, user C
     - _id: reactionD
       id: "56becd3e-74b3-42b4-acde-4a59003379f2"
       note: '{{ $.NoteDB.stackTestNote1.ID }}'
-      user: '{{ $.User.jay.ID }}'
+      user: '{{ $.DatabaseUser.jay.ID }}'
       reaction_type: "laughing"
