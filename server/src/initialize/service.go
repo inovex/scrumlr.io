@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/websocket"
 
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/boardreactions"
 	"scrumlr.io/server/feedback"
 	"scrumlr.io/server/health"
 	"scrumlr.io/server/reactions"
@@ -16,6 +17,12 @@ import (
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
+
+func InitializeBoardReactionService(rt *realtime.Broker) boardreactions.BoardReactionService {
+	boardreactionService := boardreactions.NewBoardReactionService(rt)
+
+	return boardreactionService
+}
 
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
 	client := new(http.Client)

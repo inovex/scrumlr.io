@@ -1,11 +1,12 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"net/http"
+	"scrumlr.io/server/boardreactions"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
@@ -16,7 +17,7 @@ func (s *Server) createBoardReaction(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body dto.BoardReactionCreateRequest
+	var body boardreactions.BoardReactionCreateRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		log.Errorw("unable to create board reaction", "err", err)
