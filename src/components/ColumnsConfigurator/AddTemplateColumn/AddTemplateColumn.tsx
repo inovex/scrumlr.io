@@ -3,11 +3,13 @@ import {ReactComponent as AddColumnIcon} from "assets/icons/add-column.svg";
 import classNames from "classnames";
 import "./AddTemplateColumn.scss";
 
+type AddTemplateColumnAlignment = "left" | "right";
+
 type AddTemplateColumnProps = {
   className?: string;
-  alignment: "left" | "right";
+  alignment: AddTemplateColumnAlignment;
   color: Color;
-  onClick: (alignment: "left" | "right", color: Color) => void;
+  onClick: (alignment: AddTemplateColumnAlignment, color: Color) => void;
   disabled?: boolean;
 };
 
