@@ -23,7 +23,6 @@ import (
 	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
-	"scrumlr.io/server/services/votings"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"

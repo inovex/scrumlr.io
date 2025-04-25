@@ -66,7 +66,7 @@ func New(
 	auth auth.Auth,
 
 	boards services.Boards,
-	votings services.Votings,
+  votings voting.VotingService,
 	users users.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
@@ -117,6 +117,7 @@ func New(
 		notes:                            notes,
 		reactions:                        reactions,
 		sessions:                         sessions,
+		sessionRequests:                  sessionRequests,
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,

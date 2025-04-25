@@ -5,7 +5,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/voting"
 	"time"
 
 	"scrumlr.io/server/columns"
@@ -154,7 +153,7 @@ type ImportBoardRequest struct {
 	Board   *CreateBoardRequest `json:"board"`
 	Columns []columns.Column    `json:"columns"`
 	Notes   []notes.Note        `json:"notes"`
-	Votings []voting.Voting     `json:"votings"`
+	//Votings []voting.Voting     `json:"votings"`
 }
 
 type FullBoard struct {
@@ -164,8 +163,8 @@ type FullBoard struct {
 	Columns              []*columns.Column                      `json:"columns"`
 	Notes                []*notes.Note                          `json:"notes"`
 	Reactions            []*reactions.Reaction                  `json:"reactions"`
-	Votings              []*voting.Voting                       `json:"votings"`
-	Votes                []*voting.Vote                         `json:"votes"`
+	//Votings              []*voting.Voting                       `json:"votings"`
+	//Votes                []*voting.Vote                         `json:"votes"`
 }
 
 func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
@@ -175,7 +174,7 @@ func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
 	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
 	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
 	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)
-	dtoFullBoard.Votings = voting.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
-	dtoFullBoard.Votes = voting.Votes(dbFullBoard.Votes)
+	//dtoFullBoard.Votings = voting.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
+	//dtoFullBoard.Votes = voting.Votes(dbFullBoard.Votes)
 	return dtoFullBoard
 }
