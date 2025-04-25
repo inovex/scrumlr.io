@@ -1,96 +1,80 @@
 package initialize
 
 import (
-	"net/http"
-	"scrumlr.io/server/notes"
-	"scrumlr.io/server/voting"
+  "net/http"
+  "scrumlr.io/server/notes"
+  "scrumlr.io/server/voting"
 
-	"scrumlr.io/server/notes"
+  "github.com/gorilla/websocket"
 
-	"github.com/gorilla/websocket"
-
-	"github.com/uptrace/bun"
-	"scrumlr.io/server/feedback"
-	"scrumlr.io/server/health"
-	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/users"
+  "github.com/uptrace/bun"
+  "scrumlr.io/server/feedback"
+  "scrumlr.io/server/health"
+  "scrumlr.io/server/reactions"
+  "scrumlr.io/server/realtime"
+  "scrumlr.io/server/sessionrequests"
+  "scrumlr.io/server/sessions"
+  "scrumlr.io/server/users"
 )
 
 // TODO: create generic method to initialize services
 func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {
-	reactionsDb := reactions.NewReactionsDatabase(db)
-	reactionService := reactions.NewReactionService(reactionsDb, rt)
-	return reactionService
+  reactionsDb := reactions.NewReactionsDatabase(db)
+  reactionService := reactions.NewReactionService(reactionsDb, rt)
+  return reactionService
 }
 
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
-	client := new(http.Client)
-	feedbackService := feedback.NewFeedbackService(client, webhookUrl)
+  client := new(http.Client)
+  feedbackService := feedback.NewFeedbackService(client, webhookUrl)
 
-	return feedbackService
+  return feedbackService
 }
 
 func InitializeHealthService(db *bun.DB, rt *realtime.Broker) health.HealthService {
-	healthDb := health.NewHealthDatabase(db)
-	healthService := health.NewHealthService(healthDb, rt)
+  healthDb := health.NewHealthDatabase(db)
+  healthService := health.NewHealthService(healthDb, rt)
 
-	return healthService
+  return healthService
 }
 
 func InitializeSessionService(db *bun.DB, rt *realtime.Broker) sessions.SessionService {
-	sessionDb := sessions.NewSessionDatabase(db)
-	sessionService := sessions.NewSessionService(sessionDb, rt)
+  sessionDb := sessions.NewSessionDatabase(db)
+  sessionService := sessions.NewSessionService(sessionDb, rt)
 
-	return sessionService
+  return sessionService
 }
 
 func InitializeSessionRequestService(db *bun.DB, rt *realtime.Broker, websocket sessionrequests.Websocket, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
-	sessionRequestDb := sessionrequests.NewSessionRequestDatabase(db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, rt, websocket, sessionService)
+  sessionRequestDb := sessionrequests.NewSessionRequestDatabase(db)
+  sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, rt, websocket, sessionService)
 
-	return sessionRequestService
+  return sessionRequestService
 }
 
 func InitializeWebsocket(ws websocket.Upgrader, rt *realtime.Broker) sessionrequests.Websocket {
-	websocket := sessionrequests.NewWebsocket(ws, rt)
+  websocket := sessionrequests.NewWebsocket(ws, rt)
 
-	return websocket
-}
-
-func InitializeVotingService(db *bun.DB, rt *realtime.Broker) voting.VotingService {
-	votingDB := voting.NewVotingDatabase(db)
-	votingService := voting.NewVotingService(votingDB, rt)
-
-	return votingService
+  return websocket
 }
 
 func InitializeUserService(db *bun.DB, rt *realtime.Broker) users.UserService {
-	userDb := users.NewUserDatabase(db)
-	userService := users.NewUserService(userDb, rt)
+  userDb := users.NewUserDatabase(db)
+  userService := users.NewUserService(userDb, rt)
 
-	return userService
+  return userService
 }
 
 func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService {
-	notesDB := notes.NewNotesDatabase(db)
-	notesService := notes.NewNotesService(notesDB, rt)
+  notesDB := notes.NewNotesDatabase(db)
+  notesService := notes.NewNotesService(notesDB, rt)
 
-	return notesService
+  return notesService
 }
 
 func InitializeVotingService(db *bun.DB, rt *realtime.Broker) voting.VotingService {
-	votingDB := voting.NewVotingDatabase(db)
-	votingService := voting.NewVotingService(votingDB, rt)
+  votingDB := voting.NewVotingDatabase(db)
+  votingService := voting.NewVotingService(votingDB, rt)
 
-	return votingService
-}
-
-func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService {
-	notesDB := notes.NewNotesDatabase(db)
-	notesService := notes.NewNotesService(notesDB, rt)
-
-	return notesService
+  return votingService
 }
