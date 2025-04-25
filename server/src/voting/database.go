@@ -10,7 +10,6 @@ import (
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
-	"scrumlr.io/server/notes"
 )
 
 type DB struct {
@@ -101,7 +100,7 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 		GroupExpr("id")
 
 	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-		Model((*notes.NoteDB)(nil)).
+		//Model((*notes.NoteDB)(nil)).
 		TableExpr("_data").
 		Set("rank = _data.new_rank").
 		WhereOr("note.id = _data.id").

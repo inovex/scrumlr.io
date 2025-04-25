@@ -7,7 +7,7 @@ filename: "mock_{{.InterfaceName}}.go"
 resolve-type-alias: false
 issue-845-fix: true
 packages:
-  # configuration on package level
+  #   configuration on package level
   net/http:
     interfaces:
       ResponseWriter:
