@@ -1,9 +1,8 @@
 import {Color, getColorClassName} from "constants/colors";
 import {ReactComponent as AddColumnIcon} from "assets/icons/add-column.svg";
 import classNames from "classnames";
+import {AddTemplateColumnAlignment} from "../ColumnsConfigurator.types";
 import "./AddTemplateColumn.scss";
-
-type AddTemplateColumnAlignment = "left" | "right";
 
 type AddTemplateColumnProps = {
   className?: string;

@@ -8,6 +8,7 @@ import {horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable"
 import {ColumnsConfiguratorColumn} from "./ColumnsConfiguratorColumn/ColumnsConfiguratorColumn";
 import {AddTemplateColumn} from "./AddTemplateColumn/AddTemplateColumn";
 import {calcPlacement} from "./ColumnsConfigurator.utils";
+import {AddTemplateColumnAlignment} from "./ColumnsConfigurator.types";
 import "./ColumnsConfigurator.scss";
 
 type ColumnsConfiguratorProps = {
@@ -99,7 +100,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     );
   };
 
-  const addTemplateColumn = (alignment: "left" | "right", color: Color) => {
+  const addTemplateColumn = (alignment: AddTemplateColumnAlignment, color: Color) => {
     const newColumn: TemplateColumn = {
       id: uniqueId("col"),
       template: props.templateId,
