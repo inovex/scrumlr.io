@@ -9,6 +9,7 @@ import (
   "scrumlr.io/server/logger"
   "scrumlr.io/server/mocks/services"
   "scrumlr.io/server/votes"
+  "scrumlr.io/server/voting"
   "strings"
   "testing"
 
@@ -49,12 +50,12 @@ func (suite *VotingTestSuite) TestCreateVoting() {
       req.req = logger.InitTestLoggerRequest(req.Request())
       req.AddToContext(identifiers.BoardIdentifier, boardId)
 
-      votingMock.EXPECT().Create(req.req.Context(), votes.VotingCreateRequest{
+      votingMock.EXPECT().Create(req.req.Context(), voting.VotingCreateRequest{
         VoteLimit:          4,
         AllowMultipleVotes: false,
         ShowVotesOfOthers:  false,
         Board:              boardId,
-      }).Return(&votes.Voting{
+      }).Return(&voting.Voting{
         AllowMultipleVotes: false,
         ShowVotesOfOthers:  false,
       }, tt.err)
@@ -92,11 +93,11 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
         AddToContext(identifiers.VotingIdentifier, votingId)
       rr := httptest.NewRecorder()
 
-      votingMock.EXPECT().Update(req.req.Context(), votes.VotingUpdateRequest{
+      votingMock.EXPECT().Update(req.req.Context(), voting.VotingUpdateRequest{
         Board:  boardId,
         ID:     votingId,
         Status: types.VotingStatusClosed,
-      }).Return(&votes.Voting{
+      }).Return(&voting.Voting{
         Status: types.VotingStatusClosed,
       }, tt.err)
 
@@ -121,7 +122,7 @@ func (suite *VotingTestSuite) TestGetVoting() {
     AddToContext(identifiers.VotingIdentifier, votingId)
   rr := httptest.NewRecorder()
 
-  votingMock.EXPECT().Get(req.req.Context(), boardId, votingId).Return(&votes.Voting{
+  votingMock.EXPECT().Get(req.req.Context(), boardId, votingId).Return(&voting.Voting{
     ID:     votingId,
     Status: types.VotingStatusClosed,
   }, nil)

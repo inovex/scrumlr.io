@@ -2,7 +2,6 @@ package notes
 
 import (
 	"context"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	brokerMock "scrumlr.io/server/mocks/realtime"
@@ -236,17 +235,8 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	boardID, _ := uuid.NewRandom()
 	noteID, _ := uuid.NewRandom()
 
-	votesToDelete := []*dto.Vote{
-		{
-			Voting: uuid.UUID{},
-			Note:   noteID,
-			User:   uuid.UUID{},
-		},
-		{
-			Voting: uuid.UUID{},
-			Note:   noteID,
-			User:   uuid.UUID{},
-		},
+	votesToDelete := []uuid.UUID{
+		uuid.UUID{},
 	}
 	deleteStack := true
 	body := NoteDeleteRequest{
