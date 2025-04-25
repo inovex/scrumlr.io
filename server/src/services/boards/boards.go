@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	notes2 "scrumlr.io/server/notes"
 	"time"
 
 	"github.com/google/uuid"

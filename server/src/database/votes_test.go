@@ -20,7 +20,7 @@ func TestRunnerForVotes(t *testing.T) {
 }
 
 func testAddVote(t *testing.T) {
-	voting := fixture.MustRow("Voting.votingForOpenMultipleVotesTestBoard").(*voting.VotingDB)
+	voting := fixture.MustRow("VotingDB.votingForOpenMultipleVotesTestBoard").(*voting.VotingDB)
 	board := fixture.MustRow("Board.openMultipleVotesTestBoard").(*Board)
 	user := fixture.MustRow("User.jack").(*User)
 	note := fixture.MustRow("NoteDB.openMultipleVotesTestBoardNote").(*notes.NoteDB)

@@ -1,10 +1,10 @@
 package voting
 
 import (
-  "github.com/google/uuid"
-  "scrumlr.io/server/database/types"
-  "scrumlr.io/server/notes"
-  "scrumlr.io/server/technical_helper"
+	"github.com/google/uuid"
+	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/technical_helper"
 )
 
 func Votings(votings []VotingDB, votes []VoteDB) []*Voting {
@@ -36,13 +36,13 @@ func (v *Voting) UpdateVoting(notes notes.NoteSlice) *VotingUpdated {
 }
 
 func UnmarshallVoteData(data interface{}) (*VotingUpdated, error) {
-  vote, err := technical_helper.Unmarshal[VotingUpdated](data)
+	vote, err := technical_helper.Unmarshal[VotingUpdated](data)
 
-  if err != nil {
-    return nil, err
-  }
+	if err != nil {
+		return nil, err
+	}
 
-  return vote, nil
+	return vote, nil
 }
 
 func getVotingWithResults(voting VotingDB, votes []VoteDB) *VotingResults {

@@ -6,19 +6,20 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"scrumlr.io/server/voting"
 	"strconv"
 
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/notes"
-	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/identifiers"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/sessions"
 )
 
 // createBoard creates a new board
@@ -207,7 +208,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if b.AccessPolicy == types.AccessPolicyByInvite {
-		sessionExists, err := s.sessions.SessionRequestExists(r.Context(), board, user)
+		sessionExists, err := s.sessions.Exists(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
 			return
@@ -480,7 +481,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		for i, column := range body.Columns {
 			if parentNote.Position.Column == column.ID {
 
-				note, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+				note, err := s.notes.Import(r.Context(), notes.NoteImportRequest{
 					Text: parentNote.Text,
 					Position: notes.NotePosition{
 						Column: cols[i].ID,
@@ -506,7 +507,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	for _, node := range organizedNotes {
 		for _, note := range node.Children {
-			_, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+			_, err := s.notes.Import(r.Context(), notes.NoteImportRequest{
 				Text:  note.Text,
 				Board: b.ID,
 				User:  note.Author,

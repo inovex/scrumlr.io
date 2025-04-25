@@ -19,12 +19,12 @@ type VotingService interface {
 }
 
 type VotingApi struct {
-  service VotingService
+	service VotingService
 }
 
 func NewVotingApi(service VotingService) *VotingApi {
-  api := new(VotingApi)
-  api.service = service
+	api := new(VotingApi)
+	api.service = service
 
-  return api
+	return api
 }

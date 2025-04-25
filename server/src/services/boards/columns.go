@@ -6,12 +6,11 @@ import (
 	"errors"
 	"fmt"
 	columns2 "scrumlr.io/server/columns"
-	notes2 "scrumlr.io/server/notes"
+	"scrumlr.io/server/common/filter"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/realtime"
 
 	"scrumlr.io/server/database"
@@ -33,7 +32,7 @@ func (s *BoardService) DeleteColumn(ctx context.Context, board, column, user uui
 	log := logger.FromContext(ctx)
 
 	voting, err := s.database.GetOpenVoting(board)
-	var toBeDeletedVotes []database.Vote
+	var toBeDeletedVotes []voting.VoteDB
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
 			log.Errorw("unable to get open voting", "board", board, "err", err)
@@ -102,7 +101,7 @@ func (s *BoardService) UpdatedColumns(board uuid.UUID) {
 	})
 
 	var err_msg string
-	err_msg, err = s.SyncNotesOnColumnChange(board)
+	//err_msg, err = s.SyncNotesOnColumnChange(board)
 	if err != nil {
 		logger.Get().Errorw(err_msg, "err", err)
 	}
