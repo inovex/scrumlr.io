@@ -7,6 +7,7 @@ import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, Dra
 import {horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import {ColumnsConfiguratorColumn} from "./ColumnsConfiguratorColumn/ColumnsConfiguratorColumn";
 import {AddTemplateColumn} from "./AddTemplateColumn/AddTemplateColumn";
+import {calcPlacement} from "./ColumnsConfigurator.utils";
 import "./ColumnsConfigurator.scss";
 
 type ColumnsConfiguratorProps = {
@@ -53,20 +54,6 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     setDropElementId(null);
   };
 
-  const calcPlacement = (index: number) => {
-    const {length} = props.columns;
-    if (length === 1) {
-      return "all";
-    }
-    if (index === 0) {
-      return "first";
-    }
-    if (index === length - 1) {
-      return "last";
-    }
-    return "center";
-  };
-
   // function to calculate where each column would be positioned if the drag-and-drop operation were completed at its current state
   const getPotentialIndex = (index: number) => {
     // no valid drag operation occurring
@@ -106,7 +93,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
         column={activeColumn}
         // here, use actual index unlike potential index in the main part
         index={activeColumnIndex}
-        placement={calcPlacement(activeColumnIndex)}
+        placement={calcPlacement(activeColumnIndex, props.columns)}
         allColumns={props.columns}
       />
     );
@@ -152,7 +139,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
                   index={potentialIndex}
                   activeDrag={column.id === activeElementId}
                   activeDrop={column.id === dropElementId}
-                  placement={calcPlacement(potentialIndex)}
+                  placement={calcPlacement(potentialIndex, props.columns)}
                   allColumns={props.columns}
                   editColumn={props.editColumn}
                   deleteColumn={props.deleteColumn}

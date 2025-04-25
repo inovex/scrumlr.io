@@ -1,6 +1,7 @@
 import {EditableTemplateColumn} from "store/features";
 import classNames from "classnames";
 import {getColorClassName} from "constants/colors";
+import {calcPlacement} from "../ColumnsConfigurator.utils";
 import "./ColumnsMiniView.scss";
 
 type ColumnsMiniViewProps = {
@@ -8,22 +9,7 @@ type ColumnsMiniViewProps = {
   columns: EditableTemplateColumn[];
 };
 
-export const ColumnsMiniView = (props: ColumnsMiniViewProps) => {
-  const calcPlacement = (index: number) => {
-    const {length} = props.columns;
-    if (length === 1) {
-      return "all";
-    }
-    if (index === 0) {
-      return "first";
-    }
-    if (index === length - 1) {
-      return "last";
-    }
-    return "center";
-  };
-
-  return (
+export const ColumnsMiniView = (props: ColumnsMiniViewProps) => (
     <div className={classNames(props.className, "columns-mini-view")}>
       {props.columns.map((column) => (
         <div
@@ -31,7 +17,7 @@ export const ColumnsMiniView = (props: ColumnsMiniViewProps) => {
           className={classNames(
             "columns-mini-view__column",
             {"columns-mini-view__column--hidden": !column.visible},
-            `columns-mini-view__column--border-${calcPlacement(column.index)}`,
+            `columns-mini-view__column--border-${calcPlacement(column.index, props.columns)}`,
             getColorClassName(column.color)
           )}
         >
@@ -40,4 +26,3 @@ export const ColumnsMiniView = (props: ColumnsMiniViewProps) => {
       ))}
     </div>
   );
-};

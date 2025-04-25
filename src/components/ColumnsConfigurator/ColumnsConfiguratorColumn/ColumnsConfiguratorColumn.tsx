@@ -11,13 +11,14 @@ import {CSSProperties, useCallback, useEffect, useState} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {ColumnConfiguratorColumnNameDetails, OpenState} from "./ColumnConfiguratorColumnNameDetails/ColumnConfiguratorColumnNameDetails";
+import {ColumnPlacement} from "../ColumnsConfigurator.types";
 import "./ColumnsConfiguratorColumn.scss";
 
 type ColumnsConfiguratorColumnProps = {
   className?: string;
   column: EditableTemplateColumn;
   index: number;
-  placement?: "first" | "center" | "last" | "all";
+  placement?: ColumnPlacement;
   activeDrag?: boolean;
   activeDrop?: boolean;
   allColumns: EditableTemplateColumn[];
