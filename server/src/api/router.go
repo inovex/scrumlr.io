@@ -3,8 +3,10 @@ package api
 import (
 	"net/http"
 	"os"
-  "scrumlr.io/server/notes"
-  "time"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/services/users"
+	"scrumlr.io/server/voting"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -36,7 +38,7 @@ type Server struct {
 
 	boards          services.Boards
 	votings         voting.VotingService
-	users           services.Users
+	users           users.UserService
 	notes           notes.NotesService
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
@@ -64,7 +66,7 @@ func New(
 
 	boards services.Boards,
 	votings voting.VotingService,
-	users services.Users,
+	users users.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,

@@ -3,8 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
-  "github.com/gorilla/websocket"
-  "log"
+	"github.com/gorilla/websocket"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -12,7 +12,6 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
 
-	"github.com/gorilla/websocket"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
@@ -23,9 +22,7 @@ import (
 	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
-	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
-	"scrumlr.io/server/services/votings"
 )
 
 func main() {
@@ -383,7 +380,6 @@ func run(c *cli.Context) error {
 	votingService := initialize.InitializeVotingService(bun, rt)
 	userService := users.NewUserService(dbConnection, rt, sessionService)
 	noteService := initialize.InitializeNotesService(bun, rt)
-	boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)
 	boardReactionService := board_reactions.NewReactionService(dbConnection, rt)

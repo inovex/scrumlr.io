@@ -8,7 +8,6 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/voting"
 )
 
 type Service struct {
@@ -111,7 +110,7 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 	return Notes(notes), err
 }
 
-func (service *Service) Delete(ctx context.Context, body NoteDeleteRequest, noteID uuid.UUID, deletedVotes []*voting.Vote) error {
+func (service *Service) Delete(ctx context.Context, body NoteDeleteRequest, noteID uuid.UUID, deletedVotes []uuid.UUID) error {
 	log := logger.FromContext(ctx)
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
@@ -153,7 +152,7 @@ func (service *Service) updatedNotes(board uuid.UUID) {
 	})
 }
 
-func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*voting.Vote, deleteStack bool) {
+func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []uuid.UUID, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,
 		"deleteStack": deleteStack,
@@ -165,9 +164,29 @@ func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []
 
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotesDeleted,
-		Data: deletedVotes,
+		Data: deletedVotesUpdateMessage(note, deletedVotes),
 	})
 
+}
+
+func deletedVotesUpdateMessage(note uuid.UUID, deletedVotes []uuid.UUID) []struct {
+	voting uuid.UUID
+	note   uuid.UUID
+} {
+	votes := make([]struct {
+		voting uuid.UUID
+		note   uuid.UUID
+	}, len(deletedVotes))
+	for index, vote := range deletedVotes {
+		votes[index] = struct {
+			voting uuid.UUID
+			note   uuid.UUID
+		}{
+			voting: vote,
+			note:   note,
+		}
+	}
+	return votes
 }
 
 func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {

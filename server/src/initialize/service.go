@@ -59,7 +59,7 @@ func InitializeWebsocket(ws websocket.Upgrader, rt *realtime.Broker) sessionrequ
 
 func InitializeVotingService(db *bun.DB, rt *realtime.Broker) voting.VotingService {
 	votingDB := voting.NewVotingDatabase(db)
-	votingService := voting.NewVotingService(&votingDB, rt)
+	votingService := voting.NewVotingService(votingDB, rt)
 
 	return votingService
 }

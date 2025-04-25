@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -115,9 +114,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, err)
 		return
 	}
-
-	var votesToDelete []*dto.Vote
-
+	var votesToDelete []uuid.UUID
 	for _, note := range notesToDelete {
 		votes, err := s.votings.GetVotes(r.Context(), filter.VoteFilter{
 			Board: board,
@@ -127,7 +124,9 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 			common.Throw(w, r, err)
 			return
 		}
-		votesToDelete = append(votesToDelete, votes...)
+		for _, vote := range votes {
+			votesToDelete = append(votesToDelete, vote.Voting)
+		}
 	}
 
 	if err := s.notes.Delete(r.Context(), body, note, votesToDelete); err != nil {

@@ -3,7 +3,6 @@ package notes
 import (
 	"context"
 	"github.com/google/uuid"
-	"scrumlr.io/server/voting"
 )
 
 type NotesService interface {
@@ -12,6 +11,6 @@ type NotesService interface {
 	Get(ctx context.Context, id uuid.UUID) (*Note, error)
 	Update(ctx context.Context, body NoteUpdateRequest) (*Note, error)
 	GetAll(ctx context.Context, id uuid.UUID, columns ...uuid.UUID) ([]*Note, error)
-	Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID, deletedVotes []*voting.Vote) error
+	Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID, deletedVotes []uuid.UUID) error
 	GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error)
 }
