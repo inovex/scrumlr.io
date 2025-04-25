@@ -7,6 +7,8 @@ import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Dispatch, SetStateAction, useRef, useState, FocusEvent} from "react";
 import "./ColumnConfiguratorColumnNameDetails.scss";
 
+export type OpenState = "closed" | "nameFirst" | "descriptionFirst";
+
 type ColumnConfiguratorColumnNameDetailsProps = {
   className: string;
 
@@ -14,8 +16,8 @@ type ColumnConfiguratorColumnNameDetailsProps = {
   description: string;
 
   // name/description indicate that the editable section should be opened with focus on either the title or description input
-  openState: "closed" | "nameFirst" | "descriptionFirst";
-  setOpenState: Dispatch<SetStateAction<"closed" | "nameFirst" | "descriptionFirst">>;
+  openState: OpenState;
+  setOpenState: Dispatch<SetStateAction<OpenState>>;
 
   updateColumnTitle: (newName: string, newDescription: string) => void;
 };

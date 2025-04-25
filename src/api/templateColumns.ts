@@ -2,15 +2,15 @@ import {SERVER_HTTP_URL} from "config";
 import {TemplateColumn} from "store/features";
 
 export const TemplateColumnsAPI = {
-  getTemplateColumns: async (template: string) => {
+  getTemplateColumns: async (templateId: string): Promise<TemplateColumn[]> => {
     try {
-      const response = await fetch(`${SERVER_HTTP_URL}/templates/${template}/columns`, {
+      const response = await fetch(`${SERVER_HTTP_URL}/templates/${templateId}/columns`, {
         method: "GET",
         credentials: "include",
       });
 
-      if (response.status === 200) {
-        return (await response.json()) as TemplateColumn[];
+      if (response.ok) {
+        return await response.json();
       }
 
       throw new Error(`get all template columns request resulted in status ${response.status}`);

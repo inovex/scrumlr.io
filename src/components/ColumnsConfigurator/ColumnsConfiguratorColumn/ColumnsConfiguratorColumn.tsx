@@ -10,7 +10,7 @@ import {useSortable} from "@dnd-kit/sortable";
 import {CSSProperties, useCallback, useEffect, useState} from "react";
 import {CSS} from "@dnd-kit/utilities";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
-import {ColumnConfiguratorColumnNameDetails} from "./ColumnConfiguratorColumnNameDetails/ColumnConfiguratorColumnNameDetails";
+import {ColumnConfiguratorColumnNameDetails, OpenState} from "./ColumnConfiguratorColumnNameDetails/ColumnConfiguratorColumnNameDetails";
 import "./ColumnsConfiguratorColumn.scss";
 
 type ColumnsConfiguratorColumnProps = {
@@ -28,7 +28,7 @@ type ColumnsConfiguratorColumnProps = {
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
   // const {t} = useTranslation();
 
-  const [titleEditState, setTitleEditState] = useState<"closed" | "nameFirst" | "descriptionFirst">("closed");
+  const [titleEditState, setTitleEditState] = useState<OpenState>("closed");
   const [openColorPicker, setOpenColorPicker] = useState(false);
 
   const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id: props.column.id});

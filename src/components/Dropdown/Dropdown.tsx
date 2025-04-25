@@ -20,6 +20,7 @@ type DropdownProps<K = string> = {
 };
 
 export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
+  if (props.options.length === 0) return null;
   const activeOption = props.options.find((option) => option.key === props.activeKey) ?? props.options[0];
 
   // active refers to the option on the very top
