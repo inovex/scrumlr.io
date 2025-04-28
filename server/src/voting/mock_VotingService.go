@@ -204,6 +204,65 @@ func (_c *MockVotingService_Get_Call) RunAndReturn(run func(context.Context, uui
 	return _c
 }
 
+// GetAll provides a mock function with given fields: ctx, board
+func (_m *MockVotingService) GetAll(ctx context.Context, board uuid.UUID) ([]*Voting, error) {
+	ret := _m.Called(ctx, board)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAll")
+	}
+
+	var r0 []*Voting
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]*Voting, error)); ok {
+		return rf(ctx, board)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []*Voting); ok {
+		r0 = rf(ctx, board)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]*Voting)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, board)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockVotingService_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockVotingService_GetAll_Call struct {
+	*mock.Call
+}
+
+// GetAll is a helper method to define mock.On call
+//   - ctx context.Context
+//   - board uuid.UUID
+func (_e *MockVotingService_Expecter) GetAll(ctx interface{}, board interface{}) *MockVotingService_GetAll_Call {
+	return &MockVotingService_GetAll_Call{Call: _e.mock.On("GetAll", ctx, board)}
+}
+
+func (_c *MockVotingService_GetAll_Call) Run(run func(ctx context.Context, board uuid.UUID)) *MockVotingService_GetAll_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockVotingService_GetAll_Call) Return(_a0 []*Voting, _a1 error) *MockVotingService_GetAll_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockVotingService_GetAll_Call) RunAndReturn(run func(context.Context, uuid.UUID) ([]*Voting, error)) *MockVotingService_GetAll_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetVotes provides a mock function with given fields: ctx, f
 func (_m *MockVotingService) GetVotes(ctx context.Context, f filter.VoteFilter) ([]*Vote, error) {
 	ret := _m.Called(ctx, f)
@@ -259,65 +318,6 @@ func (_c *MockVotingService_GetVotes_Call) Return(_a0 []*Vote, _a1 error) *MockV
 }
 
 func (_c *MockVotingService_GetVotes_Call) RunAndReturn(run func(context.Context, filter.VoteFilter) ([]*Vote, error)) *MockVotingService_GetVotes_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// List provides a mock function with given fields: ctx, board
-func (_m *MockVotingService) List(ctx context.Context, board uuid.UUID) ([]*Voting, error) {
-	ret := _m.Called(ctx, board)
-
-	if len(ret) == 0 {
-		panic("no return value specified for List")
-	}
-
-	var r0 []*Voting
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]*Voting, error)); ok {
-		return rf(ctx, board)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) []*Voting); ok {
-		r0 = rf(ctx, board)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*Voting)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
-		r1 = rf(ctx, board)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// MockVotingService_List_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'List'
-type MockVotingService_List_Call struct {
-	*mock.Call
-}
-
-// List is a helper method to define mock.On call
-//   - ctx context.Context
-//   - board uuid.UUID
-func (_e *MockVotingService_Expecter) List(ctx interface{}, board interface{}) *MockVotingService_List_Call {
-	return &MockVotingService_List_Call{Call: _e.mock.On("List", ctx, board)}
-}
-
-func (_c *MockVotingService_List_Call) Run(run func(ctx context.Context, board uuid.UUID)) *MockVotingService_List_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockVotingService_List_Call) Return(_a0 []*Voting, _a1 error) *MockVotingService_List_Call {
-	_c.Call.Return(_a0, _a1)
-	return _c
-}
-
-func (_c *MockVotingService_List_Call) RunAndReturn(run func(context.Context, uuid.UUID) ([]*Voting, error)) *MockVotingService_List_Call {
 	_c.Call.Return(run)
 	return _c
 }

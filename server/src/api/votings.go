@@ -92,7 +92,7 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	votings, err := s.votings.List(r.Context(), board)
+	votings, err := s.votings.GetAll(r.Context(), board)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
