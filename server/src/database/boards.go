@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"errors"
+	"scrumlr.io/server/voting"
 	"time"
 
 	"scrumlr.io/server/identifiers"
@@ -153,7 +154,7 @@ func (d *Database) UpdateBoard(update BoardUpdate) (Board, error) {
 	var err error
 	if update.ShowVoting.Valid {
 		votingQuery := d.db.NewSelect().
-			Model((*Voting)(nil)).
+			Model((*voting.VotingDB)(nil)).
 			Column("id").
 			Where("board = ?", update.ID).
 			Where("id = ?", update.ShowVoting.UUID).
