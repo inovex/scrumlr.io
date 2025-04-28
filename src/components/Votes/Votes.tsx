@@ -14,6 +14,11 @@ type VotesProps = {
   colorClassName?: string;
 };
 
+// Define Vote interface to type userVotes and fix linter errors
+interface Vote {
+  id: string;
+}
+
 export const Votes: FC<VotesProps> = (props) => {
   const {t} = useTranslation();
 
@@ -41,13 +46,14 @@ export const Votes: FC<VotesProps> = (props) => {
 
     const votesPerNote = lastVoting.votes?.votesPerNote ?? {};
 
-    let userVotes: Array<{id: string}> = (votesPerNote[props.noteId]?.userVotes ?? []).map((v: any) => ({id: v.id}));
+    // Aggregate user votes for a note and its stacked child notes, then deduplicate by vote ID to display unique user names
+    let userVotes: Array<{id: string}> = (votesPerNote[props.noteId]?.userVotes ?? []).map((v: Vote) => ({id: v.id}));
     if (props.aggregateVotes) {
       const childVotes: Array<{id: string}> = state.notes
         .filter((n) => n.position.stack === props.noteId)
         .reduce(
           (acc, curr) => {
-            const childUserVotes = (votesPerNote[curr.id]?.userVotes ?? []).map((v: any) => ({id: v.id}));
+            const childUserVotes = (votesPerNote[curr.id]?.userVotes ?? []).map((v: Vote) => ({id: v.id}));
             return acc.concat(childUserVotes);
           },
           [] as Array<{id: string}>
