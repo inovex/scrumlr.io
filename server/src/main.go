@@ -21,7 +21,6 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
-	"scrumlr.io/server/services/votings"
 )
 
 func main() {
@@ -378,7 +377,7 @@ func run(c *cli.Context) error {
 	reactionService := initialize.InitializeReactionService(bun, rt)
 
 	boardService := boards.NewBoardService(dbConnection, rt)
-	votingService := votings.NewVotingService(dbConnection, rt)
+	votingService := initialize.InitializeVotingService(bun, rt)
 	noteService := initialize.InitializeNotesService(bun, rt)
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)
