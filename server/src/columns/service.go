@@ -1,73 +1,181 @@
 package columns
 
 import (
-	"github.com/google/uuid"
-	"net/http"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
-	"scrumlr.io/server/technical_helper"
+  "context"
+  "database/sql"
+  "errors"
+  "fmt"
+  "github.com/google/uuid"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/common/filter"
+  "scrumlr.io/server/logger"
+  "scrumlr.io/server/notes"
+  "scrumlr.io/server/realtime"
+  "scrumlr.io/server/voting"
 )
 
-type ColumnSlice []*Column
-
-// Column is the response for all column requests.
-type Column struct {
-
-	// The column id.
-	ID uuid.UUID `json:"id"`
-
-	// The column name.
-	Name string `json:"name"`
-
-	// The column description.
-	Description string `json:"description"`
-
-	// The column color.
-	Color types.Color `json:"color"`
-
-	// The column visibility.
-	Visible bool `json:"visible"`
-
-	// The column rank.
-	Index int `json:"index"`
+type ColumnsDatabase interface {
+  Create(column ColumnInsertDB) (ColumnDB, error)
+  Update(column ColumnUpdateDB) (ColumnDB, error)
+  Delete(board uuid.UUID, column uuid.UUID, user uuid.UUID) error
+  Get(board uuid.UUID, id uuid.UUID) (ColumnDB, error)
+  GetAll(board uuid.UUID) ([]ColumnDB, error)
 }
 
-func (c ColumnSlice) FilterVisibleColumns() []*Column {
-	return technical_helper.Filter[*Column](c, func(column *Column) bool {
-		return column.Visible
-	})
+type Service struct {
+  database ColumnsDatabase
+  realtime *realtime.Broker
 }
 
-func UnmarshallColumnData(data interface{}) (ColumnSlice, error) {
-	columns, err := technical_helper.UnmarshalSlice[Column](data)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return columns, nil
+func (s *Service) Create(ctx context.Context, body ColumnRequest) (*Column, error) {
+  log := logger.FromContext(ctx)
+  column, err := s.database.CreateColumn(ColumnInsertDB{Board: body.Board, Name: body.Name, Description: body.Description, Color: body.Color, Visible: body.Visible, Index: body.Index})
+  if err != nil {
+    log.Errorw("unable to create column", "err", err)
+    return nil, err
+  }
+  s.updatedColumns(body.Board)
+  return new(Column).From(column), err
 }
 
-func (c *Column) From(column database.Column) *Column {
-	c.ID = column.ID
-	c.Name = column.Name
-	c.Description = column.Description
-	c.Color = column.Color
-	c.Visible = column.Visible
-	c.Index = column.Index
-	return c
+func (s *Service) Delete(ctx context.Context, board, column, user uuid.UUID) error {
+  log := logger.FromContext(ctx)
+
+  openVoting, err := s.database.GetOpenVoting(board)
+  var toBeDeletedVotes []voting.Vote
+  if err != nil {
+    if !errors.Is(err, sql.ErrNoRows) {
+      log.Errorw("unable to get open voting", "board", board, "err", err)
+      return err
+    }
+  } else {
+    toBeDeletedVotes, err = s.database.GetVotes(filter.VoteFilter{Board: board, Voting: &openVoting.ID})
+    if err != nil {
+      logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err, "board", board, "column", column)
+      return err
+    }
+  }
+
+  err = s.database.DeleteColumn(board, column, user)
+  if err != nil {
+    log.Errorw("unable to delete column", "err", err)
+    return err
+  }
+  s.deletedColumn(user, board, column, toBeDeletedVotes)
+  return err
 }
 
-func (*Column) Render(_ http.ResponseWriter, _ *http.Request) error {
-	return nil
+func (s *Service) Update(ctx context.Context, body ColumnUpdateRequest) (*Column, error) {
+  log := logger.FromContext(ctx)
+  column, err := s.database.UpdateColumn(ColumnUpdateDB{ID: body.ID, Board: body.Board, Name: body.Name, Description: body.Description, Color: body.Color, Visible: body.Visible, Index: body.Index})
+  if err != nil {
+    log.Errorw("unable to update column", "err", err)
+    return nil, err
+  }
+  s.updatedColumns(body.Board)
+  return new(Column).From(column), err
 }
 
-func Columns(columns []database.Column) []*Column {
-	if columns == nil {
-		return nil
-	}
+func (s *Service) Get(ctx context.Context, boardID, columnID uuid.UUID) (*Column, error) {
+  log := logger.FromContext(ctx)
+  column, err := s.database.GetColumn(boardID, columnID)
+  if err != nil {
+    if err == sql.ErrNoRows {
+      return nil, common.NotFoundError
+    }
+    log.Errorw("unable to get column", "board", boardID, "column", columnID, "error", err)
+    return nil, fmt.Errorf("unable to get column: %w", err)
+  }
+  return new(Column).From(column), err
+}
 
-	return technical_helper.MapSlice[database.Column, *Column](columns, func(column database.Column) *Column {
-		return new(Column).From(column)
-	})
+func (s *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Column, error) {
+  log := logger.FromContext(ctx)
+  columns, err := s.database.GetColumns(boardID)
+  if err != nil {
+    log.Errorw("unable to get columns", "board", boardID, "error", err)
+    return nil, fmt.Errorf("unable to get columns: %w", err)
+  }
+  return Columns(columns), err
+}
+
+func (s *Service) updatedColumns(board uuid.UUID) {
+  dbColumns, err := s.database.GetColumns(board)
+  if err != nil {
+    logger.Get().Errorw("unable to retrieve columns in updated notes", "err", err)
+    return
+  }
+  _ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+    Type: realtime.BoardEventColumnsUpdated,
+    Data: Columns(dbColumns),
+  })
+
+  var err_msg string
+  err_msg, err = s.syncNotesOnColumnChange(board)
+  if err != nil {
+    logger.Get().Errorw(err_msg, "err", err)
+  }
+}
+
+func (s *Service) syncNotesOnColumnChange(boardID uuid.UUID) (string, error) {
+  var err_msg string
+  columns, err := s.database.GetColumns(boardID)
+  if err != nil {
+    err_msg = "unable to retrieve columns, following a updated columns call"
+    return err_msg, err
+  }
+
+  var columnsID []uuid.UUID
+  for _, column := range columns {
+    columnsID = append(columnsID, column.ID)
+  }
+  notesOnBoard, err := s.database.GetNotes(boardID, columnsID...)
+  if err != nil {
+    err_msg = "unable to retrieve notes, following a updated columns call"
+    return err_msg, err
+  }
+
+  err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+    Type: realtime.BoardEventNotesSync,
+    Data: notes.Notes(notesOnBoard),
+  })
+  if err != nil {
+    err_msg = "unable to broadcast notes, following a updated columns call"
+    return err_msg, err
+  }
+  return "", err
+}
+
+func (s *Service) deletedColumn(user, board, column uuid.UUID, toBeDeletedVotes []voting.VoteDB) {
+  _ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+    Type: realtime.BoardEventColumnDeleted,
+    Data: column,
+  })
+
+  dbNotes, err := s.database.GetNotes(board)
+  if err != nil {
+    logger.Get().Errorw("unable to retrieve notes in deleted column", "err", err)
+    return
+  }
+  eventNotes := make([]notes.Note, len(dbNotes))
+  for index, note := range dbNotes {
+    eventNotes[index] = *new(notes.Note).From(note)
+  }
+  _ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+    Type: realtime.BoardEventNotesUpdated,
+    Data: eventNotes,
+  })
+  if len(toBeDeletedVotes) > 0 {
+    _ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+      Type: realtime.BoardEventVotesDeleted,
+      Data: toBeDeletedVotes,
+    })
+  }
+}
+
+func NewColumnsService(db ColumnsDatabase, rt *realtime.Broker) ColumnsService {
+  b := new(Service)
+  b.database = db
+  b.realtime = rt
+  return b
 }

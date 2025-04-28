@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"net/http"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/voting"
 
 	"scrumlr.io/server/notes"
@@ -85,4 +86,11 @@ func InitializeVotingService(db *bun.DB, rt *realtime.Broker) voting.VotingServi
 	votingService := voting.NewVotingService(votingDB, rt)
 
 	return votingService
+}
+
+func InitializeColumnsService(db *bun.DB, rt *realtime.Broker) columns.ColumnsService {
+	columnsDB := columns.NewColumnsDatabase(db)
+	columnsService := columns.NewColumnsService(columnsDB, rt)
+
+	return columnsService
 }

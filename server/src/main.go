@@ -375,7 +375,7 @@ func run(c *cli.Context) error {
 	websocket := initialize.InitializeWebsocket(websocketUpgrader, rt)
 	sessionRequestService := initialize.InitializeSessionRequestService(bun, rt, websocket, sessionService)
 	reactionService := initialize.InitializeReactionService(bun, rt)
-
+	columnsService := initialize.InitializeColumnsService(bun, rt)
 	boardService := boards.NewBoardService(dbConnection, rt)
 	votingService := initialize.InitializeVotingService(bun, rt)
 	noteService := initialize.InitializeNotesService(bun, rt)
@@ -390,6 +390,7 @@ func run(c *cli.Context) error {
 		authConfig,
 
 		boardService,
+		columnsService,
 		votingService,
 		userService,
 		noteService,

@@ -3,6 +3,7 @@ package database
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/voting"
 
@@ -19,13 +20,14 @@ type Database struct {
 	sessionRequestDb sessionrequests.SessionRequestDatabase
 	notesDb          notes.NotesDatabase
 	votingDb         voting.VotingDatabase
+	columnsDb        columns.ColumnsDatabase
 }
 
 type FullBoard struct {
 	Board                Board
 	BoardSessions        []sessions.DatabaseBoardSession
 	BoardSessionRequests []sessionrequests.DatabaseBoardSessionRequest
-	Columns              []Column
+	Columns              []columns.ColumnDB
 	Notes                []notes.NoteDB
 	Reactions            []reactions.DatabaseReaction
 	Votings              []voting.VotingDB
@@ -43,6 +45,7 @@ func New(db *bun.DB) *Database {
 	d.sessionRequestDb = sessionrequests.NewSessionRequestDatabase(db)
 	d.notesDb = notes.NewNotesDatabase(db)
 	d.votingDb = voting.NewVotingDatabase(db)
+	d.columnsDb = columns.NewColumnsDatabase(db)
 	return d
 }
 
@@ -51,7 +54,7 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		board     Board
 		sessions  []sessions.DatabaseBoardSession
 		requests  []sessionrequests.DatabaseBoardSessionRequest
-		columns   []Column
+		columns   []columns.ColumnDB
 		notes     []notes.NoteDB
 		reactions []reactions.DatabaseReaction
 		votings   []voting.VotingDB
@@ -81,13 +84,13 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getSessions:
 			sessions, err = d.sessionDb.GetAll(id)
 		case getColumns:
-			columns, err = d.GetColumns(id)
+			columns, err = d.columnsDb.GetColumns(id)
 		case getNotes:
 			notes, err = d.notesDb.GetAll(id)
 		case getReactions:
 			reactions, err = d.reactionsDb.GetAll(id)
 		case getVotings:
-			votings, votes, err = d.votingDb.GetVotings(id)
+			votings, votes, err = d.votingDb.GetAll(id)
 		}
 		if err != nil {
 			return FullBoard{}, err
