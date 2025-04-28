@@ -80,12 +80,12 @@ func (_c *MockVotingDatabase_AddVote_Call) RunAndReturn(run func(uuid.UUID, uuid
 	return _c
 }
 
-// CreateVoting provides a mock function with given fields: insert
-func (_m *MockVotingDatabase) CreateVoting(insert VotingInsert) (VotingDB, error) {
+// Create provides a mock function with given fields: insert
+func (_m *MockVotingDatabase) Create(insert VotingInsert) (VotingDB, error) {
 	ret := _m.Called(insert)
 
 	if len(ret) == 0 {
-		panic("no return value specified for CreateVoting")
+		panic("no return value specified for Create")
 	}
 
 	var r0 VotingDB
@@ -108,30 +108,163 @@ func (_m *MockVotingDatabase) CreateVoting(insert VotingInsert) (VotingDB, error
 	return r0, r1
 }
 
-// MockVotingDatabase_CreateVoting_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CreateVoting'
-type MockVotingDatabase_CreateVoting_Call struct {
+// MockVotingDatabase_Create_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Create'
+type MockVotingDatabase_Create_Call struct {
 	*mock.Call
 }
 
-// CreateVoting is a helper method to define mock.On call
+// Create is a helper method to define mock.On call
 //   - insert VotingInsert
-func (_e *MockVotingDatabase_Expecter) CreateVoting(insert interface{}) *MockVotingDatabase_CreateVoting_Call {
-	return &MockVotingDatabase_CreateVoting_Call{Call: _e.mock.On("CreateVoting", insert)}
+func (_e *MockVotingDatabase_Expecter) Create(insert interface{}) *MockVotingDatabase_Create_Call {
+	return &MockVotingDatabase_Create_Call{Call: _e.mock.On("Create", insert)}
 }
 
-func (_c *MockVotingDatabase_CreateVoting_Call) Run(run func(insert VotingInsert)) *MockVotingDatabase_CreateVoting_Call {
+func (_c *MockVotingDatabase_Create_Call) Run(run func(insert VotingInsert)) *MockVotingDatabase_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(VotingInsert))
 	})
 	return _c
 }
 
-func (_c *MockVotingDatabase_CreateVoting_Call) Return(_a0 VotingDB, _a1 error) *MockVotingDatabase_CreateVoting_Call {
+func (_c *MockVotingDatabase_Create_Call) Return(_a0 VotingDB, _a1 error) *MockVotingDatabase_Create_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockVotingDatabase_CreateVoting_Call) RunAndReturn(run func(VotingInsert) (VotingDB, error)) *MockVotingDatabase_CreateVoting_Call {
+func (_c *MockVotingDatabase_Create_Call) RunAndReturn(run func(VotingInsert) (VotingDB, error)) *MockVotingDatabase_Create_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// Get provides a mock function with given fields: board, id
+func (_m *MockVotingDatabase) Get(board uuid.UUID, id uuid.UUID) (VotingDB, []VoteDB, error) {
+	ret := _m.Called(board, id)
+
+	if len(ret) == 0 {
+		panic("no return value specified for Get")
+	}
+
+	var r0 VotingDB
+	var r1 []VoteDB
+	var r2 error
+	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (VotingDB, []VoteDB, error)); ok {
+		return rf(board, id)
+	}
+	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) VotingDB); ok {
+		r0 = rf(board, id)
+	} else {
+		r0 = ret.Get(0).(VotingDB)
+	}
+
+	if rf, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) []VoteDB); ok {
+		r1 = rf(board, id)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).([]VoteDB)
+		}
+	}
+
+	if rf, ok := ret.Get(2).(func(uuid.UUID, uuid.UUID) error); ok {
+		r2 = rf(board, id)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
+}
+
+// MockVotingDatabase_Get_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Get'
+type MockVotingDatabase_Get_Call struct {
+	*mock.Call
+}
+
+// Get is a helper method to define mock.On call
+//   - board uuid.UUID
+//   - id uuid.UUID
+func (_e *MockVotingDatabase_Expecter) Get(board interface{}, id interface{}) *MockVotingDatabase_Get_Call {
+	return &MockVotingDatabase_Get_Call{Call: _e.mock.On("Get", board, id)}
+}
+
+func (_c *MockVotingDatabase_Get_Call) Run(run func(board uuid.UUID, id uuid.UUID)) *MockVotingDatabase_Get_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(uuid.UUID), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockVotingDatabase_Get_Call) Return(_a0 VotingDB, _a1 []VoteDB, _a2 error) *MockVotingDatabase_Get_Call {
+	_c.Call.Return(_a0, _a1, _a2)
+	return _c
+}
+
+func (_c *MockVotingDatabase_Get_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (VotingDB, []VoteDB, error)) *MockVotingDatabase_Get_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAll provides a mock function with given fields: board
+func (_m *MockVotingDatabase) GetAll(board uuid.UUID) ([]VotingDB, []VoteDB, error) {
+	ret := _m.Called(board)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAll")
+	}
+
+	var r0 []VotingDB
+	var r1 []VoteDB
+	var r2 error
+	if rf, ok := ret.Get(0).(func(uuid.UUID) ([]VotingDB, []VoteDB, error)); ok {
+		return rf(board)
+	}
+	if rf, ok := ret.Get(0).(func(uuid.UUID) []VotingDB); ok {
+		r0 = rf(board)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]VotingDB)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(uuid.UUID) []VoteDB); ok {
+		r1 = rf(board)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).([]VoteDB)
+		}
+	}
+
+	if rf, ok := ret.Get(2).(func(uuid.UUID) error); ok {
+		r2 = rf(board)
+	} else {
+		r2 = ret.Error(2)
+	}
+
+	return r0, r1, r2
+}
+
+// MockVotingDatabase_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockVotingDatabase_GetAll_Call struct {
+	*mock.Call
+}
+
+// GetAll is a helper method to define mock.On call
+//   - board uuid.UUID
+func (_e *MockVotingDatabase_Expecter) GetAll(board interface{}) *MockVotingDatabase_GetAll_Call {
+	return &MockVotingDatabase_GetAll_Call{Call: _e.mock.On("GetAll", board)}
+}
+
+func (_c *MockVotingDatabase_GetAll_Call) Run(run func(board uuid.UUID)) *MockVotingDatabase_GetAll_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockVotingDatabase_GetAll_Call) Return(_a0 []VotingDB, _a1 []VoteDB, _a2 error) *MockVotingDatabase_GetAll_Call {
+	_c.Call.Return(_a0, _a1, _a2)
+	return _c
+}
+
+func (_c *MockVotingDatabase_GetAll_Call) RunAndReturn(run func(uuid.UUID) ([]VotingDB, []VoteDB, error)) *MockVotingDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -250,139 +383,6 @@ func (_c *MockVotingDatabase_GetVotes_Call) RunAndReturn(run func(filter.VoteFil
 	return _c
 }
 
-// GetVoting provides a mock function with given fields: board, id
-func (_m *MockVotingDatabase) GetVoting(board uuid.UUID, id uuid.UUID) (VotingDB, []VoteDB, error) {
-	ret := _m.Called(board, id)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetVoting")
-	}
-
-	var r0 VotingDB
-	var r1 []VoteDB
-	var r2 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (VotingDB, []VoteDB, error)); ok {
-		return rf(board, id)
-	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) VotingDB); ok {
-		r0 = rf(board, id)
-	} else {
-		r0 = ret.Get(0).(VotingDB)
-	}
-
-	if rf, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) []VoteDB); ok {
-		r1 = rf(board, id)
-	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).([]VoteDB)
-		}
-	}
-
-	if rf, ok := ret.Get(2).(func(uuid.UUID, uuid.UUID) error); ok {
-		r2 = rf(board, id)
-	} else {
-		r2 = ret.Error(2)
-	}
-
-	return r0, r1, r2
-}
-
-// MockVotingDatabase_GetVoting_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetVoting'
-type MockVotingDatabase_GetVoting_Call struct {
-	*mock.Call
-}
-
-// GetVoting is a helper method to define mock.On call
-//   - board uuid.UUID
-//   - id uuid.UUID
-func (_e *MockVotingDatabase_Expecter) GetVoting(board interface{}, id interface{}) *MockVotingDatabase_GetVoting_Call {
-	return &MockVotingDatabase_GetVoting_Call{Call: _e.mock.On("GetVoting", board, id)}
-}
-
-func (_c *MockVotingDatabase_GetVoting_Call) Run(run func(board uuid.UUID, id uuid.UUID)) *MockVotingDatabase_GetVoting_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uuid.UUID), args[1].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockVotingDatabase_GetVoting_Call) Return(_a0 VotingDB, _a1 []VoteDB, _a2 error) *MockVotingDatabase_GetVoting_Call {
-	_c.Call.Return(_a0, _a1, _a2)
-	return _c
-}
-
-func (_c *MockVotingDatabase_GetVoting_Call) RunAndReturn(run func(uuid.UUID, uuid.UUID) (VotingDB, []VoteDB, error)) *MockVotingDatabase_GetVoting_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// GetVotings provides a mock function with given fields: board
-func (_m *MockVotingDatabase) GetVotings(board uuid.UUID) ([]VotingDB, []VoteDB, error) {
-	ret := _m.Called(board)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetVotings")
-	}
-
-	var r0 []VotingDB
-	var r1 []VoteDB
-	var r2 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID) ([]VotingDB, []VoteDB, error)); ok {
-		return rf(board)
-	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID) []VotingDB); ok {
-		r0 = rf(board)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]VotingDB)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(uuid.UUID) []VoteDB); ok {
-		r1 = rf(board)
-	} else {
-		if ret.Get(1) != nil {
-			r1 = ret.Get(1).([]VoteDB)
-		}
-	}
-
-	if rf, ok := ret.Get(2).(func(uuid.UUID) error); ok {
-		r2 = rf(board)
-	} else {
-		r2 = ret.Error(2)
-	}
-
-	return r0, r1, r2
-}
-
-// MockVotingDatabase_GetVotings_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetVotings'
-type MockVotingDatabase_GetVotings_Call struct {
-	*mock.Call
-}
-
-// GetVotings is a helper method to define mock.On call
-//   - board uuid.UUID
-func (_e *MockVotingDatabase_Expecter) GetVotings(board interface{}) *MockVotingDatabase_GetVotings_Call {
-	return &MockVotingDatabase_GetVotings_Call{Call: _e.mock.On("GetVotings", board)}
-}
-
-func (_c *MockVotingDatabase_GetVotings_Call) Run(run func(board uuid.UUID)) *MockVotingDatabase_GetVotings_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(uuid.UUID))
-	})
-	return _c
-}
-
-func (_c *MockVotingDatabase_GetVotings_Call) Return(_a0 []VotingDB, _a1 []VoteDB, _a2 error) *MockVotingDatabase_GetVotings_Call {
-	_c.Call.Return(_a0, _a1, _a2)
-	return _c
-}
-
-func (_c *MockVotingDatabase_GetVotings_Call) RunAndReturn(run func(uuid.UUID) ([]VotingDB, []VoteDB, error)) *MockVotingDatabase_GetVotings_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
 // RemoveVote provides a mock function with given fields: board, user, note
 func (_m *MockVotingDatabase) RemoveVote(board uuid.UUID, user uuid.UUID, note uuid.UUID) error {
 	ret := _m.Called(board, user, note)
@@ -431,12 +431,12 @@ func (_c *MockVotingDatabase_RemoveVote_Call) RunAndReturn(run func(uuid.UUID, u
 	return _c
 }
 
-// UpdateVoting provides a mock function with given fields: update
-func (_m *MockVotingDatabase) UpdateVoting(update VotingUpdate) (VotingDB, error) {
+// Update provides a mock function with given fields: update
+func (_m *MockVotingDatabase) Update(update VotingUpdate) (VotingDB, error) {
 	ret := _m.Called(update)
 
 	if len(ret) == 0 {
-		panic("no return value specified for UpdateVoting")
+		panic("no return value specified for Update")
 	}
 
 	var r0 VotingDB
@@ -459,30 +459,30 @@ func (_m *MockVotingDatabase) UpdateVoting(update VotingUpdate) (VotingDB, error
 	return r0, r1
 }
 
-// MockVotingDatabase_UpdateVoting_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateVoting'
-type MockVotingDatabase_UpdateVoting_Call struct {
+// MockVotingDatabase_Update_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Update'
+type MockVotingDatabase_Update_Call struct {
 	*mock.Call
 }
 
-// UpdateVoting is a helper method to define mock.On call
+// Update is a helper method to define mock.On call
 //   - update VotingUpdate
-func (_e *MockVotingDatabase_Expecter) UpdateVoting(update interface{}) *MockVotingDatabase_UpdateVoting_Call {
-	return &MockVotingDatabase_UpdateVoting_Call{Call: _e.mock.On("UpdateVoting", update)}
+func (_e *MockVotingDatabase_Expecter) Update(update interface{}) *MockVotingDatabase_Update_Call {
+	return &MockVotingDatabase_Update_Call{Call: _e.mock.On("Update", update)}
 }
 
-func (_c *MockVotingDatabase_UpdateVoting_Call) Run(run func(update VotingUpdate)) *MockVotingDatabase_UpdateVoting_Call {
+func (_c *MockVotingDatabase_Update_Call) Run(run func(update VotingUpdate)) *MockVotingDatabase_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(VotingUpdate))
 	})
 	return _c
 }
 
-func (_c *MockVotingDatabase_UpdateVoting_Call) Return(_a0 VotingDB, _a1 error) *MockVotingDatabase_UpdateVoting_Call {
+func (_c *MockVotingDatabase_Update_Call) Return(_a0 VotingDB, _a1 error) *MockVotingDatabase_Update_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockVotingDatabase_UpdateVoting_Call) RunAndReturn(run func(VotingUpdate) (VotingDB, error)) *MockVotingDatabase_UpdateVoting_Call {
+func (_c *MockVotingDatabase_Update_Call) RunAndReturn(run func(VotingUpdate) (VotingDB, error)) *MockVotingDatabase_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
