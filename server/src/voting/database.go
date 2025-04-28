@@ -24,7 +24,7 @@ func NewVotingDatabase(database *bun.DB) VotingDatabase {
 	return db
 }
 
-func (d *DB) CreateVoting(insert VotingInsert) (VotingDB, error) {
+func (d *DB) Create(insert VotingInsert) (VotingDB, error) {
 	if insert.Status != types.VotingStatusOpen {
 		return VotingDB{}, errors.New("unable to create voting with other state than 'OPEN'")
 	}
@@ -59,7 +59,7 @@ func (d *DB) CreateVoting(insert VotingInsert) (VotingDB, error) {
 	return voting, err
 }
 
-func (d *DB) UpdateVoting(update VotingUpdate) (VotingDB, error) {
+func (d *DB) Update(update VotingUpdate) (VotingDB, error) {
 	if update.Status == types.VotingStatusOpen {
 		return VotingDB{}, errors.New("only allowed to close or a abort a voting")
 	}
@@ -110,7 +110,7 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 	return rankUpdate
 }
 
-func (d *DB) GetVoting(board, id uuid.UUID) (VotingDB, []VoteDB, error) {
+func (d *DB) Get(board, id uuid.UUID) (VotingDB, []VoteDB, error) {
 	var voting VotingDB
 	err := d.db.NewSelect().Model(&voting).Where("board = ?", board).Where("id = ?", id).Scan(context.Background())
 
@@ -122,7 +122,7 @@ func (d *DB) GetVoting(board, id uuid.UUID) (VotingDB, []VoteDB, error) {
 	return voting, []VoteDB{}, err
 }
 
-func (d *DB) GetVotings(board uuid.UUID) ([]VotingDB, []VoteDB, error) {
+func (d *DB) GetAll(board uuid.UUID) ([]VotingDB, []VoteDB, error) {
 	var votings []VotingDB
 	err := d.db.NewSelect().
 		Model(&votings).
