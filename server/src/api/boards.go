@@ -6,12 +6,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"scrumlr.io/server/voting"
 	"strconv"
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/votes"
 
 	"scrumlr.io/server/identifiers"
 
@@ -343,7 +343,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			Participants []*sessions.BoardSession `json:"participants"`
 			Columns      []*columns.Column        `json:"columns"`
 			Notes        []*notes.Note            `json:"notes"`
-			Votings      []*votes.Voting          `json:"votings"`
+			Votings      []*voting.Voting         `json:"votings"`
 		}{
 			Board:        fullBoard.Board,
 			Participants: fullBoard.BoardSessions,
@@ -354,8 +354,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if r.Header.Get("Accept") == "text/csv" {
 		header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-		for index, voting := range fullBoard.Votings {
-			if voting.Status == types.VotingStatusClosed {
+		for index, closedVoting := range fullBoard.Votings {
+			if closedVoting.Status == types.VotingStatusClosed {
 				header = append(header, fmt.Sprintf("voting_%d", index))
 			}
 		}
@@ -392,10 +392,10 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 				stack,
 			}
 
-			for _, voting := range fullBoard.Votings {
-				if voting.Status == types.VotingStatusClosed {
-					if voting.VotingResults != nil {
-						resultOnNote = append(resultOnNote, strconv.Itoa(voting.VotingResults.Votes[note.ID].Total))
+			for _, closedVoting := range fullBoard.Votings {
+				if closedVoting.Status == types.VotingStatusClosed {
+					if closedVoting.VotingResults != nil {
+						resultOnNote = append(resultOnNote, strconv.Itoa(closedVoting.VotingResults.Votes[note.ID].Total))
 					} else {
 						resultOnNote = append(resultOnNote, "0")
 					}
