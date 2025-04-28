@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/voting"
 	"time"
 
 	"scrumlr.io/server/notes"
@@ -37,7 +38,7 @@ type Server struct {
 	auth     auth.Auth
 
 	boards          services.Boards
-	votings         services.Votings
+	votings         voting.VotingService
 	users           users.UserService
 	notes           notes.NotesService
 	reactions       reactions.ReactionService

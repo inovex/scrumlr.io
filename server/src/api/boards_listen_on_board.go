@@ -3,12 +3,12 @@ package api
 import (
 	"context"
 	"net/http"
+	"scrumlr.io/server/voting"
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/votes"
 
 	"scrumlr.io/server/identifiers"
 
@@ -40,8 +40,8 @@ type EventData struct {
 	Columns   []*columns.Column                      `json:"columns"`
 	Notes     []*notes.Note                          `json:"notes"`
 	Reactions []*reactions.Reaction                  `json:"reactions"`
-	Votings   []*votes.Voting                        `json:"votings"`
-	Votes     []*dto.Vote                            `json:"votes"`
+	Votings   []*voting.Voting                       `json:"votings"`
+	Votes     []*voting.Vote                         `json:"votes"`
 	Sessions  []*sessions.BoardSession               `json:"participants"`
 	Requests  []*sessionrequests.BoardSessionRequest `json:"requests"`
 }

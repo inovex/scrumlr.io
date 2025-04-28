@@ -1,29 +1,13 @@
-package votes
+package voting
 
 import (
 	"github.com/google/uuid"
-	"net/http"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/technical_helper"
 )
 
-func (v *Voting) From(voting database.Voting, votes []database.Vote) *Voting {
-	v.ID = voting.ID
-	v.VoteLimit = voting.VoteLimit
-	v.AllowMultipleVotes = voting.AllowMultipleVotes
-	v.ShowVotesOfOthers = voting.ShowVotesOfOthers
-	v.Status = voting.Status
-	v.VotingResults = getVotingWithResults(voting, votes)
-	return v
-}
-
-func (*Voting) Render(_ http.ResponseWriter, _ *http.Request) error {
-	return nil
-}
-
-func Votings(votings []database.Voting, votes []database.Vote) []*Voting {
+func Votings(votings []VotingDB, votes []VoteDB) []*Voting {
 	if votings == nil {
 		return nil
 	}
@@ -61,12 +45,12 @@ func UnmarshallVoteData(data interface{}) (*VotingUpdated, error) {
 	return vote, nil
 }
 
-func getVotingWithResults(voting database.Voting, votes []database.Vote) *VotingResults {
+func getVotingWithResults(voting VotingDB, votes []VoteDB) *VotingResults {
 	if voting.Status != types.VotingStatusClosed {
 		return nil
 	}
 
-	relevantVoting := technical_helper.Filter[database.Vote](votes, func(vote database.Vote) bool {
+	relevantVoting := technical_helper.Filter[VoteDB](votes, func(vote VoteDB) bool {
 		return vote.Voting == voting.ID
 	})
 
