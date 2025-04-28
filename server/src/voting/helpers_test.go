@@ -1,20 +1,20 @@
-package votes
+package voting
 
 import (
+	"testing"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
-	"testing"
-	"time"
 )
 
 func TestVotingWithResultsWithEmptyStructs(t *testing.T) {
 
-	var votes []database.Vote
-	var voting database.Voting
+	var votes []VoteDB
+	var voting VotingDB
 
 	res := getVotingWithResults(voting, votes)
 
@@ -22,7 +22,7 @@ func TestVotingWithResultsWithEmptyStructs(t *testing.T) {
 }
 
 func TestVotingNotClosed(t *testing.T) {
-	var votes []database.Vote
+	var votes []VoteDB
 	voting := buildVoting(uuid.New(), types.VotingStatusOpen, false)
 
 	res := getVotingWithResults(*voting, votes)
@@ -33,11 +33,26 @@ func TestVotingNotClosed(t *testing.T) {
 func TestVotingAndVotesIdDiffer(t *testing.T) {
 
 	voting := buildVoting(uuid.New(), types.VotingStatusClosed, false)
-	votes := []database.Vote{*buildVote(uuid.New(), uuid.New(), uuid.New())}
+	votes := []VoteDB{*buildVote(uuid.New(), uuid.New(), uuid.New())}
 
 	res := getVotingWithResults(*voting, votes)
 
 	assert.Nil(t, res)
+}
+
+func TestVotingAndVotesIdEqualNoUserDefined(t *testing.T) {
+
+	voteId := uuid.New()
+	noteId := uuid.New()
+
+	voting := buildVoting(voteId, types.VotingStatusClosed, false)
+	votes := []VoteDB{*buildVote(voteId, noteId, uuid.New())}
+
+	res := getVotingWithResults(*voting, votes)
+
+	assert.Equal(t, 1, res.Total)
+	assert.Equal(t, 1, res.Votes[noteId].Total)
+	assert.Nil(t, res.Votes[noteId].Users)
 }
 
 func TestShowVotesOfOthers(t *testing.T) {
@@ -47,7 +62,7 @@ func TestShowVotesOfOthers(t *testing.T) {
 	userId := uuid.New()
 
 	voting := buildVoting(voteId, types.VotingStatusClosed, true)
-	votes := []database.Vote{*buildVote(voteId, noteId, userId)}
+	votes := []VoteDB{*buildVote(voteId, noteId, userId)}
 
 	res := getVotingWithResults(*voting, votes)
 
@@ -67,7 +82,7 @@ func TestMultipleVotesForDifferentNotesFromOneUser(t *testing.T) {
 	userId := uuid.New()
 
 	voting := buildVoting(voteId, types.VotingStatusClosed, true)
-	votes := []database.Vote{*buildVote(voteId, note1Id, userId), *buildVote(voteId, note2Id, userId)}
+	votes := []VoteDB{*buildVote(voteId, note1Id, userId), *buildVote(voteId, note2Id, userId)}
 
 	res := getVotingWithResults(*voting, votes)
 
@@ -89,7 +104,7 @@ func TestMultipleVotesForOneNoteFromOneUser(t *testing.T) {
 	userId := uuid.New()
 
 	voting := buildVoting(voteId, types.VotingStatusClosed, true)
-	votes := []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)}
+	votes := []VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)}
 
 	res := getVotingWithResults(*voting, votes)
 
@@ -119,7 +134,10 @@ func TestCalculateVoteCountForSpecificNote(t *testing.T) {
 	userId := uuid.New()
 
 	noteSlice := notes.NoteSlice{buildNote(noteId)}
-	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+	voting := Votings(
+		[]VotingDB{*buildVoting(voteId, types.VotingStatusClosed, true)},
+		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
+	)[0]
 
 	votingCountResult := voting.calculateTotalVoteCount(noteSlice)
 
@@ -133,7 +151,7 @@ func TestShouldReturnNoVotingResultsBecauseVotingIsStillOpen(t *testing.T) {
 	voteId := uuid.New()
 	noteId := uuid.New()
 
-	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusOpen, true)}, []database.Vote{})[0]
+	voting := Votings([]VotingDB{*buildVoting(voteId, types.VotingStatusOpen, true)}, []VoteDB{})[0]
 	noteSlice := notes.NoteSlice{buildNote(noteId)}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
@@ -150,7 +168,10 @@ func TestShouldReturnVotingResults(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 
-	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+	voting := Votings(
+		[]VotingDB{*buildVoting(voteId, types.VotingStatusClosed, true)},
+		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
+	)[0]
 	noteSlice := notes.NoteSlice{buildNote(noteId)}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
@@ -167,7 +188,10 @@ func TestShouldUnmarshallVoteData(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 
-	voting := Votings([]database.Voting{*buildVoting(voteId, types.VotingStatusClosed, true)}, []database.Vote{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)})[0]
+	voting := Votings(
+		[]VotingDB{*buildVoting(voteId, types.VotingStatusClosed, true)},
+		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
+	)[0]
 	noteSlice := notes.NoteSlice{buildNote(noteId)}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
@@ -193,8 +217,8 @@ func buildNote(noteId uuid.UUID) *notes.Note {
 	}
 }
 
-func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *database.Vote {
-	return &database.Vote{
+func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *VoteDB {
+	return &VoteDB{
 		Voting:    votingId,
 		BaseModel: bun.BaseModel{},
 		Board:     uuid.UUID{},
@@ -203,8 +227,8 @@ func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *database
 	}
 }
 
-func buildVoting(id uuid.UUID, status types.VotingStatus, showVotesOfOthers bool) *database.Voting {
-	return &database.Voting{
+func buildVoting(id uuid.UUID, status types.VotingStatus, showVotesOfOthers bool) *VotingDB {
+	return &VotingDB{
 		ID:                 id,
 		BaseModel:          bun.BaseModel{},
 		Board:              uuid.UUID{},

@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"scrumlr.io/server/voting"
 	"time"
 
 	"scrumlr.io/server/notes"
@@ -24,11 +25,12 @@ import (
 )
 
 var testDb *Database
-var notesDB notes.NotesDatabase
+var notesDb notes.NotesDatabase
 var reactionDb reactions.ReactionDatabase
 var sessionDb sessions.SessionDatabase
 var sessionRequestDb sessionrequests.SessionRequestDatabase
 var userDb users.UserDatabase
+var votingDb voting.VotingDatabase
 var fixture *dbfixture.Fixture
 
 const DatabaseUsernameAndPassword = "dbtest"
@@ -58,8 +60,8 @@ func testMainWithDefer(m *testing.M) int {
 	sessionDb = sessions.NewSessionDatabase(bun)
 	sessionRequestDb = sessionrequests.NewSessionRequestDatabase(bun)
 	userDb = users.NewUserDatabase(bun)
-	notesDB = notes.NewNotesDatabase(bun)
-
+	notesDb = notes.NewNotesDatabase(bun)
+	votingDb = voting.NewVotingDatabase(bun)
 	err = loadTestdata()
 	if err != nil {
 		println(fmt.Sprintf("unable to load testdata: %s", err))
@@ -134,8 +136,8 @@ func loadTestdata() error {
 		(*sessions.DatabaseBoardSessionInsert)(nil),
 		(*Column)(nil),
 		(*notes.NoteDB)(nil),
-		(*Voting)(nil),
-		(*Vote)(nil),
+		(*voting.VotingDB)(nil),
+		(*voting.VoteDB)(nil),
 		(*reactions.DatabaseReaction)(nil),
 		(*BoardTemplate)(nil),
 		(*ColumnTemplate)(nil),

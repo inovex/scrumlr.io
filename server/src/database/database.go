@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/voting"
 
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
@@ -16,7 +17,8 @@ type Database struct {
 	reactionsDb      reactions.ReactionDatabase
 	sessionDb        sessions.SessionDatabase
 	sessionRequestDb sessionrequests.SessionRequestDatabase
-	notesDB          notes.NotesDatabase
+	notesDb          notes.NotesDatabase
+	votingDb         voting.VotingDatabase
 }
 
 type FullBoard struct {
@@ -26,8 +28,8 @@ type FullBoard struct {
 	Columns              []Column
 	Notes                []notes.NoteDB
 	Reactions            []reactions.DatabaseReaction
-	Votings              []Voting
-	Votes                []Vote
+	Votings              []voting.VotingDB
+	Votes                []voting.VoteDB
 }
 
 // New creates a new instance of Database
@@ -39,8 +41,8 @@ func New(db *bun.DB) *Database {
 	d.reactionsDb = reactions.NewReactionsDatabase(db)
 	d.sessionDb = sessions.NewSessionDatabase(db)
 	d.sessionRequestDb = sessionrequests.NewSessionRequestDatabase(db)
-	d.notesDB = notes.NewNotesDatabase(db)
-
+	d.notesDb = notes.NewNotesDatabase(db)
+	d.votingDb = voting.NewVotingDatabase(db)
 	return d
 }
 
@@ -52,8 +54,8 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		columns   []Column
 		notes     []notes.NoteDB
 		reactions []reactions.DatabaseReaction
-		votings   []Voting
-		votes     []Vote
+		votings   []voting.VotingDB
+		votes     []voting.VoteDB
 		err       error
 	)
 	type dataBaseOperation int
@@ -81,11 +83,11 @@ func (d *Database) Get(id uuid.UUID) (FullBoard, error) {
 		case getColumns:
 			columns, err = d.GetColumns(id)
 		case getNotes:
-			notes, err = d.notesDB.GetAll(id)
+			notes, err = d.notesDb.GetAll(id)
 		case getReactions:
 			reactions, err = d.reactionsDb.GetAll(id)
 		case getVotings:
-			votings, votes, err = d.GetVotings(id)
+			votings, votes, err = d.votingDb.GetVotings(id)
 		}
 		if err != nil {
 			return FullBoard{}, err
