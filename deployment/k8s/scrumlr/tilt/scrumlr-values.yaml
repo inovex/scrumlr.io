@@ -1,14 +1,12 @@
 ---
-frontend:
-
 backend:
   config:
     natsUrl: nats://nats.nats.svc.cluster.local:4222
   secrets:
     privateKey:
     databaseUrl: postgres://postgres:SuperStrongpassword@postgres-postgresql.postgres.svc.cluster.local:5432/scrumlr?sslmode=disable
-  
+
 ingress:
   enabled: true
-  annotations: 
+  annotations:
     kubernetes.io/ingress.class: public
