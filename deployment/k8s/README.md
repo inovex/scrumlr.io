@@ -26,7 +26,7 @@ We provide a [Makefile](./scrumlr/Makefile) with the most commen commands you ne
 
 #### Unittests
 
-To run the unittests for the hel chart you must install [helm unittests](https://github.com/helm-unittest/helm-unittest).
+To run the unittests for the helm chart you must install [helm unittests](https://github.com/helm-unittest/helm-unittest).
 After that you can run
 
 ```bash
@@ -46,7 +46,7 @@ to execute the tests.
 For the development of the helm chart we provide a [Tiltfile](./tilt/Tiltfile) that deploys all needed requirements to a
 cluster.
 The tiltfile deploys a minimal deployment for scrumlr, which consist out of a namespace, a postgresql database, nats and
-the scrumlr helm chart. 
+the scrumlr helm chart.
 *Note*: For the scrumlr helm chart you need to provide a private key.
 
 *Note*: Befor you start tilt make sure to set the right kube config for the cluster you want to test the scrumlr helm chart.
