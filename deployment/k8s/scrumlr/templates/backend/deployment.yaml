@@ -26,7 +26,7 @@ spec:
       {{- end}}
       containers:
         - name: {{ .Release.Name }}-backend
-          image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+          image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion  }}
           imagePullPolicy: {{ .Values.backend.image.pullPolicy | quote }}
           {{- if .Values.backend.image.args }}
           args: {{ range $val := .Values.backend.image.args }}

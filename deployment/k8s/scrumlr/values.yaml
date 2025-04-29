@@ -11,7 +11,7 @@ frontend:
   ##
   image:
     repository: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
-    tag: 3.10.3
+    tag:
     pullSecrets: []
     pullPolicy: IfNotPresent
     args: []
@@ -111,7 +111,7 @@ backend:
   ##
   image:
     repository: ghcr.io/inovex/scrumlr.io/scrumlr-server
-    tag: 3.10.3
+    tag:
     pullSecrets: []
     pullPolicy: IfNotPresent
     args:
@@ -139,7 +139,7 @@ backend:
   config:
     serverPort: 8080
     basePath: /api
-    natsUrl: 
+    natsUrl:
   ## @param backend.extraConfig Extra configuration values as a map
   ##
   extraConfig: {}
@@ -253,7 +253,7 @@ ingress:
   ##        serviceName: servicename
   ##        servicePort: 8080
   extraPaths: []
-  ## @param ingress.extraTls TLS configuration for additional hostnames 
+  ## @param ingress.extraTls TLS configuration for additional hostnames
   ## e.g.
   ##  extraTls:
   ##    - hosts:
@@ -262,14 +262,14 @@ ingress:
   ##
   extraTls: []
   ## @param ingress.secrets Additional TLS-secrets for the extra TLS filed
-  ## e.g. 
+  ## e.g.
   ##  secrets:
   ##    - name: secretname
-  ##      certificate: |- 
+  ##      certificate: |-
   ##        -----BEGIN CERTIFICATE-----
   ##        ...
   ##        -----END CERTIFICATE-----
-  ##      key: |- 
+  ##      key: |-
   ##        -----BEGIN RSA PRIVATE KEY-----
   ##        ...
   ##        -----END RSA PRIVATE KEY-----
