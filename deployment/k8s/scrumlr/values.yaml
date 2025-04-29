@@ -219,7 +219,7 @@ ingress:
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress
   ##
   ingressClassName: ""
-  ## @param ingress.hostname Default host for the ingress record
+  ## @param ingress.hostname Default host for the ingress record. Set “*” here to omit the host.
   ##
   hostname: scrumlr.local
   ## @param ingress.path.frontend Default path for the frontend ingress record
