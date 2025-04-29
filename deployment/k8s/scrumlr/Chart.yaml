@@ -26,11 +26,3 @@ appVersion: "3.10.3"
 home: scrumlr.io
 sources:
   - https://github.com/inovex/scrumlr.io
-
-# dependencies:
-#   - name: cloudnative-pg
-#     version: 0.23.0
-#     repository: https://cloudnative-pg.github.io/charts/
-#   - name: nats
-#     version: 1.2.9
-#     repository: https://nats-io.github.io/k8s/helm/charts/
