@@ -4,7 +4,7 @@ templates:
   - /backend/hpa.yaml
 tests:
   - it: should set name, namespace, apiVersion and kind
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:

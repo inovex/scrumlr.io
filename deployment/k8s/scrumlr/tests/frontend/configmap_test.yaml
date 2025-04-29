@@ -4,7 +4,7 @@ templates:
   - /frontend/configmap.yaml
 tests:
   - it: should set name, namespace, apiVersion and kind
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     asserts:
@@ -27,7 +27,7 @@ tests:
     release:
       name: scrumlr
       namespace: scrumlr
-    set: 
+    set:
       frontend.config.listenPort: 9000
     asserts:
       - equal:
@@ -47,7 +47,7 @@ tests:
     release:
       name: scrumlr
       namespace: scrumlr
-    set: 
+    set:
       frontend.config.serverUrl: /scrumlr/api/
     asserts:
       - equal:

@@ -12,7 +12,7 @@ spec:
       app: {{ .Release.Name }}-backend
   template:
     metadata:
-       annotations:
+      annotations:
         checksum/config: {{ include (print $.Template.BasePath "/backend/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/backend/secrets.yaml") . | sha256sum }}
       labels:
@@ -45,11 +45,11 @@ spec:
                 name: {{ .Release.Name }}-backend-secrets
             {{- end}}
           {{- if .Values.backend.resources }}
-          resources: 
+          resources:
             {{- toYaml .Values.backend.resources | nindent 12 }}
           {{- end}}
           {{- if .Values.backend.customStartupProbe }}
-          startupProbe: 
+          startupProbe:
             {{- toYaml .Values.backend.customStartupProbe | nindent 12 }}
           {{- else }}
           {{- if .Values.backend.startupProbe.enabled }}
@@ -65,7 +65,7 @@ spec:
           {{- end }}
           {{- end}}
           {{- if .Values.backend.customReadinessProbe }}
-          readinessProbe: 
+          readinessProbe:
             {{- toYaml .Values.backend.customReadinessProbe | nindent 12 }}
           {{- else }}
           {{- if .Values.backend.readinessProbe.enabled }}
@@ -81,7 +81,7 @@ spec:
           {{- end }}
           {{- end}}
           {{- if .Values.backend.customLivenessProbe }}
-          livenessProbe: 
+          livenessProbe:
             {{- toYaml .Values.backend.customLivenessProbe | nindent 12 }}
           {{- else }}
           {{- if .Values.backend.livenessProbe.enabled }}
@@ -96,4 +96,3 @@ spec:
             failureThreshold: {{ .Values.backend.livenessProbe.failureThreshold }}
           {{- end }}
           {{- end}}
-          

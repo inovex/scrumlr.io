@@ -49,7 +49,7 @@ spec:
             {{- toYaml .Values.frontend.resources | nindent 12 }}
           {{- end}}
           {{- if .Values.frontend.customStartupProbe }}
-          startupProbe: 
+          startupProbe:
             {{- toYaml .Values.frontend.customStartupProbe | nindent 12}}
           {{- else }}
           {{- if .Values.frontend.startupProbe.enabled }}
@@ -81,7 +81,7 @@ spec:
           {{- end }}
           {{- end}}
           {{- if .Values.frontend.customLivenessProbe }}
-          livenessProbe: 
+          livenessProbe:
             {{- toYaml .Values.frontend.customLivenessProbe | nindent 12 }}
           {{- else }}
           {{- if .Values.frontend.livenessProbe.enabled }}
