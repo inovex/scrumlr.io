@@ -74,7 +74,7 @@ func New(
 
 	boards services.Boards,
 	columns columns.ColumnService,
-	votings services.Votings,
+	votings voting.VotingService,
 	users users.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
