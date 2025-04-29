@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/google/uuid"
-	columnService "scrumlr.io/server/columns"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
@@ -45,8 +45,8 @@ func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid
 }
 
 func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
-	var columns columnService.ColumnSlice
-	columns, err := columnService.UnmarshallColumnData(event.Data)
+	var updateColumns columns.ColumnSlice
+	updateColumns, err := columns.UnmarshallColumnData(event.Data)
 
 	if err != nil {
 		logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
@@ -54,12 +54,12 @@ func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID u
 	}
 
 	if isMod {
-		bs.boardColumns = columns
+		bs.boardColumns = updateColumns
 		return event, true
 	} else {
 		return &realtime.BoardEvent{
 			Type: event.Type,
-			Data: columns.FilterVisibleColumns(),
+			Data: updateColumns.FilterVisibleColumns(),
 		}, true
 	}
 }
