@@ -2,6 +2,7 @@ package voting
 
 import (
 	"context"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/notes"
@@ -12,6 +13,7 @@ type VotingService interface {
 	Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*notes.Note) (*Voting, error)
 	Get(ctx context.Context, board, id uuid.UUID) (*Voting, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]*Voting, error)
+	GetOpen(ctx context.Context, board uuid.UUID) (*Voting, error)
 
 	AddVote(ctx context.Context, req VoteRequest) (*Vote, error)
 	RemoveVote(ctx context.Context, req VoteRequest) error
