@@ -4,7 +4,7 @@ templates:
   - /frontend/service.yaml
 tests:
   - it: should set name, namespace, apiVersion, kind and app selector
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     asserts:

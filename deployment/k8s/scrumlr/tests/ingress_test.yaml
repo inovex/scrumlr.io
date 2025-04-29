@@ -4,7 +4,7 @@ templates:
   - /ingress.yaml
 tests:
   - it: should set name, namespace, apiVersion and kind
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -159,7 +159,7 @@ tests:
     asserts:
       - notExists:
           path: spec.rules[0].host
-  
+
   - it: should not set http rules
     release:
       name: scrumlr
