@@ -1,3 +1,5 @@
 # rendered template
 .render/**
 .debug/**
+
+Chart.lock
