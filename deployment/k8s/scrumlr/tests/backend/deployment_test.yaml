@@ -2,9 +2,11 @@
 suite: test backend deployment
 templates:
   - /backend/deployment.yaml
+  - /backend/configmap.yaml
+  - /backend/secrets.yaml
 tests:
   - it: should set name, namespace, apiVersion, kind, labels, container name and config map name
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     asserts:
@@ -13,21 +15,26 @@ tests:
           apiVersion: apps/v1
           name: scrumlr-deployment-backend
           namespace: scrumlr
+        template: /backend/deployment.yaml
       - equal:
           path: spec.selector.matchLabels.app
           value: scrumlr-backend
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.metadata.labels.app
           value: scrumlr-backend
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].name
           value: scrumlr-backend
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].envFrom[0].configMapRef.name
           value: scrumlr-backend-configmap
+        template: /backend/deployment.yaml
 
   - it: should set image repository
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -36,12 +43,14 @@ tests:
       - isType:
           path: spec.template.spec.containers[0].image
           type: string
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
           value: scrumlr/scrumlr-backend:3.10.3
+        template: /backend/deployment.yaml
 
   - it: should set image tag
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -50,12 +59,14 @@ tests:
       - isType:
           path: spec.template.spec.containers[0].image
           type: string
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
+        template: /backend/deployment.yaml
 
   - it: should set image pull secrets
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -64,12 +75,14 @@ tests:
       - isType:
           path: spec.template.spec.imagePullSecrets
           type: "[]interface {}"
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.imagePullSecrets
           value: [{name: Registry1Secrets}, {name: Registry2Secrets}]
+        template: /backend/deployment.yaml
 
   - it: should set image pull policy
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -78,12 +91,14 @@ tests:
       - isType:
           path: spec.template.spec.containers[0].imagePullPolicy
           type: string
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].imagePullPolicy
           value: Present
+        template: /backend/deployment.yaml
 
   - it: should set image arguments
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -92,12 +107,14 @@ tests:
       - isType:
           path: spec.template.spec.containers[0].args
           type: "[]interface {}"
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].args
           value: ["-disable-check-origin"]
+        template: /backend/deployment.yaml
 
   - it: should set replica count
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -106,12 +123,14 @@ tests:
       - isType:
           path: spec.replicas
           type: int
+        template: /backend/deployment.yaml
       - equal:
           path: spec.replicas
           value: 3
+        template: /backend/deployment.yaml
 
   - it: should set default secret ref
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -120,12 +139,14 @@ tests:
       - isType:
           path: spec.template.spec.containers[0].envFrom[1].secretRef.name
           type: string
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].envFrom[1].secretRef.name
           value: scrumlr-backend-secrets
+        template: /backend/deployment.yaml
 
   - it: should set secret ref
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -134,20 +155,23 @@ tests:
       - isType:
           path: spec.template.spec.containers[0].envFrom[1].secretRef.name
           type: string
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].envFrom[1].secretRef.name
           value: My-Scrumlr-Secrets
+        template: /backend/deployment.yaml
 
   - it: should not set resources
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     asserts:
       - notExists:
           path: spec.template.spec.containers[0].resources
+        template: /backend/deployment.yaml
 
   - it: should set resources
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -158,21 +182,26 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].resources
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].resources.requests.cpu
           value: 20m
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].resources.requests.memory
           value: 100Mi
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
           value: 40m
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: 200Mi
+        template: /backend/deployment.yaml
 
   - it: should set resource requests
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -181,17 +210,21 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].resources
+        template: /backend/deployment.yaml
       - notExists:
           path: spec.template.spec.containers[0].resources.limits
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].resources.requests.cpu
           value: 20m
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].resources.requests.memory
           value: 100Mi
-  
+        template: /backend/deployment.yaml
+
   - it: should set resource limits
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     set:
@@ -200,14 +233,18 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].resources
+        template: /backend/deployment.yaml
       - notExists:
           path: spec.template.spec.containers[0].resources.requests
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].resources.limits.cpu
           value: 40m
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].resources.limits.memory
           value: 200Mi
+        template: /backend/deployment.yaml
 
   - it: should not set startupProbe
     release:
@@ -218,7 +255,8 @@ tests:
     asserts:
       - notExists:
           path: spec.template.spec.containers[0].startupProbe
-  
+        template: /backend/deployment.yaml
+
   - it: should set startupProbe
     release:
       name: scrumlr
@@ -233,21 +271,27 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].startupProbe
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.initialDelaySeconds
           value: 20
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.periodSeconds
           value: 15
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.timeoutSeconds
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.successThreshold
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.failureThreshold
           value: 3
+        template: /backend/deployment.yaml
 
   - it: should set custom startupProbe
     release:
@@ -264,27 +308,35 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].startupProbe
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.httpGet.path
           value: /health
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.httpGet.port
           value: 9000
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.initialDelaySeconds
           value: 20
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.periodSeconds
           value: 15
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.timeoutSeconds
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.successThreshold
           value: 3
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].startupProbe.failureThreshold
           value: 3
+        template: /backend/deployment.yaml
 
   - it: should not set readinessProbe
     release:
@@ -295,6 +347,7 @@ tests:
     asserts:
       - notExists:
           path: spec.template.spec.containers[0].readinessProbe
+        template: /backend/deployment.yaml
 
   - it: should set readinessProbe
     release:
@@ -310,21 +363,27 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].readinessProbe
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.initialDelaySeconds
           value: 20
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.periodSeconds
           value: 15
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.timeoutSeconds
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.successThreshold
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.failureThreshold
           value: 3
+        template: /backend/deployment.yaml
 
   - it: should set custom readinessProbe
     release:
@@ -341,27 +400,35 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].readinessProbe
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.httpGet.path
           value: /health
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.httpGet.port
           value: 9000
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.initialDelaySeconds
           value: 20
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.periodSeconds
           value: 15
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.timeoutSeconds
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.successThreshold
           value: 3
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].readinessProbe.failureThreshold
           value: 3
+        template: /backend/deployment.yaml
 
   - it: should not set livenessProbe
     release:
@@ -372,6 +439,7 @@ tests:
     asserts:
       - notExists:
           path: spec.template.spec.containers[0].livenessProbe
+        template: /backend/deployment.yaml
 
   - it: should set livenessProbe
     release:
@@ -387,21 +455,27 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].livenessProbe
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.initialDelaySeconds
           value: 20
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.periodSeconds
           value: 15
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.timeoutSeconds
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.successThreshold
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.failureThreshold
           value: 3
+        template: /backend/deployment.yaml
 
   - it: should set custom livenessProbe
     release:
@@ -418,24 +492,32 @@ tests:
     asserts:
       - exists:
           path: spec.template.spec.containers[0].livenessProbe
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.httpGet.path
           value: /health
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.httpGet.port
           value: 9000
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.initialDelaySeconds
           value: 20
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.periodSeconds
           value: 15
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.timeoutSeconds
           value: 2
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.successThreshold
           value: 3
+        template: /backend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.failureThreshold
           value: 3
+        template: /backend/deployment.yaml
