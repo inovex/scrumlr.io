@@ -4,7 +4,7 @@ templates:
   - /backend/configmap.yaml
 tests:
   - it: should set name, namespace, apiVersion and kind
-    release: 
+    release:
       name: scrumlr
       namespace: scrumlr
     asserts:
@@ -27,7 +27,7 @@ tests:
     release:
       name: scrumlr
       namespace: scrumlr
-    set: 
+    set:
       backend.config.serverPort: 9000
     asserts:
       - equal:
@@ -47,7 +47,7 @@ tests:
     release:
       name: scrumlr
       namespace: scrumlr
-    set: 
+    set:
       backend.config.basePath: /scrumlr/api/
     asserts:
       - equal:
@@ -67,7 +67,7 @@ tests:
     release:
       name: scrumlr
       namespace: scrumlr
-    set: 
+    set:
       backend.config.natsUrl: nats://nats:4222
     asserts:
       - equal:
