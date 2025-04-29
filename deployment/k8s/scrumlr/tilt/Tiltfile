@@ -1,6 +1,7 @@
 load("ext://helm_resource", "helm_resource", "helm_repo")
 
-helm_repo("nats", "https://nats-io.github.io/k8s/helm/charts/")
+helm_repo("nats-repo", "https://nats-io.github.io/k8s/helm/charts/")
+helm_repo("ingress-nginx-repo","https://kubernetes.github.io/ingress-nginx")
 
 k8s_yaml(yaml="./namespace.yaml")
 
@@ -16,7 +17,15 @@ helm_resource(
     release_name="nats",
     chart="nats/nats",
     namespace="nats",
-    resource_deps=["nats"],
+    resource_deps=["nats-repo"],
+)
+
+helm_resource(
+    name="ingress-nginx-deploy",
+    release_name="ingress-nginx",
+    chart="ingress-nginx/ingress-nginx",
+    namespace="ingress-nginx",
+    resource_deps=["ingress-nginx-repo"],
 )
 
 yaml = helm(
