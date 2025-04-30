@@ -7,7 +7,7 @@
 | Name                                          | Description                                                                                 | Value                                        |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------- |
 | `frontend.image.repository`                   | The scrumlr image to deploy                                                                 | `ghcr.io/inovex/scrumlr.io/scrumlr-frontend` |
-| `frontend.image.tag`                          | The image tag to use                                                                        | `3.10.3`                                     |
+| `frontend.image.tag`                          | The image tag to use                                                                        | `nil`                                        |
 | `frontend.image.pullSecrets`                  | Docker registry secret names as an array                                                    | `[]`                                         |
 | `frontend.image.pullPolicy`                   | The imagePullPolicy to use                                                                  | `IfNotPresent`                               |
 | `frontend.image.args`                         | Aguments for the scrumlr backend                                                            | `[]`                                         |
@@ -50,7 +50,7 @@
 | Name                                         | Description                                                                                 | Value                                      |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------ |
 | `backend.image.repository`                   | The scrumlr image to deploy                                                                 | `ghcr.io/inovex/scrumlr.io/scrumlr-server` |
-| `backend.image.tag`                          | The image tag to use                                                                        | `3.10.3`                                   |
+| `backend.image.tag`                          | The image tag to use                                                                        | `nil`                                      |
 | `backend.image.pullSecrets`                  | Docker registry secret names as an array                                                    | `[]`                                       |
 | `backend.image.pullPolicy`                   | The imagePullPolicy to use                                                                  | `IfNotPresent`                             |
 | `backend.image.args`                         | Aguments for the scrumlr backend                                                            | `["/app/main","-disable-check-origin"]`    |
@@ -97,7 +97,7 @@
 | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `ingress.enabled`          | Enable/disable the ingress                                                                                                       | `false`         |
 | `ingress.ingressClassName` | IngressClass that will be be used to implement the Ingress                                                                       | `""`            |
-| `ingress.hostname`         | Default host for the ingress record                                                                                              | `scrumlr.local` |
+| `ingress.hostname`         | Default host for the ingress record. Set “*” here to omit the host.                                                              | `scrumlr.local` |
 | `ingress.path.frontend`    | Default path for the frontend ingress record                                                                                     | `/`             |
 | `ingress.path.backend`     | Default path for the backend ingress record                                                                                      | `/api`          |
 | `ingress.pathType`         | Ingress path type                                                                                                                | `Prefix`        |
