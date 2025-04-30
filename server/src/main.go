@@ -11,7 +11,6 @@ import (
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
 
-	"github.com/gorilla/websocket"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
@@ -355,13 +354,9 @@ func run(c *cli.Context) error {
 
 	bun := initialize.InitializeBun(db, c.Bool("verbose"))
 	dbConnection := database.New(bun)
+	initializer := initialize.NewSerivceInitializer(bun, rt)
 
-	websocketUpgrader := websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
-
-	userService := initialize.InitializeUserService(bun, rt)
+	userService := initializer.InitializeUserService()
 
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
@@ -370,19 +365,19 @@ func run(c *cli.Context) error {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
 
-	sessionService := initialize.InitializeSessionService(bun, rt)
-	websocket := initialize.InitializeWebsocket(websocketUpgrader, rt)
-	sessionRequestService := initialize.InitializeSessionRequestService(bun, rt, websocket, sessionService)
-	reactionService := initialize.InitializeReactionService(bun, rt)
-	columnTemplateService := initialize.InitializeColumnTemplateService(bun)
+	sessionService := initializer.InitializeSessionService()
+	websocket := initializer.InitializeWebsocket()
+	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
+	reactionService := initializer.InitializeReactionService()
+	columnTemplateService := initializer.InitializeColumnTemplateService()
 
 	boardService := boards.NewBoardService(dbConnection, rt)
-	votingService := initialize.InitializeVotingService(bun, rt)
-	noteService := initialize.InitializeNotesService(bun, rt)
-	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
-	healthService := initialize.InitializeHealthService(bun, rt)
-	boardReactionService := initialize.InitializeBoardReactionService(rt)
-	boardTemplateService := initialize.InitializeBoardTemplateService(bun)
+	votingService := initializer.InitializeVotingService()
+	noteService := initializer.InitializeNotesService()
+	feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
+	healthService := initializer.InitializeHealthService()
+	boardReactionService := initializer.InitializeBoardReactionService()
+	boardTemplateService := initializer.InitializeBoardTemplateService()
 
 	s := api.New(
 		basePath,
