@@ -6,6 +6,8 @@ import (
 	"scrumlr.io/server/voting"
 	"time"
 
+	"scrumlr.io/server/boardreactions"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
 	"github.com/go-chi/chi/v5"
@@ -46,8 +48,9 @@ type Server struct {
 	sessionRequests sessionrequests.SessionRequestService
 	health          health.HealthService
 	feedback        feedback.FeedbackService
-	boardReactions  services.BoardReactions
+	boardReactions  boardreactions.BoardReactionService
 	boardTemplates  services.BoardTemplates
+	columntemplates columntemplates.ColumnTemplateService
 
 	upgrader websocket.Upgrader
 
@@ -74,8 +77,9 @@ func New(
 	sessionRequests sessionrequests.SessionRequestService,
 	health health.HealthService,
 	feedback feedback.FeedbackService,
-	boardReactions services.BoardReactions,
+	boardReactions boardreactions.BoardReactionService,
 	boardTemplates services.BoardTemplates,
+	columntemplates columntemplates.ColumnTemplateService,
 
 	verbose bool,
 	checkOrigin bool,
