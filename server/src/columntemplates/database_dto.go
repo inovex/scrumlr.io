@@ -3,7 +3,7 @@ package columntemplates
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/columns"
 )
 
 // ColumnTemplate the model for a column template of a board template
@@ -13,7 +13,7 @@ type DatabaseColumnTemplate struct {
 	BoardTemplate uuid.UUID
 	Description   string
 	Name          string
-	Color         types.Color
+	Color         columns.Color
 	Visible       bool
 	Index         int
 }
@@ -24,7 +24,7 @@ type DatabaseColumnTemplateInsert struct {
 	BoardTemplate uuid.UUID
 	Description   string
 	Name          string
-	Color         types.Color
+	Color         columns.Color
 	Visible       *bool
 	Index         *int
 }
@@ -36,7 +36,7 @@ type DatabaseColumnTemplateUpdate struct {
 	BoardTemplate uuid.UUID
 	Description   string
 	Name          string
-	Color         types.Color
+	Color         columns.Color
 	Visible       bool
 	Index         int
 }
