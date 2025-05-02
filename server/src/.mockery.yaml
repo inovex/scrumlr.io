@@ -19,12 +19,6 @@ packages:
     interfaces:
       Boards:
         all: true
-      BoardSessions:
-        all: true
-      Notes:
-        all: true
-      Votings:
-        all: true
 
   scrumlr.io/server/realtime:
     interfaces:
@@ -101,4 +95,15 @@ packages:
       VotingService:
         all: true
       VotingDatabase:
+        all: true
+
+
+  scrumlr.io/server/columntemplates:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      ColumnTemplateService:
+        all: true
+      ColumnTemplateDatabase:
         all: true

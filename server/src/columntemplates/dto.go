@@ -1,10 +1,9 @@
-package dto
+package columntemplates
 
 import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 )
 
@@ -30,21 +29,6 @@ type ColumnTemplate struct {
 
 	// The column template rank.
 	Index int `json:"index"`
-}
-
-func (ct *ColumnTemplate) From(column database.ColumnTemplate) *ColumnTemplate {
-	ct.ID = column.ID
-	ct.BoardTemplate = column.BoardTemplate
-	ct.Name = column.Name
-	ct.Description = column.Description
-	ct.Color = column.Color
-	ct.Visible = column.Visible
-	ct.Index = column.Index
-	return ct
-}
-
-func (*ColumnTemplate) Render(_ http.ResponseWriter, _ *http.Request) error {
-	return nil
 }
 
 // ColumnTemplateRequest represents the request to create a new column template.
@@ -90,7 +74,18 @@ type ColumnTemplateUpdateRequest struct {
 	BoardTemplate uuid.UUID `json:"-"`
 }
 
-func ColumnTemplates(columns []database.ColumnTemplate) []*ColumnTemplate {
+func (ct *ColumnTemplate) From(column DatabaseColumnTemplate) *ColumnTemplate {
+	ct.ID = column.ID
+	ct.BoardTemplate = column.BoardTemplate
+	ct.Name = column.Name
+	ct.Description = column.Description
+	ct.Color = column.Color
+	ct.Visible = column.Visible
+	ct.Index = column.Index
+	return ct
+}
+
+func ColumnTemplates(columns []DatabaseColumnTemplate) []*ColumnTemplate {
 	if columns == nil {
 		return nil
 	}
@@ -100,4 +95,8 @@ func ColumnTemplates(columns []database.ColumnTemplate) []*ColumnTemplate {
 		list[index] = new(ColumnTemplate).From(column)
 	}
 	return list
+}
+
+func (*ColumnTemplate) Render(_ http.ResponseWriter, _ *http.Request) error {
+	return nil
 }

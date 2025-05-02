@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"scrumlr.io/server/voting"
 
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
 	"github.com/gorilla/websocket"
@@ -23,6 +24,13 @@ func InitializeBoardReactionService(rt *realtime.Broker) boardreactions.BoardRea
 	boardreactionService := boardreactions.NewBoardReactionService(rt)
 
 	return boardreactionService
+}
+
+func InitializeColumnTemplateService(db *bun.DB) columntemplates.ColumnTemplateService {
+	columnTemplateDb := columntemplates.NewColumnTemplateDatabase(db)
+	columntemplateService := columntemplates.NewColumnTemplateService(columnTemplateDb)
+
+	return columntemplateService
 }
 
 func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {

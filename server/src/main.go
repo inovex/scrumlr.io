@@ -382,6 +382,7 @@ func run(c *cli.Context) error {
 	websocket := initialize.InitializeWebsocket(websocketUpgrader, rt)
 	sessionRequestService := initialize.InitializeSessionRequestService(bun, rt, websocket, sessionService)
 	reactionService := initialize.InitializeReactionService(bun, rt)
+	columnTemplateService := initialize.InitializeColumnTemplateService(bun)
 
 	boardService := boards.NewBoardService(dbConnection, rt)
 	votingService := initialize.InitializeVotingService(bun, rt)
@@ -407,6 +408,7 @@ func run(c *cli.Context) error {
 		feedbackService,
 		boardReactionService,
 		boardTemplateService,
+		columnTemplateService,
 
 		c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
