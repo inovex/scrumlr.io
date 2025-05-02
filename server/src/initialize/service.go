@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"net/http"
+
 	"scrumlr.io/server/voting"
 
 	"scrumlr.io/server/boardtemplates"
@@ -21,84 +22,103 @@ import (
 	"scrumlr.io/server/users"
 )
 
-func InitializeBoardReactionService(rt *realtime.Broker) boardreactions.BoardReactionService {
-	boardreactionService := boardreactions.NewBoardReactionService(rt)
+type ServiceInitializer struct {
+	db     *bun.DB
+	rt     *realtime.Broker
+	ws     websocket.Upgrader
+	client *http.Client
+}
+
+func NewSerivceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
+	initializer := new(ServiceInitializer)
+	initializer.db = db
+	initializer.rt = rt
+	initializer.ws = websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}
+	initializer.client = &http.Client{}
+
+	return *initializer
+}
+
+func (init *ServiceInitializer) InitializeBoardReactionService() boardreactions.BoardReactionService {
+	boardreactionService := boardreactions.NewBoardReactionService(init.rt)
 
 	return boardreactionService
 }
 
-func InitializeBoardTemplateService(db *bun.DB) boardtemplates.BoardTemplateService {
-	boardTemplateDb := boardtemplates.NewBoardTemplateDatabase(db)
+func (init *ServiceInitializer) InitializeBoardTemplateService() boardtemplates.BoardTemplateService {
+	boardTemplateDb := boardtemplates.NewBoardTemplateDatabase(init.db)
 	boardTemplateService := boardtemplates.NewBoardTemplateService(boardTemplateDb)
 
 	return boardTemplateService
 }
 
-func InitializeColumnTemplateService(db *bun.DB) columntemplates.ColumnTemplateService {
-	columnTemplateDb := columntemplates.NewColumnTemplateDatabase(db)
+func (init *ServiceInitializer) InitializeColumnTemplateService() columntemplates.ColumnTemplateService {
+	columnTemplateDb := columntemplates.NewColumnTemplateDatabase(init.db)
 	columntemplateService := columntemplates.NewColumnTemplateService(columnTemplateDb)
 
 	return columntemplateService
 }
 
-func InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
-	client := new(http.Client)
-	feedbackService := feedback.NewFeedbackService(client, webhookUrl)
+func (init *ServiceInitializer) InitializeFeedbackService(webhookUrl string) feedback.FeedbackService {
+	feedbackService := feedback.NewFeedbackService(init.client, webhookUrl)
 
 	return feedbackService
 }
 
-func InitializeHealthService(db *bun.DB, rt *realtime.Broker) health.HealthService {
-	healthDb := health.NewHealthDatabase(db)
-	healthService := health.NewHealthService(healthDb, rt)
+func (init *ServiceInitializer) InitializeHealthService() health.HealthService {
+	healthDb := health.NewHealthDatabase(init.db)
+	healthService := health.NewHealthService(healthDb, init.rt)
 
 	return healthService
 }
 
-func InitializeReactionService(db *bun.DB, rt *realtime.Broker) reactions.ReactionService {
-	reactionsDb := reactions.NewReactionsDatabase(db)
-	reactionService := reactions.NewReactionService(reactionsDb, rt)
+func (init *ServiceInitializer) InitializeReactionService() reactions.ReactionService {
+	reactionsDb := reactions.NewReactionsDatabase(init.db)
+	reactionService := reactions.NewReactionService(reactionsDb, init.rt)
 
 	return reactionService
 }
 
-func InitializeSessionService(db *bun.DB, rt *realtime.Broker) sessions.SessionService {
-	sessionDb := sessions.NewSessionDatabase(db)
-	sessionService := sessions.NewSessionService(sessionDb, rt)
+func (init *ServiceInitializer) InitializeSessionService() sessions.SessionService {
+	sessionDb := sessions.NewSessionDatabase(init.db)
+	sessionService := sessions.NewSessionService(sessionDb, init.rt)
 
 	return sessionService
 }
 
-func InitializeSessionRequestService(db *bun.DB, rt *realtime.Broker, websocket sessionrequests.Websocket, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
-	sessionRequestDb := sessionrequests.NewSessionRequestDatabase(db)
-	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, rt, websocket, sessionService)
+func (init *ServiceInitializer) InitializeSessionRequestService(websocket sessionrequests.Websocket, sessionService sessions.SessionService) sessionrequests.SessionRequestService {
+	sessionRequestDb := sessionrequests.NewSessionRequestDatabase(init.db)
+	sessionRequestService := sessionrequests.NewSessionRequestService(sessionRequestDb, init.rt, websocket, sessionService)
 
 	return sessionRequestService
 }
 
-func InitializeWebsocket(ws websocket.Upgrader, rt *realtime.Broker) sessionrequests.Websocket {
-	websocket := sessionrequests.NewWebsocket(ws, rt)
+func (init *ServiceInitializer) InitializeWebsocket() sessionrequests.Websocket {
+	websocket := sessionrequests.NewWebsocket(init.ws, init.rt)
 
 	return websocket
 }
 
-func InitializeUserService(db *bun.DB, rt *realtime.Broker) users.UserService {
-	userDb := users.NewUserDatabase(db)
-	userService := users.NewUserService(userDb, rt)
+func (init *ServiceInitializer) InitializeUserService() users.UserService {
+	userDb := users.NewUserDatabase(init.db)
+	userService := users.NewUserService(userDb, init.rt)
 
 	return userService
 }
 
-func InitializeNotesService(db *bun.DB, rt *realtime.Broker) notes.NotesService {
-	notesDB := notes.NewNotesDatabase(db)
-	notesService := notes.NewNotesService(notesDB, rt)
+func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
+	notesDB := notes.NewNotesDatabase(init.db)
+	notesService := notes.NewNotesService(notesDB, init.rt)
 
 	return notesService
 }
 
-func InitializeVotingService(db *bun.DB, rt *realtime.Broker) voting.VotingService {
-	votingDB := voting.NewVotingDatabase(db)
-	votingService := voting.NewVotingService(votingDB, rt)
+func (init *ServiceInitializer) InitializeVotingService() voting.VotingService {
+	votingDB := voting.NewVotingDatabase(init.db)
+	votingService := voting.NewVotingService(votingDB, init.rt)
 
 	return votingService
 }
