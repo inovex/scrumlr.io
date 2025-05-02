@@ -31,7 +31,7 @@
       account_type: ANONYMOUS
       created_at: '{{ now }}'
 
-- model: BoardTemplate
+- model: DatabaseBoardTemplate
   rows:
     - _id: columnTemplatesTestBoard
       id: "3113b096-986c-4e23-adf7-b3fa19224bd4"
@@ -185,7 +185,7 @@
   rows:
     - _id: firstColumnTemplate
       id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
       name: First column
       description: Fist column description
       color: backlog-blue
@@ -193,7 +193,7 @@
       index: 0
     - _id: secondColumnTemplate
       id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
       name: Second column
       description: Second column description
       color: backlog-blue
@@ -201,7 +201,7 @@
       index: 1
     - _id: thirdColumnTemplate
       id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
       name: Third column
       description: Third column description
       color: backlog-blue

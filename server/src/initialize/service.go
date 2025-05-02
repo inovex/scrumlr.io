@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"scrumlr.io/server/voting"
 
+	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
@@ -24,6 +25,13 @@ func InitializeBoardReactionService(rt *realtime.Broker) boardreactions.BoardRea
 	boardreactionService := boardreactions.NewBoardReactionService(rt)
 
 	return boardreactionService
+}
+
+func InitializeBoardTemplateService(db *bun.DB) boardtemplates.BoardTemplateService {
+	boardTemplateDb := boardtemplates.NewBoardTemplateDatabase(db)
+	boardTemplateService := boardtemplates.NewBoardTemplateService(boardTemplateDb)
+
+	return boardTemplateService
 }
 
 func InitializeColumnTemplateService(db *bun.DB) columntemplates.ColumnTemplateService {
