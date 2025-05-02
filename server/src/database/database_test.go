@@ -5,9 +5,11 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"scrumlr.io/server/voting"
 	"time"
 
+	"scrumlr.io/server/voting"
+
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
 	"github.com/ory/dockertest/v3"
@@ -31,6 +33,7 @@ var sessionDb sessions.SessionDatabase
 var sessionRequestDb sessionrequests.SessionRequestDatabase
 var userDb users.UserDatabase
 var votingDb voting.VotingDatabase
+var columnTemplateDb columntemplates.ColumnTemplateDatabase
 var fixture *dbfixture.Fixture
 
 const DatabaseUsernameAndPassword = "dbtest"
@@ -62,6 +65,8 @@ func testMainWithDefer(m *testing.M) int {
 	userDb = users.NewUserDatabase(bun)
 	notesDb = notes.NewNotesDatabase(bun)
 	votingDb = voting.NewVotingDatabase(bun)
+	columnTemplateDb = columntemplates.NewColumnTemplateDatabase(bun)
+
 	err = loadTestdata()
 	if err != nil {
 		println(fmt.Sprintf("unable to load testdata: %s", err))
@@ -140,7 +145,7 @@ func loadTestdata() error {
 		(*voting.VoteDB)(nil),
 		(*reactions.DatabaseReaction)(nil),
 		(*BoardTemplate)(nil),
-		(*ColumnTemplate)(nil),
+		(*columntemplates.DatabaseColumnTemplate)(nil),
 	)
 	fixture = dbfixture.New(testDb.db)
 	return fixture.Load(context.Background(), os.DirFS("testdata"), "fixture.yml")

@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
@@ -31,7 +32,7 @@ type BoardTemplateFull struct {
 	Description     *string
 	AccessPolicy    types.AccessPolicy
 	Favourite       *bool
-	ColumnTemplates []ColumnTemplate
+	ColumnTemplates []columntemplates.DatabaseColumnTemplate
 	CreatedAt       time.Time
 }
 
@@ -53,7 +54,7 @@ type BoardTemplateUpdate struct {
 	Favourite     *bool
 }
 
-func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []ColumnTemplateInsert) (BoardTemplate, error) {
+func (d *Database) CreateBoardTemplate(board BoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (BoardTemplate, error) {
 	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
 
 	var b BoardTemplate
@@ -101,7 +102,7 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error
 
 	var templates []BoardTemplateFull
 	for _, board := range tBoards {
-		var cols []ColumnTemplate
+		var cols []columntemplates.DatabaseColumnTemplate
 		err = d.db.NewSelect().Model(&cols).Where("board_template = ?", board.ID).Scan(context.Background())
 		if err != nil {
 			return []BoardTemplateFull{}, err

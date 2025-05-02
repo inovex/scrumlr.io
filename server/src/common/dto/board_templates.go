@@ -2,6 +2,7 @@ package dto
 
 import (
 	"github.com/google/uuid"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 )
@@ -57,7 +58,7 @@ type BoardTemplateFull struct {
 	Favourite *bool `json:"favourite"`
 
 	// Board templates associated column templates
-	ColumnTemplates []*ColumnTemplate `json:"columns"`
+	ColumnTemplates []*columntemplates.ColumnTemplate `json:"columns"`
 }
 
 func (bt *BoardTemplateFull) From(board database.BoardTemplateFull) *BoardTemplateFull {
@@ -68,7 +69,7 @@ func (bt *BoardTemplateFull) From(board database.BoardTemplateFull) *BoardTempla
 	bt.AccessPolicy = board.AccessPolicy
 	bt.Favourite = board.Favourite
 	// parse db to dto column templates with dto helper function ColumnTemplates
-	bt.ColumnTemplates = ColumnTemplates(board.ColumnTemplates)
+	bt.ColumnTemplates = columntemplates.ColumnTemplates(board.ColumnTemplates)
 
 	return bt
 }
@@ -91,7 +92,7 @@ type CreateBoardTemplateRequest struct {
 	Favourite *bool `json:"favourite"`
 
 	// The column templates to create for the board template.
-	Columns []*ColumnTemplateRequest `json:"columnTemplates"`
+	Columns []*columntemplates.ColumnTemplateRequest `json:"columnTemplates"`
 }
 
 type BoardTemplateUpdateRequest struct {
