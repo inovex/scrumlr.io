@@ -107,3 +107,13 @@ packages:
         all: true
       ColumnTemplateDatabase:
         all: true
+
+  scrumlr.io/server/boardtemplates:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      BoardTemplateService:
+        all: true
+      BoardTemplateDatabase:
+        all: true

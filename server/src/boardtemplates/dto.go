@@ -1,9 +1,8 @@
-package dto
+package boardtemplates
 
 import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/columntemplates"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 )
 
@@ -27,17 +26,6 @@ type BoardTemplate struct {
 	Favourite *bool `json:"favourite"`
 }
 
-func (bt *BoardTemplate) From(board database.BoardTemplate) *BoardTemplate {
-	bt.ID = board.ID
-	bt.Creator = board.Creator
-	bt.Name = board.Name
-	bt.Description = board.Description
-	bt.AccessPolicy = board.AccessPolicy
-	bt.Favourite = board.Favourite
-
-	return bt
-}
-
 type BoardTemplateFull struct {
 	// The board template id
 	ID uuid.UUID `json:"id"`
@@ -59,19 +47,6 @@ type BoardTemplateFull struct {
 
 	// Board templates associated column templates
 	ColumnTemplates []*columntemplates.ColumnTemplate `json:"columns"`
-}
-
-func (bt *BoardTemplateFull) From(board database.BoardTemplateFull) *BoardTemplateFull {
-	bt.ID = board.ID
-	bt.Creator = board.Creator
-	bt.Name = board.Name
-	bt.Description = board.Description
-	bt.AccessPolicy = board.AccessPolicy
-	bt.Favourite = board.Favourite
-	// parse db to dto column templates with dto helper function ColumnTemplates
-	bt.ColumnTemplates = columntemplates.ColumnTemplates(board.ColumnTemplates)
-
-	return bt
 }
 
 // CreateBoardTemplateRequest represents the request to create a new board template.
@@ -110,4 +85,28 @@ type BoardTemplateUpdateRequest struct {
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
+}
+
+func (bt *BoardTemplate) From(board DatabaseBoardTemplate) *BoardTemplate {
+	bt.ID = board.ID
+	bt.Creator = board.Creator
+	bt.Name = board.Name
+	bt.Description = board.Description
+	bt.AccessPolicy = board.AccessPolicy
+	bt.Favourite = board.Favourite
+
+	return bt
+}
+
+func (bt *BoardTemplateFull) From(board DatabaseBoardTemplateFull) *BoardTemplateFull {
+	bt.ID = board.ID
+	bt.Creator = board.Creator
+	bt.Name = board.Name
+	bt.Description = board.Description
+	bt.AccessPolicy = board.AccessPolicy
+	bt.Favourite = board.Favourite
+	// parse db to dto column templates with dto helper function ColumnTemplates
+	bt.ColumnTemplates = columntemplates.ColumnTemplates(board.ColumnTemplates)
+
+	return bt
 }

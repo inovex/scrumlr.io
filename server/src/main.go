@@ -19,7 +19,6 @@ import (
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 )
 
@@ -383,7 +382,7 @@ func run(c *cli.Context) error {
 	feedbackService := initialize.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initialize.InitializeHealthService(bun, rt)
 	boardReactionService := initialize.InitializeBoardReactionService(rt)
-	boardTemplateService := board_templates.NewBoardTemplateService(dbConnection)
+	boardTemplateService := initialize.InitializeBoardTemplateService(bun)
 
 	s := api.New(
 		basePath,
