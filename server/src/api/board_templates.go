@@ -6,8 +6,8 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
@@ -16,7 +16,7 @@ func (s *Server) createBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	creator := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	// parse request
-	var body dto.CreateBoardTemplateRequest
+	var body boardtemplates.CreateBoardTemplateRequest
 	if err := render.Decode(r, &body); err != nil {
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -56,7 +56,7 @@ func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	templates, err := s.boardTemplates.List(r.Context(), user)
+	templates, err := s.boardTemplates.GetAll(r.Context(), user)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			common.Throw(w, r, common.NotFoundError)
@@ -74,7 +74,7 @@ func (s *Server) getBoardTemplates(w http.ResponseWriter, r *http.Request) {
 func (s *Server) updateBoardTemplate(w http.ResponseWriter, r *http.Request) {
 	templateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 
-	var body dto.BoardTemplateUpdateRequest
+	var body boardtemplates.BoardTemplateUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
