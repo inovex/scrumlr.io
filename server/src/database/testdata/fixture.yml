@@ -180,7 +180,7 @@
       user: '{{ $.DatabaseUser.justin.ID }}'
       role: OWNER
 
-- model: ColumnTemplate
+- model: DatabaseColumnTemplate
   rows:
     - _id: firstColumnTemplate
       id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
