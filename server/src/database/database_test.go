@@ -7,10 +7,10 @@ import (
 	"log"
 	"time"
 
-	"scrumlr.io/server/voting"
-
+	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/voting"
 
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
@@ -34,6 +34,7 @@ var sessionRequestDb sessionrequests.SessionRequestDatabase
 var userDb users.UserDatabase
 var votingDb voting.VotingDatabase
 var columnTemplateDb columntemplates.ColumnTemplateDatabase
+var boardTemplatesDb boardtemplates.BoardTemplateDatabase
 var fixture *dbfixture.Fixture
 
 const DatabaseUsernameAndPassword = "dbtest"
@@ -66,6 +67,7 @@ func testMainWithDefer(m *testing.M) int {
 	notesDb = notes.NewNotesDatabase(bun)
 	votingDb = voting.NewVotingDatabase(bun)
 	columnTemplateDb = columntemplates.NewColumnTemplateDatabase(bun)
+	boardTemplatesDb = boardtemplates.NewBoardTemplateDatabase(bun)
 
 	err = loadTestdata()
 	if err != nil {
@@ -144,7 +146,7 @@ func loadTestdata() error {
 		(*voting.VotingDB)(nil),
 		(*voting.VoteDB)(nil),
 		(*reactions.DatabaseReaction)(nil),
-		(*BoardTemplate)(nil),
+		(*boardtemplates.DatabaseBoardTemplate)(nil),
 		(*columntemplates.DatabaseColumnTemplate)(nil),
 	)
 	fixture = dbfixture.New(testDb.db)

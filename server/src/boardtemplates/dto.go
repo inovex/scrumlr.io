@@ -1,4 +1,4 @@
-package dto
+package boardtemplates
 
 import (
 	"github.com/google/uuid"
