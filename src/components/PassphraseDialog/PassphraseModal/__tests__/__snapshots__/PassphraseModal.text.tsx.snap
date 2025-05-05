@@ -95,20 +95,20 @@ exports[`<PassphraseDialog /> snapshot test 1`] = `
       <button
         aria-disabled="true"
         aria-label="Open board"
-        class="button button--primary button--contained button__label--shown new-board__action import-board__action"
+        class="legacy-button legacy-button--primary legacy-button--contained legacy-button__label--shown new-board__action import-board__action"
         disabled=""
       >
         <span
-          class="button__label"
+          class="legacy-button__label"
         >
           Open Board
         </span>
       </button>
       <button
-        class="button button--primary button--contained button__label--shown new-board__action import-board__action"
+        class="legacy-button legacy-button--primary legacy-button--contained legacy-button__label--shown new-board__action import-board__action"
       >
         <span
-          class="button__label"
+          class="legacy-button__label"
         >
           Continue without password
         </span>

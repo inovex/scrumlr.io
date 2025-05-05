@@ -1,6 +1,8 @@
-import {BrowserRouter, Route, Routes} from "react-router";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router";
 import {LoginBoard} from "routes/LoginBoard";
-import {NewBoard} from "routes/NewBoard";
+import {Boards} from "routes/Boards";
+import {Templates} from "routes/Boards/Templates";
+import {Sessions} from "routes/Boards/Sessions";
 import {BoardGuard} from "routes/Board";
 import {NotFound} from "routes/NotFound";
 import {RequireAuthentication} from "routes/RequireAuthentication";
@@ -20,8 +22,24 @@ import {Homepage} from "./Homepage";
 import {Legal} from "./Legal";
 import {StackView} from "./StackView";
 import RouteChangeObserver from "./RouteChangeObserver";
+import {LegacyNewBoard} from "./Boards/Legacy/LegacyNewBoard";
+
+const renderLegacyRoute = (legacy: boolean) =>
+  legacy ? (
+    <Route
+      path="/new"
+      element={
+        <RequireAuthentication>
+          <LegacyNewBoard />
+        </RequireAuthentication>
+      }
+    />
+  ) : (
+    <Route path="/new" element={<Navigate to="/boards" />} />
+  );
 
 const Router = () => {
+  const legacyCreateBoard = !!useAppSelector((state) => state.view.legacyCreateBoard);
   const feedbackEnabled = useAppSelector((state) => state.view.feedbackEnabled);
 
   return (
@@ -32,14 +50,32 @@ const Router = () => {
         <Route path="/legal/termsAndConditions" element={<Legal document="termsAndConditions" />} />
         <Route path="/legal/privacyPolicy" element={<Legal document="privacyPolicy" />} />
         <Route path="/legal/cookiePolicy" element={<Legal document="cookiePolicy" />} />
+        {renderLegacyRoute(legacyCreateBoard)}
         <Route
-          path="/new"
+          path="/boards"
           element={
             <RequireAuthentication>
-              <NewBoard />
+              <Boards />
             </RequireAuthentication>
           }
-        />
+        >
+          <Route index element={<Navigate to="templates" />} />
+          <Route path="templates" element={<Templates />}>
+            {/* TODO extract settings routes to avoid repetition */}
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="profile" element={<ProfileSettings />} />
+            </Route>
+          </Route>
+          <Route path="sessions" element={<Sessions />}>
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="profile" element={<ProfileSettings />} />
+            </Route>
+          </Route>
+        </Route>
         <Route path="/login" element={<LoginBoard />} />
         <Route
           path="/board/:boardId/print"

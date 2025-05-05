@@ -1,12 +1,13 @@
 package api
 
 import (
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/markbates/goth/gothic"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/markbates/goth/gothic"
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
@@ -17,6 +18,7 @@ import (
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
 )
@@ -31,7 +33,7 @@ type Server struct {
 	votings        services.Votings
 	users          services.Users
 	notes          services.Notes
-	reactions      services.Reactions
+	reactions      reactions.ReactionService
 	sessions       services.BoardSessions
 	health         services.Health
 	feedback       services.Feedback
@@ -58,7 +60,7 @@ func New(
 	votings services.Votings,
 	users services.Users,
 	notes services.Notes,
-	reactions services.Reactions,
+	reactions reactions.ReactionService,
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,

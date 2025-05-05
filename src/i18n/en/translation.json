@@ -4,7 +4,7 @@
     "VotingIsAnonymous": "Voting is anonymous",
     "VotingIsNotAnonymous": "Voting is not anonymous"
   },
-  "NewBoard": {
+  "LegacyNewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
     "extendedConfigurationButton": "Extended configuration",
@@ -14,6 +14,29 @@
     "importBoard": "Import JSON",
     "uploadFile": "Upload file or drag here",
     "importNewBoard": "Import now"
+  },
+  "Templates": {
+    "switchTitle": "Templates",
+    "title": "Choose a template",
+    "savedTemplates": "Your Templates",
+    "recommendedTemplates": "Our Recommendations",
+
+    "CreateTemplateCard": {
+      "create": "Create a new Template"
+    },
+
+    "TemplateCard": {
+      "addFavourite": "Mark as Favourite",
+      "removeFavourite": "Remove Favourite",
+      "column_one": "{{count}} Column",
+      "column_other": "{{count}} Columns",
+      "start": "Start",
+      "save": "Save"
+    }
+  },
+  "Sessions": {
+    "switchTitle": "Sessions",
+    "title": "Choose a session"
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
@@ -355,6 +378,9 @@
   },
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
+  },
+  "SearchBar": {
+    "placeholder": "Search"
   },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
