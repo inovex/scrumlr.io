@@ -3,6 +3,7 @@ package database
 import (
 	"testing"
 
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 
 	"github.com/google/uuid"
@@ -47,8 +48,8 @@ func TestRunnerForNotes(t *testing.T) {
 
 var notesTestBoard *Board
 
-var columnA *Column
-var columnB *Column
+var columnA *columns.DatabaseColumn
+var columnB *columns.DatabaseColumn
 
 var noteA1 *notes.NoteDB
 var noteA2 *notes.NoteDB
@@ -62,8 +63,8 @@ var noteB3 *notes.NoteDB
 var noteC1 *notes.NoteDB
 
 var stackTestBoard *Board
-var stackTestColumnA *Column
-var stackTestColumnB *Column
+var stackTestColumnA *columns.DatabaseColumn
+var stackTestColumnB *columns.DatabaseColumn
 var stackA *notes.NoteDB
 var stackB *notes.NoteDB
 var stackC *notes.NoteDB
@@ -98,12 +99,12 @@ func testGetNotes(t *testing.T) {
 	assert.Equal(t, 9, len(listOfNotes))
 }
 func testGetFilterByColumn(t *testing.T) {
-	columnA = fixture.MustRow("Column.notesColumnA").(*Column)
+	columnA = fixture.MustRow("DatabaseColumn.notesColumnA").(*columns.DatabaseColumn)
 	notesInColumnA, err := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 5, len(notesInColumnA))
 
-	columnB = fixture.MustRow("Column.notesColumnB").(*Column)
+	columnB = fixture.MustRow("DatabaseColumn.notesColumnB").(*columns.DatabaseColumn)
 	notesInColumnB, err := notesDb.GetAll(notesTestBoard.ID, columnB.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(notesInColumnB))
@@ -361,7 +362,7 @@ func testOrderWhenMergingStacks(t *testing.T) {
 
 func testChangeOrderWhenMoveWithinStackToLower(t *testing.T) {
 	stackTestBoard = fixture.MustRow("Board.stackTestBoard").(*Board)
-	stackTestColumnA = fixture.MustRow("Column.stackTestColumnA").(*Column)
+	stackTestColumnA = fixture.MustRow("DatabaseColumn.stackTestColumnA").(*columns.DatabaseColumn)
 	stackA = fixture.MustRow("NoteDB.stackTestNote1").(*notes.NoteDB)
 	stackB = fixture.MustRow("NoteDB.stackTestNote2").(*notes.NoteDB)
 	stackC = fixture.MustRow("NoteDB.stackTestNote3").(*notes.NoteDB)
@@ -499,7 +500,7 @@ func testDeleteSharedNote(t *testing.T) {
 
 func testDeleteStackParent(t *testing.T) {
 	stackTestBoard = fixture.MustRow("Board.stackTestBoard").(*Board)
-	stackTestColumnB = fixture.MustRow("Column.stackTestColumnB").(*Column)
+	stackTestColumnB = fixture.MustRow("DatabaseColumn.stackTestColumnB").(*columns.DatabaseColumn)
 	stackE = fixture.MustRow("NoteDB.stackTestNote5").(*notes.NoteDB)
 	stackF = fixture.MustRow("NoteDB.stackTestNote6").(*notes.NoteDB)
 	stackG = fixture.MustRow("NoteDB.stackTestNote7").(*notes.NoteDB)
@@ -546,7 +547,7 @@ func testDeleteStackParent(t *testing.T) {
 
 func testDeleteStack(t *testing.T) {
 	stackTestBoard = fixture.MustRow("Board.stackTestBoard").(*Board)
-	stackTestColumnB = fixture.MustRow("Column.stackTestColumnB").(*Column)
+	stackTestColumnB = fixture.MustRow("DatabaseColumn.stackTestColumnB").(*columns.DatabaseColumn)
 	stackH = fixture.MustRow("NoteDB.stackTestNote8").(*notes.NoteDB)
 	stackUser = fixture.MustRow("DatabaseUser.justin").(*users.DatabaseUser)
 

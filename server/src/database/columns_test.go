@@ -3,29 +3,29 @@ package database
 import (
 	"testing"
 
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/users"
 )
 
 var boardForColumnsTest uuid.UUID
-var firstColumn *Column
-var secondColumn *Column
-var thirdColumn *Column
-var columnInsertedFirst *Column
-var columnInsertedSecond *Column
-var columnInsertedThird *Column
-var columnInsertedFourth *Column
-var columnInsertedFifth *Column
+var firstColumn *columns.DatabaseColumn
+var secondColumn *columns.DatabaseColumn
+var thirdColumn *columns.DatabaseColumn
+var columnInsertedFirst *columns.DatabaseColumn
+var columnInsertedSecond *columns.DatabaseColumn
+var columnInsertedThird *columns.DatabaseColumn
+var columnInsertedFourth *columns.DatabaseColumn
+var columnInsertedFifth *columns.DatabaseColumn
 var columnTestUser *users.DatabaseUser
 
 func TestRunnerForColumns(t *testing.T) {
-	firstColumn = fixture.MustRow("Column.firstColumn").(*Column)
-	secondColumn = fixture.MustRow("Column.secondColumn").(*Column)
-	thirdColumn = fixture.MustRow("Column.thirdColumn").(*Column)
+	firstColumn = fixture.MustRow("DatabaseColumn.firstColumn").(*columns.DatabaseColumn)
+	secondColumn = fixture.MustRow("DatabaseColumn.secondColumn").(*columns.DatabaseColumn)
+	thirdColumn = fixture.MustRow("DatabaseColumn.thirdColumn").(*columns.DatabaseColumn)
 	columnTestUser = fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser)
 	boardForColumnsTest = firstColumn.Board
 
@@ -58,8 +58,8 @@ func TestRunnerForColumns(t *testing.T) {
 }
 
 func testGetColumn(t *testing.T) {
-	column := fixture.MustRow("Column.firstColumn").(*Column)
-	gotColumn, err := testDb.GetColumn(boardForColumnsTest, column.ID)
+	column := fixture.MustRow("DatabaseColumn.firstColumn").(*columns.DatabaseColumn)
+	gotColumn, err := columnDb.Get(boardForColumnsTest, column.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, column.ID, gotColumn.ID)
 	assert.Equal(t, column.Name, gotColumn.Name)
@@ -76,10 +76,10 @@ func testCreateColumnOnFirstIndex(t *testing.T) {
 	visible := true
 	index := 0
 
-	column, err := testDb.CreateColumn(ColumnInsert{
+	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "0 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -95,10 +95,10 @@ func testCreateColumnOnLastIndex(t *testing.T) {
 	visible := true
 	index := 4
 
-	column, err := testDb.CreateColumn(ColumnInsert{
+	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "4 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -114,10 +114,10 @@ func testCreateColumnOnNegativeIndex(t *testing.T) {
 	visible := true
 	index := -99
 
-	column, err := testDb.CreateColumn(ColumnInsert{
+	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "-99 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -133,10 +133,10 @@ func testCreateColumnWithExceptionallyHighIndex(t *testing.T) {
 	visible := true
 	index := 99
 
-	column, err := testDb.CreateColumn(ColumnInsert{
+	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "99 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -152,10 +152,10 @@ func testCreateColumnOnSecondIndex(t *testing.T) {
 	visible := true
 	index := 1
 
-	column, err := testDb.CreateColumn(ColumnInsert{
+	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "1 Column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: &visible,
 		Index:   &index,
 	})
@@ -168,16 +168,16 @@ func testCreateColumnOnSecondIndex(t *testing.T) {
 }
 
 func testCreateColumnWithEmptyName(t *testing.T) {
-	_, err := testDb.CreateColumn(ColumnInsert{
+	_, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board: boardForColumnsTest,
 		Name:  "",
-		Color: types.ColorBacklogBlue,
+		Color: columns.ColorBacklogBlue,
 	})
 	assert.NotNil(t, err)
 }
 
 func testCreateColumnWithEmptyColor(t *testing.T) {
-	_, err := testDb.CreateColumn(ColumnInsert{
+	_, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board: boardForColumnsTest,
 		Name:  "Column",
 		Color: "",
@@ -187,10 +187,10 @@ func testCreateColumnWithEmptyColor(t *testing.T) {
 
 func testCreateColumnWithDescription(t *testing.T) {
 	aDescription := "A description"
-	column, err := testDb.CreateColumn(ColumnInsert{
+	column, err := columnDb.Create(columns.DatabaseColumnInsert{
 		Board:       boardForColumnsTest,
 		Name:        "Column",
-		Color:       types.ColorBacklogBlue,
+		Color:       columns.ColorBacklogBlue,
 		Description: aDescription,
 	})
 	assert.Nil(t, err)
@@ -198,25 +198,25 @@ func testCreateColumnWithDescription(t *testing.T) {
 	assert.Equal(t, aDescription, column.Description)
 
 	// clean up to not crash other tests
-	_ = testDb.DeleteColumn(boardForColumnsTest, column.ID, uuid.New())
+	_ = columnDb.Delete(boardForColumnsTest, column.ID, uuid.New())
 }
 
 func testDeleteColumnOnSecondIndex(t *testing.T) {
-	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedFifth.ID, columnTestUser.ID)
+	err := columnDb.Delete(boardForColumnsTest, columnInsertedFifth.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedThird.ID, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID, columnInsertedFourth.ID)
 }
 
 func testDeleteColumnOnFirstIndex(t *testing.T) {
-	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedThird.ID, columnTestUser.ID)
+	err := columnDb.Delete(boardForColumnsTest, columnInsertedThird.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID, columnInsertedFourth.ID)
 }
 
 func testDeleteLastColumn(t *testing.T) {
-	err := testDb.DeleteColumn(boardForColumnsTest, columnInsertedFourth.ID, columnTestUser.ID)
+	err := columnDb.Delete(boardForColumnsTest, columnInsertedFourth.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID)
@@ -242,7 +242,7 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: note.ID, Valid: true})
 
-	deleteColumnError := testDb.DeleteColumn(boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
+	deleteColumnError := columnDb.Delete(boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
 	assert.Nil(t, deleteColumnError)
 
 	updatedBoard, getUpdatedBoardError := testDb.GetBoard(boardForColumnsTest)
@@ -251,17 +251,17 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 }
 
 func testDeleteOthers(t *testing.T) {
-	_ = testDb.DeleteColumn(boardForColumnsTest, columnInsertedFirst.ID, columnTestUser.ID)
+	_ = columnDb.Delete(boardForColumnsTest, columnInsertedFirst.ID, columnTestUser.ID)
 
 	verifyOrder(t, firstColumn.ID, secondColumn.ID, thirdColumn.ID)
 }
 
 func testUpdateName(t *testing.T) {
-	column, err := testDb.UpdateColumn(ColumnUpdate{
+	column, err := columnDb.Update(columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "Updated name",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: false,
 		Index:   0,
 	})
@@ -270,24 +270,24 @@ func testUpdateName(t *testing.T) {
 }
 
 func testUpdateColor(t *testing.T) {
-	column, err := testDb.UpdateColumn(ColumnUpdate{
+	column, err := columnDb.Update(columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "Updated name",
-		Color:   types.ColorPlanningPink,
+		Color:   columns.ColorPlanningPink,
 		Visible: false,
 		Index:   0,
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, types.ColorPlanningPink, column.Color)
+	assert.Equal(t, columns.ColorPlanningPink, column.Color)
 }
 
 func testUpdateVisibility(t *testing.T) {
-	column, err := testDb.UpdateColumn(ColumnUpdate{
+	column, err := columnDb.Update(columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   0,
 	})
@@ -296,11 +296,11 @@ func testUpdateVisibility(t *testing.T) {
 }
 
 func testMoveFirstColumnOnLastIndex(t *testing.T) {
-	_, err := testDb.UpdateColumn(ColumnUpdate{
+	_, err := columnDb.Update(columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   100,
 	})
@@ -309,11 +309,11 @@ func testMoveFirstColumnOnLastIndex(t *testing.T) {
 }
 
 func testMoveLastColumnOnFirstIndex(t *testing.T) {
-	_, err := testDb.UpdateColumn(ColumnUpdate{
+	_, err := columnDb.Update(columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   0,
 	})
@@ -322,11 +322,11 @@ func testMoveLastColumnOnFirstIndex(t *testing.T) {
 }
 
 func testMoveFirstColumnOnSecondIndex(t *testing.T) {
-	_, err := testDb.UpdateColumn(ColumnUpdate{
+	_, err := columnDb.Update(columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   1,
 	})
@@ -335,11 +335,11 @@ func testMoveFirstColumnOnSecondIndex(t *testing.T) {
 }
 
 func testMoveSecondColumnOnFirstIndex(t *testing.T) {
-	_, err := testDb.UpdateColumn(ColumnUpdate{
+	_, err := columnDb.Update(columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
-		Color:   types.ColorBacklogBlue,
+		Color:   columns.ColorBacklogBlue,
 		Visible: true,
 		Index:   0,
 	})
@@ -350,7 +350,7 @@ func testMoveSecondColumnOnFirstIndex(t *testing.T) {
 func verifyOrder(t *testing.T, ids ...uuid.UUID) {
 	expectedOrder := ids
 
-	columns, err := testDb.GetColumns(boardForColumnsTest)
+	columns, err := columnDb.GetAll(boardForColumnsTest)
 	assert.Nil(t, err)
 	assert.Equal(t, len(ids), len(columns))
 
@@ -361,12 +361,12 @@ func verifyOrder(t *testing.T, ids ...uuid.UUID) {
 }
 
 func testUpdateDescription(t *testing.T) {
-	column, err := testDb.UpdateColumn(ColumnUpdate{
+	column, err := columnDb.Update(columns.DatabaseColumnUpdate{
 		ID:          firstColumn.ID,
 		Board:       boardForColumnsTest,
 		Name:        "FirstColumn",
 		Description: "Updated Column Description",
-		Color:       types.ColorBacklogBlue,
+		Color:       columns.ColorBacklogBlue,
 		Visible:     true,
 		Index:       0,
 	})

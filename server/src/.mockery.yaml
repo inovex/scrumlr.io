@@ -97,7 +97,6 @@ packages:
       VotingDatabase:
         all: true
 
-
   scrumlr.io/server/columntemplates:
     config:
       dir: "{{.InterfaceDir}}"
@@ -116,4 +115,14 @@ packages:
       BoardTemplateService:
         all: true
       BoardTemplateDatabase:
+        all: true
+
+  scrumlr.io/server/columns:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      ColumnService:
+        all: true
+      ColumnDatabase:
         all: true

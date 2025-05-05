@@ -432,10 +432,10 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	body.Board.Owner = owner
 
-	columns := make([]dto.ColumnRequest, 0, len(body.Notes))
+	importColumns := make([]columns.ColumnRequest, 0, len(body.Notes))
 
 	for _, column := range body.Columns {
-		columns = append(columns, dto.ColumnRequest{
+		importColumns = append(importColumns, columns.ColumnRequest{
 			Name:    column.Name,
 			Color:   column.Color,
 			Visible: &column.Visible,
@@ -447,7 +447,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		Description:  body.Board.Description,
 		AccessPolicy: body.Board.AccessPolicy,
 		Passphrase:   body.Board.Passphrase,
-		Columns:      columns,
+		Columns:      importColumns,
 		Owner:        owner,
 	})
 
@@ -457,7 +457,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cols, err := s.boards.ListColumns(r.Context(), b.ID)
+	cols, err := s.columns.GetAll(r.Context(), b.ID)
 	if err != nil {
 		_ = s.boards.Delete(r.Context(), b.ID)
 

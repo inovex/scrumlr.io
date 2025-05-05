@@ -6,6 +6,7 @@ import (
 	"scrumlr.io/server/voting"
 	"time"
 
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
@@ -70,7 +71,7 @@ type BoardUpdate struct {
 	ShowVoting            uuid.NullUUID
 }
 
-func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []ColumnInsert) (Board, error) {
+func (d *Database) CreateBoard(creator uuid.UUID, board BoardInsert, columns []columns.DatabaseColumnInsert) (Board, error) {
 	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
 
 	if board.AccessPolicy == types.AccessPolicyByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
@@ -203,10 +204,10 @@ func (d *Database) GetBoards(userID uuid.UUID) ([]Board, error) {
 	return boards, err
 }
 
-func (d *Database) GetBoardOverview(id uuid.UUID) (Board, []sessions.DatabaseBoardSession, []Column, error) {
+func (d *Database) GetBoardOverview(id uuid.UUID) (Board, []sessions.DatabaseBoardSession, []columns.DatabaseColumn, error) {
 	var board Board
 	var sessions []sessions.DatabaseBoardSession
-	var columns []Column
+	var columns []columns.DatabaseColumn
 	var err error
 
 	board, err = d.GetBoard(id)
@@ -218,7 +219,7 @@ func (d *Database) GetBoardOverview(id uuid.UUID) (Board, []sessions.DatabaseBoa
 		return Board{}, nil, nil, err
 	}
 
-	columns, err = d.GetColumns(id)
+	columns, err = d.columnsDB.GetAll(id)
 	if err != nil {
 		return Board{}, nil, nil, err
 	}
