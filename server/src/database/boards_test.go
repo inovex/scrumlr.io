@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -48,7 +49,7 @@ func testCreatePublicBoard(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 	assert.Nil(t, board.Name)
@@ -68,7 +69,7 @@ func testCreatePublicBoardWithPassphraseShouldFail(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   &passphrase,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.NotNil(t, err)
 }
@@ -82,7 +83,7 @@ func testCreatePublicBoardWithSaltShouldFail(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   &salt,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.NotNil(t, err)
 }
@@ -95,7 +96,7 @@ func testCreateBoardAlsoGeneratesOwnerSession(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -112,7 +113,7 @@ func testCreateBoardAlsoGeneratesColumns(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{
+	}, []columns.DatabaseColumnInsert{
 		{
 			Name:  "A",
 			Color: "backlog-blue",
@@ -125,7 +126,7 @@ func testCreateBoardAlsoGeneratesColumns(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	columns, err := testDb.GetColumns(board.ID)
+	columns, err := columnDb.GetAll(board.ID)
 	assert.Nil(t, err)
 
 	assert.Equal(t, "A", columns[0].Name)
@@ -145,7 +146,7 @@ func testCreateByPassphraseBoard(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
 		Salt:         &salt,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 	assert.Nil(t, board.Name)
@@ -162,7 +163,7 @@ func testCreateByInviteBoard(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 	assert.Nil(t, board.Name)
@@ -180,7 +181,7 @@ func testCreateBoardWithName(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 	assert.Equal(t, name, *board.Name)
@@ -196,7 +197,7 @@ func testCreateBoardWithDescription(t *testing.T) {
 		Passphrase:   nil,
 		Salt:         nil,
 		Description:  &description,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 	assert.Equal(t, description, *board.Description)
@@ -211,7 +212,7 @@ func testChangePublicBoardToPassphraseBoard(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -240,7 +241,7 @@ func testChangeToPassphraseBoardWithMissingPassphraseShouldFail(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -265,7 +266,7 @@ func testChangeToPassphraseBoardWithMissingSaltShouldFail(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -292,7 +293,7 @@ func testChangePassphraseBoardToPublicBoard(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
 		Salt:         &salt,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -318,7 +319,7 @@ func testChangePassphraseBoardToPublicBoardWithPassphraseShouldFail(t *testing.T
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
 		Salt:         &salt,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -343,7 +344,7 @@ func testChangePassphraseBoardToPublicBoardWithSaltShouldFail(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
 		Salt:         &salt,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -368,7 +369,7 @@ func testChangePassphraseBoardToBoardByInviteShouldFail(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
 		Salt:         &salt,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -390,7 +391,7 @@ func testChangeInviteBoardToPassphraseBoardShouldFail(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -414,7 +415,7 @@ func testChangeInviteBoardToPublicBoardShouldFail(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -436,7 +437,7 @@ func testUpdateBoardName(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -456,7 +457,7 @@ func testUpdateBoardSettings(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -479,7 +480,7 @@ func testUpdateBoardDescription(t *testing.T) {
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 
 	assert.Nil(t, err)
 
@@ -517,7 +518,7 @@ func testGetUserBoards(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 	assert.Nil(t, err)
 	boardName2 := "Board 2"
 	board2, err := testDb.CreateBoard(user.ID, BoardInsert{
@@ -525,7 +526,7 @@ func testGetUserBoards(t *testing.T) {
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
 		Salt:         nil,
-	}, []ColumnInsert{})
+	}, []columns.DatabaseColumnInsert{})
 	assert.Nil(t, err)
 
 	// Retrieve the boards associated with the user

@@ -1,4 +1,4 @@
-package types
+package columns
 
 import (
 	"encoding/json"

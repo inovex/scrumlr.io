@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strings"
+	"testing"
+
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/mocks/services"
-	"strings"
-	"testing"
+	"scrumlr.io/server/voting"
 
 	"github.com/google/uuid"
 
@@ -56,11 +57,11 @@ func (suite *VoteTestSuite) TestAddVote() {
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
-			votingMock.EXPECT().AddVote(req.req.Context(), dto.VoteRequest{
+			votingMock.EXPECT().AddVote(req.req.Context(), voting.VoteRequest{
 				Board: boardId,
 				User:  userId,
 				Note:  noteId,
-			}).Return(&dto.Vote{
+			}).Return(&voting.Vote{
 				Note: noteId,
 			}, tt.err)
 

@@ -6,6 +6,7 @@ import (
 	"scrumlr.io/server/voting"
 
 	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 
@@ -40,6 +41,13 @@ func NewSerivceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 	initializer.client = &http.Client{}
 
 	return *initializer
+}
+
+func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService, votingService voting.VotingService) columns.ColumnService {
+	columnDb := columns.NewColumnsDatabase(init.db)
+	columnService := columns.NewColumnService(columnDb, init.rt, noteService, votingService)
+
+	return columnService
 }
 
 func (init *ServiceInitializer) InitializeBoardReactionService() boardreactions.BoardReactionService {

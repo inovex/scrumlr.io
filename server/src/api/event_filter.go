@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/google/uuid"
-	columnService "scrumlr.io/server/columns"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
@@ -45,8 +45,8 @@ func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid
 }
 
 func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
-	var columns columnService.ColumnSlice
-	columns, err := columnService.UnmarshallColumnData(event.Data)
+	var updateColumns columns.ColumnSlice
+	updateColumns, err := columns.UnmarshallColumnData(event.Data)
 
 	if err != nil {
 		logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
@@ -54,12 +54,12 @@ func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID u
 	}
 
 	if isMod {
-		bs.boardColumns = columns
+		bs.boardColumns = updateColumns
 		return event, true
 	} else {
 		return &realtime.BoardEvent{
 			Type: event.Type,
-			Data: columns.FilterVisibleColumns(),
+			Data: updateColumns.FilterVisibleColumns(),
 		}, true
 	}
 }
@@ -99,7 +99,7 @@ func (bs *BoardSubscription) boardUpdated(event *realtime.BoardEvent, isMod bool
 
 func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uuid.UUID) (*realtime.BoardEvent, bool) {
 	//filter deleted votes after user
-	votings, err := technical_helper.UnmarshalSlice[dto.Vote](event.Data)
+	votings, err := technical_helper.UnmarshalSlice[voting.Vote](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse deleteVotes in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
 		return nil, false
@@ -107,7 +107,7 @@ func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uui
 
 	ret := realtime.BoardEvent{
 		Type: event.Type,
-		Data: technical_helper.Filter[*dto.Vote](votings, func(vote *dto.Vote) bool {
+		Data: technical_helper.Filter[*voting.Vote](votings, func(vote *voting.Vote) bool {
 			return vote.User == userID
 		}),
 	}
@@ -167,7 +167,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		latestVoting := event.Data.Votings[0]
 
 		event.Data.Votings = []*voting.Voting{latestVoting}
-		event.Data.Votes = technical_helper.Filter[*dto.Vote](event.Data.Votes, func(vote *dto.Vote) bool {
+		event.Data.Votes = technical_helper.Filter[*voting.Vote](event.Data.Votes, func(vote *voting.Vote) bool {
 			return vote.Voting == latestVoting.ID && (latestVoting.Status != types.VotingStatusOpen || vote.User == clientID)
 		})
 	}
@@ -191,11 +191,11 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			BoardSessionRequests: event.Data.BoardSessionRequests,
 			Notes:                filteredNotes,
 			Reactions:            event.Data.Reactions,
-			Columns:              columnService.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
+			Columns:              columns.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
 			Votings: technical_helper.MapSlice[*voting.Voting, *voting.Voting](event.Data.Votings, func(voting *voting.Voting) *voting.Voting {
 				return voting.UpdateVoting(filteredNotes).Voting
 			}),
-			Votes: technical_helper.Filter[*dto.Vote](event.Data.Votes, func(vote *dto.Vote) bool {
+			Votes: technical_helper.Filter[*voting.Vote](event.Data.Votes, func(vote *voting.Vote) bool {
 				_, exists := notesMap[vote.Note]
 				return exists
 			}),

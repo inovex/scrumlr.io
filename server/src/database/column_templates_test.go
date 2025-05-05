@@ -5,8 +5,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/users"
 )
 
@@ -78,7 +78,7 @@ func testCreateColumnTemplateOnFirstIndex(t *testing.T) {
 	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "0 Column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       &visible,
 		Index:         &index,
 	})
@@ -97,7 +97,7 @@ func testCreateColumnTemplateOnLastIndex(t *testing.T) {
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "4 Column",
 		Description:   "Test description",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       &visible,
 		Index:         &index,
 	})
@@ -117,7 +117,7 @@ func testCreateColumnTemplateOnNegativeIndex(t *testing.T) {
 	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "-99 Column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       &visible,
 		Index:         &index,
 	})
@@ -136,7 +136,7 @@ func testCreateColumnTemplateWithExceptionallyHighIndex(t *testing.T) {
 	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "99 Column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       &visible,
 		Index:         &index,
 	})
@@ -154,7 +154,7 @@ func testCreateColumnTemplateOnSecondIndex(t *testing.T) {
 	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "1 Column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       &visible,
 		Index:         &index,
 	})
@@ -170,7 +170,7 @@ func testCreateColumnTemplateWithEmptyName(t *testing.T) {
 	_, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Index:         &index,
 	})
 	assert.NotNil(t, err)
@@ -190,7 +190,7 @@ func testCreateColumnTemplateWithDescription(t *testing.T) {
 	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "Column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Description:   aDescription,
 	})
 	assert.Nil(t, err)
@@ -234,7 +234,7 @@ func testUpdateColumnTemplateName(t *testing.T) {
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "Updated name",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       false,
 		Index:         0,
 	})
@@ -247,12 +247,12 @@ func testUpdateColumnTemplateColor(t *testing.T) {
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "Updated name",
-		Color:         types.ColorPlanningPink,
+		Color:         columns.ColorPlanningPink,
 		Visible:       false,
 		Index:         0,
 	})
 	assert.Nil(t, err)
-	assert.Equal(t, types.ColorPlanningPink, column.Color)
+	assert.Equal(t, columns.ColorPlanningPink, column.Color)
 }
 
 func testUpdateColumnTemplateVisibility(t *testing.T) {
@@ -260,7 +260,7 @@ func testUpdateColumnTemplateVisibility(t *testing.T) {
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       true,
 		Index:         0,
 	})
@@ -273,7 +273,7 @@ func testMoveFirstColumnTemplateOnLastIndex(t *testing.T) {
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       true,
 		Index:         100,
 	})
@@ -286,7 +286,7 @@ func testMoveLastColumnTemplateOnFirstIndex(t *testing.T) {
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       true,
 		Index:         0,
 	})
@@ -299,7 +299,7 @@ func testMoveFirstColumnTemplateOnSecondIndex(t *testing.T) {
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       true,
 		Index:         1,
 	})
@@ -312,7 +312,7 @@ func testMoveSecondColumnTemplateOnFirstIndex(t *testing.T) {
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       true,
 		Index:         0,
 	})
@@ -326,7 +326,7 @@ func testUpdateColumnTemplateDescription(t *testing.T) {
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "FirstColumn",
 		Description:   "Updated Column Template Description",
-		Color:         types.ColorBacklogBlue,
+		Color:         columns.ColorBacklogBlue,
 		Visible:       true,
 		Index:         0,
 	})
