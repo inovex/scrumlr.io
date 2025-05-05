@@ -115,8 +115,6 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     // which is why we use the total col amount as new index
     const index = alignment === "left" ? 0 : props.columns.length;
 
-    // TODO can illegal indices happen? apparently so
-
     props.addColumn(newColumn, index);
   };
 
