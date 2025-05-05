@@ -14,11 +14,6 @@ type VotesProps = {
   colorClassName?: string;
 };
 
-// Define Vote interface to type userVotes and fix linter errors
-interface Vote {
-  id: string;
-}
-
 export const Votes: FC<VotesProps> = (props) => {
   const {t} = useTranslation();
 
@@ -30,6 +25,7 @@ export const Votes: FC<VotesProps> = (props) => {
     }),
     _.isEqual
   );
+
   const allPastVotes = useAppSelector(
     (state) =>
       (state.votings.past[0]?.votes?.votesPerNote[props.noteId]?.total ?? 0) +
@@ -47,19 +43,21 @@ export const Votes: FC<VotesProps> = (props) => {
     const votesPerNote = lastVoting.votes?.votesPerNote ?? {};
 
     // Aggregate user votes for a note and its stacked child notes, then deduplicate by vote ID to display unique user names
-    let userVotes: Array<{id: string}> = (votesPerNote[props.noteId]?.userVotes ?? []).map((v: Vote) => ({id: v.id}));
+    let userVotes = (votesPerNote[props.noteId]?.userVotes ?? []).map((v) => ({id: v.id}));
+
     if (props.aggregateVotes) {
-      const childVotes: Array<{id: string}> = state.notes
+      const childVotes = state.notes
         .filter((n) => n.position.stack === props.noteId)
         .reduce(
           (acc, curr) => {
-            const childUserVotes = (votesPerNote[curr.id]?.userVotes ?? []).map((v: Vote) => ({id: v.id}));
+            const childUserVotes = (votesPerNote[curr.id]?.userVotes ?? []).map((v) => ({id: v.id}));
             return acc.concat(childUserVotes);
           },
           [] as Array<{id: string}>
         );
       userVotes = userVotes.concat(childVotes);
     }
+
     const uniqueUserVotes = _.uniq(userVotes, (vote) => vote.id);
 
     const others = state.participants?.others ?? [];
@@ -69,7 +67,7 @@ export const Votes: FC<VotesProps> = (props) => {
     const names = uniqueUserVotes
       .map((userVote) => participants.find((p) => p.user.id === userVote.id))
       .filter((p) => p !== undefined)
-      .map((p) => p.user.name)
+      .map((p) => p!.user.name)
       .toSorted((a, b) => a.localeCompare(b))
       .join(", ");
 
@@ -77,6 +75,7 @@ export const Votes: FC<VotesProps> = (props) => {
   });
 
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
+
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 
   const addVotesDisabledReason = (): string => {
