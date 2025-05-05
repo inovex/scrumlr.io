@@ -67,14 +67,14 @@ export const Votes: FC<VotesProps> = (props) => {
     const names = uniqueUserVotes
       .map((userVote) => participants.find((p) => p.user.id === userVote.id))
       .filter((p) => p !== undefined)
-      .map((p) => p!.user.name)
+      .map((p) => p.user.name)
       .toSorted((a, b) => a.localeCompare(b))
       .join(", ");
 
     return {participantsNames: names, isAnonymous: false};
   });
 
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants!.self?.role));
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => role === state.participants.self?.role));
 
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 
