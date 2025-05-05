@@ -263,6 +263,65 @@ func (_c *MockVotingService_GetAll_Call) RunAndReturn(run func(context.Context, 
 	return _c
 }
 
+// GetOpen provides a mock function with given fields: ctx, board
+func (_m *MockVotingService) GetOpen(ctx context.Context, board uuid.UUID) (*Voting, error) {
+	ret := _m.Called(ctx, board)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetOpen")
+	}
+
+	var r0 *Voting
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) (*Voting, error)); ok {
+		return rf(ctx, board)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, uuid.UUID) *Voting); ok {
+		r0 = rf(ctx, board)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*Voting)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = rf(ctx, board)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockVotingService_GetOpen_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetOpen'
+type MockVotingService_GetOpen_Call struct {
+	*mock.Call
+}
+
+// GetOpen is a helper method to define mock.On call
+//   - ctx context.Context
+//   - board uuid.UUID
+func (_e *MockVotingService_Expecter) GetOpen(ctx interface{}, board interface{}) *MockVotingService_GetOpen_Call {
+	return &MockVotingService_GetOpen_Call{Call: _e.mock.On("GetOpen", ctx, board)}
+}
+
+func (_c *MockVotingService_GetOpen_Call) Run(run func(ctx context.Context, board uuid.UUID)) *MockVotingService_GetOpen_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(uuid.UUID))
+	})
+	return _c
+}
+
+func (_c *MockVotingService_GetOpen_Call) Return(_a0 *Voting, _a1 error) *MockVotingService_GetOpen_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockVotingService_GetOpen_Call) RunAndReturn(run func(context.Context, uuid.UUID) (*Voting, error)) *MockVotingService_GetOpen_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // GetVotes provides a mock function with given fields: ctx, f
 func (_m *MockVotingService) GetVotes(ctx context.Context, f filter.VoteFilter) ([]*Vote, error) {
 	ret := _m.Called(ctx, f)

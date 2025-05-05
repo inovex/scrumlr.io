@@ -370,10 +370,11 @@ func run(c *cli.Context) error {
 	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
 	reactionService := initializer.InitializeReactionService()
 	columnTemplateService := initializer.InitializeColumnTemplateService()
+	noteService := initializer.InitializeNotesService()
+	votingService := initializer.InitializeVotingService()
+	columnService := initializer.InitializeColumnService(noteService, votingService)
 
 	boardService := boards.NewBoardService(dbConnection, rt)
-	votingService := initializer.InitializeVotingService()
-	noteService := initializer.InitializeNotesService()
 	feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initializer.InitializeHealthService()
 	boardReactionService := initializer.InitializeBoardReactionService()
@@ -385,6 +386,7 @@ func run(c *cli.Context) error {
 		authConfig,
 
 		boardService,
+		columnService,
 		votingService,
 		userService,
 		noteService,

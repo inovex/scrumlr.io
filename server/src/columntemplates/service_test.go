@@ -8,14 +8,14 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/columns"
 )
 
 func TestCreateColumnTemplate(t *testing.T) {
 	id := uuid.New()
 	board := uuid.New()
 	name := "template test"
-	color := types.ColorGoalGreen
+	color := columns.ColorGoalGreen
 	index := 1
 	visible := true
 
@@ -61,7 +61,7 @@ func TestCreateColumnTemplate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	board := uuid.New()
 	name := "template test"
-	color := types.ColorGoalGreen
+	color := columns.ColorGoalGreen
 	index := 1
 	visible := true
 
@@ -94,7 +94,7 @@ func TestGetColumnTemplate(t *testing.T) {
 	boardId := uuid.New()
 	columnId := uuid.New()
 	name := "template test"
-	color := types.ColorGoalGreen
+	color := columns.ColorGoalGreen
 	index := 1
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
@@ -200,7 +200,7 @@ func TestUpdateColumnTemplate(t *testing.T) {
 	board := uuid.New()
 	name := "New Name"
 	description := "New Description"
-	color := types.ColorValueViolet
+	color := columns.ColorValueViolet
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
 	mockColumnTemplateDatabase.EXPECT().Update(DatabaseColumnTemplateUpdate{
@@ -244,7 +244,7 @@ func TestUpdateColumnTemplate_DatabaseError(t *testing.T) {
 	board := uuid.New()
 	name := "New Name"
 	description := "New Description"
-	color := types.ColorValueViolet
+	color := columns.ColorValueViolet
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
 	mockColumnTemplateDatabase.EXPECT().Update(DatabaseColumnTemplateUpdate{

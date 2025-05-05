@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/voting"
@@ -32,6 +33,7 @@ var reactionDb reactions.ReactionDatabase
 var sessionDb sessions.SessionDatabase
 var sessionRequestDb sessionrequests.SessionRequestDatabase
 var userDb users.UserDatabase
+var columnDb columns.ColumnDatabase
 var votingDb voting.VotingDatabase
 var columnTemplateDb columntemplates.ColumnTemplateDatabase
 var boardTemplatesDb boardtemplates.BoardTemplateDatabase
@@ -66,6 +68,7 @@ func testMainWithDefer(m *testing.M) int {
 	userDb = users.NewUserDatabase(bun)
 	notesDb = notes.NewNotesDatabase(bun)
 	votingDb = voting.NewVotingDatabase(bun)
+	columnDb = columns.NewColumnsDatabase(bun)
 	columnTemplateDb = columntemplates.NewColumnTemplateDatabase(bun)
 	boardTemplatesDb = boardtemplates.NewBoardTemplateDatabase(bun)
 
@@ -141,7 +144,7 @@ func loadTestdata() error {
 		(*users.DatabaseUser)(nil),
 		(*Board)(nil),
 		(*sessions.DatabaseBoardSessionInsert)(nil),
-		(*Column)(nil),
+		(*columns.DatabaseColumn)(nil),
 		(*notes.NoteDB)(nil),
 		(*voting.VotingDB)(nil),
 		(*voting.VoteDB)(nil),

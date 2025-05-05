@@ -22,6 +22,7 @@ import (
 	"scrumlr.io/server/mocks/services"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/voting"
 )
 
 type NotesTestSuite struct {
@@ -194,7 +195,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 
 			noteMock.EXPECT().GetStack(mock.Anything, noteID).Return(notesToDelete, nil)
 
-			votesToDelete := []*dto.Vote{{
+			votesToDelete := []*voting.Vote{{
 				Voting: uuid.UUID{},
 				Note:   noteID,
 				User:   uuid.UUID{},

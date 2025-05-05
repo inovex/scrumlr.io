@@ -4,14 +4,14 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"strings"
+	"testing"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/mocks/services"
-	"scrumlr.io/server/votes"
 	"scrumlr.io/server/voting"
-	"strings"
-	"testing"
 
 	"github.com/google/uuid"
 

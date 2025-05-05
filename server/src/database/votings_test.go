@@ -1,12 +1,13 @@
 package database
 
 import (
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/voting"
-	"testing"
 )
 
 func TestRunnerForVoting(t *testing.T) {
