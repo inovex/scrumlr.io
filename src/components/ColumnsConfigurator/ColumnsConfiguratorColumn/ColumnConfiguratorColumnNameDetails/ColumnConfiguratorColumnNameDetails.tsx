@@ -7,7 +7,7 @@ import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Dispatch, SetStateAction, useRef, useState, FocusEvent} from "react";
 import "./ColumnConfiguratorColumnNameDetails.scss";
 
-export type OpenState = "closed" | "nameFirst" | "descriptionFirst";
+export type OpenState = "closed" | "visualFeedback" | "nameFirst" | "descriptionFirst";
 
 type ColumnConfiguratorColumnNameDetailsProps = {
   className: string;
@@ -31,6 +31,8 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
 
+  const isEditing = props.openState === "nameFirst" || props.openState === "descriptionFirst";
+
   const descriptionConfirmMiniMenu: MiniMenuItem[] = [
     {
       element: <CloseIcon />,
@@ -44,10 +46,12 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
       element: <CheckDoneIcon />,
       label: t("Templates.ColumnsConfiguratorColumn.save"),
       onClick(): void {
-        // props.editColumn?.(props.column, {name, description});
         props.updateColumnTitle(name, description);
-        props.setOpenState("closed");
-        (document.activeElement as HTMLElement)?.blur();
+        // show visual feedback for 2s before displaying menu options again
+        props.setOpenState("visualFeedback");
+        setTimeout(() => {
+          props.setOpenState("closed");
+        }, 2000);
       },
     },
   ];
@@ -70,7 +74,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
   return (
     <div className={classNames(props.className, "column-configurator-column-name-details__name-wrapper")} ref={nameWrapperRef}>
       <input
-        className={classNames("column-configurator-column-name-details__name", {"column-configurator-column-name-details__name--editing": props.openState !== "closed"})}
+        className={classNames("column-configurator-column-name-details__name", {"column-configurator-column-name-details__name--editing": isEditing})}
         value={name}
         placeholder={t("Templates.ColumnsConfiguratorColumn.namePlaceholder")}
         onInput={(e) => setName(e.currentTarget.value)}
@@ -78,7 +82,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         onBlur={handleBlurNameWrapperContents}
         autoComplete="off"
       />
-      {props.openState !== "closed" ? (
+      {isEditing ? (
         <div className="column-configurator-column-name-details__description-wrapper">
           <TextArea
             className="column-configurator-column-name-details__description-text-area"
