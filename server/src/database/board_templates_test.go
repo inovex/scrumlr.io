@@ -423,7 +423,7 @@ func testDeleteBoardTemplate(t *testing.T) {
 	err = boardTemplatesDb.Delete(template.ID)
 	assert.Nil(t, err)
 
-	_, err = testDb.GetBoard(template.ID)
+	_, err = boardDb.GetBoard(template.ID)
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
 }

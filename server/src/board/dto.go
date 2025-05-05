@@ -1,19 +1,16 @@
-package dto
+package board
 
 import (
+	"github.com/google/uuid"
 	"net/http"
-	"scrumlr.io/server/voting"
-	"time"
-
 	"scrumlr.io/server/columns"
+	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-
-	"github.com/google/uuid"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
-	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/voting"
+	"time"
 )
 
 // Board is the response for all board requests.
@@ -55,7 +52,7 @@ type Board struct {
 	Salt       *string `json:"-"`
 }
 
-func (b *Board) From(board database.Board) *Board {
+func (b *Board) From(board DatabaseBoard) *Board {
 	b.ID = board.ID
 	b.Name = board.Name
 	b.Description = board.Description
@@ -168,7 +165,7 @@ type FullBoard struct {
 	Votes                []*voting.Vote                         `json:"votes"`
 }
 
-func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
+func (dtoFullBoard *FullBoard) From(dbFullBoard DatabaseFullBoard) *FullBoard {
 	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
 	dtoFullBoard.BoardSessionRequests = sessionrequests.BoardSessionRequests(dbFullBoard.BoardSessionRequests)
 	dtoFullBoard.BoardSessions = sessions.BoardSessions(dbFullBoard.BoardSessions)

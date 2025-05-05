@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"scrumlr.io/server/board"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -44,7 +45,7 @@ func TestRunnerForBoards(t *testing.T) {
 func testCreatePublicBoard(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -64,7 +65,7 @@ func testCreatePublicBoardWithPassphraseShouldFail(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	passphrase := "passphrase"
-	_, err := testDb.CreateBoard(user.ID, BoardInsert{
+	_, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   &passphrase,
@@ -78,7 +79,7 @@ func testCreatePublicBoardWithSaltShouldFail(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	salt := "salt"
-	_, err := testDb.CreateBoard(user.ID, BoardInsert{
+	_, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   &salt,
@@ -91,7 +92,7 @@ func testCreatePublicBoardWithSaltShouldFail(t *testing.T) {
 func testCreateBoardAlsoGeneratesOwnerSession(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -108,7 +109,7 @@ func testCreateBoardAlsoGeneratesOwnerSession(t *testing.T) {
 func testCreateBoardAlsoGeneratesColumns(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -141,7 +142,7 @@ func testCreateByPassphraseBoard(t *testing.T) {
 	passphrase := "passphrase"
 	salt := "salt"
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
@@ -158,7 +159,7 @@ func testCreateByPassphraseBoard(t *testing.T) {
 func testCreateByInviteBoard(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
@@ -176,7 +177,7 @@ func testCreateBoardWithName(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	name := "Board name"
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         &name,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -191,7 +192,7 @@ func testCreateBoardWithDescription(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	description := "A board description"
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -207,7 +208,7 @@ func testChangePublicBoardToPassphraseBoard(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	name := "Board name"
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         &name,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -220,8 +221,8 @@ func testChangePublicBoardToPassphraseBoard(t *testing.T) {
 	passphrase := "passphrase"
 	salt := "salt"
 
-	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	updatedBoard, err := boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   &passphrase,
 		Salt:         &salt,
@@ -236,7 +237,7 @@ func testChangeToPassphraseBoardWithMissingPassphraseShouldFail(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	name := "Board name"
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         &name,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -248,8 +249,8 @@ func testChangeToPassphraseBoardWithMissingPassphraseShouldFail(t *testing.T) {
 	accessPolicy := types.AccessPolicyByPassphrase
 	salt := "salt"
 
-	_, err = testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	_, err = boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   nil,
 		Salt:         &salt,
@@ -261,7 +262,7 @@ func testChangeToPassphraseBoardWithMissingSaltShouldFail(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
 	name := "Board name"
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         &name,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -273,8 +274,8 @@ func testChangeToPassphraseBoardWithMissingSaltShouldFail(t *testing.T) {
 	accessPolicy := types.AccessPolicyByPassphrase
 	passphrase := "passphrase"
 
-	_, err = testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	_, err = boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   &passphrase,
 		Salt:         nil,
@@ -288,7 +289,7 @@ func testChangePassphraseBoardToPublicBoard(t *testing.T) {
 	passphrase := "passphrase"
 	salt := "salt"
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
@@ -298,8 +299,8 @@ func testChangePassphraseBoardToPublicBoard(t *testing.T) {
 	assert.Nil(t, err)
 
 	accessPolicy := types.AccessPolicyPublic
-	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	updatedBoard, err := boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   nil,
 		Salt:         nil,
@@ -314,7 +315,7 @@ func testChangePassphraseBoardToPublicBoardWithPassphraseShouldFail(t *testing.T
 	passphrase := "passphrase"
 	salt := "salt"
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
@@ -324,8 +325,8 @@ func testChangePassphraseBoardToPublicBoardWithPassphraseShouldFail(t *testing.T
 	assert.Nil(t, err)
 
 	accessPolicy := types.AccessPolicyPublic
-	_, err = testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	_, err = boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   &passphrase,
 		Salt:         nil,
@@ -339,7 +340,7 @@ func testChangePassphraseBoardToPublicBoardWithSaltShouldFail(t *testing.T) {
 	passphrase := "passphrase"
 	salt := "salt"
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
@@ -349,8 +350,8 @@ func testChangePassphraseBoardToPublicBoardWithSaltShouldFail(t *testing.T) {
 	assert.Nil(t, err)
 
 	accessPolicy := types.AccessPolicyPublic
-	_, err = testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	_, err = boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   nil,
 		Salt:         &salt,
@@ -364,7 +365,7 @@ func testChangePassphraseBoardToBoardByInviteShouldFail(t *testing.T) {
 	passphrase := "passphrase"
 	salt := "salt"
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByPassphrase,
 		Passphrase:   &passphrase,
@@ -374,8 +375,8 @@ func testChangePassphraseBoardToBoardByInviteShouldFail(t *testing.T) {
 	assert.Nil(t, err)
 
 	accessPolicy := types.AccessPolicyByInvite
-	_, err = testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	_, err = boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   nil,
 		Salt:         nil,
@@ -386,7 +387,7 @@ func testChangePassphraseBoardToBoardByInviteShouldFail(t *testing.T) {
 func testChangeInviteBoardToPassphraseBoardShouldFail(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
@@ -398,8 +399,8 @@ func testChangeInviteBoardToPassphraseBoardShouldFail(t *testing.T) {
 	accessPolicy := types.AccessPolicyByInvite
 	passphrase := "passphrase"
 	salt := "salt"
-	_, err = testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	_, err = boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   &passphrase,
 		Salt:         &salt,
@@ -410,7 +411,7 @@ func testChangeInviteBoardToPassphraseBoardShouldFail(t *testing.T) {
 func testChangeInviteBoardToPublicBoardShouldFail(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
@@ -420,8 +421,8 @@ func testChangeInviteBoardToPublicBoardShouldFail(t *testing.T) {
 	assert.Nil(t, err)
 
 	accessPolicy := types.AccessPolicyPublic
-	_, err = testDb.UpdateBoard(BoardUpdate{
-		ID:           board.ID,
+	_, err = boardDb.UpdateBoard(board.DatabaseBoardUpdate{
+		ID:           newBoard.ID,
 		AccessPolicy: &accessPolicy,
 		Passphrase:   nil,
 		Salt:         nil,
@@ -432,7 +433,7 @@ func testChangeInviteBoardToPublicBoardShouldFail(t *testing.T) {
 func testUpdateBoardName(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
@@ -443,7 +444,7 @@ func testUpdateBoardName(t *testing.T) {
 
 	name := "New name"
 
-	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, Name: &name})
+	updatedBoard, err := boardDb.UpdateBoard(board.DatabaseBoardUpdate{ID: newBoard.ID, Name: &name})
 
 	assert.Nil(t, err)
 	assert.Equal(t, name, *updatedBoard.Name)
@@ -452,7 +453,7 @@ func testUpdateBoardName(t *testing.T) {
 func testUpdateBoardSettings(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
@@ -464,7 +465,7 @@ func testUpdateBoardSettings(t *testing.T) {
 	showAuthors := true
 	showNotesOfOtherUsers := true
 	isLocked := true
-	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, ShowAuthors: &showAuthors, ShowNotesOfOtherUsers: &showNotesOfOtherUsers, IsLocked: &isLocked})
+	updatedBoard, err := boardDb.UpdateBoard(board.DatabaseBoardUpdate{ID: newBoard.ID, ShowAuthors: &showAuthors, ShowNotesOfOtherUsers: &showNotesOfOtherUsers, IsLocked: &isLocked})
 
 	assert.Nil(t, err)
 	assert.Equal(t, showAuthors, updatedBoard.ShowAuthors)
@@ -475,7 +476,7 @@ func testUpdateBoardSettings(t *testing.T) {
 func testUpdateBoardDescription(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	board, err := testDb.CreateBoard(user.ID, BoardInsert{
+	newBoard, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         nil,
 		AccessPolicy: types.AccessPolicyByInvite,
 		Passphrase:   nil,
@@ -486,16 +487,16 @@ func testUpdateBoardDescription(t *testing.T) {
 
 	description := "New description"
 
-	updatedBoard, err := testDb.UpdateBoard(BoardUpdate{ID: board.ID, Description: &description})
+	updatedBoard, err := boardDb.UpdateBoard(board.DatabaseBoardUpdate{ID: newBoard.ID, Description: &description})
 
 	assert.Nil(t, err)
 	assert.Equal(t, description, *updatedBoard.Description)
 }
 
 func testGetBoard(t *testing.T) {
-	board := fixture.MustRow("Board.boardTestBoard").(*Board)
+	board := fixture.MustRow("Board.boardTestBoard").(*board.DatabaseBoard)
 
-	gotBoard, err := testDb.GetBoard(board.ID)
+	gotBoard, err := boardDb.GetBoard(board.ID)
 	assert.Nil(t, err)
 
 	assert.Equal(t, board.ID, gotBoard.ID)
@@ -513,7 +514,7 @@ func testGetUserBoards(t *testing.T) {
 
 	// Create some boards associated with the user
 	boardName1 := "Board 1"
-	board1, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board1, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         &boardName1,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -521,7 +522,7 @@ func testGetUserBoards(t *testing.T) {
 	}, []columns.DatabaseColumnInsert{})
 	assert.Nil(t, err)
 	boardName2 := "Board 2"
-	board2, err := testDb.CreateBoard(user.ID, BoardInsert{
+	board2, err := boardDb.CreateBoard(user.ID, board.DatabaseBoardInsert{
 		Name:         &boardName2,
 		AccessPolicy: types.AccessPolicyPublic,
 		Passphrase:   nil,
@@ -530,7 +531,7 @@ func testGetUserBoards(t *testing.T) {
 	assert.Nil(t, err)
 
 	// Retrieve the boards associated with the user
-	boards, err := testDb.GetBoards(user.ID)
+	boards, err := boardDb.GetBoards(user.ID)
 	assert.Nil(t, err)
 
 	// Check that the correct boards were retrieved
@@ -543,12 +544,12 @@ func testGetUserBoards(t *testing.T) {
 }
 
 func testDeleteBoards(t *testing.T) {
-	board := fixture.MustRow("Board.boardTestBoard").(*Board)
+	board := fixture.MustRow("DatabaseBoard.boardTestBoard").(*board.DatabaseBoard)
 
-	err := testDb.DeleteBoard(board.ID)
+	err := boardDb.DeleteBoard(board.ID)
 	assert.Nil(t, err)
 
-	_, err = testDb.GetBoard(board.ID)
+	_, err = boardDb.GetBoard(board.ID)
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
 }

@@ -1,50 +1,59 @@
-package boards
+package board
 
 import (
 	"context"
 	"errors"
 	"fmt"
-	notes2 "scrumlr.io/server/notes"
-	"time"
-
 	"github.com/google/uuid"
-
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services"
-
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/sessions"
+	"time"
 )
 
-type BoardService struct {
-	database *database.Database
+type Service struct {
+	database BoardDatabase
 	realtime *realtime.Broker
+
+	columnService columns.ColumnService
+	notesService  notes.NotesService
+}
+type BoardDatabase interface {
+	CreateBoard(creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error)
+	UpdateBoardTimer(update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
+	UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error)
+	GetBoard(id uuid.UUID) (DatabaseBoard, error)
+	DeleteBoard(id uuid.UUID) error
+	GetBoards(userID uuid.UUID) ([]DatabaseBoard, error)
+	GetBoardOverview(id uuid.UUID) (DatabaseBoard, []sessions.DatabaseBoardSession, []columns.DatabaseColumn, error)
+	Get(id uuid.UUID) (DatabaseFullBoard, error)
 }
 
-func NewBoardService(db *database.Database, rt *realtime.Broker) services.Boards {
-	b := new(BoardService)
+func NewBoardService(db BoardDatabase, rt *realtime.Broker) BoardService {
+	b := new(Service)
 	b.database = db
 	b.realtime = rt
 	return b
 }
 
-func (s *BoardService) Get(ctx context.Context, id uuid.UUID) (*dto.Board, error) {
+func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
-	board, err := s.database.GetBoard(id)
+	board, err := service.database.GetBoard(id)
 	if err != nil {
 		log.Errorw("unable to get board", "boardID", id, "err", err)
 		return nil, err
 	}
-	return new(dto.Board).From(board), err
+	return new(Board).From(board), err
 }
 
 // get all associated boards of a given user
-func (s *BoardService) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
+func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
 	log := logger.FromContext(ctx)
-	boards, err := s.database.GetBoards(userID)
+	boards, err := service.database.GetBoards(userID)
 	if err != nil {
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
 		return nil, err
@@ -57,20 +66,20 @@ func (s *BoardService) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.
 	return result, nil
 }
 
-func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) (*dto.Board, error) {
+func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*Board, error) {
 	log := logger.FromContext(ctx)
 	// map request on board object to insert into database
-	var board database.BoardInsert
+	var board DatabaseBoardInsert
 	switch body.AccessPolicy {
 	case types.AccessPolicyPublic, types.AccessPolicyByInvite:
-		board = database.BoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
+		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
 	case types.AccessPolicyByPassphrase:
 		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
 			return nil, errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
 		}
 
 		encodedPassphrase, salt, _ := common.Sha512WithSalt(*body.Passphrase)
-		board = database.BoardInsert{
+		board = DatabaseBoardInsert{
 			Name:         body.Name,
 			Description:  body.Description,
 			AccessPolicy: body.AccessPolicy,
@@ -80,49 +89,49 @@ func (s *BoardService) Create(ctx context.Context, body dto.CreateBoardRequest) 
 	}
 
 	// map request on column objects to insert into database
-	columns := make([]database.ColumnInsert, 0, len(body.Columns))
+	newColumns := make([]columns.DatabaseColumnInsert, 0, len(body.Columns))
 	for index, value := range body.Columns {
 		var currentIndex = index
-		columns = append(columns, database.ColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible, Index: &currentIndex})
+		newColumns = append(newColumns, columns.DatabaseColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible, Index: &currentIndex})
 	}
 
 	// create the board
-	b, err := s.database.CreateBoard(body.Owner, board, columns)
+	b, err := service.database.CreateBoard(body.Owner, board, newColumns)
 	if err != nil {
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
 		return nil, err
 	}
 
-	return new(dto.Board).From(b), nil
+	return new(Board).From(b), nil
 }
 
-func (s *BoardService) FullBoard(ctx context.Context, boardID uuid.UUID) (*dto.FullBoard, error) {
+func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error) {
 	log := logger.FromContext(ctx)
-	fullBoard, err := s.database.Get(boardID)
+	fullBoard, err := service.database.Get(boardID)
 	if err != nil {
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
-	return new(dto.FullBoard).From(fullBoard), err
+	return new(FullBoard).From(fullBoard), err
 }
 
-func (s *BoardService) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*dto.BoardOverview, error) {
+func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error) {
 	log := logger.FromContext(ctx)
-	OverviewBoards := make([]*dto.BoardOverview, len(boardIDs))
+	OverviewBoards := make([]*BoardOverview, len(boardIDs))
 	for i, id := range boardIDs {
-		board, sessions, columns, err := s.database.GetBoardOverview(id)
+		board, sessions, columns, err := service.database.GetBoardOverview(id)
 		if err != nil {
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
 		participantNum := len(sessions)
 		columnNum := len(columns)
-		dtoBoard := new(dto.Board).From(board)
+		dtoBoard := new(Board).From(board)
 		for _, session := range sessions {
 			if session.User == user {
 				sessionCreated := session.CreatedAt
-				OverviewBoards[i] = &dto.BoardOverview{
+				OverviewBoards[i] = &BoardOverview{
 					Board:        dtoBoard,
 					Participants: participantNum,
 					CreatedAt:    sessionCreated,
@@ -134,18 +143,18 @@ func (s *BoardService) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, 
 	return OverviewBoards, nil
 }
 
-func (s *BoardService) Delete(ctx context.Context, id uuid.UUID) error {
+func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	log := logger.FromContext(ctx)
-	err := s.database.DeleteBoard(id)
+	err := service.database.DeleteBoard(id)
 	if err != nil {
 		log.Errorw("unable to delete board", "err", err)
 	}
 	return err
 }
 
-func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) (*dto.Board, error) {
+func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*Board, error) {
 	log := logger.FromContext(ctx)
-	update := database.BoardUpdate{
+	update := DatabaseBoardUpdate{
 		ID:                    body.ID,
 		Name:                  body.Name,
 		Description:           body.Description,
@@ -177,55 +186,55 @@ func (s *BoardService) Update(ctx context.Context, body dto.BoardUpdateRequest) 
 		}
 	}
 
-	board, err := s.database.UpdateBoard(update)
+	board, err := service.database.UpdateBoard(update)
 	if err != nil {
 		log.Errorw("unable to update board", "err", err)
 		return nil, err
 	}
-	s.UpdatedBoard(board)
+	service.UpdatedBoard(board)
 
-	return new(dto.Board).From(board), err
+	return new(Board).From(board), err
 }
 
-func (s *BoardService) SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*dto.Board, error) {
+func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*Board, error) {
 	log := logger.FromContext(ctx)
 	timerStart := time.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(minutes))
-	update := database.BoardTimerUpdate{
+	update := DatabaseBoardTimerUpdate{
 		ID:         id,
 		TimerStart: &timerStart,
 		TimerEnd:   &timerEnd,
 	}
-	board, err := s.database.UpdateBoardTimer(update)
+	board, err := service.database.UpdateBoardTimer(update)
 	if err != nil {
 		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
-	s.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(board)
 
-	return new(dto.Board).From(board), err
+	return new(Board).From(board), err
 }
 
-func (s *BoardService) DeleteTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error) {
+func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
-	update := database.BoardTimerUpdate{
+	update := DatabaseBoardTimerUpdate{
 		ID:         id,
 		TimerStart: nil,
 		TimerEnd:   nil,
 	}
-	board, err := s.database.UpdateBoardTimer(update)
+	board, err := service.database.UpdateBoardTimer(update)
 	if err != nil {
 		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
-	s.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(board)
 
-	return new(dto.Board).From(board), err
+	return new(Board).From(board), err
 }
 
-func (s *BoardService) IncrementTimer(ctx context.Context, id uuid.UUID) (*dto.Board, error) {
+func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
-	board, err := s.database.GetBoard(id)
+	board, err := service.database.GetBoard(id)
 	if err != nil {
 		log.Errorw("unable to get board", "boardID", id, "err", err)
 		return nil, err
@@ -244,62 +253,62 @@ func (s *BoardService) IncrementTimer(ctx context.Context, id uuid.UUID) (*dto.B
 		timerEnd = currentTime.Add(time.Minute * time.Duration(1))
 	}
 
-	update := database.BoardTimerUpdate{
+	update := DatabaseBoardTimerUpdate{
 		ID:         board.ID,
 		TimerStart: &timerStart,
 		TimerEnd:   &timerEnd,
 	}
 
-	board, err = s.database.UpdateBoardTimer(update)
+	board, err = service.database.UpdateBoardTimer(update)
 	if err != nil {
 		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
-	s.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(board)
 
-	return new(dto.Board).From(board), nil
+	return new(Board).From(board), nil
 }
 
-func (s *BoardService) UpdatedBoardTimer(board database.Board) {
-	_ = s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+func (service *Service) UpdatedBoardTimer(board DatabaseBoard) {
+	_ = service.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardTimerUpdated,
-		Data: new(dto.Board).From(board),
+		Data: new(Board).From(board),
 	})
 }
 
-func (s *BoardService) UpdatedBoard(board database.Board) {
-	_ = s.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+func (service *Service) UpdatedBoard(board DatabaseBoard) {
+	_ = service.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardUpdated,
-		Data: new(dto.Board).From(board),
+		Data: new(Board).From(board),
 	})
 
-	err_msg, err := s.SyncBoardSettingChange(board.ID)
+	err_msg, err := service.SyncBoardSettingChange(board.ID)
 	if err != nil {
 		logger.Get().Errorw(err_msg, "err", err)
 	}
 }
 
-func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
+func (service *Service) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
 	var err_msg string
-	columns, err := s.database.GetColumns(boardID)
+	columnsOnBoard, err := service.columnService.GetAll(context.Background(), boardID)
 	if err != nil {
 		err_msg = "unable to retrieve columns, following a updated board call"
 		return err_msg, err
 	}
 
 	var columnsID []uuid.UUID
-	for _, column := range columns {
+	for _, column := range columnsOnBoard {
 		columnsID = append(columnsID, column.ID)
 	}
-	notes, err := s.database.GetNotes(boardID, columnsID...)
+	notesOnBoard, err := service.notesService.GetAll(context.Background(), boardID, columnsID...)
 	if err != nil {
 		err_msg = "unable to retrieve notes, following a updated board call"
 		return err_msg, err
 	}
 
-	err = s.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+	err = service.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
-		Data: notes2.Notes(notes),
+		Data: notesOnBoard,
 	})
 	if err != nil {
 		err_msg = "unable to broadcast notes, following a updated board call"
@@ -308,8 +317,8 @@ func (s *BoardService) SyncBoardSettingChange(boardID uuid.UUID) (string, error)
 	return "", err
 }
 
-func (s *BoardService) DeletedBoard(board uuid.UUID) {
-	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+func (service *Service) DeletedBoard(board uuid.UUID) {
+	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardDeleted,
 	})
 }
