@@ -24,7 +24,7 @@ export const Dropdown = <K = string,>(props: DropdownProps<K>) => {
   const activeOption = props.options.find((option) => option.key === props.activeKey) ?? props.options[0];
 
   // active refers to the option on the very top
-  // TODO focus lock (maybe the same way as with note reactions)
+  // TODO focus lock (maybe the same way as with note reactions) update: do this with #4917
   const renderDropdownOption = (option: DropdownOption<K>, active: boolean) => (
     <div
       className={classNames("dropdown__option", {"dropdown__option--active": active})}
