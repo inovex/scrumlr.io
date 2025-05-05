@@ -18,8 +18,8 @@ type SwitchProps = {
  * the component itself only emits whenever the switch is interacted with.
  */
 export const Switch = (props: SwitchProps) => (
-    <button className={classNames("switch", props.className)} disabled={props.disabled} onClick={props.toggle}>
-      <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "left"})}>{props.leftText}</div>
-      <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "right"})}>{props.rightText}</div>
-    </button>
-  );
+  <button className={classNames("switch", props.className)} disabled={props.disabled} onClick={props.toggle}>
+    <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "left"})}>{props.leftText}</div>
+    <div className={classNames("switch__item", {"switch__item--active": props.activeDirection === "right"})}>{props.rightText}</div>
+  </button>
+);

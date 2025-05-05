@@ -95,6 +95,17 @@ exports[`VotingDialog should match the snapshot with no active voting 1`] = `
             </h2>
             <button
               class="dialog__button"
+              data-testid="voting-dialog__anonymous-voting-button"
+            >
+              <label>
+                Anonymous voting
+              </label>
+              <div
+                class="toggle toggle--active voting-dialog__toggle"
+              />
+            </button>
+            <button
+              class="dialog__button"
               data-testid="voting-dialog__cumulative-voting-button"
             >
               <label>

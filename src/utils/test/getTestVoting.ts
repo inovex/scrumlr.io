@@ -6,5 +6,6 @@ export default (overwrite?: Partial<Voting>): Voting => ({
   allowMultipleVotes: false,
   showVotesOfOthers: false,
   status: "OPEN",
+  isAnonymous: true,
   ...overwrite,
 });
