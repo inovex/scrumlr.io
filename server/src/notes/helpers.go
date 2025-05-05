@@ -1,13 +1,14 @@
 package notes
 
 import (
-	"github.com/google/uuid"
 	"net/http"
-	columnService "scrumlr.io/server/columns"
+
+	"github.com/google/uuid"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/technical_helper"
 )
 
-func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUID, showNotesOfOtherUsers bool, showAuthors bool, columns columnService.ColumnSlice) NoteSlice {
+func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUID, showNotesOfOtherUsers bool, showAuthors bool, columns columns.ColumnSlice) NoteSlice {
 
 	visibleNotes := technical_helper.Filter[*Note](n, func(note *Note) bool {
 		for _, column := range columns {
