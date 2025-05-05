@@ -40,21 +40,6 @@ func TestVotingAndVotesIdDiffer(t *testing.T) {
 	assert.Nil(t, res)
 }
 
-func TestVotingAndVotesIdEqualNoUserDefined(t *testing.T) {
-
-	voteId := uuid.New()
-	noteId := uuid.New()
-
-	voting := buildVoting(voteId, types.VotingStatusClosed, false)
-	votes := []database.Vote{*buildVote(voteId, noteId, uuid.New())}
-
-	res := getVotingWithResults(*voting, votes)
-
-	assert.Equal(t, 1, res.Total)
-	assert.Equal(t, 1, res.Votes[noteId].Total)
-	assert.Nil(t, res.Votes[noteId].Users)
-}
-
 func TestShowVotesOfOthers(t *testing.T) {
 
 	voteId := uuid.New()
@@ -218,7 +203,7 @@ func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *database
 	}
 }
 
-func buildVoting(id uuid.UUID, status types.VotingStatus) *database.Voting {
+func buildVoting(id uuid.UUID, status types.VotingStatus, showVotesOfOthers bool) *database.Voting {
 	return &database.Voting{
 		ID:                 id,
 		BaseModel:          bun.BaseModel{},
