@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"scrumlr.io/server/board"
 	"scrumlr.io/server/voting"
 	"strconv"
 
@@ -19,7 +20,6 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 )
@@ -29,7 +29,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 	// parse request
-	var body dto.CreateBoardRequest
+	var body board.CreateBoardRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -248,7 +248,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	var body dto.BoardUpdateRequest
+	var body board.BoardUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
@@ -270,7 +270,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	var body dto.SetTimerRequest
+	var body board.SetTimerRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, err)
@@ -339,7 +339,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
-			Board        *dto.Board               `json:"board"`
+			Board        *board.Board             `json:"board"`
 			Participants []*sessions.BoardSession `json:"participants"`
 			Columns      []*columns.Column        `json:"columns"`
 			Notes        []*notes.Note            `json:"notes"`
@@ -423,7 +423,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-	var body dto.ImportBoardRequest
+	var body board.ImportBoardRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Could not read body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -442,7 +442,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 			Index:   &column.Index,
 		})
 	}
-	b, err := s.boards.Create(r.Context(), dto.CreateBoardRequest{
+	b, err := s.boards.Create(r.Context(), board.CreateBoardRequest{
 		Name:         body.Board.Name,
 		Description:  body.Board.Description,
 		AccessPolicy: body.Board.AccessPolicy,

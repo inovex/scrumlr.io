@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"net/http"
+	"scrumlr.io/server/board"
 
 	"scrumlr.io/server/voting"
 
@@ -41,6 +42,13 @@ func NewSerivceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 	initializer.client = &http.Client{}
 
 	return *initializer
+}
+
+func (init *ServiceInitializer) InitializeBoardService() board.BoardService {
+	boardDB := board.NewBoardDatabase(init.db)
+	boardService := board.NewBoardService(boardDB, init.rt)
+
+	return boardService
 }
 
 func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService, votingService voting.VotingService) columns.ColumnService {

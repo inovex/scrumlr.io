@@ -14,11 +14,9 @@ import (
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services/boards"
 )
 
 func main() {
@@ -353,14 +351,13 @@ func run(c *cli.Context) error {
 	}
 
 	bun := initialize.InitializeBun(db, c.Bool("verbose"))
-	dbConnection := database.New(bun)
 	initializer := initialize.NewSerivceInitializer(bun, rt)
 
 	userService := initializer.InitializeUserService()
 
 	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
 	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection, userService)
+	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
 	if err != nil {
 		return fmt.Errorf("unable to setup authentication: %w", err)
 	}
@@ -374,7 +371,7 @@ func run(c *cli.Context) error {
 	votingService := initializer.InitializeVotingService()
 	columnService := initializer.InitializeColumnService(noteService, votingService)
 
-	boardService := boards.NewBoardService(dbConnection, rt)
+	boardService := initializer.InitializeBoardService()
 	feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initializer.InitializeHealthService()
 	boardReactionService := initializer.InitializeBoardReactionService()
