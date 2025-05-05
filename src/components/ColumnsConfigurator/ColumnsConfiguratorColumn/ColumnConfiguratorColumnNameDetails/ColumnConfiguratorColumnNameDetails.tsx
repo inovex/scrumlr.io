@@ -76,6 +76,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         onInput={(e) => setName(e.currentTarget.value)}
         onFocus={() => props.setOpenState("nameFirst")}
         onBlur={handleBlurNameWrapperContents}
+        autoComplete="off"
       />
       {props.openState !== "closed" ? (
         <div className="column-configurator-column-name-details__description-wrapper">
