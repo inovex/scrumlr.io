@@ -41,7 +41,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 	publishSubject := "board." + boardID.String()
 
 	// Returned note from the mock database
-	noteDB := NoteDB{
+	noteDB := &NoteDB{
 		ID:     noteID,
 		Author: authorID,
 		Board:  boardID,
@@ -59,7 +59,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 		Text:   txt,
 	}).Return(noteDB, nil)
 
-	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
+	mockDB.EXPECT().GetAll(boardID).Return([]*NoteDB{}, nil)
 
 	publishEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
@@ -109,7 +109,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 	columnID1, _ := uuid.NewRandom()
 	columnID2, _ := uuid.NewRandom()
 
-	noteDBList := []NoteDB{
+	noteDBList := []*NoteDB{
 		{
 			ID:     noteID1,
 			Author: authorID1,
@@ -199,7 +199,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
 
 	// Mock for the updatedNotes call, which internally calls GetNotes
-	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
+	mockDB.EXPECT().GetAll(boardID).Return([]*NoteDB{}, nil)
 
 	ctx := logger.InitTestLogger(context.Background())
 
@@ -211,7 +211,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		Text:     &txt,
 		Position: &posUpdate,
 		Edited:   true,
-	}).Return(NoteDB{}, nil)
+	}).Return(&NoteDB{}, nil)
 
 	_, err := service.Update(ctx, NoteUpdateRequest{
 		Text:     &txt,
@@ -334,7 +334,7 @@ func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
 	ctx := context.Background()
 	noteID := uuid.New()
 
-	expectedNotes := []NoteDB{
+	expectedNotes := []*NoteDB{
 		{ID: uuid.New(), Text: "Note 1"},
 		{ID: uuid.New(), Text: "Note 2"},
 	}
