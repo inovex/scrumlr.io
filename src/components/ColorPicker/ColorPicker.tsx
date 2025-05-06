@@ -38,7 +38,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
   if (!props.open) {
     return (
       <span
-        className="color-picker__color-option color-picker__color-option--selected"
+        className={classNames(props.className, "color-picker__color-option", "color-picker__color-option--selected")}
         aria-label={`current color${formatColorName(props.activeColor)}`}
         tabIndex={0}
         role="button"
@@ -65,7 +65,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
         {colorsWithoutSelectedColor.map((color) => {
           const anchor = uniqueId(`color-picker-${color.toString()}`);
           return (
-            <li className={`${getColorClassName(color)} color-picker__item`}>
+            <li className={`${getColorClassName(color)} color-picker__item`} key={anchor}>
               <button
                 id={anchor}
                 aria-label={formatColorName(color)}
