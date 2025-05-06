@@ -9,13 +9,28 @@ import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
 import {ArrowLeft, Close} from "components/Icon";
-import {MENU_ENTRIES, MenuEntry, MenuItemConfig, MenuItemKey, MOBILE_BREAKPOINT} from "constants/settings";
+import {MENU_ITEM_CONFIG, MenuEntry, MenuItemConfig, MenuItemConfigOverride, MenuItemKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
 
 type SettingsDialogProps = {
   enabledMenuItems: Partial<Record<MenuItemKey, boolean>>;
+  override?: MenuItemConfigOverride;
 };
+
+// create a merged item config allowing partial overwriting of properties while retaining type safety
+const mergeMenuItemConfig = (defaultConfig: Record<MenuItemKey, MenuItemConfig>, overrides?: MenuItemConfigOverride): Record<MenuItemKey, MenuItemConfig> =>
+  Object.entries(defaultConfig).reduce(
+    (acc, [key, value]) => {
+      const override = overrides?.[key as MenuItemKey];
+      acc[key as MenuItemKey] = {...value, ...override};
+      return acc;
+    },
+    {} as Record<MenuItemKey, MenuItemConfig>
+  );
+
+// create an iterable menu entry array to be used for easier HOF use (map, find, etc.)
+const createMenuEntries = (settingsConfig: Record<MenuItemKey, MenuItemConfig>) => Object.entries(settingsConfig).map(([key, value]) => ({key, value}) as MenuEntry);
 
 export const SettingsDialog = (props: SettingsDialogProps) => {
   const {t} = useTranslation();
@@ -24,6 +39,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const me = useAppSelector((state) => state.auth.user!);
   const isBoardModerator = useAppSelector((state) => state.participants?.self?.role === "MODERATOR" || state.participants?.self?.role === "OWNER");
 
+  const [menuEntries, setMenuEntries] = useState<MenuEntry[]>(createMenuEntries(MENU_ITEM_CONFIG));
   const [activeMenuItem, setActiveMenuItem] = useState<MenuItemConfig>();
 
   const transitionConfigMobile = {
@@ -32,11 +48,18 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     items: true,
   };
 
+  // overwrite standard config with optional record and set state
+  useEffect(() => {
+    const mergedMenuConfig = mergeMenuItemConfig(MENU_ITEM_CONFIG, props.override);
+    const newMenuEntries = createMenuEntries(mergedMenuConfig);
+    setMenuEntries(newMenuEntries);
+  }, [props.override]);
+
   useEffect(() => {
     const pathEnd = location.pathname.split("/").at(-1)!;
 
     // search all menu items for the one where the location matches the current path; then return that entry
-    const activeMenuEntry = MENU_ENTRIES.find((entry) => entry.value.location === pathEnd);
+    const activeMenuEntry = menuEntries.find((entry) => entry.value.location === pathEnd);
     setActiveMenuItem(activeMenuEntry?.value);
 
     /* check if a user is allowed to go to a menu entry.
@@ -51,7 +74,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     /* finds the first allowed menu item a user can go to and navigates there.
      * if no route is allowed, the user is navigated back to the page below settings. */
     const goToFirstAllowedMenuEntry = () => {
-      const firstAllowedMenuEntry = MENU_ENTRIES.find(isMenuEntryAllowed);
+      const firstAllowedMenuEntry = menuEntries.find(isMenuEntryAllowed);
       navigate(firstAllowedMenuEntry?.value.location ?? "..");
     };
 
@@ -79,7 +102,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
       goToFirstAllowedMenuEntry();
     }
     // else, do nothing if no submenu and mobile
-  }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems, location.pathname]);
+  }, [navigate, isBoardModerator, activeMenuItem, props.enabledMenuItems, location.pathname, menuEntries]);
 
   /* renders a menu item.
    * condition: menu item is enabled and user has authorization
@@ -127,7 +150,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
               <div className="settings-dialog__sidebar">
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
                 {/* render all menu items */}
-                <nav className="settings-dialog__navigation">{MENU_ENTRIES.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
+                <nav className="settings-dialog__navigation">{menuEntries.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">
