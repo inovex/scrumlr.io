@@ -94,7 +94,6 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
         setOpenState={setTitleEditState}
         updateColumnTitle={(name, description) => props.editColumn?.(props.column, {name, description})}
       />
-      {/* TODO title and description are editable as one thing, can tab, show with timeout before saving. */}
       {titleEditState === "closed" && (
         <div className="columns-configurator-column__menu">
           <DnDIcon
