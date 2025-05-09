@@ -1,4 +1,4 @@
-package types
+package board
 
 import (
 	"encoding/json"
@@ -13,14 +13,14 @@ import (
 type AccessPolicy string
 
 const (
-	// AccessPolicyPublic access policy allows all users to join a board
-	AccessPolicyPublic AccessPolicy = "PUBLIC"
+	// Public access policy allows all users to join a board
+	Public AccessPolicy = "PUBLIC"
 
-	// AccessPolicyByPassphrase access policy must pass a passphrase check before they can join a board
-	AccessPolicyByPassphrase AccessPolicy = "BY_PASSPHRASE"
+	// ByPassphrase access policy must pass a passphrase check before they can join a board
+	ByPassphrase AccessPolicy = "BY_PASSPHRASE"
 
-	// AccessPolicyByInvite access policy lets moderators accept and reject user join requests to a board
-	AccessPolicyByInvite AccessPolicy = "BY_INVITE"
+	// ByInvite access policy lets moderators accept and reject user join requests to a board
+	ByInvite AccessPolicy = "BY_INVITE"
 )
 
 func (accessPolicy *AccessPolicy) UnmarshalJSON(b []byte) error {
@@ -31,7 +31,7 @@ func (accessPolicy *AccessPolicy) UnmarshalJSON(b []byte) error {
 
 	unmarshalledAccessPolicy := AccessPolicy(s)
 	switch unmarshalledAccessPolicy {
-	case AccessPolicyPublic, AccessPolicyByPassphrase, AccessPolicyByInvite:
+	case Public, ByPassphrase, ByInvite:
 		*accessPolicy = unmarshalledAccessPolicy
 		return nil
 	}

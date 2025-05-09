@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"scrumlr.io/server/board"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database"
 	"scrumlr.io/server/identifiers"
 )
 
@@ -111,7 +111,7 @@ func (db *DB) Update(column DatabaseColumnUpdate) (DatabaseColumn, error) {
 }
 
 // Delete deletes a column and adapts all indices of the other columns.
-func (db *DB) Delete(board, column, user uuid.UUID) error {
+func (db *DB) Delete(affectedBoard, column, user uuid.UUID) error {
 	var columns []DatabaseColumn
 	selectPreviousIndex := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
@@ -125,9 +125,9 @@ func (db *DB) Delete(board, column, user uuid.UUID) error {
 		Where("index >= (SELECT index from \"selectPreviousIndex\")")
 
 	boardUpdate := db.db.NewUpdate().
-		Model((*database.Board)(nil)).
+		Model((*board.DatabaseBoard)(nil)).
 		Set("shared_note = null").
-		Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", board, board, column)
+		Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", affectedBoard, affectedBoard, column)
 
 	_, err := db.db.NewDelete().
 		With("boardUpdate", boardUpdate).
@@ -135,7 +135,7 @@ func (db *DB) Delete(board, column, user uuid.UUID) error {
 		Model((*DatabaseColumn)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardIdentifier, board, identifiers.ColumnIdentifier, column, identifiers.UserIdentifier, user, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardIdentifier, affectedBoard, identifiers.ColumnIdentifier, column, identifiers.UserIdentifier, user, "Result", &columns), &columns)
 
 	return err
 }

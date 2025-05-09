@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"scrumlr.io/server/board"
 	"strings"
 	"testing"
 	"time"
@@ -15,7 +16,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/mocks/services"
 	"scrumlr.io/server/sessionrequests"
@@ -30,7 +30,7 @@ func TestBoardTestSuite(t *testing.T) {
 	suite.Run(t, new(BoardTestSuite))
 }
 
-func (suite *BoardTestSuite) createBoard(boardName *string, boardDescription *string, accessPolicy types.AccessPolicy, passphrase *string, salt *string) *dto.Board {
+func (suite *BoardTestSuite) createBoard(boardName *string, boardDescription *string, accessPolicy board.AccessPolicy, passphrase *string, salt *string) *dto.Board {
 	return &dto.Board{
 		ID:                    uuid.New(),
 		Name:                  boardName,
@@ -67,7 +67,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 			boardMock := services.NewMockBoards(suite.T())
 
 			s.boards = boardMock
-			accessPolicy := types.AccessPolicyPublic
+			accessPolicy := board.Public
 			visible := true
 			colName := "Lean Coffee"
 			color := columns.Color("backlog-blue")
@@ -165,11 +165,11 @@ func (suite *BoardTestSuite) TestGetBoards() {
 
 			boardName := "Test Name"
 			boardDescription := "Test Description"
-			firstBoard := suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)
+			firstBoard := suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)
 
 			boardName = "Test Board"
 			boardDescription = "Description for second board"
-			secondBoard := suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)
+			secondBoard := suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)
 			boardIDs := []uuid.UUID{firstBoard.ID, secondBoard.ID}
 
 			req := NewTestRequestBuilder("POST", "/", nil).
@@ -246,18 +246,18 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 	passphrase := common.Sha512BySalt("123", salt)
 
 	testParameterBundles := *TestParameterBundles{}.
-		Append("Successfully join board", http.StatusSeeOther, nil, true, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)).
+		Append("Successfully join board", http.StatusSeeOther, nil, true, false, suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)).
 		Append("Failed joining board", http.StatusInternalServerError,
 			&common.APIError{
 				Err:        errors.New("failed to join board"),
 				StatusCode: http.StatusInternalServerError,
 				StatusText: "no",
 				ErrorText:  "Could not join board",
-			}, true, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)).
-		Append("Successfully joined board without session", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyPublic, nil, nil)).
-		Append("Successfully joined board with passphrase", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyByPassphrase, &passphrase, &salt)).
-		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, true, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyByInvite, &passphrase, &salt)).
-		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, false, suite.createBoard(&boardName, &boardDescription, types.AccessPolicyByInvite, &passphrase, &salt))
+			}, true, false, suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)).
+		Append("Successfully joined board without session", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)).
+		Append("Successfully joined board with passphrase", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, board.ByPassphrase, &passphrase, &salt)).
+		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, true, suite.createBoard(&boardName, &boardDescription, board.ByInvite, &passphrase, &salt)).
+		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, false, suite.createBoard(&boardName, &boardDescription, board.ByInvite, &passphrase, &salt))
 
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
@@ -285,7 +285,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				boardMock.EXPECT().Get(req.req.Context(), boardID).Return(te.board, te.err)
 			}
 
-			if te.board.AccessPolicy == types.AccessPolicyByInvite {
+			if te.board.AccessPolicy == board.ByInvite {
 				sessionRequestMock.EXPECT().Exists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
 				if !te.sessionRequestExists {
 					sessionRequestMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
@@ -328,7 +328,7 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
 
 			newName := "UpdatedName"
 			newDescription := "UpdatedDescription"
-			accessPolicy := types.AccessPolicyPublic
+			accessPolicy := board.Public
 			boardReq := dto.BoardUpdateRequest{
 				Name:         &newName,
 				Description:  &newDescription,

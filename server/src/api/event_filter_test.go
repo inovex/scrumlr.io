@@ -2,6 +2,8 @@ package api
 
 import (
 	"math/rand"
+	"scrumlr.io/server/auth"
+	"scrumlr.io/server/board"
 	"scrumlr.io/server/voting"
 	"testing"
 
@@ -9,7 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
@@ -30,7 +31,7 @@ var (
 	participantBoardSession = sessions.BoardSession{
 		User: users.User{
 			ID:          uuid.New(),
-			AccountType: types.AccountTypeAnonymous,
+			AccountType: auth.AccountTypeAnonymous,
 		},
 		Role: sessions.ParticipantRole,
 	}
@@ -41,7 +42,7 @@ var (
 	}
 	boardSettings = &dto.Board{
 		ID:                    uuid.New(),
-		AccessPolicy:          types.AccessPolicyPublic,
+		AccessPolicy:          board.Public,
 		ShowAuthors:           true,
 		ShowNotesOfOtherUsers: true,
 		AllowStacking:         true,
@@ -184,7 +185,7 @@ func TestEventFilter(t *testing.T) {
 func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 
 	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		return session.User.AccountType == types.AccountTypeAnonymous
+		return session.User.AccountType == auth.AccountTypeAnonymous
 	})[0]
 
 	updateEvent := &realtime.BoardEvent{
@@ -193,7 +194,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 			RaisedHand: true,
 			User: users.User{
 				ID:          originalParticipantSession.User.ID,
-				AccountType: types.AccountTypeAnonymous,
+				AccountType: auth.AccountTypeAnonymous,
 			},
 			Role: sessions.ParticipantRole,
 		},
@@ -202,7 +203,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 	isUpdated := boardSub.participantUpdated(updateEvent, true)
 
 	updatedParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		return session.User.AccountType == types.AccountTypeAnonymous
+		return session.User.AccountType == auth.AccountTypeAnonymous
 	})[0]
 
 	assert.Equal(t, true, isUpdated)
@@ -452,7 +453,7 @@ func testInitFilterAsParticipant(t *testing.T) {
 func TestShouldFailBecauseOfInvalidBordData(t *testing.T) {
 
 	event := buildBoardEvent(buildBoardDto(nil, nil, "lorem ipsum", false), realtime.BoardEventBoardUpdated)
-	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+	bordSubscription := buildBordSubscription(board.Public)
 
 	_, success := bordSubscription.boardUpdated(event, false)
 
@@ -464,8 +465,8 @@ func TestShouldUpdateBordSubscriptionAsModerator(t *testing.T) {
 	nameForUpdate := randSeq(10)
 	descriptionForUpdate := randSeq(10)
 
-	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic, false), realtime.BoardEventBoardUpdated)
-	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, board.Public, false), realtime.BoardEventBoardUpdated)
+	bordSubscription := buildBordSubscription(board.Public)
 
 	_, success := bordSubscription.boardUpdated(event, true)
 
@@ -479,8 +480,8 @@ func TestShouldNotUpdateBordSubscriptionWithoutModeratorRights(t *testing.T) {
 	nameForUpdate := randSeq(10)
 	descriptionForUpdate := randSeq(10)
 
-	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic, false), realtime.BoardEventBoardUpdated)
-	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+	event := buildBoardEvent(buildBoardDto(nameForUpdate, descriptionForUpdate, board.Public, false), realtime.BoardEventBoardUpdated)
+	bordSubscription := buildBordSubscription(board.Public)
 
 	_, success := bordSubscription.boardUpdated(event, false)
 
@@ -505,8 +506,8 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusClosed(t *testing.T) {
 				},
 			},
 			Votings: []*voting.Voting{
-				buildVoting(latestVotingId, types.VotingStatusClosed),
-				buildVoting(newestVotingId, types.VotingStatusClosed),
+				buildVoting(latestVotingId, voting.Closed),
+				buildVoting(newestVotingId, voting.Closed),
 			},
 			Votes: []*voting.Vote{
 				buildVote(latestVotingId, uuid.New(), uuid.New()),
@@ -537,8 +538,8 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusOpen(t *testing.T) {
 				},
 			},
 			Votings: []*voting.Voting{
-				buildVoting(latestVotingId, types.VotingStatusOpen),
-				buildVoting(newestVotingId, types.VotingStatusClosed),
+				buildVoting(latestVotingId, voting.Open),
+				buildVoting(newestVotingId, voting.Closed),
 			},
 			Votes: []*voting.Vote{
 				buildVote(latestVotingId, clientId, uuid.New()),
@@ -559,8 +560,8 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 	latestVotingId := uuid.New()
 
 	orgVoting := []*voting.Voting{
-		buildVoting(latestVotingId, types.VotingStatusOpen),
-		buildVoting(uuid.New(), types.VotingStatusClosed),
+		buildVoting(latestVotingId, voting.Open),
+		buildVoting(uuid.New(), voting.Closed),
 	}
 	orgVote := []*voting.Vote{
 		buildVote(uuid.New(), uuid.New(), uuid.New()),
@@ -601,7 +602,7 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 		Type: "",
 		Data: dto.FullBoard{
 			Columns: []*columns.Column{buildColumn(columnId, true)},
-			Board:   buildBoardDto(nameForUpdate, descriptionForUpdate, types.AccessPolicyPublic, true),
+			Board:   buildBoardDto(nameForUpdate, descriptionForUpdate, board.Public, true),
 			Notes:   []*notes.Note{buildNote(noteId, columnId)},
 			BoardSessions: []*sessions.BoardSession{
 				{
@@ -610,8 +611,8 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 				},
 			},
 			Votings: []*voting.Voting{
-				buildVoting(latestVotingId, types.VotingStatusOpen),
-				buildVoting(newestVotingId, types.VotingStatusClosed),
+				buildVoting(latestVotingId, voting.Open),
+				buildVoting(newestVotingId, voting.Closed),
 			},
 			Votes: []*voting.Vote{
 				buildVote(latestVotingId, clientId, noteId),
@@ -629,7 +630,7 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 func TestShouldFailBecauseOfInvalidVoteData(t *testing.T) {
 
 	event := buildBoardEvent(*buildVote(uuid.New(), uuid.New(), uuid.New()), realtime.BoardEventVotesDeleted)
-	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+	bordSubscription := buildBordSubscription(board.Public)
 
 	_, success := bordSubscription.votesDeleted(event, uuid.New())
 
@@ -639,7 +640,7 @@ func TestShouldFailBecauseOfInvalidVoteData(t *testing.T) {
 func TestShouldReturnEmptyVotesBecauseUserIdNotMatched(t *testing.T) {
 
 	event := buildBoardEvent([]voting.Vote{*buildVote(uuid.New(), uuid.New(), uuid.New())}, realtime.BoardEventVotesDeleted)
-	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+	bordSubscription := buildBordSubscription(board.Public)
 
 	updatedBordEvent, success := bordSubscription.votesDeleted(event, uuid.New())
 
@@ -651,7 +652,7 @@ func TestVotesDeleted(t *testing.T) {
 
 	userId := uuid.New()
 	event := buildBoardEvent([]voting.Vote{*buildVote(uuid.New(), userId, uuid.New())}, realtime.BoardEventVotesDeleted)
-	bordSubscription := buildBordSubscription(types.AccessPolicyPublic)
+	bordSubscription := buildBordSubscription(board.Public)
 
 	updatedBordEvent, success := bordSubscription.votesDeleted(event, userId)
 
@@ -691,14 +692,14 @@ func buildVote(votingId uuid.UUID, userId uuid.UUID, noteId uuid.UUID) *voting.V
 	}
 }
 
-func buildVoting(id uuid.UUID, status types.VotingStatus) *voting.Voting {
+func buildVoting(id uuid.UUID, status voting.VotingStatus) *voting.Voting {
 	return &voting.Voting{
 		ID:     id,
 		Status: status,
 	}
 }
 
-func buildBordSubscription(accessPolicy types.AccessPolicy) BoardSubscription {
+func buildBordSubscription(accessPolicy board.AccessPolicy) BoardSubscription {
 	return BoardSubscription{
 		subscription:      nil,
 		clients:           nil,
@@ -717,7 +718,7 @@ func buildBoardEvent(data interface{}, eventType realtime.BoardEventType) *realt
 	}
 }
 
-func buildBoardDto(name *string, description *string, accessPolicy types.AccessPolicy, showNotesOfOtherUsers bool) *dto.Board {
+func buildBoardDto(name *string, description *string, accessPolicy board.AccessPolicy, showNotesOfOtherUsers bool) *dto.Board {
 	return &dto.Board{
 		ID:                    uuid.UUID{},
 		Name:                  name,

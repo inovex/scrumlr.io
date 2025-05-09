@@ -1,4 +1,4 @@
-package types
+package voting
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestVotingStatusEnum(t *testing.T) {
-	values := []VotingStatus{VotingStatusOpen, VotingStatusClosed}
+	values := []VotingStatus{Open, Closed}
 	for _, value := range values {
 		var votingStatus VotingStatus
 		err := votingStatus.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))

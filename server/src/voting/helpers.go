@@ -2,7 +2,6 @@ package voting
 
 import (
 	"github.com/google/uuid"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/technical_helper"
 )
@@ -46,7 +45,7 @@ func UnmarshallVoteData(data interface{}) (*VotingUpdated, error) {
 }
 
 func getVotingWithResults(voting VotingDB, votes []VoteDB) *VotingResults {
-	if voting.Status != types.VotingStatusClosed {
+	if voting.Status != Closed {
 		return nil
 	}
 

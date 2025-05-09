@@ -16,7 +16,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/stretchr/testify/suite"
-	"scrumlr.io/server/database/types"
 )
 
 type VotingTestSuite struct {
@@ -96,9 +95,9 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 			votingMock.EXPECT().Update(req.req.Context(), voting.VotingUpdateRequest{
 				Board:  boardId,
 				ID:     votingId,
-				Status: types.VotingStatusClosed,
+				Status: voting.Closed,
 			}).Return(&voting.Voting{
-				Status: types.VotingStatusClosed,
+				Status: voting.Closed,
 			}, tt.err)
 
 			s.updateVoting(rr, req.Request())
@@ -124,7 +123,7 @@ func (suite *VotingTestSuite) TestGetVoting() {
 
 	votingMock.EXPECT().Get(req.req.Context(), boardId, votingId).Return(&voting.Voting{
 		ID:     votingId,
-		Status: types.VotingStatusClosed,
+		Status: voting.Closed,
 	}, nil)
 
 	s.getVoting(rr, req.Request())

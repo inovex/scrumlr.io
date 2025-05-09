@@ -4,7 +4,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
@@ -18,7 +17,7 @@ type DatabaseBoard struct {
 	ID                    uuid.UUID
 	Name                  *string
 	Description           *string
-	AccessPolicy          types.AccessPolicy
+	AccessPolicy          AccessPolicy
 	Passphrase            *string
 	Salt                  *string
 	ShowAuthors           bool
@@ -37,7 +36,7 @@ type DatabaseBoardInsert struct {
 	bun.BaseModel `bun:"table:boards"`
 	Name          *string
 	Description   *string
-	AccessPolicy  types.AccessPolicy
+	AccessPolicy  AccessPolicy
 	Passphrase    *string
 	Salt          *string
 }
@@ -54,7 +53,7 @@ type DatabaseBoardUpdate struct {
 	ID                    uuid.UUID
 	Name                  *string
 	Description           *string
-	AccessPolicy          *types.AccessPolicy
+	AccessPolicy          *AccessPolicy
 	Passphrase            *string
 	Salt                  *string
 	ShowAuthors           *bool

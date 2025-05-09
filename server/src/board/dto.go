@@ -4,7 +4,6 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
@@ -24,7 +23,7 @@ type Board struct {
 	Description *string `json:"description"`
 
 	// The access policy
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy AccessPolicy `json:"accessPolicy"`
 
 	// The show authors
 	ShowAuthors bool `json:"showAuthors"`
@@ -83,7 +82,7 @@ type CreateBoardRequest struct {
 	// Description of the board
 	Description *string `json:"description"`
 
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy AccessPolicy `json:"accessPolicy"`
 
 	// The passphrase must be set if access policy is defined as by passphrase.
 	Passphrase *string `json:"passphrase"`
@@ -107,7 +106,7 @@ type BoardUpdateRequest struct {
 	Description *string `json:"description"`
 
 	// The new access policy of the board.
-	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy *AccessPolicy `json:"accessPolicy"`
 
 	// The passphrase of the board.
 	Passphrase *string `json:"passphrase"`

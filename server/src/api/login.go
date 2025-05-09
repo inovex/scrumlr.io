@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"scrumlr.io/server/auth"
 	"strings"
 	"time"
 
@@ -13,7 +14,6 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/markbates/goth/gothic"
-	"scrumlr.io/server/database/types"
 )
 
 // AnonymousSignUpRequest represents the request to create a new anonymous user.
@@ -85,7 +85,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	provider, err := types.NewAccountType(externalUser.Provider)
+	provider, err := auth.NewAccountType(externalUser.Provider)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("unsupported user provider", "err", err)
@@ -101,17 +101,17 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 
 	var internalUser *users.User
 	switch provider {
-	case types.AccountTypeGoogle:
+	case auth.AccountTypeGoogle:
 		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeGitHub:
+	case auth.AccountTypeGitHub:
 		internalUser, err = s.users.CreateGitHubUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeMicrosoft:
+	case auth.AccountTypeMicrosoft:
 		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeAzureAd:
+	case auth.AccountTypeAzureAd:
 		internalUser, err = s.users.CreateAzureAdUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeApple:
+	case auth.AccountTypeApple:
 		internalUser, err = s.users.CreateAppleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeOIDC:
+	case auth.AccountTypeOIDC:
 		internalUser, err = s.users.CreateOIDCUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 	}
 	if err != nil {

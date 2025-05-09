@@ -20,7 +20,6 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 )
 
@@ -163,7 +162,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if b.AccessPolicy == types.AccessPolicyPublic {
+	if b.AccessPolicy == board.AccessPolicyPublic {
 		_, err := s.sessions.Create(r.Context(), board, user)
 		if err != nil {
 			common.Throw(w, r, common.InternalServerError)
@@ -178,7 +177,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if b.AccessPolicy == types.AccessPolicyByPassphrase {
+	if b.AccessPolicy == board.AccessPolicyByPassphrase {
 		var body JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
@@ -209,7 +208,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if b.AccessPolicy == types.AccessPolicyByInvite {
+	if b.AccessPolicy == board.AccessPolicyByInvite {
 		sessionExists, err := s.sessionRequests.Exists(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
@@ -355,7 +354,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	} else if r.Header.Get("Accept") == "text/csv" {
 		header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
 		for index, closedVoting := range fullBoard.Votings {
-			if closedVoting.Status == types.VotingStatusClosed {
+			if closedVoting.Status == voting.Closed {
 				header = append(header, fmt.Sprintf("voting_%d", index))
 			}
 		}
@@ -393,7 +392,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			}
 
 			for _, closedVoting := range fullBoard.Votings {
-				if closedVoting.Status == types.VotingStatusClosed {
+				if closedVoting.Status == voting.Closed {
 					if closedVoting.VotingResults != nil {
 						resultOnNote = append(resultOnNote, strconv.Itoa(closedVoting.VotingResults.Votes[note.ID].Total))
 					} else {

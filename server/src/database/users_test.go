@@ -2,11 +2,11 @@ package database
 
 import (
 	"database/sql"
+	"scrumlr.io/server/auth"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/users"
 )
 
@@ -24,7 +24,7 @@ func testInsertUser(t *testing.T) {
 	user, err := userDb.CreateAnonymousUser(name)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, user.ID)
-	assert.Equal(t, types.AccountTypeAnonymous, user.AccountType)
+	assert.Equal(t, auth.AccountTypeAnonymous, user.AccountType)
 	assert.Equal(t, name, user.Name)
 }
 

@@ -8,7 +8,6 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
@@ -29,9 +28,9 @@ func NewBoardDatabase(database *bun.DB) BoardDatabase {
 func (d *DB) CreateBoard(creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error) {
 	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
 
-	if board.AccessPolicy == types.AccessPolicyByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
+	if board.AccessPolicy == ByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
 		return DatabaseBoard{}, errors.New("passphrase or salt may not be empty")
-	} else if board.AccessPolicy != types.AccessPolicyByPassphrase && (board.Passphrase != nil || board.Salt != nil) {
+	} else if board.AccessPolicy != ByPassphrase && (board.Passphrase != nil || board.Salt != nil) {
 		return DatabaseBoard{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
 	}
 
@@ -76,16 +75,16 @@ func (d *DB) UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error) {
 		query.Column("description")
 	}
 	if update.AccessPolicy != nil {
-		if *update.AccessPolicy == types.AccessPolicyByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
+		if *update.AccessPolicy == ByPassphrase && (update.Passphrase == nil || update.Salt == nil) {
 			return DatabaseBoard{}, errors.New("passphrase and salt should be set when access policy is updated")
-		} else if *update.AccessPolicy != types.AccessPolicyByPassphrase && (update.Passphrase != nil || update.Salt != nil) {
+		} else if *update.AccessPolicy != ByPassphrase && (update.Passphrase != nil || update.Salt != nil) {
 			return DatabaseBoard{}, errors.New("passphrase and salt should not be set if access policy is defined as 'BY_PASSPHRASE'")
 		}
 
-		if *update.AccessPolicy == types.AccessPolicyByInvite {
-			query.Where("access_policy = ?", types.AccessPolicyByInvite)
+		if *update.AccessPolicy == ByInvite {
+			query.Where("access_policy = ?", ByInvite)
 		} else {
-			query.Where("access_policy <> ?", types.AccessPolicyByInvite)
+			query.Where("access_policy <> ?", ByInvite)
 		}
 
 		query.Column("access_policy", "passphrase", "salt")
@@ -114,7 +113,7 @@ func (d *DB) UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error) {
 			Column("id").
 			Where("board = ?", update.ID).
 			Where("id = ?", update.ShowVoting.UUID).
-			Where("status = ?", types.VotingStatusClosed)
+			Where("status = ?", voting.Closed)
 
 		_, err = query.
 			With("voting", votingQuery).

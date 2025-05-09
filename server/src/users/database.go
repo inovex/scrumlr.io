@@ -3,13 +3,13 @@ package users
 import (
 	"context"
 	"fmt"
+	"scrumlr.io/server/auth"
 	"strings"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
 )
 
 type DB struct {
@@ -25,34 +25,34 @@ func NewUserDatabase(database *bun.DB) UserDatabase {
 
 func (db *DB) CreateAnonymousUser(name string) (DatabaseUser, error) {
 	var user DatabaseUser
-	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: types.AccountTypeAnonymous}
+	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: auth.AccountTypeAnonymous}
 	_, err := db.db.NewInsert().Model(&insert).Returning("*").Exec(context.Background(), &user)
 
 	return user, err
 }
 
 func (db *DB) CreateAppleUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, types.AccountTypeApple, "apple_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeApple, "apple_users")
 }
 
 func (db *DB) CreateAzureAdUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, types.AccountTypeAzureAd, "azure_ad_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeAzureAd, "azure_ad_users")
 }
 
 func (db *DB) CreateGitHubUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, types.AccountTypeGitHub, "github_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeGitHub, "github_users")
 }
 
 func (db *DB) CreateGoogleUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, types.AccountTypeGoogle, "google_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeGoogle, "google_users")
 }
 
 func (db *DB) CreateMicrosoftUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, types.AccountTypeMicrosoft, "microsoft_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeMicrosoft, "microsoft_users")
 }
 
 func (db *DB) CreateOIDCUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, types.AccountTypeOIDC, "oidc_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeOIDC, "oidc_users")
 }
 
 func (db *DB) UpdateUser(update DatabaseUserUpdate) (DatabaseUser, error) {
@@ -78,7 +78,7 @@ func (db *DB) IsUserAnonymous(id uuid.UUID) (bool, error) {
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
-		Where("account_type = ?", types.AccountTypeAnonymous).
+		Where("account_type = ?", auth.AccountTypeAnonymous).
 		Count(context.Background())
 
 	if err != nil {
@@ -93,7 +93,7 @@ func (db *DB) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
-		Where("account_type = ?", types.AccountTypeAnonymous).
+		Where("account_type = ?", auth.AccountTypeAnonymous).
 		Where("key_migration IS NULL").
 		Count(context.Background())
 
@@ -116,7 +116,7 @@ func (db *DB) SetKeyMigration(id uuid.UUID) (DatabaseUser, error) {
 	return user, err
 }
 
-func (db *DB) createExternalUser(id, name, avatarUrl string, accountType types.AccountType, table string) (DatabaseUser, error) {
+func (db *DB) createExternalUser(id, name, avatarUrl string, accountType auth.AccountType, table string) (DatabaseUser, error) {
 	name = strings.TrimSpace(name)
 	existingUser := db.db.NewSelect().TableExpr(table).ColumnExpr("*").Where("id = ?", id)
 	existsCheck := db.db.NewSelect().ColumnExpr("CASE WHEN (SELECT COUNT(*) as count FROM \"existing_user\")=1 THEN true ELSE false END AS user_exists")
