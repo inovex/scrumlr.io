@@ -24,7 +24,7 @@ func testInsertUser(t *testing.T) {
 	user, err := userDb.CreateAnonymousUser(name)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, user.ID)
-	assert.Equal(t, auth.AccountTypeAnonymous, user.AccountType)
+	assert.Equal(t, auth.Anonymous, user.AccountType)
 	assert.Equal(t, name, user.Name)
 }
 

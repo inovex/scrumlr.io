@@ -25,34 +25,34 @@ func NewUserDatabase(database *bun.DB) UserDatabase {
 
 func (db *DB) CreateAnonymousUser(name string) (DatabaseUser, error) {
 	var user DatabaseUser
-	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: auth.AccountTypeAnonymous}
+	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: auth.Anonymous}
 	_, err := db.db.NewInsert().Model(&insert).Returning("*").Exec(context.Background(), &user)
 
 	return user, err
 }
 
 func (db *DB) CreateAppleUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeApple, "apple_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.Apple, "apple_users")
 }
 
 func (db *DB) CreateAzureAdUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeAzureAd, "azure_ad_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.AzureAd, "azure_ad_users")
 }
 
 func (db *DB) CreateGitHubUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeGitHub, "github_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.GitHub, "github_users")
 }
 
 func (db *DB) CreateGoogleUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeGoogle, "google_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.Google, "google_users")
 }
 
 func (db *DB) CreateMicrosoftUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeMicrosoft, "microsoft_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.Microsoft, "microsoft_users")
 }
 
 func (db *DB) CreateOIDCUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.AccountTypeOIDC, "oidc_users")
+	return db.createExternalUser(id, name, avatarUrl, auth.TypeOIDC, "oidc_users")
 }
 
 func (db *DB) UpdateUser(update DatabaseUserUpdate) (DatabaseUser, error) {
@@ -78,7 +78,7 @@ func (db *DB) IsUserAnonymous(id uuid.UUID) (bool, error) {
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
-		Where("account_type = ?", auth.AccountTypeAnonymous).
+		Where("account_type = ?", auth.Anonymous).
 		Count(context.Background())
 
 	if err != nil {
@@ -93,7 +93,7 @@ func (db *DB) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
-		Where("account_type = ?", auth.AccountTypeAnonymous).
+		Where("account_type = ?", auth.Anonymous).
 		Where("key_migration IS NULL").
 		Count(context.Background())
 

@@ -83,7 +83,7 @@ func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafe
 
 func (a *AuthConfiguration) initializeProviders() error {
 	providers := []goth.Provider{}
-	if provider, ok := a.providers[(string)(AccountTypeGoogle)]; ok {
+	if provider, ok := a.providers[(string)(Google)]; ok {
 		p := google.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -91,30 +91,30 @@ func (a *AuthConfiguration) initializeProviders() error {
 			"openid",
 			"profile",
 		)
-		p.SetName(strings.ToLower((string)(AccountTypeGoogle)))
+		p.SetName(strings.ToLower((string)(Google)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(AccountTypeGitHub)]; ok {
+	if provider, ok := a.providers[(string)(GitHub)]; ok {
 		p := github.New(
 			provider.ClientId,
 			provider.ClientSecret,
 			provider.RedirectUri,
 			"user",
 		)
-		p.SetName(strings.ToLower((string)(AccountTypeGitHub)))
+		p.SetName(strings.ToLower((string)(GitHub)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(AccountTypeMicrosoft)]; ok {
+	if provider, ok := a.providers[(string)(Microsoft)]; ok {
 		p := microsoftonline.New(
 			provider.ClientId,
 			provider.ClientSecret,
 			provider.RedirectUri,
 			"User.Read",
 		)
-		p.SetName(strings.ToLower((string)(AccountTypeMicrosoft)))
+		p.SetName(strings.ToLower((string)(Microsoft)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(AccountTypeAzureAd)]; ok {
+	if provider, ok := a.providers[(string)(AzureAd)]; ok {
 		p := azureadv2.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -124,10 +124,10 @@ func (a *AuthConfiguration) initializeProviders() error {
 				Scopes: []azureadv2.ScopeType{"User.Read"},
 			},
 		)
-		p.SetName(strings.ToLower((string)(AccountTypeAzureAd)))
+		p.SetName(strings.ToLower((string)(AzureAd)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(AccountTypeApple)]; ok {
+	if provider, ok := a.providers[(string)(Apple)]; ok {
 		providers = append(providers, apple.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -137,7 +137,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			apple.ScopeEmail,
 		))
 	}
-	if provider, ok := a.providers[(string)(AccountTypeOIDC)]; ok {
+	if provider, ok := a.providers[(string)(TypeOIDC)]; ok {
 		p, err := oidc.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -150,7 +150,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			logger.Get().Errorw("OIDC provider setup failed", "error", err)
 		}
 
-		p.SetName(strings.ToLower((string)(AccountTypeOIDC)))
+		p.SetName(strings.ToLower((string)(TypeOIDC)))
 		providers = append(providers, p)
 	}
 	goth.UseProviders(providers...)

@@ -10,32 +10,32 @@ import (
 type AccountType string
 
 const (
-	// AccountTypeAnonymous users don't require a registration
-	AccountTypeAnonymous AccountType = "ANONYMOUS"
+	// Anonymous users don't require a registration
+	Anonymous AccountType = "ANONYMOUS"
 
-	// AccountTypeGoogle users registered on Google
-	AccountTypeGoogle AccountType = "GOOGLE"
+	// Google users registered on Google
+	Google AccountType = "GOOGLE"
 
-	// AccountTypeMicrosoft users registered on Microsoft
-	AccountTypeMicrosoft AccountType = "MICROSOFT"
+	// Microsoft users registered on Microsoft
+	Microsoft AccountType = "MICROSOFT"
 
-	// AccountTypeAzureAd users registered on Azure AD
-	AccountTypeAzureAd AccountType = "AZURE_AD"
+	// AzureAd users registered on Azure AD
+	AzureAd AccountType = "AZURE_AD"
 
-	// AccountTypeGitHub users registered on GitHub
-	AccountTypeGitHub AccountType = "GITHUB"
+	// GitHub users registered on GitHub
+	GitHub AccountType = "GITHUB"
 
-	// AccountTypeApple users registered on Apple
-	AccountTypeApple AccountType = "APPLE"
+	// Apple users registered on Apple
+	Apple AccountType = "APPLE"
 
-	// AccountTypeOIDC users registered on OIDC
-	AccountTypeOIDC AccountType = "OIDC"
+	// TypeOIDC users registered on OIDC
+	TypeOIDC AccountType = "OIDC"
 )
 
 func NewAccountType(s string) (result AccountType, err error) {
 	result = AccountType(strings.ToUpper(s))
 	switch result {
-	case AccountTypeAnonymous, AccountTypeGoogle, AccountTypeMicrosoft, AccountTypeAzureAd, AccountTypeGitHub, AccountTypeApple, AccountTypeOIDC:
+	case Anonymous, Google, Microsoft, AzureAd, GitHub, Apple, TypeOIDC:
 		return
 	}
 	err = errors.New("invalid account type")

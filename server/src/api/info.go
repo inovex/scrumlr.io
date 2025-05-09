@@ -20,23 +20,23 @@ func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
 
 	info.AnonymousLoginDisabled = s.anonymousLoginDisabled
 
-	if s.auth.Exists(auth.AccountTypeGoogle) {
-		info.AuthProvider = append(info.AuthProvider, auth.AccountTypeGoogle)
+	if s.auth.Exists(auth.Google) {
+		info.AuthProvider = append(info.AuthProvider, auth.Google)
 	}
-	if s.auth.Exists(auth.AccountTypeGitHub) {
-		info.AuthProvider = append(info.AuthProvider, auth.AccountTypeGitHub)
+	if s.auth.Exists(auth.GitHub) {
+		info.AuthProvider = append(info.AuthProvider, auth.GitHub)
 	}
-	if s.auth.Exists(auth.AccountTypeMicrosoft) {
-		info.AuthProvider = append(info.AuthProvider, auth.AccountTypeMicrosoft)
+	if s.auth.Exists(auth.Microsoft) {
+		info.AuthProvider = append(info.AuthProvider, auth.Microsoft)
 	}
-	if s.auth.Exists(auth.AccountTypeAzureAd) {
-		info.AuthProvider = append(info.AuthProvider, auth.AccountTypeAzureAd)
+	if s.auth.Exists(auth.AzureAd) {
+		info.AuthProvider = append(info.AuthProvider, auth.AzureAd)
 	}
-	if s.auth.Exists(auth.AccountTypeApple) {
-		info.AuthProvider = append(info.AuthProvider, auth.AccountTypeApple)
+	if s.auth.Exists(auth.Apple) {
+		info.AuthProvider = append(info.AuthProvider, auth.Apple)
 	}
-	if s.auth.Exists(auth.AccountTypeOIDC) {
-		info.AuthProvider = append(info.AuthProvider, auth.AccountTypeOIDC)
+	if s.auth.Exists(auth.TypeOIDC) {
+		info.AuthProvider = append(info.AuthProvider, auth.TypeOIDC)
 	}
 
 	info.ServerTime = time.Now()

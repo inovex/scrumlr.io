@@ -30,7 +30,7 @@ var (
 	participantBoardSession = sessions.BoardSession{
 		User: users.User{
 			ID:          uuid.New(),
-			AccountType: auth.AccountTypeAnonymous,
+			AccountType: auth.Anonymous,
 		},
 		Role: sessions.ParticipantRole,
 	}
@@ -184,7 +184,7 @@ func TestEventFilter(t *testing.T) {
 func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 
 	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		return session.User.AccountType == auth.AccountTypeAnonymous
+		return session.User.AccountType == auth.Anonymous
 	})[0]
 
 	updateEvent := &realtime.BoardEvent{
@@ -193,7 +193,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 			RaisedHand: true,
 			User: users.User{
 				ID:          originalParticipantSession.User.ID,
-				AccountType: auth.AccountTypeAnonymous,
+				AccountType: auth.Anonymous,
 			},
 			Role: sessions.ParticipantRole,
 		},
@@ -202,7 +202,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 	isUpdated := boardSub.participantUpdated(updateEvent, true)
 
 	updatedParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		return session.User.AccountType == auth.AccountTypeAnonymous
+		return session.User.AccountType == auth.Anonymous
 	})[0]
 
 	assert.Equal(t, true, isUpdated)

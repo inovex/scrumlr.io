@@ -294,7 +294,7 @@ func run(c *cli.Context) error {
 	providersMap := make(map[string]auth.AuthProviderConfiguration)
 	if c.String("auth-google-client-id") != "" && c.String("auth-google-client-secret") != "" && c.String("auth-callback-host") != "" {
 		logger.Get().Info("Using google authentication")
-		providersMap[(string)(auth.AccountTypeGoogle)] = auth.AuthProviderConfiguration{
+		providersMap[(string)(auth.Google)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-google-client-id"),
 			ClientSecret: c.String("auth-google-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -302,7 +302,7 @@ func run(c *cli.Context) error {
 	}
 	if c.String("auth-github-client-id") != "" && c.String("auth-github-client-secret") != "" && c.String("auth-callback-host") != "" {
 		logger.Get().Info("Using github authentication")
-		providersMap[(string)(auth.AccountTypeGitHub)] = auth.AuthProviderConfiguration{
+		providersMap[(string)(auth.GitHub)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-github-client-id"),
 			ClientSecret: c.String("auth-github-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -310,7 +310,7 @@ func run(c *cli.Context) error {
 	}
 	if c.String("auth-microsoft-client-id") != "" && c.String("auth-microsoft-client-secret") != "" && c.String("auth-callback-host") != "" {
 		logger.Get().Info("Using microsoft authentication")
-		providersMap[(string)(auth.AccountTypeMicrosoft)] = auth.AuthProviderConfiguration{
+		providersMap[(string)(auth.Microsoft)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-microsoft-client-id"),
 			ClientSecret: c.String("auth-microsoft-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -318,7 +318,7 @@ func run(c *cli.Context) error {
 	}
 	if c.String("auth-azure-ad-tenant-id") != "" && c.String("auth-azure-ad-client-id") != "" && c.String("auth-azure-ad-client-secret") != "" && c.String("auth-callback-host") != "" {
 		logger.Get().Info("Using azure authentication")
-		providersMap[(string)(auth.AccountTypeAzureAd)] = auth.AuthProviderConfiguration{
+		providersMap[(string)(auth.AzureAd)] = auth.AuthProviderConfiguration{
 			TenantId:     c.String("auth-azure-ad-tenant-id"),
 			ClientId:     c.String("auth-azure-ad-client-id"),
 			ClientSecret: c.String("auth-azure-ad-client-secret"),
@@ -327,7 +327,7 @@ func run(c *cli.Context) error {
 	}
 	if c.String("auth-apple-client-id") != "" && c.String("auth-apple-client-secret") != "" && c.String("auth-callback-host") != "" {
 		logger.Get().Info("Using apple authentication.")
-		providersMap[(string)(auth.AccountTypeApple)] = auth.AuthProviderConfiguration{
+		providersMap[(string)(auth.Apple)] = auth.AuthProviderConfiguration{
 			ClientId:     c.String("auth-apple-client-id"),
 			ClientSecret: c.String("auth-apple-client-secret"),
 			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -335,7 +335,7 @@ func run(c *cli.Context) error {
 	}
 	if c.String("auth-oidc-discovery-url") != "" && c.String("auth-oidc-client-id") != "" && c.String("auth-oidc-client-secret") != "" && c.String("auth-callback-host") != "" {
 		logger.Get().Info("Using oicd authentication.")
-		providersMap[(string)(auth.AccountTypeOIDC)] = auth.AuthProviderConfiguration{
+		providersMap[(string)(auth.TypeOIDC)] = auth.AuthProviderConfiguration{
 			ClientId:       c.String("auth-oidc-client-id"),
 			ClientSecret:   c.String("auth-oidc-client-secret"),
 			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),

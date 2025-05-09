@@ -165,7 +165,7 @@ func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
 			return
 		}
 
-		if user.AccountType == auth.AccountTypeAnonymous {
+		if user.AccountType == auth.Anonymous {
 			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized")))
 			return
