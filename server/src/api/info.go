@@ -3,40 +3,40 @@ package api
 import (
 	"github.com/go-chi/render"
 	"net/http"
-	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/auth"
 	"time"
 )
 
 type Info struct {
-	AuthProvider           []types.AccountType `json:"authProvider"`
-	AnonymousLoginDisabled bool                `json:"anonymousLoginDisabled"`
-	ServerTime             time.Time           `json:"serverTime"`
-	FeedbackEnabled        bool                `json:"feedbackEnabled"`
+	AuthProvider           []auth.AccountType `json:"authProvider"`
+	AnonymousLoginDisabled bool               `json:"anonymousLoginDisabled"`
+	ServerTime             time.Time          `json:"serverTime"`
+	FeedbackEnabled        bool               `json:"feedbackEnabled"`
 }
 
 func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
 	info := Info{}
-	info.AuthProvider = []types.AccountType{}
+	info.AuthProvider = []auth.AccountType{}
 
 	info.AnonymousLoginDisabled = s.anonymousLoginDisabled
 
-	if s.auth.Exists(types.AccountTypeGoogle) {
-		info.AuthProvider = append(info.AuthProvider, types.AccountTypeGoogle)
+	if s.auth.Exists(auth.Google) {
+		info.AuthProvider = append(info.AuthProvider, auth.Google)
 	}
-	if s.auth.Exists(types.AccountTypeGitHub) {
-		info.AuthProvider = append(info.AuthProvider, types.AccountTypeGitHub)
+	if s.auth.Exists(auth.GitHub) {
+		info.AuthProvider = append(info.AuthProvider, auth.GitHub)
 	}
-	if s.auth.Exists(types.AccountTypeMicrosoft) {
-		info.AuthProvider = append(info.AuthProvider, types.AccountTypeMicrosoft)
+	if s.auth.Exists(auth.Microsoft) {
+		info.AuthProvider = append(info.AuthProvider, auth.Microsoft)
 	}
-	if s.auth.Exists(types.AccountTypeAzureAd) {
-		info.AuthProvider = append(info.AuthProvider, types.AccountTypeAzureAd)
+	if s.auth.Exists(auth.AzureAd) {
+		info.AuthProvider = append(info.AuthProvider, auth.AzureAd)
 	}
-	if s.auth.Exists(types.AccountTypeApple) {
-		info.AuthProvider = append(info.AuthProvider, types.AccountTypeApple)
+	if s.auth.Exists(auth.Apple) {
+		info.AuthProvider = append(info.AuthProvider, auth.Apple)
 	}
-	if s.auth.Exists(types.AccountTypeOIDC) {
-		info.AuthProvider = append(info.AuthProvider, types.AccountTypeOIDC)
+	if s.auth.Exists(auth.TypeOIDC) {
+		info.AuthProvider = append(info.AuthProvider, auth.TypeOIDC)
 	}
 
 	info.ServerTime = time.Now()

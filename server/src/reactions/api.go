@@ -2,6 +2,11 @@ package reactions
 
 import (
 	"context"
+	"github.com/go-chi/render"
+	"net/http"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 
 	"github.com/google/uuid"
 )
@@ -25,90 +30,90 @@ func NewReactionApi(service ReactionService) *ReactionApi {
 	return api
 }
 
-// func (api *ReactionApi) getReaction(w http.ResponseWriter, r *http.Request) {
-// 	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
-//
-// 	reaction, err := api.service.Get(r.Context(), id)
-// 	if err != nil {
-// 		common.Throw(w, r, err)
-// 		return
-// 	}
-//
-// 	render.Status(r, http.StatusOK)
-// 	render.Respond(w, r, reaction)
-// }
+func (api *ReactionApi) getReaction(w http.ResponseWriter, r *http.Request) {
+	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
 
-// func (api *ReactionApi) getReactions(w http.ResponseWriter, r *http.Request) {
-// 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-//
-// 	reactions, err := api.service.List(r.Context(), boardId)
-// 	if err != nil {
-// 		common.Throw(w, r, err)
-// 		return
-// 	}
-//
-// 	render.Status(r, http.StatusOK)
-// 	render.Respond(w, r, reactions)
-// }
+	reaction, err := api.service.Get(r.Context(), id)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
 
-// func (api *ReactionApi) createReaction(w http.ResponseWriter, r *http.Request) {
-// 	log := logger.FromContext(r.Context())
-// 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-// 	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-//
-// 	var body ReactionCreateRequest
-// 	if err := render.Decode(r, &body); err != nil {
-// 		log.Errorw("unable to decode body", "err", err)
-// 		common.Throw(w, r, common.BadRequestError(err))
-// 		return
-// 	}
-//
-// 	// user is filled from context
-// 	body.User = userId
-//
-// 	reaction, err := api.service.Create(r.Context(), boardId, body)
-// 	if err != nil {
-// 		common.Throw(w, r, err)
-// 		return
-// 	}
-//
-// 	render.Status(r, http.StatusCreated)
-// 	render.Respond(w, r, reaction)
-// }
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, reaction)
+}
 
-// func (api *ReactionApi) removeReaction(w http.ResponseWriter, r *http.Request) {
-// 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-// 	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-// 	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
-//
-// 	if err := api.service.Delete(r.Context(), boardId, userId, id); err != nil {
-// 		common.Throw(w, r, err)
-// 		return
-// 	}
-//
-// 	render.Status(r, http.StatusNoContent)
-// 	render.Respond(w, r, nil)
-// }
+func (api *ReactionApi) getReactions(w http.ResponseWriter, r *http.Request) {
+	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-// func (api *ReactionApi) updateReaction(w http.ResponseWriter, r *http.Request) {
-// 	log := logger.FromRequest(r)
-// 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-// 	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-// 	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
-//
-// 	var body ReactionUpdateTypeRequest
-// 	if err := render.Decode(r, &body); err != nil {
-// 		log.Errorw("unable to decode body", "err", err)
-// 		common.Throw(w, r, common.BadRequestError(err))
-// 		return
-// 	}
-//
-// 	reaction, err := api.service.Update(r.Context(), boardId, userId, id, body)
-// 	if err != nil {
-// 		common.Throw(w, r, err)
-// 		return
-// 	}
-//
-// 	render.Status(r, http.StatusOK)
-// 	render.Respond(w, r, reaction)
-// }
+	reactions, err := api.service.GetAll(r.Context(), boardId)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, reactions)
+}
+
+func (api *ReactionApi) createReaction(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromContext(r.Context())
+	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	var body ReactionCreateRequest
+	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+
+	// user is filled from context
+	body.User = userId
+
+	reaction, err := api.service.Create(r.Context(), boardId, body)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusCreated)
+	render.Respond(w, r, reaction)
+}
+
+func (api *ReactionApi) removeReaction(w http.ResponseWriter, r *http.Request) {
+	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
+
+	if err := api.service.Delete(r.Context(), boardId, userId, id); err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusNoContent)
+	render.Respond(w, r, nil)
+}
+
+func (api *ReactionApi) updateReaction(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
+	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	id := r.Context().Value(identifiers.ReactionIdentifier).(uuid.UUID)
+
+	var body ReactionUpdateTypeRequest
+	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
+		common.Throw(w, r, common.BadRequestError(err))
+		return
+	}
+
+	reaction, err := api.service.Update(r.Context(), boardId, userId, id, body)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, reaction)
+}

@@ -14,10 +14,14 @@ packages:
       ResponseWriter:
         all: true
 
-  scrumlr.io/server/services:
-    # configuration on interface level
+  scrumlr.io/server/board:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
     interfaces:
-      Boards:
+      BoardService:
+        all: true
+      BoardDatabase:
         all: true
 
   scrumlr.io/server/realtime:

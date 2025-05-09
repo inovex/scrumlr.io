@@ -4,14 +4,16 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/uptrace/bun"
 	"log"
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/votings"
 	"time"
 
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/notes"
-	"scrumlr.io/server/voting"
 
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
@@ -27,14 +29,15 @@ import (
 	"scrumlr.io/server/users"
 )
 
-var testDb *Database
+var testDb *bun.DB
+var boardDb boards.BoardDatabase
 var notesDb notes.NotesDatabase
 var reactionDb reactions.ReactionDatabase
 var sessionDb sessions.SessionDatabase
 var sessionRequestDb sessionrequests.SessionRequestDatabase
 var userDb users.UserDatabase
 var columnDb columns.ColumnDatabase
-var votingDb voting.VotingDatabase
+var votingDb votings.VotingDatabase
 var columnTemplateDb columntemplates.ColumnTemplateDatabase
 var boardTemplatesDb boardtemplates.BoardTemplateDatabase
 var fixture *dbfixture.Fixture
@@ -60,14 +63,15 @@ func testMainWithDefer(m *testing.M) int {
 	}
 
 	bun := initialize.InitializeBun(database, true)
+	testDb = bun
 
-	testDb = New(bun)
+	boardDb = boards.NewBoardDatabase(bun)
 	reactionDb = reactions.NewReactionsDatabase(bun)
 	sessionDb = sessions.NewSessionDatabase(bun)
 	sessionRequestDb = sessionrequests.NewSessionRequestDatabase(bun)
 	userDb = users.NewUserDatabase(bun)
 	notesDb = notes.NewNotesDatabase(bun)
-	votingDb = voting.NewVotingDatabase(bun)
+	votingDb = votings.NewVotingDatabase(bun)
 	columnDb = columns.NewColumnsDatabase(bun)
 	columnTemplateDb = columntemplates.NewColumnTemplateDatabase(bun)
 	boardTemplatesDb = boardtemplates.NewBoardTemplateDatabase(bun)
@@ -140,18 +144,18 @@ func initDatabase() (string, func(), error) {
 }
 
 func loadTestdata() error {
-	testDb.db.RegisterModel(
+	testDb.RegisterModel(
 		(*users.DatabaseUser)(nil),
-		(*Board)(nil),
+		(*boards.DatabaseBoard)(nil),
 		(*sessions.DatabaseBoardSessionInsert)(nil),
 		(*columns.DatabaseColumn)(nil),
 		(*notes.NoteDB)(nil),
-		(*voting.VotingDB)(nil),
-		(*voting.VoteDB)(nil),
+		(*votings.VotingDB)(nil),
+		(*votings.VoteDB)(nil),
 		(*reactions.DatabaseReaction)(nil),
 		(*boardtemplates.DatabaseBoardTemplate)(nil),
 		(*columntemplates.DatabaseColumnTemplate)(nil),
 	)
-	fixture = dbfixture.New(testDb.db)
+	fixture = dbfixture.New(testDb)
 	return fixture.Load(context.Background(), os.DirFS("testdata"), "fixture.yml")
 }

@@ -2,15 +2,14 @@ package api
 
 import (
 	"github.com/google/uuid"
+	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 )
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
@@ -83,7 +82,7 @@ func (bs *BoardSubscription) notesUpdated(event *realtime.BoardEvent, userID uui
 }
 
 func (bs *BoardSubscription) boardUpdated(event *realtime.BoardEvent, isMod bool) (*realtime.BoardEvent, bool) {
-	boardSettings, err := technical_helper.Unmarshal[dto.Board](event.Data)
+	boardSettings, err := technical_helper.Unmarshal[boards.Board](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", bs.boardSettings.ID, "err", err)
 		return nil, false
@@ -99,7 +98,7 @@ func (bs *BoardSubscription) boardUpdated(event *realtime.BoardEvent, isMod bool
 
 func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uuid.UUID) (*realtime.BoardEvent, bool) {
 	//filter deleted votes after user
-	votings, err := technical_helper.UnmarshalSlice[voting.Vote](event.Data)
+	votes, err := technical_helper.UnmarshalSlice[votings.Vote](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse deleteVotes in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
 		return nil, false
@@ -107,7 +106,7 @@ func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uui
 
 	ret := realtime.BoardEvent{
 		Type: event.Type,
-		Data: technical_helper.Filter[*voting.Vote](votings, func(vote *voting.Vote) bool {
+		Data: technical_helper.Filter[*votings.Vote](votes, func(vote *votings.Vote) bool {
 			return vote.User == userID
 		}),
 	}
@@ -116,7 +115,7 @@ func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uui
 }
 
 func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
-	voting, err := voting.UnmarshallVoteData(event.Data)
+	voting, err := votings.UnmarshallVoteData(event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
 		return nil, false
@@ -124,7 +123,7 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 
 	if isMod {
 		return event, true
-	} else if voting.Voting.Status != types.VotingStatusClosed {
+	} else if voting.Voting.Status != votings.Closed {
 		return event, true
 	} else {
 		filteredVotingNotes := voting.Notes.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, bs.boardColumns)
@@ -166,9 +165,9 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	if len(event.Data.Votings) != 0 {
 		latestVoting := event.Data.Votings[0]
 
-		event.Data.Votings = []*voting.Voting{latestVoting}
-		event.Data.Votes = technical_helper.Filter[*voting.Vote](event.Data.Votes, func(vote *voting.Vote) bool {
-			return vote.Voting == latestVoting.ID && (latestVoting.Status != types.VotingStatusOpen || vote.User == clientID)
+		event.Data.Votings = []*votings.Voting{latestVoting}
+		event.Data.Votes = technical_helper.Filter[*votings.Vote](event.Data.Votes, func(vote *votings.Vote) bool {
+			return vote.Voting == latestVoting.ID && (latestVoting.Status != votings.Open || vote.User == clientID)
 		})
 	}
 
@@ -185,17 +184,17 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 
 	return InitEvent{
 		Type: event.Type,
-		Data: dto.FullBoard{
+		Data: boards.FullBoard{
 			Board:                event.Data.Board,
 			BoardSessions:        event.Data.BoardSessions,
 			BoardSessionRequests: event.Data.BoardSessionRequests,
 			Notes:                filteredNotes,
 			Reactions:            event.Data.Reactions,
 			Columns:              columns.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
-			Votings: technical_helper.MapSlice[*voting.Voting, *voting.Voting](event.Data.Votings, func(voting *voting.Voting) *voting.Voting {
+			Votings: technical_helper.MapSlice[*votings.Voting, *votings.Voting](event.Data.Votings, func(voting *votings.Voting) *votings.Voting {
 				return voting.UpdateVoting(filteredNotes).Voting
 			}),
-			Votes: technical_helper.Filter[*voting.Vote](event.Data.Votes, func(vote *voting.Vote) bool {
+			Votes: technical_helper.Filter[*votings.Vote](event.Data.Votes, func(vote *votings.Vote) bool {
 				_, exists := notesMap[vote.Note]
 				return exists
 			}),

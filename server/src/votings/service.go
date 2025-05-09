@@ -1,4 +1,4 @@
-package voting
+package votings
 
 import (
 	"context"
@@ -9,7 +9,6 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
 
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
@@ -69,7 +68,7 @@ func (s *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting
 		VoteLimit:          body.VoteLimit,
 		AllowMultipleVotes: body.AllowMultipleVotes,
 		ShowVotesOfOthers:  body.ShowVotesOfOthers,
-		Status:             types.VotingStatusOpen,
+		Status:             Open,
 	})
 
 	if err != nil {
@@ -86,7 +85,7 @@ func (s *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting
 
 func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*notes.Note) (*Voting, error) {
 	log := logger.FromContext(ctx)
-	if body.Status == types.VotingStatusOpen {
+	if body.Status == Open {
 		return nil, common.BadRequestError(errors.New("not allowed ot change to open state"))
 	}
 
@@ -103,7 +102,7 @@ func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affected
 		return nil, common.InternalServerError
 	}
 
-	if voting.Status == types.VotingStatusClosed {
+	if voting.Status == Closed {
 		receivedVotes, err := s.getVotes(ctx, body.Board, body.ID)
 		if err != nil {
 			log.Errorw("unable to get votes", "err", err)
@@ -127,7 +126,7 @@ func (s *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting, erro
 		return nil, common.InternalServerError
 	}
 
-	if voting.Status == types.VotingStatusClosed {
+	if voting.Status == Closed {
 		receivedVotes, err := s.getVotes(ctx, boardID, id)
 		if err != nil {
 			log.Errorw("unable to get votes", "voting", id, "error", err)
@@ -188,7 +187,7 @@ func (s *Service) UpdatedVoting(board uuid.UUID, voting VotingDB, affectedNotes 
 		logger.Get().Errorw("unable to retrieve voting in updated voting", "err", err)
 		return
 	}
-	if voting.Status == types.VotingStatusClosed {
+	if voting.Status == Closed {
 		if err != nil {
 			logger.Get().Errorw("unable to retrieve notes in updated voting", "err", err)
 		}

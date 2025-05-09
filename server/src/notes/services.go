@@ -16,14 +16,14 @@ type Service struct {
 }
 
 type NotesDatabase interface {
-	CreateNote(insert NoteInsertDB) (NoteDB, error)
-	ImportNote(insert NoteImportDB) (NoteDB, error)
-	Get(id uuid.UUID) (NoteDB, error)
-	GetAll(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error)
-	GetChildNotes(parentNote uuid.UUID) ([]NoteDB, error)
-	UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error)
+	CreateNote(insert NoteInsertDB) (*NoteDB, error)
+	ImportNote(insert NoteImportDB) (*NoteDB, error)
+	Get(id uuid.UUID) (*NoteDB, error)
+	GetAll(board uuid.UUID, columns ...uuid.UUID) ([]*NoteDB, error)
+	GetChildNotes(parentNote uuid.UUID) ([]*NoteDB, error)
+	UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error)
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
-	GetStack(noteID uuid.UUID) ([]NoteDB, error)
+	GetStack(noteID uuid.UUID) ([]*NoteDB, error)
 }
 
 func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*Note, error) {

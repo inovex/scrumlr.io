@@ -195,7 +195,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 
 			noteMock.EXPECT().GetStack(mock.Anything, noteID).Return(notesToDelete, nil)
 
-			votesToDelete := []*voting.Vote{{
+			votesToDelete := []*votings.Vote{{
 				Voting: uuid.UUID{},
 				Note:   noteID,
 				User:   uuid.UUID{},

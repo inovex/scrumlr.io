@@ -2,9 +2,9 @@ package users
 
 import (
 	"net/http"
+	"scrumlr.io/server/auth"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/database/types"
 )
 
 // User is the response for all user requests.
@@ -19,7 +19,7 @@ type User struct {
 	Avatar *Avatar `json:"avatar,omitempty"`
 
 	// The user's account type configuration
-	AccountType types.AccountType `json:"accountType"`
+	AccountType auth.AccountType `json:"accountType"`
 }
 
 type UserUpdateRequest struct {

@@ -1,4 +1,4 @@
-package types
+package votings
 
 import (
 	"encoding/json"
@@ -9,13 +9,13 @@ import (
 type VotingStatus string
 
 const (
-	// VotingStatusOpen is the state for an open voting session, meaning that votes are allowed.
-	VotingStatusOpen VotingStatus = "OPEN"
+	// Open is the state for an open voting session, meaning that votes are allowed.
+	Open VotingStatus = "OPEN"
 
-	// VotingStatusClosed is the state for a closed voting session.
+	// Closed is the state for a closed voting session.
 	//
 	// The results of the voting session are available to all participants of a board.
-	VotingStatusClosed VotingStatus = "CLOSED"
+	Closed VotingStatus = "CLOSED"
 )
 
 func (votingStatus *VotingStatus) UnmarshalJSON(b []byte) error {
@@ -25,7 +25,7 @@ func (votingStatus *VotingStatus) UnmarshalJSON(b []byte) error {
 	}
 	unmarshalledVotingStatus := VotingStatus(s)
 	switch unmarshalledVotingStatus {
-	case VotingStatusOpen, VotingStatusClosed:
+	case Open, Closed:
 		*votingStatus = unmarshalledVotingStatus
 		return nil
 	}

@@ -1,12 +1,12 @@
 package boardtemplates
 
 import (
+	"scrumlr.io/server/board"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columntemplates"
-	"scrumlr.io/server/database/types"
 )
 
 type DatabaseBoardTemplate struct {
@@ -15,7 +15,7 @@ type DatabaseBoardTemplate struct {
 	Creator       uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  types.AccessPolicy
+	AccessPolicy  boards.AccessPolicy
 	Favourite     *bool
 	CreatedAt     time.Time
 }
@@ -26,7 +26,7 @@ type DatabaseBoardTemplateFull struct {
 	Creator         uuid.UUID
 	Name            *string
 	Description     *string
-	AccessPolicy    types.AccessPolicy
+	AccessPolicy    boards.AccessPolicy
 	Favourite       *bool
 	ColumnTemplates []columntemplates.DatabaseColumnTemplate
 	CreatedAt       time.Time
@@ -37,7 +37,7 @@ type DatabaseBoardTemplateInsert struct {
 	Creator       uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  types.AccessPolicy
+	AccessPolicy  boards.AccessPolicy
 	Favourite     *bool
 }
 
@@ -46,6 +46,6 @@ type DatabaseBoardTemplateUpdate struct {
 	ID            uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  *types.AccessPolicy
+	AccessPolicy  *boards.AccessPolicy
 	Favourite     *bool
 }
