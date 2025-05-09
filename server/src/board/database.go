@@ -11,31 +11,18 @@ import (
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/notes"
-	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/voting"
 )
 
 type DB struct {
-	db               *bun.DB
-	reactionsDb      reactions.ReactionDatabase
-	sessionDb        sessions.SessionDatabase
-	sessionRequestDb sessionrequests.SessionRequestDatabase
-	notesDb          notes.NotesDatabase
-	columnsDB        columns.ColumnDatabase
-	votingDb         voting.VotingDatabase
+	db *bun.DB
 }
 
 func NewBoardDatabase(database *bun.DB) BoardDatabase {
 	db := new(DB)
 	db.db = database
-	db.reactionsDb = reactions.NewReactionsDatabase(database)
-	db.sessionDb = sessions.NewSessionDatabase(database)
-	db.sessionRequestDb = sessionrequests.NewSessionRequestDatabase(database)
-	db.notesDb = notes.NewNotesDatabase(database)
-	db.columnsDB = columns.NewColumnsDatabase(database)
-	db.votingDb = voting.NewVotingDatabase(database)
+
 	return db
 }
 
@@ -172,29 +159,6 @@ func (d *DB) GetBoards(userID uuid.UUID) ([]DatabaseBoard, error) {
 	return boards, err
 }
 
-func (d *DB) GetBoardOverview(id uuid.UUID) (DatabaseBoard, []sessions.DatabaseBoardSession, []columns.DatabaseColumn, error) {
-	var board DatabaseBoard
-	var sessions []sessions.DatabaseBoardSession
-	var columns []columns.DatabaseColumn
-	var err error
-
-	board, err = d.GetBoard(id)
-	if err != nil {
-		return DatabaseBoard{}, nil, nil, err
-	}
-	sessions, err = d.sessionDb.GetAll(id)
-	if err != nil {
-		return DatabaseBoard{}, nil, nil, err
-	}
-
-	columns, err = d.columnsDB.GetAll(id)
-	if err != nil {
-		return DatabaseBoard{}, nil, nil, err
-	}
-
-	return board, sessions, columns, err
-}
-
 // todo: duplicate here. either remove from here or from voting
 func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQuery {
 	newRankSelect := d.db.NewSelect().
@@ -215,54 +179,4 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 		WhereOr("note.stack = _data.id")
 
 	return rankUpdate
-}
-
-func (d *DB) Get(id uuid.UUID) (DatabaseFullBoard, error) {
-	var (
-		board     DatabaseBoard
-		sessions  []sessions.DatabaseBoardSession
-		requests  []sessionrequests.DatabaseBoardSessionRequest
-		columns   []columns.DatabaseColumn
-		notes     []*notes.NoteDB
-		reactions []reactions.DatabaseReaction
-		votings   []voting.VotingDB
-		votes     []voting.VoteDB
-		err       error
-	)
-	type dataBaseOperation int
-
-	/* The following const can be compared to an enum in Java
-	iota allows for an automatic increment in Go */
-	const (
-		getBoard dataBaseOperation = iota
-		getRequests
-		getSessions
-		getColumns
-		getNotes
-		getReactions
-		getVotings
-	)
-
-	for op := getBoard; op <= getVotings; op++ {
-		switch op {
-		case getBoard:
-			board, err = d.GetBoard(id)
-		case getRequests:
-			requests, err = d.sessionRequestDb.GetAll(id)
-		case getSessions:
-			sessions, err = d.sessionDb.GetAll(id)
-		case getColumns:
-			columns, err = d.columnsDB.GetAll(id)
-		case getNotes:
-			notes, err = d.notesDb.GetAll(id)
-		case getReactions:
-			reactions, err = d.reactionsDb.GetAll(id)
-		case getVotings:
-			votings, votes, err = d.votingDb.GetAll(id)
-		}
-		if err != nil {
-			return DatabaseFullBoard{}, err
-		}
-	}
-	return DatabaseFullBoard{board, sessions, requests, columns, notes, reactions, votings, votes}, nil
 }

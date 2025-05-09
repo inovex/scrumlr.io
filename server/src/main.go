@@ -351,7 +351,7 @@ func run(c *cli.Context) error {
 	}
 
 	bun := initialize.InitializeBun(db, c.Bool("verbose"))
-	initializer := initialize.NewSerivceInitializer(bun, rt)
+	initializer := initialize.NewServiceInitializer(bun, rt)
 
 	userService := initializer.InitializeUserService()
 
@@ -371,11 +371,11 @@ func run(c *cli.Context) error {
 	votingService := initializer.InitializeVotingService()
 	columnService := initializer.InitializeColumnService(noteService, votingService)
 
-	boardService := initializer.InitializeBoardService()
 	feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
 	healthService := initializer.InitializeHealthService()
 	boardReactionService := initializer.InitializeBoardReactionService()
 	boardTemplateService := initializer.InitializeBoardTemplateService()
+	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, noteService, reactionService, votingService)
 
 	s := api.New(
 		basePath,
