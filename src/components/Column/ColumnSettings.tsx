@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useAppDispatch, useAppSelector} from "store";
 import {Column, createColumnOptimistically, deleteColumn, editColumn, setShowHiddenColumns} from "store/features";
-import {Color, getColorForIndex, COLOR_ORDER} from "constants/colors";
+import {Color, COLOR_ORDER, getRandomColor} from "constants/colors";
 import {TEMPORARY_COLUMN_ID, TOAST_TIMER_SHORT} from "constants/misc";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Toast} from "utils/Toast";
@@ -29,7 +29,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       dispatch(setShowHiddenColumns({showHiddenColumns: true}));
       Toast.success({title: t("Toast.hiddenColumnsVisible"), autoClose: TOAST_TIMER_SHORT});
     }
-    const randomColor = getColorForIndex(Math.floor(Math.random() * COLOR_ORDER.length));
+    const randomColor = getRandomColor();
     dispatch(createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
@@ -75,6 +75,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
           activeColor={props.column.color}
           selectColor={onSelectColor}
           closeColorPicker={() => setOpenedColorPicker(false)}
+          allowVertical
         />
       ),
       onClick: () => setOpenedColorPicker((o) => !o),
@@ -130,7 +131,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
 
   return (
     <div ref={columnSettingsRef} className="column-settings">
-      <MiniMenu items={menuItems} />
+      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn />
     </div>
   );
 };
