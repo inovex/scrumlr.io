@@ -115,7 +115,7 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
   log := logger.FromContext(ctx)
 
   board, err := service.database.GetBoard(boardID)
-  boardRequests, err := service.sessionRequestService.GetAll(ctx, boardID, "")
+  boardRequests, err := service.sessionRequestService.GetAll(ctx, boardID, string(sessionrequests.RequestAccepted))
   boardSessions, err := service.sessionService.GetAll(ctx, boardID, sessions.BoardSessionFilter{})
   boardColumns, err := service.columnService.GetAll(ctx, boardID)
   boardNotes, err := service.notesService.GetAll(ctx, boardID)
