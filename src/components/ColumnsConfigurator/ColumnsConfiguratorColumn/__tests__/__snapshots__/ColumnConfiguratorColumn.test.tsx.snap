@@ -43,7 +43,7 @@ exports[`ColumnConfiguratorColumn render should render correctly 1`] = `
         tabindex="0"
       />
       <button
-        class="columns-configurator-column__button"
+        class="columns-configurator-column__button column-configurator-column__visibility-button"
       >
         <svg
           class="columns-configurator-column__icon columns-configurator-column__icon--visible"
@@ -52,7 +52,7 @@ exports[`ColumnConfiguratorColumn render should render correctly 1`] = `
         </svg>
       </button>
       <button
-        class="columns-configurator-column__button"
+        class="columns-configurator-column__button column-configurator-column__delete-button"
       >
         <svg
           class="columns-configurator-column__icon columns-configurator-column__icon--delete"

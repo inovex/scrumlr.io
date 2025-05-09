@@ -18,7 +18,8 @@ describe("ColumnConfiguratorColumn render", () => {
     templateId: string,
     columnId: string,
     potentialIndex: number,
-    editColumn?: (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void
+    editColumn?: (templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void,
+    deleteColumn?: (templateColumn: EditableTemplateColumn) => void
   ) => {
     // some preprocessing to get the correct column and convert to editableColumn, which would normally be done by TemplateEditor component
     const columns = testStore.getState().templatesColumns.filter((tc) => tc.template === templateId);
@@ -27,7 +28,7 @@ describe("ColumnConfiguratorColumn render", () => {
 
     return render(
       <Provider store={testStore}>
-        <ColumnsConfiguratorColumn column={column} index={potentialIndex} allColumns={editableColumns} editColumn={editColumn} />
+        <ColumnsConfiguratorColumn column={column} index={potentialIndex} allColumns={editableColumns} editColumn={editColumn} deleteColumn={deleteColumn} />
       </Provider>
     );
   };
@@ -67,5 +68,24 @@ describe("ColumnConfiguratorColumn render", () => {
     fireEvent.mouseDown(colorPickerButtonPlanningPink);
 
     expect(editColumnSpy).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({color: "planning-pink"}));
+  });
+
+  it("should be able to toggle visibility", () => {
+    const editColumnSpy: jest.Mock<(templateColumn: EditableTemplateColumn, overwrite: Partial<EditableTemplateColumn>) => void> = jest.fn();
+    const {container} = renderColumnConfiguratorColumn("test-templates-id-1", "test-templates-columns-id-1", 0, editColumnSpy);
+    const visibilityButtonElement = container.querySelector(".column-configurator-column__visibility-button")! as HTMLButtonElement;
+
+    fireEvent.click(visibilityButtonElement);
+    expect(editColumnSpy).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({visible: false}));
+  });
+
+  it("should be deletable", () => {
+    const deleteColumnSpy: jest.Mock<(templateColumn: EditableTemplateColumn) => void> = jest.fn();
+    const {container} = renderColumnConfiguratorColumn("test-templates-id-1", "test-templates-columns-id-1", 0, undefined, deleteColumnSpy);
+    const deleteButtonElement = container.querySelector(".column-configurator-column__delete-button")! as HTMLButtonElement;
+
+    expect(deleteButtonElement).not.toBeDisabled();
+    fireEvent.click(deleteButtonElement);
+    expect(deleteColumnSpy).toHaveBeenCalledWith(expect.objectContaining({id: "test-templates-columns-id-1"}));
   });
 });

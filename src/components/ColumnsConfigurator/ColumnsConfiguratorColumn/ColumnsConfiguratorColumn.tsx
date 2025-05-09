@@ -113,7 +113,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             fitted
           />
           <button
-            className={classNames("columns-configurator-column__button", {"columns-configurator-column__button--disabled": false})}
+            className={classNames("columns-configurator-column__button", {"columns-configurator-column__button--disabled": false}, "column-configurator-column__visibility-button")}
             onClick={() => props.editColumn?.(props.column, {visible: !props.column.visible})}
           >
             {props.column.visible ? (
@@ -123,7 +123,11 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             )}
           </button>
           <button
-            className={classNames("columns-configurator-column__button", {"columns-configurator-column__button--disabled": disableDelete})}
+            className={classNames(
+              "columns-configurator-column__button",
+              {"columns-configurator-column__button--disabled": disableDelete},
+              "column-configurator-column__delete-button"
+            )}
             onClick={() => props.deleteColumn?.(props.column)}
             disabled={disableDelete}
           >
