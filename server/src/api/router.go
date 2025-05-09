@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/board"
+	"scrumlr.io/server/boards"
 	"time"
 
 	"scrumlr.io/server/voting"
@@ -42,9 +42,9 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards          board.BoardService
+	boards          boards.BoardService
 	columns         columns.ColumnService
-	votings         voting.VotingService
+	votings         votings.VotingService
 	users           users.UserService
 	notes           notes.NotesService
 	reactions       reactions.ReactionService
@@ -72,9 +72,9 @@ func New(
 	rt *realtime.Broker,
 	auth auth.Auth,
 
-	boards board.BoardService,
+	boards boards.BoardService,
 	columns columns.ColumnService,
-	votings voting.VotingService,
+	votings votings.VotingService,
 	users users.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,

@@ -1,4 +1,4 @@
-package board
+package boards
 
 import (
 	"encoding/json"

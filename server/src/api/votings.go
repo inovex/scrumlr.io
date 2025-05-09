@@ -17,7 +17,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	var body voting.VotingCreateRequest
+	var body votings.VotingCreateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -46,7 +46,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.VotingIdentifier).(uuid.UUID)
 
-	var body voting.VotingUpdateRequest
+	var body votings.VotingUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))

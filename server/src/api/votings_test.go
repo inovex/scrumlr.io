@@ -49,12 +49,12 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 			req.req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId)
 
-			votingMock.EXPECT().Create(req.req.Context(), voting.VotingCreateRequest{
+			votingMock.EXPECT().Create(req.req.Context(), votings.VotingCreateRequest{
 				VoteLimit:          4,
 				AllowMultipleVotes: false,
 				ShowVotesOfOthers:  false,
 				Board:              boardId,
-			}).Return(&voting.Voting{
+			}).Return(&votings.Voting{
 				AllowMultipleVotes: false,
 				ShowVotesOfOthers:  false,
 			}, tt.err)
@@ -92,12 +92,12 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 				AddToContext(identifiers.VotingIdentifier, votingId)
 			rr := httptest.NewRecorder()
 
-			votingMock.EXPECT().Update(req.req.Context(), voting.VotingUpdateRequest{
+			votingMock.EXPECT().Update(req.req.Context(), votings.VotingUpdateRequest{
 				Board:  boardId,
 				ID:     votingId,
-				Status: voting.Closed,
-			}).Return(&voting.Voting{
-				Status: voting.Closed,
+				Status: votings.Closed,
+			}).Return(&votings.Voting{
+				Status: votings.Closed,
 			}, tt.err)
 
 			s.updateVoting(rr, req.Request())
@@ -121,9 +121,9 @@ func (suite *VotingTestSuite) TestGetVoting() {
 		AddToContext(identifiers.VotingIdentifier, votingId)
 	rr := httptest.NewRecorder()
 
-	votingMock.EXPECT().Get(req.req.Context(), boardId, votingId).Return(&voting.Voting{
+	votingMock.EXPECT().Get(req.req.Context(), boardId, votingId).Return(&votings.Voting{
 		ID:     votingId,
-		Status: voting.Closed,
+		Status: votings.Closed,
 	}, nil)
 
 	s.getVoting(rr, req.Request())

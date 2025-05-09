@@ -1,4 +1,4 @@
-package board
+package boards
 
 import (
 	"context"
@@ -109,11 +109,11 @@ func (d *DB) UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error) {
 	var err error
 	if update.ShowVoting.Valid {
 		votingQuery := d.db.NewSelect().
-			Model((*voting.VotingDB)(nil)).
+			Model((*votings.VotingDB)(nil)).
 			Column("id").
 			Where("board = ?", update.ID).
 			Where("id = ?", update.ShowVoting.UUID).
-			Where("status = ?", voting.Closed)
+			Where("status = ?", votings.Closed)
 
 		_, err = query.
 			With("voting", votingQuery).

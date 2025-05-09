@@ -16,7 +16,7 @@ func TestCreateBoardTemplate(t *testing.T) {
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := board.ByInvite
+	access := boards.ByInvite
 	firstColumnName := "Column 1"
 	secondColumnName := "column 2"
 	firstColumnDescription := "This is Column 1"
@@ -91,7 +91,7 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := board.ByInvite
+	access := boards.ByInvite
 	firstColumnName := "Column 1"
 	secondColumnName := "column 2"
 	firstColumnDescription := "This is Column 1"
@@ -155,7 +155,7 @@ func TestGetBoardTemplate(t *testing.T) {
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := board.ByInvite
+	access := boards.ByInvite
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
 	mockBoardTemplateDatabase.EXPECT().Get(boardId).
@@ -281,7 +281,7 @@ func TestUpdateBoardTemplate(t *testing.T) {
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := board.ByInvite
+	access := boards.ByInvite
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
 	mockBoardTemplateDatabase.EXPECT().Update(DatabaseBoardTemplateUpdate{
@@ -316,7 +316,7 @@ func TestUpdateBoardTemplate_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := board.ByInvite
+	access := boards.ByInvite
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
 	mockBoardTemplateDatabase.EXPECT().Update(DatabaseBoardTemplateUpdate{

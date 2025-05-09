@@ -1,4 +1,4 @@
-package voting
+package votings
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/board"
+	"scrumlr.io/server/boards"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/notes"
@@ -43,7 +43,7 @@ func (d *DB) Create(insert VotingInsert) (VotingDB, error) {
 		ColumnExpr("?::voting_status as status", insert.Status).
 		Where("(SELECT count FROM \"countOpenVotings\") = 0")
 
-	updateBoard := d.db.NewUpdate().Model((*board.DatabaseBoard)(nil)).Set("show_voting = null").Where("(SELECT count FROM \"countOpenVotings\") = 0")
+	updateBoard := d.db.NewUpdate().Model((*boards.DatabaseBoard)(nil)).Set("show_voting = null").Where("(SELECT count FROM \"countOpenVotings\") = 0")
 
 	var voting VotingDB
 	_, err := d.db.NewInsert().
@@ -74,7 +74,7 @@ func (d *DB) Update(update VotingUpdate) (VotingDB, error) {
 	var err error
 
 	if update.Status == Closed {
-		updateBoard := d.db.NewUpdate().Model((*board.DatabaseBoard)(nil)).Set("show_voting = (SELECT id FROM \"updateQuery\")").Where("id = ?", update.Board)
+		updateBoard := d.db.NewUpdate().Model((*boards.DatabaseBoard)(nil)).Set("show_voting = (SELECT id FROM \"updateQuery\")").Where("id = ?", update.Board)
 
 		err = d.db.NewSelect().
 			With("updateQuery", updateQuery).

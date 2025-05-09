@@ -1,4 +1,4 @@
-package voting
+package votings
 
 import (
 	"github.com/google/uuid"

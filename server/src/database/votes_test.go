@@ -1,8 +1,8 @@
 package database
 
 import (
-	"scrumlr.io/server/board"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/votings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,8 +23,8 @@ func TestRunnerForVotes(t *testing.T) {
 }
 
 func testAddVote(t *testing.T) {
-	voting := fixture.MustRow("VotingDB.votingForOpenMultipleVotesTestBoard").(*voting.VotingDB)
-	board := fixture.MustRow("Board.openMultipleVotesTestBoard").(*board.DatabaseBoard)
+	voting := fixture.MustRow("VotingDB.votingForOpenMultipleVotesTestBoard").(*votings.VotingDB)
+	board := fixture.MustRow("DatabaseBoard.openMultipleVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	note := fixture.MustRow("NoteDB.openMultipleVotesTestBoardNote").(*notes.NoteDB)
 
@@ -36,7 +36,7 @@ func testAddVote(t *testing.T) {
 }
 
 func testAddVoteOnClosedSessionShouldFailed(t *testing.T) {
-	board := fixture.MustRow("Board.closedVotesTestBoard").(*board.DatabaseBoard)
+	board := fixture.MustRow("DatabaseBoard.closedVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	note := fixture.MustRow("NoteDB.closedVotesTestBoardNote").(*notes.NoteDB)
 
@@ -45,7 +45,7 @@ func testAddVoteOnClosedSessionShouldFailed(t *testing.T) {
 }
 
 func testAddVoteOnAbortedSessionShouldFailed(t *testing.T) {
-	board := fixture.MustRow("Board.abortedVotesTestBoard").(*board.DatabaseBoard)
+	board := fixture.MustRow("DatabaseBoard.abortedVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	note := fixture.MustRow("NoteDB.abortedVotesTestBoardNote").(*notes.NoteDB)
 
@@ -54,7 +54,7 @@ func testAddVoteOnAbortedSessionShouldFailed(t *testing.T) {
 }
 
 func testAddVoteAboveLimit(t *testing.T) {
-	board := fixture.MustRow("Board.openMultipleVotesTestBoard").(*board.DatabaseBoard)
+	board := fixture.MustRow("DatabaseBoard.openMultipleVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	note := fixture.MustRow("NoteDB.openMultipleVotesTestBoardNote").(*notes.NoteDB)
 
@@ -66,7 +66,7 @@ func testAddVoteAboveLimit(t *testing.T) {
 }
 
 func testAddMultipleVotesWhenNotAllowedShouldFail(t *testing.T) {
-	board := fixture.MustRow("Board.openSingleVotesTestBoard").(*board.DatabaseBoard)
+	board := fixture.MustRow("DatabaseBoard.openSingleVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	note := fixture.MustRow("NoteDB.openSingleVotesTestBoardNote").(*notes.NoteDB)
 
@@ -78,7 +78,7 @@ func testAddMultipleVotesWhenNotAllowedShouldFail(t *testing.T) {
 }
 
 func testRemoveVote(t *testing.T) {
-	board := fixture.MustRow("Board.openMultipleVotesTestBoard").(*board.DatabaseBoard)
+	board := fixture.MustRow("DatabaseBoard.openMultipleVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	note := fixture.MustRow("NoteDB.openMultipleVotesTestBoardNote").(*notes.NoteDB)
 
@@ -87,7 +87,7 @@ func testRemoveVote(t *testing.T) {
 }
 
 func testRemoveVoteOnClosedSessionShouldFail(t *testing.T) {
-	board := fixture.MustRow("Board.closedVotesTestBoard").(*board.DatabaseBoard)
+	board := fixture.MustRow("DatabaseBoard.closedVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	note := fixture.MustRow("NoteDB.closedVotesTestBoardNote").(*notes.NoteDB)
 
@@ -96,7 +96,7 @@ func testRemoveVoteOnClosedSessionShouldFail(t *testing.T) {
 }
 
 func testRemoveVoteOnAbortedSessionShouldFail(t *testing.T) {
-	board := fixture.MustRow("Board.abortedVotesTestBoard").(*board.DatabaseBoard)
+	board := fixture.MustRow("DatabaseBoard.abortedVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 	note := fixture.MustRow("NoteDB.abortedVotesTestBoardNote").(*notes.NoteDB)
 

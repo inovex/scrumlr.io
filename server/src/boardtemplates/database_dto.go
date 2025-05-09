@@ -15,7 +15,7 @@ type DatabaseBoardTemplate struct {
 	Creator       uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  board.AccessPolicy
+	AccessPolicy  boards.AccessPolicy
 	Favourite     *bool
 	CreatedAt     time.Time
 }
@@ -26,7 +26,7 @@ type DatabaseBoardTemplateFull struct {
 	Creator         uuid.UUID
 	Name            *string
 	Description     *string
-	AccessPolicy    board.AccessPolicy
+	AccessPolicy    boards.AccessPolicy
 	Favourite       *bool
 	ColumnTemplates []columntemplates.DatabaseColumnTemplate
 	CreatedAt       time.Time
@@ -37,7 +37,7 @@ type DatabaseBoardTemplateInsert struct {
 	Creator       uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  board.AccessPolicy
+	AccessPolicy  boards.AccessPolicy
 	Favourite     *bool
 }
 
@@ -46,6 +46,6 @@ type DatabaseBoardTemplateUpdate struct {
 	ID            uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  *board.AccessPolicy
+	AccessPolicy  *boards.AccessPolicy
 	Favourite     *bool
 }

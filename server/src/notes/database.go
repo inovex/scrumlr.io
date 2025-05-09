@@ -67,7 +67,7 @@ func (d *DB) GetChildNotes(parentNote uuid.UUID) ([]*NoteDB, error) {
 }
 
 func (d *DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error) {
-	boardSelect := d.db.NewSelect().Model((*board.DatabaseBoard)(nil)).Column("allow_stacking").Where("id = ?", update.Board)
+	boardSelect := d.db.NewSelect().Model((*boards.DatabaseBoard)(nil)).Column("allow_stacking").Where("id = ?", update.Board)
 	sessionSelect := d.db.NewSelect().Model((*sessions.BoardSession)(nil)).Column("role").Where("\"user\" = ?", caller).Where("board = ?", update.Board)
 	noteSelect := d.db.NewSelect().Model((*Note)(nil)).Column("author").Where("id = ?", update.ID).Where("board = ?", update.Board)
 
@@ -138,7 +138,7 @@ func (d *DB) DeleteNote(caller uuid.UUID, boardID uuid.UUID, id uuid.UUID, delet
 		children := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", id)
 
 		updateBoard := d.db.NewUpdate().
-			Model((*board.DatabaseBoard)(nil)).
+			Model((*boards.DatabaseBoard)(nil)).
 			Set("shared_note = null").
 			Where("id = ? AND shared_note = ?", boardID, id)
 

@@ -125,7 +125,7 @@ func (db *DB) Delete(affectedBoard, column, user uuid.UUID) error {
 		Where("index >= (SELECT index from \"selectPreviousIndex\")")
 
 	boardUpdate := db.db.NewUpdate().
-		Model((*board.DatabaseBoard)(nil)).
+		Model((*boards.DatabaseBoard)(nil)).
 		Set("shared_note = null").
 		Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", affectedBoard, affectedBoard, column)
 

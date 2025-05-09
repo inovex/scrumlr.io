@@ -1,4 +1,4 @@
-package board
+package boards
 
 import (
 	"github.com/google/uuid"
@@ -74,6 +74,6 @@ type DatabaseFullBoard struct {
 	Columns              []columns.DatabaseColumn
 	Notes                []*notes.NoteDB
 	Reactions            []reactions.DatabaseReaction
-	Votings              []voting.VotingDB
-	Votes                []voting.VoteDB
+	Votings              []votings.VotingDB
+	Votes                []votings.VoteDB
 }

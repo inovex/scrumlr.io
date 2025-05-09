@@ -1,4 +1,4 @@
-package board
+package boards
 
 import (
 	"github.com/google/uuid"
@@ -8,7 +8,7 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 	"time"
 )
 
@@ -150,7 +150,7 @@ type ImportBoardRequest struct {
 	Board   *CreateBoardRequest `json:"board"`
 	Columns []columns.Column    `json:"columns"`
 	Notes   []notes.Note        `json:"notes"`
-	Votings []voting.Voting     `json:"votings"`
+	Votings []votings.Voting    `json:"votings"`
 }
 
 type FullBoard struct {
@@ -160,8 +160,8 @@ type FullBoard struct {
 	Columns              []*columns.Column                      `json:"columns"`
 	Notes                []*notes.Note                          `json:"notes"`
 	Reactions            []*reactions.Reaction                  `json:"reactions"`
-	Votings              []*voting.Voting                       `json:"votings"`
-	Votes                []*voting.Vote                         `json:"votes"`
+	Votings              []*votings.Voting                      `json:"votings"`
+	Votes                []*votings.Vote                        `json:"votes"`
 }
 
 func (dtoFullBoard *FullBoard) From(dbFullBoard DatabaseFullBoard) *FullBoard {
@@ -171,7 +171,7 @@ func (dtoFullBoard *FullBoard) From(dbFullBoard DatabaseFullBoard) *FullBoard {
 	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
 	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
 	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)
-	dtoFullBoard.Votings = voting.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
-	dtoFullBoard.Votes = voting.Votes(dbFullBoard.Votes)
+	dtoFullBoard.Votings = votings.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
+	dtoFullBoard.Votes = votings.Votes(dbFullBoard.Votes)
 	return dtoFullBoard
 }

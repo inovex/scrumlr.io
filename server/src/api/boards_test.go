@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/board"
+	"scrumlr.io/server/boards"
 	"strings"
 	"testing"
 	"time"
@@ -15,7 +15,6 @@ import (
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/mocks/services"
 	"scrumlr.io/server/sessionrequests"
@@ -30,8 +29,8 @@ func TestBoardTestSuite(t *testing.T) {
 	suite.Run(t, new(BoardTestSuite))
 }
 
-func (suite *BoardTestSuite) createBoard(boardName *string, boardDescription *string, accessPolicy board.AccessPolicy, passphrase *string, salt *string) *dto.Board {
-	return &dto.Board{
+func (suite *BoardTestSuite) createBoard(boardName *string, boardDescription *string, accessPolicy boards.AccessPolicy, passphrase *string, salt *string) *boards.Board {
+	return &boards.Board{
 		ID:                    uuid.New(),
 		Name:                  boardName,
 		Description:           boardDescription,
@@ -67,7 +66,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 			boardMock := services.NewMockBoards(suite.T())
 
 			s.boards = boardMock
-			accessPolicy := board.Public
+			accessPolicy := boards.Public
 			visible := true
 			colName := "Lean Coffee"
 			color := columns.Color("backlog-blue")
@@ -85,7 +84,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
       }`, accessPolicy, colName, visible, color))).
 				AddToContext(identifiers.UserIdentifier, ownerID)
 
-			boardMock.EXPECT().Create(req.req.Context(), dto.CreateBoardRequest{
+			boardMock.EXPECT().Create(req.req.Context(), boards.CreateBoardRequest{
 				Name:         nil,
 				Description:  nil,
 				AccessPolicy: accessPolicy,
@@ -165,11 +164,11 @@ func (suite *BoardTestSuite) TestGetBoards() {
 
 			boardName := "Test Name"
 			boardDescription := "Test Description"
-			firstBoard := suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)
+			firstBoard := suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)
 
 			boardName = "Test Board"
 			boardDescription = "Description for second board"
-			secondBoard := suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)
+			secondBoard := suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)
 			boardIDs := []uuid.UUID{firstBoard.ID, secondBoard.ID}
 
 			req := NewTestRequestBuilder("POST", "/", nil).
@@ -177,7 +176,7 @@ func (suite *BoardTestSuite) TestGetBoards() {
 
 			boardMock.EXPECT().GetBoards(req.req.Context(), userID).Return(boardIDs, te.err)
 			if te.err == nil {
-				boardMock.EXPECT().BoardOverview(req.req.Context(), boardIDs, userID).Return([]*dto.BoardOverview{{
+				boardMock.EXPECT().BoardOverview(req.req.Context(), boardIDs, userID).Return([]*boards.BoardOverview{{
 					Board:        firstBoard,
 					Columns:      1,
 					CreatedAt:    time.Time{},
@@ -246,18 +245,18 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 	passphrase := common.Sha512BySalt("123", salt)
 
 	testParameterBundles := *TestParameterBundles{}.
-		Append("Successfully join board", http.StatusSeeOther, nil, true, false, suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)).
+		Append("Successfully join board", http.StatusSeeOther, nil, true, false, suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)).
 		Append("Failed joining board", http.StatusInternalServerError,
 			&common.APIError{
 				Err:        errors.New("failed to join board"),
 				StatusCode: http.StatusInternalServerError,
 				StatusText: "no",
 				ErrorText:  "Could not join board",
-			}, true, false, suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)).
-		Append("Successfully joined board without session", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, board.Public, nil, nil)).
-		Append("Successfully joined board with passphrase", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, board.ByPassphrase, &passphrase, &salt)).
-		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, true, suite.createBoard(&boardName, &boardDescription, board.ByInvite, &passphrase, &salt)).
-		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, false, suite.createBoard(&boardName, &boardDescription, board.ByInvite, &passphrase, &salt))
+			}, true, false, suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)).
+		Append("Successfully joined board without session", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, boards.Public, nil, nil)).
+		Append("Successfully joined board with passphrase", http.StatusCreated, nil, false, false, suite.createBoard(&boardName, &boardDescription, boards.ByPassphrase, &passphrase, &salt)).
+		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, true, suite.createBoard(&boardName, &boardDescription, boards.ByInvite, &passphrase, &salt)).
+		Append("Successfully join board by invite with existing session request", http.StatusSeeOther, nil, false, false, suite.createBoard(&boardName, &boardDescription, boards.ByInvite, &passphrase, &salt))
 
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
@@ -285,7 +284,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 				boardMock.EXPECT().Get(req.req.Context(), boardID).Return(te.board, te.err)
 			}
 
-			if te.board.AccessPolicy == board.ByInvite {
+			if te.board.AccessPolicy == boards.ByInvite {
 				sessionRequestMock.EXPECT().Exists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
 				if !te.sessionRequestExists {
 					sessionRequestMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
@@ -328,8 +327,8 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
 
 			newName := "UpdatedName"
 			newDescription := "UpdatedDescription"
-			accessPolicy := board.Public
-			boardReq := dto.BoardUpdateRequest{
+			accessPolicy := boards.Public
+			boardReq := boards.BoardUpdateRequest{
 				Name:         &newName,
 				Description:  &newDescription,
 				AccessPolicy: &accessPolicy,
@@ -344,7 +343,7 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
       }`, boardID, newName, newDescription))).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().Update(req.req.Context(), boardReq).Return(new(dto.Board), te.err)
+			boardMock.EXPECT().Update(req.req.Context(), boardReq).Return(new(boards.Board), te.err)
 
 			rr := httptest.NewRecorder()
 
@@ -379,7 +378,7 @@ func (suite *BoardTestSuite) TestSetTimer() {
 			req := NewTestRequestBuilder("PUT", "/timer", strings.NewReader(fmt.Sprintf(`{"minutes": %d}`, minutes))).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().SetTimer(req.req.Context(), boardID, minutes).Return(new(dto.Board), te.err)
+			boardMock.EXPECT().SetTimer(req.req.Context(), boardID, minutes).Return(new(boards.Board), te.err)
 
 			rr := httptest.NewRecorder()
 
@@ -412,7 +411,7 @@ func (suite *BoardTestSuite) TestDeleteTimer() {
 			req := NewTestRequestBuilder("DEL", "/timer", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().DeleteTimer(req.req.Context(), boardID).Return(new(dto.Board), tt.err)
+			boardMock.EXPECT().DeleteTimer(req.req.Context(), boardID).Return(new(boards.Board), tt.err)
 
 			rr := httptest.NewRecorder()
 
@@ -445,7 +444,7 @@ func (suite *BoardTestSuite) TestIncrementTimer() {
 			req := NewTestRequestBuilder("POST", "/timer/increment", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().IncrementTimer(req.req.Context(), boardID).Return(new(dto.Board), tt.err)
+			boardMock.EXPECT().IncrementTimer(req.req.Context(), boardID).Return(new(boards.Board), tt.err)
 
 			rr := httptest.NewRecorder()
 
