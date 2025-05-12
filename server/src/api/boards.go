@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"scrumlr.io/server/boards"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 	"strconv"
 
 	"scrumlr.io/server/columns"

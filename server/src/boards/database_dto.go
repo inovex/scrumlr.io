@@ -8,7 +8,7 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 	"time"
 )
 

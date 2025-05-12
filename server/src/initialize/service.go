@@ -2,10 +2,9 @@ package initialize
 
 import (
 	"net/http"
-	"scrumlr.io/server/board"
 	"scrumlr.io/server/boards"
 
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"

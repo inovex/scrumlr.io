@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"scrumlr.io/server/boards"
 	"strings"
 	"testing"
 
@@ -15,14 +16,13 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/mocks/services"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 )
 
 type NotesTestSuite struct {
@@ -179,7 +179,7 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			req.AddToContext(chi.RouteCtxKey, rctx)
 			req.AddToContext(identifiers.UserIdentifier, userID)
 
-			boardMock.EXPECT().Get(mock.Anything, boardID).Return(&dto.Board{
+			boardMock.EXPECT().Get(mock.Anything, boardID).Return(&boards.Board{
 				ID:       boardID,
 				IsLocked: tt.isLocked,
 			}, nil)

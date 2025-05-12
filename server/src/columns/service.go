@@ -12,7 +12,7 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 )
 
 type ColumnDatabase interface {

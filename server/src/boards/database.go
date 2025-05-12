@@ -11,7 +11,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 )
 
 type DB struct {

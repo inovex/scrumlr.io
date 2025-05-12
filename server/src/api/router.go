@@ -6,7 +6,7 @@ import (
 	"scrumlr.io/server/boards"
 	"time"
 
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/boardreactions"
 	"scrumlr.io/server/boardtemplates"

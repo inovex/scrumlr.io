@@ -6,7 +6,7 @@ import (
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"

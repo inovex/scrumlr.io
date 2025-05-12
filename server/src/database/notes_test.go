@@ -547,7 +547,7 @@ func testDeleteStackParent(t *testing.T) {
 }
 
 func testDeleteStack(t *testing.T) {
-	stackTestBoard = fixture.MustRow("Board.stackTestBoard").(*boards.DatabaseBoard)
+	stackTestBoard = fixture.MustRow("DatabaseBoard.stackTestBoard").(*boards.DatabaseBoard)
 	stackTestColumnB = fixture.MustRow("DatabaseColumn.stackTestColumnB").(*columns.DatabaseColumn)
 	stackH = fixture.MustRow("NoteDB.stackTestNote8").(*notes.NoteDB)
 	stackUser = fixture.MustRow("DatabaseUser.justin").(*users.DatabaseUser)

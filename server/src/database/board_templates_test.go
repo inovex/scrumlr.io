@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"scrumlr.io/server/board"
+	"scrumlr.io/server/boards"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

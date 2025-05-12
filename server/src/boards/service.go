@@ -14,7 +14,7 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 	"time"
 )
 

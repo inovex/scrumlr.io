@@ -12,7 +12,7 @@ import (
 	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 )
 
 func TestCreateColumn(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 	"scrumlr.io/server/boards"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"

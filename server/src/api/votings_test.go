@@ -10,8 +10,7 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/mocks/services"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 
@@ -36,7 +35,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			votingMock := services.NewMockVotings(suite.T())
+			votingMock := votings.NewMockVotingService(suite.T())
 
 			boardId, _ := uuid.NewRandom()
 			s.votings = votingMock
@@ -78,7 +77,7 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			votingMock := services.NewMockVotings(suite.T())
+			votingMock := votings.NewMockVotingService(suite.T())
 			boardId, _ := uuid.NewRandom()
 			votingId, _ := uuid.NewRandom()
 
@@ -96,7 +95,7 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 				Board:  boardId,
 				ID:     votingId,
 				Status: votings.Closed,
-			}).Return(&votings.Voting{
+			}, nil).Return(&votings.Voting{
 				Status: votings.Closed,
 			}, tt.err)
 
@@ -111,7 +110,7 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 
 func (suite *VotingTestSuite) TestGetVoting() {
 	s := new(Server)
-	votingMock := services.NewMockVotings(suite.T())
+	votingMock := votings.NewMockVotingService(suite.T())
 	s.votings = votingMock
 	boardId, _ := uuid.NewRandom()
 	votingId, _ := uuid.NewRandom()

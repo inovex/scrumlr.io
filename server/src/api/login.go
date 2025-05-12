@@ -1,140 +1,140 @@
 package api
 
 import (
-  "fmt"
-  "math"
-  "net/http"
-  "scrumlr.io/server/auth"
-  "strings"
-  "time"
+	"fmt"
+	"math"
+	"net/http"
+	"scrumlr.io/server/auth"
+	"strings"
+	"time"
 
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/logger"
-  "scrumlr.io/server/users"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/users"
 
-  "github.com/go-chi/render"
-  "github.com/markbates/goth/gothic"
+	"github.com/go-chi/render"
+	"github.com/markbates/goth/gothic"
 )
 
 // AnonymousSignUpRequest represents the request to create a new anonymous user.
 type AnonymousSignUpRequest struct {
-  // The display name of the user.
-  Name string
+	// The display name of the user.
+	Name string
 }
 
 // signInAnonymously create a new anonymous user
 func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
-  log := logger.FromRequest(r)
+	log := logger.FromRequest(r)
 
-  var body AnonymousSignUpRequest
-  if err := render.Decode(r, &body); err != nil {
-    log.Errorw("unable to decode body", "err", err)
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
+	var body AnonymousSignUpRequest
+	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-  user, err := s.users.CreateAnonymous(r.Context(), body.Name)
-  if err != nil {
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
+	user, err := s.users.CreateAnonymous(r.Context(), body.Name)
+	if err != nil {
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
 
-  tokenString, err := s.auth.Sign(map[string]interface{}{"id": user.ID})
-  if err != nil {
-    log.Errorw("unable to generate token string", "err", err)
-    common.Throw(w, r, common.InternalServerError)
-    return
-  }
+	tokenString, err := s.auth.Sign(map[string]interface{}{"id": user.ID})
+	if err != nil {
+		log.Errorw("unable to generate token string", "err", err)
+		common.Throw(w, r, common.InternalServerError)
+		return
+	}
 
-  cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
-  common.SealCookie(r, &cookie)
-  http.SetCookie(w, &cookie)
+	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", HttpOnly: true, MaxAge: math.MaxInt32}
+	common.SealCookie(r, &cookie)
+	http.SetCookie(w, &cookie)
 
-  render.Status(r, http.StatusCreated)
-  render.Respond(w, r, user)
+	render.Status(r, http.StatusCreated)
+	render.Respond(w, r, user)
 }
 
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
-  cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
-  common.SealCookie(r, &cookie)
-  http.SetCookie(w, &cookie)
+	cookie := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
+	common.SealCookie(r, &cookie)
+	http.SetCookie(w, &cookie)
 
-  if common.GetHostWithoutPort(r) != common.GetTopLevelHost(r) {
-    cookieWithSubdomain := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
-    common.SealCookie(r, &cookieWithSubdomain)
-    cookieWithSubdomain.Domain = common.GetHostWithoutPort(r)
-    http.SetCookie(w, &cookieWithSubdomain)
-  }
+	if common.GetHostWithoutPort(r) != common.GetTopLevelHost(r) {
+		cookieWithSubdomain := http.Cookie{Name: "jwt", Value: "deleted", Path: "/", MaxAge: -1, Expires: time.UnixMilli(0)}
+		common.SealCookie(r, &cookieWithSubdomain)
+		cookieWithSubdomain.Domain = common.GetHostWithoutPort(r)
+		http.SetCookie(w, &cookieWithSubdomain)
+	}
 
-  render.Status(r, http.StatusNoContent)
-  render.Respond(w, r, nil)
+	render.Status(r, http.StatusNoContent)
+	render.Respond(w, r, nil)
 }
 
 // beginAuthProviderVerification will redirect the user to the specified auth provider consent page
 func (s *Server) beginAuthProviderVerification(w http.ResponseWriter, r *http.Request) {
-  gothic.BeginAuthHandler(w, r)
+	gothic.BeginAuthHandler(w, r)
 }
 
 // verifyAuthProviderCallback will verify the auth provider call, create or update a user and redirect to the page provider with the state
 func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Request) {
-  log := logger.FromRequest(r)
-  externalUser, err := gothic.CompleteUserAuth(w, r)
-  if err != nil {
-    w.WriteHeader(http.StatusInternalServerError)
-    log.Errorw("could not complete user auth", "err", err)
-    return
-  }
+	log := logger.FromRequest(r)
+	externalUser, err := gothic.CompleteUserAuth(w, r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("could not complete user auth", "err", err)
+		return
+	}
 
-  provider, err := auth.NewAccountType(externalUser.Provider)
-  if err != nil {
-    w.WriteHeader(http.StatusInternalServerError)
-    log.Errorw("unsupported user provider", "err", err)
-    return
-  }
+	provider, err := auth.NewAccountType(externalUser.Provider)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("unsupported user provider", "err", err)
+		return
+	}
 
-  userInfo, err := s.auth.ExtractUserInformation(provider, &externalUser)
-  if err != nil {
-    w.WriteHeader(http.StatusInternalServerError)
-    log.Errorw("insufficient user information from external auth source", "err", err)
-    return
-  }
+	userInfo, err := s.auth.ExtractUserInformation(provider, &externalUser)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("insufficient user information from external auth source", "err", err)
+		return
+	}
 
-  var internalUser *users.User
-  switch provider {
-  case auth.Google:
-    internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-  case auth.GitHub:
-    internalUser, err = s.users.CreateGitHubUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-  case auth.Microsoft:
-    internalUser, err = s.users.CreateMicrosoftUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-  case auth.AzureAd:
-    internalUser, err = s.users.CreateAzureAdUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-  case auth.Apple:
-    internalUser, err = s.users.CreateAppleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-  case auth.TypeOIDC:
-    internalUser, err = s.users.CreateOIDCUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-  }
-  if err != nil {
-    w.WriteHeader(http.StatusInternalServerError)
-    log.Errorw("could not create user", "err", err)
-    return
-  }
+	var internalUser *users.User
+	switch provider {
+	case auth.Google:
+		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case auth.GitHub:
+		internalUser, err = s.users.CreateGitHubUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case auth.Microsoft:
+		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case auth.AzureAd:
+		internalUser, err = s.users.CreateAzureAdUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case auth.Apple:
+		internalUser, err = s.users.CreateAppleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	case auth.TypeOIDC:
+		internalUser, err = s.users.CreateOIDCUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
+	}
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Errorw("could not create user", "err", err)
+		return
+	}
 
-  tokenString, _ := s.auth.Sign(map[string]interface{}{"id": internalUser.ID})
-  cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
-  common.SealCookie(r, &cookie)
-  http.SetCookie(w, &cookie)
+	tokenString, _ := s.auth.Sign(map[string]interface{}{"id": internalUser.ID})
+	cookie := http.Cookie{Name: "jwt", Value: tokenString, Path: "/", Expires: time.Now().AddDate(0, 0, 3*7)}
+	common.SealCookie(r, &cookie)
+	http.SetCookie(w, &cookie)
 
-  state := gothic.GetState(r)
-  stateSplit := strings.Split(state, "__")
-  if len(stateSplit) > 1 {
-    w.Header().Set("Location", stateSplit[1])
-    w.WriteHeader(http.StatusSeeOther)
-  }
-  if s.basePath == "/" {
-    w.Header().Set("Location", fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host))
-  } else {
-    w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
-  }
-  w.WriteHeader(http.StatusSeeOther)
+	state := gothic.GetState(r)
+	stateSplit := strings.Split(state, "__")
+	if len(stateSplit) > 1 {
+		w.Header().Set("Location", stateSplit[1])
+		w.WriteHeader(http.StatusSeeOther)
+	}
+	if s.basePath == "/" {
+		w.Header().Set("Location", fmt.Sprintf("%s://%s/", common.GetProtocol(r), r.Host))
+	} else {
+		w.Header().Set("Location", fmt.Sprintf("%s://%s%s/", common.GetProtocol(r), r.Host, s.basePath))
+	}
+	w.WriteHeader(http.StatusSeeOther)
 }
