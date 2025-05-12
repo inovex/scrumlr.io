@@ -11,7 +11,7 @@ import {calcPlacement} from "./ColumnsConfigurator.utils";
 import {AddTemplateColumnAlignment} from "./ColumnsConfigurator.types";
 import "./ColumnsConfigurator.scss";
 
-type ColumnsConfiguratorProps = {
+export type ColumnsConfiguratorProps = {
   className: string;
   templateId: string;
   columns: EditableTemplateColumn[]; // without deleted cols
