@@ -5,6 +5,7 @@ import FocusLock, {MoveFocusInside} from "react-focus-lock";
 import "./MiniMenu.scss";
 
 export type MiniMenuItem = {
+  className?: string;
   element: ReactNode; // an Icon in most cases, but can also be a complex element (e.g. ColorPicker)
   label: string;
   active?: boolean;
@@ -38,7 +39,7 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
             data-tooltip-content={item.label}
             aria-label={item.label}
             id={anchor}
-            className={classNames("mini-menu__item", {"mini-menu__item--active": item.active, "mini-menu__item--small": small})}
+            className={classNames(item.className, "mini-menu__item", {"mini-menu__item--active": item.active, "mini-menu__item--small": small})}
             key={item.label}
             // mouse down instead of click because it has precedence over blur
             onMouseDown={(e) => onClickItem(e, item)}

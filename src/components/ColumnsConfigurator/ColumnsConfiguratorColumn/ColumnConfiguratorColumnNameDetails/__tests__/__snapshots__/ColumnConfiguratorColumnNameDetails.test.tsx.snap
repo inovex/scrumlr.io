@@ -47,10 +47,10 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (descriptio
       >
         <button
           aria-label="Cancel"
-          class="mini-menu__item mini-menu__item--small"
+          class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Cancel3"
+          id="mini-menu-Cancel1"
         >
           <svg>
             close.svg
@@ -58,10 +58,10 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (descriptio
         </button>
         <button
           aria-label="Save"
-          class="mini-menu__item mini-menu__item--small"
+          class="mini-menu-item--save mini-menu__item mini-menu__item--small"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Save4"
+          id="mini-menu-Save2"
         >
           <svg>
             check-done.svg
@@ -98,7 +98,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (nameFirst)
       >
         <button
           aria-label="Cancel"
-          class="mini-menu__item mini-menu__item--small"
+          class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
           id="mini-menu-Cancel1"
@@ -109,7 +109,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (nameFirst)
         </button>
         <button
           aria-label="Save"
-          class="mini-menu__item mini-menu__item--small"
+          class="mini-menu-item--save mini-menu__item mini-menu__item--small"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
           id="mini-menu-Save2"
@@ -125,28 +125,6 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (nameFirst)
 `;
 
 exports[`ColumnConfiguratorColumnNameDetails should render correctly (visualFeedback) 1`] = `
-<div>
-  <div
-    class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
-  >
-    <input
-      autocomplete="off"
-      class="column-configurator-column-name-details__name"
-      placeholder="Name"
-      value="Default Name"
-    />
-    <div
-      class="column-configurator-column-name-details__inline-description"
-      role="button"
-      tabindex="0"
-    >
-      Default Description
-    </div>
-  </div>
-</div>
-`;
-
-exports[`ColumnConfiguratorColumnNameDetails should render correctly 1`] = `
 <div>
   <div
     class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"

@@ -35,6 +35,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
 
   const descriptionConfirmMiniMenu: MiniMenuItem[] = [
     {
+      className: "mini-menu-item--cancel",
       element: <CloseIcon />,
       label: t("Templates.ColumnsConfiguratorColumn.cancel"),
       onClick(): void {
@@ -43,6 +44,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
       },
     },
     {
+      className: "mini-menu-item--save",
       element: <CheckDoneIcon />,
       label: t("Templates.ColumnsConfiguratorColumn.save"),
       onClick(): void {
