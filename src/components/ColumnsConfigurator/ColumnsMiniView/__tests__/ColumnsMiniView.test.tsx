@@ -1,4 +1,4 @@
-import {ColumnsMiniView, ColumnsMiniViewProps} from "../ColumnsMiniView";
+import {ColumnsMiniView} from "../ColumnsMiniView";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {convertToEditableColumn} from "../../ColumnsConfigurator.utils";
 import {render} from "testUtils";
@@ -22,5 +22,20 @@ describe("ColumnsMiniView", () => {
     const {container} = renderColumnsMiniView("test-templates-id-2");
     expect(container).toMatchSnapshot();
     expect(container.firstChild?.childNodes).toHaveLength(1);
+  });
+
+  it("should have left and right border respectively", () => {
+    const {container} = renderColumnsMiniView("test-templates-id-1");
+
+    const miniColumnElement = container.querySelectorAll<HTMLDivElement>(".columns-mini-view__column");
+    expect(miniColumnElement[0]).toHaveClass("columns-mini-view__column--border-first");
+    expect(miniColumnElement[1]).toHaveClass("columns-mini-view__column--border-last");
+  });
+
+  it("should have all borders", () => {
+    const {container} = renderColumnsMiniView("test-templates-id-2");
+
+    const miniColumnElement = container.querySelector<HTMLDivElement>(".columns-mini-view__column");
+    expect(miniColumnElement).toHaveClass("columns-mini-view__column--border-all");
   });
 });
