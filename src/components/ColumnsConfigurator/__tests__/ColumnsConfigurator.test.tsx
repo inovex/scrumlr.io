@@ -4,13 +4,12 @@ import {render} from "testUtils";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {convertToEditableColumn} from "components/ColumnsConfigurator/ColumnsConfigurator.utils";
 
-const renderColumnsConfigurator = (override?: Partial<ColumnsConfiguratorProps>) => {
-  const defaultTemplateId = "test-templates-id-1";
+const renderColumnsConfigurator = (templateId: string, override?: Partial<Omit<ColumnsConfiguratorProps, "templateId" | "columns">>) => {
   const defaultProps: ColumnsConfiguratorProps = {
     className: "test-columns-configurator",
-    templateId: defaultTemplateId,
+    templateId,
     columns: getTestApplicationState()
-      .templatesColumns.filter((c) => c.template === defaultTemplateId)
+      .templatesColumns.filter((tc) => tc.template === templateId)
       .map((tc) => convertToEditableColumn(tc)),
     addColumn: jest.fn(),
     deleteColumn: jest.fn(),
@@ -23,7 +22,7 @@ const renderColumnsConfigurator = (override?: Partial<ColumnsConfiguratorProps>)
 
 describe("ColumnsConfigurator", () => {
   it("should render correctly", () => {
-    const {container} = renderColumnsConfigurator();
+    const {container} = renderColumnsConfigurator("test-templates-id-1");
     expect(container).toMatchSnapshot();
   });
 });
