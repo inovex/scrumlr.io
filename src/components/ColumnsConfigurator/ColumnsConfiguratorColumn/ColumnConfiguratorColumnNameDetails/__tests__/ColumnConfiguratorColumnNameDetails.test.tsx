@@ -19,4 +19,15 @@ describe("ColumnConfiguratorColumnNameDetails", () => {
     const {container} = renderColumnConfiguratorColumnNameDetails();
     expect(container).toMatchSnapshot();
   });
+
+  it("should match title and description", () => {
+    const name = "Custom Title";
+    const description = "Custom Description";
+    const {container} = renderColumnConfiguratorColumnNameDetails({name, description});
+
+    expect(container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")).toHaveValue(name);
+    expect(container.querySelector<HTMLDivElement>(".column-configurator-column-name-details__inline-description")).toHaveTextContent(description);
+  });
+
+  it("spec name", () => {});
 });
