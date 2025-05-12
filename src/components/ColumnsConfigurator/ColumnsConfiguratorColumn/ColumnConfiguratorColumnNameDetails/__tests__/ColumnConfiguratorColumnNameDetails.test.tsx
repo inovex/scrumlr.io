@@ -15,8 +15,23 @@ const renderColumnConfiguratorColumnNameDetails = (override?: Partial<ColumnConf
 };
 
 describe("ColumnConfiguratorColumnNameDetails", () => {
-  it("should render correctly", () => {
-    const {container} = renderColumnConfiguratorColumnNameDetails();
+  it("should render correctly (closed)", () => {
+    const {container} = renderColumnConfiguratorColumnNameDetails({openState: "closed"});
+    expect(container).toMatchSnapshot();
+  });
+
+  it("should render correctly (visualFeedback)", () => {
+    const {container} = renderColumnConfiguratorColumnNameDetails({openState: "visualFeedback"});
+    expect(container).toMatchSnapshot();
+  });
+
+  it("should render correctly (nameFirst)", () => {
+    const {container} = renderColumnConfiguratorColumnNameDetails({openState: "nameFirst"});
+    expect(container).toMatchSnapshot();
+  });
+
+  it("should render correctly (descriptionFirst)", () => {
+    const {container} = renderColumnConfiguratorColumnNameDetails({openState: "descriptionFirst"});
     expect(container).toMatchSnapshot();
   });
 
@@ -28,6 +43,4 @@ describe("ColumnConfiguratorColumnNameDetails", () => {
     expect(container.querySelector<HTMLInputElement>(".column-configurator-column-name-details__name")).toHaveValue(name);
     expect(container.querySelector<HTMLDivElement>(".column-configurator-column-name-details__inline-description")).toHaveTextContent(description);
   });
-
-  it("spec name", () => {});
 });
