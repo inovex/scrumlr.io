@@ -9,7 +9,7 @@ import "./ColumnConfiguratorColumnNameDetails.scss";
 
 export type OpenState = "closed" | "visualFeedback" | "nameFirst" | "descriptionFirst";
 
-type ColumnConfiguratorColumnNameDetailsProps = {
+export type ColumnConfiguratorColumnNameDetailsProps = {
   className: string;
 
   name: string;

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnConfiguratorColumnNameDetails should render correctly 1`] = `
+<div>
+  <div
+    class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
+  >
+    <input
+      autocomplete="off"
+      class="column-configurator-column-name-details__name"
+      placeholder="Name"
+      value="Default Name"
+    />
+    <div
+      class="column-configurator-column-name-details__inline-description"
+      role="button"
+      tabindex="0"
+    >
+      Default Description
+    </div>
+  </div>
+</div>
+`;
