@@ -1,7 +1,7 @@
 import {ColumnConfiguratorColumnNameDetails, ColumnConfiguratorColumnNameDetailsProps} from "../ColumnConfiguratorColumnNameDetails";
 import {render} from "testUtils";
 
-const renderColumnConfiguratorColumnNameDetails = (override: Partial<ColumnConfiguratorColumnNameDetailsProps> = {}) => {
+const renderColumnConfiguratorColumnNameDetails = (override?: Partial<ColumnConfiguratorColumnNameDetailsProps>) => {
   const defaultProps: ColumnConfiguratorColumnNameDetailsProps = {
     className: "column-configurator-column-name-details",
     name: "Default Name",

@@ -12,7 +12,7 @@ export type TemplateColumn = {
 
 export type TemplateColumnAction = "create" | "edit" | "delete";
 
-type ExistenceStatus = {
+export type ExistenceStatus = {
   persisted: boolean;
   mode?: TemplateColumnAction;
 };

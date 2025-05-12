@@ -6,6 +6,7 @@ import {EditableTemplateColumn} from "store/features";
 import {MockStoreEnhanced} from "redux-mock-store";
 import {ApplicationState} from "store";
 import {fireEvent} from "@testing-library/react";
+import {convertToEditableColumn} from "../../ColumnsConfigurator.utils";
 
 describe("ColumnConfiguratorColumn render", () => {
   let testStore: MockStoreEnhanced<ApplicationState>;
@@ -13,6 +14,25 @@ describe("ColumnConfiguratorColumn render", () => {
   beforeEach(() => {
     testStore = getTestStore();
   });
+
+  // different way of rendering the columns configurator column
+  /* const renderColumnConfiguratorColumn = (override: Partial<ColumnsConfiguratorColumnProps> = {}) => {
+    const testTemplatesColumns = getTestApplicationState().templatesColumns
+    const testEditableTemplatesColumns = testTemplatesColumns.map(c => convertToEditableColumn(c))
+    const editableTemplatesColumn0 = testEditableTemplatesColumns[0]
+    const editableTemplatesColumn1 = testEditableTemplatesColumns[1]
+    const allColumns = [editableTemplatesColumn0, editableTemplatesColumn1]
+
+    const defaultProps: ColumnsConfiguratorColumnProps = {
+      className: "columns-configurator-column",
+      column: editableTemplatesColumn0,
+      index: 0,
+      allColumns,
+      editColumn: jest.fn(),
+    };
+
+    return render(<ColumnsConfiguratorColumn {...defaultProps} {...override}/>);
+  }; */
 
   const renderColumnConfiguratorColumn = (
     templateId: string,
@@ -23,7 +43,7 @@ describe("ColumnConfiguratorColumn render", () => {
   ) => {
     // some preprocessing to get the correct column and convert to editableColumn, which would normally be done by TemplateEditor component
     const columns = testStore.getState().templatesColumns.filter((tc) => tc.template === templateId);
-    const editableColumns = columns.map((bc) => ({...bc, persisted: false, mode: undefined}) as EditableTemplateColumn);
+    const editableColumns = columns.map((bc) => convertToEditableColumn(bc));
     const column = editableColumns.find((c) => c.id === columnId)!;
 
     return render(

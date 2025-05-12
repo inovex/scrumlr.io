@@ -14,7 +14,7 @@ import {ColumnConfiguratorColumnNameDetails, OpenState} from "./ColumnConfigurat
 import {ColumnPlacement} from "../ColumnsConfigurator.types";
 import "./ColumnsConfiguratorColumn.scss";
 
-type ColumnsConfiguratorColumnProps = {
+export type ColumnsConfiguratorColumnProps = {
   className?: string;
   column: EditableTemplateColumn;
   index: number;

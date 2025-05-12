@@ -1,4 +1,4 @@
-import {TemplateColumn} from "store/features";
+import {EditableTemplateColumn, ExistenceStatus, TemplateColumn} from "store/features";
 import {ColumnPlacement} from "./ColumnsConfigurator.types";
 
 export const calcPlacement = (index: number, columns: TemplateColumn[]): ColumnPlacement => {
@@ -14,3 +14,12 @@ export const calcPlacement = (index: number, columns: TemplateColumn[]): ColumnP
   }
   return "center";
 };
+
+// convert TemplateColumn to EditableColumn, used for test purposes
+export const convertToEditableColumn = (c: TemplateColumn, overrideExistenceStatus?: Partial<ExistenceStatus>): EditableTemplateColumn =>
+  ({
+    ...c,
+    persisted: false,
+    mode: undefined,
+    ...overrideExistenceStatus,
+  }) as EditableTemplateColumn;
