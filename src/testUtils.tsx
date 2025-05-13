@@ -1,10 +1,12 @@
 import {render, RenderOptions} from "@testing-library/react";
 import {I18nextProvider} from "react-i18next";
-import {FC, PropsWithChildren, ReactElement, ReactNode} from "react";
+import {FC, PropsWithChildren, ReactElement} from "react";
 import {MemoryRouter, Outlet, Route, Routes} from "react-router";
 import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import i18n from "./i18nTest";
+
+type PropsWithChildrenAndContext = PropsWithChildren & {context: unknown};
 
 export type AssertTypeEqual<T, Expected> = T extends Expected ? (Expected extends T ? true : never) : never;
 
@@ -20,12 +22,7 @@ const AllTheProviders: FC<PropsWithChildren> = ({children}) => (
   </MemoryRouter>
 );
 
-interface AllTheProvidersProps {
-  children: ReactNode;
-  context: unknown;
-}
-
-const AllTheProvidersWithContext: FC<AllTheProvidersProps> = ({children, context}) => (
+const AllTheProvidersWithContext: FC<PropsWithChildrenAndContext> = ({children, context}) => (
   <MemoryRouter>
     <Routes>
       <Route path="/" element={<Outlet context={context} />}>
