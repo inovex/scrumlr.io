@@ -18,6 +18,17 @@ import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID} 
 import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
 
+import {UnleashClient} from "unleash-proxy-client";
+import {FlagProvider} from "@unleash/proxy-client-react";
+
+const unleash = new UnleashClient({
+  url: "https://unleash.dev.scrumlr.fra.ics.inovex.io/api/frontend",
+  clientKey: "take it from unlesh UI",
+  appName: "scrumlr-frontend",
+  environment: "development",
+});
+unleash.start();
+
 const APP_VERSION = process.env.REACT_APP_VERSION;
 if (APP_VERSION) {
   saveToStorage(APP_VERSION_STORAGE_KEY, APP_VERSION);
@@ -36,9 +47,7 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
       const url = `${baseUrl}/board/${Array.from(new Uint8Array(hash))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("")}`;
-      trackPageview({
-        url,
-      });
+      trackPageview({url});
     } else {
       trackPageview();
     }
@@ -48,25 +57,26 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
 
-// If clarity ID is set and not empty in env variables, initialize Clarity
 if (CLARITY_ID && CLARITY_ID !== "") {
-  // TODO: tracking, including storing data using third party services has to be explicitly opt in!
   // Clarity.init(CLARITY_ID);
 }
 
 root.render(
   <React.StrictMode>
-    <I18nextProvider i18n={i18n}>
-      <Provider store={store}>
-        <Html />
-        <Suspense fallback={<LoadingScreen />}>
-          <Tooltip id="scrumlr-tooltip" />
-          <ToastContainer limit={2} />
-          <Router />
-          {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
-        </Suspense>
-      </Provider>
-    </I18nextProvider>
+    <FlagProvider unleashClient={unleash}>
+      <I18nextProvider i18n={i18n}>
+        <Provider store={store}>
+          <Html />
+          <Suspense fallback={<LoadingScreen />}>
+            <Tooltip id="scrumlr-tooltip" />
+            <ToastContainer limit={2} />
+            <Router />
+            {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
+          </Suspense>
+        </Provider>
+      </I18nextProvider>
+    </FlagProvider>
   </React.StrictMode>
 );
+
 store.dispatch(initAuth());

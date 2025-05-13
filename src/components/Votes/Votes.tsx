@@ -5,6 +5,7 @@ import _ from "underscore";
 import {useAppSelector} from "store";
 import {VoteButtons} from "./VoteButtons";
 import "./Votes.scss";
+import {useFlag} from "@unleash/proxy-client-react";
 
 type VotesProps = {
   className?: string;
@@ -16,6 +17,7 @@ type VotesProps = {
 
 export const Votes: FC<VotesProps> = (props) => {
   const {t} = useTranslation();
+  const showNames = useFlag("non-AnonymousVoting");
 
   const voting = useAppSelector((state) => state.votings.open);
   const ongoingVotes = useAppSelector(
@@ -36,7 +38,8 @@ export const Votes: FC<VotesProps> = (props) => {
 
   const {isAnonymous, participantsNames} = useAppSelector((state) => {
     const lastVoting = state.votings?.past?.[0];
-    if (!lastVoting || lastVoting.isAnonymous) {
+
+    if (!lastVoting || (lastVoting.isAnonymous && !showNames)) {
       return {participantsNames: "", isAnonymous: true};
     }
 
@@ -97,6 +100,11 @@ export const Votes: FC<VotesProps> = (props) => {
 
   return voting || allPastVotes > 0 ? (
     <div role="none" className={classNames("votes", props.className)} onClick={(e) => e.stopPropagation()}>
+      {voting && (
+        <div className="votes__info" style={{fontSize: "0.8rem", color: "#666", marginBottom: "0.25rem"}}>
+          {showNames ? t("Votes.NonAnonymousHint", "👤 Deine Stimme wird namentlich gespeichert.") : t("Votes.AnonymousHint", "🕵️ Deine Stimme ist anonym.")}
+        </div>
+      )}
       {!voting && allPastVotes > 0 && (
         <VoteButtons.Remove
           noteId={props.noteId}
