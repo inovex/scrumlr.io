@@ -44,7 +44,7 @@ export const Templates = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const searchBarInput: string = useOutletContext();
+  const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
 
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
 

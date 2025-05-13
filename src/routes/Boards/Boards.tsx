@@ -121,7 +121,7 @@ export const Boards = () => {
         {renderExpandedView()}
 
         <main className={classNames("boards__outlet", {"boards__outlet--extended-top": viewType === "overview"})}>
-          <Outlet context={searchBarInput} />
+          <Outlet context={{searchBarInput}} />
         </main>
       </div>
     </div>
