@@ -1,19 +1,15 @@
-package dto
+package boards
 
 import (
+	"github.com/google/uuid"
 	"net/http"
-	"scrumlr.io/server/voting"
-	"time"
-
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
-
-	"github.com/google/uuid"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
-	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/votings"
+	"time"
 )
 
 // Board is the response for all board requests.
@@ -27,7 +23,7 @@ type Board struct {
 	Description *string `json:"description"`
 
 	// The access policy
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy AccessPolicy `json:"accessPolicy"`
 
 	// The show authors
 	ShowAuthors bool `json:"showAuthors"`
@@ -55,7 +51,7 @@ type Board struct {
 	Salt       *string `json:"-"`
 }
 
-func (b *Board) From(board database.Board) *Board {
+func (b *Board) From(board DatabaseBoard) *Board {
 	b.ID = board.ID
 	b.Name = board.Name
 	b.Description = board.Description
@@ -86,7 +82,7 @@ type CreateBoardRequest struct {
 	// Description of the board
 	Description *string `json:"description"`
 
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy AccessPolicy `json:"accessPolicy"`
 
 	// The passphrase must be set if access policy is defined as by passphrase.
 	Passphrase *string `json:"passphrase"`
@@ -110,7 +106,7 @@ type BoardUpdateRequest struct {
 	Description *string `json:"description"`
 
 	// The new access policy of the board.
-	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy *AccessPolicy `json:"accessPolicy"`
 
 	// The passphrase of the board.
 	Passphrase *string `json:"passphrase"`
@@ -154,7 +150,7 @@ type ImportBoardRequest struct {
 	Board   *CreateBoardRequest `json:"board"`
 	Columns []columns.Column    `json:"columns"`
 	Notes   []notes.Note        `json:"notes"`
-	Votings []voting.Voting     `json:"votings"`
+	Votings []votings.Voting    `json:"votings"`
 }
 
 type FullBoard struct {
@@ -164,18 +160,18 @@ type FullBoard struct {
 	Columns              []*columns.Column                      `json:"columns"`
 	Notes                []*notes.Note                          `json:"notes"`
 	Reactions            []*reactions.Reaction                  `json:"reactions"`
-	Votings              []*voting.Voting                       `json:"votings"`
-	Votes                []*voting.Vote                         `json:"votes"`
+	Votings              []*votings.Voting                      `json:"votings"`
+	Votes                []*votings.Vote                        `json:"votes"`
 }
 
-func (dtoFullBoard *FullBoard) From(dbFullBoard database.FullBoard) *FullBoard {
+func (dtoFullBoard *FullBoard) From(dbFullBoard DatabaseFullBoard) *FullBoard {
 	dtoFullBoard.Board = new(Board).From(dbFullBoard.Board)
 	dtoFullBoard.BoardSessionRequests = sessionrequests.BoardSessionRequests(dbFullBoard.BoardSessionRequests)
 	dtoFullBoard.BoardSessions = sessions.BoardSessions(dbFullBoard.BoardSessions)
 	dtoFullBoard.Columns = columns.Columns(dbFullBoard.Columns)
 	dtoFullBoard.Notes = notes.Notes(dbFullBoard.Notes)
 	dtoFullBoard.Reactions = reactions.Reactions(dbFullBoard.Reactions)
-	dtoFullBoard.Votings = voting.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
-	dtoFullBoard.Votes = voting.Votes(dbFullBoard.Votes)
+	dtoFullBoard.Votings = votings.Votings(dbFullBoard.Votings, dbFullBoard.Votes)
+	dtoFullBoard.Votes = votings.Votes(dbFullBoard.Votes)
 	return dtoFullBoard
 }

@@ -2,8 +2,8 @@ package boardtemplates
 
 import (
 	"github.com/google/uuid"
+	"scrumlr.io/server/board"
 	"scrumlr.io/server/columntemplates"
-	"scrumlr.io/server/database/types"
 )
 
 type BoardTemplate struct {
@@ -20,7 +20,7 @@ type BoardTemplate struct {
 	Description *string `json:"description"`
 
 	// The access policy
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy boards.AccessPolicy `json:"accessPolicy"`
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
@@ -40,7 +40,7 @@ type BoardTemplateFull struct {
 	Description *string `json:"description"`
 
 	// The access policy
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy boards.AccessPolicy `json:"accessPolicy"`
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
@@ -61,7 +61,7 @@ type CreateBoardTemplateRequest struct {
 	Description *string `json:"description"`
 
 	// Access policy of the board template
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy boards.AccessPolicy `json:"accessPolicy"`
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
@@ -81,7 +81,7 @@ type BoardTemplateUpdateRequest struct {
 	Description *string `json:"description"`
 
 	// The access policy
-	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
+	AccessPolicy *boards.AccessPolicy `json:"accessPolicy"`
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`

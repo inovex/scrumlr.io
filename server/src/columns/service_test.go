@@ -12,7 +12,7 @@ import (
 	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 )
 
 func TestCreateColumn(t *testing.T) {
@@ -45,7 +45,7 @@ func TestCreateColumn(t *testing.T) {
 	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
 		Return([]*notes.Note{}, nil)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -82,7 +82,7 @@ func TestCreateColumn_DatabaseError(t *testing.T) {
 
 	mockNoteService := notes.NewMockNotesService(t)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -115,11 +115,11 @@ func TestDeleteColumn(t *testing.T) {
 	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
 		Return([]*notes.Note{}, nil)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 	mockVotingService.EXPECT().GetOpen(context.Background(), boardId).
-		Return(&voting.Voting{ID: votingId}, nil)
+		Return(&votings.Voting{ID: votingId}, nil)
 	mockVotingService.EXPECT().GetVotes(context.Background(), filter.VoteFilter{Board: boardId, Voting: &votingId}).
-		Return([]*voting.Vote{}, nil)
+		Return([]*votings.Vote{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -144,11 +144,11 @@ func TestDeleteColumn_DatabaseError(t *testing.T) {
 
 	mockNoteService := notes.NewMockNotesService(t)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 	mockVotingService.EXPECT().GetOpen(context.Background(), boardId).
-		Return(&voting.Voting{ID: votingId}, nil)
+		Return(&votings.Voting{ID: votingId}, nil)
 	mockVotingService.EXPECT().GetVotes(context.Background(), filter.VoteFilter{Board: boardId, Voting: &votingId}).
-		Return([]*voting.Vote{}, nil)
+		Return([]*votings.Vote{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -189,7 +189,7 @@ func TestUpdateColumn(t *testing.T) {
 	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
 		Return([]*notes.Note{}, nil)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -229,7 +229,7 @@ func TestUpdateColumn_DatabaseError(t *testing.T) {
 
 	mockNoteService := notes.NewMockNotesService(t)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -266,7 +266,7 @@ func TestGetColumn(t *testing.T) {
 
 	mockNoteService := notes.NewMockNotesService(t)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -294,7 +294,7 @@ func TestGetColumn_DatabaseError(t *testing.T) {
 
 	mockNoteService := notes.NewMockNotesService(t)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -337,7 +337,7 @@ func TestGetAllColumns(t *testing.T) {
 
 	mockNoteService := notes.NewMockNotesService(t)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 
@@ -370,7 +370,7 @@ func TestGetAllColumns_DatabaseError(t *testing.T) {
 
 	mockNoteService := notes.NewMockNotesService(t)
 
-	mockVotingService := voting.NewMockVotingService(t)
+	mockVotingService := votings.NewMockVotingService(t)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService, mockVotingService)
 

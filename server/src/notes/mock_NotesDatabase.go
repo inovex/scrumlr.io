@@ -21,22 +21,24 @@ func (_m *MockNotesDatabase) EXPECT() *MockNotesDatabase_Expecter {
 }
 
 // CreateNote provides a mock function with given fields: insert
-func (_m *MockNotesDatabase) CreateNote(insert NoteInsertDB) (NoteDB, error) {
+func (_m *MockNotesDatabase) CreateNote(insert NoteInsertDB) (*NoteDB, error) {
 	ret := _m.Called(insert)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateNote")
 	}
 
-	var r0 NoteDB
+	var r0 *NoteDB
 	var r1 error
-	if rf, ok := ret.Get(0).(func(NoteInsertDB) (NoteDB, error)); ok {
+	if rf, ok := ret.Get(0).(func(NoteInsertDB) (*NoteDB, error)); ok {
 		return rf(insert)
 	}
-	if rf, ok := ret.Get(0).(func(NoteInsertDB) NoteDB); ok {
+	if rf, ok := ret.Get(0).(func(NoteInsertDB) *NoteDB); ok {
 		r0 = rf(insert)
 	} else {
-		r0 = ret.Get(0).(NoteDB)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*NoteDB)
+		}
 	}
 
 	if rf, ok := ret.Get(1).(func(NoteInsertDB) error); ok {
@@ -66,12 +68,12 @@ func (_c *MockNotesDatabase_CreateNote_Call) Run(run func(insert NoteInsertDB)) 
 	return _c
 }
 
-func (_c *MockNotesDatabase_CreateNote_Call) Return(_a0 NoteDB, _a1 error) *MockNotesDatabase_CreateNote_Call {
+func (_c *MockNotesDatabase_CreateNote_Call) Return(_a0 *NoteDB, _a1 error) *MockNotesDatabase_CreateNote_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockNotesDatabase_CreateNote_Call) RunAndReturn(run func(NoteInsertDB) (NoteDB, error)) *MockNotesDatabase_CreateNote_Call {
+func (_c *MockNotesDatabase_CreateNote_Call) RunAndReturn(run func(NoteInsertDB) (*NoteDB, error)) *MockNotesDatabase_CreateNote_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -126,22 +128,24 @@ func (_c *MockNotesDatabase_DeleteNote_Call) RunAndReturn(run func(uuid.UUID, uu
 }
 
 // Get provides a mock function with given fields: id
-func (_m *MockNotesDatabase) Get(id uuid.UUID) (NoteDB, error) {
+func (_m *MockNotesDatabase) Get(id uuid.UUID) (*NoteDB, error) {
 	ret := _m.Called(id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Get")
 	}
 
-	var r0 NoteDB
+	var r0 *NoteDB
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID) (NoteDB, error)); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID) (*NoteDB, error)); ok {
 		return rf(id)
 	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID) NoteDB); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID) *NoteDB); ok {
 		r0 = rf(id)
 	} else {
-		r0 = ret.Get(0).(NoteDB)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*NoteDB)
+		}
 	}
 
 	if rf, ok := ret.Get(1).(func(uuid.UUID) error); ok {
@@ -171,18 +175,18 @@ func (_c *MockNotesDatabase_Get_Call) Run(run func(id uuid.UUID)) *MockNotesData
 	return _c
 }
 
-func (_c *MockNotesDatabase_Get_Call) Return(_a0 NoteDB, _a1 error) *MockNotesDatabase_Get_Call {
+func (_c *MockNotesDatabase_Get_Call) Return(_a0 *NoteDB, _a1 error) *MockNotesDatabase_Get_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockNotesDatabase_Get_Call) RunAndReturn(run func(uuid.UUID) (NoteDB, error)) *MockNotesDatabase_Get_Call {
+func (_c *MockNotesDatabase_Get_Call) RunAndReturn(run func(uuid.UUID) (*NoteDB, error)) *MockNotesDatabase_Get_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetAll provides a mock function with given fields: board, columns
-func (_m *MockNotesDatabase) GetAll(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error) {
+func (_m *MockNotesDatabase) GetAll(board uuid.UUID, columns ...uuid.UUID) ([]*NoteDB, error) {
 	_va := make([]interface{}, len(columns))
 	for _i := range columns {
 		_va[_i] = columns[_i]
@@ -196,16 +200,16 @@ func (_m *MockNotesDatabase) GetAll(board uuid.UUID, columns ...uuid.UUID) ([]No
 		panic("no return value specified for GetAll")
 	}
 
-	var r0 []NoteDB
+	var r0 []*NoteDB
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) ([]NoteDB, error)); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) ([]*NoteDB, error)); ok {
 		return rf(board, columns...)
 	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) []NoteDB); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID, ...uuid.UUID) []*NoteDB); ok {
 		r0 = rf(board, columns...)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]NoteDB)
+			r0 = ret.Get(0).([]*NoteDB)
 		}
 	}
 
@@ -244,34 +248,34 @@ func (_c *MockNotesDatabase_GetAll_Call) Run(run func(board uuid.UUID, columns .
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetAll_Call) Return(_a0 []NoteDB, _a1 error) *MockNotesDatabase_GetAll_Call {
+func (_c *MockNotesDatabase_GetAll_Call) Return(_a0 []*NoteDB, _a1 error) *MockNotesDatabase_GetAll_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetAll_Call) RunAndReturn(run func(uuid.UUID, ...uuid.UUID) ([]NoteDB, error)) *MockNotesDatabase_GetAll_Call {
+func (_c *MockNotesDatabase_GetAll_Call) RunAndReturn(run func(uuid.UUID, ...uuid.UUID) ([]*NoteDB, error)) *MockNotesDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetChildNotes provides a mock function with given fields: parentNote
-func (_m *MockNotesDatabase) GetChildNotes(parentNote uuid.UUID) ([]NoteDB, error) {
+func (_m *MockNotesDatabase) GetChildNotes(parentNote uuid.UUID) ([]*NoteDB, error) {
 	ret := _m.Called(parentNote)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetChildNotes")
 	}
 
-	var r0 []NoteDB
+	var r0 []*NoteDB
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID) ([]NoteDB, error)); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID) ([]*NoteDB, error)); ok {
 		return rf(parentNote)
 	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID) []NoteDB); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID) []*NoteDB); ok {
 		r0 = rf(parentNote)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]NoteDB)
+			r0 = ret.Get(0).([]*NoteDB)
 		}
 	}
 
@@ -302,34 +306,34 @@ func (_c *MockNotesDatabase_GetChildNotes_Call) Run(run func(parentNote uuid.UUI
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetChildNotes_Call) Return(_a0 []NoteDB, _a1 error) *MockNotesDatabase_GetChildNotes_Call {
+func (_c *MockNotesDatabase_GetChildNotes_Call) Return(_a0 []*NoteDB, _a1 error) *MockNotesDatabase_GetChildNotes_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetChildNotes_Call) RunAndReturn(run func(uuid.UUID) ([]NoteDB, error)) *MockNotesDatabase_GetChildNotes_Call {
+func (_c *MockNotesDatabase_GetChildNotes_Call) RunAndReturn(run func(uuid.UUID) ([]*NoteDB, error)) *MockNotesDatabase_GetChildNotes_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetStack provides a mock function with given fields: noteID
-func (_m *MockNotesDatabase) GetStack(noteID uuid.UUID) ([]NoteDB, error) {
+func (_m *MockNotesDatabase) GetStack(noteID uuid.UUID) ([]*NoteDB, error) {
 	ret := _m.Called(noteID)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetStack")
 	}
 
-	var r0 []NoteDB
+	var r0 []*NoteDB
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID) ([]NoteDB, error)); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID) ([]*NoteDB, error)); ok {
 		return rf(noteID)
 	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID) []NoteDB); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID) []*NoteDB); ok {
 		r0 = rf(noteID)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]NoteDB)
+			r0 = ret.Get(0).([]*NoteDB)
 		}
 	}
 
@@ -360,33 +364,35 @@ func (_c *MockNotesDatabase_GetStack_Call) Run(run func(noteID uuid.UUID)) *Mock
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetStack_Call) Return(_a0 []NoteDB, _a1 error) *MockNotesDatabase_GetStack_Call {
+func (_c *MockNotesDatabase_GetStack_Call) Return(_a0 []*NoteDB, _a1 error) *MockNotesDatabase_GetStack_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetStack_Call) RunAndReturn(run func(uuid.UUID) ([]NoteDB, error)) *MockNotesDatabase_GetStack_Call {
+func (_c *MockNotesDatabase_GetStack_Call) RunAndReturn(run func(uuid.UUID) ([]*NoteDB, error)) *MockNotesDatabase_GetStack_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // ImportNote provides a mock function with given fields: insert
-func (_m *MockNotesDatabase) ImportNote(insert NoteImportDB) (NoteDB, error) {
+func (_m *MockNotesDatabase) ImportNote(insert NoteImportDB) (*NoteDB, error) {
 	ret := _m.Called(insert)
 
 	if len(ret) == 0 {
 		panic("no return value specified for ImportNote")
 	}
 
-	var r0 NoteDB
+	var r0 *NoteDB
 	var r1 error
-	if rf, ok := ret.Get(0).(func(NoteImportDB) (NoteDB, error)); ok {
+	if rf, ok := ret.Get(0).(func(NoteImportDB) (*NoteDB, error)); ok {
 		return rf(insert)
 	}
-	if rf, ok := ret.Get(0).(func(NoteImportDB) NoteDB); ok {
+	if rf, ok := ret.Get(0).(func(NoteImportDB) *NoteDB); ok {
 		r0 = rf(insert)
 	} else {
-		r0 = ret.Get(0).(NoteDB)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*NoteDB)
+		}
 	}
 
 	if rf, ok := ret.Get(1).(func(NoteImportDB) error); ok {
@@ -416,33 +422,35 @@ func (_c *MockNotesDatabase_ImportNote_Call) Run(run func(insert NoteImportDB)) 
 	return _c
 }
 
-func (_c *MockNotesDatabase_ImportNote_Call) Return(_a0 NoteDB, _a1 error) *MockNotesDatabase_ImportNote_Call {
+func (_c *MockNotesDatabase_ImportNote_Call) Return(_a0 *NoteDB, _a1 error) *MockNotesDatabase_ImportNote_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockNotesDatabase_ImportNote_Call) RunAndReturn(run func(NoteImportDB) (NoteDB, error)) *MockNotesDatabase_ImportNote_Call {
+func (_c *MockNotesDatabase_ImportNote_Call) RunAndReturn(run func(NoteImportDB) (*NoteDB, error)) *MockNotesDatabase_ImportNote_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // UpdateNote provides a mock function with given fields: caller, update
-func (_m *MockNotesDatabase) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error) {
+func (_m *MockNotesDatabase) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error) {
 	ret := _m.Called(caller, update)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateNote")
 	}
 
-	var r0 NoteDB
+	var r0 *NoteDB
 	var r1 error
-	if rf, ok := ret.Get(0).(func(uuid.UUID, NoteUpdateDB) (NoteDB, error)); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID, NoteUpdateDB) (*NoteDB, error)); ok {
 		return rf(caller, update)
 	}
-	if rf, ok := ret.Get(0).(func(uuid.UUID, NoteUpdateDB) NoteDB); ok {
+	if rf, ok := ret.Get(0).(func(uuid.UUID, NoteUpdateDB) *NoteDB); ok {
 		r0 = rf(caller, update)
 	} else {
-		r0 = ret.Get(0).(NoteDB)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*NoteDB)
+		}
 	}
 
 	if rf, ok := ret.Get(1).(func(uuid.UUID, NoteUpdateDB) error); ok {
@@ -473,12 +481,12 @@ func (_c *MockNotesDatabase_UpdateNote_Call) Run(run func(caller uuid.UUID, upda
 	return _c
 }
 
-func (_c *MockNotesDatabase_UpdateNote_Call) Return(_a0 NoteDB, _a1 error) *MockNotesDatabase_UpdateNote_Call {
+func (_c *MockNotesDatabase_UpdateNote_Call) Return(_a0 *NoteDB, _a1 error) *MockNotesDatabase_UpdateNote_Call {
 	_c.Call.Return(_a0, _a1)
 	return _c
 }
 
-func (_c *MockNotesDatabase_UpdateNote_Call) RunAndReturn(run func(uuid.UUID, NoteUpdateDB) (NoteDB, error)) *MockNotesDatabase_UpdateNote_Call {
+func (_c *MockNotesDatabase_UpdateNote_Call) RunAndReturn(run func(uuid.UUID, NoteUpdateDB) (*NoteDB, error)) *MockNotesDatabase_UpdateNote_Call {
 	_c.Call.Return(run)
 	return _c
 }

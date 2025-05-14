@@ -12,7 +12,7 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 )
 
 type ColumnDatabase interface {
@@ -27,10 +27,10 @@ type Service struct {
 	database      ColumnDatabase
 	realtime      *realtime.Broker
 	noteService   notes.NotesService
-	votingService voting.VotingService
+	votingService votings.VotingService
 }
 
-func NewColumnService(db ColumnDatabase, rt *realtime.Broker, noteService notes.NotesService, votingService voting.VotingService) ColumnService {
+func NewColumnService(db ColumnDatabase, rt *realtime.Broker, noteService notes.NotesService, votingService votings.VotingService) ColumnService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
@@ -57,7 +57,7 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 	log := logger.FromContext(ctx)
 
 	openVoting, err := service.votingService.GetOpen(ctx, board)
-	var toBeDeletedVotes []*voting.Vote
+	var toBeDeletedVotes []*votings.Vote
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
 			log.Errorw("unable to get open voting", "board", board, "err", err)
@@ -171,7 +171,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	return "", err
 }
 
-func (service *Service) deletedColumn(ctx context.Context, user, board, column uuid.UUID, toBeDeletedVotes []*voting.Vote) {
+func (service *Service) deletedColumn(ctx context.Context, user, board, column uuid.UUID, toBeDeletedVotes []*votings.Vote) {
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
 		Data: column,

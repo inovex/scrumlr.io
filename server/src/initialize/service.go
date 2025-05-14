@@ -2,8 +2,9 @@ package initialize
 
 import (
 	"net/http"
+	"scrumlr.io/server/boards"
 
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"
@@ -30,7 +31,7 @@ type ServiceInitializer struct {
 	client *http.Client
 }
 
-func NewSerivceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
+func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 	initializer := new(ServiceInitializer)
 	initializer.db = db
 	initializer.rt = rt
@@ -43,7 +44,14 @@ func NewSerivceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 	return *initializer
 }
 
-func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService, votingService voting.VotingService) columns.ColumnService {
+func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) boards.BoardService {
+	boardDB := boards.NewBoardDatabase(init.db)
+	boardService := boards.NewBoardService(boardDB, init.rt, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+
+	return boardService
+}
+
+func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService, votingService votings.VotingService) columns.ColumnService {
 	columnDb := columns.NewColumnsDatabase(init.db)
 	columnService := columns.NewColumnService(columnDb, init.rt, noteService, votingService)
 
@@ -124,9 +132,9 @@ func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
 	return notesService
 }
 
-func (init *ServiceInitializer) InitializeVotingService() voting.VotingService {
-	votingDB := voting.NewVotingDatabase(init.db)
-	votingService := voting.NewVotingService(votingDB, init.rt)
+func (init *ServiceInitializer) InitializeVotingService() votings.VotingService {
+	votingDB := votings.NewVotingDatabase(init.db)
+	votingService := votings.NewVotingService(votingDB, init.rt)
 
 	return votingService
 }

@@ -1,6 +1,7 @@
 package database
 
 import (
+	"scrumlr.io/server/boards"
 	"testing"
 
 	"scrumlr.io/server/columns"
@@ -231,21 +232,21 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 	})
 	assert.Nil(t, createNoteError)
 
-	_, updateBoardError := testDb.UpdateBoard(BoardUpdate{
+	_, updateBoardError := boardDb.UpdateBoard(boards.DatabaseBoardUpdate{
 		ID:         boardForColumnsTest,
 		SharedNote: uuid.NullUUID{UUID: note.ID, Valid: true},
 		ShowVoting: uuid.NullUUID{Valid: false},
 	})
 	assert.Nil(t, updateBoardError)
 
-	board, getBoardError := testDb.GetBoard(boardForColumnsTest)
+	board, getBoardError := boardDb.GetBoard(boardForColumnsTest)
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: note.ID, Valid: true})
 
 	deleteColumnError := columnDb.Delete(boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
 	assert.Nil(t, deleteColumnError)
 
-	updatedBoard, getUpdatedBoardError := testDb.GetBoard(boardForColumnsTest)
+	updatedBoard, getUpdatedBoardError := boardDb.GetBoard(boardForColumnsTest)
 	assert.Nil(t, getUpdatedBoardError)
 	assert.Equal(t, updatedBoard.SharedNote, uuid.NullUUID{Valid: false})
 }

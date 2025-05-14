@@ -12,7 +12,7 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/mocks/services"
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 
@@ -57,11 +57,11 @@ func (suite *VoteTestSuite) TestAddVote() {
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
-			votingMock.EXPECT().AddVote(req.req.Context(), voting.VoteRequest{
+			votingMock.EXPECT().AddVote(req.req.Context(), votings.VoteRequest{
 				Board: boardId,
 				User:  userId,
 				Note:  noteId,
-			}).Return(&voting.Vote{
+			}).Return(&votings.Vote{
 				Note: noteId,
 			}, tt.err)
 
