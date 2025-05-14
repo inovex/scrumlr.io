@@ -38,12 +38,13 @@ type BoardDatabase interface {
 	GetBoards(userID uuid.UUID) ([]DatabaseBoard, error)
 }
 
-func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) BoardService {
+func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) BoardService {
 	b := new(Service)
 	b.database = db
 	b.realtime = rt
 	b.sessionService = sessionService
 	b.sessionRequestService = sessionRequestService
+	b.columnService = columnService
 	b.notesService = noteService
 	b.reactionService = reactionService
 	b.votingService = votingService

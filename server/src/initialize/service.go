@@ -44,9 +44,9 @@ func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 	return *initializer
 }
 
-func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) boards.BoardService {
+func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) boards.BoardService {
 	boardDB := boards.NewBoardDatabase(init.db)
-	boardService := boards.NewBoardService(boardDB, init.rt, sessionRequestService, sessionService, noteService, reactionService, votingService)
+	boardService := boards.NewBoardService(boardDB, init.rt, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
 
 	return boardService
 }
