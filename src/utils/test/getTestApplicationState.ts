@@ -193,7 +193,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   templates: [
     {
       id: "test-templates-id-1",
-      creator: "test-participants-self-user-id",
+      creator: "test-auth-user-id",
       name: "sample name 1",
       description: "sample description 1",
       accessPolicy: "PUBLIC",
@@ -201,7 +201,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     },
     {
       id: "test-templates-id-2",
-      creator: "test-participants-self-user-id",
+      creator: "test-auth-user-id",
       name: "sample name 2",
       description: "sample description 2",
       accessPolicy: "PUBLIC",
