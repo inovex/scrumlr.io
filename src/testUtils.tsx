@@ -22,10 +22,11 @@ const AllTheProviders: FC<PropsWithChildren> = ({children}) => (
   </MemoryRouter>
 );
 
+// TODO make a router that is able to inject initialEntries and custom routes
 const AllTheProvidersWithContext: FC<PropsWithChildrenAndContext> = ({children, context}) => (
-  <MemoryRouter>
+  <MemoryRouter initialEntries={[{pathname: "/boards/edit/test-templates-id-1"}]}>
     <Routes>
-      <Route path="/" element={<Outlet context={context} />}>
+      <Route path="/boards/edit/:id" element={<Outlet context={context} />}>
         <Route index element={<AllTheProvidersWithoutRouter>{children}</AllTheProvidersWithoutRouter>} />
       </Route>
     </Routes>

@@ -1,7 +1,7 @@
 import {TemplateEditor, TemplateEditorProps} from "routes/Boards/TemplateEditor/TemplateEditor";
-import {render} from "testUtils";
+import {renderWithContext} from "testUtils";
 
-const renderTemplateEditor = (props: TemplateEditorProps) => render(<TemplateEditor {...props} />);
+const renderTemplateEditor = (props: TemplateEditorProps) => renderWithContext(<TemplateEditor {...props} />, undefined);
 
 describe("TemplateEditor create", () => {
   it("should render correctly (create)", () => {
