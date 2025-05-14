@@ -11,8 +11,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	mock "github.com/stretchr/testify/mock"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	brokerMock "scrumlr.io/server/mocks/realtime"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
 
@@ -27,7 +29,10 @@ func TestGetSession(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Get(context.Background(), boardId, userId)
 
@@ -48,7 +53,10 @@ func TestGetSession_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Get(context.Background(), boardId, userId)
 
@@ -69,7 +77,10 @@ func TestGetSession_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Get(context.Background(), boardId, userId)
 
@@ -95,7 +106,10 @@ func TestGetSessions(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
 
@@ -126,7 +140,10 @@ func TestListSessions_WithFilterConnected(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
 
@@ -157,7 +174,10 @@ func TestListSessions_WithFilterReady(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
 
@@ -188,7 +208,10 @@ func TestListSessions_WithFilterRaisedHand(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
 
@@ -219,7 +242,10 @@ func TestListSessions_WithFilterRole(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
 
@@ -247,7 +273,10 @@ func TestListSessions_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
 
@@ -269,7 +298,10 @@ func TestCreateSession(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Create(context.Background(), boardId, userId)
 
@@ -294,7 +326,10 @@ func TestCreateSession_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Create(context.Background(), boardId, userId)
 
@@ -307,6 +342,8 @@ func TestUpdateSession_Role(t *testing.T) {
 	boardId := uuid.New()
 	moderatorId := uuid.New()
 	userId := uuid.New()
+	firstColumnId := uuid.New()
+	secondColumnId := uuid.New()
 	moderatorRole := ModeratorRole
 
 	mockSessiondb := NewMockSessionDatabase(t)
@@ -324,7 +361,26 @@ func TestUpdateSession_Role(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockColumnService.EXPECT().GetAll(context.Background(), boardId).
+		Return([]*columns.Column{
+			&columns.Column{ID: firstColumnId},
+			&columns.Column{ID: secondColumnId},
+		}, nil)
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, firstColumnId).
+		Return([]*notes.Note{
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
+		}, nil)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, secondColumnId).
+		Return([]*notes.Note{
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
+		}, nil)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:  boardId,
@@ -344,6 +400,8 @@ func TestUpdateSession_Role(t *testing.T) {
 func TestUpdateSession_RaiseHand(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
+	firstColumnId := uuid.New()
+	secondColumnId := uuid.New()
 	raisedHand := true
 
 	mockSessiondb := NewMockSessionDatabase(t)
@@ -359,7 +417,26 @@ func TestUpdateSession_RaiseHand(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockColumnService.EXPECT().GetAll(context.Background(), boardId).
+		Return([]*columns.Column{
+			&columns.Column{ID: firstColumnId},
+			&columns.Column{ID: secondColumnId},
+		}, nil)
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, firstColumnId).
+		Return([]*notes.Note{
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
+		}, nil)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, secondColumnId).
+		Return([]*notes.Note{
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
+		}, nil)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:      boardId,
@@ -390,7 +467,10 @@ func TestUpdateSession_DatbaseErrorGetModerator(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:  boardId,
@@ -421,7 +501,10 @@ func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:  boardId,
@@ -454,7 +537,10 @@ func TestUpdateSession_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:  boardId,
@@ -482,7 +568,10 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:  boardId,
@@ -509,7 +598,10 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:  boardId,
@@ -536,7 +628,10 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:  boardId,
@@ -563,7 +658,10 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
 		Board:  boardId,
@@ -595,7 +693,10 @@ func TestUpdateAllSessions(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	boardSessions, err := sessionService.UpdateAll(context.Background(), BoardSessionsUpdateRequest{Board: boardId, Ready: &ready})
 
@@ -625,7 +726,10 @@ func TestUpdateAllSessions_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	boardSessions, err := sessionService.UpdateAll(context.Background(), BoardSessionsUpdateRequest{Board: boardId, Ready: &ready})
 
@@ -637,6 +741,8 @@ func TestUpdateAllSessions_DatabaseError(t *testing.T) {
 func TestConnectSession(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
+	firstColumnId := uuid.New()
+	secondColumnId := uuid.New()
 	connected := true
 
 	mockSessiondb := NewMockSessionDatabase(t)
@@ -652,7 +758,26 @@ func TestConnectSession(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockColumnService.EXPECT().GetAll(context.Background(), boardId).
+		Return([]*columns.Column{
+			&columns.Column{ID: firstColumnId},
+			&columns.Column{ID: secondColumnId},
+		}, nil)
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, firstColumnId).
+		Return([]*notes.Note{
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
+		}, nil)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, secondColumnId).
+		Return([]*notes.Note{
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
+		}, nil)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	err := sessionService.Connect(context.Background(), boardId, userId)
 
@@ -673,7 +798,10 @@ func TestConnectSession_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	err := sessionService.Connect(context.Background(), boardId, userId)
 
@@ -684,6 +812,8 @@ func TestConnectSession_DatabaseError(t *testing.T) {
 func TestDisconnectSession(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
+	firstColumnId := uuid.New()
+	secondColumnId := uuid.New()
 	connected := false
 
 	mockSessiondb := NewMockSessionDatabase(t)
@@ -699,7 +829,26 @@ func TestDisconnectSession(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockColumnService.EXPECT().GetAll(context.Background(), boardId).
+		Return([]*columns.Column{
+			&columns.Column{ID: firstColumnId},
+			&columns.Column{ID: secondColumnId},
+		}, nil)
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, firstColumnId).
+		Return([]*notes.Note{
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
+		}, nil)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, secondColumnId).
+		Return([]*notes.Note{
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
+			&notes.Note{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
+		}, nil)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	err := sessionService.Disconnect(context.Background(), boardId, userId)
 
@@ -720,7 +869,10 @@ func TestDisconnectSession_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	err := sessionService.Disconnect(context.Background(), boardId, userId)
 
@@ -739,7 +891,10 @@ func TestSessionExists(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	exists, err := sessionService.Exists(context.Background(), boardId, userId)
 
@@ -759,7 +914,10 @@ func TestSessionExists_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	exists, err := sessionService.Exists(context.Background(), boardId, userId)
 
@@ -779,7 +937,10 @@ func TestModeratorSessionExists(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	exists, err := sessionService.ModeratorSessionExists(context.Background(), boardId, userId)
 
@@ -799,7 +960,10 @@ func TestModeratorSessionExists_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	exists, err := sessionService.ModeratorSessionExists(context.Background(), boardId, userId)
 
@@ -819,7 +983,10 @@ func TestIsParticipantBanned(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	banned, err := sessionService.IsParticipantBanned(context.Background(), boardId, userId)
 
@@ -839,7 +1006,10 @@ func TestIsParticipantBanned_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	banned, err := sessionService.IsParticipantBanned(context.Background(), boardId, userId)
 
@@ -850,11 +1020,15 @@ func TestIsParticipantBanned_DatabaseError(t *testing.T) {
 
 func TestFilterfromQueryString_EmptyQuery(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
+
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	query := url.Values{}
 	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
@@ -864,11 +1038,15 @@ func TestFilterfromQueryString_EmptyQuery(t *testing.T) {
 
 func TestFilterfromQueryString_Connected(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
+
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	connected := true
 	query := url.Values{}
@@ -880,11 +1058,15 @@ func TestFilterfromQueryString_Connected(t *testing.T) {
 
 func TestFilterfromQueryString_Ready(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
+
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	ready := true
 	query := url.Values{}
@@ -896,11 +1078,15 @@ func TestFilterfromQueryString_Ready(t *testing.T) {
 
 func TestFilterfromQueryString_Raisedhand(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
+
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	raisedHand := true
 	query := url.Values{}
@@ -912,11 +1098,15 @@ func TestFilterfromQueryString_Raisedhand(t *testing.T) {
 
 func TestFilterfromQueryString_Role(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
+
 	mockBroker := brokerMock.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	sessionService := NewSessionService(mockSessiondb, broker)
+	mockColumnService := columns.NewMockColumnService(t)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
 
 	role := OwnerRole
 	query := url.Values{}
