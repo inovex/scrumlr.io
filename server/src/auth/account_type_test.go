@@ -1,4 +1,4 @@
-package types
+package auth
 
 import (
 	"fmt"
@@ -14,59 +14,59 @@ func TestNewAccountType(t *testing.T) {
 	}{
 		"ANONYMOUS": {
 			have: "ANONYMOUS",
-			want: AccountTypeAnonymous,
+			want: Anonymous,
 		},
 		"GOOGLE": {
 			have: "GOOGLE",
-			want: AccountTypeGoogle,
+			want: Google,
 		},
 		"MICROSOFT": {
 			have: "MICROSOFT",
-			want: AccountTypeMicrosoft,
+			want: Microsoft,
 		},
 		"AZURE_AD": {
 			have: "AZURE_AD",
-			want: AccountTypeAzureAd,
+			want: AzureAd,
 		},
 		"GITHUB": {
 			have: "GITHUB",
-			want: AccountTypeGitHub,
+			want: GitHub,
 		},
 		"APPLE": {
 			have: "APPLE",
-			want: AccountTypeApple,
+			want: Apple,
 		},
 		"OIDC": {
 			have: "OIDC",
-			want: AccountTypeOIDC,
+			want: TypeOIDC,
 		},
 		"ANONYMOUS (lowercase)": {
 			have: "anonymous",
-			want: AccountTypeAnonymous,
+			want: Anonymous,
 		},
 		"GOOGLE (lowercase)": {
 			have: "google",
-			want: AccountTypeGoogle,
+			want: Google,
 		},
 		"MICROSOFT (lowercase)": {
 			have: "microsoft",
-			want: AccountTypeMicrosoft,
+			want: Microsoft,
 		},
 		"AZURE_AD (lowercase)": {
 			have: "azure_ad",
-			want: AccountTypeAzureAd,
+			want: AzureAd,
 		},
 		"GITHUB (lowercase)": {
 			have: "github",
-			want: AccountTypeGitHub,
+			want: GitHub,
 		},
 		"APPLE (lowercase)": {
 			have: "apple",
-			want: AccountTypeApple,
+			want: Apple,
 		},
 		"OIDC (lowercase)": {
 			have: "oidc",
-			want: AccountTypeOIDC,
+			want: TypeOIDC,
 		},
 		"invalid enum value": {
 			have:      "FACEBOOK",
@@ -93,7 +93,7 @@ func TestNewAccountType(t *testing.T) {
 }
 
 func TestAccountTypeEnum(t *testing.T) {
-	values := []AccountType{AccountTypeAnonymous, AccountTypeGoogle, AccountTypeGitHub, AccountTypeMicrosoft, AccountTypeApple, AccountTypeOIDC}
+	values := []AccountType{Anonymous, Google, GitHub, Microsoft, Apple, TypeOIDC}
 	for _, value := range values {
 		var accountType AccountType
 		err := accountType.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))

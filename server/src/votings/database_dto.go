@@ -1,9 +1,8 @@
-package voting
+package votings
 
 import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/database/types"
 	"time"
 )
 
@@ -15,7 +14,7 @@ type VotingDB struct {
 	VoteLimit          int
 	AllowMultipleVotes bool
 	ShowVotesOfOthers  bool
-	Status             types.VotingStatus
+	Status             VotingStatus
 }
 
 type VotingInsert struct {
@@ -24,14 +23,14 @@ type VotingInsert struct {
 	VoteLimit          int
 	AllowMultipleVotes bool
 	ShowVotesOfOthers  bool
-	Status             types.VotingStatus
+	Status             VotingStatus
 }
 
 type VotingUpdate struct {
 	bun.BaseModel `bun:"table:votings"`
 	ID            uuid.UUID
 	Board         uuid.UUID
-	Status        types.VotingStatus
+	Status        VotingStatus
 }
 
 type VoteDB struct {

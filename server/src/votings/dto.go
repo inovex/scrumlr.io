@@ -1,9 +1,9 @@
-package voting
+package votings
 
 import (
-	"github.com/google/uuid"
 	"net/http"
-	"scrumlr.io/server/database/types"
+
+	"github.com/google/uuid"
 	"scrumlr.io/server/notes"
 )
 
@@ -50,20 +50,20 @@ type VotingCreateRequest struct {
 
 // VotingUpdateRequest represents the request to update a voting session.
 type VotingUpdateRequest struct {
-	ID     uuid.UUID          `json:"-"`
-	Board  uuid.UUID          `json:"-"`
-	Status types.VotingStatus `json:"status"`
+	ID     uuid.UUID    `json:"-"`
+	Board  uuid.UUID    `json:"-"`
+	Status VotingStatus `json:"status"`
 }
 
 // Voting is the response for all voting requests.
 type Voting struct {
-	ID                 uuid.UUID          `json:"id"`
-	VoteLimit          int                `json:"voteLimit"`
-	AllowMultipleVotes bool               `json:"allowMultipleVotes"`
-	ShowVotesOfOthers  bool               `json:"showVotesOfOthers"`
-	Status             types.VotingStatus `json:"status"`
-	VotingResults      *VotingResults     `json:"votes,omitempty"`
-	IsAnonymous        bool               `json:"isAnonymous"`
+	ID                 uuid.UUID      `json:"id"`
+	VoteLimit          int            `json:"voteLimit"`
+	AllowMultipleVotes bool           `json:"allowMultipleVotes"`
+	ShowVotesOfOthers  bool           `json:"showVotesOfOthers"`
+	Status             VotingStatus   `json:"status"`
+	VotingResults      *VotingResults `json:"votes,omitempty"`
+	IsAnonymous        bool           `json:"isAnonymous"`
 }
 
 func (v *Voting) From(voting VotingDB, votes []VoteDB) *Voting {

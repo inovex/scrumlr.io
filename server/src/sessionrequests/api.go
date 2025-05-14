@@ -2,7 +2,7 @@ package sessionrequests
 
 import (
 	"context"
-	http "net/http"
+	"net/http"
 
 	"github.com/google/uuid"
 )
