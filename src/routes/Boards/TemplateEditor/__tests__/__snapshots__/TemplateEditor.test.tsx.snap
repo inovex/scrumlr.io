@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TemplateEditor edit should render correctly (edit) 1`] = `
+<div>
+  <div>
+    Error loading template
+  </div>
+</div>
+`;
+
+exports[`TemplateEditor should render correctly (create) 1`] = `
+<div>
+  <div>
+    Error loading template
+  </div>
+</div>
+`;

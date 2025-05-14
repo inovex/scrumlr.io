@@ -26,12 +26,12 @@ import {arrayMove} from "@dnd-kit/sortable";
 import {TemplatesNavigationState} from "../Templates";
 import "./TemplateEditor.scss";
 
-type TemplateColumnProps = {mode: "create" | "edit"; debug?: boolean};
+export type TemplateEditorProps = {mode: "create" | "edit"; debug?: boolean};
 
 // component to edit a template.
 // can be either used to edit an existing template (referred by their uuid) or create one from scratch.
 // changes will only be saved after clicking the button and are local till then.
-export const TemplateEditor = ({mode, debug}: TemplateColumnProps) => {
+export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   const {t} = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
