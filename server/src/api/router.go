@@ -3,9 +3,10 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/boards"
 	"time"
 
-	"scrumlr.io/server/voting"
+	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/boardreactions"
 	"scrumlr.io/server/boardtemplates"
@@ -30,7 +31,6 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
@@ -42,9 +42,9 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards          services.Boards
+	boards          boards.BoardService
 	columns         columns.ColumnService
-	votings         voting.VotingService
+	votings         votings.VotingService
 	users           users.UserService
 	notes           notes.NotesService
 	reactions       reactions.ReactionService
@@ -72,9 +72,9 @@ func New(
 	rt *realtime.Broker,
 	auth auth.Auth,
 
-	boards services.Boards,
+	boards boards.BoardService,
 	columns columns.ColumnService,
-	votings voting.VotingService,
+	votings votings.VotingService,
 	users users.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
