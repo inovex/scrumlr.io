@@ -3,8 +3,9 @@ package boardtemplates
 import (
 	"context"
 	"errors"
-	"scrumlr.io/server/board"
 	"testing"
+
+	"scrumlr.io/server/boards"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
