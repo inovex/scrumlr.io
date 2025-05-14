@@ -9,8 +9,10 @@ import (
 	"strconv"
 
 	"github.com/google/uuid"
+	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
 
@@ -27,14 +29,18 @@ type SessionDatabase interface {
 }
 
 type BoardSessionService struct {
-	database SessionDatabase
-	realtime *realtime.Broker
+	database      SessionDatabase
+	realtime      *realtime.Broker
+	columnService columns.ColumnService
+	noteService   notes.NotesService
 }
 
-func NewSessionService(db SessionDatabase, rt *realtime.Broker) SessionService {
+func NewSessionService(db SessionDatabase, rt *realtime.Broker, columnService columns.ColumnService, noteService notes.NotesService) SessionService {
 	service := new(BoardSessionService)
 	service.database = db
 	service.realtime = rt
+	service.columnService = columnService
+	service.noteService = noteService
 
 	return service
 }
@@ -101,7 +107,7 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 		return nil, err
 	}
 
-	service.updatedSession(body.Board, session)
+	service.updatedSession(ctx, body.Board, session)
 
 	return new(BoardSession).From(session), err
 }
@@ -131,7 +137,7 @@ func (service *BoardSessionService) UpdateUserBoards(ctx context.Context, body B
 	}
 
 	for _, session := range connectedBoards {
-		service.updatedSession(session.Board, session)
+		service.updatedSession(ctx, session.Board, session)
 	}
 
 	return BoardSessions(connectedBoards), err
@@ -183,7 +189,7 @@ func (service *BoardSessionService) Connect(ctx context.Context, boardID, userID
 		return err
 	}
 
-	service.updatedSession(boardID, updatedSession)
+	service.updatedSession(ctx, boardID, updatedSession)
 
 	return err
 }
@@ -202,7 +208,7 @@ func (service *BoardSessionService) Disconnect(ctx context.Context, boardID, use
 		return err
 	}
 
-	service.updatedSession(boardID, updatedSession)
+	service.updatedSession(ctx, boardID, updatedSession)
 
 	return err
 }
@@ -254,7 +260,7 @@ func (service *BoardSessionService) createdSession(board uuid.UUID, session Data
 	})
 }
 
-func (service *BoardSessionService) updatedSession(board uuid.UUID, session DatabaseBoardSession) {
+func (service *BoardSessionService) updatedSession(ctx context.Context, board uuid.UUID, session DatabaseBoardSession) {
 	connectedBoards, err := service.database.GetUserConnectedBoards(session.User)
 	if err != nil {
 		logger.Get().Errorw("unable to get user connections", "session", session, "error", err)
@@ -273,27 +279,29 @@ func (service *BoardSessionService) updatedSession(board uuid.UUID, session Data
 		})
 	}
 
-	// TODO Sync colums and notes when refactored
-
 	// Sync columns
-	//columns, err := service.database.GetColumns(board)
-	//if err != nil {
-	//	logger.Get().Errorw("unable to get columns", "boardID", board, "err", err)
-	//}
-	//_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-	//	Type: realtime.BoardEventColumnsUpdated,
-	//	Data: columns2.Columns(columns),
-	//})
+	columns, err := service.columnService.GetAll(ctx, board)
+	if err != nil {
+		logger.Get().Errorw("unable to get columns", "boardID", board, "err", err)
+	}
+	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventColumnsUpdated,
+		Data: columns,
+	})
 
+	columnIds := make([]uuid.UUID, len(columns))
+	for i, column := range columns {
+		columnIds[i] = column.ID
+	}
 	// Sync notes
-	//notes, err := service.database.GetNotes(board)
-	//if err != nil {
-	//	logger.Get().Errorw("unable to get notes on a updatedsession call", "err", err)
-	//}
-	//_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-	//	Type: realtime.BoardEventNotesSync,
-	//	Data: notes2.Notes(notes),
-	//})
+	notes, err := service.noteService.GetAll(ctx, board, columnIds...)
+	if err != nil {
+		logger.Get().Errorw("unable to get notes on a updatedsession call", "err", err)
+	}
+	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventNotesSync,
+		Data: notes,
+	})
 }
 
 func (service *BoardSessionService) updatedSessions(board uuid.UUID, sessions []DatabaseBoardSession) {
