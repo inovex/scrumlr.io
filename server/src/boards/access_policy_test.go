@@ -1,4 +1,4 @@
-package types
+package boards
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestAccessPolicyEnum(t *testing.T) {
-	values := []AccessPolicy{AccessPolicyPublic, AccessPolicyByPassphrase, AccessPolicyByInvite}
+	values := []AccessPolicy{Public, ByPassphrase, ByInvite}
 	for _, value := range values {
 		var accessPolicy AccessPolicy
 		err := accessPolicy.UnmarshalJSON([]byte(fmt.Sprintf("\"%s\"", value)))

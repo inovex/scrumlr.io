@@ -6,6 +6,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"github.com/uptrace/bun"
 	"io"
 	"math"
 	"net/http"
@@ -26,8 +27,6 @@ import (
 	"golang.org/x/crypto/ssh"
 	"scrumlr.io/server/auth/devkeys"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/users"
 )
@@ -36,8 +35,8 @@ type Auth interface {
 	Sign(map[string]interface{}) (string, error)
 	Verifier() func(http.Handler) http.Handler
 	Authenticator() func(http.Handler) http.Handler
-	Exists(accountType types.AccountType) bool
-	ExtractUserInformation(types.AccountType, *goth.User) (*UserInformation, error)
+	Exists(accountType AccountType) bool
+	ExtractUserInformation(AccountType, *goth.User) (*UserInformation, error)
 }
 
 type AuthProviderConfiguration struct {
@@ -56,16 +55,16 @@ type AuthConfiguration struct {
 	privateKey       string
 	unsafeAuth       *jwtauth.JWTAuth
 	auth             *jwtauth.JWTAuth
-	database         *database.Database
+	database         *bun.DB
 	userService      users.UserService
 }
 
 type UserInformation struct {
-	Provider               types.AccountType
+	Provider               AccountType
 	Ident, Name, AvatarURL string
 }
 
-func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *database.Database, userService users.UserService) (Auth, error) {
+func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService users.UserService) (Auth, error) {
 	a := new(AuthConfiguration)
 	a.providers = providers
 	a.unsafePrivateKey = unsafePrivateKey
@@ -84,7 +83,7 @@ func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafe
 
 func (a *AuthConfiguration) initializeProviders() error {
 	providers := []goth.Provider{}
-	if provider, ok := a.providers[(string)(types.AccountTypeGoogle)]; ok {
+	if provider, ok := a.providers[(string)(Google)]; ok {
 		p := google.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -92,30 +91,30 @@ func (a *AuthConfiguration) initializeProviders() error {
 			"openid",
 			"profile",
 		)
-		p.SetName(strings.ToLower((string)(types.AccountTypeGoogle)))
+		p.SetName(strings.ToLower((string)(Google)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(types.AccountTypeGitHub)]; ok {
+	if provider, ok := a.providers[(string)(GitHub)]; ok {
 		p := github.New(
 			provider.ClientId,
 			provider.ClientSecret,
 			provider.RedirectUri,
 			"user",
 		)
-		p.SetName(strings.ToLower((string)(types.AccountTypeGitHub)))
+		p.SetName(strings.ToLower((string)(GitHub)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(types.AccountTypeMicrosoft)]; ok {
+	if provider, ok := a.providers[(string)(Microsoft)]; ok {
 		p := microsoftonline.New(
 			provider.ClientId,
 			provider.ClientSecret,
 			provider.RedirectUri,
 			"User.Read",
 		)
-		p.SetName(strings.ToLower((string)(types.AccountTypeMicrosoft)))
+		p.SetName(strings.ToLower((string)(Microsoft)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(types.AccountTypeAzureAd)]; ok {
+	if provider, ok := a.providers[(string)(AzureAd)]; ok {
 		p := azureadv2.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -125,10 +124,10 @@ func (a *AuthConfiguration) initializeProviders() error {
 				Scopes: []azureadv2.ScopeType{"User.Read"},
 			},
 		)
-		p.SetName(strings.ToLower((string)(types.AccountTypeAzureAd)))
+		p.SetName(strings.ToLower((string)(AzureAd)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(types.AccountTypeApple)]; ok {
+	if provider, ok := a.providers[(string)(Apple)]; ok {
 		providers = append(providers, apple.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -138,7 +137,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			apple.ScopeEmail,
 		))
 	}
-	if provider, ok := a.providers[(string)(types.AccountTypeOIDC)]; ok {
+	if provider, ok := a.providers[(string)(TypeOIDC)]; ok {
 		p, err := oidc.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -151,7 +150,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			logger.Get().Errorw("OIDC provider setup failed", "error", err)
 		}
 
-		p.SetName(strings.ToLower((string)(types.AccountTypeOIDC)))
+		p.SetName(strings.ToLower((string)(TypeOIDC)))
 		providers = append(providers, p)
 	}
 	goth.UseProviders(providers...)
@@ -231,14 +230,14 @@ func (a *AuthConfiguration) Authenticator() func(http.Handler) http.Handler {
 	return jwtauth.Authenticator(a.auth)
 }
 
-func (a *AuthConfiguration) Exists(accountType types.AccountType) bool {
+func (a *AuthConfiguration) Exists(accountType AccountType) bool {
 	if _, ok := a.providers[string(accountType)]; ok {
 		return true
 	}
 	return false
 }
 
-func (a *AuthConfiguration) ExtractUserInformation(accountType types.AccountType, user *goth.User) (*UserInformation, error) {
+func (a *AuthConfiguration) ExtractUserInformation(accountType AccountType, user *goth.User) (*UserInformation, error) {
 	ident := user.UserID
 	name := user.NickName
 	avatar := user.AvatarURL
