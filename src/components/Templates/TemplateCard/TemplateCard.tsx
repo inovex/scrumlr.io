@@ -7,7 +7,7 @@ import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-textarea-autosize";
 import {FavouriteButton} from "components/Templates";
 import {useAppDispatch} from "store";
-import {AccessPolicy, createBoardFromTemplate, setTemplateFavourite, TemplateWithColumns} from "store/features";
+import {AccessPolicy, createBoardFromTemplate, deleteTemplate, setTemplateFavourite, TemplateWithColumns} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -18,7 +18,7 @@ import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import "./TemplateCard.scss";
 
-type TemplateCardType = "RECOMMENDED" | "CUSTOM";
+export type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
 type TemplateCardProps = {
   template: TemplateWithColumns;
@@ -36,10 +36,15 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
     setShowMiniMenu(false);
   };
 
-  const toggleFavourite = () => dispatch(setTemplateFavourite({id: template.id, favourite: !template.favourite}));
+  const toggleFavourite = () => dispatch(setTemplateFavourite({id: template.template.id, favourite: !template.template.favourite}));
 
   const navigateToEdit = () => {
-    // TODO
+    navigate(`../edit/${template.template.id}`);
+  };
+
+  const deleteTemplateAndColumns = () => {
+    setShowMiniMenu(false); // close menu manually, because it stays open for some reason
+    dispatch(deleteTemplate({id: template.template.id}));
   };
 
   const createBoard = () => {
@@ -65,10 +70,12 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
-          {label: "Delete", element: <TrashIcon />, onClick: closeMenu},
+          {label: "Delete", element: <TrashIcon />, onClick: deleteTemplateAndColumns},
           {label: "Edit", element: <EditIcon />, onClick: navigateToEdit},
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
+        focusBehaviour="moveFocus"
+        onBlur={() => setShowMiniMenu(false)}
       />
     ) : (
       <MenuIcon className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
@@ -77,13 +84,13 @@ export const TemplateCard = ({template, templateType}: TemplateCardProps) => {
 
   return (
     <div className="template-card">
-      {templateType === "CUSTOM" ? <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={toggleFavourite} /> : null}
+      {templateType === "CUSTOM" ? <FavouriteButton className="template-card__favourite" active={template.template.favourite} onClick={toggleFavourite} /> : null}
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={template.name} disabled />
-        <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
+        <input className="template-card__title" type="text" value={template.template.name} disabled />
+        <div className="template-card__access-policy">{renderAccessPolicy(template.template.accessPolicy)}</div>
       </div>
       {renderMenu()}
-      <TextareaAutosize className={classNames("template-card__description")} value={template.description} disabled />
+      <TextareaAutosize className={classNames("template-card__description")} value={template.template.description} disabled />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: template.columns.length})}</div>

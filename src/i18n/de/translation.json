@@ -32,11 +32,42 @@
       "column_other": "{{count}} Spalten",
       "start": "Starten",
       "save": "Speichern"
+    },
+
+    "TemplateEditor": {
+      "create": "Erstelle eine Vorlage",
+      "edit": "Bearbeite eine Vorlage",
+      "cancel": "Abbrechen",
+      "saveEdit": "Speichern",
+      "saveCreate": "Template erstellen"
+    },
+
+    "ColumnsConfiguratorColumn": {
+      "namePlaceholder": "Name",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
     }
   },
   "Sessions": {
     "switchTitle": "Sitzungen",
     "title": "Wähle eine Sitzung"
+  },
+  "CreateBoard": {
+    "title": "Ein neues Board erstellen",
+    "dropdown": {
+      "open": "Offen",
+      "password": "Passwort",
+      "approval": "Freigabe"
+    },
+    "info": {
+      "open": "TBA",
+      "password": "TBA",
+      "approval": "TBA"
+    },
+    "validation": {
+      "REQUIRED": "Board-Name ist erforderlich."
+    }
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
@@ -379,8 +410,10 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "Alle"
   },
-  "SearchBar": {
-    "placeholder": "Suchen"
+  "Input": {
+    "placeholder": {
+      "search": "Suchen"
+    }
   },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
@@ -494,6 +527,13 @@
     "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
     "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
     "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
+  },
+  "Validation": {
+    "REQUIRED": "required",
+    "BAD_INPUT": "bad input",
+    "PATTERN_MISMATCH": "pattern mismatch",
+    "TYPE_MISMATCH": "type mismatch",
+    "RANGE": "range"
   },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",
