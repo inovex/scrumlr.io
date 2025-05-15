@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ColumnConfiguratorColumnNameDetails should render correctly (closed) 1`] = `
+exports[`ColumnConfiguratorColumnNameDetails render should render correctly (closed) 1`] = `
 <div>
   <div
     class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
@@ -22,7 +22,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (closed) 1`
 </div>
 `;
 
-exports[`ColumnConfiguratorColumnNameDetails should render correctly (descriptionFirst) 1`] = `
+exports[`ColumnConfiguratorColumnNameDetails render should render correctly (descriptionFirst) 1`] = `
 <div>
   <div
     class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
@@ -50,7 +50,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (descriptio
           class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Cancel1"
+          id="mini-menu-Cancel5"
         >
           <svg>
             close.svg
@@ -61,7 +61,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (descriptio
           class="mini-menu-item--save mini-menu__item mini-menu__item--small"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Save2"
+          id="mini-menu-Save6"
         >
           <svg>
             check-done.svg
@@ -73,7 +73,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (descriptio
 </div>
 `;
 
-exports[`ColumnConfiguratorColumnNameDetails should render correctly (nameFirst) 1`] = `
+exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nameFirst) 1`] = `
 <div>
   <div
     class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
@@ -101,7 +101,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (nameFirst)
           class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Cancel1"
+          id="mini-menu-Cancel3"
         >
           <svg>
             close.svg
@@ -112,7 +112,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (nameFirst)
           class="mini-menu-item--save mini-menu__item mini-menu__item--small"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Save2"
+          id="mini-menu-Save4"
         >
           <svg>
             check-done.svg
@@ -124,7 +124,7 @@ exports[`ColumnConfiguratorColumnNameDetails should render correctly (nameFirst)
 </div>
 `;
 
-exports[`ColumnConfiguratorColumnNameDetails should render correctly (visualFeedback) 1`] = `
+exports[`ColumnConfiguratorColumnNameDetails render should render correctly (visualFeedback) 1`] = `
 <div>
   <div
     class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"

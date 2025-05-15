@@ -326,7 +326,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
           class="columns-configurator__columns-wrapper"
         >
           <div
-            aria-describedby="DndDescribedBy-0"
+            aria-describedby="DndDescribedBy-2"
             aria-disabled="false"
             aria-roledescription="sortable"
             class="columns-configurator__column columns-configurator-column columns-configurator-column--border-first columns-configurator-column--even accent-color__backlog-blue"
@@ -386,7 +386,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
             </div>
           </div>
           <div
-            aria-describedby="DndDescribedBy-0"
+            aria-describedby="DndDescribedBy-2"
             aria-disabled="false"
             aria-roledescription="sortable"
             class="columns-configurator__column columns-configurator-column columns-configurator-column--border-last columns-configurator-column--odd columns-configurator-column--hidden accent-color__planning-pink"
@@ -461,7 +461,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
         </div>
       </div>
       <div
-        id="DndDescribedBy-0"
+        id="DndDescribedBy-2"
         style="display: none;"
       >
         
@@ -473,7 +473,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
       <div
         aria-atomic="true"
         aria-live="assertive"
-        id="DndLiveRegion-0"
+        id="DndLiveRegion-2"
         role="status"
         style="position: fixed; top: 0px; left: 0px; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip-path: inset(100%); white-space: nowrap;"
       />
