@@ -2,15 +2,12 @@ import {renderWithContext} from "testUtils";
 import {Templates} from "routes/Boards/Templates/Templates";
 import {API} from "api";
 import getTestApplicationState from "utils/test/getTestApplicationState";
-import {TemplateWithColumns} from "store/features";
+import {mergeTemplateAndColumns} from "components/ColumnsConfigurator/ColumnsConfigurator.utils";
 
 const contextData = {searchBarInput: "test1"};
 
 const {templates: templatesPreloaded, templatesColumns: templatesColumnsPreloaded} = getTestApplicationState();
-const mockedTemplateWithColumns: TemplateWithColumns[] = templatesPreloaded.map((template) => ({
-  template,
-  columns: templatesColumnsPreloaded.filter((column) => column.template === template.id),
-}));
+const mockedTemplateWithColumns = mergeTemplateAndColumns(templatesPreloaded, templatesColumnsPreloaded);
 
 const renderTemplates = () => renderWithContext(<Templates />, contextData);
 
