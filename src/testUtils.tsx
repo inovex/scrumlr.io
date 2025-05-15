@@ -6,8 +6,8 @@ import {Provider} from "react-redux";
 import getTestStore from "utils/test/getTestStore";
 import i18n from "./i18nTest";
 
-type Context = {context: unknown; initialRouteEntries?: InitialEntry[]; currentPath?: string};
-type PropsWithChildrenAndContext = PropsWithChildren & Context;
+export type RenderContext = {context: unknown; initialRouteEntries?: InitialEntry[]; currentPath?: string};
+type PropsWithChildrenAndContext = PropsWithChildren & RenderContext;
 
 export type AssertTypeEqual<T, Expected> = T extends Expected ? (Expected extends T ? true : never) : never;
 
@@ -36,7 +36,7 @@ const AllTheProvidersWithContext: FC<PropsWithChildrenAndContext> = ({children, 
 
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions & {container: Element}, "wrapper">) => render(ui, {wrapper: AllTheProviders, ...options});
 
-const customRenderWithContext = (ui: ReactElement, context: Context, options?: Omit<RenderOptions & {container: Element}, "wrapper">) =>
+const customRenderWithContext = (ui: ReactElement, context: RenderContext, options?: Omit<RenderOptions & {container: Element}, "wrapper">) =>
   render(ui, {wrapper: (props) => <AllTheProvidersWithContext {...context} {...props} />, ...options});
 
 const customRenderWithoutRouter = (ui: ReactElement, options?: Omit<RenderOptions & {container: Element}, "wrapper">) =>
