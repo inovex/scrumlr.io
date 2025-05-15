@@ -20,20 +20,8 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
             required=""
             tabindex="0"
             type="text"
-            value="sample name 1"
+            value=""
           />
-          <div
-            class="input__icon-container input__icon-container--clear-icon"
-            role="button"
-            tabindex="0"
-          >
-            <svg
-              aria-label="clear input"
-              class="input__icon"
-            >
-              close.svg
-            </svg>
-          </div>
         </div>
       </div>
     </div>
@@ -43,9 +31,7 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
       <textarea
         class="template-editor__description-text-area text-area"
         placeholder="Description (optional)"
-      >
-        sample description 1
-      </textarea>
+      />
     </div>
     <div
       class="template-editor__columns-configurator-wrapper"
@@ -85,14 +71,14 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
                 autocomplete="off"
                 class="column-configurator-column-name-details__name"
                 placeholder="Name"
-                value="sample templates col name 1"
+                value="Default Main"
               />
               <div
                 class="column-configurator-column-name-details__inline-description"
                 role="button"
                 tabindex="0"
               >
-                sample templates col name 1
+                Description (optional)
               </div>
             </div>
             <div
@@ -145,14 +131,14 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
                 autocomplete="off"
                 class="column-configurator-column-name-details__name"
                 placeholder="Name"
-                value="sample templates col name 2"
+                value="Default Action"
               />
               <div
                 class="column-configurator-column-name-details__inline-description"
                 role="button"
                 tabindex="0"
               >
-                sample templates col name 2
+                Description (optional)
               </div>
             </div>
             <div
@@ -258,6 +244,7 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
       </button>
       <button
         class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
+        disabled=""
       >
         Create template
         <svg>

@@ -1,4 +1,5 @@
 import {ApplicationState} from "store";
+import {DEFAULT_TEMPLATE} from "constants/templates";
 
 export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   auth: {user: {id: "test-auth-user-id", name: "test-auth-user-name", isAnonymous: true}, initializationSucceeded: true},
@@ -191,6 +192,8 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     component: "",
   },
   templates: [
+    // default template added manually, as reducers initial state isn't regarded
+    DEFAULT_TEMPLATE.template,
     {
       id: "test-templates-id-1",
       creator: "test-auth-user-id",
@@ -209,6 +212,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     },
   ],
   templatesColumns: [
+    ...DEFAULT_TEMPLATE.columns,
     {
       id: "test-templates-columns-id-1",
       template: "test-templates-id-1",

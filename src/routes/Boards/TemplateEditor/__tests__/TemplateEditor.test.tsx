@@ -10,9 +10,7 @@ const renderTemplateEditor = (props: TemplateEditorProps) =>
         currentPath: "/boards/edit/:id",
       });
 
-// skipping because the store is not correctly initialized.
-// todo add default templates or get reducers to work
-describe.skip("TemplateEditor create", () => {
+describe("TemplateEditor create", () => {
   it("should render correctly (create)", () => {
     const {container} = renderTemplateEditor({mode: "create"});
     expect(container).toMatchSnapshot();
