@@ -6,7 +6,7 @@ import {mergeTemplateAndColumns} from "components/ColumnsConfigurator/ColumnsCon
 
 const contextData = {searchBarInput: "test1"};
 
-const {templates: templatesPreloaded, templatesColumns: templatesColumnsPreloaded} = getTestApplicationState();
+const {templates: templatesPreloaded, templateColumns: templatesColumnsPreloaded} = getTestApplicationState();
 const mockedTemplateWithColumns = mergeTemplateAndColumns(templatesPreloaded, templatesColumnsPreloaded);
 
 const renderTemplates = () => renderWithContext(<Templates />, contextData);

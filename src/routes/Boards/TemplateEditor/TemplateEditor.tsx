@@ -45,7 +45,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   const basisTemplate = useAppSelector((state) => state.templates.find((tmpl) => tmpl.id === templateId));
   // no columns found? use from default template. keep in mind this is also true if template is valid, but the array is empty! logic to avoid empty array has to be checked
   // template columns are displayed in order of their index.
-  const basisColumns = useAppSelector((state) => state.templatesColumns.filter((tmplCol) => tmplCol.template === templateId))
+  const basisColumns = useAppSelector((state) => state.templateColumns.filter((tmplCol) => tmplCol.template === templateId))
     // presort by index for DnD
     .sort((a, b) => a.index - b.index);
 

@@ -211,7 +211,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       favourite: false,
     },
   ],
-  templatesColumns: [
+  templateColumns: [
     ...DEFAULT_TEMPLATE.columns,
     {
       id: "test-templates-columns-id-1",

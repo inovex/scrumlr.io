@@ -51,7 +51,7 @@ export const Templates = () => {
   const showCreateTemplateView = () => navigate("../create");
 
   const templates = useAppSelector((state) => state.templates);
-  const templateColumns = useAppSelector((state) => state.templatesColumns);
+  const templateColumns = useAppSelector((state) => state.templateColumns);
 
   const reducedRecommendedTemplates: ReducedTemplateWithColumns[] = templatesJsonRaw as ReducedTemplateWithColumns[];
   const fullRecommendedTemplates = convertJsonToFullTemplates(reducedRecommendedTemplates);

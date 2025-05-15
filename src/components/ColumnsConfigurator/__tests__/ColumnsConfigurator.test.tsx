@@ -10,7 +10,7 @@ const renderColumnsConfigurator = (templateId: string, override?: Partial<Omit<C
     className: "test-columns-configurator",
     templateId,
     columns: getTestApplicationState()
-      .templatesColumns.filter((tc) => tc.template === templateId)
+      .templateColumns.filter((tc) => tc.template === templateId)
       .map((tc) => convertToEditableColumn(tc)),
     addColumn: jest.fn(),
     deleteColumn: jest.fn(),

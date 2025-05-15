@@ -5,7 +5,7 @@ import {render} from "testUtils";
 
 const renderColumnsMiniView = (templateId: string) => {
   const columns = getTestApplicationState()
-    .templatesColumns.filter((tc) => tc.template === templateId)
+    .templateColumns.filter((tc) => tc.template === templateId)
     .map((tc) => convertToEditableColumn(tc));
 
   return render(<ColumnsMiniView className={"test-columns-mini-view"} columns={columns} />);

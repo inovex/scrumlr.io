@@ -18,7 +18,7 @@ import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import "./TemplateCard.scss";
 
-type TemplateCardType = "RECOMMENDED" | "CUSTOM";
+export type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
 type TemplateCardProps = {
   template: TemplateWithColumns;

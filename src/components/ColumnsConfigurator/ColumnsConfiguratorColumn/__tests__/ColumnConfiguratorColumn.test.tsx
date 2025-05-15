@@ -42,7 +42,7 @@ describe("ColumnConfiguratorColumn render", () => {
     deleteColumn?: (templateColumn: EditableTemplateColumn) => void
   ) => {
     // some preprocessing to get the correct column and convert to editableColumn, which would normally be done by TemplateEditor component
-    const columns = testStore.getState().templatesColumns.filter((tc) => tc.template === templateId);
+    const columns = testStore.getState().templateColumns.filter((tc) => tc.template === templateId);
     const editableColumns = columns.map((bc) => convertToEditableColumn(bc));
     const column = editableColumns.find((c) => c.id === columnId)!;
 
