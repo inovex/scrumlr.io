@@ -9,7 +9,7 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
       class="template-editor__name"
     >
       <div
-        class="input__root"
+        class="template-editor__name-input input__root"
       >
         <div
           class="input input--text input--height-normal"
@@ -265,7 +265,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
       class="template-editor__name"
     >
       <div
-        class="input__root"
+        class="template-editor__name-input input__root"
       >
         <div
           class="input input--text input--height-normal"
