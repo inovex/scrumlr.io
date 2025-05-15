@@ -13,7 +13,7 @@ describe("TemplateEditor create", () => {
 
 describe("TemplateEditor edit", () => {
   it("should render correctly (edit)", () => {
-    const {container} = renderTemplateEditor({mode: "create"});
+    const {container} = renderTemplateEditor({mode: "edit"});
     expect(container).toMatchSnapshot();
   });
 });

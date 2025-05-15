@@ -528,7 +528,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
       <button
         class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
       >
-        Create template
+        Save
         <svg>
           plus.svg
         </svg>
