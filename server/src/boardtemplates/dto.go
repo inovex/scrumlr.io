@@ -2,7 +2,7 @@ package boardtemplates
 
 import (
 	"github.com/google/uuid"
-	"scrumlr.io/server/board"
+	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columntemplates"
 )
 

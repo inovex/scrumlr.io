@@ -1,8 +1,9 @@
 package database
 
 import (
-	"scrumlr.io/server/boards"
 	"testing"
+
+	"scrumlr.io/server/boards"
 
 	"scrumlr.io/server/notes"
 
@@ -44,7 +45,7 @@ func testGetReaction(t *testing.T) {
 
 func testGetReactionsForNote(t *testing.T) {
 	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
-	r, err := reactionDb.GetReactionsForNote(notesTestA1.ID)
+	r, err := reactionDb.GetAllForNote(notesTestA1.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(r))
