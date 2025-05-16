@@ -1,8 +1,9 @@
 package boardtemplates
 
 import (
-	"scrumlr.io/server/board"
 	"time"
+
+	"scrumlr.io/server/boards"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"

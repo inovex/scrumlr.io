@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 	"math"
-	"scrumlr.io/server/board"
+
+	"scrumlr.io/server/boards"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
