@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
@@ -26,7 +27,9 @@ func NewBoardDatabase(database *bun.DB) BoardDatabase {
 }
 
 func (d *DB) CreateBoard(creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error) {
-	boardInsert := d.db.NewInsert().Model(&board).Returning("*")
+	boardInsert := d.db.NewInsert().
+		Model(&board).
+		Returning("*")
 
 	if board.AccessPolicy == ByPassphrase && (board.Passphrase == nil || board.Salt == nil) {
 		return DatabaseBoard{}, errors.New("passphrase or salt may not be empty")
@@ -61,12 +64,20 @@ func (d *DB) CreateBoard(creator uuid.UUID, board DatabaseBoardInsert, columns [
 
 func (d *DB) UpdateBoardTimer(update DatabaseBoardTimerUpdate) (DatabaseBoard, error) {
 	var board DatabaseBoard
-	_, err := d.db.NewUpdate().Model(&update).Column("timer_start", "timer_end").Where("id = ?", update.ID).Returning("*").Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
+	_, err := d.db.NewUpdate().
+		Model(&update).
+		Column("timer_start", "timer_end").
+		Where("id = ?", update.ID).
+		Returning("*").
+		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &board), &board)
+
 	return board, err
 }
 
 func (d *DB) UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error) {
-	query := d.db.NewUpdate().Model(&update).Column("timer_start", "timer_end", "shared_note")
+	query := d.db.NewUpdate().
+		Model(&update).
+		Column("timer_start", "timer_end", "shared_note")
 
 	if update.Name != nil {
 		query.Column("name")
@@ -134,13 +145,21 @@ func (d *DB) UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error) {
 }
 
 func (d *DB) DeleteBoard(id uuid.UUID) error {
-	_, err := d.db.NewDelete().Model((*DatabaseBoard)(nil)).Where("id = ?", id).Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, id))
+	_, err := d.db.NewDelete().
+		Model((*DatabaseBoard)(nil)).
+		Where("id = ?", id).
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, id))
+
 	return err
 }
 
 func (d *DB) GetBoard(id uuid.UUID) (DatabaseBoard, error) {
 	var board DatabaseBoard
-	err := d.db.NewSelect().Model(&board).Where("id = ?", id).Scan(context.Background())
+	err := d.db.NewSelect().
+		Model(&board).
+		Where("id = ?", id).
+		Scan(context.Background())
+
 	return board, err
 }
 
@@ -152,9 +171,11 @@ func (d *DB) GetBoards(userID uuid.UUID) ([]DatabaseBoard, error) {
 		Join("INNER JOIN board_sessions AS s ON s.board = b.id").
 		Where("s.user = ?", userID).
 		Scan(context.Background(), &boards)
+
 	if err != nil {
 		return nil, err
 	}
+
 	return boards, err
 }
 

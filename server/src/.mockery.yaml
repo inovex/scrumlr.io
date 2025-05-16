@@ -14,7 +14,7 @@ packages:
       ResponseWriter:
         all: true
 
-  scrumlr.io/server/board:
+  scrumlr.io/server/boards:
     config:
       dir: "{{.InterfaceDir}}"
       inpackage: true
