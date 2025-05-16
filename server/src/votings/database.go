@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/boards"
@@ -55,6 +56,7 @@ func (d *DB) Create(insert VotingInsert) (VotingDB, error) {
 		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status").
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
+
 	return voting, err
 }
 
@@ -225,6 +227,11 @@ func (d *DB) RemoveVote(board, user, note uuid.UUID) error {
 
 func (d *DB) GetOpenVoting(board uuid.UUID) (VotingDB, error) {
 	var voting VotingDB
-	err := d.db.NewSelect().Model(&voting).Where("board = ?", board).Where("status = ?", "OPEN").Scan(context.Background())
+	err := d.db.NewSelect().
+		Model(&voting).
+		Where("board = ?", board).
+		Where("status = ?", "OPEN").
+		Scan(context.Background())
+
 	return voting, err
 }
