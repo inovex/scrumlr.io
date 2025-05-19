@@ -3,13 +3,12 @@ package notes
 import (
 	"context"
 	"errors"
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/boards"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/sessions"
 )
 
 type DB struct {
@@ -70,7 +69,7 @@ func (d *DB) GetChildNotes(parentNote uuid.UUID) ([]*NoteDB, error) {
 
 func (d *DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error) {
 	boardSelect := d.db.NewSelect().
-		Model((*boards.DatabaseBoard)(nil)).
+		Model((*common.DatabaseBoard)(nil)).
 		Column("allow_stacking").
 		Where("id = ?", update.Board)
 
@@ -133,7 +132,7 @@ func (d *DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error) 
 
 func (d *DB) DeleteNote(caller uuid.UUID, boardID uuid.UUID, id uuid.UUID, deleteStack bool) error {
 	sessionSelect := d.db.NewSelect().
-		Model((*sessions.DatabaseBoardSession)(nil)).
+		Model((*common.DatabaseBoardSession)(nil)).
 		Column("role").
 		Where("\"user\" = ?", caller).
 		Where("board = ?", boardID)
@@ -170,7 +169,7 @@ func (d *DB) DeleteNote(caller uuid.UUID, boardID uuid.UUID, id uuid.UUID, delet
 			Where("stack = ?", id)
 
 		updateBoard := d.db.NewUpdate().
-			Model((*boards.DatabaseBoard)(nil)).
+			Model((*common.DatabaseBoard)(nil)).
 			Set("shared_note = null").
 			Where("id = ? AND shared_note = ?", boardID, id)
 

@@ -5,14 +5,17 @@ import (
 	"database/sql"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/votings"
 )
 
 type Service struct {
-	database NotesDatabase
-	realtime *realtime.Broker
+	database      NotesDatabase
+	votingService votings.VotingService
+	realtime      *realtime.Broker
 }
 
 type NotesDatabase interface {
@@ -110,18 +113,35 @@ func (service *Service) GetAll(ctx context.Context, boardID uuid.UUID, columnID 
 	return Notes(notes), err
 }
 
-func (service *Service) Delete(ctx context.Context, body NoteDeleteRequest, noteID uuid.UUID, deletedVotes []uuid.UUID) error {
+func (service *Service) Delete(ctx context.Context, body NoteDeleteRequest, noteID uuid.UUID) error {
 	log := logger.FromContext(ctx)
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	err := service.database.DeleteNote(user, board, noteID, body.DeleteStack)
+	votes, err := service.votingService.GetVotes(ctx, filter.VoteFilter{
+		Note: &noteID,
+	})
+	if err != nil {
+		return err
+	}
+	for _, vote := range votes {
+		err = service.votingService.RemoveVote(ctx, votings.VoteRequest{
+			Note: vote.Note,
+			User: vote.User,
+		})
+	}
+
+	if err != nil {
+		return err
+	}
+
+	err = service.database.DeleteNote(user, board, noteID, body.DeleteStack)
 	if err != nil {
 		log.Errorw("unable to delete note", "note", body, "err", err)
 		return err
 	}
 
-	service.deletedNote(user, board, noteID, deletedVotes, body.DeleteStack)
+	service.deletedNote(user, board, noteID, votes, body.DeleteStack)
 	return nil
 }
 
@@ -152,7 +172,7 @@ func (service *Service) updatedNotes(board uuid.UUID) {
 	})
 }
 
-func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []uuid.UUID, deleteStack bool) {
+func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*votings.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,
 		"deleteStack": deleteStack,
@@ -164,28 +184,8 @@ func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []
 
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotesDeleted,
-		Data: deletedVotesUpdateMessage(note, deletedVotes),
+		Data: deletedVotes,
 	})
-}
-
-func deletedVotesUpdateMessage(note uuid.UUID, deletedVotes []uuid.UUID) []struct {
-	voting uuid.UUID
-	note   uuid.UUID
-} {
-	votes := make([]struct {
-		voting uuid.UUID
-		note   uuid.UUID
-	}, len(deletedVotes))
-	for index, vote := range deletedVotes {
-		votes[index] = struct {
-			voting uuid.UUID
-			note   uuid.UUID
-		}{
-			voting: vote,
-			note:   note,
-		}
-	}
-	return votes
 }
 
 func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {

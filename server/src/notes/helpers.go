@@ -1,22 +1,33 @@
 package notes
 
 import (
-	"net/http"
-
 	"github.com/google/uuid"
-	"scrumlr.io/server/columns"
+	"net/http"
 	"scrumlr.io/server/technical_helper"
 )
 
-func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUID, showNotesOfOtherUsers bool, showAuthors bool, columns columns.ColumnSlice) NoteSlice {
+//todo: rename an move somewhere else
 
+type NoteVisibilityConfig struct {
+	UserID                uuid.UUID
+	ShowNotesOfOtherUsers bool
+	ShowAuthors           bool
+
+	Columns []ColumnVisibility
+}
+type ColumnVisibility struct {
+	ID      uuid.UUID
+	Visible bool
+}
+
+func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(renameLater NoteVisibilityConfig) NoteSlice {
 	visibleNotes := technical_helper.Filter[*Note](n, func(note *Note) bool {
-		for _, column := range columns {
+		for _, column := range renameLater.Columns {
 			if (note.Position.Column == column.ID) && column.Visible {
 				// BoardSettings -> Remove other participant cards
-				if showNotesOfOtherUsers {
+				if renameLater.ShowNotesOfOtherUsers {
 					return true
-				} else if userID == note.Author {
+				} else if renameLater.UserID == note.Author {
 					return true
 				}
 			}
@@ -24,7 +35,7 @@ func (n NoteSlice) FilterNotesByBoardSettingsOrAuthorInformation(userID uuid.UUI
 		return false
 	})
 
-	n.hideOtherAuthors(userID, showAuthors, visibleNotes)
+	n.hideOtherAuthors(renameLater.UserID, renameLater.ShowAuthors, visibleNotes)
 
 	return visibleNotes
 }

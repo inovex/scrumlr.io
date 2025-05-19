@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"net/http"
-	"scrumlr.io/server/auth"
 	"strings"
 	"time"
 
@@ -85,7 +84,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	provider, err := auth.NewAccountType(externalUser.Provider)
+	provider, err := users.NewAccountType(externalUser.Provider)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("unsupported user provider", "err", err)
@@ -101,17 +100,17 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 
 	var internalUser *users.User
 	switch provider {
-	case auth.Google:
+	case users.Google:
 		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case auth.GitHub:
+	case users.GitHub:
 		internalUser, err = s.users.CreateGitHubUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case auth.Microsoft:
+	case users.Microsoft:
 		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case auth.AzureAd:
+	case users.AzureAd:
 		internalUser, err = s.users.CreateAzureAdUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case auth.Apple:
+	case users.Apple:
 		internalUser, err = s.users.CreateAppleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case auth.TypeOIDC:
+	case users.TypeOIDC:
 		internalUser, err = s.users.CreateOIDCUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 	}
 	if err != nil {

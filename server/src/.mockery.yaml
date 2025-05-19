@@ -91,7 +91,7 @@ packages:
       UserDatabase:
         all: true
 
-  scrumlr.io/server/voting:
+  scrumlr.io/server/votings:
     config:
       dir: "{{.InterfaceDir}}"
       inpackage: true

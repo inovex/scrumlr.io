@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"math"
 
-	"scrumlr.io/server/boards"
-
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
@@ -126,7 +124,7 @@ func (db *DB) Delete(affectedBoard, column, user uuid.UUID) error {
 		Where("index >= (SELECT index from \"selectPreviousIndex\")")
 
 	boardUpdate := db.db.NewUpdate().
-		Model((*boards.DatabaseBoard)(nil)).
+		Model((*common.DatabaseBoard)(nil)).
 		Set("shared_note = null").
 		Where("id = ? AND (SELECT \"column\" FROM notes WHERE id = (SELECT shared_note FROM boards WHERE id = ?)) = ?", affectedBoard, affectedBoard, column)
 

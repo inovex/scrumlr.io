@@ -4,15 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/votings"
 )
 
 type DB struct {
@@ -120,7 +119,7 @@ func (d *DB) UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error) {
 	var err error
 	if update.ShowVoting.Valid {
 		votingQuery := d.db.NewSelect().
-			Model((*votings.VotingDB)(nil)).
+			Model((*common.VotingDB)(nil)).
 			Column("id").
 			Where("board = ?", update.ID).
 			Where("id = ?", update.ShowVoting.UUID).
@@ -192,7 +191,7 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 		GroupExpr("id")
 
 	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-		Model((*notes.NoteDB)(nil)).
+		Model((*common.NoteDB)(nil)).
 		TableExpr("_data").
 		Set("rank = _data.new_rank").
 		WhereOr("note.id = _data.id").

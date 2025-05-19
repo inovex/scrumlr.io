@@ -2,7 +2,6 @@ package api
 
 import (
 	"math/rand"
-	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/votings"
 	"testing"
@@ -30,7 +29,7 @@ var (
 	participantBoardSession = sessions.BoardSession{
 		User: users.User{
 			ID:          uuid.New(),
-			AccountType: auth.Anonymous,
+			AccountType: users.Anonymous,
 		},
 		Role: sessions.ParticipantRole,
 	}
@@ -184,7 +183,7 @@ func TestEventFilter(t *testing.T) {
 func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 
 	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		return session.User.AccountType == auth.Anonymous
+		return session.User.AccountType == users.Anonymous
 	})[0]
 
 	updateEvent := &realtime.BoardEvent{
@@ -193,7 +192,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 			RaisedHand: true,
 			User: users.User{
 				ID:          originalParticipantSession.User.ID,
-				AccountType: auth.Anonymous,
+				AccountType: users.Anonymous,
 			},
 			Role: sessions.ParticipantRole,
 		},
@@ -202,7 +201,7 @@ func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 	isUpdated := boardSub.participantUpdated(updateEvent, true)
 
 	updatedParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		return session.User.AccountType == auth.Anonymous
+		return session.User.AccountType == users.Anonymous
 	})[0]
 
 	assert.Equal(t, true, isUpdated)

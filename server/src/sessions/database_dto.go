@@ -1,7 +1,6 @@
 package sessions
 
 import (
-	"scrumlr.io/server/auth"
 	"time"
 
 	"github.com/google/uuid"
@@ -21,7 +20,7 @@ type DatabaseBoardSession struct {
 	RaisedHand        bool
 	Role              SessionRole
 	Banned            bool
-	AccountType       auth.AccountType
+	AccountType       users.AccountType
 	CreatedAt         time.Time
 }
 

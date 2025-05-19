@@ -74,9 +74,15 @@ func (bs *BoardSubscription) notesUpdated(event *realtime.BoardEvent, userID uui
 		bs.boardNotes = noteSlice
 		return event, true
 	} else {
+		var settingPerColumn []notes.ColumnVisibility
+		for _, column := range bs.boardColumns {
+			settingPerColumn = append(settingPerColumn, notes.ColumnVisibility{column.ID, column.Visible})
+		}
+
+		smth := notes.NoteVisibilityConfig{UserID: userID, ShowNotesOfOtherUsers: bs.boardSettings.ShowNotesOfOtherUsers, ShowAuthors: bs.boardSettings.ShowAuthors, Columns: settingPerColumn}
 		return &realtime.BoardEvent{
 			Type: event.Type,
-			Data: noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, bs.boardColumns),
+			Data: noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(smth),
 		}, true
 	}
 }
@@ -126,7 +132,13 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 	} else if voting.Voting.Status != votings.Closed {
 		return event, true
 	} else {
-		filteredVotingNotes := voting.Notes.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, bs.boardColumns)
+		var settingPerColumn []notes.ColumnVisibility
+		for _, column := range bs.boardColumns {
+			settingPerColumn = append(settingPerColumn, notes.ColumnVisibility{column.ID, column.Visible})
+		}
+
+		smth := notes.NoteVisibilityConfig{UserID: userID, ShowNotesOfOtherUsers: bs.boardSettings.ShowNotesOfOtherUsers, ShowAuthors: bs.boardSettings.ShowAuthors, Columns: settingPerColumn}
+		filteredVotingNotes := voting.Notes.FilterNotesByBoardSettingsOrAuthorInformation(smth)
 		voting.Notes = filteredVotingNotes
 		ret := realtime.BoardEvent{
 			Type: event.Type,
@@ -175,7 +187,13 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		return event
 	}
 
-	filteredNotes := notes.NoteSlice(event.Data.Notes).FilterNotesByBoardSettingsOrAuthorInformation(clientID, event.Data.Board.ShowNotesOfOtherUsers, event.Data.Board.ShowAuthors, event.Data.Columns)
+	var settingPerColumn []notes.ColumnVisibility
+	for _, column := range event.Data.Columns {
+		settingPerColumn = append(settingPerColumn, notes.ColumnVisibility{column.ID, column.Visible})
+	}
+	smth := notes.NoteVisibilityConfig{UserID: clientID, ShowNotesOfOtherUsers: event.Data.Board.ShowNotesOfOtherUsers, ShowAuthors: event.Data.Board.ShowAuthors, Columns: settingPerColumn}
+
+	filteredNotes := notes.NoteSlice(event.Data.Notes).FilterNotesByBoardSettingsOrAuthorInformation(smth)
 
 	notesMap := make(map[uuid.UUID]*notes.Note)
 	for _, n := range filteredNotes {

@@ -3,16 +3,14 @@ package columns
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
+	"scrumlr.io/server/notes"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/notes"
+
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/votings"
 )
 
 type ColumnDatabase interface {
@@ -24,18 +22,16 @@ type ColumnDatabase interface {
 }
 
 type Service struct {
-	database      ColumnDatabase
-	realtime      *realtime.Broker
-	noteService   notes.NotesService
-	votingService votings.VotingService
+	database    ColumnDatabase
+	realtime    *realtime.Broker
+	noteService notes.NotesService
 }
 
-func NewColumnService(db ColumnDatabase, rt *realtime.Broker, noteService notes.NotesService, votingService votings.VotingService) ColumnService {
+func NewColumnService(db ColumnDatabase, rt *realtime.Broker, noteService notes.NotesService) ColumnService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
 	service.noteService = noteService
-	service.votingService = votingService
 
 	return service
 }
@@ -56,28 +52,23 @@ func (service *Service) Create(ctx context.Context, body ColumnRequest) (*Column
 func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUID) error {
 	log := logger.FromContext(ctx)
 
-	openVoting, err := service.votingService.GetOpen(ctx, board)
-	var toBeDeletedVotes []*votings.Vote
-	if err != nil {
-		if !errors.Is(err, sql.ErrNoRows) {
-			log.Errorw("unable to get open voting", "board", board, "err", err)
-			return err
-		}
-	} else {
-		toBeDeletedVotes, err = service.votingService.GetVotes(ctx, filter.VoteFilter{Board: board, Voting: &openVoting.ID})
+	// todo: call services to delete votes and notes
+	// columnService -> calls noteService -> calls votingService delete()
+	toBeDeletedNotes, err := service.noteService.GetAll(ctx, board, column)
+	for _, note := range toBeDeletedNotes {
+		err := service.noteService.Delete(ctx, notes.NoteDeleteRequest{DeleteStack: true}, note.ID)
 		if err != nil {
-			logger.Get().Errorw("unable to retrieve votes in deleted column", "err", err, "board", board, "column", column)
+			log.Errorw("unable to delete note", "err", err)
 			return err
 		}
 	}
-
 	err = service.database.Delete(board, column, user)
 	if err != nil {
 		log.Errorw("unable to delete column", "err", err)
 		return err
 	}
 
-	service.deletedColumn(ctx, user, board, column, toBeDeletedVotes)
+	service.deletedColumn(ctx, user, board, column)
 	return err
 }
 
@@ -171,7 +162,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	return "", err
 }
 
-func (service *Service) deletedColumn(ctx context.Context, user, board, column uuid.UUID, toBeDeletedVotes []*votings.Vote) {
+func (service *Service) deletedColumn(ctx context.Context, user, board, column uuid.UUID) {
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
 		Data: column,
@@ -188,10 +179,4 @@ func (service *Service) deletedColumn(ctx context.Context, user, board, column u
 		Data: eventNotes,
 	})
 
-	if len(toBeDeletedVotes) > 0 {
-		_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-			Type: realtime.BoardEventVotesDeleted,
-			Data: toBeDeletedVotes,
-		})
-	}
 }

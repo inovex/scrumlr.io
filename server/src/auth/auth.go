@@ -10,6 +10,7 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"scrumlr.io/server/users"
 	"strings"
 
 	"github.com/go-chi/chi/v5"
@@ -28,15 +29,14 @@ import (
 	"scrumlr.io/server/auth/devkeys"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/users"
 )
 
 type Auth interface {
 	Sign(map[string]interface{}) (string, error)
 	Verifier() func(http.Handler) http.Handler
 	Authenticator() func(http.Handler) http.Handler
-	Exists(accountType AccountType) bool
-	ExtractUserInformation(AccountType, *goth.User) (*UserInformation, error)
+	Exists(accountType users.AccountType) bool
+	ExtractUserInformation(users.AccountType, *goth.User) (*UserInformation, error)
 }
 
 type AuthProviderConfiguration struct {
@@ -60,7 +60,7 @@ type AuthConfiguration struct {
 }
 
 type UserInformation struct {
-	Provider               AccountType
+	Provider               users.AccountType
 	Ident, Name, AvatarURL string
 }
 
@@ -83,7 +83,7 @@ func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafe
 
 func (a *AuthConfiguration) initializeProviders() error {
 	providers := []goth.Provider{}
-	if provider, ok := a.providers[(string)(Google)]; ok {
+	if provider, ok := a.providers[(string)(users.Google)]; ok {
 		p := google.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -91,30 +91,30 @@ func (a *AuthConfiguration) initializeProviders() error {
 			"openid",
 			"profile",
 		)
-		p.SetName(strings.ToLower((string)(Google)))
+		p.SetName(strings.ToLower((string)(users.Google)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(GitHub)]; ok {
+	if provider, ok := a.providers[(string)(users.GitHub)]; ok {
 		p := github.New(
 			provider.ClientId,
 			provider.ClientSecret,
 			provider.RedirectUri,
 			"user",
 		)
-		p.SetName(strings.ToLower((string)(GitHub)))
+		p.SetName(strings.ToLower((string)(users.GitHub)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(Microsoft)]; ok {
+	if provider, ok := a.providers[(string)(users.Microsoft)]; ok {
 		p := microsoftonline.New(
 			provider.ClientId,
 			provider.ClientSecret,
 			provider.RedirectUri,
 			"User.Read",
 		)
-		p.SetName(strings.ToLower((string)(Microsoft)))
+		p.SetName(strings.ToLower((string)(users.Microsoft)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(AzureAd)]; ok {
+	if provider, ok := a.providers[(string)(users.AzureAd)]; ok {
 		p := azureadv2.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -124,10 +124,10 @@ func (a *AuthConfiguration) initializeProviders() error {
 				Scopes: []azureadv2.ScopeType{"User.Read"},
 			},
 		)
-		p.SetName(strings.ToLower((string)(AzureAd)))
+		p.SetName(strings.ToLower((string)(users.AzureAd)))
 		providers = append(providers, p)
 	}
-	if provider, ok := a.providers[(string)(Apple)]; ok {
+	if provider, ok := a.providers[(string)(users.Apple)]; ok {
 		providers = append(providers, apple.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -137,7 +137,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			apple.ScopeEmail,
 		))
 	}
-	if provider, ok := a.providers[(string)(TypeOIDC)]; ok {
+	if provider, ok := a.providers[(string)(users.TypeOIDC)]; ok {
 		p, err := oidc.New(
 			provider.ClientId,
 			provider.ClientSecret,
@@ -150,7 +150,7 @@ func (a *AuthConfiguration) initializeProviders() error {
 			logger.Get().Errorw("OIDC provider setup failed", "error", err)
 		}
 
-		p.SetName(strings.ToLower((string)(TypeOIDC)))
+		p.SetName(strings.ToLower((string)(users.TypeOIDC)))
 		providers = append(providers, p)
 	}
 	goth.UseProviders(providers...)
@@ -230,14 +230,14 @@ func (a *AuthConfiguration) Authenticator() func(http.Handler) http.Handler {
 	return jwtauth.Authenticator(a.auth)
 }
 
-func (a *AuthConfiguration) Exists(accountType AccountType) bool {
+func (a *AuthConfiguration) Exists(accountType users.AccountType) bool {
 	if _, ok := a.providers[string(accountType)]; ok {
 		return true
 	}
 	return false
 }
 
-func (a *AuthConfiguration) ExtractUserInformation(accountType AccountType, user *goth.User) (*UserInformation, error) {
+func (a *AuthConfiguration) ExtractUserInformation(accountType users.AccountType, user *goth.User) (*UserInformation, error) {
 	ident := user.UserID
 	name := user.NickName
 	avatar := user.AvatarURL

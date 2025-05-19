@@ -6,13 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/notes"
 	"strconv"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
 

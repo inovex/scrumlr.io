@@ -1,7 +1,6 @@
 package users
 
 import (
-	"scrumlr.io/server/auth"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,7 +13,7 @@ type DatabaseUser struct {
 	ID            uuid.UUID `bun:"type:uuid"`
 	Avatar        *Avatar   `bun:"type:jsonb,nullzero"`
 	Name          string
-	AccountType   auth.AccountType
+	AccountType   AccountType
 	KeyMigration  *time.Time
 	CreatedAt     time.Time
 }
@@ -23,7 +22,7 @@ type DatabaseUser struct {
 type DatabaseUserInsert struct {
 	bun.BaseModel `bun:"table:users"`
 	Name          string
-	AccountType   auth.AccountType
+	AccountType   AccountType
 }
 
 type DatabaseUserUpdate struct {
