@@ -29,6 +29,14 @@ type Service struct {
 	realtime *realtime.Broker
 }
 
+func NewVotingService(db VotingDatabase, rt *realtime.Broker) VotingService {
+	service := new(Service)
+	service.database = db
+	service.realtime = rt
+
+	return service
+}
+
 func (s *Service) AddVote(ctx context.Context, body VoteRequest) (*Vote, error) {
 	log := logger.FromContext(ctx)
 	v, err := s.database.AddVote(body.Board, body.User, body.Note)
@@ -57,6 +65,7 @@ func (s *Service) GetVotes(ctx context.Context, f filter.VoteFilter) ([]*Vote, e
 	if err != nil {
 		log.Errorw("unable to get votes", "err", err)
 	}
+
 	return Votes(votes), err
 }
 
@@ -93,10 +102,12 @@ func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affected
 		Board:  body.Board,
 		Status: body.Status,
 	})
+
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, common.NotFoundError
 		}
+
 		log.Errorw("unable to update voting", "err", err)
 		return nil, common.InternalServerError
 	}
@@ -107,9 +118,11 @@ func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affected
 			log.Errorw("unable to get votes", "err", err)
 			return nil, err
 		}
+
 		s.UpdatedVoting(body.Board, voting, affectedNotes)
 		return new(Voting).From(voting, receivedVotes), err
 	}
+
 	s.UpdatedVoting(body.Board, voting, affectedNotes)
 	return new(Voting).From(voting, nil), err
 }
@@ -186,6 +199,7 @@ func (s *Service) UpdatedVoting(board uuid.UUID, voting VotingDB, affectedNotes 
 		logger.Get().Errorw("unable to retrieve voting in updated voting", "err", err)
 		return
 	}
+
 	if voting.Status == Closed {
 		if err != nil {
 			logger.Get().Errorw("unable to retrieve notes in updated voting", "err", err)
@@ -203,11 +217,4 @@ func (s *Service) UpdatedVoting(board uuid.UUID, voting VotingDB, affectedNotes 
 		},
 	})
 
-}
-
-func NewVotingService(db VotingDatabase, rt *realtime.Broker) VotingService {
-	service := new(Service)
-	service.database = db
-	service.realtime = rt
-	return service
 }
