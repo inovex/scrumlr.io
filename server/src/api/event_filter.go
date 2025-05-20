@@ -4,6 +4,7 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
@@ -13,7 +14,7 @@ import (
 )
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
-	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
@@ -158,7 +159,7 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 	if isMod {
 		// Cache the changes of when a participant got updated
 		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *sessions.BoardSession) *sessions.BoardSession {
-			if boardSession.User.ID == participantSession.User.ID {
+			if boardSession.User == participantSession.User {
 				return participantSession
 			} else {
 				return boardSession
@@ -171,7 +172,7 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	isMod := sessions.CheckSessionRole(clientID, event.Data.BoardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(clientID, event.Data.BoardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {
@@ -210,7 +211,12 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			Reactions:            event.Data.Reactions,
 			Columns:              columns.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
 			Votings: technical_helper.MapSlice[*votings.Voting, *votings.Voting](event.Data.Votings, func(voting *votings.Voting) *votings.Voting {
-				return voting.UpdateVoting(filteredNotes).Voting
+
+				noteIds := make([]uuid.UUID, len(filteredNotes))
+				for index, filteredNote := range filteredNotes {
+					noteIds[index] = filteredNote.ID
+				}
+				return voting.UpdateVoting(noteIds).Voting
 			}),
 			Votes: technical_helper.Filter[*votings.Vote](event.Data.Votes, func(vote *votings.Vote) bool {
 				_, exists := notesMap[vote.Note]

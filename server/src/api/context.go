@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"scrumlr.io/server/users"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -165,7 +164,7 @@ func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
 			return
 		}
 
-		if user.AccountType == users.Anonymous {
+		if user.AccountType == common.Anonymous {
 			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized")))
 			return

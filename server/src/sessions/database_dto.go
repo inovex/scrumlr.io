@@ -5,22 +5,22 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/users"
+	"scrumlr.io/server/common"
 )
 
 type DatabaseBoardSession struct {
 	bun.BaseModel     `bun:"table:board_sessions"`
 	Board             uuid.UUID
 	User              uuid.UUID
-	Avatar            *users.Avatar
+	Avatar            *common.Avatar
 	Name              string
 	ShowHiddenColumns bool
 	Connected         bool
 	Ready             bool
 	RaisedHand        bool
-	Role              SessionRole
+	Role              common.SessionRole
 	Banned            bool
-	AccountType       users.AccountType
+	AccountType       common.AccountType
 	CreatedAt         time.Time
 }
 
@@ -28,7 +28,7 @@ type DatabaseBoardSessionInsert struct {
 	bun.BaseModel `bun:"table:board_sessions"`
 	Board         uuid.UUID
 	User          uuid.UUID
-	Role          SessionRole
+	Role          common.SessionRole
 }
 
 type DatabaseBoardSessionUpdate struct {
@@ -39,6 +39,6 @@ type DatabaseBoardSessionUpdate struct {
 	ShowHiddenColumns *bool
 	Ready             *bool
 	RaisedHand        *bool
-	Role              *SessionRole
+	Role              *common.SessionRole
 	Banned            *bool
 }

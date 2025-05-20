@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
@@ -36,7 +37,7 @@ func (d *DB) CreateBoard(creator uuid.UUID, board DatabaseBoardInsert, columns [
 		return DatabaseBoard{}, errors.New("passphrase or salt should not be set for policies except 'BY_PASSPHRASE'")
 	}
 
-	session := sessions.DatabaseBoardSessionInsert{User: creator, Role: sessions.OwnerRole}
+	session := sessions.DatabaseBoardSessionInsert{User: creator, Role: common.OwnerRole}
 
 	var b DatabaseBoard
 	query := d.db.NewSelect().With("createdBoard", boardInsert)

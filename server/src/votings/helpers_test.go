@@ -1,12 +1,13 @@
 package votings
 
 import (
+	"testing"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/notes"
-	"testing"
-	"time"
 )
 
 func TestVotingWithResultsWithEmptyStructs(t *testing.T) {

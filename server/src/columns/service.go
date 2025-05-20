@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+
 	"scrumlr.io/server/notes"
 
 	"github.com/google/uuid"

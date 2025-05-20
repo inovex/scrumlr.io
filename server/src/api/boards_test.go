@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/boards"
 	"strings"
 	"testing"
 	"time"
+
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/mocks/services"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -16,7 +18,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/mocks/services"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 )

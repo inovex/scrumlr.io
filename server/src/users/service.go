@@ -4,8 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"scrumlr.io/server/sessions"
 	"strings"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -35,10 +36,11 @@ type Service struct {
 	realtime       *realtime.Broker
 }
 
-func NewUserService(db UserDatabase, rt *realtime.Broker) UserService {
+func NewUserService(db UserDatabase, rt *realtime.Broker, sessionService sessions.SessionService) UserService {
 	service := new(Service)
 	service.database = db
 	service.realtime = rt
+	service.sessionService = sessionService
 
 	return service
 }
@@ -198,7 +200,7 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 	}
 
 	for _, session := range connectedBoards {
-		userSession, err := service.sessionService.Get(ctx, session.Board, session.User.ID)
+		userSession, err := service.sessionService.Get(ctx, session.Board, session.User)
 		if err != nil {
 			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID, "err", err)
 		}

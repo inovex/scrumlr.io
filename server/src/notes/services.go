@@ -3,6 +3,7 @@ package notes
 import (
 	"context"
 	"database/sql"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
@@ -27,6 +28,15 @@ type NotesDatabase interface {
 	UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error)
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 	GetStack(noteID uuid.UUID) ([]*NoteDB, error)
+}
+
+func NewNotesService(db NotesDatabase, rt *realtime.Broker, votingService votings.VotingService) NotesService {
+	service := new(Service)
+	service.database = db
+	service.realtime = rt
+	service.votingService = votingService
+
+	return service
 }
 
 func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*Note, error) {
@@ -186,11 +196,4 @@ func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []
 		Type: realtime.BoardEventVotesDeleted,
 		Data: deletedVotes,
 	})
-}
-
-func NewNotesService(db NotesDatabase, rt *realtime.Broker) NotesService {
-	b := new(Service)
-	b.database = db
-	b.realtime = rt
-	return b
 }

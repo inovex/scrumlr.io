@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
@@ -15,7 +17,6 @@ import (
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
-	"time"
 )
 
 type Service struct {
@@ -161,7 +162,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 		columnNum := len(boardColumns)
 		dtoBoard := new(Board).From(board)
 		for _, session := range boardSessions {
-			if session.User.ID == user {
+			if session.User == user {
 				sessionCreated := session.CreatedAt
 				OverviewBoards[i] = &BoardOverview{
 					Board:        dtoBoard,
