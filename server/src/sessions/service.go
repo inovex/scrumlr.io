@@ -74,7 +74,6 @@ func (service *BoardSessionService) Update(ctx context.Context, body BoardSessio
 	}
 
 	if sessionOfCaller.Role == common.ParticipantRole && body.User != body.Caller {
-
 		return nil, common.ForbiddenError(errors.New("not allowed to change other users session"))
 	}
 
