@@ -103,10 +103,12 @@ func (service *Service) Update(ctx context.Context, body NoteUpdateRequest) (*No
 		Position: positionUpdate,
 		Edited:   edited,
 	})
+
 	if err != nil {
 		log.Errorw("unable to update note", "error", err, "note", body.ID)
 		return nil, common.InternalServerError
 	}
+
 	service.updatedNotes(body.Board)
 	return new(Note).From(note), err
 }
