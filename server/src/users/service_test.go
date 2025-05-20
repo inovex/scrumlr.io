@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
 	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
@@ -707,6 +708,8 @@ func TestCreateOIDCUser_NewLineUsername(t *testing.T) {
 
 func TestUpdateUser(t *testing.T) {
 	userId := uuid.New()
+	firstBoardId := uuid.New()
+	secondBoardId := uuid.New()
 	name := "Stan"
 
 	mockUserDatabase := NewMockUserDatabase(t)
@@ -714,10 +717,20 @@ func TestUpdateUser(t *testing.T) {
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockSessionService := sessions.NewMockSessionService(t)
+	mockSessionService.EXPECT().GetUserConnectedBoards(context.Background(), userId).
+		Return([]*sessions.BoardSession{
+			{User: userId, Board: firstBoardId},
+			{User: userId, Board: secondBoardId},
+		}, nil)
+	mockSessionService.EXPECT().Get(context.Background(), firstBoardId, userId).
+		Return(&sessions.BoardSession{User: userId, Board: firstBoardId}, nil)
+	mockSessionService.EXPECT().Get(context.Background(), secondBoardId, userId).
+		Return(&sessions.BoardSession{User: userId, Board: secondBoardId}, nil)
 
 	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
