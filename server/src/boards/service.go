@@ -104,8 +104,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	// map request on column objects to insert into database
 	newColumns := make([]columns.DatabaseColumnInsert, 0, len(body.Columns))
 	for index, value := range body.Columns {
-		var currentIndex = index
-		newColumns = append(newColumns, columns.DatabaseColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible, Index: &currentIndex})
+		newColumns = append(newColumns, columns.DatabaseColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible, Index: &index})
 	}
 
 	// create the board
