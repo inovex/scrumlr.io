@@ -3,6 +3,7 @@ package columns
 import (
 	"context"
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/google/uuid"
@@ -35,12 +36,12 @@ func TestCreateColumn(t *testing.T) {
 		Return([]DatabaseColumn{{ID: columnId, Board: boardId, Name: columnName, Description: columnDescription}}, nil)
 
 	mockBroker := brokerMock.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, columnId).
 		Return([]*notes.Note{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
@@ -100,12 +101,12 @@ func TestDeleteColumn(t *testing.T) {
 	mockColumndatabase.EXPECT().Delete(boardId, columnId, userId).Return(nil)
 
 	mockBroker := brokerMock.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, columnId).
 		Return([]*notes.Note{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
@@ -129,6 +130,8 @@ func TestDeleteColumn_DatabaseError(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, columnId).
+		Return([]*notes.Note{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
 
@@ -161,12 +164,12 @@ func TestUpdateColumn(t *testing.T) {
 		Return([]DatabaseColumn{{ID: columnId, Board: boardId, Name: columnName, Description: columnDescription}}, nil)
 
 	mockBroker := brokerMock.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, columnId).
 		Return([]*notes.Note{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
@@ -274,13 +277,13 @@ func TestGetColumn_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, column)
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.Equal(t, fmt.Errorf("unable to get column: %w", dbError), err)
 }
 
 func TestGetAllColumns(t *testing.T) {
 	boardId := uuid.New()
 	firstColumnId := uuid.New()
-	secondcolumnId := uuid.New()
+	secondColumnId := uuid.New()
 	firstColumnName := "Column One"
 	secondColumnName := "Column Two"
 	firstColumnDescription := "This is a column"
@@ -296,7 +299,7 @@ func TestGetAllColumns(t *testing.T) {
 				Description: firstColumnDescription,
 			},
 			{
-				ID:          secondcolumnId,
+				ID:          secondColumnId,
 				Board:       boardId,
 				Name:        secondColumnName,
 				Description: secondColumnDescription,
@@ -321,9 +324,9 @@ func TestGetAllColumns(t *testing.T) {
 	assert.Equal(t, firstColumnName, columns[0].Name)
 	assert.Equal(t, firstColumnDescription, columns[0].Description)
 
-	assert.Equal(t, firstColumnId, columns[1].ID)
-	assert.Equal(t, firstColumnName, columns[1].Name)
-	assert.Equal(t, firstColumnDescription, columns[1].Description)
+	assert.Equal(t, secondColumnId, columns[1].ID)
+	assert.Equal(t, secondColumnName, columns[1].Name)
+	assert.Equal(t, secondColumnDescription, columns[1].Description)
 }
 
 func TestGetAllColumns_DatabaseError(t *testing.T) {
@@ -346,5 +349,5 @@ func TestGetAllColumns_DatabaseError(t *testing.T) {
 
 	assert.Nil(t, column)
 	assert.NotNil(t, err)
-	assert.Equal(t, dbError, err)
+	assert.Equal(t, fmt.Errorf("unable to get columns: %w", dbError), err)
 }
