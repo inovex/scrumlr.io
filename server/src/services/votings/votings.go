@@ -11,12 +11,11 @@ import (
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
-	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services"
-
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/services"
 )
 
 type VotingService struct {

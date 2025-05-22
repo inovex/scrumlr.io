@@ -3,17 +3,18 @@ package main
 import (
 	"errors"
 	"fmt"
+	"github.com/Unleash/unleash-client-go/v4"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
-
-	"scrumlr.io/server/auth"
-	"scrumlr.io/server/services/health"
 
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/migrations"
 	"scrumlr.io/server/database/types"
@@ -23,13 +24,58 @@ import (
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
+	"scrumlr.io/server/services/health"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/reactions"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
 )
 
+func init() {
+	//  Wenn in der Umgebung bereits UNLEASH_API_URL gesetzt ist, skippen wir das Laden
+	if os.Getenv("UNLEASH_API_URL") != "" {
+		log.Println("UNLEASH_API_URL bereits gesetzt – überspringe .env-Laden")
+		return
+	}
+
+	// 2) Rekursives Aufwärts-Suchen nach einer .env
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Printf("Kann Arbeitsverzeichnis nicht ermitteln: %v", err)
+		return
+	}
+	for dir := wd; ; dir = filepath.Dir(dir) {
+		envFile := filepath.Join(dir, ".env")
+		if _, statErr := os.Stat(envFile); statErr == nil {
+			if loadErr := godotenv.Load(envFile); loadErr != nil {
+				log.Printf(" Fehler beim Laden von %s: %v", envFile, loadErr)
+			} else {
+				log.Printf(".env geladen von %s", envFile)
+			}
+			return
+		}
+		// Abbruch, wenn wir im Wurzel-Verzeichnis angekommen sind
+		if parent := filepath.Dir(dir); parent == dir {
+			break
+		}
+	}
+	log.Println(".env nicht gefunden – Umgebungsvariablen fehlen möglicherweise")
+}
 func main() {
+	/*
+		exePath, err := os.Executable()
+		if err != nil {
+			log.Printf("Fehler beim Ermitteln des Pfads zur ausführbaren Datei: %v", err)
+		} else {
+			envPath := filepath.Join(filepath.Dir(exePath), "..", "..", ".env")
+			if err := godotenv.Load(envPath); err != nil {
+				log.Printf(".env-Datei konnte nicht geladen werden: %v", err)
+				log.Printf("Versuche stattdessen .env im aktuellen Verzeichnis zu laden...")
+				_ = godotenv.Load(".env")
+			}
+
+		}
+	*/
 	app := &cli.App{
 		Name:      "scrumlr.io",
 		Usage:     "Awesome & scalable server for the scrumlr.io web application",
@@ -269,6 +315,51 @@ func run(c *cli.Context) error {
 
 	if !c.Bool("insecure") && c.String("key") == "" {
 		return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
+	}
+
+	/*
+	   headers := http.Header{}
+	   headers.Set("Authorization", os.Getenv("UNLEASH_API_TOKEN"))
+
+	   logger.Get().Info("Initializing Unleash client")
+	   if err := unleash.Initialize(
+	     unleash.WithAppName("scrumlr-backend"),
+	     unleash.WithUrl(os.Getenv("UNLEASH_API_URL")),
+	     unleash.WithCustomHeaders(http.Header{
+	       "Authorization": []string{os.Getenv("UNLEASH_API_TOKEN")},
+	     }),
+	   ); err != nil {
+	     return fmt.Errorf("failed to initialize Unleash: %w", err)
+	   }
+
+	   unleash.WaitForReady()
+
+	   if unleash.IsEnabled("enable-welcome-message") {
+	     logger.Get().Info("Feature 'enable-welcome-message' is ENABLED!")
+	   } else {
+	     logger.Get().Info("Feature 'enable-welcome-message' is DISABLED!")
+	   }
+	*/
+
+	headers := http.Header{}
+	headers.Set("Authorization", os.Getenv("UNLEASH_API_TOKEN"))
+
+	logger.Get().Info("🔧 Initializing Unleash client")
+
+	if err := unleash.Initialize(
+		unleash.WithAppName("scrumlr-backend"),
+		unleash.WithUrl(os.Getenv("UNLEASH_API_URL")),
+		unleash.WithCustomHeaders(headers),
+		unleash.WithListener(&unleash.DebugListener{}),
+	); err != nil {
+		return fmt.Errorf("failed to initialize Unleash: %w", err)
+	}
+
+	unleash.WaitForReady()
+	if unleash.IsEnabled("enable-welcome-message") {
+		logger.Get().Info("Feature 'enable-welcome-message' is ENABLED!")
+	} else {
+		logger.Get().Info("Feature 'enable-welcome-message' is DISABLED!")
 	}
 
 	var rt *realtime.Broker
