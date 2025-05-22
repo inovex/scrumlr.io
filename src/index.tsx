@@ -23,7 +23,7 @@ import {FlagProvider} from "@unleash/proxy-client-react";
 
 const unleash = new UnleashClient({
   url: "https://unleash.dev.scrumlr.fra.ics.inovex.io/api/frontend",
-  clientKey: "take it from unlesh UI",
+  clientKey: "REACT_APP_UNLEASH_FRONTEND_TOKEN",
   appName: "scrumlr-frontend",
   environment: "development",
 });

@@ -15,6 +15,7 @@ import (
 	gorillaSessions "github.com/gorilla/sessions"
 	"github.com/gorilla/websocket"
 
+	//"github.com/Unleash/unleash-client-go/v4"
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -75,6 +76,7 @@ func New(
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+	//	r.Get("/debug/flags", handleFeatureFlags)
 
 	if !checkOrigin {
 		r.Use(cors.Handler(cors.Options{
@@ -340,6 +342,18 @@ func (s *Server) initReactionResources(r chi.Router) {
 		})
 	})
 }
+
+/*
+func (s *Server) getFeatureFlagStatus(w http.ResponseWriter, r *http.Request) {
+
+		flagName := "non-AnonymousVoting"
+		if unleash.IsEnabled(flagName) {
+			w.Write([]byte("Feature '" + flagName + "' ist aktiviert"))
+		} else {
+			w.Write([]byte(" Feature '" + flagName + "' ist deaktiviert"))
+		}
+	}
+*/
 
 func (s *Server) initBoardReactionResources(r chi.Router) {
 	r.Route("/board-reactions", func(r chi.Router) {
