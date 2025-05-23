@@ -84,8 +84,9 @@ $column-height: 340px;
   }
 }
 
-// TODO subject to change with column
-.columns-configurator-column__color-picker {
+// note: hardcoded values are always subject to change with the column or color picker themselves
+.columns-configurator-column__color-picker--open {
+  // only apply to opened color picker, as it behaves differently
   position: absolute;
   // some precise but hardcoded positioning values so it fits exactly on top of the active color
   // varying by column position (left, center, right) probably because of borders ig

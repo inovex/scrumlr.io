@@ -103,7 +103,11 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             {...listeners}
           />
           <ColorPicker
-            className={classNames("columns-configurator-column__color-picker", `columns-configurator-column__color-picker--column-${props.placement}`)}
+            className={classNames(
+              "columns-configurator-column__color-picker",
+              {"columns-configurator-column__color-picker--open": openColorPicker},
+              `columns-configurator-column__color-picker--column-${props.placement}`
+            )}
             open={openColorPicker}
             colors={COLOR_ORDER}
             activeColor={props.column.color}
