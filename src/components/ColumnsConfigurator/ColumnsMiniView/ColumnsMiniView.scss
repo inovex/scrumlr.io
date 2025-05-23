@@ -55,3 +55,15 @@ $mini-column-height: 91px;
   font-size: $text--base;
   font-weight: 600;
 }
+
+[theme="dark"] {
+  .columns-mini-view__column {
+    &--hidden {
+      background-image: $column-stripes--dark;
+    }
+  }
+
+  .columns-mini-view__column-index {
+    color: $gray--000;
+  }
+}
