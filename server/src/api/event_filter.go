@@ -11,11 +11,16 @@ import (
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votings"
+	"slices"
 )
+
+type VotingUpdated struct {
+	Notes  notes.NoteSlice `json:"notes"`
+	Voting *votings.Voting `json:"voting"`
+}
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
 	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
-
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
 		if updated, ok := bs.columnsUpdated(event, userID, isMod); ok {
@@ -70,20 +75,20 @@ func (bs *BoardSubscription) notesUpdated(event *realtime.BoardEvent, userID uui
 		logger.Get().Errorw("unable to parse notesUpdated or eventNotesSync in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
 		return nil, false
 	}
-
 	if isMod {
 		bs.boardNotes = noteSlice
 		return event, true
 	} else {
-		var settingPerColumn []notes.ColumnVisibility
+		var columnVisibility []notes.ColumnVisability
 		for _, column := range bs.boardColumns {
-			settingPerColumn = append(settingPerColumn, notes.ColumnVisibility{column.ID, column.Visible})
+			columnVisibility = append(columnVisibility, notes.ColumnVisability{
+				ID:      column.ID,
+				Visible: column.Visible,
+			})
 		}
-
-		smth := notes.NoteVisibilityConfig{UserID: userID, ShowNotesOfOtherUsers: bs.boardSettings.ShowNotesOfOtherUsers, ShowAuthors: bs.boardSettings.ShowAuthors, Columns: settingPerColumn}
 		return &realtime.BoardEvent{
 			Type: event.Type,
-			Data: noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(smth),
+			Data: noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, columnVisibility),
 		}, true
 	}
 }
@@ -117,7 +122,6 @@ func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uui
 			return vote.User == userID
 		}),
 	}
-
 	return &ret, true
 }
 
@@ -133,17 +137,33 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 	} else if voting.Voting.Status != votings.Closed {
 		return event, true
 	} else {
-		var settingPerColumn []notes.ColumnVisibility
-		for _, column := range bs.boardColumns {
-			settingPerColumn = append(settingPerColumn, notes.ColumnVisibility{column.ID, column.Visible})
+
+		var noteSlice notes.NoteSlice
+		var notesID []uuid.UUID
+		for _, note := range bs.boardNotes {
+			if slices.Contains(voting.Notes, note.ID) {
+				noteSlice = append(noteSlice, note)
+				notesID = append(notesID, note.ID)
+			}
 		}
 
-		smth := notes.NoteVisibilityConfig{UserID: userID, ShowNotesOfOtherUsers: bs.boardSettings.ShowNotesOfOtherUsers, ShowAuthors: bs.boardSettings.ShowAuthors, Columns: settingPerColumn}
-		filteredVotingNotes := voting.Notes.FilterNotesByBoardSettingsOrAuthorInformation(smth)
-		voting.Notes = filteredVotingNotes
+		var columnVisibility []notes.ColumnVisability
+		for _, column := range bs.boardColumns {
+			columnVisibility = append(columnVisibility, notes.ColumnVisability{
+				ID:      column.ID,
+				Visible: column.Visible,
+			})
+		}
+
+		filteredVotingNotes := noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, columnVisibility)
+
+		data := &VotingUpdated{
+			Notes:  filteredVotingNotes,
+			Voting: voting.Voting.UpdateVoting(notesID).Voting,
+		}
 		ret := realtime.BoardEvent{
 			Type: event.Type,
-			Data: voting.Voting.UpdateVoting(filteredVotingNotes),
+			Data: data,
 		}
 		return &ret, true
 	}
@@ -173,32 +193,38 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	isMod := sessions.CheckSessionRole(clientID, event.Data.BoardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
-
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {
 		latestVoting := event.Data.Votings[0]
-
 		event.Data.Votings = []*votings.Voting{latestVoting}
 		event.Data.Votes = technical_helper.Filter[*votings.Vote](event.Data.Votes, func(vote *votings.Vote) bool {
 			return vote.Voting == latestVoting.ID && (latestVoting.Status != votings.Open || vote.User == clientID)
 		})
 	}
-
 	if isMod {
 		return event
 	}
 
-	var settingPerColumn []notes.ColumnVisibility
+	var noteSlice notes.NoteSlice
+	noteSlice = event.Data.Notes
+
+	var columnVisibility []notes.ColumnVisability
 	for _, column := range event.Data.Columns {
-		settingPerColumn = append(settingPerColumn, notes.ColumnVisibility{column.ID, column.Visible})
+		columnVisibility = append(columnVisibility, notes.ColumnVisability{
+			ID:      column.ID,
+			Visible: column.Visible,
+		})
 	}
-	smth := notes.NoteVisibilityConfig{UserID: clientID, ShowNotesOfOtherUsers: event.Data.Board.ShowNotesOfOtherUsers, ShowAuthors: event.Data.Board.ShowAuthors, Columns: settingPerColumn}
 
-	filteredNotes := notes.NoteSlice(event.Data.Notes).FilterNotesByBoardSettingsOrAuthorInformation(smth)
-
+	filteredNotes := noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(clientID, event.Data.Board.ShowNotesOfOtherUsers, event.Data.Board.ShowAuthors, columnVisibility)
 	notesMap := make(map[uuid.UUID]*notes.Note)
 	for _, n := range filteredNotes {
 		notesMap[n.ID] = n
+	}
+
+	var notesID []uuid.UUID
+	for _, note := range filteredNotes {
+		notesID = append(notesID, note.ID)
 	}
 
 	return InitEvent{
@@ -211,12 +237,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			Reactions:            event.Data.Reactions,
 			Columns:              columns.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
 			Votings: technical_helper.MapSlice[*votings.Voting, *votings.Voting](event.Data.Votings, func(voting *votings.Voting) *votings.Voting {
-
-				noteIds := make([]uuid.UUID, len(filteredNotes))
-				for index, filteredNote := range filteredNotes {
-					noteIds[index] = filteredNote.ID
-				}
-				return voting.UpdateVoting(noteIds).Voting
+				return voting.UpdateVoting(notesID).Voting
 			}),
 			Votes: technical_helper.Filter[*votings.Vote](event.Data.Votes, func(vote *votings.Vote) bool {
 				_, exists := notesMap[vote.Note]

@@ -105,13 +105,13 @@ func (v *Voting) calculateTotalVoteCount(notes []uuid.UUID) *VotingResults {
 		Votes: make(map[uuid.UUID]VotingResultsPerNote),
 	}
 
-	for _, noteID := range notes {
-		if voteResults, ok := v.VotingResults.Votes[noteID]; ok { // Check if note was voted on
-			votingResultsPerNode.Votes[noteID] = VotingResultsPerNote{
+	for _, note := range notes {
+		if voteResults, ok := v.VotingResults.Votes[note]; ok { // Check if note was voted on
+			votingResultsPerNode.Votes[note] = VotingResultsPerNote{
 				Total: voteResults.Total,
 				Users: voteResults.Users,
 			}
-			totalVotingCount += v.VotingResults.Votes[noteID].Total
+			totalVotingCount += v.VotingResults.Votes[note].Total
 		}
 	}
 

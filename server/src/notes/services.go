@@ -3,6 +3,7 @@ package notes
 import (
 	"context"
 	"database/sql"
+	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
@@ -10,7 +11,6 @@ import (
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/votings"
 )
 
 type Service struct {

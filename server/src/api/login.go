@@ -84,7 +84,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	provider, err := users.NewAccountType(externalUser.Provider)
+	provider, err := common.NewAccountType(externalUser.Provider)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("unsupported user provider", "err", err)
