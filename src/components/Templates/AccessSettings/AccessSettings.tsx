@@ -4,6 +4,7 @@ import {ReactComponent as Icon} from "assets/icons/info.svg";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import "./AccessSettings.scss";
+import {Button} from "components/Button";
 
 // yes, this modal can also be abstracted / generalized if need be
 export const AccessSettings = () => {
@@ -24,8 +25,8 @@ export const AccessSettings = () => {
           </Select>
         </main>
         <footer className="access-settings__footer">
-          <button className="access-settings__cancel">Go back</button>
-          <button className="access-settings__start">Start Session</button>
+          <Button type="secondary">Go back</Button>
+          <Button type="primary">Start Session</Button>
         </footer>
       </div>
     </div>
