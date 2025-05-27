@@ -45,6 +45,21 @@
       "descriptionPlaceholder": "Description (optional)",
       "save": "Save",
       "cancel": "Cancel"
+    },
+
+    "AccessSettings": {
+      "Public": {
+        "title": "Open",
+        "description": "Participants can join easily & quickly via the link – this provides basic security."
+      },
+      "By_Invite": {
+        "title": "Approval",
+        "description": "Participants must be approved before joining – ensuring a high level of security."
+      },
+      "By_Passphrase": {
+        "title": "Password Protected",
+        "description": "Access is only possible with a set password – ensuring a high level of security."
+      }
     }
   },
   "Sessions": {
