@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/timeprovider"
 
 	"scrumlr.io/server/votings"
 
@@ -26,6 +27,7 @@ import (
 )
 
 type ServiceInitializer struct {
+	clock  timeprovider.TimeProvider
 	db     *bun.DB
 	rt     *realtime.Broker
 	ws     websocket.Upgrader
@@ -34,6 +36,7 @@ type ServiceInitializer struct {
 
 func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 	initializer := new(ServiceInitializer)
+	initializer.clock = timeprovider.NewClock()
 	initializer.db = db
 	initializer.rt = rt
 	initializer.ws = websocket.Upgrader{
@@ -47,7 +50,7 @@ func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 
 func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) boards.BoardService {
 	boardDB := boards.NewBoardDatabase(init.db)
-	boardService := boards.NewBoardService(boardDB, init.rt, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+	boardService := boards.NewBoardService(boardDB, init.rt, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, init.clock)
 
 	return boardService
 }

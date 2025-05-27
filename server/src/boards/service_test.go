@@ -13,6 +13,7 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
@@ -38,7 +39,9 @@ func TestGet(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.Get(context.Background(), boardID)
 
 	require.NoError(t, err)
@@ -64,7 +67,9 @@ func TestGetError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.Get(context.Background(), boardID)
 
 	require.Error(t, err)
@@ -95,7 +100,9 @@ func TestCreate(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.Create(context.Background(), CreateBoardRequest{Name: &boardName, Description: &boardDescription, Owner: userID, AccessPolicy: Public, Columns: []columns.ColumnRequest{
 		{Board: boardID, Name: boardName, Description: boardDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index, User: userID},
 	}})
@@ -123,7 +130,9 @@ func TestCreate_ByPassphraseMissing(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.Create(context.Background(), CreateBoardRequest{Name: &boardName, Description: &boardDescription, Owner: userID, AccessPolicy: ByPassphrase, Columns: nil, Passphrase: nil})
 
 	require.Error(t, err)
@@ -148,7 +157,9 @@ func TestDelete(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	err := service.Delete(context.Background(), boardID)
 
 	require.NoError(t, err)
@@ -178,14 +189,16 @@ func TestUpdate(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName})
 
 	require.NoError(t, err)
 	assert.Equal(t, boardID, result.ID)
 }
 
-func TestSetTimer(t *testing.T) { //TODO
+func TestSetTimer(t *testing.T) {
 	boardID := uuid.New()
 	timerStart := time.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(5))
@@ -206,7 +219,10 @@ func TestSetTimer(t *testing.T) { //TODO
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(timerStart)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.SetTimer(context.Background(), boardID, 5)
 
 	require.NoError(t, err)
@@ -233,7 +249,9 @@ func TestDeleteTimer(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.DeleteTimer(context.Background(), boardID)
 
 	require.NoError(t, err)
@@ -242,17 +260,17 @@ func TestDeleteTimer(t *testing.T) {
 	assert.Equal(t, (*time.Time)(nil), result.TimerEnd)
 }
 
-func TestIncrementTimer(t *testing.T) { //TODO
+func TestIncrementTimer(t *testing.T) {
 	boardID := uuid.New()
-	now := time.Now()
-	updatedTimer := now.Add(1 * time.Minute)
-	updatedTimerEnd := updatedTimer.Add(time.Minute * 1)
+	now := time.Now().Local()
+	updatedTimer := now.Add(time.Duration(1) * time.Minute)
+	updatedTimerEnd := updatedTimer.Add(time.Minute * time.Duration(1))
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockBoardDatabase.EXPECT().GetBoard(boardID).
 		Return(DatabaseBoard{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimer}, nil)
 	mockBoardDatabase.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimerEnd}).
-		Return(DatabaseBoard{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimer}, nil)
+		Return(DatabaseBoard{ID: boardID, TimerStart: &updatedTimer, TimerEnd: &updatedTimerEnd}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
 	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
@@ -266,7 +284,10 @@ func TestIncrementTimer(t *testing.T) { //TODO
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(now)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.IncrementTimer(context.Background(), boardID)
 
 	require.NoError(t, err)
