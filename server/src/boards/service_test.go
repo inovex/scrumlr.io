@@ -72,7 +72,7 @@ func TestGetError(t *testing.T) {
 	assert.Equal(t, dbError, err)
 }
 
-func TestCreate(t *testing.T) { //TODO
+func TestCreate(t *testing.T) {
 	boardID := uuid.New()
 	userID := uuid.New()
 	boardName := "Test Board"
@@ -80,9 +80,8 @@ func TestCreate(t *testing.T) { //TODO
 	index := 0
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().CreateBoard(userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public}, []columns.DatabaseColumnInsert{
-		{Name: boardName, Description: boardDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index, Board: boardID},
-	}).
+	mockBoardDatabase.EXPECT().CreateBoard(userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public},
+		[]columns.DatabaseColumnInsert{{Name: boardName, Color: columns.ColorGoalGreen, Visible: nil, Index: &index}}).
 		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: Public}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
@@ -98,8 +97,8 @@ func TestCreate(t *testing.T) { //TODO
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
 	result, err := service.Create(context.Background(), CreateBoardRequest{Name: &boardName, Description: &boardDescription, Owner: userID, AccessPolicy: Public, Columns: []columns.ColumnRequest{
-		{Name: boardName, Description: boardDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index, Board: boardID, User: userID}},
-	})
+		{Board: boardID, Name: boardName, Description: boardDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index, User: userID},
+	}})
 
 	require.NoError(t, err)
 	require.NotNil(t, result)
@@ -155,12 +154,12 @@ func TestDelete(t *testing.T) {
 	require.NoError(t, err)
 }
 
-func TestUpdate(t *testing.T) { //TODO
+func TestUpdate(t *testing.T) {
 	boardID := uuid.New()
 	updatedName := "Updated Board Name"
 
 	mockBoardDatabase := NewMockBoardDatabase(t)
-	mockBoardDatabase.EXPECT().UpdateBoard(BoardUpdateRequest{ID: boardID, Name: &updatedName}).
+	mockBoardDatabase.EXPECT().UpdateBoard(DatabaseBoardUpdate{ID: boardID, Name: &updatedName}).
 		Return(DatabaseBoard{ID: boardID, Name: &updatedName}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
