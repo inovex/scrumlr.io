@@ -10,9 +10,15 @@
     ".    . description . . ";
 
   padding: $spacing--base;
+
+  border: 2px solid transparent;
   border-radius: 12px;
 
   background-color: $gray--100;
+
+  &--active {
+    border-color: $blue--500;
+  }
 }
 
 .select-option__icon-container {
