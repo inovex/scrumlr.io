@@ -3,7 +3,9 @@ import "./AccessSettings.scss";
 export const AccessSettings = () => (
   <div className="access-settings__wrapper">
     <div className="access-settings">
-      <header className="access-settings__header">Title</header>
+      <header className="access-settings__header">
+        <div className="access-settings__title">Access Settings</div>
+      </header>
       <main className="access-settings__main">
         <div className="access-settings__option">Open</div>
         <div className="access-settings__option">With Approval</div>

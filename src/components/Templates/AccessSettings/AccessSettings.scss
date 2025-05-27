@@ -12,5 +12,22 @@
   width: 37%;
   height: 62%;
 
+  padding: 40px $spacing--xl $spacing--xl $spacing--xl;
+
+  border-radius: $rounded--default;
   background-color: $gray--000;
+}
+
+.access-settings__header {
+  display: flex;
+  justify-content: center;
+}
+
+.access-settings__title {
+  color: $navy--900;
+  font-size: $text--lg;
+  font-weight: 700;
+
+  padding-bottom: $spacing--xxs;
+  border-bottom: 3px solid $blue--500;
 }
