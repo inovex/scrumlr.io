@@ -22,7 +22,7 @@ export type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 type TemplateCardProps = {
   template: TemplateWithColumns;
   templateType: TemplateCardType;
-  onCreateBoard: (template: TemplateWithColumns) => void;
+  onSelectTemplate: (template: TemplateWithColumns) => void;
 } & (
   | {
       templateType: "CUSTOM";
@@ -101,7 +101,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
         className={classNames("template-card__start-button", "template-card__start-button--start")}
         small
         icon={<NextIcon />}
-        onClick={() => props.onCreateBoard({template, columns})}
+        onClick={() => props.onSelectTemplate({template, columns})}
       >
         {t("Templates.TemplateCard.start")}
       </Button>

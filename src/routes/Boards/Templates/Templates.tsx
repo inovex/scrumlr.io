@@ -3,6 +3,7 @@ import {Outlet, useOutletContext, useNavigate, useLocation} from "react-router";
 import {useAppSelector, useAppDispatch} from "store";
 import {
   createBoardFromTemplate,
+  CreateSessionAccessPolicy,
   deleteTemplate,
   getTemplates,
   ReducedTemplateWithColumns,
@@ -55,7 +56,8 @@ export const Templates = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [showAccessSettingsPortal, _setShowAccessSettingsPortal] = useState(true);
+  const [selectedTemplateWithColumns, setSelectedTemplateWithColumns] = useState<TemplateWithColumns | null>(null);
+  const [showAccessSettingsPortal, setShowAccessSettingsPortal] = useState(false);
 
   const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
 
@@ -85,10 +87,26 @@ export const Templates = () => {
     dispatch(deleteTemplate({id: templateId}));
   };
 
-  const createBoard = (templateWithColumns: TemplateWithColumns) => {
-    dispatch(createBoardFromTemplate(templateWithColumns))
+  // after selecting template and access policy, actually dispatch to create board from template
+  const createBoard = (templateWithColumns: TemplateWithColumns, accessPolicy: CreateSessionAccessPolicy) => {
+    dispatch(createBoardFromTemplate({templateWithColumns, accessPolicy}))
       .unwrap()
       .then((boardId) => navigate(`/board/${boardId}`));
+  };
+
+  // second step: after selecting access policy, collect selected template and selected accessPolicy and proceed to dispatch
+  const onSelectSessionPolicy = (accessPolicy: CreateSessionAccessPolicy) => {
+    if (!selectedTemplateWithColumns) return;
+
+    setShowAccessSettingsPortal(false);
+
+    createBoard(selectedTemplateWithColumns, accessPolicy);
+  };
+
+  // first step: after selecting a template, save it as state and proceed to access policy selection modal
+  const onSelectTemplateWithColumns = (templateWithColumns: TemplateWithColumns) => {
+    setSelectedTemplateWithColumns(templateWithColumns);
+    setShowAccessSettingsPortal(true);
   };
 
   const scrollToSide = (side: Side, smooth: boolean) => {
@@ -146,7 +164,7 @@ export const Templates = () => {
       <Outlet /> {/* settings */}
       {showAccessSettingsPortal ? (
         <Portal className={classNames("templates__portal")} hiddenOverflow disabledPadding>
-          <AccessSettings />
+          <AccessSettings onCancel={() => setShowAccessSettingsPortal(false)} onSelectSessionPolicy={onSelectSessionPolicy} />
         </Portal>
       ) : null}
       <div className="templates" ref={templatesRef}>
@@ -163,7 +181,7 @@ export const Templates = () => {
                 <TemplateCard
                   templateType="RECOMMENDED"
                   template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)}
-                  onCreateBoard={createBoard}
+                  onSelectTemplate={onSelectTemplateWithColumns}
                   key={templateFull.template.id}
                 />
               ))}
@@ -181,7 +199,7 @@ export const Templates = () => {
                   <TemplateCard
                     templateType="CUSTOM"
                     template={mergeTemplateWithColumns(template)}
-                    onCreateBoard={createBoard}
+                    onSelectTemplate={onSelectTemplateWithColumns}
                     onDeleteTemplate={deleteTemplateAndColumns}
                     onNavigateToEdit={navigateToEdit}
                     onToggleFavourite={toggleFavourite}

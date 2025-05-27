@@ -6,12 +6,12 @@ import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
-import {AccessPolicy} from "store/features";
+import {AccessPolicy, CreateSessionAccessPolicy} from "store/features";
 import "./AccessSettings.scss";
 
 type AccessSettingsProps = {
   onCancel: () => void;
-  onStartSessionWithPolicy: (accessPolicyData: CreateSessionAccessPolicy) => void;
+  onSelectSessionPolicy: (accessPolicyData: CreateSessionAccessPolicy) => void;
 };
 
 // yes, this modal can also be abstracted / generalized if need be
@@ -42,7 +42,7 @@ export const AccessSettings = (props: AccessSettingsProps) => {
 
   const onStartSession = () => {
     const sessionPolicy = getSessionAccessPolicy();
-    props.onStartSessionWithPolicy(sessionPolicy);
+    props.onSelectSessionPolicy(sessionPolicy);
   };
 
   return (
