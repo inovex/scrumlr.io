@@ -2,9 +2,10 @@
 
 .select-option {
   display: grid;
-  grid-template-rows: auto auto;
+  grid-template-rows: 2px auto auto;
   grid-template-columns: auto $spacing--sm 1fr $spacing--sm auto;
   grid-template-areas:
+    "icon . .           . radio"
     "icon . label       . radio"
     ".    . description . . ";
 
@@ -16,16 +17,34 @@
 
 .select-option__icon-container {
   grid-area: icon;
+
+  width: $icon--large;
+  height: $icon--large;
 }
 
 .select-option__label {
   grid-area: label;
+
+  font-size: $text--base;
+  font-weight: 600;
+  line-height: normal;
+
+  color: $navy--400;
 }
 
 .select-option__description {
   grid-area: description;
+
+  font-size: $text--base;
+  font-weight: 400;
+  line-height: 22px;
+
+  color: $navy--500;
 }
 
 .select-option__radio {
   grid-area: radio;
+
+  width: 20px;
+  height: 20px;
 }
