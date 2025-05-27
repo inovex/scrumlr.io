@@ -21,7 +21,7 @@ export const SelectOption = (props: SelectOptionProps) => {
   };
 
   return (
-    <div className={classNames("select-option", `select-option--${props.index}`, {"select-option--active": isActive})}>
+    <div className={classNames("select-option", `select-option--${props.index}`, {"select-option--active": isActive})} onClick={handleSelect}>
       <div className="select-option__icon-container">{props.icon}</div>
       <div className="select-option__label">{props.label}</div>
       <div className="select-option__description">{props.description}</div>
