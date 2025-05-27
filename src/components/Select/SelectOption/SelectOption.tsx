@@ -12,7 +12,11 @@ export type SelectOptionProps = {
 export const SelectOption = (props: SelectOptionProps) => {
   const {activeIndex, setActiveIndex} = useSelect();
 
-  const handleSelect = () => setActiveIndex(props.index!);
+  const handleSelect = () => {
+    if (props.index) {
+      setActiveIndex(props.index);
+    }
+  };
 
   return (
     <div>
