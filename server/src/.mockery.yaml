@@ -14,6 +14,14 @@ packages:
       ResponseWriter:
         all: true
 
+  scrumlr.io/server/timeprovider:
+    config:
+      dir: "{{.InterfaceDir}}"
+      inpackage: true
+    interfaces:
+      TimeProvider:
+        all: true
+
   scrumlr.io/server/boards:
     config:
       dir: "{{.InterfaceDir}}"
