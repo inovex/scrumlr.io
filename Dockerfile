@@ -36,6 +36,5 @@ ENV SCRUMLR_ANALYTICS_SRC=''
 ENV SCRUMLR_CLARITY_ID=''
 
 COPY ./nginx.conf /etc/nginx/templates/scrumlr.io.conf.template
-COPY ./security-headers.conf /etc/nginx/conf.d/security-headers.conf
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
 RUN rm /etc/nginx/conf.d/default.conf
