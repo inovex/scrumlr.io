@@ -9,9 +9,6 @@ import {Button} from "components/Button";
 import {AccessPolicy} from "store/features";
 import "./AccessSettings.scss";
 
-// smart type which comes with a passphrase for the respective access policy
-type CreateSessionAccessPolicy = {policy: Extract<AccessPolicy, "PUBLIC" | "BY_INVITE">} | {policy: Extract<AccessPolicy, "BY_PASSPHRASE">; passphrase: string};
-
 type AccessSettingsProps = {
   onCancel: () => void;
   onStartSessionWithPolicy: (accessPolicyData: CreateSessionAccessPolicy) => void;
@@ -39,7 +36,8 @@ export const AccessSettings = (props: AccessSettingsProps) => {
     const policy = matchAccessPolicy();
     if (policy === "BY_PASSPHRASE") {
       return {policy, passphrase: "wip"};
-    } return {policy};
+    }
+    return {policy};
   };
 
   const onStartSession = () => {
