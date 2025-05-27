@@ -12,7 +12,7 @@ import {
   TemplateWithColumns,
 } from "store/features";
 import {useTranslation} from "react-i18next";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
 import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
@@ -21,6 +21,8 @@ import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
 import templatesJsonRaw from "constants/recommendedTemplates.json";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
+import {Portal} from "components/Portal";
+import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -52,6 +54,8 @@ export const Templates = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [showAccessSettingsPortal, _setShowAccessSettingsPortal] = useState(true);
 
   const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
 
@@ -140,6 +144,11 @@ export const Templates = () => {
   return (
     <>
       <Outlet /> {/* settings */}
+      {showAccessSettingsPortal ? (
+        <Portal className={classNames("templates__portal")} hiddenOverflow centered disabledPadding>
+          <AccessSettings />
+        </Portal>
+      ) : null}
       <div className="templates" ref={templatesRef}>
         <div className="templates__stan-container">
           <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
