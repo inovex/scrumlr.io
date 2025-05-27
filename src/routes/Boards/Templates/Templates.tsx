@@ -39,7 +39,6 @@ const convertJsonToFullTemplates = (reducedTemplates: ReducedTemplateWithColumns
       id: `template-${indexTemplate}`,
       creator: "scrumlr",
       favourite: false,
-      accessPolicy: "PUBLIC", // this property will be removed soon
     },
     columns: columns.map((column, indexColumn) => ({
       ...column,

@@ -199,7 +199,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       creator: "test-auth-user-id",
       name: "sample name 1",
       description: "sample description 1",
-      accessPolicy: "PUBLIC",
       favourite: true,
     },
     {
@@ -207,7 +206,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       creator: "test-auth-user-id",
       name: "sample name 2",
       description: "sample description 2",
-      accessPolicy: "PUBLIC",
       favourite: false,
     },
   ],

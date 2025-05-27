@@ -1,4 +1,3 @@
-import {AccessPolicy} from "../board";
 import {TemplateColumn} from "../templateColumns";
 
 // getTemplates returns all templates with columns, but is the only endpoint to do so.
@@ -11,7 +10,6 @@ export type Template = {
   creator: string; // UUID
   name: string;
   description: string;
-  accessPolicy: AccessPolicy;
   favourite: boolean;
 };
 

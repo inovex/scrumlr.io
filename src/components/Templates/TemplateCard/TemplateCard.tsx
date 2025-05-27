@@ -5,12 +5,10 @@ import {Button} from "components/Button";
 import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-textarea-autosize";
 import {FavouriteButton} from "components/Templates";
-import {AccessPolicy, TemplateWithColumns} from "store/features";
+import {TemplateWithColumns} from "store/features";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
-import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
-import {ReactComponent as LockIcon} from "assets/icons/lock-closed.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {ReactComponent as TrashIcon} from "assets/icons/trash.svg";
 import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
@@ -46,17 +44,6 @@ export const TemplateCard = (props: TemplateCardProps) => {
     setShowMiniMenu(false);
   };
 
-  const renderAccessPolicy = (accessPolicy: AccessPolicy) => {
-    switch (accessPolicy) {
-      case "BY_PASSPHRASE":
-        return <KeyIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-passphrase" />;
-      case "BY_INVITE":
-        return <LockIcon className="template-card__access-policy-icon template-card__access-policy-icon--by-invite" />;
-      default:
-        return null;
-    }
-  };
-
   const renderMenu = () => {
     if (props.templateType === "RECOMMENDED") return null;
 
@@ -83,7 +70,6 @@ export const TemplateCard = (props: TemplateCardProps) => {
       ) : null}
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.name} disabled />
-        <div className="template-card__access-policy">{renderAccessPolicy(template.accessPolicy)}</div>
       </div>
       {renderMenu()}
       <TextareaAutosize className={classNames("template-card__description")} value={template.description} disabled />

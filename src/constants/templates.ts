@@ -11,7 +11,6 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     id: DEFAULT_TEMPLATE_ID,
     creator: DEFAULT_TEMPLATE_CREATOR,
     name: "",
-    accessPolicy: "PUBLIC",
     description: "",
     favourite: false,
   },
