@@ -145,7 +145,7 @@ export const Templates = () => {
     <>
       <Outlet /> {/* settings */}
       {showAccessSettingsPortal ? (
-        <Portal className={classNames("templates__portal")} hiddenOverflow centered disabledPadding>
+        <Portal className={classNames("templates__portal")} hiddenOverflow disabledPadding>
           <AccessSettings />
         </Portal>
       ) : null}

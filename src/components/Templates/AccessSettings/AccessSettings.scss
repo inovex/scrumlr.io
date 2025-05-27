@@ -1,8 +1,16 @@
 @import "constants/style";
 
-.access-settings {
+.access-settings__wrapper {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.access-settings {
+  width: 37%;
+  height: 62%;
+
   background-color: $gray--000;
 }
