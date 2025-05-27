@@ -13,7 +13,7 @@ export const SelectOption = (props: SelectOptionProps) => {
   const {activeIndex, setActiveIndex} = useSelect();
 
   const handleSelect = () => {
-    if (props.index) {
+    if (props.index !== undefined) {
       setActiveIndex(props.index);
     }
   };
