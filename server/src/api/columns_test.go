@@ -13,7 +13,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/mocks/services"
 )
 
 type ColumnTestSuite struct {
@@ -38,7 +37,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			columnMock := columns.NewMockColumnService(suite.T())
 			name := "TestColumn"
 			color := columns.Color("backlog-blue")
 			visible := true
@@ -52,7 +51,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 				AddToContext(identifiers.UserIdentifier, userID)
 			rr := httptest.NewRecorder()
 
-			boardMock.EXPECT().CreateColumn(req.req.Context(), columns.ColumnRequest{
+			columnMock.EXPECT().Create(req.req.Context(), columns.ColumnRequest{
 				Name:    name,
 				Color:   color,
 				Visible: &visible,
@@ -67,12 +66,12 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 				Index:   index,
 			}, tt.err)
 
-			s.boards = boardMock
+			s.columns = columnMock
 
 			s.createColumn(rr, req.Request())
 
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			boardMock.AssertExpectations(suite.T())
+			columnMock.AssertExpectations(suite.T())
 		})
 	}
 }
@@ -90,7 +89,7 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			columnMock := columns.NewMockColumnService(suite.T())
 			boardID, _ := uuid.NewRandom()
 			columnID, _ := uuid.NewRandom()
 			userID, _ := uuid.NewRandom()
@@ -101,13 +100,13 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 				AddToContext(identifiers.ColumnIdentifier, columnID)
 			rr := httptest.NewRecorder()
 
-			boardMock.EXPECT().DeleteColumn(req.req.Context(), boardID, columnID, userID).Return(tt.err)
+			columnMock.EXPECT().Delete(req.req.Context(), boardID, columnID, userID).Return(tt.err)
 
-			s.boards = boardMock
+			s.columns = columnMock
 			s.deleteColumn(rr, req.Request())
 
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			boardMock.AssertExpectations(suite.T())
+			columnMock.AssertExpectations(suite.T())
 		})
 	}
 }
@@ -126,7 +125,7 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			columnMock := columns.NewMockColumnService(suite.T())
 			boardID, _ := uuid.NewRandom()
 			columnID, _ := uuid.NewRandom()
 
@@ -141,7 +140,7 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 				AddToContext(identifiers.ColumnIdentifier, columnID)
 			rr := httptest.NewRecorder()
 
-			boardMock.EXPECT().UpdateColumn(req.req.Context(), columns.ColumnUpdateRequest{
+			columnMock.EXPECT().Update(req.req.Context(), columns.ColumnUpdateRequest{
 				Name:    colName,
 				Color:   color,
 				Visible: visible,
@@ -156,12 +155,12 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 				Index:   index,
 			}, tt.err)
 
-			s.boards = boardMock
+			s.columns = columnMock
 
 			s.updateColumn(rr, req.Request())
 
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			boardMock.AssertExpectations(suite.T())
+			columnMock.AssertExpectations(suite.T())
 		})
 	}
 }
@@ -180,7 +179,7 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			columnMock := columns.NewMockColumnService(suite.T())
 			boardID, _ := uuid.NewRandom()
 			columnID, _ := uuid.NewRandom()
 
@@ -202,14 +201,14 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 				AddToContext(identifiers.ColumnIdentifier, columnID)
 			rr := httptest.NewRecorder()
 
-			boardMock.EXPECT().GetColumn(req.req.Context(), boardID, columnID).Return(column, tt.err)
+			columnMock.EXPECT().Get(req.req.Context(), boardID, columnID).Return(column, tt.err)
 
-			s.boards = boardMock
+			s.columns = columnMock
 
 			s.getColumn(rr, req.Request())
 
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			boardMock.AssertExpectations(suite.T())
+			columnMock.AssertExpectations(suite.T())
 		})
 	}
 }
@@ -228,7 +227,7 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			columnsMock := columns.NewMockColumnService(suite.T())
 			boardID, _ := uuid.NewRandom()
 			columnID, _ := uuid.NewRandom()
 
@@ -248,14 +247,14 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 			req := NewTestRequestBuilder("GET", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 			rr := httptest.NewRecorder()
-			boardMock.EXPECT().ListColumns(req.req.Context(), boardID).Return([]*columns.Column{column}, tt.err)
+			columnsMock.EXPECT().GetAll(req.req.Context(), boardID).Return([]*columns.Column{column}, tt.err)
 
-			s.boards = boardMock
+			s.columns = columnsMock
 
 			s.getColumns(rr, req.Request())
 
 			suite.Equal(tt.expectedCode, rr.Result().StatusCode)
-			boardMock.AssertExpectations(suite.T())
+			columnsMock.AssertExpectations(suite.T())
 		})
 	}
 }
