@@ -6,12 +6,46 @@ import {ReactComponent as KeyIcon} from "assets/icons/key-protected.svg";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
+import {AccessPolicy} from "store/features";
 import "./AccessSettings.scss";
 
+// smart type which comes with a passphrase for the respective access policy
+type CreateSessionAccessPolicy = {policy: Extract<AccessPolicy, "PUBLIC" | "BY_INVITE">} | {policy: Extract<AccessPolicy, "BY_PASSPHRASE">; passphrase: string};
+
+type AccessSettingsProps = {
+  onCancel: () => void;
+  onStartSessionWithPolicy: (accessPolicyData: CreateSessionAccessPolicy) => void;
+};
+
 // yes, this modal can also be abstracted / generalized if need be
-export const AccessSettings = () => {
+export const AccessSettings = (props: AccessSettingsProps) => {
   const {t} = useTranslation();
   const [activeAccessSettingIndex, setActiveAccessSettingIndex] = useState(0);
+
+  const matchAccessPolicy = (): AccessPolicy => {
+    switch (activeAccessSettingIndex) {
+      case 0:
+        return "PUBLIC";
+      case 1:
+        return "BY_INVITE";
+      case 2:
+        return "BY_PASSPHRASE";
+      default:
+        return "PUBLIC";
+    }
+  };
+
+  const getSessionAccessPolicy = (): CreateSessionAccessPolicy => {
+    const policy = matchAccessPolicy();
+    if (policy === "BY_PASSPHRASE") {
+      return {policy, passphrase: "wip"};
+    } return {policy};
+  };
+
+  const onStartSession = () => {
+    const sessionPolicy = getSessionAccessPolicy();
+    props.onStartSessionWithPolicy(sessionPolicy);
+  };
 
   return (
     <div className="access-settings__wrapper">
@@ -27,8 +61,12 @@ export const AccessSettings = () => {
           </Select>
         </main>
         <footer className="access-settings__footer">
-          <Button type="secondary">Go back</Button>
-          <Button type="primary">Start Session</Button>
+          <Button type="secondary" onClick={props.onCancel}>
+            Go back
+          </Button>
+          <Button type="primary" onClick={onStartSession}>
+            Start Session
+          </Button>
         </footer>
       </div>
     </div>
