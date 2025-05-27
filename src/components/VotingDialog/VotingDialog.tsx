@@ -1,36 +1,39 @@
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Dialog} from "components/Dialog";
-import {useNavigate} from "react-router-dom";
-import store, {useAppSelector} from "store";
+import {useNavigate} from "react-router";
+import {useAppDispatch, useAppSelector} from "store";
 import {Toggle} from "components/Toggle";
-import {Actions} from "store/action";
 import {getNumberFromStorage, saveToStorage, getFromStorage} from "utils/storage";
 import {CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY, CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY} from "constants/storage";
 import {Plus, Minus} from "components/Icon";
 import "./VotingDialog.scss";
+import {closeVoting, createVoting} from "store/features";
 
 export const VotingDialog = () => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const navigate = useNavigate();
-  const isAdmin = useAppSelector((state) => state.participants?.self.role === "OWNER" || state.participants?.self.role === "MODERATOR");
+  const isAdmin = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
   const voting = useAppSelector((state) => state.votings.open?.id);
 
   const cumulativeVotingStorage = getFromStorage(CUMULATIVE_VOTING_DEFAULT_STORAGE_KEY);
   const cumulativeVotingDefault = !(typeof cumulativeVotingStorage !== "undefined" && cumulativeVotingStorage !== null && cumulativeVotingStorage === "false");
   const [allowCumulativeVoting, setAllowCumulativeVoting] = useState(cumulativeVotingDefault);
   const [numberOfVotes, setNumberOfVotes] = useState(getNumberFromStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, 5));
+  const [isAnonymous, setIsAnonymous] = useState(true);
 
   if (!isAdmin) {
     navigate("..");
   }
 
   const startVoting = () => {
-    store.dispatch(
-      Actions.createVoting({
+    dispatch(
+      createVoting({
         voteLimit: numberOfVotes,
         showVotesOfOthers: false,
         allowMultipleVotes: allowCumulativeVoting,
+        isAnonymous,
       })
     );
     saveToStorage(CUSTOM_NUMBER_OF_VOTES_STORAGE_KEY, String(numberOfVotes));
@@ -39,7 +42,7 @@ export const VotingDialog = () => {
   };
 
   const stopVoting = () => {
-    store.dispatch(Actions.closeVoting(voting!));
+    dispatch(closeVoting(voting!));
     navigate("..");
   };
 
@@ -51,6 +54,17 @@ export const VotingDialog = () => {
         </button>
       ) : (
         <>
+          <button
+            className="dialog__button"
+            data-testid="voting-dialog__anonymous-voting-button"
+            onClick={() => {
+              setIsAnonymous((prev) => !prev);
+            }}
+          >
+            <label>{t("VoteConfigurationButton.isAnonymous")}</label>
+            <Toggle active={isAnonymous} className="voting-dialog__toggle" />
+          </button>
+
           <button className="dialog__button" data-testid="voting-dialog__cumulative-voting-button" onClick={() => setAllowCumulativeVoting((state) => !state)}>
             <label>{t("VoteConfigurationButton.allowMultipleVotesPerNote")}</label>
             <Toggle active={allowCumulativeVoting} className="voting-dialog__toggle" />

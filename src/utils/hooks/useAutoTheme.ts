@@ -1,5 +1,5 @@
 import {useState, useEffect, useCallback} from "react";
-import {Theme, AutoTheme} from "types/view";
+import {Theme, AutoTheme} from "store/features/view/types";
 
 /** this hook return the theme that should be used, regarding the current system preferences. */
 export const useAutoTheme = (theme: Theme): AutoTheme => {

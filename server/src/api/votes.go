@@ -15,12 +15,12 @@ import (
 // addVote adds a vote to the currently open voting session
 func (s *Server) addVote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -48,6 +48,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 
 	var body dto.VoteRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -67,6 +68,7 @@ func (s *Server) removeVote(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
@@ -79,6 +81,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if votingQuery != "" {
 		voting, err := uuid.Parse(votingQuery)
 		if err != nil {
+			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}
@@ -89,6 +92,7 @@ func (s *Server) getVotes(w http.ResponseWriter, r *http.Request) {
 	if noteQuery != "" {
 		note, err := uuid.Parse(noteQuery)
 		if err != nil {
+			log.Errorw("unable to decode body", "err", err)
 			common.Throw(w, r, common.BadRequestError(err))
 			return
 		}

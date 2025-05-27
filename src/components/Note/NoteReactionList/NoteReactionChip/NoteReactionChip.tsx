@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
-import {REACTION_EMOJI_MAP, ReactionType} from "types/reaction";
+import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
 import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
 import {getEmojiWithSkinTone} from "utils/reactions";
@@ -24,7 +24,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);
   const skinTone = useAppSelector((state) => state.skinTone);
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {

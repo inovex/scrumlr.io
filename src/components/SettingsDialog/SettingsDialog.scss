@@ -102,12 +102,6 @@ $settings-dialog-container--bottom: 62px;
   height: 40px;
   margin: $spacing--xl;
 }
-[theme="light"] .settings-dialog__scrumlr-logo--dark {
-  display: none;
-}
-[theme="dark"] .settings-dialog__scrumlr-logo--light {
-  display: none;
-}
 
 .settings-dialog__navigation {
   display: flex;

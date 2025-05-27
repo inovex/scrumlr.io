@@ -57,7 +57,7 @@ func testGetVotingForOpen(t *testing.T) {
 	assert.Equal(t, voting.Board, got.Board)
 	assert.Equal(t, voting.Status, got.Status)
 	assert.Equal(t, voting.VoteLimit, got.VoteLimit)
-	assert.Equal(t, voting.ShowVotesOfOthers, got.ShowVotesOfOthers)
+	//assert.Equal(t, voting.ShowVotesOfOthers, got.ShowVotesOfOthers)
 	assert.Equal(t, voting.AllowMultipleVotes, got.AllowMultipleVotes)
 }
 func testGetVotesForClosedVoting(t *testing.T) {
@@ -149,8 +149,8 @@ func testCreateVoting(t *testing.T) {
 		Board:              board.ID,
 		VoteLimit:          10,
 		AllowMultipleVotes: false,
-		ShowVotesOfOthers:  false,
-		Status:             types.VotingStatusOpen,
+		//	ShowVotesOfOthers:  false,
+		Status: types.VotingStatusOpen,
 	})
 	assert.Nil(t, err)
 	assert.Equal(t, board.ID, voting.Board)

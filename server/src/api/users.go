@@ -26,11 +26,11 @@ func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
-
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body dto.UserUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
@@ -39,7 +39,6 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 
 	updatedUser, err := s.users.Update(r.Context(), body)
 	if err != nil {
-		log.Errorw("failed to update user", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}

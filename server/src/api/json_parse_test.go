@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
 	"strings"
 	"testing"
 
@@ -74,15 +75,18 @@ func (suite *JSONErrTestSuite) TestJSONErrs() {
 			handler: func(s *Server) func(w http.ResponseWriter, r *http.Request) { return s.updateBoardSessionRequest },
 		},
 	}
+
 	for _, tt := range tests {
 		suite.Run(tt.name, func() {
 			s := new(Server)
 
-			mockUUID, _ := uuid.NewRandom()
+			mockUUID := uuid.New()
 			req := NewTestRequestBuilder("POST", "/", strings.NewReader(`{
 				"id": %s
-				}`)).
-				AddToContext(identifiers.BoardIdentifier, mockUUID).
+				}`))
+
+			req.req = logger.InitTestLoggerRequest(req.Request())
+			req.AddToContext(identifiers.BoardIdentifier, mockUUID).
 				AddToContext(identifiers.UserIdentifier, mockUUID).
 				AddToContext(identifiers.NoteIdentifier, mockUUID).
 				AddToContext(identifiers.ColumnIdentifier, mockUUID).

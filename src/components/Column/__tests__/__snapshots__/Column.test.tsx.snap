@@ -25,6 +25,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           </svg>
           <h2
             class="column__header-text column__header-text--hidden"
+            data-clarity-mask="True"
             id="column-test-columns-id-1"
           >
             Testheader 1
@@ -42,9 +43,11 @@ exports[`Column should have correct style show column with correct style 1`] = `
         >
           <svg
             class="column__header-edit-button-icon"
+            style="transform: rotate(90deg);"
           >
             three-dots.svg
           </svg>
+           
         </button>
       </div>
       <form
@@ -52,10 +55,9 @@ exports[`Column should have correct style show column with correct style 1`] = `
       >
         <textarea
           class="note-input__input"
+          data-clarity-mask="True"
           maxlength="1024"
           placeholder="Add your note..."
-          rows="1"
-          style="overflow-x: hidden; word-wrap: break-word; overflow-y: hidden;"
         />
         <div
           class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"
@@ -111,6 +113,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__author-container"
+                  data-clarity-mask="True"
                 >
                   <div
                     class="note-author-list"
@@ -566,7 +569,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                 >
                   <button
                     class="dot-button vote-button-remove"
-                    title="Remove vote"
+                    data-tooltip-id="scrumlr-tooltip"
                   >
                     <span
                       class="vote-button-remove__folded-corner"
@@ -583,9 +586,11 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     </span>
                   </button>
                   <button
+                    aria-label="Multiple votes are not allowed"
                     class="dot-button vote-button-add"
+                    data-tooltip-content="Multiple votes are not allowed"
+                    data-tooltip-id="scrumlr-tooltip"
                     disabled=""
-                    title="Add vote"
                   >
                     <svg
                       class="vote-button-add__icon"
@@ -600,6 +605,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__text"
+                  data-clarity-mask="True"
                 >
                   Lorem Ipsum
                 </div>
@@ -690,6 +696,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__author-container"
+                  data-clarity-mask="True"
                 >
                   <div
                     class="note-author-list"
@@ -1144,8 +1151,10 @@ exports[`Column should have correct style show column with correct style 1`] = `
                   role="none"
                 >
                   <button
+                    aria-label="Add vote"
                     class="dot-button vote-button-add"
-                    title="Add vote"
+                    data-tooltip-content="Add vote"
+                    data-tooltip-id="scrumlr-tooltip"
                   >
                     <svg
                       class="vote-button-add__icon"
@@ -1160,6 +1169,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
               >
                 <div
                   class="note__text"
+                  data-clarity-mask="True"
                 >
                   Lorem Ipsum
                 </div>

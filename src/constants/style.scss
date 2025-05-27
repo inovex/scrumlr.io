@@ -98,10 +98,12 @@ $brighten--slightly: brightness(1.1);
 $brighten--strongly: brightness(1.4);
 
 // z-index
+// TODO clean this up
 $base-z-index: 100;
 $base-z-index-step: 10;
 $note-z-index: $base-z-index + (2 * $base-z-index-step);
-$emoji-suggestions-z-index: $note-z-index + $base-z-index-step;
+$column-header-z-index: $note-z-index + $base-z-index-step; // elements from header overlaying notes must always be visible
+$emoji-suggestions-z-index: $column-header-z-index;
 $menu-z-index: $base-z-index + (8 * $base-z-index-step);
 $menu-item-z-index: $menu-z-index + $base-z-index-step;
 $board__navigation-button-z-index: $base-z-index + (6 * $base-z-index-step);
@@ -122,6 +124,8 @@ $tablet: "screen and (min-width : 768px)";
 $desktop: "screen and (min-width : 1280px)";
 $menu-mobile: "screen and (max-width: 1343px)";
 $menu-desktop: "screen and (min-width: 1344px)";
+
+$breakpoint--smartphone: 768px;
 
 // responsive: @container query
 $container__note: "note (max-width: 300px)";
@@ -172,11 +176,15 @@ $column-stripes--dark: repeating-linear-gradient(
 @mixin scrollbar() {
   scrollbar-width: auto;
 
-  scrollbar-color: var(--accent-color--200) var(--accent-color--100);
+  scrollbar-color: var(--accent-color--200) transparent;
+
+  ::-webkit-scrollbar {
+    background-color: transparent;
+  }
 
   // ampersand to correctly scope the rule
   [theme="dark"] & {
-    scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) rgba(var(--accent-color--dark-rgb), 0.6);
+    scrollbar-color: rgba(var(--accent-color--dark-rgb), 0.8) transparent;
   }
 }
 
@@ -198,4 +206,53 @@ $column-stripes--dark: repeating-linear-gradient(
   @include tooltip;
   color: $gray--000;
   background-color: $navy--200;
+}
+
+// this mixin is used to decrease an element's padding,
+// in order to keep it the same size if the borders change.
+@mixin compensate-padding($padding, $decrement) {
+  $new-padding: ();
+  @each $value in $padding {
+    $new-padding: append($new-padding, $value - $decrement);
+  }
+  padding: $new-padding;
+}
+
+// add some default css for hover, focus, and active states.
+@mixin default-states($border-size: 1.5px, $padding, $compensate-padding: true) {
+  &:hover {
+    box-shadow: 0 3px 12px 0 color.change($navy--700, $alpha: 0.12);
+  }
+
+  &:focus,
+  &:focus-within {
+    border: $border-size solid $blue--500;
+    @if $compensate-padding == true {
+      @include compensate-padding($padding, $border-size);
+    }
+  }
+
+  &:active {
+    border: $border-size solid $navy--400;
+    @if $compensate-padding == true {
+      @include compensate-padding($padding, $border-size);
+    }
+  }
+
+  [theme="dark"] & {
+    &:focus,
+    &:focus-within {
+      border: $border-size solid $blue--400;
+      @if $compensate-padding == true {
+        @include compensate-padding($padding, $border-size);
+      }
+    }
+
+    &:active {
+      border: $border-size solid $gray--000;
+      @if $compensate-padding == true {
+        @include compensate-padding($padding, $border-size);
+      }
+    }
+  }
 }

@@ -7,12 +7,12 @@
   margin-right: calc(-1 * ($spacing--xs + 10px));
   padding-bottom: $settings-dialog-container--bottom;
 
+  @include scrollbar();
+
   &:focus-visible {
     outline: 2px dashed rgba(var(--accent-color--light-rgb), 0.5);
     border-radius: 8px;
   }
-
-  @include scrollbar();
 }
 
 @media screen and (min-width: 920px) {
@@ -80,6 +80,7 @@
   .board-settings__board-name-button_input {
     color: $gray--000;
   }
+
   .board-settings__board-name-button_input::placeholder {
     color: $gray--000;
   }

@@ -14,14 +14,15 @@ import (
 )
 
 func (s *Server) getBoardSessionRequest(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromContext(r.Context())
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	userParam := chi.URLParam(r, "user")
 	user, err := uuid.Parse(userParam)
 	if err != nil {
+		log.Error(err, "unable to parse body", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
-
 	// user should only be allowed to get own session request
 	if user != r.Context().Value(identifiers.UserIdentifier).(uuid.UUID) {
 		common.Throw(w, r, common.ForbiddenError(errors.New("not allowed")))

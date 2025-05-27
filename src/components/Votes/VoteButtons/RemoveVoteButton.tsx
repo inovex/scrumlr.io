@@ -1,24 +1,29 @@
 import {FC, useEffect, useRef, useState} from "react";
-import {useDispatch} from "react-redux";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
-import {Actions} from "store/action";
 import {DotButton} from "components/DotButton";
 import {Minus} from "components/Icon";
 import "./RemoveVoteButton.scss";
+import {useAppDispatch} from "store";
+import {deleteVote} from "store/features";
+import {needsHighContrast} from "constants/colors";
+// import {t} from "i18next";
 
 type RemoveVoteProps = {
   noteId: string;
   disabled?: boolean;
   numberOfVotes: number;
+  colorClassName?: string;
+  participantNames?: string;
+  isAnonymous?: boolean;
 };
 
-export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes}) => {
-  const dispatch = useDispatch();
+export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberOfVotes, colorClassName, participantNames, isAnonymous}) => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
 
-  const deleteVote = () => {
-    dispatch(Actions.deleteVote(noteId));
+  const dispatchDeleteVote = () => {
+    dispatch(deleteVote(noteId));
   };
 
   const [doBump, setDoBump] = useState(false);
@@ -34,13 +39,14 @@ export const RemoveVoteButton: FC<RemoveVoteProps> = ({noteId, disabled, numberO
 
   return (
     <DotButton
-      title={disabled ? t("Votes.VotesOnNote", {votes: numberOfVotes}) : t("Votes.RemoveVote")}
-      className={classNames("vote-button-remove", {bump: doBump})}
+      className={classNames("vote-button-remove", {bump: doBump}, colorClassName && needsHighContrast(colorClassName) && "vote-button-remove--high-contrast")}
       disabled={disabled}
-      onClick={deleteVote}
+      onClick={dispatchDeleteVote}
       onAnimationEnd={() => {
         setDoBump(false);
       }}
+      dataTooltipId="scrumlr-tooltip"
+      dataTooltipContent={isAnonymous ? t("Votes.VotesOnNote", {count: numberOfVotes}) : participantNames}
     >
       <span className="vote-button-remove__folded-corner" />
       <Minus className="vote-button-remove__icon" />

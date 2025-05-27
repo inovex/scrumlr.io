@@ -20,7 +20,7 @@ import {getColorClassName} from "constants/colors";
 import {MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode, useState} from "react";
 import {useAppSelector} from "store";
-import {Column} from "types/column";
+import {Column} from "store/features/columns/types";
 import {isEqual} from "underscore";
 
 type CustomDndContextProps = {

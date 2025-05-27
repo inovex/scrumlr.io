@@ -135,6 +135,7 @@ exports[`<HeaderMenu/> should render correctly for moderator 1`] = `
             >
               <a
                 class="board-option-link"
+                data-discover="true"
                 href="/settings"
               >
                 <p
@@ -201,6 +202,7 @@ exports[`<HeaderMenu/> should render correctly for participants 1`] = `
             >
               <a
                 class="board-option-link"
+                data-discover="true"
                 href="/settings"
               >
                 <p

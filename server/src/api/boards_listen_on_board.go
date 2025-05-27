@@ -4,48 +4,54 @@ import (
 	"context"
 	"net/http"
 
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
+
 	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	dto2 "scrumlr.io/server/common/dto"
+	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 )
 
 type BoardSubscription struct {
 	subscription      chan *realtime.BoardEvent
 	clients           map[uuid.UUID]*websocket.Conn
-	boardParticipants []*dto2.BoardSession
-	boardSettings     *dto2.Board
-	boardColumns      []*dto2.Column
-	boardNotes        []*dto2.Note
-	boardReactions    []*dto2.Reaction
+	boardParticipants []*dto.BoardSession
+	boardSettings     *dto.Board
+	boardColumns      []*columns.Column
+	boardNotes        []*notes.Note
+	boardReactions    []*reactions.Reaction
 }
 
 type InitEvent struct {
 	Type realtime.BoardEventType `json:"type"`
-	Data dto2.FullBoard          `json:"data"`
+	Data dto.FullBoard           `json:"data"`
 }
 
 type EventData struct {
-	Board     *dto2.Board                 `json:"board"`
-	Columns   []*dto2.Column              `json:"columns"`
-	Notes     []*dto2.Note                `json:"notes"`
-	Reactions []*dto2.Reaction            `json:"reactions"`
-	Votings   []*dto2.Voting              `json:"votings"`
-	Votes     []*dto2.Vote                `json:"votes"`
-	Sessions  []*dto2.BoardSession        `json:"participants"`
-	Requests  []*dto2.BoardSessionRequest `json:"requests"`
+	Board     *dto.Board                 `json:"board"`
+	Columns   []*columns.Column          `json:"columns"`
+	Notes     []*notes.Note              `json:"notes"`
+	Reactions []*reactions.Reaction      `json:"reactions"`
+	Votings   []*votes.Voting            `json:"votings"`
+	Votes     []*dto.Vote                `json:"votes"`
+	Sessions  []*dto.BoardSession        `json:"participants"`
+	Requests  []*dto.BoardSessionRequest `json:"requests"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
+	log := logger.FromRequest(r)
 	id := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	conn, err := s.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		logger.FromRequest(r).Errorw("unable to upgrade websocket",
+		log.Errorw("unable to upgrade websocket",
 			"err", err,
 			"board", id,
 			"user", userID)
@@ -54,7 +60,6 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 
 	fullBoard, err := s.boards.FullBoard(r.Context(), id)
 	if err != nil {
-		logger.Get().Errorw("failed to prepare init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
 		return
 	}
@@ -67,7 +72,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	initEvent = eventInitFilter(initEvent, userID)
 	err = conn.WriteJSON(initEvent)
 	if err != nil {
-		logger.Get().Errorw("failed to send init message", "board", id, "user", userID, "err", err)
+		log.Errorw("failed to send init message", "board", id, "user", userID, "err", err)
 		s.closeBoardSocket(id, userID, conn)
 		return
 	}
@@ -97,7 +102,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData dto2.FullBoard) {
+func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData dto.FullBoard) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
@@ -119,11 +124,11 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
 	}
 }
 
-func (b *BoardSubscription) startListeningOnBoard() {
-	for msg := range b.subscription {
+func (bs *BoardSubscription) startListeningOnBoard() {
+	for msg := range bs.subscription {
 		logger.Get().Debugw("message received", "message", msg)
-		for id, conn := range b.clients {
-			filteredMsg := b.eventFilter(msg, id)
+		for id, conn := range bs.clients {
+			filteredMsg := bs.eventFilter(msg, id)
 			if err := conn.WriteJSON(filteredMsg); err != nil {
 				logger.Get().Warnw("failed to send message", "message", filteredMsg, "err", err)
 			}

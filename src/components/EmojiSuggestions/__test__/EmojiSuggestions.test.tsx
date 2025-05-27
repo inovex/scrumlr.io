@@ -1,5 +1,5 @@
 import {Provider} from "react-redux";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import getTestStore from "utils/test/getTestStore";
 import {ComponentProps} from "react";
 import {render} from "@testing-library/react";

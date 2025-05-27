@@ -1,16 +1,15 @@
-import {Link} from "react-router-dom";
-import {getRandomName} from "constants/name";
+import {getRandomName} from "utils/random";
 import {Auth} from "utils/auth";
 import {Toast} from "utils/Toast";
 import {useState} from "react";
 import {LoginProviders} from "components/LoginProviders";
 import {Trans, useTranslation} from "react-i18next";
-import {useLocation} from "react-router";
+import {Link, useLocation} from "react-router";
 import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {Refresh} from "components/Icon";
 import {TextInputAction} from "components/TextInputAction";
-import {Button} from "components/Button";
+import {LegacyButton} from "components/Button";
 import {TextInput} from "components/TextInput";
 import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
@@ -109,9 +108,9 @@ export const LoginBoard = () => {
             </fieldset>
             {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
 
-            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={anonymousLoginDisabled}>
+            <LegacyButton className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={anonymousLoginDisabled}>
               {t("LoginBoard.login")}
-            </Button>
+            </LegacyButton>
             {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
             {/* admin messed something up */}
             {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}

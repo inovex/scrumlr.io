@@ -7,11 +7,17 @@ import {Router} from "react-router";
 import * as reactRouter from "react-router";
 import i18nTest from "i18nTest";
 import {StackView} from "../StackView";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import getTestStore from "utils/test/getTestStore";
 
 jest.mock("utils/hooks/useImageChecker.ts", () => ({
   useImageChecker: () => false,
+}));
+
+jest.mock("react-router", () => ({
+  ...jest.requireActual("react-router"),
+  useParams: jest.fn(),
+  useNavigate: jest.fn(),
 }));
 
 const BOARD_ID = "test-board-id";
@@ -54,12 +60,13 @@ describe("StackView", () => {
 
   describe("side effects", () => {
     it("should navigate to board route on close", () => {
-      const navigateSpy = jest.fn();
-      jest.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => navigateSpy);
+      const mockedUsedNavigate = jest.fn();
+      jest.spyOn(reactRouter, "useNavigate").mockImplementationOnce(() => mockedUsedNavigate);
+
       const {container} = render(createStackView(), {container: global.document.querySelector("#portal")!});
       expect(container.querySelector(".stack-view__portal")).not.toBeNull();
       fireEvent.click(container.querySelector(".stack-view__portal")!);
-      expect(navigateSpy).toHaveBeenCalledWith(`/board/${BOARD_ID}`);
+      expect(mockedUsedNavigate).toHaveBeenCalledWith(`/board/${BOARD_ID}`);
     });
   });
 });

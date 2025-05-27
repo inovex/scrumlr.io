@@ -1,7 +1,7 @@
 import {render} from "@testing-library/react";
 import {Provider} from "react-redux";
 import {InfoBar} from "../Infobar";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import getTestStore from "utils/test/getTestStore";
 import {I18nextProvider} from "react-i18next";
 import i18nTest from "i18nTest";
@@ -42,6 +42,7 @@ describe("InfoBar", () => {
           allowStacking: true,
           timerStart: new Date(123436789),
           timerEnd: new Date(123456789),
+          isLocked: false,
         },
       },
     });
@@ -66,6 +67,7 @@ describe("InfoBar", () => {
           showNoteReactions: true,
           allowStacking: true,
           sharedNote: "test",
+          isLocked: false,
         },
       },
     });

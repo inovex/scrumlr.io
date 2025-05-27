@@ -5,12 +5,13 @@ import {MenuBars} from "components/MenuBars";
 import {InfoBar} from "components/Infobar";
 import {BoardHeader} from "components/BoardHeader";
 import {HotkeyAnchor} from "components/HotkeyAnchor";
-import "./Board.scss";
 import {useDndMonitor} from "@dnd-kit/core";
 import classNames from "classnames";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {Toast} from "utils/Toast";
 import {useTranslation} from "react-i18next";
+import {useIsTouchingSides} from "utils/hooks/useIsTouchingSides";
+import "./Board.scss";
 
 export interface BoardProps {
   children: React.ReactElement<ColumnProps> | React.ReactElement<ColumnProps>[];
@@ -19,30 +20,8 @@ export interface BoardProps {
   locked: boolean;
 }
 
-export interface BoardState {
-  showNextButton: boolean;
-  showPreviousButton: boolean;
-}
-
-export interface ColumnState {
-  firstVisibleColumnIndex: number;
-  lastVisibleColumnIndex: number;
-}
-
 export const BoardComponent = ({children, currentUserIsModerator, moderating, locked}: BoardProps) => {
   const {t} = useTranslation();
-  const [state, setState] = useState<BoardState & ColumnState>({
-    firstVisibleColumnIndex: 0,
-    lastVisibleColumnIndex: React.Children.count(children),
-    showNextButton: false,
-    showPreviousButton: false,
-  });
-
-  const [columnState, setColumnState] = useState<ColumnState>({
-    firstVisibleColumnIndex: 0,
-    lastVisibleColumnIndex: React.Children.count(children),
-  });
-
   const [dragActive, setDragActive] = useState(false);
   useDndMonitor({
     onDragStart() {
@@ -57,7 +36,6 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
   });
 
   const boardRef = useRef<HTMLDivElement>(null);
-  const columnVisibilityStatesRef = useRef<boolean[]>([]);
 
   const columnsCount = React.Children.count(children);
 
@@ -65,79 +43,14 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
   const leftSpacerOffset = useStripeOffset<HTMLDivElement>({gradientLength: 40, gradientAngle: 45});
   const rightSpacerOffset = useStripeOffset<HTMLDivElement>({gradientLength: 40, gradientAngle: 45});
 
+  const {isTouchingLeftSide, isTouchingRightSide} = useIsTouchingSides(boardRef);
+
   useEffect(() => {
     leftSpacerOffset.updateOffset();
     rightSpacerOffset.updateOffset();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children]);
-
-  useEffect(() => {
-    const board = boardRef.current;
-
-    if (board) {
-      // initialize column visibility states
-      columnVisibilityStatesRef.current = new Array(React.Children.count(children));
-      const columnVisibilityStates = columnVisibilityStatesRef.current;
-      columnVisibilityStates.fill(false);
-
-      // initialize intersection observer
-      const observerOptions = {
-        root: board,
-        rootMargin: "0px",
-        threshold: 1.0,
-      };
-      const observerCallback: IntersectionObserverCallback = (entries) => {
-        entries.forEach((entry) => {
-          const index = Array.prototype.indexOf.call(board.children, entry.target) - 1;
-          columnVisibilityStates[index] = entry.isIntersecting;
-        });
-
-        const firstVisibleColumnIndex = columnVisibilityStates.findIndex((value) => value);
-        const lastVisibleColumnIndex = columnVisibilityStates.lastIndexOf(true);
-
-        setColumnState({
-          firstVisibleColumnIndex,
-          lastVisibleColumnIndex,
-        });
-      };
-      const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-      // observe children
-      const domChildren = board.children;
-      for (let i = 1; i < domChildren.length - 1; i += 1) {
-        observer.observe(domChildren[i]);
-      }
-
-      // return callback handler that will disconnect the observer on unmount
-      return () => {
-        observer.disconnect();
-      };
-    }
-    return undefined;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [children]);
-
-  useEffect(() => {
-    let firstVisibleColumnIndex;
-    let lastVisibleColumnIndex;
-
-    if (columnState.firstVisibleColumnIndex === -1 && columnState.lastVisibleColumnIndex === -1) {
-      firstVisibleColumnIndex = state.firstVisibleColumnIndex;
-      lastVisibleColumnIndex = state.firstVisibleColumnIndex - 1;
-    } else {
-      firstVisibleColumnIndex = columnState.firstVisibleColumnIndex;
-      lastVisibleColumnIndex = columnState.lastVisibleColumnIndex;
-    }
-
-    setState({
-      firstVisibleColumnIndex,
-      lastVisibleColumnIndex,
-      showNextButton: lastVisibleColumnIndex < columnsCount - 1,
-      showPreviousButton: firstVisibleColumnIndex > 0,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columnState]);
 
   useEffect(() => {
     if (locked) {
@@ -163,18 +76,13 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
     );
   }
 
-  const {firstVisibleColumnIndex, lastVisibleColumnIndex} = state;
   const columnColors = React.Children.map(children, (child) => child.props.color);
 
-  const previousColumnIndex = firstVisibleColumnIndex > 0 ? firstVisibleColumnIndex - 1 : columnsCount - 1;
-  const nextColumnIndex = lastVisibleColumnIndex === columnsCount - 1 ? 0 : firstVisibleColumnIndex + 1;
-
-  const handlePreviousClick = () => {
-    boardRef.current!.children[previousColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
-  };
-
-  const handleNextClick = () => {
-    boardRef.current!.children[nextColumnIndex + 1].scrollIntoView({inline: "start", behavior: "smooth"});
+  const scrollBoard = (direction: "left" | "right") => {
+    const boardWidth = boardRef.current?.scrollWidth ?? 0;
+    const columnWidth = boardWidth / columnsCount;
+    const scrollValue = columnWidth * (direction === "left" ? -1 : 1);
+    boardRef.current?.scrollBy({left: scrollValue, behavior: "smooth"});
   };
 
   return (
@@ -182,7 +90,12 @@ export const BoardComponent = ({children, currentUserIsModerator, moderating, lo
       <style>{`.board { --board__columns: ${columnsCount} }`}</style>
       <BoardHeader currentUserIsModerator={currentUserIsModerator} />
       <InfoBar />
-      <MenuBars showPreviousColumn={state.showPreviousButton} showNextColumn={state.showNextButton} onPreviousColumn={handlePreviousClick} onNextColumn={handleNextClick} />
+      <MenuBars
+        showPreviousColumn={!isTouchingLeftSide}
+        showNextColumn={!isTouchingRightSide}
+        onPreviousColumn={() => scrollBoard("left")}
+        onNextColumn={() => scrollBoard("right")}
+      />
       <HotkeyAnchor />
       <main className={classNames("board", dragActive && "board--dragging")} ref={boardRef}>
         <div

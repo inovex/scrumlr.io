@@ -2,7 +2,7 @@ import {render} from "testUtils";
 import {Provider} from "react-redux";
 import {BoardHeader} from "components/BoardHeader/BoardHeader";
 import getTestStore from "utils/test/getTestStore";
-import {ApplicationState} from "types";
+import {ApplicationState} from "store";
 import i18n from "i18nTest";
 
 const createBoardHeader = (overwrite?: Partial<ApplicationState>) => {
@@ -70,6 +70,7 @@ describe("Board Header", () => {
               showNotesOfOtherUsers: true,
               allowStacking: true,
               showNoteReactions: true,
+              isLocked: false,
             },
           },
         })

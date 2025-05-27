@@ -1,8 +1,327 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Appearance should render all Settings correctly 1`] = `
+exports[`Appearance should render all Settings correctly with Snowfall 1`] = `
 <div
-  class="settings-dialog__container accent-color__lean-lilac"
+  class="settings-dialog__container accent-color__backlog-blue"
+>
+  <header
+    class="settings-dialog__header"
+  >
+    <h2
+      class="settings-dialog__header-text"
+    >
+      Appearance
+    </h2>
+  </header>
+  <div
+    class="appearance-container"
+  >
+    <div
+      class="appearance-settings__theme-container"
+    >
+      <span
+        class="appearance-settings__theme-title"
+      >
+        Color scheme
+      </span>
+      <form
+        class="appearance-settings__theme-options"
+      >
+        <label
+          class="appearence-settings__theme-option"
+          for="auto"
+          title="Scrumlr will match the appearance mode (dark or light) with your active system settings"
+        >
+          <input
+            checked=""
+            id="auto"
+            name="themeAuto"
+            type="radio"
+            value="auto"
+          />
+          <img
+            alt="Color scheme Auto"
+            src="theme-preview-light.svg"
+          />
+          <img
+            alt="Color scheme Auto"
+            src="theme-preview-dark.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              general-settings.svg
+            </svg>
+            <span>
+              Auto
+            </span>
+          </p>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="light"
+        >
+          <input
+            id="light"
+            name="themeLight"
+            type="radio"
+            value="light"
+          />
+          <img
+            alt="Color scheme Light"
+            src="theme-preview-light.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              settings-light-mode.svg
+            </svg>
+            <span>
+              Light
+            </span>
+          </p>
+        </label>
+        <label
+          class="appearence-settings__theme-option"
+          for="dark"
+        >
+          <input
+            id="dark"
+            name="themeDark"
+            type="radio"
+            value="dark"
+          />
+          <img
+            alt="Color scheme Dark"
+            src="theme-preview-dark.svg"
+          />
+          <p>
+            <svg
+              class="appearance-settings__theme-icon"
+            >
+              settings-dark-mode.svg
+            </svg>
+            <span>
+              Dark
+            </span>
+          </p>
+        </label>
+      </form>
+    </div>
+    <section>
+      <button
+        aria-checked="false"
+        aria-label="Show snowfall"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show snowfall
+        </span>
+        <div
+          class="toggle"
+        />
+      </button>
+    </section>
+    <section>
+      <button
+        aria-checked="true"
+        aria-label="Show hotkey notifications"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show hotkey notifications
+        </span>
+        <div
+          class="toggle toggle--active"
+        />
+      </button>
+    </section>
+    <section>
+      <button
+        aria-checked="true"
+        aria-label="Show board reactions"
+        class="settings-option-button"
+        role="switch"
+        type="button"
+      >
+        <span
+          class="settings-option-button__label"
+        >
+          Show board reactions
+        </span>
+        <div
+          class="toggle toggle--active"
+        />
+      </button>
+    </section>
+    <div
+      class="settings-dropdown"
+    >
+      <button
+        aria-controls="dropdown-list"
+        aria-expanded="false"
+        class="settings-dropdown__button"
+        role="combobox"
+      >
+        <span>
+          Emoji skin tone
+        </span>
+        <p
+          class="settings-dropdown__item--current"
+        >
+          <span>
+            👏
+          </span>
+          <svg
+            class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
+          >
+            arrow-right.svg
+          </svg>
+        </p>
+      </button>
+      <ul
+        class="settings-dropdown__list"
+        id="dropdown-list"
+        role="listbox"
+      >
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏻
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏼
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏽
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏾
+            </span>
+          </button>
+        </li>
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <span>
+              👏🏿
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div
+      class="settings-dropdown"
+    >
+      <button
+        aria-controls="dropdown-list"
+        aria-expanded="false"
+        class="settings-dropdown__button"
+        role="combobox"
+      >
+        <span>
+          Language
+        </span>
+        <p
+          class="settings-dropdown__item--current"
+        >
+          <svg
+            class="settings-dropdown__item-icon"
+          >
+            US.svg
+          </svg>
+          <span>
+            English
+          </span>
+          <svg
+            class="settings-dropdown__item-icon settings-dropdown__item-icon--dropdown"
+          >
+            arrow-right.svg
+          </svg>
+        </p>
+      </button>
+      <ul
+        class="settings-dropdown__list"
+        id="dropdown-list"
+        role="listbox"
+      >
+        <li
+          class="settings-dropdown__item"
+        >
+          <button
+            class="settings-dropdown__button"
+          >
+            <svg
+              class="settings-dropdown__item-icon"
+            >
+              DE.svg
+            </svg>
+            <span>
+              German
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Appearance should render all Settings correctly without Snowfall 1`] = `
+<div
+  class="settings-dialog__container accent-color__backlog-blue"
 >
   <header
     class="settings-dialog__header"

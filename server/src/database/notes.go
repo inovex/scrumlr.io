@@ -33,6 +33,14 @@ type NoteInsert struct {
 	Text          string
 }
 
+type NoteImport struct {
+	bun.BaseModel `bun:"table:notes"`
+	Author        uuid.UUID
+	Board         uuid.UUID
+	Text          string
+	Position      *NoteUpdatePosition `bun:",embed"`
+}
+
 type NoteUpdatePosition struct {
 	Column uuid.UUID
 	Rank   int
@@ -58,6 +66,16 @@ func (d *Database) CreateNote(insert NoteInsert) (Note, error) {
 	return note, err
 }
 
+func (d *Database) ImportNote(insert NoteImport) (Note, error) {
+	var note Note
+	query := d.db.NewInsert().
+		Model(&insert).
+		Returning("*")
+	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
+
+	return note, err
+}
+
 func (d *Database) GetNote(id uuid.UUID) (Note, error) {
 	var note Note
 	err := d.db.NewSelect().Model((*Note)(nil)).Where("id = ?", id).Scan(context.Background(), &note)
@@ -72,6 +90,15 @@ func (d *Database) GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]Note, erro
 	}
 	err := query.OrderExpr("\"column\", stack DESC, rank DESC").Scan(context.Background(), &notes)
 	return notes, err
+}
+
+func (d *Database) GetChildNotes(parentNote uuid.UUID) ([]Note, error) {
+	var notes []Note
+	err := d.db.NewSelect().Model((*Note)(nil)).Where("stack = ?", parentNote).Scan(context.Background(), &notes)
+	if err != nil {
+		return nil, err
+	}
+	return notes, nil
 }
 
 func (d *Database) UpdateNote(caller uuid.UUID, update NoteUpdate) (Note, error) {

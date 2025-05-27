@@ -1,14 +1,42 @@
 {
   "InfoBar": {
-    "ReturnToPresentedNote": "Return to presented note"
+    "ReturnToPresentedNote": "Return to presented note",
+    "VotingIsAnonymous": "Voting is anonymous",
+    "VotingIsNotAnonymous": "Voting is not anonymous"
   },
-  "NewBoard": {
+  "LegacyNewBoard": {
     "boardName": "Board name",
     "createNewBoard": "Create new Board",
     "extendedConfigurationButton": "Extended configuration",
     "basicConfigurationButton": "Template selection",
     "extendedConfigurationTitle": "Extended configuration",
-    "basicConfigurationTitle": "Choose a template"
+    "basicConfigurationTitle": "Choose a template",
+    "importBoard": "Import JSON",
+    "uploadFile": "Upload file or drag here",
+    "importNewBoard": "Import now"
+  },
+  "Templates": {
+    "switchTitle": "Templates",
+    "title": "Choose a template",
+    "savedTemplates": "Your Templates",
+    "recommendedTemplates": "Our Recommendations",
+
+    "CreateTemplateCard": {
+      "create": "Create a new Template"
+    },
+
+    "TemplateCard": {
+      "addFavourite": "Mark as Favourite",
+      "removeFavourite": "Remove Favourite",
+      "column_one": "{{count}} Column",
+      "column_other": "{{count}} Columns",
+      "start": "Start",
+      "save": "Save"
+    }
+  },
+  "Sessions": {
+    "switchTitle": "Sessions",
+    "title": "Choose a session"
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
@@ -125,7 +153,8 @@
     "addColumnRight": "Add column right",
     "hiddenColumn": "Column is hidden for all participants",
     "notes_one": "{{count}} note",
-    "notes_other": "{{count}} notes"
+    "notes_other": "{{count}} notes",
+    "color": "Change color"
   },
   "ErrorPage": {
     "navigateHome": "Home",
@@ -154,7 +183,8 @@
     "signInWithGitHub": "Sign in with Github",
     "signInWithMicrosoft": "Sign in with Microsoft",
     "signInWithAzureAd": "Sign in with Azure AD",
-    "signInWithApple": "Sign in with Apple"
+    "signInWithApple": "Sign in with Apple",
+    "signInWithOIDC": "Sign in with OpenID Connect"
   },
   "NoteInput": {
     "placeholder": "Add your note...",
@@ -168,6 +198,15 @@
     "submit": "Open board",
     "inputPlaceholder": "Password",
     "incorrectPassphrase": "Oops, that wasn’t the right password. Try again."
+  },
+  "PassphraseModal": {
+    "title": "Assign new password",
+    "continuePublic": "Continue without password",
+    "newPassword": "Open Board",
+    "info": "This board was once password protected. Enter a new password to continue protection, or continue without a password. You can change all settings at any time.",
+    "submit": "Open board",
+    "inputPlaceholder": "Password",
+    "showPassword": "Show password"
   },
   "Timer": {
     "endTimer": "End timer",
@@ -237,7 +276,7 @@
   },
   "VoteConfigurationButton": {
     "label": "Voting",
-    "showVotesOfOthers": "Anonymous voting",
+    "isAnonymous": "Anonymous voting",
     "allowMultipleVotesPerNote": "Allow cumulative voting",
     "numberOfVotes": "Number of votes",
     "increaseVotes": "Increase number of votes",
@@ -298,14 +337,15 @@
     "ready": "Are you ready?",
     "readyButton": "Ready!",
     "boardReactionsDisabled": "Board reactions are disabled",
-    "enable": "Enable"
+    "enable": "Enable",
+    "failedImport": "Error importing the file"
   },
   "Language": {
     "german": "German",
     "english": "English"
   },
   "Homepage": {
-    "developers": "© 2021-2023, provided by <inovex>inovex</inovex> with ❤️",
+    "developers": "© 2021-{{currentYear}}, provided by <inovex>inovex</inovex> with ❤️",
     "teaserTitle": "Reach new heights with your <team>team</team> and start your first <retrospective>retrospective.</retrospective>",
     "teaserText": "Start your first collaborative session in an instant - no registration required and completely free.",
     "startButton": "Start now",
@@ -338,6 +378,9 @@
   },
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
+  },
+  "SearchBar": {
+    "placeholder": "Search"
   },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
@@ -399,7 +442,8 @@
     "colorSchemeLight": "Light",
     "colorSchemeDark": "Dark",
     "showHotkeyNotifications": "Show hotkey notifications",
-    "showBoardReactions": "Show board reactions"
+    "showBoardReactions": "Show board reactions",
+    "showSnowfall": "Show snowfall"
   },
   "Feedback": {
     "PraiseInputLabel": "Anything else you want to tell us?",
@@ -656,6 +700,13 @@
   "Votes": {
     "AddVote": "Add vote",
     "RemoveVote": "Remove vote",
-    "VotesOnNote": "{{votes}} vote(s)"
+    "VotesOnNote_one": "{{count}} vote",
+    "VotesOnNote_other": "{{count}} votes",
+    "VoteLimitReached": "Maximum number of votes reached",
+    "MultipleVotesNotAllowed": "Multiple votes are not allowed"
+  },
+  "Snowfall": {
+    "toastTitle": "Happy Holidays 🎄",
+    "toastMessage": "Happy Holidays from the Scrumlr team! You can turn off the snow animations in the appearance settings."
   }
 }

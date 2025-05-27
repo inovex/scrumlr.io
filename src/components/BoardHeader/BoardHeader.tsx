@@ -1,16 +1,16 @@
 import {useState, VFC} from "react";
 import {LockClosed, Open as Globe, KeyProtected, Share} from "components/Icon";
 import {BoardUsers} from "components/BoardUsers";
-import store, {useAppSelector} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {HeaderMenu} from "components/BoardHeader/HeaderMenu";
 import {useTranslation} from "react-i18next";
-import {Actions} from "store/action";
 import {ConfirmationDialog} from "components/ConfirmationDialog";
 import {shallowEqual} from "react-redux";
 import "./BoardHeader.scss";
 import {ShareButton} from "components/ShareButton";
 import {Tooltip} from "react-tooltip";
+import {leaveBoard} from "store/features";
 import {DEFAULT_BOARD_NAME} from "../../constants/misc";
 
 export interface BoardHeaderProps {
@@ -18,6 +18,7 @@ export interface BoardHeaderProps {
 }
 
 export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
   const state = useAppSelector(
     (rootState) => ({
@@ -36,7 +37,7 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
         <ConfirmationDialog
           title={t("ConfirmationDialog.returnToHomepage")}
           onAccept={() => {
-            store.dispatch(Actions.leaveBoard());
+            dispatch(leaveBoard());
             window.location.pathname = "/";
           }}
           onDecline={() => setShowConfirmationDialog(false)}
@@ -69,7 +70,9 @@ export const BoardHeader: VFC<BoardHeaderProps> = (props) => {
             <span>{t(`AccessPolicy.${state.accessPolicy}`)}</span>
           </div>
           <div className="board-header__name-container">
-            <h1 className="board-header__name">{state.name || DEFAULT_BOARD_NAME}</h1>
+            <h1 data-clarity-mask="True" className="board-header__name">
+              {state.name || DEFAULT_BOARD_NAME}
+            </h1>
           </div>
           <Tooltip
             anchorSelect="#board-header__name-and-settings"

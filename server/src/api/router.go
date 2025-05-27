@@ -2,22 +2,25 @@ package api
 
 import (
 	"net/http"
+	"os"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/markbates/goth/gothic"
 
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
-	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	gorillaSessions "github.com/gorilla/sessions"
 	"github.com/gorilla/websocket"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
-
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 type Server struct {
@@ -30,7 +33,7 @@ type Server struct {
 	votings        services.Votings
 	users          services.Users
 	notes          services.Notes
-	reactions      services.Reactions
+	reactions      reactions.ReactionService
 	sessions       services.BoardSessions
 	health         services.Health
 	feedback       services.Feedback
@@ -43,7 +46,9 @@ type Server struct {
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
 	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 
-	anonymousLoginDisabled bool
+	// note: if more options come with time, it might be sensible to wrap them into a struct
+	anonymousLoginDisabled      bool
+	experimentalFileSystemStore bool
 }
 
 func New(
@@ -55,7 +60,7 @@ func New(
 	votings services.Votings,
 	users services.Users,
 	notes services.Notes,
-	reactions services.Reactions,
+	reactions reactions.ReactionService,
 	sessions services.BoardSessions,
 	health services.Health,
 	feedback services.Feedback,
@@ -65,6 +70,7 @@ func New(
 	verbose bool,
 	checkOrigin bool,
 	anonymousLoginDisabled bool,
+	experimentalFileSystemStore bool,
 ) chi.Router {
 	r := chi.NewRouter()
 	r.Use(middleware.Recoverer)
@@ -106,13 +112,24 @@ func New(
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
 
-		anonymousLoginDisabled: anonymousLoginDisabled,
+		anonymousLoginDisabled:      anonymousLoginDisabled,
+		experimentalFileSystemStore: experimentalFileSystemStore,
 	}
 
 	// initialize websocket upgrader with origin check depending on options
 	s.upgrader = websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
+	}
+
+	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
+	// this might be required when using some OIDC providers which exceed the 4KB limit.
+	// see https://github.com/markbates/goth/pull/141
+	if s.experimentalFileSystemStore {
+		logger.Get().Infow("using experimental file system store")
+		store := gorillaSessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
+		store.MaxLength(0x8000) // 32KB should be plenty of space
+		gothic.Store = store
 	}
 
 	if checkOrigin {
@@ -154,7 +171,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 func (s *Server) protectedRoutes(r chi.Router) {
 	r.Group(func(r chi.Router) {
 		r.Use(s.auth.Verifier())
-		r.Use(jwtauth.Authenticator)
+		r.Use(s.auth.Authenticator())
 		r.Use(auth.AuthContext)
 
 		r.With(s.BoardTemplateRateLimiter).Post("/templates", s.createBoardTemplate)
@@ -182,6 +199,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		})
 
 		r.Post("/boards", s.createBoard)
+		r.Post("/import", s.importBoard)
 		r.Get("/boards", s.getBoards)
 		r.Route("/boards/{id}", func(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/", s.getBoard)

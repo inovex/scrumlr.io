@@ -4,8 +4,8 @@ import {CSS} from "@dnd-kit/utilities";
 import classNames from "classnames";
 import {COMBINE_THRESHOLD, MOVE_THRESHOLD} from "constants/misc";
 import {ReactNode, useState} from "react";
-import store, {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppDispatch, useAppSelector} from "store";
+import {editNote} from "store/features";
 
 type SortableProps = {
   id: UniqueIdentifier;
@@ -44,6 +44,7 @@ export const shouldStack = (id: UniqueIdentifier, items: UniqueIdentifier[], new
 };
 
 export const Sortable = ({id, children, disabled, className, columnId, setItems}: SortableProps) => {
+  const dispatch = useAppDispatch();
   const {collisions} = useDndContext();
   const {setNodeRef, attributes, listeners, transition, transform, isDragging, items, newIndex, active} = useSortable({
     id,
@@ -81,7 +82,14 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
           rank: note?.position.rank ?? 0,
         };
 
-        store.dispatch(Actions.editNote(active.id.toString(), {position}));
+        dispatch(
+          editNote({
+            noteId: active.id.toString(),
+            request: {
+              position,
+            },
+          })
+        );
         if (setItems) setItems(items.filter((item) => item !== active.id.toString()).map((item) => item.toString()));
 
         return;
@@ -97,7 +105,14 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
             rank: items.reverse().indexOf(id.toString()),
           };
 
-          store.dispatch(Actions.editNote(active.id.toString(), {position}));
+          dispatch(
+            editNote({
+              noteId: active.id.toString(),
+              request: {
+                position,
+              },
+            })
+          );
         }
       }
     },

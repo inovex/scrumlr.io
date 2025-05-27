@@ -19,3 +19,4 @@ export const SERVER_WEBSOCKET_URL =
 export const SERVER_WEBSOCKET_PROTOCOL = websocketProtocol;
 export const ANALYTICS_DATA_DOMAIN = Cookies.get("scrumlr__analytics_data_domain");
 export const ANALYTICS_SRC = Cookies.get("scrumlr__analytics_src");
+export const CLARITY_ID = Cookies.get("scrumlr__clarity_id");

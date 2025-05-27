@@ -5,7 +5,6 @@ import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/dto"
 	_ "scrumlr.io/server/database"
-	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services"
 	_ "scrumlr.io/server/services"
@@ -42,12 +41,8 @@ func (s *BoardReactionService) Create(_ context.Context, board uuid.UUID, body d
 
 // AddedReaction creates a broadcast for all connected boards with the added reaction as payload
 func (s *BoardReactionService) AddedReaction(board uuid.UUID, reaction dto.BoardReaction) {
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardReactionAdded,
 		Data: reaction,
 	})
-
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated reactions", "err", err)
-	}
 }

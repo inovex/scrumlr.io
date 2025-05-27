@@ -1,4 +1,4 @@
-import {Voting} from "types/voting";
+import {Voting} from "store/features/votings/types";
 
 export default (overwrite?: Partial<Voting>): Voting => ({
   id: "test-votings-open-id-1",
@@ -6,5 +6,6 @@ export default (overwrite?: Partial<Voting>): Voting => ({
   allowMultipleVotes: false,
   showVotesOfOthers: false,
   status: "OPEN",
+  isAnonymous: true,
   ...overwrite,
 });

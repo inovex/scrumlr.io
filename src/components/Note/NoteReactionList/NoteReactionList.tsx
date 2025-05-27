@@ -1,14 +1,13 @@
-import {useDispatch} from "react-redux";
 import {AddEmoji} from "components/Icon";
 import React, {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
 import {LongPressReactEvents} from "use-long-press";
 import {isEqual} from "underscore";
-import {Actions} from "store/action";
-import {Reaction, ReactionType} from "types/reaction";
-import {Participant} from "types/participant";
-import {useAppSelector} from "../../../store";
+import {Reaction, ReactionType} from "store/features/reactions/types";
+import {Participant} from "store/features/participants/types";
+import {addReaction, deleteReaction, updateReaction} from "store/features";
+import {useAppDispatch, useAppSelector} from "../../../store";
 import {NoteReactionChip} from "./NoteReactionChip/NoteReactionChip";
 import {NoteReactionBar} from "./NoteReactionBar/NoteReactionBar";
 import {NoteReactionChipCondensed} from "./NoteReactionChipCondensed/NoteReactionChipCondensed";
@@ -37,13 +36,13 @@ const CONDENSED_VIEW_WIDTH_LIMIT = 330; // pixels
 export const NoteReactionList = (props: NoteReactionListProps) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
-  const me = useAppSelector((state) => state.participants?.self);
+  const me = useAppSelector((state) => state.participants?.self)!;
   const others = useAppSelector((state) => state.participants?.others) ?? [];
   const participants = [me, ...others];
 
-  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self.role === role));
+  const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
 
   /** helper function that converts a Reaction object to ReactionModeled object */
@@ -131,18 +130,18 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     return () => document.removeEventListener("click", handleClickOutside, true);
   }, [rootRef]);
 
-  const addReaction = (noteId: string, reactionType: ReactionType) => {
-    dispatch(Actions.addReaction(noteId, reactionType));
+  const dispatchAddReaction = (noteId: string, reactionType: ReactionType) => {
+    dispatch(addReaction({noteId, reactionType}));
   };
 
-  const deleteReaction = (reactionId: string) => {
+  const dispatchDeleteReaction = (reactionId: string) => {
     dispatch(
-      Actions.deleteReaction(reactionId) // reactedSelf === true can be asserted here because we filter it in handleClickReaction()
+      deleteReaction(reactionId) // reactedSelf === true can be asserted here because we filter it in handleClickReaction()
     );
   };
 
-  const replaceReaction = (reactionId: string, reactionType: ReactionType) => {
-    dispatch(Actions.updateReaction(reactionId, reactionType));
+  const dispatchReplaceReaction = (reactionId: string, reactionType: ReactionType) => {
+    dispatch(updateReaction({reactionId, reactionType}));
   };
 
   const handleClickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
@@ -155,17 +154,17 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
     // no reaction exists -> add
     if (!reactionMadeByUser) {
-      addReaction(props.noteId, reactionType);
+      dispatchAddReaction(props.noteId, reactionType);
       return;
     }
 
     // same reaction -> remove
     if (isSameReaction) {
-      deleteReaction(reactionMadeByUser.myReactionId!);
+      dispatchDeleteReaction(reactionMadeByUser.myReactionId!);
     }
     // other reaction -> replace
     else {
-      replaceReaction(reactionMadeByUser.myReactionId!, reactionType);
+      dispatchReplaceReaction(reactionMadeByUser.myReactionId!, reactionType);
     }
   };
 

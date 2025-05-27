@@ -19,16 +19,13 @@
   width: 32px;
   padding: 0;
   border: 0;
-  color: var(--accent-color--light);
-  background-color: var(--accent-color--100);
+  color: var(--accent-color--600);
+  background-color: transparent;
   border-radius: $rounded--full;
   cursor: pointer;
   transition:
     background-color 80ms ease-in-out,
     color 80ms ease-in-out;
-  box-shadow:
-    0 1px 3px 0 rgba(var(--accent-color--light-rgb), 0.1),
-    0 1px 2px -1px rgba(var(--accent-color--light-rgb), 0.1);
 
   > svg {
     height: 100%;
@@ -36,9 +33,9 @@
   }
 
   &:hover {
-    background-color: var(--accent-color--light);
-    color: $gray--000;
+    color: var(--accent-color--500);
   }
+
   &:focus-visible {
     outline: 2px solid var(--accent-color--light);
   }
@@ -46,13 +43,12 @@
 
 [theme="dark"] {
   .note-option__button {
-    background-color: rgba(var(--accent-color--dark-rgb), 0.6);
-    color: var(--accent-color--dark);
+    color: var(--accent-color--400);
 
     &:hover {
-      background-color: var(--accent-color--light);
-      color: $gray--000;
+      color: var(--accent-color--300);
     }
+
     &:focus-visible {
       outline: 2px solid rgba(var(--accent-color--dark-rgb), 0.6);
     }

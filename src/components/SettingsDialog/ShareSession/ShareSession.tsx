@@ -1,14 +1,19 @@
 import classNames from "classnames";
-import QRCode from "qrcode.react";
+import {QRCodeCanvas} from "qrcode.react";
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import {useAppSelector} from "store";
+import {MenuItemConfig} from "constants/settings";
+import {getColorClassName} from "constants/colors";
+import {useOutletContext} from "react-router";
 import {useAutoTheme} from "utils/hooks/useAutoTheme";
 import {getCSSCustomPropertyValue} from "utils/computedStyles";
 import "./ShareSession.scss";
 
 export const ShareSession = () => {
   const {t} = useTranslation();
+  const activeMenuItem: MenuItemConfig = useOutletContext();
+
   const boardId = useAppSelector((state) => state.board.data?.id);
   const theme = useAppSelector((state) => state.view.theme);
   const autoTheme = useAutoTheme(theme);
@@ -24,16 +29,15 @@ export const ShareSession = () => {
   };
 
   return (
-    <div data-testid="qrcode" className="settings-dialog__container">
+    <div data-testid="qrcode" className={classNames("settings-dialog__container", getColorClassName(activeMenuItem?.color))}>
       <div className="settings-dialog__header">
-        <h2 className={classNames("settings-dialog__header-text", "accent-color__planning-pink")}> {t("ShareQrCodeOption.title")}</h2>
+        <h2 className={classNames("settings-dialog__header-text")}> {t("ShareQrCodeOption.title")}</h2>
       </div>
-      <div className={classNames("share-session__container", "accent-color__planning-pink")}>
+      <div className={classNames("share-session__container")}>
         <div className="share-session__background">
           {/* using an upscaled canvas instead of svg to make it a savable image */}
-          <QRCode
+          <QRCodeCanvas
             value={`${window.location.origin}/board/${boardId}`}
-            renderAs="canvas"
             size={1024}
             fgColor={autoTheme === "dark" ? gray000 : navy900}
             bgColor={autoTheme === "dark" ? navy900 : gray000}

@@ -5,6 +5,9 @@ import (
 	"errors"
 	"math/rand/v2"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/votes"
 	"testing"
 	"time"
 
@@ -12,7 +15,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
@@ -104,7 +106,7 @@ func (suite *votingServiceTestSuite) TestCreate() {
 
 	var votingId uuid.UUID
 	var boardId uuid.UUID
-	votingRequest := dto.VotingCreateRequest{
+	votingRequest := votes.VotingCreateRequest{
 		Board:              boardId, // boardId is nulled
 		VoteLimit:          0,
 		AllowMultipleVotes: false,
@@ -115,7 +117,7 @@ func (suite *votingServiceTestSuite) TestCreate() {
 	publishSubject := "board." + boardId.String()
 	publishEvent := realtime.BoardEvent{
 		Type: realtime.BoardEventVotingCreated,
-		Data: &dto.Voting{},
+		Data: &votes.Voting{},
 	}
 
 	mock.On("CreateVoting", database.VotingInsert{
@@ -124,7 +126,7 @@ func (suite *votingServiceTestSuite) TestCreate() {
 
 	mock.On("GetVoting", boardId, votingId).Return(database.Voting{}, []database.Vote{}, nil)
 	rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
-	create, err := s.Create(context.Background(), votingRequest)
+	create, err := s.Create(logger.InitTestLogger(context.Background()), votingRequest)
 
 	assert.NotNil(suite.T(), create)
 	assert.NoError(suite.T(), err)
@@ -150,7 +152,7 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 		err          error
 		votingStatus types.VotingStatus
 		voting       database.Voting
-		update       *dto.Voting
+		update       *votes.Voting
 	}{
 		{
 			name:         "Voting status open",
@@ -164,7 +166,7 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 			err:          nil,
 			votingStatus: types.VotingStatusClosed,
 			voting:       voting,
-			update:       new(dto.Voting).From(voting, nil),
+			update:       new(votes.Voting).From(voting, nil),
 		},
 	}
 
@@ -181,7 +183,7 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 			}
 			s.realtime = rtMock
 
-			updateVotingRequest := dto.VotingUpdateRequest{
+			updateVotingRequest := votes.VotingUpdateRequest{
 				ID:     votingID,
 				Board:  boardId,
 				Status: tt.votingStatus,
@@ -192,10 +194,10 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 			publishEvent := realtime.BoardEvent{
 				Type: realtime.BoardEventVotingUpdated,
 				Data: struct {
-					Voting *dto.Voting `json:"voting"`
-					Notes  []*dto.Note `json:"notes"`
+					Voting *votes.Voting `json:"voting"`
+					Notes  []*notes.Note `json:"notes"`
 				}{
-					Voting: &dto.Voting{},
+					Voting: &votes.Voting{},
 					Notes:  nil,
 				},
 			}
@@ -217,7 +219,7 @@ func (suite *votingServiceTestSuite) TestUpdateVoting() {
 				rtClientMock.On("Publish", publishSubject, publishEvent).Return(nil)
 			}
 
-			update, err := s.Update(context.Background(), updateVotingRequest)
+			update, err := s.Update(logger.InitTestLogger(context.Background()), updateVotingRequest)
 
 			assert.Equal(suite.T(), tt.err, err)
 			assert.Equal(suite.T(), update, tt.update)

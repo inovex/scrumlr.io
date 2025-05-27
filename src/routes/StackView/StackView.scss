@@ -7,7 +7,7 @@ $stack-view__min-height: 82px;
 .stack-view__portal {
   backdrop-filter: blur(10px) brightness(0.76) saturate(0);
   background: rgba(var(--accent-color--light-rgb), 0.42);
-  transition: all 0.2s ease-in-out;
+  transition: background 0.2s ease-out;
 }
 
 .stack-view {
@@ -26,6 +26,7 @@ $stack-view__min-height: 82px;
   pointer-events: none;
   background: transparent;
   box-shadow: inset 0 0 0 $column__border-width var(--accent-color--light);
+  transition: box-shadow 0.2s ease-out;
 }
 
 .stack-view__border--moderating {
@@ -35,10 +36,11 @@ $stack-view__min-height: 82px;
 .stack-view__content {
   position: relative;
 
-  height: auto;
+  height: calc(100vh - $stack-view__header-height - $stack-view__navigation-height);
+  width: 100vw;
   border-radius: $note__border-radius;
 
-  overflow: hidden;
+  overflow: visible;
 
   @include scrollbar();
 }
@@ -53,7 +55,14 @@ $stack-view__min-height: 82px;
 
 .stack-view__animation-wrapper {
   display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.stack-view__notes {
+  display: flex;
   flex-direction: row;
+  justify-content: flex-start;
   max-height: $stack-content-max-height;
   gap: $spacing--sm;
 }
@@ -111,7 +120,7 @@ $stack-view__min-height: 82px;
 }
 
 @media screen and (max-width: $breakpoint--desktop) {
-  .stack-view__animation-wrapper {
+  .stack-view__notes {
     flex-direction: column;
     max-height: initial;
   }

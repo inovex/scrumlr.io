@@ -80,6 +80,11 @@ spec:
                 secretKeyRef:
                   name: scrumlr-secrets
                   key: WEBHOOK_URL
+            - name: SESSION_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: scrumlr-secrets
+                  key: SESSION_SECRET
             - name: SCRUMLR_BASE_PATH
               value: "/api"
           ports:
@@ -222,7 +227,7 @@ kind: Cluster
 metadata:
   name: cluster-PR_NUMBER
 spec:
-  imageName: ghcr.io/cloudnative-pg/postgresql:16.3
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.4
   instances: 1
   storage:
     storageClass: csi-cinder-sc-delete

@@ -1,21 +1,20 @@
 import {Toggle} from "components/Toggle";
-import {useAppSelector} from "store";
-import {Actions} from "store/action";
+import {useAppDispatch, useAppSelector} from "store";
 import {useTranslation} from "react-i18next";
-import {useDispatch} from "react-redux";
+import {setShowBoardReactions} from "store/features";
 import {SettingsButton} from "./SettingsButton";
 
 export const BoardReactionsSettings = () => {
   const {t} = useTranslation();
   const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <section>
       <SettingsButton
         aria-checked={showBoardReactions}
         label={t("Appearance.showBoardReactions")}
-        onClick={() => dispatch(Actions.setShowBoardReactions(!showBoardReactions))}
+        onClick={() => dispatch(setShowBoardReactions(!showBoardReactions))}
         role="switch"
       >
         <Toggle active={showBoardReactions} />

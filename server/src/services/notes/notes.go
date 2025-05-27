@@ -3,9 +3,9 @@ package notes
 import (
 	"context"
 	"database/sql"
-
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
+	notes2 "scrumlr.io/server/notes"
 	"scrumlr.io/server/services"
 
 	"github.com/google/uuid"
@@ -25,11 +25,13 @@ type NoteService struct {
 
 type DB interface {
 	CreateNote(insert database.NoteInsert) (database.Note, error)
+	ImportNote(note database.NoteImport) (database.Note, error)
 	GetNote(id uuid.UUID) (database.Note, error)
 	GetNotes(board uuid.UUID, columns ...uuid.UUID) ([]database.Note, error)
 	UpdateNote(caller uuid.UUID, update database.NoteUpdate) (database.Note, error)
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
 	GetVotes(f filter.VoteFilter) ([]database.Vote, error)
+	GetChildNotes(parentNote uuid.UUID) ([]database.Note, error)
 }
 
 func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
@@ -39,7 +41,7 @@ func NewNoteService(db DB, rt *realtime.Broker) services.Notes {
 	return b
 }
 
-func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*dto.Note, error) {
+func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 	note, err := s.database.CreateNote(database.NoteInsert{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
 	if err != nil {
@@ -47,10 +49,30 @@ func (s *NoteService) Create(ctx context.Context, body dto.NoteCreateRequest) (*
 		return nil, common.InternalServerError
 	}
 	s.UpdatedNotes(body.Board)
-	return new(dto.Note).From(note), err
+	return new(notes2.Note).From(note), err
 }
 
-func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) {
+func (s *NoteService) Import(ctx context.Context, body dto.NoteImportRequest) (*notes2.Note, error) {
+	log := logger.FromContext(ctx)
+
+	note, err := s.database.ImportNote(database.NoteImport{
+		Author: body.User,
+		Board:  body.Board,
+		Position: &database.NoteUpdatePosition{
+			Column: body.Position.Column,
+			Rank:   body.Position.Rank,
+			Stack:  body.Position.Stack,
+		},
+		Text: body.Text,
+	})
+	if err != nil {
+		log.Errorw("Could not import notes", "err", err)
+		return nil, err
+	}
+	return new(notes2.Note).From(note), err
+}
+
+func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 	note, err := s.database.GetNote(id)
 	if err != nil {
@@ -60,10 +82,10 @@ func (s *NoteService) Get(ctx context.Context, id uuid.UUID) (*dto.Note, error) 
 		log.Errorw("unable to get note", "note", id, "error", err)
 		return nil, common.InternalServerError
 	}
-	return new(dto.Note).From(note), err
+	return new(notes2.Note).From(note), err
 }
 
-func (s *NoteService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Note, error) {
+func (s *NoteService) List(ctx context.Context, boardID uuid.UUID) ([]*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 	notes, err := s.database.GetNotes(boardID)
 	if err != nil {
@@ -72,10 +94,10 @@ func (s *NoteService) List(ctx context.Context, boardID uuid.UUID) ([]*dto.Note,
 		}
 		log.Errorw("unable to get notes", "board", boardID, "error", err)
 	}
-	return dto.Notes(notes), err
+	return notes2.Notes(notes), err
 }
 
-func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*dto.Note, error) {
+func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*notes2.Note, error) {
 	log := logger.FromContext(ctx)
 	var positionUpdate *database.NoteUpdatePosition
 	edited := body.Text != nil
@@ -99,78 +121,78 @@ func (s *NoteService) Update(ctx context.Context, body dto.NoteUpdateRequest) (*
 		return nil, common.InternalServerError
 	}
 	s.UpdatedNotes(body.Board)
-	return new(dto.Note).From(note), err
+	return new(notes2.Note).From(note), err
 }
 
 func (s *NoteService) Delete(ctx context.Context, body dto.NoteDeleteRequest, id uuid.UUID) error {
+	log := logger.FromContext(ctx)
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 	note := ctx.Value(identifiers.NoteIdentifier).(uuid.UUID)
 	voteFilter := filter.VoteFilter{
-		User:  &user,
 		Board: board,
 		Note:  &note,
 	}
-
-	votes, vErr := s.database.GetVotes(voteFilter)
-	if vErr != nil {
-		logger.Get().Errorw("unable to retrieve votes for a note delete", "err", vErr)
+	deletedVotes, err := s.database.GetVotes(voteFilter)
+	if body.DeleteStack {
+		stackedVotes, _ := s.database.GetChildNotes(note)
+		for _, n := range stackedVotes {
+			votes, err := s.database.GetVotes(filter.VoteFilter{
+				Board: board,
+				Note:  &n.ID,
+			})
+			if err != nil {
+				log.Errorw("unable to get votes of stacked notes", "note", n, "error", err)
+				return err
+			}
+			deletedVotes = append(deletedVotes, votes...)
+		}
 	}
 
-	err := s.database.DeleteNote(user, board, id, body.DeleteStack)
 	if err != nil {
+		log.Errorw("unable to retrieve votes for a note delete", "err", err)
+	}
+
+	err = s.database.DeleteNote(user, board, id, body.DeleteStack)
+	if err != nil {
+		log.Errorw("unable to delete note", "note", body, "err", err)
 		return err
 	}
 
-	s.DeletedNote(user, board, note, votes, body.DeleteStack)
-
+	s.DeletedNote(user, board, note, deletedVotes, body.DeleteStack)
 	return err
 }
 
 func (s *NoteService) UpdatedNotes(board uuid.UUID) {
-	notes, dbErr := s.database.GetNotes(board)
-	if dbErr != nil {
-		logger.Get().Errorw("unable to retrieve notes in UpdatedNotes call", "err", dbErr)
+	notes, err := s.database.GetNotes(board)
+	if err != nil {
+		logger.Get().Errorw("unable to retrieve notes in UpdatedNotes call", "boardID", board, "err", err)
 	}
 
-	eventNotes := make([]dto.Note, len(notes))
+	eventNotes := make([]notes2.Note, len(notes))
 	for index, note := range notes {
-		eventNotes[index] = *new(dto.Note).From(note)
+		eventNotes[index] = *new(notes2.Note).From(note)
 	}
 
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
-	}
 }
 
-func (s *NoteService) DeletedNote(user, board, note uuid.UUID, votes []database.Vote, deleteStack bool) {
+func (s *NoteService) DeletedNote(user, board, note uuid.UUID, deletedVotes []database.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,
 		"deleteStack": deleteStack,
 	}
-	err := s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventNoteDeleted,
 		Data: noteData,
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated notes", "err", err)
-	}
 
-	personalVotes := []*dto.Vote{}
-	for _, vote := range votes {
-		if vote.User == user {
-			personalVotes = append(personalVotes, new(dto.Vote).From(vote))
-		}
-	}
-	err = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-		Type: realtime.BoardEventVotesUpdated,
-		Data: personalVotes,
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventVotesDeleted,
+		Data: deletedVotes,
 	})
-	if err != nil {
-		logger.Get().Errorw("unable to broadcast updated votes", "err", err)
-	}
+
 }
