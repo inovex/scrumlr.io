@@ -1,7 +1,16 @@
 import classNames from "classnames";
 import {Outlet, useOutletContext, useNavigate, useLocation} from "react-router";
 import {useAppSelector, useAppDispatch} from "store";
-import {getTemplates, ReducedTemplateWithColumns, Template, TemplateColumn, TemplateWithColumns} from "store/features";
+import {
+  createBoardFromTemplate,
+  deleteTemplate,
+  getTemplates,
+  ReducedTemplateWithColumns,
+  setTemplateFavourite,
+  Template,
+  TemplateColumn,
+  TemplateWithColumns,
+} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
@@ -60,6 +69,23 @@ export const Templates = () => {
   useEffect(() => {
     dispatch(getTemplates());
   }, [dispatch]);
+
+  const toggleFavourite = (templateId: string, favourite: boolean) => dispatch(setTemplateFavourite({id: templateId, favourite: !favourite}));
+
+  const navigateToEdit = (templateId: string) => {
+    navigate(`../edit/${templateId}`);
+  };
+
+  const deleteTemplateAndColumns = (templateId: string) => {
+    // setShowMiniMenu(false); // close menu manually, because it stays open for some reason
+    dispatch(deleteTemplate({id: templateId}));
+  };
+
+  const createBoard = (templateWithColumns: TemplateWithColumns) => {
+    dispatch(createBoardFromTemplate(templateWithColumns))
+      .unwrap()
+      .then((boardId) => navigate(`/board/${boardId}`));
+  };
 
   const scrollToSide = (side: Side, smooth: boolean) => {
     const screenWidth = document.documentElement.clientWidth;
@@ -125,7 +151,12 @@ export const Templates = () => {
             {fullRecommendedTemplates
               .filter((rc) => matchSearchInput(rc.template))
               .map((templateFull) => (
-                <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)} key={templateFull.template.id} />
+                <TemplateCard
+                  templateType="RECOMMENDED"
+                  template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)}
+                  onCreateBoard={createBoard}
+                  key={templateFull.template.id}
+                />
               ))}
           </div>
         </section>
@@ -138,7 +169,15 @@ export const Templates = () => {
                 .filter(matchSearchInput)
                 .filter(excludeDefaultTemplate)
                 .map((template) => (
-                  <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} key={template.id} />
+                  <TemplateCard
+                    templateType="CUSTOM"
+                    template={mergeTemplateWithColumns(template)}
+                    onCreateBoard={createBoard}
+                    onDeleteTemplate={deleteTemplateAndColumns}
+                    onNavigateToEdit={navigateToEdit}
+                    onToggleFavourite={toggleFavourite}
+                    key={template.id}
+                  />
                 ))}
             </div>
           </section>
