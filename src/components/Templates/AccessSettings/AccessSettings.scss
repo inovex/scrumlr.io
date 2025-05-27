@@ -9,8 +9,11 @@
 }
 
 .access-settings {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xl;
+
   width: 37%;
-  height: 62%;
 
   padding: 40px $spacing--xl $spacing--xl $spacing--xl;
 
@@ -30,4 +33,11 @@
 
   padding-bottom: $spacing--xxs;
   border-bottom: 3px solid $blue--500;
+}
+
+.access-settings__footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  gap: $spacing--md;
 }
