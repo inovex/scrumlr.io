@@ -1,6 +1,7 @@
-import "./SelectOption.scss";
 import {ReactNode} from "react";
 import {useSelect} from "utils/hooks/useSelect";
+import classNames from "classnames";
+import "./SelectOption.scss";
 
 export type SelectOptionProps = {
   label: string;
@@ -11,6 +12,7 @@ export type SelectOptionProps = {
 
 export const SelectOption = (props: SelectOptionProps) => {
   const {activeIndex, setActiveIndex} = useSelect();
+  const isActive = activeIndex === props.index;
 
   const handleSelect = () => {
     if (props.index !== undefined) {
@@ -19,13 +21,12 @@ export const SelectOption = (props: SelectOptionProps) => {
   };
 
   return (
-    <div>
-      <h4>
-        {props.label} {activeIndex === props.index ? "active" : null}
-      </h4>
-      <p>{props.description}</p>
-      {props.icon}
-      <button onClick={handleSelect}>activate</button>
+    <div className={classNames("select-option", `select-option--${props.index}`, {"select-option--active": isActive})}>
+      <div className="select-option__icon-container">{props.icon}</div>
+      <div className="select-option__label">{props.label}</div>
+      <div className="select-option__description">{props.description}</div>
+
+      <input className="select-option__radio" type="radio" checked={isActive} onChange={handleSelect} />
     </div>
   );
 };

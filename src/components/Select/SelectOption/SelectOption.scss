@@ -1,0 +1,31 @@
+@import "constants/style";
+
+.select-option {
+  display: grid;
+  grid-template-rows: auto auto;
+  grid-template-columns: auto $spacing--sm 1fr $spacing--sm auto;
+  grid-template-areas:
+    "icon . label       . radio"
+    ".    . description . . ";
+
+  padding: $spacing--base;
+  border-radius: 12px;
+
+  background-color: $gray--100;
+}
+
+.select-option__icon-container {
+  grid-area: icon;
+}
+
+.select-option__label {
+  grid-area: label;
+}
+
+.select-option__description {
+  grid-area: description;
+}
+
+.select-option__radio {
+  grid-area: radio;
+}
