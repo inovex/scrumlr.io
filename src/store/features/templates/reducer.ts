@@ -18,7 +18,6 @@ export const templatesReducer = createReducer(initialState, (builder) => {
         (t) => (t.id === action.payload.id ? {...action.payload} : t) // only change edited templates, other stay the same
       )
     )
-    // .addCase(addTemplateOptimistically, (state, action) => [...state, action.payload.template])
     .addCase(createTemplateWithColumns.fulfilled, (state, action) => [...state, action.payload])
     .addCase(deleteTemplate.fulfilled, (state, action) => state.filter((template) => template.id !== action.payload));
 });

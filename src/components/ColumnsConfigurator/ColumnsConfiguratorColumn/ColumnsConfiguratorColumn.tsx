@@ -27,8 +27,6 @@ export type ColumnsConfiguratorColumnProps = {
 };
 
 export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps) => {
-  // const {t} = useTranslation();
-
   const [titleEditState, setTitleEditState] = useState<OpenState>("closed");
   const [openColorPicker, setOpenColorPicker] = useState(false);
 
@@ -65,7 +63,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
   };
 
   // disable delete if only one column remains
-  const disableDelete = !(props.allColumns.length > 1);
+  const disableDelete = props.allColumns.length <= 1;
 
   return (
     <div

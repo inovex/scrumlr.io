@@ -37,7 +37,6 @@ export const useInputValidation = (inputRef: RefObject<HTMLInputElement>, inputV
 
     // check if user interaction is required
     if (options?.requireInteraction && !userInteracted) {
-      // setValidationError(null);
       return;
     }
 
