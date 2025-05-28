@@ -38,7 +38,7 @@ export const AccessSettings = (props: AccessSettingsProps) => {
   const getSessionAccessPolicy = (): CreateSessionAccessPolicy => {
     const policy = matchAccessPolicy();
     if (policy === "BY_PASSPHRASE") {
-      return {policy, passphrase: "wip"};
+      return {policy, passphrase: passwordInput};
     }
     return {policy};
   };
