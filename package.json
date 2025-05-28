@@ -100,7 +100,7 @@
     "sass": "^1.89.0",
     "stylelint": "^16.19.1",
     "stylelint-config-standard": "^38.0.0",
-    "ts-jest": "^29.3.2",
+    "ts-jest": "^29.3.4",
     "typescript": "^5.8.3"
   },
   "scripts": {
