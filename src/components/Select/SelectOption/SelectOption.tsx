@@ -26,9 +26,10 @@ export const SelectOption = (props: SelectOptionProps) => {
   const renderExtraContent = () => (props.children && isActive ? <div className="select-option__extra-content">{props.children}</div> : null);
 
   return (
-    <div
+    <button
       className={classNames("select-option", `select-option--${props.index}`, {"select-option--active": isActive}, {"select-option--extra": props.children})}
       onClick={handleSelect}
+      tabIndex={0}
     >
       <div className="select-option__icon-container">{props.icon}</div>
       <div className="select-option__label">{props.label}</div>
@@ -37,6 +38,6 @@ export const SelectOption = (props: SelectOptionProps) => {
       <input className="select-option__radio" type="radio" checked={isActive} onChange={handleSelect} />
 
       {renderExtraContent()}
-    </div>
+    </button>
   );
 };

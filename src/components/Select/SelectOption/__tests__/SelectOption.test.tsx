@@ -32,7 +32,7 @@ describe("SelectOption (single)", () => {
 
   it("be active by default", () => {
     const {container} = renderSelectOption();
-    const selectOption = container.querySelector<HTMLDivElement>(".select-option");
+    const selectOption = container.querySelector<HTMLButtonElement>(".select-option");
     expect(selectOption).toHaveClass("select-option--active");
     const selectOptionRadio = container.querySelector<HTMLInputElement>(".select-option__radio");
     expect(selectOptionRadio).toBeChecked();
@@ -42,7 +42,7 @@ describe("SelectOption (single)", () => {
     const setActiveIndexSpy: (index: number) => void = jest.fn();
     const {container} = renderSelectOption({setActiveIndex: setActiveIndexSpy});
 
-    const selectOption = container.querySelector<HTMLDivElement>(".select-option")!;
+    const selectOption = container.querySelector<HTMLButtonElement>(".select-option")!;
     fireEvent.click(selectOption);
     expect(setActiveIndexSpy).toHaveBeenCalled();
   });
@@ -56,7 +56,7 @@ describe("SelectOption (multiple)", () => {
 
   it("be active by default", () => {
     const {container} = renderMultipleSelectOptions();
-    const selectOption = container.querySelectorAll<HTMLDivElement>(".select-option");
+    const selectOption = container.querySelectorAll<HTMLButtonElement>(".select-option");
     expect(selectOption[0]).toHaveClass("select-option--active");
     expect(selectOption[1]).not.toHaveClass("select-option--active");
     const selectOptionRadio = container.querySelectorAll<HTMLInputElement>(".select-option__radio");
@@ -68,7 +68,7 @@ describe("SelectOption (multiple)", () => {
     const setActiveIndexSpy: (index: number) => void = jest.fn();
     const {container} = renderSelectOption({setActiveIndex: setActiveIndexSpy});
 
-    const selectOption = container.querySelector<HTMLDivElement>(".select-option")!;
+    const selectOption = container.querySelector<HTMLButtonElement>(".select-option")!;
     fireEvent.click(selectOption);
     expect(setActiveIndexSpy).toHaveBeenCalled();
   });

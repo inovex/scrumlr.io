@@ -2,8 +2,9 @@
 
 exports[`SelectOption (multiple) should render correctly 1`] = `
 <div>
-  <div
+  <button
     class="select-option select-option--0 select-option--active"
+    tabindex="0"
   >
     <div
       class="select-option__icon-container"
@@ -27,9 +28,10 @@ exports[`SelectOption (multiple) should render correctly 1`] = `
       class="select-option__radio"
       type="radio"
     />
-  </div>
-  <div
+  </button>
+  <button
     class="select-option select-option--1"
+    tabindex="0"
   >
     <div
       class="select-option__icon-container"
@@ -52,14 +54,15 @@ exports[`SelectOption (multiple) should render correctly 1`] = `
       class="select-option__radio"
       type="radio"
     />
-  </div>
+  </button>
 </div>
 `;
 
 exports[`SelectOption (single) should render correctly 1`] = `
 <div>
-  <div
+  <button
     class="select-option select-option--0 select-option--active"
+    tabindex="0"
   >
     <div
       class="select-option__icon-container"
@@ -83,6 +86,6 @@ exports[`SelectOption (single) should render correctly 1`] = `
       class="select-option__radio"
       type="radio"
     />
-  </div>
+  </button>
 </div>
 `;

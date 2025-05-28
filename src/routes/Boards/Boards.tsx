@@ -23,7 +23,7 @@ export const Boards = () => {
   const [boardView, setBoardView] = useState<BoardView>("templates");
   // a simplification of BoardView in order to change some render behaviour (e.g. conditional render of SearchBar)
   const viewType = ["templates", "sessions"].includes(boardView) ? "overview" : "edit";
-  console.log(viewType);
+
   const [showMobileSearchBar, setShowMobileSearchBar] = useState(false);
   const [searchBarInput, setSearchBarInput] = useState("");
 
@@ -106,7 +106,7 @@ export const Boards = () => {
 
   return (
     <div className="boards">
-      <div className={classNames("boards__grid", `boards__grid--view-type-${  viewType}`)}>
+      <div className={classNames("boards__grid", `boards__grid--view-type-${viewType}`)}>
         {/* logo - - - profile */}
         <div className="boards__scrumlr-logo-container">
           <a className="new-board__scrumlr-logo-href" href="/" aria-label={t("BoardHeader.returnToHomepage")}>
