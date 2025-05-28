@@ -12,6 +12,8 @@ export type SelectOptionProps = {
 };
 
 export const SelectOption = (props: SelectOptionProps) => {
+  if (props.index === undefined) throw new Error("undefined index, make sure to wrap <SelectOption> components inside a <Select> component or <SelectContext.Provider>");
+
   const {activeIndex, setActiveIndex} = useSelect();
   const isActive = activeIndex === props.index;
 
