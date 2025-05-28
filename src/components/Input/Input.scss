@@ -189,6 +189,11 @@ $padding--mobile: 12.5px $spacing--base;
     &--clear-icon {
       color: $blue--50;
     }
+
+    &--password-hidden,
+    &--password-visible {
+      color: $gray--000;
+    }
   }
 
   .input__error {
