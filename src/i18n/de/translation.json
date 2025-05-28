@@ -64,7 +64,7 @@
       "approval": "TBA"
     },
     "validation": {
-      "REQUIRED": "Board-Name ist erforderlich."
+      "REQUIRED": "Eingabe ist erforderlich."
     }
   },
   "LoginBoard": {
