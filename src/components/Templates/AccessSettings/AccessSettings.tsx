@@ -35,6 +35,8 @@ export const AccessSettings = (props: AccessSettingsProps) => {
     }
   };
 
+  const disableIfEmptyPassword = matchAccessPolicy() === "BY_PASSPHRASE" && !passwordInput;
+
   const getSessionAccessPolicy = (): CreateSessionAccessPolicy => {
     const policy = matchAccessPolicy();
     if (policy === "BY_PASSPHRASE") {
@@ -59,7 +61,7 @@ export const AccessSettings = (props: AccessSettingsProps) => {
             <SelectOption label={t("Templates.AccessSettings.Public.title")} description={t("Templates.AccessSettings.Public.description")} icon={<GlobeIcon />} />
             <SelectOption label={t("Templates.AccessSettings.By_Invite.title")} description={t("Templates.AccessSettings.By_Invite.description")} icon={<LockIcon />} />
             <SelectOption label={t("Templates.AccessSettings.By_Passphrase.title")} description={t("Templates.AccessSettings.By_Passphrase.description")} icon={<KeyIcon />}>
-              <Input type="password" input={passwordInput} setInput={setPasswordInput} height="normal" />
+              <Input type="password" required input={passwordInput} setInput={setPasswordInput} height="normal" />
             </SelectOption>
           </Select>
         </main>
@@ -67,7 +69,7 @@ export const AccessSettings = (props: AccessSettingsProps) => {
           <Button type="secondary" onClick={props.onCancel}>
             Go back
           </Button>
-          <Button type="primary" onClick={onStartSession}>
+          <Button type="primary" onClick={onStartSession} disabled={disableIfEmptyPassword}>
             Start Session
           </Button>
         </footer>
