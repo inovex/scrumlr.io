@@ -3,7 +3,7 @@ import {TemplateCard} from "components/Templates/TemplateCard/TemplateCard";
 import {getTemplateAndColumnsByTemplateId} from "components/ColumnsConfigurator/ColumnsConfigurator.utils";
 import getTestApplicationState from "utils/test/getTestApplicationState";
 import {TemplateWithColumns} from "store/features";
-import {fireEvent} from "@testing-library/react";
+import {act, fireEvent} from "@testing-library/react";
 
 const renderRecommendedTemplateCard = (templateId: string, onSelectTemplate: (template: TemplateWithColumns) => void = jest.fn()) => {
   const templateWithColumns = getTemplateAndColumnsByTemplateId({...getTestApplicationState()}, templateId)!;
@@ -42,7 +42,7 @@ const renderCustomTemplateCard = (
 // helper function which queries the mini menu icon and clicks it, which opens the mini menu
 const openMiniMenu = (container: HTMLElement & Element) => {
   const miniMenuIcon = container.querySelector(".template-card__icon--menu")!;
-  fireEvent.click(miniMenuIcon);
+  act(() => fireEvent.click(miniMenuIcon));
   const miniMenu = container.querySelector<HTMLDivElement>(".template-card__menu--open");
   expect(miniMenu).toBeInTheDocument();
 };
@@ -51,7 +51,7 @@ const openMiniMenu = (container: HTMLElement & Element) => {
 const clickMiniMenuItem = (container: HTMLElement & Element, label: string) => {
   const miniMenuButton = container.querySelector<HTMLButtonElement>(`.mini-menu__item[data-tooltip-content="${label}"]`);
   expect(miniMenuButton).toBeInTheDocument();
-  fireEvent.mouseDown(miniMenuButton!);
+  act(() => fireEvent.mouseDown(miniMenuButton!));
 };
 
 describe("TemplateCard", () => {
@@ -71,7 +71,7 @@ describe("TemplateCard", () => {
     const {container} = renderCustomTemplateCard("test-templates-id-1", {onSelectTemplate});
     const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
 
-    fireEvent.click(startButton);
+    act(() => fireEvent.click(startButton));
 
     expect(onSelectTemplate).toHaveBeenCalledWith(expect.objectContaining({template: expect.objectContaining({id: "test-templates-id-1"})}));
   });
@@ -82,7 +82,7 @@ describe("TemplateCard", () => {
     const {container} = renderCustomTemplateCard("test-templates-id-1", {onToggleFavourite});
     const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
 
-    fireEvent.click(favouriteButton);
+    act(() => fireEvent.click(favouriteButton));
 
     expect(onToggleFavourite).toHaveBeenCalledWith("test-templates-id-1", true);
   });
@@ -93,7 +93,7 @@ describe("TemplateCard", () => {
     const {container} = renderCustomTemplateCard("test-templates-id-2", {onToggleFavourite});
     const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
 
-    fireEvent.click(favouriteButton);
+    act(() => fireEvent.click(favouriteButton));
 
     expect(onToggleFavourite).toHaveBeenCalledWith("test-templates-id-2", false);
   });
