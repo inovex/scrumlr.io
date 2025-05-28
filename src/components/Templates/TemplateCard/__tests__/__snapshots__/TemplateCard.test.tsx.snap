@@ -28,9 +28,6 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
         type="text"
         value="sample name 1"
       />
-      <div
-        class="template-card__access-policy"
-      />
     </div>
     <svg
       class="template-card__menu template-card__icon template-card__icon--menu"
@@ -87,9 +84,6 @@ exports[`TemplateCard should render correctly (recommended) 1`] = `
         disabled=""
         type="text"
         value="sample name 1"
-      />
-      <div
-        class="template-card__access-policy"
       />
     </div>
     <textarea
