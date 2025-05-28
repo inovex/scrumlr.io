@@ -494,7 +494,7 @@ func testUpdateBoardDescription(t *testing.T) {
 }
 
 func testGetBoard(t *testing.T) {
-	board := fixture.MustRow("Board.boardTestBoard").(*boards.DatabaseBoard)
+	board := fixture.MustRow("DatabaseBoard.boardTestBoard").(*boards.DatabaseBoard)
 
 	gotBoard, err := boardDb.GetBoard(board.ID)
 	assert.Nil(t, err)

@@ -74,7 +74,7 @@ func testCreateBoardSessionAsOwnerShouldFail(t *testing.T) {
 	board := fixture.MustRow("DatabaseBoard.boardSessionsTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
 
-	_, err := sessionDb.Create(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: common.ModeratorRole})
+	_, err := sessionDb.Create(sessions.DatabaseBoardSessionInsert{Board: board.ID, User: user.ID, Role: common.OwnerRole})
 	assert.NotNil(t, err)
 }
 

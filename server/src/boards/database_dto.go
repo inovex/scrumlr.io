@@ -1,6 +1,8 @@
 package boards
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
@@ -9,7 +11,6 @@ import (
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
-	"time"
 )
 
 type DatabaseBoard struct {
@@ -72,7 +73,7 @@ type DatabaseFullBoard struct {
 	BoardSessions        []sessions.DatabaseBoardSession
 	BoardSessionRequests []sessionrequests.DatabaseBoardSessionRequest
 	Columns              []columns.DatabaseColumn
-	Notes                []*notes.NoteDB
+	Notes                []notes.NoteDB
 	Reactions            []reactions.DatabaseReaction
 	Votings              []votings.VotingDB
 	Votes                []votings.VoteDB

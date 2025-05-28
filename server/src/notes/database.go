@@ -20,8 +20,8 @@ func NewNotesDatabase(database *bun.DB) NotesDatabase {
 	return db
 }
 
-func (d *DB) CreateNote(insert NoteInsertDB) (*NoteDB, error) {
-	var note *NoteDB
+func (d *DB) CreateNote(insert NoteInsertDB) (NoteDB, error) {
+	var note NoteDB
 	_, err := d.db.NewInsert().
 		Model(&insert).
 		Value("rank", "coalesce((SELECT COUNT(*) as rank FROM notes WHERE board = ? AND \"column\" = ? AND stack IS NULL), 0)", insert.Board, insert.Column).
@@ -31,18 +31,18 @@ func (d *DB) CreateNote(insert NoteInsertDB) (*NoteDB, error) {
 	return note, err
 }
 
-func (d *DB) ImportNote(insert NoteImportDB) (*NoteDB, error) {
-	var note *NoteDB
-	query := d.db.NewInsert().
+func (d *DB) ImportNote(insert NoteImportDB) (NoteDB, error) {
+	var note NoteDB
+	_, err := d.db.NewInsert().
 		Model(&insert).
-		Returning("*")
-	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
+		Returning("*").
+		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, insert.Board), &note)
 
 	return note, err
 }
 
-func (d *DB) Get(id uuid.UUID) (*NoteDB, error) {
-	var note *NoteDB
+func (d *DB) Get(id uuid.UUID) (NoteDB, error) {
+	var note NoteDB
 	err := d.db.NewSelect().
 		Model((*NoteDB)(nil)).
 		Where("id = ?", id).
@@ -51,26 +51,36 @@ func (d *DB) Get(id uuid.UUID) (*NoteDB, error) {
 	return note, err
 }
 
-func (d *DB) GetAll(board uuid.UUID, columns ...uuid.UUID) ([]*NoteDB, error) {
-	var notes []*NoteDB
-	query := d.db.NewSelect().Model((*NoteDB)(nil)).Where("board = ?", board)
+func (d *DB) GetAll(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error) {
+	var notes []NoteDB
+	query := d.db.NewSelect().
+		Model((*NoteDB)(nil)).
+		Where("board = ?", board)
+
 	if len(columns) > 0 {
 		query = query.Where("\"column\" IN (?)", bun.In(columns))
 	}
-	err := query.OrderExpr("\"column\", stack DESC, rank DESC").Scan(context.Background(), &notes)
+
+	err := query.OrderExpr("\"column\", stack DESC, rank DESC").
+		Scan(context.Background(), &notes)
 	return notes, err
 }
 
-func (d *DB) GetChildNotes(parentNote uuid.UUID) ([]*NoteDB, error) {
-	var notes []*NoteDB
-	err := d.db.NewSelect().Model((*NoteDB)(nil)).Where("stack = ?", parentNote).Scan(context.Background(), &notes)
+func (d *DB) GetChildNotes(parentNote uuid.UUID) ([]NoteDB, error) {
+	var notes []NoteDB
+	err := d.db.NewSelect().
+		Model((*NoteDB)(nil)).
+		Where("stack = ?", parentNote).
+		Scan(context.Background(), &notes)
+
 	if err != nil {
 		return nil, err
 	}
 	return notes, nil
 }
 
-func (d *DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error) {
+func (d *DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error) {
+	var note NoteDB
 	boardSelect := d.db.NewSelect().
 		Model((*common.DatabaseBoard)(nil)).
 		Column("allow_stacking").
@@ -100,10 +110,9 @@ func (d *DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error) 
 		Scan(context.Background(), &precondition)
 
 	if err != nil {
-		return nil, err
+		return note, err
 	}
 
-	var note *NoteDB
 	if update.Text != nil && update.Position == nil {
 		if caller == precondition.Author || precondition.CallerRole == common.ModeratorRole || precondition.CallerRole == common.OwnerRole {
 			note, err = d.updateNoteText(update)
@@ -112,11 +121,11 @@ func (d *DB) UpdateNote(caller uuid.UUID, update NoteUpdateDB) (*NoteDB, error) 
 		}
 	} else if update.Position != nil {
 		if update.Text != nil && (caller != precondition.Author || precondition.CallerRole == common.ParticipantRole) {
-			return nil, errors.New("not permitted to change text of note")
+			return note, errors.New("not permitted to change text of note")
 		}
 
 		if update.Position.Stack.Valid && update.Position.Stack.UUID == update.ID {
-			return nil, errors.New("stacking on self is not allowed")
+			return note, errors.New("stacking on self is not allowed")
 		}
 
 		if precondition.CallerRole == common.ModeratorRole || precondition.CallerRole == common.OwnerRole || precondition.StackingAllowed {
@@ -222,7 +231,11 @@ func (d *DB) DeleteNote(caller uuid.UUID, boardID uuid.UUID, id uuid.UUID, delet
 			return err
 		}
 
-		nextParentSelect := d.db.NewSelect().Model((*NoteDB)(nil)).Where("stack = ?", id).Where("rank = (SELECT MAX(rank) FROM notes WHERE stack = ?)", id).Limit((1))
+		nextParentSelect := d.db.NewSelect().
+			Model((*NoteDB)(nil)).
+			Where("stack = ?", id).
+			Where("rank = (SELECT MAX(rank) FROM notes WHERE stack = ?)", id).
+			Limit((1))
 
 		updateStackRefs := d.db.NewUpdate().
 			With("next_parent", nextParentSelect).
@@ -252,8 +265,8 @@ func (d *DB) DeleteNote(caller uuid.UUID, boardID uuid.UUID, id uuid.UUID, delet
 	return errors.New("not permitted to delete note")
 }
 
-func (d *DB) updateNoteText(update NoteUpdateDB) (*NoteDB, error) {
-	var note *NoteDB
+func (d *DB) updateNoteText(update NoteUpdateDB) (NoteDB, error) {
+	var note NoteDB
 	_, err := d.db.NewUpdate().
 		Model(&update).
 		Column("text", "edited").
@@ -270,7 +283,7 @@ func (d *DB) updateNoteText(update NoteUpdateDB) (*NoteDB, error) {
 	return note, nil
 }
 
-func (d *DB) updateNoteWithoutStack(update NoteUpdateDB) (*NoteDB, error) {
+func (d *DB) updateNoteWithoutStack(update NoteUpdateDB) (NoteDB, error) {
 	newRank := update.Position.Rank
 	if update.Position.Rank < 0 {
 		newRank = 0
@@ -357,13 +370,13 @@ func (d *DB) updateNoteWithoutStack(update NoteUpdateDB) (*NoteDB, error) {
 		query = query.Set("text = ?", &update.Text)
 	}
 
-	var note []*NoteDB
+	var note []NoteDB
 	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 
 	return note[0], err
 }
 
-func (d *DB) updateNoteWithStack(update NoteUpdateDB) (*NoteDB, error) {
+func (d *DB) updateNoteWithStack(update NoteUpdateDB) (NoteDB, error) {
 	newRank := update.Position.Rank
 	if update.Position.Rank < 0 {
 		newRank = 0
@@ -508,14 +521,14 @@ func (d *DB) updateNoteWithStack(update NoteUpdateDB) (*NoteDB, error) {
 		query = query.Set("text = ?", &update.Text)
 	}
 
-	var note []*NoteDB
+	var note []NoteDB
 	_, err := query.Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 
 	return note[0], err
 }
 
-func (d *DB) GetStack(noteID uuid.UUID) ([]*NoteDB, error) {
-	var notes []*NoteDB
+func (d *DB) GetStack(noteID uuid.UUID) ([]NoteDB, error) {
+	var notes []NoteDB
 	err := d.db.NewSelect().
 		Model(&notes).
 		Where("id = ?", noteID).

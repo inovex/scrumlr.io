@@ -48,8 +48,8 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
-	}).Return(&NoteDB{ID: noteID, Author: authorID, Board: boardID, Column: colID, Text: txt, Stack: uuid.NullUUID{}, Rank: 0, Edited: false}, nil)
-	mockDB.EXPECT().GetAll(boardID).Return([]*NoteDB{}, nil)
+	}).Return(NoteDB{ID: noteID, Author: authorID, Board: boardID, Column: colID, Text: txt, Stack: uuid.NullUUID{}, Rank: 0, Edited: false}, nil)
+	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
 
 	mockBroker := brokerMock.NewMockClient(suite.T())
 	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
@@ -97,7 +97,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 	authorID2 := uuid.New()
 	columnID1 := uuid.New()
 	columnID2 := uuid.New()
-	noteDBList := []*NoteDB{
+	noteDBList := []NoteDB{
 		{
 			ID:     noteID1,
 			Author: authorID1,
@@ -191,14 +191,14 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetAll(boardID).Return([]*NoteDB{}, nil)
+	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
 	mockDB.EXPECT().UpdateNote(callerID, NoteUpdateDB{
 		ID:       noteID,
 		Board:    boardID,
 		Text:     &txt,
 		Position: &posUpdate,
 		Edited:   true,
-	}).Return(&NoteDB{}, nil)
+	}).Return(NoteDB{}, nil)
 
 	mockBroker := brokerMock.NewMockClient(suite.T())
 	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
@@ -275,7 +275,7 @@ func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
-	}).Return(&NoteDB{}, dbError)
+	}).Return(NoteDB{}, dbError)
 
 	mockBroker := brokerMock.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
@@ -300,7 +300,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 	expectedAPIError := &common.APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().Get(boardID).Return(&NoteDB{}, sql.ErrNoRows)
+	mockDB.EXPECT().Get(boardID).Return(NoteDB{}, sql.ErrNoRows)
 
 	mockBroker := brokerMock.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
@@ -318,7 +318,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
 	ctx := context.Background()
 	noteID := uuid.New()
-	expectedNotes := []*NoteDB{
+	expectedNotes := []NoteDB{
 		{ID: uuid.New(), Text: "Note 1"},
 		{ID: uuid.New(), Text: "Note 2"},
 	}
