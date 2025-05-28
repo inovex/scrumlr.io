@@ -41,3 +41,13 @@
   flex-direction: row;
   gap: $spacing--md;
 }
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .access-settings {
+    width: 75%;
+
+    gap: $spacing--md;
+
+    padding: $spacing--xl $spacing--base $spacing--base $spacing--base;
+  }
+}
