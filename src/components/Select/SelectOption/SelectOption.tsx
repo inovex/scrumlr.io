@@ -8,6 +8,7 @@ export type SelectOptionProps = {
   description: string;
   icon: ReactNode;
   index?: number; // overridden by <Select> component
+  children?: ReactNode; // optional extra content
 };
 
 export const SelectOption = (props: SelectOptionProps) => {
@@ -20,13 +21,20 @@ export const SelectOption = (props: SelectOptionProps) => {
     }
   };
 
+  const renderExtraContent = () => (props.children && isActive ? <div className="select-option__extra-content">{props.children}</div> : null);
+
   return (
-    <div className={classNames("select-option", `select-option--${props.index}`, {"select-option--active": isActive})} onClick={handleSelect}>
+    <div
+      className={classNames("select-option", `select-option--${props.index}`, {"select-option--active": isActive}, {"select-option--extra": props.children})}
+      onClick={handleSelect}
+    >
       <div className="select-option__icon-container">{props.icon}</div>
       <div className="select-option__label">{props.label}</div>
       <div className="select-option__description">{props.description}</div>
 
       <input className="select-option__radio" type="radio" checked={isActive} onChange={handleSelect} />
+
+      {renderExtraContent()}
     </div>
   );
 };

@@ -21,6 +21,17 @@
   &--active {
     border-color: $blue--500;
   }
+
+  &--extra {
+    grid-template-rows: 2px auto auto $spacing--sm auto;
+    grid-template-columns: auto $spacing--sm 1fr $spacing--sm auto;
+    grid-template-areas:
+      "icon . .           .     radio"
+      "icon . label       .     radio"
+      ".    . description .     .    "
+      ".    . .           .     .    "
+      ".    . extra       extra extra";
+  }
 }
 
 .select-option__icon-container {
@@ -57,4 +68,8 @@
   height: 20px;
   margin: 0;
   padding: 6px;
+}
+
+.select-option__extra-content {
+  grid-area: extra;
 }

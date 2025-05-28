@@ -8,6 +8,7 @@ import {useTranslation} from "react-i18next";
 import {Button} from "components/Button";
 import {AccessPolicy, CreateSessionAccessPolicy} from "store/features";
 import "./AccessSettings.scss";
+import {Input} from "components/Input/Input";
 
 type AccessSettingsProps = {
   onCancel: () => void;
@@ -17,7 +18,9 @@ type AccessSettingsProps = {
 // yes, this modal can also be abstracted / generalized if need be
 export const AccessSettings = (props: AccessSettingsProps) => {
   const {t} = useTranslation();
+
   const [activeAccessSettingIndex, setActiveAccessSettingIndex] = useState(0);
+  const [passwordInput, setPasswordInput] = useState("");
 
   const matchAccessPolicy = (): AccessPolicy => {
     switch (activeAccessSettingIndex) {
@@ -55,7 +58,9 @@ export const AccessSettings = (props: AccessSettingsProps) => {
           <Select activeIndex={activeAccessSettingIndex} setActiveIndex={setActiveAccessSettingIndex}>
             <SelectOption label={t("Templates.AccessSettings.Public.title")} description={t("Templates.AccessSettings.Public.description")} icon={<GlobeIcon />} />
             <SelectOption label={t("Templates.AccessSettings.By_Invite.title")} description={t("Templates.AccessSettings.By_Invite.description")} icon={<LockIcon />} />
-            <SelectOption label={t("Templates.AccessSettings.By_Passphrase.title")} description={t("Templates.AccessSettings.By_Passphrase.description")} icon={<KeyIcon />} />
+            <SelectOption label={t("Templates.AccessSettings.By_Passphrase.title")} description={t("Templates.AccessSettings.By_Passphrase.description")} icon={<KeyIcon />}>
+              <Input type="password" input={passwordInput} setInput={setPasswordInput} height="normal" />
+            </SelectOption>
           </Select>
         </main>
         <footer className="access-settings__footer">
