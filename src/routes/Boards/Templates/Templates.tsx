@@ -108,6 +108,11 @@ export const Templates = () => {
     setShowAccessSettingsPortal(true);
   };
 
+  const onLeaveSessionPolicy = () => {
+    setSelectedTemplateWithColumns(null);
+    setShowAccessSettingsPortal(false);
+  };
+
   const scrollToSide = (side: Side, smooth: boolean) => {
     const screenWidth = document.documentElement.clientWidth;
     const offset = screenWidth * (side === "left" ? -1 : 1);
@@ -163,7 +168,7 @@ export const Templates = () => {
       <Outlet /> {/* settings */}
       {showAccessSettingsPortal ? (
         <Portal className={classNames("templates__portal")} hiddenOverflow disabledPadding>
-          <AccessSettings onCancel={() => setShowAccessSettingsPortal(false)} onSelectSessionPolicy={onSelectSessionPolicy} />
+          <AccessSettings onCancel={onLeaveSessionPolicy} onSelectSessionPolicy={onSelectSessionPolicy} />
         </Portal>
       ) : null}
       <div className="templates" ref={templatesRef}>
