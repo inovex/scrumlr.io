@@ -1,6 +1,8 @@
 package api
 
 import (
+	"slices"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/columns"
@@ -11,13 +13,12 @@ import (
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votings"
-	"slices"
 )
 
-type VotingUpdated struct {
-	Notes  notes.NoteSlice `json:"notes"`
-	Voting *votings.Voting `json:"voting"`
-}
+//type VotingUpdated struct {
+//	Notes  notes.NoteSlice `json:"notes"`
+//	Voting *votings.Voting `json:"voting"`
+//}
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
 	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
@@ -156,14 +157,18 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 		}
 
 		filteredVotingNotes := noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, columnVisibility)
+		filteredvotingNotesIDs := make([]uuid.UUID, len(filteredVotingNotes))
+		for index, note := range filteredVotingNotes {
+			filteredvotingNotesIDs[index] = note.ID
+		}
 
-		data := &VotingUpdated{
-			Notes:  filteredVotingNotes,
+		votingUpdate := &votings.VotingUpdated{
+			Notes:  filteredvotingNotesIDs,
 			Voting: voting.Voting.UpdateVoting(notesID).Voting,
 		}
 		ret := realtime.BoardEvent{
 			Type: event.Type,
-			Data: data,
+			Data: votingUpdate,
 		}
 		return &ret, true
 	}

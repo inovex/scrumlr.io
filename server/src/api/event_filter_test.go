@@ -2,9 +2,11 @@ package api
 
 import (
 	"math/rand"
-	"scrumlr.io/server/boards"
-	"scrumlr.io/server/votings"
 	"testing"
+
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -18,20 +20,27 @@ import (
 )
 
 var (
+	moderatorUser = users.User{
+		ID: uuid.New(),
+	}
+	ownerUser = users.User{
+		ID: uuid.New(),
+	}
+	participantUser = users.User{
+		ID:          uuid.New(),
+		AccountType: common.Anonymous,
+	}
 	moderatorBoardSession = sessions.BoardSession{
-		User: users.User{ID: uuid.New()},
-		Role: sessions.ModeratorRole,
+		User: moderatorUser.ID,
+		Role: common.ModeratorRole,
 	}
 	ownerBoardSession = sessions.BoardSession{
-		User: users.User{ID: uuid.New()},
-		Role: sessions.OwnerRole,
+		User: ownerUser.ID,
+		Role: common.OwnerRole,
 	}
 	participantBoardSession = sessions.BoardSession{
-		User: users.User{
-			ID:          uuid.New(),
-			AccountType: users.Anonymous,
-		},
-		Role: sessions.ParticipantRole,
+		User: participantUser.ID,
+		Role: common.ParticipantRole,
 	}
 	boardSessions = []*sessions.BoardSession{
 		&participantBoardSession,
@@ -54,7 +63,7 @@ var (
 	}
 	aModeratorNote = notes.Note{
 		ID:     uuid.New(),
-		Author: moderatorBoardSession.User.ID,
+		Author: moderatorUser.ID,
 		Text:   "Moderator Text",
 		Position: notes.NotePosition{
 			Column: aSeeableColumn.ID,
@@ -64,7 +73,7 @@ var (
 	}
 	aParticipantNote = notes.Note{
 		ID:     uuid.New(),
-		Author: participantBoardSession.User.ID,
+		Author: participantUser.ID,
 		Text:   "User Text",
 		Position: notes.NotePosition{
 			Column: aSeeableColumn.ID,
@@ -81,7 +90,7 @@ var (
 	}
 	aOwnerNote = notes.Note{
 		ID:     uuid.New(),
-		Author: ownerBoardSession.User.ID,
+		Author: ownerUser.ID,
 		Text:   "Owner Text",
 		Position: notes.NotePosition{
 			Column: aHiddenColumn.ID,
@@ -111,7 +120,7 @@ var (
 	}
 	votingID   = uuid.New()
 	votingData = &votings.VotingUpdated{
-		Notes: []*notes.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
+		Notes: []uuid.UUID{aParticipantNote.ID, aModeratorNote.ID, aOwnerNote.ID},
 		Voting: &votings.Voting{
 			ID:                 votingID,
 			VoteLimit:          5,
@@ -155,6 +164,17 @@ var (
 	}
 )
 
+func getUserById(id uuid.UUID) users.User {
+	if ownerUser.ID == id {
+		return ownerUser
+	} else if participantUser.ID == id {
+		return participantUser
+	} else if moderatorUser.ID == id {
+		return moderatorUser
+	}
+	return users.User{}
+}
+
 func TestEventFilter(t *testing.T) {
 	t.Run("TestIsOwnerModerator", testIsOwnerModerator)
 	t.Run("TestIsModModerator", testIsModModerator)
@@ -183,25 +203,24 @@ func TestEventFilter(t *testing.T) {
 func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 
 	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		return session.User.AccountType == users.Anonymous
+		user := getUserById(session.User)
+		return user.AccountType == common.Anonymous
 	})[0]
 
 	updateEvent := &realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantUpdated,
 		Data: sessions.BoardSession{
 			RaisedHand: true,
-			User: users.User{
-				ID:          originalParticipantSession.User.ID,
-				AccountType: users.Anonymous,
-			},
-			Role: sessions.ParticipantRole,
+			User:       originalParticipantSession.User,
+			Role:       common.ParticipantRole,
 		},
 	}
 
 	isUpdated := boardSub.participantUpdated(updateEvent, true)
 
 	updatedParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		return session.User.AccountType == users.Anonymous
+		user := getUserById(session.User)
+		return user.AccountType == common.Anonymous
 	})[0]
 
 	assert.Equal(t, true, isUpdated)
@@ -222,30 +241,30 @@ func testParticipantUpdatedShouldHandleError(t *testing.T) {
 }
 
 func testIsModModerator(t *testing.T) {
-	isMod := sessions.CheckSessionRole(moderatorBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(moderatorBoardSession.User, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
-	assert.Equal(t, sessions.ModeratorRole, moderatorBoardSession.Role)
+	assert.Equal(t, common.ModeratorRole, moderatorBoardSession.Role)
 }
 
 func testIsOwnerModerator(t *testing.T) {
-	isMod := sessions.CheckSessionRole(ownerBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(ownerBoardSession.User, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
-	assert.Equal(t, sessions.OwnerRole, ownerBoardSession.Role)
+	assert.Equal(t, common.OwnerRole, ownerBoardSession.Role)
 }
 
 func testIsParticipantModerator(t *testing.T) {
-	isMod := sessions.CheckSessionRole(participantBoardSession.User.ID, boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(participantBoardSession.User, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
 }
 
 func testIsUnknownUuidModerator(t *testing.T) {
-	isMod := sessions.CheckSessionRole(uuid.New(), boardSessions, []sessions.SessionRole{sessions.ModeratorRole, sessions.OwnerRole})
+	isMod := sessions.CheckSessionRole(uuid.New(), boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
@@ -292,7 +311,7 @@ func testColumnFilterAsParticipant(t *testing.T) {
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: []*columns.Column{&aSeeableColumn},
 	}
-	returnedColumnEvent := boardSub.eventFilter(columnEvent, participantBoardSession.User.ID)
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, participantBoardSession.User)
 
 	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
@@ -302,7 +321,7 @@ func testColumnFilterAsOwner(t *testing.T) {
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: []*columns.Column{&aSeeableColumn, &aHiddenColumn},
 	}
-	returnedColumnEvent := boardSub.eventFilter(columnEvent, ownerBoardSession.User.ID)
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, ownerBoardSession.User)
 
 	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
@@ -313,7 +332,7 @@ func testColumnFilterAsModerator(t *testing.T) {
 		Data: []*columns.Column{&aSeeableColumn, &aHiddenColumn},
 	}
 
-	returnedColumnEvent := boardSub.eventFilter(columnEvent, moderatorBoardSession.User.ID)
+	returnedColumnEvent := boardSub.eventFilter(columnEvent, moderatorBoardSession.User)
 
 	assert.Equal(t, expectedColumnEvent, returnedColumnEvent)
 }
@@ -323,7 +342,7 @@ func testNoteFilterAsParticipant(t *testing.T) {
 		Type: realtime.BoardEventNotesUpdated,
 		Data: notes.NoteSlice{&aParticipantNote},
 	}
-	returnedNoteEvent := boardSub.eventFilter(noteEvent, participantBoardSession.User.ID)
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, participantBoardSession.User)
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
@@ -333,7 +352,7 @@ func testNoteFilterAsOwner(t *testing.T) {
 		Type: realtime.BoardEventNotesUpdated,
 		Data: []*notes.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
 	}
-	returnedNoteEvent := boardSub.eventFilter(noteEvent, ownerBoardSession.User.ID)
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, ownerBoardSession.User)
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
@@ -343,7 +362,7 @@ func testNoteFilterAsModerator(t *testing.T) {
 		Type: realtime.BoardEventNotesUpdated,
 		Data: []*notes.Note{&aParticipantNote, &aModeratorNote, &aOwnerNote},
 	}
-	returnedNoteEvent := boardSub.eventFilter(noteEvent, moderatorBoardSession.User.ID)
+	returnedNoteEvent := boardSub.eventFilter(noteEvent, moderatorBoardSession.User)
 
 	assert.Equal(t, expectedNoteEvent, returnedNoteEvent)
 }
@@ -353,7 +372,7 @@ func testFilterVotingUpdatedAsOwner(t *testing.T) {
 		Type: realtime.BoardEventVotingUpdated,
 		Data: votingData,
 	}
-	returnedVoteEvent := boardSub.eventFilter(votingEvent, ownerBoardSession.User.ID)
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, ownerBoardSession.User)
 
 	assert.NotNil(t, returnedVoteEvent)
 	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
@@ -364,7 +383,7 @@ func testFilterVotingUpdatedAsModerator(t *testing.T) {
 		Type: realtime.BoardEventVotingUpdated,
 		Data: votingData,
 	}
-	returnedVoteEvent := boardSub.eventFilter(votingEvent, moderatorBoardSession.User.ID)
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, moderatorBoardSession.User)
 
 	assert.NotNil(t, returnedVoteEvent)
 	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
@@ -372,7 +391,7 @@ func testFilterVotingUpdatedAsModerator(t *testing.T) {
 
 func testFilterVotingUpdatedAsParticipant(t *testing.T) {
 	expectedVoting := &votings.VotingUpdated{
-		Notes: []*notes.Note{&aParticipantNote},
+		Notes: []uuid.UUID{aParticipantNote.ID},
 		Voting: &votings.Voting{
 			ID:                 votingID,
 			VoteLimit:          5,
@@ -394,7 +413,7 @@ func testFilterVotingUpdatedAsParticipant(t *testing.T) {
 		Type: realtime.BoardEventVotingUpdated,
 		Data: expectedVoting,
 	}
-	returnedVoteEvent := boardSub.eventFilter(votingEvent, participantBoardSession.User.ID)
+	returnedVoteEvent := boardSub.eventFilter(votingEvent, participantBoardSession.User)
 
 	assert.NotNil(t, returnedVoteEvent)
 	assert.Equal(t, expectedVotingEvent, returnedVoteEvent)
@@ -402,14 +421,14 @@ func testFilterVotingUpdatedAsParticipant(t *testing.T) {
 
 func testInitFilterAsOwner(t *testing.T) {
 	expectedInitEvent := initEvent
-	returnedInitEvent := eventInitFilter(initEvent, ownerBoardSession.User.ID)
+	returnedInitEvent := eventInitFilter(initEvent, ownerBoardSession.User)
 
 	assert.Equal(t, expectedInitEvent, returnedInitEvent)
 }
 
 func testInitFilterAsModerator(t *testing.T) {
 	expectedInitEvent := initEvent
-	returnedInitEvent := eventInitFilter(initEvent, moderatorBoardSession.User.ID)
+	returnedInitEvent := eventInitFilter(initEvent, moderatorBoardSession.User)
 
 	assert.Equal(t, expectedInitEvent, returnedInitEvent)
 }
@@ -443,7 +462,7 @@ func testInitFilterAsParticipant(t *testing.T) {
 			BoardSessionRequests: []*sessionrequests.BoardSessionRequest{},
 		},
 	}
-	returnedInitEvent := eventInitFilter(initEvent, participantBoardSession.User.ID)
+	returnedInitEvent := eventInitFilter(initEvent, participantBoardSession.User)
 
 	assert.Equal(t, expectedInitEvent, returnedInitEvent)
 }
@@ -499,8 +518,8 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusClosed(t *testing.T) {
 		Data: boards.FullBoard{
 			BoardSessions: []*sessions.BoardSession{
 				{
-					Role: sessions.ModeratorRole,
-					User: users.User{ID: clientId},
+					Role: common.ModeratorRole,
+					User: clientId,
 				},
 			},
 			Votings: []*votings.Voting{
@@ -531,8 +550,8 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusOpen(t *testing.T) {
 		Data: boards.FullBoard{
 			BoardSessions: []*sessions.BoardSession{
 				{
-					Role: sessions.ModeratorRole,
-					User: users.User{ID: clientId},
+					Role: common.ModeratorRole,
+					User: clientId,
 				},
 			},
 			Votings: []*votings.Voting{
@@ -571,8 +590,8 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 		Data: boards.FullBoard{
 			BoardSessions: []*sessions.BoardSession{
 				{
-					Role: sessions.ModeratorRole,
-					User: users.User{ID: clientId},
+					Role: common.ModeratorRole,
+					User: clientId,
 				},
 			},
 			Votings: orgVoting,
@@ -604,8 +623,8 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 			Notes:   []*notes.Note{buildNote(noteId, columnId)},
 			BoardSessions: []*sessions.BoardSession{
 				{
-					Role: sessions.ParticipantRole,
-					User: users.User{ID: clientId},
+					Role: common.ParticipantRole,
+					User: clientId,
 				},
 			},
 			Votings: []*votings.Voting{
