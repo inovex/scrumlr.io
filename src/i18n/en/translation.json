@@ -18,11 +18,9 @@
     "title": "Choose a template",
     "savedTemplates": "Your Templates",
     "recommendedTemplates": "Our Recommendations",
-
     "CreateTemplateCard": {
       "create": "Create a new Template"
     },
-
     "TemplateCard": {
       "addFavourite": "Mark as Favourite",
       "removeFavourite": "Remove Favourite",
@@ -31,7 +29,6 @@
       "start": "Start",
       "save": "Save"
     },
-
     "TemplateEditor": {
       "createTitle": "Create a Template",
       "editTitle": "Edit a Template",
@@ -39,26 +36,31 @@
       "saveEdit": "Save",
       "saveCreate": "Create template"
     },
-
     "ColumnsConfiguratorColumn": {
       "namePlaceholder": "Name",
       "descriptionPlaceholder": "Description (optional)",
       "save": "Save",
       "cancel": "Cancel"
     },
-
     "AccessSettings": {
-      "Public": {
-        "title": "Open",
-        "description": "Participants can join easily & quickly via the link – this provides basic security."
+      "title": "Access Settings",
+      "Options": {
+        "Public": {
+          "title": "Open",
+          "description": "Participants can join easily & quickly via the link – this provides basic security."
+        },
+        "By_Invite": {
+          "title": "Approval",
+          "description": "Participants must be approved before joining – ensuring a high level of security."
+        },
+        "By_Passphrase": {
+          "title": "Password Protected",
+          "description": "Access is only possible with a set password – ensuring a high level of security."
+        }
       },
-      "By_Invite": {
-        "title": "Approval",
-        "description": "Participants must be approved before joining – ensuring a high level of security."
-      },
-      "By_Passphrase": {
-        "title": "Password Protected",
-        "description": "Access is only possible with a set password – ensuring a high level of security."
+      "Buttons": {
+        "cancel": "Go back",
+        "start": "Start Session"
       }
     }
   },
@@ -72,11 +74,6 @@
       "open": "Open",
       "password": "Password",
       "approval": "Approval"
-    },
-    "info": {
-      "open": "Access for all participants is possible via the URL. This should be secure enough in most cases, as the URLs are difficult to guess.",
-      "password": "Access via the URL is protected with a password. This is suitable when not collaborating simultaneously with a group, allowing users to join at any time.",
-      "approval": "TBA"
     },
     "validation": {
       "REQUIRED": "Input is required."

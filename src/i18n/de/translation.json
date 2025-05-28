@@ -45,6 +45,27 @@
       "descriptionPlaceholder": "Beschreibung (optional)",
       "save": "Speichern",
       "cancel": "Abbrechen"
+    },
+    "AccessSettings": {
+      "title": "Zugriffseinstellungen",
+      "Options": {
+        "Public": {
+          "title": "Offen",
+          "description": "Teilnehmende können einfach & schnell über den Link beitreten – bietet grundlegende Sicherheit."
+        },
+        "By_Invite": {
+          "title": "Mit Zustimmung",
+          "description": "Teilnehmende müssen vor dem Beitritt bestätigt werden – gewährleistet eine hohe Sicherheit."
+        },
+        "By_Passphrase": {
+          "title": "Passwortgeschützt",
+          "description": "Der Zugriff ist nur mit einem gesetzten Passwort möglich – gewährleistet eine hohe Sicherheit."
+        }
+      },
+      "Buttons": {
+        "cancel": "Zurück",
+        "start": "Sitzung starten"
+      }
     }
   },
   "Sessions": {
@@ -57,11 +78,6 @@
       "open": "Offen",
       "password": "Passwort",
       "approval": "Freigabe"
-    },
-    "info": {
-      "open": "TBA",
-      "password": "TBA",
-      "approval": "TBA"
     },
     "validation": {
       "REQUIRED": "Eingabe ist erforderlich."

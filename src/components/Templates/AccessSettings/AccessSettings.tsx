@@ -54,23 +54,31 @@ export const AccessSettings = (props: AccessSettingsProps) => {
     <div className="access-settings__wrapper">
       <div className="access-settings">
         <header className="access-settings__header">
-          <div className="access-settings__title">Access Settings</div>
+          <div className="access-settings__title">{t("Templates.AccessSettings.title")}</div>
         </header>
         <main className="access-settings__main">
           <Select activeIndex={activeAccessSettingIndex} setActiveIndex={setActiveAccessSettingIndex}>
-            <SelectOption label={t("Templates.AccessSettings.Public.title")} description={t("Templates.AccessSettings.Public.description")} icon={<GlobeIcon />} />
-            <SelectOption label={t("Templates.AccessSettings.By_Invite.title")} description={t("Templates.AccessSettings.By_Invite.description")} icon={<LockIcon />} />
-            <SelectOption label={t("Templates.AccessSettings.By_Passphrase.title")} description={t("Templates.AccessSettings.By_Passphrase.description")} icon={<KeyIcon />}>
+            <SelectOption label={t("Templates.AccessSettings.Options.Public.title")} description={t("Templates.AccessSettings.Options.Public.description")} icon={<GlobeIcon />} />
+            <SelectOption
+              label={t("Templates.AccessSettings.Options.By_Invite.title")}
+              description={t("Templates.AccessSettings.Options.By_Invite.description")}
+              icon={<LockIcon />}
+            />
+            <SelectOption
+              label={t("Templates.AccessSettings.Options.By_Passphrase.title")}
+              description={t("Templates.AccessSettings.Options.By_Passphrase.description")}
+              icon={<KeyIcon />}
+            >
               <Input type="password" required input={passwordInput} setInput={setPasswordInput} height="normal" />
             </SelectOption>
           </Select>
         </main>
         <footer className="access-settings__footer">
           <Button type="secondary" onClick={props.onCancel}>
-            Go back
+            {t("Templates.AccessSettings.Buttons.cancel")}
           </Button>
           <Button type="primary" onClick={onStartSession} disabled={disableIfEmptyPassword}>
-            Start Session
+            {t("Templates.AccessSettings.Buttons.start")}
           </Button>
         </footer>
       </div>
