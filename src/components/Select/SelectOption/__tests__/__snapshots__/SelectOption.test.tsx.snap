@@ -1,6 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SelectOption should render correctly 1`] = `
+exports[`SelectOption (multiple) should render correctly 1`] = `
+<div>
+  <div
+    class="select-option select-option--0 select-option--active"
+  >
+    <div
+      class="select-option__icon-container"
+    >
+      <svg>
+        open.svg
+      </svg>
+    </div>
+    <div
+      class="select-option__label"
+    >
+      test 1
+    </div>
+    <div
+      class="select-option__description"
+    >
+      another test 1
+    </div>
+    <input
+      checked=""
+      class="select-option__radio"
+      type="radio"
+    />
+  </div>
+  <div
+    class="select-option select-option--1"
+  >
+    <div
+      class="select-option__icon-container"
+    >
+      <svg>
+        lock-closed.svg
+      </svg>
+    </div>
+    <div
+      class="select-option__label"
+    >
+      test 2
+    </div>
+    <div
+      class="select-option__description"
+    >
+      another test 2
+    </div>
+    <input
+      class="select-option__radio"
+      type="radio"
+    />
+  </div>
+</div>
+`;
+
+exports[`SelectOption (single) should render correctly 1`] = `
 <div>
   <div
     class="select-option select-option--0 select-option--active"
