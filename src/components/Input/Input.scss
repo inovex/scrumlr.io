@@ -51,6 +51,10 @@ $padding--mobile: 12.5px $spacing--base;
 
       .input__input {
         color: $navy--600;
+
+        &::selection {
+          background-color: $blue--50;
+        }
       }
     }
 
