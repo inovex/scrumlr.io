@@ -45,16 +45,22 @@
     outline: 2px solid $blue--500;
   }
 }
-[theme="dark"] .info-bar__return-to-shared-note-button {
-  color: $gray--000;
-  background-color: $navy--500;
-
-  &:hover {
-    background-color: getDarkHoverBackground($navy--500);
+[theme="dark"] {
+  .info-bar__icon {
+    color: $gray--000;
   }
 
-  &:focus-visible {
-    outline: 2px solid $pink--500;
+  .info-bar__return-to-shared-note-button {
+    color: $gray--000;
+    background-color: $navy--500;
+
+    &:hover {
+      background-color: getDarkHoverBackground($navy--500);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $pink--500;
+    }
   }
 }
 
