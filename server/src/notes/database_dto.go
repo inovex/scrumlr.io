@@ -1,13 +1,14 @@
 package notes
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"time"
 )
 
 type NoteDB struct {
-	bun.BaseModel `bun:"table:notes"`
+	bun.BaseModel `bun:"table:notes,alias:note"`
 	ID            uuid.UUID
 	CreatedAt     time.Time
 	Author        uuid.UUID
@@ -20,7 +21,7 @@ type NoteDB struct {
 }
 
 type NoteInsertDB struct {
-	bun.BaseModel `bun:"table:notes"`
+	bun.BaseModel `bun:"table:notes,alias:note"`
 	Author        uuid.UUID
 	Board         uuid.UUID
 	Column        uuid.UUID
@@ -28,7 +29,7 @@ type NoteInsertDB struct {
 }
 
 type NoteImportDB struct {
-	bun.BaseModel `bun:"table:notes"`
+	bun.BaseModel `bun:"table:notes,alias:note"`
 	Author        uuid.UUID
 	Board         uuid.UUID
 	Text          string
@@ -36,7 +37,7 @@ type NoteImportDB struct {
 }
 
 type NoteUpdateDB struct {
-	bun.BaseModel `bun:"table:notes"`
+	bun.BaseModel `bun:"table:notes,alias:note"`
 	ID            uuid.UUID
 	Board         uuid.UUID
 	Text          *string
