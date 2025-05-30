@@ -4098,8 +4098,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"OPEN\"\n}",
-
+							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"OPEN\"\n}"
 						}
 					]
 				},
