@@ -10065,10 +10065,10 @@ qs@6.14.0:
   dependencies:
     side-channel "^1.1.0"
 
-query-string@^9.1.2:
-  version "9.1.2"
-  resolved "https://registry.yarnpkg.com/query-string/-/query-string-9.1.2.tgz#1e4c6a17e2eaab7a282240cf716dec5e72c36cba"
-  integrity sha512-s3UlTyjxRux4KjwWaJsjh1Mp8zoCkSGKirbD9H89pEM9UOZsfpRZpdfzvsy2/mGlLfC3NnYVpy2gk7jXITHEtA==
+query-string@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-9.2.0.tgz#bf9909412689117865aac4e05c10422c4839828f"
+  integrity sha512-YIRhrHujoQxhexwRLxfy3VSjOXmvZRd2nyw1PwL1UUqZ/ys1dEZd1+NSgXkne2l/4X/7OXkigEAuhTX0g/ivJQ==
   dependencies:
     decode-uri-component "^0.4.1"
     filter-obj "^5.1.0"
