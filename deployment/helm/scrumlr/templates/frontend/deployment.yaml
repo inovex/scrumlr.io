@@ -56,7 +56,7 @@ spec:
           startupProbe:
             httpGet:
               path: /
-              port: {{ .Values.backend.config.serverPort }}
+              port: {{ .Values.frontend.config.listenPort }}
             initialDelaySeconds: {{ .Values.frontend.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.frontend.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.frontend.startupProbe.timeoutSeconds }}
@@ -72,7 +72,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.backend.config.serverPort }}
+              port: {{ .Values.frontend.config.listenPort }}
             initialDelaySeconds: {{ .Values.frontend.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.frontend.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.frontend.readinessProbe.timeoutSeconds }}
@@ -88,7 +88,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.backend.config.serverPort }}
+              port: {{ .Values.frontend.config.listenPort }}
             initialDelaySeconds: {{ .Values.frontend.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.frontend.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.frontend.livenessProbe.timeoutSeconds }}
