@@ -12,6 +12,7 @@ type VotingCreateRequest struct {
 	VoteLimit          int       `json:"voteLimit"`
 	AllowMultipleVotes bool      `json:"allowMultipleVotes"`
 	ShowVotesOfOthers  bool      `json:"showVotesOfOthers"`
+	IsAnonymous        bool      `json:"isAnonymous"`
 }
 
 // VotingUpdateRequest represents the request to update a voting session.
@@ -29,6 +30,7 @@ type Voting struct {
 	ShowVotesOfOthers  bool               `json:"showVotesOfOthers"`
 	Status             types.VotingStatus `json:"status"`
 	VotingResults      *VotingResults     `json:"votes,omitempty"`
+	IsAnonymous        bool               `json:"isAnonymous"`
 }
 
 type VotingResults struct {

@@ -1,6 +1,8 @@
 {
   "InfoBar": {
-    "ReturnToPresentedNote": "Zurück zur präsentierten Karte"
+    "ReturnToPresentedNote": "Zurück zur präsentierten Karte",
+    "VotingIsAnonymous": "Abstimmung ist anonym",
+    "VotingIsNotAnonymous": "Abstimmung ist nicht anonym"
   },
   "LegacyNewBoard": {
     "boardName": "Sitzungsname",
@@ -321,7 +323,7 @@
   },
   "VoteConfigurationButton": {
     "label": "Abstimmung",
-    "showVotesOfOthers": "Anonyme Abstimmung",
+    "isAnonymous": "Anonyme Abstimmung",
     "allowMultipleVotesPerNote": "Erlaube Stimmhäufung",
     "numberOfVotes": "Anzahl Stimmen",
     "increaseVotes": "Anzahl Stimmen erhöhen",

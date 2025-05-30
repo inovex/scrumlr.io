@@ -31,9 +31,7 @@ exports[`Votes should render correctly with votes and active voting 1`] = `
     role="none"
   >
     <button
-      aria-label="Remove vote"
       class="dot-button vote-button-remove"
-      data-tooltip-content="Remove vote"
       data-tooltip-id="scrumlr-tooltip"
     >
       <span

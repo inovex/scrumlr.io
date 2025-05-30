@@ -1,5 +1,5 @@
-import { defineConfig } from 'astro/config';
-import starlight from '@astrojs/starlight';
+import {defineConfig} from "astro/config";
+import starlight from "@astrojs/starlight";
 
 // https://astro.build/config
 // TODO Later on replace site with docs.scrumlr.io
@@ -8,28 +8,26 @@ export default defineConfig({
   // base: "/scrumlr.io/",
   integrations: [
     starlight({
-      title: 'Scrumlr Docs',
+      title: "Scrumlr Docs",
       customCss: [
         // Relative path to your custom CSS file
-        './src/styles/custom.css',
+        "./src/styles/custom.css",
       ],
-      social: {
-        github: 'https://github.com/inovex/scrumlr.io',
-      },
+      social: [{icon: "github", label: "GitHub", href: "https://github.com/inovex/scrumlr.io"}],
       sidebar: [
         {
-          label: 'Getting Started',
-          autogenerate: { directory: 'getting-started' },
+          label: "Getting Started",
+          autogenerate: {directory: "getting-started"},
         },
         {
-          label: 'Development',
+          label: "Development",
           autogenerate: {
-            directory: 'dev',
+            directory: "dev",
           },
         },
         {
-          label: 'Self-Hosted',
-          autogenerate: { directory: 'self-hosting' },
+          label: "Self-Hosted",
+          autogenerate: {directory: "self-hosting"},
         },
       ],
     }),

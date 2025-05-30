@@ -2273,7 +2273,7 @@
 							"_postman_previewlanguage": "Text",
 							"header": [],
 							"cookie": [],
-							"body": "[\n    {\n        \"board\": {\n            \"id\": \"4b08e0e9-f141-49b0-a75f-17d181f96969\",\n            \"name\": \"My board\",\n            \"description\": \"This is a test description\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"showNotesOfOtherUsers\": true,\n            \"showNoteReactions\": true,\n            \"allowStacking\": true,\n            \"allowEditing\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columnsNumber\": 2,\n        \"createdAt\": \"0001-01-01T00:00:00Z\",\n        \"participants\": 1\n    }\n]"
+							"body": "[\n    {\n        \"board\": {\n            \"id\": \"4b08e0e9-f141-49b0-a75f-17d181f96969\",\n            \"name\": \"My board\",\n            \"description\": \"This is a test description\",\n            \"accessPolicy\": \"PUBLIC\",\n            \"showAuthors\": true,\n            \"showVotesOfOthers\": true,\n            \"showNoteReactions\": true,\n            \"allowStacking\": true,\n            \"allowEditing\": true,\n            \"sharedNote\": null,\n            \"showVoting\": null\n        },\n        \"columnsNumber\": 2,\n        \"createdAt\": \"0001-01-01T00:00:00Z\",\n        \"participants\": 1\n    }\n]"
 						}
 					]
 				},
@@ -4098,7 +4098,8 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"OPEN\"\n}"
+							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"OPEN\"\n}",
+
 						}
 					]
 				},
@@ -4474,7 +4475,7 @@
 									"let body = {",
 									"    \"voteLimit\": 5,",
 									"    \"allowMultipleVotes\": true,",
-									"    \"showVotesOfOthers\": true",
+									"    \"showNotesOfOtherUsers\": true",
 									"}",
 									"body = JSON.stringify(body)",
 									"",

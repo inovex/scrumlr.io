@@ -1,6 +1,8 @@
 {
   "InfoBar": {
-    "ReturnToPresentedNote": "Return to presented note"
+    "ReturnToPresentedNote": "Return to presented note",
+    "VotingIsAnonymous": "Voting is anonymous",
+    "VotingIsNotAnonymous": "Voting is not anonymous"
   },
   "LegacyNewBoard": {
     "boardName": "Board name",
@@ -317,7 +319,7 @@
   },
   "VoteConfigurationButton": {
     "label": "Voting",
-    "showVotesOfOthers": "Anonymous voting",
+    "isAnonymous": "Anonymous voting",
     "allowMultipleVotesPerNote": "Allow cumulative voting",
     "numberOfVotes": "Number of votes",
     "increaseVotes": "Increase number of votes",

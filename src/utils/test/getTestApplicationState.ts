@@ -161,6 +161,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       allowMultipleVotes: false,
       showVotesOfOthers: false,
       status: "OPEN",
+      isAnonymous: true,
     },
     past: [
       {
@@ -169,6 +170,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
         allowMultipleVotes: false,
         showVotesOfOthers: false,
         status: "CLOSED",
+        isAnonymous: true,
       },
     ],
   },
