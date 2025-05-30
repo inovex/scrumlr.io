@@ -2,9 +2,9 @@ package users
 
 import (
 	"net/http"
-	"scrumlr.io/server/auth"
 
 	"github.com/google/uuid"
+	"scrumlr.io/server/common"
 )
 
 // User is the response for all user requests.
@@ -16,16 +16,16 @@ type User struct {
 	Name string `json:"name"`
 
 	// The user's avatar configuration
-	Avatar *Avatar `json:"avatar,omitempty"`
+	Avatar *common.Avatar `json:"avatar,omitempty"`
 
 	// The user's account type configuration
-	AccountType auth.AccountType `json:"accountType"`
+	AccountType common.AccountType `json:"accountType"`
 }
 
 type UserUpdateRequest struct {
-	ID     uuid.UUID `json:"-"`
-	Name   string    `json:"name"`
-	Avatar *Avatar   `json:"avatar,omitempty"`
+	ID     uuid.UUID      `json:"-"`
+	Name   string         `json:"name"`
+	Avatar *common.Avatar `json:"avatar,omitempty"`
 }
 
 func (u *User) From(user DatabaseUser) *User {

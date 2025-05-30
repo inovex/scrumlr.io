@@ -81,17 +81,17 @@ func (_c *MockNotesService_Create_Call) RunAndReturn(run func(context.Context, N
 	return _c
 }
 
-// Delete provides a mock function with given fields: ctx, body, id, deletedVotes
-func (_m *MockNotesService) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID, deletedVotes []uuid.UUID) error {
-	ret := _m.Called(ctx, body, id, deletedVotes)
+// Delete provides a mock function with given fields: ctx, body, id
+func (_m *MockNotesService) Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID) error {
+	ret := _m.Called(ctx, body, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, NoteDeleteRequest, uuid.UUID, []uuid.UUID) error); ok {
-		r0 = rf(ctx, body, id, deletedVotes)
+	if rf, ok := ret.Get(0).(func(context.Context, NoteDeleteRequest, uuid.UUID) error); ok {
+		r0 = rf(ctx, body, id)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -108,14 +108,13 @@ type MockNotesService_Delete_Call struct {
 //   - ctx context.Context
 //   - body NoteDeleteRequest
 //   - id uuid.UUID
-//   - deletedVotes []uuid.UUID
-func (_e *MockNotesService_Expecter) Delete(ctx interface{}, body interface{}, id interface{}, deletedVotes interface{}) *MockNotesService_Delete_Call {
-	return &MockNotesService_Delete_Call{Call: _e.mock.On("Delete", ctx, body, id, deletedVotes)}
+func (_e *MockNotesService_Expecter) Delete(ctx interface{}, body interface{}, id interface{}) *MockNotesService_Delete_Call {
+	return &MockNotesService_Delete_Call{Call: _e.mock.On("Delete", ctx, body, id)}
 }
 
-func (_c *MockNotesService_Delete_Call) Run(run func(ctx context.Context, body NoteDeleteRequest, id uuid.UUID, deletedVotes []uuid.UUID)) *MockNotesService_Delete_Call {
+func (_c *MockNotesService_Delete_Call) Run(run func(ctx context.Context, body NoteDeleteRequest, id uuid.UUID)) *MockNotesService_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(NoteDeleteRequest), args[2].(uuid.UUID), args[3].([]uuid.UUID))
+		run(args[0].(context.Context), args[1].(NoteDeleteRequest), args[2].(uuid.UUID))
 	})
 	return _c
 }
@@ -125,7 +124,7 @@ func (_c *MockNotesService_Delete_Call) Return(_a0 error) *MockNotesService_Dele
 	return _c
 }
 
-func (_c *MockNotesService_Delete_Call) RunAndReturn(run func(context.Context, NoteDeleteRequest, uuid.UUID, []uuid.UUID) error) *MockNotesService_Delete_Call {
+func (_c *MockNotesService_Delete_Call) RunAndReturn(run func(context.Context, NoteDeleteRequest, uuid.UUID) error) *MockNotesService_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }

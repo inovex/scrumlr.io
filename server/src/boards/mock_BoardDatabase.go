@@ -22,9 +22,9 @@ func (_m *MockBoardDatabase) EXPECT() *MockBoardDatabase_Expecter {
 	return &MockBoardDatabase_Expecter{mock: &_m.Mock}
 }
 
-// CreateBoard provides a mock function with given fields: creator, _a1, _a2
-func (_m *MockBoardDatabase) CreateBoard(creator uuid.UUID, _a1 DatabaseBoardInsert, _a2 []columns.DatabaseColumnInsert) (DatabaseBoard, error) {
-	ret := _m.Called(creator, _a1, _a2)
+// CreateBoard provides a mock function with given fields: creator, board, _a2
+func (_m *MockBoardDatabase) CreateBoard(creator uuid.UUID, board DatabaseBoardInsert, _a2 []columns.DatabaseColumnInsert) (DatabaseBoard, error) {
+	ret := _m.Called(creator, board, _a2)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateBoard")
@@ -33,16 +33,16 @@ func (_m *MockBoardDatabase) CreateBoard(creator uuid.UUID, _a1 DatabaseBoardIns
 	var r0 DatabaseBoard
 	var r1 error
 	if rf, ok := ret.Get(0).(func(uuid.UUID, DatabaseBoardInsert, []columns.DatabaseColumnInsert) (DatabaseBoard, error)); ok {
-		return rf(creator, _a1, _a2)
+		return rf(creator, board, _a2)
 	}
 	if rf, ok := ret.Get(0).(func(uuid.UUID, DatabaseBoardInsert, []columns.DatabaseColumnInsert) DatabaseBoard); ok {
-		r0 = rf(creator, _a1, _a2)
+		r0 = rf(creator, board, _a2)
 	} else {
 		r0 = ret.Get(0).(DatabaseBoard)
 	}
 
 	if rf, ok := ret.Get(1).(func(uuid.UUID, DatabaseBoardInsert, []columns.DatabaseColumnInsert) error); ok {
-		r1 = rf(creator, _a1, _a2)
+		r1 = rf(creator, board, _a2)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -57,13 +57,13 @@ type MockBoardDatabase_CreateBoard_Call struct {
 
 // CreateBoard is a helper method to define mock.On call
 //   - creator uuid.UUID
-//   - _a1 DatabaseBoardInsert
+//   - board DatabaseBoardInsert
 //   - _a2 []columns.DatabaseColumnInsert
-func (_e *MockBoardDatabase_Expecter) CreateBoard(creator interface{}, _a1 interface{}, _a2 interface{}) *MockBoardDatabase_CreateBoard_Call {
-	return &MockBoardDatabase_CreateBoard_Call{Call: _e.mock.On("CreateBoard", creator, _a1, _a2)}
+func (_e *MockBoardDatabase_Expecter) CreateBoard(creator interface{}, board interface{}, _a2 interface{}) *MockBoardDatabase_CreateBoard_Call {
+	return &MockBoardDatabase_CreateBoard_Call{Call: _e.mock.On("CreateBoard", creator, board, _a2)}
 }
 
-func (_c *MockBoardDatabase_CreateBoard_Call) Run(run func(creator uuid.UUID, _a1 DatabaseBoardInsert, _a2 []columns.DatabaseColumnInsert)) *MockBoardDatabase_CreateBoard_Call {
+func (_c *MockBoardDatabase_CreateBoard_Call) Run(run func(creator uuid.UUID, board DatabaseBoardInsert, _a2 []columns.DatabaseColumnInsert)) *MockBoardDatabase_CreateBoard_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		run(args[0].(uuid.UUID), args[1].(DatabaseBoardInsert), args[2].([]columns.DatabaseColumnInsert))
 	})

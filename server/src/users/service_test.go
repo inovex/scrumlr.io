@@ -8,9 +8,11 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
 	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/sessions"
 )
 
 func TestGetUser(t *testing.T) {
@@ -23,7 +25,9 @@ func TestGetUser(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.Get(context.Background(), userId)
 
@@ -41,7 +45,9 @@ func TestGetUser_NotFound(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.Get(context.Background(), userId)
 
@@ -61,7 +67,9 @@ func TestGetUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.Get(context.Background(), userId)
 
@@ -80,7 +88,9 @@ func TestCreateAnonymusUser(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAnonymous(context.Background(), name)
 
@@ -99,7 +109,9 @@ func TestCreateAnonymusUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAnonymous(context.Background(), name)
 
@@ -117,7 +129,9 @@ func TestCreateAnonymusUser_EmptyUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAnonymous(context.Background(), name)
 
@@ -135,7 +149,9 @@ func TestCreateAnonymusUser_NewLineUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAnonymous(context.Background(), name)
 
@@ -157,7 +173,9 @@ func TestCreateAppleUser(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -178,7 +196,9 @@ func TestCreateAppleUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -198,7 +218,9 @@ func TestCreateAppleUser_EmptyUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -218,7 +240,9 @@ func TestCreateAppleUser_NewLineUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -240,7 +264,9 @@ func TestCreateAzureUser(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -261,7 +287,9 @@ func TestCreateAzureUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -281,7 +309,9 @@ func TestCreateAzureUser_EmptyUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -301,7 +331,9 @@ func TestCreateAzureUser_NewLineUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -323,7 +355,9 @@ func TestCreateGitHubUser(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -344,7 +378,9 @@ func TestCreateGitHubUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -364,7 +400,9 @@ func TestCreateGitHubUser_EmptyUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -384,7 +422,9 @@ func TestCreateGitHubUser_NewLineUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -406,7 +446,9 @@ func TestCreateGoogleUser(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -427,7 +469,9 @@ func TestCreateGoogleUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -447,7 +491,9 @@ func TestCreateGoogleUser_EmptyUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -467,7 +513,9 @@ func TestCreateGoogleUser_NewLineUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -489,7 +537,9 @@ func TestCreateMicrosoftUser(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -510,7 +560,9 @@ func TestCreateMicrosoftUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -530,7 +582,9 @@ func TestCreateMicrosoftUser_EmptyUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -550,7 +604,9 @@ func TestCreateMicrosoftUser_NewLineUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -572,7 +628,9 @@ func TestCreateOIDCUser(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -593,7 +651,9 @@ func TestCreateOIDCUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -613,7 +673,9 @@ func TestCreateOIDCUser_EmptyUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -633,7 +695,9 @@ func TestCreateOIDCUser_NewLineUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
 
@@ -644,6 +708,8 @@ func TestCreateOIDCUser_NewLineUsername(t *testing.T) {
 
 func TestUpdateUser(t *testing.T) {
 	userId := uuid.New()
+	firstBoardId := uuid.New()
+	secondBoardId := uuid.New()
 	name := "Stan"
 
 	mockUserDatabase := NewMockUserDatabase(t)
@@ -651,10 +717,22 @@ func TestUpdateUser(t *testing.T) {
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+	mockSessionService.EXPECT().GetUserConnectedBoards(context.Background(), userId).
+		Return([]*sessions.BoardSession{
+			{User: userId, Board: firstBoardId},
+			{User: userId, Board: secondBoardId},
+		}, nil)
+	mockSessionService.EXPECT().Get(context.Background(), firstBoardId, userId).
+		Return(&sessions.BoardSession{User: userId, Board: firstBoardId}, nil)
+	mockSessionService.EXPECT().Get(context.Background(), secondBoardId, userId).
+		Return(&sessions.BoardSession{User: userId, Board: secondBoardId}, nil)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
 
@@ -675,7 +753,9 @@ func TestUpdateUser_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
 
@@ -694,7 +774,9 @@ func TestUpdateUser_EmptyUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
 
@@ -713,7 +795,9 @@ func TestUpdateUser_NewLineUsername(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
 
@@ -732,7 +816,9 @@ func TestAvailableForKeyMigration(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	available, err := userService.IsUserAvailableForKeyMigration(context.Background(), userId)
 
@@ -751,7 +837,9 @@ func TestAvailableForKeyMigration_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	available, err := userService.IsUserAvailableForKeyMigration(context.Background(), userId)
 
@@ -770,7 +858,9 @@ func TestSetKeyMigration(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.SetKeyMigration(context.Background(), userId)
 
@@ -789,7 +879,9 @@ func TestSetKeymigration_DatabaseError(t *testing.T) {
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	userService := NewUserService(mockUserDatabase, broker)
+	mockSessionService := sessions.NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
 	user, err := userService.SetKeyMigration(context.Background(), userId)
 

@@ -1,9 +1,10 @@
-package auth
+package common
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewAccountType(t *testing.T) {

@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/notes"
 )
 
 type Vote struct {
@@ -96,6 +95,6 @@ type VotingResultsPerNote struct {
 }
 
 type VotingUpdated struct {
-	Notes  notes.NoteSlice `json:"notes"`
-	Voting *Voting         `json:"voting"`
+	Notes  []uuid.UUID `json:"notes"`
+	Voting *Voting     `json:"voting"`
 }

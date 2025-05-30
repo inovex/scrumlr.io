@@ -7,7 +7,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/notes"
 )
 
 func TestVotingWithResultsWithEmptyStructs(t *testing.T) {
@@ -117,7 +116,7 @@ func TestMultipleVotesForOneNoteFromOneUser(t *testing.T) {
 
 func TestCalculateVoteCountsWithEmptySlice(t *testing.T) {
 
-	var noteSlice notes.NoteSlice
+	var noteSlice []uuid.UUID
 	var voting Voting
 
 	votingCountResult := voting.calculateTotalVoteCount(noteSlice)
@@ -132,7 +131,7 @@ func TestCalculateVoteCountForSpecificNote(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 
-	noteSlice := notes.NoteSlice{buildNote(noteId)}
+	noteSlice := []uuid.UUID{noteId}
 	voting := Votings(
 		[]VotingDB{*buildVoting(voteId, Closed, true)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
@@ -151,7 +150,7 @@ func TestShouldReturnNoVotingResultsBecauseVotingIsStillOpen(t *testing.T) {
 	noteId := uuid.New()
 
 	voting := Votings([]VotingDB{*buildVoting(voteId, Open, true)}, []VoteDB{})[0]
-	noteSlice := notes.NoteSlice{buildNote(noteId)}
+	noteSlice := []uuid.UUID{noteId}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
 
@@ -171,7 +170,7 @@ func TestShouldReturnVotingResults(t *testing.T) {
 		[]VotingDB{*buildVoting(voteId, Closed, true)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
 	)[0]
-	noteSlice := notes.NoteSlice{buildNote(noteId)}
+	noteSlice := []uuid.UUID{noteId}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
 
@@ -191,7 +190,7 @@ func TestShouldUnmarshallVoteData(t *testing.T) {
 		[]VotingDB{*buildVoting(voteId, Closed, true)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
 	)[0]
-	noteSlice := notes.NoteSlice{buildNote(noteId)}
+	noteSlice := []uuid.UUID{noteId}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
 	_, err := UnmarshallVoteData(updatedVoting)
@@ -206,15 +205,15 @@ func TestShouldFailUnmarshallingVoteData(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func buildNote(noteId uuid.UUID) *notes.Note {
-	return &notes.Note{
-		ID:       noteId,
-		Author:   uuid.UUID{},
-		Text:     "",
-		Edited:   false,
-		Position: notes.NotePosition{},
-	}
-}
+//func buildNote(noteId uuid.UUID) *notes.Note {
+//	return &notes.Note{
+//		ID:       noteId,
+//		Author:   uuid.UUID{},
+//		Text:     "",
+//		Edited:   false,
+//		Position: notes.NotePosition{},
+//	}
+//}
 
 func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *VoteDB {
 	return &VoteDB{

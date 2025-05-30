@@ -8,8 +8,6 @@ import (
 	mock "github.com/stretchr/testify/mock"
 	filter "scrumlr.io/server/common/filter"
 
-	notes "scrumlr.io/server/notes"
-
 	uuid "github.com/google/uuid"
 )
 
@@ -429,7 +427,7 @@ func (_c *MockVotingService_RemoveVote_Call) RunAndReturn(run func(context.Conte
 }
 
 // Update provides a mock function with given fields: ctx, body, affectedNotes
-func (_m *MockVotingService) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*notes.Note) (*Voting, error) {
+func (_m *MockVotingService) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*uuid.UUID) (*Voting, error) {
 	ret := _m.Called(ctx, body, affectedNotes)
 
 	if len(ret) == 0 {
@@ -438,10 +436,10 @@ func (_m *MockVotingService) Update(ctx context.Context, body VotingUpdateReques
 
 	var r0 *Voting
 	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, VotingUpdateRequest, []*notes.Note) (*Voting, error)); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, VotingUpdateRequest, []*uuid.UUID) (*Voting, error)); ok {
 		return rf(ctx, body, affectedNotes)
 	}
-	if rf, ok := ret.Get(0).(func(context.Context, VotingUpdateRequest, []*notes.Note) *Voting); ok {
+	if rf, ok := ret.Get(0).(func(context.Context, VotingUpdateRequest, []*uuid.UUID) *Voting); ok {
 		r0 = rf(ctx, body, affectedNotes)
 	} else {
 		if ret.Get(0) != nil {
@@ -449,7 +447,7 @@ func (_m *MockVotingService) Update(ctx context.Context, body VotingUpdateReques
 		}
 	}
 
-	if rf, ok := ret.Get(1).(func(context.Context, VotingUpdateRequest, []*notes.Note) error); ok {
+	if rf, ok := ret.Get(1).(func(context.Context, VotingUpdateRequest, []*uuid.UUID) error); ok {
 		r1 = rf(ctx, body, affectedNotes)
 	} else {
 		r1 = ret.Error(1)
@@ -466,14 +464,14 @@ type MockVotingService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body VotingUpdateRequest
-//   - affectedNotes []*notes.Note
+//   - affectedNotes []*uuid.UUID
 func (_e *MockVotingService_Expecter) Update(ctx interface{}, body interface{}, affectedNotes interface{}) *MockVotingService_Update_Call {
 	return &MockVotingService_Update_Call{Call: _e.mock.On("Update", ctx, body, affectedNotes)}
 }
 
-func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, body VotingUpdateRequest, affectedNotes []*notes.Note)) *MockVotingService_Update_Call {
+func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, body VotingUpdateRequest, affectedNotes []*uuid.UUID)) *MockVotingService_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		run(args[0].(context.Context), args[1].(VotingUpdateRequest), args[2].([]*notes.Note))
+		run(args[0].(context.Context), args[1].(VotingUpdateRequest), args[2].([]*uuid.UUID))
 	})
 	return _c
 }
@@ -483,7 +481,7 @@ func (_c *MockVotingService_Update_Call) Return(_a0 *Voting, _a1 error) *MockVot
 	return _c
 }
 
-func (_c *MockVotingService_Update_Call) RunAndReturn(run func(context.Context, VotingUpdateRequest, []*notes.Note) (*Voting, error)) *MockVotingService_Update_Call {
+func (_c *MockVotingService_Update_Call) RunAndReturn(run func(context.Context, VotingUpdateRequest, []*uuid.UUID) (*Voting, error)) *MockVotingService_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
