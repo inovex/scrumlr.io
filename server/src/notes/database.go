@@ -217,7 +217,7 @@ func (d *DB) DeleteNote(caller uuid.UUID, boardID uuid.UUID, id uuid.UUID, delet
 					})
 			})
 
-		var notes []Note
+		var notes []NoteDB
 
 		if deleteStack {
 			_, err := d.db.NewDelete().
@@ -256,7 +256,10 @@ func (d *DB) DeleteNote(caller uuid.UUID, boardID uuid.UUID, id uuid.UUID, delet
 			With("update_ranks", updateRanks).
 			With("update_stackrefs", updateStackRefs).
 			With("update_parentStackId", updateNextParentStackId).
-			Model((*NoteDB)(nil)).Where("id = ?", id).Where("board = ?", boardID).Returning("*").
+			Model((*NoteDB)(nil)).
+			Where("id = ?", id).
+			Where("board = ?", boardID).
+			Returning("*").
 			Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, boardID, identifiers.NoteIdentifier, id, identifiers.UserIdentifier, caller, "DeleteStack", deleteStack, "Result", &notes), &notes)
 
 		return err
