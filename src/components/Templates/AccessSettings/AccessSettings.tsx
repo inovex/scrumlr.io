@@ -77,7 +77,7 @@ export const AccessSettings = (props: AccessSettingsProps) => {
           <Button type="secondary" onClick={props.onCancel}>
             {t("Templates.AccessSettings.Buttons.cancel")}
           </Button>
-          <Button type="primary" onClick={onStartSession} disabled={disableIfEmptyPassword}>
+          <Button type="primary" onClick={onStartSession} disabled={disableIfEmptyPassword} dataCy="access-settings__start-button">
             {t("Templates.AccessSettings.Buttons.start")}
           </Button>
         </footer>
