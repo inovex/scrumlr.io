@@ -21,16 +21,18 @@ type MiniMenuProps = {
   small?: boolean; // smaller icons
   wrapToColumn?: boolean; // render as column in small screen sizes
   transparent?: boolean; // no background
+
+  dataCy?: string;
 };
 
-export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapToColumn, transparent}: MiniMenuProps) => {
+export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapToColumn, transparent, dataCy}: MiniMenuProps) => {
   const onClickItem = (e: React.MouseEvent, item: MiniMenuItem) => {
     e.preventDefault(); // fix some issues
     item.onClick?.();
   };
 
   const renderMenu = () => (
-    <div className={classNames(className, "mini-menu", {"mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})} onBlur={onBlur}>
+    <div className={classNames(className, "mini-menu", {"mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})} onBlur={onBlur} data-cy={dataCy}>
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
         return (
@@ -43,6 +45,7 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
             key={item.label}
             // mouse down instead of click because it has precedence over blur
             onMouseDown={(e) => onClickItem(e, item)}
+            data-cy={`${dataCy}-item-${item.label}`}
           >
             {item.element}
           </button>

@@ -203,7 +203,16 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   return (
     <div className="template-editor">
       <div className="template-editor__name">
-        <Input className="template-editor__name-input" type="text" input={nameInput} setInput={setNameInput} height="normal" placeholder="Board name" required />
+        <Input
+          className="template-editor__name-input"
+          type="text"
+          input={nameInput}
+          setInput={setNameInput}
+          height="normal"
+          placeholder="Board name"
+          required
+          dataCy="template-editor__name-input"
+        />
       </div>
       <div className="template-editor__description">
         <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
@@ -247,10 +256,22 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
         <ColumnsMiniView className="columns-configurator__mini-view" columns={editableTemplateColumns} />
       </div>
       <div className="template-editor__buttons">
-        <Button className={classNames("template-editor__button", "template-editor__button--return")} type="secondary" onClick={cancelAndGoBack}>
+        <Button
+          className={classNames("template-editor__button", "template-editor__button--return")}
+          type="secondary"
+          onClick={cancelAndGoBack}
+          dataCy="template-editor__button--return"
+        >
           {t("Templates.TemplateEditor.cancel")}
         </Button>
-        <Button className={classNames("template-editor__button", "template-editor__button--create")} type="primary" icon={<AddIcon />} onClick={saveTemplate} disabled={!validForm}>
+        <Button
+          className={classNames("template-editor__button", "template-editor__button--create")}
+          type="primary"
+          icon={<AddIcon />}
+          onClick={saveTemplate}
+          disabled={!validForm}
+          dataCy="template-editor__button--create"
+        >
           {t(`Templates.TemplateEditor.save${mode === "create" ? "Create" : "Edit"}`)}
         </Button>
       </div>

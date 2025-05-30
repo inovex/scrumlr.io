@@ -48,3 +48,25 @@ Cypress.Commands.add("login", () => {
     .url()
     .should("include", "/boards/templates")
 })
+
+// from templates view, creates a new template with given name and default columns.
+Cypress.Commands.add("createCustomTemplate", (templateName: string)=>{
+  cy
+    .get("[data-cy='create-template-card']")
+    .click()
+
+  cy
+    .url()
+    .should("include", "/boards/create")
+
+  cy.get<HTMLButtonElement>("[data-cy='template-editor__button--create']")
+    .should("be.disabled")
+  cy
+    .get("[data-cy='template-editor__name-input']")
+    .type(templateName)
+
+  cy
+    .get<HTMLButtonElement>("[data-cy='template-editor__button--create']")
+    .should("not.be.disabled")
+    .click()
+})

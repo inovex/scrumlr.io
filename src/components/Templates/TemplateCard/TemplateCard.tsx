@@ -57,14 +57,19 @@ export const TemplateCard = (props: TemplateCardProps) => {
         ]}
         focusBehaviour="moveFocus"
         onBlur={() => setShowMiniMenu(false)}
+        dataCy="template-card__menu"
       />
     ) : (
-      <MenuIcon className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")} onClick={() => setShowMiniMenu(true)} />
+      <MenuIcon
+        className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")}
+        onClick={() => setShowMiniMenu(true)}
+        data-cy="template-card__menu--closed"
+      />
     );
   };
 
   return (
-    <div className="template-card" data-cy={`template-card__${props.templateType}`}>
+    <div className="template-card" data-cy={`template-card--${props.templateType}`}>
       {props.templateType === "CUSTOM" ? (
         <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => props.onToggleFavourite(template.id, template.favourite)} />
       ) : null}

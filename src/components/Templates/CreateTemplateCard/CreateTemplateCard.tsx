@@ -11,7 +11,7 @@ export const CreateTemplateCard = (props: CreateTemplateCardProps) => {
   const {t} = useTranslation();
 
   return (
-    <button className="create-template-card" disabled={props.disabled} onClick={props.onClick}>
+    <button className="create-template-card" disabled={props.disabled} onClick={props.onClick} data-cy="create-template-card">
       <PlusIcon className="create-template-card__icon" />
       <div className="create-template-card__title">{t("Templates.CreateTemplateCard.create")}</div>
     </button>

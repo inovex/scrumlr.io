@@ -13,5 +13,8 @@ declare namespace Cypress {
        * Custom command to change the language to english.
        */
       changeLanguageToEnglish(): Chainable<void>
+
+      // create template with given name
+      createCustomTemplate(templateName: string): Chainable<void>
     }
   }

@@ -25,6 +25,8 @@ type SearchBarProps = {
   // style
   placeholder?: string;
   height: "normal" | "larger"; // normal e.g. TemplateEditor, larger e.g. Boards
+
+  dataCy?: string;
 };
 
 /*
@@ -111,6 +113,7 @@ export const Input = (props: SearchBarProps) => {
           value={props.input}
           onInput={updateInput}
           required={props.required}
+          data-cy={props.dataCy}
         />
         {renderRightIcon()}
       </div>
