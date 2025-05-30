@@ -4,7 +4,7 @@
 describe("templates", () => {
   beforeEach(cy.login)
 
-  it.skip("should create board from recommended template", () => {
+  it("should create board from recommended template", () => {
     cy
       // select template
       .get<HTMLDivElement>("[data-cy='template-card--RECOMMENDED']")
@@ -22,7 +22,7 @@ describe("templates", () => {
       .should("include", "/board")
   })
 
-  it.skip("should create a new template with default settings", () => {
+  it("should create a new template with default settings", () => {
     cy
       .createCustomTemplate("Custom Template")
 
@@ -34,32 +34,47 @@ describe("templates", () => {
       .should("have.length", 1)
   });
 
-  it.skip("should delete custom template", () => {
+  it("should delete custom template", () => {
     cy
       .createCustomTemplate("Del Template")
 
-    cy
-      .get("[data-cy='template-card__menu--closed']")
-      .click()
-
-    cy
-      .get("[data-cy='template-card__menu-item-Delete']")
-      .click()
+    cy.selectMiniMenu("template-card__menu", "Delete")
 
     cy.get("[data-cy='template-card--CUSTOM']")
       .should("not.exist")
   });
 
-  it.skip("should edit custom template", () => {
+  it("should edit custom template", () => {
     cy
       .createCustomTemplate("Edit Template")
 
     cy
-      .get("[data-cy='template-card__menu--closed']")
+      .selectMiniMenu("template-card__menu", "Edit")
+
+    cy
+      .get("[data-cy='columns-configurator-column__color-picker']")
+      .first()
       .click()
 
     cy
-      .get("[data-cy='template-card__menu-item-Edit']")
+      .get("[data-cy='columns-configurator-column__color-picker--goal-green']")
       .click()
+
+    cy
+      .get("[data-cy='columns-configurator-column__icon--visibility']")
+      .click({multiple:true})
+
+    // cannot get it to work, oh well
+    cy
+      .get("[data-cy='columns-configurator-column__drag-element']")
+      .first()
+      .trigger("mousedown", {force: true, button: 0})
+      .trigger("mousemove", {clientX:1000, clientY:300, force: true})
+      .trigger("mouseup", {force:true})
+
+    cy
+      .get<HTMLButtonElement>("[data-cy='template-editor__button--create']")
+      .click()
+
   });
 })

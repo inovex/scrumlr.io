@@ -17,6 +17,8 @@ type ColorPickerProps = {
 
   fitted?: boolean; // elements more narrow
   allowVertical?: boolean;
+
+  dataCy?: string;
 };
 
 export const ColorPicker = (props: ColorPickerProps) => {
@@ -43,6 +45,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
         tabIndex={0}
         role="button"
         onClick={props.attemptOpenColorPicker}
+        data-cy={props.dataCy}
       />
     );
   }
@@ -73,6 +76,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
                 // onMouseDown instead of onClick because onBlur has priority, and it might get closed before firing the event
                 onMouseDown={() => props.selectColor(color)}
                 className={classNames(color.toString, "color-picker__item-button", {"color-picker__item-button--fitted": props.fitted})}
+                data-cy={`${props.dataCy}--${color}`}
               >
                 <div className={`color-picker__color-option color-picker__color-option--${color.toString()}`} />
               </button>

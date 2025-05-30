@@ -63,7 +63,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
       <MenuIcon
         className={classNames("template-card__menu", "template-card__icon", "template-card__icon--menu")}
         onClick={() => setShowMiniMenu(true)}
-        data-cy="template-card__menu--closed"
+        data-cy="template-card__menu"
       />
     );
   };

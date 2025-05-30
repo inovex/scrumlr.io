@@ -99,6 +99,7 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
               "columns-configurator-column__drag-element--dragging": props.activeDrag,
             })}
             {...listeners}
+            data-cy="columns-configurator-column__drag-element"
           />
           <ColorPicker
             className={classNames(
@@ -113,15 +114,22 @@ export const ColumnsConfiguratorColumn = (props: ColumnsConfiguratorColumnProps)
             attemptOpenColorPicker={() => setOpenColorPicker(true)} // always allow to open
             closeColorPicker={() => setOpenColorPicker(false)}
             fitted
+            dataCy="columns-configurator-column__color-picker"
           />
           <button
             className={classNames("columns-configurator-column__button", {"columns-configurator-column__button--disabled": false}, "column-configurator-column__visibility-button")}
             onClick={() => props.editColumn?.(props.column, {visible: !props.column.visible})}
           >
             {props.column.visible ? (
-              <VisibleIcon className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--visible")} />
+              <VisibleIcon
+                className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--visible")}
+                data-cy="columns-configurator-column__icon--visibility"
+              />
             ) : (
-              <HiddenIcon className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--hidden")} />
+              <HiddenIcon
+                className={classNames("columns-configurator-column__icon", "columns-configurator-column__icon--hidden")}
+                data-cy="columns-configurator-column__icon--visibility"
+              />
             )}
           </button>
           <button

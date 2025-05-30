@@ -70,3 +70,13 @@ Cypress.Commands.add("createCustomTemplate", (templateName: string)=>{
     .should("not.be.disabled")
     .click()
 })
+
+Cypress.Commands.add("selectMiniMenu", (cyData: string, itemLabel: string)=>{
+  cy
+    .get(`[data-cy='${cyData}']`)
+    .click()
+
+  cy
+    .get(`[data-cy='${cyData}-item-${itemLabel}']`)
+    .click()
+})
