@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/database/types"
 )
 
 func TestRunnerForBoardTemplates(t *testing.T) {
@@ -16,14 +15,10 @@ func TestRunnerForBoardTemplates(t *testing.T) {
 	t.Run("Create=4", testCreateBoardTemplateWithName)
 	t.Run("Create=5", testCreateBoardTemplateWithDescription)
 
-	t.Run("Update=0", testUpdatePublicBoardTemplateToPassphraseBoardTemplate)
-	t.Run("Update=1", testUpdatePublicBoardTemplateToByInviteBoardTemplate)
-	t.Run("Update=2", testUpdateByPassphraseBoardTemplateToByInviteBoardTemplate)
-	t.Run("Update=3", testUpdateByInviteBoardTemplateToByPassphraseBoardTemplate)
-	t.Run("Update=4", testUpdateBoardTemplateName)
-	t.Run("Update=5", testUpdateBoardTemplateDescription)
-	t.Run("Update=6", testUpdateBoardTemplateFavouriteToTrue)
-	t.Run("Update=7", testUpdateBoardTemplateFavouriteFromTrueToFalse)
+	t.Run("Update=0", testUpdateBoardTemplateName)
+	t.Run("Update=1", testUpdateBoardTemplateDescription)
+	t.Run("Update=2", testUpdateBoardTemplateFavouriteToTrue)
+	t.Run("Update=3", testUpdateBoardTemplateFavouriteFromTrueToFalse)
 
 	t.Run("Get=0", testGetBoardTemplate)
 	t.Run("Get=1", testGetAllBoardTemplatesForSpecificUser)
@@ -35,11 +30,10 @@ func testCreatePublicBoardTemplate(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		Description:  nil,
-		Favourite:    nil,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator:     user.ID,
+		Name:        nil,
+		Description: nil,
+		Favourite:   nil,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -47,18 +41,16 @@ func testCreatePublicBoardTemplate(t *testing.T) {
 	assert.Nil(t, template.Name)
 	assert.Nil(t, template.Description)
 	assert.False(t, *template.Favourite)
-	assert.Equal(t, types.AccessPolicyPublic, template.AccessPolicy)
 }
 
 func testCreateByPassphraseBoardTemplate(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		Description:  nil,
-		Favourite:    nil,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator:     user.ID,
+		Name:        nil,
+		Description: nil,
+		Favourite:   nil,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -66,18 +58,16 @@ func testCreateByPassphraseBoardTemplate(t *testing.T) {
 	assert.Nil(t, template.Name)
 	assert.Nil(t, template.Description)
 	assert.False(t, *template.Favourite)
-	assert.Equal(t, types.AccessPolicyPublic, template.AccessPolicy)
 }
 
 func testCreateByInviteBoardTemplate(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		Description:  nil,
-		Favourite:    nil,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator:     user.ID,
+		Name:        nil,
+		Description: nil,
+		Favourite:   nil,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -85,7 +75,6 @@ func testCreateByInviteBoardTemplate(t *testing.T) {
 	assert.Nil(t, template.Name)
 	assert.Nil(t, template.Description)
 	assert.False(t, *template.Favourite)
-	assert.Equal(t, types.AccessPolicyPublic, template.AccessPolicy)
 }
 
 func testCreateBoardTemplateAlsoCreatesColumnTemplates(t *testing.T) {
@@ -97,11 +86,10 @@ func testCreateBoardTemplateAlsoCreatesColumnTemplates(t *testing.T) {
 	indexTwo := 1
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		Description:  nil,
-		Favourite:    nil,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator:     user.ID,
+		Name:        nil,
+		Description: nil,
+		Favourite:   nil,
 	}, []ColumnTemplateInsert{
 		{
 			Name:        "A",
@@ -145,11 +133,10 @@ func testCreateBoardTemplateWithName(t *testing.T) {
 	name := "Test Template"
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         &name,
-		Description:  nil,
-		Favourite:    nil,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator:     user.ID,
+		Name:        &name,
+		Description: nil,
+		Favourite:   nil,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -163,11 +150,10 @@ func testCreateBoardTemplateWithDescription(t *testing.T) {
 	description := "Test Description"
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		Description:  &description,
-		Favourite:    nil,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator:     user.ID,
+		Name:        nil,
+		Description: &description,
+		Favourite:   nil,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -175,101 +161,12 @@ func testCreateBoardTemplateWithDescription(t *testing.T) {
 	assert.Equal(t, "Test Description", *template.Description)
 }
 
-func testUpdatePublicBoardTemplateToPassphraseBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
-
-	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		AccessPolicy: types.AccessPolicyPublic,
-	}, []ColumnTemplateInsert{})
-
-	assert.Nil(t, err)
-	assert.NotNil(t, template)
-
-	updateAccessPolicy := types.AccessPolicyByPassphrase
-	updatedBoard, err := testDb.UpdateBoardTemplate(BoardTemplateUpdate{
-		ID:           template.ID,
-		AccessPolicy: &updateAccessPolicy,
-	})
-
-	assert.Nil(t, err)
-	assert.Equal(t, updateAccessPolicy, updatedBoard.AccessPolicy)
-}
-
-func testUpdatePublicBoardTemplateToByInviteBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
-
-	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		AccessPolicy: types.AccessPolicyPublic,
-	}, []ColumnTemplateInsert{})
-
-	assert.Nil(t, err)
-	assert.NotNil(t, template)
-
-	updateAccessPolicy := types.AccessPolicyByInvite
-	updatedBoard, err := testDb.UpdateBoardTemplate(BoardTemplateUpdate{
-		ID:           template.ID,
-		AccessPolicy: &updateAccessPolicy,
-	})
-
-	assert.Nil(t, err)
-	assert.Equal(t, updateAccessPolicy, updatedBoard.AccessPolicy)
-}
-
-func testUpdateByPassphraseBoardTemplateToByInviteBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
-
-	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		AccessPolicy: types.AccessPolicyByPassphrase,
-	}, []ColumnTemplateInsert{})
-
-	assert.Nil(t, err)
-	assert.NotNil(t, template)
-
-	updateAccessPolicy := types.AccessPolicyByInvite
-	updatedBoard, err := testDb.UpdateBoardTemplate(BoardTemplateUpdate{
-		ID:           template.ID,
-		AccessPolicy: &updateAccessPolicy,
-	})
-
-	assert.Nil(t, err)
-	assert.Equal(t, updateAccessPolicy, updatedBoard.AccessPolicy)
-}
-
-func testUpdateByInviteBoardTemplateToByPassphraseBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("User.jack").(*User)
-
-	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		AccessPolicy: types.AccessPolicyByInvite,
-	}, []ColumnTemplateInsert{})
-
-	assert.Nil(t, err)
-	assert.NotNil(t, template)
-
-	updateAccessPolicy := types.AccessPolicyByPassphrase
-	updatedBoard, err := testDb.UpdateBoardTemplate(BoardTemplateUpdate{
-		ID:           template.ID,
-		AccessPolicy: &updateAccessPolicy,
-	})
-
-	assert.Nil(t, err)
-	assert.Equal(t, updateAccessPolicy, updatedBoard.AccessPolicy)
-}
-
 func testUpdateBoardTemplateName(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         nil,
-		AccessPolicy: types.AccessPolicyByInvite,
+		Creator: user.ID,
+		Name:    nil,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -289,9 +186,8 @@ func testUpdateBoardTemplateDescription(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Description:  nil,
-		AccessPolicy: types.AccessPolicyByInvite,
+		Creator:     user.ID,
+		Description: nil,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -311,9 +207,8 @@ func testUpdateBoardTemplateFavouriteToTrue(t *testing.T) {
 	user := fixture.MustRow("User.jack").(*User)
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Favourite:    nil,
-		AccessPolicy: types.AccessPolicyByInvite,
+		Creator:   user.ID,
+		Favourite: nil,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -335,9 +230,8 @@ func testUpdateBoardTemplateFavouriteFromTrueToFalse(t *testing.T) {
 	favourited := true
 
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Favourite:    &favourited,
-		AccessPolicy: types.AccessPolicyByInvite,
+		Creator:   user.ID,
+		Favourite: &favourited,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -358,9 +252,8 @@ func testGetBoardTemplate(t *testing.T) {
 
 	name := "Get Template Test"
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         &name,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator: user.ID,
+		Name:    &name,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -380,18 +273,16 @@ func testGetAllBoardTemplatesForSpecificUser(t *testing.T) {
 
 	name := "Get Template Test"
 	templateOne, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         &name,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator: user.ID,
+		Name:    &name,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
 	assert.NotNil(t, templateOne)
 
 	templateTwo, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         &name,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator: user.ID,
+		Name:    &name,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
@@ -409,9 +300,8 @@ func testDeleteBoardTemplate(t *testing.T) {
 
 	name := "Delete Template Test"
 	template, err := testDb.CreateBoardTemplate(BoardTemplateInsert{
-		Creator:      user.ID,
-		Name:         &name,
-		AccessPolicy: types.AccessPolicyPublic,
+		Creator: user.ID,
+		Name:    &name,
 	}, []ColumnTemplateInsert{})
 
 	assert.Nil(t, err)
