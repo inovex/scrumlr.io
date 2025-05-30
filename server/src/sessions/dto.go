@@ -5,12 +5,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"scrumlr.io/server/users"
+	"scrumlr.io/server/common"
 )
 
 // BoardSession is the response for all participant requests.
 type BoardSession struct {
-	User users.User `json:"user"`
+	User uuid.UUID `json:"user"`
 
 	// Flag indicates whether user is online and connected to the board.
 	Connected bool `json:"connected"`
@@ -30,7 +30,7 @@ type BoardSession struct {
 	// can only view data, add notes and votes while the users with the other
 	// roles are able to promote users, change board settings, edit columns,
 	// start voting sessions etc.
-	Role SessionRole `json:"role"`
+	Role common.SessionRole `json:"role"`
 
 	//Reference for when board_session has been created
 	CreatedAt time.Time `json:"createdAt"`
@@ -57,7 +57,7 @@ type BoardSessionUpdateRequest struct {
 	// Can be either 'PARTICIPANT', 'MODERATOR' or 'OWNER'.
 	// Only moderators and owners can promote other participants. A regular participant is not
 	// allowed to change the role.
-	Role *SessionRole `json:"role"`
+	Role *common.SessionRole `json:"role"`
 
 	// The banned state of the participant
 	Banned *bool `json:"banned"`
@@ -79,13 +79,7 @@ type BoardSessionsUpdateRequest struct {
 }
 
 func (b *BoardSession) From(session DatabaseBoardSession) *BoardSession {
-	user := users.User{
-		ID:          session.User,
-		Name:        session.Name,
-		Avatar:      session.Avatar,
-		AccountType: session.AccountType,
-	}
-	b.User = user
+	b.User = session.User
 	b.Connected = session.Connected
 	b.Ready = session.Ready
 	b.RaisedHand = session.RaisedHand

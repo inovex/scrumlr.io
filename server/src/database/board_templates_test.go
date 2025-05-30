@@ -2,8 +2,9 @@ package database
 
 import (
 	"database/sql"
-	"scrumlr.io/server/boards"
 	"testing"
+
+	"scrumlr.io/server/boards"
 
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/boardtemplates"
@@ -400,7 +401,7 @@ func testGetAllBoardTemplatesForSpecificUser(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, templateTwo)
 
-	getTemplates, err := boardTemplatesDb.Get(user.ID)
+	getTemplates, err := boardTemplatesDb.GetAll(user.ID)
 
 	assert.Nil(t, err)
 	assert.IsType(t, []boardtemplates.DatabaseBoardTemplateFull{}, getTemplates)

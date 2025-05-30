@@ -1,11 +1,8 @@
-package sessions
+package common
 
 import (
 	"encoding/json"
 	"errors"
-	"slices"
-
-	"github.com/google/uuid"
 )
 
 // SessionRole is the role of a user on a board and within a board session.
@@ -36,15 +33,4 @@ func (sessionRole *SessionRole) UnmarshalJSON(b []byte) error {
 	}
 
 	return errors.New("invalid session role")
-}
-
-func CheckSessionRole(clientID uuid.UUID, sessions []*BoardSession, sessionsRoles []SessionRole) bool {
-	for _, session := range sessions {
-		if clientID == session.User.ID {
-			if slices.Contains(sessionsRoles, session.Role) {
-				return true
-			}
-		}
-	}
-	return false
 }

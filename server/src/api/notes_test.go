@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/boards"
 	"strings"
 	"testing"
+
+	"scrumlr.io/server/boards"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -19,7 +20,6 @@ import (
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/mocks/services"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
@@ -148,9 +148,9 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			s := new(Server)
 
 			noteMock := notes.NewMockNotesService(suite.T())
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			sessionMock := sessions.NewMockSessionService(suite.T())
-			voteMock := services.NewMockVotings(suite.T())
+			voteMock := votings.NewMockVotingService(suite.T())
 			s.notes = noteMock
 			s.boards = boardMock
 			s.sessions = sessionMock
@@ -207,9 +207,9 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			}
 
 			if tt.isLocked {
-				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID, votesToDelete).Return(nil)
+				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID).Return(nil)
 			} else {
-				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID, votesToDelete).Return(tt.err)
+				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID).Return(tt.err)
 			}
 
 			rr := httptest.NewRecorder()

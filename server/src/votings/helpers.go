@@ -2,7 +2,6 @@ package votings
 
 import (
 	"github.com/google/uuid"
-	"scrumlr.io/server/notes"
 	"scrumlr.io/server/technical_helper"
 )
 
@@ -18,7 +17,7 @@ func Votings(votings []VotingDB, votes []VoteDB) []*Voting {
 	return list
 }
 
-func (v *Voting) UpdateVoting(notes notes.NoteSlice) *VotingUpdated {
+func (v *Voting) UpdateVoting(notes []uuid.UUID) *VotingUpdated {
 	if v.hasNoResults() {
 		return &VotingUpdated{
 			Notes:  notes,
@@ -100,19 +99,19 @@ func getVotingWithResults(voting VotingDB, votes []VoteDB) *VotingResults {
 	return &votingResult
 }
 
-func (v *Voting) calculateTotalVoteCount(notes notes.NoteSlice) *VotingResults {
+func (v *Voting) calculateTotalVoteCount(notes []uuid.UUID) *VotingResults {
 	totalVotingCount := 0
 	votingResultsPerNode := &VotingResults{
 		Votes: make(map[uuid.UUID]VotingResultsPerNote),
 	}
 
 	for _, note := range notes {
-		if voteResults, ok := v.VotingResults.Votes[note.ID]; ok { // Check if note was voted on
-			votingResultsPerNode.Votes[note.ID] = VotingResultsPerNote{
+		if voteResults, ok := v.VotingResults.Votes[note]; ok { // Check if note was voted on
+			votingResultsPerNode.Votes[note] = VotingResultsPerNote{
 				Total: voteResults.Total,
 				Users: voteResults.Users,
 			}
-			totalVotingCount += v.VotingResults.Votes[note.ID].Total
+			totalVotingCount += v.VotingResults.Votes[note].Total
 		}
 	}
 

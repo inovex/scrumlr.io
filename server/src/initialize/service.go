@@ -2,7 +2,9 @@ package initialize
 
 import (
 	"net/http"
+
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/timeprovider"
 
 	"scrumlr.io/server/votings"
 
@@ -25,6 +27,7 @@ import (
 )
 
 type ServiceInitializer struct {
+	clock  timeprovider.TimeProvider
 	db     *bun.DB
 	rt     *realtime.Broker
 	ws     websocket.Upgrader
@@ -33,6 +36,7 @@ type ServiceInitializer struct {
 
 func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 	initializer := new(ServiceInitializer)
+	initializer.clock = timeprovider.NewClock()
 	initializer.db = db
 	initializer.rt = rt
 	initializer.ws = websocket.Upgrader{
@@ -46,14 +50,14 @@ func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 
 func (init *ServiceInitializer) InitializeBoardService(sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) boards.BoardService {
 	boardDB := boards.NewBoardDatabase(init.db)
-	boardService := boards.NewBoardService(boardDB, init.rt, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+	boardService := boards.NewBoardService(boardDB, init.rt, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, init.clock)
 
 	return boardService
 }
 
-func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService, votingService votings.VotingService) columns.ColumnService {
+func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService) columns.ColumnService {
 	columnDb := columns.NewColumnsDatabase(init.db)
-	columnService := columns.NewColumnService(columnDb, init.rt, noteService, votingService)
+	columnService := columns.NewColumnService(columnDb, init.rt, noteService)
 
 	return columnService
 }
@@ -98,9 +102,9 @@ func (init *ServiceInitializer) InitializeReactionService() reactions.ReactionSe
 	return reactionService
 }
 
-func (init *ServiceInitializer) InitializeSessionService() sessions.SessionService {
+func (init *ServiceInitializer) InitializeSessionService(columnService columns.ColumnService, noteService notes.NotesService) sessions.SessionService {
 	sessionDb := sessions.NewSessionDatabase(init.db)
-	sessionService := sessions.NewSessionService(sessionDb, init.rt)
+	sessionService := sessions.NewSessionService(sessionDb, init.rt, columnService, noteService)
 
 	return sessionService
 }
@@ -118,16 +122,16 @@ func (init *ServiceInitializer) InitializeWebsocket() sessionrequests.Websocket 
 	return websocket
 }
 
-func (init *ServiceInitializer) InitializeUserService() users.UserService {
+func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) users.UserService {
 	userDb := users.NewUserDatabase(init.db)
-	userService := users.NewUserService(userDb, init.rt)
+	userService := users.NewUserService(userDb, init.rt, sessionService)
 
 	return userService
 }
 
-func (init *ServiceInitializer) InitializeNotesService() notes.NotesService {
+func (init *ServiceInitializer) InitializeNotesService(votingService votings.VotingService) notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
-	notesService := notes.NewNotesService(notesDB, init.rt)
+	notesService := notes.NewNotesService(notesDB, init.rt, votingService)
 
 	return notesService
 }

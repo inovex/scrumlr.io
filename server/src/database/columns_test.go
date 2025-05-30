@@ -1,8 +1,9 @@
 package database
 
 import (
-	"scrumlr.io/server/boards"
 	"testing"
+
+	"scrumlr.io/server/boards"
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"

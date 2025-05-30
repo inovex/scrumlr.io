@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/boards"
 	"strings"
 	"testing"
 	"time"
+
+	"scrumlr.io/server/boards"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -16,7 +17,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/mocks/services"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
 )
@@ -63,7 +63,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 
 			s.boards = boardMock
 			accessPolicy := boards.Public
@@ -126,7 +126,7 @@ func (suite *BoardTestSuite) TestDeleteBoard() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			s.boards = boardMock
 			boardID := uuid.New()
 
@@ -158,7 +158,7 @@ func (suite *BoardTestSuite) TestGetBoards() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			s.boards = boardMock
 			userID := uuid.New()
 
@@ -215,7 +215,7 @@ func (suite *BoardTestSuite) TestGetBoard() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			s.boards = boardMock
 			boardID := uuid.New()
 
@@ -261,7 +261,7 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			sessionMock := sessions.NewMockSessionService(suite.T())
 			sessionRequestMock := sessionrequests.NewMockSessionRequestService(suite.T())
 			s.boards = boardMock
@@ -321,7 +321,7 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			s.boards = boardMock
 			boardID := uuid.New()
 
@@ -369,7 +369,7 @@ func (suite *BoardTestSuite) TestSetTimer() {
 	for _, te := range testParameterBundles {
 		suite.Run(te.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			s.boards = boardMock
 			boardID := uuid.New()
 
@@ -404,7 +404,7 @@ func (suite *BoardTestSuite) TestDeleteTimer() {
 	for _, tt := range *testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			s.boards = boardMock
 			boardID := uuid.New()
 
@@ -437,7 +437,7 @@ func (suite *BoardTestSuite) TestIncrementTimer() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			boardMock := services.NewMockBoards(suite.T())
+			boardMock := boards.NewMockBoardService(suite.T())
 			s.boards = boardMock
 			boardID := uuid.New()
 

@@ -1,6 +1,6 @@
-package users
+package common
 
-import "scrumlr.io/server/users/avatar"
+import "scrumlr.io/server/common/avatar"
 
 type Avatar struct {
 	AccentColorClass string                 `json:"accentColorClass,omitempty"`
