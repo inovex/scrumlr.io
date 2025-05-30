@@ -3,7 +3,6 @@ package dto
 import (
 	"github.com/google/uuid"
 	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
 )
 
 type BoardTemplate struct {
@@ -19,9 +18,6 @@ type BoardTemplate struct {
 	// Description of the board template
 	Description *string `json:"description"`
 
-	// The access policy
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
-
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
 }
@@ -31,7 +27,6 @@ func (bt *BoardTemplate) From(board database.BoardTemplate) *BoardTemplate {
 	bt.Creator = board.Creator
 	bt.Name = board.Name
 	bt.Description = board.Description
-	bt.AccessPolicy = board.AccessPolicy
 	bt.Favourite = board.Favourite
 
 	return bt
@@ -63,9 +58,6 @@ type CreateBoardTemplateRequest struct {
 	// Description of the board template
 	Description *string `json:"description"`
 
-	// Access policy of the board template
-	AccessPolicy types.AccessPolicy `json:"accessPolicy"`
-
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
 
@@ -82,9 +74,6 @@ type BoardTemplateUpdateRequest struct {
 
 	// Description of the board template
 	Description *string `json:"description"`
-
-	// The access policy
-	AccessPolicy *types.AccessPolicy `json:"accessPolicy"`
 
 	// The favourite status of the template
 	Favourite *bool `json:"favourite"`
