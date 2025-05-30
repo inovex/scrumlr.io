@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Select should render correctly 1`] = `
+<div>
+  <div
+    class="select"
+  >
+    <button
+      class="select-option select-option--0 select-option--active"
+      tabindex="0"
+    >
+      <div
+        class="select-option__icon-container"
+      >
+        <svg>
+          open.svg
+        </svg>
+      </div>
+      <div
+        class="select-option__label"
+      >
+        test 1
+      </div>
+      <div
+        class="select-option__description"
+      >
+        another test 1
+      </div>
+      <input
+        checked=""
+        class="select-option__radio"
+        type="radio"
+      />
+    </button>
+    <button
+      class="select-option select-option--1"
+      tabindex="0"
+    >
+      <div
+        class="select-option__icon-container"
+      >
+        <svg>
+          lock-closed.svg
+        </svg>
+      </div>
+      <div
+        class="select-option__label"
+      >
+        test 2
+      </div>
+      <div
+        class="select-option__description"
+      >
+        another test 2
+      </div>
+      <input
+        class="select-option__radio"
+        type="radio"
+      />
+    </button>
+    <button
+      class="select-option select-option--2"
+      tabindex="0"
+    >
+      <div
+        class="select-option__icon-container"
+      >
+        <svg>
+          key-protected.svg
+        </svg>
+      </div>
+      <div
+        class="select-option__label"
+      >
+        test 3
+      </div>
+      <div
+        class="select-option__description"
+      >
+        another test 3
+      </div>
+      <input
+        class="select-option__radio"
+        type="radio"
+      />
+    </button>
+  </div>
+</div>
+`;

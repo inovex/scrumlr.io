@@ -1,0 +1,68 @@
+@import "constants/style";
+
+.access-settings__wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.access-settings {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xl;
+
+  width: 37%;
+
+  padding: 40px $spacing--xl $spacing--xl $spacing--xl;
+
+  border-radius: $rounded--default;
+  background-color: $gray--000;
+
+  box-shadow: 0 6px 32px 0 rgba($blue--500, 0.26);
+}
+
+.access-settings__header {
+  display: flex;
+  justify-content: center;
+}
+
+.access-settings__title {
+  color: $navy--900;
+  font-size: $text--lg;
+  font-weight: 700;
+
+  padding-bottom: $spacing--xxs;
+  border-bottom: 3px solid $blue--500;
+}
+
+.access-settings__footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  gap: $spacing--md;
+}
+
+@media screen and (max-width: $breakpoint--smartphone) {
+  .access-settings {
+    width: 75%;
+
+    gap: $spacing--md;
+
+    padding: $spacing--xl $spacing--base $spacing--base $spacing--base;
+  }
+}
+
+[theme="dark"] {
+  .access-settings {
+    background-color: $navy--400;
+
+    box-shadow: 0 6px 32px 0 rgba($blue--400, 0.26);
+  }
+
+  .access-settings__title {
+    color: $gray--000;
+    border-color: $blue--400;
+  }
+}

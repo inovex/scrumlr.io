@@ -15,6 +15,8 @@ type ButtonProps = {
   icon?: ReactNode;
 
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+
+  dataCy?: string;
 };
 
 export const Button = (props: ButtonProps) => (
@@ -31,6 +33,7 @@ export const Button = (props: ButtonProps) => (
     )}
     disabled={props.disabled}
     onClick={props.onClick}
+    data-cy={props.dataCy}
   >
     {props.children}
     {props.icon}
