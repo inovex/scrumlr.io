@@ -2,6 +2,8 @@
 
 declare namespace Cypress {
     interface Chainable {
+      login(): Chainable<void>
+
       /**
        * Custom command to accept the cookies so the cookie banner is dismissed.
        */

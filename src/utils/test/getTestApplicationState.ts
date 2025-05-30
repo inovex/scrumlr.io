@@ -180,6 +180,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     moderating: false,
     serverTimeOffset: 0,
     anonymousLoginDisabled: false,
+    allowAnonymousCustomTemplates: true,
     enabledAuthProvider: [],
     feedbackEnabled: false,
     hotkeysAreActive: true,

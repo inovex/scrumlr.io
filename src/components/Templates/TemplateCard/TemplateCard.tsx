@@ -64,7 +64,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
   };
 
   return (
-    <div className="template-card">
+    <div className="template-card" data-cy={`template-card__${templateType}`}>
       {props.templateType === "CUSTOM" ? (
         <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => props.onToggleFavourite(template.id, template.favourite)} />
       ) : null}
@@ -88,6 +88,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
         small
         icon={<NextIcon />}
         onClick={() => props.onSelectTemplate({template, columns})}
+        dataCy="template-card__start-button"
       >
         {t("Templates.TemplateCard.start")}
       </Button>
