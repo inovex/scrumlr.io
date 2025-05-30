@@ -48,6 +48,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (des
         <button
           aria-label="Cancel"
           class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Cancel"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
           id="mini-menu-Cancel5"
@@ -59,6 +60,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (des
         <button
           aria-label="Save"
           class="mini-menu-item--save mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Save"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
           id="mini-menu-Save6"
@@ -99,6 +101,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nam
         <button
           aria-label="Cancel"
           class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Cancel"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
           id="mini-menu-Cancel3"
@@ -110,6 +113,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nam
         <button
           aria-label="Save"
           class="mini-menu-item--save mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Save"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
           id="mini-menu-Save4"

@@ -52,12 +52,14 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
         >
           <svg
             class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+            data-cy="columns-configurator-column__drag-element"
           >
             drag-and-drop.svg
           </svg>
           <span
             aria-label="current colorBacklog Blue"
             class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
+            data-cy="columns-configurator-column__color-picker"
             role="button"
             tabindex="0"
           />
@@ -66,6 +68,7 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
           >
             <svg
               class="columns-configurator-column__icon columns-configurator-column__icon--visible"
+              data-cy="columns-configurator-column__icon--visibility"
             >
               visible.svg
             </svg>
@@ -112,12 +115,14 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
         >
           <svg
             class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+            data-cy="columns-configurator-column__drag-element"
           >
             drag-and-drop.svg
           </svg>
           <span
             aria-label="current colorPlanning Pink"
             class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
+            data-cy="columns-configurator-column__color-picker"
             role="button"
             tabindex="0"
           />
@@ -126,6 +131,7 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
           >
             <svg
               class="columns-configurator-column__icon columns-configurator-column__icon--hidden"
+              data-cy="columns-configurator-column__icon--visibility"
             >
               hidden.svg
             </svg>

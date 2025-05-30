@@ -16,6 +16,7 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
         >
           <input
             class="input__input input__input--text"
+            data-cy="template-editor__name-input"
             placeholder="Board name"
             required=""
             tabindex="0"
@@ -86,12 +87,14 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
             >
               <svg
                 class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+                data-cy="columns-configurator-column__drag-element"
               >
                 drag-and-drop.svg
               </svg>
               <span
                 aria-label="current colorBacklog Blue"
                 class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
+                data-cy="columns-configurator-column__color-picker"
                 role="button"
                 tabindex="0"
               />
@@ -100,6 +103,7 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
               >
                 <svg
                   class="columns-configurator-column__icon columns-configurator-column__icon--visible"
+                  data-cy="columns-configurator-column__icon--visibility"
                 >
                   visible.svg
                 </svg>
@@ -146,12 +150,14 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
             >
               <svg
                 class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+                data-cy="columns-configurator-column__drag-element"
               >
                 drag-and-drop.svg
               </svg>
               <span
                 aria-label="current colorPlanning Pink"
                 class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
+                data-cy="columns-configurator-column__color-picker"
                 role="button"
                 tabindex="0"
               />
@@ -160,6 +166,7 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
               >
                 <svg
                   class="columns-configurator-column__icon columns-configurator-column__icon--hidden"
+                  data-cy="columns-configurator-column__icon--visibility"
                 >
                   hidden.svg
                 </svg>
@@ -239,11 +246,13 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
     >
       <button
         class="template-editor__button template-editor__button--return button button--secondary accent-color__planning-pink"
+        data-cy="template-editor__button--return"
       >
         Cancel
       </button>
       <button
         class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
+        data-cy="template-editor__button--create"
         disabled=""
       >
         Create template
@@ -272,6 +281,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
         >
           <input
             class="input__input input__input--text"
+            data-cy="template-editor__name-input"
             placeholder="Board name"
             required=""
             tabindex="0"
@@ -356,12 +366,14 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
             >
               <svg
                 class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+                data-cy="columns-configurator-column__drag-element"
               >
                 drag-and-drop.svg
               </svg>
               <span
                 aria-label="current colorBacklog Blue"
                 class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
+                data-cy="columns-configurator-column__color-picker"
                 role="button"
                 tabindex="0"
               />
@@ -370,6 +382,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
               >
                 <svg
                   class="columns-configurator-column__icon columns-configurator-column__icon--visible"
+                  data-cy="columns-configurator-column__icon--visibility"
                 >
                   visible.svg
                 </svg>
@@ -416,12 +429,14 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
             >
               <svg
                 class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+                data-cy="columns-configurator-column__drag-element"
               >
                 drag-and-drop.svg
               </svg>
               <span
                 aria-label="current colorPlanning Pink"
                 class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
+                data-cy="columns-configurator-column__color-picker"
                 role="button"
                 tabindex="0"
               />
@@ -430,6 +445,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
               >
                 <svg
                   class="columns-configurator-column__icon columns-configurator-column__icon--hidden"
+                  data-cy="columns-configurator-column__icon--visibility"
                 >
                   hidden.svg
                 </svg>
@@ -509,11 +525,13 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
     >
       <button
         class="template-editor__button template-editor__button--return button button--secondary accent-color__planning-pink"
+        data-cy="template-editor__button--return"
       >
         Cancel
       </button>
       <button
         class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
+        data-cy="template-editor__button--create"
       >
         Save
         <svg>

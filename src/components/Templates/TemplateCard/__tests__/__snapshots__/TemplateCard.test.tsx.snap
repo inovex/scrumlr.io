@@ -4,7 +4,7 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
 <div>
   <div
     class="template-card"
-    data-cy="template-card__CUSTOM"
+    data-cy="template-card--CUSTOM"
   >
     <button
       class="template-card__favourite favourite-button favourite-button--active accent-color__planning-pink"
@@ -32,6 +32,7 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
     </div>
     <svg
       class="template-card__menu template-card__icon template-card__icon--menu"
+      data-cy="template-card__menu"
     >
       three-dots.svg
     </svg>
@@ -77,7 +78,7 @@ exports[`TemplateCard should render correctly (recommended) 1`] = `
 <div>
   <div
     class="template-card"
-    data-cy="template-card__RECOMMENDED"
+    data-cy="template-card--RECOMMENDED"
   >
     <div
       class="template-card__head"
