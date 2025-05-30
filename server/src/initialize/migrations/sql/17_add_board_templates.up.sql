@@ -5,6 +5,7 @@ create table board_templates
     created_at                timestamptz       default now(),
     "name"                    varchar(128),
     description               varchar(300),
+    access_policy             access_policy     not null DEFAULT 'PUBLIC',
     "favourite"  boolean      not null DEFAULT false
 );
 
@@ -15,7 +16,6 @@ create table column_templates
     name               varchar(128) not null,
     check (name <> ''),
     description        varchar(128),
-    access_policy      access_policy     not null DEFAULT 'PUBLIC',
     color              color        not null default 'backlog-blue',
     "visible"          boolean               DEFAULT false,
     "index"            int          not null DEFAULT 0
