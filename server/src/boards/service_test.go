@@ -1,315 +1,296 @@
 package boards
 
 import (
-  "context"
-  "errors"
-  "github.com/stretchr/testify/mock"
-  "github.com/uptrace/bun"
-  "scrumlr.io/server/columns"
-  brokerMock "scrumlr.io/server/mocks/realtime"
-  "scrumlr.io/server/notes"
-  "scrumlr.io/server/reactions"
-  "scrumlr.io/server/sessionrequests"
-  "scrumlr.io/server/sessions"
-  "scrumlr.io/server/votings"
-  "testing"
-  "time"
+	"context"
+	"errors"
+	"testing"
+	"time"
 
-  "github.com/google/uuid"
-  "github.com/stretchr/testify/assert"
-  "github.com/stretchr/testify/require"
-  "scrumlr.io/server/realtime"
+	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/columns"
+	brokerMock "scrumlr.io/server/mocks/realtime"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/timeprovider"
+	"scrumlr.io/server/votings"
+
+	"github.com/google/uuid"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"scrumlr.io/server/realtime"
 )
 
 func TestGet(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	boardID := uuid.New()
 
-  mockRealtime := new(realtime.Broker)
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().GetBoard(boardID).Return(DatabaseBoard{ID: boardID}, nil)
 
-  service := NewBoardService(boardMock, mockRealtime, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  boardID := uuid.New()
-  mockBoard := DatabaseBoard{ID: boardID}
+	mockBroker := brokerMock.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  boardMock.EXPECT().GetBoard(boardID).Return(mockBoard, nil)
+	mockClock := timeprovider.NewMockTimeProvider(t)
 
-  result, err := service.Get(ctx, boardID)
-  require.NoError(t, err)
-  require.NotNil(t, result)
-  assert.Equal(t, boardID, result.ID)
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	result, err := service.Get(context.Background(), boardID)
+
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	assert.Equal(t, boardID, result.ID)
 }
 
 func TestGetError(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	boardID := uuid.New()
+	dbError := errors.New("db error")
 
-  mockRealtime := new(realtime.Broker)
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().GetBoard(boardID).Return(DatabaseBoard{}, dbError)
 
-  service := NewBoardService(boardMock, mockRealtime, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  boardID := uuid.New()
-  boardMock.EXPECT().GetBoard(boardID).Return(DatabaseBoard{}, errors.New("db error"))
+	mockBroker := brokerMock.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  result, err := service.Get(ctx, boardID)
-  require.Error(t, err)
-  assert.Nil(t, result)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	result, err := service.Get(context.Background(), boardID)
+
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Equal(t, dbError, err)
 }
 
 func TestCreate(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	boardID := uuid.New()
+	userID := uuid.New()
+	boardName := "Test Board"
+	boardDescription := "A test board"
+	index := 0
 
-  mockRealtime := new(realtime.Broker)
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().CreateBoard(userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public},
+		[]columns.DatabaseColumnInsert{{Name: boardName, Color: columns.ColorGoalGreen, Visible: nil, Index: &index}}).
+		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: Public}, nil)
 
-  service := NewBoardService(boardMock, mockRealtime, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  boardID := uuid.New()
-  userID := uuid.New()
+	mockBroker := brokerMock.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  boardName := "Test Board"
-  boardDescription := "A test board"
+	mockClock := timeprovider.NewMockTimeProvider(t)
 
-  req := CreateBoardRequest{
-    Name:         &boardName,
-    Description:  &boardDescription,
-    Owner:        userID,
-    AccessPolicy: Public,
-    Columns: []columns.ColumnRequest{{
-      Name:        boardName,
-      Description: boardDescription,
-      Color:       columns.ColorGoalGreen,
-      Visible:     nil,
-      Index:       nil,
-      Board:       boardID,
-      User:        userID,
-    }},
-  }
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	result, err := service.Create(context.Background(), CreateBoardRequest{Name: &boardName, Description: &boardDescription, Owner: userID, AccessPolicy: Public, Columns: []columns.ColumnRequest{
+		{Board: boardID, Name: boardName, Description: boardDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index, User: userID},
+	}})
 
-  expectedBoard := DatabaseBoard{ID: boardID}
-  boardMock.EXPECT().CreateBoard(userID, mock.Anything, mock.Anything).Return(expectedBoard, nil)
-
-  result, err := service.Create(ctx, req)
-  require.NoError(t, err)
-  require.NotNil(t, result)
-  assert.Equal(t, boardID, result.ID)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	assert.Equal(t, boardID, result.ID)
 }
 
 func TestCreate_ByPassphraseMissing(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	userID := uuid.New()
+	boardName := "Test Board"
+	boardDescription := "A test board"
 
-  mockRealtime := new(realtime.Broker)
+	mockBoardDatabase := NewMockBoardDatabase(t)
 
-  service := NewBoardService(boardMock, mockRealtime, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  userID := uuid.New()
+	mockBroker := brokerMock.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  boardName := "Test Board"
-  boardDescription := "A test board"
+	mockClock := timeprovider.NewMockTimeProvider(t)
 
-  req := CreateBoardRequest{
-    Name:         &boardName,
-    Description:  &boardDescription,
-    Owner:        userID,
-    AccessPolicy: ByPassphrase,
-    Columns:      nil,
-    Passphrase:   nil,
-  }
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	result, err := service.Create(context.Background(), CreateBoardRequest{Name: &boardName, Description: &boardDescription, Owner: userID, AccessPolicy: ByPassphrase, Columns: nil, Passphrase: nil})
 
-  boardMock.EXPECT().CreateBoard(userID, mock.Anything, mock.Anything).Return(DatabaseBoard{}, errors.New("passphrase is required"))
-
-  result, err := service.Create(ctx, req)
-  require.Error(t, err)
-  assert.Nil(t, result)
+	require.Error(t, err)
+	assert.Nil(t, result)
+	assert.Equal(t, errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'"), err)
 }
 
 func TestDelete(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	boardID := uuid.New()
 
-  mockRealtime := new(realtime.Broker)
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().DeleteBoard(boardID).Return(nil)
 
-  service := NewBoardService(boardMock, mockRealtime, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  boardID := uuid.New()
-  boardMock.EXPECT().DeleteBoard(boardID).Return(nil)
+	mockBroker := brokerMock.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  err := service.Delete(ctx, boardID)
-  require.NoError(t, err)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	err := service.Delete(context.Background(), boardID)
+
+	require.NoError(t, err)
 }
 
 func TestUpdate(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	boardID := uuid.New()
+	updatedName := "Updated Board Name"
 
-  mockBroker := brokerMock.NewMockClient(t)
-  broker := new(realtime.Broker)
-  broker.Con = mockBroker
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().UpdateBoard(DatabaseBoardUpdate{ID: boardID, Name: &updatedName}).
+		Return(DatabaseBoard{ID: boardID, Name: &updatedName}, nil)
 
-  service := NewBoardService(boardMock, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  boardID := uuid.New()
-  updatedName := "Updated Board Name"
+	columnMock := columns.NewMockColumnService(t)
+	columnMock.EXPECT().GetAll(context.Background(), boardID).Return([]*columns.Column{}, nil)
 
-  updateReq := BoardUpdateRequest{
-    ID:   boardID,
-    Name: &updatedName,
-  }
+	noteMock := notes.NewMockNotesService(t)
+	noteMock.EXPECT().GetAll(context.Background(), boardID).Return([]*notes.Note{}, nil)
 
-  expectedBoard := DatabaseBoard{
-    ID:   boardID,
-    Name: &updatedName,
-  }
-  boardMock.EXPECT().UpdateBoard(updateReq).Return(expectedBoard, nil)
-  columnMock.EXPECT().GetAll(ctx, boardID).Return([]*columns.Column{}, nil)
-  noteMock.EXPECT().GetAll(ctx, boardID).Return([]*notes.Note{}, nil)
-  mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
+	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  result, err := service.Update(ctx, updateReq)
-  require.NoError(t, err)
-  assert.Equal(t, boardID, result.ID)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	result, err := service.Update(context.Background(), BoardUpdateRequest{ID: boardID, Name: &updatedName})
+
+	require.NoError(t, err)
+	assert.Equal(t, boardID, result.ID)
 }
 
 func TestSetTimer(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	boardID := uuid.New()
+	timerStart := time.Now().Local()
+	timerEnd := timerStart.Add(time.Minute * time.Duration(5))
 
-  mockBroker := brokerMock.NewMockClient(t)
-  broker := new(realtime.Broker)
-  broker.Con = mockBroker
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &timerStart, TimerEnd: &timerEnd}).
+		Return(DatabaseBoard{ID: boardID, TimerEnd: &timerEnd}, nil)
 
-  service := NewBoardService(boardMock, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  boardID := uuid.New()
+	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  timerStart := time.Now().Local()
-  timerEnd := timerStart.Add(time.Minute * time.Duration(5))
+	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(timerStart)
 
-  boardMock.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{
-    BaseModel:  bun.BaseModel{},
-    ID:         boardID,
-    TimerStart: &timerStart,
-    TimerEnd:   &timerEnd,
-  }).Return(DatabaseBoard{ID: boardID, TimerEnd: &timerEnd}, nil)
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	result, err := service.SetTimer(context.Background(), boardID, 5)
 
-  result, err := service.SetTimer(ctx, boardID, 5)
-  require.NoError(t, err)
-  require.NotNil(t, result)
-  assert.Equal(t, boardID, result.ID)
+	require.NoError(t, err)
+	require.NotNil(t, result)
+	assert.Equal(t, boardID, result.ID)
 }
 
 func TestDeleteTimer(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	boardID := uuid.New()
 
-  mockBroker := brokerMock.NewMockClient(t)
-  broker := new(realtime.Broker)
-  broker.Con = mockBroker
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{ID: boardID, TimerStart: nil, TimerEnd: nil}).
+		Return(DatabaseBoard{ID: boardID}, nil)
 
-  service := NewBoardService(boardMock, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  boardID := uuid.New()
-  boardMock.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{
-    BaseModel:  bun.BaseModel{},
-    ID:         boardID,
-    TimerStart: nil,
-    TimerEnd:   nil,
-  }).Return(DatabaseBoard{ID: boardID}, nil)
+	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  result, err := service.DeleteTimer(ctx, boardID)
-  require.NoError(t, err)
-  assert.Equal(t, boardID, result.ID)
-  assert.Equal(t, (*time.Time)(nil), result.TimerStart)
-  assert.Equal(t, (*time.Time)(nil), result.TimerEnd)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	result, err := service.DeleteTimer(context.Background(), boardID)
+
+	require.NoError(t, err)
+	assert.Equal(t, boardID, result.ID)
+	assert.Equal(t, (*time.Time)(nil), result.TimerStart)
+	assert.Equal(t, (*time.Time)(nil), result.TimerEnd)
 }
 
 func TestIncrementTimer(t *testing.T) {
-  ctx := context.Background()
-  boardMock := NewMockBoardDatabase(t)
-  sessionsMock := sessions.NewMockSessionService(t)
-  sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
-  columnMock := columns.NewMockColumnService(t)
-  noteMock := notes.NewMockNotesService(t)
-  reactionMock := reactions.NewMockReactionService(t)
-  votingMock := votings.NewMockVotingService(t)
+	boardID := uuid.New()
+	now := time.Now().Local()
+	updatedTimer := now.Add(time.Duration(1) * time.Minute)
+	updatedTimerEnd := updatedTimer.Add(time.Minute * time.Duration(1))
 
-  mockBroker := brokerMock.NewMockClient(t)
-  broker := new(realtime.Broker)
-  broker.Con = mockBroker
+	mockBoardDatabase := NewMockBoardDatabase(t)
+	mockBoardDatabase.EXPECT().GetBoard(boardID).
+		Return(DatabaseBoard{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimer}, nil)
+	mockBoardDatabase.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{ID: boardID, TimerStart: &now, TimerEnd: &updatedTimerEnd}).
+		Return(DatabaseBoard{ID: boardID, TimerStart: &updatedTimer, TimerEnd: &updatedTimerEnd}, nil)
 
-  service := NewBoardService(boardMock, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock)
+	sessionsMock := sessions.NewMockSessionService(t)
+	sessionRequestMock := sessionrequests.NewMockSessionRequestService(t)
+	columnMock := columns.NewMockColumnService(t)
+	noteMock := notes.NewMockNotesService(t)
+	reactionMock := reactions.NewMockReactionService(t)
+	votingMock := votings.NewMockVotingService(t)
 
-  boardID := uuid.New()
-  now := time.Now()
+	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-  updatedTimer := now.Add(1 * time.Minute)
+	mockClock := timeprovider.NewMockTimeProvider(t)
+	mockClock.EXPECT().Now().Return(now)
 
-  mockBoard := DatabaseBoard{
-    ID:         boardID,
-    TimerStart: &now,
-    TimerEnd:   &updatedTimer,
-  }
-  updatedTimerEnd := updatedTimer.Add(time.Minute * 1)
-  boardMock.EXPECT().GetBoard(boardID).Return(mockBoard, nil)
-  boardMock.EXPECT().UpdateBoardTimer(DatabaseBoardTimerUpdate{
-    BaseModel:  bun.BaseModel{},
-    ID:         boardID,
-    TimerStart: &now,
-    TimerEnd:   &updatedTimerEnd,
-  }).Return(mockBoard, nil)
-  mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(nil)
+	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
+	result, err := service.IncrementTimer(context.Background(), boardID)
 
-  result, err := service.IncrementTimer(ctx, boardID)
-  require.NoError(t, err)
-  assert.Equal(t, boardID, result.ID)
-  assert.Equal(t, updatedTimerEnd, *result.TimerEnd)
+	require.NoError(t, err)
+	assert.Equal(t, boardID, result.ID)
+	assert.Equal(t, updatedTimerEnd, *result.TimerEnd)
 }

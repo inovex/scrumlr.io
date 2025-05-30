@@ -4,12 +4,11 @@ import (
 	"context"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common/filter"
-	"scrumlr.io/server/notes"
 )
 
 type VotingService interface {
 	Create(ctx context.Context, body VotingCreateRequest) (*Voting, error)
-	Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*notes.Note) (*Voting, error)
+	Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*uuid.UUID) (*Voting, error)
 	Get(ctx context.Context, board, id uuid.UUID) (*Voting, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]*Voting, error)
 	GetOpen(ctx context.Context, board uuid.UUID) (*Voting, error)

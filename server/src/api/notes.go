@@ -130,7 +130,7 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if err := s.notes.Delete(r.Context(), body, note, votesToDelete); err != nil {
+	if err := s.notes.Delete(r.Context(), body, note); err != nil {
 		common.Throw(w, r, err)
 		return
 	}

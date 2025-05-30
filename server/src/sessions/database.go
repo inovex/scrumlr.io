@@ -22,7 +22,7 @@ func NewSessionDatabase(database *bun.DB) SessionDatabase {
 }
 
 func (database *SessionDB) Create(boardSession DatabaseBoardSessionInsert) (DatabaseBoardSession, error) {
-	if boardSession.Role == OwnerRole {
+	if boardSession.Role == common.OwnerRole {
 		return DatabaseBoardSession{}, errors.New("not allowed to create board session with owner role")
 	}
 
@@ -64,8 +64,8 @@ func (database *SessionDB) Update(update DatabaseBoardSessionUpdate) (DatabaseBo
 	}
 	if update.Role != nil {
 		updateQuery = updateQuery.Column("role")
-		if *update.Role == OwnerRole {
-			updateQuery.Where("role = ?", OwnerRole)
+		if *update.Role == common.OwnerRole {
+			updateQuery.Where("role = ?", common.OwnerRole)
 		}
 	}
 	if update.Banned != nil {
@@ -130,7 +130,7 @@ func (database *SessionDB) ModeratorExists(board, user uuid.UUID) (bool, error) 
 		Table("board_sessions").
 		Where("\"board\" = ?", board).
 		Where("\"user\" = ?", user).
-		Where("role <> ?", ParticipantRole).
+		Where("role <> ?", common.ParticipantRole).
 		Exists(context.Background())
 }
 

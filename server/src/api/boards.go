@@ -6,9 +6,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
+
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/votings"
-	"strconv"
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
@@ -368,8 +369,9 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
-				if session.User.ID == note.Author {
-					author = session.User.Name
+				if session.User == note.Author {
+					user, _ := s.users.Get(r.Context(), session.User) // TODO handle error
+					author = user.Name
 				}
 			}
 

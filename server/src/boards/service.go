@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
@@ -14,11 +16,12 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
-	"time"
 )
 
 type Service struct {
+	clock    timeprovider.TimeProvider
 	database BoardDatabase
 	realtime *realtime.Broker
 
@@ -29,6 +32,7 @@ type Service struct {
 	reactionService       reactions.ReactionService
 	votingService         votings.VotingService
 }
+
 type BoardDatabase interface {
 	CreateBoard(creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error)
 	UpdateBoardTimer(update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
@@ -38,8 +42,9 @@ type BoardDatabase interface {
 	GetBoards(userID uuid.UUID) ([]DatabaseBoard, error)
 }
 
-func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService) BoardService {
+func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, clock timeprovider.TimeProvider) BoardService {
 	b := new(Service)
+	b.clock = clock
 	b.database = db
 	b.realtime = rt
 	b.sessionService = sessionService
@@ -103,8 +108,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	// map request on column objects to insert into database
 	newColumns := make([]columns.DatabaseColumnInsert, 0, len(body.Columns))
 	for index, value := range body.Columns {
-		var currentIndex = index
-		newColumns = append(newColumns, columns.DatabaseColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible, Index: &currentIndex})
+		newColumns = append(newColumns, columns.DatabaseColumnInsert{Name: value.Name, Color: value.Color, Visible: value.Visible, Index: &index})
 	}
 
 	// create the board
@@ -161,7 +165,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 		columnNum := len(boardColumns)
 		dtoBoard := new(Board).From(board)
 		for _, session := range boardSessions {
-			if session.User.ID == user {
+			if session.User == user {
 				sessionCreated := session.CreatedAt
 				OverviewBoards[i] = &BoardOverview{
 					Board:        dtoBoard,
@@ -230,7 +234,7 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 
 func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*Board, error) {
 	log := logger.FromContext(ctx)
-	timerStart := time.Now().Local()
+	timerStart := service.clock.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(minutes))
 	update := DatabaseBoardTimerUpdate{
 		ID:         id,
@@ -275,7 +279,7 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 	var timerStart time.Time
 	var timerEnd time.Time
 
-	currentTime := time.Now().Local()
+	currentTime := service.clock.Now().Local()
 
 	if board.TimerEnd.After(currentTime) {
 		timerStart = *board.TimerStart

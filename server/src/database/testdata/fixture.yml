@@ -42,6 +42,33 @@
       favourite: false
       created_at: '{{ now }}'
 
+- model: DatabaseColumnTemplate
+  rows:
+    - _id: firstColumnTemplate
+      id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: First column
+      description: Fist column description
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: secondColumnTemplate
+      id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: Second column
+      description: Second column description
+      color: backlog-blue
+      visible: true
+      index: 1
+    - _id: thirdColumnTemplate
+      id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: Third column
+      description: Third column description
+      color: backlog-blue
+      visible: true
+      index: 2
+
 - model: DatabaseBoard
   rows:
     - _id: columnsTestBoard
@@ -180,33 +207,6 @@
       board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
       user: '{{ $.DatabaseUser.justin.ID }}'
       role: OWNER
-
-- model: DatabaseColumnTemplate
-  rows:
-    - _id: firstColumnTemplate
-      id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
-      name: First column
-      description: Fist column description
-      color: backlog-blue
-      visible: true
-      index: 0
-    - _id: secondColumnTemplate
-      id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
-      name: Second column
-      description: Second column description
-      color: backlog-blue
-      visible: true
-      index: 1
-    - _id: thirdColumnTemplate
-      id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
-      name: Third column
-      description: Third column description
-      color: backlog-blue
-      visible: true
-      index: 2
 
 - model: DatabaseColumn
   rows:
@@ -359,7 +359,7 @@
       text: "Just do it!"
       stack: "3113b296-986c-4e23-adf7-c3fa19224bd4"
       rank: 0
-    - _id: g
+    - _id: notesTestA1
       id: "00000000-0000-0000-0000-0000000000a1"
       board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
       author: '{{ $.DatabaseUser.jack.ID }}'
