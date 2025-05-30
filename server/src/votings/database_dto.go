@@ -1,13 +1,14 @@
 package votings
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"time"
 )
 
 type VotingDB struct {
-	bun.BaseModel      `bun:"table:votings"`
+	bun.BaseModel      `bun:"table:votings,alias:voting"`
 	ID                 uuid.UUID
 	Board              uuid.UUID
 	CreatedAt          time.Time

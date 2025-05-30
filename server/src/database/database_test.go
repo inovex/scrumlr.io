@@ -4,11 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/uptrace/bun"
 	"log"
+	"time"
+
+	"github.com/uptrace/bun"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/votings"
-	"time"
 
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columns"

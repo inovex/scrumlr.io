@@ -61,8 +61,11 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, err)
 		return
 	}
-
-	voting, err := s.votings.Update(r.Context(), body, notes)
+	var notesID []*uuid.UUID
+	for _, note := range notes {
+		notesID = append(notesID, &note.ID)
+	}
+	voting, err := s.votings.Update(r.Context(), body, notesID)
 	if err != nil {
 
 		common.Throw(w, r, err)

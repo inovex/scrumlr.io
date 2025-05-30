@@ -83,7 +83,7 @@ type NotePosition struct {
 	Rank int `json:"rank"`
 }
 
-func (n *Note) From(note *NoteDB) *Note {
+func (n *Note) From(note NoteDB) *Note {
 	n.ID = note.ID
 	n.Author = note.Author
 	n.Text = note.Text
@@ -96,7 +96,7 @@ func (n *Note) From(note *NoteDB) *Note {
 	return n
 }
 
-func Notes(notes []*NoteDB) []*Note {
+func Notes(notes []NoteDB) []*Note {
 	if notes == nil {
 		return nil
 	}

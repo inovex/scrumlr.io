@@ -11,7 +11,6 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/mocks/services"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
@@ -42,7 +41,7 @@ func (suite *VoteTestSuite) TestAddVote() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			votingMock := services.NewMockVotings(suite.T())
+			votingMock := votings.NewMockVotingService(suite.T())
 
 			boardId, _ := uuid.NewRandom()
 			userId, _ := uuid.NewRandom()

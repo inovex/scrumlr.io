@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"fmt"
-	"scrumlr.io/server/auth"
 	"strings"
 	"time"
 
@@ -25,34 +24,34 @@ func NewUserDatabase(database *bun.DB) UserDatabase {
 
 func (db *DB) CreateAnonymousUser(name string) (DatabaseUser, error) {
 	var user DatabaseUser
-	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: auth.Anonymous}
+	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: common.Anonymous}
 	_, err := db.db.NewInsert().Model(&insert).Returning("*").Exec(context.Background(), &user)
 
 	return user, err
 }
 
 func (db *DB) CreateAppleUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.Apple, "apple_users")
+	return db.createExternalUser(id, name, avatarUrl, common.Apple, "apple_users")
 }
 
 func (db *DB) CreateAzureAdUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.AzureAd, "azure_ad_users")
+	return db.createExternalUser(id, name, avatarUrl, common.AzureAd, "azure_ad_users")
 }
 
 func (db *DB) CreateGitHubUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.GitHub, "github_users")
+	return db.createExternalUser(id, name, avatarUrl, common.GitHub, "github_users")
 }
 
 func (db *DB) CreateGoogleUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.Google, "google_users")
+	return db.createExternalUser(id, name, avatarUrl, common.Google, "google_users")
 }
 
 func (db *DB) CreateMicrosoftUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.Microsoft, "microsoft_users")
+	return db.createExternalUser(id, name, avatarUrl, common.Microsoft, "microsoft_users")
 }
 
 func (db *DB) CreateOIDCUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, auth.TypeOIDC, "oidc_users")
+	return db.createExternalUser(id, name, avatarUrl, common.TypeOIDC, "oidc_users")
 }
 
 func (db *DB) UpdateUser(update DatabaseUserUpdate) (DatabaseUser, error) {
@@ -78,7 +77,7 @@ func (db *DB) IsUserAnonymous(id uuid.UUID) (bool, error) {
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
-		Where("account_type = ?", auth.Anonymous).
+		Where("account_type = ?", common.Anonymous).
 		Count(context.Background())
 
 	if err != nil {
@@ -93,7 +92,7 @@ func (db *DB) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
-		Where("account_type = ?", auth.Anonymous).
+		Where("account_type = ?", common.Anonymous).
 		Where("key_migration IS NULL").
 		Count(context.Background())
 
@@ -116,15 +115,41 @@ func (db *DB) SetKeyMigration(id uuid.UUID) (DatabaseUser, error) {
 	return user, err
 }
 
-func (db *DB) createExternalUser(id, name, avatarUrl string, accountType auth.AccountType, table string) (DatabaseUser, error) {
+func (db *DB) createExternalUser(id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
 	name = strings.TrimSpace(name)
-	existingUser := db.db.NewSelect().TableExpr(table).ColumnExpr("*").Where("id = ?", id)
-	existsCheck := db.db.NewSelect().ColumnExpr("CASE WHEN (SELECT COUNT(*) as count FROM \"existing_user\")=1 THEN true ELSE false END AS user_exists")
-	updateName := db.db.NewUpdate().Model((*DatabaseUser)(nil)).Column("name").Set("name = ?", name).Where("(SELECT user_exists FROM exists_check)").Where("id=(SELECT \"user\" FROM \"existing_user\")").Where("name=(SELECT name FROM \"existing_user\")")
-	createNewUser := db.db.NewInsert().Model((*DatabaseUser)(nil)).ColumnExpr("name, account_type").TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query WHERE (SELECT NOT user_exists FROM exists_check)", accountType), name).Returning("id")
-	selectUser := db.db.NewSelect().ColumnExpr("CASE WHEN (SELECT user_exists FROM exists_check) IS TRUE THEN (SELECT \"user\" FROM \"existing_user\") ELSE (SELECT id FROM \"create_new_user\") END AS id")
-	insertExternalUser := db.db.NewInsert().TableExpr(table).ColumnExpr("\"user\", id, name, avatar_url").TableExpr("(SELECT (SELECT id::uuid FROM select_user) as \"user\", ? as id, ? as name, ? as avatar_url) as sub_query", id, name, avatarUrl).On("CONFLICT (id) DO UPDATE SET name=?, avatar_url=?", name, avatarUrl)
-	selectExistingUser := db.db.NewSelect().Model((*DatabaseUser)(nil)).Where("id=(SELECT id FROM select_user)")
+	existingUser := db.db.NewSelect().
+		TableExpr(table).
+		ColumnExpr("*").
+		Where("id = ?", id)
+
+	existsCheck := db.db.NewSelect().
+		ColumnExpr("CASE WHEN (SELECT COUNT(*) as count FROM \"existing_user\")=1 THEN true ELSE false END AS user_exists")
+
+	updateName := db.db.NewUpdate().
+		Model((*DatabaseUser)(nil)).
+		Column("name").Set("name = ?", name).
+		Where("(SELECT user_exists FROM exists_check)").
+		Where("id=(SELECT \"user\" FROM \"existing_user\")").
+		Where("name=(SELECT name FROM \"existing_user\")")
+
+	createNewUser := db.db.NewInsert().
+		Model((*DatabaseUser)(nil)).
+		ColumnExpr("name, account_type").
+		TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query WHERE (SELECT NOT user_exists FROM exists_check)", accountType), name).
+		Returning("id")
+
+	selectUser := db.db.NewSelect().
+		ColumnExpr("CASE WHEN (SELECT user_exists FROM exists_check) IS TRUE THEN (SELECT \"user\" FROM \"existing_user\") ELSE (SELECT id FROM \"create_new_user\") END AS id")
+
+	insertExternalUser := db.db.NewInsert().
+		TableExpr(table).
+		ColumnExpr("\"user\", id, name, avatar_url").
+		TableExpr("(SELECT (SELECT id::uuid FROM select_user) as \"user\", ? as id, ? as name, ? as avatar_url) as sub_query", id, name, avatarUrl).
+		On("CONFLICT (id) DO UPDATE SET name=?, avatar_url=?", name, avatarUrl)
+
+	selectExistingUser := db.db.NewSelect().
+		Model((*DatabaseUser)(nil)).
+		Where("id=(SELECT id FROM select_user)")
 
 	var user DatabaseUser
 	err := db.db.NewSelect().

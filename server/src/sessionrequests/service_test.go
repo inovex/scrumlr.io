@@ -17,7 +17,6 @@ import (
 	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/users"
 )
 
 func TestGetSessionRequest(t *testing.T) {
@@ -272,7 +271,7 @@ func TestUpdatesessionRequest(t *testing.T) {
 
 	mockSessionService := sessions.NewMockSessionService(t)
 	mockSessionService.EXPECT().Create(context.Background(), boardId, userId).
-		Return(&sessions.BoardSession{Board: boardId, User: users.User{ID: userId}}, nil)
+		Return(&sessions.BoardSession{Board: boardId, User: userId}, nil)
 
 	mockBroker := brokerMock.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
