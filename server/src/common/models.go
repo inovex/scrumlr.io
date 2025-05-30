@@ -5,7 +5,7 @@ import (
 )
 
 type DatabaseBoard struct {
-	bun.BaseModel `bun:"table:boards"`
+	bun.BaseModel `bun:"table:boards,alias:board"`
 }
 
 type DatabaseBoardInsert struct {
@@ -65,19 +65,19 @@ type DatabaseColumnTemplateUpdate struct {
 }
 
 type NoteDB struct {
-	bun.BaseModel `bun:"table:notes"`
+	bun.BaseModel `bun:"table:notes,alias:note"`
 }
 
 type NoteInsertDB struct {
-	bun.BaseModel `bun:"table:notes"`
+	bun.BaseModel `bun:"table:notes,alias:note"`
 }
 
 type NoteImportDB struct {
-	bun.BaseModel `bun:"table:notes"`
+	bun.BaseModel `bun:"table:notes,alias:note"`
 }
 
 type NoteUpdateDB struct {
-	bun.BaseModel `bun:"table:notes"`
+	bun.BaseModel `bun:"table:notes,alias:note"`
 }
 
 type DatabaseReaction struct {
@@ -134,7 +134,7 @@ type DatabaseUserUpdate struct {
 }
 
 type VotingDB struct {
-	bun.BaseModel `bun:"table:votings"`
+	bun.BaseModel `bun:"table:votings,alias:voting"`
 }
 
 type VotingInsert struct {
