@@ -1,3 +1,4 @@
+import {useFlag} from "@unleash/proxy-client-react";
 import {FC} from "react";
 import {useTranslation} from "react-i18next";
 import classNames from "classnames";
@@ -5,7 +6,6 @@ import _ from "underscore";
 import {useAppSelector} from "store";
 import {VoteButtons} from "./VoteButtons";
 import "./Votes.scss";
-import {useFlag} from "@unleash/proxy-client-react";
 
 type VotesProps = {
   className?: string;

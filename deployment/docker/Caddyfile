@@ -1,4 +1,3 @@
-:80 {
 	log {
 		output stdout
 	}

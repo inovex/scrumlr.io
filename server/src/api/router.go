@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/Unleash/unleash-client-go/v4"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/httprate"
 	"github.com/go-chi/render"
@@ -15,7 +16,6 @@ import (
 	gorillaSessions "github.com/gorilla/sessions"
 	"github.com/gorilla/websocket"
 
-	//"github.com/Unleash/unleash-client-go/v4"
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -165,6 +165,7 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 				r.Get("/callback", s.verifyAuthProviderCallback)
 			})
 		})
+		r.Get("/features/{name}", s.getFeatureFlag)
 	})
 }
 
@@ -225,6 +226,11 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.Put("/", s.updateUser)
 		})
 	})
+}
+func (s *Server) getFeatureFlag(w http.ResponseWriter, r *http.Request) {
+	flagName := chi.URLParam(r, "name")
+	status := unleash.IsEnabled(flagName)
+	render.JSON(w, r, map[string]bool{"enabled": status})
 }
 
 func (s *Server) initVoteResources(r chi.Router) {

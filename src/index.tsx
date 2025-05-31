@@ -1,3 +1,5 @@
+import {FlagProvider} from "@unleash/proxy-client-react";
+import {UnleashClient} from "unleash-proxy-client";
 import React, {Suspense} from "react";
 import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
@@ -18,12 +20,9 @@ import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID} 
 import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
 
-import {UnleashClient} from "unleash-proxy-client";
-import {FlagProvider} from "@unleash/proxy-client-react";
-
 const unleash = new UnleashClient({
-  url: "https://unleash.dev.scrumlr.fra.ics.inovex.io/api/frontend",
-  clientKey: "REACT_APP_UNLEASH_FRONTEND_TOKEN",
+  url: process.env.REACT_APP_UNLEASH_FRONTEND_URL!,
+  clientKey: process.env.REACT_APP_UNLEASH_FRONTEND_TOKEN!,
   appName: "scrumlr-frontend",
   environment: "development",
 });
