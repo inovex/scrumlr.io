@@ -6,7 +6,6 @@ import {Tooltip} from "react-tooltip";
 import {useAppDispatch, useAppSelector} from "store";
 import {createColumn, deleteColumnOptimistically, editColumn, editColumnOptimistically} from "store/features";
 import {Color, getColorClassName} from "constants/colors";
-import {hotkeyMap} from "constants/hotkeys";
 import {NoteInput} from "components/NoteInput";
 import {Droppable} from "components/DragAndDrop/Droppable";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
@@ -17,8 +16,6 @@ import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import "./Column.scss";
-
-const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
 
 export interface ColumnProps {
   id: string;
@@ -58,20 +55,6 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const inputRef = useRef<HTMLInputElement>();
   const columnRef = useRef<HTMLElement | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  const toggleVisibilityHandler = () => {
-    dispatch(
-      editColumn({
-        id,
-        column: {
-          name,
-          color,
-          index,
-          visible: !visible,
-        },
-      })
-    );
-  };
 
   const [localNotes, setLocalNotes] = useState(notes);
   useEffect(() => {
@@ -127,7 +110,15 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
   const renderColumnName = () =>
     columnNameMode === "VIEW" ? (
       <div className={classNames("column__header-text-wrapper", {"column__header-text-wrapper--hidden": !visible})}>
-        {!visible && <Hidden className="column__header-hidden-icon" title={t("Column.hiddenColumn")} onClick={toggleVisibilityHandler} />}
+        {!visible && (
+          <Hidden
+            className="column__header-hidden-icon"
+            title={t("Column.hiddenColumn")}
+            onClick={() => {
+              throw new Error("implement in ColumnHeader");
+            }}
+          />
+        )}
         <h2
           data-clarity-mask="True"
           ref={textRef}
@@ -254,13 +245,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
               <ColumnSettings column={{id, name, color, visible, index}} onClose={() => setOpenedColumnSettings(false)} onNameEdit={() => setColumnNameMode("EDIT")} />
             )}
           </div>
-          <NoteInput
-            columnIndex={index}
-            columnId={id}
-            columnIsVisible={visible}
-            toggleColumnVisibility={toggleVisibilityHandler}
-            hotkeyKey={`${SELECT_NOTE_INPUT_FIRST_KEY.map((key, i) => (i === 0 ? `${key.toUpperCase()}/` : key.toUpperCase())).join("")} + ${index + 1}`}
-          />
+          <NoteInput column={{id, index, name, color, visible}} />
         </div>
         <Droppable id={id} items={localNotes} setItems={setItems} globalNotes={notes} className="column__notes-wrapper">
           <ul className="column__note-list">
