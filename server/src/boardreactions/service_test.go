@@ -6,12 +6,11 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/mock"
-	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
 )
 
 func TestCreateBoardReaction(t *testing.T) {
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
