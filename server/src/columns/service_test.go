@@ -9,7 +9,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
@@ -20,8 +19,8 @@ func TestCreateColumn(t *testing.T) {
 	columnName := "Column One"
 	columnDescription := "This is a column"
 
-	mockColumndatabase := NewMockColumnDatabase(t)
-	mockColumndatabase.EXPECT().Create(DatabaseColumnInsert{
+	mockColumnDatabase := NewMockColumnDatabase(t)
+	mockColumnDatabase.EXPECT().Create(DatabaseColumnInsert{
 		Board:       boardId,
 		Name:        columnName,
 		Description: columnDescription,
@@ -32,19 +31,19 @@ func TestCreateColumn(t *testing.T) {
 			Name:        columnName,
 			Description: columnDescription,
 		}, nil)
-	mockColumndatabase.EXPECT().GetAll(boardId).
+	mockColumnDatabase.EXPECT().GetAll(boardId).
 		Return([]DatabaseColumn{{ID: columnId, Board: boardId, Name: columnName, Description: columnDescription}}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, columnId).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
 		Return([]*notes.Note{}, nil)
 
-	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+	columnService := NewColumnService(mockColumnDatabase, broker, mockNoteService)
 
 	column, err := columnService.Create(context.Background(), ColumnRequest{
 		Name:        columnName,
@@ -73,7 +72,7 @@ func TestCreateColumn_DatabaseError(t *testing.T) {
 	}).
 		Return(DatabaseColumn{}, dbError)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -100,13 +99,13 @@ func TestDeleteColumn(t *testing.T) {
 	mockColumndatabase := NewMockColumnDatabase(t)
 	mockColumndatabase.EXPECT().Delete(boardId, columnId, userId).Return(nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, columnId).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
 		Return([]*notes.Note{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
@@ -125,12 +124,12 @@ func TestDeleteColumn_DatabaseError(t *testing.T) {
 	mockColumndatabase := NewMockColumnDatabase(t)
 	mockColumndatabase.EXPECT().Delete(boardId, columnId, userId).Return(dbError)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, columnId).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
 		Return([]*notes.Note{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
@@ -163,13 +162,13 @@ func TestUpdateColumn(t *testing.T) {
 	mockColumndatabase.EXPECT().GetAll(boardId).
 		Return([]DatabaseColumn{{ID: columnId, Board: boardId, Name: columnName, Description: columnDescription}}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, columnId).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
 		Return([]*notes.Note{}, nil)
 
 	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
@@ -204,7 +203,7 @@ func TestUpdateColumn_DatabaseError(t *testing.T) {
 	}).
 		Return(DatabaseColumn{}, dbError)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -239,7 +238,7 @@ func TestGetColumn(t *testing.T) {
 			Description: columnDescription,
 		}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -265,7 +264,7 @@ func TestGetColumn_DatabaseError(t *testing.T) {
 	mockColumndatabase.EXPECT().Get(boardId, columnId).
 		Return(DatabaseColumn{}, dbError)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -306,7 +305,7 @@ func TestGetAllColumns(t *testing.T) {
 			},
 		}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -337,7 +336,7 @@ func TestGetAllColumns_DatabaseError(t *testing.T) {
 	mockColumndatabase.EXPECT().GetAll(boardId).
 		Return([]DatabaseColumn{}, dbError)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 

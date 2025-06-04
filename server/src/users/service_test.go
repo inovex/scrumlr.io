@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/common"
-	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
 )
@@ -21,7 +20,7 @@ func TestGetUser(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{ID: userId}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -41,7 +40,7 @@ func TestGetUser_NotFound(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{}, sql.ErrNoRows)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -63,7 +62,7 @@ func TestGetUser_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -84,7 +83,7 @@ func TestCreateAnonymusUser(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().CreateAnonymousUser(name).Return(DatabaseUser{ID: uuid.New(), Name: name}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -105,7 +104,7 @@ func TestCreateAnonymusUser_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().CreateAnonymousUser(name).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -125,7 +124,7 @@ func TestCreateAnonymusUser_EmptyUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -145,7 +144,7 @@ func TestCreateAnonymusUser_NewLineUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -169,7 +168,7 @@ func TestCreateAppleUser(t *testing.T) {
 	mockUserDatabase.EXPECT().CreateAppleUser(userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -192,7 +191,7 @@ func TestCreateAppleUser_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().CreateAppleUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -214,7 +213,7 @@ func TestCreateAppleUser_EmptyUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -236,7 +235,7 @@ func TestCreateAppleUser_NewLineUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -260,7 +259,7 @@ func TestCreateAzureUser(t *testing.T) {
 	mockUserDatabase.EXPECT().CreateAzureAdUser(userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -283,7 +282,7 @@ func TestCreateAzureUser_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().CreateAzureAdUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -305,7 +304,7 @@ func TestCreateAzureUser_EmptyUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -327,7 +326,7 @@ func TestCreateAzureUser_NewLineUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -351,7 +350,7 @@ func TestCreateGitHubUser(t *testing.T) {
 	mockUserDatabase.EXPECT().CreateGitHubUser(userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -374,7 +373,7 @@ func TestCreateGitHubUser_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().CreateGitHubUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -396,7 +395,7 @@ func TestCreateGitHubUser_EmptyUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -418,7 +417,7 @@ func TestCreateGitHubUser_NewLineUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -442,7 +441,7 @@ func TestCreateGoogleUser(t *testing.T) {
 	mockUserDatabase.EXPECT().CreateGoogleUser(userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -465,7 +464,7 @@ func TestCreateGoogleUser_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().CreateGoogleUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -487,7 +486,7 @@ func TestCreateGoogleUser_EmptyUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -509,7 +508,7 @@ func TestCreateGoogleUser_NewLineUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -533,7 +532,7 @@ func TestCreateMicrosoftUser(t *testing.T) {
 	mockUserDatabase.EXPECT().CreateMicrosoftUser(userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -556,7 +555,7 @@ func TestCreateMicrosoftUser_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().CreateMicrosoftUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -578,7 +577,7 @@ func TestCreateMicrosoftUser_EmptyUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -600,7 +599,7 @@ func TestCreateMicrosoftUser_NewLineUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -624,7 +623,7 @@ func TestCreateOIDCUser(t *testing.T) {
 	mockUserDatabase.EXPECT().CreateOIDCUser(userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -647,7 +646,7 @@ func TestCreateOIDCUser_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().CreateOIDCUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -669,7 +668,7 @@ func TestCreateOIDCUser_EmptyUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -691,7 +690,7 @@ func TestCreateOIDCUser_NewLineUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -716,7 +715,7 @@ func TestUpdateUser(t *testing.T) {
 	mockUserDatabase.EXPECT().UpdateUser(DatabaseUserUpdate{ID: userId, Name: name}).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -749,7 +748,7 @@ func TestUpdateUser_DatabaseError(t *testing.T) {
 	mockUserDatabase.EXPECT().UpdateUser(DatabaseUserUpdate{ID: userId, Name: name}).
 		Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -770,7 +769,7 @@ func TestUpdateUser_EmptyUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -791,7 +790,7 @@ func TestUpdateUser_NewLineUsername(t *testing.T) {
 
 	mockUserDatabase := NewMockUserDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -812,7 +811,7 @@ func TestAvailableForKeyMigration(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(userId).Return(true, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -833,7 +832,7 @@ func TestAvailableForKeyMigration_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(userId).Return(false, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -854,7 +853,7 @@ func TestSetKeyMigration(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().SetKeyMigration(userId).Return(DatabaseUser{ID: userId}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -875,7 +874,7 @@ func TestSetKeymigration_DatabaseError(t *testing.T) {
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().SetKeyMigration(userId).Return(DatabaseUser{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
