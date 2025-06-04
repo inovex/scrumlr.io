@@ -535,7 +535,7 @@ func (d *DB) GetStack(noteID uuid.UUID) ([]NoteDB, error) {
 	err := d.db.NewSelect().
 		Model(&notes).
 		Where("id = ?", noteID).
-		WhereOr("parent_id = ?", noteID).
+		WhereOr("stack = ?", noteID).
 		Scan(context.Background())
 
 	return notes, err
