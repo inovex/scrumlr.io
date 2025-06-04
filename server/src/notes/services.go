@@ -166,6 +166,7 @@ func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, 
 		log.Errorw("unable to get stack", "note", note, "err", err)
 		return nil, err
 	}
+
 	return Notes(notes), err
 }
 
