@@ -8,7 +8,6 @@ import (
 
 	"github.com/stretchr/testify/mock"
 	"scrumlr.io/server/columns"
-	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
@@ -35,7 +34,7 @@ func TestGet(t *testing.T) {
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -63,7 +62,7 @@ func TestGetError(t *testing.T) {
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -96,7 +95,7 @@ func TestCreate(t *testing.T) {
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -126,7 +125,7 @@ func TestCreate_ByPassphraseMissing(t *testing.T) {
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -153,7 +152,7 @@ func TestDelete(t *testing.T) {
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -184,7 +183,7 @@ func TestUpdate(t *testing.T) {
 	noteMock := notes.NewMockNotesService(t)
 	noteMock.EXPECT().GetAll(context.Background(), boardID).Return([]*notes.Note{}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -214,7 +213,7 @@ func TestSetTimer(t *testing.T) {
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -244,7 +243,7 @@ func TestDeleteTimer(t *testing.T) {
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -279,7 +278,7 @@ func TestIncrementTimer(t *testing.T) {
 	reactionMock := reactions.NewMockReactionService(t)
 	votingMock := votings.NewMockVotingService(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
