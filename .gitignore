@@ -32,7 +32,7 @@ debug.log
 ui-debug.log
 
 # vscode
-/.vscode
+**/.vscode
 
 # env files
 server/**/.env
