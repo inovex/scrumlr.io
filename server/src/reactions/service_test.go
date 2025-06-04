@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
 )
 
@@ -19,7 +18,7 @@ func TestGetReaction(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Get(id).Return(DatabaseReaction{ID: id, Note: uuid.New(), User: uuid.New(), ReactionType: Like}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -36,7 +35,7 @@ func TestGetReaction_NotFound(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Get(id).Return(DatabaseReaction{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -52,7 +51,7 @@ func TestListReactions(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().GetAll(boardId).Return([]DatabaseReaction{{bun.BaseModel{}, uuid.New(), uuid.New(), uuid.New(), Heart}, {bun.BaseModel{}, uuid.New(), uuid.New(), uuid.New(), Joy}}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -69,7 +68,7 @@ func TestListReactions_NotFound(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().GetAll(boardId).Return(nil, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -85,7 +84,7 @@ func TestCreateReaction(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Create(boardId, DatabaseReactionInsert{}).Return(DatabaseReaction{}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -103,7 +102,7 @@ func TestCreateReaction_Failed(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Create(boardId, DatabaseReactionInsert{}).Return(DatabaseReaction{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -121,7 +120,7 @@ func TestDeleteReaction(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Delete(boardId, userId, reactionId).Return(nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -140,7 +139,7 @@ func TestDeleteReaction_Failed(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Delete(boardId, userId, reactionId).Return(errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -158,7 +157,7 @@ func TestUpdateReaction(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Update(boardId, userId, reactionId, DatabaseReactionUpdate{}).Return(DatabaseReaction{}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -178,7 +177,7 @@ func TestUpdateReaction_Failed(t *testing.T) {
 	mockReactionDb := NewMockReactionDatabase(t)
 	mockReactionDb.EXPECT().Update(boardId, userId, reactionId, DatabaseReactionUpdate{}).Return(DatabaseReaction{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
