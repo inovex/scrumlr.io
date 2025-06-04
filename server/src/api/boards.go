@@ -7,13 +7,14 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/users"
 	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
-	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/identifiers"
 
@@ -320,6 +321,37 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type FullSession struct {
+		User              users.User         `json:"user"`
+		Connected         bool               `json:"connected"`
+		ShowHiddenColumns bool               `json:"showHiddenColumns"`
+		Ready             bool               `json:"ready"`
+		RaisedHand        bool               `json:"raisedHand"`
+		Role              common.SessionRole `json:"role"`
+		CreatedAt         time.Time          `json:"createdAt"`
+		Banned            bool               `json:"banned"`
+	}
+
+	fullSessions := make([]*FullSession, len(fullBoard.BoardSessions))
+	for i, session := range fullBoard.BoardSessions {
+		user, err := s.users.Get(r.Context(), session.User)
+		if err != nil {
+			common.Throw(w, r, err)
+			return
+		}
+
+		fullSessions[i] = &FullSession{
+			User:              *user,
+			Connected:         session.Connected,
+			ShowHiddenColumns: session.ShowHiddenColumns,
+			Ready:             session.Ready,
+			RaisedHand:        session.RaisedHand,
+			Role:              session.Role,
+			CreatedAt:         session.CreatedAt,
+			Banned:            session.Banned,
+		}
+	}
+
 	visibleColumns := make([]*columns.Column, 0)
 	for _, column := range fullBoard.Columns {
 		if column.Visible {
@@ -339,14 +371,14 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
-			Board        *boards.Board            `json:"board"`
-			Participants []*sessions.BoardSession `json:"participants"`
-			Columns      []*columns.Column        `json:"columns"`
-			Notes        []*notes.Note            `json:"notes"`
-			Votings      []*votings.Voting        `json:"votings"`
+			Board        *boards.Board     `json:"board"`
+			Participants []*FullSession    `json:"participants"`
+			Columns      []*columns.Column `json:"columns"`
+			Notes        []*notes.Note     `json:"notes"`
+			Votings      []*votings.Voting `json:"votings"`
 		}{
 			Board:        fullBoard.Board,
-			Participants: fullBoard.BoardSessions,
+			Participants: fullSessions,
 			Columns:      visibleColumns,
 			Notes:        visibleNotes,
 			Votings:      fullBoard.Votings,
