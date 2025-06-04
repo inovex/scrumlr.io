@@ -19,6 +19,7 @@ func TestRunnerForNotes(t *testing.T) {
 	t.Run("Get=2", testGetFilterByColumn)
 	t.Run("Get=3", testGetFilterByMultipleColumns)
 	t.Run("Get=4", testGetNotesAndVerifyOrder)
+	t.Run("Get=5", testGetStack)
 
 	t.Run("Create=0", testCreateNote)
 	t.Run("Create=1", testCreateNoteWithEmptyTextShouldFail)
@@ -137,6 +138,16 @@ func testGetNotesAndVerifyOrder(t *testing.T) {
 
 	notesOnBoard, _ = notesDb.GetAll(notesTestBoard.ID, columnB.ID)
 	verifyNoteOrder(t, notesOnBoard, noteB1, noteB2, noteB3)
+}
+
+func testGetStack(t *testing.T) {
+	noteA2 = fixture.MustRow("NoteDB.notesTestA2").(*notes.NoteDB)
+	noteA3 = fixture.MustRow("NoteDB.notesTestA3").(*notes.NoteDB)
+
+	noteStack, err := notesDb.GetStack(noteA2.ID)
+
+	assert.Nil(t, err)
+	verifyNoteOrder(t, noteStack, noteA2, noteA3)
 }
 
 func verifyNoteOrder(t *testing.T, notes []notes.NoteDB, expected ...*notes.NoteDB) {
