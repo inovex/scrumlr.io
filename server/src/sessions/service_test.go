@@ -13,7 +13,6 @@ import (
 	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
@@ -25,7 +24,7 @@ func TestGetSession(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(boardId, userId).Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -49,7 +48,7 @@ func TestGetSession_NotFound(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(boardId, userId).Return(DatabaseBoardSession{}, sql.ErrNoRows)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -73,7 +72,7 @@ func TestGetSession_DatabaseError(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(boardId, userId).Return(DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -96,13 +95,13 @@ func TestGetSessions(t *testing.T) {
 	filter := BoardSessionFilter{}
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, filter).
+	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
 		Return([]DatabaseBoardSession{
 			{Board: boardId, User: firstUserId},
 			{Board: boardId, User: secondUserId},
 		}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -130,13 +129,13 @@ func TestListSessions_WithFilterConnected(t *testing.T) {
 	filter := BoardSessionFilter{Connected: &connected}
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, filter).
+	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
 		Return([]DatabaseBoardSession{
 			{Board: boardId, Connected: connected},
 			{Board: boardId, Connected: connected},
 		}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -164,13 +163,13 @@ func TestListSessions_WithFilterReady(t *testing.T) {
 	filter := BoardSessionFilter{Ready: &ready}
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, filter).
+	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
 		Return([]DatabaseBoardSession{
 			{Board: boardId, Ready: ready},
 			{Board: boardId, Ready: ready},
 		}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -198,13 +197,13 @@ func TestListSessions_WithFilterRaisedHand(t *testing.T) {
 	filter := BoardSessionFilter{RaisedHand: &raisedHand}
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, filter).
+	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
 		Return([]DatabaseBoardSession{
 			{Board: boardId, RaisedHand: raisedHand},
 			{Board: boardId, RaisedHand: raisedHand},
 		}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -232,13 +231,13 @@ func TestListSessions_WithFilterRole(t *testing.T) {
 	filter := BoardSessionFilter{Role: &moderatorRole}
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, filter).
+	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
 		Return([]DatabaseBoardSession{
 			{Board: boardId, Role: common.ModeratorRole},
 			{Board: boardId, Role: common.ModeratorRole},
 		}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -266,10 +265,10 @@ func TestListSessions_DatabaseError(t *testing.T) {
 	filter := BoardSessionFilter{}
 
 	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, filter).
+	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
 		Return([]DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -293,7 +292,7 @@ func TestCreateSession(t *testing.T) {
 	mockSessiondb.EXPECT().Create(DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: common.ParticipantRole}).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -322,7 +321,7 @@ func TestCreateSession_DatabaseError(t *testing.T) {
 	mockSessiondb.EXPECT().Create(DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: common.ParticipantRole}).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -356,7 +355,7 @@ func TestUpdateSession_Role(t *testing.T) {
 	mockSessiondb.EXPECT().GetUserConnectedBoards(userId).
 		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -369,7 +368,7 @@ func TestUpdateSession_Role(t *testing.T) {
 		}, nil)
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, firstColumnId, secondColumnId).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{firstColumnId, secondColumnId}).
 		Return([]*notes.Note{
 			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
 			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
@@ -409,7 +408,7 @@ func TestUpdateSession_RaiseHand(t *testing.T) {
 	mockSessiondb.EXPECT().GetUserConnectedBoards(userId).
 		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -422,7 +421,7 @@ func TestUpdateSession_RaiseHand(t *testing.T) {
 		}, nil)
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, firstColumnId, secondColumnId).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{firstColumnId, secondColumnId}).
 		Return([]*notes.Note{
 			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
 			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
@@ -457,7 +456,7 @@ func TestUpdateSession_DatbaseErrorGetModerator(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Get(boardId, moderatorId).Return(DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -491,7 +490,7 @@ func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
 	mockSessiondb.EXPECT().Get(boardId, userId).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -527,7 +526,7 @@ func TestUpdateSession_DatabaseError(t *testing.T) {
 	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &moderatorRole}).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -558,7 +557,7 @@ func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
 	mockSessiondb.EXPECT().Get(boardId, moderatorId).
 		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ParticipantRole}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -588,7 +587,7 @@ func TestUpdateSession_ErrorPromoting(t *testing.T) {
 	mockSessiondb.EXPECT().Get(boardId, userId).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -618,7 +617,7 @@ func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
 	mockSessiondb.EXPECT().Get(boardId, userId).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.OwnerRole}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -648,7 +647,7 @@ func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
 	mockSessiondb.EXPECT().Get(boardId, userId).
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ModeratorRole}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -682,7 +681,7 @@ func TestUpdateAllSessions(t *testing.T) {
 			{Board: boardId, User: secondUserId, Ready: ready},
 		}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -716,7 +715,7 @@ func TestUpdateAllSessions_DatabaseError(t *testing.T) {
 	mockSessiondb.EXPECT().UpdateAll(DatabaseBoardSessionUpdate{Board: boardId, Ready: &ready}).
 		Return([]DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -747,7 +746,7 @@ func TestConnectSession(t *testing.T) {
 	mockSessiondb.EXPECT().Get(boardId, userId).
 		Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -760,7 +759,7 @@ func TestConnectSession(t *testing.T) {
 		}, nil)
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, firstColumnId, secondColumnId).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{firstColumnId, secondColumnId}).
 		Return([]*notes.Note{
 			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
 			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
@@ -785,7 +784,7 @@ func TestConnectSession_DatabaseError(t *testing.T) {
 	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -815,7 +814,7 @@ func TestDisconnectSession(t *testing.T) {
 	mockSessiondb.EXPECT().Get(boardId, userId).
 		Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -828,7 +827,7 @@ func TestDisconnectSession(t *testing.T) {
 		}, nil)
 
 	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, firstColumnId, secondColumnId).
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{firstColumnId, secondColumnId}).
 		Return([]*notes.Note{
 			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
 			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
@@ -853,7 +852,7 @@ func TestDisconnectSession_DatabaseError(t *testing.T) {
 	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
 		Return(DatabaseBoardSession{}, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -875,7 +874,7 @@ func TestSessionExists(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Exists(boardId, userId).Return(true, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -898,7 +897,7 @@ func TestSessionExists_DatabaseError(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().Exists(boardId, userId).Return(false, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -921,7 +920,7 @@ func TestModeratorSessionExists(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().ModeratorExists(boardId, userId).Return(true, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -944,7 +943,7 @@ func TestModeratorSessionExists_DatabaseError(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().ModeratorExists(boardId, userId).Return(false, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -967,7 +966,7 @@ func TestIsParticipantBanned(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().IsParticipantBanned(boardId, userId).Return(true, nil)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -990,7 +989,7 @@ func TestIsParticipantBanned_DatabaseError(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 	mockSessiondb.EXPECT().IsParticipantBanned(boardId, userId).Return(false, errors.New(dbError))
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -1009,7 +1008,7 @@ func TestIsParticipantBanned_DatabaseError(t *testing.T) {
 func TestFilterfromQueryString_EmptyQuery(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -1027,7 +1026,7 @@ func TestFilterfromQueryString_EmptyQuery(t *testing.T) {
 func TestFilterfromQueryString_Connected(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -1047,7 +1046,7 @@ func TestFilterfromQueryString_Connected(t *testing.T) {
 func TestFilterfromQueryString_Ready(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -1067,7 +1066,7 @@ func TestFilterfromQueryString_Ready(t *testing.T) {
 func TestFilterfromQueryString_Raisedhand(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -1087,7 +1086,7 @@ func TestFilterfromQueryString_Raisedhand(t *testing.T) {
 func TestFilterfromQueryString_Role(t *testing.T) {
 	mockSessiondb := NewMockSessionDatabase(t)
 
-	mockBroker := brokerMock.NewMockClient(t)
+	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 

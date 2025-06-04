@@ -6,7 +6,6 @@ import (
 	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
-	brokerMock "scrumlr.io/server/mocks/realtime"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/votings"
 
@@ -51,7 +50,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 	}).Return(NoteDB{ID: noteID, Author: authorID, Board: boardID, Column: colID, Text: txt, Stack: uuid.NullUUID{}, Rank: 0, Edited: false}, nil)
 	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -123,7 +122,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 	mockDB := NewMockNotesDatabase(suite.T())
 	mockDB.EXPECT().GetAll(boardID).Return(noteDBList, nil)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -200,7 +199,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 		Edited:   true,
 	}).Return(NoteDB{}, nil)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -236,7 +235,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	mockDB := NewMockNotesDatabase(suite.T())
 	mockDB.EXPECT().DeleteNote(callerID, boardID, noteID, deleteStack).Return(nil)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -277,7 +276,7 @@ func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
 		Text:   txt,
 	}).Return(NoteDB{}, dbError)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -302,7 +301,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 	mockDB := NewMockNotesDatabase(suite.T())
 	mockDB.EXPECT().Get(boardID).Return(NoteDB{}, sql.ErrNoRows)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -326,7 +325,7 @@ func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
 	mockDB := NewMockNotesDatabase(suite.T())
 	mockDB.EXPECT().GetStack(noteID).Return(expectedNotes, nil)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -349,7 +348,7 @@ func (suite *NoteServiceTestSuite) TestGetStackError() {
 	mockDB := NewMockNotesDatabase(suite.T())
 	mockDB.EXPECT().GetStack(noteID).Return(nil, dbError)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 

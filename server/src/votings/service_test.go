@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/common/filter"
-	brokerMock "scrumlr.io/server/mocks/realtime"
 
 	"scrumlr.io/server/realtime"
 )
@@ -36,7 +35,7 @@ func (suite *VotingServiceTestSuite) TestCreateVoting() {
 	mockDb.EXPECT().Get(boardId, votingId).
 		Return(VotingDB{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, []VoteDB{}, nil)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.On("Publish", mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -62,7 +61,7 @@ func (suite *VotingServiceTestSuite) TestUpdateVotingOpen() {
 
 	mockDb := NewMockVotingDatabase(suite.T())
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -88,7 +87,7 @@ func (suite *VotingServiceTestSuite) TestUpdateVotingClose() {
 	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId, Voting: &votingID}).
 		Return([]VoteDB{}, nil)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.On("Publish", mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
@@ -118,7 +117,7 @@ func (suite *VotingServiceTestSuite) TestAddVotes() {
 	mockDb := NewMockVotingDatabase(suite.T())
 	mockDb.EXPECT().AddVote(boardID, userID, noteID).Return(expectedVote, nil)
 
-	mockBroker := brokerMock.NewMockClient(suite.T())
+	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
