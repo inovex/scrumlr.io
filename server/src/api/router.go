@@ -3,8 +3,9 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/boards"
 	"time"
+
+	"scrumlr.io/server/boards"
 
 	"scrumlr.io/server/votings"
 
@@ -123,6 +124,7 @@ func New(
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
+		columns:                          columns,
 		votings:                          votings,
 		users:                            users,
 		notes:                            notes,
@@ -133,6 +135,7 @@ func New(
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
+		columntemplates:                  columntemplates,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
