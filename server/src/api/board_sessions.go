@@ -26,8 +26,39 @@ func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	type FullSession struct {
+		User              users.User         `json:"user"`
+		Connected         bool               `json:"connected"`
+		ShowHiddenColumns bool               `json:"showHiddenColumns"`
+		Ready             bool               `json:"ready"`
+		RaisedHand        bool               `json:"raisedHand"`
+		Role              common.SessionRole `json:"role"`
+		CreatedAt         time.Time          `json:"createdAt"`
+		Banned            bool               `json:"banned"`
+	}
+
+	fullSessions := make([]FullSession, len(sessions))
+	for i, session := range sessions {
+		user, err := s.users.Get(r.Context(), session.User)
+		if err != nil {
+			common.Throw(w, r, err)
+			return
+		}
+
+		fullSessions[i] = FullSession{
+			User:              *user,
+			Connected:         session.Connected,
+			ShowHiddenColumns: session.ShowHiddenColumns,
+			Ready:             session.Ready,
+			RaisedHand:        session.RaisedHand,
+			Role:              session.Role,
+			CreatedAt:         session.CreatedAt,
+			Banned:            session.Banned,
+		}
+	}
+
 	render.Status(r, http.StatusOK)
-	render.Respond(w, r, sessions)
+	render.Respond(w, r, fullSessions)
 }
 
 // getBoardSession get a participant

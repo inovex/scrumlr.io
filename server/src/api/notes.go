@@ -110,21 +110,19 @@ func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	}
 
 	notesToDelete, err := s.notes.GetStack(r.Context(), note)
-
 	if err != nil {
 		common.Throw(w, r, err)
 		return
 	}
+
 	var votesToDelete []uuid.UUID
 	for _, note := range notesToDelete {
-		votes, err := s.votings.GetVotes(r.Context(), filter.VoteFilter{
-			Board: board,
-			Note:  &note.ID,
-		})
+		votes, err := s.votings.GetVotes(r.Context(), filter.VoteFilter{Board: board, Note: &note.ID})
 		if err != nil {
 			common.Throw(w, r, err)
 			return
 		}
+
 		for _, vote := range votes {
 			votesToDelete = append(votesToDelete, vote.Voting)
 		}
