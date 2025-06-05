@@ -1,4 +1,3 @@
-import {TranslationTemplates} from "types/i18next";
 import {TemplateColumn} from "../templateColumns";
 
 // getTemplates returns all templates with columns, but is the only endpoint to do so.
@@ -20,8 +19,6 @@ export type TemplateWithColumns = {template: Template; columns: TemplateColumn[]
 export type TemplatesState = Template[];
 
 // used for importing, where information like ids will be set dynamically
-export type ImportReducedTemplateWithColumns = Omit<Template, "id" | "creator" | "favourite" | "name" | "description"> & {
-  name: TranslationTemplates;
-  description: TranslationTemplates;
-  columns: (Omit<TemplateColumn, "id" | "template" | "index" | "name" | "description"> & {name: TranslationTemplates; description: TranslationTemplates})[];
+export type ImportReducedTemplateWithColumns = Omit<Template, "id" | "creator" | "favourite"> & {
+  columns: Omit<TemplateColumn, "id" | "template" | "index">[];
 };
