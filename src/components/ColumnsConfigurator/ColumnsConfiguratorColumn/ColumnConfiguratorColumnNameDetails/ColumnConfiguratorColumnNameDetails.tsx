@@ -99,7 +99,14 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
           <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
         </div>
       ) : (
-        <div className="column-configurator-column-name-details__inline-description" role="button" tabIndex={0} onClick={openDescriptionWithCurrentValue}>
+        <div
+          className={classNames("column-configurator-column-name-details__inline-description", {
+            "column-configurator-column-name-details__inline-description--visual-feedback": props.openState === "visualFeedback",
+          })}
+          role="button"
+          tabIndex={0}
+          onClick={openDescriptionWithCurrentValue}
+        >
           {props.description ? props.description : t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
         </div>
       )}
