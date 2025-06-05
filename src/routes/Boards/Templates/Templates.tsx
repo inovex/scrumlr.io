@@ -6,7 +6,7 @@ import {
   CreateSessionAccessPolicy,
   deleteTemplate,
   getTemplates,
-  ReducedTemplateWithColumns,
+  ImportReducedTemplateWithColumns,
   setTemplateFavourite,
   Template,
   TemplateColumn,
@@ -30,27 +30,9 @@ type Side = "left" | "right";
 
 export type TemplatesNavigationState = {scrollToSaved?: boolean};
 
-// takes the template json data and converts it to the full template with columns type.
-// data like ids will be populated dynamically.
-const convertJsonToFullTemplates = (reducedTemplates: ReducedTemplateWithColumns[]): TemplateWithColumns[] =>
-  reducedTemplates.map(({columns, ...rest}, indexTemplate) => ({
-    template: {
-      ...rest,
-      id: `template-${indexTemplate}`,
-      creator: "scrumlr",
-      favourite: false,
-    },
-    columns: columns.map((column, indexColumn) => ({
-      ...column,
-      id: `column-${indexTemplate}-${indexColumn}`,
-      template: `template-${indexTemplate}`,
-      index: indexColumn,
-    })),
-  }));
-
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
-  const {t} = useTranslation();
+  const {t} = useTranslation(["translation", "templates"]);
   const dispatch = useAppDispatch();
   const location = useLocation();
   const navigate = useNavigate();
@@ -69,7 +51,28 @@ export const Templates = () => {
   const templates = useAppSelector((state) => state.templates);
   const templateColumns = useAppSelector((state) => state.templateColumns);
 
-  const reducedRecommendedTemplates: ReducedTemplateWithColumns[] = templatesJsonRaw as ReducedTemplateWithColumns[];
+  // takes the template json data and converts it to the full template with columns type.
+  // data like ids will be populated dynamically.
+  const convertJsonToFullTemplates = (reducedTemplates: ImportReducedTemplateWithColumns[]): TemplateWithColumns[] =>
+    reducedTemplates.map(({columns, ...rest}, indexTemplate) => ({
+      template: {
+        id: `template-${indexTemplate}`,
+        creator: "scrumlr",
+        name: t(rest.name, {ns: "templates"}),
+        description: t(rest.description, {ns: "templates"}),
+        favourite: false,
+      },
+      columns: columns.map((column, indexColumn) => ({
+        ...column,
+        id: `column-${indexTemplate}-${indexColumn}`,
+        template: `template-${indexTemplate}`,
+        index: indexColumn,
+        name: t(column.name, {ns: "templates"}),
+        description: t(column.description, {ns: "templates"}),
+      })),
+    }));
+
+  const reducedRecommendedTemplates: ImportReducedTemplateWithColumns[] = templatesJsonRaw as ImportReducedTemplateWithColumns[];
   const fullRecommendedTemplates = convertJsonToFullTemplates(reducedRecommendedTemplates);
 
   // init templates
