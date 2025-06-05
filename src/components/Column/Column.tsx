@@ -12,12 +12,13 @@ import {ColumnHeader} from "components/Column/ColumnHeader/ColumnHeader";
 export interface ColumnProps {
   id: string;
   name: string;
+  description: string;
   color: Color;
   visible: boolean;
   index: number;
 }
 
-export const Column = ({id, name, color, visible, index}: ColumnProps) => {
+export const Column = ({id, name, description, color, visible, index}: ColumnProps) => {
   // const {isTextTruncated, textRef} = useTextOverflow<HTMLHeadingElement>(name);
 
   const notes = useAppSelector(
@@ -69,7 +70,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       }}
     >
       <div className="column__content">
-        <ColumnHeader column={{id, index, name, color, visible}} notesCount={localNotes.length} />
+        <ColumnHeader column={{id, index, name, color, visible, description}} notesCount={localNotes.length} />
         <Droppable id={id} items={localNotes} setItems={setItems} globalNotes={notes} className="column__notes-wrapper">
           <ul className="column__note-list">
             {localNotes.map((note) => (

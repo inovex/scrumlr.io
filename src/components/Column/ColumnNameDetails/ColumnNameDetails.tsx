@@ -12,5 +12,6 @@ export const ColumnNameDetails = (props: ColumnNameDetailsProps) => (
       <div className="column-name-details__name">{props.column.name}</div>
       <div className="column-name-details__notes-count">{props.notesCount}</div>
     </div>
+    <div className="column-name-details__description">{props.column.description}</div>
   </div>
 );

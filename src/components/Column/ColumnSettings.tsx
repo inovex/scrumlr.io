@@ -30,7 +30,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       Toast.success({title: t("Toast.hiddenColumnsVisible"), autoClose: TOAST_TIMER_SHORT});
     }
     const randomColor = getRandomColor();
-    dispatch(createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
+    dispatch(createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", description: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
   useEffect(() => {
@@ -105,9 +105,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
           editColumn({
             id: props.column.id,
             column: {
-              name: props.column.name,
-              color: props.column.color,
-              index: props.column.index,
+              ...props.column,
               visible: !props.column.visible,
             },
           })
