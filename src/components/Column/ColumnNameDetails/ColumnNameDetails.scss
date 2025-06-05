@@ -1,0 +1,19 @@
+@import "constants/style";
+
+.column-name-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.column-name-details__name {
+  align-self: flex-start; // only take as much space as needed
+
+  padding: 0 $spacing--xxs $spacing--xxs 0; // extend border space to bottom, and also slightly to the right
+
+  font-size: $text--lg;
+  font-weight: 700;
+
+  color: $navy--900;
+
+  border-bottom: 3px solid var(--accent-color--light);
+}

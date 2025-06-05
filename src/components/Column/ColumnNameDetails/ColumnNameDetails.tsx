@@ -1,20 +1,12 @@
-import "./ColumnNameDetails.scss";
-import {ColumnSettings} from "components/Column/ColumnSettings";
 import {Column} from "store/features";
-import {useState} from "react";
+import "./ColumnNameDetails.scss";
 
 type ColumnNameDetailsProps = {
   column: Column;
 };
 
-export const ColumnNameDetails = (props: ColumnNameDetailsProps) => {
-  const [openSettings, setOpenSettings] = useState(false);
-  const onNameEdit = () => {};
-
-  return (
+export const ColumnNameDetails = (props: ColumnNameDetailsProps) => (
     <div className="column-name-details">
-      <div className="column-name-details__title">Column Name</div>
-      {openSettings ? <ColumnSettings column={props.column} onClose={() => setOpenSettings(false)} onNameEdit={onNameEdit} /> : <div className="asdasd">S</div>}{" "}
+      <div className="column-name-details__name">{props.column.name}</div>
     </div>
   );
-};
