@@ -69,7 +69,7 @@ export const Column = ({id, name, color, visible, index}: ColumnProps) => {
       }}
     >
       <div className="column__content">
-        <ColumnHeader column={{id, index, name, color, visible}} />
+        <ColumnHeader column={{id, index, name, color, visible}} notesCount={localNotes.length} />
         <Droppable id={id} items={localNotes} setItems={setItems} globalNotes={notes} className="column__notes-wrapper">
           <ul className="column__note-list">
             {localNotes.map((note) => (
