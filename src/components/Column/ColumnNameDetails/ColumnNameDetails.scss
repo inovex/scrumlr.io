@@ -8,6 +8,12 @@ $description-line-height: $line-height--medium;
   gap: $spacing--sm;
 }
 
+.column-name-details__name-and-settings-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .column-name-details__name-wrapper {
   display: flex;
   flex-direction: row;
@@ -30,6 +36,21 @@ $description-line-height: $line-height--medium;
   color: $gray--800;
   font-size: $text--base;
   font-weight: 600;
+}
+
+.column-name-details__settings-icon-container {
+  all: unset;
+
+  width: $icon--large;
+  height: $icon--large;
+
+  cursor: pointer;
+}
+.column-name-details__settings-icon {
+  width: $icon--large;
+  height: $icon--large;
+
+  transform: rotate(90deg);
 }
 
 .column-name-details__description-wrapper {
