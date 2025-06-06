@@ -3,13 +3,16 @@ package api
 import (
 	"context"
 	"net/http"
+	"time"
+
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/users"
 	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/identifiers"
 
@@ -23,7 +26,7 @@ import (
 type BoardSubscription struct {
 	subscription      chan *realtime.BoardEvent
 	clients           map[uuid.UUID]*websocket.Conn
-	boardParticipants []*sessions.BoardSession
+	boardParticipants []*FullSession
 	boardSettings     *boards.Board
 	boardColumns      []*columns.Column
 	boardNotes        []*notes.Note
@@ -32,19 +35,41 @@ type BoardSubscription struct {
 
 type InitEvent struct {
 	Type realtime.BoardEventType `json:"type"`
-	Data boards.FullBoard        `json:"data"`
+	Data FullBoard               `json:"data"`
 }
 
-type EventData struct {
-	Board     *boards.Board                          `json:"board"`
-	Columns   []*columns.Column                      `json:"columns"`
-	Notes     []*notes.Note                          `json:"notes"`
-	Reactions []*reactions.Reaction                  `json:"reactions"`
-	Votings   []*votings.Voting                      `json:"votings"`
-	Votes     []*votings.Vote                        `json:"votes"`
-	Sessions  []*sessions.BoardSession               `json:"participants"`
-	Requests  []*sessionrequests.BoardSessionRequest `json:"requests"`
+type FullSession struct {
+	User              users.User         `json:"user"`
+	Connected         bool               `json:"connected"`
+	ShowHiddenColumns bool               `json:"showHiddenColumns"`
+	Ready             bool               `json:"ready"`
+	RaisedHand        bool               `json:"raisedHand"`
+	Role              common.SessionRole `json:"role"`
+	CreatedAt         time.Time          `json:"createdAt"`
+	Banned            bool               `json:"banned"`
 }
+
+type FullBoard struct {
+	Board                *boards.Board                          `json:"board"`
+	BoardSessionRequests []*sessionrequests.BoardSessionRequest `json:"requests"`
+	BoardSessions        []*FullSession                         `json:"participants"`
+	Columns              []*columns.Column                      `json:"columns"`
+	Notes                []*notes.Note                          `json:"notes"`
+	Reactions            []*reactions.Reaction                  `json:"reactions"`
+	Votings              []*votings.Voting                      `json:"votings"`
+	Votes                []*votings.Vote                        `json:"votes"`
+}
+
+//type EventData struct {
+//	Board     *boards.Board                          `json:"board"`
+//	Columns   []*columns.Column                      `json:"columns"`
+//	Notes     []*notes.Note                          `json:"notes"`
+//	Reactions []*reactions.Reaction                  `json:"reactions"`
+//	Votings   []*votings.Voting                      `json:"votings"`
+//	Votes     []*votings.Vote                        `json:"votes"`
+//	Sessions  []*sessions.BoardSession               `json:"participants"`
+//	Requests  []*sessionrequests.BoardSessionRequest `json:"requests"`
+//}
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
@@ -60,15 +85,47 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fullBoard, err := s.boards.FullBoard(r.Context(), id)
+	board, err := s.boards.FullBoard(r.Context(), id)
 	if err != nil {
+		log.Debugw("Can't retrive full board with id", id)
 		s.closeBoardSocket(id, userID, conn)
 		return
 	}
 
+	fullSessions := make([]*FullSession, len(board.BoardSessions))
+	for i, session := range board.BoardSessions {
+		user, err := s.users.Get(r.Context(), session.User)
+		if err != nil {
+			common.Throw(w, r, err)
+			return
+		}
+
+		fullSessions[i] = &FullSession{
+			User:              *user,
+			Connected:         session.Connected,
+			ShowHiddenColumns: session.ShowHiddenColumns,
+			Ready:             session.Ready,
+			RaisedHand:        session.RaisedHand,
+			Role:              session.Role,
+			CreatedAt:         session.CreatedAt,
+			Banned:            session.Banned,
+		}
+	}
+
+	fullBoard := FullBoard{
+		Board:                board.Board,
+		BoardSessionRequests: board.BoardSessionRequests,
+		BoardSessions:        fullSessions,
+		Columns:              board.Columns,
+		Notes:                board.Notes,
+		Reactions:            board.Reactions,
+		Votings:              board.Votings,
+		Votes:                board.Votes,
+	}
+
 	initEvent := InitEvent{
 		Type: realtime.BoardEventInit,
-		Data: *fullBoard,
+		Data: fullBoard,
 	}
 
 	initEvent = eventInitFilter(initEvent, userID)
@@ -104,8 +161,10 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData boards.FullBoard) {
+func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData FullBoard) {
+	logger.Get().Debugw("Listen on board", "connection", conn)
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
+		logger.Get().Debugw("Subscription does not exist. Creating subscription for board", "board", boardID)
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
 		}
@@ -139,6 +198,7 @@ func (bs *BoardSubscription) startListeningOnBoard() {
 }
 
 func (s *Server) closeBoardSocket(board, user uuid.UUID, conn *websocket.Conn) {
+	logger.Get().Debugw("Closing connection", "connection", conn)
 	_ = conn.Close()
 	err := s.sessions.Disconnect(context.Background(), board, user)
 	if err != nil {
