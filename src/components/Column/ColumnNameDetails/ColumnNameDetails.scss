@@ -1,5 +1,7 @@
 @import "constants/style";
 
+$description-line-height: $line-height--medium;
+
 .column-name-details {
   display: flex;
   flex-direction: column;
@@ -30,13 +32,45 @@
   font-weight: 600;
 }
 
+.column-name-details__description-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .column-name-details__description {
+  flex-grow: 1;
   color: $navy--900;
   font-size: $text--base;
   font-weight: 600;
-  line-height: 14px;
+  line-height: $description-line-height;
+  max-height: 2 * $description-line-height;
+  overflow: hidden;
+
+  &--expanded {
+    max-height: max-content;
+  }
 
   &--placeholder {
     color: $gray--800;
+  }
+}
+
+.column-name-details__description-expand-icon-container {
+  all: unset;
+  align-self: flex-start;
+
+  width: $icon--large;
+  height: $icon--large;
+
+  cursor: pointer;
+}
+
+.column-name-details__description-expand-icon {
+  width: $icon--large;
+  height: $icon--large;
+
+  &--expanded {
+    transform: rotate(180deg);
   }
 }
