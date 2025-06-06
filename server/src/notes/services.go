@@ -170,6 +170,24 @@ func (service *Service) GetStack(ctx context.Context, note uuid.UUID) ([]*Note, 
 	return Notes(notes), err
 }
 
+func (service *Service) UpdateEvent(event *realtime.BoardEvent, userId uuid.UUID, isMod bool, boardId uuid.UUID, columnVisabilities []ColumnVisability, showNotesOfOtherUsers bool, showAuthors bool) (*realtime.BoardEvent, bool) {
+	noteSlice, err := UnmarshallNotaData(event.Data)
+	if err != nil {
+		logger.Get().Errorw("unable to parse notesUpdated or eventNotesSync in event filter", "board", boardId, "session", userId, "err", err)
+		return nil, false
+	}
+
+	if isMod {
+		event.Data = noteSlice
+		return event, true
+	} else {
+		return &realtime.BoardEvent{
+			Type: event.Type,
+			Data: noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userId, showNotesOfOtherUsers, showAuthors, columnVisabilities),
+		}, true
+	}
+}
+
 func (service *Service) updatedNotes(board uuid.UUID) {
 	notes, err := service.database.GetAll(board)
 	if err != nil {

@@ -2,7 +2,9 @@ package notes
 
 import (
 	"context"
+
 	"github.com/google/uuid"
+	"scrumlr.io/server/realtime"
 )
 
 type NotesService interface {
@@ -13,4 +15,6 @@ type NotesService interface {
 	GetAll(ctx context.Context, id uuid.UUID, columns ...uuid.UUID) ([]*Note, error)
 	Delete(ctx context.Context, body NoteDeleteRequest, id uuid.UUID) error
 	GetStack(ctx context.Context, note uuid.UUID) ([]*Note, error)
+
+	UpdateEvent(event *realtime.BoardEvent, userId uuid.UUID, isMod bool, boardId uuid.UUID, columnVisabilities []ColumnVisability, showNotesOfOtherUsers bool, showAuthors bool) (*realtime.BoardEvent, bool)
 }
