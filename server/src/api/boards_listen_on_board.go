@@ -179,66 +179,70 @@ func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, 
   b.boardNotes = initEventData.Notes
   b.boardReactions = initEventData.Reactions
 
-	// if not already done, start listening to board changes
-	if b.subscription == nil {
-		b.subscription = s.realtime.GetBoardChannel(boardID)
-		go s.startListeningOnBoard(b)
-	}
+  // if not already done, start listening to board changes
+  if b.subscription == nil {
+    b.subscription = s.realtime.GetBoardChannel(boardID)
+    go s.startListeningOnBoard(b)
+  }
 }
 
 func (server *Server) startListeningOnBoard(bs *BoardSubscription) {
-	for msg := range bs.subscription {
-		logger.Get().Debugw("message received", "message", msg)
-		for id, conn := range bs.clients {
-			boardSessions := make([]*sessions.BoardSession, len(bs.boardParticipants))
-			for i, session := range bs.boardParticipants {
-				boardSessions[i] = &sessions.BoardSession{
-					User:              session.User.ID,
-					Connected:         session.Connected,
-					ShowHiddenColumns: session.ShowHiddenColumns,
-					Ready:             session.Ready,
-					RaisedHand:        session.RaisedHand,
-					Role:              session.Role,
-					CreatedAt:         session.CreatedAt,
-					Banned:            session.Banned,
-				}
-			}
-			isMod := sessions.CheckSessionRole(id, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
-			var filteredMsg *realtime.BoardEvent
-			switch msg.Type {
-			case realtime.BoardEventColumnsUpdated:
-				if updated, ok := bs.columnsUpdated(msg, id, isMod); ok {
-					filteredMsg = updated
-				}
-			case realtime.BoardEventNotesUpdated, realtime.BoardEventNotesSync:
-				columnVisabilities := make([]notes.ColumnVisability, len(bs.boardColumns))
-				for i, column := range bs.boardColumns {
-					columnVisabilities[i] = notes.ColumnVisability{
-						ID:      column.ID,
-						Visible: column.Visible,
-					}
-				}
-				if updated, ok := server.notes.UpdateEvent(msg, id, isMod, bs.boardSettings.ID, columnVisabilities, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors); ok {
-					filteredMsg = updated
-					if isMod {
-						bs.boardNotes = updated.Data.(notes.NoteSlice)
-					}
-				}
-			case realtime.BoardEventBoardUpdated:
-				if updated, ok := bs.boardUpdated(msg, isMod); ok {
-					filteredMsg = updated
-				}
-			case realtime.BoardEventVotingUpdated:
-				if updated, ok := bs.votingUpdated(msg, id, isMod); ok {
-					filteredMsg = updated
-				}
-			case realtime.BoardEventParticipantUpdated:
-				_ = bs.participantUpdated(msg, isMod)
-			case realtime.BoardEventVotesDeleted:
-				if updated, ok := bs.votesDeleted(msg, id); ok {
-					filteredMsg = updated
-				}
-			}
+  for msg := range bs.subscription {
+    logger.Get().Debugw("message received", "message", msg)
+    for clientID, conn := range bs.clients {
+      boardSessions := make([]*sessions.BoardSession, len(bs.boardParticipants))
+      for i, session := range bs.boardParticipants {
+        boardSessions[i] = &sessions.BoardSession{
+          User:              session.User.ID,
+          Connected:         session.Connected,
+          ShowHiddenColumns: session.ShowHiddenColumns,
+          Ready:             session.Ready,
+          RaisedHand:        session.RaisedHand,
+          Role:              session.Role,
+          CreatedAt:         session.CreatedAt,
+          Banned:            session.Banned,
+        }
+      }
+      isMod := sessions.CheckSessionRole(clientID, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+      var filteredMsg *realtime.BoardEvent
+      switch msg.Type {
+      case realtime.BoardEventColumnsUpdated:
+        if updated, ok := server.columns.UpdateEvent(msg, bs.boardSettings.ID, clientID, isMod); ok {
+          filteredMsg = updated
+          if isMod {
+            bs.boardColumns = filteredMsg.Data.(columns.ColumnSlice)
+          }
+        }
+
+      case realtime.BoardEventNotesUpdated, realtime.BoardEventNotesSync:
+        columnVisabilities := make([]notes.ColumnVisability, len(bs.boardColumns))
+        for i, column := range bs.boardColumns {
+          columnVisabilities[i] = notes.ColumnVisability{
+            ID:      column.ID,
+            Visible: column.Visible,
+          }
+        }
+        if updated, ok := server.notes.UpdateEvent(msg, clientID, isMod, bs.boardSettings.ID, columnVisabilities, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors); ok {
+          filteredMsg = updated
+          if isMod {
+            bs.boardNotes = updated.Data.(notes.NoteSlice)
+          }
+        }
+      case realtime.BoardEventBoardUpdated:
+        if updated, ok := bs.boardUpdated(msg, isMod); ok {
+          filteredMsg = updated
+        }
+      case realtime.BoardEventVotingUpdated:
+        if updated, ok := bs.votingUpdated(msg, clientID, isMod); ok {
+          filteredMsg = updated
+        }
+      case realtime.BoardEventParticipantUpdated:
+        _ = bs.participantUpdated(msg, isMod)
+      case realtime.BoardEventVotesDeleted:
+        if updated, ok := bs.votesDeleted(msg, clientID); ok {
+          filteredMsg = updated
+        }
+      }
 
       if err := conn.WriteJSON(filteredMsg); err != nil {
         logger.Get().Warnw("failed to send message", "message", filteredMsg, "err", err)
