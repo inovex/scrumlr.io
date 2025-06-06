@@ -1,0 +1,158 @@
+{
+  "template": {
+    "lean_coffee": {
+      "name": "Lean Coffee",
+      "description": "Eine flexible Diskussionsmethode ohne feste Agenda. Ideal zur Identifizierung und Diskussion wichtiger Themen.",
+      "column": {
+        "lean_coffee": {
+          "name": "Lean Coffee",
+          "description": "Themen, Ideen und Fragen sammeln."
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "quick_review": {
+      "name": "Blitz-Feedback",
+      "description": "Teilnehmende heben positive und negative Ereignisse hervor, um Erfolge und Probleme zu identifizieren.",
+      "column": {
+        "positive": {
+          "name": "Positiv",
+          "description": "Was lief gut?"
+        },
+        "negative": {
+          "name": "Negativ",
+          "description": "Was lief nicht gut?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "status_quo_check": {
+      "name": "Status-quo-Check",
+      "description": "Das Team reflektiert über Maßnahmen zum Starten, Stoppen und Weiterführen, um kontinuierliche Verbesserung zu fördern.",
+      "column": {
+        "start": {
+          "name": "Start",
+          "description": "Welche neuen Prozesse sollten ausprobiert werden?"
+        },
+        "stop": {
+          "name": "Stopp",
+          "description": "Was funktioniert nicht und sollte beendet werden?"
+        },
+        "continue": {
+          "name": "Weiterführen",
+          "description": "Was läuft gut und sollte beibehalten werden?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "mood": {
+      "name": "Stimmungsbild",
+      "description": "Teilnehmende teilen Gedanken, die sie verärgert, traurig oder glücklich gemacht haben. Gut zum Verstehen emotionaler Zustände.",
+      "column": {
+        "mad": {
+          "name": "Verärgert",
+          "description": "Was hat Frustration oder Ärger ausgelöst?"
+        },
+        "sad": {
+          "name": "Betrübt",
+          "description": "Was hat Enttäuschungen verursacht?"
+        },
+        "glad": {
+          "name": "Erfreut",
+          "description": "Was hat Freude oder Motivation hervorgerufen?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "kalm": {
+      "name": "KALM",
+      "description": "Die Teilnehmenden identifizieren, was erhalten, erweitert, reduziert und optimiert werden soll, um die Leistung zu steigern.",
+      "column": {
+        "keep": {
+          "name": "Erhalten",
+          "description": "Was sollte beibehalten werden?"
+        },
+        "add": {
+          "name": "Erweitern",
+          "description": "Was könnte Mehrwert bringen?"
+        },
+        "less": {
+          "name": "Reduzieren",
+          "description": "Was sollte seltener gemacht werden?"
+        },
+        "more": {
+          "name": "Optimieren",
+          "description": "Was sollte häufiger gemacht werden?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "4l": {
+      "name": "4L",
+      "description": "Die Teilnehmenden identifizieren, was erhalten, erweitert, reduziert und optimiert werden soll, um die Leistung zu steigern.",
+      "column": {
+        "liked": {
+          "name": "Geschätzt",
+          "description": "Was war besonders positiv?"
+        },
+        "learned": {
+          "name": "Gelernt",
+          "description": "Welches Wissen wurde gewonnen?"
+        },
+        "lacked": {
+          "name": "Gefehlt",
+          "description": "Was hat gefehlt?"
+        },
+        "longed_for": {
+          "name": "Gewünscht",
+          "description": "Was wäre für die Zukunft wünschenswert?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "swot": {
+      "name": "SWOT",
+      "description": "Analysiert Stärken, Schwächen, Chancen und Risiken, um die strategische Planung zu unterstützen.",
+      "column": {
+        "strengths": {
+          "name": "Stärken",
+          "description": "Welche Stärken verschaffen einen Vorteil?"
+        },
+        "weaknesses": {
+          "name": "Schwächen",
+          "description": "An welchen Schwächen sollte gearbeitet werden?"
+        },
+        "opportunities": {
+          "name": "Chancen",
+          "description": "Welchen Chancen könnten genutzt werden?"
+        },
+        "threats": {
+          "name": "Risiken",
+          "description": "Welchen Herausforderungen sollten berücksichtigt werden?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    }
+  }
+}

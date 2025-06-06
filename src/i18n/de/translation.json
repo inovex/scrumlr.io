@@ -32,11 +32,58 @@
       "column_other": "{{count}} Spalten",
       "start": "Starten",
       "save": "Speichern"
+    },
+
+    "TemplateEditor": {
+      "create": "Erstelle eine Vorlage",
+      "edit": "Bearbeite eine Vorlage",
+      "cancel": "Abbrechen",
+      "saveEdit": "Speichern",
+      "saveCreate": "Template erstellen"
+    },
+
+    "ColumnsConfiguratorColumn": {
+      "namePlaceholder": "Name",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    },
+    "AccessSettings": {
+      "title": "Zugriffseinstellungen",
+      "Options": {
+        "Public": {
+          "title": "Offen",
+          "description": "Teilnehmende können einfach & schnell über den Link beitreten – bietet grundlegende Sicherheit."
+        },
+        "By_Invite": {
+          "title": "Mit Zustimmung",
+          "description": "Teilnehmende müssen vor dem Beitritt bestätigt werden – gewährleistet eine hohe Sicherheit."
+        },
+        "By_Passphrase": {
+          "title": "Passwortgeschützt",
+          "description": "Der Zugriff ist nur mit einem gesetzten Passwort möglich – gewährleistet eine hohe Sicherheit."
+        }
+      },
+      "Buttons": {
+        "cancel": "Zurück",
+        "start": "Sitzung starten"
+      }
     }
   },
   "Sessions": {
     "switchTitle": "Sitzungen",
     "title": "Wähle eine Sitzung"
+  },
+  "CreateBoard": {
+    "title": "Ein neues Board erstellen",
+    "dropdown": {
+      "open": "Offen",
+      "password": "Passwort",
+      "approval": "Freigabe"
+    },
+    "validation": {
+      "REQUIRED": "Eingabe ist erforderlich."
+    }
   },
   "LoginBoard": {
     "title": "Login bei scrumlr.io",
@@ -379,8 +426,10 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "Alle"
   },
-  "SearchBar": {
-    "placeholder": "Suchen"
+  "Input": {
+    "placeholder": {
+      "search": "Suchen"
+    }
   },
   "SettingsDialog": {
     "BoardSettings": "Board Einstellungen",
@@ -494,6 +543,13 @@
     "closeVoting": "Es tut uns leid, aber wir haben ein Problem beim Beenden der Abstimmung. Bitte versuche es erneut.",
     "abortVoting": "Es tut uns leid, aber wir haben ein Problem beim Abbrechen der Abstimmung. Bitte versuche es erneut.",
     "editSelf": "Es tut uns leid, aber wir haben ein Problem beim Aktualisieren deiner Informationen. Bitte versuche es erneut."
+  },
+  "Validation": {
+    "REQUIRED": "required",
+    "BAD_INPUT": "bad input",
+    "PATTERN_MISMATCH": "pattern mismatch",
+    "TYPE_MISMATCH": "type mismatch",
+    "RANGE": "range"
   },
   "Avatar": {
     "random": "Zufälligen Avatar generieren",

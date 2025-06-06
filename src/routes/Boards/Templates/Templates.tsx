@@ -1,58 +1,78 @@
 import classNames from "classnames";
-import {Outlet, useOutletContext} from "react-router";
-import {useAppDispatch, useAppSelector} from "store";
-import {getTemplates, ReducedTemplateWithColumns, Template, TemplateColumn, TemplateWithColumns} from "store/features";
+import {Outlet, useOutletContext, useNavigate, useLocation} from "react-router";
+import {useAppSelector, useAppDispatch} from "store";
+import {
+  createBoardFromTemplate,
+  CreateSessionAccessPolicy,
+  deleteTemplate,
+  getTemplates,
+  ImportReducedTemplateWithColumns,
+  setTemplateFavourite,
+  Template,
+  TemplateColumn,
+  TemplateWithColumns,
+} from "store/features";
 import {useTranslation} from "react-i18next";
-import {useEffect, useRef} from "react";
+import {useEffect, useRef, useState} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
 // using a png instead of svg for now. reason being problems with layering
 import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
-import templatesJsonRaw from "constants/templates.json";
+import templatesJsonRaw from "constants/recommendedTemplates.json";
+import {DEFAULT_TEMPLATE_ID} from "constants/templates";
+import {Portal} from "components/Portal";
+import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import "./Templates.scss";
 
 type Side = "left" | "right";
 
-// takes the template json data and converts it to the full template with columns type.
-// data like ids will be populated dynamically.
-const convertJsonToFullTemplates = (reducedTemplates: ReducedTemplateWithColumns[]): TemplateWithColumns[] =>
-  reducedTemplates.map(({columns, ...rest}, indexTemplate) => {
-    const templateId = `template-${indexTemplate}`;
-
-    return {
-      ...rest,
-      id: templateId,
-      creator: "scrumlr",
-      favourite: false,
-      accessPolicy: "PUBLIC", // this property will be removed in the next PR
-      columns: columns.map((column, indexColumn) => {
-        const columnId = `column-${indexTemplate}-${indexColumn}`;
-
-        return {
-          ...column,
-          id: columnId,
-          template: templateId,
-          index: indexColumn,
-        } as TemplateColumn;
-      }),
-    } as TemplateWithColumns;
-  });
+export type TemplatesNavigationState = {scrollToSaved?: boolean};
 
 export const Templates = () => {
   const templatesRef = useRef<HTMLDivElement>(null);
-  const {t} = useTranslation();
+  const {t} = useTranslation(["translation", "templates"]);
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const searchBarInput: string = useOutletContext();
+  const [selectedTemplateWithColumns, setSelectedTemplateWithColumns] = useState<TemplateWithColumns | null>(null);
+  const [showAccessSettingsPortal, setShowAccessSettingsPortal] = useState(false);
 
-  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous) ?? true;
+  const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
+
+  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
+  const allowAnonymousCustomTemplates = useAppSelector((state) => state.view.allowAnonymousCustomTemplates);
+  const showCustomTemplates = !isAnonymous || allowAnonymousCustomTemplates;
+
+  const showCreateTemplateView = () => navigate("../create");
 
   const templates = useAppSelector((state) => state.templates);
-  const templateColumns = useAppSelector((state) => state.templatesColumns);
+  const templateColumns = useAppSelector((state) => state.templateColumns);
 
-  const reducedRecommendedTemplates: ReducedTemplateWithColumns[] = templatesJsonRaw as ReducedTemplateWithColumns[];
+  // takes the template json data and converts it to the full template with columns type.
+  // data like ids will be populated dynamically.
+  const convertJsonToFullTemplates = (reducedTemplates: ImportReducedTemplateWithColumns[]): TemplateWithColumns[] =>
+    reducedTemplates.map(({columns, ...rest}, indexTemplate) => ({
+      template: {
+        id: `template-${indexTemplate}`,
+        creator: "scrumlr",
+        name: t(rest.name, {ns: "templates"}),
+        description: t(rest.description, {ns: "templates"}),
+        favourite: false,
+      },
+      columns: columns.map((column, indexColumn) => ({
+        ...column,
+        id: `column-${indexTemplate}-${indexColumn}`,
+        template: `template-${indexTemplate}`,
+        index: indexColumn,
+        name: t(column.name, {ns: "templates"}),
+        description: t(column.description, {ns: "templates"}),
+      })),
+    }));
+
+  const reducedRecommendedTemplates: ImportReducedTemplateWithColumns[] = templatesJsonRaw as ImportReducedTemplateWithColumns[];
   const fullRecommendedTemplates = convertJsonToFullTemplates(reducedRecommendedTemplates);
 
   // init templates
@@ -60,40 +80,89 @@ export const Templates = () => {
     dispatch(getTemplates());
   }, [dispatch]);
 
-  const scrollToSide = (side: Side) => {
+  const toggleFavourite = (templateId: string, favourite: boolean) => dispatch(setTemplateFavourite({id: templateId, favourite: !favourite}));
+
+  const navigateToEdit = (templateId: string) => {
+    navigate(`../edit/${templateId}`);
+  };
+
+  const deleteTemplateAndColumns = (templateId: string) => {
+    // setShowMiniMenu(false); // close menu manually, because it stays open for some reason
+    dispatch(deleteTemplate({id: templateId}));
+  };
+
+  // after selecting template and access policy, actually dispatch to create board from template
+  const createBoard = (templateWithColumns: TemplateWithColumns, accessPolicy: CreateSessionAccessPolicy) => {
+    dispatch(createBoardFromTemplate({templateWithColumns, accessPolicy}))
+      .unwrap()
+      .then((boardId) => navigate(`/board/${boardId}`));
+  };
+
+  // second step: after selecting access policy, collect selected template and selected accessPolicy and proceed to dispatch
+  const onSelectSessionPolicy = (accessPolicy: CreateSessionAccessPolicy) => {
+    if (!selectedTemplateWithColumns) return;
+
+    setShowAccessSettingsPortal(false);
+
+    createBoard(selectedTemplateWithColumns, accessPolicy);
+  };
+
+  // first step: after selecting a template, save it as state and proceed to access policy selection modal
+  const onSelectTemplateWithColumns = (templateWithColumns: TemplateWithColumns) => {
+    setSelectedTemplateWithColumns(templateWithColumns);
+    setShowAccessSettingsPortal(true);
+  };
+
+  const onLeaveSessionPolicy = () => {
+    setSelectedTemplateWithColumns(null);
+    setShowAccessSettingsPortal(false);
+  };
+
+  const scrollToSide = (side: Side, smooth: boolean) => {
     const screenWidth = document.documentElement.clientWidth;
     const offset = screenWidth * (side === "left" ? -1 : 1);
-    templatesRef.current?.scroll({left: offset, behavior: "smooth"});
+    templatesRef.current?.scroll({left: offset, behavior: smooth ? "smooth" : "auto"});
   };
 
   // simple comparison between template name and search input
   const matchSearchInput = (template: Template) => template.name.toLowerCase().includes(searchBarInput.toLowerCase());
 
+  // default template, which is in the state should not be shown.
+  const excludeDefaultTemplate = (template: Template) => template.id !== DEFAULT_TEMPLATE_ID;
+
   // ironically, since templates and their columns are handled separately, we need to stitch them back together
   // to a common object in order to avoid losing information (since recommended templates don't have associated cols)
   const mergeTemplateWithColumns = (template: Template, columns?: TemplateColumn[]): TemplateWithColumns => {
     if (columns) {
-      return {...template, columns};
+      return {template, columns};
     }
 
     const associatedColumns = templateColumns.filter((tc) => tc.template === template.id);
-    return {...template, columns: associatedColumns};
+    return {template, columns: associatedColumns};
   };
 
+  // if we just created/edited a template, go to custom templates view immediately
+  const scrollToSaved = !!(location.state as TemplatesNavigationState)?.scrollToSaved;
+  useEffect(() => {
+    if (scrollToSaved) {
+      scrollToSide("right", false);
+    }
+  }, [scrollToSaved]);
+
   const renderContainerHeader = (renderSide: Side, title: string) =>
-    isAnonymous ? (
+    showCustomTemplates ? (
       <header className="templates__container-header">
         <div className="templates__container-title">{title}</div>
       </header>
     ) : (
       <header className="templates__container-header">
-        <button className="templates__container-arrow-button" disabled={renderSide === "left"} onClick={() => scrollToSide("left")} aria-label="scroll left">
+        <button className="templates__container-arrow-button" disabled={renderSide === "left"} onClick={() => scrollToSide("left", true)} aria-label="scroll left">
           <ArrowLeft className={classNames("templates__container-arrow", "templates__container-arrow--left", {"templates__container-arrow--disabled": renderSide === "left"})} />
         </button>
-        <div className="templates__container-title" role="button" tabIndex={0} onClick={() => scrollToSide(renderSide === "left" ? "right" : "left")}>
+        <div className="templates__container-title" role="button" tabIndex={0} onClick={() => scrollToSide(renderSide === "left" ? "right" : "left", true)}>
           {title}
         </div>
-        <button className="templates__container-arrow-button" disabled={renderSide === "right"} onClick={() => scrollToSide("right")} aria-label="scroll right">
+        <button className="templates__container-arrow-button" disabled={renderSide === "right"} onClick={() => scrollToSide("right", true)} aria-label="scroll right">
           <ArrowRight className={classNames("templates__container-arrow", "templates__container-arrow--right", {"templates__container-arrow--disabled": renderSide === "right"})} />
         </button>
       </header>
@@ -102,6 +171,11 @@ export const Templates = () => {
   return (
     <>
       <Outlet /> {/* settings */}
+      {showAccessSettingsPortal ? (
+        <Portal className={classNames("templates__portal")} hiddenOverflow disabledPadding>
+          <AccessSettings onCancel={onLeaveSessionPolicy} onSelectSessionPolicy={onSelectSessionPolicy} />
+        </Portal>
+      ) : null}
       <div className="templates" ref={templatesRef}>
         <div className="templates__stan-container">
           <img className={classNames("templates__stan", "templates__stan--dark")} src={StanDark} alt="Stan just hanging there with a coffee" />
@@ -110,19 +184,37 @@ export const Templates = () => {
         <section className="templates__container templates__container--recommended">
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
-            {fullRecommendedTemplates.filter(matchSearchInput).map((template) => (
-              <TemplateCard templateType="RECOMMENDED" template={mergeTemplateWithColumns(template, template.columns)} key={template.id} />
-            ))}
+            {fullRecommendedTemplates
+              .filter((rc) => matchSearchInput(rc.template))
+              .map((templateFull) => (
+                <TemplateCard
+                  templateType="RECOMMENDED"
+                  template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)}
+                  onSelectTemplate={onSelectTemplateWithColumns}
+                  key={templateFull.template.id}
+                />
+              ))}
           </div>
         </section>
-        {!isAnonymous && (
+        {showCustomTemplates && (
           <section className="templates__container templates__container--saved">
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
-              <CreateTemplateCard />
-              {templates.filter(matchSearchInput).map((template) => (
-                <TemplateCard templateType="CUSTOM" template={mergeTemplateWithColumns(template)} key={template.id} />
-              ))}
+              <CreateTemplateCard onClick={showCreateTemplateView} />
+              {templates
+                .filter(matchSearchInput)
+                .filter(excludeDefaultTemplate)
+                .map((template) => (
+                  <TemplateCard
+                    templateType="CUSTOM"
+                    template={mergeTemplateWithColumns(template)}
+                    onSelectTemplate={onSelectTemplateWithColumns}
+                    onDeleteTemplate={deleteTemplateAndColumns}
+                    onNavigateToEdit={navigateToEdit}
+                    onToggleFavourite={toggleFavourite}
+                    key={template.id}
+                  />
+                ))}
             </div>
           </section>
         )}

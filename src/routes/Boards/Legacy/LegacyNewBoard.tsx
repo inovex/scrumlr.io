@@ -1,6 +1,6 @@
 import {API} from "api";
 import React, {useRef, useState} from "react";
-import {AccessPolicy, BoardImportData} from "store/features/board/types";
+import {AccessPolicy, BoardImportData, CreateSessionAccessPolicy} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
 import {useAppDispatch} from "store";
@@ -99,23 +99,21 @@ export const LegacyNewBoard = () => {
   };
 
   const onCreateBoard = async () => {
-    let additionalAccessPolicyOptions = {};
-    if (accessPolicy === "BY_PASSPHRASE" && Boolean(passphrase)) {
-      additionalAccessPolicyOptions = {
+    let createAccessPolicy: CreateSessionAccessPolicy;
+    if (accessPolicy === "BY_PASSPHRASE") {
+      createAccessPolicy = {
+        policy: accessPolicy,
         passphrase,
+      };
+    } else {
+      createAccessPolicy = {
+        policy: accessPolicy,
       };
     }
 
     if (columnTemplate) {
       // todo: use thunk instead
-      const boardId = await API.createBoard(
-        boardName,
-        {
-          type: accessPolicy,
-          ...additionalAccessPolicyOptions,
-        },
-        legacyColumnTemplates[columnTemplate].columns
-      );
+      const boardId = await API.createBoard(boardName, createAccessPolicy, legacyColumnTemplates[columnTemplate].columns);
       navigate(`/board/${boardId}`);
     }
   };
