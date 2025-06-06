@@ -179,5 +179,24 @@ func (service *Service) deletedColumn(ctx context.Context, user, board, column u
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})
+}
 
+func (service *Service) UpdateEvent(event *realtime.BoardEvent, userID, boardID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
+	var updateColumns ColumnSlice
+	updateColumns, err := UnmarshallColumnData(event.Data)
+
+	if err != nil {
+		logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", boardID, "session", userID, "err", err)
+		return nil, false
+	}
+
+	if isMod {
+		//bs.boardColumns = updateColumns
+		return event, true
+	} else {
+		return &realtime.BoardEvent{
+			Type: event.Type,
+			Data: updateColumns.FilterVisibleColumns(),
+		}, true
+	}
 }
