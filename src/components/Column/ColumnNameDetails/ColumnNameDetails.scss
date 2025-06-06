@@ -60,15 +60,15 @@ $description-line-height: $line-height--medium;
   all: unset;
   align-self: flex-start;
 
-  width: $icon--large;
-  height: $icon--large;
+  width: $description-line-height;
+  height: $description-line-height;
 
   cursor: pointer;
 }
 
 .column-name-details__description-expand-icon {
-  width: $icon--large;
-  height: $icon--large;
+  width: $description-line-height;
+  height: $description-line-height;
 
   &--expanded {
     transform: rotate(180deg);

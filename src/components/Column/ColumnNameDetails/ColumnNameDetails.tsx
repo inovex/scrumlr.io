@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import classNames from "classnames";
 import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
+import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import "./ColumnNameDetails.scss";
 
 type ColumnNameDetailsProps = {
@@ -12,6 +13,8 @@ type ColumnNameDetailsProps = {
 
 export const ColumnNameDetails = (props: ColumnNameDetailsProps) => {
   const {t} = useTranslation();
+
+  const {isTextTruncated, textRef: descriptionRef} = useTextOverflow<HTMLDivElement>(props.column.description);
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
@@ -23,12 +26,16 @@ export const ColumnNameDetails = (props: ColumnNameDetailsProps) => {
       </div>
       {props.column.description ? (
         <div className="column-name-details__description-wrapper">
-          <div className={classNames("column-name-details__description", {"column-name-details__description--expanded": isDescriptionExpanded})}>{props.column.description}</div>
-          <button className={classNames("column-name-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
-            <ArrowIcon
-              className={classNames("column-name-details__description-expand-icon", {"column-name-details__description-extend-icon--expanded": isDescriptionExpanded})}
-             />
-          </button>
+          <div ref={descriptionRef} className={classNames("column-name-details__description", {"column-name-details__description--expanded": isDescriptionExpanded})}>
+            {props.column.description}
+          </div>
+          {isTextTruncated.vertical && (
+            <button className={classNames("column-name-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
+              <ArrowIcon
+                className={classNames("column-name-details__description-expand-icon", {"column-name-details__description-expand-icon--expanded": isDescriptionExpanded})}
+              />
+            </button>
+          )}
         </div>
       ) : (
         <div className="column-name-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>
