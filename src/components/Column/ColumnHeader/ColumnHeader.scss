@@ -1,5 +1,9 @@
 @import "constants/style";
 
 .column-header {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--md;
+
   padding: 0 $spacing--xl 0 $spacing--xl;
 }
