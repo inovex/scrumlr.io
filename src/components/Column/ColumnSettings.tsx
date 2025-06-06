@@ -10,8 +10,10 @@ import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "compon
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
 import "./ColumnSettings.scss";
+import classNames from "classnames";
 
 type ColumnSettingsProps = {
+  className: string;
   column: Column;
   onClose: () => void;
   onNameEdit: () => void;
@@ -128,7 +130,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
   ];
 
   return (
-    <div ref={columnSettingsRef} className="column-settings">
+    <div ref={columnSettingsRef} className={classNames(props.className, "column-settings")}>
       <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn />
     </div>
   );

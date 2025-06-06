@@ -1,9 +1,32 @@
 @import "constants/style";
 
 .column-header {
+  position: relative;
+
   display: flex;
   flex-direction: column;
   gap: $spacing--md;
 
   padding: 0 $spacing--xl 0 $spacing--xl;
+}
+
+.column-header__settings-icon-container {
+  all: unset;
+
+  width: $icon--large;
+  height: $icon--large;
+
+  cursor: pointer;
+}
+.column-header__settings-icon {
+  width: $icon--large;
+  height: $icon--large;
+
+  transform: rotate(90deg);
+}
+
+.column-header__settings {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
