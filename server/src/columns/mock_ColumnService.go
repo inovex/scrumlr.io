@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
+	"scrumlr.io/server/realtime"
 )
 
 // NewMockColumnService creates a new instance of MockColumnService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -381,6 +382,86 @@ func (_c *MockColumnService_Update_Call) Return(column *Column, err error) *Mock
 }
 
 func (_c *MockColumnService_Update_Call) RunAndReturn(run func(ctx context.Context, body ColumnUpdateRequest) (*Column, error)) *MockColumnService_Update_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateEvent provides a mock function for the type MockColumnService
+func (_mock *MockColumnService) UpdateEvent(event *realtime.BoardEvent, boardID uuid.UUID, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
+	ret := _mock.Called(event, boardID, userID, isMod)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateEvent")
+	}
+
+	var r0 *realtime.BoardEvent
+	var r1 bool
+	if returnFunc, ok := ret.Get(0).(func(*realtime.BoardEvent, uuid.UUID, uuid.UUID, bool) (*realtime.BoardEvent, bool)); ok {
+		return returnFunc(event, boardID, userID, isMod)
+	}
+	if returnFunc, ok := ret.Get(0).(func(*realtime.BoardEvent, uuid.UUID, uuid.UUID, bool) *realtime.BoardEvent); ok {
+		r0 = returnFunc(event, boardID, userID, isMod)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*realtime.BoardEvent)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(*realtime.BoardEvent, uuid.UUID, uuid.UUID, bool) bool); ok {
+		r1 = returnFunc(event, boardID, userID, isMod)
+	} else {
+		r1 = ret.Get(1).(bool)
+	}
+	return r0, r1
+}
+
+// MockColumnService_UpdateEvent_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateEvent'
+type MockColumnService_UpdateEvent_Call struct {
+	*mock.Call
+}
+
+// UpdateEvent is a helper method to define mock.On call
+//   - event *realtime.BoardEvent
+//   - boardID uuid.UUID
+//   - userID uuid.UUID
+//   - isMod bool
+func (_e *MockColumnService_Expecter) UpdateEvent(event interface{}, boardID interface{}, userID interface{}, isMod interface{}) *MockColumnService_UpdateEvent_Call {
+	return &MockColumnService_UpdateEvent_Call{Call: _e.mock.On("UpdateEvent", event, boardID, userID, isMod)}
+}
+
+func (_c *MockColumnService_UpdateEvent_Call) Run(run func(event *realtime.BoardEvent, boardID uuid.UUID, userID uuid.UUID, isMod bool)) *MockColumnService_UpdateEvent_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 *realtime.BoardEvent
+		if args[0] != nil {
+			arg0 = args[0].(*realtime.BoardEvent)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		var arg3 bool
+		if args[3] != nil {
+			arg3 = args[3].(bool)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+		)
+	})
+	return _c
+}
+
+func (_c *MockColumnService_UpdateEvent_Call) Return(boardEvent *realtime.BoardEvent, b bool) *MockColumnService_UpdateEvent_Call {
+	_c.Call.Return(boardEvent, b)
+	return _c
+}
+
+func (_c *MockColumnService_UpdateEvent_Call) RunAndReturn(run func(event *realtime.BoardEvent, boardID uuid.UUID, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool)) *MockColumnService_UpdateEvent_Call {
 	_c.Call.Return(run)
 	return _c
 }
