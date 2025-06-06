@@ -9,6 +9,7 @@ import (
 
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
+	"scrumlr.io/server/realtime"
 )
 
 // NewMockNotesService creates a new instance of MockNotesService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -520,6 +521,104 @@ func (_c *MockNotesService_Update_Call) Return(note *Note, err error) *MockNotes
 }
 
 func (_c *MockNotesService_Update_Call) RunAndReturn(run func(ctx context.Context, body NoteUpdateRequest) (*Note, error)) *MockNotesService_Update_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateEvent provides a mock function for the type MockNotesService
+func (_mock *MockNotesService) UpdateEvent(event *realtime.BoardEvent, userId uuid.UUID, isMod bool, boardId uuid.UUID, columnVisabilities []ColumnVisability, showNotesOfOtherUsers bool, showAuthors bool) (*realtime.BoardEvent, bool) {
+	ret := _mock.Called(event, userId, isMod, boardId, columnVisabilities, showNotesOfOtherUsers, showAuthors)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateEvent")
+	}
+
+	var r0 *realtime.BoardEvent
+	var r1 bool
+	if returnFunc, ok := ret.Get(0).(func(*realtime.BoardEvent, uuid.UUID, bool, uuid.UUID, []ColumnVisability, bool, bool) (*realtime.BoardEvent, bool)); ok {
+		return returnFunc(event, userId, isMod, boardId, columnVisabilities, showNotesOfOtherUsers, showAuthors)
+	}
+	if returnFunc, ok := ret.Get(0).(func(*realtime.BoardEvent, uuid.UUID, bool, uuid.UUID, []ColumnVisability, bool, bool) *realtime.BoardEvent); ok {
+		r0 = returnFunc(event, userId, isMod, boardId, columnVisabilities, showNotesOfOtherUsers, showAuthors)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*realtime.BoardEvent)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(*realtime.BoardEvent, uuid.UUID, bool, uuid.UUID, []ColumnVisability, bool, bool) bool); ok {
+		r1 = returnFunc(event, userId, isMod, boardId, columnVisabilities, showNotesOfOtherUsers, showAuthors)
+	} else {
+		r1 = ret.Get(1).(bool)
+	}
+	return r0, r1
+}
+
+// MockNotesService_UpdateEvent_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateEvent'
+type MockNotesService_UpdateEvent_Call struct {
+	*mock.Call
+}
+
+// UpdateEvent is a helper method to define mock.On call
+//   - event *realtime.BoardEvent
+//   - userId uuid.UUID
+//   - isMod bool
+//   - boardId uuid.UUID
+//   - columnVisabilities []ColumnVisability
+//   - showNotesOfOtherUsers bool
+//   - showAuthors bool
+func (_e *MockNotesService_Expecter) UpdateEvent(event interface{}, userId interface{}, isMod interface{}, boardId interface{}, columnVisabilities interface{}, showNotesOfOtherUsers interface{}, showAuthors interface{}) *MockNotesService_UpdateEvent_Call {
+	return &MockNotesService_UpdateEvent_Call{Call: _e.mock.On("UpdateEvent", event, userId, isMod, boardId, columnVisabilities, showNotesOfOtherUsers, showAuthors)}
+}
+
+func (_c *MockNotesService_UpdateEvent_Call) Run(run func(event *realtime.BoardEvent, userId uuid.UUID, isMod bool, boardId uuid.UUID, columnVisabilities []ColumnVisability, showNotesOfOtherUsers bool, showAuthors bool)) *MockNotesService_UpdateEvent_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 *realtime.BoardEvent
+		if args[0] != nil {
+			arg0 = args[0].(*realtime.BoardEvent)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 bool
+		if args[2] != nil {
+			arg2 = args[2].(bool)
+		}
+		var arg3 uuid.UUID
+		if args[3] != nil {
+			arg3 = args[3].(uuid.UUID)
+		}
+		var arg4 []ColumnVisability
+		if args[4] != nil {
+			arg4 = args[4].([]ColumnVisability)
+		}
+		var arg5 bool
+		if args[5] != nil {
+			arg5 = args[5].(bool)
+		}
+		var arg6 bool
+		if args[6] != nil {
+			arg6 = args[6].(bool)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6,
+		)
+	})
+	return _c
+}
+
+func (_c *MockNotesService_UpdateEvent_Call) Return(boardEvent *realtime.BoardEvent, b bool) *MockNotesService_UpdateEvent_Call {
+	_c.Call.Return(boardEvent, b)
+	return _c
+}
+
+func (_c *MockNotesService_UpdateEvent_Call) RunAndReturn(run func(event *realtime.BoardEvent, userId uuid.UUID, isMod bool, boardId uuid.UUID, columnVisabilities []ColumnVisability, showNotesOfOtherUsers bool, showAuthors bool) (*realtime.BoardEvent, bool)) *MockNotesService_UpdateEvent_Call {
 	_c.Call.Return(run)
 	return _c
 }
