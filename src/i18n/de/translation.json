@@ -201,7 +201,10 @@
     "hiddenColumn": "Die Spalte ist für alle Teilnehmer ausgeblendet",
     "notes_one": "{{count}} Kärtchen",
     "notes_other": "{{count}} Kärtchen",
-    "color": "Farbe ändern"
+    "color": "Farbe ändern",
+    "Header": {
+      "descriptionPlaceholder": "Beschreibung hinzufügen (optional)"
+    }
   },
   "ErrorPage": {
     "navigateHome": "Startseite",

@@ -3,6 +3,7 @@
 .column-name-details {
   display: flex;
   flex-direction: column;
+  gap: $spacing--sm;
 }
 
 .column-name-details__name-wrapper {
@@ -27,4 +28,15 @@
   color: $gray--800;
   font-size: $text--base;
   font-weight: 600;
+}
+
+.column-name-details__description {
+  color: $navy--900;
+  font-size: $text--base;
+  font-weight: 600;
+  line-height: 14px;
+
+  &--placeholder {
+    color: $gray--800;
+  }
 }
