@@ -17,6 +17,8 @@ $description-line-height: $line-height--medium;
 .column-details__name-wrapper {
   display: flex;
   flex-direction: row;
+
+  overflow: hidden;
 }
 
 .column-details__name {
@@ -30,6 +32,10 @@ $description-line-height: $line-height--medium;
   color: $navy--900;
 
   border-bottom: 3px solid var(--accent-color--light);
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .column-details__notes-count {
