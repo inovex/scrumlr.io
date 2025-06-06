@@ -385,6 +385,7 @@ func run(c *cli.Context) error {
 	s := api.New(
 		basePath,
 		rt,
+		initializer.GetWebsocket(),
 		authConfig,
 
 		boardService,

@@ -71,6 +71,7 @@ type Server struct {
 func New(
 	basePath string,
 	rt *realtime.Broker,
+	websocket websocket.Upgrader,
 	auth auth.Auth,
 
 	boards boards.BoardService,
@@ -116,33 +117,30 @@ func New(
 	}
 
 	s := Server{
-		basePath:                         basePath,
-		realtime:                         rt,
+		basePath: basePath,
+		realtime: rt,
+		upgrader: websocket,
+
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
 		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
-		auth:                             auth,
-		boards:                           boards,
-		columns:                          columns,
-		votings:                          votings,
-		users:                            users,
-		notes:                            notes,
-		reactions:                        reactions,
-		sessions:                         sessions,
-		sessionRequests:                  sessionRequests,
-		health:                           health,
-		feedback:                         feedback,
-		boardReactions:                   boardReactions,
-		boardTemplates:                   boardTemplates,
-		columntemplates:                  columntemplates,
+
+		auth:            auth,
+		boards:          boards,
+		columns:         columns,
+		votings:         votings,
+		users:           users,
+		notes:           notes,
+		reactions:       reactions,
+		sessions:        sessions,
+		sessionRequests: sessionRequests,
+		health:          health,
+		feedback:        feedback,
+		boardReactions:  boardReactions,
+		boardTemplates:  boardTemplates,
+		columntemplates: columntemplates,
 
 		anonymousLoginDisabled:      anonymousLoginDisabled,
 		experimentalFileSystemStore: experimentalFileSystemStore,
-	}
-
-	// initialize websocket upgrader with origin check depending on options
-	s.upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
 	}
 
 	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.

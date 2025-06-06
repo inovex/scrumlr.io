@@ -142,3 +142,7 @@ func (init *ServiceInitializer) InitializeVotingService() votings.VotingService 
 
 	return votingService
 }
+
+func (init *ServiceInitializer) GetWebsocket() websocket.Upgrader {
+	return init.ws
+}
