@@ -210,10 +210,10 @@ github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOf
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc h1:9lRDQMhESg+zvGYmW5DyG0UqvY96Bu5QYsTLvCHdrgo=
 github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc/go.mod h1:bciPuU6GHm1iF1pBvUfxfsH0Wmnc2VbpgvbI9ZWuIRs=
-github.com/uptrace/bun v1.2.11 h1:l9dTymsdZZAoSZ1+Qo3utms0RffgkDbIv+1UGk8N1wQ=
-github.com/uptrace/bun v1.2.11/go.mod h1:ww5G8h59UrOnCHmZ8O1I/4Djc7M/Z3E+EWFS2KLB6dQ=
-github.com/uptrace/bun/dbfixture v1.2.11 h1:9rKYVDwQCLdXtPkgzMgvDsHKHXelNlXmnpuNHvFz2w0=
-github.com/uptrace/bun/dbfixture v1.2.11/go.mod h1:E2H4A4/dx6+xB61qGsjVqV17Pqyb+Gg5QTmswy4hUpk=
+github.com/uptrace/bun v1.2.12 h1:XRvGko5tIZ5A3T0GkLsbFFnSR2Yd6knuML8eJVGTLM0=
+github.com/uptrace/bun v1.2.12/go.mod h1:ZS4nPaEv2Du3OFqAD/irk3WVP6xTB3/9TWqjJbgKYBU=
+github.com/uptrace/bun/dbfixture v1.2.12 h1:zMiBeUfnDNk4ihXfkJSZWJf2IlOtWdu6BzcI2k4tDhI=
+github.com/uptrace/bun/dbfixture v1.2.12/go.mod h1:lbh6qM0GTurmAKsLAygFnZH846snz60ihS00fGgK4HA=
 github.com/uptrace/bun/dialect/pgdialect v1.2.11 h1:n0VKWm1fL1dwJK5TRxYYLaRKRe14BOg2+AQgpvqzG/M=
 github.com/uptrace/bun/dialect/pgdialect v1.2.11/go.mod h1:NvV1S/zwtwBnW8yhJ3XEKAQEw76SkeH7yUhfrx3W1Eo=
 github.com/uptrace/bun/extra/bundebug v1.2.11 h1:RyJmjITEXLRvFJwjD+u2U2eZijJhL7eIdzvW7FQSUgg=
