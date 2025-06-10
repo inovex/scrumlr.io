@@ -76,12 +76,11 @@ func New(
 	r.Use(middleware.RequestID)
 	r.Use(logger.RequestIDMiddleware)
 	r.Use(render.SetContentType(render.ContentTypeJSON))
-	//	r.Get("/debug/flags", handleFeatureFlags)
+	//  r.Get("/debug/flags", handleFeatureFlags)
 
 	if !checkOrigin {
 		r.Use(cors.Handler(cors.Options{
 			AllowedOrigins: []string{"https://*", "http://*"},
-
 			// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
 			AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 			AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
@@ -122,7 +121,8 @@ func New(
 		WriteBufferSize: 1024,
 	}
 
-	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
+	// if enabled, this experimental feature allows for larger session cookies
+	// *during OAuth authentication* by storing them in a file store.
 	// this might be required when using some OIDC providers which exceed the 4KB limit.
 	// see https://github.com/markbates/goth/pull/141
 	if s.experimentalFileSystemStore {
@@ -139,6 +139,7 @@ func New(
 			return true
 		}
 	}
+
 	if s.basePath == "/" {
 		s.publicRoutes(r)
 		s.protectedRoutes(r)
@@ -148,6 +149,7 @@ func New(
 			s.protectedRoutes(router)
 		})
 	}
+
 	return r
 }
 
@@ -227,6 +229,7 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		})
 	})
 }
+
 func (s *Server) getFeatureFlag(w http.ResponseWriter, r *http.Request) {
 	flagName := chi.URLParam(r, "name")
 	status := unleash.IsEnabled(flagName)
@@ -348,18 +351,6 @@ func (s *Server) initReactionResources(r chi.Router) {
 		})
 	})
 }
-
-/*
-func (s *Server) getFeatureFlagStatus(w http.ResponseWriter, r *http.Request) {
-
-		flagName := "non-AnonymousVoting"
-		if unleash.IsEnabled(flagName) {
-			w.Write([]byte("Feature '" + flagName + "' ist aktiviert"))
-		} else {
-			w.Write([]byte(" Feature '" + flagName + "' ist deaktiviert"))
-		}
-	}
-*/
 
 func (s *Server) initBoardReactionResources(r chi.Router) {
 	r.Route("/board-reactions", func(r chi.Router) {

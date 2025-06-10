@@ -60,6 +60,14 @@ The clarity id to use [Clarity](https://clarity.microsoft.com/).
 ```ini
 SCRUMLR_CLARITY_ID=''
 ```
+### Unleash Frontend
+
+Token and URL for Unleash integration
+
+```ini
+REACT_APP_UNLEASH_FRONTEND_URL=''
+REACT_APP_UNLEASH_FRONTEND_TOKEN=''
+```
 
 ## Backend
 
@@ -207,6 +215,15 @@ Only configure if you wish to use Apple OAuth.
 SCRUMLR_AUTH_APPLE_CLIENT_ID=''
 SCRUMLR_AUTH_APPLE_CLIENT_SECRET=''
 ```
+### Unleash Backend
+
+Token and URL for Unleash integration
+
+```ini
+SCRUMLR_UNLEASH_BACKEND_URL=''
+SCRUMLR_UNLEASH_BACKEND_TOKEN=''
+```
+
 
 ### OpenID Connect OAuth
 

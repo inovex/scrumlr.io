@@ -87,6 +87,16 @@ spec:
                   key: SESSION_SECRET
             - name: SCRUMLR_BASE_PATH
               value: "/api"
+            - name: SCRUMLR_UNLEASH_BACKEND_URL
+              valueFrom:
+                  secretKeyRef:
+                    name: unleash-creds-backend
+                    key: url
+            - name: SCRUMLR_UNLEASH_BACKEND_TOKEN
+              valueFrom:
+                  secretKeyRef:
+                    name: unleash-creds-backend
+                    key: token
           ports:
             - containerPort: 8080
 ---
@@ -134,6 +144,17 @@ spec:
             #   value: /api
             - name: SCRUMLR_SHOW_LEGAL_DOCUMENTS
               value: "true"
+            - name: REACT_APP_UNLEASH_FRONTEND_URL
+              valueFrom:
+                secretKeyRef:
+                  name: unleash-creds-frontend
+                  key: url
+            - name: REACT_APP_UNLEASH_FRONTEND_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: unleash-creds-frontend
+                  key: token
+
           ports:
             - containerPort: 80
 
