@@ -78,6 +78,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
           selectColor={onSelectColor}
           closeColorPicker={() => setOpenedColorPicker(false)}
           allowVertical
+          small
         />
       ),
       onClick: () => setOpenedColorPicker((o) => !o),
