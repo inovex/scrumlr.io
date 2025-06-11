@@ -16,30 +16,29 @@ import (
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
 	"scrumlr.io/server/technical_helper"
-	"scrumlr.io/server/users"
 )
 
 var (
-	moderatorUser = users.User{
+	moderatorUser = sessions.User{
 		ID: uuid.New(),
 	}
-	ownerUser = users.User{
+	ownerUser = sessions.User{
 		ID: uuid.New(),
 	}
-	participantUser = users.User{
+	participantUser = sessions.User{
 		ID:          uuid.New(),
 		AccountType: common.Anonymous,
 	}
 	moderatorBoardSession = sessions.BoardSession{
-		User: moderatorUser.ID,
+		User: moderatorUser,
 		Role: common.ModeratorRole,
 	}
 	ownerBoardSession = sessions.BoardSession{
-		User: ownerUser.ID,
+		User: ownerUser,
 		Role: common.OwnerRole,
 	}
 	participantBoardSession = sessions.BoardSession{
-		User: participantUser.ID,
+		User: participantUser,
 		Role: common.ParticipantRole,
 	}
 	boardSessions = []*sessions.BoardSession{
@@ -164,7 +163,7 @@ var (
 	}
 )
 
-func getUserById(id uuid.UUID) users.User {
+func getUserById(id uuid.UUID) sessions.User {
 	if ownerUser.ID == id {
 		return ownerUser
 	} else if participantUser.ID == id {
@@ -172,7 +171,7 @@ func getUserById(id uuid.UUID) users.User {
 	} else if moderatorUser.ID == id {
 		return moderatorUser
 	}
-	return users.User{}
+	return sessions.User{}
 }
 
 func TestEventFilter(t *testing.T) {
@@ -203,7 +202,7 @@ func TestEventFilter(t *testing.T) {
 func testRaiseHandShouldBeUpdatedAfterParticipantUpdated(t *testing.T) {
 
 	originalParticipantSession := technical_helper.Filter(boardSub.boardParticipants, func(session *sessions.BoardSession) bool {
-		user := getUserById(session.User)
+		user := getUserById(session.User.ID)
 		return user.AccountType == common.Anonymous
 	})[0]
 
@@ -241,7 +240,7 @@ func testParticipantUpdatedShouldHandleError(t *testing.T) {
 }
 
 func testIsModModerator(t *testing.T) {
-	isMod := sessions.CheckSessionRole(moderatorBoardSession.User, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+	isMod := sessions.CheckSessionRole(moderatorBoardSession.User.ID, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
@@ -249,7 +248,7 @@ func testIsModModerator(t *testing.T) {
 }
 
 func testIsOwnerModerator(t *testing.T) {
-	isMod := sessions.CheckSessionRole(ownerBoardSession.User, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+	isMod := sessions.CheckSessionRole(ownerBoardSession.User.ID, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.True(t, isMod)
@@ -257,7 +256,7 @@ func testIsOwnerModerator(t *testing.T) {
 }
 
 func testIsParticipantModerator(t *testing.T) {
-	isMod := sessions.CheckSessionRole(participantBoardSession.User, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+	isMod := sessions.CheckSessionRole(participantBoardSession.User.ID, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 
 	assert.NotNil(t, isMod)
 	assert.False(t, isMod)
@@ -512,14 +511,16 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusClosed(t *testing.T) {
 	latestVotingId := uuid.New()
 	newestVotingId := uuid.New()
 	clientId := uuid.New()
-
+	client := sessions.User{
+		ID: clientId,
+	}
 	initEvent := InitEvent{
 		Type: "",
 		Data: boards.FullBoard{
 			BoardSessions: []*sessions.BoardSession{
 				{
 					Role: common.ModeratorRole,
-					User: clientId,
+					User: client,
 				},
 			},
 			Votings: []*votings.Voting{
@@ -544,14 +545,16 @@ func TestShouldOnlyInsertLatestVotingInInitEventStatusOpen(t *testing.T) {
 	latestVotingId := uuid.New()
 	newestVotingId := uuid.New()
 	clientId := uuid.New()
-
+	client := sessions.User{
+		ID: clientId,
+	}
 	initEvent := InitEvent{
 		Type: "",
 		Data: boards.FullBoard{
 			BoardSessions: []*sessions.BoardSession{
 				{
 					Role: common.ModeratorRole,
-					User: clientId,
+					User: client,
 				},
 			},
 			Votings: []*votings.Voting{
@@ -575,7 +578,9 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 
 	clientId := uuid.New()
 	latestVotingId := uuid.New()
-
+	client := sessions.User{
+		ID: clientId,
+	}
 	orgVoting := []*votings.Voting{
 		buildVoting(latestVotingId, votings.Open),
 		buildVoting(uuid.New(), votings.Closed),
@@ -591,7 +596,7 @@ func TestShouldBeEmptyVotesInInitEventBecauseIdsDiffer(t *testing.T) {
 			BoardSessions: []*sessions.BoardSession{
 				{
 					Role: common.ModeratorRole,
-					User: clientId,
+					User: client,
 				},
 			},
 			Votings: orgVoting,
@@ -612,6 +617,9 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 	noteId := uuid.New()
 	columnId := uuid.New()
 	clientId := uuid.New()
+	client := sessions.User{
+		ID: clientId,
+	}
 	nameForUpdate := randSeq(10)
 	descriptionForUpdate := randSeq(10)
 
@@ -624,7 +632,7 @@ func TestShouldCreateNewInitEventBecauseNoModeratorRightsWithVisibleVotes(t *tes
 			BoardSessions: []*sessions.BoardSession{
 				{
 					Role: common.ParticipantRole,
-					User: clientId,
+					User: client,
 				},
 			},
 			Votings: []*votings.Voting{
