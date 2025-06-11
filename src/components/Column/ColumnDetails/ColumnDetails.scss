@@ -2,6 +2,8 @@
 
 $description-line-height: $line-height--medium;
 
+$settings-icon: 24px;
+
 .column-details {
   display: flex;
   flex-direction: column;
@@ -12,6 +14,7 @@ $description-line-height: $line-height--medium;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 
 .column-details__name-wrapper {
@@ -47,14 +50,14 @@ $description-line-height: $line-height--medium;
 .column-details__settings-icon-container {
   all: unset;
 
-  width: $icon--large;
-  height: $icon--large;
+  width: $settings-icon;
+  height: $settings-icon;
 
   cursor: pointer;
 }
 .column-details__settings-icon {
-  width: $icon--large;
-  height: $icon--large;
+  width: $settings-icon;
+  height: $settings-icon;
 
   transform: rotate(90deg);
 }
