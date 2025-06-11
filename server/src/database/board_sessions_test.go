@@ -1,13 +1,13 @@
 package database
 
 import (
+	"scrumlr.io/server/sessions"
 	"testing"
 
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/common"
 
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
 

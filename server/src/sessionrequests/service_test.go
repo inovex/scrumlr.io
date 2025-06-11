@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"scrumlr.io/server/sessions"
 	"testing"
 	"time"
 
@@ -15,7 +16,6 @@ import (
 	"github.com/uptrace/bun"
 	httpMock "scrumlr.io/server/mocks/net/http"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessions"
 )
 
 func TestGetSessionRequest(t *testing.T) {

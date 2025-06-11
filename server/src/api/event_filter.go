@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"scrumlr.io/server/sessions"
 	"slices"
 
 	"github.com/google/uuid"
@@ -11,7 +12,6 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votings"
 )
@@ -20,7 +20,7 @@ func (s *Server) eventFilter(bs *BoardSubscription, event *realtime.BoardEvent, 
 	boardSessions := make([]*sessions.BoardSession, len(bs.boardParticipants))
 	for i, session := range bs.boardParticipants {
 		boardSessions[i] = &sessions.BoardSession{
-			User:              session.User.ID,
+			User:              session.User,
 			Connected:         session.Connected,
 			ShowHiddenColumns: session.ShowHiddenColumns,
 			Ready:             session.Ready,
@@ -194,7 +194,7 @@ func (s *Server) participantUpdated(bs *BoardSubscription, event *realtime.Board
 	if isMod {
 		// Cache the changes of when a participant got updated
 		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *FullSession) *FullSession {
-			if boardSession.User.ID == participantSession.User {
+			if boardSession.User.ID == participantSession.User.ID {
 				user, err := s.users.Get(context.Background(), boardSession.User.ID)
 				if err != nil {
 					logger.Get().Errorw("unable to get user with id", boardSession.User.ID)
@@ -225,7 +225,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 	boardSessions := make([]*sessions.BoardSession, len(event.Data.BoardSessions))
 	for i, session := range event.Data.BoardSessions {
 		boardSessions[i] = &sessions.BoardSession{
-			User:              session.User.ID,
+			User:              session.User,
 			Connected:         session.Connected,
 			ShowHiddenColumns: session.ShowHiddenColumns,
 			Ready:             session.Ready,

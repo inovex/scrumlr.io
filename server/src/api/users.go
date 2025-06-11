@@ -1,15 +1,13 @@
 package api
 
 import (
-	"net/http"
-
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/users"
 )
 
 // getUser get a user
@@ -30,7 +28,7 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body users.UserUpdateRequest
+	var body sessions.UserUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))

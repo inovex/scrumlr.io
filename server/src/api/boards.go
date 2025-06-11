@@ -6,11 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"scrumlr.io/server/sessions"
 	"strconv"
 	"time"
 
 	"scrumlr.io/server/boards"
-	"scrumlr.io/server/users"
 	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/columns"
@@ -322,7 +322,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type FullSession struct {
-		User              users.User         `json:"user"`
+		User              sessions.User      `json:"user"`
 		Connected         bool               `json:"connected"`
 		ShowHiddenColumns bool               `json:"showHiddenColumns"`
 		Ready             bool               `json:"ready"`
@@ -334,7 +334,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 	fullSessions := make([]*FullSession, len(fullBoard.BoardSessions))
 	for i, session := range fullBoard.BoardSessions {
-		user, err := s.users.Get(r.Context(), session.User)
+		user, err := s.users.Get(r.Context(), session.User.ID)
 		if err != nil {
 			common.Throw(w, r, err)
 			return
@@ -401,8 +401,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
-				if session.User == note.Author {
-					user, _ := s.users.Get(r.Context(), session.User) // TODO handle error
+				if session.User.ID == note.Author {
+					user, _ := s.users.Get(r.Context(), session.User.ID) // TODO handle error
 					author = user.Name
 				}
 			}

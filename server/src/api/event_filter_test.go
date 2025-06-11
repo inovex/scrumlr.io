@@ -2,6 +2,7 @@ package api
 
 import (
 	"math/rand"
+	"scrumlr.io/server/sessions"
 	"testing"
 
 	"scrumlr.io/server/boards"
@@ -14,7 +15,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/users"
 )

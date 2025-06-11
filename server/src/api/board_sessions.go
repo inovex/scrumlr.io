@@ -2,12 +2,11 @@ package api
 
 import (
 	"net/http"
+	"scrumlr.io/server/sessions"
 	"time"
 
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/users"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
@@ -20,14 +19,14 @@ func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	filter := s.sessions.BoardSessionFilterTypeFromQueryString(r.URL.Query())
-	sessions, err := s.sessions.GetAll(r.Context(), board, filter)
+	boardSsessions, err := s.sessions.GetAll(r.Context(), board, filter)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
 	type FullSession struct {
-		User              users.User         `json:"user"`
+		User              sessions.User      `json:"user"`
 		Connected         bool               `json:"connected"`
 		ShowHiddenColumns bool               `json:"showHiddenColumns"`
 		Ready             bool               `json:"ready"`
@@ -37,9 +36,9 @@ func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 		Banned            bool               `json:"banned"`
 	}
 
-	fullSessions := make([]FullSession, len(sessions))
-	for i, session := range sessions {
-		user, err := s.users.Get(r.Context(), session.User)
+	fullSessions := make([]FullSession, len(boardSsessions))
+	for i, session := range boardSsessions {
+		user, err := s.users.Get(r.Context(), session.User.ID)
 		if err != nil {
 			common.Throw(w, r, err)
 			return
@@ -86,7 +85,7 @@ func (s *Server) getBoardSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fullSession := struct {
-		User              users.User         `json:"user"`
+		User              sessions.User      `json:"user"`
 		Connected         bool               `json:"connected"`
 		ShowHiddenColumns bool               `json:"showHiddenColumns"`
 		Ready             bool               `json:"ready"`
@@ -146,7 +145,7 @@ func (s *Server) updateBoardSession(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fullSession := struct {
-		User              users.User         `json:"user"`
+		User              sessions.User      `json:"user"`
 		Connected         bool               `json:"connected"`
 		ShowHiddenColumns bool               `json:"showHiddenColumns"`
 		Ready             bool               `json:"ready"`
@@ -189,7 +188,7 @@ func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type FullSession struct {
-		User              users.User         `json:"user"`
+		User              sessions.User      `json:"user"`
 		Connected         bool               `json:"connected"`
 		ShowHiddenColumns bool               `json:"showHiddenColumns"`
 		Ready             bool               `json:"ready"`
@@ -201,7 +200,7 @@ func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
 
 	fullSessions := make([]FullSession, len(updatedSessions))
 	for i, session := range updatedSessions {
-		user, err := s.users.Get(r.Context(), session.User)
+		user, err := s.users.Get(r.Context(), session.User.ID)
 		if err != nil {
 			common.Throw(w, r, err)
 			return

@@ -3,11 +3,11 @@ package api
 import (
 	"context"
 	"net/http"
+	"scrumlr.io/server/sessions"
 	"time"
 
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/users"
 	"scrumlr.io/server/votings"
 
 	"scrumlr.io/server/columns"
@@ -39,7 +39,7 @@ type InitEvent struct {
 }
 
 type FullSession struct {
-	User              users.User         `json:"user"`
+	User              sessions.User      `json:"user"`
 	Connected         bool               `json:"connected"`
 	ShowHiddenColumns bool               `json:"showHiddenColumns"`
 	Ready             bool               `json:"ready"`
@@ -82,7 +82,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 
 	fullSessions := make([]*FullSession, len(board.BoardSessions))
 	for i, session := range board.BoardSessions {
-		user, err := s.users.Get(r.Context(), session.User)
+		user, err := s.users.Get(r.Context(), session.User.ID)
 		if err != nil {
 			common.Throw(w, r, err)
 			return

@@ -8,37 +8,27 @@ import (
 	"scrumlr.io/server/common"
 )
 
-type DatabaseBoardSession struct {
-	bun.BaseModel     `bun:"table:board_sessions"`
-	Board             uuid.UUID
-	User              uuid.UUID
-	Avatar            *common.Avatar
-	Name              string
-	ShowHiddenColumns bool
-	Connected         bool
-	Ready             bool
-	RaisedHand        bool
-	Role              common.SessionRole
-	Banned            bool
-	AccountType       common.AccountType
-	CreatedAt         time.Time
+// User model of the application
+type DatabaseUser struct {
+	bun.BaseModel `bun:"table:users"`
+	ID            uuid.UUID      `bun:"type:uuid"`
+	Avatar        *common.Avatar `bun:"type:jsonb,nullzero"`
+	Name          string
+	AccountType   common.AccountType
+	KeyMigration  *time.Time
+	CreatedAt     time.Time
 }
 
-type DatabaseBoardSessionInsert struct {
-	bun.BaseModel `bun:"table:board_sessions"`
-	Board         uuid.UUID
-	User          uuid.UUID
-	Role          common.SessionRole
+// UserInsert the insert type for a new User
+type DatabaseUserInsert struct {
+	bun.BaseModel `bun:"table:users"`
+	Name          string
+	AccountType   common.AccountType
 }
 
-type DatabaseBoardSessionUpdate struct {
-	bun.BaseModel     `bun:"table:board_sessions"`
-	Board             uuid.UUID
-	User              uuid.UUID
-	Connected         *bool
-	ShowHiddenColumns *bool
-	Ready             *bool
-	RaisedHand        *bool
-	Role              *common.SessionRole
-	Banned            *bool
+type DatabaseUserUpdate struct {
+	bun.BaseModel `bun:"table:users"`
+	ID            uuid.UUID `bun:"type:uuid"`
+	Name          string
+	Avatar        *common.Avatar `bun:"type:jsonb,nullzero"`
 }

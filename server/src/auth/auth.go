@@ -9,10 +9,10 @@ import (
 	"io"
 	"math"
 	"net/http"
+	"scrumlr.io/server/sessions"
 	"strings"
 
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/users"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
@@ -57,7 +57,7 @@ type AuthConfiguration struct {
 	unsafeAuth       *jwtauth.JWTAuth
 	auth             *jwtauth.JWTAuth
 	database         *bun.DB
-	userService      users.UserService
+	userService      sessions.UserService
 }
 
 type UserInformation struct {
@@ -65,7 +65,7 @@ type UserInformation struct {
 	Ident, Name, AvatarURL string
 }
 
-func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService users.UserService) (Auth, error) {
+func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService sessions.UserService) (Auth, error) {
 	a := new(AuthConfiguration)
 	a.providers = providers
 	a.unsafePrivateKey = unsafePrivateKey

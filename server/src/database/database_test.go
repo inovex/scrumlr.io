@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"scrumlr.io/server/sessions"
 	"time"
 
 	"github.com/uptrace/bun"
@@ -26,7 +27,6 @@ import (
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/users"
 )
 

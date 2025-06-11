@@ -1,6 +1,7 @@
 package boards
 
 import (
+	"scrumlr.io/server/sessions"
 	"time"
 
 	"github.com/google/uuid"
@@ -9,7 +10,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
 )
 
