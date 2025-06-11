@@ -2,11 +2,10 @@ package api
 
 import (
 	"net/http"
-	"scrumlr.io/server/sessions"
-	"time"
 
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/sessions"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
@@ -19,45 +18,14 @@ func (s *Server) getBoardSessions(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	filter := s.sessions.BoardSessionFilterTypeFromQueryString(r.URL.Query())
-	boardSsessions, err := s.sessions.GetAll(r.Context(), board, filter)
+	sessions, err := s.sessions.GetAll(r.Context(), board, filter)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
-	type FullSession struct {
-		User              sessions.User      `json:"user"`
-		Connected         bool               `json:"connected"`
-		ShowHiddenColumns bool               `json:"showHiddenColumns"`
-		Ready             bool               `json:"ready"`
-		RaisedHand        bool               `json:"raisedHand"`
-		Role              common.SessionRole `json:"role"`
-		CreatedAt         time.Time          `json:"createdAt"`
-		Banned            bool               `json:"banned"`
-	}
-
-	fullSessions := make([]FullSession, len(boardSsessions))
-	for i, session := range boardSsessions {
-		user, err := s.users.Get(r.Context(), session.User.ID)
-		if err != nil {
-			common.Throw(w, r, err)
-			return
-		}
-
-		fullSessions[i] = FullSession{
-			User:              *user,
-			Connected:         session.Connected,
-			ShowHiddenColumns: session.ShowHiddenColumns,
-			Ready:             session.Ready,
-			RaisedHand:        session.RaisedHand,
-			Role:              session.Role,
-			CreatedAt:         session.CreatedAt,
-			Banned:            session.Banned,
-		}
-	}
-
 	render.Status(r, http.StatusOK)
-	render.Respond(w, r, fullSessions)
+	render.Respond(w, r, sessions)
 }
 
 // getBoardSession get a participant
@@ -72,40 +40,14 @@ func (s *Server) getBoardSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.Get(r.Context(), userId)
-	if err != nil {
-		common.Throw(w, r, err)
-		return
-	}
-
 	session, err := s.sessions.Get(r.Context(), board, userId)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
 	}
 
-	fullSession := struct {
-		User              sessions.User      `json:"user"`
-		Connected         bool               `json:"connected"`
-		ShowHiddenColumns bool               `json:"showHiddenColumns"`
-		Ready             bool               `json:"ready"`
-		RaisedHand        bool               `json:"raisedHand"`
-		Role              common.SessionRole `json:"role"`
-		CreatedAt         time.Time          `json:"createdAt"`
-		Banned            bool               `json:"banned"`
-	}{
-		User:              *user,
-		Connected:         session.Connected,
-		ShowHiddenColumns: session.ShowHiddenColumns,
-		Ready:             session.Ready,
-		RaisedHand:        session.RaisedHand,
-		Role:              session.Role,
-		CreatedAt:         session.CreatedAt,
-		Banned:            session.Banned,
-	}
-
 	render.Status(r, http.StatusOK)
-	render.Respond(w, r, fullSession)
+	render.Respond(w, r, session)
 }
 
 // updateBoardSession updates a participant
@@ -138,34 +80,8 @@ func (s *Server) updateBoardSession(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.Get(r.Context(), userId)
-	if err != nil {
-		common.Throw(w, r, err)
-		return
-	}
-
-	fullSession := struct {
-		User              sessions.User      `json:"user"`
-		Connected         bool               `json:"connected"`
-		ShowHiddenColumns bool               `json:"showHiddenColumns"`
-		Ready             bool               `json:"ready"`
-		RaisedHand        bool               `json:"raisedHand"`
-		Role              common.SessionRole `json:"role"`
-		CreatedAt         time.Time          `json:"createdAt"`
-		Banned            bool               `json:"banned"`
-	}{
-		User:              *user,
-		Connected:         session.Connected,
-		ShowHiddenColumns: session.ShowHiddenColumns,
-		Ready:             session.Ready,
-		RaisedHand:        session.RaisedHand,
-		Role:              session.Role,
-		CreatedAt:         session.CreatedAt,
-		Banned:            session.Banned,
-	}
-
 	render.Status(r, http.StatusOK)
-	render.Respond(w, r, fullSession)
+	render.Respond(w, r, session)
 }
 
 // updateBoardSessions updates all participants
@@ -187,37 +103,6 @@ func (s *Server) updateBoardSessions(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	type FullSession struct {
-		User              sessions.User      `json:"user"`
-		Connected         bool               `json:"connected"`
-		ShowHiddenColumns bool               `json:"showHiddenColumns"`
-		Ready             bool               `json:"ready"`
-		RaisedHand        bool               `json:"raisedHand"`
-		Role              common.SessionRole `json:"role"`
-		CreatedAt         time.Time          `json:"createdAt"`
-		Banned            bool               `json:"banned"`
-	}
-
-	fullSessions := make([]FullSession, len(updatedSessions))
-	for i, session := range updatedSessions {
-		user, err := s.users.Get(r.Context(), session.User.ID)
-		if err != nil {
-			common.Throw(w, r, err)
-			return
-		}
-
-		fullSessions[i] = FullSession{
-			User:              *user,
-			Connected:         session.Connected,
-			ShowHiddenColumns: session.ShowHiddenColumns,
-			Ready:             session.Ready,
-			RaisedHand:        session.RaisedHand,
-			Role:              session.Role,
-			CreatedAt:         session.CreatedAt,
-			Banned:            session.Banned,
-		}
-	}
-
 	render.Status(r, http.StatusOK)
-	render.Respond(w, r, fullSessions)
+	render.Respond(w, r, updatedSessions)
 }

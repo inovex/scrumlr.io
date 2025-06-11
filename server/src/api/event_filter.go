@@ -1,8 +1,6 @@
 package api
 
 import (
-	"context"
-	"scrumlr.io/server/sessions"
 	"slices"
 
 	"github.com/google/uuid"
@@ -12,47 +10,34 @@ import (
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
 	"scrumlr.io/server/votings"
 )
 
-func (s *Server) eventFilter(bs *BoardSubscription, event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
-	boardSessions := make([]*sessions.BoardSession, len(bs.boardParticipants))
-	for i, session := range bs.boardParticipants {
-		boardSessions[i] = &sessions.BoardSession{
-			User:              session.User,
-			Connected:         session.Connected,
-			ShowHiddenColumns: session.ShowHiddenColumns,
-			Ready:             session.Ready,
-			RaisedHand:        session.RaisedHand,
-			Role:              session.Role,
-			CreatedAt:         session.CreatedAt,
-			Banned:            session.Banned,
-		}
-	}
-
-	isMod := sessions.CheckSessionRole(userID, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
+	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
-		if updated, ok := s.columnsUpdated(bs, event, userID, isMod); ok {
+		if updated, ok := bs.columnsUpdated(event, userID, isMod); ok {
 			return updated
 		}
 	case realtime.BoardEventNotesUpdated, realtime.BoardEventNotesSync:
-		if updated, ok := s.notesUpdated(bs, event, userID, isMod); ok {
+		if updated, ok := bs.notesUpdated(event, userID, isMod); ok {
 			return updated
 		}
 	case realtime.BoardEventBoardUpdated:
-		if updated, ok := s.boardUpdated(bs, event, isMod); ok {
+		if updated, ok := bs.boardUpdated(event, isMod); ok {
 			return updated
 		}
 	case realtime.BoardEventVotingUpdated:
-		if updated, ok := s.votingUpdated(bs, event, userID, isMod); ok {
+		if updated, ok := bs.votingUpdated(event, userID, isMod); ok {
 			return updated
 		}
 	case realtime.BoardEventParticipantUpdated:
-		_ = s.participantUpdated(bs, event, isMod)
+		_ = bs.participantUpdated(event, isMod)
 	case realtime.BoardEventVotesDeleted:
-		if updated, ok := s.votesDeleted(bs, event, userID); ok {
+		if updated, ok := bs.votesDeleted(event, userID); ok {
 			return updated
 		}
 	}
@@ -60,7 +45,7 @@ func (s *Server) eventFilter(bs *BoardSubscription, event *realtime.BoardEvent, 
 	return event
 }
 
-func (s *Server) columnsUpdated(bs *BoardSubscription, event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
+func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
 	var updateColumns columns.ColumnSlice
 	updateColumns, err := columns.UnmarshallColumnData(event.Data)
 
@@ -80,7 +65,7 @@ func (s *Server) columnsUpdated(bs *BoardSubscription, event *realtime.BoardEven
 	}
 }
 
-func (s *Server) notesUpdated(bs *BoardSubscription, event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
+func (bs *BoardSubscription) notesUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
 	noteSlice, err := notes.UnmarshallNotaData(event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse notesUpdated or eventNotesSync in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
@@ -104,7 +89,7 @@ func (s *Server) notesUpdated(bs *BoardSubscription, event *realtime.BoardEvent,
 	}
 }
 
-func (s *Server) boardUpdated(bs *BoardSubscription, event *realtime.BoardEvent, isMod bool) (*realtime.BoardEvent, bool) {
+func (bs *BoardSubscription) boardUpdated(event *realtime.BoardEvent, isMod bool) (*realtime.BoardEvent, bool) {
 	boardSettings, err := technical_helper.Unmarshal[boards.Board](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", bs.boardSettings.ID, "err", err)
@@ -119,7 +104,7 @@ func (s *Server) boardUpdated(bs *BoardSubscription, event *realtime.BoardEvent,
 	}
 }
 
-func (s *Server) votesDeleted(bs *BoardSubscription, event *realtime.BoardEvent, userID uuid.UUID) (*realtime.BoardEvent, bool) {
+func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uuid.UUID) (*realtime.BoardEvent, bool) {
 	//filter deleted votes after user
 	votes, err := technical_helper.UnmarshalSlice[votings.Vote](event.Data)
 	if err != nil {
@@ -136,7 +121,7 @@ func (s *Server) votesDeleted(bs *BoardSubscription, event *realtime.BoardEvent,
 	return &ret, true
 }
 
-func (s *Server) votingUpdated(bs *BoardSubscription, event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
+func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
 	voting, err := votings.UnmarshallVoteData(event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
@@ -184,7 +169,7 @@ func (s *Server) votingUpdated(bs *BoardSubscription, event *realtime.BoardEvent
 	}
 }
 
-func (s *Server) participantUpdated(bs *BoardSubscription, event *realtime.BoardEvent, isMod bool) bool {
+func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMod bool) bool {
 	participantSession, err := technical_helper.Unmarshal[sessions.BoardSession](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse participantUpdated in event filter", "board", bs.boardSettings.ID, "err", err)
@@ -193,24 +178,9 @@ func (s *Server) participantUpdated(bs *BoardSubscription, event *realtime.Board
 
 	if isMod {
 		// Cache the changes of when a participant got updated
-		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *FullSession) *FullSession {
-			if boardSession.User.ID == participantSession.User.ID {
-				user, err := s.users.Get(context.Background(), boardSession.User.ID)
-				if err != nil {
-					logger.Get().Errorw("unable to get user with id", boardSession.User.ID)
-					return nil
-				}
-
-				return &FullSession{
-					User:              *user,
-					Connected:         participantSession.Connected,
-					ShowHiddenColumns: participantSession.ShowHiddenColumns,
-					Ready:             participantSession.Ready,
-					RaisedHand:        participantSession.RaisedHand,
-					Role:              participantSession.Role,
-					CreatedAt:         participantSession.CreatedAt,
-					Banned:            participantSession.Banned,
-				}
+		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *sessions.BoardSession) *sessions.BoardSession {
+			if boardSession.User == participantSession.User {
+				return participantSession
 			} else {
 				return boardSession
 			}
@@ -222,21 +192,7 @@ func (s *Server) participantUpdated(bs *BoardSubscription, event *realtime.Board
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	boardSessions := make([]*sessions.BoardSession, len(event.Data.BoardSessions))
-	for i, session := range event.Data.BoardSessions {
-		boardSessions[i] = &sessions.BoardSession{
-			User:              session.User,
-			Connected:         session.Connected,
-			ShowHiddenColumns: session.ShowHiddenColumns,
-			Ready:             session.Ready,
-			RaisedHand:        session.RaisedHand,
-			Role:              session.Role,
-			CreatedAt:         session.CreatedAt,
-			Banned:            session.Banned,
-		}
-	}
-
-	isMod := sessions.CheckSessionRole(clientID, boardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
+	isMod := sessions.CheckSessionRole(clientID, event.Data.BoardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {
 		latestVoting := event.Data.Votings[0]
@@ -273,7 +229,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 
 	return InitEvent{
 		Type: event.Type,
-		Data: FullBoard{
+		Data: boards.FullBoard{
 			Board:                event.Data.Board,
 			BoardSessions:        event.Data.BoardSessions,
 			BoardSessionRequests: event.Data.BoardSessionRequests,
