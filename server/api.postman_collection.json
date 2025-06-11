@@ -1027,15 +1027,15 @@
 									"",
 									"",
 									"pm.test(\"Check that first entry of array includes column templates\", () => {",
-									"    pm.expect(res[0].ColumnTemplates).to.exist;",
+									"    pm.expect(res[0].columns).to.exist;",
 									"})",
 									"",
 									"pm.test(\"Check that column template is not null\", () => {",
-									"    pm.expect(res[0].ColumnTemplates).to.not.be.null;",
+									"    pm.expect(res[0].columns).to.not.be.null;",
 									"})",
 									"",
 									"pm.test(\"Check that column template is an array\", () => {",
-									"    pm.expect(res[0].ColumnTemplates).to.be.an('array');",
+									"    pm.expect(res[0].columns).to.be.an('array');",
 									"})"
 								],
 								"type": "text/javascript",
@@ -4098,8 +4098,7 @@
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"OPEN\"\n}",
-
+							"body": "{\n    \"id\": \"6ea90c4c-84df-4647-a6e1-3255299f2717\",\n    \"voteLimit\": 5,\n    \"allowMultipleVotes\": true,\n    \"showVotesOfOthers\": false,\n    \"status\": \"OPEN\"\n}"
 						}
 					]
 				},

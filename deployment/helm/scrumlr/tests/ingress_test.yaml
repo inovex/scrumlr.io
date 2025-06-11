@@ -1,0 +1,230 @@
+---
+suite: test ingress
+templates:
+  - /ingress.yaml
+tests:
+  - it: should set name, namespace, apiVersion and kind
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+    asserts:
+      - containsDocument:
+          kind: Ingress
+          apiVersion: networking.k8s.io/v1
+          name: scrumlr-ingress
+          namespace: scrumlr
+
+  - it: should not set ingress if not enabled
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should not set annotations
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+    asserts:
+      - notExists:
+          path: metadata.annotations
+
+  - it: should set annotations
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+      ingress.annotations:
+        kubernetes.io/ingress.class: nginx
+    asserts:
+      - exists:
+          path: metadata.annotations
+      - exists:
+          path: metadata.annotations["kubernetes.io/ingress.class"]
+      - equal:
+          path: metadata.annotations["kubernetes.io/ingress.class"]
+          value: nginx
+
+  - it: should not set ingress class name
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+    asserts:
+      - notExists:
+          path: spec.ingressClassName
+
+  - it: should set ingress class name
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+      ingress.ingressClassName: traefik
+    asserts:
+      - exists:
+          path: spec.ingressClassName
+      - equal:
+          path: spec.ingressClassName
+          value: traefik
+
+  - it: should set default http rules
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /api
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: Prefix
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: scrumlr-backend
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 80
+      - equal:
+          path: spec.rules[0].http.paths[1].path
+          value: /
+      - equal:
+          path: spec.rules[0].http.paths[1].pathType
+          value: Prefix
+      - equal:
+          path: spec.rules[0].http.paths[1].backend.service.name
+          value: scrumlr-frontend
+      - equal:
+          path: spec.rules[0].http.paths[1].backend.service.port.number
+          value: 80
+      - equal:
+          path: spec.rules[0].host
+          value: scrumlr.local
+
+  - it: should set http rule
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+      ingress.hostname: my.scrumlr.local
+      ingress.path.backend: /scrumlr/api
+      ingress.path.frontend: /scrumlr
+      ingress.pathType: ImplementationSpecific
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: /scrumlr/api
+      - equal:
+          path: spec.rules[0].http.paths[0].pathType
+          value: ImplementationSpecific
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: scrumlr-backend
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: 80
+      - equal:
+          path: spec.rules[0].http.paths[1].path
+          value: /scrumlr
+      - equal:
+          path: spec.rules[0].http.paths[1].pathType
+          value: ImplementationSpecific
+      - equal:
+          path: spec.rules[0].http.paths[1].backend.service.name
+          value: scrumlr-frontend
+      - equal:
+          path: spec.rules[0].http.paths[1].backend.service.port.number
+          value: 80
+      - equal:
+          path: spec.rules[0].host
+          value: my.scrumlr.local
+
+  - it: should not set host for http rules
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+      ingress.hostname: "*"
+    asserts:
+      - notExists:
+          path: spec.rules[0].host
+
+  - it: should not set http rules
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+      ingress.hostname: ""
+    asserts:
+      - notExists:
+          path: spec.rules[0]
+
+  - it: should not set tls
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+    asserts:
+      - notExists:
+          path: spec.tls
+
+  - it: should not set tls
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+      ingress.tls: true
+    asserts:
+      - notExists:
+          path: spec.tls
+
+  - it: should set tls host self signed
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+      ingress.tls: true
+      ingress.selfSigned: true
+    asserts:
+      - exists:
+          path: spec.tls
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: scrumlr.local
+      - equal:
+          path: spec.tls[0].secretName
+          value: scrumlr.local-tls
+
+  - it: should set tls host annotations
+    release:
+      name: scrumlr
+      namespace: scrumlr
+    set:
+      ingress.enabled: true
+      ingress.tls: true
+      ingress.annotations:
+        cert-manager.io/cluster-issuer: prod
+    asserts:
+      - exists:
+          path: spec.tls
+      - equal:
+          path: spec.tls[0].hosts[0]
+          value: scrumlr.local
+      - equal:
+          path: spec.tls[0].secretName
+          value: scrumlr.local-tls
