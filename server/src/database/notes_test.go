@@ -1,6 +1,7 @@
 package database
 
 import (
+	"scrumlr.io/server/sessions"
 	"testing"
 
 	"scrumlr.io/server/boards"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/users"
 )
 
 func TestRunnerForNotes(t *testing.T) {
@@ -77,9 +77,9 @@ var stackF *notes.NoteDB
 var stackG *notes.NoteDB
 var stackH *notes.NoteDB
 
-var stackUser *users.DatabaseUser
+var stackUser *sessions.DatabaseUser
 
-var author *users.DatabaseUser
+var author *sessions.DatabaseUser
 
 var deleteStack bool
 
@@ -157,7 +157,7 @@ func verifyNoteOrder(t *testing.T, notes []notes.NoteDB, expected ...*notes.Note
 }
 
 func testCreateNote(t *testing.T) {
-	author = fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	author = fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	note, err := notesDb.CreateNote(notes.NoteInsertDB{
 		Author: author.ID,
@@ -177,7 +177,7 @@ func testCreateNote(t *testing.T) {
 }
 
 func testCreateNoteWithEmptyTextShouldFail(t *testing.T) {
-	author = fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	author = fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 	_, err := notesDb.CreateNote(notes.NoteInsertDB{
 		Author: author.ID,
 		Board:  notesTestBoard.ID,
@@ -397,7 +397,7 @@ func testChangeOrderWhenMoveWithinStackToLower(t *testing.T) {
 	stackB = fixture.MustRow("NoteDB.stackTestNote2").(*notes.NoteDB)
 	stackC = fixture.MustRow("NoteDB.stackTestNote3").(*notes.NoteDB)
 	stackD = fixture.MustRow("NoteDB.stackTestNote4").(*notes.NoteDB)
-	stackUser = fixture.MustRow("DatabaseUser.justin").(*users.DatabaseUser)
+	stackUser = fixture.MustRow("DatabaseUser.justin").(*sessions.DatabaseUser)
 
 	/*
 	   A: Rank 1337, Stack null
@@ -535,7 +535,7 @@ func testDeleteStackParent(t *testing.T) {
 	stackF = fixture.MustRow("NoteDB.stackTestNote6").(*notes.NoteDB)
 	stackG = fixture.MustRow("NoteDB.stackTestNote7").(*notes.NoteDB)
 	stackH = fixture.MustRow("NoteDB.stackTestNote8").(*notes.NoteDB)
-	stackUser = fixture.MustRow("DatabaseUser.justin").(*users.DatabaseUser)
+	stackUser = fixture.MustRow("DatabaseUser.justin").(*sessions.DatabaseUser)
 	deleteStack = false
 
 	/*
@@ -579,7 +579,7 @@ func testDeleteStack(t *testing.T) {
 	stackTestBoard = fixture.MustRow("DatabaseBoard.stackTestBoard").(*boards.DatabaseBoard)
 	stackTestColumnB = fixture.MustRow("DatabaseColumn.stackTestColumnB").(*columns.DatabaseColumn)
 	stackH = fixture.MustRow("NoteDB.stackTestNote8").(*notes.NoteDB)
-	stackUser = fixture.MustRow("DatabaseUser.justin").(*users.DatabaseUser)
+	stackUser = fixture.MustRow("DatabaseUser.justin").(*sessions.DatabaseUser)
 
 	notesInStack, _ := notesDb.GetAll(stackTestBoard.ID, stackTestColumnB.ID)
 	assert.Equal(t, 3, len(notesInStack))

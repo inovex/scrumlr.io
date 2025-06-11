@@ -2,8 +2,8 @@ package initialize
 
 import (
 	"net/http"
-
 	"scrumlr.io/server/boards"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
 
 	"scrumlr.io/server/votings"
@@ -22,8 +22,6 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/users"
 )
 
 type ServiceInitializer struct {
@@ -122,9 +120,9 @@ func (init *ServiceInitializer) InitializeWebsocket() sessionrequests.Websocket 
 	return websocket
 }
 
-func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) users.UserService {
-	userDb := users.NewUserDatabase(init.db)
-	userService := users.NewUserService(userDb, init.rt, sessionService)
+func (init *ServiceInitializer) InitializeUserService(sessionService sessions.SessionService) sessions.UserService {
+	userDb := sessions.NewUserDatabase(init.db)
+	userService := sessions.NewUserService(userDb, init.rt, sessionService)
 
 	return userService
 }

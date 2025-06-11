@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/sessions"
 	"time"
 
 	"scrumlr.io/server/boards"
@@ -33,8 +34,6 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
-	"scrumlr.io/server/users"
 )
 
 type Server struct {
@@ -46,7 +45,7 @@ type Server struct {
 	boards          boards.BoardService
 	columns         columns.ColumnService
 	votings         votings.VotingService
-	users           users.UserService
+	users           sessions.UserService
 	notes           notes.NotesService
 	reactions       reactions.ReactionService
 	sessions        sessions.SessionService
@@ -76,7 +75,7 @@ func New(
 	boards boards.BoardService,
 	columns columns.ColumnService,
 	votings votings.VotingService,
-	users users.UserService,
+	users sessions.UserService,
 	notes notes.NotesService,
 	reactions reactions.ReactionService,
 	sessions sessions.SessionService,
