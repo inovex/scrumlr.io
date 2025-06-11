@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
@@ -12,7 +12,6 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/sessions"
 )
 
 type DB struct {

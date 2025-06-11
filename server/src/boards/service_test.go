@@ -3,6 +3,7 @@ package boards
 import (
 	"context"
 	"errors"
+	"scrumlr.io/server/sessions"
 	"testing"
 	"time"
 
@@ -11,7 +12,6 @@ import (
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
 	"scrumlr.io/server/votings"
 

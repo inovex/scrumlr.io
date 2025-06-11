@@ -2,12 +2,12 @@ package database
 
 import (
 	"database/sql"
+	"scrumlr.io/server/sessions"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/users"
 )
 
 func TestRunnerForUser(t *testing.T) {
@@ -29,7 +29,7 @@ func testInsertUser(t *testing.T) {
 }
 
 func testGetUser(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.john").(*sessions.DatabaseUser)
 
 	gotUser, err := userDb.GetUser(user.ID)
 	assert.Nil(t, err)
@@ -50,7 +50,7 @@ func testUpdateUser(t *testing.T) {
 	assert.Nil(t, err)
 
 	newName := "Piece Peace"
-	updatedUser, err := userDb.UpdateUser(users.DatabaseUserUpdate{ID: user.ID, Name: newName})
+	updatedUser, err := userDb.UpdateUser(sessions.DatabaseUserUpdate{ID: user.ID, Name: newName})
 	assert.Nil(t, err)
 
 	assert.Equal(t, newName, updatedUser.Name)

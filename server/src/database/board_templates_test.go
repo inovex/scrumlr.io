@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"scrumlr.io/server/sessions"
 	"testing"
 
 	"scrumlr.io/server/boards"
@@ -9,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/boardtemplates"
 	"scrumlr.io/server/columntemplates"
-	"scrumlr.io/server/users"
 )
 
 func TestRunnerForBoardTemplates(t *testing.T) {
@@ -36,7 +36,7 @@ func TestRunnerForBoardTemplates(t *testing.T) {
 }
 
 func testCreatePublicBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -55,7 +55,7 @@ func testCreatePublicBoardTemplate(t *testing.T) {
 }
 
 func testCreateByPassphraseBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -74,7 +74,7 @@ func testCreateByPassphraseBoardTemplate(t *testing.T) {
 }
 
 func testCreateByInviteBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -93,7 +93,7 @@ func testCreateByInviteBoardTemplate(t *testing.T) {
 }
 
 func testCreateBoardTemplateAlsoCreatesColumnTemplates(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	visible := true
 	notVisible := false
@@ -144,7 +144,7 @@ func testCreateBoardTemplateAlsoCreatesColumnTemplates(t *testing.T) {
 }
 
 func testCreateBoardTemplateWithName(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	name := "Test Template"
 
@@ -162,7 +162,7 @@ func testCreateBoardTemplateWithName(t *testing.T) {
 }
 
 func testCreateBoardTemplateWithDescription(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	description := "Test Description"
 
@@ -180,7 +180,7 @@ func testCreateBoardTemplateWithDescription(t *testing.T) {
 }
 
 func testUpdatePublicBoardTemplateToPassphraseBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -202,7 +202,7 @@ func testUpdatePublicBoardTemplateToPassphraseBoardTemplate(t *testing.T) {
 }
 
 func testUpdatePublicBoardTemplateToByInviteBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -224,7 +224,7 @@ func testUpdatePublicBoardTemplateToByInviteBoardTemplate(t *testing.T) {
 }
 
 func testUpdateByPassphraseBoardTemplateToByInviteBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -246,7 +246,7 @@ func testUpdateByPassphraseBoardTemplateToByInviteBoardTemplate(t *testing.T) {
 }
 
 func testUpdateByInviteBoardTemplateToByPassphraseBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -268,7 +268,7 @@ func testUpdateByInviteBoardTemplateToByPassphraseBoardTemplate(t *testing.T) {
 }
 
 func testUpdateBoardTemplateName(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -290,7 +290,7 @@ func testUpdateBoardTemplateName(t *testing.T) {
 }
 
 func testUpdateBoardTemplateDescription(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -312,7 +312,7 @@ func testUpdateBoardTemplateDescription(t *testing.T) {
 }
 
 func testUpdateBoardTemplateFavouriteToTrue(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
 		Creator:      user.ID,
@@ -334,7 +334,7 @@ func testUpdateBoardTemplateFavouriteToTrue(t *testing.T) {
 }
 
 func testUpdateBoardTemplateFavouriteFromTrueToFalse(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	favourited := true
 
@@ -358,7 +358,7 @@ func testUpdateBoardTemplateFavouriteFromTrueToFalse(t *testing.T) {
 }
 
 func testGetBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	name := "Get Template Test"
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
@@ -380,7 +380,7 @@ func testGetBoardTemplate(t *testing.T) {
 }
 
 func testGetAllBoardTemplatesForSpecificUser(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	name := "Get Template Test"
 	templateOne, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
@@ -409,7 +409,7 @@ func testGetAllBoardTemplatesForSpecificUser(t *testing.T) {
 }
 
 func testDeleteBoardTemplate(t *testing.T) {
-	user := fixture.MustRow("DatabaseUser.jack").(*users.DatabaseUser)
+	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	name := "Delete Template Test"
 	template, err := boardTemplatesDb.Create(boardtemplates.DatabaseBoardTemplateInsert{
