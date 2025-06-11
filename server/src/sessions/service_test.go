@@ -710,6 +710,11 @@ func TestUpdateUser(t *testing.T) {
 	secondBoardId := uuid.New()
 	name := "Stan"
 
+	user := User{
+		ID:   userId,
+		Name: name,
+	}
+
 	mockUserDatabase := NewMockUserDatabase(t)
 	mockUserDatabase.EXPECT().UpdateUser(DatabaseUserUpdate{ID: userId, Name: name}).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
@@ -722,20 +727,20 @@ func TestUpdateUser(t *testing.T) {
 	mockSessionService := NewMockSessionService(t)
 	mockSessionService.EXPECT().GetUserConnectedBoards(context.Background(), userId).
 		Return([]*BoardSession{
-			{User: userId, Board: firstBoardId},
-			{User: userId, Board: secondBoardId},
+			{User: user, Board: firstBoardId},
+			{User: user, Board: secondBoardId},
 		}, nil)
 	mockSessionService.EXPECT().Get(context.Background(), firstBoardId, userId).
-		Return(&BoardSession{User: userId, Board: firstBoardId}, nil)
+		Return(&BoardSession{User: user, Board: firstBoardId}, nil)
 	mockSessionService.EXPECT().Get(context.Background(), secondBoardId, userId).
-		Return(&BoardSession{User: userId, Board: secondBoardId}, nil)
+		Return(&BoardSession{User: user, Board: secondBoardId}, nil)
 
 	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
+	updatedUser, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
 
 	assert.Nil(t, err)
-	assert.NotNil(t, user)
+	assert.NotNil(t, updatedUser)
 }
 
 func TestUpdateUser_DatabaseError(t *testing.T) {
