@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"scrumlr.io/server/sessions"
 	"strings"
 	"testing"
 	"time"
@@ -18,7 +19,6 @@ import (
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
 )
 
 type BoardTestSuite struct {

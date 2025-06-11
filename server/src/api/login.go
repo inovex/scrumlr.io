@@ -4,15 +4,14 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"scrumlr.io/server/sessions"
 	"strings"
 	"time"
 
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/users"
-
 	"github.com/go-chi/render"
 	"github.com/markbates/goth/gothic"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/logger"
 )
 
 // AnonymousSignUpRequest represents the request to create a new anonymous user.
@@ -98,7 +97,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var internalUser *users.User
+	var internalUser *sessions.User
 	switch provider {
 	case common.Google:
 		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)

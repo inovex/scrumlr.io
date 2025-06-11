@@ -4,1101 +4,891 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
-	"net/url"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	mock "github.com/stretchr/testify/mock"
-	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
 )
 
-func TestGetSession(t *testing.T) {
-	boardId := uuid.New()
+func TestGetUser(t *testing.T) {
 	userId := uuid.New()
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, userId).Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{ID: userId}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	session, err := sessionService.Get(context.Background(), boardId, userId)
+	user, err := userService.Get(context.Background(), userId)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, session)
-	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.User)
+	assert.NotNil(t, user)
 }
 
-func TestGetSession_NotFound(t *testing.T) {
-	boardId := uuid.New()
+func TestGetUser_NotFound(t *testing.T) {
 	userId := uuid.New()
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, userId).Return(DatabaseBoardSession{}, sql.ErrNoRows)
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{}, sql.ErrNoRows)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	session, err := sessionService.Get(context.Background(), boardId, userId)
+	user, err := userService.Get(context.Background(), userId)
 
-	assert.Nil(t, session)
+	assert.Nil(t, user)
 	assert.NotNil(t, err)
 	assert.Equal(t, common.NotFoundError, err)
 }
 
-func TestGetSession_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
+func TestGetUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	dbError := "unable to execute"
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, userId).Return(DatabaseBoardSession{}, errors.New(dbError))
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	session, err := sessionService.Get(context.Background(), boardId, userId)
+	user, err := userService.Get(context.Background(), userId)
 
-	assert.Nil(t, session)
+	assert.Nil(t, user)
 	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Errorf("unable to get session for board: %w", errors.New(dbError)), err)
+	assert.Equal(t, common.InternalServerError, err)
 }
 
-func TestGetSessions(t *testing.T) {
-	boardId := uuid.New()
-	firstUserId := uuid.New()
-	secondUserId := uuid.New()
-	filter := BoardSessionFilter{}
+func TestCreateAnonymusUser(t *testing.T) {
+	name := "Stan"
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
-		Return([]DatabaseBoardSession{
-			{Board: boardId, User: firstUserId},
-			{Board: boardId, User: secondUserId},
-		}, nil)
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateAnonymousUser(name).Return(DatabaseUser{ID: uuid.New(), Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, boardSessions)
-	assert.Len(t, boardSessions, 2)
-
-	assert.Equal(t, firstUserId, boardSessions[0].User)
-	assert.Equal(t, boardId, boardSessions[0].Board)
-
-	assert.Equal(t, secondUserId, boardSessions[1].User)
-	assert.Equal(t, boardId, boardSessions[1].Board)
-}
-
-func TestListSessions_WithFilterConnected(t *testing.T) {
-	boardId := uuid.New()
-	connected := true
-	filter := BoardSessionFilter{Connected: &connected}
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
-		Return([]DatabaseBoardSession{
-			{Board: boardId, Connected: connected},
-			{Board: boardId, Connected: connected},
-		}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
+	user, err := userService.CreateAnonymous(context.Background(), name)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, boardSessions)
-	assert.Len(t, boardSessions, 2)
-
-	assert.Equal(t, connected, boardSessions[0].Connected)
-	assert.Equal(t, boardId, boardSessions[0].Board)
-
-	assert.Equal(t, connected, boardSessions[1].Connected)
-	assert.Equal(t, boardId, boardSessions[1].Board)
+	assert.NotNil(t, user)
 }
 
-func TestListSessions_WithFilterReady(t *testing.T) {
-	boardId := uuid.New()
-	ready := true
-	filter := BoardSessionFilter{Ready: &ready}
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
-		Return([]DatabaseBoardSession{
-			{Board: boardId, Ready: ready},
-			{Board: boardId, Ready: ready},
-		}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, boardSessions)
-	assert.Len(t, boardSessions, 2)
-
-	assert.Equal(t, ready, boardSessions[0].Ready)
-	assert.Equal(t, boardId, boardSessions[0].Board)
-
-	assert.Equal(t, ready, boardSessions[1].Ready)
-	assert.Equal(t, boardId, boardSessions[1].Board)
-}
-
-func TestListSessions_WithFilterRaisedHand(t *testing.T) {
-	boardId := uuid.New()
-	raisedHand := true
-	filter := BoardSessionFilter{RaisedHand: &raisedHand}
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
-		Return([]DatabaseBoardSession{
-			{Board: boardId, RaisedHand: raisedHand},
-			{Board: boardId, RaisedHand: raisedHand},
-		}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, boardSessions)
-	assert.Len(t, boardSessions, 2)
-
-	assert.Equal(t, raisedHand, boardSessions[0].RaisedHand)
-	assert.Equal(t, boardId, boardSessions[0].Board)
-
-	assert.Equal(t, raisedHand, boardSessions[1].RaisedHand)
-	assert.Equal(t, boardId, boardSessions[1].Board)
-}
-
-func TestListSessions_WithFilterRole(t *testing.T) {
-	boardId := uuid.New()
-	moderatorRole := common.ModeratorRole
-	filter := BoardSessionFilter{Role: &moderatorRole}
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
-		Return([]DatabaseBoardSession{
-			{Board: boardId, Role: common.ModeratorRole},
-			{Board: boardId, Role: common.ModeratorRole},
-		}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, boardSessions)
-	assert.Len(t, boardSessions, 2)
-
-	assert.Equal(t, moderatorRole, boardSessions[0].Role)
-	assert.Equal(t, boardId, boardSessions[0].Board)
-
-	assert.Equal(t, moderatorRole, boardSessions[1].Role)
-	assert.Equal(t, boardId, boardSessions[1].Board)
-}
-
-func TestListSessions_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
+func TestCreateAnonymusUser_DatabaseError(t *testing.T) {
+	name := "Stan"
 	dbError := "unable to execute"
-	filter := BoardSessionFilter{}
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().GetAll(boardId, []BoardSessionFilter{filter}).
-		Return([]DatabaseBoardSession{}, errors.New(dbError))
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateAnonymousUser(name).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	boardSessions, err := sessionService.GetAll(context.Background(), boardId, filter)
+	user, err := userService.CreateAnonymous(context.Background(), name)
 
-	assert.Nil(t, boardSessions)
+	assert.Nil(t, user)
 	assert.NotNil(t, err)
 	assert.Equal(t, errors.New(dbError), err)
 }
 
-func TestCreateSession(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
+func TestCreateAnonymusUser_EmptyUsername(t *testing.T) {
+	name := "   "
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Create(DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: common.ParticipantRole}).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAnonymous(context.Background(), name)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not be empty"), err)
+}
+
+func TestCreateAnonymusUser_NewLineUsername(t *testing.T) {
+	name := "Stan\n"
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAnonymous(context.Background(), name)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+}
+
+func TestCreateAppleUser(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateAppleUser(userId.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: userId, Name: name}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, user)
+}
+
+func TestCreateAppleUser_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+	dbError := "unable to execute"
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateAppleUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestCreateAppleUser_EmptyUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "   "
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not be empty"), err)
+}
+
+func TestCreateAppleUser_NewLineUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan\n"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAppleUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+}
+
+func TestCreateAzureUser(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateAzureAdUser(userId.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: userId, Name: name}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, user)
+}
+
+func TestCreateAzureUser_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+	dbError := "unable to execute"
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateAzureAdUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestCreateAzureUser_EmptyUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "   "
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not be empty"), err)
+}
+
+func TestCreateAzureUser_NewLineUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan\n"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateAzureAdUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+}
+
+func TestCreateGitHubUser(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateGitHubUser(userId.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: userId, Name: name}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, user)
+}
+
+func TestCreateGitHubUser_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+	dbError := "unable to execute"
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateGitHubUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestCreateGitHubUser_EmptyUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "   "
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not be empty"), err)
+}
+
+func TestCreateGitHubUser_NewLineUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan\n"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateGitHubUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+}
+
+func TestCreateGoogleUser(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateGoogleUser(userId.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: userId, Name: name}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, user)
+}
+
+func TestCreateGoogleUser_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+	dbError := "unable to execute"
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateGoogleUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestCreateGoogleUser_EmptyUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "   "
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not be empty"), err)
+}
+
+func TestCreateGoogleUser_NewLineUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan\n"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateGoogleUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+}
+
+func TestCreateMicrosoftUser(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateMicrosoftUser(userId.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: userId, Name: name}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, user)
+}
+
+func TestCreateMicrosoftUser_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+	dbError := "unable to execute"
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateMicrosoftUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestCreateMicrosoftUser_EmptyUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "   "
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not be empty"), err)
+}
+
+func TestCreateMicrosoftUser_NewLineUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan\n"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateMicrosoftUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+}
+
+func TestCreateOIDCUser(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateOIDCUser(userId.String(), name, avatarUrl).
+		Return(DatabaseUser{ID: userId, Name: name}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, user)
+}
+
+func TestCreateOIDCUser_DatabaseError(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan"
+	avatarUrl := ""
+	dbError := "unable to execute"
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().CreateOIDCUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New(dbError), err)
+}
+
+func TestCreateOIDCUser_EmptyUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "   "
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not be empty"), err)
+}
+
+func TestCreateOIDCUser_NewLineUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan\n"
+	avatarUrl := ""
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.CreateOIDCUser(context.Background(), userId.String(), name, avatarUrl)
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+}
+
+func TestUpdateUser(t *testing.T) {
+	userId := uuid.New()
+	firstBoardId := uuid.New()
+	secondBoardId := uuid.New()
+	name := "Stan"
+
+	user := User{
+		ID:   userId,
+		Name: name,
+	}
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().UpdateUser(DatabaseUserUpdate{ID: userId, Name: name}).
+		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
+	mockSessionService.EXPECT().GetUserConnectedBoards(context.Background(), userId).
+		Return([]*BoardSession{
+			{User: user, Board: firstBoardId},
+			{User: user, Board: secondBoardId},
+		}, nil)
+	mockSessionService.EXPECT().Get(context.Background(), firstBoardId, userId).
+		Return(&BoardSession{User: user, Board: firstBoardId}, nil)
+	mockSessionService.EXPECT().Get(context.Background(), secondBoardId, userId).
+		Return(&BoardSession{User: user, Board: secondBoardId}, nil)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	session, err := sessionService.Create(context.Background(), boardId, userId)
+	updatedUser, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
 
 	assert.Nil(t, err)
-	assert.NotNil(t, session)
-
-	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.User)
-	assert.Equal(t, common.ParticipantRole, session.Role)
+	assert.NotNil(t, updatedUser)
 }
 
-func TestCreateSession_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
+func TestUpdateUser_DatabaseError(t *testing.T) {
 	userId := uuid.New()
-	dbError := "unable to create"
+	name := "Stan"
+	dbError := "unable to execute"
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Create(DatabaseBoardSessionInsert{Board: boardId, User: userId, Role: common.ParticipantRole}).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().UpdateUser(DatabaseUserUpdate{ID: userId, Name: name}).
+		Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	session, err := sessionService.Create(context.Background(), boardId, userId)
+	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
 
-	assert.Nil(t, session)
+	assert.Nil(t, user)
 	assert.NotNil(t, err)
 	assert.Equal(t, errors.New(dbError), err)
 }
 
-func TestUpdateSession_Role(t *testing.T) {
-	boardId := uuid.New()
-	moderatorId := uuid.New()
+func TestUpdateUser_EmptyUsername(t *testing.T) {
 	userId := uuid.New()
-	firstColumnId := uuid.New()
-	secondColumnId := uuid.New()
-	moderatorRole := common.ModeratorRole
+	name := "   "
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
-	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &moderatorRole}).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ModeratorRole}, nil)
-	mockSessiondb.EXPECT().GetUserConnectedBoards(userId).
-		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
+	mockUserDatabase := NewMockUserDatabase(t)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockColumnService.EXPECT().GetAll(context.Background(), boardId).
-		Return([]*columns.Column{
-			{ID: firstColumnId},
-			{ID: secondColumnId},
-		}, nil)
+	mockSessionService := NewMockSessionService(t)
 
-	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{firstColumnId, secondColumnId}).
-		Return([]*notes.Note{
-			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
-		}, nil)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
 
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:  boardId,
-		Caller: moderatorId,
-		User:   userId,
-		Role:   &moderatorRole,
-	})
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not be empty"), err)
+}
+
+func TestUpdateUser_NewLineUsername(t *testing.T) {
+	userId := uuid.New()
+	name := "Stan\n"
+
+	mockUserDatabase := NewMockUserDatabase(t)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	user, err := userService.Update(context.Background(), UserUpdateRequest{ID: userId, Name: name})
+
+	assert.Nil(t, user)
+	assert.NotNil(t, err)
+	assert.Equal(t, errors.New("name may not contain newline characters"), err)
+}
+
+func TestAvailableForKeyMigration(t *testing.T) {
+	userId := uuid.New()
+
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(userId).Return(true, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockSessionService := NewMockSessionService(t)
+
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
+
+	available, err := userService.IsUserAvailableForKeyMigration(context.Background(), userId)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, session)
-
-	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.User)
-	assert.Equal(t, common.ModeratorRole, session.Role)
+	assert.True(t, available)
 }
 
-func TestUpdateSession_RaiseHand(t *testing.T) {
-	boardId := uuid.New()
+func TestAvailableForKeyMigration_DatabaseError(t *testing.T) {
 	userId := uuid.New()
-	firstColumnId := uuid.New()
-	secondColumnId := uuid.New()
-	raisedHand := true
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
-	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, RaisedHand: &raisedHand}).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, RaisedHand: raisedHand}, nil)
-	mockSessiondb.EXPECT().GetUserConnectedBoards(userId).
-		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockColumnService.EXPECT().GetAll(context.Background(), boardId).
-		Return([]*columns.Column{
-			{ID: firstColumnId},
-			{ID: secondColumnId},
-		}, nil)
-
-	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{firstColumnId, secondColumnId}).
-		Return([]*notes.Note{
-			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
-		}, nil)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:      boardId,
-		Caller:     userId,
-		User:       userId,
-		RaisedHand: &raisedHand,
-	})
-
-	assert.Nil(t, err)
-	assert.NotNil(t, session)
-
-	assert.Equal(t, boardId, session.Board)
-	assert.Equal(t, userId, session.User)
-	assert.Equal(t, raisedHand, session.RaisedHand)
-}
-
-func TestUpdateSession_DatbaseErrorGetModerator(t *testing.T) {
-	boardId := uuid.New()
-	moderatorId := uuid.New()
-	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
 	dbError := "unable to execute"
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, moderatorId).Return(DatabaseBoardSession{}, errors.New(dbError))
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(userId).Return(false, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:  boardId,
-		Caller: moderatorId,
-		User:   userId,
-		Role:   &moderatorRole,
-	})
+	available, err := userService.IsUserAvailableForKeyMigration(context.Background(), userId)
 
-	assert.Nil(t, session)
-	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Errorf("unable to get session for board: %w", errors.New(dbError)), err)
-}
-
-func TestUpdateSession_DatbaseErrorGetUserToPromote(t *testing.T) {
-	boardId := uuid.New()
-	moderatorId := uuid.New()
-	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
-	dbError := "unable to execute"
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:  boardId,
-		Caller: moderatorId,
-		User:   userId,
-		Role:   &moderatorRole,
-	})
-
-	assert.Nil(t, session)
-	assert.NotNil(t, err)
-	assert.Equal(t, fmt.Errorf("unable to get session for board: %w", errors.New(dbError)), err)
-}
-
-func TestUpdateSession_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
-	moderatorId := uuid.New()
-	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
-	dbError := "unable to execute"
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ModeratorRole}, nil)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
-	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &moderatorRole}).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:  boardId,
-		Caller: moderatorId,
-		User:   userId,
-		Role:   &moderatorRole,
-	})
-
-	assert.Nil(t, session)
+	assert.False(t, available)
 	assert.NotNil(t, err)
 	assert.Equal(t, errors.New(dbError), err)
 }
 
-func TestUpdateSession_ErrorPromotingUserPermission(t *testing.T) {
-	boardId := uuid.New()
-	moderatorId := uuid.New()
+func TestSetKeyMigration(t *testing.T) {
 	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, moderatorId).
-		Return(DatabaseBoardSession{Board: boardId, User: moderatorId, Role: common.ParticipantRole}, nil)
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().SetKeyMigration(userId).Return(DatabaseUser{ID: userId}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:  boardId,
-		Caller: moderatorId,
-		User:   userId,
-		Role:   &moderatorRole,
-	})
-
-	assert.Nil(t, session)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change other users session")), err)
-}
-
-func TestUpdateSession_ErrorPromoting(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:  boardId,
-		Caller: userId,
-		User:   userId,
-		Role:   &moderatorRole,
-	})
-
-	assert.Nil(t, session)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("cannot promote role")), err)
-}
-
-func TestUpdateSession_ErrorChangingOwner(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	moderatorRole := common.ModeratorRole
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.OwnerRole}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:  boardId,
-		Caller: userId,
-		User:   userId,
-		Role:   &moderatorRole,
-	})
-
-	assert.Nil(t, session)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to change owner role")), err)
-}
-
-func TestUpdateSession_ErrorPromotingToOwner(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	ownerRole := common.OwnerRole
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ModeratorRole}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	session, err := sessionService.Update(context.Background(), BoardSessionUpdateRequest{
-		Board:  boardId,
-		Caller: userId,
-		User:   userId,
-		Role:   &ownerRole,
-	})
-
-	assert.Nil(t, session)
-	assert.NotNil(t, err)
-	assert.Equal(t, common.ForbiddenError(errors.New("not allowed to promote to owner role")), err)
-}
-
-func TestUpdateAllSessions(t *testing.T) {
-	boardId := uuid.New()
-	firstUserId := uuid.New()
-	secondUserId := uuid.New()
-	ready := true
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().UpdateAll(DatabaseBoardSessionUpdate{Board: boardId, Ready: &ready}).
-		Return([]DatabaseBoardSession{
-			{Board: boardId, User: firstUserId, Ready: ready},
-			{Board: boardId, User: secondUserId, Ready: ready},
-		}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	boardSessions, err := sessionService.UpdateAll(context.Background(), BoardSessionsUpdateRequest{Board: boardId, Ready: &ready})
+	user, err := userService.SetKeyMigration(context.Background(), userId)
 
 	assert.Nil(t, err)
-	assert.NotNil(t, boardSessions)
-	assert.Len(t, boardSessions, 2)
-
-	assert.Equal(t, boardId, boardSessions[0].Board)
-	assert.Equal(t, firstUserId, boardSessions[0].User)
-	assert.Equal(t, ready, boardSessions[0].Ready)
-
-	assert.Equal(t, boardId, boardSessions[1].Board)
-	assert.Equal(t, secondUserId, boardSessions[1].User)
-	assert.Equal(t, ready, boardSessions[1].Ready)
+	assert.NotNil(t, user)
 }
 
-func TestUpdateAllSessions_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
-	ready := true
-	dbError := "unable to execute"
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().UpdateAll(DatabaseBoardSessionUpdate{Board: boardId, Ready: &ready}).
-		Return([]DatabaseBoardSession{}, errors.New(dbError))
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	boardSessions, err := sessionService.UpdateAll(context.Background(), BoardSessionsUpdateRequest{Board: boardId, Ready: &ready})
-
-	assert.Nil(t, boardSessions)
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
-}
-
-func TestConnectSession(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	firstColumnId := uuid.New()
-	secondColumnId := uuid.New()
-	connected := true
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Connected: connected}, nil)
-	mockSessiondb.EXPECT().GetUserConnectedBoards(userId).
-		Return([]DatabaseBoardSession{{User: userId, Board: boardId}}, nil)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockColumnService.EXPECT().GetAll(context.Background(), boardId).
-		Return([]*columns.Column{
-			{ID: firstColumnId},
-			{ID: secondColumnId},
-		}, nil)
-
-	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{firstColumnId, secondColumnId}).
-		Return([]*notes.Note{
-			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
-		}, nil)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	err := sessionService.Connect(context.Background(), boardId, userId)
-
-	assert.Nil(t, err)
-}
-
-func TestConnectSession_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	dbError := "unable to execute"
-	connected := true
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	err := sessionService.Connect(context.Background(), boardId, userId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
-}
-
-func TestDisconnectSession(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	firstColumnId := uuid.New()
-	secondColumnId := uuid.New()
-	connected := false
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
-		Return(DatabaseBoardSession{Board: boardId, User: userId, Connected: connected}, nil)
-	mockSessiondb.EXPECT().GetUserConnectedBoards(userId).
-		Return([]DatabaseBoardSession{{User: userId, Board: boardId}}, nil)
-	mockSessiondb.EXPECT().Get(boardId, userId).
-		Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockColumnService.EXPECT().GetAll(context.Background(), boardId).
-		Return([]*columns.Column{
-			{ID: firstColumnId},
-			{ID: secondColumnId},
-		}, nil)
-
-	mockNoteService := notes.NewMockNotesService(t)
-	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{firstColumnId, secondColumnId}).
-		Return([]*notes.Note{
-			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 1}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: firstColumnId, Rank: 2}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 1}},
-			{ID: uuid.New(), Position: notes.NotePosition{Column: secondColumnId, Rank: 2}},
-		}, nil)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	err := sessionService.Disconnect(context.Background(), boardId, userId)
-
-	assert.Nil(t, err)
-}
-
-func TestDisconnectSession_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	dbError := "unable to execute"
-	connected := false
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected}).
-		Return(DatabaseBoardSession{}, errors.New(dbError))
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	err := sessionService.Disconnect(context.Background(), boardId, userId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
-}
-
-func TestSessionExists(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Exists(boardId, userId).Return(true, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	exists, err := sessionService.Exists(context.Background(), boardId, userId)
-
-	assert.Nil(t, err)
-	assert.True(t, exists)
-}
-
-func TestSessionExists_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
+func TestSetKeymigration_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	dbError := "unable to execute"
 
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().Exists(boardId, userId).Return(false, errors.New(dbError))
+	mockUserDatabase := NewMockUserDatabase(t)
+	mockUserDatabase.EXPECT().SetKeyMigration(userId).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
+	mockSessionService := NewMockSessionService(t)
 
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
+	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
 
-	exists, err := sessionService.Exists(context.Background(), boardId, userId)
+	user, err := userService.SetKeyMigration(context.Background(), userId)
 
+	assert.Nil(t, user)
 	assert.NotNil(t, err)
 	assert.Equal(t, errors.New(dbError), err)
-	assert.False(t, exists)
-}
-
-func TestModeratorSessionExists(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().ModeratorExists(boardId, userId).Return(true, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	exists, err := sessionService.ModeratorSessionExists(context.Background(), boardId, userId)
-
-	assert.Nil(t, err)
-	assert.True(t, exists)
-}
-
-func TestModeratorSessionExists_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	dbError := "unable to execute"
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().ModeratorExists(boardId, userId).Return(false, errors.New(dbError))
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	exists, err := sessionService.ModeratorSessionExists(context.Background(), boardId, userId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
-	assert.False(t, exists)
-}
-
-func TestIsParticipantBanned(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().IsParticipantBanned(boardId, userId).Return(true, nil)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	banned, err := sessionService.IsParticipantBanned(context.Background(), boardId, userId)
-
-	assert.Nil(t, err)
-	assert.True(t, banned)
-}
-
-func TestIsParticipantBanned_DatabaseError(t *testing.T) {
-	boardId := uuid.New()
-	userId := uuid.New()
-	dbError := "unable to execute"
-
-	mockSessiondb := NewMockSessionDatabase(t)
-	mockSessiondb.EXPECT().IsParticipantBanned(boardId, userId).Return(false, errors.New(dbError))
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	banned, err := sessionService.IsParticipantBanned(context.Background(), boardId, userId)
-
-	assert.NotNil(t, err)
-	assert.Equal(t, errors.New(dbError), err)
-	assert.False(t, banned)
-}
-
-func TestFilterfromQueryString_EmptyQuery(t *testing.T) {
-	mockSessiondb := NewMockSessionDatabase(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	query := url.Values{}
-	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
-
-	assert.Equal(t, BoardSessionFilter{}, filter)
-}
-
-func TestFilterfromQueryString_Connected(t *testing.T) {
-	mockSessiondb := NewMockSessionDatabase(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	connected := true
-	query := url.Values{}
-	query.Add("connected", "true")
-	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
-
-	assert.Equal(t, BoardSessionFilter{Connected: &connected}, filter)
-}
-
-func TestFilterfromQueryString_Ready(t *testing.T) {
-	mockSessiondb := NewMockSessionDatabase(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	ready := true
-	query := url.Values{}
-	query.Add("ready", "true")
-	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
-
-	assert.Equal(t, BoardSessionFilter{Ready: &ready}, filter)
-}
-
-func TestFilterfromQueryString_Raisedhand(t *testing.T) {
-	mockSessiondb := NewMockSessionDatabase(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	raisedHand := true
-	query := url.Values{}
-	query.Add("raisedHand", "true")
-	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
-
-	assert.Equal(t, BoardSessionFilter{RaisedHand: &raisedHand}, filter)
-}
-
-func TestFilterfromQueryString_Role(t *testing.T) {
-	mockSessiondb := NewMockSessionDatabase(t)
-
-	mockBroker := realtime.NewMockClient(t)
-	broker := new(realtime.Broker)
-	broker.Con = mockBroker
-
-	mockColumnService := columns.NewMockColumnService(t)
-	mockNoteService := notes.NewMockNotesService(t)
-
-	sessionService := NewSessionService(mockSessiondb, broker, mockColumnService, mockNoteService)
-
-	role := common.OwnerRole
-	query := url.Values{}
-	query.Add("role", "OWNER")
-	filter := sessionService.BoardSessionFilterTypeFromQueryString(query)
-
-	assert.Equal(t, BoardSessionFilter{Role: &role}, filter)
 }
