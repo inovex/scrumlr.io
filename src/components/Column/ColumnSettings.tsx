@@ -131,7 +131,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
 
   return (
     <div ref={columnSettingsRef} className={classNames(props.className, "column-settings")}>
-      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn />
+      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn small />
     </div>
   );
 };

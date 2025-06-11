@@ -1,5 +1,11 @@
 @import "constants/style";
 
+$height--default: 48px;
+$height--small: 36px;
+
+$icon--default: 40px;
+$icon--small: 24px;
+
 .mini-menu {
   display: flex;
   flex-direction: row;
@@ -9,7 +15,7 @@
 
   width: fit-content;
   height: fit-content;
-  min-height: 48px;
+  min-height: $height--default;
   padding-left: $spacing--xxs 2px;
 
   border-radius: $rounded--full;
@@ -21,6 +27,13 @@
     background: none;
     box-shadow: none;
   }
+
+  &--small {
+    min-height: $height--small;
+    height: $height--small;
+    padding-left: 2px;
+    padding-right: 2px;
+  }
 }
 .mini-menu__item {
   all: unset;
@@ -29,8 +42,8 @@
   justify-content: center;
   align-items: center;
 
-  width: 40px;
-  height: 40px;
+  width: $icon--default;
+  height: $icon--default;
   border-radius: $rounded--full;
 
   color: $navy--900;
@@ -38,8 +51,8 @@
   cursor: pointer;
 
   &--small {
-    width: 24px;
-    height: 24px;
+    width: $icon--small;
+    height: $icon--small;
   }
 
   &:hover {
