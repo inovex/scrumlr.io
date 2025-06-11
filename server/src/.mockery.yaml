@@ -50,6 +50,11 @@ packages:
     interfaces:
       NotesService:
       NotesDatabase:
+# todo: reimplement this interface
+#  scrumlr.io/server/sessions:
+#    interfaces:
+#      UserService:
+#      UserDatabase:
 
   scrumlr.io/server/votings:
     interfaces:
