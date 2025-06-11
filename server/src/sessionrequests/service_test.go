@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"scrumlr.io/server/sessions"
 	"testing"
 	"time"
 
@@ -15,7 +16,6 @@ import (
 	"github.com/uptrace/bun"
 	httpMock "scrumlr.io/server/mocks/net/http"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessions"
 )
 
 func TestGetSessionRequest(t *testing.T) {
@@ -264,13 +264,16 @@ func TestUpdatesessionRequest(t *testing.T) {
 	boardId := uuid.New()
 	userId := uuid.New()
 
+	user := sessions.User{
+		ID: userId,
+	}
 	mockSessionRequestDb := NewMockSessionRequestDatabase(t)
 	mockSessionRequestDb.EXPECT().Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted}).
 		Return(DatabaseBoardSessionRequest{Board: boardId, User: userId, Status: RequestAccepted}, nil)
 
 	mockSessionService := sessions.NewMockSessionService(t)
 	mockSessionService.EXPECT().Create(context.Background(), boardId, userId).
-		Return(&sessions.BoardSession{Board: boardId, User: userId}, nil)
+		Return(&sessions.BoardSession{Board: boardId, User: user}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)

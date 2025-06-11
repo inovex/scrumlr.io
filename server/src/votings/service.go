@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
@@ -91,7 +90,7 @@ func (s *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting
 	return new(Voting).From(voting, nil), err
 }
 
-func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*uuid.UUID) (*Voting, error) {
+func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []Note) (*Voting, error) {
 	log := logger.FromContext(ctx)
 	if body.Status == Open {
 		return nil, common.BadRequestError(errors.New("not allowed ot change to open state"))
@@ -193,7 +192,7 @@ func (s *Service) CreatedVoting(board, voting uuid.UUID) {
 	})
 }
 
-func (s *Service) UpdatedVoting(board uuid.UUID, voting VotingDB, affectedNotes []*uuid.UUID) {
+func (s *Service) UpdatedVoting(board uuid.UUID, voting VotingDB, affectedNotes []Note) {
 	dbVoting, dbVotes, err := s.database.Get(board, voting.ID)
 	if err != nil {
 		logger.Get().Errorw("unable to retrieve voting in updated voting", "err", err)
@@ -209,8 +208,8 @@ func (s *Service) UpdatedVoting(board uuid.UUID, voting VotingDB, affectedNotes 
 	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: struct {
-			Voting *Voting      `json:"voting"`
-			Notes  []*uuid.UUID `json:"notes"`
+			Voting *Voting `json:"voting"`
+			Notes  []Note  `json:"notes"`
 		}{
 			Voting: new(Voting).From(dbVoting, dbVotes),
 			Notes:  affectedNotes,

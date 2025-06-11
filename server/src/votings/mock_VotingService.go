@@ -511,7 +511,7 @@ func (_c *MockVotingService_RemoveVote_Call) RunAndReturn(run func(ctx context.C
 }
 
 // Update provides a mock function for the type MockVotingService
-func (_mock *MockVotingService) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []*uuid.UUID) (*Voting, error) {
+func (_mock *MockVotingService) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []Note) (*Voting, error) {
 	ret := _mock.Called(ctx, body, affectedNotes)
 
 	if len(ret) == 0 {
@@ -520,17 +520,17 @@ func (_mock *MockVotingService) Update(ctx context.Context, body VotingUpdateReq
 
 	var r0 *Voting
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, VotingUpdateRequest, []*uuid.UUID) (*Voting, error)); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, VotingUpdateRequest, []Note) (*Voting, error)); ok {
 		return returnFunc(ctx, body, affectedNotes)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, VotingUpdateRequest, []*uuid.UUID) *Voting); ok {
+	if returnFunc, ok := ret.Get(0).(func(context.Context, VotingUpdateRequest, []Note) *Voting); ok {
 		r0 = returnFunc(ctx, body, affectedNotes)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*Voting)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, VotingUpdateRequest, []*uuid.UUID) error); ok {
+	if returnFunc, ok := ret.Get(1).(func(context.Context, VotingUpdateRequest, []Note) error); ok {
 		r1 = returnFunc(ctx, body, affectedNotes)
 	} else {
 		r1 = ret.Error(1)
@@ -546,12 +546,12 @@ type MockVotingService_Update_Call struct {
 // Update is a helper method to define mock.On call
 //   - ctx context.Context
 //   - body VotingUpdateRequest
-//   - affectedNotes []*uuid.UUID
+//   - affectedNotes []Note
 func (_e *MockVotingService_Expecter) Update(ctx interface{}, body interface{}, affectedNotes interface{}) *MockVotingService_Update_Call {
 	return &MockVotingService_Update_Call{Call: _e.mock.On("Update", ctx, body, affectedNotes)}
 }
 
-func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, body VotingUpdateRequest, affectedNotes []*uuid.UUID)) *MockVotingService_Update_Call {
+func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, body VotingUpdateRequest, affectedNotes []Note)) *MockVotingService_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -561,9 +561,9 @@ func (_c *MockVotingService_Update_Call) Run(run func(ctx context.Context, body 
 		if args[1] != nil {
 			arg1 = args[1].(VotingUpdateRequest)
 		}
-		var arg2 []*uuid.UUID
+		var arg2 []Note
 		if args[2] != nil {
-			arg2 = args[2].([]*uuid.UUID)
+			arg2 = args[2].([]Note)
 		}
 		run(
 			arg0,
@@ -579,7 +579,7 @@ func (_c *MockVotingService_Update_Call) Return(voting *Voting, err error) *Mock
 	return _c
 }
 
-func (_c *MockVotingService_Update_Call) RunAndReturn(run func(ctx context.Context, body VotingUpdateRequest, affectedNotes []*uuid.UUID) (*Voting, error)) *MockVotingService_Update_Call {
+func (_c *MockVotingService_Update_Call) RunAndReturn(run func(ctx context.Context, body VotingUpdateRequest, affectedNotes []Note) (*Voting, error)) *MockVotingService_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }

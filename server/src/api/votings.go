@@ -55,17 +55,28 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 	body.Board = board
 	body.ID = id
-
 	notes, err := s.notes.GetAll(r.Context(), board)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
 	}
-	var notesID []*uuid.UUID
+	var affectedNotes []votings.Note
+
 	for _, note := range notes {
-		notesID = append(notesID, &note.ID)
+		affectedNotes = append(affectedNotes, votings.Note{
+			ID:     note.ID,
+			Author: note.Author,
+			Text:   note.Text,
+			Edited: note.Edited,
+			Position: votings.NotePosition{
+				Column: note.Position.Column,
+				Stack:  note.Position.Stack,
+				Rank:   note.Position.Rank,
+			},
+		})
 	}
-	voting, err := s.votings.Update(r.Context(), body, notesID)
+
+	voting, err := s.votings.Update(r.Context(), body, affectedNotes)
 	if err != nil {
 
 		common.Throw(w, r, err)

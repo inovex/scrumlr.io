@@ -98,3 +98,31 @@ type VotingUpdated struct {
 	Notes  []uuid.UUID `json:"notes"`
 	Voting *Voting     `json:"voting"`
 }
+
+type Note struct {
+	// The id of the note
+	ID uuid.UUID `json:"id"`
+
+	// The author of the note.
+	Author uuid.UUID `json:"author"`
+
+	// The text of the note.
+	Text string `json:"text"`
+
+	Edited bool `json:"edited"`
+
+	// The position of the note.
+	Position NotePosition `json:"position"`
+}
+
+type NotePosition struct {
+
+	// The column of the note.
+	Column uuid.UUID `json:"column"`
+
+	// The parent note for this note in a stack.
+	Stack uuid.NullUUID `json:"stack"`
+
+	// The note rank.
+	Rank int `json:"rank"`
+}

@@ -3,13 +3,12 @@ package api
 import (
 	"context"
 	"net/http"
+
 	"scrumlr.io/server/boards"
-	"scrumlr.io/server/votings"
+	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
-	"scrumlr.io/server/sessionrequests"
-	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/identifiers"
 
@@ -33,17 +32,6 @@ type BoardSubscription struct {
 type InitEvent struct {
 	Type realtime.BoardEventType `json:"type"`
 	Data boards.FullBoard        `json:"data"`
-}
-
-type EventData struct {
-	Board     *boards.Board                          `json:"board"`
-	Columns   []*columns.Column                      `json:"columns"`
-	Notes     []*notes.Note                          `json:"notes"`
-	Reactions []*reactions.Reaction                  `json:"reactions"`
-	Votings   []*votings.Voting                      `json:"votings"`
-	Votes     []*votings.Vote                        `json:"votes"`
-	Sessions  []*sessions.BoardSession               `json:"participants"`
-	Requests  []*sessionrequests.BoardSessionRequest `json:"requests"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {

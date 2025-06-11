@@ -1,6 +1,7 @@
 package database
 
 import (
+	"scrumlr.io/server/sessions"
 	"testing"
 
 	"scrumlr.io/server/boards"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/users"
 )
 
 var boardForColumnsTest uuid.UUID
@@ -22,13 +22,13 @@ var columnInsertedSecond *columns.DatabaseColumn
 var columnInsertedThird *columns.DatabaseColumn
 var columnInsertedFourth *columns.DatabaseColumn
 var columnInsertedFifth *columns.DatabaseColumn
-var columnTestUser *users.DatabaseUser
+var columnTestUser *sessions.DatabaseUser
 
 func TestRunnerForColumns(t *testing.T) {
 	firstColumn = fixture.MustRow("DatabaseColumn.firstColumn").(*columns.DatabaseColumn)
 	secondColumn = fixture.MustRow("DatabaseColumn.secondColumn").(*columns.DatabaseColumn)
 	thirdColumn = fixture.MustRow("DatabaseColumn.thirdColumn").(*columns.DatabaseColumn)
-	columnTestUser = fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser)
+	columnTestUser = fixture.MustRow("DatabaseUser.john").(*sessions.DatabaseUser)
 	boardForColumnsTest = firstColumn.Board
 
 	t.Run("Getter=0", testGetColumn)
@@ -229,7 +229,7 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 		Board:  boardForColumnsTest,
 		Column: columnInsertedSecond.ID,
 		Text:   "Lorem Ipsum",
-		Author: fixture.MustRow("DatabaseUser.john").(*users.DatabaseUser).ID,
+		Author: fixture.MustRow("DatabaseUser.john").(*sessions.DatabaseUser).ID,
 	})
 	assert.Nil(t, createNoteError)
 

@@ -5,10 +5,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"net/http"
-
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
