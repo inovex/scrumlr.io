@@ -15,6 +15,7 @@ type VotingDB struct {
 	VoteLimit          int
 	AllowMultipleVotes bool
 	ShowVotesOfOthers  bool
+	IsAnonymous        bool
 	Status             VotingStatus
 }
 
@@ -24,6 +25,7 @@ type VotingInsert struct {
 	VoteLimit          int
 	AllowMultipleVotes bool
 	ShowVotesOfOthers  bool
+	IsAnonymous        bool
 	Status             VotingStatus
 }
 
