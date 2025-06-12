@@ -19,6 +19,9 @@ type ColumnSettingsProps = {
   onNameEdit: () => void;
 };
 
+// behaviour of the now smaller column menu and color picker needs to be defined, thus I disabled it for now
+const ENABLE_VERTICAL = false;
+
 export const ColumnSettings = (props: ColumnSettingsProps) => {
   const {t} = useTranslation();
   const showHiddenColumns = useAppSelector((state) => state.participants?.self!.showHiddenColumns);
@@ -77,7 +80,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
           activeColor={props.column.color}
           selectColor={onSelectColor}
           closeColorPicker={() => setOpenedColorPicker(false)}
-          allowVertical
+          allowVertical={ENABLE_VERTICAL}
           small
         />
       ),
@@ -132,7 +135,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
 
   return (
     <div ref={columnSettingsRef} className={classNames(props.className, "column-settings")}>
-      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn small />
+      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn={ENABLE_VERTICAL} small />
     </div>
   );
 };
