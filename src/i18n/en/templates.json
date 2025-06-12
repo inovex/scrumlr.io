@@ -1,0 +1,158 @@
+{
+  "template": {
+    "lean_coffee": {
+      "name": "Lean Coffee",
+      "description": "A flexible discussion method without a fixed agenda. Ideal for identifying & discussing important topics.",
+      "column": {
+        "lean_coffee": {
+          "name": "Lean Coffee",
+          "description": "Collect topics, ideas, and questions."
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "quick_review": {
+      "name": "Quick Review",
+      "description": "Participants highlight positives & negatives incidents for quick identification of successes & issues.",
+      "column": {
+        "positive": {
+          "name": "Positive",
+          "description": "What went well?"
+        },
+        "negative": {
+          "name": "Negative",
+          "description": "What didn't go well?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "status_quo_check": {
+      "name": "Status-quo-Check",
+      "description": "The team reflects on actions to start, stop, and continue, promoting continuous improvement.",
+      "column": {
+        "start": {
+          "name": "Start",
+          "description": "What new processes should be tried?"
+        },
+        "stop": {
+          "name": "Stop",
+          "description": "What isn't working and should be stopped?"
+        },
+        "continue": {
+          "name": "Continue",
+          "description": "What is working well and should be continued?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "mood": {
+      "name": "Mood",
+      "description": "Participants share things that made them mad, sad, or glad. Good for understanding emotional states.",
+      "column": {
+        "mad": {
+          "name": "Mad",
+          "description": "What caused frustration or anger?"
+        },
+        "sad": {
+          "name": "Sad",
+          "description": "What caused disappointment?"
+        },
+        "glad": {
+          "name": "Glad",
+          "description": "What brought joy or motivation?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "kalm": {
+      "name": "KALM",
+      "description": "The team identifies what to keep, add, reduce, or amplify to enhance performance.",
+      "column": {
+        "keep": {
+          "name": "Keep",
+          "description": "What works well and should be kept?"
+        },
+        "add": {
+          "name": "Add",
+          "description": "What could add value?"
+        },
+        "less": {
+          "name": "Less",
+          "description": "What should be done less frequently?"
+        },
+        "more": {
+          "name": "More",
+          "description": "What should be done more often?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "4l": {
+      "name": "4L",
+      "description": "Participants review what they liked, learned, lacked, and longed for, encouraging feedback.",
+      "column": {
+        "liked": {
+          "name": "Liked",
+          "description": "What was particularly positive?"
+        },
+        "learned": {
+          "name": "Learned",
+          "description": "What knowledge was gained?"
+        },
+        "lacked": {
+          "name": "Lacked",
+          "description": "What could have been improved?"
+        },
+        "longed_for": {
+          "name": "Longed for",
+          "description": "What would be desirable for the future?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    },
+    "swot": {
+      "name": "SWOT",
+      "description": "Analyzes strengths, weaknesses, opportunities, and threats to support strategic planning.",
+      "column": {
+        "strengths": {
+          "name": "Strengths",
+          "description": "What strengths provide an advantage?"
+        },
+        "weaknesses": {
+          "name": "Weaknesses",
+          "description": "What weaknesses should be adressed?"
+        },
+        "opportunities": {
+          "name": "Opportunities",
+          "description": "What opportunities can be leveraged?"
+        },
+        "threats": {
+          "name": "Threats",
+          "description": "What challenges should be considered?"
+        },
+        "actions": {
+          "name": "Actions",
+          "description": ""
+        }
+      }
+    }
+  }
+}

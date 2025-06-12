@@ -1,4 +1,5 @@
 import {ApplicationState} from "store";
+import {DEFAULT_TEMPLATE} from "constants/templates";
 
 export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
   auth: {user: {id: "test-auth-user-id", name: "test-auth-user-name", isAnonymous: true}, initializationSucceeded: true},
@@ -179,6 +180,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     moderating: false,
     serverTimeOffset: 0,
     anonymousLoginDisabled: false,
+    allowAnonymousCustomTemplates: true,
     enabledAuthProvider: [],
     feedbackEnabled: false,
     hotkeysAreActive: true,
@@ -192,7 +194,53 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     name: "default",
     component: "",
   },
-  templates: [],
-  templatesColumns: [],
+  templates: [
+    // default template added manually, as reducers initial state isn't regarded
+    DEFAULT_TEMPLATE.template,
+    {
+      id: "test-templates-id-1",
+      creator: "test-auth-user-id",
+      name: "sample name 1",
+      description: "sample description 1",
+      favourite: true,
+    },
+    {
+      id: "test-templates-id-2",
+      creator: "test-auth-user-id",
+      name: "sample name 2",
+      description: "sample description 2",
+      favourite: false,
+    },
+  ],
+  templateColumns: [
+    ...DEFAULT_TEMPLATE.columns,
+    {
+      id: "test-templates-columns-id-1",
+      template: "test-templates-id-1",
+      index: 0,
+      name: "sample templates col name 1",
+      description: "sample templates col name 1",
+      color: "backlog-blue",
+      visible: true,
+    },
+    {
+      id: "test-templates-columns-id-2",
+      template: "test-templates-id-1",
+      index: 1,
+      name: "sample templates col name 2",
+      description: "sample templates col name 2",
+      color: "planning-pink",
+      visible: false,
+    },
+    {
+      id: "test-templates-columns-id-3",
+      template: "test-templates-id-2",
+      index: 0,
+      name: "sample templates col name 3",
+      description: "sample templates col name 3",
+      color: "goal-green",
+      visible: true,
+    },
+  ],
   ...overwrite,
 });

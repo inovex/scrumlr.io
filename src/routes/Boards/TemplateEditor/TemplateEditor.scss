@@ -1,0 +1,114 @@
+@import "src/constants/style";
+
+.template-editor {
+  display: grid;
+  grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
+  grid-template-rows:
+    $spacing--xs
+    min-content // <- name
+    16px
+    min-content // <- description
+    36px
+    min-content // <- debug
+    min-content // <- columns config
+    56px
+    52px // <- buttons
+    $spacing--xs;
+  grid-template-areas:
+    ".          .           .         .         ."
+    ".          name        name      name      ."
+    ".          .           .         .         ."
+    ".          description description description ."
+    ".          .           .         .         ."
+    ".          debug        debug      debug      ."
+    ".          columns     columns   columns   ."
+    ".          .           .         .         ."
+    ".          buttons     buttons   buttons   ."
+    ".          .           .         .         .";
+
+  justify-items: stretch;
+
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+
+  overflow: hidden auto;
+}
+
+.template-editor__name {
+  grid-area: name;
+}
+
+.template-editor__description {
+  grid-area: description;
+}
+
+.template-editor__debug {
+  grid-area: debug;
+  color: $pink--500;
+}
+
+.template-editor__columns-configurator-wrapper {
+  grid-area: columns;
+
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+
+  // lock scrolling
+  max-width: 100%;
+  height: max-content; // correct height!
+}
+
+.template-editor__columns-mini-view-wrapper {
+  grid-area: mini;
+  justify-self: center;
+
+  max-width: 100%;
+
+  display: none;
+}
+
+.template-editor__buttons {
+  grid-area: buttons;
+  justify-self: end;
+
+  display: flex;
+  flex-direction: row;
+  gap: $spacing--base;
+}
+
+@media (screen and max-width: $breakpoint--smartphone) {
+  .template-editor {
+    grid-template-rows:
+      $spacing--xs
+      min-content // <- name
+      20px
+      min-content // <- description
+      46px
+      min-content // <- debug
+      min-content // <- columns config
+      16px
+      min-content // <- mini columns
+      56px
+      52px // <- buttons
+      $spacing--xs;
+    grid-template-areas:
+      ".          .           .         .         ."
+      ".          name        name      name      ."
+      ".          .           .         .         ."
+      ".          description description description ."
+      ".          .           .         .         ."
+      ".          debug        debug      debug      ."
+      ".          columns     columns   columns   ."
+      ".          .           .         .         ."
+      ".          mini        mini      mini      ."
+      ".          .           .         .         ."
+      ".          buttons     buttons   buttons   ."
+      ".          .           .         .         .";
+  }
+
+  .template-editor__columns-mini-view-wrapper {
+    display: initial;
+  }
+}

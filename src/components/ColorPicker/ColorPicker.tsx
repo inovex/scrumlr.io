@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import {useEffect} from "react";
 import {uniqueId} from "underscore";
 import ReactFocusLock from "react-focus-lock";
@@ -6,11 +7,18 @@ import {Tooltip} from "components/Tooltip";
 import "./ColorPicker.scss";
 
 type ColorPickerProps = {
+  className?: string;
   open: boolean;
   colors: Color[];
   activeColor: Color;
   selectColor: (color: Color) => void;
+  attemptOpenColorPicker?: () => void; // get fired if color picker is closed and is clicked
   closeColorPicker: () => void;
+
+  fitted?: boolean; // elements more narrow
+  allowVertical?: boolean;
+
+  dataCy?: string;
 };
 
 export const ColorPicker = (props: ColorPickerProps) => {
@@ -30,19 +38,28 @@ export const ColorPicker = (props: ColorPickerProps) => {
   }, [props]);
 
   if (!props.open) {
-    return <span className="color-picker__color-option color-picker__color-option--selected" />;
+    return (
+      <span
+        className={classNames(props.className, "color-picker__color-option", "color-picker__color-option--selected")}
+        aria-label={`current color${formatColorName(props.activeColor)}`}
+        tabIndex={0}
+        role="button"
+        onClick={props.attemptOpenColorPicker}
+        data-cy={props.dataCy}
+      />
+    );
   }
 
   return (
     <ReactFocusLock autoFocus className="fix-focus-lock-placement">
-      <ul className="color-picker">
+      <ul className={classNames(props.className, "color-picker", {"color-picker--allow-vertical": props.allowVertical, "color-picker--fitted": props.fitted})}>
         <li className={`${getColorClassName(props.activeColor)} color-picker__item`}>
           <button
             id={primColorAnchor}
             aria-label={formatColorName(props.activeColor)}
             title={formatColorName(props.activeColor)}
             onClick={() => props.selectColor(props.activeColor)}
-            className="color-picker__item-button"
+            className={classNames("color-picker__item-button", {"color-picker__item-button--fitted": props.fitted})}
           >
             <div className="color-picker__color-option color-picker__color-option--selected" />
           </button>
@@ -51,13 +68,15 @@ export const ColorPicker = (props: ColorPickerProps) => {
         {colorsWithoutSelectedColor.map((color) => {
           const anchor = uniqueId(`color-picker-${color.toString()}`);
           return (
-            <li className={`${getColorClassName(color)} color-picker__item`}>
+            <li className={`${getColorClassName(color)} color-picker__item`} key={anchor}>
               <button
                 id={anchor}
                 aria-label={formatColorName(color)}
                 title={formatColorName(color)}
-                onClick={() => props.selectColor(color)}
-                className={`${color.toString()} color-picker__item-button`}
+                // onMouseDown instead of onClick because onBlur has priority, and it might get closed before firing the event
+                onMouseDown={() => props.selectColor(color)}
+                className={classNames(color.toString, "color-picker__item-button", {"color-picker__item-button--fitted": props.fitted})}
+                data-cy={`${props.dataCy}--${color}`}
               >
                 <div className={`color-picker__color-option color-picker__color-option--${color.toString()}`} />
               </button>

@@ -256,7 +256,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                     href="/profile"
                   >
                     <svg
-                      class="avatar navigation-item__icon accent-color__planning-pink"
+                      class="avatar navigation-item__icon accent-color__poker-purple"
                       height="280px"
                       version="1.1"
                       viewBox="0 0 264 280"

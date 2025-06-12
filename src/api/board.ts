@@ -1,5 +1,5 @@
 import {Color} from "constants/colors";
-import {Board, EditBoardRequest} from "store/features/board/types";
+import {Board, CreateSessionAccessPolicy, EditBoardRequest} from "store/features/board/types";
 import {SERVER_HTTP_URL} from "../config";
 
 export const BoardAPI = {
@@ -12,15 +12,15 @@ export const BoardAPI = {
    *
    * @returns the board id of the created board
    */
-  createBoard: async (name: string | undefined, accessPolicy: {type: string; passphrase?: string}, columns: {name: string; visible: boolean; color: Color}[]) => {
+  createBoard: async (name: string | undefined, accessPolicy: CreateSessionAccessPolicy, columns: {name: string; visible: boolean; color: Color}[]) => {
     try {
       const response = await fetch(`${SERVER_HTTP_URL}/boards`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
           name,
-          accessPolicy: accessPolicy.type,
-          passphrase: accessPolicy.passphrase,
+          accessPolicy: accessPolicy.policy,
+          passphrase: accessPolicy.policy === "BY_PASSPHRASE" ? accessPolicy.passphrase : undefined,
           columns,
         }),
       });
