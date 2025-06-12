@@ -17,7 +17,7 @@ func Votings(votings []VotingDB, votes []VoteDB) []*Voting {
 	return list
 }
 
-func (v *Voting) UpdateVoting(notes []uuid.UUID) *VotingUpdated {
+func (v *Voting) UpdateVoting(notes []Note) *VotingUpdated {
 	if v.hasNoResults() {
 		return &VotingUpdated{
 			Notes:  notes,
@@ -99,19 +99,19 @@ func getVotingWithResults(voting VotingDB, votes []VoteDB) *VotingResults {
 	return &votingResult
 }
 
-func (v *Voting) calculateTotalVoteCount(notes []uuid.UUID) *VotingResults {
+func (v *Voting) calculateTotalVoteCount(notes []Note) *VotingResults {
 	totalVotingCount := 0
 	votingResultsPerNode := &VotingResults{
 		Votes: make(map[uuid.UUID]VotingResultsPerNote),
 	}
 
 	for _, note := range notes {
-		if voteResults, ok := v.VotingResults.Votes[note]; ok { // Check if note was voted on
-			votingResultsPerNode.Votes[note] = VotingResultsPerNote{
+		if voteResults, ok := v.VotingResults.Votes[note.ID]; ok { // Check if note was voted on
+			votingResultsPerNode.Votes[note.ID] = VotingResultsPerNote{
 				Total: voteResults.Total,
 				Users: voteResults.Users,
 			}
-			totalVotingCount += v.VotingResults.Votes[note].Total
+			totalVotingCount += v.VotingResults.Votes[note.ID].Total
 		}
 	}
 

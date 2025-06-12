@@ -135,11 +135,21 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 	} else {
 
 		var noteSlice notes.NoteSlice
-		var notesID []uuid.UUID
 		for _, note := range bs.boardNotes {
-			if slices.Contains(voting.Notes, note.ID) {
+			n := votings.Note{
+				ID:     note.ID,
+				Author: note.Author,
+				Text:   note.Text,
+				Edited: note.Edited,
+				Position: votings.NotePosition{
+					Column: note.Position.Column,
+					Stack:  note.Position.Stack,
+					Rank:   note.Position.Rank,
+				},
+			}
+
+			if slices.Contains(voting.Notes, n) {
 				noteSlice = append(noteSlice, note)
-				notesID = append(notesID, note.ID)
 			}
 		}
 
@@ -152,9 +162,19 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 		}
 
 		filteredVotingNotes := noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, columnVisibility)
-		filteredvotingNotesIDs := make([]uuid.UUID, len(filteredVotingNotes))
+		filteredvotingNotesIDs := make([]votings.Note, len(filteredVotingNotes))
 		for index, note := range filteredVotingNotes {
-			filteredvotingNotesIDs[index] = note.ID
+			filteredvotingNotesIDs[index] = votings.Note{
+				ID:     note.ID,
+				Author: note.Author,
+				Text:   note.Text,
+				Edited: note.Edited,
+				Position: votings.NotePosition{
+					Column: note.Position.Column,
+					Stack:  note.Position.Stack,
+					Rank:   note.Position.Rank,
+				},
+			}
 		}
 
 		votingUpdate := &votings.VotingUpdated{
@@ -222,9 +242,19 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		notesMap[n.ID] = n
 	}
 
-	var notesID []uuid.UUID
-	for _, note := range filteredNotes {
-		notesID = append(notesID, note.ID)
+	notes := make([]votings.Note, len(filteredNotes))
+	for index, note := range filteredNotes {
+		notes[index] = votings.Note{
+			ID:     note.ID,
+			Author: note.Author,
+			Text:   note.Text,
+			Edited: note.Edited,
+			Position: votings.NotePosition{
+				Column: note.Position.Column,
+				Stack:  note.Position.Stack,
+				Rank:   note.Position.Rank,
+			},
+		}
 	}
 
 	return InitEvent{
@@ -237,7 +267,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 			Reactions:            event.Data.Reactions,
 			Columns:              columns.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
 			Votings: technical_helper.MapSlice[*votings.Voting, *votings.Voting](event.Data.Votings, func(voting *votings.Voting) *votings.Voting {
-				return voting.UpdateVoting(notesID).Voting
+				return voting.UpdateVoting(notes).Voting
 			}),
 			Votes: technical_helper.Filter[*votings.Vote](event.Data.Votes, func(vote *votings.Vote) bool {
 				_, exists := notesMap[vote.Note]

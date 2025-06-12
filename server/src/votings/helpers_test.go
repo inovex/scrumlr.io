@@ -116,7 +116,7 @@ func TestMultipleVotesForOneNoteFromOneUser(t *testing.T) {
 
 func TestCalculateVoteCountsWithEmptySlice(t *testing.T) {
 
-	var noteSlice []uuid.UUID
+	var noteSlice []Note
 	var voting Voting
 
 	votingCountResult := voting.calculateTotalVoteCount(noteSlice)
@@ -131,7 +131,7 @@ func TestCalculateVoteCountForSpecificNote(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 
-	noteSlice := []uuid.UUID{noteId}
+	noteSlice := []Note{{ID: noteId}}
 	voting := Votings(
 		[]VotingDB{*buildVoting(voteId, Closed, true)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
@@ -150,7 +150,7 @@ func TestShouldReturnNoVotingResultsBecauseVotingIsStillOpen(t *testing.T) {
 	noteId := uuid.New()
 
 	voting := Votings([]VotingDB{*buildVoting(voteId, Open, true)}, []VoteDB{})[0]
-	noteSlice := []uuid.UUID{noteId}
+	noteSlice := []Note{{ID: noteId}}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
 
@@ -170,7 +170,7 @@ func TestShouldReturnVotingResults(t *testing.T) {
 		[]VotingDB{*buildVoting(voteId, Closed, true)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
 	)[0]
-	noteSlice := []uuid.UUID{noteId}
+	noteSlice := []Note{{ID: noteId}}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
 
@@ -190,7 +190,7 @@ func TestShouldUnmarshallVoteData(t *testing.T) {
 		[]VotingDB{*buildVoting(voteId, Closed, true)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
 	)[0]
-	noteSlice := []uuid.UUID{noteId}
+	noteSlice := []Note{{ID: noteId}}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
 	_, err := UnmarshallVoteData(updatedVoting)
