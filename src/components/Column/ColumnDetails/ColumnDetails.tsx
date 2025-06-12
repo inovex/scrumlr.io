@@ -1,6 +1,6 @@
 import {Column} from "store/features";
 import {useTranslation} from "react-i18next";
-import {useState} from "react";
+import {useState, ChangeEvent} from "react";
 import classNames from "classnames";
 import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
 import {ReactComponent as SettingsIcon} from "assets/icons/three-dots.svg";
@@ -8,9 +8,13 @@ import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
 
+export type ColumnDetailsMode = "view" | "edit";
+
 type ColumnDetailsProps = {
   column: Column;
   notesCount: number;
+  mode: ColumnDetailsMode;
+  changeMode: (mode: ColumnDetailsMode) => void;
 };
 
 export const ColumnDetails = (props: ColumnDetailsProps) => {
@@ -21,21 +25,28 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const [openSettings, setOpenSettings] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
-  const onNameEdit = () => {};
+  const [localName, setLocalName] = useState(props.column.name);
+
+  const renderName = () =>
+    props.mode === "view" ? (
+      <>
+        <div className="column-details__name">{props.column.name}</div>
+        <div className="column-details__notes-count">{props.notesCount}</div>
+      </>
+    ) : (
+      <input className={classNames("column-details__name", "column-details__name--editing")} value={localName} onInput={(e) => setLocalName(e.currentTarget.value)} />
+    );
 
   return (
     <div className="column-details">
       <div className="column-details__name-and-settings-wrapper">
-        <div className="column-details__name-wrapper">
-          <div className="column-details__name">{props.column.name}</div>
-          <div className="column-details__notes-count">{props.notesCount}</div>
-        </div>
+        <div className="column-details__name-wrapper">{renderName()}</div>
         {openSettings ? (
           <ColumnSettings
             className={classNames("column-details__settings", "column-details__settings--open")}
             column={props.column}
             onClose={() => setOpenSettings(false)}
-            onNameEdit={onNameEdit}
+            onNameEdit={() => props.changeMode("edit")}
           />
         ) : (
           <button

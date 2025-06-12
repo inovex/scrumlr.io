@@ -1,16 +1,21 @@
 import {Column} from "store/features";
 import {NoteInput} from "components/NoteInput";
-import {ColumnDetails} from "components/Column/ColumnDetails/ColumnDetails";
+import {ColumnDetails, ColumnDetailsMode} from "components/Column/ColumnDetails/ColumnDetails";
 import "./ColumnHeader.scss";
+import {useState} from "react";
 
 type ColumnProps = {
   column: Column;
   notesCount: number;
 };
 
-export const ColumnHeader = ({column, notesCount}: ColumnProps) => (
-  <div className="column-header">
-    <ColumnDetails column={column} notesCount={notesCount} />
-    <NoteInput column={column} />
-  </div>
-);
+export const ColumnHeader = ({column, notesCount}: ColumnProps) => {
+  const [columnDetailsMode, setColumnDetailsMode] = useState<ColumnDetailsMode>("view");
+
+  return (
+    <div className="column-header">
+      <ColumnDetails column={column} notesCount={notesCount} mode={columnDetailsMode} changeMode={setColumnDetailsMode} />
+      <NoteInput column={column} />
+    </div>
+  );
+};
