@@ -1,4 +1,4 @@
-import {Column, createColumn, editColumn} from "store/features";
+import {Column, createColumn, deleteColumnOptimistically, editColumn} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import classNames from "classnames";
@@ -48,6 +48,15 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     }
   };
 
+  const cancelUpdate = () => {
+    if (props.isTemporary) {
+      dispatch(deleteColumnOptimistically(props.column.id));
+    } else {
+      setLocalName(props.column.name);
+      setLocalDescription(props.column.description);
+    }
+  };
+
   const descriptionConfirmMiniMenu: MiniMenuItem[] = [
     {
       className: "mini-menu-item--cancel",
@@ -55,8 +64,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       label: "Cancel",
       onClick(): void {
         // reset
-        setLocalName(props.column.name);
-        setLocalDescription(props.column.description);
+        cancelUpdate();
         props.changeMode("view");
       },
     },
