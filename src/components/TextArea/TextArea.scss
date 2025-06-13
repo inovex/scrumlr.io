@@ -3,7 +3,12 @@
 $padding--default: 16px;
 $padding--small: 8px;
 
-$height--default: calc(8.75 * $text--base + 2 * $padding--default); // = 172px
+$line-height--default: $line-height--medium;
+$border-width--default: 2px;
+
+$text-lines--default: 7;
+
+$height--default: $text-lines--default * $line-height--default + 2 * ($padding--default + $border-width--default); // = 176px
 
 .text-area {
   resize: none;
@@ -20,6 +25,7 @@ $height--default: calc(8.75 * $text--base + 2 * $padding--default); // = 172px
 
   font-size: $text--base;
   font-weight: 500;
+  line-height: $line-height--default;
 
   color: $gray--800;
   background-color: $gray--000;
@@ -49,7 +55,7 @@ $height--default: calc(8.75 * $text--base + 2 * $padding--default); // = 172px
 
   &--embedded {
     background: none;
-    border: 2px dashed var(--accent-color--light);
+    border: $border-width--default dashed var(--accent-color--light);
   }
 
   &--small {

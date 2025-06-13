@@ -1,6 +1,6 @@
 import TextareaAutosize from "react-textarea-autosize";
 import classNames from "classnames";
-import React, {Dispatch, FormEvent, SetStateAction} from "react";
+import {Dispatch, FocusEvent, FormEvent, SetStateAction} from "react";
 import "./TextArea.scss";
 
 type TextAreaProps = {
@@ -18,8 +18,8 @@ type TextAreaProps = {
   placeholder?: string;
 
   autoFocus?: boolean;
-  onFocus?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
+  onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
 };
 
 export const TextArea = (props: TextAreaProps) => {
