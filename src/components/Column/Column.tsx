@@ -8,6 +8,7 @@ import {Note} from "components/Note";
 import {useStripeOffset} from "utils/hooks/useStripeOffset";
 import "./Column.scss";
 import {ColumnHeader} from "components/Column/ColumnHeader/ColumnHeader";
+import {TEMPORARY_COLUMN_ID} from "constants/misc";
 
 export interface ColumnProps {
   id: string;
@@ -20,6 +21,8 @@ export interface ColumnProps {
 
 export const Column = ({id, name, description, color, visible, index}: ColumnProps) => {
   // const {isTextTruncated, textRef} = useTextOverflow<HTMLHeadingElement>(name);
+
+  const isTemporary = id === TEMPORARY_COLUMN_ID;
 
   const notes = useAppSelector(
     (state) =>
@@ -70,7 +73,7 @@ export const Column = ({id, name, description, color, visible, index}: ColumnPro
       }}
     >
       <div className="column__content">
-        <ColumnHeader column={{id, index, name, color, visible, description}} notesCount={localNotes.length} />
+        <ColumnHeader column={{id, index, name, color, visible, description}} notesCount={localNotes.length} isTemporary={isTemporary} />
         <Droppable id={id} items={localNotes} setItems={setItems} globalNotes={notes} className="column__notes-wrapper">
           <ul className="column__note-list">
             {localNotes.map((note) => (

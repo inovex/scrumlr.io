@@ -1,4 +1,4 @@
-import {Column, editColumn} from "store/features";
+import {Column, createColumn, editColumn} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useState} from "react";
 import classNames from "classnames";
@@ -20,6 +20,7 @@ type ColumnDetailsProps = {
   notesCount: number;
   mode: ColumnDetailsMode;
   changeMode: (mode: ColumnDetailsMode) => void;
+  isTemporary: boolean;
 };
 
 export const ColumnDetails = (props: ColumnDetailsProps) => {
@@ -34,9 +35,17 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
 
+  // todo renaming
+  // if column exists, update details
+  // else create new column
   const updateColumnDetails = (newName: string, newDescription: string) => {
     if (newName.trim().length === 0) return;
-    dispatch(editColumn({id: props.column.id, column: {...props.column, name: newName, description: newDescription}}));
+    const updateColumnPayload: Column = {...props.column, name: newName, description: newDescription};
+    if (props.isTemporary) {
+      dispatch(createColumn(updateColumnPayload));
+    } else {
+      dispatch(editColumn({id: props.column.id, column: updateColumnPayload}));
+    }
   };
 
   const descriptionConfirmMiniMenu: MiniMenuItem[] = [
