@@ -7,6 +7,7 @@ import {ReactComponent as SettingsIcon} from "assets/icons/three-dots.svg";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
+import {TextArea} from "components/TextArea/TextArea";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -26,6 +27,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const [localName, setLocalName] = useState(props.column.name);
+  const [localDescription, setLocalDescription] = useState(props.column.description);
 
   const renderName = () =>
     props.mode === "view" ? (
@@ -35,6 +37,26 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       </>
     ) : (
       <input className={classNames("column-details__name", "column-details__name--editing")} value={localName} onInput={(e) => setLocalName(e.currentTarget.value)} />
+    );
+
+  const renderDescription = () =>
+    props.mode === "view" ? (
+      props.column.description ? (
+        <>
+          <div ref={descriptionRef} className={classNames("column-details__description", {"column-details__description--expanded": isDescriptionExpanded})}>
+            {props.column.description}
+          </div>
+          {isTextTruncated.vertical && (
+            <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
+              <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
+            </button>
+          )}
+        </>
+      ) : (
+        <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>
+      )
+    ) : (
+      <TextArea className="column-configurator-column-name-details__description-text-area" input={localDescription} setInput={setLocalDescription} embedded />
     );
 
   return (
@@ -57,20 +79,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           </button>
         )}
       </div>
-      {props.column.description ? (
-        <div className="column-details__description-wrapper">
-          <div ref={descriptionRef} className={classNames("column-details__description", {"column-details__description--expanded": isDescriptionExpanded})}>
-            {props.column.description}
-          </div>
-          {isTextTruncated.vertical && (
-            <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
-              <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
-            </button>
-          )}
-        </div>
-      ) : (
-        <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>
-      )}
+      <div className="column-details__description-wrapper">{renderDescription()}</div>
     </div>
   );
 };
