@@ -1,6 +1,6 @@
 import {Column, createColumn, deleteColumnOptimistically, editColumn} from "store/features";
 import {useTranslation} from "react-i18next";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import classNames from "classnames";
 import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
 import {ReactComponent as SettingsIcon} from "assets/icons/three-dots.svg";
@@ -12,6 +12,7 @@ import "components/Column/ColumnDetails/ColumnDetails.scss";
 import {TextArea} from "components/TextArea/TextArea";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {useAppDispatch} from "store";
+import {useOnBlur} from "utils/hooks/useOnBlur";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -27,6 +28,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const {isTextTruncated, textRef: descriptionRef} = useTextOverflow<HTMLDivElement>(props.column.description);
 
   const [openSettings, setOpenSettings] = useState(false);
@@ -35,18 +38,14 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
 
-  // todo renaming
-  // if column exists, update details
-  // else create new column
-  const updateColumnDetails = (newName: string, newDescription: string) => {
-    if (newName.trim().length === 0) return;
-    const updateColumnPayload: Column = {...props.column, name: newName, description: newDescription};
-    if (props.isTemporary) {
-      dispatch(createColumn(updateColumnPayload));
-    } else {
-      dispatch(editColumn({id: props.column.id, column: updateColumnPayload}));
+  const hasNameInputContent = localName.trim().length > 0;
+
+  // focus input upon entering edit mode
+  useEffect(() => {
+    if (inputRef && inputRef.current) {
+      inputRef.current.focus();
     }
-  };
+  }, [inputRef, props.mode]);
 
   const cancelUpdate = () => {
     if (props.isTemporary) {
@@ -56,6 +55,30 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       setLocalDescription(props.column.description);
     }
   };
+
+  // if column exists, update details
+  // else create new column
+  const updateColumnDetails = (newName: string, newDescription: string) => {
+    if (!hasNameInputContent) {
+      cancelUpdate();
+      return;
+    }
+
+    const updateColumnPayload: Column = {...props.column, name: newName, description: newDescription};
+    if (props.isTemporary) {
+      dispatch(createColumn(updateColumnPayload));
+    } else {
+      dispatch(editColumn({id: props.column.id, column: updateColumnPayload}));
+    }
+  };
+
+  const handleBlur = () => {
+    if (props.mode === "view") return;
+
+    updateColumnDetails(localName, localDescription);
+  };
+
+  const ref = useOnBlur<HTMLDivElement>(handleBlur);
 
   const descriptionConfirmMiniMenu: MiniMenuItem[] = [
     {
@@ -86,7 +109,12 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         <div className="column-details__notes-count">{props.notesCount}</div>
       </>
     ) : (
-      <input className={classNames("column-details__name", "column-details__name--editing")} value={localName} onInput={(e) => setLocalName(e.currentTarget.value)} />
+      <input
+        ref={inputRef}
+        className={classNames("column-details__name", "column-details__name--editing")}
+        value={localName}
+        onInput={(e) => setLocalName(e.currentTarget.value)}
+      />
     );
 
   const viewableDescription = props.column.description ? (
@@ -114,7 +142,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const renderDescription = () => (props.mode === "view" ? viewableDescription : editableDescription);
 
   return (
-    <div className="column-details">
+    <div className="column-details" ref={ref}>
       <div className="column-details__name-and-settings-wrapper">
         <div className="column-details__name-wrapper">{renderName()}</div>
         {openSettings ? (
