@@ -12,7 +12,7 @@ type TextAreaProps = {
   // embedded:      to be used inside another component
   // not embedded:  form component like input
   embedded?: boolean;
-  small?: boolean; // affects the text, padding, and border-radius rn
+  fitted?: boolean; // affects the text, padding, and border-radius rn
   // minLines?: number;
 
   placeholder?: string;
@@ -27,7 +27,7 @@ export const TextArea = (props: TextAreaProps) => {
 
   return (
     <TextareaAutosize
-      className={classNames(props.className, "text-area", {"text-area--extendable": props.extendable, "text-area--embedded": props.embedded, "text-area--small": props.small})}
+      className={classNames(props.className, "text-area", {"text-area--extendable": props.extendable, "text-area--embedded": props.embedded, "text-area--fitted": props.fitted})}
       value={props.input}
       onInput={updateInput}
       placeholder={props.placeholder}

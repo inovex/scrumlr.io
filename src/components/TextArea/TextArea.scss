@@ -1,7 +1,7 @@
 @import "constants/style";
 
 $padding--default: 16px;
-$padding--small: 8px;
+$padding--fitted: 8px;
 
 $line-height--default: $line-height--medium;
 $border-width--default: 2px;
@@ -31,9 +31,9 @@ $height--default: $text-lines--default * $line-height--default + 2 * ($padding--
   background-color: $gray--000;
 
   &:not(&--embedded) {
-    @include default-states($padding: $padding--small);
+    @include default-states($padding: $padding--fitted);
   }
-  &:not(&--embedded):not(&--small) {
+  &:not(&--embedded):not(&--fitted) {
     @include default-states($padding: $padding--default);
   }
 
@@ -58,9 +58,9 @@ $height--default: $text-lines--default * $line-height--default + 2 * ($padding--
     border: $border-width--default dashed var(--accent-color--light);
   }
 
-  &--small {
+  &--fitted {
     font-size: $text--xs;
-    padding: $padding--small;
+    padding: $padding--fitted;
     border-radius: 5px;
   }
 }
