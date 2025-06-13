@@ -1,13 +1,17 @@
-import {Column} from "store/features";
+import {Column, editColumn} from "store/features";
 import {useTranslation} from "react-i18next";
-import {useState, ChangeEvent} from "react";
+import {useState} from "react";
 import classNames from "classnames";
 import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
 import {ReactComponent as SettingsIcon} from "assets/icons/three-dots.svg";
+import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
+import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
 import {TextArea} from "components/TextArea/TextArea";
+import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
+import {useAppDispatch} from "store";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -20,6 +24,7 @@ type ColumnDetailsProps = {
 
 export const ColumnDetails = (props: ColumnDetailsProps) => {
   const {t} = useTranslation();
+  const dispatch = useAppDispatch();
 
   const {isTextTruncated, textRef: descriptionRef} = useTextOverflow<HTMLDivElement>(props.column.description);
 
@@ -28,6 +33,32 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
+
+  const updateColumnDetails = (newName: string, newDescription: string) =>
+    dispatch(editColumn({id: props.column.id, column: {...props.column, name: newName, description: newDescription}}));
+
+  const descriptionConfirmMiniMenu: MiniMenuItem[] = [
+    {
+      className: "mini-menu-item--cancel",
+      element: <CloseIcon />,
+      label: "Cancel",
+      onClick(): void {
+        // reset
+        setLocalName(props.column.name);
+        setLocalDescription(props.column.description);
+        props.changeMode("view");
+      },
+    },
+    {
+      className: "mini-menu-item--save",
+      element: <CheckDoneIcon />,
+      label: "Save",
+      onClick(): void {
+        updateColumnDetails(localName, localDescription);
+        props.changeMode("view");
+      },
+    },
+  ];
 
   const renderName = () =>
     props.mode === "view" ? (
@@ -56,7 +87,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>
       )
     ) : (
-      <TextArea className="column-configurator-column-name-details__description-text-area" input={localDescription} setInput={setLocalDescription} embedded />
+      <>
+        <TextArea className="column-details__description-text-area" input={localDescription} setInput={setLocalDescription} embedded />
+        <MiniMenu className="column-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
+      </>
     );
 
   return (
@@ -79,7 +113,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           </button>
         )}
       </div>
-      <div className="column-details__description-wrapper">{renderDescription()}</div>
+      <div className={classNames("column-details__description-wrapper", `column-details__description-wrapper--${props.mode}`)}>{renderDescription()}</div>
     </div>
   );
 };

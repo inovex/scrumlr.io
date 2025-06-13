@@ -74,6 +74,10 @@ $settings-icon: 24px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+
+  &--edit {
+    flex-direction: column;
+  }
 }
 
 .column-details__description {
@@ -111,4 +115,8 @@ $settings-icon: 24px;
   &--expanded {
     transform: rotate(180deg);
   }
+}
+
+.column-details__description-mini-menu {
+  align-self: flex-end;
 }
