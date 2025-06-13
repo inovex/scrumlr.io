@@ -34,8 +34,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
 
-  const updateColumnDetails = (newName: string, newDescription: string) =>
+  const updateColumnDetails = (newName: string, newDescription: string) => {
+    if (newName.trim().length === 0) return;
     dispatch(editColumn({id: props.column.id, column: {...props.column, name: newName, description: newDescription}}));
+  };
 
   const descriptionConfirmMiniMenu: MiniMenuItem[] = [
     {
