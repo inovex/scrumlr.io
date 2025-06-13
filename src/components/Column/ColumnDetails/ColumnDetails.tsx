@@ -140,7 +140,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const editableDescription = (
     <>
-      <TextArea className="column-details__description-text-area" input={localDescription} setInput={setLocalDescription} embedded />
+      <TextArea className="column-details__description-text-area" input={localDescription} setInput={setLocalDescription} small embedded extendable thickBorder />
       <MiniMenu className="column-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
     </>
   );
