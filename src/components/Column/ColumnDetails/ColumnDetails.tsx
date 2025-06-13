@@ -70,28 +70,29 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       <input className={classNames("column-details__name", "column-details__name--editing")} value={localName} onInput={(e) => setLocalName(e.currentTarget.value)} />
     );
 
-  const renderDescription = () =>
-    props.mode === "view" ? (
-      props.column.description ? (
-        <>
-          <div ref={descriptionRef} className={classNames("column-details__description", {"column-details__description--expanded": isDescriptionExpanded})}>
-            {props.column.description}
-          </div>
-          {isTextTruncated.vertical && (
-            <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
-              <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
-            </button>
-          )}
-        </>
-      ) : (
-        <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>
-      )
-    ) : (
-      <>
-        <TextArea className="column-details__description-text-area" input={localDescription} setInput={setLocalDescription} embedded />
-        <MiniMenu className="column-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
-      </>
-    );
+  const viewableDescription = props.column.description ? (
+    <>
+      <div ref={descriptionRef} className={classNames("column-details__description", {"column-details__description--expanded": isDescriptionExpanded})}>
+        {props.column.description}
+      </div>
+      {isTextTruncated.vertical && (
+        <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
+          <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
+        </button>
+      )}
+    </>
+  ) : (
+    <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>
+  );
+
+  const editableDescription = (
+    <>
+      <TextArea className="column-details__description-text-area" input={localDescription} setInput={setLocalDescription} embedded />
+      <MiniMenu className="column-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
+    </>
+  );
+
+  const renderDescription = () => (props.mode === "view" ? viewableDescription : editableDescription);
 
   return (
     <div className="column-details">
