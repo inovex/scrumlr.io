@@ -70,6 +70,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     } else {
       dispatch(editColumn({id: props.column.id, column: updateColumnPayload}));
     }
+
+    props.changeMode("view");
   };
 
   const handleBlur = () => {
