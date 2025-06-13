@@ -10,16 +10,32 @@ $border-width--thick: 3px;
 $text-lines--default: 7;
 $text-lines--small: 3;
 
-$height--default: $text-lines--default * $line-height--default + 2 * ($padding--default + $border-width--default); // = 176px
-$height--small: $text-lines--small * $line-height--default + 2 * ($padding--default + $border-width--default); // = 96px
-
 .text-area {
   resize: none;
   @include scrollbar();
 
   width: 100%;
-  min-height: $height--default;
-  max-height: $height--default;
+
+  --text-area-padding: #{$padding--default};
+  --text-area-border-width: #{$border-width--default};
+  --text-area-lines: #{$text-lines--default};
+
+  &--fitted {
+    --text-area-padding: #{$padding--fitted};
+  }
+
+  &--thick-border {
+    --text-area-border-width: #{$border-width--thick};
+  }
+
+  &--small {
+    --text-area-lines: #{$text-lines--small};
+  }
+
+  $dynamic-height: calc(var(--text-area-lines) * $line-height--default + 2 * (var(--text-area-padding) + var(--text-area-border-width)));
+
+  min-height: $dynamic-height;
+  max-height: $dynamic-height;
 
   padding: $padding--default;
   margin: 0;
@@ -33,11 +49,6 @@ $height--small: $text-lines--small * $line-height--default + 2 * ($padding--defa
 
   color: $gray--800;
   background-color: $gray--000;
-
-  &--small {
-    min-height: $height--small;
-    max-height: $height--small;
-  }
 
   &:not(&--embedded) {
     @include default-states($padding: $padding--fitted);
