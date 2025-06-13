@@ -7,9 +7,6 @@ $line-height--default: $line-height--medium;
 $border-width--default: 2px;
 $border-width--thick: 3px;
 
-$text-lines--default: 7;
-$text-lines--small: 3;
-
 .text-area {
   resize: none;
   @include scrollbar();
@@ -18,7 +15,6 @@ $text-lines--small: 3;
 
   --text-area-padding: #{$padding--default};
   --text-area-border-width: #{$border-width--default};
-  --text-area-lines: #{$text-lines--default};
 
   &--fitted {
     --text-area-padding: #{$padding--fitted};
@@ -26,10 +22,6 @@ $text-lines--small: 3;
 
   &--thick-border {
     --text-area-border-width: #{$border-width--thick};
-  }
-
-  &--small {
-    --text-area-lines: #{$text-lines--small};
   }
 
   $dynamic-height: calc(var(--text-area-lines) * $line-height--default + 2 * (var(--text-area-padding) + var(--text-area-border-width)));
