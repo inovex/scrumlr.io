@@ -77,6 +77,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const handleBlur = () => {
     if (props.mode === "view") return;
 
+    // behaviour: always save as long as name is not empty.
+    // could also change it to only save if persisted is empty.
     updateColumnDetails(localName, localDescription);
   };
 
@@ -107,7 +109,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const renderName = () =>
     props.mode === "view" ? (
       <>
-        <div className="column-details__name">{props.column.name}</div>
+        <div className="column-details__name" onDoubleClick={() => props.changeMode("edit")}>
+          {props.column.name}
+        </div>
         <div className="column-details__notes-count">{props.notesCount}</div>
       </>
     ) : (
