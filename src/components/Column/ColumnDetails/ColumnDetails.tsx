@@ -8,11 +8,12 @@ import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
-import "components/Column/ColumnDetails/ColumnDetails.scss";
 import {TextArea} from "components/TextArea/TextArea";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
+import {Tooltip} from "components/Tooltip";
+import "components/Column/ColumnDetails/ColumnDetails.scss";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -32,7 +33,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const {isTextTruncated, textRef: descriptionRef} = useTextOverflow<HTMLDivElement>(props.column.description);
+  const {isTextTruncated: isDescriptionTextTruncated, textRef: descriptionRef} = useTextOverflow<HTMLDivElement>(props.column.description);
+  const {isTextTruncated: isNameTextTruncated, textRef: nameRef} = useTextOverflow<HTMLDivElement>(props.column.name);
 
   const [openSettings, setOpenSettings] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -117,10 +119,11 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const renderName = () =>
     props.mode === "view" ? (
       <>
-        <div className="column-details__name" onDoubleClick={() => changeMode("edit")}>
+        <div ref={nameRef} id={`col-${props.column.id}-name`} className="column-details__name" onDoubleClick={() => changeMode("edit")}>
           {props.column.name}
         </div>
         <div className="column-details__notes-count">{props.notesCount}</div>
+        {isNameTextTruncated.horizontal && <Tooltip anchorSelect={`#col-${props.column.id}-name`} content={props.column.name} color={props.column.color} />}
       </>
     ) : (
       <input
@@ -139,7 +142,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           <div ref={descriptionRef} className={classNames("column-details__description", {"column-details__description--expanded": isDescriptionExpanded})}>
             {props.column.description}
           </div>
-          {isTextTruncated.vertical && (
+          {isDescriptionTextTruncated.vertical && (
             <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
               <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
             </button>
