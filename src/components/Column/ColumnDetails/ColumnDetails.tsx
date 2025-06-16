@@ -11,7 +11,7 @@ import {ColumnSettings} from "components/Column/ColumnSettings";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
 import {TextArea} from "components/TextArea/TextArea";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
-import {useAppDispatch} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 
 export type ColumnDetailsMode = "view" | "edit";
@@ -27,6 +27,8 @@ type ColumnDetailsProps = {
 export const ColumnDetails = (props: ColumnDetailsProps) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
+
+  const isModerator = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -46,6 +48,12 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       inputRef.current.focus();
     }
   }, [inputRef, props.mode]);
+
+  const changeMode = (mode: ColumnDetailsMode) => {
+    if (!isModerator) return;
+
+    props.changeMode(mode);
+  };
 
   const cancelUpdate = () => {
     if (props.isTemporary) {
@@ -71,7 +79,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       dispatch(editColumn({id: props.column.id, column: updateColumnPayload}));
     }
 
-    props.changeMode("view");
+    changeMode("view");
   };
 
   const handleBlur = () => {
@@ -92,7 +100,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       onClick(): void {
         // reset
         cancelUpdate();
-        props.changeMode("view");
+        changeMode("view");
       },
     },
     {
@@ -101,7 +109,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       label: "Save",
       onClick(): void {
         updateColumnDetails(localName, localDescription);
-        props.changeMode("view");
+        changeMode("view");
       },
     },
   ];
@@ -109,7 +117,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const renderName = () =>
     props.mode === "view" ? (
       <>
-        <div className="column-details__name" onDoubleClick={() => props.changeMode("edit")}>
+        <div className="column-details__name" onDoubleClick={() => changeMode("edit")}>
           {props.column.name}
         </div>
         <div className="column-details__notes-count">{props.notesCount}</div>
@@ -156,7 +164,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
             className={classNames("column-details__settings", "column-details__settings--open")}
             column={props.column}
             onClose={() => setOpenSettings(false)}
-            onNameEdit={() => props.changeMode("edit")}
+            onNameEdit={() => changeMode("edit")}
           />
         ) : (
           <button
