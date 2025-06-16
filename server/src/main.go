@@ -629,6 +629,9 @@ func run(c *cli.Context) error {
   if err := app.Run(os.Args); err != nil {
     log.Fatal(err)
   }
+}
+
+func run(c *cli.Context) error {
   if c.Bool("verbose") {
     logger.EnableDevelopmentLogger()
   }
@@ -827,6 +830,7 @@ func run(c *cli.Context) error {
   votingService := votings.NewVotingService(dbConnection, rt)
   userService := users.NewUserService(dbConnection, rt)
   noteService := notes.NewNoteService(dbConnection, rt)
+  //reactionService := reactions.NewReactionService(dbConnection, rt)
   reactionService := initialize.InitializeReactionService(bun, rt)
   feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
   healthService := health.NewHealthService(dbConnection, rt)
