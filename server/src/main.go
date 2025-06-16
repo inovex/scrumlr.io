@@ -1,26 +1,35 @@
 package main
 
 import (
-  "errors"
-  "fmt"
-  "log"
-  "net/http"
-  "os"
-  "strings"
+	"errors"
+	"fmt"
+	"github.com/Unleash/unleash-client-go/v4"
+	"log"
+	"net/http"
+	"os"
+	"strings"
 
-  "scrumlr.io/server/common"
+	"scrumlr.io/server/auth"
+	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/services/health"
 
-  "scrumlr.io/server/auth"
-  "scrumlr.io/server/initialize"
-
-  "github.com/urfave/cli/v2"
-  "github.com/urfave/cli/v2/altsrc"
-  "scrumlr.io/server/api"
-  "scrumlr.io/server/logger"
-  "scrumlr.io/server/realtime"
+	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2/altsrc"
+	"scrumlr.io/server/api"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/database"
+	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/services/board_reactions"
+	"scrumlr.io/server/services/board_templates"
+	"scrumlr.io/server/services/boards"
+	"scrumlr.io/server/services/feedback"
+	"scrumlr.io/server/services/notes"
+	"scrumlr.io/server/services/users"
+	"scrumlr.io/server/services/votings"
 )
 
-func main() {
   app := &cli.App{
     Name:      "scrumlr.io",
     Usage:     "Awesome & scalable server for the scrumlr.io web application",
@@ -97,13 +106,6 @@ func main() {
         Name:     "disable-anonymous-login",
         EnvVars:  []string{"SCRUMLR_DISABLE_ANONYMOUS_LOGIN"},
         Usage:    "enables/disables the login of anonymous clients",
-        Required: false,
-        Value:    false,
-      }),
-      altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:     "allow-anonymous-custom-templates",
-        EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES"},
-        Usage:    "allows custom templates to be used for anonymous clients",
         Required: false,
         Value:    false,
       }),
@@ -240,35 +242,38 @@ func main() {
         Usage:    "the url where feedback will be sent to",
         Required: false,
       }),
-      &cli.StringFlag{
-        Name:     "config",
-        EnvVars:  []string{"SCRUMLR_CONFIG_PATH"},
-        Usage:    "TOML `filepath` to be loaded ",
-        Required: false,
-      },
+
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "unleash-backend-url",
+        EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_URL"},
+        Usage:   "The URL of the Unleash backend",
+      }),
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "unleash-backend-token",
+        EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_TOKEN"},
+        Usage:   "The token for the Unleash backend",
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{
+        Name:    "unleash-debug",
+        EnvVars: []string{"SCRUMLR_UNLEASH_DEBUG"},
+        Usage:   "Enable Unleash debug listener",
+        Value:   false,
+      }),
     },
   }
-  app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
-
   if err := app.Run(os.Args); err != nil {
     log.Fatal(err)
   }
-}
-
-func run(c *cli.Context) error {
   if c.Bool("verbose") {
     logger.EnableDevelopmentLogger()
   }
-
   db, err := initialize.InitializeDatabase(c.String("database"))
   if err != nil {
     return fmt.Errorf("unable to migrate database: %w", err)
   }
-
   if !c.Bool("insecure") && c.String("key") == "" {
     return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
   }
-
   var rt *realtime.Broker
   if c.String("redis-address") != "" {
     logger.Get().Infof("Connecting to redis at %v", c.String("redis-address"))
@@ -287,23 +292,20 @@ func run(c *cli.Context) error {
       logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
     }
   }
-
   basePath := "/"
   if c.IsSet("base-path") {
     basePath = c.String("base-path")
     if !strings.HasPrefix(basePath, "/") {
       return errors.New("base path must start with '/'")
     }
-
     if len(basePath) > 1 {
       basePath = strings.TrimSuffix(basePath, "/")
     }
   }
-
   providersMap := make(map[string]auth.AuthProviderConfiguration)
   if c.String("auth-google-client-id") != "" && c.String("auth-google-client-secret") != "" && c.String("auth-callback-host") != "" {
     logger.Get().Info("Using google authentication")
-    providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
+    providersMap[(string)(types.AccountTypeGoogle)] = auth.AuthProviderConfiguration{
       ClientId:     c.String("auth-google-client-id"),
       ClientSecret: c.String("auth-google-client-secret"),
       RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -311,7 +313,7 @@ func run(c *cli.Context) error {
   }
   if c.String("auth-github-client-id") != "" && c.String("auth-github-client-secret") != "" && c.String("auth-callback-host") != "" {
     logger.Get().Info("Using github authentication")
-    providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
+    providersMap[(string)(types.AccountTypeGitHub)] = auth.AuthProviderConfiguration{
       ClientId:     c.String("auth-github-client-id"),
       ClientSecret: c.String("auth-github-client-secret"),
       RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -319,7 +321,7 @@ func run(c *cli.Context) error {
   }
   if c.String("auth-microsoft-client-id") != "" && c.String("auth-microsoft-client-secret") != "" && c.String("auth-callback-host") != "" {
     logger.Get().Info("Using microsoft authentication")
-    providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
+    providersMap[(string)(types.AccountTypeMicrosoft)] = auth.AuthProviderConfiguration{
       ClientId:     c.String("auth-microsoft-client-id"),
       ClientSecret: c.String("auth-microsoft-client-secret"),
       RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -327,7 +329,7 @@ func run(c *cli.Context) error {
   }
   if c.String("auth-azure-ad-tenant-id") != "" && c.String("auth-azure-ad-client-id") != "" && c.String("auth-azure-ad-client-secret") != "" && c.String("auth-callback-host") != "" {
     logger.Get().Info("Using azure authentication")
-    providersMap[(string)(common.AzureAd)] = auth.AuthProviderConfiguration{
+    providersMap[(string)(types.AccountTypeAzureAd)] = auth.AuthProviderConfiguration{
       TenantId:     c.String("auth-azure-ad-tenant-id"),
       ClientId:     c.String("auth-azure-ad-client-id"),
       ClientSecret: c.String("auth-azure-ad-client-secret"),
@@ -336,7 +338,7 @@ func run(c *cli.Context) error {
   }
   if c.String("auth-apple-client-id") != "" && c.String("auth-apple-client-secret") != "" && c.String("auth-callback-host") != "" {
     logger.Get().Info("Using apple authentication.")
-    providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
+    providersMap[(string)(types.AccountTypeApple)] = auth.AuthProviderConfiguration{
       ClientId:     c.String("auth-apple-client-id"),
       ClientSecret: c.String("auth-apple-client-secret"),
       RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -344,7 +346,7 @@ func run(c *cli.Context) error {
   }
   if c.String("auth-oidc-discovery-url") != "" && c.String("auth-oidc-client-id") != "" && c.String("auth-oidc-client-secret") != "" && c.String("auth-callback-host") != "" {
     logger.Get().Info("Using oicd authentication.")
-    providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
+    providersMap[(string)(types.AccountTypeOIDC)] = auth.AuthProviderConfiguration{
       ClientId:       c.String("auth-oidc-client-id"),
       ClientSecret:   c.String("auth-oidc-client-secret"),
       RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
@@ -353,47 +355,60 @@ func run(c *cli.Context) error {
       UserNameScope:  c.String("auth-oidc-user-name-scope"),
     }
   }
-
   if c.String("session-secret") == "" && len(providersMap) != 0 {
     return errors.New("you may not start the application without a session secret if an authentication provider is configured")
   }
+  unleashURL := c.String("unleash-backend-url")
+  unleashToken := c.String("unleash-backend-token")
 
+  if unleashURL == "" || unleashToken == "" {
+    logger.Get().Warn("Unleash is not configured – skipping feature flag integration")
+  } else {
+    headers := http.Header{}
+    headers.Set("Authorization", unleashToken)
+    options := []unleash.ConfigOption{
+      unleash.WithAppName("scrumlr-backend"),
+      unleash.WithUrl(unleashURL),
+      unleash.WithCustomHeaders(headers),
+      unleash.WithEnvironment("production"),
+    }
+    if c.Bool("unleash-debug") {
+      options = append(options, unleash.WithListener(&unleash.DebugListener{}))
+    }
+    if err := unleash.Initialize(options...); err != nil {
+      return fmt.Errorf("failed to initialize Unleash: %w", err)
+    }
+    unleash.WaitForReady()
+    // just to test non-AnonymousVoting is the name of flag in UI
+
+    if unleash.IsEnabled("non-AnonymousVoting") {
+      logger.Get().Info("Feature 'enable-welcome-message' ENABLED")
+    } else {
+      logger.Get().Info("Feature 'enable-welcome-message' DISABLED")
+    }
+  }
   bun := initialize.InitializeBun(db, c.Bool("verbose"))
-  initializer := initialize.NewServiceInitializer(bun, rt)
-
-  websocket := initializer.InitializeWebsocket()
-  feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
-  healthService := initializer.InitializeHealthService()
-
-  boardReactionService := initializer.InitializeBoardReactionService()
-  reactionService := initializer.InitializeReactionService()
-
-  boardTemplateService := initializer.InitializeBoardTemplateService()
-  columnTemplateService := initializer.InitializeColumnTemplateService()
-
-  votingService := initializer.InitializeVotingService()
-  noteService := initializer.InitializeNotesService(votingService)
-  columnService := initializer.InitializeColumnService(noteService)
-
-  sessionService := initializer.InitializeSessionService(columnService, noteService)
-  sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
-
-  userService := initializer.InitializeUserService(sessionService)
-
+  dbConnection := database.New(bun)
   keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
   unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
-  authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
+  authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, dbConnection)
   if err != nil {
     return fmt.Errorf("unable to setup authentication: %w", err)
   }
-
-  boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
-
+  boardService := boards.NewBoardService(dbConnection, rt)
+  boardSessionService := boards.NewBoardSessionService(dbConnection, rt)
+  votingService := votings.NewVotingService(dbConnection, rt)
+  userService := users.NewUserService(dbConnection, rt)
+  noteService := notes.NewNoteService(dbConnection, rt)
+  reactionService := initialize.InitializeReactionService(bun, rt)
+  feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
+  healthService := health.NewHealthService(dbConnection, rt)
+  boardReactionService := board_reactions.NewReactionService(dbConnection, rt)
+  boardTemplateService := board_templates.NewBoardTemplateService(dbConnection)
   s := api.New(
     basePath,
     rt,
     authConfig,
-
     boardService,
     columnService,
     votingService,
@@ -407,15 +422,11 @@ func run(c *cli.Context) error {
     boardReactionService,
     boardTemplateService,
     columnTemplateService,
-
     c.Bool("verbose"),
     !c.Bool("disable-check-origin"),
     c.Bool("disable-anonymous-login"),
-    c.Bool("allow-anonymous-custom-templates"),
     c.Bool("auth-enable-experimental-file-system-store"),
   )
-
   port := fmt.Sprintf(":%d", c.Int("port"))
   logger.Get().Infow("starting server", "base-path", basePath, "port", port)
   return http.ListenAndServe(port, s)
-}

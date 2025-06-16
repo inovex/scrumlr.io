@@ -1,6 +1,8 @@
 import React, {Suspense} from "react";
 import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
+import FlagProvider from "@unleash/proxy-client-react";
+import {UnleashClient} from "unleash-proxy-client";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import {store} from "store";
@@ -14,9 +16,17 @@ import {Tooltip} from "components/Tooltip";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import Plausible from "plausible-tracker";
-import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID} from "./config";
+import {ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID, SHOW_LEGAL_DOCUMENTS, UNLEASH_ENV, UNLEASH_TOKEN, UNLEASH_URL} from "./config";
 import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
+
+const unleash = new UnleashClient({
+  url: UNLEASH_URL,
+  clientKey: UNLEASH_TOKEN,
+  appName: "scrumlr-frontend",
+  environment: UNLEASH_ENV,
+});
+unleash.start();
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
 if (APP_VERSION) {
@@ -46,7 +56,7 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
   handleAnalytics();
 }
 
-const root = createRoot(document.getElementById("root") as HTMLDivElement);
+// const root = createRoot(document.getElementById("root") as HTMLDivElement);
 
 // If clarity ID is set and not empty in env variables, initialize Clarity
 if (CLARITY_ID && CLARITY_ID !== "") {
@@ -54,19 +64,57 @@ if (CLARITY_ID && CLARITY_ID !== "") {
   // Clarity.init(CLARITY_ID);
 }
 
+let unleashClient: UnleashClient | null = null;
+if (UNLEASH_URL && UNLEASH_TOKEN) {
+  unleashClient = new UnleashClient({
+    url: UNLEASH_URL,
+    clientKey: UNLEASH_TOKEN,
+    appName: "scrumlr-frontend",
+    environment: UNLEASH_ENV,
+  });
+  unleashClient.start();
+}
+
+const AppContent: React.FC = () => (
+  <>
+    <Html />
+    <Suspense fallback={<LoadingScreen />}>
+      <Tooltip id="scrumlr-tooltip" />
+      <ToastContainer limit={2} />
+      <Router />
+      {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
+    </Suspense>
+  </>
+);
+
+// Render with a fallback when Unleash is not configured
+const root = createRoot(document.getElementById("root") as HTMLDivElement);
+
 root.render(
   <React.StrictMode>
-    <I18nextProvider i18n={i18n}>
-      <Provider store={store}>
-        <Html />
-        <Suspense fallback={<LoadingScreen />}>
-          <Tooltip id="scrumlr-tooltip" />
-          <ToastContainer limit={2} />
-          <Router />
-          {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
-        </Suspense>
-      </Provider>
-    </I18nextProvider>
+    {unleashClient ? (
+      // Wrap with FlagProvider only if unleashClient is set
+      <FlagProvider
+        config={{
+          url: UNLEASH_URL,
+          clientKey: UNLEASH_TOKEN,
+          appName: "scrumlr-frontend",
+          environment: UNLEASH_ENV,
+        }}
+      >
+        <I18nextProvider i18n={i18n}>
+          <Provider store={store}>
+            <AppContent />
+          </Provider>
+        </I18nextProvider>
+      </FlagProvider>
+    ) : (
+      <I18nextProvider i18n={i18n}>
+        <Provider store={store}>
+          <AppContent />
+        </Provider>
+      </I18nextProvider>
+    )}
   </React.StrictMode>
 );
 store.dispatch(initAuth());
