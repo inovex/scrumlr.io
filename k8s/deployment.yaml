@@ -89,6 +89,16 @@ spec:
                   key: SESSION_SECRET
             - name: SCRUMLR_BASE_PATH
               value: "/api"
+            - name: SCRUMLR_UNLEASH_BACKEND_URL
+              valueFrom:
+                secretKeyRef:
+                  name: unleash-creds-backend
+                  key: url
+            - name: SCRUMLR_UNLEASH_BACKEND_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: unleash-creds-backend
+                  key: token
             - name: SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES
               value: "true"
             - name: SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION
@@ -140,6 +150,16 @@ spec:
             #   value: /api
             - name: SCRUMLR_SHOW_LEGAL_DOCUMENTS
               value: "true"
+            - name: REACT_APP_UNLEASH_FRONTEND_URL
+              valueFrom:
+                secretKeyRef:
+                  name: unleash-creds-frontend
+                  key: url
+            - name: REACT_APP_UNLEASH_FRONTEND_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: unleash-creds-frontend
+                  key: token
           ports:
             - containerPort: 80
 
@@ -284,6 +304,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: nats
-  install: {}
+  install: { }
   interval: 10m0s
   targetNamespace: scrumlr-dev-deployments

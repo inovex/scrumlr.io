@@ -184,6 +184,17 @@ func (s *Server) publicRoutes(r chi.Router) chi.Router {
 	return r.Group(func(r chi.Router) {
 		r.Get("/info", s.getServerInfo)
 		r.Get("/health", s.healthCheck)
+		/* for test
+		   r.Get("/welcome", func(w http.ResponseWriter, r *http.Request) {
+		     if unleash.IsEnabled("enable-welcome-message") {
+		       w.Header().Set("Content-Type", "application/json")
+		       w.WriteHeader(http.StatusOK)
+		       w.Write([]byte(`{"msg": Welcome to Scrumlr!"}`))
+		     } else {
+		       http.NotFound(w, r)
+		     }
+		   })
+		*/
 		r.Post("/feedback", s.createFeedback)
 		r.Route("/login", func(r chi.Router) {
 			r.Delete("/", s.logout)
