@@ -3,7 +3,6 @@ package main
 import (
   "errors"
   "fmt"
-  "github.com/Unleash/unleash-client-go/v4"
   "log"
   "net/http"
   "os"
@@ -13,6 +12,7 @@ import (
   "scrumlr.io/server/initialize"
   "scrumlr.io/server/services/health"
 
+  "github.com/Unleash/unleash-client-go/v4"
   "github.com/urfave/cli/v2"
   "github.com/urfave/cli/v2/altsrc"
   "scrumlr.io/server/api"
@@ -414,6 +414,7 @@ func run(c *cli.Context) error {
   votingService := votings.NewVotingService(dbConnection, rt)
   userService := users.NewUserService(dbConnection, rt)
   noteService := notes.NewNoteService(dbConnection, rt)
+  //reactionService := reactions.NewReactionService(dbConnection, rt)
   reactionService := initialize.InitializeReactionService(bun, rt)
   feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
   healthService := health.NewHealthService(dbConnection, rt)
