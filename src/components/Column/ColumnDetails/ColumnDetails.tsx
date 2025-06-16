@@ -155,25 +155,33 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const renderDescription = () => (props.mode === "view" ? viewableDescription : editableDescription);
 
+  const renderSettings = () => {
+    if (!isModerator) return null;
+
+    if (openSettings) {
+      return (
+        <ColumnSettings
+          className={classNames("column-details__settings", "column-details__settings--open")}
+          column={props.column}
+          onClose={() => setOpenSettings(false)}
+          onNameEdit={() => changeMode("edit")}
+        />
+      );
+    } return (
+        <button
+          className={classNames("column-details__settings", "column-details__settings--closed", "column-details__settings-icon-container")}
+          onClick={() => setOpenSettings(true)}
+        >
+          <SettingsIcon className="column-details__settings-icon" />
+        </button>
+      );
+  };
+
   return (
     <div className="column-details" ref={ref}>
       <div className="column-details__name-and-settings-wrapper">
         <div className="column-details__name-wrapper">{renderName()}</div>
-        {openSettings ? (
-          <ColumnSettings
-            className={classNames("column-details__settings", "column-details__settings--open")}
-            column={props.column}
-            onClose={() => setOpenSettings(false)}
-            onNameEdit={() => changeMode("edit")}
-          />
-        ) : (
-          <button
-            className={classNames("column-details__settings", "column-details__settings--closed", "column-details__settings-icon-container")}
-            onClick={() => setOpenSettings(true)}
-          >
-            <SettingsIcon className="column-details__settings-icon" />
-          </button>
-        )}
+        {renderSettings()}
       </div>
       <div className={classNames("column-details__description-wrapper", `column-details__description-wrapper--${props.mode}`)}>{renderDescription()}</div>
     </div>
