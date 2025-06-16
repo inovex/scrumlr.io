@@ -1,20 +1,21 @@
 @import "constants/style";
 @import "routes/StackView/StackView.scss";
 
-.note-dialog__header {
+.note-dialog-header {
   font-size: calc(24px + 0.8vw);
   color: $gray--000;
   width: 100%;
-  height: $stack-view__header-height;
+  // height: $stack-view__header-height;
   min-height: $stack-view__min-height;
   letter-spacing: $letter-spacing--large;
   line-height: $line-height--large;
   text-align: center;
   cursor: initial;
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
   flex-shrink: 0;
+  gap: $spacing--base;
 
   h2 {
     width: max-content;
@@ -31,8 +32,15 @@
   }
 }
 
+.note-dialog-header__description {
+  width: 60%;
+  font-size: $text--lg;
+  font-weight: 600;
+  line-height: 30px;
+}
+
 [theme="dark"] {
-  .note-dialog__header > h2::after {
+  .note-dialog-header > h2::after {
     background: var(--accent-color--dark);
   }
 }
