@@ -131,29 +131,37 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       />
     );
 
-  const viewableDescription = props.column.description ? (
-    <>
-      <div ref={descriptionRef} className={classNames("column-details__description", {"column-details__description--expanded": isDescriptionExpanded})}>
-        {props.column.description}
-      </div>
-      {isTextTruncated.vertical && (
-        <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
-          <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
-        </button>
-      )}
-    </>
-  ) : (
-    <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>
-  );
+  const viewableDescription = () => {
+    // expandable content
+    if (props.column.description)
+      return (
+        <>
+          <div ref={descriptionRef} className={classNames("column-details__description", {"column-details__description--expanded": isDescriptionExpanded})}>
+            {props.column.description}
+          </div>
+          {isTextTruncated.vertical && (
+            <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
+              <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
+            </button>
+          )}
+        </>
+      );
+    if (isModerator) {
+      // placeholder
+      return <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>;
+    }
+    // empty placeholder space
+    return <div className="column-details__description--placeholder" />;
+  };
 
-  const editableDescription = (
+  const editableDescription = () => (
     <>
       <TextArea className="column-details__description-text-area" input={localDescription} setInput={setLocalDescription} embedded extendable thickBorder lines={3} />
       <MiniMenu className="column-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
     </>
   );
 
-  const renderDescription = () => (props.mode === "view" ? viewableDescription : editableDescription);
+  const renderDescription = () => (props.mode === "view" ? viewableDescription() : editableDescription());
 
   const renderSettings = () => {
     if (!isModerator) return null;
@@ -167,14 +175,15 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           onNameEdit={() => changeMode("edit")}
         />
       );
-    } return (
-        <button
-          className={classNames("column-details__settings", "column-details__settings--closed", "column-details__settings-icon-container")}
-          onClick={() => setOpenSettings(true)}
-        >
-          <SettingsIcon className="column-details__settings-icon" />
-        </button>
-      );
+    }
+    return (
+      <button
+        className={classNames("column-details__settings", "column-details__settings--closed", "column-details__settings-icon-container")}
+        onClick={() => setOpenSettings(true)}
+      >
+        <SettingsIcon className="column-details__settings-icon" />
+      </button>
+    );
   };
 
   return (
