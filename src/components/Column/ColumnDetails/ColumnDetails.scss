@@ -1,6 +1,7 @@
 @import "constants/style";
 
 $description-line-height: $line-height--medium;
+$description-target-height: 2 * $description-line-height;
 
 $settings-icon: 24px;
 
@@ -75,6 +76,8 @@ $settings-icon: 24px;
   flex-direction: row;
   justify-content: space-between;
 
+  min-height: $description-target-height;
+
   &--edit {
     flex-direction: column;
   }
@@ -86,7 +89,7 @@ $settings-icon: 24px;
   font-size: $text--base;
   font-weight: 600;
   line-height: $description-line-height;
-  max-height: 2 * $description-line-height;
+  max-height: $description-target-height;
   overflow: hidden;
 
   &--expanded {
