@@ -1,13 +1,13 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"github.com/Unleash/unleash-client-go/v4"
-	"log"
-	"net/http"
-	"os"
-	"strings"
+  "errors"
+  "fmt"
+  "github.com/Unleash/unleash-client-go/v4"
+  "log"
+  "net/http"
+  "os"
+  "strings"
 
 	"scrumlr.io/server/auth"
 	"scrumlr.io/server/initialize"
@@ -30,6 +30,7 @@ import (
 	"scrumlr.io/server/services/votings"
 )
 
+func main() {
   app := &cli.App{
     Name:      "scrumlr.io",
     Usage:     "Awesome & scalable server for the scrumlr.io web application",
@@ -264,6 +265,9 @@ import (
   if err := app.Run(os.Args); err != nil {
     log.Fatal(err)
   }
+}
+
+func run(c *cli.Context) error {
   if c.Bool("verbose") {
     logger.EnableDevelopmentLogger()
   }
@@ -400,6 +404,7 @@ import (
   votingService := votings.NewVotingService(dbConnection, rt)
   userService := users.NewUserService(dbConnection, rt)
   noteService := notes.NewNoteService(dbConnection, rt)
+  //reactionService := reactions.NewReactionService(dbConnection, rt)
   reactionService := initialize.InitializeReactionService(bun, rt)
   feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
   healthService := health.NewHealthService(dbConnection, rt)
