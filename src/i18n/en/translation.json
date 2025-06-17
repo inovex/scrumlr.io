@@ -109,7 +109,7 @@
     "button": "Export board",
     "exportAsJson": "Export as JSON",
     "exportAsCSV": "Export as CSV",
-    "openPrintView": "Open print view",
+    "openPrintView": "Export PDF",
     "exportToClipboard": "Copy Markdown to Clipboard",
     "copyToClipboardSuccess": "Markdown copied!",
     "hintHiddenColumns": "The following columns are hidden and will not be exported:",
