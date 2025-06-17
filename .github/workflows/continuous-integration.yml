@@ -249,11 +249,3 @@ jobs:
             yarn run start
           working-directory: ./
           wait-on: 'http://localhost:3000'
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: Cypress-Screenshots
-          path: cypress/screenshots/
-          retention-days: 1
-
