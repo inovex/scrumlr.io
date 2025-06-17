@@ -21,7 +21,7 @@ func TestVotingWithResultsWithEmptyStructs(t *testing.T) {
 
 func TestVotingNotClosed(t *testing.T) {
 	var votes []VoteDB
-	voting := buildVoting(uuid.New(), Open, false)
+	voting := buildVoting(uuid.New(), Open, false, false)
 
 	res := getVotingWithResults(*voting, votes)
 
@@ -30,7 +30,7 @@ func TestVotingNotClosed(t *testing.T) {
 
 func TestVotingAndVotesIdDiffer(t *testing.T) {
 
-	voting := buildVoting(uuid.New(), Closed, false)
+	voting := buildVoting(uuid.New(), Closed, false, false)
 	votes := []VoteDB{*buildVote(uuid.New(), uuid.New(), uuid.New())}
 
 	res := getVotingWithResults(*voting, votes)
@@ -43,7 +43,7 @@ func TestVotingAndVotesIdEqualNoUserDefined(t *testing.T) {
 	voteId := uuid.New()
 	noteId := uuid.New()
 
-	voting := buildVoting(voteId, Closed, false)
+	voting := buildVoting(voteId, Closed, false, true)
 	votes := []VoteDB{*buildVote(voteId, noteId, uuid.New())}
 
 	res := getVotingWithResults(*voting, votes)
@@ -59,7 +59,7 @@ func TestShowVotesOfOthers(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 
-	voting := buildVoting(voteId, Closed, true)
+	voting := buildVoting(voteId, Closed, true, false)
 	votes := []VoteDB{*buildVote(voteId, noteId, userId)}
 
 	res := getVotingWithResults(*voting, votes)
@@ -79,7 +79,7 @@ func TestMultipleVotesForDifferentNotesFromOneUser(t *testing.T) {
 	note2Id := uuid.New()
 	userId := uuid.New()
 
-	voting := buildVoting(voteId, Closed, true)
+	voting := buildVoting(voteId, Closed, true, false)
 	votes := []VoteDB{*buildVote(voteId, note1Id, userId), *buildVote(voteId, note2Id, userId)}
 
 	res := getVotingWithResults(*voting, votes)
@@ -101,7 +101,7 @@ func TestMultipleVotesForOneNoteFromOneUser(t *testing.T) {
 	noteId := uuid.New()
 	userId := uuid.New()
 
-	voting := buildVoting(voteId, Closed, true)
+	voting := buildVoting(voteId, Closed, true, false)
 	votes := []VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)}
 
 	res := getVotingWithResults(*voting, votes)
@@ -133,7 +133,7 @@ func TestCalculateVoteCountForSpecificNote(t *testing.T) {
 
 	noteSlice := []Note{{ID: noteId}}
 	voting := Votings(
-		[]VotingDB{*buildVoting(voteId, Closed, true)},
+		[]VotingDB{*buildVoting(voteId, Closed, true, false)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
 	)[0]
 
@@ -149,7 +149,7 @@ func TestShouldReturnNoVotingResultsBecauseVotingIsStillOpen(t *testing.T) {
 	voteId := uuid.New()
 	noteId := uuid.New()
 
-	voting := Votings([]VotingDB{*buildVoting(voteId, Open, true)}, []VoteDB{})[0]
+	voting := Votings([]VotingDB{*buildVoting(voteId, Open, true, false)}, []VoteDB{})[0]
 	noteSlice := []Note{{ID: noteId}}
 
 	updatedVoting := voting.UpdateVoting(noteSlice)
@@ -167,7 +167,7 @@ func TestShouldReturnVotingResults(t *testing.T) {
 	userId := uuid.New()
 
 	voting := Votings(
-		[]VotingDB{*buildVoting(voteId, Closed, true)},
+		[]VotingDB{*buildVoting(voteId, Closed, true, false)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
 	)[0]
 	noteSlice := []Note{{ID: noteId}}
@@ -187,7 +187,7 @@ func TestShouldUnmarshallVoteData(t *testing.T) {
 	userId := uuid.New()
 
 	voting := Votings(
-		[]VotingDB{*buildVoting(voteId, Closed, true)},
+		[]VotingDB{*buildVoting(voteId, Closed, true, false)},
 		[]VoteDB{*buildVote(voteId, noteId, userId), *buildVote(voteId, noteId, userId)},
 	)[0]
 	noteSlice := []Note{{ID: noteId}}
@@ -225,7 +225,7 @@ func buildVote(votingId uuid.UUID, noteId uuid.UUID, userId uuid.UUID) *VoteDB {
 	}
 }
 
-func buildVoting(id uuid.UUID, status VotingStatus, showVotesOfOthers bool) *VotingDB {
+func buildVoting(id uuid.UUID, status VotingStatus, showVotesOfOthers bool, isAnonymous bool) *VotingDB {
 	return &VotingDB{
 		ID:                 id,
 		BaseModel:          bun.BaseModel{},
@@ -234,6 +234,7 @@ func buildVoting(id uuid.UUID, status VotingStatus, showVotesOfOthers bool) *Vot
 		VoteLimit:          0,
 		AllowMultipleVotes: false,
 		ShowVotesOfOthers:  showVotesOfOthers,
+		IsAnonymous:        isAnonymous,
 		Status:             status,
 	}
 }
