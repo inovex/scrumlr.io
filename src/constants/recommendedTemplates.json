@@ -1,0 +1,212 @@
+[
+  {
+    "name": "template.lean_coffee.name",
+    "description": "template.lean_coffee.description",
+    "columns": [
+      {
+        "name": "template.lean_coffee.column.lean_coffee.name",
+        "description": "template.lean_coffee.column.lean_coffee.description",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "template.lean_coffee.column.actions.name",
+        "description": "template.lean_coffee.column.actions.description",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "template.quick_review.name",
+    "description": "template.quick_review.description",
+    "columns": [
+      {
+        "name": "template.quick_review.column.positive.name",
+        "description": "template.quick_review.column.positive.description",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "template.quick_review.column.negative.name",
+        "description": "template.quick_review.column.negative.description",
+        "color": "poker-purple",
+        "visible": true
+      },
+      {
+        "name": "template.quick_review.column.actions.name",
+        "description": "template.quick_review.column.actions.description",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "template.status_quo_check.name",
+    "description": "template.status_quo_check.description",
+    "columns": [
+      {
+        "name": "template.status_quo_check.column.start.name",
+        "description": "template.status_quo_check.column.start.description",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "template.status_quo_check.column.stop.name",
+        "description": "template.status_quo_check.column.stop.description",
+        "color": "goal-green",
+        "visible": true
+      },
+      {
+        "name": "template.status_quo_check.column.continue.name",
+        "description": "template.status_quo_check.column.continue.description",
+        "color": "online-orange",
+        "visible": true
+      },
+      {
+        "name": "template.status_quo_check.column.actions.name",
+        "description": "template.status_quo_check.column.actions.description",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "template.mood.name",
+    "description": "template.mood.description",
+    "columns": [
+      {
+        "name": "template.mood.column.mad.name",
+        "description": "template.mood.column.mad.description",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "template.mood.column.sad.name",
+        "description": "template.mood.column.sad.description",
+        "color": "online-orange",
+        "visible": true
+      },
+      {
+        "name": "template.mood.column.glad.name",
+        "description": "template.mood.column.glad.description",
+        "color": "poker-purple",
+        "visible": true
+      },
+      {
+        "name": "template.mood.column.actions.name",
+        "description": "template.mood.column.actions.description",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "template.kalm.name",
+    "description": "template.kalm.description",
+    "columns": [
+      {
+        "name": "template.kalm.column.keep.name",
+        "description": "template.kalm.column.keep.description",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "template.kalm.column.add.name",
+        "description": "template.kalm.column.add.description",
+        "color": "yielding-yellow",
+        "visible": true
+      },
+      {
+        "name": "template.kalm.column.less.name",
+        "description": "template.kalm.column.less.description",
+        "color": "goal-green",
+        "visible": true
+      },
+      {
+        "name": "template.kalm.column.more.name",
+        "description": "template.kalm.column.more.description",
+        "color": "poker-purple",
+        "visible": true
+      },
+      {
+        "name": "template.kalm.column.actions.name",
+        "description": "template.kalm.column.actions.description",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "template.4l.name",
+    "description": "template.4l.description",
+    "columns": [
+      {
+        "name": "template.4l.column.liked.name",
+        "description": "template.4l.column.liked.description",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "template.4l.column.learned.name",
+        "description": "template.4l.column.learned.description",
+        "color": "poker-purple",
+        "visible": true
+      },
+      {
+        "name": "template.4l.column.lacked.name",
+        "description": "template.4l.column.lacked.description",
+        "color": "value-violet",
+        "visible": true
+      },
+      {
+        "name": "template.4l.column.longed_for.name",
+        "description": "template.4l.column.longed_for.description",
+        "color": "planning-pink",
+        "visible": true
+      },
+      {
+        "name": "template.4l.column.actions.name",
+        "description": "template.4l.column.actions.description",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  },
+  {
+    "name": "template.swot.name",
+    "description": "template.swot.description",
+    "columns": [
+      {
+        "name": "template.swot.column.strengths.name",
+        "description": "template.swot.column.strengths.description",
+        "color": "backlog-blue",
+        "visible": true
+      },
+      {
+        "name": "template.swot.column.weaknesses.name",
+        "description": "template.swot.column.weaknesses.description",
+        "color": "online-orange",
+        "visible": true
+      },
+      {
+        "name": "template.swot.column.opportunities.name",
+        "description": "template.swot.column.opportunities.description",
+        "color": "goal-green",
+        "visible": true
+      },
+      {
+        "name": "template.swot.column.threats.name",
+        "description": "template.swot.column.threats.description",
+        "color": "yielding-yellow",
+        "visible": true
+      },
+      {
+        "name": "template.swot.column.actions.name",
+        "description": "template.swot.column.actions.description",
+        "color": "planning-pink",
+        "visible": false
+      }
+    ]
+  }
+]

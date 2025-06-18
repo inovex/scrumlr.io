@@ -1,0 +1,83 @@
+@import "constants/style";
+
+$padding--default: 16px;
+$padding--small: 8px;
+
+$height--default: calc(8.75 * $text--base + 2 * $padding--default); // = 172px
+
+.text-area {
+  resize: none;
+  @include scrollbar();
+
+  width: 100%;
+  min-height: $height--default;
+
+  padding: $padding--default;
+  margin: 0;
+  outline: none;
+  border: none;
+  border-radius: $rounded--default;
+
+  font-size: $text--base;
+  font-weight: 500;
+
+  color: $gray--800;
+  background-color: $gray--000;
+
+  &:not(&--embedded) {
+    @include default-states($padding: $padding--small);
+  }
+  &:not(&--embedded):not(&--small) {
+    @include default-states($padding: $padding--default);
+  }
+
+  &::placeholder {
+    color: $gray--800;
+  }
+
+  &:hover,
+  &:focus-within {
+    color: $navy--400;
+    &::placeholder {
+      color: $gray--800;
+    }
+  }
+
+  &:not(&--extendable) {
+    max-height: $height--default;
+  }
+
+  &--embedded {
+    background: none;
+    border: 2px dashed var(--accent-color--light);
+  }
+
+  &--small {
+    font-size: $text--xs;
+    padding: $padding--small;
+    border-radius: 5px;
+  }
+}
+
+[theme="dark"] {
+  .text-area {
+    color: $gray--300;
+    background-color: $navy--400;
+
+    &::placeholder {
+      color: $gray--800;
+    }
+
+    &:hover,
+    &:focus-within {
+      color: $gray--300;
+      &::placeholder {
+        color: $gray--300;
+      }
+    }
+
+    &--embedded {
+      border-color: var(--accent-color--dark);
+    }
+  }
+}

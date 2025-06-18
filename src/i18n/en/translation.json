@@ -20,11 +20,9 @@
     "title": "Choose a template",
     "savedTemplates": "Your Templates",
     "recommendedTemplates": "Our Recommendations",
-
     "CreateTemplateCard": {
       "create": "Create a new Template"
     },
-
     "TemplateCard": {
       "addFavourite": "Mark as Favourite",
       "removeFavourite": "Remove Favourite",
@@ -32,11 +30,56 @@
       "column_other": "{{count}} Columns",
       "start": "Start",
       "save": "Save"
+    },
+    "TemplateEditor": {
+      "createTitle": "Create a Template",
+      "editTitle": "Edit a Template",
+      "cancel": "Cancel",
+      "saveEdit": "Save",
+      "saveCreate": "Create template"
+    },
+    "ColumnsConfiguratorColumn": {
+      "namePlaceholder": "Name",
+      "descriptionPlaceholder": "Description (optional)",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "AccessSettings": {
+      "title": "Access Settings",
+      "Options": {
+        "Public": {
+          "title": "Open",
+          "description": "Participants can join easily & quickly via the link – this provides basic security."
+        },
+        "By_Invite": {
+          "title": "Approval",
+          "description": "Participants must be approved before joining – ensuring a high level of security."
+        },
+        "By_Passphrase": {
+          "title": "Password Protected",
+          "description": "Access is only possible with a set password – ensuring a high level of security."
+        }
+      },
+      "Buttons": {
+        "cancel": "Go back",
+        "start": "Start Session"
+      }
     }
   },
   "Sessions": {
     "switchTitle": "Sessions",
     "title": "Choose a session"
+  },
+  "CreateBoard": {
+    "title": "Create a new Board",
+    "dropdown": {
+      "open": "Open",
+      "password": "Password",
+      "approval": "Approval"
+    },
+    "validation": {
+      "REQUIRED": "Input is required."
+    }
   },
   "LoginBoard": {
     "title": "Sign in to scrumlr.io",
@@ -379,8 +422,10 @@
   "NoteReactionsPopup": {
     "allReactionsTab": "All"
   },
-  "SearchBar": {
-    "placeholder": "Search"
+  "Input": {
+    "placeholder": {
+      "search": "Search"
+    }
   },
   "SettingsDialog": {
     "BoardSettings": "Board Settings",
@@ -494,6 +539,13 @@
     "closeVoting": "Sorry, but we're having trouble ending the voting. Please try again.",
     "abortVoting": "Sorry, but we're having trouble aborting the voting. Please try again.",
     "editSelf": "Sorry, but we're having trouble updating your information. Please try again."
+  },
+  "Validation": {
+    "REQUIRED": "required",
+    "BAD_INPUT": "bad input",
+    "PATTERN_MISMATCH": "pattern mismatch",
+    "TYPE_MISMATCH": "type mismatch",
+    "RANGE": "range"
   },
   "Avatar": {
     "random": "Generate random avatar",
