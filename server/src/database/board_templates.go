@@ -7,7 +7,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
@@ -18,21 +17,14 @@ type BoardTemplate struct {
 	Creator       uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  types.AccessPolicy
 	Favourite     *bool
 	CreatedAt     time.Time
 }
 
 type BoardTemplateFull struct {
 	bun.BaseModel   `bun:"table:board_templates"`
-	ID              uuid.UUID
-	Creator         uuid.UUID
-	Name            *string
-	Description     *string
-	AccessPolicy    types.AccessPolicy
-	Favourite       *bool
+	Template        BoardTemplate
 	ColumnTemplates []ColumnTemplate
-	CreatedAt       time.Time
 }
 
 type BoardTemplateInsert struct {
@@ -40,7 +32,6 @@ type BoardTemplateInsert struct {
 	Creator       uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  types.AccessPolicy
 	Favourite     *bool
 }
 
@@ -49,7 +40,6 @@ type BoardTemplateUpdate struct {
 	ID            uuid.UUID
 	Name          *string
 	Description   *string
-	AccessPolicy  *types.AccessPolicy
 	Favourite     *bool
 }
 
@@ -108,13 +98,7 @@ func (d *Database) GetBoardTemplates(user uuid.UUID) ([]BoardTemplateFull, error
 		}
 
 		dbBoardTemplate := BoardTemplateFull{
-			ID:              board.ID,
-			Creator:         board.Creator,
-			Name:            board.Name,
-			Description:     board.Description,
-			AccessPolicy:    board.AccessPolicy,
-			Favourite:       board.Favourite,
-			CreatedAt:       board.CreatedAt,
+			Template:        board,
 			ColumnTemplates: cols,
 		}
 		templates = append(templates, dbBoardTemplate)
@@ -133,10 +117,6 @@ func (d *Database) UpdateBoardTemplate(board BoardTemplateUpdate) (BoardTemplate
 
 	if board.Description != nil {
 		query_settings.Column("description")
-	}
-
-	if board.AccessPolicy != nil {
-		query_settings.Column("access_policy")
 	}
 
 	if board.Favourite != nil {

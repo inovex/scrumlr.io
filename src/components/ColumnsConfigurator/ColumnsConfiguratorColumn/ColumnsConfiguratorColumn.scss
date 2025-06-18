@@ -1,0 +1,149 @@
+@import "constants/style";
+
+$column-width: 158px;
+$column-height: 340px;
+
+.columns-configurator-column {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--md;
+  flex-shrink: 0;
+  flex-grow: 1;
+
+  width: $column-width;
+  height: $column-height;
+
+  padding: $spacing--md $spacing--base;
+
+  border: $spacing--xxs solid var(--accent-color--light);
+
+  z-index: $base-z-index;
+
+  &--even {
+    background-color: $gray--200;
+  }
+  &--odd {
+    background-color: $gray--100;
+  }
+
+  // not the column that's currently being dragged, but actually where it was
+  &--active-drag {
+    background-color: rgba(var(--accent-color--100-rgb, 0.5));
+    border: $spacing--xxs dashed var(--accent-color--light);
+    z-index: $base-z-index + $base-z-index-step; // display dragged item above others
+  }
+
+  &--active-drop {
+    background-color: rgba(var(--accent-color--100-rgb, 0.5));
+    border: $spacing--xxs dashed var(--accent-color--light);
+  }
+
+  &--hidden {
+    background-image: $column-stripes--light;
+  }
+
+  // deactivate borders depending on position
+  &--border {
+    &-first {
+      border-right: none;
+    }
+    &-center {
+      border-left: none;
+      border-right: none;
+    }
+    &-last {
+      border-left: none;
+    }
+  }
+}
+
+.columns-configurator-column__menu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xl; // TODO proper gaps
+  align-items: center;
+}
+
+.columns-configurator-column__icon {
+  width: $icon--large;
+  height: $icon--large;
+
+  &--dnd {
+    width: 22px;
+    height: 15px;
+  }
+}
+
+.columns-configurator-column__drag-element {
+  cursor: grab;
+  touch-action: none; // prevent funky mobile dnd behaviour
+
+  &--dragging {
+    cursor: grabbing;
+  }
+}
+
+// note: hardcoded values are always subject to change with the column or color picker themselves
+.columns-configurator-column__color-picker {
+  &--open {
+    // only apply to opened color picker, as it behaves differently
+    position: absolute;
+    // some precise but hardcoded positioning values so it fits exactly on top of the active color
+    // varying by column position (left, center, right) probably because of borders ig
+    top: 40px - 1px;
+    left: 40px + 1px;
+  }
+
+  // different column layout require different offsets ... would be nice to have a better solution for this in the future
+  &--column-center {
+    left: 40px + 3px;
+  }
+
+  &--column-all {
+    left: 40px - 1px;
+  }
+}
+
+.columns-configurator-column__button {
+  all: unset;
+  cursor: pointer;
+  max-width: $icon--large;
+  max-height: $icon--large;
+
+  &:disabled {
+    color: $gray--800;
+    cursor: default;
+  }
+}
+
+[theme="dark"] {
+  .columns-configurator-column {
+    border-color: var(--accent-color--dark);
+
+    &--even {
+      background-color: $navy--600;
+    }
+    &--odd {
+      background-color: $navy--400;
+    }
+
+    &--active-drag {
+      background-color: rgba(var(--accent-color--200-rgb, 0.5));
+      border-color: var(--accent-color--dark);
+    }
+
+    &--active-drop {
+      background-color: rgba(var(--accent-color--200-rgb, 0.5));
+      border-color: var(--accent-color--dark);
+    }
+
+    &--hidden {
+      background-image: $column-stripes--dark;
+    }
+  }
+
+  .columns-configurator-column__icon {
+    color: $gray--000;
+  }
+}

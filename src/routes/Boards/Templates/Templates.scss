@@ -3,6 +3,12 @@
 $stan-height: 70vh;
 $max-card-width: 500px;
 
+.templates__portal {
+  backdrop-filter: blur(10px);
+  background: rgba($blue--500, 0.1);
+  transition: background 0.2s ease-out;
+}
+
 .templates {
   display: flex;
   flex-direction: row;

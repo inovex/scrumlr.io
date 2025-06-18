@@ -20,7 +20,7 @@ import {
 const rootReducer = {
   auth: authReducer,
   templates: templatesReducer,
-  templatesColumns: templateColumnsReducer,
+  templateColumns: templateColumnsReducer,
   board: boardReducer,
   boardReactions: boardReactionsReducer,
   columns: columnsReducer,

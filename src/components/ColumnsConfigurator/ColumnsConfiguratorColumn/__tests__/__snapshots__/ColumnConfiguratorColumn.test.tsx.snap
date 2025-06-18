@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnConfiguratorColumn render should render correctly 1`] = `
+<div>
+  <div
+    aria-describedby=""
+    aria-disabled="false"
+    aria-roledescription="sortable"
+    class="columns-configurator-column columns-configurator-column--border-ghost columns-configurator-column--even accent-color__backlog-blue"
+    role="button"
+    style="--stripe-offset: 0px;"
+    tabindex="0"
+  >
+    <div
+      class="columns-configurator-column__name-details column-configurator-column-name-details__name-wrapper"
+    >
+      <input
+        autocomplete="off"
+        class="column-configurator-column-name-details__name"
+        placeholder="Name"
+        value="sample templates col name 1"
+      />
+      <div
+        class="column-configurator-column-name-details__inline-description"
+        role="button"
+        tabindex="0"
+      >
+        sample templates col name 1
+      </div>
+    </div>
+    <div
+      class="columns-configurator-column__menu"
+    >
+      <svg
+        class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+        data-cy="columns-configurator-column__drag-element"
+      >
+        drag-and-drop.svg
+      </svg>
+      <span
+        aria-label="current colorBacklog Blue"
+        class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-undefined color-picker__color-option color-picker__color-option--selected"
+        data-cy="columns-configurator-column__color-picker"
+        role="button"
+        tabindex="0"
+      />
+      <button
+        class="columns-configurator-column__button column-configurator-column__visibility-button"
+      >
+        <svg
+          class="columns-configurator-column__icon columns-configurator-column__icon--visible"
+          data-cy="columns-configurator-column__icon--visibility"
+        >
+          visible.svg
+        </svg>
+      </button>
+      <button
+        class="columns-configurator-column__button column-configurator-column__delete-button"
+      >
+        <svg
+          class="columns-configurator-column__icon columns-configurator-column__icon--delete"
+        >
+          trash.svg
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+`;

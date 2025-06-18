@@ -7,6 +7,7 @@ interface ServerInformationDto {
   authProvider: string[];
   serverTime: string;
   feedbackEnabled: boolean;
+  allowAnonymousCustomTemplates: boolean;
 }
 
 export const InfoAPI = {
@@ -29,6 +30,7 @@ export const InfoAPI = {
           serverTime: new Date(info.serverTime).getTime(),
           enabledAuthProvider: info.authProvider,
           anonymousLoginDisabled: info.anonymousLoginDisabled,
+          allowAnonymousCustomTemplates: info.allowAnonymousCustomTemplates,
           feedbackEnabled: info.feedbackEnabled,
         } as ServerInfo;
       }
