@@ -72,6 +72,7 @@ func (v *Voting) From(voting VotingDB, votes []VoteDB) *Voting {
 	v.ShowVotesOfOthers = voting.ShowVotesOfOthers
 	v.Status = voting.Status
 	v.VotingResults = getVotingWithResults(voting, votes)
+	v.IsAnonymous = voting.IsAnonymous
 	return v
 }
 

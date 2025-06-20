@@ -75,6 +75,7 @@ func (s *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting
 		VoteLimit:          body.VoteLimit,
 		AllowMultipleVotes: body.AllowMultipleVotes,
 		ShowVotesOfOthers:  body.ShowVotesOfOthers,
+		IsAnonymous:        body.IsAnonymous,
 		Status:             Open,
 	})
 

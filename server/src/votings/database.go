@@ -33,13 +33,19 @@ func (d *DB) Create(insert VotingInsert) (VotingDB, error) {
 		return VotingDB{}, errors.New("vote limit shall not be greater than 99")
 	}
 
-	countOpenVotings := d.db.NewSelect().Model((*Voting)(nil)).ColumnExpr("COUNT(*) as count").Where("board = ?", insert.Board).Where("status = ?", Open)
+	countOpenVotings := d.db.NewSelect().
+		Model((*Voting)(nil)).
+		ColumnExpr("COUNT(*) as count").
+		Where("board = ?", insert.Board).
+		Where("status = ?", Open)
+
 	values := d.db.NewSelect().
 		ColumnExpr("uuid(?) as board", insert.Board).
 		ColumnExpr("? as vote_limit", insert.VoteLimit).
 		ColumnExpr("? as show_votes_of_others", insert.ShowVotesOfOthers).
 		ColumnExpr("? as allow_multiple_votes", insert.AllowMultipleVotes).
 		ColumnExpr("?::voting_status as status", insert.Status).
+		ColumnExpr("? as is_anonymous", insert.IsAnonymous).
 		Where("(SELECT count FROM \"countOpenVotings\") = 0")
 
 	updateBoard := d.db.NewUpdate().
@@ -54,7 +60,7 @@ func (d *DB) Create(insert VotingInsert) (VotingDB, error) {
 		With("_values", values).
 		Model(&insert).
 		TableExpr("_values").
-		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status").
+		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status", "is_anonymous").
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
 

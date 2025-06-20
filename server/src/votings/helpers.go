@@ -73,7 +73,8 @@ func getVotingWithResults(voting VotingDB, votes []VoteDB) *VotingResults {
 		result := VotingResultsPerNote{
 			Total: total,
 		}
-		if voting.ShowVotesOfOthers {
+
+		if !voting.IsAnonymous {
 			userVotes := map[uuid.UUID]int{}
 			for _, user := range votesPerUser[note] {
 				if _, ok := userVotes[user]; ok {
