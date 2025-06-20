@@ -5,7 +5,7 @@
     "columns": [
       {
         "name": "Lean Coffee",
-        "description": "",
+        "description": "Collect topics, ideas, and questions.",
         "color": "backlog-blue",
         "visible": true
       },
@@ -23,13 +23,13 @@
     "columns": [
       {
         "name": "Positive",
-        "description": "",
+        "description": "What went well?",
         "color": "backlog-blue",
         "visible": true
       },
       {
         "name": "Negative",
-        "description": "",
+        "description": "What didn't go well?",
         "color": "poker-purple",
         "visible": true
       },
@@ -47,19 +47,19 @@
     "columns": [
       {
         "name": "Start",
-        "description": "",
+        "description": "What new processes should be tried?",
         "color": "backlog-blue",
         "visible": true
       },
       {
         "name": "Stop",
-        "description": "",
+        "description": "What isn't working and should be stopped?",
         "color": "goal-green",
         "visible": true
       },
       {
         "name": "Continue",
-        "description": "",
+        "description": "What is working well and should be continued?",
         "color": "online-orange",
         "visible": true
       },
@@ -77,19 +77,19 @@
     "columns": [
       {
         "name": "Mad",
-        "description": "",
+        "description": "What caused frustration or anger?",
         "color": "backlog-blue",
         "visible": true
       },
       {
         "name": "Sad",
-        "description": "",
+        "description": "What caused disappointment?",
         "color": "online-orange",
         "visible": true
       },
       {
         "name": "Glad",
-        "description": "",
+        "description": "What brought joy or motivation?",
         "color": "poker-purple",
         "visible": true
       },
@@ -107,25 +107,25 @@
     "columns": [
       {
         "name": "Keep",
-        "description": "",
+        "description": "What works well and should be kept?",
         "color": "backlog-blue",
         "visible": true
       },
       {
         "name": "Add",
-        "description": "",
+        "description": "What could add value?",
         "color": "yielding-yellow",
         "visible": true
       },
       {
         "name": "Less",
-        "description": "",
+        "description": "What should be done less frequently?",
         "color": "goal-green",
         "visible": true
       },
       {
         "name": "More",
-        "description": "",
+        "description": "What should be done more often?",
         "color": "poker-purple",
         "visible": true
       },
@@ -143,25 +143,25 @@
     "columns": [
       {
         "name": "Liked",
-        "description": "",
+        "description": "What was particularly positive?",
         "color": "backlog-blue",
         "visible": true
       },
       {
         "name": "Learned",
-        "description": "",
+        "description": "What knowledge was gained?",
         "color": "poker-purple",
         "visible": true
       },
       {
         "name": "Learned",
-        "description": "",
+        "description": "What could habe been improved?",
         "color": "value-violet",
         "visible": true
       },
       {
         "name": "Longed for",
-        "description": "",
+        "description": "What would be desirable for the future?",
         "color": "planning-pink",
         "visible": true
       },
@@ -179,25 +179,25 @@
     "columns": [
       {
         "name": "Strengths",
-        "description": "",
+        "description": "What strengths provide an advantage?",
         "color": "backlog-blue",
         "visible": true
       },
       {
         "name": "Weaknesses",
-        "description": "",
+        "description": "What weaknesses should be adressed?",
         "color": "online-orange",
         "visible": true
       },
       {
         "name": "Opportunities",
-        "description": "",
+        "description": "What opportunities can be leveraged?",
         "color": "goal-green",
         "visible": true
       },
       {
         "name": "Threats",
-        "description": "",
+        "description": "What challenges should be considered?",
         "color": "yielding-yellow",
         "visible": true
       },

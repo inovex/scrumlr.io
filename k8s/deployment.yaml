@@ -87,6 +87,7 @@ spec:
                   key: SESSION_SECRET
             - name: SCRUMLR_BASE_PATH
               value: "/api"
+
             - name: SCRUMLR_UNLEASH_BACKEND_URL
               valueFrom:
                 secretKeyRef:
@@ -97,6 +98,10 @@ spec:
                 secretKeyRef:
                   name: unleash-creds-backend
                   key: token
+
+            - name: SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES
+              value: "true"
+
           ports:
             - containerPort: 8080
 ---

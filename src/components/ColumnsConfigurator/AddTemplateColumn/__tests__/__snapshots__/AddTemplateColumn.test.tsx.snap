@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddTemplateColumn should render correctly 1`] = `
+<div>
+  <div
+    class="add-template-column add-template-column--left accent-color__backlog-blue"
+  >
+    <button
+      class="add-template-column__button"
+    >
+      <svg
+        class="add-template-column__icon"
+      >
+        add-column.svg
+      </svg>
+    </button>
+  </div>
+</div>
+`;

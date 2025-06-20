@@ -10,4 +10,13 @@ export type TemplateColumn = {
   index: number;
 };
 
+export type TemplateColumnAction = "create" | "edit" | "delete";
+
+export type ExistenceStatus = {
+  persisted: boolean;
+  mode?: TemplateColumnAction;
+};
+
+export type EditableTemplateColumn = TemplateColumn & ExistenceStatus;
+
 export type TemplateColumnsState = TemplateColumn[];

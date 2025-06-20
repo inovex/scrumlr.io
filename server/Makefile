@@ -6,14 +6,14 @@ build-alpine:
 
 run-docker:
 	make build-alpine
-	docker-compose up --build
+	docker compose up --build scrumlr
 
 .ONESHELL:
 run-dev:
 	cd src && go run . -d postgresql://admin:supersecret@localhost:5432/scrumlr?sslmode=disable
 
 run-docker-dev:
-	docker-compose --profile dev up
+	docker compose --profile dev up
 
 .ONESHELL:
 test:

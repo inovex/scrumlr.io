@@ -1,0 +1,4 @@
+---
+auth:
+  postgresPassword: SuperStrongpassword
+  database: scrumlr

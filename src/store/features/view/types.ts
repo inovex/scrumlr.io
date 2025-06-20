@@ -8,6 +8,7 @@ export type AutoTheme = Omit<Theme, "auto">;
 export type ServerInfo = {
   anonymousLoginDisabled: boolean;
   enabledAuthProvider: string[];
+  allowAnonymousCustomTemplates: boolean;
   serverTime: number;
   feedbackEnabled: boolean;
 };
@@ -22,6 +23,8 @@ export interface View {
   serverTimeOffset: number;
 
   anonymousLoginDisabled: boolean;
+
+  allowAnonymousCustomTemplates: boolean;
 
   enabledAuthProvider: string[];
 

@@ -63,14 +63,14 @@ Object {
             class="settings-dialog__separator"
           />
           <button
-            aria-label="Open print view"
+            aria-label="Export PDF"
             class="settings-option-button export-board__button-reverse-order export-board__button-print-view"
             type="button"
           >
             <span
               class="settings-option-button__label"
             >
-              Open print view
+              Export PDF
             </span>
             <svg
               class="settings-option-button__icon"
@@ -161,14 +161,14 @@ Object {
           class="settings-dialog__separator"
         />
         <button
-          aria-label="Open print view"
+          aria-label="Export PDF"
           class="settings-option-button export-board__button-reverse-order export-board__button-print-view"
           type="button"
         >
           <span
             class="settings-option-button__label"
           >
-            Open print view
+            Export PDF
           </span>
           <svg
             class="settings-option-button__icon"
