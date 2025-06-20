@@ -2,13 +2,15 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"net/http"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
+	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/notes"
 )
 
 // createNote creates a new note
@@ -17,7 +19,7 @@ func (s *Server) createNote(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body dto.NoteCreateRequest
+	var body notes.NoteCreateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -59,7 +61,7 @@ func (s *Server) getNote(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getNotes(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	notes, err := s.notes.List(r.Context(), board)
+	notes, err := s.notes.GetAll(r.Context(), board)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
@@ -75,7 +77,7 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 	boardID := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	noteID := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
 
-	var body dto.NoteUpdateRequest
+	var body notes.NoteUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -98,11 +100,32 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	note := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
-	var body dto.NoteDeleteRequest
+	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
+	}
+
+	notesToDelete, err := s.notes.GetStack(r.Context(), note)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	var votesToDelete []uuid.UUID
+	for _, note := range notesToDelete {
+		votes, err := s.votings.GetVotes(r.Context(), filter.VoteFilter{Board: board, Note: &note.ID})
+		if err != nil {
+			common.Throw(w, r, err)
+			return
+		}
+
+		for _, vote := range votes {
+			votesToDelete = append(votesToDelete, vote.Voting)
+		}
 	}
 
 	if err := s.notes.Delete(r.Context(), body, note); err != nil {

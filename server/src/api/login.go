@@ -4,16 +4,14 @@ import (
 	"fmt"
 	"math"
 	"net/http"
+	"scrumlr.io/server/sessions"
 	"strings"
 	"time"
 
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/logger"
-
 	"github.com/go-chi/render"
 	"github.com/markbates/goth/gothic"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/logger"
 )
 
 // AnonymousSignUpRequest represents the request to create a new anonymous user.
@@ -33,7 +31,7 @@ func (s *Server) signInAnonymously(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.users.LoginAnonymous(r.Context(), body.Name)
+	user, err := s.users.CreateAnonymous(r.Context(), body.Name)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
@@ -85,7 +83,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	provider, err := types.NewAccountType(externalUser.Provider)
+	provider, err := common.NewAccountType(externalUser.Provider)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Errorw("unsupported user provider", "err", err)
@@ -99,19 +97,19 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var internalUser *dto.User
+	var internalUser *sessions.User
 	switch provider {
-	case types.AccountTypeGoogle:
+	case common.Google:
 		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeGitHub:
+	case common.GitHub:
 		internalUser, err = s.users.CreateGitHubUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeMicrosoft:
+	case common.Microsoft:
 		internalUser, err = s.users.CreateMicrosoftUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeAzureAd:
+	case common.AzureAd:
 		internalUser, err = s.users.CreateAzureAdUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeApple:
+	case common.Apple:
 		internalUser, err = s.users.CreateAppleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
-	case types.AccountTypeOIDC:
+	case common.TypeOIDC:
 		internalUser, err = s.users.CreateOIDCUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
 	}
 	if err != nil {

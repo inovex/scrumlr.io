@@ -5,9 +5,9 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/sessions"
 )
 
 // getUser get a user
@@ -28,7 +28,7 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body dto.UserUpdateRequest
+	var body sessions.UserUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -42,6 +42,13 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
+
+	// because of a import cycle the boards are updated through the session service
+	// after a user update.
+	updateBoards := sessions.BoardSessionUpdateRequest{
+		User: user,
+	}
+	s.sessions.UpdateUserBoards(r.Context(), updateBoards)
 
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, updatedUser)

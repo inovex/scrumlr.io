@@ -4,15 +4,16 @@ import (
 	"context"
 	"net/http"
 
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/sessions"
+
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
-	"scrumlr.io/server/votes"
 
 	"scrumlr.io/server/identifiers"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"scrumlr.io/server/common/dto"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
@@ -21,8 +22,8 @@ import (
 type BoardSubscription struct {
 	subscription      chan *realtime.BoardEvent
 	clients           map[uuid.UUID]*websocket.Conn
-	boardParticipants []*dto.BoardSession
-	boardSettings     *dto.Board
+	boardParticipants []*sessions.BoardSession
+	boardSettings     *boards.Board
 	boardColumns      []*columns.Column
 	boardNotes        []*notes.Note
 	boardReactions    []*reactions.Reaction
@@ -30,18 +31,7 @@ type BoardSubscription struct {
 
 type InitEvent struct {
 	Type realtime.BoardEventType `json:"type"`
-	Data dto.FullBoard           `json:"data"`
-}
-
-type EventData struct {
-	Board     *dto.Board                 `json:"board"`
-	Columns   []*columns.Column          `json:"columns"`
-	Notes     []*notes.Note              `json:"notes"`
-	Reactions []*reactions.Reaction      `json:"reactions"`
-	Votings   []*votes.Voting            `json:"votings"`
-	Votes     []*dto.Vote                `json:"votes"`
-	Sessions  []*dto.BoardSession        `json:"participants"`
-	Requests  []*dto.BoardSessionRequest `json:"requests"`
+	Data boards.FullBoard        `json:"data"`
 }
 
 func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
@@ -102,7 +92,7 @@ func (s *Server) openBoardSocket(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData dto.FullBoard) {
+func (s *Server) listenOnBoard(boardID, userID uuid.UUID, conn *websocket.Conn, initEventData boards.FullBoard) {
 	if _, exist := s.boardSubscriptions[boardID]; !exist {
 		s.boardSubscriptions[boardID] = &BoardSubscription{
 			clients: make(map[uuid.UUID]*websocket.Conn),
