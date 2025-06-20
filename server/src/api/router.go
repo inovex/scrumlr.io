@@ -38,10 +38,10 @@ import (
 )
 
 type Server struct {
-	basePath string
+  basePath string
 
-	realtime *realtime.Broker
-	auth     auth.Auth
+  realtime *realtime.Broker
+  auth     auth.Auth
 
 	boards          boards.BoardService
 	columns         columns.ColumnService
@@ -57,11 +57,11 @@ type Server struct {
 	boardTemplates  boardtemplates.BoardTemplateService
 	columntemplates columntemplates.ColumnTemplateService
 
-	upgrader websocket.Upgrader
+  upgrader websocket.Upgrader
 
-	// map of boardSubscriptions with maps of users with connections
-	boardSubscriptions               map[uuid.UUID]*BoardSubscription
-	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
+  // map of boardSubscriptions with maps of users with connections
+  boardSubscriptions               map[uuid.UUID]*BoardSubscription
+  boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
 	anonymousLoginDisabled        	bool
@@ -71,9 +71,9 @@ type Server struct {
 }
 
 func New(
-	basePath string,
-	rt *realtime.Broker,
-	auth auth.Auth,
+  basePath string,
+  rt *realtime.Broker,
+  auth auth.Auth,
 
 	boards boards.BoardService,
 	columns columns.ColumnService,
@@ -96,28 +96,28 @@ func New(
 	allowAnonymousBoardCreation bool,
 	experimentalFileSystemStore bool,
 ) chi.Router {
-	r := chi.NewRouter()
-	r.Use(middleware.Recoverer)
-	r.Use(middleware.RequestID)
-	r.Use(logger.RequestIDMiddleware)
-	r.Use(render.SetContentType(render.ContentTypeJSON))
+  r := chi.NewRouter()
+  r.Use(middleware.Recoverer)
+  r.Use(middleware.RequestID)
+  r.Use(logger.RequestIDMiddleware)
+  r.Use(render.SetContentType(render.ContentTypeJSON))
 
-	if !checkOrigin {
-		r.Use(cors.Handler(cors.Options{
-			AllowedOrigins: []string{"https://*", "http://*"},
+  if !checkOrigin {
+    r.Use(cors.Handler(cors.Options{
+      AllowedOrigins: []string{"https://*", "http://*"},
 
-			// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
-			AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-			AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-			ExposedHeaders:   []string{"Link", "Set-Cookie"},
-			AllowCredentials: true,
-			MaxAge:           300,
-		}))
-	}
+      // AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+      AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+      AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+      ExposedHeaders:   []string{"Link", "Set-Cookie"},
+      AllowCredentials: true,
+      MaxAge:           300,
+    }))
+  }
 
-	if verbose {
-		r.Use(logger.ChiZapLogger())
-	}
+  if verbose {
+    r.Use(logger.ChiZapLogger())
+  }
 
 	s := Server{
 		basePath:                         basePath,
@@ -145,82 +145,71 @@ func New(
 		experimentalFileSystemStore:   experimentalFileSystemStore,
 	}
 
-	// initialize websocket upgrader with origin check depending on options
-	s.upgrader = websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-	}
+  // initialize websocket upgrader with origin check depending on options
+  s.upgrader = websocket.Upgrader{
+    ReadBufferSize:  1024,
+    WriteBufferSize: 1024,
+  }
 
-	// if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
-	// this might be required when using some OIDC providers which exceed the 4KB limit.
-	// see https://github.com/markbates/goth/pull/141
-	if s.experimentalFileSystemStore {
-		logger.Get().Infow("using experimental file system store")
-		store := gorillaSessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
-		store.MaxLength(0x8000) // 32KB should be plenty of space
-		gothic.Store = store
-	}
+  // if enabled, this experimental feature allows for larger session cookies *during OAuth authentication* by storing them in a file store.
+  // this might be required when using some OIDC providers which exceed the 4KB limit.
+  // see https://github.com/markbates/goth/pull/141
+  if s.experimentalFileSystemStore {
+    logger.Get().Infow("using experimental file system store")
+    store := gorillaSessions.NewFilesystemStore(os.TempDir(), []byte("scrumlr.io"))
+    store.MaxLength(0x8000) // 32KB should be plenty of space
+    gothic.Store = store
+  }
 
-	if checkOrigin {
-		s.upgrader.CheckOrigin = nil
-	} else {
-		s.upgrader.CheckOrigin = func(r *http.Request) bool {
-			return true
-		}
-	}
-	if s.basePath == "/" {
-		s.publicRoutes(r)
-		s.protectedRoutes(r)
-	} else {
-		r.Route(s.basePath, func(router chi.Router) {
-			s.publicRoutes(router)
-			s.protectedRoutes(router)
-		})
-	}
-	return r
+  if checkOrigin {
+    s.upgrader.CheckOrigin = nil
+  } else {
+    s.upgrader.CheckOrigin = func(r *http.Request) bool {
+      return true
+    }
+  }
+  if s.basePath == "/" {
+    s.publicRoutes(r)
+    s.protectedRoutes(r)
+  } else {
+    r.Route(s.basePath, func(router chi.Router) {
+      s.publicRoutes(router)
+      s.protectedRoutes(router)
+    })
+  }
+  return r
 }
 
 func (s *Server) publicRoutes(r chi.Router) chi.Router {
-	return r.Group(func(r chi.Router) {
-		r.Get("/info", s.getServerInfo)
-		r.Get("/health", s.healthCheck)
-		/* for test
-		   r.Get("/welcome", func(w http.ResponseWriter, r *http.Request) {
-		     if unleash.IsEnabled("enable-welcome-message") {
-		       w.Header().Set("Content-Type", "application/json")
-		       w.WriteHeader(http.StatusOK)
-		       w.Write([]byte(`{"msg": Welcome to Scrumlr!"}`))
-		     } else {
-		       http.NotFound(w, r)
-		     }
-		   })
-		*/
-		r.Post("/feedback", s.createFeedback)
-		r.Route("/login", func(r chi.Router) {
-			r.Delete("/", s.logout)
-			r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
+  return r.Group(func(r chi.Router) {
+    r.Get("/info", s.getServerInfo)
+    r.Get("/health", s.healthCheck)
+    r.Post("/feedback", s.createFeedback)
+    r.Route("/login", func(r chi.Router) {
+      r.Delete("/", s.logout)
+      r.With(s.AnonymousLoginDisabledContext).Post("/anonymous", s.signInAnonymously)
 
-			r.Route("/{provider}", func(r chi.Router) {
-				r.Get("/", s.beginAuthProviderVerification)
-				r.Get("/callback", s.verifyAuthProviderCallback)
-			})
-		})
-	})
+      r.Route("/{provider}", func(r chi.Router) {
+        r.Get("/", s.beginAuthProviderVerification)
+        r.Get("/callback", s.verifyAuthProviderCallback)
+      })
+    })
+  })
 }
 
 func (s *Server) protectedRoutes(r chi.Router) {
-	r.Group(func(r chi.Router) {
-		r.Use(s.auth.Verifier())
-		r.Use(s.auth.Authenticator())
-		r.Use(auth.AuthContext)
+  r.Group(func(r chi.Router) {
+    r.Use(s.auth.Verifier())
+    r.Use(s.auth.Authenticator())
+    r.Use(auth.AuthContext)
 
 		r.Route("/templates", func(r chi.Router) {
 			r.Use(s.BoardTemplateRateLimiter)
 			r.Use(s.AnonymousCustomTemplateCreationContext)
-			
+
 			r.Post("/", s.createBoardTemplate)
 			r.Get("/", s.getBoardTemplates)
-			
+
 			r.Route("/{id}", func(r chi.Router) {
 				r.Use(s.BoardTemplateContext)
 
@@ -255,143 +244,143 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			r.With(s.BoardModeratorContext).Put("/", s.updateBoard)
 			r.With(s.BoardModeratorContext).Delete("/", s.deleteBoard)
 
-			s.initBoardSessionRequestResources(r)
-			s.initBoardSessionResources(r)
-			s.initColumnResources(r)
-			s.initNoteResources(r)
-			s.initReactionResources(r)
-			s.initVotingResources(r)
-			s.initVoteResources(r)
-			s.initBoardReactionResources(r)
-		})
+      s.initBoardSessionRequestResources(r)
+      s.initBoardSessionResources(r)
+      s.initColumnResources(r)
+      s.initNoteResources(r)
+      s.initReactionResources(r)
+      s.initVotingResources(r)
+      s.initVoteResources(r)
+      s.initBoardReactionResources(r)
+    })
 
-		r.Route("/user", func(r chi.Router) {
-			r.Get("/", s.getUser)
-			r.Put("/", s.updateUser)
-		})
-	})
+    r.Route("/user", func(r chi.Router) {
+      r.Get("/", s.getUser)
+      r.Put("/", s.updateUser)
+    })
+  })
 }
 
 func (s *Server) initVoteResources(r chi.Router) {
-	r.Route("/votes", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
-		r.Get("/", s.getVotes)
+  r.Route("/votes", func(r chi.Router) {
+    r.Use(s.BoardParticipantContext)
+    r.Get("/", s.getVotes)
 
-		r.Group(func(r chi.Router) {
-			r.Use(s.BoardEditableContext)
-			r.Post("/", s.addVote)
-			r.Delete("/", s.removeVote)
-		})
-	})
+    r.Group(func(r chi.Router) {
+      r.Use(s.BoardEditableContext)
+      r.Post("/", s.addVote)
+      r.Delete("/", s.removeVote)
+    })
+  })
 }
 
 func (s *Server) initVotingResources(r chi.Router) {
-	r.Route("/votings", func(r chi.Router) {
-		r.With(s.BoardParticipantContext).Get("/", s.getVotings)
-		r.With(s.BoardModeratorContext).Post("/", s.createVoting)
-		r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
+  r.Route("/votings", func(r chi.Router) {
+    r.With(s.BoardParticipantContext).Get("/", s.getVotings)
+    r.With(s.BoardModeratorContext).Post("/", s.createVoting)
+    r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
 
-		r.Route("/{voting}", func(r chi.Router) {
-			r.Use(s.VotingContext)
-			r.With(s.BoardParticipantContext).Get("/", s.getVoting)
-			r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
-		})
-	})
+    r.Route("/{voting}", func(r chi.Router) {
+      r.Use(s.VotingContext)
+      r.With(s.BoardParticipantContext).Get("/", s.getVoting)
+      r.With(s.BoardModeratorContext).Put("/", s.updateVoting)
+    })
+  })
 }
 
 func (s *Server) initBoardSessionResources(r chi.Router) {
-	r.Route("/participants", func(r chi.Router) {
-		r.Group(func(r chi.Router) {
-			r.Use(httprate.Limit(
-				3,
-				5*time.Second,
-				httprate.WithKeyFuncs(httprate.KeyByIP),
-				httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
-					w.Header().Set("Content-Type", "application/json")
-					w.WriteHeader(http.StatusTooManyRequests)
-					_, err := w.Write([]byte(`{"error": "Too many requests"}`))
-					if err != nil {
-						log := logger.FromRequest(r)
-						log.Errorw("Could not write error", "error", err)
-						return
-					}
-				}),
-			))
+  r.Route("/participants", func(r chi.Router) {
+    r.Group(func(r chi.Router) {
+      r.Use(httprate.Limit(
+        3,
+        5*time.Second,
+        httprate.WithKeyFuncs(httprate.KeyByIP),
+        httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+          w.Header().Set("Content-Type", "application/json")
+          w.WriteHeader(http.StatusTooManyRequests)
+          _, err := w.Write([]byte(`{"error": "Too many requests"}`))
+          if err != nil {
+            log := logger.FromRequest(r)
+            log.Errorw("Could not write error", "error", err)
+            return
+          }
+        }),
+      ))
 
-			r.Post("/", s.joinBoard)
-		})
-		r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
-		r.With(s.BoardModeratorContext).Put("/", s.updateBoardSessions)
+      r.Post("/", s.joinBoard)
+    })
+    r.With(s.BoardParticipantContext).Get("/", s.getBoardSessions)
+    r.With(s.BoardModeratorContext).Put("/", s.updateBoardSessions)
 
-		r.Route("/{session}", func(r chi.Router) {
-			r.Use(s.BoardParticipantContext)
-			r.Get("/", s.getBoardSession)
-			r.Put("/", s.updateBoardSession)
-		})
-	})
+    r.Route("/{session}", func(r chi.Router) {
+      r.Use(s.BoardParticipantContext)
+      r.Get("/", s.getBoardSession)
+      r.Put("/", s.updateBoardSession)
+    })
+  })
 }
 
 func (s *Server) initBoardSessionRequestResources(r chi.Router) {
-	r.Route("/requests", func(r chi.Router) {
-		r.With(s.BoardModeratorContext).Get("/", s.getBoardSessionRequests)
-		r.With(s.BoardCandidateContext).Get("/{user}", s.getBoardSessionRequest)
-		r.With(s.BoardModeratorContext).Put("/{user}", s.updateBoardSessionRequest)
-	})
+  r.Route("/requests", func(r chi.Router) {
+    r.With(s.BoardModeratorContext).Get("/", s.getBoardSessionRequests)
+    r.With(s.BoardCandidateContext).Get("/{user}", s.getBoardSessionRequest)
+    r.With(s.BoardModeratorContext).Put("/{user}", s.updateBoardSessionRequest)
+  })
 }
 
 func (s *Server) initColumnResources(r chi.Router) {
-	r.Route("/columns", func(r chi.Router) {
-		r.With(s.BoardParticipantContext).Get("/", s.getColumns)
-		r.With(s.BoardModeratorContext).Post("/", s.createColumn)
+  r.Route("/columns", func(r chi.Router) {
+    r.With(s.BoardParticipantContext).Get("/", s.getColumns)
+    r.With(s.BoardModeratorContext).Post("/", s.createColumn)
 
-		r.Route("/{column}", func(r chi.Router) {
-			r.Use(s.ColumnContext)
+    r.Route("/{column}", func(r chi.Router) {
+      r.Use(s.ColumnContext)
 
-			r.With(s.BoardParticipantContext).Get("/", s.getColumn)
-			r.With(s.BoardModeratorContext).Put("/", s.updateColumn)
-			r.With(s.BoardModeratorContext).Delete("/", s.deleteColumn)
-		})
-	})
+      r.With(s.BoardParticipantContext).Get("/", s.getColumn)
+      r.With(s.BoardModeratorContext).Put("/", s.updateColumn)
+      r.With(s.BoardModeratorContext).Delete("/", s.deleteColumn)
+    })
+  })
 }
 
 func (s *Server) initNoteResources(r chi.Router) {
-	r.Route("/notes", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
+  r.Route("/notes", func(r chi.Router) {
+    r.Use(s.BoardParticipantContext)
 
-		r.Get("/", s.getNotes)
-		r.With(s.BoardEditableContext).Post("/", s.createNote)
+    r.Get("/", s.getNotes)
+    r.With(s.BoardEditableContext).Post("/", s.createNote)
 
-		r.Route("/{note}", func(r chi.Router) {
-			r.Use(s.NoteContext)
+    r.Route("/{note}", func(r chi.Router) {
+      r.Use(s.NoteContext)
 
-			r.Get("/", s.getNote)
-			r.With(s.BoardEditableContext).Put("/", s.updateNote)
-			r.With(s.BoardEditableContext).Delete("/", s.deleteNote)
-		})
-	})
+      r.Get("/", s.getNote)
+      r.With(s.BoardEditableContext).Put("/", s.updateNote)
+      r.With(s.BoardEditableContext).Delete("/", s.deleteNote)
+    })
+  })
 }
 
 func (s *Server) initReactionResources(r chi.Router) {
-	r.Route("/reactions", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
+  r.Route("/reactions", func(r chi.Router) {
+    r.Use(s.BoardParticipantContext)
 
-		r.Get("/", s.getReactions)
-		r.With(s.BoardEditableContext).Post("/", s.createReaction)
+    r.Get("/", s.getReactions)
+    r.With(s.BoardEditableContext).Post("/", s.createReaction)
 
-		r.Route("/{reaction}", func(r chi.Router) {
-			r.Use(s.ReactionContext)
+    r.Route("/{reaction}", func(r chi.Router) {
+      r.Use(s.ReactionContext)
 
-			r.Get("/", s.getReaction)
-			r.With(s.BoardEditableContext).Delete("/", s.removeReaction)
-			r.With(s.BoardEditableContext).Put("/", s.updateReaction)
-		})
-	})
+      r.Get("/", s.getReaction)
+      r.With(s.BoardEditableContext).Delete("/", s.removeReaction)
+      r.With(s.BoardEditableContext).Put("/", s.updateReaction)
+    })
+  })
 }
 
 func (s *Server) initBoardReactionResources(r chi.Router) {
-	r.Route("/board-reactions", func(r chi.Router) {
-		r.Use(s.BoardParticipantContext)
+  r.Route("/board-reactions", func(r chi.Router) {
+    r.Use(s.BoardParticipantContext)
 
-		r.Post("/", s.createBoardReaction)
-	})
+    r.Post("/", s.createBoardReaction)
+  })
 }
