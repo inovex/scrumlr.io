@@ -474,6 +474,13 @@ func run(c *cli.Context) error {
         Value:    false,
       }),
       altsrc.NewBoolFlag(&cli.BoolFlag{
+        Name:     "allow-anonymous-custom-templates",
+        EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES"},
+        Usage:    "allows custom templates to be used for anonymous clients",
+        Required: false,
+        Value:    false,
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{
         Name:     "auth-enable-experimental-file-system-store",
         EnvVars:  []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
         Usage:    "enables/disables experimental file system store, in order to allow larger session cookie sizes",
@@ -606,7 +613,6 @@ func run(c *cli.Context) error {
         Usage:    "the url where feedback will be sent to",
         Required: false,
       }),
-
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "unleash-backend-url",
         EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_URL"},
@@ -623,8 +629,16 @@ func run(c *cli.Context) error {
         Usage:   "Enable Unleash debug listener",
         Value:   false,
       }),
+
+      &cli.StringFlag{
+        Name:     "config",
+        EnvVars:  []string{"SCRUMLR_CONFIG_PATH"},
+        Usage:    "TOML `filepath` to be loaded ",
+        Required: false,
+      },
     },
   }
+  app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
   if err := app.Run(os.Args); err != nil {
     log.Fatal(err)
@@ -815,9 +829,6 @@ func run(c *cli.Context) error {
     if err := unleash.Initialize(options...); err != nil {
       return fmt.Errorf("failed to initialize Unleash: %w", err)
     }
-    unleash.WaitForReady()
-    // just to test non-AnonymousVoting is the name of flag in UI
-
   }
   bun := initialize.InitializeBun(db, c.Bool("verbose"))
   dbConnection := database.New(bun)
@@ -834,7 +845,6 @@ func run(c *cli.Context) error {
   votingService := votings.NewVotingService(dbConnection, rt)
   userService := users.NewUserService(dbConnection, rt)
   noteService := notes.NewNoteService(dbConnection, rt)
-  //reactionService := reactions.NewReactionService(dbConnection, rt)
   reactionService := initialize.InitializeReactionService(bun, rt)
   feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
   healthService := health.NewHealthService(dbConnection, rt)
@@ -860,8 +870,8 @@ func run(c *cli.Context) error {
     c.Bool("verbose"),
     !c.Bool("disable-check-origin"),
     c.Bool("disable-anonymous-login"),
+    c.Bool("allow-anonymous-custom-templates"),
     c.Bool("auth-enable-experimental-file-system-store"),
-    false,
   )
 
   port := fmt.Sprintf(":%d", c.Int("port"))
