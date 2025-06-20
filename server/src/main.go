@@ -8,21 +8,21 @@ import (
 	"os"
 	"strings"
 
-	"scrumlr.io/server/auth"
-	"scrumlr.io/server/initialize"
-	"scrumlr.io/server/services/health"
-
+	"github.com/Unleash/unleash-client-go/v4"
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
 	"scrumlr.io/server/api"
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/database"
 	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/services/board_reactions"
 	"scrumlr.io/server/services/board_templates"
 	"scrumlr.io/server/services/boards"
 	"scrumlr.io/server/services/feedback"
+	"scrumlr.io/server/services/health"
 	"scrumlr.io/server/services/notes"
 	"scrumlr.io/server/services/users"
 	"scrumlr.io/server/services/votings"
@@ -248,6 +248,23 @@ func main() {
 				Usage:    "the url where feedback will be sent to",
 				Required: false,
 			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "unleash-backend-url",
+				EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_URL"},
+				Usage:   "The URL of the Unleash backend",
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:    "unleash-backend-token",
+				EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_TOKEN"},
+				Usage:   "The token for the Unleash backend",
+			}),
+			altsrc.NewBoolFlag(&cli.BoolFlag{
+				Name:    "unleash-debug",
+				EnvVars: []string{"SCRUMLR_UNLEASH_DEBUG"},
+				Usage:   "Enable Unleash debug listener",
+				Value:   false,
+			}),
+
 			&cli.StringFlag{
 				Name:     "config",
 				EnvVars:  []string{"SCRUMLR_CONFIG_PATH"},
@@ -365,7 +382,28 @@ func run(c *cli.Context) error {
 	if c.String("session-secret") == "" && len(providersMap) != 0 {
 		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
+	unleashURL := c.String("unleash-backend-url")
+	unleashToken := c.String("unleash-backend-token")
 
+	if unleashURL == "" || unleashToken == "" {
+		logger.Get().Warn("Unleash is not configured – skipping feature flag integration")
+	} else {
+		headers := http.Header{}
+		headers.Set("Authorization", unleashToken)
+
+		options := []unleash.ConfigOption{
+			unleash.WithAppName("scrumlr-backend"),
+			unleash.WithUrl(unleashURL),
+			unleash.WithCustomHeaders(headers),
+			unleash.WithEnvironment("production"),
+		}
+		if c.Bool("unleash-debug") {
+			options = append(options, unleash.WithListener(&unleash.DebugListener{}))
+		}
+		if err := unleash.Initialize(options...); err != nil {
+			return fmt.Errorf("failed to initialize Unleash: %w", err)
+		}
+	}
 	bun := initialize.InitializeBun(db, c.Bool("verbose"))
 	dbConnection := database.New(bun)
 
