@@ -30,6 +30,7 @@ import (
 )
 
 func main() {
+
   app := &cli.App{
     Name:      "scrumlr.io",
     Usage:     "Awesome & scalable server for the scrumlr.io web application",
