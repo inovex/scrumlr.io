@@ -20,13 +20,15 @@ import {ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID, SHOW_LEGAL_DOCUMENTS, 
 import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
 
-const unleash = new UnleashClient({
+const unleashFlagConfig = {
   url: UNLEASH_URL,
   clientKey: UNLEASH_TOKEN,
   appName: "scrumlr-frontend",
   environment: UNLEASH_ENV,
-});
-unleash.start();
+};
+
+const unleashClient = new UnleashClient(unleashFlagConfig);
+unleashClient.start();
 
 const APP_VERSION = process.env.REACT_APP_VERSION;
 if (APP_VERSION) {
@@ -56,23 +58,10 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
   handleAnalytics();
 }
 
-// const root = createRoot(document.getElementById("root") as HTMLDivElement);
-
 // If clarity ID is set and not empty in env variables, initialize Clarity
 if (CLARITY_ID && CLARITY_ID !== "") {
   // TODO: tracking, including storing data using third party services has to be explicitly opt in!
   // Clarity.init(CLARITY_ID);
-}
-
-let unleashClient: UnleashClient | null = null;
-if (UNLEASH_URL && UNLEASH_TOKEN) {
-  unleashClient = new UnleashClient({
-    url: UNLEASH_URL,
-    clientKey: UNLEASH_TOKEN,
-    appName: "scrumlr-frontend",
-    environment: UNLEASH_ENV,
-  });
-  unleashClient.start();
 }
 
 const AppContent: React.FC = () => (
@@ -87,34 +76,18 @@ const AppContent: React.FC = () => (
   </>
 );
 
-// Render with a fallback when Unleash is not configured
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
 
 root.render(
   <React.StrictMode>
-    {unleashClient ? (
-      // Wrap with FlagProvider only if unleashClient is set
-      <FlagProvider
-        config={{
-          url: UNLEASH_URL,
-          clientKey: UNLEASH_TOKEN,
-          appName: "scrumlr-frontend",
-          environment: UNLEASH_ENV,
-        }}
-      >
-        <I18nextProvider i18n={i18n}>
-          <Provider store={store}>
-            <AppContent />
-          </Provider>
-        </I18nextProvider>
-      </FlagProvider>
-    ) : (
+    <FlagProvider config={unleashFlagConfig}>
       <I18nextProvider i18n={i18n}>
         <Provider store={store}>
           <AppContent />
         </Provider>
       </I18nextProvider>
-    )}
+    </FlagProvider>
   </React.StrictMode>
 );
+
 store.dispatch(initAuth());

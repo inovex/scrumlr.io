@@ -21,8 +21,8 @@ export const ANALYTICS_DATA_DOMAIN = Cookies.get("scrumlr__analytics_data_domain
 export const ANALYTICS_SRC = Cookies.get("scrumlr__analytics_src");
 export const CLARITY_ID = Cookies.get("scrumlr__clarity_id");
 
-export const UNLEASH_ENV: string = process.env.REACT_APP_UNLEASH_ENV || "development";
+export const UNLEASH_ENV: string = process.env.REACT_APP_UNLEASH_ENV ?? "development";
 
-export const UNLEASH_URL: string = process.env.REACT_APP_UNLEASH_FRONTEND_URL!;
+export const UNLEASH_URL = process.env.REACT_APP_UNLEASH_FRONTEND_URL ?? "";
 
-export const UNLEASH_TOKEN: string = process.env.REACT_APP_UNLEASH_FRONTEND_TOKEN!;
+export const UNLEASH_TOKEN = process.env.REACT_APP_UNLEASH_FRONTEND_TOKEN ?? "";
