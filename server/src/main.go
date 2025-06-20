@@ -8,29 +8,27 @@ import (
   "os"
   "strings"
 
-  "scrumlr.io/server/auth"
-  "scrumlr.io/server/initialize"
-  "scrumlr.io/server/services/health"
-
   "github.com/Unleash/unleash-client-go/v4"
   "github.com/urfave/cli/v2"
   "github.com/urfave/cli/v2/altsrc"
   "scrumlr.io/server/api"
+  "scrumlr.io/server/auth"
   "scrumlr.io/server/database"
   "scrumlr.io/server/database/types"
+  "scrumlr.io/server/initialize"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/realtime"
   "scrumlr.io/server/services/board_reactions"
   "scrumlr.io/server/services/board_templates"
   "scrumlr.io/server/services/boards"
   "scrumlr.io/server/services/feedback"
+  "scrumlr.io/server/services/health"
   "scrumlr.io/server/services/notes"
   "scrumlr.io/server/services/users"
   "scrumlr.io/server/services/votings"
 )
 
 func main() {
-
   app := &cli.App{
     Name:      "scrumlr.io",
     Usage:     "Awesome & scalable server for the scrumlr.io web application",
@@ -107,6 +105,13 @@ func main() {
         Name:     "disable-anonymous-login",
         EnvVars:  []string{"SCRUMLR_DISABLE_ANONYMOUS_LOGIN"},
         Usage:    "enables/disables the login of anonymous clients",
+        Required: false,
+        Value:    false,
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{
+        Name:     "allow-anonymous-custom-templates",
+        EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES"},
+        Usage:    "allows custom templates to be used for anonymous clients",
         Required: false,
         Value:    false,
       }),
@@ -243,7 +248,6 @@ func main() {
         Usage:    "the url where feedback will be sent to",
         Required: false,
       }),
-
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "unleash-backend-url",
         EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_URL"},
@@ -260,8 +264,16 @@ func main() {
         Usage:   "Enable Unleash debug listener",
         Value:   false,
       }),
+
+      &cli.StringFlag{
+        Name:     "config",
+        EnvVars:  []string{"SCRUMLR_CONFIG_PATH"},
+        Usage:    "TOML `filepath` to be loaded ",
+        Required: false,
+      },
     },
   }
+  app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
   if err := app.Run(os.Args); err != nil {
     log.Fatal(err)
@@ -391,9 +403,6 @@ func run(c *cli.Context) error {
     if err := unleash.Initialize(options...); err != nil {
       return fmt.Errorf("failed to initialize Unleash: %w", err)
     }
-    unleash.WaitForReady()
-    // just to test non-AnonymousVoting is the name of flag in UI
-
   }
   bun := initialize.InitializeBun(db, c.Bool("verbose"))
   dbConnection := database.New(bun)
@@ -410,7 +419,6 @@ func run(c *cli.Context) error {
   votingService := votings.NewVotingService(dbConnection, rt)
   userService := users.NewUserService(dbConnection, rt)
   noteService := notes.NewNoteService(dbConnection, rt)
-  //reactionService := reactions.NewReactionService(dbConnection, rt)
   reactionService := initialize.InitializeReactionService(bun, rt)
   feedbackService := feedback.NewFeedbackService(c.String("feedback-webhook-url"))
   healthService := health.NewHealthService(dbConnection, rt)
@@ -436,8 +444,8 @@ func run(c *cli.Context) error {
     c.Bool("verbose"),
     !c.Bool("disable-check-origin"),
     c.Bool("disable-anonymous-login"),
+    c.Bool("allow-anonymous-custom-templates"),
     c.Bool("auth-enable-experimental-file-system-store"),
-    false,
   )
 
   port := fmt.Sprintf(":%d", c.Int("port"))
