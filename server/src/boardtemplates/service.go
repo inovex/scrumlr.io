@@ -31,11 +31,10 @@ func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequ
 	log := logger.FromContext(ctx)
 	// map request on board object to insert into database
 	board := DatabaseBoardTemplateInsert{
-		Creator:      body.Creator,
-		Name:         body.Name,
-		Description:  body.Description,
-		AccessPolicy: body.AccessPolicy,
-		Favourite:    body.Favourite,
+		Creator:     body.Creator,
+		Name:        body.Name,
+		Description: body.Description,
+		Favourite:   body.Favourite,
 	}
 
 	// map request column templates to db column template inserts
@@ -54,7 +53,7 @@ func (service *Service) Create(ctx context.Context, body CreateBoardTemplateRequ
 	// create the board template
 	b, err := service.database.Create(board, columns)
 	if err != nil {
-		log.Errorw("unable to create board template", "creator", body.Creator, "policy", body.AccessPolicy, "err", err)
+		log.Errorw("unable to create board template", "creator", body.Creator, "policy", "err", err)
 		return nil, err
 	}
 
@@ -92,11 +91,10 @@ func (service *Service) Update(ctx context.Context, body BoardTemplateUpdateRequ
 	log := logger.FromContext(ctx)
 	// parse req update to db update
 	updateBoard := DatabaseBoardTemplateUpdate{
-		ID:           body.ID,
-		Name:         body.Name,
-		Description:  body.Description,
-		AccessPolicy: body.AccessPolicy,
-		Favourite:    body.Favourite,
+		ID:          body.ID,
+		Name:        body.Name,
+		Description: body.Description,
+		Favourite:   body.Favourite,
 	}
 
 	updatedTemplate, err := service.database.Update(updateBoard)

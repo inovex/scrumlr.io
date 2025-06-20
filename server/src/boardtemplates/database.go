@@ -86,13 +86,7 @@ func (db *DB) GetAll(user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
 		}
 
 		dbBoardTemplate := DatabaseBoardTemplateFull{
-			ID:              board.ID,
-			Creator:         board.Creator,
-			Name:            board.Name,
-			Description:     board.Description,
-			AccessPolicy:    board.AccessPolicy,
-			Favourite:       board.Favourite,
-			CreatedAt:       board.CreatedAt,
+			Template:        board,
 			ColumnTemplates: cols,
 		}
 		templates = append(templates, dbBoardTemplate)
@@ -111,10 +105,6 @@ func (db *DB) Update(board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, 
 
 	if board.Description != nil {
 		query_settings.Column("description")
-	}
-
-	if board.AccessPolicy != nil {
-		query_settings.Column("access_policy")
 	}
 
 	if board.Favourite != nil {
