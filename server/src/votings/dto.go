@@ -95,8 +95,8 @@ type VotingResultsPerNote struct {
 }
 
 type VotingUpdated struct {
-	Notes  []uuid.UUID `json:"notes"`
-	Voting *Voting     `json:"voting"`
+	Notes  []Note  `json:"notes"`
+	Voting *Voting `json:"voting"`
 }
 
 type Note struct {
