@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"net/http"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -12,7 +13,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// / createVoting creates a new voting session
+// createVoting creates a new voting session
 func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
