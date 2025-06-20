@@ -818,11 +818,6 @@ func run(c *cli.Context) error {
     unleash.WaitForReady()
     // just to test non-AnonymousVoting is the name of flag in UI
 
-    if unleash.IsEnabled("non-AnonymousVoting") {
-      logger.Get().Info("Feature 'enable-welcome-message' ENABLED")
-    } else {
-      logger.Get().Info("Feature 'enable-welcome-message' DISABLED")
-    }
   }
   bun := initialize.InitializeBun(db, c.Bool("verbose"))
   dbConnection := database.New(bun)
