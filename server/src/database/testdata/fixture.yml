@@ -1,4 +1,4 @@
-- model: User
+- model: DatabaseUser
   rows:
     - _id: john
       id: "3113b096-986c-4e23-adf7-b3fa19224bd2"
