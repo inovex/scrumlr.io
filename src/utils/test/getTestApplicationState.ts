@@ -70,6 +70,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     {
       id: "test-columns-id-1",
       name: "test-columns-name-1",
+      description: "",
       color: "backlog-blue",
       visible: true,
       index: 0,
@@ -77,6 +78,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     {
       id: "test-columns-id-2",
       name: "test-columns-name-2",
+      description: "",
       color: "planning-pink",
       visible: true,
       index: 1,
@@ -84,6 +86,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     {
       id: "test-columns-id-3",
       name: "test-columns-name-3",
+      description: "",
       color: "planning-pink",
       visible: true,
       index: 2,

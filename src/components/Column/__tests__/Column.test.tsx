@@ -44,47 +44,7 @@ describe("Column", () => {
   describe("should render correctly", () => {
     test("column has correct accent-color", () => {
       const {container} = render(createColumn());
-      expect(container.firstChild).toHaveClass("column accent-color__planning-pink");
-    });
-
-    test("column content is present", () => {
-      const {container} = render(createColumn());
-      expect(container.querySelector(".column")!.firstChild).toHaveClass("column__content");
-    });
-
-    test("column header is present", () => {
-      const {container} = render(createColumn());
-      expect(container.querySelector(".column__content")!.firstChild).toHaveClass("column__header");
-    });
-
-    test("column header title is present", () => {
-      const {container} = render(createColumn());
-      expect(container.querySelector(".column__header")!.childNodes.item(0)).toHaveClass("column__header-title");
-    });
-
-    test("column header text is present", () => {
-      const {container} = render(createColumn());
-      expect(container.querySelector(".column__header-title")!.firstChild).toHaveClass("column__header-text-wrapper");
-    });
-
-    test("column header card number is present", () => {
-      const {container} = render(createColumn());
-      expect(container.querySelector(".column__header-title")!.children[1]).toHaveClass("column__header-card-number");
-    });
-
-    test("column header card number is not present", () => {
-      const {container} = render(createEmptyColumn());
-      expect(container.querySelector(".column__header-title")!.children[1]).not.toHaveClass("column__header-card-number");
-    });
-
-    test("column header card number is correct number", () => {
-      const {container} = render(createColumn());
-      expect(container.querySelector(".column__header-card-number")!).toHaveTextContent("2");
-    });
-
-    test("header text has correct title", () => {
-      const {container} = render(createColumn());
-      expect(container.firstChild).toHaveTextContent("Testheader");
+      expect(container).toMatchSnapshot();
     });
   });
 
