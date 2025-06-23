@@ -5,8 +5,6 @@ import (
 	"errors"
 	"testing"
 
-	"scrumlr.io/server/boards"
-
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/columntemplates"
@@ -17,7 +15,6 @@ func TestCreateBoardTemplate(t *testing.T) {
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := boards.ByInvite
 	firstColumnName := "Column 1"
 	secondColumnName := "column 2"
 	firstColumnDescription := "This is Column 1"
@@ -28,10 +25,9 @@ func TestCreateBoardTemplate(t *testing.T) {
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
 	mockBoardTemplateDatabase.EXPECT().Create(DatabaseBoardTemplateInsert{
-		Creator:      userId,
-		Name:         &name,
-		Description:  &description,
-		AccessPolicy: access,
+		Creator:     userId,
+		Name:        &name,
+		Description: &description,
 	}, []columntemplates.DatabaseColumnTemplateInsert{
 		{
 			Name:        firstColumnName,
@@ -47,20 +43,18 @@ func TestCreateBoardTemplate(t *testing.T) {
 		},
 	}).
 		Return(DatabaseBoardTemplate{
-			ID:           boardId,
-			Creator:      userId,
-			Name:         &name,
-			Description:  &description,
-			AccessPolicy: access,
+			ID:          boardId,
+			Creator:     userId,
+			Name:        &name,
+			Description: &description,
 		}, nil)
 
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
 
 	board, err := boardTemplateService.Create(context.Background(), CreateBoardTemplateRequest{
-		Creator:      userId,
-		Name:         &name,
-		Description:  &description,
-		AccessPolicy: access,
+		Creator:     userId,
+		Name:        &name,
+		Description: &description,
 		Columns: []*columntemplates.ColumnTemplateRequest{
 			{
 				Name:        firstColumnName,
@@ -84,7 +78,6 @@ func TestCreateBoardTemplate(t *testing.T) {
 	assert.Equal(t, userId, board.Creator)
 	assert.Equal(t, &name, board.Name)
 	assert.Equal(t, &description, board.Description)
-	assert.Equal(t, access, board.AccessPolicy)
 }
 
 func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
@@ -92,7 +85,6 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := boards.ByInvite
 	firstColumnName := "Column 1"
 	secondColumnName := "column 2"
 	firstColumnDescription := "This is Column 1"
@@ -103,10 +95,9 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
 	mockBoardTemplateDatabase.EXPECT().Create(DatabaseBoardTemplateInsert{
-		Creator:      userId,
-		Name:         &name,
-		Description:  &description,
-		AccessPolicy: access,
+		Creator:     userId,
+		Name:        &name,
+		Description: &description,
 	}, []columntemplates.DatabaseColumnTemplateInsert{
 		{
 			Name:        firstColumnName,
@@ -126,10 +117,9 @@ func TestCreateBoardTemplate_DatabaseError(t *testing.T) {
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
 
 	board, err := boardTemplateService.Create(context.Background(), CreateBoardTemplateRequest{
-		Creator:      userId,
-		Name:         &name,
-		Description:  &description,
-		AccessPolicy: access,
+		Creator:     userId,
+		Name:        &name,
+		Description: &description,
 		Columns: []*columntemplates.ColumnTemplateRequest{
 			{
 				Name:        firstColumnName,
@@ -156,16 +146,14 @@ func TestGetBoardTemplate(t *testing.T) {
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := boards.ByInvite
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
 	mockBoardTemplateDatabase.EXPECT().Get(boardId).
 		Return(DatabaseBoardTemplate{
-			ID:           boardId,
-			Creator:      userId,
-			Name:         &name,
-			Description:  &description,
-			AccessPolicy: access,
+			ID:          boardId,
+			Creator:     userId,
+			Name:        &name,
+			Description: &description,
 		}, nil)
 
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
@@ -179,7 +167,6 @@ func TestGetBoardTemplate(t *testing.T) {
 	assert.Equal(t, userId, board.Creator)
 	assert.Equal(t, &name, board.Name)
 	assert.Equal(t, &description, board.Description)
-	assert.Equal(t, access, board.AccessPolicy)
 }
 
 func TestGetBoardTemplate_DatabaseError(t *testing.T) {
@@ -214,9 +201,11 @@ func TestGetAllBoardTemplate(t *testing.T) {
 	mockBoardTemplateDatabase.EXPECT().GetAll(userId).
 		Return([]DatabaseBoardTemplateFull{
 			{
-				ID:      firstBoardId,
-				Creator: userId,
-				Name:    &firstBoardName,
+				Template: DatabaseBoardTemplate{
+					ID:      firstBoardId,
+					Creator: userId,
+					Name:    &firstBoardName,
+				},
 				ColumnTemplates: []columntemplates.DatabaseColumnTemplate{
 					{
 						ID:   firstColumnId,
@@ -225,9 +214,11 @@ func TestGetAllBoardTemplate(t *testing.T) {
 				},
 			},
 			{
-				ID:      secondBoardId,
-				Creator: userId,
-				Name:    &secondBoardName,
+				Template: DatabaseBoardTemplate{
+					ID:      secondBoardId,
+					Creator: userId,
+					Name:    &secondBoardName,
+				},
 				ColumnTemplates: []columntemplates.DatabaseColumnTemplate{
 					{
 						ID:   secondColumnId,
@@ -245,16 +236,16 @@ func TestGetAllBoardTemplate(t *testing.T) {
 	assert.NotNil(t, boards)
 	assert.Len(t, boards, 2)
 
-	assert.Equal(t, firstBoardId, boards[0].ID)
-	assert.Equal(t, &firstBoardName, boards[0].Name)
-	assert.Equal(t, userId, boards[0].Creator)
+	assert.Equal(t, firstBoardId, boards[0].Template.ID)
+	assert.Equal(t, &firstBoardName, boards[0].Template.Name)
+	assert.Equal(t, userId, boards[0].Template.Creator)
 	assert.Len(t, boards[0].ColumnTemplates, 1)
 	assert.Equal(t, firstColumnId, boards[0].ColumnTemplates[0].ID)
 	assert.Equal(t, firstColumnName, boards[0].ColumnTemplates[0].Name)
 
-	assert.Equal(t, secondBoardId, boards[1].ID)
-	assert.Equal(t, &secondBoardName, boards[1].Name)
-	assert.Equal(t, userId, boards[1].Creator)
+	assert.Equal(t, secondBoardId, boards[1].Template.ID)
+	assert.Equal(t, &secondBoardName, boards[1].Template.Name)
+	assert.Equal(t, userId, boards[1].Template.Creator)
 	assert.Len(t, boards[1].ColumnTemplates, 1)
 	assert.Equal(t, secondColumnId, boards[1].ColumnTemplates[0].ID)
 	assert.Equal(t, secondColumnName, boards[1].ColumnTemplates[0].Name)
@@ -282,30 +273,26 @@ func TestUpdateBoardTemplate(t *testing.T) {
 	userId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := boards.ByInvite
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
 	mockBoardTemplateDatabase.EXPECT().Update(DatabaseBoardTemplateUpdate{
-		ID:           boardId,
-		Name:         &name,
-		Description:  &description,
-		AccessPolicy: &access,
+		ID:          boardId,
+		Name:        &name,
+		Description: &description,
 	}).
 		Return(DatabaseBoardTemplate{
-			ID:           boardId,
-			Creator:      userId,
-			Name:         &name,
-			Description:  &description,
-			AccessPolicy: access,
+			ID:          boardId,
+			Creator:     userId,
+			Name:        &name,
+			Description: &description,
 		}, nil)
 
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
 
 	board, err := boardTemplateService.Update(context.Background(), BoardTemplateUpdateRequest{
-		ID:           boardId,
-		Name:         &name,
-		Description:  &description,
-		AccessPolicy: &access,
+		ID:          boardId,
+		Name:        &name,
+		Description: &description,
 	})
 
 	assert.Nil(t, err)
@@ -317,24 +304,21 @@ func TestUpdateBoardTemplate_DatabaseError(t *testing.T) {
 	boardId := uuid.New()
 	name := "Template"
 	description := "This is a description"
-	access := boards.ByInvite
 
 	mockBoardTemplateDatabase := NewMockBoardTemplateDatabase(t)
 	mockBoardTemplateDatabase.EXPECT().Update(DatabaseBoardTemplateUpdate{
-		ID:           boardId,
-		Name:         &name,
-		Description:  &description,
-		AccessPolicy: &access,
+		ID:          boardId,
+		Name:        &name,
+		Description: &description,
 	}).
 		Return(DatabaseBoardTemplate{}, dbError)
 
 	boardTemplateService := NewBoardTemplateService(mockBoardTemplateDatabase)
 
 	board, err := boardTemplateService.Update(context.Background(), BoardTemplateUpdateRequest{
-		ID:           boardId,
-		Name:         &name,
-		Description:  &description,
-		AccessPolicy: &access,
+		ID:          boardId,
+		Name:        &name,
+		Description: &description,
 	})
 
 	assert.Nil(t, board)
