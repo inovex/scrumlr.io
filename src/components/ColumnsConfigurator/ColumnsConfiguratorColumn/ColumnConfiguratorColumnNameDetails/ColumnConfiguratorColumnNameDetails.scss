@@ -43,9 +43,12 @@
   font-size: $text--xs;
   font-weight: 500;
 
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  // if in visual feedback mode, show as multiline, else in one line
+  &:not(&--visual-feedback) {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 
 .column-configurator-column-name-details__description-wrapper {

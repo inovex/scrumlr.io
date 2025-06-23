@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment-backend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Release.Name }}-backend
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-backend
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/backend/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/backend/secrets.yaml") . | sha256sum }}
+      labels:
+        app: {{ .Release.Name }}-backend
+    spec:
+      {{- if .Values.backend.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range $val := .Values.backend.image.pullSecrets }}
+        - name: {{ $val | quote }}
+      {{- end }}
+      {{- end}}
+      containers:
+        - name: {{ .Release.Name }}-backend
+          image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag | default .Chart.AppVersion  }}
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy | quote }}
+          {{- if .Values.backend.image.args }}
+          args: {{ range $val := .Values.backend.image.args }}
+            - {{ $val | quote }} {{ end }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.backend.config.serverPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-backend-configmap
+            {{- if .Values.backend.secretRef }}
+            - secretRef:
+                name: {{ .Values.backend.secretRef }}
+            {{ else }}
+            - secretRef:
+                name: {{ .Release.Name }}-backend-secrets
+            {{- end}}
+          {{- if .Values.backend.resources }}
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
+          {{- end}}
+          {{- if .Values.backend.customStartupProbe }}
+          startupProbe:
+            {{- toYaml .Values.backend.customStartupProbe | nindent 12 }}
+          {{- else }}
+          {{- if .Values.backend.startupProbe.enabled }}
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.backend.config.serverPort }}
+            initialDelaySeconds: {{ .Values.backend.startupProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.backend.startupProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.backend.startupProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.backend.startupProbe.successThreshold }}
+            failureThreshold: {{ .Values.backend.startupProbe.failureThreshold }}
+          {{- end }}
+          {{- end}}
+          {{- if .Values.backend.customReadinessProbe }}
+          readinessProbe:
+            {{- toYaml .Values.backend.customReadinessProbe | nindent 12 }}
+          {{- else }}
+          {{- if .Values.backend.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.backend.config.serverPort }}
+            initialDelaySeconds: {{ .Values.backend.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.backend.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.backend.readinessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.backend.readinessProbe.successThreshold }}
+            failureThreshold: {{ .Values.backend.readinessProbe.failureThreshold }}
+          {{- end }}
+          {{- end}}
+          {{- if .Values.backend.customLivenessProbe }}
+          livenessProbe:
+            {{- toYaml .Values.backend.customLivenessProbe | nindent 12 }}
+          {{- else }}
+          {{- if .Values.backend.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.backend.config.serverPort }}
+            initialDelaySeconds: {{ .Values.backend.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.backend.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.backend.livenessProbe.timeoutSeconds }}
+            successThreshold: {{ .Values.backend.livenessProbe.successThreshold }}
+            failureThreshold: {{ .Values.backend.livenessProbe.failureThreshold }}
+          {{- end }}
+          {{- end}}

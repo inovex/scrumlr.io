@@ -140,7 +140,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (vis
       value="Default Name"
     />
     <div
-      class="column-configurator-column-name-details__inline-description"
+      class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--visual-feedback"
       role="button"
       tabindex="0"
     >
