@@ -21,14 +21,14 @@ type Service struct {
 }
 
 type NotesDatabase interface {
-	CreateNote(insert NoteInsertDB) (NoteDB, error)
-	ImportNote(insert NoteImportDB) (NoteDB, error)
-	Get(id uuid.UUID) (NoteDB, error)
-	GetAll(board uuid.UUID, columns ...uuid.UUID) ([]NoteDB, error)
-	GetChildNotes(parentNote uuid.UUID) ([]NoteDB, error)
-	UpdateNote(caller uuid.UUID, update NoteUpdateDB) (NoteDB, error)
+	CreateNote(insert DatabaseNoteInsert) (DatabaseNote, error)
+	ImportNote(insert DatabaseNoteImport) (DatabaseNote, error)
+	Get(id uuid.UUID) (DatabaseNote, error)
+	GetAll(board uuid.UUID, columns ...uuid.UUID) ([]DatabaseNote, error)
+	GetChildNotes(parentNote uuid.UUID) ([]DatabaseNote, error)
+	UpdateNote(caller uuid.UUID, update DatabaseNoteUpdate) (DatabaseNote, error)
 	DeleteNote(caller uuid.UUID, board uuid.UUID, id uuid.UUID, deleteStack bool) error
-	GetStack(noteID uuid.UUID) ([]NoteDB, error)
+	GetStack(noteID uuid.UUID) ([]DatabaseNote, error)
 }
 
 func NewNotesService(db NotesDatabase, rt *realtime.Broker, votingService votings.VotingService) NotesService {
@@ -42,7 +42,7 @@ func NewNotesService(db NotesDatabase, rt *realtime.Broker, votingService voting
 
 func (service *Service) Create(ctx context.Context, body NoteCreateRequest) (*Note, error) {
 	log := logger.FromContext(ctx)
-	note, err := service.database.CreateNote(NoteInsertDB{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
+	note, err := service.database.CreateNote(DatabaseNoteInsert{Author: body.User, Board: body.Board, Column: body.Column, Text: body.Text})
 	if err != nil {
 		log.Errorw("unable to create note", "board", body.Board, "user", body.User, "error", err)
 		return nil, common.InternalServerError
@@ -56,7 +56,7 @@ func (service *Service) Import(ctx context.Context, body NoteImportRequest) (*No
 
 	log := logger.FromContext(ctx)
 
-	note, err := service.database.ImportNote(NoteImportDB{
+	note, err := service.database.ImportNote(DatabaseNoteImport{
 		Author: body.User,
 		Board:  body.Board,
 		Position: &NoteUpdatePosition{
@@ -98,7 +98,7 @@ func (service *Service) Update(ctx context.Context, body NoteUpdateRequest) (*No
 		}
 	}
 
-	note, err := service.database.UpdateNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), NoteUpdateDB{
+	note, err := service.database.UpdateNote(ctx.Value(identifiers.UserIdentifier).(uuid.UUID), DatabaseNoteUpdate{
 		ID:       body.ID,
 		Board:    body.Board,
 		Text:     body.Text,

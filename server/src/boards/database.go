@@ -119,7 +119,7 @@ func (d *DB) UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error) {
 	var err error
 	if update.ShowVoting.Valid {
 		votingQuery := d.db.NewSelect().
-			Model((*common.VotingDB)(nil)).
+			Model((*common.DatabaseVoting)(nil)).
 			Column("id").
 			Where("board = ?", update.ID).
 			Where("id = ?", update.ShowVoting.UUID).
@@ -191,7 +191,7 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 		GroupExpr("id")
 
 	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-		Model((*common.NoteDB)(nil)).
+		Model((*common.DatabaseNote)(nil)).
 		TableExpr("_data").
 		Set("rank = _data.new_rank").
 		WhereOr("note.id = _data.id").

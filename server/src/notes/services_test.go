@@ -42,13 +42,13 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().CreateNote(NoteInsertDB{
+	mockDB.EXPECT().CreateNote(DatabaseNoteInsert{
 		Author: authorID,
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
-	}).Return(NoteDB{ID: noteID, Author: authorID, Board: boardID, Column: colID, Text: txt, Stack: uuid.NullUUID{}, Rank: 0, Edited: false}, nil)
-	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
+	}).Return(DatabaseNote{ID: noteID, Author: authorID, Board: boardID, Column: colID, Text: txt, Stack: uuid.NullUUID{}, Rank: 0, Edited: false}, nil)
+	mockDB.EXPECT().GetAll(boardID).Return([]DatabaseNote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
@@ -68,7 +68,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 
 	assert.NoError(suite.T(), err)
 
-	// Construct the expected Note output from the returned NoteDB
+	// Construct the expected Note output from the returned DatabaseNote
 	expectedNote := &Note{
 		ID:     noteID,
 		Author: authorID,
@@ -96,7 +96,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 	authorID2 := uuid.New()
 	columnID1 := uuid.New()
 	columnID2 := uuid.New()
-	noteDBList := []NoteDB{
+	noteDBList := []DatabaseNote{
 		{
 			ID:     noteID1,
 			Author: authorID1,
@@ -190,14 +190,14 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetAll(boardID).Return([]NoteDB{}, nil)
-	mockDB.EXPECT().UpdateNote(callerID, NoteUpdateDB{
+	mockDB.EXPECT().GetAll(boardID).Return([]DatabaseNote{}, nil)
+	mockDB.EXPECT().UpdateNote(callerID, DatabaseNoteUpdate{
 		ID:       noteID,
 		Board:    boardID,
 		Text:     &txt,
 		Position: &posUpdate,
 		Edited:   true,
-	}).Return(NoteDB{}, nil)
+	}).Return(DatabaseNote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
@@ -269,12 +269,12 @@ func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().CreateNote(NoteInsertDB{
+	mockDB.EXPECT().CreateNote(DatabaseNoteInsert{
 		Author: authorID,
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
-	}).Return(NoteDB{}, dbError)
+	}).Return(DatabaseNote{}, dbError)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
@@ -299,7 +299,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 	expectedAPIError := &common.APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().Get(boardID).Return(NoteDB{}, sql.ErrNoRows)
+	mockDB.EXPECT().Get(boardID).Return(DatabaseNote{}, sql.ErrNoRows)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
@@ -317,7 +317,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
 	ctx := context.Background()
 	noteID := uuid.New()
-	expectedNotes := []NoteDB{
+	expectedNotes := []DatabaseNote{
 		{ID: uuid.New(), Text: "Note 1"},
 		{ID: uuid.New(), Text: "Note 2"},
 	}

@@ -30,10 +30,10 @@ func (suite *VotingServiceTestSuite) TestCreateVoting() {
 	showVotes := false
 
 	mockDb := NewMockVotingDatabase(suite.T())
-	mockDb.EXPECT().Create(VotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
-		Return(VotingDB{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, nil)
+	mockDb.EXPECT().Create(DatabaseVotingInsert{Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}).
+		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, nil)
 	mockDb.EXPECT().Get(boardId, votingId).
-		Return(VotingDB{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, []VoteDB{}, nil)
+		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, []DatabaseVote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.On("Publish", mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -80,12 +80,12 @@ func (suite *VotingServiceTestSuite) TestUpdateVotingClose() {
 	status := Closed
 
 	mockDb := NewMockVotingDatabase(suite.T())
-	mockDb.EXPECT().Update(VotingUpdate{ID: votingID, Board: boardId, Status: status}).
-		Return(VotingDB{ID: votingID, Board: boardId, Status: status}, nil)
+	mockDb.EXPECT().Update(DatabaseVotingUpdate{ID: votingID, Board: boardId, Status: status}).
+		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, nil)
 	mockDb.EXPECT().Get(boardId, votingID).
-		Return(VotingDB{ID: votingID, Board: boardId, Status: status}, []VoteDB{}, nil)
+		Return(DatabaseVoting{ID: votingID, Board: boardId, Status: status}, []DatabaseVote{}, nil)
 	mockDb.EXPECT().GetVotes(filter.VoteFilter{Board: boardId, Voting: &votingID}).
-		Return([]VoteDB{}, nil)
+		Return([]DatabaseVote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	mockBroker.On("Publish", mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -107,7 +107,7 @@ func (suite *VotingServiceTestSuite) TestAddVotes() {
 	userID := uuid.New()
 	noteID := uuid.New()
 	votingID := uuid.New()
-	expectedVote := VoteDB{
+	expectedVote := DatabaseVote{
 		Board:  boardID,
 		Voting: votingID,
 		User:   userID,
