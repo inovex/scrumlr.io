@@ -225,8 +225,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		return event
 	}
 
-	var noteSlice notes.NoteSlice
-	noteSlice = event.Data.Notes
+	noteSlice := notes.NoteSlice(event.Data.Notes)
 
 	var columnVisibility []notes.ColumnVisability
 	for _, column := range event.Data.Columns {

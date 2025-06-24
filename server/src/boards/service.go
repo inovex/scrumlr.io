@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"scrumlr.io/server/sessions"
 	"time"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"scrumlr.io/server/columns"
@@ -125,12 +126,47 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 	log := logger.FromContext(ctx)
 
 	board, err := service.database.GetBoard(boardID)
+	if err != nil {
+		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
+		return nil, err
+	}
+
 	boardRequests, err := service.sessionRequestService.GetAll(ctx, boardID, string(sessionrequests.RequestAccepted))
+	if err != nil {
+		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
+		return nil, err
+	}
+
 	boardSessions, err := service.sessionService.GetAll(ctx, boardID, sessions.BoardSessionFilter{})
+	if err != nil {
+		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
+		return nil, err
+	}
+
 	boardColumns, err := service.columnService.GetAll(ctx, boardID)
+	if err != nil {
+		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
+		return nil, err
+	}
+
 	boardNotes, err := service.notesService.GetAll(ctx, boardID)
+	if err != nil {
+		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
+		return nil, err
+	}
+
 	boardReactions, err := service.reactionService.GetAll(ctx, boardID)
+	if err != nil {
+		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
+		return nil, err
+	}
+
 	boardVotings, err := service.votingService.GetAll(ctx, boardID)
+	if err != nil {
+		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
+		return nil, err
+	}
+
 	boardVotes, err := service.votingService.GetVotes(ctx, filter.VoteFilter{Board: boardID})
 
 	if err != nil {
@@ -155,12 +191,23 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 	OverviewBoards := make([]*BoardOverview, len(boardIDs))
 	for i, id := range boardIDs {
 		board, err := service.database.GetBoard(id)
+		if err != nil {
+			log.Errorw("unable to get board overview", "board", id, "err", err)
+			return nil, err
+		}
+
 		boardSessions, err := service.sessionService.GetAll(ctx, id, sessions.BoardSessionFilter{})
+		if err != nil {
+			log.Errorw("unable to get board overview", "board", id, "err", err)
+			return nil, err
+		}
+
 		boardColumns, err := service.columnService.GetAll(ctx, id)
 		if err != nil {
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
+
 		participantNum := len(boardSessions)
 		columnNum := len(boardColumns)
 		dtoBoard := new(Board).From(board)
