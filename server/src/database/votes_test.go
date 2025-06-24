@@ -23,10 +23,10 @@ func TestRunnerForVotes(t *testing.T) {
 }
 
 func testAddVote(t *testing.T) {
-	voting := fixture.MustRow("VotingDB.votingForOpenMultipleVotesTestBoard").(*votings.VotingDB)
+	voting := fixture.MustRow("DatabaseVoting.votingForOpenMultipleVotesTestBoard").(*votings.DatabaseVoting)
 	board := fixture.MustRow("DatabaseBoard.openMultipleVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	note := fixture.MustRow("NoteDB.openMultipleVotesTestBoardNote").(*notes.NoteDB)
+	note := fixture.MustRow("DatabaseNote.openMultipleVotesTestBoardNote").(*notes.DatabaseNote)
 
 	vote, err := votingDb.AddVote(board.ID, user.ID, note.ID)
 	assert.Nil(t, err)
@@ -38,7 +38,7 @@ func testAddVote(t *testing.T) {
 func testAddVoteOnClosedSessionShouldFailed(t *testing.T) {
 	board := fixture.MustRow("DatabaseBoard.closedVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	note := fixture.MustRow("NoteDB.closedVotesTestBoardNote").(*notes.NoteDB)
+	note := fixture.MustRow("DatabaseNote.closedVotesTestBoardNote").(*notes.DatabaseNote)
 
 	_, err := votingDb.AddVote(board.ID, user.ID, note.ID)
 	assert.NotNil(t, err)
@@ -47,7 +47,7 @@ func testAddVoteOnClosedSessionShouldFailed(t *testing.T) {
 func testAddVoteOnAbortedSessionShouldFailed(t *testing.T) {
 	board := fixture.MustRow("DatabaseBoard.abortedVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	note := fixture.MustRow("NoteDB.abortedVotesTestBoardNote").(*notes.NoteDB)
+	note := fixture.MustRow("DatabaseNote.abortedVotesTestBoardNote").(*notes.DatabaseNote)
 
 	_, err := votingDb.AddVote(board.ID, user.ID, note.ID)
 	assert.NotNil(t, err)
@@ -56,7 +56,7 @@ func testAddVoteOnAbortedSessionShouldFailed(t *testing.T) {
 func testAddVoteAboveLimit(t *testing.T) {
 	board := fixture.MustRow("DatabaseBoard.openMultipleVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	note := fixture.MustRow("NoteDB.openMultipleVotesTestBoardNote").(*notes.NoteDB)
+	note := fixture.MustRow("DatabaseNote.openMultipleVotesTestBoardNote").(*notes.DatabaseNote)
 
 	_, err := votingDb.AddVote(board.ID, user.ID, note.ID)
 	assert.Nil(t, err)
@@ -68,7 +68,7 @@ func testAddVoteAboveLimit(t *testing.T) {
 func testAddMultipleVotesWhenNotAllowedShouldFail(t *testing.T) {
 	board := fixture.MustRow("DatabaseBoard.openSingleVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	note := fixture.MustRow("NoteDB.openSingleVotesTestBoardNote").(*notes.NoteDB)
+	note := fixture.MustRow("DatabaseNote.openSingleVotesTestBoardNote").(*notes.DatabaseNote)
 
 	_, err := votingDb.AddVote(board.ID, user.ID, note.ID)
 	assert.Nil(t, err)
@@ -80,7 +80,7 @@ func testAddMultipleVotesWhenNotAllowedShouldFail(t *testing.T) {
 func testRemoveVote(t *testing.T) {
 	board := fixture.MustRow("DatabaseBoard.openMultipleVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	note := fixture.MustRow("NoteDB.openMultipleVotesTestBoardNote").(*notes.NoteDB)
+	note := fixture.MustRow("DatabaseNote.openMultipleVotesTestBoardNote").(*notes.DatabaseNote)
 
 	err := votingDb.RemoveVote(board.ID, user.ID, note.ID)
 	assert.Nil(t, err)
@@ -89,7 +89,7 @@ func testRemoveVote(t *testing.T) {
 func testRemoveVoteOnClosedSessionShouldFail(t *testing.T) {
 	board := fixture.MustRow("DatabaseBoard.closedVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	note := fixture.MustRow("NoteDB.closedVotesTestBoardNote").(*notes.NoteDB)
+	note := fixture.MustRow("DatabaseNote.closedVotesTestBoardNote").(*notes.DatabaseNote)
 
 	err := votingDb.RemoveVote(board.ID, user.ID, note.ID)
 	assert.Nil(t, err)
@@ -98,7 +98,7 @@ func testRemoveVoteOnClosedSessionShouldFail(t *testing.T) {
 func testRemoveVoteOnAbortedSessionShouldFail(t *testing.T) {
 	board := fixture.MustRow("DatabaseBoard.abortedVotesTestBoard").(*boards.DatabaseBoard)
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	note := fixture.MustRow("NoteDB.abortedVotesTestBoardNote").(*notes.NoteDB)
+	note := fixture.MustRow("DatabaseNote.abortedVotesTestBoardNote").(*notes.DatabaseNote)
 
 	err := votingDb.RemoveVote(board.ID, user.ID, note.ID)
 	assert.Nil(t, err)

@@ -73,8 +73,8 @@ type DatabaseFullBoard struct {
 	BoardSessions        []sessions.DatabaseBoardSession
 	BoardSessionRequests []sessionrequests.DatabaseBoardSessionRequest
 	Columns              []columns.DatabaseColumn
-	Notes                []notes.NoteDB
+	Notes                []notes.DatabaseNote
 	Reactions            []reactions.DatabaseReaction
-	Votings              []votings.VotingDB
-	Votes                []votings.VoteDB
+	Votings              []votings.DatabaseVoting
+	Votes                []votings.DatabaseVote
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-type VotingDB struct {
+type DatabaseVoting struct {
 	bun.BaseModel      `bun:"table:votings,alias:voting"`
 	ID                 uuid.UUID
 	Board              uuid.UUID
@@ -19,7 +19,7 @@ type VotingDB struct {
 	Status             VotingStatus
 }
 
-type VotingInsert struct {
+type DatabaseVotingInsert struct {
 	bun.BaseModel      `bun:"table:votings"`
 	Board              uuid.UUID
 	VoteLimit          int
@@ -29,14 +29,14 @@ type VotingInsert struct {
 	Status             VotingStatus
 }
 
-type VotingUpdate struct {
+type DatabaseVotingUpdate struct {
 	bun.BaseModel `bun:"table:votings"`
 	ID            uuid.UUID
 	Board         uuid.UUID
 	Status        VotingStatus
 }
 
-type VoteDB struct {
+type DatabaseVote struct {
 	bun.BaseModel `bun:"table:votes"`
 	Board         uuid.UUID
 	Voting        uuid.UUID

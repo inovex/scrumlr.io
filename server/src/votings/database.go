@@ -22,15 +22,15 @@ func NewVotingDatabase(database *bun.DB) VotingDatabase {
 	return db
 }
 
-func (d *DB) Create(insert VotingInsert) (VotingDB, error) {
+func (d *DB) Create(insert DatabaseVotingInsert) (DatabaseVoting, error) {
 	if insert.Status != Open {
-		return VotingDB{}, errors.New("unable to create voting with other state than 'OPEN'")
+		return DatabaseVoting{}, errors.New("unable to create voting with other state than 'OPEN'")
 	}
 
 	if insert.VoteLimit < 0 {
-		return VotingDB{}, errors.New("vote limit shall not be a negative number")
+		return DatabaseVoting{}, errors.New("vote limit shall not be a negative number")
 	} else if insert.VoteLimit >= 100 {
-		return VotingDB{}, errors.New("vote limit shall not be greater than 99")
+		return DatabaseVoting{}, errors.New("vote limit shall not be greater than 99")
 	}
 
 	countOpenVotings := d.db.NewSelect().
@@ -53,7 +53,7 @@ func (d *DB) Create(insert VotingInsert) (VotingDB, error) {
 		Set("show_voting = null").
 		Where("(SELECT count FROM \"countOpenVotings\") = 0")
 
-	var voting VotingDB
+	var voting DatabaseVoting
 	_, err := d.db.NewInsert().
 		With("countOpenVotings", countOpenVotings).
 		With("updateBoard", updateBoard).
@@ -67,9 +67,9 @@ func (d *DB) Create(insert VotingInsert) (VotingDB, error) {
 	return voting, err
 }
 
-func (d *DB) Update(update VotingUpdate) (VotingDB, error) {
+func (d *DB) Update(update DatabaseVotingUpdate) (DatabaseVoting, error) {
 	if update.Status == Open {
-		return VotingDB{}, errors.New("only allowed to close or a abort a voting")
+		return DatabaseVoting{}, errors.New("only allowed to close or a abort a voting")
 	}
 
 	updateQuery := d.db.NewUpdate().
@@ -79,7 +79,7 @@ func (d *DB) Update(update VotingUpdate) (VotingDB, error) {
 		Where("status = ?", Open).
 		Returning("*")
 
-	var voting VotingDB
+	var voting DatabaseVoting
 	var err error
 
 	if update.Status == Closed {
@@ -92,7 +92,7 @@ func (d *DB) Update(update VotingUpdate) (VotingDB, error) {
 			With("updateQuery", updateQuery).
 			With("updateBoard", updateBoard).
 			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
-			Model((*VotingDB)(nil)).
+			Model((*DatabaseVoting)(nil)).
 			ModelTableExpr("\"updateQuery\" AS voting").
 			Scan(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
 	}
@@ -112,7 +112,7 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 		GroupExpr("id")
 
 	rankUpdate := d.db.NewUpdate().With("_data", newRankSelect).
-		Model((*common.NoteDB)(nil)).
+		Model((*common.DatabaseNote)(nil)).
 		TableExpr("_data").
 		Set("rank = _data.new_rank").
 		WhereOr("note.id = _data.id").
@@ -121,8 +121,8 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 	return rankUpdate
 }
 
-func (d *DB) Get(board, id uuid.UUID) (VotingDB, []VoteDB, error) {
-	var voting VotingDB
+func (d *DB) Get(board, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error) {
+	var voting DatabaseVoting
 	err := d.db.NewSelect().
 		Model(&voting).
 		Where("board = ?", board).
@@ -134,11 +134,11 @@ func (d *DB) Get(board, id uuid.UUID) (VotingDB, []VoteDB, error) {
 		return voting, votes, err
 	}
 
-	return voting, []VoteDB{}, err
+	return voting, []DatabaseVote{}, err
 }
 
-func (d *DB) GetAll(board uuid.UUID) ([]VotingDB, []VoteDB, error) {
-	var votings []VotingDB
+func (d *DB) GetAll(board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error) {
+	var votings []DatabaseVoting
 	err := d.db.NewSelect().
 		Model(&votings).
 		Where("board = ?", board).
@@ -146,14 +146,14 @@ func (d *DB) GetAll(board uuid.UUID) ([]VotingDB, []VoteDB, error) {
 		Scan(context.Background())
 
 	if err != nil {
-		return votings, []VoteDB{}, err
+		return votings, []DatabaseVote{}, err
 	}
 
 	votes, err := d.GetVotes(filter.VoteFilter{Board: board})
 	return votings, votes, err
 }
 
-func (d *DB) GetVotes(f filter.VoteFilter) ([]VoteDB, error) {
+func (d *DB) GetVotes(f filter.VoteFilter) ([]DatabaseVote, error) {
 	voteQuery := d.db.NewSelect().
 		Model((*Vote)(nil)).
 		Where("board = ?", f.Board)
@@ -168,27 +168,27 @@ func (d *DB) GetVotes(f filter.VoteFilter) ([]VoteDB, error) {
 		voteQuery = voteQuery.Where("note = ?", *f.Note)
 	}
 
-	var votes []VoteDB
+	var votes []DatabaseVote
 	err := voteQuery.Scan(context.Background(), &votes)
 
 	return votes, err
 }
 
-func (d *DB) AddVote(board, user, note uuid.UUID) (VoteDB, error) {
+func (d *DB) AddVote(board, user, note uuid.UUID) (DatabaseVote, error) {
 	openVotingQuery := d.db.NewSelect().
-		Model((*VotingDB)(nil)).
+		Model((*DatabaseVoting)(nil)).
 		Column("id", "vote_limit", "allow_multiple_votes").
 		Where("board = ?", board).
 		Where("status = ?", Open)
 
 	currentVoteCount := d.db.NewSelect().
-		Model((*VoteDB)(nil)).
+		Model((*DatabaseVote)(nil)).
 		ColumnExpr("note").
 		Where("voting = (SELECT id FROM \"openVotingQuery\")").
 		Where("\"user\" = ?", user)
 
 	currentVotesOnNoteCount := d.db.NewSelect().
-		Model((*VoteDB)(nil)).
+		Model((*DatabaseVote)(nil)).
 		ColumnExpr("COUNT(*) as count").
 		Where("voting = (SELECT id FROM \"openVotingQuery\")").
 		Where("\"user\" = ?", user).
@@ -211,8 +211,8 @@ func (d *DB) AddVote(board, user, note uuid.UUID) (VoteDB, error) {
 
 		})
 
-	var result VoteDB
-	insert := VoteDB{Board: board, User: user, Note: note}
+	var result DatabaseVote
+	insert := DatabaseVote{Board: board, User: user, Note: note}
 	_, err := d.db.NewInsert().
 		With("openVotingQuery", openVotingQuery).
 		With("currentVoteCount", currentVoteCount).
@@ -242,7 +242,7 @@ func (d *DB) RemoveVote(board, user, note uuid.UUID) error {
 		Where("note = ?", note).
 		Limit(1)
 
-	deleteQuery := VoteDB{Board: board, User: user, Note: note}
+	deleteQuery := DatabaseVote{Board: board, User: user, Note: note}
 	_, err := d.db.NewDelete().
 		With("openVotingQuery", openVotingQuery).
 		Model(&deleteQuery).
@@ -253,8 +253,8 @@ func (d *DB) RemoveVote(board, user, note uuid.UUID) error {
 	return err
 }
 
-func (d *DB) GetOpenVoting(board uuid.UUID) (VotingDB, error) {
-	var voting VotingDB
+func (d *DB) GetOpenVoting(board uuid.UUID) (DatabaseVoting, error) {
+	var voting DatabaseVoting
 	err := d.db.NewSelect().
 		Model(&voting).
 		Where("board = ?", board).
