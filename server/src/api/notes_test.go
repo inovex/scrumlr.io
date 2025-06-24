@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/sessions"
 	"strings"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
 
@@ -18,7 +19,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
@@ -160,16 +160,6 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			userID, _ := uuid.NewRandom()
 			noteID, _ := uuid.NewRandom()
 
-			notesToDelete := []*notes.Note{
-				{
-					ID:       uuid.UUID{},
-					Author:   uuid.UUID{},
-					Text:     "",
-					Edited:   false,
-					Position: notes.NotePosition{},
-				},
-			}
-
 			r := chi.NewRouter()
 			s.initNoteResources(r)
 
@@ -194,23 +184,12 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			// Mock the ParticipantBanned method
 			sessionMock.EXPECT().IsParticipantBanned(req.req.Context(), boardID, userID).Return(false, nil)
 
-			noteMock.EXPECT().GetStack(mock.Anything, noteID).Return(notesToDelete, nil)
-
-			votesToDelete := []*votings.Vote{{
-				Voting: uuid.UUID{},
-				Note:   noteID,
-				User:   uuid.UUID{},
-			}}
-
-			for _, note := range notesToDelete {
-				votingMock.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Board: boardID, Note: &note.ID}).Return(votesToDelete, nil)
-
-			}
-
 			if tt.isLocked {
-				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID).Return(nil)
+				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID).
+					Return(nil)
 			} else {
-				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID).Return(tt.err)
+				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID).
+					Return(tt.err)
 			}
 
 			rr := httptest.NewRecorder()
