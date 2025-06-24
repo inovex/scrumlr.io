@@ -56,6 +56,11 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 	// todo: call services to delete votes and notes
 	// columnService -> calls noteService -> calls votingService delete()
 	toBeDeletedNotes, err := service.noteService.GetAll(ctx, board, column)
+	if err != nil {
+		log.Errorw("Unable to get notes", "board", board, "column", column)
+		return err
+	}
+
 	for _, note := range toBeDeletedNotes {
 		err := service.noteService.Delete(ctx, notes.NoteDeleteRequest{DeleteStack: true}, note.ID)
 		if err != nil {
