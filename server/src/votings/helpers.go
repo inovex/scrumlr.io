@@ -5,7 +5,7 @@ import (
 	"scrumlr.io/server/technical_helper"
 )
 
-func Votings(votings []VotingDB, votes []VoteDB) []*Voting {
+func Votings(votings []DatabaseVoting, votes []DatabaseVote) []*Voting {
 	if votings == nil {
 		return nil
 	}
@@ -43,12 +43,12 @@ func UnmarshallVoteData(data interface{}) (*VotingUpdated, error) {
 	return vote, nil
 }
 
-func getVotingWithResults(voting VotingDB, votes []VoteDB) *VotingResults {
+func getVotingWithResults(voting DatabaseVoting, votes []DatabaseVote) *VotingResults {
 	if voting.Status != Closed {
 		return nil
 	}
 
-	relevantVoting := technical_helper.Filter[VoteDB](votes, func(vote VoteDB) bool {
+	relevantVoting := technical_helper.Filter[DatabaseVote](votes, func(vote DatabaseVote) bool {
 		return vote.Voting == voting.ID
 	})
 

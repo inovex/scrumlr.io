@@ -64,19 +64,19 @@ type DatabaseColumnTemplateUpdate struct {
 	bun.BaseModel `bun:"table:column_templates"`
 }
 
-type NoteDB struct {
+type DatabaseNote struct {
 	bun.BaseModel `bun:"table:notes,alias:note"`
 }
 
-type NoteInsertDB struct {
+type DatabaseNoteInsert struct {
 	bun.BaseModel `bun:"table:notes,alias:note"`
 }
 
-type NoteImportDB struct {
+type DatabaseNoteImport struct {
 	bun.BaseModel `bun:"table:notes,alias:note"`
 }
 
-type NoteUpdateDB struct {
+type DatabaseNoteUpdate struct {
 	bun.BaseModel `bun:"table:notes,alias:note"`
 }
 
@@ -133,18 +133,18 @@ type DatabaseUserUpdate struct {
 	bun.BaseModel `bun:"table:users"`
 }
 
-type VotingDB struct {
+type DatabaseVoting struct {
 	bun.BaseModel `bun:"table:votings,alias:voting"`
 }
 
-type VotingInsert struct {
+type DatabaseVotingInsert struct {
 	bun.BaseModel `bun:"table:votings"`
 }
 
-type VotingUpdate struct {
+type DatabaseVotingUpdate struct {
 	bun.BaseModel `bun:"table:votings"`
 }
 
-type VoteDB struct {
+type DatabaseVote struct {
 	bun.BaseModel `bun:"table:votes"`
 }

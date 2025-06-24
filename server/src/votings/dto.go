@@ -12,14 +12,14 @@ type Vote struct {
 	User   uuid.UUID `json:"user"`
 }
 
-func (v *Vote) From(vote VoteDB) *Vote {
+func (v *Vote) From(vote DatabaseVote) *Vote {
 	v.Voting = vote.Voting
 	v.Note = vote.Note
 	v.User = vote.User
 	return v
 }
 
-func Votes(votes []VoteDB) []*Vote {
+func Votes(votes []DatabaseVote) []*Vote {
 	if votes == nil {
 		return nil
 	}
@@ -65,7 +65,7 @@ type Voting struct {
 	IsAnonymous        bool           `json:"isAnonymous"`
 }
 
-func (v *Voting) From(voting VotingDB, votes []VoteDB) *Voting {
+func (v *Voting) From(voting DatabaseVoting, votes []DatabaseVote) *Voting {
 	v.ID = voting.ID
 	v.VoteLimit = voting.VoteLimit
 	v.AllowMultipleVotes = voting.AllowMultipleVotes

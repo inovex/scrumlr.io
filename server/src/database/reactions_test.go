@@ -27,7 +27,7 @@ func TestRunnerForReactions(t *testing.T) {
 	t.Run("Delete=1", testDeleteReactionFailsBecauseForbidden)
 }
 
-var notesTestA1 *notes.NoteDB
+var notesTestA1 *notes.DatabaseNote
 var boardTestBoard *boards.DatabaseBoard
 var reactionUserJay *sessions.DatabaseUser
 var reactionUserJack *sessions.DatabaseUser
@@ -44,7 +44,7 @@ func testGetReaction(t *testing.T) {
 }
 
 func testGetReactionsForNote(t *testing.T) {
-	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
+	notesTestA1 = fixture.MustRow("DatabaseNote.notesTestA1").(*notes.DatabaseNote)
 	r, err := reactionDb.GetAllForNote(notesTestA1.ID)
 
 	assert.Nil(t, err)
@@ -61,7 +61,7 @@ func testGetReactions(t *testing.T) {
 
 func testCreateReaction(t *testing.T) {
 	boardTestBoard = fixture.MustRow("DatabaseBoard.notesTestBoard").(*boards.DatabaseBoard)
-	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
+	notesTestA1 = fixture.MustRow("DatabaseNote.notesTestA1").(*notes.DatabaseNote)
 	reactionUserJay = fixture.MustRow("DatabaseUser.jay").(*sessions.DatabaseUser)
 
 	reaction, err := reactionDb.Create(boardTestBoard.ID, reactions.DatabaseReactionInsert{
@@ -78,7 +78,7 @@ func testCreateReaction(t *testing.T) {
 
 func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 	boardTestBoard = fixture.MustRow("DatabaseBoard.notesTestBoard").(*boards.DatabaseBoard)
-	notesTestA1 = fixture.MustRow("NoteDB.notesTestA1").(*notes.NoteDB)
+	notesTestA1 = fixture.MustRow("DatabaseNote.notesTestA1").(*notes.DatabaseNote)
 	reactionUserJack = fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
 	_, err := reactionDb.Create(boardTestBoard.ID, reactions.DatabaseReactionInsert{

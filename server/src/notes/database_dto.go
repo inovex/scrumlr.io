@@ -7,7 +7,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-type NoteDB struct {
+type DatabaseNote struct {
 	bun.BaseModel `bun:"table:notes,alias:note"`
 	ID            uuid.UUID
 	CreatedAt     time.Time
@@ -20,7 +20,7 @@ type NoteDB struct {
 	Edited        bool
 }
 
-type NoteInsertDB struct {
+type DatabaseNoteInsert struct {
 	bun.BaseModel `bun:"table:notes,alias:note"`
 	Author        uuid.UUID
 	Board         uuid.UUID
@@ -28,7 +28,7 @@ type NoteInsertDB struct {
 	Text          string
 }
 
-type NoteImportDB struct {
+type DatabaseNoteImport struct {
 	bun.BaseModel `bun:"table:notes,alias:note"`
 	Author        uuid.UUID
 	Board         uuid.UUID
@@ -36,7 +36,7 @@ type NoteImportDB struct {
 	Position      *NoteUpdatePosition `bun:",embed"`
 }
 
-type NoteUpdateDB struct {
+type DatabaseNoteUpdate struct {
 	bun.BaseModel `bun:"table:notes,alias:note"`
 	ID            uuid.UUID
 	Board         uuid.UUID
