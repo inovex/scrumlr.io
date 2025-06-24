@@ -1,9 +1,10 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
-	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -48,7 +49,10 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 	updateBoards := sessions.BoardSessionUpdateRequest{
 		User: user,
 	}
-	s.sessions.UpdateUserBoards(r.Context(), updateBoards)
+	_, err = s.sessions.UpdateUserBoards(r.Context(), updateBoards)
+	if err != nil {
+		log.Errorw("Unable to update user boards")
+	}
 
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, updatedUser)

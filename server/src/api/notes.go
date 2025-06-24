@@ -7,7 +7,6 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/filter"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
@@ -100,32 +99,12 @@ func (s *Server) updateNote(w http.ResponseWriter, r *http.Request) {
 func (s *Server) deleteNote(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	note := r.Context().Value(identifiers.NoteIdentifier).(uuid.UUID)
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body notes.NoteDeleteRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
-	}
-
-	notesToDelete, err := s.notes.GetStack(r.Context(), note)
-	if err != nil {
-		common.Throw(w, r, err)
-		return
-	}
-
-	var votesToDelete []uuid.UUID
-	for _, note := range notesToDelete {
-		votes, err := s.votings.GetVotes(r.Context(), filter.VoteFilter{Board: board, Note: &note.ID})
-		if err != nil {
-			common.Throw(w, r, err)
-			return
-		}
-
-		for _, vote := range votes {
-			votesToDelete = append(votesToDelete, vote.Voting)
-		}
 	}
 
 	if err := s.notes.Delete(r.Context(), body, note); err != nil {
