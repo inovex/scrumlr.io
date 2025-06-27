@@ -10,18 +10,20 @@ jobs:
     name: "clean scrumlr server packages"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/delete-package-versions@v5
+      - if: false
+        uses: actions/delete-package-versions@v5
         with:
           package-name: "scrumlr.io/scrumlr-server"
           package-type: "container"
           min-versions-to-keep: 256
           delete-only-untagged-versions: "true"
-  
+
   clean_scrumlr_frontend_packages:
     name: "clean scrumlr frontend packages"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/delete-package-versions@v5
+      - if: false
+        uses: actions/delete-package-versions@v5
         with:
           package-name: "scrumlr.io/scrumlr-frontend"
           package-type: "container"
