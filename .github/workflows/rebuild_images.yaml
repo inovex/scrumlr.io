@@ -41,18 +41,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: scrumlr.io - Frontend image meta information
-        id: meta-frontend
-        uses: docker/metadata-action@v5
+      - name: Build and push frontend images
+        uses: docker/build-push-action@v6
         with:
-          images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-frontend
+          context: .
+          file: ./Dockerfile
+          platforms: ${{ needs.determine-platforms.outputs.platforms }}
+          push: true
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=raw,value=latest
-            type=sha,prefix=sha-,format=short
+            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ matrix.tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:latest
           labels: |
             org.opencontainers.image.authors=info@scrumlr.io
             org.opencontainers.image.url=https://github.com/inovex/scrumlr.io/pkgs/container/scrumlr.io%2Fscrumlr-frontend
@@ -61,25 +59,14 @@ jobs:
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.title=scrumlr.io Frontend
             org.opencontainers.image.description=The web client for scrumlr.io
-
-      - name: Build and push frontend images
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          platforms: ${{ needs.determine-platforms.outputs.platforms }}
-          push: true
-          tags: ${{ steps.meta-frontend.outputs.tags }}
-          labels: ${{ steps.meta-frontend.outputs.labels }}
+            org.opencontainers.image.version=${{ matrix.tag }}
           cache-from: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache
           cache-to: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache,mode=max
 
       - name: Set outputs
         id: outputs
         run: |
-          echo $DOCKER_METADATA_OUTPUT_TAGS
-          echo _____________________________________________________
-          echo frontend-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')" ) >> $GITHUB_OUTPUT
+          echo "frontend-image-tag=${{ matrix.tag }}" >> $GITHUB_OUTPUT
 
   package-server:
     needs: determine-platforms
@@ -108,18 +95,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: scrumlr.io - Server image meta information
-        id: meta-server
-        uses: docker/metadata-action@v5
+      - name: Build and push server images
+        uses: docker/build-push-action@v6
         with:
-          images: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-server
+          context: ./server/src
+          file: ./server/src/Dockerfile
+          platforms: ${{ needs.determine-platforms.outputs.platforms }}
+          push: true
           tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=raw,value=latest
-            type=sha,prefix=sha-,format=short
+            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ matrix.tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
           labels: |
             org.opencontainers.image.authors=info@scrumlr.io
             org.opencontainers.image.url=https://github.com/inovex/scrumlr.io/pkgs/container/scrumlr.io%2Fscrumlr-server
@@ -128,22 +113,11 @@ jobs:
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.title=scrumlr.io Server
             org.opencontainers.image.description=The server for scrumlr.io
-
-      - name: Build and push server images
-        uses: docker/build-push-action@v6
-        with:
-          context: ./server/src
-          file: ./server/src/Dockerfile
-          platforms: ${{ needs.determine-platforms.outputs.platforms }}
-          push: true
-          tags: ${{ steps.meta-server.outputs.tags }}
-          labels: ${{ steps.meta-server.outputs.labels }}
+            org.opencontainers.image.version=${{ matrix.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Set outputs
         id: outputs
         run: |
-          echo $DOCKER_METADATA_OUTPUT_TAGS
-          echo _____________________________________________________
-          echo server-image-tag=$(echo "$(echo $DOCKER_METADATA_OUTPUT_TAGS | grep -oP 'sha-[a-f0-9]+')" ) >> $GITHUB_OUTPUT
+          echo "server-image-tag=${{ matrix.tag }}" >> $GITHUB_OUTPUT
