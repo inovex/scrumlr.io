@@ -24,6 +24,12 @@ jobs:
         with:
           ref: ${{ matrix.tag }}
 
+      - name: Prepare Docker tags
+        id: prep_tags
+        run: |
+          TAG="${{ matrix.tag }}"
+          echo "tag=${TAG#v}" >> "$GITHUB_OUTPUT"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -42,7 +48,7 @@ jobs:
           platforms: ${{ matrix.build_info.platform }}
           push: true
           tags: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ matrix.tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ steps.prep_tags.outputs.tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:latest
           labels: |
             org.opencontainers.image.authors=info@scrumlr.io
@@ -52,14 +58,14 @@ jobs:
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.title=scrumlr.io Frontend
             org.opencontainers.image.description=The web client for scrumlr.io
-            org.opencontainers.image.version=${{ matrix.tag }}
+            org.opencontainers.image.version=${{ steps.prep_tags.outputs.tag }}
           cache-from: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache
           cache-to: type=registry,ref=ghcr.io/inovex/scrumlr.io/scrumlr-frontend:cache,mode=max
 
       - name: Set outputs
         id: outputs
         run: |
-          echo "frontend-image-tag=${{ matrix.tag }}" >> $GITHUB_OUTPUT
+          echo "frontend-image-tag=${{ steps.prep_tags.outputs.tag }}" >> $GITHUB_OUTPUT
 
   package-server:
     outputs:
@@ -81,6 +87,12 @@ jobs:
         with:
           ref: ${{ matrix.tag }}
 
+      - name: Prepare Docker tags
+        id: prep_tags
+        run: |
+          TAG="${{ matrix.tag }}"
+          echo "tag=${TAG#v}" >> "$GITHUB_OUTPUT"
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -99,7 +111,7 @@ jobs:
           platforms: ${{ matrix.build_info.platform }}
           push: true
           tags: |
-            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ matrix.tag }}
+            ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ steps.prep_tags.outputs.tag }}
             ghcr.io/inovex/scrumlr.io/scrumlr-server:latest
           labels: |
             org.opencontainers.image.authors=info@scrumlr.io
@@ -109,11 +121,11 @@ jobs:
             org.opencontainers.image.licenses=MIT
             org.opencontainers.image.title=scrumlr.io Server
             org.opencontainers.image.description=The server for scrumlr.io
-            org.opencontainers.image.version=${{ matrix.tag }}
+            org.opencontainers.image.version=${{ steps.prep_tags.outputs.tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Set outputs
         id: outputs
         run: |
-          echo "server-image-tag=${{ matrix.tag }}" >> $GITHUB_OUTPUT
+          echo "server-image-tag=${{ steps.prep_tags.outputs.tag }}" >> "$GITHUB_OUTPUT"
