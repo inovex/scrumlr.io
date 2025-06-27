@@ -1,30 +1,24 @@
----
 name: Rebuild images
 
 on:
   workflow_dispatch:
 
 jobs:
-  determine-platforms:
-    runs-on: ubuntu-latest
-    outputs:
-      platforms: ${{ steps.platforms.outputs.platforms }}
-    steps:
-      - name: Set platforms
-        id: platforms
-        run: echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
-
   package-frontend:
-    needs: determine-platforms
     outputs:
       frontend-image-tag: ${{ steps.outputs.outputs.frontend-image-tag }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     strategy:
       matrix:
         tag: ["v2.1.0", "v2.1.1", "v2.1.2", "v2.2.0", "v2.2.1", "v2.2.2", "v2.2.3", "v2.2.4", "v2.5.0", "v2.6.0", "v2.6.1", "v2.6.2", "v2.6.3", "v2.6.4", "v2.7.0", "v2.7.1", "v2.7.2", "v2.7.3", "v2.7.4", "v2.7.5", "v2.7.6", "v2.7.7", "v2.7.8", "v2.8.0", "v2.8.1", "v3.0.0", "v3.1.0", "v3.2.0", "v3.2.1", "v3.3.0", "v3.4.0", "v3.4.1", "v3.5.0", "v3.5.1", "v3.5.2", "v3.5.3", "v3.6.0", "v3.7.0", "v3.7.1", "v3.8.0", "v3.8.1", "v3.8.2", "v3.9.0", "v3.10.0", "v3.10.1", "v3.10.2", "v3.10.3", "v3.11.0"]
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,7 +40,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: ${{ needs.determine-platforms.outputs.platforms }}
+          platforms: ${{ matrix.platform }}
           push: true
           tags: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ matrix.tag }}
@@ -69,16 +63,20 @@ jobs:
           echo "frontend-image-tag=${{ matrix.tag }}" >> $GITHUB_OUTPUT
 
   package-server:
-    needs: determine-platforms
     outputs:
       server-image-tag: ${{ steps.outputs.outputs.server-image-tag }}
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     strategy:
       matrix:
         tag: ["v2.1.0", "v2.1.1", "v2.1.2", "v2.2.0", "v2.2.1", "v2.2.2", "v2.2.3", "v2.2.4", "v2.5.0", "v2.6.0", "v2.6.1", "v2.6.2", "v2.6.3", "v2.6.4", "v2.7.0", "v2.7.1", "v2.7.2", "v2.7.3", "v2.7.4", "v2.7.5", "v2.7.6", "v2.7.7", "v2.7.8", "v2.8.0", "v2.8.1", "v3.0.0", "v3.1.0", "v3.2.0", "v3.2.1", "v3.3.0", "v3.4.0", "v3.4.1", "v3.5.0", "v3.5.1", "v3.5.2", "v3.5.3", "v3.6.0", "v3.7.0", "v3.7.1", "v3.8.0", "v3.8.1", "v3.8.2", "v3.9.0", "v3.10.0", "v3.10.1", "v3.10.2", "v3.10.3", "v3.11.0"]
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-latest
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -100,7 +98,7 @@ jobs:
         with:
           context: ./server/src
           file: ./server/src/Dockerfile
-          platforms: ${{ needs.determine-platforms.outputs.platforms }}
+          platforms: ${{ matrix.platform }}
           push: true
           tags: |
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ matrix.tag }}
