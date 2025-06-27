@@ -8,14 +8,13 @@ jobs:
     outputs:
       frontend-image-tag: ${{ steps.outputs.outputs.frontend-image-tag }}
     strategy:
+      fail-fast: false
       matrix:
         tag: ["v2.1.0", "v2.1.1", "v2.1.2", "v2.2.0", "v2.2.1", "v2.2.2", "v2.2.3", "v2.2.4", "v2.5.0", "v2.6.0", "v2.6.1", "v2.6.2", "v2.6.3", "v2.6.4", "v2.7.0", "v2.7.1", "v2.7.2", "v2.7.3", "v2.7.4", "v2.7.5", "v2.7.6", "v2.7.7", "v2.7.8", "v2.8.0", "v2.8.1", "v3.0.0", "v3.1.0", "v3.2.0", "v3.2.1", "v3.3.0", "v3.4.0", "v3.4.1", "v3.5.0", "v3.5.1", "v3.5.2", "v3.5.3", "v3.6.0", "v3.7.0", "v3.7.1", "v3.8.0", "v3.8.1", "v3.8.2", "v3.9.0", "v3.10.0", "v3.10.1", "v3.10.2", "v3.10.3", "v3.11.0"]
-        include:
-          - platform: linux/amd64
-            runner: ubuntu-latest
-          - platform: linux/arm64
-            runner: ubuntu-24.04-arm
-    runs-on: ${{ matrix.runner }}
+        build_info:
+          - { platform: 'linux/amd64', runner: 'ubuntu-latest' }
+          - { platform: 'linux/arm64', runner: 'ubuntu-24.04-arm' }
+    runs-on: ${{ matrix.build_info.runner }}
     permissions:
       contents: read
       packages: write
@@ -40,7 +39,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: ${{ matrix.platform }}
+          platforms: ${{ matrix.build_info.platform }}
           push: true
           tags: |
             ghcr.io/inovex/scrumlr.io/scrumlr-frontend:${{ matrix.tag }}
@@ -66,14 +65,13 @@ jobs:
     outputs:
       server-image-tag: ${{ steps.outputs.outputs.server-image-tag }}
     strategy:
+      fail-fast: false
       matrix:
         tag: ["v2.1.0", "v2.1.1", "v2.1.2", "v2.2.0", "v2.2.1", "v2.2.2", "v2.2.3", "v2.2.4", "v2.5.0", "v2.6.0", "v2.6.1", "v2.6.2", "v2.6.3", "v2.6.4", "v2.7.0", "v2.7.1", "v2.7.2", "v2.7.3", "v2.7.4", "v2.7.5", "v2.7.6", "v2.7.7", "v2.7.8", "v2.8.0", "v2.8.1", "v3.0.0", "v3.1.0", "v3.2.0", "v3.2.1", "v3.3.0", "v3.4.0", "v3.4.1", "v3.5.0", "v3.5.1", "v3.5.2", "v3.5.3", "v3.6.0", "v3.7.0", "v3.7.1", "v3.8.0", "v3.8.1", "v3.8.2", "v3.9.0", "v3.10.0", "v3.10.1", "v3.10.2", "v3.10.3", "v3.11.0"]
-        include:
-          - platform: linux/amd64
-            runner: ubuntu-latest
-          - platform: linux/arm64
-            runner: ubuntu-24.04-arm
-    runs-on: ${{ matrix.runner }}
+        build_info:
+          - { platform: 'linux/amd64', runner: 'ubuntu-latest' }
+          - { platform: 'linux/arm64', runner: 'ubuntu-24.04-arm' }
+    runs-on: ${{ matrix.build_info.runner }}
     permissions:
       contents: read
       packages: write
@@ -98,7 +96,7 @@ jobs:
         with:
           context: ./server/src
           file: ./server/src/Dockerfile
-          platforms: ${{ matrix.platform }}
+          platforms: ${{ matrix.build_info.platform }}
           push: true
           tags: |
             ghcr.io/inovex/scrumlr.io/scrumlr-server:${{ matrix.tag }}
