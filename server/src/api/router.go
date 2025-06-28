@@ -3,7 +3,18 @@ package api
 import (
 	"net/http"
 	"os"
+	"scrumlr.io/server/sessions"
 	"time"
+
+	"scrumlr.io/server/boards"
+
+	"scrumlr.io/server/votings"
+
+	"scrumlr.io/server/boardreactions"
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/columntemplates"
+	"scrumlr.io/server/notes"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -17,10 +28,12 @@ import (
 	"github.com/gorilla/websocket"
 
 	"scrumlr.io/server/auth"
+	"scrumlr.io/server/feedback"
+	"scrumlr.io/server/health"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/services"
+	"scrumlr.io/server/sessionrequests"
 )
 
 type Server struct {
@@ -29,22 +42,25 @@ type Server struct {
 	realtime *realtime.Broker
 	auth     auth.Auth
 
-	boards         services.Boards
-	votings        services.Votings
-	users          services.Users
-	notes          services.Notes
-	reactions      reactions.ReactionService
-	sessions       services.BoardSessions
-	health         services.Health
-	feedback       services.Feedback
-	boardReactions services.BoardReactions
-	boardTemplates services.BoardTemplates
+	boards          boards.BoardService
+	columns         columns.ColumnService
+	votings         votings.VotingService
+	users           sessions.UserService
+	notes           notes.NotesService
+	reactions       reactions.ReactionService
+	sessions        sessions.SessionService
+	sessionRequests sessionrequests.SessionRequestService
+	health          health.HealthService
+	feedback        feedback.FeedbackService
+	boardReactions  boardreactions.BoardReactionService
+	boardTemplates  boardtemplates.BoardTemplateService
+	columntemplates columntemplates.ColumnTemplateService
 
 	upgrader websocket.Upgrader
 
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
-	boardSessionRequestSubscriptions map[uuid.UUID]*BoardSessionRequestSubscription
+	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
 	anonymousLoginDisabled        bool
@@ -57,16 +73,19 @@ func New(
 	rt *realtime.Broker,
 	auth auth.Auth,
 
-	boards services.Boards,
-	votings services.Votings,
-	users services.Users,
-	notes services.Notes,
+	boards boards.BoardService,
+	columns columns.ColumnService,
+	votings votings.VotingService,
+	users sessions.UserService,
+	notes notes.NotesService,
 	reactions reactions.ReactionService,
-	sessions services.BoardSessions,
-	health services.Health,
-	feedback services.Feedback,
-	boardReactions services.BoardReactions,
-	boardTemplates services.BoardTemplates,
+	sessions sessions.SessionService,
+	sessionRequests sessionrequests.SessionRequestService,
+	health health.HealthService,
+	feedback feedback.FeedbackService,
+	boardReactions boardreactions.BoardReactionService,
+	boardTemplates boardtemplates.BoardTemplateService,
+	columntemplates columntemplates.ColumnTemplateService,
 
 	verbose bool,
 	checkOrigin bool,
@@ -101,18 +120,21 @@ func New(
 		basePath:                         basePath,
 		realtime:                         rt,
 		boardSubscriptions:               make(map[uuid.UUID]*BoardSubscription),
-		boardSessionRequestSubscriptions: make(map[uuid.UUID]*BoardSessionRequestSubscription),
+		boardSessionRequestSubscriptions: make(map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription),
 		auth:                             auth,
 		boards:                           boards,
+		columns:                          columns,
 		votings:                          votings,
 		users:                            users,
 		notes:                            notes,
 		reactions:                        reactions,
 		sessions:                         sessions,
+		sessionRequests:                  sessionRequests,
 		health:                           health,
 		feedback:                         feedback,
 		boardReactions:                   boardReactions,
 		boardTemplates:                   boardTemplates,
+		columntemplates:                  columntemplates,
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,

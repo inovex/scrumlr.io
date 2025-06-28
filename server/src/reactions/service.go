@@ -10,12 +10,12 @@ import (
 )
 
 type ReactionDatabase interface {
-	GetReaction(id uuid.UUID) (DatabaseReaction, error)
-	GetReactions(board uuid.UUID) ([]DatabaseReaction, error)
-	GetReactionsForNote(note uuid.UUID) ([]DatabaseReaction, error)
-	CreateReaction(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error)
-	RemoveReaction(board, user, id uuid.UUID) error
-	UpdateReaction(board, user, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error)
+	Get(id uuid.UUID) (DatabaseReaction, error)
+	GetAll(board uuid.UUID) ([]DatabaseReaction, error)
+	GetAllForNote(note uuid.UUID) ([]DatabaseReaction, error)
+	Create(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error)
+	Delete(board, user, id uuid.UUID) error
+	Update(board, user, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error)
 }
 
 type Service struct {
@@ -33,7 +33,7 @@ func NewReactionService(db ReactionDatabase, rt *realtime.Broker) ReactionServic
 
 func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error) {
 	log := logger.FromContext(ctx)
-	reaction, err := service.database.GetReaction(id)
+	reaction, err := service.database.Get(id)
 	if err != nil {
 		log.Errorw("Unable to get reaction", "userId", id, "err", err)
 		return nil, err
@@ -42,9 +42,9 @@ func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Reaction, error
 	return new(Reaction).From(reaction), err
 }
 
-func (service *Service) List(ctx context.Context, boardId uuid.UUID) ([]*Reaction, error) {
+func (service *Service) GetAll(ctx context.Context, boardId uuid.UUID) ([]*Reaction, error) {
 	log := logger.FromContext(ctx)
-	reactions, err := service.database.GetReactions(boardId)
+	reactions, err := service.database.GetAll(boardId)
 	if err != nil {
 		log.Errorw("Unable to get reactions", "boardId", boardId, "err", err)
 		return nil, err
@@ -55,7 +55,7 @@ func (service *Service) List(ctx context.Context, boardId uuid.UUID) ([]*Reactio
 
 func (service *Service) Create(ctx context.Context, board uuid.UUID, body ReactionCreateRequest) (*Reaction, error) {
 	log := logger.FromContext(ctx)
-	reaction, err := service.database.CreateReaction(
+	reaction, err := service.database.Create(
 		board,
 		DatabaseReactionInsert{
 			Note:         body.Note,
@@ -76,7 +76,7 @@ func (service *Service) Create(ctx context.Context, board uuid.UUID, body Reacti
 
 func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) error {
 	log := logger.FromContext(ctx)
-	err := service.database.RemoveReaction(board, user, id)
+	err := service.database.Delete(board, user, id)
 	if err != nil {
 		log.Errorw("Unable to remove reaction", "board", board, "user", user, "reaction", id)
 		return err
@@ -89,7 +89,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 
 func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, body ReactionUpdateTypeRequest) (*Reaction, error) {
 	log := logger.FromContext(ctx)
-	reaction, err := service.database.UpdateReaction(
+	reaction, err := service.database.Update(
 		board,
 		user,
 		id,
