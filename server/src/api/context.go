@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"scrumlr.io/server/notes"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -15,7 +16,11 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
+type Service struct {
+	notesAPI notes.API
+}
+
+func (s *Service) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 		boardParam := chi.URLParam(r, "id")
@@ -43,7 +48,7 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
+func (s *Service) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 		boardParam := chi.URLParam(r, "id")
@@ -83,7 +88,7 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
+func (s *Service) BoardModeratorContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
@@ -112,7 +117,7 @@ func (s *Server) BoardModeratorContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
+func (s *Service) BoardEditableContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
@@ -144,7 +149,7 @@ func (s *Server) BoardEditableContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
+func (s *Service) BoardAuthenticatedContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
@@ -175,7 +180,7 @@ func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
+func (s *Service) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
@@ -189,7 +194,7 @@ func (s *Server) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) ColumnContext(next http.Handler) http.Handler {
+func (s *Service) ColumnContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnParam := chi.URLParam(r, "column")
 		column, err := uuid.Parse(columnParam)
@@ -203,7 +208,7 @@ func (s *Server) ColumnContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) NoteContext(next http.Handler) http.Handler {
+func (s *Service) NoteContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		noteParam := chi.URLParam(r, "note")
 		note, err := uuid.Parse(noteParam)
@@ -217,7 +222,7 @@ func (s *Server) NoteContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) ReactionContext(next http.Handler) http.Handler {
+func (s *Service) ReactionContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		reactionParam := chi.URLParam(r, "reaction")
 		reaction, err := uuid.Parse(reactionParam)
@@ -231,7 +236,7 @@ func (s *Server) ReactionContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) VotingContext(next http.Handler) http.Handler {
+func (s *Service) VotingContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		votingParam := chi.URLParam(r, "voting")
 		voting, err := uuid.Parse(votingParam)
@@ -244,7 +249,7 @@ func (s *Server) VotingContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
+func (s *Service) BoardTemplateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		boardTemplateParam := chi.URLParam(r, "id")
 		boardTemplate, err := uuid.Parse(boardTemplateParam)
@@ -256,7 +261,7 @@ func (s *Server) BoardTemplateContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
+func (s *Service) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
 	limiter := httprate.Limit(
 		20,
@@ -279,7 +284,7 @@ func (s *Server) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Server) ColumnTemplateContext(next http.Handler) http.Handler {
+func (s *Service) ColumnTemplateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnTemplateParam := chi.URLParam(r, "columnTemplate")
 		columnTemplate, err := uuid.Parse(columnTemplateParam)

@@ -14,23 +14,23 @@ type NotesAPI interface {
 }
 type NotesRouter struct {
 	notesAPI NotesAPI
-	//todo: add middleware
 }
 
-func (n *NotesRouter) RegisterRoutes(r chi.Router) {
-	r.Route("/notes", func(r chi.Router) {
-		//r.Use(n.BoardParticipantContext)
+// todo: implement the missing middleware
+func (r *NotesRouter) RegisterRoutes(router chi.Router) {
+	router.Route("/notes", func(router chi.Router) {
+		//r.Use(s.BoardParticipantContext)
 
-		r.Get("/", n.notesAPI.Get)
-		r.Post("/", n.notesAPI.Create)
+		router.Get("/", r.notesAPI.GetAll)
+		//router.With(s.BoardEditableContext).Post("/", r.notesAPI.Create)
 
-		//r.Route("/{note}", func(r chi.Router) {
-		//  r.Use(n.NoteContext)
-		//
-		//  r.Get("/", n.getNote)
-		//  r.With(n.BoardEditableContext).Put("/", n.updateNote)
-		//  r.With(n.BoardEditableContext).Delete("/", n.deleteNote)
-		//})
+		router.Route("/{note}", func(router chi.Router) {
+			//r.Use(s.NoteContext)
+
+			router.Get("/", r.notesAPI.Get)
+			//router.With(s.BoardEditableContext).Put("/", r.notesAPI.Update)
+			//router.With(s.BoardEditableContext).Delete("/", r.notesAPI.Delete)
+		})
 	})
 }
 
