@@ -3,7 +3,6 @@ package notes
 import (
 	"context"
 	"database/sql"
-
 	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
