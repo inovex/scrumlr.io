@@ -99,8 +99,8 @@ func (_c *MockVotingDatabase_AddVote_Call) Run(run func(board uuid.UUID, user uu
 	return _c
 }
 
-func (_c *MockVotingDatabase_AddVote_Call) Return(voteDB DatabaseVote, err error) *MockVotingDatabase_AddVote_Call {
-	_c.Call.Return(voteDB, err)
+func (_c *MockVotingDatabase_AddVote_Call) Return(databaseVote DatabaseVote, err error) *MockVotingDatabase_AddVote_Call {
+	_c.Call.Return(databaseVote, err)
 	return _c
 }
 
@@ -159,8 +159,8 @@ func (_c *MockVotingDatabase_Create_Call) Run(run func(insert DatabaseVotingInse
 	return _c
 }
 
-func (_c *MockVotingDatabase_Create_Call) Return(votingDB DatabaseVoting, err error) *MockVotingDatabase_Create_Call {
-	_c.Call.Return(votingDB, err)
+func (_c *MockVotingDatabase_Create_Call) Return(databaseVoting DatabaseVoting, err error) *MockVotingDatabase_Create_Call {
+	_c.Call.Return(databaseVoting, err)
 	return _c
 }
 
@@ -233,8 +233,8 @@ func (_c *MockVotingDatabase_Get_Call) Run(run func(board uuid.UUID, id uuid.UUI
 	return _c
 }
 
-func (_c *MockVotingDatabase_Get_Call) Return(votingDB DatabaseVoting, voteDBs []DatabaseVote, err error) *MockVotingDatabase_Get_Call {
-	_c.Call.Return(votingDB, voteDBs, err)
+func (_c *MockVotingDatabase_Get_Call) Return(databaseVoting DatabaseVoting, databaseVotes []DatabaseVote, err error) *MockVotingDatabase_Get_Call {
+	_c.Call.Return(databaseVoting, databaseVotes, err)
 	return _c
 }
 
@@ -303,8 +303,8 @@ func (_c *MockVotingDatabase_GetAll_Call) Run(run func(board uuid.UUID)) *MockVo
 	return _c
 }
 
-func (_c *MockVotingDatabase_GetAll_Call) Return(votingDBs []DatabaseVoting, voteDBs []DatabaseVote, err error) *MockVotingDatabase_GetAll_Call {
-	_c.Call.Return(votingDBs, voteDBs, err)
+func (_c *MockVotingDatabase_GetAll_Call) Return(databaseVotings []DatabaseVoting, databaseVotes []DatabaseVote, err error) *MockVotingDatabase_GetAll_Call {
+	_c.Call.Return(databaseVotings, databaseVotes, err)
 	return _c
 }
 
@@ -363,8 +363,8 @@ func (_c *MockVotingDatabase_GetOpenVoting_Call) Run(run func(board uuid.UUID)) 
 	return _c
 }
 
-func (_c *MockVotingDatabase_GetOpenVoting_Call) Return(votingDB DatabaseVoting, err error) *MockVotingDatabase_GetOpenVoting_Call {
-	_c.Call.Return(votingDB, err)
+func (_c *MockVotingDatabase_GetOpenVoting_Call) Return(databaseVoting DatabaseVoting, err error) *MockVotingDatabase_GetOpenVoting_Call {
+	_c.Call.Return(databaseVoting, err)
 	return _c
 }
 
@@ -425,8 +425,8 @@ func (_c *MockVotingDatabase_GetVotes_Call) Run(run func(f filter.VoteFilter)) *
 	return _c
 }
 
-func (_c *MockVotingDatabase_GetVotes_Call) Return(voteDBs []DatabaseVote, err error) *MockVotingDatabase_GetVotes_Call {
-	_c.Call.Return(voteDBs, err)
+func (_c *MockVotingDatabase_GetVotes_Call) Return(databaseVotes []DatabaseVote, err error) *MockVotingDatabase_GetVotes_Call {
+	_c.Call.Return(databaseVotes, err)
 	return _c
 }
 
@@ -548,8 +548,8 @@ func (_c *MockVotingDatabase_Update_Call) Run(run func(update DatabaseVotingUpda
 	return _c
 }
 
-func (_c *MockVotingDatabase_Update_Call) Return(votingDB DatabaseVoting, err error) *MockVotingDatabase_Update_Call {
-	_c.Call.Return(votingDB, err)
+func (_c *MockVotingDatabase_Update_Call) Return(databaseVoting DatabaseVoting, err error) *MockVotingDatabase_Update_Call {
+	_c.Call.Return(databaseVoting, err)
 	return _c
 }
 
