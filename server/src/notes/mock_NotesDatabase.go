@@ -86,8 +86,8 @@ func (_c *MockNotesDatabase_CreateNote_Call) Run(run func(insert DatabaseNoteIns
 	return _c
 }
 
-func (_c *MockNotesDatabase_CreateNote_Call) Return(noteDB DatabaseNote, err error) *MockNotesDatabase_CreateNote_Call {
-	_c.Call.Return(noteDB, err)
+func (_c *MockNotesDatabase_CreateNote_Call) Return(databaseNote DatabaseNote, err error) *MockNotesDatabase_CreateNote_Call {
+	_c.Call.Return(databaseNote, err)
 	return _c
 }
 
@@ -215,8 +215,8 @@ func (_c *MockNotesDatabase_Get_Call) Run(run func(id uuid.UUID)) *MockNotesData
 	return _c
 }
 
-func (_c *MockNotesDatabase_Get_Call) Return(noteDB DatabaseNote, err error) *MockNotesDatabase_Get_Call {
-	_c.Call.Return(noteDB, err)
+func (_c *MockNotesDatabase_Get_Call) Return(databaseNote DatabaseNote, err error) *MockNotesDatabase_Get_Call {
+	_c.Call.Return(databaseNote, err)
 	return _c
 }
 
@@ -292,8 +292,8 @@ func (_c *MockNotesDatabase_GetAll_Call) Run(run func(board uuid.UUID, columns .
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetAll_Call) Return(noteDBs []DatabaseNote, err error) *MockNotesDatabase_GetAll_Call {
-	_c.Call.Return(noteDBs, err)
+func (_c *MockNotesDatabase_GetAll_Call) Return(databaseNotes []DatabaseNote, err error) *MockNotesDatabase_GetAll_Call {
+	_c.Call.Return(databaseNotes, err)
 	return _c
 }
 
@@ -354,8 +354,8 @@ func (_c *MockNotesDatabase_GetChildNotes_Call) Run(run func(parentNote uuid.UUI
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetChildNotes_Call) Return(noteDBs []DatabaseNote, err error) *MockNotesDatabase_GetChildNotes_Call {
-	_c.Call.Return(noteDBs, err)
+func (_c *MockNotesDatabase_GetChildNotes_Call) Return(databaseNotes []DatabaseNote, err error) *MockNotesDatabase_GetChildNotes_Call {
+	_c.Call.Return(databaseNotes, err)
 	return _c
 }
 
@@ -416,8 +416,8 @@ func (_c *MockNotesDatabase_GetStack_Call) Run(run func(noteID uuid.UUID)) *Mock
 	return _c
 }
 
-func (_c *MockNotesDatabase_GetStack_Call) Return(noteDBs []DatabaseNote, err error) *MockNotesDatabase_GetStack_Call {
-	_c.Call.Return(noteDBs, err)
+func (_c *MockNotesDatabase_GetStack_Call) Return(databaseNotes []DatabaseNote, err error) *MockNotesDatabase_GetStack_Call {
+	_c.Call.Return(databaseNotes, err)
 	return _c
 }
 
@@ -476,8 +476,8 @@ func (_c *MockNotesDatabase_ImportNote_Call) Run(run func(insert DatabaseNoteImp
 	return _c
 }
 
-func (_c *MockNotesDatabase_ImportNote_Call) Return(noteDB DatabaseNote, err error) *MockNotesDatabase_ImportNote_Call {
-	_c.Call.Return(noteDB, err)
+func (_c *MockNotesDatabase_ImportNote_Call) Return(databaseNote DatabaseNote, err error) *MockNotesDatabase_ImportNote_Call {
+	_c.Call.Return(databaseNote, err)
 	return _c
 }
 
@@ -542,8 +542,8 @@ func (_c *MockNotesDatabase_UpdateNote_Call) Run(run func(caller uuid.UUID, upda
 	return _c
 }
 
-func (_c *MockNotesDatabase_UpdateNote_Call) Return(noteDB DatabaseNote, err error) *MockNotesDatabase_UpdateNote_Call {
-	_c.Call.Return(noteDB, err)
+func (_c *MockNotesDatabase_UpdateNote_Call) Return(databaseNote DatabaseNote, err error) *MockNotesDatabase_UpdateNote_Call {
+	_c.Call.Return(databaseNote, err)
 	return _c
 }
 
