@@ -59,7 +59,7 @@ jobs:
 
       - uses: actions/setup-go@v5
         with:
-          go-version: "^1.22"
+          go-version: "^1.23"
           cache: false
 
       - name: Cache Go Modules
@@ -85,7 +85,7 @@ jobs:
       - name: Go lint
         uses: golangci/golangci-lint-action@v4
         with:
-          version: v1.61
+          version: v1.64
           skip-pkg-cache: true
           working-directory: ./server/src/
 
