@@ -5,8 +5,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"scrumlr.io/server/sessions"
 	"time"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/boards"
@@ -24,7 +25,7 @@ import (
 	"testing"
 
 	"github.com/uptrace/bun/dbfixture"
-	"scrumlr.io/server/initialize"
+	"scrumlr.io/server/databaseinitialize"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 )
@@ -56,13 +57,13 @@ func testMainWithDefer(m *testing.M) int {
 	}
 
 	exitCode := 0
-	database, err := initialize.InitializeDatabase(databaseUrl)
+	database, err := databaseinitialize.InitializeDatabase(databaseUrl)
 	if err != nil {
 		println(fmt.Sprintf("unable to migrate database scheme: %s", err))
 		exitCode = 1
 	}
 
-	bun := initialize.InitializeBun(database, true)
+	bun := databaseinitialize.InitializeBun(database, true)
 	testDb = bun
 
 	boardDb = boards.NewBoardDatabase(bun)

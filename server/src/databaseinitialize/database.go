@@ -1,4 +1,4 @@
-package initialize
+package databaseinitialize
 
 import (
 	"database/sql"
