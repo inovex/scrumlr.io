@@ -321,14 +321,14 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	visibleColumns := make([]*columns.Column, 0)
+	visibleColumns := make([]*columns.Column, 0, len(fullBoard.Columns))
 	for _, column := range fullBoard.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 		}
 	}
 
-	visibleNotes := make([]*notes.Note, 0)
+	visibleNotes := make([]*notes.Note, 0, len(fullBoard.Notes))
 	for _, note := range fullBoard.Notes {
 		for _, column := range visibleColumns {
 			if note.Position.Column == column.ID {
