@@ -5,9 +5,10 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"net/http"
+
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
-	"net/http"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
@@ -51,6 +52,7 @@ func (service *BoardSessionRequestService) Create(ctx context.Context, boardID, 
 		Board: boardID,
 		User:  userID,
 	})
+
 	if err != nil {
 		log.Errorw("unable to create BoardSessionRequest", "board", boardID, "user", userID, "error", err)
 		return nil, err
@@ -63,7 +65,12 @@ func (service *BoardSessionRequestService) Create(ctx context.Context, boardID, 
 
 func (service *BoardSessionRequestService) Update(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
-	request, err := service.database.Update(DatabaseBoardSessionRequestUpdate{Board: body.Board, User: body.User, Status: body.Status})
+	request, err := service.database.Update(DatabaseBoardSessionRequestUpdate{
+		Board:  body.Board,
+		User:   body.User,
+		Status: body.Status,
+	})
+
 	if err != nil {
 		log.Errorw("unable to update BoardSessionRequest", "board", body.Board, "user", body.User, "error", err)
 		return nil, err

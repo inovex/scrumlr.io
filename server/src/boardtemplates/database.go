@@ -23,10 +23,13 @@ func NewBoardTemplateDatabase(database *bun.DB) BoardTemplateDatabase {
 }
 
 func (db *DB) Create(board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error) {
-	boardInsert := db.db.NewInsert().Model(&board).Returning("*")
+	boardInsert := db.db.NewInsert().
+		Model(&board).
+		Returning("*")
 
 	var b DatabaseBoardTemplate
-	query := db.db.NewSelect().With("createdBoardTemplate", boardInsert)
+	query := db.db.NewSelect().
+		With("createdBoardTemplate", boardInsert)
 	if len(columns) > 0 {
 		for index := range columns {
 			newColumnIndex := index
@@ -39,7 +42,9 @@ func (db *DB) Create(board DatabaseBoardTemplateInsert, columns []columntemplate
 			Value("board_template", "(SELECT id FROM \"createdBoardTemplate\")"))
 	}
 
-	err := query.Table("createdBoardTemplate").Column("*").Scan(context.Background(), &b)
+	err := query.Table("createdBoardTemplate").
+		Column("*").
+		Scan(context.Background(), &b)
 	if err != nil {
 		return DatabaseBoardTemplate{}, err
 	}
@@ -66,7 +71,6 @@ func (db *DB) Get(id uuid.UUID) (DatabaseBoardTemplate, error) {
 func (db *DB) GetAll(user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
 	var tBoards []DatabaseBoardTemplate
 
-	// note that if no templates match, nil is returned
 	err := db.db.NewSelect().
 		Model(&tBoards).
 		Where("creator = ?", user).
@@ -80,7 +84,11 @@ func (db *DB) GetAll(user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
 	var templates []DatabaseBoardTemplateFull
 	for _, board := range tBoards {
 		var cols []columntemplates.DatabaseColumnTemplate
-		err = db.db.NewSelect().Model(&cols).Where("board_template = ?", board.ID).Scan(context.Background())
+		err = db.db.NewSelect().
+			Model(&cols).
+			Where("board_template = ?", board.ID).
+			Scan(context.Background())
+
 		if err != nil {
 			return []DatabaseBoardTemplateFull{}, err
 		}
