@@ -15,6 +15,10 @@ updates:
     commit-message:
       prefix: "yarn"
       include: "scope"
+    groups:
+      frontend-deps:
+        patterns:
+          - "*"
 
   # Server
   - package-ecosystem: "gomod"
@@ -30,3 +34,7 @@ updates:
     commit-message:
       prefix: "go"
       include: "scope"
+    groups:
+      backend-deps:
+        patterns:
+          - "*"
