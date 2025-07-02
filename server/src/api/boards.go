@@ -433,8 +433,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body.Board.Owner = owner
-
-	importColumns := make([]columns.ColumnRequest, 0, len(body.Notes))
+	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
 
 	for _, column := range body.Columns {
 		importColumns = append(importColumns, columns.ColumnRequest{
