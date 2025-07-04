@@ -162,9 +162,9 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 		}
 
 		filteredVotingNotes := noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, columnVisibility)
-		filteredvotingNotesIDs := make([]votings.Note, len(filteredVotingNotes))
-		for index, note := range filteredVotingNotes {
-			filteredvotingNotesIDs[index] = votings.Note{
+		filteredvotingNotesIDs := make([]votings.Note, 0, len(filteredVotingNotes))
+		for _, note := range filteredVotingNotes {
+			filteredvotingNotesIDs = append(filteredvotingNotesIDs, votings.Note{
 				ID:     note.ID,
 				Author: note.Author,
 				Text:   note.Text,
@@ -174,7 +174,7 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 					Stack:  note.Position.Stack,
 					Rank:   note.Position.Rank,
 				},
-			}
+			})
 		}
 
 		votingUpdate := &votings.VotingUpdated{
@@ -241,9 +241,9 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 		notesMap[n.ID] = n
 	}
 
-	notes := make([]votings.Note, len(filteredNotes))
-	for index, note := range filteredNotes {
-		notes[index] = votings.Note{
+	notes := make([]votings.Note, 0, len(filteredNotes))
+	for _, note := range filteredNotes {
+		notes = append(notes, votings.Note{
 			ID:     note.ID,
 			Author: note.Author,
 			Text:   note.Text,
@@ -253,7 +253,7 @@ func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
 				Stack:  note.Position.Stack,
 				Rank:   note.Position.Rank,
 			},
-		}
+		})
 	}
 
 	return InitEvent{

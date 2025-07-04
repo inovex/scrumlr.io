@@ -290,9 +290,9 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 		Data: columns,
 	})
 
-	columnIds := make([]uuid.UUID, len(columns))
-	for i, column := range columns {
-		columnIds[i] = column.ID
+	columnIds := make([]uuid.UUID, 0, len(columns))
+	for _, column := range columns {
+		columnIds = append(columnIds, column.ID)
 	}
 	// Sync notes
 	notes, err := service.noteService.GetAll(ctx, board, columnIds...)
@@ -306,9 +306,9 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 }
 
 func (service *BoardSessionService) updatedSessions(board uuid.UUID, sessions []DatabaseBoardSession) {
-	eventSessions := make([]BoardSession, len(sessions))
-	for index, session := range sessions {
-		eventSessions[index] = *new(BoardSession).From(session)
+	eventSessions := make([]BoardSession, 0, len(sessions))
+	for _, session := range sessions {
+		eventSessions = append(eventSessions, *new(BoardSession).From(session))
 	}
 
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{

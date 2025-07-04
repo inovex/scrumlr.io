@@ -176,9 +176,9 @@ func (service *Service) updatedNotes(board uuid.UUID) {
 		logger.Get().Errorw("unable to retrieve notes in UpdatedNotes call", "boardID", board, "err", err)
 	}
 
-	eventNotes := make([]Note, len(notes))
-	for index, note := range notes {
-		eventNotes[index] = *new(Note).From(note)
+	eventNotes := make([]Note, 0, len(notes))
+	for _, note := range notes {
+		eventNotes = append(eventNotes, *new(Note).From(note))
 	}
 
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{

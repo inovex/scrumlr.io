@@ -321,14 +321,14 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	visibleColumns := make([]*columns.Column, 0)
+	visibleColumns := make([]*columns.Column, 0, len(fullBoard.Columns))
 	for _, column := range fullBoard.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 		}
 	}
 
-	visibleNotes := make([]*notes.Note, 0)
+	visibleNotes := make([]*notes.Note, 0, len(fullBoard.Notes))
 	for _, note := range fullBoard.Notes {
 		for _, column := range visibleColumns {
 			if note.Position.Column == column.ID {
@@ -433,8 +433,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body.Board.Owner = owner
-
-	importColumns := make([]columns.ColumnRequest, 0, len(body.Notes))
+	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
 
 	for _, column := range body.Columns {
 		importColumns = append(importColumns, columns.ColumnRequest{
