@@ -1,6 +1,8 @@
 package api
 
-import "scrumlr.io/server/common/dto"
+import (
+	"scrumlr.io/server/boards"
+)
 
 type TestParameterBundle struct {
 	name                 string
@@ -8,7 +10,7 @@ type TestParameterBundle struct {
 	err                  error
 	sessionExists        bool
 	sessionRequestExists bool
-	board                *dto.Board
+	board                *boards.Board
 }
 
 type TestParameterBundleBuilder struct {
@@ -17,12 +19,12 @@ type TestParameterBundleBuilder struct {
 	err                  error
 	sessionExists        bool
 	sessionRequestExists bool
-	board                *dto.Board
+	board                *boards.Board
 }
 
 type TestParameterBundles []TestParameterBundle
 
-func (testElements TestParameterBundles) Append(name string, expectedCode int, err error, sessionExists bool, sessionRequestExists bool, board *dto.Board) *TestParameterBundles {
+func (testElements TestParameterBundles) Append(name string, expectedCode int, err error, sessionExists bool, sessionRequestExists bool, board *boards.Board) *TestParameterBundles {
 	t := append(testElements,
 		newTestParameterBundleBuilder().
 			setName(name).
@@ -64,7 +66,7 @@ func (t *TestParameterBundleBuilder) setSessionRequestExists(sessionRequestExist
 	return t
 }
 
-func (t *TestParameterBundleBuilder) setBoard(board *dto.Board) *TestParameterBundleBuilder {
+func (t *TestParameterBundleBuilder) setBoard(board *boards.Board) *TestParameterBundleBuilder {
 	t.board = board
 	return t
 }

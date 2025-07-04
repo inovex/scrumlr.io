@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/identifiers"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/mocks/services"
 	"strings"
 	"testing"
+
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/votings"
 
 	"github.com/google/uuid"
 
@@ -41,7 +41,7 @@ func (suite *VoteTestSuite) TestAddVote() {
 	for _, tt := range testParameterBundles {
 		suite.Run(tt.name, func() {
 			s := new(Server)
-			votingMock := services.NewMockVotings(suite.T())
+			votingMock := votings.NewMockVotingService(suite.T())
 
 			boardId, _ := uuid.NewRandom()
 			userId, _ := uuid.NewRandom()
@@ -56,11 +56,11 @@ func (suite *VoteTestSuite) TestAddVote() {
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
-			votingMock.EXPECT().AddVote(req.req.Context(), dto.VoteRequest{
+			votingMock.EXPECT().AddVote(req.req.Context(), votings.VoteRequest{
 				Board: boardId,
 				User:  userId,
 				Note:  noteId,
-			}).Return(&dto.Vote{
+			}).Return(&votings.Vote{
 				Note: noteId,
 			}, tt.err)
 

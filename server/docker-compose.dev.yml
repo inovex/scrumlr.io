@@ -2,12 +2,12 @@
 name: scrumlr-dev
 services:
   nats:
-    image: nats:2.10.24-alpine
+    image: nats:2.11.4-alpine
     ports:
       - "4222:4222"
 
   database:
-    image: postgres:17.2
+    image: postgres:17.5
     ports:
       - "5432:5432"
     environment:

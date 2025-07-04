@@ -1,21 +1,22 @@
 package api
 
 import (
+	"slices"
+
 	"github.com/google/uuid"
-	columnService "scrumlr.io/server/columns"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/notes"
 	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/session_helper"
+	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/technical_helper"
-	"scrumlr.io/server/votes"
+	"scrumlr.io/server/votings"
 )
 
 func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid.UUID) *realtime.BoardEvent {
-	isMod := session_helper.CheckSessionRole(userID, bs.boardParticipants, []types.SessionRole{types.SessionRoleModerator, types.SessionRoleOwner})
-
+	isMod := sessions.CheckSessionRole(userID, bs.boardParticipants, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 	switch event.Type {
 	case realtime.BoardEventColumnsUpdated:
 		if updated, ok := bs.columnsUpdated(event, userID, isMod); ok {
@@ -45,8 +46,8 @@ func (bs *BoardSubscription) eventFilter(event *realtime.BoardEvent, userID uuid
 }
 
 func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
-	var columns columnService.ColumnSlice
-	columns, err := columnService.UnmarshallColumnData(event.Data)
+	var updateColumns columns.ColumnSlice
+	updateColumns, err := columns.UnmarshallColumnData(event.Data)
 
 	if err != nil {
 		logger.Get().Errorw("unable to parse columnUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
@@ -54,12 +55,12 @@ func (bs *BoardSubscription) columnsUpdated(event *realtime.BoardEvent, userID u
 	}
 
 	if isMod {
-		bs.boardColumns = columns
+		bs.boardColumns = updateColumns
 		return event, true
 	} else {
 		return &realtime.BoardEvent{
 			Type: event.Type,
-			Data: columns.FilterVisibleColumns(),
+			Data: updateColumns.FilterVisibleColumns(),
 		}, true
 	}
 }
@@ -70,20 +71,26 @@ func (bs *BoardSubscription) notesUpdated(event *realtime.BoardEvent, userID uui
 		logger.Get().Errorw("unable to parse notesUpdated or eventNotesSync in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
 		return nil, false
 	}
-
 	if isMod {
 		bs.boardNotes = noteSlice
 		return event, true
 	} else {
+		var columnVisibility []notes.ColumnVisability
+		for _, column := range bs.boardColumns {
+			columnVisibility = append(columnVisibility, notes.ColumnVisability{
+				ID:      column.ID,
+				Visible: column.Visible,
+			})
+		}
 		return &realtime.BoardEvent{
 			Type: event.Type,
-			Data: noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, bs.boardColumns),
+			Data: noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, columnVisibility),
 		}, true
 	}
 }
 
 func (bs *BoardSubscription) boardUpdated(event *realtime.BoardEvent, isMod bool) (*realtime.BoardEvent, bool) {
-	boardSettings, err := technical_helper.Unmarshal[dto.Board](event.Data)
+	boardSettings, err := technical_helper.Unmarshal[boards.Board](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse boardUpdated in event filter", "board", bs.boardSettings.ID, "err", err)
 		return nil, false
@@ -99,7 +106,7 @@ func (bs *BoardSubscription) boardUpdated(event *realtime.BoardEvent, isMod bool
 
 func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uuid.UUID) (*realtime.BoardEvent, bool) {
 	//filter deleted votes after user
-	votings, err := technical_helper.UnmarshalSlice[dto.Vote](event.Data)
+	votes, err := technical_helper.UnmarshalSlice[votings.Vote](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse deleteVotes in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
 		return nil, false
@@ -107,16 +114,15 @@ func (bs *BoardSubscription) votesDeleted(event *realtime.BoardEvent, userID uui
 
 	ret := realtime.BoardEvent{
 		Type: event.Type,
-		Data: technical_helper.Filter[*dto.Vote](votings, func(vote *dto.Vote) bool {
+		Data: technical_helper.Filter[*votings.Vote](votes, func(vote *votings.Vote) bool {
 			return vote.User == userID
 		}),
 	}
-
 	return &ret, true
 }
 
 func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uuid.UUID, isMod bool) (*realtime.BoardEvent, bool) {
-	voting, err := votes.UnmarshallVoteData(event.Data)
+	voting, err := votings.UnmarshallVoteData(event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse votingUpdated in event filter", "board", bs.boardSettings.ID, "session", userID, "err", err)
 		return nil, false
@@ -124,21 +130,67 @@ func (bs *BoardSubscription) votingUpdated(event *realtime.BoardEvent, userID uu
 
 	if isMod {
 		return event, true
-	} else if voting.Voting.Status != types.VotingStatusClosed {
+	} else if voting.Voting.Status != votings.Closed {
 		return event, true
 	} else {
-		filteredVotingNotes := voting.Notes.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, bs.boardColumns)
-		voting.Notes = filteredVotingNotes
+
+		var noteSlice notes.NoteSlice
+		for _, note := range bs.boardNotes {
+			n := votings.Note{
+				ID:     note.ID,
+				Author: note.Author,
+				Text:   note.Text,
+				Edited: note.Edited,
+				Position: votings.NotePosition{
+					Column: note.Position.Column,
+					Stack:  note.Position.Stack,
+					Rank:   note.Position.Rank,
+				},
+			}
+
+			if slices.Contains(voting.Notes, n) {
+				noteSlice = append(noteSlice, note)
+			}
+		}
+
+		var columnVisibility []notes.ColumnVisability
+		for _, column := range bs.boardColumns {
+			columnVisibility = append(columnVisibility, notes.ColumnVisability{
+				ID:      column.ID,
+				Visible: column.Visible,
+			})
+		}
+
+		filteredVotingNotes := noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(userID, bs.boardSettings.ShowNotesOfOtherUsers, bs.boardSettings.ShowAuthors, columnVisibility)
+		filteredvotingNotesIDs := make([]votings.Note, 0, len(filteredVotingNotes))
+		for _, note := range filteredVotingNotes {
+			filteredvotingNotesIDs = append(filteredvotingNotesIDs, votings.Note{
+				ID:     note.ID,
+				Author: note.Author,
+				Text:   note.Text,
+				Edited: note.Edited,
+				Position: votings.NotePosition{
+					Column: note.Position.Column,
+					Stack:  note.Position.Stack,
+					Rank:   note.Position.Rank,
+				},
+			})
+		}
+
+		votingUpdate := &votings.VotingUpdated{
+			Notes:  filteredvotingNotesIDs,
+			Voting: voting.Voting.UpdateVoting(filteredvotingNotesIDs).Voting,
+		}
 		ret := realtime.BoardEvent{
 			Type: event.Type,
-			Data: voting.Voting.UpdateVoting(filteredVotingNotes),
+			Data: votingUpdate,
 		}
 		return &ret, true
 	}
 }
 
 func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMod bool) bool {
-	participantSession, err := technical_helper.Unmarshal[dto.BoardSession](event.Data)
+	participantSession, err := technical_helper.Unmarshal[sessions.BoardSession](event.Data)
 	if err != nil {
 		logger.Get().Errorw("unable to parse participantUpdated in event filter", "board", bs.boardSettings.ID, "err", err)
 		return false
@@ -146,8 +198,8 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 
 	if isMod {
 		// Cache the changes of when a participant got updated
-		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *dto.BoardSession) *dto.BoardSession {
-			if boardSession.User.ID == participantSession.User.ID {
+		updatedSessions := technical_helper.MapSlice(bs.boardParticipants, func(boardSession *sessions.BoardSession) *sessions.BoardSession {
+			if boardSession.User == participantSession.User {
 				return participantSession
 			} else {
 				return boardSession
@@ -160,42 +212,63 @@ func (bs *BoardSubscription) participantUpdated(event *realtime.BoardEvent, isMo
 }
 
 func eventInitFilter(event InitEvent, clientID uuid.UUID) InitEvent {
-	isMod := session_helper.CheckSessionRole(clientID, event.Data.BoardSessions, []types.SessionRole{types.SessionRoleModerator, types.SessionRoleOwner})
-
+	isMod := sessions.CheckSessionRole(clientID, event.Data.BoardSessions, []common.SessionRole{common.ModeratorRole, common.OwnerRole})
 	// filter to only respond with the latest voting and its votes
 	if len(event.Data.Votings) != 0 {
 		latestVoting := event.Data.Votings[0]
-
-		event.Data.Votings = []*votes.Voting{latestVoting}
-		event.Data.Votes = technical_helper.Filter[*dto.Vote](event.Data.Votes, func(vote *dto.Vote) bool {
-			return vote.Voting == latestVoting.ID && (latestVoting.Status != types.VotingStatusOpen || vote.User == clientID)
+		event.Data.Votings = []*votings.Voting{latestVoting}
+		event.Data.Votes = technical_helper.Filter[*votings.Vote](event.Data.Votes, func(vote *votings.Vote) bool {
+			return vote.Voting == latestVoting.ID && (latestVoting.Status != votings.Open || vote.User == clientID)
 		})
 	}
-
 	if isMod {
 		return event
 	}
 
-	filteredNotes := notes.NoteSlice(event.Data.Notes).FilterNotesByBoardSettingsOrAuthorInformation(clientID, event.Data.Board.ShowNotesOfOtherUsers, event.Data.Board.ShowAuthors, event.Data.Columns)
+	noteSlice := notes.NoteSlice(event.Data.Notes)
 
+	var columnVisibility []notes.ColumnVisability
+	for _, column := range event.Data.Columns {
+		columnVisibility = append(columnVisibility, notes.ColumnVisability{
+			ID:      column.ID,
+			Visible: column.Visible,
+		})
+	}
+
+	filteredNotes := noteSlice.FilterNotesByBoardSettingsOrAuthorInformation(clientID, event.Data.Board.ShowNotesOfOtherUsers, event.Data.Board.ShowAuthors, columnVisibility)
 	notesMap := make(map[uuid.UUID]*notes.Note)
 	for _, n := range filteredNotes {
 		notesMap[n.ID] = n
 	}
 
+	notes := make([]votings.Note, 0, len(filteredNotes))
+	for _, note := range filteredNotes {
+		notes = append(notes, votings.Note{
+			ID:     note.ID,
+			Author: note.Author,
+			Text:   note.Text,
+			Edited: note.Edited,
+			Position: votings.NotePosition{
+				Column: note.Position.Column,
+				Stack:  note.Position.Stack,
+				Rank:   note.Position.Rank,
+			},
+		})
+	}
+
 	return InitEvent{
 		Type: event.Type,
-		Data: dto.FullBoard{
+		Data: boards.FullBoard{
 			Board:                event.Data.Board,
 			BoardSessions:        event.Data.BoardSessions,
 			BoardSessionRequests: event.Data.BoardSessionRequests,
 			Notes:                filteredNotes,
 			Reactions:            event.Data.Reactions,
-			Columns:              columnService.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
-			Votings: technical_helper.MapSlice[*votes.Voting, *votes.Voting](event.Data.Votings, func(voting *votes.Voting) *votes.Voting {
-				return voting.UpdateVoting(filteredNotes).Voting
+			Columns:              columns.ColumnSlice(event.Data.Columns).FilterVisibleColumns(),
+			Votings: technical_helper.MapSlice[*votings.Voting, *votings.Voting](event.Data.Votings, func(voting *votings.Voting) *votings.Voting {
+				return voting.UpdateVoting(notes).Voting
 			}),
-			Votes: technical_helper.Filter[*dto.Vote](event.Data.Votes, func(vote *dto.Vote) bool {
+			Votes: technical_helper.Filter[*votings.Vote](event.Data.Votes, func(vote *votings.Vote) bool {
 				_, exists := notesMap[vote.Note]
 				return exists
 			}),

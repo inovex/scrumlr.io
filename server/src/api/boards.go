@@ -6,10 +6,15 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
+
+	"scrumlr.io/server/sessions"
+
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/votings"
+
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/notes"
-	"scrumlr.io/server/votes"
-	"strconv"
 
 	"scrumlr.io/server/identifiers"
 
@@ -17,8 +22,6 @@ import (
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/common/dto"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/logger"
 )
 
@@ -27,7 +30,7 @@ func (s *Server) createBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 	// parse request
-	var body dto.CreateBoardRequest
+	var body boards.CreateBoardRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -128,14 +131,14 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 	}
 	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	exists, err := s.sessions.SessionExists(r.Context(), board, user)
+	exists, err := s.sessions.Exists(r.Context(), board, user)
 	if err != nil {
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
 
 	if exists {
-		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
+		banned, err := s.sessions.IsParticipantBanned(r.Context(), board, user)
 		if err != nil {
 			common.Throw(w, r, common.InternalServerError)
 			return
@@ -161,7 +164,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if b.AccessPolicy == types.AccessPolicyPublic {
+	if b.AccessPolicy == boards.Public {
 		_, err := s.sessions.Create(r.Context(), board, user)
 		if err != nil {
 			common.Throw(w, r, common.InternalServerError)
@@ -176,7 +179,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if b.AccessPolicy == types.AccessPolicyByPassphrase {
+	if b.AccessPolicy == boards.ByPassphrase {
 		var body JoinBoardRequest
 		err := render.Decode(r, &body)
 		if err != nil {
@@ -207,8 +210,8 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	if b.AccessPolicy == types.AccessPolicyByInvite {
-		sessionExists, err := s.sessions.SessionRequestExists(r.Context(), board, user)
+	if b.AccessPolicy == boards.ByInvite {
+		sessionExists, err := s.sessionRequests.Exists(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to check for existing board session request", http.StatusInternalServerError)
 			return
@@ -224,7 +227,7 @@ func (s *Server) joinBoard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		_, err = s.sessions.CreateSessionRequest(r.Context(), board, user)
+		_, err = s.sessionRequests.Create(r.Context(), board, user)
 		if err != nil {
 			http.Error(w, "failed to create board session request", http.StatusInternalServerError)
 			return
@@ -246,7 +249,7 @@ func (s *Server) updateBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	var body dto.BoardUpdateRequest
+	var body boards.BoardUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
@@ -268,7 +271,7 @@ func (s *Server) setTimer(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	var body dto.SetTimerRequest
+	var body boards.SetTimerRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, err)
@@ -318,14 +321,14 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	visibleColumns := make([]*columns.Column, 0)
+	visibleColumns := make([]*columns.Column, 0, len(fullBoard.Columns))
 	for _, column := range fullBoard.Columns {
 		if column.Visible {
 			visibleColumns = append(visibleColumns, column)
 		}
 	}
 
-	visibleNotes := make([]*notes.Note, 0)
+	visibleNotes := make([]*notes.Note, 0, len(fullBoard.Notes))
 	for _, note := range fullBoard.Notes {
 		for _, column := range visibleColumns {
 			if note.Position.Column == column.ID {
@@ -337,11 +340,11 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Accept") == "" || r.Header.Get("Accept") == "*/*" || r.Header.Get("Accept") == "application/json" {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r, struct {
-			Board        *dto.Board          `json:"board"`
-			Participants []*dto.BoardSession `json:"participants"`
-			Columns      []*columns.Column   `json:"columns"`
-			Notes        []*notes.Note       `json:"notes"`
-			Votings      []*votes.Voting     `json:"votings"`
+			Board        *boards.Board            `json:"board"`
+			Participants []*sessions.BoardSession `json:"participants"`
+			Columns      []*columns.Column        `json:"columns"`
+			Notes        []*notes.Note            `json:"notes"`
+			Votings      []*votings.Voting        `json:"votings"`
 		}{
 			Board:        fullBoard.Board,
 			Participants: fullBoard.BoardSessions,
@@ -352,8 +355,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	} else if r.Header.Get("Accept") == "text/csv" {
 		header := []string{"note_id", "author_id", "author", "text", "column_id", "column", "rank", "stack"}
-		for index, voting := range fullBoard.Votings {
-			if voting.Status == types.VotingStatusClosed {
+		for index, closedVoting := range fullBoard.Votings {
+			if closedVoting.Status == votings.Closed {
 				header = append(header, fmt.Sprintf("voting_%d", index))
 			}
 		}
@@ -368,7 +371,8 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 			author := note.Author.String()
 			for _, session := range fullBoard.BoardSessions {
 				if session.User.ID == note.Author {
-					author = session.User.Name
+					user, _ := s.users.Get(r.Context(), session.User.ID) // TODO handle error
+					author = user.Name
 				}
 			}
 
@@ -390,10 +394,10 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 				stack,
 			}
 
-			for _, voting := range fullBoard.Votings {
-				if voting.Status == types.VotingStatusClosed {
-					if voting.VotingResults != nil {
-						resultOnNote = append(resultOnNote, strconv.Itoa(voting.VotingResults.Votes[note.ID].Total))
+			for _, closedVoting := range fullBoard.Votings {
+				if closedVoting.Status == votings.Closed {
+					if closedVoting.VotingResults != nil {
+						resultOnNote = append(resultOnNote, strconv.Itoa(closedVoting.VotingResults.Votes[note.ID].Total))
 					} else {
 						resultOnNote = append(resultOnNote, "0")
 					}
@@ -421,7 +425,7 @@ func (s *Server) exportBoard(w http.ResponseWriter, r *http.Request) {
 func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	owner := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-	var body dto.ImportBoardRequest
+	var body boards.ImportBoardRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Could not read body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -429,23 +433,22 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 	}
 
 	body.Board.Owner = owner
-
-	columns := make([]dto.ColumnRequest, 0, len(body.Notes))
+	importColumns := make([]columns.ColumnRequest, 0, len(body.Columns))
 
 	for _, column := range body.Columns {
-		columns = append(columns, dto.ColumnRequest{
+		importColumns = append(importColumns, columns.ColumnRequest{
 			Name:    column.Name,
 			Color:   column.Color,
 			Visible: &column.Visible,
 			Index:   &column.Index,
 		})
 	}
-	b, err := s.boards.Create(r.Context(), dto.CreateBoardRequest{
+	b, err := s.boards.Create(r.Context(), boards.CreateBoardRequest{
 		Name:         body.Board.Name,
 		Description:  body.Board.Description,
 		AccessPolicy: body.Board.AccessPolicy,
 		Passphrase:   body.Board.Passphrase,
-		Columns:      columns,
+		Columns:      importColumns,
 		Owner:        owner,
 	})
 
@@ -455,7 +458,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	cols, err := s.boards.ListColumns(r.Context(), b.ID)
+	cols, err := s.columns.GetAll(r.Context(), b.ID)
 	if err != nil {
 		_ = s.boards.Delete(r.Context(), b.ID)
 
@@ -481,7 +484,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 		for i, column := range body.Columns {
 			if parentNote.Position.Column == column.ID {
 
-				note, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+				note, err := s.notes.Import(r.Context(), notes.NoteImportRequest{
 					Text: parentNote.Text,
 					Position: notes.NotePosition{
 						Column: cols[i].ID,
@@ -507,7 +510,7 @@ func (s *Server) importBoard(w http.ResponseWriter, r *http.Request) {
 
 	for _, node := range organizedNotes {
 		for _, note := range node.Children {
-			_, err := s.notes.Import(r.Context(), dto.NoteImportRequest{
+			_, err := s.notes.Import(r.Context(), notes.NoteImportRequest{
 				Text:  note.Text,
 				Board: b.ID,
 				User:  note.Author,
