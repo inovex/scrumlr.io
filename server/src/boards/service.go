@@ -77,9 +77,9 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 		return nil, err
 	}
 
-	result := make([]uuid.UUID, len(boards))
-	for i, board := range boards {
-		result[i] = board.ID
+	result := make([]uuid.UUID, 0, len(boards))
+	for _, board := range boards {
+		result = append(result, board.ID)
 	}
 	return result, nil
 }
@@ -188,8 +188,8 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 
 func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error) {
 	log := logger.FromContext(ctx)
-	OverviewBoards := make([]*BoardOverview, len(boardIDs))
-	for i, id := range boardIDs {
+	overviewBoards := make([]*BoardOverview, 0, len(boardIDs))
+	for _, id := range boardIDs {
 		board, err := service.database.GetBoard(id)
 		if err != nil {
 			log.Errorw("unable to get board overview", "board", id, "err", err)
@@ -214,16 +214,16 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 		for _, session := range boardSessions {
 			if session.User.ID == user {
 				sessionCreated := session.CreatedAt
-				OverviewBoards[i] = &BoardOverview{
+				overviewBoards = append(overviewBoards, &BoardOverview{
 					Board:        dtoBoard,
 					Participants: participantNum,
 					CreatedAt:    sessionCreated,
 					Columns:      columnNum,
-				}
+				})
 			}
 		}
 	}
-	return OverviewBoards, nil
+	return overviewBoards, nil
 }
 
 func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {

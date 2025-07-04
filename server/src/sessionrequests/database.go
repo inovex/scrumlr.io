@@ -24,7 +24,12 @@ func NewSessionRequestDatabase(database *bun.DB) SessionRequestDatabase {
 // CreateBoardSessionRequest creates a new board session request with the state 'PENDING' and does nothing if it already exists
 func (database *SessionRequestDB) Create(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error) {
 	r := DatabaseBoardSessionRequest{Board: request.Board, User: request.User, Status: RequestPending}
-	insertQuery := database.db.NewInsert().Model(&r).ExcludeColumn("name").On("CONFLICT (\"user\", board) DO UPDATE SET board=?", request.Board).Returning("*")
+	insertQuery := database.db.NewInsert().
+		Model(&r).
+		ExcludeColumn("name").
+		On("CONFLICT (\"user\", board) DO UPDATE SET board=?", request.Board).
+		Returning("*")
+
 	err := database.db.NewSelect().
 		With("insertQuery", insertQuery).
 		Model((*BoardSessionRequest)(nil)).
