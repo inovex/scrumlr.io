@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"github.com/go-chi/chi/v5"
 	"net/http"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/sessions"
@@ -25,14 +26,16 @@ import (
 )
 
 type ServiceInitializer struct {
-	clock  timeprovider.TimeProvider
-	db     *bun.DB
-	rt     *realtime.Broker
-	ws     websocket.Upgrader
-	client *http.Client
+	clock    timeprovider.TimeProvider
+	db       *bun.DB
+	rt       *realtime.Broker
+	ws       websocket.Upgrader
+	client   *http.Client
+	basePath string
+	r        chi.Router
 }
 
-func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
+func NewServiceInitializer(db *bun.DB, rt *realtime.Broker, basePath string, newRouter chi.Router) ServiceInitializer {
 	initializer := new(ServiceInitializer)
 	initializer.clock = timeprovider.NewClock()
 	initializer.db = db
@@ -42,7 +45,8 @@ func NewServiceInitializer(db *bun.DB, rt *realtime.Broker) ServiceInitializer {
 		WriteBufferSize: 1024,
 	}
 	initializer.client = &http.Client{}
-
+	initializer.basePath = basePath
+	initializer.r = newRouter
 	return *initializer
 }
 
@@ -130,7 +134,8 @@ func (init *ServiceInitializer) InitializeUserService(sessionService sessions.Se
 func (init *ServiceInitializer) InitializeNotesService(votingService votings.VotingService) notes.NotesService {
 	notesDB := notes.NewNotesDatabase(init.db)
 	notesService := notes.NewNotesService(notesDB, init.rt, votingService)
-
+	notesAPI := notes.NewNotesAPI(notesService, init.basePath)
+	notes.NewNotesRouter(notesAPI).RegisterRoutes(init.r)
 	return notesService
 }
 
