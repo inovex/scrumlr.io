@@ -1,7 +1,8 @@
-package initialize
+package serviceinitialize
 
 import (
 	"net/http"
+
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"

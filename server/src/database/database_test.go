@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"go.uber.org/zap"
+
+	"scrumlr.io/server/databaseinitialize"
 	"scrumlr.io/server/sessions"
 
 	"github.com/uptrace/bun"
@@ -26,7 +28,6 @@ import (
 	"testing"
 
 	"github.com/uptrace/bun/dbfixture"
-	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/sessionrequests"
 )
@@ -58,13 +59,13 @@ func testMainWithDefer(m *testing.M) int {
 	}
 
 	exitCode := 0
-	database, err := initialize.InitializeDatabase(databaseUrl)
+	database, err := databaseinitialize.InitializeDatabase(databaseUrl)
 	if err != nil {
 		println(fmt.Sprintf("unable to migrate database scheme: %s", err))
 		exitCode = 1
 	}
 
-	bun := initialize.InitializeBun(database, zap.DebugLevel)
+	bun := databaseinitialize.InitializeBun(database, zap.DebugLevel)
 	testDb = bun
 
 	boardDb = boards.NewBoardDatabase(bun)
