@@ -25,7 +25,10 @@ func NewUserDatabase(database *bun.DB) UserDatabase {
 func (db *DB) CreateAnonymousUser(name string) (DatabaseUser, error) {
 	var user DatabaseUser
 	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: common.Anonymous}
-	_, err := db.db.NewInsert().Model(&insert).Returning("*").Exec(context.Background(), &user)
+	_, err := db.db.NewInsert().
+		Model(&insert).
+		Returning("*").
+		Exec(context.Background(), &user)
 
 	return user, err
 }
@@ -68,7 +71,11 @@ func (db *DB) UpdateUser(update DatabaseUserUpdate) (DatabaseUser, error) {
 
 func (db *DB) GetUser(id uuid.UUID) (DatabaseUser, error) {
 	var user DatabaseUser
-	err := db.db.NewSelect().Model(&user).Where("id = ?", id).Scan(context.Background())
+	err := db.db.NewSelect().
+		Model(&user).
+		Where("id = ?", id).
+		Scan(context.Background())
+
 	return user, err
 }
 
