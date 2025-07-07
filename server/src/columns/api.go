@@ -2,6 +2,7 @@ package columns
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/google/uuid"
 )
@@ -14,13 +15,37 @@ type ColumnService interface {
 	GetAll(ctx context.Context, boardID uuid.UUID) ([]*Column, error)
 }
 
-type ColumnApi struct {
-	service ColumnService
+type API struct {
+	service  ColumnService
+	basePath string
 }
 
-func NewColumnApi(service ColumnService) *ColumnApi {
-	api := new(ColumnApi)
-	api.service = service
+func (A API) Create(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
 
+func (A API) Get(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (A API) GetAll(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (A API) Update(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (A API) Delete(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func NewColumnApi(service ColumnService, basePath string) ColumnAPI {
+	api := &API{service: service, basePath: basePath}
 	return api
 }

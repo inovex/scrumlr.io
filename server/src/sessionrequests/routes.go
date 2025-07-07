@@ -1,23 +1,21 @@
-package columns
+package sessionrequests
 
 import (
 	"github.com/go-chi/chi/v5"
 	"net/http"
 )
 
-type ColumnAPI interface {
-	Create(w http.ResponseWriter, r *http.Request)
-	Get(w http.ResponseWriter, r *http.Request)
-	GetAll(w http.ResponseWriter, r *http.Request)
-	Update(w http.ResponseWriter, r *http.Request)
-	Delete(w http.ResponseWriter, r *http.Request)
+type SessionRequestAPI interface {
+	getBoardSessionRequest(w http.ResponseWriter, r *http.Request)
+	getBoardSessionRequests(w http.ResponseWriter, r *http.Request)
+	updateBoardSessionRequest(w http.ResponseWriter, r *http.Request)
 }
-type ColumnRouter struct {
-	columnAPI ColumnAPI
+type SessionRequestRouter struct {
+	sessionRequestsAPI SessionRequestAPI
 }
 
 // todo: implement the missing middleware
-func (r *ColumnRouter) RegisterRoutes(router chi.Router) {
+func (r *SessionRequestRouter) RegisterRoutes(router chi.Router) {
 	//router.Route("/columns", func(router chi.Router) {
 	//	router.With(s.BoardParticipantContext).Get("/", s.getColumns)
 	//	router.With(s.BoardModeratorContext).Post("/", s.createColumn)
@@ -31,8 +29,8 @@ func (r *ColumnRouter) RegisterRoutes(router chi.Router) {
 	//	})
 	//})
 }
-func NewColumnRouter(columnAPI ColumnAPI) *ColumnRouter {
-	return &ColumnRouter{
-		columnAPI: columnAPI,
+func NewSessionRequestRouter(sessionRequestsAPI SessionRequestAPI) *SessionRequestRouter {
+	return &SessionRequestRouter{
+		sessionRequestsAPI: sessionRequestsAPI,
 	}
 }

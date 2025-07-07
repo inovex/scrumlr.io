@@ -2,9 +2,15 @@ package reactions
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/google/uuid"
 )
+
+type API struct {
+	service  ReactionService
+	basePath string
+}
 
 type ReactionService interface {
 	Get(ctx context.Context, id uuid.UUID) (*Reaction, error)
@@ -14,13 +20,27 @@ type ReactionService interface {
 	Update(ctx context.Context, board, user, id uuid.UUID, body ReactionUpdateTypeRequest) (*Reaction, error)
 }
 
-type ReactionApi struct {
-	service ReactionService
+func (A API) createReaction(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
 }
 
-func NewReactionApi(service ReactionService) *ReactionApi {
-	api := new(ReactionApi)
-	api.service = service
+func (A API) getReaction(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
 
+func (A API) removeReaction(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (A API) updateReaction(w http.ResponseWriter, r *http.Request) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func NewReactionAPI(service ReactionService, basePath string) ReactionAPI {
+	api := &API{service: service, basePath: basePath}
 	return api
 }

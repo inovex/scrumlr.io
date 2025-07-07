@@ -1,23 +1,20 @@
-package columns
+package health
 
 import (
 	"github.com/go-chi/chi/v5"
 	"net/http"
 )
 
-type ColumnAPI interface {
-	Create(w http.ResponseWriter, r *http.Request)
-	Get(w http.ResponseWriter, r *http.Request)
-	GetAll(w http.ResponseWriter, r *http.Request)
-	Update(w http.ResponseWriter, r *http.Request)
-	Delete(w http.ResponseWriter, r *http.Request)
+type HealthAPI interface {
+	healthCheck(w http.ResponseWriter, r *http.Request)
 }
-type ColumnRouter struct {
-	columnAPI ColumnAPI
+
+type HealthRouter struct {
+	healthAPI HealthAPI
 }
 
 // todo: implement the missing middleware
-func (r *ColumnRouter) RegisterRoutes(router chi.Router) {
+func (r *HealthRouter) RegisterRoutes(router chi.Router) {
 	//router.Route("/columns", func(router chi.Router) {
 	//	router.With(s.BoardParticipantContext).Get("/", s.getColumns)
 	//	router.With(s.BoardModeratorContext).Post("/", s.createColumn)
@@ -31,8 +28,9 @@ func (r *ColumnRouter) RegisterRoutes(router chi.Router) {
 	//	})
 	//})
 }
-func NewColumnRouter(columnAPI ColumnAPI) *ColumnRouter {
-	return &ColumnRouter{
-		columnAPI: columnAPI,
+
+func NewFeedbackRouter(healthAPI HealthAPI) *HealthRouter {
+	return &HealthRouter{
+		healthAPI: healthAPI,
 	}
 }

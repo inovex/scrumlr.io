@@ -4,7 +4,10 @@ import (
 	"context"
 	"errors"
 	"net/http"
+	"scrumlr.io/server/boards"
 	"scrumlr.io/server/notes"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -17,7 +20,11 @@ import (
 )
 
 type Service struct {
-	notesAPI notes.API
+	notesService          notes.NotesService
+	sessionRequestService sessionrequests.SessionRequestService
+	sessionsService       sessions.SessionService
+	boardService          boards.BoardService
+	userService           sessions.UserService
 }
 
 func (s *Service) BoardCandidateContext(next http.Handler) http.Handler {
@@ -31,7 +38,7 @@ func (s *Service) BoardCandidateContext(next http.Handler) http.Handler {
 		}
 
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		exists, err := s.sessionRequests.Exists(r.Context(), board, user)
+		exists, err := s.sessionRequestService.Exists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -59,7 +66,7 @@ func (s *Service) BoardParticipantContext(next http.Handler) http.Handler {
 		}
 
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		exists, err := s.sessions.Exists(r.Context(), board, user)
+		exists, err := s.sessionsService.Exists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -71,7 +78,7 @@ func (s *Service) BoardParticipantContext(next http.Handler) http.Handler {
 			return
 		}
 
-		banned, err := s.sessions.IsParticipantBanned(r.Context(), board, user)
+		banned, err := s.sessionsService.IsParticipantBanned(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check if participant is banned", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -100,7 +107,7 @@ func (s *Service) BoardModeratorContext(next http.Handler) http.Handler {
 		}
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-		exists, err := s.sessions.ModeratorSessionExists(r.Context(), board, user)
+		exists, err := s.sessionsService.ModeratorSessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -123,14 +130,14 @@ func (s *Service) BoardEditableContext(next http.Handler) http.Handler {
 
 		board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		isMod, err := s.sessions.ModeratorSessionExists(r.Context(), board, user)
+		isMod, err := s.sessionsService.ModeratorSessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
 			return
 		}
 
-		settings, err := s.boards.Get(r.Context(), board)
+		settings, err := s.boardService.Get(r.Context(), board)
 		if err != nil {
 
 			log.Errorw("unable to verify board settings", "err", err)
@@ -161,7 +168,7 @@ func (s *Service) BoardAuthenticatedContext(next http.Handler) http.Handler {
 		}
 		userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-		user, err := s.users.Get(r.Context(), userID)
+		user, err := s.userService.Get(r.Context(), userID)
 
 		if err != nil {
 			log.Errorw("Could not fetch user", "error", err)
