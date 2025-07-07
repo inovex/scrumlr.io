@@ -11,7 +11,6 @@ import (
 	"github.com/google/uuid"
 
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/database/types"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
@@ -27,7 +26,7 @@ func (s *Server) BoardCandidateContext(next http.Handler) http.Handler {
 		}
 
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		exists, err := s.sessions.SessionRequestExists(r.Context(), board, user)
+		exists, err := s.sessionRequests.Exists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -55,7 +54,7 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 		}
 
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		exists, err := s.sessions.SessionExists(r.Context(), board, user)
+		exists, err := s.sessions.Exists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -67,7 +66,7 @@ func (s *Server) BoardParticipantContext(next http.Handler) http.Handler {
 			return
 		}
 
-		banned, err := s.sessions.ParticipantBanned(r.Context(), board, user)
+		banned, err := s.sessions.IsParticipantBanned(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check if participant is banned", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -165,7 +164,7 @@ func (s *Server) BoardAuthenticatedContext(next http.Handler) http.Handler {
 			return
 		}
 
-		if user.AccountType == types.AccountTypeAnonymous {
+		if user.AccountType == common.Anonymous {
 			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
 			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized")))
 			return

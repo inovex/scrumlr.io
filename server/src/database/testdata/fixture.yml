@@ -1,4 +1,4 @@
-- model: User
+- model: DatabaseUser
   rows:
     - _id: john
       id: "3113b096-986c-4e23-adf7-b3fa19224bd2"
@@ -31,7 +31,7 @@
       account_type: ANONYMOUS
       created_at: '{{ now }}'
 
-- model: BoardTemplate
+- model: DatabaseBoardTemplate
   rows:
     - _id: columnTemplatesTestBoard
       id: "3113b096-986c-4e23-adf7-b3fa19224bd4"
@@ -41,7 +41,34 @@
       favourite: false
       created_at: '{{ now }}'
 
-- model: Board
+- model: DatabaseColumnTemplate
+  rows:
+    - _id: firstColumnTemplate
+      id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: First column
+      description: Fist column description
+      color: backlog-blue
+      visible: true
+      index: 0
+    - _id: secondColumnTemplate
+      id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: Second column
+      description: Second column description
+      color: backlog-blue
+      visible: true
+      index: 1
+    - _id: thirdColumnTemplate
+      id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
+      board_template: '{{ $.DatabaseBoardTemplate.columnTemplatesTestBoard.ID }}'
+      name: Third column
+      description: Third column description
+      color: backlog-blue
+      visible: true
+      index: 2
+
+- model: DatabaseBoard
   rows:
     - _id: columnsTestBoard
       id: "3113b096-986c-4e23-adf7-b3fa19224bd4"
@@ -129,562 +156,535 @@
       show_notes_of_other_users: true
       created_at: '{{ now }}'
 
-- model: BoardSessionInsert
+- model: DatabaseBoardSessionInsert
   rows:
     - _id: johnsSessionOnColumnsTestBoard
-      board: '{{ $.Board.columnsTestBoard.ID }}'
-      user: '{{ $.User.john.ID }}'
+      board: '{{ $.DatabaseBoard.columnsTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.john.ID }}'
       role: OWNER
     - _id: janesSessionOnBoardSessionTestBoard
-      board: '{{ $.Board.boardSessionsTestBoard.ID }}'
-      user: '{{ $.User.jane.ID }}'
+      board: '{{ $.DatabaseBoard.boardSessionsTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.jane.ID }}'
       role: OWNER
     - _id: johnsSessionOnBoardSessionRequestsTestBoard
-      board: '{{ $.Board.boardSessionRequestsTestBoard.ID }}'
-      user: '{{ $.User.john.ID }}'
+      board: '{{ $.DatabaseBoard.boardSessionRequestsTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.john.ID }}'
       role: OWNER
     - _id: johnsSessionOnOpenMultipleVotesTestBoard
-      board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      board: '{{ $.DatabaseBoard.openMultipleVotesTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       role: OWNER
     - _id: johnsSessionOnOpenSingleVotesTestBoard
-      board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      board: '{{ $.DatabaseBoard.openSingleVotesTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       role: OWNER
     - _id: johnsSessionOnClosedVotesTestBoard
-      board: '{{ $.Board.closedVotesTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      board: '{{ $.DatabaseBoard.closedVotesTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       role: OWNER
     - _id: johnsSessionOnAbortedVotesTestBoard
-      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      board: '{{ $.DatabaseBoard.abortedVotesTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       role: OWNER
     - _id: jacksSessionOnVotingTestBoard
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       role: OWNER
     - _id: janesSessionOnVotingTestBoard
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      user: '{{ $.User.jane.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.jane.ID }}'
       role: PARTICIPANT
     - _id: jacksSessionOnNotesTestBoard
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       role: OWNER
     - _id: justinSessionOnVotingSortingTestBoard
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      user: '{{ $.User.justin.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
       role: OWNER
     - _id: justinSessionOnStackTestBoard
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      user: '{{ $.User.justin.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
       role: OWNER
 
-- model: ColumnTemplate
-  rows:
-    - _id: firstColumnTemplate
-      id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
-      name: First column
-      description: Fist column description
-      color: backlog-blue
-      visible: true
-      index: 0
-    - _id: secondColumnTemplate
-      id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
-      name: Second column
-      description: Second column description
-      color: backlog-blue
-      visible: true
-      index: 1
-    - _id: thirdColumnTemplate
-      id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
-      board_template: '{{ $.BoardTemplate.columnTemplatesTestBoard.ID }}'
-      name: Third column
-      description: Third column description
-      color: backlog-blue
-      visible: true
-      index: 2
-
-- model: Column
+- model: DatabaseColumn
   rows:
     - _id: firstColumn
       id: "2813b000-0000-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.columnsTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.columnsTestBoard.ID }}'
       name: First column
       color: backlog-blue
       visible: true
       index: 0
     - _id: secondColumn
       id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.columnsTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.columnsTestBoard.ID }}'
       name: Second column
       color: backlog-blue
       visible: true
       index: 1
     - _id: thirdColumn
       id: "2813b000-0002-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.columnsTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.columnsTestBoard.ID }}'
       name: Third column
       color: backlog-blue
       visible: true
       index: 2
     - _id: openMultipleVotesColumn
       id: "2813b000-0003-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.openMultipleVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
       index: 0
     - _id: openSingleVotesColumn
       id: "2813b000-0004-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.openSingleVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
       index: 0
     - _id: closedVotesColumn
       id: "2813b000-0005-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.closedVotesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.closedVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
       index: 0
     - _id: abortedVotesColumn
       id: "2813b000-0006-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.abortedVotesTestBoard.ID }}'
       name: Vote here
       color: backlog-blue
       visible: true
       index: 0
     - _id: votingColumn
       id: "3113b196-986c-5f23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
       name: Voting column
       color: backlog-blue
       visible: true
       index: 0
     - _id: notesColumnA
       id: "3113b196-986c-2123-adf7-c3fa19224bd4"
-      board: '{{ $.Board.notesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
       name: A
       color: backlog-blue
       visible: true
       index: 0
     - _id: notesColumnB
       id: "3113b196-986c-2923-adf7-c3fa19224bd4"
-      board: '{{ $.Board.notesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
       name: B
       color: backlog-blue
       visible: true
       index: 0
     - _id: notesColumnC
       id: "2cf7f80e-d3ed-4606-be72-59f5dc05ec47"
-      board: '{{ $.Board.notesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
       name: C
       color: backlog-blue
       visible: true
       index: 0
     - _id: votingSortingColumn
       id: "00c8c51b-d391-4472-8136-06efdfe7bbd2"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
       name: Voting Sorting column
       color: backlog-blue
       visible: true
       index: 0
     - _id: stackTestColumnA
       id: "00c8c51b-0000-4472-8136-06eadff7bbd6"
-      board: '{{ $.Board.stackTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
       name: Stack test columnA
       color: backlog-blue
       visible: true
       index: 0
     - _id: stackTestColumnB
       id: "00c8c51b-0001-4472-8136-06eadff7bbd6"
-      board: '{{ $.Board.stackTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
       name: Stack test columnB
       color: backlog-blue
       visible: true
       index: 1
 
-- model: Note
+- model: DatabaseNote
   rows:
     - _id: openMultipleVotesTestBoardNote
       id: "3113b888-986c-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.openMultipleVotesColumn.ID }}'
+      board: '{{ $.DatabaseBoard.openMultipleVotesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.openMultipleVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
     - _id: openSingleVotesTestBoardNote
       id: "3113b878-986c-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.openSingleVotesColumn.ID }}'
+      board: '{{ $.DatabaseBoard.openSingleVotesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.openSingleVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
     - _id: closedVotesTestBoardNote
       id: "3113b889-986c-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.closedVotesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.closedVotesColumn.ID }}'
+      board: '{{ $.DatabaseBoard.closedVotesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.closedVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
     - _id: abortedVotesTestBoardNote
       id: "3113b899-986c-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.abortedVotesColumn.ID }}'
+      board: '{{ $.DatabaseBoard.abortedVotesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.abortedVotesColumn.ID }}'
       text: "Just some text"
       stack: null
       rank: 0
     - _id: votingTestBoardParentNoteOfStack
       id: "3113b296-986c-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      author: '{{ $.User.jane.ID }}'
-      column: '{{ $.Column.votingColumn.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jane.ID }}'
+      column: '{{ $.DatabaseColumn.votingColumn.ID }}'
       text: "I'm the godfather"
       stack: null
       rank: 1
     - _id: votingTestBoardChildOfStack
       id: "3113b396-986c-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.votingColumn.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.votingColumn.ID }}'
       text: "Just do it!"
       stack: "3113b296-986c-4e23-adf7-c3fa19224bd4"
       rank: 0
     - _id: notesTestA1
       id: "00000000-0000-0000-0000-0000000000a1"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: null
       rank: 2
     - _id: notesTestA2
       id: "00000000-0000-0000-0000-0000000000a2"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: null
       rank: 1
     - _id: notesTestA3 # stacked on A2
       id: "00000000-0000-0000-0000-0000000000a3"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000a2"
       rank: 0
     - _id: notesTestA4
       id: "00000000-0000-0000-0000-0000000000a4"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: null
       rank: 0
     - _id: notesTestA5 # stacked on A4
       id: "00000000-0000-0000-0000-0000000000a5"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnA.ID }}'
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000a4"
       rank: 0
     - _id: notesTestB1
       id: "00000000-0000-0000-0000-0000000000b1"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnB.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnB.ID }}'
       text: "Just do it!"
       stack: null
       rank: 1
     - _id: notesTestB2
       id: "00000000-0000-0000-0000-0000000000b2"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnB.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnB.ID }}'
       text: "Just do it!"
       stack: null
       rank: 0
     - _id: notesTestB3 # stacked on B2
       id: "00000000-0000-0000-0000-0000000000b3"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnB.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnB.ID }}'
       text: "Just do it!"
       stack: "00000000-0000-0000-0000-0000000000b2"
       rank: 0
     - _id: notesTestC1
       id: "00000000-0000-0000-0000-0000000000c1"
-      board: '{{ $.Board.notesTestBoard.ID }}'
-      author: '{{ $.User.jack.ID }}'
-      column: '{{ $.Column.notesColumnC.ID }}'
+      board: '{{ $.DatabaseBoard.notesTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.jack.ID }}'
+      column: '{{ $.DatabaseColumn.notesColumnC.ID }}'
       text: "Godfather!"
       stack: null
       rank: 0
     - _id: votingSortingNote1
       id: "2638e01b-e38e-4360-a4ce-74af074ee0be"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 1"
       stack: null
       rank: 0
     - _id: votingSortingNote2
       id: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 2"
       stack: null
       rank: 1
     - _id: votingSortingNote3
       id: "7840fe66-1a97-4841-ae75-40d87ee327ec"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 3"
       stack: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
       rank: 1
     - _id: votingSortingNote4
       id: "1f6b22ba-ea68-4e9e-a9c9-4266e76b1051"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 4"
       stack: "03fa3e37-b09c-4d87-9c92-38444cbafb70"
       rank: 0
     - _id: votingSortingNote5
       id: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 5"
       stack: null
       rank: 2
     - _id: votingSortingNote6
       id: "c98dd4cd-66ae-4c59-a7de-b7fee44e452a"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.votingSortingColumn.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.votingSortingColumn.ID }}'
       text: "Note 6"
       stack: "8d77f76d-803c-4c37-9c03-20d38772ef7f"
       rank: 0
     - _id: stackTestNote1
       id: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnA.ID }}'
       text: "A"
       stack: null
       rank: 1337
     - _id: stackTestNote2
       id: "c98dd001-66ae-4c59-a7de-b7fee44e452a"
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnA.ID }}'
       text: "B"
       stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
       rank: 0
     - _id: stackTestNote3
       id: "c98dd002-66ae-4c59-a7de-b7fee44e452a"
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnA.ID }}'
       text: "C"
       stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
       rank: 1
     - _id: stackTestNote4
       id: "c98dd003-66ae-4c59-a7de-b7fee44e452a"
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnA.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnA.ID }}'
       text: "D"
       stack: "c98dd000-66ae-4c59-a7de-b7fee44e452a"
       rank: 2
     - _id: stackTestNote5
       id: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnB.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnB.ID }}'
       text: "E"
       stack: null
       rank: 1338
     - _id: stackTestNote6
       id: "02d135da-0001-4a6f-8cb7-8c9f3d7c5416"
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnB.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnB.ID }}'
       text: "F"
       stack: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
       rank: 0
     - _id: stackTestNote7
       id: "02d135da-0002-4a6f-8cb7-8c9f3d7c5416"
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnB.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnB.ID }}'
       text: "G"
       stack: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
       rank: 1
     - _id: stackTestNote8
       id: "02d135da-0003-4a6f-8cb7-8c9f3d7c5416"
-      board: '{{ $.Board.stackTestBoard.ID }}'
-      author: '{{ $.User.justin.ID }}'
-      column: '{{ $.Column.stackTestColumnB.ID }}'
+      board: '{{ $.DatabaseBoard.stackTestBoard.ID }}'
+      author: '{{ $.DatabaseUser.justin.ID }}'
+      column: '{{ $.DatabaseColumn.stackTestColumnB.ID }}'
       text: "H"
       stack: "02d135da-0000-4a6f-8cb7-8c9f3d7c5416"
       rank: 2
 
-- model: Voting
+- model: DatabaseVoting
   rows:
     - _id: votingForOpenMultipleVotesTestBoard
       id: "3113b396-2110-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.openMultipleVotesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.openMultipleVotesTestBoard.ID }}'
       vote_limit: 2
       allow_multiple_votes: true
       show_votes_of_others: true
       status: OPEN
     - _id: votingForOpenSingleVotesTestBoard
       id: "3113b396-2118-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.openSingleVotesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.openSingleVotesTestBoard.ID }}'
       vote_limit: 2
       allow_multiple_votes: false
       show_votes_of_others: true
       status: OPEN
     - _id: votingForClosedVotesTestBoard
       id: "3113b396-2210-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.closedVotesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.closedVotesTestBoard.ID }}'
       vote_limit: 2
       allow_multiple_votes: true
       show_votes_of_others: true
       status: CLOSED
     - _id: votingForAbortedVotesTestBoard
       id: "3113b396-2310-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.abortedVotesTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.abortedVotesTestBoard.ID }}'
       vote_limit: 2
       allow_multiple_votes: true
       show_votes_of_others: true
       status: ABORTED
     - _id: votingTestBoardAbortedVoting
       id: "3113b396-1110-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
       vote_limit: 5
       allow_multiple_votes: true
       show_votes_of_others: true
       status: ABORTED
     - _id: votingTestBoardClosedVoting
       id: "3113b396-1113-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
       vote_limit: 5
       allow_multiple_votes: true
       show_votes_of_others: true
       status: CLOSED
     - _id: votingTestBoardClosedVotingHiddenUserVotes
       id: "3113b396-1112-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
       vote_limit: 5
       allow_multiple_votes: true
       show_votes_of_others: false
       status: CLOSED
     - _id: votingTestBoardOpenVoting
       id: "3113b396-1114-4e23-adf7-c3fa19224bd4"
-      board: '{{ $.Board.votingTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
       vote_limit: 5
       allow_multiple_votes: true
       show_votes_of_others: true
       status: OPEN
     - _id: votingSortingTestBoardOpenVoting
       id: "19d2cbf9-99db-464c-a74c-be0ab1b38d59"
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
       vote_limit: 5
       allow_multiple_votes: true
       show_votes_of_others: true
       status: OPEN
 
-- model: Vote
+- model: DatabaseVote
   rows:
     - _id: jacksVoteOnStack
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingTestBoardClosedVoting.ID }}'
-      user: '{{ $.User.jack.ID }}'
-      note: '{{ $.Note.votingTestBoardParentNoteOfStack.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingTestBoardClosedVoting.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
+      note: '{{ $.DatabaseNote.votingTestBoardParentNoteOfStack.ID }}'
     - _id: jacksVoteOnChild
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingTestBoardClosedVoting.ID }}'
-      user: '{{ $.User.jack.ID }}'
-      note: '{{ $.Note.votingTestBoardChildOfStack.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingTestBoardClosedVoting.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
+      note: '{{ $.DatabaseNote.votingTestBoardChildOfStack.ID }}'
     - _id: jacksVoteOnStackOpen
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.jack.ID }}'
-      note: '{{ $.Note.votingTestBoardParentNoteOfStack.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingTestBoardOpenVoting.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
+      note: '{{ $.DatabaseNote.votingTestBoardParentNoteOfStack.ID }}'
     - _id: jacksVoteOnChildOpen
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.jack.ID }}'
-      note: '{{ $.Note.votingTestBoardChildOfStack.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingTestBoardOpenVoting.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
+      note: '{{ $.DatabaseNote.votingTestBoardChildOfStack.ID }}'
     - _id: janesVoteOnStack
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
-      user: '{{ $.User.jane.ID }}'
-      note: '{{ $.Note.votingTestBoardParentNoteOfStack.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
+      user: '{{ $.DatabaseUser.jane.ID }}'
+      note: '{{ $.DatabaseNote.votingTestBoardParentNoteOfStack.ID }}'
     - _id: janesVoteOnChild
-      board: '{{ $.Board.votingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
-      user: '{{ $.User.jane.ID }}'
-      note: '{{ $.Note.votingTestBoardChildOfStack.ID }}'
+      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingTestBoardClosedVotingHiddenUserVotes.ID }}'
+      user: '{{ $.DatabaseUser.jane.ID }}'
+      note: '{{ $.DatabaseNote.votingTestBoardChildOfStack.ID }}'
     - _id: votingSortingBoardNote1Vote
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.justin.ID }}'
-      note: '{{ $.Note.votingSortingNote1.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingSortingTestBoardOpenVoting.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
+      note: '{{ $.DatabaseNote.votingSortingNote1.ID }}'
     - _id: votingSortingBoardNote2Vote
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.justin.ID }}'
-      note: '{{ $.Note.votingSortingNote2.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingSortingTestBoardOpenVoting.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
+      note: '{{ $.DatabaseNote.votingSortingNote2.ID }}'
     - _id: votingSortingBoardNote4Vote
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.justin.ID }}'
-      note: '{{ $.Note.votingSortingNote4.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingSortingTestBoardOpenVoting.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
+      note: '{{ $.DatabaseNote.votingSortingNote4.ID }}'
     - _id: votingSortingBoardNote6Vote
-      board: '{{ $.Board.votingSortingTestBoard.ID }}'
-      voting: '{{ $.Voting.votingSortingTestBoardOpenVoting.ID }}'
-      user: '{{ $.User.justin.ID }}'
-      note: '{{ $.Note.votingSortingNote6.ID }}'
+      board: '{{ $.DatabaseBoard.votingSortingTestBoard.ID }}'
+      voting: '{{ $.DatabaseVoting.votingSortingTestBoardOpenVoting.ID }}'
+      user: '{{ $.DatabaseUser.justin.ID }}'
+      note: '{{ $.DatabaseNote.votingSortingNote6.ID }}'
 
 - model: DatabaseReaction
   rows:
     # A: board A, note A, user A
     - _id: reactionA
       id: "0fb0a05b-9793-479e-9ac0-1a90b10880fa"
-      note: '{{ $.Note.notesTestA1.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      note: '{{ $.DatabaseNote.notesTestA1.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       reaction_type: "like"
     # B: board A, note A, user B
     - _id: reactionB
       id: "98b92853-9f8e-42d4-8ec3-0ad8b6596eae"
-      note: '{{ $.Note.notesTestA1.ID }}'
-      user: '{{ $.User.jane.ID }}'
+      note: '{{ $.DatabaseNote.notesTestA1.ID }}'
+      user: '{{ $.DatabaseUser.jane.ID }}'
       reaction_type: "heart"
     # C: board A, note B, user A
     - _id: reactionC
       id: "fee4f00e-9399-438f-b9bb-f3675d2b9eca"
-      note: '{{ $.Note.notesTestA2.ID }}'
-      user: '{{ $.User.jack.ID }}'
+      note: '{{ $.DatabaseNote.notesTestA2.ID }}'
+      user: '{{ $.DatabaseUser.jack.ID }}'
       reaction_type: "heart"
     # D: board B, note C, user C
     - _id: reactionD
       id: "56becd3e-74b3-42b4-acde-4a59003379f2"
-      note: '{{ $.Note.stackTestNote1.ID }}'
-      user: '{{ $.User.jay.ID }}'
+      note: '{{ $.DatabaseNote.stackTestNote1.ID }}'
+      user: '{{ $.DatabaseUser.jay.ID }}'
       reaction_type: "laughing"
