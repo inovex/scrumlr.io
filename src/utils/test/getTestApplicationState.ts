@@ -242,5 +242,6 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       visible: true,
     },
   ],
+  recommendedFavourites: [],
   ...overwrite,
 });

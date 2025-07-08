@@ -5,10 +5,17 @@ import getTestApplicationState from "utils/test/getTestApplicationState";
 import {TemplateWithColumns} from "store/features";
 import {act, fireEvent} from "@testing-library/react";
 
-const renderRecommendedTemplateCard = (templateId: string, onSelectTemplate: (template: TemplateWithColumns) => void = jest.fn()) => {
+const renderRecommendedTemplateCard = (templateId: string, onSelectTemplate: (template: TemplateWithColumns) => void = jest.fn(), favourite: boolean = false) => {
   const templateWithColumns = getTemplateAndColumnsByTemplateId({...getTestApplicationState()}, templateId)!;
 
-  return render(<TemplateCard template={templateWithColumns} templateType={"RECOMMENDED"} onSelectTemplate={onSelectTemplate} />);
+  const patchedTemplateWithColumns = {
+    ...templateWithColumns,
+    template: {
+      ...templateWithColumns.template,
+      favourite,
+    },
+  };
+  return render(<TemplateCard template={patchedTemplateWithColumns} templateType={"RECOMMENDED"} onSelectTemplate={onSelectTemplate} onToggleFavourite={jest.fn()} />);
 };
 
 const renderCustomTemplateCard = (

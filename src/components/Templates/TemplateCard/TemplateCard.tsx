@@ -30,6 +30,7 @@ type TemplateCardProps = {
     }
   | {
       templateType: "RECOMMENDED";
+      onToggleFavourite: (templateId: string, favourite: boolean) => void;
     }
 );
 
@@ -70,9 +71,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
 
   return (
     <div className="template-card" data-cy={`template-card--${props.templateType}`}>
-      {props.templateType === "CUSTOM" ? (
-        <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => props.onToggleFavourite(template.id, template.favourite)} />
-      ) : null}
+      <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => props.onToggleFavourite(template.id, template.favourite)} />
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.name} disabled />
       </div>

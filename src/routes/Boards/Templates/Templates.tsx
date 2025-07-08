@@ -24,6 +24,7 @@ import templatesJsonRaw from "constants/recommendedTemplates.json";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
+import {toggleRecommendedFavourite} from "store/features/templates/recommendedFavourite";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -80,7 +81,14 @@ export const Templates = () => {
     dispatch(getTemplates());
   }, [dispatch]);
 
-  const toggleFavourite = (templateId: string, favourite: boolean) => dispatch(setTemplateFavourite({id: templateId, favourite: !favourite}));
+  const recommendedFavourites = useAppSelector((state) => state.recommendedFavourites);
+  const toggleFavourite = (templateId: string, favourite: boolean, type: "RECOMMENDED" | "CUSTOM") => {
+    if (type === "RECOMMENDED") {
+      dispatch(toggleRecommendedFavourite(templateId));
+    } else {
+      dispatch(setTemplateFavourite({id: templateId, favourite: !favourite}));
+    }
+  };
 
   const navigateToEdit = (templateId: string) => {
     navigate(`../edit/${templateId}`);
@@ -189,8 +197,15 @@ export const Templates = () => {
               .map((templateFull) => (
                 <TemplateCard
                   templateType="RECOMMENDED"
-                  template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)}
+                  template={{
+                    ...mergeTemplateWithColumns(templateFull.template, templateFull.columns),
+                    template: {
+                      ...templateFull.template,
+                      favourite: recommendedFavourites.includes(templateFull.template.id),
+                    },
+                  }}
                   onSelectTemplate={onSelectTemplateWithColumns}
+                  onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "RECOMMENDED")}
                   key={templateFull.template.id}
                 />
               ))}
@@ -211,7 +226,7 @@ export const Templates = () => {
                     onSelectTemplate={onSelectTemplateWithColumns}
                     onDeleteTemplate={deleteTemplateAndColumns}
                     onNavigateToEdit={navigateToEdit}
-                    onToggleFavourite={toggleFavourite}
+                    onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
                     key={template.id}
                   />
                 ))}
