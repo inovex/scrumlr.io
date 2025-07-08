@@ -30,6 +30,7 @@ func (database *SessionDB) Create(boardSession DatabaseBoardSessionInsert) (Data
 	insertQuery := database.db.NewInsert().
 		Model(&boardSession).
 		Returning("*")
+
 	err := database.db.NewSelect().
 		With("insertQuery", insertQuery).
 		Model((*DatabaseBoardSession)(nil)).
@@ -49,30 +50,39 @@ func (database *SessionDB) Create(boardSession DatabaseBoardSessionInsert) (Data
 }
 
 func (database *SessionDB) Update(update DatabaseBoardSessionUpdate) (DatabaseBoardSession, error) {
-	updateQuery := database.db.NewUpdate().Model(&update)
+	updateQuery := database.db.NewUpdate().
+		Model(&update)
+
 	if update.Connected != nil {
 		updateQuery = updateQuery.Column("connected")
 	}
+
 	if update.Ready != nil {
 		updateQuery = updateQuery.Column("ready")
 	}
+
 	if update.ShowHiddenColumns != nil {
 		updateQuery = updateQuery.Column("show_hidden_columns")
 	}
+
 	if update.RaisedHand != nil {
 		updateQuery = updateQuery.Column("raised_hand")
 	}
+
 	if update.Role != nil {
 		updateQuery = updateQuery.Column("role")
 		if *update.Role == common.OwnerRole {
 			updateQuery.Where("role = ?", common.OwnerRole)
 		}
 	}
+
 	if update.Banned != nil {
 		updateQuery = updateQuery.Column("banned")
 	}
 
-	updateQuery.Where("\"board\" = ?", update.Board).Where("\"user\" = ?", update.User).Returning("*")
+	updateQuery.Where("\"board\" = ?", update.Board).
+		Where("\"user\" = ?", update.User).
+		Returning("*")
 
 	var session DatabaseBoardSession
 	err := database.db.NewSelect().
@@ -94,15 +104,19 @@ func (database *SessionDB) Update(update DatabaseBoardSessionUpdate) (DatabaseBo
 }
 
 func (database *SessionDB) UpdateAll(update DatabaseBoardSessionUpdate) ([]DatabaseBoardSession, error) {
-	updateQuery := database.db.NewUpdate().Model(&update)
+	updateQuery := database.db.NewUpdate().
+		Model(&update)
+
 	if update.Ready != nil {
 		updateQuery = updateQuery.Column("ready")
 	}
+
 	if update.RaisedHand != nil {
 		updateQuery = updateQuery.Column("raised_hand")
 	}
 
-	updateQuery.Where("\"board\" = ?", update.Board).Returning("*")
+	updateQuery.Where("\"board\" = ?", update.Board).
+		Returning("*")
 
 	var sessions []DatabaseBoardSession
 	err := database.db.NewSelect().
@@ -152,13 +166,14 @@ func (database *SessionDB) Get(board, user uuid.UUID) (DatabaseBoardSession, err
 		Where("s.user = ?", user).
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Scan(context.Background(), &session)
+
 	return session, err
 }
 
 func (database *SessionDB) GetAll(board uuid.UUID, filter ...BoardSessionFilter) ([]DatabaseBoardSession, error) {
 	query := database.db.NewSelect().
 		TableExpr("board_sessions AS s").
-		ColumnExpr("s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
+		ColumnExpr("s.board, s.user, u.avatar, u.name, u.account_type, s.connected, s.show_hidden_columns, s.ready, s.raised_hand, s.role, s.banned").
 		Where("s.board = ?", board).
 		Join("INNER JOIN users AS u ON u.id = s.user")
 
@@ -193,9 +208,6 @@ func (database *SessionDB) GetUserConnectedBoards(user uuid.UUID) ([]DatabaseBoa
 		Where("s.connected").
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Scan(context.Background(), &sessions)
-	if err != nil {
-		return nil, err
-	}
 
 	return sessions, err
 }
