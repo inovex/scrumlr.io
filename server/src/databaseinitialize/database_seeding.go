@@ -35,3 +35,8 @@ func InsertReaction(db *bun.DB, id uuid.UUID, note uuid.UUID, user uuid.UUID, re
 	_, err := db.Exec("INSERT INTO reactions (\"id\", \"note\", \"user\", \"reaction_type\") VALUES (?, ?, ?, ?);", id.String(), note.String(), user.String(), reaction)
 	return err
 }
+
+func InsertSession(db *bun.DB, user uuid.UUID, board uuid.UUID, role string, banned bool, ready bool, connected bool, handRaised bool) error {
+	_, err := db.Exec("INSERT INTO \"board_sessions\" (\"user\", \"board\", \"role\", \"banned\", \"ready\", \"connected\", \"raised_hand\") VALUES (?, ?, ?, ?, ?, ?, ?);", user, board, role, banned, ready, connected, handRaised)
+	return err
+}
