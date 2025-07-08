@@ -7,7 +7,7 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
     data-cy="template-card--CUSTOM"
   >
     <button
-      class="template-card__favourite favourite-button favourite-button--active accent-color__planning-pink"
+      class="template-card__favourite favourite-button accent-color__planning-pink"
       id="favourite-icon-4"
       tabindex="0"
     >

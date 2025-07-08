@@ -71,7 +71,14 @@ export const TemplateCard = (props: TemplateCardProps) => {
 
   return (
     <div className="template-card" data-cy={`template-card--${props.templateType}`}>
-      <FavouriteButton className="template-card__favourite" active={template.favourite} onClick={() => props.onToggleFavourite(template.id, template.favourite)} />
+      <FavouriteButton
+        className="template-card__favourite"
+        active={template.favourite}
+        onClick={() => {
+          // Always toggle the favourite value, regardless of template type
+          props.onToggleFavourite(template.id, !template.favourite);
+        }}
+      />
       <div className={classNames("template-card__head")}>
         <input className="template-card__title" type="text" value={template.name} disabled />
       </div>

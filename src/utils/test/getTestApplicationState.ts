@@ -202,14 +202,14 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
       creator: "test-auth-user-id",
       name: "sample name 1",
       description: "sample description 1",
-      favourite: true,
+      favourite: false,
     },
     {
       id: "test-templates-id-2",
       creator: "test-auth-user-id",
       name: "sample name 2",
       description: "sample description 2",
-      favourite: false,
+      favourite: true,
     },
   ],
   templateColumns: [
