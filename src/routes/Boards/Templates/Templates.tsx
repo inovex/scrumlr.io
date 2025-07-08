@@ -195,7 +195,7 @@ export const Templates = () => {
           <div className="templates__card-container">
             {sortBy(
               fullRecommendedTemplates.filter((rc) => matchSearchInput(rc.template)),
-              (t: TemplateWithColumns) => !recommendedFavourites.includes(t.template.id)
+              (tc: TemplateWithColumns) => !recommendedFavourites.includes(tc.template.id)
             ).map((templateFull: TemplateWithColumns) => (
               <TemplateCard
                 templateType="RECOMMENDED"
@@ -218,7 +218,7 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard onClick={showCreateTemplateView} />
-              {sortBy(templates.filter(matchSearchInput).filter(excludeDefaultTemplate), (t: Template) => !t.favourite).map((template: Template) => (
+              {sortBy(templates.filter(matchSearchInput).filter(excludeDefaultTemplate), (template: Template) => !template.favourite).map((template: Template) => (
                 <TemplateCard
                   templateType="CUSTOM"
                   template={mergeTemplateWithColumns(template)}

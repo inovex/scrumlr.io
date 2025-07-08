@@ -17,7 +17,7 @@ import {
   votingsReducer,
 } from "./features";
 
-import recommendedFavouritesReducer from "./features/templates/recommendedFavourite";
+import favouritesReducer from "./features/templates/recommendedFavourite";
 
 const rootReducer = {
   auth: authReducer,
@@ -34,7 +34,7 @@ const rootReducer = {
   view: viewReducer,
   votes: votesReducer,
   votings: votingsReducer,
-  recommendedFavourites: recommendedFavouritesReducer,
+  recommendedFavourites: favouritesReducer,
 };
 
 export const store = configureStore({
