@@ -25,6 +25,7 @@ import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {toggleRecommendedFavourite} from "store/features/templates/recommendedFavourite";
+import sortBy from "lodash/sortBy";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -192,23 +193,24 @@ export const Templates = () => {
         <section className="templates__container templates__container--recommended">
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
-            {fullRecommendedTemplates
-              .filter((rc) => matchSearchInput(rc.template))
-              .map((templateFull) => (
-                <TemplateCard
-                  templateType="RECOMMENDED"
-                  template={{
-                    ...mergeTemplateWithColumns(templateFull.template, templateFull.columns),
-                    template: {
-                      ...templateFull.template,
-                      favourite: recommendedFavourites.includes(templateFull.template.id),
-                    },
-                  }}
-                  onSelectTemplate={onSelectTemplateWithColumns}
-                  onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "RECOMMENDED")}
-                  key={templateFull.template.id}
-                />
-              ))}
+            {sortBy(
+              fullRecommendedTemplates.filter((rc) => matchSearchInput(rc.template)),
+              (t: TemplateWithColumns) => !recommendedFavourites.includes(t.template.id)
+            ).map((templateFull: TemplateWithColumns) => (
+              <TemplateCard
+                templateType="RECOMMENDED"
+                template={{
+                  ...mergeTemplateWithColumns(templateFull.template, templateFull.columns),
+                  template: {
+                    ...templateFull.template,
+                    favourite: recommendedFavourites.includes(templateFull.template.id),
+                  },
+                }}
+                onSelectTemplate={onSelectTemplateWithColumns}
+                onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "RECOMMENDED")}
+                key={templateFull.template.id}
+              />
+            ))}
           </div>
         </section>
         {showCustomTemplates && (
@@ -216,20 +218,17 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard onClick={showCreateTemplateView} />
-              {templates
-                .filter(matchSearchInput)
-                .filter(excludeDefaultTemplate)
-                .map((template) => (
-                  <TemplateCard
-                    templateType="CUSTOM"
-                    template={mergeTemplateWithColumns(template)}
-                    onSelectTemplate={onSelectTemplateWithColumns}
-                    onDeleteTemplate={deleteTemplateAndColumns}
-                    onNavigateToEdit={navigateToEdit}
-                    onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
-                    key={template.id}
-                  />
-                ))}
+              {sortBy(templates.filter(matchSearchInput).filter(excludeDefaultTemplate), (t: Template) => !t.favourite).map((template: Template) => (
+                <TemplateCard
+                  templateType="CUSTOM"
+                  template={mergeTemplateWithColumns(template)}
+                  onSelectTemplate={onSelectTemplateWithColumns}
+                  onDeleteTemplate={deleteTemplateAndColumns}
+                  onNavigateToEdit={navigateToEdit}
+                  onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
+                  key={template.id}
+                />
+              ))}
             </div>
           </section>
         )}
