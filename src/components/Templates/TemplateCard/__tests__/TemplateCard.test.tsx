@@ -5,10 +5,26 @@ import getTestApplicationState from "utils/test/getTestApplicationState";
 import {TemplateWithColumns} from "store/features";
 import {act, fireEvent} from "@testing-library/react";
 
-const renderRecommendedTemplateCard = (templateId: string, onSelectTemplate: (template: TemplateWithColumns) => void = jest.fn()) => {
+const renderRecommendedTemplateCard = (
+  templateId: string,
+  {
+    onSelectTemplate = jest.fn(),
+    onToggleFavourite = jest.fn(),
+  }: {
+    onSelectTemplate?: (template: TemplateWithColumns) => void;
+    onToggleFavourite?: (templateId: string, favourite: boolean) => void;
+  } = {},
+  favourite: boolean = false
+) => {
   const templateWithColumns = getTemplateAndColumnsByTemplateId({...getTestApplicationState()}, templateId)!;
-
-  return render(<TemplateCard template={templateWithColumns} templateType={"RECOMMENDED"} onSelectTemplate={onSelectTemplate} />);
+  const patchedTemplateWithColumns = {
+    ...templateWithColumns,
+    template: {
+      ...templateWithColumns.template,
+      favourite,
+    },
+  };
+  return render(<TemplateCard template={patchedTemplateWithColumns} templateType="RECOMMENDED" onSelectTemplate={onSelectTemplate} onToggleFavourite={onToggleFavourite} />);
 };
 
 const renderCustomTemplateCard = (
@@ -91,6 +107,28 @@ describe("TemplateCard", () => {
     const onToggleFavourite: (templateId: string, favourite: boolean) => void = jest.fn();
 
     const {container} = renderCustomTemplateCard("test-templates-id-2", {onToggleFavourite});
+    const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
+
+    act(() => fireEvent.click(favouriteButton));
+
+    expect(onToggleFavourite).toHaveBeenCalledWith("test-templates-id-2", false);
+  });
+
+  it("should favourite template (recommended)", () => {
+    const onToggleFavourite: (templateId: string, favourite: boolean) => void = jest.fn();
+
+    const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onToggleFavourite}, false);
+    const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
+
+    act(() => fireEvent.click(favouriteButton));
+
+    expect(onToggleFavourite).toHaveBeenCalledWith("test-templates-id-1", true);
+  });
+
+  it("should un-favourite template (recommended)", () => {
+    const onToggleFavourite: (templateId: string, favourite: boolean) => void = jest.fn();
+
+    const {container} = renderRecommendedTemplateCard("test-templates-id-2", {onToggleFavourite}, true);
     const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
 
     act(() => fireEvent.click(favouriteButton));

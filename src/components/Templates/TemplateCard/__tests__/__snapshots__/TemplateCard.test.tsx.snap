@@ -7,8 +7,8 @@ exports[`TemplateCard should render correctly (custom) 1`] = `
     data-cy="template-card--CUSTOM"
   >
     <button
-      class="template-card__favourite favourite-button favourite-button--active accent-color__planning-pink"
-      id="favourite-icon-3"
+      class="template-card__favourite favourite-button accent-color__planning-pink"
+      id="favourite-icon-4"
       tabindex="0"
     >
       <svg
@@ -80,6 +80,20 @@ exports[`TemplateCard should render correctly (recommended) 1`] = `
     class="template-card"
     data-cy="template-card--RECOMMENDED"
   >
+    <button
+      class="template-card__favourite favourite-button accent-color__planning-pink"
+      id="favourite-icon-3"
+      tabindex="0"
+    >
+      <svg
+        class="favourite-icon"
+      >
+        star.svg
+      </svg>
+    </button>
+    <div
+      class="tooltip-container"
+    />
     <div
       class="template-card__head"
     >
