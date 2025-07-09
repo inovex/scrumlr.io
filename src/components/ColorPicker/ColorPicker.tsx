@@ -15,6 +15,7 @@ type ColorPickerProps = {
   attemptOpenColorPicker?: () => void; // get fired if color picker is closed and is clicked
   closeColorPicker: () => void;
 
+  small?: boolean;
   fitted?: boolean; // elements more narrow
   allowVertical?: boolean;
 
@@ -40,7 +41,7 @@ export const ColorPicker = (props: ColorPickerProps) => {
   if (!props.open) {
     return (
       <span
-        className={classNames(props.className, "color-picker__color-option", "color-picker__color-option--selected")}
+        className={classNames(props.className, "color-picker__color-option", "color-picker__color-option--selected", {"color-picker__color-option--small": props.small})}
         aria-label={`current color${formatColorName(props.activeColor)}`}
         tabIndex={0}
         role="button"
@@ -59,9 +60,9 @@ export const ColorPicker = (props: ColorPickerProps) => {
             aria-label={formatColorName(props.activeColor)}
             title={formatColorName(props.activeColor)}
             onClick={() => props.selectColor(props.activeColor)}
-            className={classNames("color-picker__item-button", {"color-picker__item-button--fitted": props.fitted})}
+            className={classNames("color-picker__item-button", {"color-picker__item-button--small": props.small, "color-picker__item-button--fitted": props.fitted})}
           >
-            <div className="color-picker__color-option color-picker__color-option--selected" />
+            <div className={classNames("color-picker__color-option", "color-picker__color-option--selected", {"color-picker__color-option--small": props.small})} />
           </button>
           <Tooltip anchorSelect={`#${primColorAnchor}`} content={formatColorName(props.activeColor)} />
         </li>
@@ -75,10 +76,15 @@ export const ColorPicker = (props: ColorPickerProps) => {
                 title={formatColorName(color)}
                 // onMouseDown instead of onClick because onBlur has priority, and it might get closed before firing the event
                 onMouseDown={() => props.selectColor(color)}
-                className={classNames(color.toString, "color-picker__item-button", {"color-picker__item-button--fitted": props.fitted})}
+                className={classNames(
+                  color.toString,
+                  "color-picker__item-button",
+                  {"color-picker__item-button--small": props.small},
+                  {"color-picker__item-button--fitted": props.fitted}
+                )}
                 data-cy={`${props.dataCy}--${color}`}
               >
-                <div className={`color-picker__color-option color-picker__color-option--${color.toString()}`} />
+                <div className={classNames("color-picker__color-option", `color-picker__color-option--${color.toString()}`, {"color-picker__color-option--small": props.small})} />
               </button>
             </li>
           );

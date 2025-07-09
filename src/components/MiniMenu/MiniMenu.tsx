@@ -32,7 +32,11 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
   };
 
   const renderMenu = () => (
-    <div className={classNames(className, "mini-menu", {"mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})} onBlur={onBlur} data-cy={dataCy}>
+    <div
+      className={classNames(className, "mini-menu", {"mini-menu--small": small, "mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})}
+      onBlur={onBlur}
+      data-cy={dataCy}
+    >
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
         return (
