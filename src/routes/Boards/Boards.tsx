@@ -1,10 +1,9 @@
 import {useTranslation} from "react-i18next";
-import {Outlet, useLocation, useNavigate} from "react-router";
+import {Outlet, useLocation} from "react-router";
 import {useEffect, useState} from "react";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
 import {Input} from "components/Input/Input";
-import {Switch} from "components/Switch/Switch";
 import {ReactComponent as SearchIcon} from "assets/icons/search.svg";
 import classNames from "classnames";
 import {getTemplates} from "store/features";
@@ -17,7 +16,7 @@ type BoardView = "templates" | "sessions" | "create" | "edit";
 export const Boards = () => {
   const {t} = useTranslation();
   const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
@@ -32,18 +31,19 @@ export const Boards = () => {
   };
 
   // navigate to view that is currently not visible
-  const switchView = () => {
-    switch (boardView) {
-      case "templates":
-        navigate("sessions");
-        break;
-      case "sessions":
-        navigate("templates");
-        break;
-      default:
-        break;
-    }
-  };
+  // deactivated for now, as it is not used in the current UI
+  // const switchView = () => {
+  //   switch (boardView) {
+  //     case "templates":
+  //       navigate("sessions");
+  //       break;
+  //     case "sessions":
+  //       navigate("templates");
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   useEffect(() => {
     // first sub path after "/boards"
@@ -74,13 +74,13 @@ export const Boards = () => {
     viewType === "overview" ? (
       <>
         {/* switch - - - search */}
-        <Switch
+        {/* <Switch 
           className="boards__switch"
           activeDirection={boardView === "templates" ? "left" : "right"}
           leftText={t("Templates.switchTitle")}
           rightText={t("Sessions.switchTitle")}
           toggle={switchView}
-        />
+        /> */}
 
         {/* desktop search  bar */}
         <Input className="boards__search-bar" type="search" height="larger" placeholder={t("Input.placeholder.search")} input={searchBarInput} setInput={setSearchBarInput} />
