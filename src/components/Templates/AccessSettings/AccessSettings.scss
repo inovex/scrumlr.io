@@ -44,6 +44,10 @@
   gap: $spacing--md;
 }
 
+.access-settings__main .select-option {
+  text-align: left;
+}
+
 @media screen and (max-width: $breakpoint--smartphone) {
   .access-settings {
     width: 75%;
