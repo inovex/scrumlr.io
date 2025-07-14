@@ -1,8 +1,9 @@
 package database
 
 import (
-	"scrumlr.io/server/sessions"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -198,33 +199,33 @@ func testCreateColumnTemplateWithDescription(t *testing.T) {
 	assert.Equal(t, aDescription, column.Description)
 
 	// clean up to not crash other tests
-	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, column.ID, uuid.New())
+	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, column.ID)
 }
 
 func testDeleteColumnTemplateOnSecondIndex(t *testing.T) {
-	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFifth.ID, columnTemplateTestUser.ID)
+	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFifth.ID)
 	assert.Nil(t, err)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedThird.ID, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID, columnTemplateInsertedFourth.ID)
 }
 
 func testDeleteColumnTemplateOnFirstIndex(t *testing.T) {
-	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedThird.ID, columnTemplateTestUser.ID)
+	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedThird.ID)
 	assert.Nil(t, err)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID, columnTemplateInsertedFourth.ID)
 }
 
 func testDeleteLastColumnTemplate(t *testing.T) {
-	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFourth.ID, columnTemplateTestUser.ID)
+	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFourth.ID)
 	assert.Nil(t, err)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID)
 }
 
 func testDeleteOtherColumnTemplates(t *testing.T) {
-	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFirst.ID, columnTemplateTestUser.ID)
-	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedSecond.ID, columnTemplateTestUser.ID)
+	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFirst.ID)
+	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedSecond.ID)
 
 	verifyColumnTemplateOrder(t, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID)
 }
