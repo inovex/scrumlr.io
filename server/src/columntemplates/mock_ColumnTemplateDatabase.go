@@ -97,16 +97,16 @@ func (_c *MockColumnTemplateDatabase_Create_Call) RunAndReturn(run func(column D
 }
 
 // Delete provides a mock function for the type MockColumnTemplateDatabase
-func (_mock *MockColumnTemplateDatabase) Delete(board uuid.UUID, column uuid.UUID, user uuid.UUID) error {
-	ret := _mock.Called(board, column, user)
+func (_mock *MockColumnTemplateDatabase) Delete(board uuid.UUID, column uuid.UUID) error {
+	ret := _mock.Called(board, column)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID) error); ok {
-		r0 = returnFunc(board, column, user)
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) error); ok {
+		r0 = returnFunc(board, column)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -121,12 +121,11 @@ type MockColumnTemplateDatabase_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - board uuid.UUID
 //   - column uuid.UUID
-//   - user uuid.UUID
-func (_e *MockColumnTemplateDatabase_Expecter) Delete(board interface{}, column interface{}, user interface{}) *MockColumnTemplateDatabase_Delete_Call {
-	return &MockColumnTemplateDatabase_Delete_Call{Call: _e.mock.On("Delete", board, column, user)}
+func (_e *MockColumnTemplateDatabase_Expecter) Delete(board interface{}, column interface{}) *MockColumnTemplateDatabase_Delete_Call {
+	return &MockColumnTemplateDatabase_Delete_Call{Call: _e.mock.On("Delete", board, column)}
 }
 
-func (_c *MockColumnTemplateDatabase_Delete_Call) Run(run func(board uuid.UUID, column uuid.UUID, user uuid.UUID)) *MockColumnTemplateDatabase_Delete_Call {
+func (_c *MockColumnTemplateDatabase_Delete_Call) Run(run func(board uuid.UUID, column uuid.UUID)) *MockColumnTemplateDatabase_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 uuid.UUID
 		if args[0] != nil {
@@ -136,14 +135,9 @@ func (_c *MockColumnTemplateDatabase_Delete_Call) Run(run func(board uuid.UUID, 
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
-		var arg2 uuid.UUID
-		if args[2] != nil {
-			arg2 = args[2].(uuid.UUID)
-		}
 		run(
 			arg0,
 			arg1,
-			arg2,
 		)
 	})
 	return _c
@@ -154,7 +148,7 @@ func (_c *MockColumnTemplateDatabase_Delete_Call) Return(err error) *MockColumnT
 	return _c
 }
 
-func (_c *MockColumnTemplateDatabase_Delete_Call) RunAndReturn(run func(board uuid.UUID, column uuid.UUID, user uuid.UUID) error) *MockColumnTemplateDatabase_Delete_Call {
+func (_c *MockColumnTemplateDatabase_Delete_Call) RunAndReturn(run func(board uuid.UUID, column uuid.UUID) error) *MockColumnTemplateDatabase_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
