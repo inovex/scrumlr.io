@@ -45,3 +45,8 @@ func InsertSessionRequest(db *bun.DB, user uuid.UUID, board uuid.UUID, status st
 	_, err := db.Exec("INSERT INTO \"board_session_requests\" (\"user\", \"board\", \"status\") VALUES(?, ?, ?);", user, board, status)
 	return err
 }
+
+func InsertBoardTemplate(db *bun.DB, id uuid.UUID, creator uuid.UUID, name string, description string, favourite bool) error {
+	_, err := db.Exec("INSERT INTO \"board_templates\" (\"id\", \"creator\", \"name\", \"description\", \"favourite\") VALUES (?, ?, ?, ?, ?);", id, creator, name, description, favourite)
+	return err
+}
