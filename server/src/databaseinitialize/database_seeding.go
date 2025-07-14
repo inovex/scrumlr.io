@@ -50,3 +50,8 @@ func InsertBoardTemplate(db *bun.DB, id uuid.UUID, creator uuid.UUID, name strin
 	_, err := db.Exec("INSERT INTO \"board_templates\" (\"id\", \"creator\", \"name\", \"description\", \"favourite\") VALUES (?, ?, ?, ?, ?);", id, creator, name, description, favourite)
 	return err
 }
+
+func InsertColumnTemplate(db *bun.DB, id uuid.UUID, board uuid.UUID, name string, description string, color string, visible bool, index int) error {
+	_, err := db.Exec("INSERT INTO \"column_templates\" (\"id\", \"board_template\", \"name\", \"description\", \"color\", \"visible\", \"index\") VALUES (?, ?, ?, ?, ?, ?, ?);", id, board, name, description, color, visible, index)
+	return err
+}
