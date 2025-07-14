@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/votings"
 
@@ -170,10 +171,6 @@ func (d *DB) GetBoards(userID uuid.UUID) ([]DatabaseBoard, error) {
 		Join("INNER JOIN board_sessions AS s ON s.board = b.id").
 		Where("s.user = ?", userID).
 		Scan(context.Background(), &boards)
-
-	if err != nil {
-		return nil, err
-	}
 
 	return boards, err
 }
