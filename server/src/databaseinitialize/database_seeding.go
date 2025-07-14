@@ -40,3 +40,8 @@ func InsertSession(db *bun.DB, user uuid.UUID, board uuid.UUID, role string, ban
 	_, err := db.Exec("INSERT INTO \"board_sessions\" (\"user\", \"board\", \"role\", \"banned\", \"ready\", \"connected\", \"raised_hand\") VALUES (?, ?, ?, ?, ?, ?, ?);", user, board, role, banned, ready, connected, handRaised)
 	return err
 }
+
+func InsertSessionRequest(db *bun.DB, user uuid.UUID, board uuid.UUID, status string) error {
+	_, err := db.Exec("INSERT INTO \"board_session_requests\" (\"user\", \"board\", \"status\") VALUES(?, ?, ?);", user, board, status)
+	return err
+}
