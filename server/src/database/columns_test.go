@@ -1,8 +1,9 @@
 package database
 
 import (
-	"scrumlr.io/server/sessions"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
 
@@ -200,25 +201,25 @@ func testCreateColumnWithDescription(t *testing.T) {
 	assert.Equal(t, aDescription, column.Description)
 
 	// clean up to not crash other tests
-	_ = columnDb.Delete(boardForColumnsTest, column.ID, uuid.New())
+	_ = columnDb.Delete(boardForColumnsTest, column.ID)
 }
 
 func testDeleteColumnOnSecondIndex(t *testing.T) {
-	err := columnDb.Delete(boardForColumnsTest, columnInsertedFifth.ID, columnTestUser.ID)
+	err := columnDb.Delete(boardForColumnsTest, columnInsertedFifth.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedThird.ID, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID, columnInsertedFourth.ID)
 }
 
 func testDeleteColumnOnFirstIndex(t *testing.T) {
-	err := columnDb.Delete(boardForColumnsTest, columnInsertedThird.ID, columnTestUser.ID)
+	err := columnDb.Delete(boardForColumnsTest, columnInsertedThird.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID, columnInsertedFourth.ID)
 }
 
 func testDeleteLastColumn(t *testing.T) {
-	err := columnDb.Delete(boardForColumnsTest, columnInsertedFourth.ID, columnTestUser.ID)
+	err := columnDb.Delete(boardForColumnsTest, columnInsertedFourth.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID)
@@ -244,7 +245,7 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: note.ID, Valid: true})
 
-	deleteColumnError := columnDb.Delete(boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
+	deleteColumnError := columnDb.Delete(boardForColumnsTest, columnInsertedSecond.ID)
 	assert.Nil(t, deleteColumnError)
 
 	updatedBoard, getUpdatedBoardError := boardDb.GetBoard(boardForColumnsTest)
@@ -253,7 +254,7 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 }
 
 func testDeleteOthers(t *testing.T) {
-	_ = columnDb.Delete(boardForColumnsTest, columnInsertedFirst.ID, columnTestUser.ID)
+	_ = columnDb.Delete(boardForColumnsTest, columnInsertedFirst.ID)
 
 	verifyOrder(t, firstColumn.ID, secondColumn.ID, thirdColumn.ID)
 }
