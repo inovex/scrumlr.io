@@ -97,7 +97,7 @@ func TestDeleteColumn(t *testing.T) {
 	userId := uuid.New()
 
 	mockColumndatabase := NewMockColumnDatabase(t)
-	mockColumndatabase.EXPECT().Delete(boardId, columnId, userId).Return(nil)
+	mockColumndatabase.EXPECT().Delete(boardId, columnId).Return(nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -122,7 +122,7 @@ func TestDeleteColumn_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 
 	mockColumndatabase := NewMockColumnDatabase(t)
-	mockColumndatabase.EXPECT().Delete(boardId, columnId, userId).Return(dbError)
+	mockColumndatabase.EXPECT().Delete(boardId, columnId).Return(dbError)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
