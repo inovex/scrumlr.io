@@ -67,6 +67,15 @@ $max-card-width: 500px;
   // place cards next to each other if width limit is exceeded
   grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
   gap: $spacing--md;
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  margin-bottom: -$spacing--xl;
+  margin-left: -$spacing--xl;
+  margin-right: -$spacing--xl;
+  padding-bottom: $spacing--xl;
+  padding-left: $spacing--xl;
+  padding-right: $spacing--xl;
 }
 
 .templates__stan-container {
