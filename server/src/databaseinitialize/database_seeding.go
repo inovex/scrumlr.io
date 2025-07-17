@@ -55,3 +55,13 @@ func InsertColumnTemplate(db *bun.DB, id uuid.UUID, board uuid.UUID, name string
 	_, err := db.Exec("INSERT INTO \"column_templates\" (\"id\", \"board_template\", \"name\", \"description\", \"color\", \"visible\", \"index\") VALUES (?, ?, ?, ?, ?, ?, ?);", id, board, name, description, color, visible, index)
 	return err
 }
+
+func InsertVoting(db *bun.DB, id uuid.UUID, board uuid.UUID, limit int, multiple bool, others bool, status string, anonymous bool) error {
+	_, err := db.Exec("INSERT INTO \"votings\" (\"id\", \"board\", \"vote_limit\", \"allow_multiple_votes\", \"show_votes_of_others\", \"status\", \"is_anonymous\") VALUES (?, ?, ?, ?, ?, ?, ?);", id, board, limit, multiple, others, status, anonymous)
+	return err
+}
+
+func InsertVote(db *bun.DB, board uuid.UUID, voting uuid.UUID, user uuid.UUID, note uuid.UUID) error {
+	_, err := db.Exec("INSERT INTO \"votes\" (\"board\", \"voting\", \"user\", \"note\") VALUES (?, ?, ?, ?);", board, voting, user, note)
+	return err
+}
