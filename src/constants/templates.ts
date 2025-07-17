@@ -13,6 +13,7 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     name: "",
     description: "",
     favourite: false,
+    type: "CUSTOM",
   },
   columns: [
     {

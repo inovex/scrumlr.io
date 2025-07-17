@@ -9,7 +9,6 @@ import {
   ImportReducedTemplateWithColumns,
   setTemplateFavourite,
   Template,
-  TemplateColumn,
   TemplateWithColumns,
 } from "store/features";
 import {useTranslation} from "react-i18next";
@@ -24,7 +23,7 @@ import templatesJsonRaw from "constants/recommendedTemplates.json";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
-import {toggleRecommendedFavourite} from "store/features/templates/recommendedFavourite";
+import {toggleRecommendedFavourite} from "store/features/templates";
 import sortBy from "lodash/sortBy";
 import "./Templates.scss";
 
@@ -53,36 +52,29 @@ export const Templates = () => {
   const templates = useAppSelector((state) => state.templates);
   const templateColumns = useAppSelector((state) => state.templateColumns);
 
-  // takes the template json data and converts it to the full template with columns type.
+  // Helper to get columns for recommended templates from JSON, matching by template id
   // data like ids will be populated dynamically.
-  const convertJsonToFullTemplates = (reducedTemplates: ImportReducedTemplateWithColumns[]): TemplateWithColumns[] =>
-    reducedTemplates.map(({columns, ...rest}, indexTemplate) => ({
-      template: {
-        id: `template-${indexTemplate}`,
-        creator: "scrumlr",
-        name: t(rest.name, {ns: "templates"}),
-        description: t(rest.description, {ns: "templates"}),
-        favourite: false,
-      },
-      columns: columns.map((column, indexColumn) => ({
-        ...column,
-        id: `column-${indexTemplate}-${indexColumn}`,
-        template: `template-${indexTemplate}`,
-        index: indexColumn,
-        name: t(column.name, {ns: "templates"}),
-        description: t(column.description, {ns: "templates"}),
-      })),
+  const recommendedTemplatesJson: ImportReducedTemplateWithColumns[] = templatesJsonRaw as ImportReducedTemplateWithColumns[];
+  const getRecommendedColumns = (templateId: string) => {
+    const idx = templates.findIndex((t) => t.id === templateId && t.type === "RECOMMENDED");
+    if (idx === -1) return [];
+    const jsonTemplate = recommendedTemplatesJson[idx];
+    if (!jsonTemplate) return [];
+    return jsonTemplate.columns.map((column, indexColumn) => ({
+      ...column,
+      id: `column-${idx}-${indexColumn}`,
+      template: templateId,
+      index: indexColumn,
+      name: t(column.name, {ns: "templates"}),
+      description: t(column.description, {ns: "templates"}),
     }));
-
-  const reducedRecommendedTemplates: ImportReducedTemplateWithColumns[] = templatesJsonRaw as ImportReducedTemplateWithColumns[];
-  const fullRecommendedTemplates = convertJsonToFullTemplates(reducedRecommendedTemplates);
+  };
 
   // init templates
   useEffect(() => {
     dispatch(getTemplates());
   }, [dispatch]);
 
-  const recommendedFavourites = useAppSelector((state) => state.recommendedFavourites);
   const toggleFavourite = (templateId: string, favourite: boolean, type: "RECOMMENDED" | "CUSTOM") => {
     if (type === "RECOMMENDED") {
       dispatch(toggleRecommendedFavourite(templateId));
@@ -141,11 +133,16 @@ export const Templates = () => {
 
   // ironically, since templates and their columns are handled separately, we need to stitch them back together
   // to a common object in order to avoid losing information (since recommended templates don't have associated cols)
-  const mergeTemplateWithColumns = (template: Template, columns?: TemplateColumn[]): TemplateWithColumns => {
-    if (columns) {
-      return {template, columns};
+  // merging template with columns, using JSON for recommended, Redux for custom
+  const mergeTemplateWithColumns = (template: Template): TemplateWithColumns => {
+    if (template.type === "RECOMMENDED") {
+      const translatedTemplate = {
+        ...template,
+        name: t(template.name, {ns: "templates"}),
+        description: t(template.description, {ns: "templates"}),
+      };
+      return {template: translatedTemplate, columns: getRecommendedColumns(template.id)};
     }
-
     const associatedColumns = templateColumns.filter((tc) => tc.template === template.id);
     return {template, columns: associatedColumns};
   };
@@ -194,21 +191,15 @@ export const Templates = () => {
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
             {sortBy(
-              fullRecommendedTemplates.filter((rc) => matchSearchInput(rc.template)),
-              (tc: TemplateWithColumns) => !recommendedFavourites.includes(tc.template.id)
-            ).map((templateFull: TemplateWithColumns) => (
+              templates.filter((t) => t.type === "RECOMMENDED" && matchSearchInput(t)),
+              (t: Template) => !t.favourite
+            ).map((template: Template) => (
               <TemplateCard
                 templateType="RECOMMENDED"
-                template={{
-                  ...mergeTemplateWithColumns(templateFull.template, templateFull.columns),
-                  template: {
-                    ...templateFull.template,
-                    favourite: recommendedFavourites.includes(templateFull.template.id),
-                  },
-                }}
+                template={mergeTemplateWithColumns(template)}
                 onSelectTemplate={onSelectTemplateWithColumns}
                 onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "RECOMMENDED")}
-                key={templateFull.template.id}
+                key={template.id}
               />
             ))}
           </div>
@@ -218,7 +209,13 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard onClick={showCreateTemplateView} />
-              {sortBy(templates.filter(matchSearchInput).filter(excludeDefaultTemplate), (template: Template) => !template.favourite).map((template: Template) => (
+              {sortBy(
+                templates
+                  .filter((template) => template.type === "CUSTOM")
+                  .filter(matchSearchInput)
+                  .filter(excludeDefaultTemplate),
+                (template: Template) => !template.favourite
+              ).map((template: Template) => (
                 <TemplateCard
                   templateType="CUSTOM"
                   template={mergeTemplateWithColumns(template)}
