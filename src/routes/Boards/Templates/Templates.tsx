@@ -87,7 +87,7 @@ export const Templates = () => {
     if (type === "RECOMMENDED") {
       dispatch(toggleRecommendedFavourite(templateId));
     } else {
-      dispatch(setTemplateFavourite({id: templateId, favourite: !favourite}));
+      dispatch(setTemplateFavourite({id: templateId, favourite}));
     }
   };
 
