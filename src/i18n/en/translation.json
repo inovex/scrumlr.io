@@ -197,7 +197,10 @@
     "hiddenColumn": "Column is hidden for all participants",
     "notes_one": "{{count}} note",
     "notes_other": "{{count}} notes",
-    "color": "Change color"
+    "color": "Change color",
+    "Header": {
+      "descriptionPlaceholder": "Add description (optional)"
+    }
   },
   "ErrorPage": {
     "navigateHome": "Home",

@@ -10,12 +10,17 @@ import {Hidden, Visible, Edit, ArrowLeft, ArrowRight, Trash, Close} from "compon
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {ColorPicker} from "components/ColorPicker/ColorPicker";
 import "./ColumnSettings.scss";
+import classNames from "classnames";
 
 type ColumnSettingsProps = {
+  className: string;
   column: Column;
   onClose: () => void;
   onNameEdit: () => void;
 };
+
+// behaviour of the now smaller column menu and color picker needs to be defined, thus I disabled it for now
+const ENABLE_VERTICAL = false;
 
 export const ColumnSettings = (props: ColumnSettingsProps) => {
   const {t} = useTranslation();
@@ -30,7 +35,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
       Toast.success({title: t("Toast.hiddenColumnsVisible"), autoClose: TOAST_TIMER_SHORT});
     }
     const randomColor = getRandomColor();
-    dispatch(createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", color: randomColor, visible: false, index: columnIndex}));
+    dispatch(createColumnOptimistically({id: TEMPORARY_COLUMN_ID, name: "", description: "", color: randomColor, visible: false, index: columnIndex}));
   };
 
   useEffect(() => {
@@ -75,7 +80,8 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
           activeColor={props.column.color}
           selectColor={onSelectColor}
           closeColorPicker={() => setOpenedColorPicker(false)}
-          allowVertical
+          allowVertical={ENABLE_VERTICAL}
+          small
         />
       ),
       onClick: () => setOpenedColorPicker((o) => !o),
@@ -105,9 +111,7 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
           editColumn({
             id: props.column.id,
             column: {
-              name: props.column.name,
-              color: props.column.color,
-              index: props.column.index,
+              ...props.column,
               visible: !props.column.visible,
             },
           })
@@ -130,8 +134,8 @@ export const ColumnSettings = (props: ColumnSettingsProps) => {
   ];
 
   return (
-    <div ref={columnSettingsRef} className="column-settings">
-      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn />
+    <div ref={columnSettingsRef} className={classNames(props.className, "column-settings")}>
+      <MiniMenu items={menuItems} focusBehaviour="trap" wrapToColumn={ENABLE_VERTICAL} small />
     </div>
   );
 };
