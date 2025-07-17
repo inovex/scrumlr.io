@@ -69,7 +69,7 @@ func (d *DB) Create(insert DatabaseVotingInsert) (DatabaseVoting, error) {
 
 func (d *DB) Update(update DatabaseVotingUpdate) (DatabaseVoting, error) {
 	if update.Status == Open {
-		return DatabaseVoting{}, errors.New("only allowed to close or a abort a voting")
+		return DatabaseVoting{}, errors.New("only allowed to close or abort a voting")
 	}
 
 	updateQuery := d.db.NewUpdate().
