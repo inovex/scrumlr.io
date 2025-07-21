@@ -1,7 +1,7 @@
 import {createReducer, createAction} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
 import recommendedTemplatesJson from "constants/recommendedTemplates.json";
-import {TemplatesState, Template} from "./types";
+import {ImportReducedTemplateWithColumns, TemplatesState, Template} from "./types";
 import {createTemplateWithColumns, deleteTemplate, editTemplate, getTemplates} from "./thunks";
 
 // both this and templateColumns reducer don't have an empty state.
@@ -9,7 +9,8 @@ import {createTemplateWithColumns, deleteTemplate, editTemplate, getTemplates} f
 // therefore, they need to be in the state at all times so they can be accessed
 
 // Helper to generate recommended templates with ids, type, etc.
-const generateRecommendedTemplates = (): Template[] => (recommendedTemplatesJson as any[]).map((tpl, idx) => ({
+const generateRecommendedTemplates = (): Template[] =>
+  (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).map((tpl, idx) => ({
     id: `recommended-${idx}`,
     creator: "scrumlr",
     name: tpl.name,
@@ -25,10 +26,10 @@ export const toggleRecommendedFavourite = createAction<string>("templates/toggle
 export const templatesReducer = createReducer(initialState, (builder) => {
   builder
     // don't forget to re-add default template even after as it's still needed to create new templates
-    .addCase(getTemplates.fulfilled, (_state, action) => 
+    .addCase(getTemplates.fulfilled, (_state, action) =>
       // action.payload: TemplateWithColumns[]
       // Only store Template objects in state, set type to CUSTOM
-       [
+      [
         {...DEFAULT_TEMPLATE.template, type: "CUSTOM"} as Template,
         ...generateRecommendedTemplates(),
         ...action.payload.map((twc) => ({...twc.template, type: "CUSTOM"}) as Template),
