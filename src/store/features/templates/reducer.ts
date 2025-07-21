@@ -8,16 +8,35 @@ import {createTemplateWithColumns, deleteTemplate, editTemplate, getTemplates} f
 // the reason for this is the fact the template/templateColumn logic for reordering is handled partly by the reducer.
 // therefore, they need to be in the state at all times so they can be accessed
 
+const RECOMMENDED_FAVOURITES_KEY = "recommendedTemplateFavourites";
+
+function getRecommendedFavouritesFromStorage(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(RECOMMENDED_FAVOURITES_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function setRecommendedFavouritesToLocalStorage(ids: string[]) {
+  localStorage.setItem(RECOMMENDED_FAVOURITES_KEY, JSON.stringify(ids));
+}
+
 // Helper to generate recommended templates with ids, type, etc.
-const generateRecommendedTemplates = (): Template[] =>
-  (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).map((tpl, idx) => ({
-    id: `recommended-${idx}`,
-    creator: "scrumlr",
-    name: tpl.name,
-    description: tpl.description,
-    favourite: tpl.favourite ?? false,
-    type: "RECOMMENDED",
-  })) as Template[];
+const generateRecommendedTemplates = (): Template[] => {
+  const favIds = getRecommendedFavouritesFromStorage();
+  return (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).map((tpl, idx) => {
+    const id = `recommended-${idx}`;
+    return {
+      id,
+      creator: "scrumlr",
+      name: tpl.name,
+      description: tpl.description,
+      favourite: favIds.includes(id),
+      type: "RECOMMENDED",
+    };
+  }) as Template[];
+};
 
 const initialState: TemplatesState = [DEFAULT_TEMPLATE.template, ...generateRecommendedTemplates()];
 
@@ -38,5 +57,10 @@ export const templatesReducer = createReducer(initialState, (builder) => {
     )
     .addCase(createTemplateWithColumns.fulfilled, (state, action) => [...state, {...action.payload, type: "CUSTOM"}])
     .addCase(deleteTemplate.fulfilled, (state, action) => state.filter((template) => template.id !== action.payload))
-    .addCase(toggleRecommendedFavourite, (state, action) => state.map((t) => (t.id === action.payload ? {...t, favourite: !t.favourite} : t)));
+    .addCase(toggleRecommendedFavourite, (state, action) => {
+      const newState = state.map((t) => (t.id === action.payload ? {...t, favourite: !t.favourite} : t));
+      const favIds = newState.filter((t) => t.type === "RECOMMENDED" && t.favourite).map((t) => t.id);
+      setRecommendedFavouritesToLocalStorage(favIds);
+      return newState;
+    });
 });
