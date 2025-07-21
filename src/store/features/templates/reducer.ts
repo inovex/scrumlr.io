@@ -19,7 +19,7 @@ const generateRecommendedTemplates = (): Template[] =>
     type: "RECOMMENDED",
   })) as Template[];
 
-const initialState: TemplatesState = [{...DEFAULT_TEMPLATE.template, type: "CUSTOM"}, ...generateRecommendedTemplates()];
+const initialState: TemplatesState = [DEFAULT_TEMPLATE.template, ...generateRecommendedTemplates()];
 
 export const toggleRecommendedFavourite = createAction<string>("templates/toggleRecommendedFavourite");
 
@@ -29,11 +29,7 @@ export const templatesReducer = createReducer(initialState, (builder) => {
     .addCase(getTemplates.fulfilled, (_state, action) =>
       // action.payload: TemplateWithColumns[]
       // Only store Template objects in state, set type to CUSTOM
-      [
-        {...DEFAULT_TEMPLATE.template, type: "CUSTOM"} as Template,
-        ...generateRecommendedTemplates(),
-        ...action.payload.map((twc) => ({...twc.template, type: "CUSTOM"}) as Template),
-      ]
+      [DEFAULT_TEMPLATE.template, ...generateRecommendedTemplates(), ...action.payload.map((twc) => ({...twc.template, type: "CUSTOM"}) as Template)]
     )
     .addCase(editTemplate.fulfilled, (state, action) =>
       state.map(
