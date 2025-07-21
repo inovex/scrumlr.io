@@ -25,7 +25,7 @@ function setRecommendedFavouritesToLocalStorage(ids: string[]) {
 // Helper to generate recommended templates with ids, type, etc.
 const generateRecommendedTemplates = (): Template[] => {
   const favIds = getRecommendedFavouritesFromStorage();
-  return (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).map((tpl, idx) => {
+  return (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).map((tpl, idx): Template => {
     const id = `recommended-${idx}`;
     return {
       id,
@@ -35,7 +35,7 @@ const generateRecommendedTemplates = (): Template[] => {
       favourite: favIds.includes(id),
       type: "RECOMMENDED",
     };
-  }) as Template[];
+  });
 };
 
 const initialState: TemplatesState = [DEFAULT_TEMPLATE.template, ...generateRecommendedTemplates()];
