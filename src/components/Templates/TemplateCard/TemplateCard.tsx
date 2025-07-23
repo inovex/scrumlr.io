@@ -6,6 +6,7 @@ import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-textarea-autosize";
 import {FavouriteButton} from "components/Templates";
 import {TemplateWithColumns} from "store/features";
+import {useAppSelector} from "store";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -16,7 +17,6 @@ import "./TemplateCard.scss";
 
 export type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
-// props type which implements additional properties for custom template type
 type TemplateCardProps = {
   template: TemplateWithColumns;
   templateType: TemplateCardType;
@@ -35,7 +35,8 @@ type TemplateCardProps = {
 );
 
 export const TemplateCard = (props: TemplateCardProps) => {
-  const {template, columns} = props.template;
+  const {template} = props;
+  const columns = useAppSelector((state) => state.templateColumns.filter((col) => col.template === template.template.id));
 
   const {t} = useTranslation();
 
@@ -52,8 +53,8 @@ export const TemplateCard = (props: TemplateCardProps) => {
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
-          {label: "Delete", element: <TrashIcon />, onClick: () => props.onDeleteTemplate(template.id)},
-          {label: "Edit", element: <EditIcon />, onClick: () => props.onNavigateToEdit(template.id)},
+          {label: "Delete", element: <TrashIcon />, onClick: () => props.onDeleteTemplate(template.template.id)},
+          {label: "Edit", element: <EditIcon />, onClick: () => props.onNavigateToEdit(template.template.id)},
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
         focusBehaviour="moveFocus"
@@ -73,17 +74,16 @@ export const TemplateCard = (props: TemplateCardProps) => {
     <div className="template-card" data-cy={`template-card--${props.templateType}`}>
       <FavouriteButton
         className="template-card__favourite"
-        active={template.favourite}
+        active={template.template.favourite}
         onClick={() => {
-          // Always toggle the favourite value, regardless of template type
-          props.onToggleFavourite(template.id, !template.favourite);
+          props.onToggleFavourite(template.template.id, !template.template.favourite);
         }}
       />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={template.name} disabled />
+        <input className="template-card__title" type="text" value={template.template.name} disabled />
       </div>
       {renderMenu()}
-      <TextareaAutosize className={classNames("template-card__description")} value={template.description} disabled />
+      <TextareaAutosize className={classNames("template-card__description")} value={template.template.description} disabled />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: columns.length})}</div>
@@ -98,7 +98,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
         className={classNames("template-card__start-button", "template-card__start-button--start")}
         small
         icon={<NextIcon />}
-        onClick={() => props.onSelectTemplate({template, columns})}
+        onClick={() => props.onSelectTemplate({template: template.template, columns})}
         dataCy="template-card__start-button"
       >
         {t("Templates.TemplateCard.start")}
