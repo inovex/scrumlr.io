@@ -212,8 +212,8 @@ github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc h1:9lRDQMhESg+zvGYm
 github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc/go.mod h1:bciPuU6GHm1iF1pBvUfxfsH0Wmnc2VbpgvbI9ZWuIRs=
 github.com/uptrace/bun v1.2.15 h1:Ut68XRBLDgp9qG9QBMa9ELWaZOmzHNdczHQdrOZbEFE=
 github.com/uptrace/bun v1.2.15/go.mod h1:Eghz7NonZMiTX/Z6oKYytJ0oaMEJ/eq3kEV4vSqG038=
-github.com/uptrace/bun/dbfixture v1.2.14 h1:SZY69v+pfoUA0T2XATCSAe5IDoAJEZgBrOeM8BQnS1Y=
-github.com/uptrace/bun/dbfixture v1.2.14/go.mod h1:w4hhHT/7ZOr2joCH99WMcCaSPah+zuWd1fCLZ6Lmo2s=
+github.com/uptrace/bun/dbfixture v1.2.15 h1:0wncXVJ7L6iYIukWe7WtCpTIxKc3Z3vFX5tAFqV674c=
+github.com/uptrace/bun/dbfixture v1.2.15/go.mod h1:vCAi8ESyYHcjFZNTcalwNHI3KYl9TC4CtzL26FsulkQ=
 github.com/uptrace/bun/dialect/pgdialect v1.2.15 h1:er+/3giAIqpfrXJw+KP9B7ujyQIi5XkPnFmgjAVL6bA=
 github.com/uptrace/bun/dialect/pgdialect v1.2.15/go.mod h1:QSiz6Qpy9wlGFsfpf7UMSL6mXAL1jDJhFwuOVacCnOQ=
 github.com/uptrace/bun/extra/bundebug v1.2.14 h1:BThGgGZ83sytVqa6Kyr3uyWRDTQ0/d2/p5rNQ3HJliw=
