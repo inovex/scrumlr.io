@@ -64,3 +64,12 @@ export const templatesReducer = createReducer(initialState, (builder) => {
       return newState;
     });
 });
+
+export const recommendedTemplateColumns: Record<string, ImportReducedTemplateWithColumns["columns"]> = (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).reduce(
+  (acc, tpl, idx) => {
+    const id = `recommended-${idx}`;
+    acc[id] = tpl.columns;
+    return acc;
+  },
+  {} as Record<string, ImportReducedTemplateWithColumns["columns"]>
+);
