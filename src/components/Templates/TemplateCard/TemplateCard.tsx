@@ -35,8 +35,10 @@ type TemplateCardProps = {
 );
 
 export const TemplateCard = (props: TemplateCardProps) => {
-  const {template} = props;
-  const columns = useAppSelector((state) => state.templateColumns.filter((col) => col.template === template.template.id));
+  const {
+    template: {template},
+  } = props;
+  const columns = useAppSelector((state) => state.templateColumns.filter((col) => col.template === template.id));
 
   const {t} = useTranslation();
 
@@ -53,8 +55,8 @@ export const TemplateCard = (props: TemplateCardProps) => {
       <MiniMenu
         className={classNames("template-card__menu", "template-card__menu--open")}
         items={[
-          {label: "Delete", element: <TrashIcon />, onClick: () => props.onDeleteTemplate(template.template.id)},
-          {label: "Edit", element: <EditIcon />, onClick: () => props.onNavigateToEdit(template.template.id)},
+          {label: "Delete", element: <TrashIcon />, onClick: () => props.onDeleteTemplate(template.id)},
+          {label: "Edit", element: <EditIcon />, onClick: () => props.onNavigateToEdit(template.id)},
           {label: "Close", element: <CloseIcon />, onClick: closeMenu},
         ]}
         focusBehaviour="moveFocus"
@@ -74,16 +76,16 @@ export const TemplateCard = (props: TemplateCardProps) => {
     <div className="template-card" data-cy={`template-card--${props.templateType}`}>
       <FavouriteButton
         className="template-card__favourite"
-        active={template.template.favourite}
+        active={template.favourite}
         onClick={() => {
-          props.onToggleFavourite(template.template.id, !template.template.favourite);
+          props.onToggleFavourite(template.id, !template.favourite);
         }}
       />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={template.template.name} disabled />
+        <input className="template-card__title" type="text" value={template.name} disabled />
       </div>
       {renderMenu()}
-      <TextareaAutosize className={classNames("template-card__description")} value={template.template.description} disabled />
+      <TextareaAutosize className={classNames("template-card__description")} value={template.description} disabled />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: columns.length})}</div>
@@ -98,7 +100,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
         className={classNames("template-card__start-button", "template-card__start-button--start")}
         small
         icon={<NextIcon />}
-        onClick={() => props.onSelectTemplate({template: template.template, columns})}
+        onClick={() => props.onSelectTemplate({template, columns})}
         dataCy="template-card__start-button"
       >
         {t("Templates.TemplateCard.start")}
