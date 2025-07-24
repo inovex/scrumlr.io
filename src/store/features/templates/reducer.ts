@@ -1,3 +1,4 @@
+import {RECOMMENDED_FAVOURITES_KEY} from "constants/storage";
 import {createReducer, createAction} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
 import recommendedTemplatesJson from "constants/recommendedTemplates.json";
@@ -8,13 +9,11 @@ import {createTemplateWithColumns, deleteTemplate, editTemplate, getTemplates} f
 // the reason for this is the fact the template/templateColumn logic for reordering is handled partly by the reducer.
 // therefore, they need to be in the state at all times so they can be accessed
 
-const RECOMMENDED_FAVOURITES_KEY = "recommendedTemplateFavourites";
-
-function getRecommendedFavouritesFromStorage(): string[] {
+function getRecommendedFavouritesFromStorage(defaultValue: string[] = []) {
   try {
-    return JSON.parse(localStorage.getItem(RECOMMENDED_FAVOURITES_KEY) || "[]");
+    return JSON.parse(localStorage.getItem(RECOMMENDED_FAVOURITES_KEY) ?? JSON.stringify(defaultValue));
   } catch {
-    return [];
+    return defaultValue;
   }
 }
 
