@@ -21,11 +21,7 @@ $max-card-width: 500px;
   flex: 1;
   gap: $spacing--lg;
 
-  padding: $spacing--xl;
   border-radius: $rounded--default;
-
-  overflow-y: scroll;
-
   background-color: $blue--50;
 
   &--saved {
@@ -39,6 +35,7 @@ $max-card-width: 500px;
   justify-content: flex-start;
   align-items: center;
   gap: 0;
+  padding: $spacing--xl $spacing--xl 0 $spacing--xl;
 }
 
 .templates__container-title {
@@ -69,13 +66,7 @@ $max-card-width: 500px;
   gap: $spacing--md;
   overflow-y: scroll;
   scrollbar-width: none;
-
-  margin-bottom: -$spacing--xl;
-  margin-left: -$spacing--xl;
-  margin-right: -$spacing--xl;
-  padding-bottom: $spacing--xl;
-  padding-left: $spacing--xl;
-  padding-right: $spacing--xl;
+  padding: 0 $spacing--xl $spacing--xl $spacing--xl;
 }
 
 .templates__stan-container {
