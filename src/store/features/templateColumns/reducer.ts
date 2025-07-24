@@ -1,7 +1,8 @@
+import recommendedTemplatesJson from "constants/recommendedTemplates.json";
 import {createReducer} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
-import {recommendedTemplateColumns} from "../templates/reducer";
 import {TemplateColumnsState, TemplateColumn} from "./types";
+import {ImportReducedTemplateWithColumns} from "../templates/types";
 import {deleteTemplate, getTemplates} from "../templates";
 import {createTemplateColumn, deleteTemplateColumn, editTemplateColumn, getTemplateColumns} from "./thunks";
 
@@ -19,8 +20,7 @@ function withMeta(columns: Omit<TemplateColumn, "id" | "template" | "index">[], 
 const defaultTemplateColumns = withMeta(DEFAULT_TEMPLATE.columns, DEFAULT_TEMPLATE.template.id);
 
 // Generate recommended columns from the recommended templates
-// This assumes that recommendedTemplateColumns is an object where keys are template IDs and values are arrays
-const recommendedColumns = Object.entries(recommendedTemplateColumns).flatMap(([templateId, columns]) => withMeta(columns, templateId));
+const recommendedColumns = (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).flatMap((tpl, idx) => withMeta(tpl.columns, `recommended-${idx}`));
 
 const initialState: TemplateColumnsState = [...defaultTemplateColumns, ...recommendedColumns];
 
