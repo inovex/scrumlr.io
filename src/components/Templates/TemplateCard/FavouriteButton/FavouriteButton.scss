@@ -18,16 +18,10 @@ $icon-size: 36px;
     background-color: $gray--300;
   }
 
-  &:focus {
-    color: $navy--600;
-    border-color: var(--accent-color--200);
-  }
-
   &--active {
     color: var(--accent-color--light);
 
-    &:hover,
-    &:focus {
+    &:hover {
       color: var(--accent-color--light);
     }
   }
@@ -49,16 +43,10 @@ $icon-size: 36px;
       background-color: $navy--600;
     }
 
-    &:focus {
-      color: $gray--000;
-      border-color: var(--accent-color--200); // same as in light mode
-    }
-
     &--active {
       color: var(--accent-color--dark);
 
-      &:hover,
-      &:focus {
+      &:hover {
         color: var(--accent-color--dark);
       }
     }
