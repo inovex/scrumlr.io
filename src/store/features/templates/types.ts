@@ -1,4 +1,4 @@
-import {TemplateColumn} from "../templateColumns";
+import {TemplateColumn} from "../templateColumns/types";
 
 // getTemplates returns all templates with columns, but is the only endpoint to do so.
 // All other template / column endpoints are handled separately, i.e. getting/updating a template
