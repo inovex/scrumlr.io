@@ -1,15 +1,33 @@
+import recommendedTemplatesJson from "constants/recommendedTemplates.json";
 import {createReducer} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
-import {TemplateColumnsState} from "./types";
+import {TemplateColumnsState, TemplateColumn} from "./types";
+import {ImportReducedTemplateWithColumns} from "../templates/types";
 import {deleteTemplate, getTemplates} from "../templates";
 import {createTemplateColumn, deleteTemplateColumn, editTemplateColumn, getTemplateColumns} from "./thunks";
 
-const initialState: TemplateColumnsState = [...DEFAULT_TEMPLATE.columns];
+// Helper function to add metadata to columns
+// This function will assign an id, template id, and index to each column
+function withMeta(columns: Omit<TemplateColumn, "id" | "template" | "index">[], templateId: string): TemplateColumn[] {
+  return columns.map((col, idx) => ({
+    ...col,
+    id: `${templateId}-${idx}`,
+    template: templateId,
+    index: idx,
+  }));
+}
+
+const defaultTemplateColumns = withMeta(DEFAULT_TEMPLATE.columns, DEFAULT_TEMPLATE.template.id);
+
+// Generate recommended columns from the recommended templates
+const recommendedColumns = (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).flatMap((tpl, idx) => withMeta(tpl.columns, `recommended-${idx}`));
+
+const initialState: TemplateColumnsState = [...defaultTemplateColumns, ...recommendedColumns];
 
 export const templateColumnsReducer = createReducer(initialState, (builder) => {
   builder
     // each full template has a column prop which is an array, so we need to map out the columns prop and also flatten the array
-    .addCase(getTemplates.fulfilled, (_state, action) => [...DEFAULT_TEMPLATE.columns, ...action.payload.flatMap((c) => c.columns)])
+    .addCase(getTemplates.fulfilled, (_state, action) => [...defaultTemplateColumns, ...recommendedColumns, ...action.payload.flatMap((c) => withMeta(c.columns, c.template.id))])
     // when retrieving template columns, update those which already exist and add the ones which don't
     // and return a new state in redux fashion
     .addCase(
