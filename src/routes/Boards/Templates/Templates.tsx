@@ -9,7 +9,6 @@ import {
   ImportReducedTemplateWithColumns,
   setTemplateFavourite,
   Template,
-  TemplateColumn,
   TemplateWithColumns,
 } from "store/features";
 import {useTranslation} from "react-i18next";
@@ -24,6 +23,8 @@ import templatesJsonRaw from "constants/recommendedTemplates.json";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
+import {toggleRecommendedFavourite} from "store/features/templates";
+import sortBy from "lodash/sortBy";
 import "./Templates.scss";
 
 type Side = "left" | "right";
@@ -51,36 +52,36 @@ export const Templates = () => {
   const templates = useAppSelector((state) => state.templates);
   const templateColumns = useAppSelector((state) => state.templateColumns);
 
-  // takes the template json data and converts it to the full template with columns type.
+  // Helper to get columns for recommended templates from JSON, matching by template id
   // data like ids will be populated dynamically.
-  const convertJsonToFullTemplates = (reducedTemplates: ImportReducedTemplateWithColumns[]): TemplateWithColumns[] =>
-    reducedTemplates.map(({columns, ...rest}, indexTemplate) => ({
-      template: {
-        id: `template-${indexTemplate}`,
-        creator: "scrumlr",
-        name: t(rest.name, {ns: "templates"}),
-        description: t(rest.description, {ns: "templates"}),
-        favourite: false,
-      },
-      columns: columns.map((column, indexColumn) => ({
-        ...column,
-        id: `column-${indexTemplate}-${indexColumn}`,
-        template: `template-${indexTemplate}`,
-        index: indexColumn,
-        name: t(column.name, {ns: "templates"}),
-        description: t(column.description, {ns: "templates"}),
-      })),
+  const recommendedTemplatesJson: ImportReducedTemplateWithColumns[] = templatesJsonRaw as ImportReducedTemplateWithColumns[];
+  const getRecommendedColumns = (templateId: string) => {
+    const idx = templates.findIndex((template) => template.id === templateId && template.type === "RECOMMENDED");
+    if (idx === -1) return [];
+    const jsonTemplate = recommendedTemplatesJson[idx];
+    if (!jsonTemplate) return [];
+    return jsonTemplate.columns.map((column, indexColumn) => ({
+      ...column,
+      id: `column-${idx}-${indexColumn}`,
+      template: templateId,
+      index: indexColumn,
+      name: t(column.name, {ns: "templates"}),
+      description: t(column.description, {ns: "templates"}),
     }));
-
-  const reducedRecommendedTemplates: ImportReducedTemplateWithColumns[] = templatesJsonRaw as ImportReducedTemplateWithColumns[];
-  const fullRecommendedTemplates = convertJsonToFullTemplates(reducedRecommendedTemplates);
+  };
 
   // init templates
   useEffect(() => {
     dispatch(getTemplates());
   }, [dispatch]);
 
-  const toggleFavourite = (templateId: string, favourite: boolean) => dispatch(setTemplateFavourite({id: templateId, favourite: !favourite}));
+  const toggleFavourite = (templateId: string, favourite: boolean, type: "RECOMMENDED" | "CUSTOM") => {
+    if (type === "RECOMMENDED") {
+      dispatch(toggleRecommendedFavourite(templateId));
+    } else {
+      dispatch(setTemplateFavourite({id: templateId, favourite}));
+    }
+  };
 
   const navigateToEdit = (templateId: string) => {
     navigate(`../edit/${templateId}`);
@@ -132,11 +133,16 @@ export const Templates = () => {
 
   // ironically, since templates and their columns are handled separately, we need to stitch them back together
   // to a common object in order to avoid losing information (since recommended templates don't have associated cols)
-  const mergeTemplateWithColumns = (template: Template, columns?: TemplateColumn[]): TemplateWithColumns => {
-    if (columns) {
-      return {template, columns};
+  // merging template with columns, using JSON for recommended, Redux for custom
+  const mergeTemplateWithColumns = (template: Template): TemplateWithColumns => {
+    if (template.type === "RECOMMENDED") {
+      const translatedTemplate = {
+        ...template,
+        name: t(template.name, {ns: "templates"}),
+        description: t(template.description, {ns: "templates"}),
+      };
+      return {template: translatedTemplate, columns: getRecommendedColumns(template.id)};
     }
-
     const associatedColumns = templateColumns.filter((tc) => tc.template === template.id);
     return {template, columns: associatedColumns};
   };
@@ -184,16 +190,18 @@ export const Templates = () => {
         <section className="templates__container templates__container--recommended">
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
-            {fullRecommendedTemplates
-              .filter((rc) => matchSearchInput(rc.template))
-              .map((templateFull) => (
-                <TemplateCard
-                  templateType="RECOMMENDED"
-                  template={mergeTemplateWithColumns(templateFull.template, templateFull.columns)}
-                  onSelectTemplate={onSelectTemplateWithColumns}
-                  key={templateFull.template.id}
-                />
-              ))}
+            {sortBy(
+              templates.filter((template) => template.type === "RECOMMENDED" && matchSearchInput(template)),
+              (template: Template) => !template.favourite
+            ).map((template: Template) => (
+              <TemplateCard
+                templateType="RECOMMENDED"
+                template={mergeTemplateWithColumns(template)}
+                onSelectTemplate={onSelectTemplateWithColumns}
+                onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "RECOMMENDED")}
+                key={template.id}
+              />
+            ))}
           </div>
         </section>
         {showCustomTemplates && (
@@ -201,20 +209,23 @@ export const Templates = () => {
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
               <CreateTemplateCard onClick={showCreateTemplateView} />
-              {templates
-                .filter(matchSearchInput)
-                .filter(excludeDefaultTemplate)
-                .map((template) => (
-                  <TemplateCard
-                    templateType="CUSTOM"
-                    template={mergeTemplateWithColumns(template)}
-                    onSelectTemplate={onSelectTemplateWithColumns}
-                    onDeleteTemplate={deleteTemplateAndColumns}
-                    onNavigateToEdit={navigateToEdit}
-                    onToggleFavourite={toggleFavourite}
-                    key={template.id}
-                  />
-                ))}
+              {sortBy(
+                templates
+                  .filter((template) => template.type === "CUSTOM")
+                  .filter(matchSearchInput)
+                  .filter(excludeDefaultTemplate),
+                (template: Template) => !template.favourite
+              ).map((template: Template) => (
+                <TemplateCard
+                  templateType="CUSTOM"
+                  template={mergeTemplateWithColumns(template)}
+                  onSelectTemplate={onSelectTemplateWithColumns}
+                  onDeleteTemplate={deleteTemplateAndColumns}
+                  onNavigateToEdit={navigateToEdit}
+                  onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
+                  key={template.id}
+                />
+              ))}
             </div>
           </section>
         )}

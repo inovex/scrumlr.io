@@ -57,13 +57,13 @@ export const Boards = () => {
 
         {/* mobile search button + search bar (row below) */}
         <Input
-            className="boards__mobile-search-bar"
-            type="search"
-            height="larger"
-            placeholder={t("Input.placeholder.search")}
-            input={searchBarInput}
-            setInput={setSearchBarInput}
-          />
+          className="boards__mobile-search-bar"
+          type="search"
+          height="larger"
+          placeholder={t("Input.placeholder.search")}
+          input={searchBarInput}
+          setInput={setSearchBarInput}
+        />
       </>
     ) : null;
 
