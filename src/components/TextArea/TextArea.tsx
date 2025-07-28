@@ -18,6 +18,8 @@ type TextAreaProps = {
 
   placeholder?: string;
 
+  disabled?: boolean;
+
   autoFocus?: boolean;
   onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
@@ -44,6 +46,7 @@ export const TextArea = (props: TextAreaProps) => {
         autoFocus={props.autoFocus}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
+        disabled={props.disabled}
       />
     </>
   );
