@@ -14,7 +14,7 @@ type TextAreaProps = {
   // not embedded:  form component like input
   embedded?: boolean;
   fitted?: boolean; // affects the text, padding, and border-radius rn
-  thickBorder?: boolean; // border width
+  border?: "none" | "normal" | "thick";
 
   placeholder?: string;
 
@@ -35,12 +35,16 @@ export const TextArea = (props: TextAreaProps) => {
     <>
       <style>{`.text-area { --text-area-lines: ${lines} }`}</style>
       <TextareaAutosize
-        className={classNames(props.className, "text-area", {
-          "text-area--extendable": props.extendable,
-          "text-area--embedded": props.embedded,
-          "text-area--fitted": props.fitted,
-          "text-area--thick-border": props.thickBorder,
-        })}
+        className={classNames(
+          props.className,
+          "text-area",
+          {
+            "text-area--extendable": props.extendable,
+            "text-area--embedded": props.embedded,
+            "text-area--fitted": props.fitted,
+          },
+          `text-area--border-${props.border ?? "normal"}`
+        )}
         value={props.input}
         maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : lines}
         onInput={updateInput}

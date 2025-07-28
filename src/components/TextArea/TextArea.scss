@@ -20,8 +20,22 @@ $border-width--thick: 3px;
     --text-area-padding: #{$padding--fitted};
   }
 
-  &--thick-border {
-    --text-area-border-width: #{$border-width--thick};
+  &--border {
+    &-none {
+      --text-area-border-width: 0;
+      --text-area-padding: 0;
+      border-radius: 0;
+    }
+
+    &-normal {
+      --text-area-border-width: #{$border-width--default};
+      border-radius: $rounded--default;
+    }
+
+    &-thick {
+      --text-area-border-width: #{$border-width--thick};
+      border-radius: $rounded--default;
+    }
   }
 
   $dynamic-height: calc(var(--text-area-lines) * $line-height--default + 2 * (var(--text-area-padding) + var(--text-area-border-width)));
@@ -29,11 +43,9 @@ $border-width--thick: 3px;
   min-height: $dynamic-height;
   max-height: $dynamic-height;
 
-  padding: $padding--default;
+  padding: var(--text-area-padding);
   margin: 0;
   outline: none;
-  border: none;
-  border-radius: $rounded--default;
 
   font-size: $text--base;
   font-weight: 500;
@@ -67,17 +79,13 @@ $border-width--thick: 3px;
 
   &--embedded {
     background: none;
-    border: $border-width--default dashed var(--accent-color--light);
+    border: var(--text-area-border-width) dashed var(--accent-color--light);
   }
 
   &--fitted {
     font-size: $text--xs;
     padding: $padding--fitted;
     border-radius: 5px;
-  }
-
-  &--thick-border {
-    border-width: $border-width--thick;
   }
 }
 
