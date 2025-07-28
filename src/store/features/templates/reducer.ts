@@ -1,7 +1,7 @@
+import recommendedTemplatesJson from "constants/recommendedTemplates.json";
 import {RECOMMENDED_FAVOURITES_KEY} from "constants/storage";
 import {createReducer, createAction} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
-import recommendedTemplatesJson from "constants/recommendedTemplates.json";
 import {ImportReducedTemplateWithColumns, TemplatesState, Template} from "./types";
 import {createTemplateWithColumns, deleteTemplate, editTemplate, getTemplates} from "./thunks";
 

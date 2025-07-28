@@ -6,6 +6,7 @@ import {MiniMenu} from "components/MiniMenu/MiniMenu";
 import TextareaAutosize from "react-textarea-autosize";
 import {FavouriteButton} from "components/Templates";
 import {TemplateWithColumns} from "store/features";
+import {useAppSelector} from "store";
 import {ReactComponent as MenuIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as ColumnsIcon} from "assets/icons/columns.svg";
 import {ReactComponent as NextIcon} from "assets/icons/next.svg";
@@ -16,7 +17,6 @@ import "./TemplateCard.scss";
 
 export type TemplateCardType = "RECOMMENDED" | "CUSTOM";
 
-// props type which implements additional properties for custom template type
 type TemplateCardProps = {
   template: TemplateWithColumns;
   templateType: TemplateCardType;
@@ -35,7 +35,10 @@ type TemplateCardProps = {
 );
 
 export const TemplateCard = (props: TemplateCardProps) => {
-  const {template, columns} = props.template;
+  const {
+    template: {template},
+  } = props;
+  const columns = useAppSelector((state) => state.templateColumns.filter((col) => col.template === template.id));
 
   const {t} = useTranslation();
 
@@ -75,7 +78,6 @@ export const TemplateCard = (props: TemplateCardProps) => {
         className="template-card__favourite"
         active={template.favourite}
         onClick={() => {
-          // Always toggle the favourite value, regardless of template type
           props.onToggleFavourite(template.id, !template.favourite);
         }}
       />
