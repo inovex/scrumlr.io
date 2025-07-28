@@ -29,10 +29,11 @@ const LINES_DEFAULT = 7;
 
 export const TextArea = (props: TextAreaProps) => {
   const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput?.(e.currentTarget.value);
+  const lines = props.lines ?? LINES_DEFAULT;
 
   return (
     <>
-      <style>{`.text-area { --text-area-lines: ${props.lines ?? LINES_DEFAULT} }`}</style>
+      <style>{`.text-area { --text-area-lines: ${lines} }`}</style>
       <TextareaAutosize
         className={classNames(props.className, "text-area", {
           "text-area--extendable": props.extendable,
@@ -41,6 +42,7 @@ export const TextArea = (props: TextAreaProps) => {
           "text-area--thick-border": props.thickBorder,
         })}
         value={props.input}
+        maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : lines}
         onInput={updateInput}
         placeholder={props.placeholder}
         autoFocus={props.autoFocus}
