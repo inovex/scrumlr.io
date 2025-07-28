@@ -2,6 +2,7 @@ import recommendedTemplatesJson from "constants/recommendedTemplates.json";
 import {RECOMMENDED_FAVOURITES_KEY} from "constants/storage";
 import {createReducer, createAction} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
+import {getFromStorage, saveToStorage} from "utils/storage";
 import {ImportReducedTemplateWithColumns, TemplatesState, Template} from "./types";
 import {createTemplateWithColumns, deleteTemplate, editTemplate, getTemplates} from "./thunks";
 
@@ -9,21 +10,9 @@ import {createTemplateWithColumns, deleteTemplate, editTemplate, getTemplates} f
 // the reason for this is the fact the template/templateColumn logic for reordering is handled partly by the reducer.
 // therefore, they need to be in the state at all times so they can be accessed
 
-function getRecommendedFavouritesFromStorage(defaultValue: string[] = []) {
-  try {
-    return JSON.parse(localStorage.getItem(RECOMMENDED_FAVOURITES_KEY) ?? JSON.stringify(defaultValue));
-  } catch {
-    return defaultValue;
-  }
-}
-
-function setRecommendedFavouritesToLocalStorage(ids: string[]) {
-  localStorage.setItem(RECOMMENDED_FAVOURITES_KEY, JSON.stringify(ids));
-}
-
 // Helper to generate recommended templates with ids, type, etc.
 const generateRecommendedTemplates = (): Template[] => {
-  const favIds = getRecommendedFavouritesFromStorage();
+  const favIds = getFromStorage<string[]>(RECOMMENDED_FAVOURITES_KEY, []);
   return (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).map((tpl, idx): Template => {
     const id = `recommended-${idx}`;
     return {
@@ -59,7 +48,7 @@ export const templatesReducer = createReducer(initialState, (builder) => {
     .addCase(toggleRecommendedFavourite, (state, action) => {
       const newState = state.map((t) => (t.id === action.payload ? {...t, favourite: !t.favourite} : t));
       const favIds = newState.filter((t) => t.type === "RECOMMENDED" && t.favourite).map((t) => t.id);
-      setRecommendedFavouritesToLocalStorage(favIds);
+      saveToStorage(RECOMMENDED_FAVOURITES_KEY, JSON.stringify(favIds));
       return newState;
     });
 });
