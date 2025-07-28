@@ -195,25 +195,28 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     component: "",
   },
   templates: [
-    // default template added manually, as reducers initial state isn't regarded
-    DEFAULT_TEMPLATE.template,
+    // Default and two custom templates for tests
+    {...DEFAULT_TEMPLATE.template, type: "CUSTOM"},
     {
       id: "test-templates-id-1",
       creator: "test-auth-user-id",
       name: "sample name 1",
       description: "sample description 1",
-      favourite: true,
+      favourite: false,
+      type: "CUSTOM",
     },
     {
       id: "test-templates-id-2",
       creator: "test-auth-user-id",
       name: "sample name 2",
       description: "sample description 2",
-      favourite: false,
+      favourite: true,
+      type: "CUSTOM",
     },
   ],
   templateColumns: [
     ...DEFAULT_TEMPLATE.columns,
+    // Columns for custom templates
     {
       id: "test-templates-columns-id-1",
       template: "test-templates-id-1",
