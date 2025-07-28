@@ -56,7 +56,7 @@ export const Templates = () => {
   // data like ids will be populated dynamically.
   const recommendedTemplatesJson: ImportReducedTemplateWithColumns[] = templatesJsonRaw as ImportReducedTemplateWithColumns[];
   const getRecommendedColumns = (templateId: string) => {
-    const idx = templates.findIndex((t) => t.id === templateId && t.type === "RECOMMENDED");
+    const idx = templates.findIndex((template) => template.id === templateId && template.type === "RECOMMENDED");
     if (idx === -1) return [];
     const jsonTemplate = recommendedTemplatesJson[idx];
     if (!jsonTemplate) return [];
@@ -191,8 +191,8 @@ export const Templates = () => {
           {renderContainerHeader("left", t("Templates.recommendedTemplates"))}
           <div className="templates__card-container">
             {sortBy(
-              templates.filter((t) => t.type === "RECOMMENDED" && matchSearchInput(t)),
-              (t: Template) => !t.favourite
+              templates.filter((template) => template.type === "RECOMMENDED" && matchSearchInput(template)),
+              (template: Template) => !template.favourite
             ).map((template: Template) => (
               <TemplateCard
                 templateType="RECOMMENDED"
