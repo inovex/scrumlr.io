@@ -6,7 +6,7 @@ import "./TextArea.scss";
 type TextAreaProps = {
   className?: string;
   input: string;
-  setInput: Dispatch<SetStateAction<string>>;
+  setInput?: Dispatch<SetStateAction<string>>;
 
   lines?: number;
   extendable?: boolean;
@@ -28,7 +28,7 @@ type TextAreaProps = {
 const LINES_DEFAULT = 7;
 
 export const TextArea = (props: TextAreaProps) => {
-  const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput(e.currentTarget.value);
+  const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput?.(e.currentTarget.value);
 
   return (
     <>
