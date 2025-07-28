@@ -2,37 +2,36 @@ package database
 
 import (
 	"database/sql"
+	"scrumlr.io/server/sessions"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"scrumlr.io/server/database/types"
-	"testing"
+	"scrumlr.io/server/common"
 )
 
-func TestInsertUser(t *testing.T) {
+func TestRunnerForUser(t *testing.T) {
+	t.Run("Create=0", testInsertUser)
+
+	t.Run("Update=0", testUpdateUser)
+
+	t.Run("Get=0", testGetUser)
+	t.Run("Get=1", testGetUnknownUser)
+}
+
+func testInsertUser(t *testing.T) {
 	name := "Some user"
-	user, err := testDb.CreateAnonymousUser(name)
+	user, err := userDb.CreateAnonymousUser(name)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, user.ID)
-	assert.Equal(t, types.AccountTypeAnonymous, user.AccountType)
+	assert.Equal(t, common.Anonymous, user.AccountType)
 	assert.Equal(t, name, user.Name)
 }
 
-func TestInsertUserWithEmptyName(t *testing.T) {
-	name := "\t\n "
-	_, err := testDb.CreateAnonymousUser(name)
-	assert.NotNil(t, err)
-}
+func testGetUser(t *testing.T) {
+	user := fixture.MustRow("DatabaseUser.john").(*sessions.DatabaseUser)
 
-func TestInsertUserWithNewlineName(t *testing.T) {
-	name := "Foo\nBar"
-	_, err := testDb.CreateAnonymousUser(name)
-	assert.NotNil(t, err)
-}
-
-func TestGetUser(t *testing.T) {
-	user := fixture.MustRow("User.john").(*User)
-
-	gotUser, err := testDb.GetUser(user.ID)
+	gotUser, err := userDb.GetUser(user.ID)
 	assert.Nil(t, err)
 	assert.NotNil(t, gotUser)
 	assert.Equal(t, user.ID, gotUser.ID)
@@ -40,18 +39,18 @@ func TestGetUser(t *testing.T) {
 	assert.Equal(t, user.Name, gotUser.Name)
 }
 
-func TestGetUnknownUser(t *testing.T) {
+func testGetUnknownUser(t *testing.T) {
 	id, _ := uuid.Parse("123e4567-e89b-12d3-a456-426614174000")
-	_, err := testDb.GetUser(id)
+	_, err := userDb.GetUser(id)
 	assert.Equal(t, sql.ErrNoRows, err)
 }
 
-func TestUpdateUser(t *testing.T) {
-	user, err := testDb.CreateAnonymousUser("Some name")
+func testUpdateUser(t *testing.T) {
+	user, err := userDb.CreateAnonymousUser("Some name")
 	assert.Nil(t, err)
 
 	newName := "Piece Peace"
-	updatedUser, err := testDb.UpdateUser(UserUpdate{ID: user.ID, Name: newName})
+	updatedUser, err := userDb.UpdateUser(sessions.DatabaseUserUpdate{ID: user.ID, Name: newName})
 	assert.Nil(t, err)
 
 	assert.Equal(t, newName, updatedUser.Name)

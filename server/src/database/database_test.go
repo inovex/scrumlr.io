@@ -5,7 +5,17 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"scrumlr.io/server/sessions"
 	"time"
+
+	"github.com/uptrace/bun"
+	"scrumlr.io/server/boards"
+	"scrumlr.io/server/votings"
+
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/columntemplates"
+	"scrumlr.io/server/notes"
 
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
@@ -16,10 +26,20 @@ import (
 	"github.com/uptrace/bun/dbfixture"
 	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/reactions"
+	"scrumlr.io/server/sessionrequests"
 )
 
-var testDb *Database
+var testDb *bun.DB
+var boardDb boards.BoardDatabase
+var notesDb notes.NotesDatabase
 var reactionDb reactions.ReactionDatabase
+var sessionDb sessions.SessionDatabase
+var sessionRequestDb sessionrequests.SessionRequestDatabase
+var userDb sessions.UserDatabase
+var columnDb columns.ColumnDatabase
+var votingDb votings.VotingDatabase
+var columnTemplateDb columntemplates.ColumnTemplateDatabase
+var boardTemplatesDb boardtemplates.BoardTemplateDatabase
 var fixture *dbfixture.Fixture
 
 const DatabaseUsernameAndPassword = "dbtest"
@@ -43,9 +63,19 @@ func testMainWithDefer(m *testing.M) int {
 	}
 
 	bun := initialize.InitializeBun(database, true)
+	testDb = bun
 
-	testDb = New(bun)
+	boardDb = boards.NewBoardDatabase(bun)
 	reactionDb = reactions.NewReactionsDatabase(bun)
+	sessionDb = sessions.NewSessionDatabase(bun)
+	sessionRequestDb = sessionrequests.NewSessionRequestDatabase(bun)
+	userDb = sessions.NewUserDatabase(bun)
+	notesDb = notes.NewNotesDatabase(bun)
+	votingDb = votings.NewVotingDatabase(bun)
+	columnDb = columns.NewColumnsDatabase(bun)
+	columnTemplateDb = columntemplates.NewColumnTemplateDatabase(bun)
+	boardTemplatesDb = boardtemplates.NewBoardTemplateDatabase(bun)
+
 	err = loadTestdata()
 	if err != nil {
 		println(fmt.Sprintf("unable to load testdata: %s", err))
@@ -114,18 +144,18 @@ func initDatabase() (string, func(), error) {
 }
 
 func loadTestdata() error {
-	testDb.db.RegisterModel(
-		(*User)(nil),
-		(*Board)(nil),
-		(*BoardSessionInsert)(nil),
-		(*Column)(nil),
-		(*Note)(nil),
-		(*Voting)(nil),
-		(*Vote)(nil),
+	testDb.RegisterModel(
+		(*sessions.DatabaseUser)(nil),
+		(*boards.DatabaseBoard)(nil),
+		(*sessions.DatabaseBoardSessionInsert)(nil),
+		(*columns.DatabaseColumn)(nil),
+		(*notes.DatabaseNote)(nil),
+		(*votings.DatabaseVoting)(nil),
+		(*votings.DatabaseVote)(nil),
 		(*reactions.DatabaseReaction)(nil),
-		(*BoardTemplate)(nil),
-		(*ColumnTemplate)(nil),
+		(*boardtemplates.DatabaseBoardTemplate)(nil),
+		(*columntemplates.DatabaseColumnTemplate)(nil),
 	)
-	fixture = dbfixture.New(testDb.db)
+	fixture = dbfixture.New(testDb)
 	return fixture.Load(context.Background(), os.DirFS("testdata"), "fixture.yml")
 }

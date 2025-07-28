@@ -21,11 +21,7 @@ $max-card-width: 500px;
   flex: 1;
   gap: $spacing--lg;
 
-  padding: $spacing--xl;
   border-radius: $rounded--default;
-
-  overflow-y: scroll;
-
   background-color: $blue--50;
 
   &--saved {
@@ -39,6 +35,7 @@ $max-card-width: 500px;
   justify-content: flex-start;
   align-items: center;
   gap: 0;
+  padding: $spacing--xl $spacing--xl 0 $spacing--xl;
 }
 
 .templates__container-title {
@@ -67,6 +64,9 @@ $max-card-width: 500px;
   // place cards next to each other if width limit is exceeded
   grid-template-columns: repeat(auto-fit, minmax(min(100%, $max-card-width), 1fr));
   gap: $spacing--md;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  padding: 0 $spacing--xl $spacing--xl $spacing--xl;
 }
 
 .templates__stan-container {

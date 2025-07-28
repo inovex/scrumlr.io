@@ -16,7 +16,7 @@ $card-description-height: 4 * 20px;
   width: 100%;
   height: $card-height;
   border-radius: $rounded--default;
-  padding: $spacing--lg;
+  padding: $spacing--base;
 
   background-color: $gray--000;
   box-shadow: 0 6px 9px 0 rgba($blue--500, 0.1);
@@ -60,7 +60,7 @@ $card-description-height: 4 * 20px;
 
   width: 100%;
 
-  font-size: $text--lg;
+  font-size: $text--md;
   font-weight: 700;
   line-height: 24px; // decreased line height to change distance to bottom border
 
