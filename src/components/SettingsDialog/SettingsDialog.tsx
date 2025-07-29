@@ -6,11 +6,12 @@ import {useTranslation} from "react-i18next";
 import {Avatar} from "components/Avatar";
 import {Portal} from "components/Portal";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
-import {useAppSelector} from "store";
+import {useAppSelector, useAppDispatch} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
-import {ArrowLeft, Close,Logout} from "components/Icon";
+import {ArrowLeft, Close, Logout} from "components/Icon";
 import {MENU_ENTRIES, MenuEntry, MenuItemConfig, MenuItemKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
+import {signOut} from "store/features/auth/thunks";
 import "./SettingsDialog.scss";
 
 type SettingsDialogProps = {
@@ -21,6 +22,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const {t} = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const me = useAppSelector((state) => state.auth.user!);
   const isBoardModerator = useAppSelector((state) => state.participants?.self?.role === "MODERATOR" || state.participants?.self?.role === "OWNER");
 
@@ -112,8 +114,8 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   };
 
   const handleLogout = () => {
-    // TODO
-    navigate("/logout");
+    dispatch(signOut());
+    navigate("/login");
   };
   return (
     <Portal onClose={() => navigate(`..`)}>
@@ -132,7 +134,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
                 {/* render all menu items */}
                 <nav className="settings-dialog__navigation">{MENU_ENTRIES.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
-                <Link to="/settings/profile" className="settings-dialog__logout navigation__item accent-color__poker-purple" type="button" onClick={handleLogout}>
+                <Link to="/login" className="settings-dialog__logout navigation__item accent-color__poker-purple" type="button" onClick={handleLogout}>
                   <Logout className="navigation-item__icon" />
                   <div className="navigation-item__content">
                     <p className="navigation-item__name">{t("SettingsDialog.Logout")}</p>
