@@ -1,5 +1,6 @@
 import {FC} from "react";
 import "./NoteDialogHeader.scss";
+import {TextArea} from "components/TextArea/TextArea";
 
 type NoteDialogHeaderProps = {
   columnName: string;
@@ -11,6 +12,6 @@ export const NoteDialogHeader: FC<NoteDialogHeaderProps> = ({columnName, columnD
     <h2 data-clarity-mask="True" onClick={(e) => e.stopPropagation()}>
       {columnName}
     </h2>
-    <div className="note-dialog-header__description">{columnDescription}</div>
+    <TextArea className="note-dialog-header__description" input={columnDescription} embedded extendable={false} disabled border="none" textAlign="center" rows={3} />
   </div>
 );

@@ -37,6 +37,13 @@
   font-size: $text--lg;
   font-weight: 600;
   line-height: 30px;
+
+  // i might be abusing our sweet text area component for our purpose here,
+  // so i have to override some styles from outside
+  color: $gray--000;
+  &:hover {
+    color: $gray--000;
+  }
 }
 
 [theme="dark"] {
