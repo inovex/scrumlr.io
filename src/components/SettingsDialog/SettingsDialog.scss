@@ -28,6 +28,20 @@ $settings-dialog-container--bottom: 62px;
   display: flex;
   flex-direction: row;
 }
+
+.settings-dialog__logout.navigation__item {
+  margin-top: auto;
+  margin-bottom: $spacing--xl;
+
+  &:hover {
+    background-color: $navy--200;
+  }
+  .navigation-item__icon {
+    background: $navy--400;
+    color: $gray--000;
+  }
+}
+
 @media screen and (min-width: 450px) {
   .settings-dialog {
     height: 616px;
@@ -71,15 +85,20 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   width: 100%;
   background-color: $gray--000;
 }
+
 [theme="dark"] .settings-dialog__sidebar {
   background-color: $navy--500;
 }
 .settings-dialog--selected .settings-dialog__sidebar {
   display: none;
 }
+
 @media screen and (min-width: 450px) {
   .settings-dialog__sidebar {
     width: 380px;
@@ -89,7 +108,7 @@ $settings-dialog-container--bottom: 62px;
 }
 @media screen and (min-width: 920px) {
   .settings-dialog--selected .settings-dialog__sidebar {
-    display: block;
+    display: flex;
   }
   .settings-dialog__sidebar {
     width: 318px;
@@ -105,6 +124,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__navigation {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: 8px;
 }
@@ -315,5 +335,17 @@ $settings-dialog-container--bottom: 62px;
 
   .settings-dialog__group {
     background-color: $navy--500;
+  }
+
+  .settings-dialog__logout.navigation__item {
+    background-color: $navy--200;
+    &:hover {
+      background-color: $navy--300;
+    }
+
+    .navigation-item__icon {
+      background: $gray--000;
+      color: $navy--400;
+    }
   }
 }

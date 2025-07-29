@@ -8,7 +8,7 @@ import {Portal} from "components/Portal";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {useAppSelector} from "store";
 import {dialogTransitionConfig} from "utils/transitionConfig";
-import {ArrowLeft, Close} from "components/Icon";
+import {ArrowLeft, Close,Logout} from "components/Icon";
 import {MENU_ENTRIES, MenuEntry, MenuItemConfig, MenuItemKey, MOBILE_BREAKPOINT} from "constants/settings";
 import {getColorClassName} from "constants/colors";
 import "./SettingsDialog.scss";
@@ -111,6 +111,10 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     );
   };
 
+  const handleLogout = () => {
+    // TODO
+    navigate("/logout");
+  };
   return (
     <Portal onClose={() => navigate(`..`)}>
       <div className="settings-dialog__background" />
@@ -128,6 +132,12 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
                 {/* render all menu items */}
                 <nav className="settings-dialog__navigation">{MENU_ENTRIES.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
+                <Link to="/settings/profile" className="settings-dialog__logout navigation__item accent-color__poker-purple" type="button" onClick={handleLogout}>
+                  <Logout className="navigation-item__icon" />
+                  <div className="navigation-item__content">
+                    <p className="navigation-item__name">{t("SettingsDialog.Logout")}</p>
+                  </div>
+                </Link>
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">

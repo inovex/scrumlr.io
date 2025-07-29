@@ -444,7 +444,8 @@
     "ExportBoardDescription": "Exportiere das Board",
     "Feedback": "Feedback",
     "FeedbackDescription": "Wir würden gerne von dir hören",
-    "ProfileDescription": "Profil bearbeiten"
+    "ProfileDescription": "Profil bearbeiten",
+    "Logout": "Abmelden"
   },
   "BoardSettings": {
     "BoardName": "Sitzungsname",
