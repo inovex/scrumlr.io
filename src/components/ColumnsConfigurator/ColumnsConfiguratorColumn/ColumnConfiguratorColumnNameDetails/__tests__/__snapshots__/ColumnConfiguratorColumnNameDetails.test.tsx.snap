@@ -37,10 +37,10 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (des
       class="column-configurator-column-name-details__description-wrapper"
     >
       <style>
-        .text-area { --text-area-lines: 7 }
+        .text-area { --text-area-rows: 7 }
       </style>
       <textarea
-        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted"
+        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--border-normal text-area--text-align-left"
         placeholder="Description (optional)"
       >
         Default Description
@@ -93,10 +93,10 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nam
       class="column-configurator-column-name-details__description-wrapper"
     >
       <style>
-        .text-area { --text-area-lines: 7 }
+        .text-area { --text-area-rows: 7 }
       </style>
       <textarea
-        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted"
+        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--border-normal text-area--text-align-left"
         placeholder="Description (optional)"
       >
         Default Description
