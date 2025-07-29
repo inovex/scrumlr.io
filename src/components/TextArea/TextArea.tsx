@@ -8,7 +8,7 @@ type TextAreaProps = {
   input: string;
   setInput?: Dispatch<SetStateAction<string>>;
 
-  lines?: number;
+  rows?: number;
   extendable?: boolean;
   // embedded:      to be used inside another component
   // not embedded:  form component like input
@@ -25,15 +25,15 @@ type TextAreaProps = {
   onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
 };
 
-const LINES_DEFAULT = 7;
+const ROWS_DEFAULT = 7;
 
 export const TextArea = (props: TextAreaProps) => {
   const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput?.(e.currentTarget.value);
-  const lines = props.lines ?? LINES_DEFAULT;
+  const rows = props.rows ?? ROWS_DEFAULT;
 
   return (
     <>
-      <style>{`.text-area { --text-area-lines: ${lines} }`}</style>
+      <style>{`.text-area { --text-area-rows: ${rows} }`}</style>
       <TextareaAutosize
         className={classNames(
           props.className,
@@ -46,7 +46,7 @@ export const TextArea = (props: TextAreaProps) => {
           `text-area--border-${props.border ?? "normal"}`
         )}
         value={props.input}
-        maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : lines}
+        maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : rows}
         onInput={updateInput}
         placeholder={props.placeholder}
         autoFocus={props.autoFocus}
