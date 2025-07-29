@@ -981,6 +981,27 @@ exports[`SettingsDialog should render correctly 1`] = `
                     </div>
                   </a>
                 </nav>
+                <a
+                  class="settings-dialog__logout navigation__item accent-color__poker-purple"
+                  data-discover="true"
+                  href="/login"
+                  type="button"
+                >
+                  <svg
+                    class="navigation-item__icon"
+                  >
+                    logout.svg
+                  </svg>
+                  <div
+                    class="navigation-item__content"
+                  >
+                    <p
+                      class="navigation-item__name"
+                    >
+                      Logout
+                    </p>
+                  </div>
+                </a>
               </div>
               <article
                 class="settings-dialog__content"
