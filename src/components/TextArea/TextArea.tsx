@@ -1,10 +1,9 @@
 import TextareaAutosize from "react-textarea-autosize";
 import classNames from "classnames";
-import {Dispatch, FocusEvent, FormEvent, RefObject, SetStateAction} from "react";
+import {Dispatch, FocusEvent, FormEvent, forwardRef, SetStateAction} from "react";
 import "./TextArea.scss";
 
 type TextAreaProps = {
-  ref?: RefObject<HTMLTextAreaElement>;
   className?: string;
   input: string;
   setInput?: Dispatch<SetStateAction<string>>;
@@ -28,7 +27,7 @@ type TextAreaProps = {
 
 const ROWS_DEFAULT = 7;
 
-export const TextArea = (props: TextAreaProps) => {
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
   const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput?.(e.currentTarget.value);
   const rows = props.rows ?? ROWS_DEFAULT;
 
@@ -36,7 +35,7 @@ export const TextArea = (props: TextAreaProps) => {
     <>
       <style>{`.text-area { --text-area-rows: ${rows} }`}</style>
       <TextareaAutosize
-        ref={props.ref}
+        ref={ref}
         className={classNames(
           props.className,
           "text-area",
@@ -58,4 +57,4 @@ export const TextArea = (props: TextAreaProps) => {
       />
     </>
   );
-};
+});
