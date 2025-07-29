@@ -32,14 +32,20 @@ $settings-dialog-container--bottom: 62px;
 .settings-dialog__logout.navigation__item {
   margin-top: auto;
   margin-bottom: $spacing--xl;
+  border: none;
 
   &:hover {
     background-color: $navy--200;
   }
+
   .navigation-item__icon {
     background: $navy--400;
     color: $gray--000;
-    padding: 4px;
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
   }
 }
 
@@ -340,6 +346,7 @@ $settings-dialog-container--bottom: 62px;
 
   .settings-dialog__logout.navigation__item {
     background-color: $navy--200;
+
     &:hover {
       background-color: $navy--300;
     }

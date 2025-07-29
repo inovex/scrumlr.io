@@ -134,12 +134,14 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
                 <ScrumlrLogo className="settings-dialog__scrumlr-logo" />
                 {/* render all menu items */}
                 <nav className="settings-dialog__navigation">{MENU_ENTRIES.map((menuEntry) => renderMenuItem(menuEntry))}</nav>
-                <Link to="/login" className="settings-dialog__logout navigation__item accent-color__poker-purple" type="button" onClick={handleLogout}>
-                  <Logout className="navigation-item__icon" />
+                <button className="settings-dialog__logout navigation__item accent-color__poker-purple" type="button" onClick={handleLogout}>
+                  <span className="navigation-item__icon">
+                    <Logout />
+                  </span>
                   <div className="navigation-item__content">
                     <p className="navigation-item__name">{t("SettingsDialog.Logout")}</p>
                   </div>
-                </Link>
+                </button>
               </div>
               <article className="settings-dialog__content">
                 <Link to="" className="settings-dialog__back-link">

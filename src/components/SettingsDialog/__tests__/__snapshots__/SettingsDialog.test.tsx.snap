@@ -981,17 +981,17 @@ exports[`SettingsDialog should render correctly 1`] = `
                     </div>
                   </a>
                 </nav>
-                <a
+                <button
                   class="settings-dialog__logout navigation__item accent-color__poker-purple"
-                  data-discover="true"
-                  href="/login"
                   type="button"
                 >
-                  <svg
+                  <span
                     class="navigation-item__icon"
                   >
-                    logout.svg
-                  </svg>
+                    <svg>
+                      logout.svg
+                    </svg>
+                  </span>
                   <div
                     class="navigation-item__content"
                   >
@@ -1001,7 +1001,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                       Logout
                     </p>
                   </div>
-                </a>
+                </button>
               </div>
               <article
                 class="settings-dialog__content"
