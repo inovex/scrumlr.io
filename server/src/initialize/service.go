@@ -3,6 +3,7 @@ package initialize
 import (
 	"github.com/go-chi/chi/v5"
 	"net/http"
+	"scrumlr.io/server/auth"
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/sessions"
 	"scrumlr.io/server/timeprovider"
@@ -55,6 +56,13 @@ func (init *ServiceInitializer) InitializeBoardService(sessionRequestService ses
 	boardService := boards.NewBoardService(boardDB, init.rt, sessionRequestService, sessionService, columnService, noteService, reactionService, votingService, init.clock)
 
 	return boardService
+}
+func (init *ServiceInitializer) InitializeAuthService(feedbackService feedback.FeedbackService, providers map[string]auth.AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService sessions.UserService, anonymousLoginDisabled bool, allowAnonymousCustomTemplates bool) auth.AuthService {
+	authService := auth.NewAuthService(providers, unsafePrivateKey, privateKey, database, userService)
+	authAPI := auth.NewAuthAPI(authService, feedbackService, init.basePath, anonymousLoginDisabled, allowAnonymousCustomTemplates)
+
+	auth.NewAuthRouter(authAPI).RegisterRoutes(init.r)
+	return authService
 }
 
 func (init *ServiceInitializer) InitializeColumnService(noteService notes.NotesService) columns.ColumnService {

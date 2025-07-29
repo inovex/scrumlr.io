@@ -80,8 +80,7 @@ func (a API) Get(w http.ResponseWriter, r *http.Request) {
   boardId := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
   if len(r.Header["Upgrade"]) > 0 && r.Header["Upgrade"][0] == "websocket" {
-    //todo: create connection to openBoardSocket!
-    a.openBoardSocket(w, r)
+    a.sessionRequests.OpenSocket(w, r)
     return
   }
 

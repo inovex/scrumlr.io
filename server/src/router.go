@@ -2,18 +2,293 @@ package main
 
 import (
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/httprate"
+	"github.com/google/uuid"
+	"net/http"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/identifiers"
+	"scrumlr.io/server/logger"
+	"time"
 )
 
 type Router interface {
 	RegisterRoutes(r chi.Router)
 }
 
-func RegisterRoutes(routers []Router) chi.Router {
-	r := chi.NewRouter()
+func (s *Service) BoardCandidateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
 
-	for _, route := range routers {
-		route.RegisterRoutes(r)
-	}
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+		exists, err := s.sessionRequestService.Exists(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to check board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
 
-	return r
+		if !exists {
+			common.Throw(w, r, common.NotFoundError)
+			return
+		}
+
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
+}
+
+func (s *Service) BoardParticipantContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+		exists, err := s.sessionsService.Exists(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to check board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if !exists {
+			common.Throw(w, r, common.ForbiddenError(errors.New("user board session not found")))
+			return
+		}
+
+		banned, err := s.sessionsService.IsParticipantBanned(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to check if participant is banned", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if banned {
+			common.Throw(w, r, common.ForbiddenError(errors.New("participant is currently banned from this session")))
+			return
+		}
+
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
+}
+
+func (s *Service) BoardModeratorContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+		exists, err := s.sessionsService.ModeratorSessionExists(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to verify board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		if !exists {
+			common.Throw(w, r, common.NotFoundError)
+			return
+		}
+
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
+}
+
+func (s *Service) BoardEditableContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+		isMod, err := s.sessionsService.ModeratorSessionExists(r.Context(), board, user)
+		if err != nil {
+			log.Errorw("unable to verify board session", "err", err)
+			common.Throw(w, r, common.InternalServerError)
+			return
+		}
+
+		settings, err := s.boardService.Get(r.Context(), board)
+		if err != nil {
+
+			log.Errorw("unable to verify board settings", "err", err)
+			common.Throw(w, r, common.BadRequestError(errors.New("unable to verify board settings")))
+			return
+		}
+
+		if !isMod && settings.IsLocked {
+			log.Errorw("not allowed to edit board", "err", err)
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to change board")))
+			return
+		}
+
+		boardEditable := context.WithValue(r.Context(), identifiers.BoardEditableIdentifier, settings.IsLocked)
+		next.ServeHTTP(w, r.WithContext(boardEditable))
+	})
+}
+
+func (s *Service) BoardAuthenticatedContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		boardParam := chi.URLParam(r, "id")
+		board, err := uuid.Parse(boardParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board id")))
+			return
+		}
+		userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+		user, err := s.userService.Get(r.Context(), userID)
+
+		if err != nil {
+			log.Errorw("Could not fetch user", "error", err)
+			common.Throw(w, r, errors.New("could not fetch user"))
+			return
+		}
+
+		if user.AccountType == common.Anonymous {
+			log.Errorw("Not authorized to perform this action", "accountType", user.AccountType)
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized")))
+			return
+		}
+
+		boardContext := context.WithValue(r.Context(), identifiers.BoardIdentifier, board)
+		next.ServeHTTP(w, r.WithContext(boardContext))
+	})
+}
+
+func (s *Service) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log := logger.FromRequest(r)
+
+		if s.anonymousLoginDisabled {
+			log.Errorw("not allowed to login anonymously")
+			common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to login anonymously")))
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (s *Service) ColumnContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		columnParam := chi.URLParam(r, "column")
+		column, err := uuid.Parse(columnParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid column id")))
+			return
+		}
+
+		columnContext := context.WithValue(r.Context(), identifiers.ColumnIdentifier, column)
+		next.ServeHTTP(w, r.WithContext(columnContext))
+	})
+}
+
+func (s *Service) NoteContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		noteParam := chi.URLParam(r, "note")
+		note, err := uuid.Parse(noteParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid note id")))
+			return
+		}
+
+		columnContext := context.WithValue(r.Context(), identifiers.NoteIdentifier, note)
+		next.ServeHTTP(w, r.WithContext(columnContext))
+	})
+}
+
+func (s *Service) ReactionContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		reactionParam := chi.URLParam(r, "reaction")
+		reaction, err := uuid.Parse(reactionParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid reaction id")))
+			return
+		}
+
+		reactionContext := context.WithValue(r.Context(), identifiers.ReactionIdentifier, reaction)
+		next.ServeHTTP(w, r.WithContext(reactionContext))
+	})
+}
+
+func (s *Service) VotingContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		votingParam := chi.URLParam(r, "voting")
+		voting, err := uuid.Parse(votingParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid voting id")))
+			return
+		}
+		votingContext := context.WithValue(r.Context(), identifiers.VotingIdentifier, voting)
+		next.ServeHTTP(w, r.WithContext(votingContext))
+	})
+}
+
+func (s *Service) BoardTemplateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		boardTemplateParam := chi.URLParam(r, "id")
+		boardTemplate, err := uuid.Parse(boardTemplateParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid board template id")))
+		}
+		boardTemplateContext := context.WithValue(r.Context(), identifiers.BoardTemplateIdentifier, boardTemplate)
+		next.ServeHTTP(w, r.WithContext(boardTemplateContext))
+	})
+}
+
+func (s *Service) BoardTemplateRateLimiter(next http.Handler) http.Handler {
+	// Initialize the rate limiter
+	limiter := httprate.Limit(
+		20,
+		1*time.Second,
+		httprate.WithKeyFuncs(httprate.KeyByIP),
+		httprate.WithLimitHandler(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusTooManyRequests)
+			_, err := w.Write([]byte(`{"error": "Too many requests"}`))
+			if err != nil {
+				log := logger.FromRequest(r)
+				log.Errorw("could not write error", "error", err)
+			}
+		}),
+	)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Apply the rate limiter to the next handler
+		limiter(next).ServeHTTP(w, r)
+	})
+}
+
+func (r *Router) ColumnTemplateContext(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		columnTemplateParam := chi.URLParam(r, "columnTemplate")
+		columnTemplate, err := uuid.Parse(columnTemplateParam)
+		if err != nil {
+			common.Throw(w, r, common.BadRequestError(errors.New("invalid column id")))
+			return
+		}
+
+		columnTemplateContext := context.WithValue(r.Context(), identifiers.ColumnTemplateIdentifier, columnTemplate)
+		next.ServeHTTP(w, r.WithContext(columnTemplateContext))
+	})
 }

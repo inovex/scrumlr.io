@@ -32,40 +32,8 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-type Auth interface {
-	Sign(map[string]interface{}) (string, error)
-	Verifier() func(http.Handler) http.Handler
-	Authenticator() func(http.Handler) http.Handler
-	Exists(accountType common.AccountType) bool
-	ExtractUserInformation(common.AccountType, *goth.User) (*UserInformation, error)
-}
-
-type AuthProviderConfiguration struct {
-	TenantId       string
-	ClientId       string
-	ClientSecret   string
-	RedirectUri    string
-	DiscoveryUri   string
-	UserIdentScope string
-	UserNameScope  string
-}
-
-type AuthConfiguration struct {
-	providers        map[string]AuthProviderConfiguration
-	unsafePrivateKey string
-	privateKey       string
-	unsafeAuth       *jwtauth.JWTAuth
-	auth             *jwtauth.JWTAuth
-	database         *bun.DB
-	userService      sessions.UserService
-}
-
-type UserInformation struct {
-	Provider               common.AccountType
-	Ident, Name, AvatarURL string
-}
-
-func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService sessions.UserService) (Auth, error) {
+// NewAuthConfiguration is the service in this package
+func NewAuthConfiguration(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService sessions.UserService) (AuthService, error) {
 	a := new(AuthConfiguration)
 	a.providers = providers
 	a.unsafePrivateKey = unsafePrivateKey
@@ -294,4 +262,10 @@ func (a *AuthConfiguration) initializeJWTAuth() error {
 
 	a.auth = jwtauth.New("ES512", privateKey, privateKey.PublicKey)
 	return nil
+}
+
+func NewAuthService(providers map[string]AuthProviderConfiguration, unsafePrivateKey, privateKey string, database *bun.DB, userService sessions.UserService) AuthService {
+	s, _ := NewAuthConfiguration(providers, unsafePrivateKey, privateKey, database, userService)
+
+	return s
 }
