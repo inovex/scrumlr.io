@@ -4,7 +4,7 @@
 .note-dialog-header {
   font-size: calc(24px + 0.8vw);
   color: $gray--000;
-  width: 100%;
+  width: 90vw;
   // height: $stack-view__header-height;
   min-height: $stack-view__min-height;
   letter-spacing: $letter-spacing--large;
@@ -16,19 +16,23 @@
   align-items: center;
   flex-shrink: 0;
   gap: $spacing--base;
+}
 
-  h2 {
-    width: max-content;
-    margin: $spacing--lg 0 0 0;
+.note-dialog-header__name {
+  width: 100%;
+  margin: $spacing--lg 0 0 0;
 
-    &::after {
-      content: " ";
-      display: block;
-      height: 6px;
-      background: var(--accent-color--light);
-      border-radius: $rounded--full;
-      margin-top: $spacing--base;
-    }
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &::after {
+    content: " ";
+    display: block;
+    height: 6px;
+    background: var(--accent-color--light);
+    border-radius: $rounded--full;
+    margin-top: $spacing--base;
   }
 }
 
