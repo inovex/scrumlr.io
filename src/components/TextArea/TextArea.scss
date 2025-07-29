@@ -102,7 +102,9 @@ $border-width--thick: 3px;
 [theme="dark"] {
   .text-area {
     color: $gray--300;
-    background-color: $navy--400;
+    &:not(&--embedded) {
+      background-color: $navy--400;
+    }
 
     &::placeholder {
       color: $gray--800;

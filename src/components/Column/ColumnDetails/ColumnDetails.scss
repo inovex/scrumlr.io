@@ -123,3 +123,24 @@ $settings-icon: 24px;
 .column-details__description-mini-menu {
   align-self: flex-end;
 }
+
+[theme="dark"] {
+  .column-details__name {
+    color: $gray--000;
+    border-bottom-color: var(--accent-color--dark);
+  }
+
+  .column-details__description {
+    &--placeholder {
+      color: $gray--700;
+    }
+  }
+
+  .column-details__settings-icon-container {
+    color: $gray--000;
+  }
+
+  .column-details__description-expand-icon {
+    color: rgba($gray--000, 0.7);
+  }
+}
