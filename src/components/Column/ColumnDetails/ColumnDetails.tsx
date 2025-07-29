@@ -33,8 +33,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const {isTextTruncated: isDescriptionTextTruncated, textRef: descriptionRef} = useTextOverflow<HTMLDivElement>(props.column.description);
-  const {isTextTruncated: isNameTextTruncated, textRef: nameRef} = useTextOverflow<HTMLDivElement>(props.column.name);
+  const {isTextTruncated: isDescriptionTextTruncated, textRef: viewDescriptionRef} = useTextOverflow<HTMLTextAreaElement>(props.column.description);
+  const {isTextTruncated: isNameTextTruncated, textRef: viewNameRef} = useTextOverflow<HTMLDivElement>(props.column.name);
 
   const [openSettings, setOpenSettings] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
@@ -119,7 +119,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const renderName = () =>
     props.mode === "view" ? (
       <>
-        <div ref={nameRef} id={`col-${props.column.id}-name`} className="column-details__name" onDoubleClick={() => changeMode("edit")}>
+        <div ref={viewNameRef} id={`col-${props.column.id}-name`} className="column-details__name" onDoubleClick={() => changeMode("edit")}>
           {props.column.name}
         </div>
         <div className="column-details__notes-count">{props.notesCount}</div>
@@ -139,10 +139,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     if (props.column.description)
       return (
         <>
-          <div ref={descriptionRef} className={classNames("column-details__description", {"column-details__description--expanded": isDescriptionExpanded})}>
-            {props.column.description}
-          </div>
-          {isDescriptionTextTruncated.vertical && (
+          <TextArea ref={viewDescriptionRef} input={props.column.description} embedded extendable={isDescriptionExpanded} disabled border="none" rows={3} />
+          {(isDescriptionTextTruncated.vertical || isDescriptionExpanded) && (
             <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
               <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
             </button>
@@ -166,8 +164,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         placeholder={t("Column.Header.descriptionPlaceholder")}
         embedded
         extendable
-        thickBorder
-        lines={3}
+        border="thick"
+        rows={3}
       />
       <MiniMenu className="column-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
     </>
