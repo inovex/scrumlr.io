@@ -1,21 +1,30 @@
-package main
+package router
 
 import (
+	"context"
+	"errors"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/httprate"
 	"github.com/google/uuid"
 	"net/http"
+	"scrumlr.io/server/boards"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
+	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 	"time"
 )
 
-type Router interface {
-	RegisterRoutes(r chi.Router)
+type MiddlewareService struct {
+	sessionRequestService  sessionrequests.SessionRequestService
+	sessionService         sessions.SessionService
+	userService            sessions.UserService
+	boardService           boards.BoardService
+	anonymousLoginDisabled bool
 }
 
-func (s *Service) BoardCandidateContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) BoardCandidateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 		boardParam := chi.URLParam(r, "id")
@@ -43,7 +52,7 @@ func (s *Service) BoardCandidateContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) BoardParticipantContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) BoardParticipantContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 		boardParam := chi.URLParam(r, "id")
@@ -54,7 +63,7 @@ func (s *Service) BoardParticipantContext(next http.Handler) http.Handler {
 		}
 
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		exists, err := s.sessionsService.Exists(r.Context(), board, user)
+		exists, err := s.sessionService.Exists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -66,7 +75,7 @@ func (s *Service) BoardParticipantContext(next http.Handler) http.Handler {
 			return
 		}
 
-		banned, err := s.sessionsService.IsParticipantBanned(r.Context(), board, user)
+		banned, err := s.sessionService.IsParticipantBanned(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to check if participant is banned", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -83,7 +92,7 @@ func (s *Service) BoardParticipantContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) BoardModeratorContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) BoardModeratorContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
@@ -95,7 +104,7 @@ func (s *Service) BoardModeratorContext(next http.Handler) http.Handler {
 		}
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-		exists, err := s.sessionsService.ModeratorSessionExists(r.Context(), board, user)
+		exists, err := s.sessionService.ModeratorSessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -112,13 +121,13 @@ func (s *Service) BoardModeratorContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) BoardEditableContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) BoardEditableContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
 		board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 		user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
-		isMod, err := s.sessionsService.ModeratorSessionExists(r.Context(), board, user)
+		isMod, err := s.sessionService.ModeratorSessionExists(r.Context(), board, user)
 		if err != nil {
 			log.Errorw("unable to verify board session", "err", err)
 			common.Throw(w, r, common.InternalServerError)
@@ -144,7 +153,7 @@ func (s *Service) BoardEditableContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) BoardAuthenticatedContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) BoardAuthenticatedContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
@@ -175,7 +184,7 @@ func (s *Service) BoardAuthenticatedContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log := logger.FromRequest(r)
 
@@ -189,7 +198,7 @@ func (s *Service) AnonymousLoginDisabledContext(next http.Handler) http.Handler 
 	})
 }
 
-func (s *Service) ColumnContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) ColumnContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnParam := chi.URLParam(r, "column")
 		column, err := uuid.Parse(columnParam)
@@ -203,7 +212,7 @@ func (s *Service) ColumnContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) NoteContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) NoteContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		noteParam := chi.URLParam(r, "note")
 		note, err := uuid.Parse(noteParam)
@@ -217,7 +226,7 @@ func (s *Service) NoteContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) ReactionContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) ReactionContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		reactionParam := chi.URLParam(r, "reaction")
 		reaction, err := uuid.Parse(reactionParam)
@@ -231,7 +240,7 @@ func (s *Service) ReactionContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) VotingContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) VotingContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		votingParam := chi.URLParam(r, "voting")
 		voting, err := uuid.Parse(votingParam)
@@ -244,7 +253,7 @@ func (s *Service) VotingContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) BoardTemplateContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) BoardTemplateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		boardTemplateParam := chi.URLParam(r, "id")
 		boardTemplate, err := uuid.Parse(boardTemplateParam)
@@ -256,7 +265,7 @@ func (s *Service) BoardTemplateContext(next http.Handler) http.Handler {
 	})
 }
 
-func (s *Service) BoardTemplateRateLimiter(next http.Handler) http.Handler {
+func (s *MiddlewareService) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	// Initialize the rate limiter
 	limiter := httprate.Limit(
 		20,
@@ -279,7 +288,7 @@ func (s *Service) BoardTemplateRateLimiter(next http.Handler) http.Handler {
 	})
 }
 
-func (r *Router) ColumnTemplateContext(next http.Handler) http.Handler {
+func (s *MiddlewareService) ColumnTemplateContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnTemplateParam := chi.URLParam(r, "columnTemplate")
 		columnTemplate, err := uuid.Parse(columnTemplateParam)
