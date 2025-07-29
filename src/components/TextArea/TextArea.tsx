@@ -15,6 +15,7 @@ type TextAreaProps = {
   embedded?: boolean;
   fitted?: boolean; // affects the text, padding, and border-radius rn
   border?: "none" | "normal" | "thick";
+  textAlign?: "left" | "center";
 
   placeholder?: string;
 
@@ -44,7 +45,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, r
             "text-area--embedded": props.embedded,
             "text-area--fitted": props.fitted,
           },
-          `text-area--border-${props.border ?? "normal"}`
+          `text-area--border-${props.border ?? "normal"}`,
+          `text-area--text-align-${props.textAlign ?? "left"}`
         )}
         value={props.input}
         maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : rows}

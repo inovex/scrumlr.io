@@ -38,6 +38,16 @@ $border-width--thick: 3px;
     }
   }
 
+  &--text-align {
+    &-left {
+      text-align: left;
+    }
+
+    &-center {
+      text-align: center;
+    }
+  }
+
   $dynamic-height: calc(var(--text-area-rows) * $line-height--default + 2 * (var(--text-area-padding) + var(--text-area-border-width)));
 
   min-height: $dynamic-height;
