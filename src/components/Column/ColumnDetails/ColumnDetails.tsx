@@ -139,7 +139,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     if (props.column.description)
       return (
         <>
-          <TextArea ref={viewDescriptionRef} input={props.column.description} embedded extendable={isDescriptionExpanded} disabled border="none" rows={3} />
+          <TextArea ref={viewDescriptionRef} input={props.column.description} embedded extendable={isDescriptionExpanded} disabled border="none" rows={2} />
           {(isDescriptionTextTruncated.vertical || isDescriptionExpanded) && (
             <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
               <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
