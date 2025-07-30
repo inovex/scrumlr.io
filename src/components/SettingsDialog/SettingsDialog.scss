@@ -211,6 +211,7 @@ $settings-dialog-container--bottom: 62px;
   flex-direction: row;
   gap: 16px;
   padding: 8px;
+  cursor: pointer;
 
   &:hover {
     background: rgba(var(--accent-color--light-rgb), 0.8);
@@ -222,7 +223,6 @@ $settings-dialog-container--bottom: 62px;
   }
 
   &--logout {
-    background-color: $navy--200;
     margin-bottom: $spacing--xl;
     border: none;
     background-color: transparent;
