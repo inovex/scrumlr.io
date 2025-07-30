@@ -1,24 +1,17 @@
 package notes
 
 import (
-	"context"
 	"log"
 	"testing"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/databaseinitialize"
 )
-
-const POSTGRES_IMAGE = "postgres:17.5-alpine"
-const DATABASE_NAME = "scrumlr_test"
-const DATABASE_USERNAME = "stan"
-const DATABASE_PASSWORD = "scrumlr"
 
 type DatabaseNoteTestSuite struct {
 	suite.Suite
@@ -36,42 +29,16 @@ func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseNoteTestSuite) SetupSuite() {
-	ctx := context.Background()
-	pgcontainer, err := postgres.Run( //creating database
-		ctx,
-		POSTGRES_IMAGE,
-		postgres.WithDatabase(DATABASE_NAME),
-		postgres.WithUsername(DATABASE_USERNAME),
-		postgres.WithPassword(DATABASE_PASSWORD),
-		postgres.BasicWaitStrategies(),
-	)
+	container, bun := databaseinitialize.StartTestDatabase()
 
-	if err != nil {
-		log.Fatalf("Failed to start container: %s", err)
-	}
+	suite.SeedDatabase(bun)
 
-	connectionString, err := pgcontainer.ConnectionString(ctx, "sslmode=disable")
-	if err != nil {
-		log.Fatalf("Failed to get connection string %s", err)
-	}
-
-	db, err := databaseinitialize.InitializeDatabase(connectionString) //migrating database
-	if err != nil {
-		log.Fatalf("Failed to initialize database %s", err)
-	}
-
-	bunDb := databaseinitialize.InitializeBun(db, true) // setup bun
-
-	suite.SeedDatabase(bunDb)
-
-	suite.container = pgcontainer
-	suite.db = bunDb
+	suite.container = container
+	suite.db = bun
 }
 
 func (suite *DatabaseNoteTestSuite) TearDownSuite() {
-	if err := testcontainers.TerminateContainer(suite.container); err != nil {
-		log.Fatalf("Failed to terminate container: %s", err)
-	}
+	databaseinitialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseNoteTestSuite) Test_Database_Create() {
