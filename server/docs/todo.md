@@ -21,3 +21,5 @@ refactoring.
 - Evaluate the standard golang logger and improve logging
   - configure the log level throug env variables
   - enable/disable the database logging with an additional env variable
+- Improve the database tests with postgres templates
+  - e.g. https://github.com/peterldowns/pgtestdb
