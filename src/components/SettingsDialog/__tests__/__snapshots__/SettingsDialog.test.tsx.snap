@@ -982,7 +982,7 @@ exports[`SettingsDialog should render correctly 1`] = `
                   </a>
                 </nav>
                 <button
-                  class="settings-dialog__logout navigation__item accent-color__poker-purple"
+                  class="navigation__item navigation__item--logout accent-color__poker-purple"
                   type="button"
                 >
                   <span
