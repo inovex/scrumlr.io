@@ -30,9 +30,9 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__logout.navigation__item {
-  margin-top: auto;
   margin-bottom: $spacing--xl;
   border: none;
+  background-color: transparent;
 
   &:hover {
     background-color: $navy--200;
@@ -41,11 +41,6 @@ $settings-dialog-container--bottom: 62px;
   .navigation-item__icon {
     background: $navy--400;
     color: $gray--000;
-
-    svg {
-      width: 2rem;
-      height: 2rem;
-    }
   }
 }
 
@@ -246,6 +241,7 @@ $settings-dialog-container--bottom: 62px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-self: center;
   gap: 2px;
   overflow: hidden;
 }
@@ -284,6 +280,9 @@ $settings-dialog-container--bottom: 62px;
   border-radius: $rounded--full;
   background: var(--accent-color--light);
   color: $gray--000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .settings-dialog__container {
