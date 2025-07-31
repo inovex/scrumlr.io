@@ -440,7 +440,8 @@
     "ExportBoardDescription": "Share the board",
     "Feedback": "Feedback",
     "FeedbackDescription": "We love to hear from you",
-    "ProfileDescription": "Edit profile"
+    "ProfileDescription": "Edit profile",
+    "Logout": "Logout"
   },
   "BoardSettings": {
     "BoardName": "Board Name",
