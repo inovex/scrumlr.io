@@ -8,7 +8,9 @@ export const saveToStorage = (key: string, value: string): void => localStorage.
  */
 export function getFromStorage<T>(key: string, defaultValue: T = null as T): T {
   try {
-    return JSON.parse(localStorage.getItem(key) ?? JSON.stringify(defaultValue)) as T;
+    const value = localStorage.getItem(key);
+    if (value == null) return defaultValue;
+    return (typeof value === "string" ? value : JSON.parse(value)) as T;
   } catch {
     return defaultValue;
   }
