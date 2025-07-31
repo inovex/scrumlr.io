@@ -29,8 +29,11 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
     <div
       class="template-editor__description"
     >
+      <style>
+        .text-area { --text-area-rows: 7 }
+      </style>
       <textarea
-        class="template-editor__description-text-area text-area"
+        class="template-editor__description-text-area text-area text-area--border-normal text-area--text-align-left"
         placeholder="Description (optional)"
       />
     </div>
@@ -306,8 +309,11 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
     <div
       class="template-editor__description"
     >
+      <style>
+        .text-area { --text-area-rows: 7 }
+      </style>
       <textarea
-        class="template-editor__description-text-area text-area"
+        class="template-editor__description-text-area text-area text-area--border-normal text-area--text-align-left"
         placeholder="Description (optional)"
       >
         sample description 1
