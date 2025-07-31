@@ -83,9 +83,12 @@ func TestCreate(t *testing.T) {
 	boardDescription := "A test board"
 	index := 0
 
+	columnName := "Test Column"
+	columnDescription := "Test Column Description"
+
 	mockBoardDatabase := NewMockBoardDatabase(t)
 	mockBoardDatabase.EXPECT().CreateBoard(userID, DatabaseBoardInsert{Name: &boardName, Description: &boardDescription, AccessPolicy: Public},
-		[]columns.DatabaseColumnInsert{{Name: boardName, Color: columns.ColorGoalGreen, Visible: nil, Index: &index}}).
+		[]columns.DatabaseColumnInsert{{Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index}}).
 		Return(DatabaseBoard{ID: boardID, Name: &boardName, Description: &boardDescription, AccessPolicy: Public}, nil)
 
 	sessionsMock := sessions.NewMockSessionService(t)
@@ -103,7 +106,7 @@ func TestCreate(t *testing.T) {
 
 	service := NewBoardService(mockBoardDatabase, broker, sessionRequestMock, sessionsMock, columnMock, noteMock, reactionMock, votingMock, mockClock)
 	result, err := service.Create(context.Background(), CreateBoardRequest{Name: &boardName, Description: &boardDescription, Owner: userID, AccessPolicy: Public, Columns: []columns.ColumnRequest{
-		{Board: boardID, Name: boardName, Description: boardDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index, User: userID},
+		{Board: boardID, Name: columnName, Description: columnDescription, Color: columns.ColorGoalGreen, Visible: nil, Index: &index, User: userID},
 	}})
 
 	require.NoError(t, err)
