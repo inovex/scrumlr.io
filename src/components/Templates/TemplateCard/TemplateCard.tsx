@@ -92,7 +92,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
         <div className="template-card__columns-subtitle">
           {columns
             .toSorted((a, b) => a.index - b.index)
-            .map((c) => c.name)
+            .map((c) => (props.templateType === "RECOMMENDED" ? t(c.name, {ns: "templates"}) : c.name))
             .join(", ")}
         </div>
       </div>
