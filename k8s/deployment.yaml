@@ -123,6 +123,7 @@ spec:
       containers:
         - name: frontend
           image: ghcr.io/inovex/scrumlr.io/scrumlr-frontend
+          command: ["/bin/sh", "-c", "sleep 1000s", "&&", "/docker-entrypoint.sh"]
           resources:
             requests:
               cpu: "10m"
