@@ -607,25 +607,29 @@ func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser() {
 	assert.Nil(t, err)
 	assert.Len(t, dbBoards, 2)
 
-	assert.Equal(t, suite.boards["Read1"].ID, dbBoards[0].ID)
-	assert.Equal(t, suite.boards["Read1"].Name, dbBoards[0].Name)
-	assert.Equal(t, suite.boards["Read1"].Description, dbBoards[0].Description)
-	assert.Equal(t, suite.boards["Read1"].AccessPolicy, dbBoards[0].AccessPolicy)
-	assert.Equal(t, suite.boards["Read1"].ShowAuthors, dbBoards[0].ShowAuthors)
-	assert.Equal(t, suite.boards["Read1"].ShowNotesOfOtherUsers, dbBoards[0].ShowNotesOfOtherUsers)
-	assert.Equal(t, suite.boards["Read1"].ShowNoteReactions, dbBoards[0].ShowNoteReactions)
-	assert.Equal(t, suite.boards["Read1"].AllowStacking, dbBoards[0].AllowStacking)
-	assert.Equal(t, suite.boards["Read1"].IsLocked, dbBoards[0].IsLocked)
+	firstBoard := checkBoardInList(dbBoards, suite.boards["Read1"].ID)
+	assert.NotNil(t, firstBoard)
+	assert.Equal(t, suite.boards["Read1"].ID, firstBoard.ID)
+	assert.Equal(t, suite.boards["Read1"].Name, firstBoard.Name)
+	assert.Equal(t, suite.boards["Read1"].Description, firstBoard.Description)
+	assert.Equal(t, suite.boards["Read1"].AccessPolicy, firstBoard.AccessPolicy)
+	assert.Equal(t, suite.boards["Read1"].ShowAuthors, firstBoard.ShowAuthors)
+	assert.Equal(t, suite.boards["Read1"].ShowNotesOfOtherUsers, firstBoard.ShowNotesOfOtherUsers)
+	assert.Equal(t, suite.boards["Read1"].ShowNoteReactions, firstBoard.ShowNoteReactions)
+	assert.Equal(t, suite.boards["Read1"].AllowStacking, firstBoard.AllowStacking)
+	assert.Equal(t, suite.boards["Read1"].IsLocked, firstBoard.IsLocked)
 
-	assert.Equal(t, suite.boards["Read2"].ID, dbBoards[0].ID)
-	assert.Equal(t, suite.boards["Read2"].Name, dbBoards[0].Name)
-	assert.Equal(t, suite.boards["Read2"].Description, dbBoards[0].Description)
-	assert.Equal(t, suite.boards["Read2"].AccessPolicy, dbBoards[0].AccessPolicy)
-	assert.Equal(t, suite.boards["Read2"].ShowAuthors, dbBoards[0].ShowAuthors)
-	assert.Equal(t, suite.boards["Read2"].ShowNotesOfOtherUsers, dbBoards[0].ShowNotesOfOtherUsers)
-	assert.Equal(t, suite.boards["Read2"].ShowNoteReactions, dbBoards[0].ShowNoteReactions)
-	assert.Equal(t, suite.boards["Read2"].AllowStacking, dbBoards[0].AllowStacking)
-	assert.Equal(t, suite.boards["Read2"].IsLocked, dbBoards[0].IsLocked)
+	secondBoard := checkBoardInList(dbBoards, suite.boards["Read2"].ID)
+	assert.NotNil(t, secondBoard)
+	assert.Equal(t, suite.boards["Read2"].ID, secondBoard.ID)
+	assert.Equal(t, suite.boards["Read2"].Name, secondBoard.Name)
+	assert.Equal(t, suite.boards["Read2"].Description, secondBoard.Description)
+	assert.Equal(t, suite.boards["Read2"].AccessPolicy, secondBoard.AccessPolicy)
+	assert.Equal(t, suite.boards["Read2"].ShowAuthors, secondBoard.ShowAuthors)
+	assert.Equal(t, suite.boards["Read2"].ShowNotesOfOtherUsers, secondBoard.ShowNotesOfOtherUsers)
+	assert.Equal(t, suite.boards["Read2"].ShowNoteReactions, secondBoard.ShowNoteReactions)
+	assert.Equal(t, suite.boards["Read2"].AllowStacking, secondBoard.AllowStacking)
+	assert.Equal(t, suite.boards["Read2"].IsLocked, secondBoard.IsLocked)
 }
 
 func (suite *DatabaseBoardTestSuite) Test_Database_GetByUser_NotFound() {
@@ -715,4 +719,13 @@ func (suite *DatabaseBoardTestSuite) SeedDatabase(db *bun.DB) {
 			log.Fatalf("Failed to insert test sessions %s", err)
 		}
 	}
+}
+
+func checkBoardInList(list []DatabaseBoard, id uuid.UUID) *DatabaseBoard {
+	for _, board := range list {
+		if board.ID == id {
+			return &board
+		}
+	}
+	return nil
 }
