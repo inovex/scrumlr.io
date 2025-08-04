@@ -228,25 +228,33 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateAllSession() {
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 4)
 
-	assert.Equal(t, suite.users["Stan"].id, dbSessions[0].User) // TODO: check order
-	assert.Equal(t, suite.boards["UpdateAll"].id, dbSessions[0].Board)
-	assert.True(t, dbSessions[0].Connected)
-	assert.True(t, dbSessions[0].Ready)
+	firstSession := checkSessionInList(dbSessions, suite.boards["UpdateAll"].id, suite.users["Stan"].id)
+	assert.NotNil(t, firstSession)
+	assert.Equal(t, suite.users["Stan"].id, firstSession.User)
+	assert.Equal(t, suite.boards["UpdateAll"].id, firstSession.Board)
+	assert.True(t, firstSession.Connected)
+	assert.True(t, firstSession.Ready)
 
-	assert.Equal(t, suite.users["Luke"].id, dbSessions[1].User)
-	assert.Equal(t, suite.boards["UpdateAll"].id, dbSessions[1].Board)
-	assert.True(t, dbSessions[1].Connected)
-	assert.True(t, dbSessions[1].Ready)
+	secondSession := checkSessionInList(dbSessions, suite.boards["UpdateAll"].id, suite.users["Luke"].id)
+	assert.NotNil(t, secondSession)
+	assert.Equal(t, suite.users["Luke"].id, secondSession.User)
+	assert.Equal(t, suite.boards["UpdateAll"].id, secondSession.Board)
+	assert.True(t, secondSession.Connected)
+	assert.True(t, secondSession.Ready)
 
-	assert.Equal(t, suite.users["Leia"].id, dbSessions[2].User)
-	assert.Equal(t, suite.boards["UpdateAll"].id, dbSessions[2].Board)
-	assert.True(t, dbSessions[2].Connected)
-	assert.True(t, dbSessions[2].Ready)
+	thirdSession := checkSessionInList(dbSessions, suite.boards["UpdateAll"].id, suite.users["Leia"].id)
+	assert.NotNil(t, thirdSession)
+	assert.Equal(t, suite.users["Leia"].id, thirdSession.User)
+	assert.Equal(t, suite.boards["UpdateAll"].id, thirdSession.Board)
+	assert.True(t, thirdSession.Connected)
+	assert.True(t, thirdSession.Ready)
 
-	assert.Equal(t, suite.users["Han"].id, dbSessions[3].User)
-	assert.Equal(t, suite.boards["UpdateAll"].id, dbSessions[3].Board)
-	assert.True(t, dbSessions[3].Connected)
-	assert.True(t, dbSessions[3].Ready)
+	fourthSession := checkSessionInList(dbSessions, suite.boards["UpdateAll"].id, suite.users["Han"].id)
+	assert.NotNil(t, fourthSession)
+	assert.Equal(t, suite.users["Han"].id, fourthSession.User)
+	assert.Equal(t, suite.boards["UpdateAll"].id, fourthSession.Board)
+	assert.True(t, fourthSession.Connected)
+	assert.True(t, fourthSession.Ready)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_Exists_True() {
@@ -412,17 +420,25 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions() {
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 4)
 
-	assert.Equal(t, suite.sessions["Read1"].Board, dbSessions[0].Board)
-	assert.Equal(t, suite.sessions["Read1"].User, dbSessions[0].User)
+	firstSession := checkSessionInList(dbSessions, boardId, suite.sessions["Read1"].User)
+	assert.NotNil(t, firstSession)
+	assert.Equal(t, suite.sessions["Read1"].Board, firstSession.Board)
+	assert.Equal(t, suite.sessions["Read1"].User, firstSession.User)
 
-	assert.Equal(t, suite.sessions["Read2"].Board, dbSessions[1].Board)
-	assert.Equal(t, suite.sessions["Read2"].User, dbSessions[1].User)
+	secondSession := checkSessionInList(dbSessions, boardId, suite.sessions["Read2"].User)
+	assert.NotNil(t, secondSession)
+	assert.Equal(t, suite.sessions["Read2"].Board, secondSession.Board)
+	assert.Equal(t, suite.sessions["Read2"].User, secondSession.User)
 
-	assert.Equal(t, suite.sessions["Read3"].Board, dbSessions[2].Board)
-	assert.Equal(t, suite.sessions["Read3"].User, dbSessions[2].User)
+	thirdSession := checkSessionInList(dbSessions, boardId, suite.sessions["Read3"].User)
+	assert.NotNil(t, thirdSession)
+	assert.Equal(t, suite.sessions["Read3"].Board, thirdSession.Board)
+	assert.Equal(t, suite.sessions["Read3"].User, thirdSession.User)
 
-	assert.Equal(t, suite.sessions["Read4"].Board, dbSessions[3].Board)
-	assert.Equal(t, suite.sessions["Read4"].User, dbSessions[3].User)
+	fourthSession := checkSessionInList(dbSessions, boardId, suite.sessions["Read4"].User)
+	assert.NotNil(t, fourthSession)
+	assert.Equal(t, suite.sessions["Read4"].Board, fourthSession.Board)
+	assert.Equal(t, suite.sessions["Read4"].User, fourthSession.User)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_Ready() {
@@ -437,13 +453,17 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
 
-	assert.Equal(t, suite.sessions["ReadFilter1"].Board, dbSessions[0].Board)
-	assert.Equal(t, suite.sessions["ReadFilter1"].User, dbSessions[0].User)
-	assert.True(t, dbSessions[0].Ready)
+	firstSession := checkSessionInList(dbSessions, boardId, suite.sessions["ReadFilter1"].User)
+	assert.NotNil(t, firstSession)
+	assert.Equal(t, suite.sessions["ReadFilter1"].Board, firstSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter1"].User, firstSession.User)
+	assert.True(t, firstSession.Ready)
 
-	assert.Equal(t, suite.sessions["ReadFilter2"].Board, dbSessions[1].Board)
-	assert.Equal(t, suite.sessions["ReadFilter2"].User, dbSessions[1].User)
-	assert.True(t, dbSessions[1].Ready)
+	secondSession := checkSessionInList(dbSessions, boardId, suite.sessions["ReadFilter2"].User)
+	assert.NotNil(t, secondSession)
+	assert.Equal(t, suite.sessions["ReadFilter2"].Board, secondSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter2"].User, secondSession.User)
+	assert.True(t, secondSession.Ready)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_RaisedHand() {
@@ -458,13 +478,17 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
 
-	assert.Equal(t, suite.sessions["ReadFilter3"].Board, dbSessions[0].Board)
-	assert.Equal(t, suite.sessions["ReadFilter3"].User, dbSessions[0].User)
-	assert.True(t, dbSessions[0].RaisedHand)
+	firstSession := checkSessionInList(dbSessions, boardId, suite.sessions["ReadFilter3"].User)
+	assert.NotNil(t, firstSession)
+	assert.Equal(t, suite.sessions["ReadFilter3"].Board, firstSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter3"].User, firstSession.User)
+	assert.True(t, firstSession.RaisedHand)
 
-	assert.Equal(t, suite.sessions["ReadFilter4"].Board, dbSessions[1].Board)
-	assert.Equal(t, suite.sessions["ReadFilter4"].User, dbSessions[1].User)
-	assert.True(t, dbSessions[1].RaisedHand)
+	secondSession := checkSessionInList(dbSessions, boardId, suite.sessions["ReadFilter4"].User)
+	assert.NotNil(t, secondSession)
+	assert.Equal(t, suite.sessions["ReadFilter4"].Board, secondSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter4"].User, secondSession.User)
+	assert.True(t, secondSession.RaisedHand)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_Connected() {
@@ -479,13 +503,17 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_C
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
 
-	assert.Equal(t, suite.sessions["ReadFilter1"].Board, dbSessions[0].Board)
-	assert.Equal(t, suite.sessions["ReadFilter1"].User, dbSessions[0].User)
-	assert.True(t, dbSessions[0].Connected)
+	firstSession := checkSessionInList(dbSessions, boardId, suite.sessions["ReadFilter1"].User)
+	assert.NotNil(t, firstSession)
+	assert.Equal(t, suite.sessions["ReadFilter1"].Board, firstSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter1"].User, firstSession.User)
+	assert.True(t, firstSession.Connected)
 
-	assert.Equal(t, suite.sessions["ReadFilter3"].Board, dbSessions[1].Board)
-	assert.Equal(t, suite.sessions["ReadFilter3"].User, dbSessions[1].User)
-	assert.True(t, dbSessions[1].Connected)
+	secondSession := checkSessionInList(dbSessions, boardId, suite.sessions["ReadFilter3"].User)
+	assert.NotNil(t, secondSession)
+	assert.Equal(t, suite.sessions["ReadFilter3"].Board, secondSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter3"].User, secondSession.User)
+	assert.True(t, secondSession.Connected)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_Role() {
@@ -534,13 +562,17 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards() {
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
 
-	assert.Equal(t, suite.sessions["UpdateAll1"].Board, dbSessions[0].Board) // TODO: check order
-	assert.Equal(t, suite.sessions["UpdateAll1"].User, dbSessions[0].User)
-	assert.True(t, dbSessions[0].Connected)
+	firstSession := checkSessionInList(dbSessions, suite.sessions["UpdateAll1"].Board, suite.sessions["UpdateAll1"].User)
+	assert.NotNil(t, firstSession)
+	assert.Equal(t, suite.sessions["UpdateAll1"].Board, firstSession.Board)
+	assert.Equal(t, suite.sessions["UpdateAll1"].User, firstSession.User)
+	assert.True(t, firstSession.Connected)
 
-	assert.Equal(t, suite.sessions["ReadFilter1"].Board, dbSessions[1].Board)
-	assert.Equal(t, suite.sessions["ReadFilter1"].User, dbSessions[1].User)
-	assert.True(t, dbSessions[1].Connected)
+	secondSession := checkSessionInList(dbSessions, suite.sessions["ReadFilter1"].Board, suite.sessions["ReadFilter1"].User)
+	assert.NotNil(t, secondSession)
+	assert.Equal(t, suite.sessions["ReadFilter1"].Board, secondSession.Board)
+	assert.Equal(t, suite.sessions["ReadFilter1"].User, secondSession.User)
+	assert.True(t, secondSession.Connected)
 }
 
 func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards_NotConnected() {
@@ -629,4 +661,13 @@ func (suite *DatabaseSessionTestSuite) SeedDatabase(db *bun.DB) {
 			log.Fatalf("Failed to insert test sessions %s", err)
 		}
 	}
+}
+
+func checkSessionInList(list []DatabaseBoardSession, boardId uuid.UUID, userId uuid.UUID) *DatabaseBoardSession {
+	for _, session := range list {
+		if session.Board == boardId && session.User == userId {
+			return &session
+		}
+	}
+	return nil
 }
