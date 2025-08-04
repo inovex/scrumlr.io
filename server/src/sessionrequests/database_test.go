@@ -194,15 +194,19 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_Pending() {
 	assert.Nil(t, err)
 	assert.Len(t, dbRequests, 2)
 
-	assert.Equal(t, suite.sessionsRequests["Read2"].Board, dbRequests[0].Board)
-	assert.Equal(t, suite.sessionsRequests["Read2"].User, dbRequests[0].User)
-	assert.Equal(t, suite.sessionsRequests["Read2"].Status, dbRequests[0].Status)
-	assert.NotNil(t, dbRequests[0].CreatedAt)
+	firstSessionRequest := checkSessioRequestInList(dbRequests, suite.sessionsRequests["Read2"].Board, suite.sessionsRequests["Read2"].User)
+	assert.NotNil(t, firstSessionRequest)
+	assert.Equal(t, suite.sessionsRequests["Read2"].Board, firstSessionRequest.Board)
+	assert.Equal(t, suite.sessionsRequests["Read2"].User, firstSessionRequest.User)
+	assert.Equal(t, suite.sessionsRequests["Read2"].Status, firstSessionRequest.Status)
+	assert.NotNil(t, firstSessionRequest.CreatedAt)
 
-	assert.Equal(t, suite.sessionsRequests["Read3"].Board, dbRequests[0].Board)
-	assert.Equal(t, suite.sessionsRequests["Read3"].User, dbRequests[0].User)
-	assert.Equal(t, suite.sessionsRequests["Read3"].Status, dbRequests[0].Status)
-	assert.NotNil(t, dbRequests[0].CreatedAt)
+	secondSessionRequest := checkSessioRequestInList(dbRequests, suite.sessionsRequests["Read3"].Board, suite.sessionsRequests["Read3"].User)
+	assert.NotNil(t, secondSessionRequest)
+	assert.Equal(t, suite.sessionsRequests["Read3"].Board, secondSessionRequest.Board)
+	assert.Equal(t, suite.sessionsRequests["Read3"].User, secondSessionRequest.User)
+	assert.Equal(t, suite.sessionsRequests["Read3"].Status, secondSessionRequest.Status)
+	assert.NotNil(t, secondSessionRequest.CreatedAt)
 }
 
 func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_Rejected() {
@@ -229,19 +233,25 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_Multifilter()
 	assert.Nil(t, err)
 	assert.Len(t, dbRequests, 3)
 
-	assert.Equal(t, suite.sessionsRequests["Read1"].Board, dbRequests[0].Board)
-	assert.Equal(t, suite.sessionsRequests["Read1"].User, dbRequests[0].User)
-	assert.Equal(t, suite.sessionsRequests["Read1"].Status, dbRequests[0].Status)
+	firstSessionRequest := checkSessioRequestInList(dbRequests, suite.sessionsRequests["Read1"].Board, suite.sessionsRequests["Read1"].User)
+	assert.NotNil(t, firstSessionRequest)
+	assert.Equal(t, suite.sessionsRequests["Read1"].Board, firstSessionRequest.Board)
+	assert.Equal(t, suite.sessionsRequests["Read1"].User, firstSessionRequest.User)
+	assert.Equal(t, suite.sessionsRequests["Read1"].Status, firstSessionRequest.Status)
+	assert.NotNil(t, firstSessionRequest.CreatedAt)
+
+	secondSessionRequest := checkSessioRequestInList(dbRequests, suite.sessionsRequests["Read2"].Board, suite.sessionsRequests["Read2"].User)
+	assert.NotNil(t, secondSessionRequest)
+	assert.Equal(t, suite.sessionsRequests["Read2"].Board, secondSessionRequest.Board)
+	assert.Equal(t, suite.sessionsRequests["Read2"].User, secondSessionRequest.User)
+	assert.Equal(t, suite.sessionsRequests["Read2"].Status, secondSessionRequest.Status)
 	assert.NotNil(t, dbRequests[0].CreatedAt)
 
-	assert.Equal(t, suite.sessionsRequests["Read2"].Board, dbRequests[0].Board)
-	assert.Equal(t, suite.sessionsRequests["Read2"].User, dbRequests[0].User)
-	assert.Equal(t, suite.sessionsRequests["Read2"].Status, dbRequests[0].Status)
-	assert.NotNil(t, dbRequests[0].CreatedAt)
-
-	assert.Equal(t, suite.sessionsRequests["Read3"].Board, dbRequests[0].Board)
-	assert.Equal(t, suite.sessionsRequests["Read3"].User, dbRequests[0].User)
-	assert.Equal(t, suite.sessionsRequests["Read3"].Status, dbRequests[0].Status)
+	thirdSessionRequest := checkSessioRequestInList(dbRequests, suite.sessionsRequests["Read3"].Board, suite.sessionsRequests["Read3"].User)
+	assert.NotNil(t, thirdSessionRequest)
+	assert.Equal(t, suite.sessionsRequests["Read3"].Board, thirdSessionRequest.Board)
+	assert.Equal(t, suite.sessionsRequests["Read3"].User, thirdSessionRequest.User)
+	assert.Equal(t, suite.sessionsRequests["Read3"].Status, thirdSessionRequest.Status)
 	assert.NotNil(t, dbRequests[0].CreatedAt)
 }
 
@@ -337,4 +347,13 @@ func (suite *DatabaseSessionRequestTestSuite) SeedDatabase(db *bun.DB) {
 			log.Fatalf("Failed to insert test session requests %s", err)
 		}
 	}
+}
+
+func checkSessioRequestInList(list []DatabaseBoardSessionRequest, boardId uuid.UUID, userId uuid.UUID) *DatabaseBoardSessionRequest {
+	for _, request := range list {
+		if request.Board == boardId && request.User == userId {
+			return &request
+		}
+	}
+	return nil
 }
