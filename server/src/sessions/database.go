@@ -143,7 +143,7 @@ func (db *DB) createExternalUser(id, name, avatarUrl string, accountType common.
 		Model((*DatabaseUser)(nil)).
 		ColumnExpr("name, account_type").
 		TableExpr(fmt.Sprintf("(SELECT ? as name, '%s'::account_type as account_type) as sub_query WHERE (SELECT NOT user_exists FROM exists_check)", accountType), name).
-		Returning("id")
+		Returning("*")
 
 	selectUser := db.db.NewSelect().
 		ColumnExpr("CASE WHEN (SELECT user_exists FROM exists_check) IS TRUE THEN (SELECT \"user\" FROM \"existing_user\") ELSE (SELECT id FROM \"create_new_user\") END AS id")
@@ -159,7 +159,7 @@ func (db *DB) createExternalUser(id, name, avatarUrl string, accountType common.
 		Where("id=(SELECT id FROM select_user)")
 
 	var user DatabaseUser
-	err := db.db.NewSelect().
+	_, err := db.db.NewSelect().
 		With("existing_user", existingUser).
 		With("exists_check", existsCheck).
 		With("update_name", updateName).
@@ -170,7 +170,7 @@ func (db *DB) createExternalUser(id, name, avatarUrl string, accountType common.
 		TableExpr("select_existing_user").
 		ColumnExpr("*").
 		Join("FULL JOIN \"create_new_user\" ON true").
-		Scan(context.Background(), &user)
+		Exec(context.Background(), &user)
 
 	return user, err
 }
