@@ -194,25 +194,31 @@ func (suite *DatabaseReactionTestSuite) Test_Database_GetAll() {
 
 	boardId := suite.boards["Read"].id
 
-	dbReactions, err := database.GetAll(boardId) // TODO: check order
+	dbReactions, err := database.GetAll(boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbReactions, 3)
 
-	assert.Equal(t, suite.reactions["Get1"].ID, dbReactions[0].ID)
-	assert.Equal(t, suite.reactions["Get1"].Note, dbReactions[0].Note)
-	assert.Equal(t, suite.reactions["Get1"].User, dbReactions[0].User)
-	assert.Equal(t, suite.reactions["Get1"].ReactionType, dbReactions[0].ReactionType)
+	firstReaction := checkReactionInList(dbReactions, suite.reactions["Get1"].ID)
+	assert.NotNil(t, firstReaction)
+	assert.Equal(t, suite.reactions["Get1"].ID, firstReaction.ID)
+	assert.Equal(t, suite.reactions["Get1"].Note, firstReaction.Note)
+	assert.Equal(t, suite.reactions["Get1"].User, firstReaction.User)
+	assert.Equal(t, suite.reactions["Get1"].ReactionType, firstReaction.ReactionType)
 
-	assert.Equal(t, suite.reactions["Get2"].ID, dbReactions[1].ID)
-	assert.Equal(t, suite.reactions["Get2"].Note, dbReactions[1].Note)
-	assert.Equal(t, suite.reactions["Get2"].User, dbReactions[1].User)
-	assert.Equal(t, suite.reactions["Get2"].ReactionType, dbReactions[1].ReactionType)
+	secondReaction := checkReactionInList(dbReactions, suite.reactions["Get2"].ID)
+	assert.NotNil(t, secondReaction)
+	assert.Equal(t, suite.reactions["Get2"].ID, secondReaction.ID)
+	assert.Equal(t, suite.reactions["Get2"].Note, secondReaction.Note)
+	assert.Equal(t, suite.reactions["Get2"].User, secondReaction.User)
+	assert.Equal(t, suite.reactions["Get2"].ReactionType, secondReaction.ReactionType)
 
-	assert.Equal(t, suite.reactions["Get3"].ID, dbReactions[2].ID)
-	assert.Equal(t, suite.reactions["Get3"].Note, dbReactions[2].Note)
-	assert.Equal(t, suite.reactions["Get3"].User, dbReactions[2].User)
-	assert.Equal(t, suite.reactions["Get3"].ReactionType, dbReactions[2].ReactionType)
+	thirdReaction := checkReactionInList(dbReactions, suite.reactions["Get3"].ID)
+	assert.NotNil(t, thirdReaction)
+	assert.Equal(t, suite.reactions["Get3"].ID, thirdReaction.ID)
+	assert.Equal(t, suite.reactions["Get3"].Note, thirdReaction.Note)
+	assert.Equal(t, suite.reactions["Get3"].User, thirdReaction.User)
+	assert.Equal(t, suite.reactions["Get3"].ReactionType, thirdReaction.ReactionType)
 }
 
 func (suite *DatabaseReactionTestSuite) Test_Database_GetAllForNote() {
@@ -226,15 +232,19 @@ func (suite *DatabaseReactionTestSuite) Test_Database_GetAllForNote() {
 	assert.Nil(t, err)
 	assert.Len(t, dbReactions, 2)
 
-	assert.Equal(t, suite.reactions["Get1"].ID, dbReactions[0].ID)
-	assert.Equal(t, suite.reactions["Get1"].Note, dbReactions[0].Note)
-	assert.Equal(t, suite.reactions["Get1"].User, dbReactions[0].User)
-	assert.Equal(t, suite.reactions["Get1"].ReactionType, dbReactions[0].ReactionType)
+	firstReaction := checkReactionInList(dbReactions, suite.reactions["Get1"].ID)
+	assert.NotNil(t, firstReaction)
+	assert.Equal(t, suite.reactions["Get1"].ID, firstReaction.ID)
+	assert.Equal(t, suite.reactions["Get1"].Note, firstReaction.Note)
+	assert.Equal(t, suite.reactions["Get1"].User, firstReaction.User)
+	assert.Equal(t, suite.reactions["Get1"].ReactionType, firstReaction.ReactionType)
 
-	assert.Equal(t, suite.reactions["Get2"].ID, dbReactions[1].ID)
-	assert.Equal(t, suite.reactions["Get2"].Note, dbReactions[1].Note)
-	assert.Equal(t, suite.reactions["Get2"].User, dbReactions[1].User)
-	assert.Equal(t, suite.reactions["Get2"].ReactionType, dbReactions[1].ReactionType)
+	secondReaction := checkReactionInList(dbReactions, suite.reactions["Get2"].ID)
+	assert.NotNil(t, secondReaction)
+	assert.Equal(t, suite.reactions["Get2"].ID, secondReaction.ID)
+	assert.Equal(t, suite.reactions["Get2"].Note, secondReaction.Note)
+	assert.Equal(t, suite.reactions["Get2"].User, secondReaction.User)
+	assert.Equal(t, suite.reactions["Get2"].ReactionType, secondReaction.ReactionType)
 }
 
 type TestUser struct {
@@ -333,4 +343,13 @@ func (suite *DatabaseReactionTestSuite) SeedDatabase(db *bun.DB) {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
+}
+
+func checkReactionInList(list []DatabaseReaction, id uuid.UUID) *DatabaseReaction {
+	for _, reaction := range list {
+		if reaction.ID == id {
+			return &reaction
+		}
+	}
+	return nil
 }
