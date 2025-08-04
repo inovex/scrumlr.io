@@ -145,17 +145,21 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll() {
 	assert.Nil(t, err)
 	assert.Len(t, dbTemplates, 2)
 
-	assert.Equal(t, suite.templates["Read1"].ID, dbTemplates[0].Template.ID)
-	assert.Equal(t, userId, dbTemplates[0].Template.Creator)
-	assert.Equal(t, suite.templates["Read1"].Name, dbTemplates[0].Template.Name)
-	assert.Equal(t, suite.templates["Read1"].Description, dbTemplates[0].Template.Description)
-	assert.NotNil(t, dbTemplates[0].Template.CreatedAt)
+	firstTemplate := checkTemplateInList(dbTemplates, suite.templates["Read1"].ID)
+	assert.NotNil(t, firstTemplate)
+	assert.Equal(t, suite.templates["Read1"].ID, firstTemplate.Template.ID)
+	assert.Equal(t, userId, firstTemplate.Template.Creator)
+	assert.Equal(t, suite.templates["Read1"].Name, firstTemplate.Template.Name)
+	assert.Equal(t, suite.templates["Read1"].Description, firstTemplate.Template.Description)
+	assert.NotNil(t, firstTemplate.Template.CreatedAt)
 
-	assert.Equal(t, suite.templates["Read2"].ID, dbTemplates[1].Template.ID)
-	assert.Equal(t, userId, dbTemplates[1].Template.Creator)
-	assert.Equal(t, suite.templates["Read2"].Name, dbTemplates[1].Template.Name)
-	assert.Equal(t, suite.templates["Read2"].Description, dbTemplates[1].Template.Description)
-	assert.NotNil(t, dbTemplates[1].Template.CreatedAt)
+	secondTemplate := checkTemplateInList(dbTemplates, suite.templates["Read2"].ID)
+	assert.NotNil(t, secondTemplate)
+	assert.Equal(t, suite.templates["Read2"].ID, secondTemplate.Template.ID)
+	assert.Equal(t, userId, secondTemplate.Template.Creator)
+	assert.Equal(t, suite.templates["Read2"].Name, secondTemplate.Template.Name)
+	assert.Equal(t, suite.templates["Read2"].Description, secondTemplate.Template.Description)
+	assert.NotNil(t, secondTemplate.Template.CreatedAt)
 }
 
 func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll_NoTemplates() {
@@ -218,4 +222,13 @@ func (suite *DatabaseBoardTemplateTestSuite) SeedDatabase(db *bun.DB) {
 			log.Fatalf("Failed to insert test board templates %s", err)
 		}
 	}
+}
+
+func checkTemplateInList(list []DatabaseBoardTemplateFull, id uuid.UUID) *DatabaseBoardTemplateFull {
+	for _, template := range list {
+		if template.Template.ID == id {
+			return &template
+		}
+	}
+	return nil
 }
