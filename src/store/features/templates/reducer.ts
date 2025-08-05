@@ -12,7 +12,7 @@ import {createTemplateWithColumns, deleteTemplate, editTemplate, getTemplates} f
 
 // Helper to generate recommended templates with ids, type, etc.
 const generateRecommendedTemplates = (): Template[] => {
-  const favIds = getFromStorage<string[]>(RECOMMENDED_FAVOURITES_KEY, []);
+  const favIds = getFromStorage<string[]>(RECOMMENDED_FAVOURITES_KEY) ?? [];
   return (recommendedTemplatesJson as ImportReducedTemplateWithColumns[]).map((tpl, idx): Template => {
     const id = `recommended-${idx}`;
     return {

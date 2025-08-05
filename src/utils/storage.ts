@@ -6,15 +6,7 @@ export const saveToStorage = (key: string, value: string): void => localStorage.
 /**
  * Retrieves value from local storage by key.
  */
-export function getFromStorage<T>(key: string, defaultValue: T = null as T): T {
-  try {
-    const value = localStorage.getItem(key);
-    if (value == null) return defaultValue;
-    return (typeof value === "string" ? value : JSON.parse(value)) as T;
-  } catch {
-    return defaultValue;
-  }
-}
+export const getFromStorage = <T>(key: string): T | null => localStorage.getItem(key) as T | null;
 
 /**
  * Retrieves number from local storage by key. Returns alternative value on error.
