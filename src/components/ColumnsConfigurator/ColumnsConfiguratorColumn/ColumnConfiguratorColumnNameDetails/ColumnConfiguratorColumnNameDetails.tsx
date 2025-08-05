@@ -64,15 +64,18 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
 
     if (!isFocusInsideTitleHeaderWrapper) {
       props.setOpenState("closed");
+
+      // reset name and description to actual
+      setName(props.name);
+      setDescription(props.description);
     }
   };
 
-  // note: description gets set to the actual value each time when opening,
-  // whereas the name input remains in its current state, meaning name will be visually saved even when canceling
   const openDescriptionWithCurrentValue = () => {
     setDescription(props.description);
     props.setOpenState("descriptionFirst");
   };
+
   return (
     <div className={classNames(props.className, "column-configurator-column-name-details__name-wrapper")} ref={nameWrapperRef}>
       <input
