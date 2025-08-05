@@ -93,6 +93,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
             embedded
             fitted
+            textDim
             autoFocus={props.openState === "descriptionFirst"}
             onBlur={handleBlurNameWrapperContents}
           />

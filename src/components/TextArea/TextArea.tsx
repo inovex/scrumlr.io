@@ -16,6 +16,7 @@ type TextAreaProps = {
   fitted?: boolean; // affects the text, padding, and border-radius rn
   border?: "none" | "normal" | "thick";
   textAlign?: "left" | "center";
+  textDim?: boolean; // affects default text and its hover/focus color
 
   placeholder?: string;
 
@@ -44,6 +45,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, r
             "text-area--extendable": props.extendable,
             "text-area--embedded": props.embedded,
             "text-area--fitted": props.fitted,
+            "text-area--text-dim": props.textDim,
           },
           `text-area--border-${props.border ?? "normal"}`,
           `text-area--text-align-${props.textAlign ?? "left"}`
