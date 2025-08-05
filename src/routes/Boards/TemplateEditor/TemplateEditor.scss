@@ -135,3 +135,10 @@
     display: initial;
   }
 }
+
+[theme="dark"] {
+  .template-editor__info,
+  .template-editor__info-text {
+    color: $gray--000;
+  }
+}
