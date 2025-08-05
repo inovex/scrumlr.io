@@ -14,7 +14,7 @@ type TextAreaProps = {
   // not embedded:  form component like input
   embedded?: boolean;
   fitted?: boolean; // affects the text, padding, and border-radius rn
-  border?: "none" | "normal" | "thick";
+  border?: "none" | "normal" | "thick" | "secret";
   textAlign?: "left" | "center";
   textDim?: boolean; // affects default text and its hover/focus color
 

@@ -27,6 +27,13 @@ $border-width--thick: 3px;
       border-radius: 0;
     }
 
+    // used with non-embedded textareas to not mess with default state borders
+    &-secret {
+      --text-area-border-width: #{$border-width--default};
+      border-radius: $rounded--default;
+      border-color: transparent;
+    }
+
     &-normal {
       --text-area-border-width: #{$border-width--default};
       border-radius: $rounded--default;
@@ -68,13 +75,6 @@ $border-width--thick: 3px;
     color: $gray--800;
   }
 
-  &:not(&--embedded) {
-    @include default-states($padding: $padding--fitted);
-  }
-  &:not(&--embedded):not(&--fitted) {
-    @include default-states($padding: $padding--default);
-  }
-
   &--text-dim {
     color: $gray--800;
     &:hover,
@@ -99,6 +99,13 @@ $border-width--thick: 3px;
     font-size: $text--xs;
     padding: $padding--fitted;
     border-radius: 5px;
+  }
+
+  &:not(&--embedded) {
+    @include default-states($padding: $padding--fitted);
+  }
+  &:not(&--embedded):not(&--fitted) {
+    @include default-states($padding: $padding--default);
   }
 }
 

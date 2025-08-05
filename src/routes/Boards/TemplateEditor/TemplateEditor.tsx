@@ -215,7 +215,14 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
         />
       </div>
       <div className="template-editor__description">
-        <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" textDim />
+        <TextArea
+          className="template-editor__description-text-area"
+          input={descriptionInput}
+          setInput={setDescriptionInput}
+          placeholder="Description (optional)"
+          border="secret"
+          textDim
+        />
       </div>
       {debug && (
         <div className="template-editor__debug">
