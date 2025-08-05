@@ -36,7 +36,8 @@
       "editTitle": "Edit a Template",
       "cancel": "Cancel",
       "saveEdit": "Save",
-      "saveCreate": "Create template"
+      "saveCreate": "Create template",
+      "info": "Changes can be made at any time, including on the board."
     },
     "ColumnsConfiguratorColumn": {
       "namePlaceholder": "Name",

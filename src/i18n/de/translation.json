@@ -20,11 +20,9 @@
     "title": "Wähle eine Vorlage",
     "savedTemplates": "Deine Vorlagen",
     "recommendedTemplates": "Unsere Empfehlungen",
-
     "CreateTemplateCard": {
       "create": "Erstelle eine Vorlage"
     },
-
     "TemplateCard": {
       "addFavourite": "Favorit hinzufügen",
       "removeFavourite": "Favorit entfernen",
@@ -33,13 +31,13 @@
       "start": "Starten",
       "save": "Speichern"
     },
-
     "TemplateEditor": {
       "create": "Erstelle eine Vorlage",
       "edit": "Bearbeite eine Vorlage",
       "cancel": "Abbrechen",
       "saveEdit": "Speichern",
-      "saveCreate": "Template erstellen"
+      "saveCreate": "Template erstellen",
+      "info": "Änderungen können jederzeit vorgenommen werden, auch auf dem Board."
     },
 
     "ColumnsConfiguratorColumn": {

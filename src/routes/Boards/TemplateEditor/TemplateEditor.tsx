@@ -258,7 +258,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
       </div>
       <div className="template-editor__info">
         <InfoIcon className="template-editor__info-icon" />
-        <div className="template-editor__info-text">Hello World</div>
+        <div className="template-editor__info-text">{t("Templates.TemplateEditor.info")}</div>
       </div>
       <div className="template-editor__buttons">
         <Button
