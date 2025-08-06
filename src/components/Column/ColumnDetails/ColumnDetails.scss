@@ -3,7 +3,7 @@
 $description-line-height: $line-height--medium;
 $description-target-height: 2 * $description-line-height;
 
-$settings-icon: 24px;
+$icon-size: $icon--large;
 
 .column-details {
   display: flex;
@@ -59,14 +59,14 @@ $settings-icon: 24px;
 .column-details__settings-icon-container {
   all: unset;
 
-  width: $settings-icon;
-  height: $settings-icon;
+  width: $icon-size;
+  height: $icon-size;
 
   cursor: pointer;
 }
 .column-details__settings-icon {
-  width: $settings-icon;
-  height: $settings-icon;
+  width: $icon-size;
+  height: $icon-size;
 
   transform: rotate(90deg);
 }
@@ -105,15 +105,15 @@ $settings-icon: 24px;
   all: unset;
   align-self: flex-end;
 
-  width: $icon--medium;
-  height: $icon--medium;
+  width: $icon-size;
+  height: $icon-size;
 
   cursor: pointer;
 }
 
 .column-details__description-expand-icon {
-  width: $icon--medium;
-  height: $icon--medium;
+  width: $icon-size;
+  height: $icon-size;
 
   &--expanded {
     transform: rotate(180deg);
