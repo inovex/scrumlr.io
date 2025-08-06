@@ -22,7 +22,7 @@ import {ReactComponent as InfoIcon} from "assets/icons/info.svg";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import classNames from "classnames";
 import {Button} from "components/Button";
-import {useNavigate, useParams} from "react-router";
+import {Outlet, useNavigate, useParams} from "react-router";
 import {arrayMove} from "@dnd-kit/sortable";
 import {TemplatesNavigationState} from "../Templates";
 import "./TemplateEditor.scss";
@@ -202,84 +202,87 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   if (!editableTemplate || !editableTemplateColumns) return <div>Error loading template</div>;
 
   return (
-    <div className="template-editor">
-      <div className="template-editor__name">
-        <Input
-          className="template-editor__name-input"
-          type="text"
-          input={nameInput}
-          setInput={setNameInput}
-          height="normal"
-          placeholder="Board name"
-          required
-          dataCy="template-editor__name-input"
-        />
-      </div>
-      <div className="template-editor__description">
-        <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
-      </div>
-      {debug && (
-        <div className="template-editor__debug">
-          <table>
-            <thead>
-              <tr>
-                <th>Column</th>
-                <th>Index</th>
-                <th>Persisted</th>
-                <th>Mode</th>
-              </tr>
-            </thead>
-            <tbody>
-              {editableTemplateColumns.map((etc) => (
-                <tr key={etc.id}>
-                  <td>{etc.id}</td>
-                  <td>{etc.index}</td>
-                  <td>{String(etc.persisted)}</td>
-                  <td>{String(etc.mode)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <>
+      <div className="template-editor">
+        <div className="template-editor__name">
+          <Input
+            className="template-editor__name-input"
+            type="text"
+            input={nameInput}
+            setInput={setNameInput}
+            height="normal"
+            placeholder="Board name"
+            required
+            dataCy="template-editor__name-input"
+          />
         </div>
-      )}
-      <div className="template-editor__columns-configurator-wrapper">
-        <ColumnsConfigurator
-          className="template-editor__columns-configurator"
-          templateId={templateId}
-          columns={editableTemplateColumns}
-          addColumn={addColumn}
-          moveColumn={moveColumn}
-          editColumn={editColumn}
-          deleteColumn={deleteColumn}
-        />
+        <div className="template-editor__description">
+          <TextArea className="template-editor__description-text-area" input={descriptionInput} setInput={setDescriptionInput} placeholder="Description (optional)" />
+        </div>
+        {debug && (
+          <div className="template-editor__debug">
+            <table>
+              <thead>
+                <tr>
+                  <th>Column</th>
+                  <th>Index</th>
+                  <th>Persisted</th>
+                  <th>Mode</th>
+                </tr>
+              </thead>
+              <tbody>
+                {editableTemplateColumns.map((etc) => (
+                  <tr key={etc.id}>
+                    <td>{etc.id}</td>
+                    <td>{etc.index}</td>
+                    <td>{String(etc.persisted)}</td>
+                    <td>{String(etc.mode)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        <div className="template-editor__columns-configurator-wrapper">
+          <ColumnsConfigurator
+            className="template-editor__columns-configurator"
+            templateId={templateId}
+            columns={editableTemplateColumns}
+            addColumn={addColumn}
+            moveColumn={moveColumn}
+            editColumn={editColumn}
+            deleteColumn={deleteColumn}
+          />
+        </div>
+        <div className="template-editor__columns-mini-view-wrapper">
+          <ColumnsMiniView className="columns-configurator__mini-view" columns={editableTemplateColumns} />
+        </div>
+        <div className="template-editor__info">
+          <InfoIcon className="template-editor__info-icon" />
+          <div className="template-editor__info-text">{t("Templates.TemplateEditor.info")}</div>
+        </div>
+        <div className="template-editor__buttons">
+          <Button
+            className={classNames("template-editor__button", "template-editor__button--return")}
+            type="secondary"
+            onClick={cancelAndGoBack}
+            dataCy="template-editor__button--return"
+          >
+            {t("Templates.TemplateEditor.cancel")}
+          </Button>
+          <Button
+            className={classNames("template-editor__button", "template-editor__button--create")}
+            type="primary"
+            icon={<AddIcon />}
+            onClick={saveTemplate}
+            disabled={!validForm}
+            dataCy="template-editor__button--create"
+          >
+            {t(`Templates.TemplateEditor.save${mode === "create" ? "Create" : "Edit"}`)}
+          </Button>
+        </div>
       </div>
-      <div className="template-editor__columns-mini-view-wrapper">
-        <ColumnsMiniView className="columns-configurator__mini-view" columns={editableTemplateColumns} />
-      </div>
-      <div className="template-editor__info">
-        <InfoIcon className="template-editor__info-icon" />
-        <div className="template-editor__info-text">{t("Templates.TemplateEditor.info")}</div>
-      </div>
-      <div className="template-editor__buttons">
-        <Button
-          className={classNames("template-editor__button", "template-editor__button--return")}
-          type="secondary"
-          onClick={cancelAndGoBack}
-          dataCy="template-editor__button--return"
-        >
-          {t("Templates.TemplateEditor.cancel")}
-        </Button>
-        <Button
-          className={classNames("template-editor__button", "template-editor__button--create")}
-          type="primary"
-          icon={<AddIcon />}
-          onClick={saveTemplate}
-          disabled={!validForm}
-          dataCy="template-editor__button--create"
-        >
-          {t(`Templates.TemplateEditor.save${mode === "create" ? "Create" : "Edit"}`)}
-        </Button>
-      </div>
-    </div>
+      <Outlet />
+    </>
   );
 };
