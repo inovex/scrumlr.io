@@ -78,7 +78,13 @@ const Router = () => {
                 <TemplateEditor mode="create" />
               </VerifiedAccountGuard>
             }
-          />
+          >
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="profile" element={<ProfileSettings />} />
+            </Route>
+          </Route>
 
           <Route
             path="edit/:id"
@@ -87,7 +93,13 @@ const Router = () => {
                 <TemplateEditor mode="edit" />
               </VerifiedAccountGuard>
             }
-          />
+          >
+            <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
+              <Route path="appearance" element={<Appearance />} />
+              <Route path="feedback" element={<Feedback />} />
+              <Route path="profile" element={<ProfileSettings />} />
+            </Route>
+          </Route>
 
           <Route path="sessions" element={<Sessions />}>
             <Route path="settings" element={<SettingsDialog enabledMenuItems={{appearance: true, feedback: feedbackEnabled, profile: true}} />}>
