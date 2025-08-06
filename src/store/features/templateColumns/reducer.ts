@@ -1,6 +1,7 @@
 import recommendedTemplatesJson from "constants/recommendedTemplates.json";
 import {createReducer} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
+import {t} from "i18next";
 import {TemplateColumnsState, TemplateColumn} from "./types";
 import {ImportReducedTemplateWithColumns} from "../templates/types";
 import {deleteTemplate, getTemplates} from "../templates";
@@ -14,6 +15,7 @@ function withMeta(columns: Omit<TemplateColumn, "id" | "template" | "index">[], 
     id: `${templateId}-${idx}`,
     template: templateId,
     index: idx,
+    name: t(col.name, {ns: "templates"}),
   }));
 }
 
@@ -49,7 +51,7 @@ export const templateColumnsReducer = createReducer(initialState, (builder) => {
         ) // start with a copy of the existing state
     )
     .addCase(createTemplateColumn.fulfilled, (state, action) => [...state, action.payload.column])
-    .addCase(editTemplateColumn.fulfilled, (state, action) => state.map((t) => (t.id === action.payload.id ? {...action.payload} : t)))
+    .addCase(editTemplateColumn.fulfilled, (state, action) => state.map((e) => (e.id === action.payload.id ? {...action.payload} : e)))
     .addCase(deleteTemplateColumn.fulfilled, (state, action) => state.filter((c) => c.id !== action.payload))
     .addCase(deleteTemplate.fulfilled, (state, action) => state.filter((column) => column.template !== action.payload));
 });
