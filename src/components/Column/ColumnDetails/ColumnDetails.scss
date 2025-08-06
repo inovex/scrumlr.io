@@ -105,15 +105,15 @@ $settings-icon: 24px;
   all: unset;
   align-self: flex-end;
 
-  width: $description-line-height;
-  height: $description-line-height;
+  width: $icon--medium;
+  height: $icon--medium;
 
   cursor: pointer;
 }
 
 .column-details__description-expand-icon {
-  width: $description-line-height;
-  height: $description-line-height;
+  width: $icon--medium;
+  height: $icon--medium;
 
   &--expanded {
     transform: rotate(180deg);
