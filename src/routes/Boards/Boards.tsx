@@ -19,8 +19,11 @@ export const Boards = () => {
   const dispatch = useAppDispatch();
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
+  const [editTemplateId, setEditTemplateId] = useState("");
   // a simplification of BoardView in order to change some render behaviour (e.g. conditional render of SearchBar)
   const viewType = ["templates", "sessions"].includes(boardView) ? "overview" : "edit";
+  // for edit route, expand location prefix used for settings with the edit template uuid
+  const locationPrefix = boardView === "edit" ? `edit/${editTemplateId}` : boardView;
 
   const [searchBarInput, setSearchBarInput] = useState("");
 
@@ -28,6 +31,12 @@ export const Boards = () => {
     // first sub path after "/boards"
     const subRoute = location.pathname.split("/").filter(Boolean)[1] as BoardView;
     setBoardView(subRoute);
+
+    // for edit route, also retrieve template uuid to be used for location prefix
+    if (subRoute === "edit") {
+      const id = location.pathname.split("/").filter(Boolean)[2];
+      if (id) setEditTemplateId(id);
+    }
   }, [location]);
 
   // init templates
@@ -80,7 +89,7 @@ export const Boards = () => {
         {/* - - title - - */}
         <div className="boards__title">{renderTitle()}</div>
 
-        <UserPill className="boards__user-pill" locationPrefix={boardView} />
+        <UserPill className="boards__user-pill" locationPrefix={locationPrefix} />
 
         {renderExpandedView()}
 
