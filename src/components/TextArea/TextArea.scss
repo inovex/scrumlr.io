@@ -28,7 +28,7 @@ $border-width--thick: 3px;
     }
 
     // used with non-embedded textareas to not mess with default state borders
-    &-secret {
+    &-transparent {
       --text-area-border-width: #{$border-width--default};
       border-radius: $rounded--default;
       border-color: transparent;
