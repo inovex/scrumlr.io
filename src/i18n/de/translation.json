@@ -35,8 +35,8 @@
     },
 
     "TemplateEditor": {
-      "create": "Erstelle eine Vorlage",
-      "edit": "Bearbeite eine Vorlage",
+      "createTitle": "Erstelle eine Vorlage",
+      "editTitle": "Bearbeite eine Vorlage",
       "cancel": "Abbrechen",
       "saveEdit": "Speichern",
       "saveCreate": "Template erstellen"
