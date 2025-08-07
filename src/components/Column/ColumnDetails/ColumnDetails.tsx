@@ -18,7 +18,7 @@ import {MAX_BOARD_NAME_LENGTH, MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/mi
 
 export type ColumnDetailsMode = "view" | "edit";
 
-type ColumnDetailsProps = {
+export type ColumnDetailsProps = {
   column: Column;
   notesCount: number;
   mode: ColumnDetailsMode;
