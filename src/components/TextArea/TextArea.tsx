@@ -20,6 +20,7 @@ type TextAreaProps = {
 
   placeholder?: string;
 
+  maxLength?: number;
   disabled?: boolean;
 
   autoFocus?: boolean;
@@ -52,6 +53,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, r
         )}
         value={props.input}
         maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : rows}
+        maxLength={props.maxLength}
         onInput={updateInput}
         placeholder={props.placeholder}
         autoFocus={props.autoFocus}

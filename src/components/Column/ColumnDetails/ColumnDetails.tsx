@@ -14,6 +14,7 @@ import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Tooltip} from "components/Tooltip";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
+import {MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/misc";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -166,6 +167,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         extendable
         border="thick"
         rows={3}
+        maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
       />
       <MiniMenu className="column-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
     </>
