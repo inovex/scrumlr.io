@@ -13,6 +13,7 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
       >
         <input
           class="column-details__name column-details__name--editing"
+          maxlength="128"
           value="test-columns-name-1"
         />
       </div>

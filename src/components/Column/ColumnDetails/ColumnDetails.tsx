@@ -134,6 +134,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         ref={inputRef}
         className={classNames("column-details__name", "column-details__name--editing")}
         value={localName}
+        maxLength={MAX_BOARD_NAME_LENGTH}
         onInput={(e) => setLocalName(e.currentTarget.value)}
       />
     );
