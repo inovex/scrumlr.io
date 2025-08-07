@@ -28,6 +28,7 @@ $settings-dialog-container--bottom: 62px;
   display: flex;
   flex-direction: row;
 }
+
 @media screen and (min-width: 450px) {
   .settings-dialog {
     height: 616px;
@@ -71,15 +72,20 @@ $settings-dialog-container--bottom: 62px;
 }
 
 .settings-dialog__sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   width: 100%;
   background-color: $gray--000;
 }
+
 [theme="dark"] .settings-dialog__sidebar {
   background-color: $navy--500;
 }
 .settings-dialog--selected .settings-dialog__sidebar {
   display: none;
 }
+
 @media screen and (min-width: 450px) {
   .settings-dialog__sidebar {
     width: 380px;
@@ -89,7 +95,7 @@ $settings-dialog-container--bottom: 62px;
 }
 @media screen and (min-width: 920px) {
   .settings-dialog--selected .settings-dialog__sidebar {
-    display: block;
+    display: flex;
   }
   .settings-dialog__sidebar {
     width: 318px;
@@ -105,6 +111,7 @@ $settings-dialog-container--bottom: 62px;
 
 .settings-dialog__navigation {
   display: flex;
+  flex: 1 1 auto;
   flex-direction: column;
   gap: 8px;
 }
@@ -204,6 +211,7 @@ $settings-dialog-container--bottom: 62px;
   flex-direction: row;
   gap: 16px;
   padding: 8px;
+  cursor: pointer;
 
   &:hover {
     background: rgba(var(--accent-color--light-rgb), 0.8);
@@ -213,12 +221,28 @@ $settings-dialog-container--bottom: 62px;
   &:focus-visible {
     box-shadow: 0 0 0 2px var(--accent-color--light);
   }
+
+  &--logout {
+    margin-bottom: $spacing--xl;
+    border: none;
+    background-color: transparent;
+
+    &:hover {
+      background-color: $navy--200;
+    }
+
+    .navigation-item__icon {
+      background: $navy--400;
+      color: $gray--000;
+    }
+  }
 }
 
 .navigation-item__content {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-self: center;
   gap: 2px;
   overflow: hidden;
 }
@@ -243,6 +267,13 @@ $settings-dialog-container--bottom: 62px;
 
 [theme="dark"] .navigation__item {
   color: $gray--000;
+
+  &--logout {
+    .navigation-item__icon {
+      background: $gray--000;
+      color: $navy--400;
+    }
+  }
 }
 
 .navigation__item--active {
@@ -257,6 +288,9 @@ $settings-dialog-container--bottom: 62px;
   border-radius: $rounded--full;
   background: var(--accent-color--light);
   color: $gray--000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .settings-dialog__container {

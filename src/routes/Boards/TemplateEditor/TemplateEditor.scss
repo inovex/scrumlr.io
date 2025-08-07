@@ -11,6 +11,8 @@
     36px
     min-content // <- debug
     min-content // <- columns config
+    24px
+    min-content // info
     56px
     52px // <- buttons
     $spacing--xs;
@@ -22,6 +24,8 @@
     ".          .           .         .         ."
     ".          debug        debug      debug      ."
     ".          columns     columns   columns   ."
+    ".          .           .         .         ."
+    ".          info        info      info      ."
     ".          .           .         .         ."
     ".          buttons     buttons   buttons   ."
     ".          .           .         .         .";
@@ -69,6 +73,21 @@
   display: none;
 }
 
+.template-editor__info {
+  grid-area: info;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing--xs;
+}
+
+.template-editor__info-text {
+  color: $navy--900;
+  font-weight: 400;
+}
+
 .template-editor__buttons {
   grid-area: buttons;
   justify-self: end;
@@ -90,6 +109,8 @@
       min-content // <- columns config
       16px
       min-content // <- mini columns
+      24px
+      min-content // info
       56px
       52px // <- buttons
       $spacing--xs;
@@ -104,11 +125,20 @@
       ".          .           .         .         ."
       ".          mini        mini      mini      ."
       ".          .           .         .         ."
+      ".          info        info      info      ."
+      ".          .           .         .         ."
       ".          buttons     buttons   buttons   ."
       ".          .           .         .         .";
   }
 
   .template-editor__columns-mini-view-wrapper {
     display: initial;
+  }
+}
+
+[theme="dark"] {
+  .template-editor__info,
+  .template-editor__info-text {
+    color: $gray--000;
   }
 }

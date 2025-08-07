@@ -245,6 +245,20 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
       </div>
     </div>
     <div
+      class="template-editor__info"
+    >
+      <svg
+        class="template-editor__info-icon"
+      >
+        info.svg
+      </svg>
+      <div
+        class="template-editor__info-text"
+      >
+        Changes can be made at any time, including on the board.
+      </div>
+    </div>
+    <div
       class="template-editor__buttons"
     >
       <button
@@ -524,6 +538,20 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
             2
           </span>
         </div>
+      </div>
+    </div>
+    <div
+      class="template-editor__info"
+    >
+      <svg
+        class="template-editor__info-icon"
+      >
+        info.svg
+      </svg>
+      <div
+        class="template-editor__info-text"
+      >
+        Changes can be made at any time, including on the board.
       </div>
     </div>
     <div

@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import {Outlet, useLocation} from "react-router";
+import {Outlet, useLocation, useParams} from "react-router";
 import {useEffect, useState} from "react";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {UserPill} from "components/UserPill/UserPill";
@@ -15,12 +15,15 @@ type BoardView = "templates" | "sessions" | "create" | "edit";
 export const Boards = () => {
   const {t} = useTranslation();
   const location = useLocation();
+  const {id: editTemplateId} = useParams();
   // const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [boardView, setBoardView] = useState<BoardView>("templates");
   // a simplification of BoardView in order to change some render behaviour (e.g. conditional render of SearchBar)
   const viewType = ["templates", "sessions"].includes(boardView) ? "overview" : "edit";
+  // for edit route, expand location prefix used for settings with the edit template uuid
+  const locationPrefix = boardView === "edit" ? `edit/${editTemplateId}` : boardView;
 
   const [searchBarInput, setSearchBarInput] = useState("");
 
@@ -80,7 +83,7 @@ export const Boards = () => {
         {/* - - title - - */}
         <div className="boards__title">{renderTitle()}</div>
 
-        <UserPill className="boards__user-pill" locationPrefix={boardView} />
+        <UserPill className="boards__user-pill" locationPrefix={locationPrefix} />
 
         {renderExpandedView()}
 

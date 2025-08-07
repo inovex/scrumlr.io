@@ -36,7 +36,8 @@
       "editTitle": "Edit a Template",
       "cancel": "Cancel",
       "saveEdit": "Save",
-      "saveCreate": "Create template"
+      "saveCreate": "Create template",
+      "info": "Changes can be made at any time, including on the board."
     },
     "ColumnsConfiguratorColumn": {
       "namePlaceholder": "Name",
@@ -443,7 +444,8 @@
     "ExportBoardDescription": "Share the board",
     "Feedback": "Feedback",
     "FeedbackDescription": "We love to hear from you",
-    "ProfileDescription": "Edit profile"
+    "ProfileDescription": "Edit profile",
+    "Logout": "Logout"
   },
   "BoardSettings": {
     "BoardName": "Board Name",
