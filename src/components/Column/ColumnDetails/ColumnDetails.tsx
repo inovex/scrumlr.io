@@ -14,7 +14,7 @@ import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Tooltip} from "components/Tooltip";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
-import {MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/misc";
+import {MAX_BOARD_NAME_LENGTH, MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/misc";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -43,7 +43,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
 
-  const hasNameInputContent = localName.trim().length > 0;
+  const isValidName = localName.trim().length > 0 && localName <= MAX_BOARD_NAME_LENGTH;
+  const isValidDescription = localDescription <= MAX_COLUMN_DESCRIPTION_LENGTH;
 
   // focus input upon entering edit mode
   useEffect(() => {
@@ -70,7 +71,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   // if column exists, update details
   // else create new column
   const updateColumnDetails = (newName: string, newDescription: string) => {
-    if (!hasNameInputContent) {
+    if (!isValidName || !isValidDescription) {
       cancelUpdate();
       return;
     }
