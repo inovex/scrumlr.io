@@ -6,6 +6,7 @@ import {TextArea} from "components/TextArea/TextArea";
 import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {Dispatch, SetStateAction, useRef, useState, FocusEvent} from "react";
 import "./ColumnConfiguratorColumnNameDetails.scss";
+import {MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/misc";
 
 export type OpenState = "closed" | "visualFeedback" | "nameFirst" | "descriptionFirst";
 
@@ -95,9 +96,11 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             setInput={setDescription}
             placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
             embedded
-            small
+            fitted
+            textDim
             autoFocus={props.openState === "descriptionFirst"}
             onBlur={handleBlurNameWrapperContents}
+            maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
           />
           <MiniMenu className="column-configurator-column-name-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
         </div>

@@ -6,8 +6,13 @@ import {useState, useEffect, useRef, RefObject} from "react";
  *
  * @template RefElement
  * @param {string} label - The text to monitor for overflow.
- * @returns {{ isTextTruncated: boolean, textRef: React.RefObject<RefElement> }} An object containing:
- * - `isTextTruncated`: A boolean indicating if the text is truncated.
+ * @returns {{
+ *   isTextTruncated: { horizontal: boolean; vertical: boolean },
+ *   textRef: React.RefObject<RefElement>
+ * }} An object containing:
+ * - `isTextTruncated`: An object indicating if the text is truncated in either direction:
+ *   - `horizontal`: A boolean indicating if the text is truncated horizontally.
+ *   - `vertical`: A boolean indicating if the text is truncated vertically.
  * - `textRef`: A ref to be attached to the text element to measure its dimensions.
  *
  * @example
@@ -17,19 +22,34 @@ import {useState, useEffect, useRef, RefObject} from "react";
  *   return (
  *     <div>
  *       <h2 ref={textRef}>Some text that might be truncated</h2>
- *       {isTextTruncated && <div className="tooltip">Some text that might be truncated</div>}
+ *       {isTextTruncated.horizontal && <div className="tooltip">Text is truncated horizontally</div>}
+ *       {isTextTruncated.vertical && <div className="tooltip">Text is truncated vertically</div>}
  *     </div>
  *   );
  * };
  */
-export const useTextOverflow = <RefElement extends HTMLElement>(label: string): {isTextTruncated: boolean; textRef: RefObject<RefElement>} => {
-  const [isTextTruncated, setIsTextTruncated] = useState<boolean>(false);
+
+export const useTextOverflow = <RefElement extends HTMLElement>(
+  label: string
+): {
+  isTextTruncated: {horizontal: boolean; vertical: boolean};
+  textRef: RefObject<RefElement>;
+} => {
+  const [isTextTruncated, setIsTextTruncated] = useState<{horizontal: boolean; vertical: boolean}>({
+    horizontal: false,
+    vertical: false,
+  });
   const textRef = useRef<RefElement | null>(null);
 
   const detectTextOverflow = () => {
     if (textRef.current) {
-      const isTextEllipsis = textRef.current.scrollWidth > textRef.current.clientWidth;
-      setIsTextTruncated(isTextEllipsis);
+      const isHorizontalOverflow = textRef.current.scrollWidth > textRef.current.clientWidth;
+      const isVerticalOverflow = textRef.current.scrollHeight > textRef.current.clientHeight;
+
+      setIsTextTruncated({
+        horizontal: isHorizontalOverflow,
+        vertical: isVerticalOverflow,
+      });
     }
   };
 

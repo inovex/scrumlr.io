@@ -1,39 +1,66 @@
 import TextareaAutosize from "react-textarea-autosize";
 import classNames from "classnames";
-import React, {Dispatch, FormEvent, SetStateAction} from "react";
+import {Dispatch, FocusEvent, FormEvent, forwardRef, SetStateAction} from "react";
 import "./TextArea.scss";
 
 type TextAreaProps = {
   className?: string;
   input: string;
-  setInput: Dispatch<SetStateAction<string>>;
+  setInput?: Dispatch<SetStateAction<string>>;
 
+  rows?: number;
   extendable?: boolean;
   // embedded:      to be used inside another component
   // not embedded:  form component like input
   embedded?: boolean;
-  small?: boolean; // affects the text, padding, and border-radius rn
-  // minLines?: number;
+  fitted?: boolean; // affects the text, padding, and border-radius rn
+  border?: "none" | "normal" | "thick" | "transparent";
+  textAlign?: "left" | "center";
+  textDim?: boolean; // affects default text and its hover/focus color
 
   placeholder?: string;
 
+  maxLength?: number;
+  disabled?: boolean;
+
   autoFocus?: boolean;
-  onFocus?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
+  onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
+  onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
 };
 
-export const TextArea = (props: TextAreaProps) => {
-  const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput(e.currentTarget.value);
+const ROWS_DEFAULT = 7;
+
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
+  const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput?.(e.currentTarget.value);
+  const rows = props.rows ?? ROWS_DEFAULT;
 
   return (
-    <TextareaAutosize
-      className={classNames(props.className, "text-area", {"text-area--extendable": props.extendable, "text-area--embedded": props.embedded, "text-area--small": props.small})}
-      value={props.input}
-      onInput={updateInput}
-      placeholder={props.placeholder}
-      autoFocus={props.autoFocus}
-      onFocus={props.onFocus}
-      onBlur={props.onBlur}
-    />
+    <>
+      <style>{`.text-area { --text-area-rows: ${rows} }`}</style>
+      <TextareaAutosize
+        ref={ref}
+        className={classNames(
+          props.className,
+          "text-area",
+          {
+            "text-area--extendable": props.extendable,
+            "text-area--embedded": props.embedded,
+            "text-area--fitted": props.fitted,
+            "text-area--text-dim": props.textDim,
+          },
+          `text-area--border-${props.border ?? "normal"}`,
+          `text-area--text-align-${props.textAlign ?? "left"}`
+        )}
+        value={props.input}
+        maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : rows}
+        maxLength={props.maxLength}
+        onInput={updateInput}
+        placeholder={props.placeholder}
+        autoFocus={props.autoFocus}
+        onFocus={props.onFocus}
+        onBlur={props.onBlur}
+        disabled={props.disabled}
+      />
+    </>
   );
-};
+});

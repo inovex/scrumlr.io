@@ -9,6 +9,7 @@ export type MiniMenuItem = {
   element: ReactNode; // an Icon in most cases, but can also be a complex element (e.g. ColorPicker)
   label: string;
   active?: boolean;
+  disabled?: boolean;
   onClick?: () => void;
 };
 
@@ -32,7 +33,11 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
   };
 
   const renderMenu = () => (
-    <div className={classNames(className, "mini-menu", {"mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})} onBlur={onBlur} data-cy={dataCy}>
+    <div
+      className={classNames(className, "mini-menu", {"mini-menu--small": small, "mini-menu--transparent": transparent, "mini-menu--wrap-to-column": wrapToColumn})}
+      onBlur={onBlur}
+      data-cy={dataCy}
+    >
       {items.map((item) => {
         const anchor = uniqueId(`mini-menu-${item.label}`);
         return (
@@ -41,10 +46,15 @@ export const MiniMenu = ({className, focusBehaviour, items, onBlur, small, wrapT
             data-tooltip-content={item.label}
             aria-label={item.label}
             id={anchor}
-            className={classNames(item.className, "mini-menu__item", {"mini-menu__item--active": item.active, "mini-menu__item--small": small})}
+            className={classNames(item.className, "mini-menu__item", {
+              "mini-menu__item--active": item.active,
+              "mini-menu__item--small": small,
+              "mini-menu__item--disabled": item.disabled,
+            })}
             key={item.label}
             // mouse down instead of click because it has precedence over blur
             onMouseDown={(e) => onClickItem(e, item)}
+            disabled={item.disabled}
             data-cy={`${dataCy}-item-${item.label}`}
           >
             {item.element}

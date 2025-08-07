@@ -55,7 +55,7 @@ export const StackView = () => {
         })),
     _.isEqual
   );
-  const column = columns.find((c) => c.id === note?.position.column);
+  const column = columns.find((c) => c.id === note?.position.column)!;
   const prevColumnParent = useAppSelector((state) => {
     if (!column) return undefined;
     // the last stack in the previous column
@@ -251,7 +251,7 @@ export const StackView = () => {
       disabledPadding
     >
       <div className={classNames("stack-view", colorClassName)}>
-        <NoteDialogComponents.Header columnName={column?.name ?? ""} />
+        <NoteDialogComponents.Header columnName={column.name} columnDescription={column.description} />
         <StackNavigation {...navigationProps} />
         <div className="stack-view__content">
           <div className="stack-view__inner-scrollbar">

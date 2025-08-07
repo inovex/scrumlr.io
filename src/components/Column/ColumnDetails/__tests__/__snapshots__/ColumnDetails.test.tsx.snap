@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnDetails should render correctly (edit) 1`] = `
+<div>
+  <div
+    class="column-details"
+  >
+    <div
+      class="column-details__name-and-settings-wrapper"
+    >
+      <div
+        class="column-details__name-wrapper"
+      >
+        <input
+          class="column-details__name column-details__name--editing"
+          maxlength="128"
+          value="test-columns-name-1"
+        />
+      </div>
+      <button
+        class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+      >
+        <svg
+          class="column-details__settings-icon"
+        >
+          three-dots.svg
+        </svg>
+      </button>
+    </div>
+    <div
+      class="column-details__description-wrapper column-details__description-wrapper--edit"
+    >
+      <style>
+        .text-area { --text-area-rows: 3 }
+      </style>
+      <textarea
+        class="column-details__description-text-area text-area text-area--extendable text-area--embedded text-area--border-thick text-area--text-align-left"
+        maxlength="1024"
+        placeholder="Add description (optional)"
+      />
+      <div
+        class="column-details__description-mini-menu mini-menu mini-menu--small mini-menu--transparent"
+      >
+        <button
+          aria-label="Cancel"
+          class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Cancel"
+          data-tooltip-content="Cancel"
+          data-tooltip-id="scrumlr-tooltip"
+          id="mini-menu-Cancel3"
+        >
+          <svg>
+            close.svg
+          </svg>
+        </button>
+        <button
+          aria-label="Save"
+          class="mini-menu-item--save mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Save"
+          data-tooltip-content="Save"
+          data-tooltip-id="scrumlr-tooltip"
+          id="mini-menu-Save4"
+        >
+          <svg>
+            check-done.svg
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ColumnDetails should render correctly (view) 1`] = `
+<div>
+  <div
+    class="column-details"
+  >
+    <div
+      class="column-details__name-and-settings-wrapper"
+    >
+      <div
+        class="column-details__name-wrapper"
+      >
+        <div
+          class="column-details__name"
+          id="col-test-columns-id-1-name"
+        >
+          test-columns-name-1
+        </div>
+        <div
+          class="column-details__notes-count"
+        >
+          1
+        </div>
+      </div>
+      <button
+        class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+      >
+        <svg
+          class="column-details__settings-icon"
+        >
+          three-dots.svg
+        </svg>
+      </button>
+    </div>
+    <div
+      class="column-details__description-wrapper column-details__description-wrapper--view"
+    >
+      <div
+        class="column-details__description--placeholder"
+      >
+        Add description (optional)
+      </div>
+    </div>
+  </div>
+</div>
+`;
