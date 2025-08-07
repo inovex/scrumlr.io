@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnHeader should render correctly 1`] = `
+<div>
+  <div
+    class="column-header"
+  >
+    <div
+      class="column-details"
+    >
+      <div
+        class="column-details__name-and-settings-wrapper"
+      >
+        <div
+          class="column-details__name-wrapper"
+        >
+          <div
+            class="column-details__name"
+            id="col-test-columns-id-1-name"
+          >
+            test-columns-name-1
+          </div>
+          <div
+            class="column-details__notes-count"
+          >
+            1
+          </div>
+        </div>
+        <button
+          class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
+        >
+          <svg
+            class="column-details__settings-icon"
+          >
+            three-dots.svg
+          </svg>
+        </button>
+      </div>
+      <div
+        class="column-details__description-wrapper column-details__description-wrapper--view"
+      >
+        <div
+          class="column-details__description--placeholder"
+        >
+          Add description (optional)
+        </div>
+      </div>
+    </div>
+    <form
+      class="note-input"
+    >
+      <textarea
+        class="note-input__input"
+        data-clarity-mask="True"
+        maxlength="1024"
+        placeholder="Add your note..."
+      />
+      <div
+        class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"
+        style="--top-distance: 0px;"
+      >
+        <ul
+          class="emoji-suggestions__list"
+        />
+      </div>
+      <button
+        aria-label="Create note"
+        class="note-input__add-button"
+        tabindex="-1"
+        title="Create note"
+        type="submit"
+      >
+        <svg
+          class="note-input__icon--add"
+        >
+          plus.svg
+        </svg>
+      </button>
+    </form>
+  </div>
+</div>
+`;
