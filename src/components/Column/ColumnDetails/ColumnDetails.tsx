@@ -96,7 +96,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const ref = useOnBlur<HTMLDivElement>(handleBlur);
 
-  const descriptionConfirmMiniMenu: MiniMenuItem[] = [
+  const saveColumnDetailsMiniMenu: MiniMenuItem[] = [
     {
       className: "mini-menu-item--cancel",
       element: <CloseIcon />,
@@ -170,7 +170,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         rows={3}
         maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
       />
-      <MiniMenu className="column-details__description-mini-menu" items={descriptionConfirmMiniMenu} small transparent />
+      <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} small transparent />
     </>
   );
 
