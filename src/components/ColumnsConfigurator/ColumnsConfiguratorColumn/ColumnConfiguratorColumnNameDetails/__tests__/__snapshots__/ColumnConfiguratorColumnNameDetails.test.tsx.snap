@@ -41,6 +41,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (des
       </style>
       <textarea
         class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--text-dim text-area--border-normal text-area--text-align-left"
+        maxlength="1024"
         placeholder="Description (optional)"
       >
         Default Description
@@ -97,6 +98,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nam
       </style>
       <textarea
         class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--text-dim text-area--border-normal text-area--text-align-left"
+        maxlength="1024"
         placeholder="Description (optional)"
       >
         Default Description

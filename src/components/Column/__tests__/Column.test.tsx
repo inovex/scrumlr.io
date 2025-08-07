@@ -13,7 +13,7 @@ const createColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
       <CustomDndContext>
-        <Column id="test-columns-id-1" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+        <Column id="test-columns-id-1" name="Testheader 1" description="" color="planning-pink" visible={false} index={0} />
       </CustomDndContext>
     </Provider>
   );
@@ -23,7 +23,7 @@ const createEmptyColumn = (overwrite?: Partial<ApplicationState>) => {
   return (
     <Provider store={getTestStore(overwrite)}>
       <CustomDndContext>
-        <Column id="test-columns-id-3" name="Testheader 1" color="planning-pink" visible={false} index={0} />
+        <Column id="test-columns-id-3" name="Testheader 1" description="" color="planning-pink" visible={false} index={0} />
       </CustomDndContext>
     </Provider>
   );

@@ -16,7 +16,7 @@ const createBoardWithColumns = (...colors: Color[]) => {
       <CustomDndContext>
         <BoardComponent currentUserIsModerator moderating={false}>
           {colors.map((color, index) => (
-            <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" visible={false} index={index} />
+            <Column key={color} id="GG0fWzyCwd" color={colors[index]} name="Positive" description="" visible={false} index={index} />
           ))}
         </BoardComponent>
       </CustomDndContext>
