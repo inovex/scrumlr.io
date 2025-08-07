@@ -43,8 +43,8 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
 
-  const isValidName = localName.trim().length > 0 && localName <= MAX_BOARD_NAME_LENGTH;
-  const isValidDescription = localDescription <= MAX_COLUMN_DESCRIPTION_LENGTH;
+  const isValidName = localName.trim().length > 0 && localName.length <= MAX_BOARD_NAME_LENGTH;
+  const isValidDescription = localDescription.length <= MAX_COLUMN_DESCRIPTION_LENGTH;
 
   // focus input upon entering edit mode
   useEffect(() => {
