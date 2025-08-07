@@ -45,6 +45,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const isValidName = localName.trim().length > 0 && localName.length <= MAX_BOARD_NAME_LENGTH;
   const isValidDescription = localDescription.length <= MAX_COLUMN_DESCRIPTION_LENGTH;
+  const isValidDetails = isValidName && isValidDescription;
 
   // focus input upon entering edit mode
   useEffect(() => {
@@ -71,7 +72,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   // if column exists, update details
   // else create new column
   const updateColumnDetails = (newName: string, newDescription: string) => {
-    if (!isValidName || !isValidDescription) {
+    if (!isValidDetails) {
       cancelUpdate();
       return;
     }
@@ -111,6 +112,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       className: "mini-menu-item--save",
       element: <CheckDoneIcon />,
       label: "Save",
+      disabled: !isValidDetails,
       onClick(): void {
         updateColumnDetails(localName, localDescription);
         changeMode("view");

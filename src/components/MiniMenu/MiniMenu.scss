@@ -47,6 +47,7 @@ $icon--small: 24px;
   border-radius: $rounded--full;
 
   color: $navy--900;
+  background-color: transparent;
 
   cursor: pointer;
 
@@ -69,6 +70,13 @@ $icon--small: 24px;
 
     &:hover {
       background-color: $navy--600;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    &:hover {
+      background-color: transparent;
     }
   }
 }
@@ -101,6 +109,13 @@ $icon--small: 24px;
 
       &:hover {
         background-color: $navy--600;
+      }
+    }
+
+    &:disabled {
+      &:hover {
+        color: $gray--000;
+        background-color: transparent;
       }
     }
   }
