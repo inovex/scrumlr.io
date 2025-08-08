@@ -18,6 +18,10 @@ export function emojiWithSkinTone(emoji: string, skinTone: SkinToneComponent) {
 type UseEmojiAutocompleteOptions<InputElement extends HTMLInputElement | HTMLTextAreaElement> = {
   /** the ref to the input or textarea element. This is required. */
   inputRef: RefObject<InputElement>;
+  /** the controlled value from the parent component */
+  value: string;
+  /** the function to update the parent's state */
+  onValueChange: (newValue: string) => void;
   /** the maximum length of the input. Defaults to MAX_NOTE_LENGTH. */
   maxInputLength?: number;
   /** the initial value of the input. Defaults to an empty string. */
@@ -46,6 +50,8 @@ type UseEmojiAutocompleteOptions<InputElement extends HTMLInputElement | HTMLTex
  */
 export const useEmojiAutocomplete = <InputElement extends HTMLInputElement | HTMLTextAreaElement, ContainerElement extends HTMLElement>({
   inputRef,
+  value,
+  onValueChange,
   maxInputLength = MAX_NOTE_LENGTH,
   initialValue = "",
   suggestionsHidden = false,
@@ -53,7 +59,6 @@ export const useEmojiAutocomplete = <InputElement extends HTMLInputElement | HTM
   // stores all the emojis
   const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
 
-  const [value, setValue] = useState(initialValue);
   // null -> no cursor
   const [cursor, setCursor] = useState<number | null>(null);
   const [nextCursor, setNextCursor] = useState<number | null>(null);
@@ -83,24 +88,24 @@ export const useEmojiAutocomplete = <InputElement extends HTMLInputElement | HTM
     (insertedEmoji: string) => {
       if (cursor === null) return;
 
-      setValue((prev) => {
-        // end replace is cursor
-        // start replace is last /\s+/
-        const lastWordStart =
-          prev
-            .slice(0, cursor)
-            .split("")
-            .findLastIndex((c) => /\s+/.test(c)) + 1;
+      const lastWordStart =
+        value
+          .slice(0, cursor)
+          .split("")
+          .findLastIndex((c) => /\s+/.test(c)) + 1;
 
-        // calculate the new cursor position: after the inserted emoji and the space
-        const newCursorPos = lastWordStart + insertedEmoji.length + 1;
-        setNextCursor(newCursorPos);
+      const newCursorPos = lastWordStart + insertedEmoji.length + 1;
 
-        // remove the inputed :emoji_name add space behind emoji
-        return `${prev.slice(0, lastWordStart)}${insertedEmoji} ${prev.slice(cursor)}`;
-      });
+      // remove the inputed :emoji_name add space behind emoji
+      const newValue = `${value.slice(0, lastWordStart)}${insertedEmoji} ${value.slice(cursor)}`;
+
+      // set the desired cursor position for the next render.
+      setNextCursor(newCursorPos);
+
+      // call the parent's update function with the final, complete string.
+      onValueChange(newValue);
     },
-    [cursor]
+    [cursor, value, onValueChange]
   );
 
   // get suggestions for emoji name
@@ -166,10 +171,10 @@ export const useEmojiAutocomplete = <InputElement extends HTMLInputElement | HTM
     (e) => {
       const newVal = e.currentTarget.value;
       // prevent exceeding max input length by slicing the input
-      if (maxInputLength !== undefined && newVal.length > maxInputLength) setValue(newVal.slice(0, maxInputLength));
-      else setValue(newVal);
+      if (maxInputLength !== undefined && newVal.length > maxInputLength) onValueChange(newVal.slice(0, maxInputLength));
+      else onValueChange(newVal);
     },
-    [maxInputLength]
+    [maxInputLength, onValueChange]
   );
 
   // handle: enter/tab (accept suggestion), arrow up/down (switch suggestion), escape (close suggestions)
@@ -230,7 +235,6 @@ export const useEmojiAutocomplete = <InputElement extends HTMLInputElement | HTM
       acceptSuggestion,
     } satisfies ComponentProps<typeof EmojiSuggestions>,
     value,
-    setValue,
     inputBindings: {
       onChange: handleChange,
       onKeyDown: handleKeyDown,
