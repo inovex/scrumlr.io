@@ -1,4 +1,4 @@
-import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps, ReactEventHandler} from "react";
+import {ChangeEventHandler, FormEventHandler, HTMLProps, KeyboardEventHandler, useCallback, useEffect, useState, ComponentProps, ReactEventHandler, RefObject} from "react";
 import {MAX_NOTE_LENGTH, MIN_CHARACTERS_TO_TRIGGER_EMOJI_SUGGESTIONS} from "constants/misc";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {SkinToneComponent} from "store/features/skinTone/types";
@@ -32,14 +32,16 @@ export function emojiWithSkinTone(emoji: string, skinTone: SkinToneComponent) {
  */
 export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
   {
+    inputRef,
     maxInputLength = MAX_NOTE_LENGTH,
     initialValue = "",
     suggestionsHidden = false,
   }: {
+    inputRef: RefObject<HTMLTextAreaElement | HTMLInputElement> | null;
     maxInputLength?: number | undefined;
     initialValue?: string;
     suggestionsHidden?: boolean;
-  } = {maxInputLength: MAX_NOTE_LENGTH, initialValue: "", suggestionsHidden: false} // names 3 times?! better syntax please @typescript ^^
+  } = {inputRef: null, maxInputLength: MAX_NOTE_LENGTH, initialValue: "", suggestionsHidden: false} // names 3 times?! better syntax please @typescript ^^
 ) => {
   // stores all the emojis
   const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
@@ -47,6 +49,19 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
   const [value, setValue] = useState(initialValue);
   // null -> no cursor
   const [cursor, setCursor] = useState<number | null>(null);
+  const [nextCursor, setNextCursor] = useState<number | null>(null);
+
+  // update cursor to new selection after emoji was inserted
+  useEffect(() => {
+    if (inputRef === null) {
+      return;
+    }
+    const input = inputRef.current;
+    if (input && nextCursor !== null) {
+      input.setSelectionRange(nextCursor, nextCursor);
+      setNextCursor(null);
+    }
+  }, [nextCursor, inputRef]);
 
   // stores the currently inputed emoji name
   const [emojiName, setEmojiName] = useState("");
@@ -72,6 +87,11 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
             .slice(0, cursor)
             .split("")
             .findLastIndex((c) => /\s+/.test(c)) + 1;
+
+        // calculate the new cursor position: after the inserted emoji and the space
+        const newCursorPos = lastWordStart + insertedEmoji.length + 1;
+        setNextCursor(newCursorPos);
+
         // remove the inputed :emoji_name add space behind emoji
         return `${prev.slice(0, lastWordStart)}${insertedEmoji} ${prev.slice(cursor)}`;
       });
