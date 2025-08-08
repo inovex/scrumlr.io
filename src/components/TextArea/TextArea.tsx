@@ -8,7 +8,7 @@ import "./TextArea.scss";
 type TextAreaProps = {
   className?: string;
   input: string;
-  setInput?: Dispatch<SetStateAction<string>>;
+  setInput: Dispatch<SetStateAction<string>>;
 
   rows?: number;
   extendable?: boolean;
@@ -36,11 +36,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
   const internalRef = useRef<HTMLTextAreaElement>(null);
   useImperativeHandle(forwardedRef, () => internalRef.current!); // use forwarded ref as internal
 
-  // const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput?.(e.currentTarget.value);
   const rows = props.rows ?? ROWS_DEFAULT;
 
-  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLDivElement>({
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLDivElement>({
     inputRef: internalRef,
+    value: props.input,
+    onValueChange: props.setInput,
     initialValue: props.input,
     maxInputLength: props.maxLength,
   });
@@ -63,8 +64,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
           `text-area--border-${props.border ?? "normal"}`,
           `text-area--text-align-${props.textAlign ?? "left"}`
         )}
-        value={value}
-        onInput={(event) => setValue(event.currentTarget.value)}
         maxLength={props.maxLength}
         maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : rows}
         placeholder={props.placeholder}
