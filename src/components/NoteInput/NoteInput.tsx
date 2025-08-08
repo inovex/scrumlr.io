@@ -55,7 +55,6 @@ export const NoteInput = ({column}: NoteInputProps) => {
   const {value, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLFormElement>({
     inputRef: noteInputRef,
     value: noteValue,
-    initialValue: noteValue,
     onValueChange: setNoteValue,
   });
 

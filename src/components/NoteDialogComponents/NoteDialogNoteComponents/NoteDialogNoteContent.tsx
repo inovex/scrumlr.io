@@ -74,7 +74,6 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
     inputRef: ref,
     value: noteValue,
     onValueChange: setNoteValue,
-    initialValue: noteValue,
     suggestionsHidden: isStackedNote,
   });
 

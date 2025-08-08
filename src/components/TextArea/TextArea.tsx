@@ -42,7 +42,6 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
     inputRef: internalRef,
     value: props.input,
     onValueChange: props.setInput,
-    initialValue: props.input,
     maxInputLength: props.maxLength,
   });
 

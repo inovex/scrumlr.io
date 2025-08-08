@@ -24,8 +24,6 @@ type UseEmojiAutocompleteOptions<InputElement extends HTMLInputElement | HTMLTex
   onValueChange: (newValue: string) => void;
   /** the maximum length of the input. Defaults to MAX_NOTE_LENGTH. */
   maxInputLength?: number;
-  /** the initial value of the input. Defaults to an empty string. */
-  initialValue?: string;
   /** whether the suggestions should be hidden. Defaults to false. */
   suggestionsHidden?: boolean;
 };
@@ -53,7 +51,6 @@ export const useEmojiAutocomplete = <InputElement extends HTMLInputElement | HTM
   value,
   onValueChange,
   maxInputLength = MAX_NOTE_LENGTH,
-  initialValue = "",
   suggestionsHidden = false,
 }: UseEmojiAutocompleteOptions<InputElement>) => {
   // stores all the emojis
