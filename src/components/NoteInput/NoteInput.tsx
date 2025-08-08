@@ -48,8 +48,8 @@ export const NoteInput = ({column}: NoteInputProps) => {
     }
   };
 
-  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLFormElement>();
   const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLFormElement>({inputRef: noteInputRef});
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
   const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${column.index + 1}`).join(",");

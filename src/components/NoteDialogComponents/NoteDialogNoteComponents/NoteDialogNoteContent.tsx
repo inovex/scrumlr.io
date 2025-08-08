@@ -1,4 +1,4 @@
-import {FC, useState} from "react";
+import {FC, useRef, useState} from "react";
 import {Participant} from "store/features/participants/types";
 import {useImageChecker} from "utils/hooks/useImageChecker";
 import {addProtocol} from "utils/images";
@@ -24,6 +24,7 @@ type NoteDialogNoteContentProps = {
 };
 
 export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, authorId, text, viewer, isStackedNote}: NoteDialogNoteContentProps) => {
+  const ref = useRef<HTMLTextAreaElement>(null);
   const [imageZoom, setImageZoom] = useState(false);
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
@@ -68,7 +69,8 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
 
   const isImage = useImageChecker(text);
 
-  const {...emoji} = useEmojiAutocomplete<HTMLDivElement>({
+  const {...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLDivElement>({
+    inputRef: ref,
     initialValue: text,
     suggestionsHidden: isStackedNote,
   });
@@ -101,6 +103,7 @@ export const NoteDialogNoteContent: FC<NoteDialogNoteContentProps> = ({noteId, a
       ) : (
         <>
           <TextareaAutosize
+            ref={ref}
             data-clarity-mask="True"
             className={classNames("note-dialog__note-content-text", {"note-dialog__note-content-text--edited": note?.edited})}
             disabled={!editable || (!isModerator && boardLocked)}
