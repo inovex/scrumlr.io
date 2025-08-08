@@ -9,40 +9,47 @@ export const emojiRegex = /^:([\w\d]+):?$/i;
 
 export type EmojiData = [slug: string, emoji: string, supportsSkintones: boolean, names: string[]];
 
-type InputElement = HTMLTextAreaElement | HTMLInputElement;
-
 export function emojiWithSkinTone(emoji: string, skinTone: SkinToneComponent) {
   // the emoji with skin color support is assumed to be the first unicode character
   // this means emojis with multiple people are unfortunately not supported
   return emoji.substring(0, 2) + skinTone + emoji.substring(2);
 }
 
+type UseEmojiAutocompleteOptions<InputElement extends HTMLInputElement | HTMLTextAreaElement> = {
+  /** the ref to the input or textarea element. This is required. */
+  inputRef: RefObject<InputElement>;
+  /** the maximum length of the input. Defaults to MAX_NOTE_LENGTH. */
+  maxInputLength?: number;
+  /** the initial value of the input. Defaults to an empty string. */
+  initialValue?: string;
+  /** whether the suggestions should be hidden. Defaults to false. */
+  suggestionsHidden?: boolean;
+};
+
 /**
- * this hook handles all the logic for the emoji autocomplete
- * if you want to extend the event handlers, first call the handler retured,
- * then check with e.defaultPrevented if the input has something to do with the emoji suggestions
+ * A hook that handles all the logic for emoji autocomplete.
  *
- * @param maxInputLength the maximum length of the input
- * @param initialValue the initial value of the input
- * @param suggestionsHidden whether the suggestions should be hidden (affects keyboard navigation)
- * @returns `containerRef`: set this to the container element that includes both the input and the `EmojiSuggestions` component (used for onBlur)
- * @returns `suggestionsProps`: props for the EmojiSuggestions component
- * @returns `value` and `setValue`: get and set the value of the input
- * @returns `inputBindings`: bindings for the input element (onChange, onKeyDown, onKeyUp, onClick, maxLength, value)
+ * If you want to extend an event handler, first call the one from `inputBindings`,
+ * then check `e.defaultPrevented` to see if the event was already handled by the hook.
+ *
+ * @template {HTMLInputElement | HTMLTextAreaElement} InputElement The type of the DOM input element (e.g., `HTMLTextAreaElement`).
+ * @template {HTMLElement} ContainerElement The type of the container element that wraps the input and suggestions (e.g., `HTMLDivElement`).
+ *
+ * @param {UseEmojiAutocompleteOptions<InputElement>} options - The configuration options for the hook, including the required `inputRef`.
+ *
+ * @returns An object containing the state and bindings needed to power the emoji autocomplete feature.
+ * @property {React.RefObject<ContainerElement>} containerRef - A ref to be attached to the main container element for blur detection.
+ * @property {object} suggestionsProps - Props to be spread onto the `EmojiSuggestions` component.
+ * @property {string} value - The current value of the input.
+ * @property {React.Dispatch<React.SetStateAction<string>>} setValue - The state setter for the input's value.
+ * @property {object} inputBindings - Props to be spread onto the input element (`<textarea>` or `<input>`).
  */
-export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
-  {
-    inputRef,
-    maxInputLength = MAX_NOTE_LENGTH,
-    initialValue = "",
-    suggestionsHidden = false,
-  }: {
-    inputRef: RefObject<HTMLTextAreaElement | HTMLInputElement> | null;
-    maxInputLength?: number | undefined;
-    initialValue?: string;
-    suggestionsHidden?: boolean;
-  } = {inputRef: null, maxInputLength: MAX_NOTE_LENGTH, initialValue: "", suggestionsHidden: false} // names 3 times?! better syntax please @typescript ^^
-) => {
+export const useEmojiAutocomplete = <InputElement extends HTMLInputElement | HTMLTextAreaElement, ContainerElement extends HTMLElement>({
+  inputRef,
+  maxInputLength = MAX_NOTE_LENGTH,
+  initialValue = "",
+  suggestionsHidden = false,
+}: UseEmojiAutocompleteOptions<InputElement>) => {
   // stores all the emojis
   const [emojiData, setEmojiData] = useState<EmojiData[] | null>(null);
 
@@ -53,9 +60,6 @@ export const useEmojiAutocomplete = <ContainerElement extends HTMLElement>(
 
   // update cursor to new selection after emoji was inserted
   useEffect(() => {
-    if (inputRef === null) {
-      return;
-    }
     const input = inputRef.current;
     if (input && nextCursor !== null) {
       input.setSelectionRange(nextCursor, nextCursor);
