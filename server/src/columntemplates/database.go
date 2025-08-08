@@ -135,7 +135,7 @@ func (db *DB) Update(column DatabaseColumnTemplateUpdate) (DatabaseColumnTemplat
 }
 
 // DeleteColumnTemplate  deletes a column template  and adapts all indices of the other columns.
-func (db *DB) Delete(board, column, user uuid.UUID) error {
+func (db *DB) Delete(board, column uuid.UUID) error {
 	var columns []DatabaseColumnTemplate
 	selectPreviousIndex := db.db.NewSelect().
 		Model((*DatabaseColumnTemplate)(nil)).
@@ -153,7 +153,7 @@ func (db *DB) Delete(board, column, user uuid.UUID) error {
 		Model((*DatabaseColumnTemplate)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardTemplateIdentifier, board, identifiers.ColumnTemplateIdentifier, column, identifiers.UserIdentifier, user, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardTemplateIdentifier, board, identifiers.ColumnTemplateIdentifier, column, "Result", &columns), &columns)
 
 	return err
 }
