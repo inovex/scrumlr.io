@@ -17,7 +17,7 @@ import (
 type ColumnDatabase interface {
 	Create(column DatabaseColumnInsert) (DatabaseColumn, error)
 	Update(column DatabaseColumnUpdate) (DatabaseColumn, error)
-	Delete(board, column, user uuid.UUID) error
+	Delete(board, column uuid.UUID) error
 	Get(board, id uuid.UUID) (DatabaseColumn, error)
 	GetAll(board uuid.UUID) ([]DatabaseColumn, error)
 }
@@ -68,13 +68,13 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 			return err
 		}
 	}
-	err = service.database.Delete(board, column, user)
+	err = service.database.Delete(board, column)
 	if err != nil {
 		log.Errorw("unable to delete column", "err", err)
 		return err
 	}
 
-	service.deletedColumn(ctx, user, board, column)
+	service.deletedColumn(ctx, board, column)
 	return err
 }
 
@@ -168,7 +168,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 	return "", err
 }
 
-func (service *Service) deletedColumn(ctx context.Context, user, board, column uuid.UUID) {
+func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UUID) {
 	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
 		Data: column,
