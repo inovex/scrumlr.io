@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 	"scrumlr.io/server/serviceinitialize"
 
 	"scrumlr.io/server/auth"
@@ -261,7 +261,7 @@ func run(c *cli.Context) error {
 		logger.EnableDevelopmentLogger()
 	}
 
-	db, err := databaseinitialize.InitializeDatabase(c.String("database"))
+	db, err := initialize.InitializeDatabase(c.String("database"))
 	if err != nil {
 		return fmt.Errorf("unable to migrate database: %w", err)
 	}
@@ -359,7 +359,7 @@ func run(c *cli.Context) error {
 		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
 
-	bun := databaseinitialize.InitializeBun(db, c.Bool("verbose"))
+	bun := initialize.InitializeBun(db, c.Bool("verbose"))
 	initializer := serviceinitialize.NewServiceInitializer(bun, rt)
 
 	websocket := initializer.InitializeWebsocket()

@@ -12,7 +12,7 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/avatar"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 )
 
 type DatabaseUserTestSuite struct {
@@ -27,7 +27,7 @@ func TestDatabaseUserTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseUserTestSuite) SetupSuite() {
-	container, bun := databaseinitialize.StartTestDatabase()
+	container, bun := initialize.StartTestDatabase()
 
 	suite.SeedDatabase(bun)
 
@@ -36,7 +36,7 @@ func (suite *DatabaseUserTestSuite) SetupSuite() {
 }
 
 func (suite *DatabaseUserTestSuite) TearDownSuite() {
-	databaseinitialize.StopTestDatabase(suite.container)
+	initialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseUserTestSuite) Test_Database_Create_AnonymousUser() {
@@ -265,7 +265,7 @@ func (suite *DatabaseUserTestSuite) SeedDatabase(db *bun.DB) {
 	suite.users["Update"] = DatabaseUser{ID: uuid.New(), Name: "UpdateMe", AccountType: common.Anonymous}
 
 	for _, user := range suite.users {
-		err := databaseinitialize.InsertUser(db, user.ID, user.Name, string(user.AccountType))
+		err := initialize.InsertUser(db, user.ID, user.Name, string(user.AccountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}

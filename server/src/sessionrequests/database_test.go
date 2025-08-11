@@ -11,7 +11,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 )
 
 type DatabaseSessionRequestTestSuite struct {
@@ -28,7 +28,7 @@ func TestDatabaseSessionRequestTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseSessionRequestTestSuite) SetupSuite() {
-	container, bun := databaseinitialize.StartTestDatabase()
+	container, bun := initialize.StartTestDatabase()
 
 	suite.SeedDatabase(bun)
 
@@ -37,7 +37,7 @@ func (suite *DatabaseSessionRequestTestSuite) SetupSuite() {
 }
 
 func (suite *DatabaseSessionRequestTestSuite) TearDownSuite() {
-	databaseinitialize.StopTestDatabase(suite.container)
+	initialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseSessionRequestTestSuite) Test_Database_Create() {
@@ -328,21 +328,21 @@ func (suite *DatabaseSessionRequestTestSuite) SeedDatabase(db *bun.DB) {
 	suite.sessionsRequests["Read4"] = DatabaseBoardSessionRequest{User: suite.users["Bob"].id, Board: suite.boards["Read"].id, Status: RequestRejected}
 
 	for _, user := range suite.users {
-		err := databaseinitialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := databaseinitialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, sessionRequest := range suite.sessionsRequests {
-		err := databaseinitialize.InsertSessionRequest(db, sessionRequest.User, sessionRequest.Board, string(sessionRequest.Status))
+		err := initialize.InsertSessionRequest(db, sessionRequest.User, sessionRequest.Board, string(sessionRequest.Status))
 		if err != nil {
 			log.Fatalf("Failed to insert test session requests %s", err)
 		}

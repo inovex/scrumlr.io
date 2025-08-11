@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 )
 
 type DatabaseHealthTestSuite struct {
@@ -21,14 +21,14 @@ func TestDatabaseHealthTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseHealthTestSuite) SetupSuite() {
-	container, bun := databaseinitialize.StartTestDatabase()
+	container, bun := initialize.StartTestDatabase()
 
 	suite.container = container
 	suite.db = bun
 }
 
 func (suite *DatabaseHealthTestSuite) TearDownSuite() {
-	databaseinitialize.StopTestDatabase(suite.container)
+	initialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseHealthTestSuite) Test_Database_IsHealthy() {

@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/suite"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 )
 
 type DatabaseColumnTestSuite struct {
@@ -26,7 +26,7 @@ func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseColumnTestSuite) SetupSuite() {
-	container, bun := databaseinitialize.StartTestDatabase()
+	container, bun := initialize.StartTestDatabase()
 
 	suite.SeedDatabase(bun)
 
@@ -35,7 +35,7 @@ func (suite *DatabaseColumnTestSuite) SetupSuite() {
 }
 
 func (suite *DatabaseColumnTestSuite) TearDownSuite() {
-	databaseinitialize.StopTestDatabase(suite.container)
+	initialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseColumnTestSuite) Test_Database_Create() {
@@ -371,14 +371,14 @@ func (suite *DatabaseColumnTestSuite) SeedDatabase(db *bun.DB) {
 	suite.columns["Read3"] = DatabaseColumn{ID: uuid.New(), Board: suite.boards["Read"].id, Name: "Column 3", Description: "This is a description", Color: ColorBacklogBlue, Visible: true, Index: 2}
 
 	for _, board := range suite.boards {
-		err := databaseinitialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, column := range suite.columns {
-		err := databaseinitialize.InsertColumn(db, column.ID, column.Board, column.Name, column.Description, string(column.Color), column.Visible, column.Index)
+		err := initialize.InsertColumn(db, column.ID, column.Board, column.Name, column.Description, string(column.Color), column.Visible, column.Index)
 		if err != nil {
 			log.Fatalf("Failed to insert test column %s", err)
 		}
