@@ -13,10 +13,11 @@ import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Tooltip} from "components/Tooltip";
-import "components/Column/ColumnDetails/ColumnDetails.scss";
 import {MAX_BOARD_NAME_LENGTH, MAX_COLUMN_DESCRIPTION_LENGTH, MAX_COLUMN_NAME_LENGTH} from "constants/misc";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {useSubmitOnShortcut} from "utils/hooks/useSubmitOnShortcut";
+import "components/Column/ColumnDetails/ColumnDetails.scss";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -81,13 +82,13 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   // if column exists, update details
   // else create new column
-  const updateColumnDetails = (newName: string, newDescription: string) => {
+  const updateColumnDetails = () => {
     if (!isValidDetails) {
       cancelUpdate();
       return;
     }
 
-    const updateColumnPayload: Column = {...props.column, name: newName, description: newDescription};
+    const updateColumnPayload: Column = {...props.column, name: localName, description: localDescription};
     if (props.isTemporary) {
       dispatch(createColumn(updateColumnPayload));
     } else {
@@ -102,8 +103,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
     // behaviour: always save as long as name is not empty.
     // could also change it to only save if persisted is empty.
-    updateColumnDetails(localName, localDescription);
+    updateColumnDetails();
   };
+
+  useSubmitOnShortcut(inputRef, updateColumnDetails);
 
   const ref = useOnBlur<HTMLDivElement>(handleBlur);
 
@@ -124,7 +127,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       label: "Save",
       disabled: !isValidDetails,
       onClick(): void {
-        updateColumnDetails(localName, localDescription);
+        updateColumnDetails();
         changeMode("view");
       },
     },
@@ -184,7 +187,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         rows={3}
         emojiSuggestions
         maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
-        onSubmit={() => updateColumnDetails(localName, localDescription)}
+        onSubmit={updateColumnDetails}
       />
       <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} small transparent />
     </>
