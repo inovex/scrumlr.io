@@ -143,14 +143,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         {isNameTextTruncated.horizontal && <Tooltip anchorSelect={`#col-${props.column.id}-name`} content={props.column.name} color={props.column.color} />}
       </>
     ) : (
-      <input
-        {...emoji.inputBindings}
-        ref={inputRef}
-        className={classNames("column-details__name", "column-details__name--editing")}
-        // value={localName}
-        maxLength={MAX_BOARD_NAME_LENGTH}
-        // onInput={(e) => setLocalName(e.currentTarget.value)}
-      />
+      <input {...emoji.inputBindings} ref={inputRef} className={classNames("column-details__name", "column-details__name--editing")} maxLength={MAX_BOARD_NAME_LENGTH} />
     );
 
   const viewableDescription = () => {
