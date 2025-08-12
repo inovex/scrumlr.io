@@ -21,6 +21,7 @@ type TextAreaProps = {
   textDim?: boolean; // affects default text and its hover/focus color
 
   placeholder?: string;
+  emojiSuggestions?: boolean;
 
   maxLength?: number;
   disabled?: boolean;
@@ -43,6 +44,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
     value: props.input,
     onValueChange: props.setInput,
     maxInputLength: props.maxLength,
+    suggestionsHidden: !props.emojiSuggestions,
   });
 
   return (
@@ -71,7 +73,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
         onBlur={props.onBlur}
         disabled={props.disabled}
       />
-      <EmojiSuggestions {...emoji.suggestionsProps} />
+      {props.emojiSuggestions ? <EmojiSuggestions {...emoji.suggestionsProps} /> : null}
     </>
   );
 });
