@@ -11,7 +11,7 @@ export const useSubmitOnShortcut = <T extends HTMLElement>(elementRef: RefObject
   useEffect(() => {
     const element = elementRef.current;
     if (!element) {
-      return;
+      return undefined;
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
