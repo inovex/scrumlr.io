@@ -2,6 +2,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import classNames from "classnames";
 import {Dispatch, FocusEvent, forwardRef, SetStateAction, useImperativeHandle, useRef} from "react";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {useSubmitOnShortcut} from "utils/hooks/useSubmitOnShortcut";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import "./TextArea.scss";
 
@@ -29,6 +30,7 @@ type TextAreaProps = {
   autoFocus?: boolean;
   onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
+  onSubmit?: () => void; // caused by shortcut
 };
 
 const ROWS_DEFAULT = 7;
@@ -36,6 +38,8 @@ const ROWS_DEFAULT = 7;
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, forwardedRef) => {
   const internalRef = useRef<HTMLTextAreaElement>(null);
   useImperativeHandle(forwardedRef, () => internalRef.current!); // use forwarded ref as internal
+
+  useSubmitOnShortcut(internalRef, props.onSubmit);
 
   const rows = props.rows ?? ROWS_DEFAULT;
 

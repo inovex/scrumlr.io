@@ -184,6 +184,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         rows={3}
         emojiSuggestions
         maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
+        onSubmit={() => updateColumnDetails(localName, localDescription)}
       />
       <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} small transparent />
     </>
