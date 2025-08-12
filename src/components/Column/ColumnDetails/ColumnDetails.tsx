@@ -101,14 +101,16 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const handleBlur = () => {
     if (props.mode === "view") return;
 
-    // behaviour: always save as long as name is not empty.
-    // could also change it to only save if persisted is empty.
-    updateColumnDetails();
+    // behaviour: do not save
+    // could also change it to only save if persisted is empty or always save,
+    // but this is streamlined with the template editor
+    cancelUpdate();
+    changeMode("view");
   };
 
   useSubmitOnShortcut(inputRef, updateColumnDetails);
 
-  const ref = useOnBlur<HTMLDivElement>(handleBlur);
+  const containerRef = useOnBlur<HTMLDivElement>(handleBlur);
 
   const saveColumnDetailsMiniMenu: MiniMenuItem[] = [
     {
@@ -212,7 +214,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   };
 
   return (
-    <div className="column-details" ref={ref}>
+    <div className="column-details" ref={containerRef}>
       <div className="column-details__name-and-settings-wrapper">
         <div className="column-details__name-wrapper">{renderName()}</div>
         {renderSettings()}
