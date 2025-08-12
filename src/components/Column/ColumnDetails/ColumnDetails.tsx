@@ -13,8 +13,11 @@ import {MiniMenu, MiniMenuItem} from "components/MiniMenu/MiniMenu";
 import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Tooltip} from "components/Tooltip";
+import {MAX_BOARD_NAME_LENGTH, MAX_COLUMN_DESCRIPTION_LENGTH, MAX_COLUMN_NAME_LENGTH} from "constants/misc";
+import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {EmojiSuggestions} from "components/EmojiSuggestions";
+import {useSubmitOnShortcut} from "utils/hooks/useSubmitOnShortcut";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
-import {MAX_BOARD_NAME_LENGTH, MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/misc";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -42,6 +45,14 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
+
+  // emoji autocomplete for column name
+  const {...emoji} = useEmojiAutocomplete({
+    inputRef,
+    value: localName,
+    onValueChange: setLocalName,
+    maxInputLength: MAX_COLUMN_NAME_LENGTH,
+  });
 
   const isValidName = localName.trim().length > 0 && localName.length <= MAX_BOARD_NAME_LENGTH;
   const isValidDescription = localDescription.length <= MAX_COLUMN_DESCRIPTION_LENGTH;
@@ -71,13 +82,13 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   // if column exists, update details
   // else create new column
-  const updateColumnDetails = (newName: string, newDescription: string) => {
+  const updateColumnDetails = () => {
     if (!isValidDetails) {
       cancelUpdate();
       return;
     }
 
-    const updateColumnPayload: Column = {...props.column, name: newName, description: newDescription};
+    const updateColumnPayload: Column = {...props.column, name: localName, description: localDescription};
     if (props.isTemporary) {
       dispatch(createColumn(updateColumnPayload));
     } else {
@@ -90,12 +101,16 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const handleBlur = () => {
     if (props.mode === "view") return;
 
-    // behaviour: always save as long as name is not empty.
-    // could also change it to only save if persisted is empty.
-    updateColumnDetails(localName, localDescription);
+    // behaviour: do not save
+    // could also change it to only save if persisted is empty or always save,
+    // but this is streamlined with the template editor
+    cancelUpdate();
+    changeMode("view");
   };
 
-  const ref = useOnBlur<HTMLDivElement>(handleBlur);
+  useSubmitOnShortcut(inputRef, updateColumnDetails);
+
+  const containerRef = useOnBlur<HTMLDivElement>(handleBlur);
 
   const saveColumnDetailsMiniMenu: MiniMenuItem[] = [
     {
@@ -114,7 +129,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       label: "Save",
       disabled: !isValidDetails,
       onClick(): void {
-        updateColumnDetails(localName, localDescription);
+        updateColumnDetails();
         changeMode("view");
       },
     },
@@ -130,13 +145,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         {isNameTextTruncated.horizontal && <Tooltip anchorSelect={`#col-${props.column.id}-name`} content={props.column.name} color={props.column.color} />}
       </>
     ) : (
-      <input
-        ref={inputRef}
-        className={classNames("column-details__name", "column-details__name--editing")}
-        value={localName}
-        maxLength={MAX_BOARD_NAME_LENGTH}
-        onInput={(e) => setLocalName(e.currentTarget.value)}
-      />
+      <input {...emoji.inputBindings} ref={inputRef} className={classNames("column-details__name", "column-details__name--editing")} maxLength={MAX_BOARD_NAME_LENGTH} />
     );
 
   const viewableDescription = () => {
@@ -144,7 +153,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     if (props.column.description)
       return (
         <>
-          <TextArea ref={viewDescriptionRef} input={props.column.description} embedded extendable={isDescriptionExpanded} disabled border="none" rows={2} />
+          <TextArea ref={viewDescriptionRef} input={props.column.description} setInput={() => {}} embedded extendable={isDescriptionExpanded} disabled border="none" rows={2} />
           {(isDescriptionTextTruncated.vertical || isDescriptionExpanded) && (
             <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
               <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
@@ -171,7 +180,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         extendable
         border="thick"
         rows={3}
+        emojiSuggestions
         maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
+        onSubmit={updateColumnDetails}
       />
       <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} small transparent />
     </>
@@ -203,12 +214,13 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   };
 
   return (
-    <div className="column-details" ref={ref}>
+    <div className="column-details" ref={containerRef}>
       <div className="column-details__name-and-settings-wrapper">
         <div className="column-details__name-wrapper">{renderName()}</div>
         {renderSettings()}
       </div>
       <div className={classNames("column-details__description-wrapper", `column-details__description-wrapper--${props.mode}`)}>{renderDescription()}</div>
+      <EmojiSuggestions positionRelative {...emoji.suggestionsProps} /> {/* suggestions for name input, as textarea has its own */}
     </div>
   );
 };

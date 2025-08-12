@@ -1,12 +1,15 @@
 import TextareaAutosize from "react-textarea-autosize";
 import classNames from "classnames";
-import {Dispatch, FocusEvent, FormEvent, forwardRef, SetStateAction} from "react";
+import {Dispatch, FocusEvent, forwardRef, SetStateAction, useImperativeHandle, useRef} from "react";
+import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {useSubmitOnShortcut} from "utils/hooks/useSubmitOnShortcut";
+import {EmojiSuggestions} from "components/EmojiSuggestions";
 import "./TextArea.scss";
 
 type TextAreaProps = {
   className?: string;
   input: string;
-  setInput?: Dispatch<SetStateAction<string>>;
+  setInput: Dispatch<SetStateAction<string>>;
 
   rows?: number;
   extendable?: boolean;
@@ -19,6 +22,7 @@ type TextAreaProps = {
   textDim?: boolean; // affects default text and its hover/focus color
 
   placeholder?: string;
+  emojiSuggestions?: boolean;
 
   maxLength?: number;
   disabled?: boolean;
@@ -26,19 +30,33 @@ type TextAreaProps = {
   autoFocus?: boolean;
   onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
+  onSubmit?: () => void; // caused by shortcut
 };
 
 const ROWS_DEFAULT = 7;
 
-export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
-  const updateInput = (e: FormEvent<HTMLTextAreaElement>) => props.setInput?.(e.currentTarget.value);
+export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, forwardedRef) => {
+  const internalRef = useRef<HTMLTextAreaElement>(null);
+  useImperativeHandle(forwardedRef, () => internalRef.current!); // use forwarded ref as internal
+
+  useSubmitOnShortcut(internalRef, props.onSubmit);
+
   const rows = props.rows ?? ROWS_DEFAULT;
+
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLDivElement>({
+    inputRef: internalRef,
+    value: props.input,
+    onValueChange: props.setInput,
+    maxInputLength: props.maxLength,
+    suggestionsHidden: !props.emojiSuggestions,
+  });
 
   return (
     <>
       <style>{`.text-area { --text-area-rows: ${rows} }`}</style>
       <TextareaAutosize
-        ref={ref}
+        {...emoji.inputBindings}
+        ref={internalRef}
         className={classNames(
           props.className,
           "text-area",
@@ -51,16 +69,15 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, r
           `text-area--border-${props.border ?? "normal"}`,
           `text-area--text-align-${props.textAlign ?? "left"}`
         )}
-        value={props.input}
-        maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : rows}
         maxLength={props.maxLength}
-        onInput={updateInput}
+        maxRows={props.extendable ? Number.MAX_SAFE_INTEGER : rows}
         placeholder={props.placeholder}
         autoFocus={props.autoFocus}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
         disabled={props.disabled}
       />
+      {props.emojiSuggestions ? <EmojiSuggestions {...emoji.suggestionsProps} /> : null}
     </>
   );
 });

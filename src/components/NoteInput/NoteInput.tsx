@@ -19,6 +19,9 @@ export interface NoteInputProps {
 export const NoteInput = ({column}: NoteInputProps) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
+
+  const [noteValue, setNoteValue] = useState("");
+
   const [toastDisplayed, setToastDisplayed] = useState(false);
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self?.role === role));
@@ -48,8 +51,12 @@ export const NoteInput = ({column}: NoteInputProps) => {
     }
   };
 
-  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLFormElement>();
   const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLFormElement>({
+    inputRef: noteInputRef,
+    value: noteValue,
+    onValueChange: setNoteValue,
+  });
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
   const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${column.index + 1}`).join(",");
@@ -72,7 +79,7 @@ export const NoteInput = ({column}: NoteInputProps) => {
       onSubmit={(e) => {
         e.preventDefault();
         dispatchAddNote(value);
-        setValue("");
+        setNoteValue("");
       }}
       ref={emoji.containerRef}
     >
