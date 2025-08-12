@@ -97,16 +97,16 @@ func (_c *MockColumnDatabase_Create_Call) RunAndReturn(run func(column DatabaseC
 }
 
 // Delete provides a mock function for the type MockColumnDatabase
-func (_mock *MockColumnDatabase) Delete(board uuid.UUID, column uuid.UUID, user uuid.UUID) error {
-	ret := _mock.Called(board, column, user)
+func (_mock *MockColumnDatabase) Delete(board uuid.UUID, column uuid.UUID) error {
+	ret := _mock.Called(board, column)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID, uuid.UUID) error); ok {
-		r0 = returnFunc(board, column, user)
+	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) error); ok {
+		r0 = returnFunc(board, column)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -121,12 +121,11 @@ type MockColumnDatabase_Delete_Call struct {
 // Delete is a helper method to define mock.On call
 //   - board uuid.UUID
 //   - column uuid.UUID
-//   - user uuid.UUID
-func (_e *MockColumnDatabase_Expecter) Delete(board interface{}, column interface{}, user interface{}) *MockColumnDatabase_Delete_Call {
-	return &MockColumnDatabase_Delete_Call{Call: _e.mock.On("Delete", board, column, user)}
+func (_e *MockColumnDatabase_Expecter) Delete(board interface{}, column interface{}) *MockColumnDatabase_Delete_Call {
+	return &MockColumnDatabase_Delete_Call{Call: _e.mock.On("Delete", board, column)}
 }
 
-func (_c *MockColumnDatabase_Delete_Call) Run(run func(board uuid.UUID, column uuid.UUID, user uuid.UUID)) *MockColumnDatabase_Delete_Call {
+func (_c *MockColumnDatabase_Delete_Call) Run(run func(board uuid.UUID, column uuid.UUID)) *MockColumnDatabase_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 uuid.UUID
 		if args[0] != nil {
@@ -136,14 +135,9 @@ func (_c *MockColumnDatabase_Delete_Call) Run(run func(board uuid.UUID, column u
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
-		var arg2 uuid.UUID
-		if args[2] != nil {
-			arg2 = args[2].(uuid.UUID)
-		}
 		run(
 			arg0,
 			arg1,
-			arg2,
 		)
 	})
 	return _c
@@ -154,7 +148,7 @@ func (_c *MockColumnDatabase_Delete_Call) Return(err error) *MockColumnDatabase_
 	return _c
 }
 
-func (_c *MockColumnDatabase_Delete_Call) RunAndReturn(run func(board uuid.UUID, column uuid.UUID, user uuid.UUID) error) *MockColumnDatabase_Delete_Call {
+func (_c *MockColumnDatabase_Delete_Call) RunAndReturn(run func(board uuid.UUID, column uuid.UUID) error) *MockColumnDatabase_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
