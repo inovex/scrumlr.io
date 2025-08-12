@@ -10,6 +10,7 @@ export interface Participant {
   showHiddenColumns: boolean;
   role: ParticipantRole;
   banned?: boolean;
+  isAnonymous?: boolean;
 }
 
 export type ParticipantsState = {

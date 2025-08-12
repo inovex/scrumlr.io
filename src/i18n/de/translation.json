@@ -16,6 +16,7 @@
     "importNewBoard": "Jetzt importieren"
   },
   "Templates": {
+    "anonymousCreateBoardsDisabled": "Anonyme Nutzer dürfen keine Boards erstellen.",
     "switchTitle": "Vorlagen",
     "title": "Wähle eine Vorlage",
     "savedTemplates": "Deine Vorlagen",

@@ -43,9 +43,11 @@ export const Templates = () => {
 
   const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
 
-  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
+  const allowAnonymousCreateBoards = useAppSelector((state) => state.view.allowAnonymousCreateBoards);
+  const isAnonymous = useAppSelector((state) => state.participants.self?.isAnonymous);
   const allowAnonymousCustomTemplates = useAppSelector((state) => state.view.allowAnonymousCustomTemplates);
   const showCustomTemplates = !isAnonymous || allowAnonymousCustomTemplates;
+  const isBoardCreationDisabled = isAnonymous && !allowAnonymousCreateBoards;
 
   const showCreateTemplateView = () => navigate("../create");
 
@@ -208,7 +210,11 @@ export const Templates = () => {
           <section className="templates__container templates__container--saved">
             {renderContainerHeader("right", t("Templates.savedTemplates"))}
             <div className="templates__card-container">
-              <CreateTemplateCard onClick={showCreateTemplateView} />
+              <CreateTemplateCard
+                onClick={showCreateTemplateView}
+                disabled={isBoardCreationDisabled}
+                tooltip={isBoardCreationDisabled ? "Templates.anonymousCreateBoardsDisabled" : undefined}
+              />
               {sortBy(
                 templates
                   .filter((template) => template.type === "CUSTOM")
