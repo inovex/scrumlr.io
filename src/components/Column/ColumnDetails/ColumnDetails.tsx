@@ -14,7 +14,9 @@ import {useAppDispatch, useAppSelector} from "store";
 import {useOnBlur} from "utils/hooks/useOnBlur";
 import {Tooltip} from "components/Tooltip";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
-import {MAX_BOARD_NAME_LENGTH, MAX_COLUMN_DESCRIPTION_LENGTH} from "constants/misc";
+import {MAX_BOARD_NAME_LENGTH, MAX_COLUMN_DESCRIPTION_LENGTH, MAX_COLUMN_NAME_LENGTH} from "constants/misc";
+import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
+import {EmojiSuggestions} from "components/EmojiSuggestions";
 
 export type ColumnDetailsMode = "view" | "edit";
 
@@ -42,6 +44,14 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
+
+  // emoji autocomplete for column name
+  const {...emoji} = useEmojiAutocomplete({
+    inputRef,
+    value: localName,
+    onValueChange: setLocalName,
+    maxInputLength: MAX_COLUMN_NAME_LENGTH,
+  });
 
   const isValidName = localName.trim().length > 0 && localName.length <= MAX_BOARD_NAME_LENGTH;
   const isValidDescription = localDescription.length <= MAX_COLUMN_DESCRIPTION_LENGTH;
@@ -131,11 +141,12 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       </>
     ) : (
       <input
+        {...emoji.inputBindings}
         ref={inputRef}
         className={classNames("column-details__name", "column-details__name--editing")}
-        value={localName}
+        // value={localName}
         maxLength={MAX_BOARD_NAME_LENGTH}
-        onInput={(e) => setLocalName(e.currentTarget.value)}
+        // onInput={(e) => setLocalName(e.currentTarget.value)}
       />
     );
 
@@ -171,6 +182,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         extendable
         border="thick"
         rows={3}
+        emojiSuggestions
         maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
       />
       <MiniMenu className="column-details__description-mini-menu" items={saveColumnDetailsMiniMenu} small transparent />
@@ -209,6 +221,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         {renderSettings()}
       </div>
       <div className={classNames("column-details__description-wrapper", `column-details__description-wrapper--${props.mode}`)}>{renderDescription()}</div>
+      <EmojiSuggestions positionRelative {...emoji.suggestionsProps} /> {/* suggestions for name input, as textarea has its own */}
     </div>
   );
 };
