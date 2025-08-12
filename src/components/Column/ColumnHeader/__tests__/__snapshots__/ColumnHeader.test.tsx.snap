@@ -45,6 +45,15 @@ exports[`ColumnHeader should render correctly 1`] = `
           Add description (optional)
         </div>
       </div>
+      <div
+        class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty emoji-suggestions__container--relative"
+        style="--top-distance: 0px;"
+      >
+        <ul
+          class="emoji-suggestions__list"
+        />
+      </div>
+       
     </div>
     <form
       class="note-input"
