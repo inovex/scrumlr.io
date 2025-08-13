@@ -44,7 +44,7 @@ export const Templates = () => {
   const {searchBarInput} = useOutletContext<{searchBarInput: string}>();
 
   const allowAnonymousCreateBoards = useAppSelector((state) => state.view.allowAnonymousCreateBoards);
-  const isAnonymous = useAppSelector((state) => state.participants.self?.isAnonymous);
+  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous ?? false);
   const allowAnonymousCustomTemplates = useAppSelector((state) => state.view.allowAnonymousCustomTemplates);
   const showCustomTemplates = !isAnonymous || allowAnonymousCustomTemplates;
   const isBoardCreationDisabled = isAnonymous && !allowAnonymousCreateBoards;
