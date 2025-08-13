@@ -49,6 +49,8 @@ export interface View {
   snowfallEnabled: boolean;
 
   snowfallNotificationEnabled: boolean;
+
+  allowAnonymousCreateBoards: boolean;
 }
 
 export type ViewState = View;

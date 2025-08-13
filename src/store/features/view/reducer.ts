@@ -38,6 +38,7 @@ const initialState: ViewState = {
   legacyCreateBoard: process.env.REACT_APP_LEGACY_CREATE_BOARD === "true",
   snowfallEnabled: getFromStorage(SNOWFALL_STORAGE_KEY) !== "false",
   snowfallNotificationEnabled: getFromStorage(SNOWFALL_NOTIFICATION_STORAGE_KEY) !== "false",
+  allowAnonymousCreateBoards: process.env.REACT_APP_ALLOW_ANONYMOUS_CREATE_BOARDS === "true",
 };
 
 export const viewReducer = createReducer(initialState, (builder) =>
