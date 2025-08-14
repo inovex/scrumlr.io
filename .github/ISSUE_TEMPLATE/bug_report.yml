@@ -10,8 +10,7 @@ body:
     id: the-problem
     attributes:
       label: The problem
-      description:
-        Describe the issue you are experiencing with Scrumlr. Provide a
+      description: Describe the issue you are experiencing with Scrumlr. Provide a
         clear and concise description of what you were trying to do and what
         happened, along with any error messages you encountered.
     validations:
@@ -20,8 +19,7 @@ body:
     id: browser
     attributes:
       label: Browser
-      description:
-        What browser are you using? (e.g. Chrome, Firefox, Safari, etc.)
+      description: What browser are you using? (e.g. Chrome, Firefox, Safari, etc.)
     validations:
       required: true
   - type: textarea
@@ -38,5 +36,4 @@ body:
     id: additional-context
     attributes:
       label: Additional context
-      description:
-        Add any other context about the problem you are experiencing here.
+      description: Add any other context about the problem you are experiencing here.

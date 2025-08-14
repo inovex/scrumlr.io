@@ -106,6 +106,7 @@
     "ts-jest": "^29.4.1",
     "typescript": "^5.8.3"
   },
+  "proxy": "http://localhost:8080",
   "scripts": {
     "start": "react-scripts start",
     "build": "yarn run hash react-scripts build",

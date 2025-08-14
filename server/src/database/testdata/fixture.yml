@@ -4,32 +4,32 @@
       id: "3113b096-986c-4e23-adf7-b3fa19224bd2"
       name: John Doe
       account_type: ANONYMOUS
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: jane
       id: "3113b096-986c-4e23-adf7-b3fa19224bd3"
       name: Jane Doe
       account_type: ANONYMOUS
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: jennifer
       id: "3113b096-986c-4e23-bdf7-b3fa19224bd3"
       name: Jennifer Doe
       account_type: ANONYMOUS
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: jack
       id: "3113b096-986c-4e23-cdf7-b3fa19224bd3"
       name: Jack Doe
       account_type: ANONYMOUS
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: jay
       id: "3113b096-986c-4e23-ddf7-b3fa19224bd3"
       name: Jay Doe
       account_type: ANONYMOUS
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: justin
       id: "62e0ea41-6fbf-49a3-8921-1d2f4e5ae316"
       name: Justin Doe
       account_type: ANONYMOUS
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
 
 - model: DatabaseBoardTemplate
   rows:
@@ -39,7 +39,7 @@
       name: John's template board
       description: Board template test
       favourite: false
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
 
 - model: DatabaseColumnTemplate
   rows:
@@ -76,21 +76,21 @@
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: boardSessionsTestBoard
       id: "3113b096-986c-4e23-adf7-c3fa19224bd4"
       name: BoardSession test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: boardSessionRequestsTestBoard
       id: "4113b096-986c-4e23-adf7-c3fa19224bd4"
       name: BoardSessionRequest test
       access_policy: BY_INVITE
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: boardTestBoard
       id: "5113b096-986c-4e23-adf7-c3fa19224bd4"
       name: Board test
@@ -98,63 +98,63 @@
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: openMultipleVotesTestBoard
       id: "7113b096-986c-4e23-adf7-c3fa19224bd4"
       name: Votes test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: openSingleVotesTestBoard
       id: "7243b096-986c-4e23-adf7-c3fa19224bd4"
       name: Votes test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: closedVotesTestBoard
       id: "7213b096-986c-4e23-adf7-c3fa19224bd4"
       name: Votes test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: abortedVotesTestBoard
       id: "7313b096-986c-4e23-adf7-c3fa19224bd4"
       name: Votes test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: votingTestBoard
       id: "6113b096-986c-4e23-adf7-c3fa19224bd4"
       name: Voting test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: notesTestBoard
       id: "2813b096-986c-4e23-adf7-c3fa19224bd4"
       name: Notes test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: votingSortingTestBoard
       id: "1acd6899-ad71-4479-8ffe-6c6401b208d7"
       name: Voting Sorting test
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
     - _id: stackTestBoard
       id: "1acd6899-ad71-4479-8ffe-6c6401b20811"
       name: Stack test board
       access_policy: PUBLIC
       show_authors: true
       show_notes_of_other_users: true
-      created_at: '{{ now }}'
+      created_at: "{{ now }}"
 
 - model: DatabaseBoardSessionInsert
   rows:
@@ -219,6 +219,7 @@
     - _id: secondColumn
       id: "2813b000-0001-4e23-adf7-c3fa19224bd4"
       board: '{{ $.DatabaseBoard.columnsTestBoard.ID }}'
+      board: "{{ $.Board.columnsTestBoard.ID }}"
       name: Second column
       color: backlog-blue
       visible: true
@@ -627,10 +628,10 @@
       user: '{{ $.DatabaseUser.jack.ID }}'
       note: '{{ $.DatabaseNote.votingTestBoardParentNoteOfStack.ID }}'
     - _id: jacksVoteOnChildOpen
-      board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
-      voting: '{{ $.DatabaseVoting.votingTestBoardOpenVoting.ID }}'
-      user: '{{ $.DatabaseUser.jack.ID }}'
-      note: '{{ $.DatabaseNote.votingTestBoardChildOfStack.ID }}'
+      board: '{{ $.Board.votingTestBoard.ID }}'
+      voting: '{{ $.Voting.votingTestBoardOpenVoting.ID }}'
+      user: '{{ $.User.jack.ID }}'
+      note: '{{ $.Note.votingTestBoardChildOfStack.ID }}'
     - _id: janesVoteOnStack
       board: '{{ $.DatabaseBoard.votingTestBoard.ID }}'
       voting: '{{ $.DatabaseVoting.votingTestBoardClosedVotingHiddenUserVotes.ID }}'

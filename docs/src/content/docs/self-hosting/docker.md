@@ -2,7 +2,7 @@
 title: Docker Compose
 description: Deploy Scrumlr using Docker Compose
 sidebar:
-    order: 2
+  order: 2
 ---
 
 Scrumlr can be deployed using a Docker Compose file. This is the easiest way to get started with Scrumlr.
@@ -46,8 +46,8 @@ pwgen -s 64 1
 
 We use an ECDSA private key to sign the JWT tokens.
 
-***Make sure to keep this key secure as it can be used to decrypt the tokens and generate new ones, potentially
-compromising your users' accounts.***
+**_Make sure to keep this key secure as it can be used to decrypt the tokens and generate new ones, potentially
+compromising your users' accounts._**
 
 ```sh
 openssl ecparam -genkey -name secp521r1 -noout -out jwt.key
