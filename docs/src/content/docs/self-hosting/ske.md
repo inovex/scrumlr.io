@@ -2,7 +2,7 @@
 title: SKE (STACKIT Kubernetes Engine)
 description: Deploy Scrumlr using SKE
 sidebar:
-    order: 5
+  order: 5
 ---
 
 ## Pre-requisites

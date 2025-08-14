@@ -1,28 +1,58 @@
 import Cookies from "js-cookie";
 
-const showLegalDocuments = Cookies.get("scrumlr__show-legal-documents");
-const serverURL = Cookies.get("scrumlr__server-url");
-const websocketURL = Cookies.get("scrumlr__websocket-url");
+const getCookie = (name: string) => Cookies.get(name);
+const getCookieBool = (name: string, fallback = true) => {
+  const v = Cookies.get(name);
+  return v !== undefined ? v.toLowerCase() === "true" : fallback;
+};
 
 let httpProtocol = "https:";
-let websocketProtocol = "wss:";
+let websocketProtocol: "ws:" | "wss:" = "wss:";
 
-if (window.location.protocol === "http:") {
+if (typeof window !== "undefined" && window.location.protocol === "http:") {
   httpProtocol = "http:";
   websocketProtocol = "ws:";
 }
 
-export const SHOW_LEGAL_DOCUMENTS = showLegalDocuments !== undefined ? showLegalDocuments.toLowerCase() === "true" : true;
-export const SERVER_HTTP_URL = serverURL || process.env.REACT_APP_SERVER_HTTP_URL || `${window.location.origin.replace(window.location.protocol, httpProtocol)}/api`;
+export const SHOW_LEGAL_DOCUMENTS = getCookieBool("scrumlr__show-legal-documents", true);
+
+export const SERVER_HTTP_URL =
+  getCookie("scrumlr__server-url") || process.env.REACT_APP_SERVER_HTTP_URL || `${window.location.origin.replace(window.location.protocol, httpProtocol)}/api`;
+
 export const SERVER_WEBSOCKET_URL =
-  websocketURL || process.env.REACT_APP_SERVER_WEBSOCKET_URL || `${window.location.origin.replace(window.location.protocol, websocketProtocol)}/api`;
+  getCookie("scrumlr__websocket-url") || process.env.REACT_APP_SERVER_WEBSOCKET_URL || `${window.location.origin.replace(window.location.protocol, websocketProtocol)}/api`;
+
 export const SERVER_WEBSOCKET_PROTOCOL = websocketProtocol;
-export const ANALYTICS_DATA_DOMAIN = Cookies.get("scrumlr__analytics_data_domain");
-export const ANALYTICS_SRC = Cookies.get("scrumlr__analytics_src");
-export const CLARITY_ID = Cookies.get("scrumlr__clarity_id");
 
-export const UNLEASH_ENV: string = process.env.REACT_APP_UNLEASH_ENV ?? "development";
+export const ANALYTICS_DATA_DOMAIN = getCookie("scrumlr__analytics_data_domain");
+export const ANALYTICS_SRC = getCookie("scrumlr__analytics_src");
+export const CLARITY_ID = getCookie("scrumlr__clarity_id");
 
-export const UNLEASH_URL = process.env.REACT_APP_UNLEASH_FRONTEND_URL ?? "";
+export type UnleashFrontendConfig = {
+  url: string;
+  clientKey: string;
+  environment?: string;
+  appName?: string;
+};
 
-export const UNLEASH_TOKEN = process.env.REACT_APP_UNLEASH_FRONTEND_TOKEN ?? "";
+export async function fetchUnleashConfig(): Promise<UnleashFrontendConfig | null> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    const res = await fetch("/api/unleash-config", {
+      credentials: "same-origin",
+      headers: {Accept: "application/json"},
+      signal: controller.signal,
+    });
+    if (res.status === 204) return null;
+    if (!res.ok) return null;
+    const data = (await res.json()) as Partial<UnleashFrontendConfig>;
+    if (!data?.url || !data?.clientKey) return null;
+    data.url = data.url.replace(/\/$/, "");
+    return data as UnleashFrontendConfig;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}

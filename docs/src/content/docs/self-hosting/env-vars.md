@@ -2,7 +2,7 @@
 title: Environment Variables
 description: A full list of all environment variables that can be used to configure Scrumlr.
 sidebar:
-    order: 3
+  order: 3
 ---
 
 Full documentation of all environment variables that can be used to configure Scrumlr.

@@ -73,12 +73,12 @@ If you are an individual in the European Economic Area (EEA), we collect and pro
 we have legal bases for doing so under applicable EU laws. The legal bases depend on the Services you use and
 how you use them. This means we collect and use your information only where:
 
-* We need it to provide you the service, including to operate the service, provide customer support and personalized
+- We need it to provide you the service, including to operate the service, provide customer support and personalized
   features and to protect the safety and security of the service;
-* It satisfies a legitimate interest (which is not overridden by your data protection interests), such as for research
+- It satisfies a legitimate interest (which is not overridden by your data protection interests), such as for research
   and development, to market and promote the service and to protect our legal rights and interests;
-* You give us consent to do so for a specific purpose; or
-* We need to process your data to comply with a legal obligation.
+- You give us consent to do so for a specific purpose; or
+- We need to process your data to comply with a legal obligation.
 
 If you have consented to our use of information about you for a specific purpose, you have the right to
 change your mind at any time, but this will not affect any processing that has already taken place.
@@ -105,7 +105,7 @@ store your information and isolate it from any further use until deletion is pos
 #### Account information
 
 We retain your account information for as long as your account is active and a reasonable period thereafter
-in case you decide to re-activate the service.  We also retain some of your information as necessary to
+in case you decide to re-activate the service. We also retain some of your information as necessary to
 comply with our legal obligations, to resolve disputes, to enforce our agreements, to support business
 operations, and to continue to develop and improve our service. Where we retain information for service
 improvement and development, we take steps to eliminate information that directly identifies you, and we

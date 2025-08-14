@@ -47,7 +47,6 @@ $card-description-height: 4 * 20px;
 .template-card__head {
   grid-area: head;
   align-self: center;
-
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -90,7 +89,7 @@ $card-description-height: 4 * 20px;
 
 .template-card__description {
   grid-area: description;
-  align-self: start;
+  align-self: flex-start;
 
   font-size: $text--sm;
   font-weight: 500;

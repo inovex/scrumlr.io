@@ -15,9 +15,11 @@ test: Adding missing tests or correcting existing tests
 -->
 
 ## Description
+
 <!-- Explain the changes you’ve made. It doesn’t need to be fancy and you don’t have to get too technical. -->
 
 ## Changelog
+
 <!-- Please provide a detailed list of the changes you have made to the codebase. -->
 
 ## Checklist
@@ -29,4 +31,5 @@ test: Adding missing tests or correcting existing tests
 - [ ] The application was tested in the most commonly used browsers (e.g. Chrome, Firefox, Safari)
 
 ## (Optional) Visual Changes
+
 <!-- If available, please provide a before and after screenshot of your UI related changes. -->

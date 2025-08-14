@@ -12,9 +12,10 @@ Deutschland
 **Kontakt-E-Mail des Eigentümers:** [info@scrumlr.io](mailto:info@scrumlr.io)
 
 "scrumlr.io" bezieht sich auf
-* diese Website, einschließlich ihrer Subdomains und jeder anderen Website, über die der Eigentümer seinen Dienst zur Verfügung stellt;
-* die Anwendungsprogramm-Schnittstellen (API);
-* den Dienst;
+
+- diese Website, einschließlich ihrer Subdomains und jeder anderen Website, über die der Eigentümer seinen Dienst zur Verfügung stellt;
+- die Anwendungsprogramm-Schnittstellen (API);
+- den Dienst;
 
 Diese Nutzungsbedingungen gelten entsprechend für die Bereitstellung neuer Versionen von scrumlr.io (z.B. Patches, Bugfixes, Updates, Upgrades, etc.).
 
@@ -28,9 +29,9 @@ Soweit nicht anders angegeben, gelten die in diesem Abschnitt aufgeführten Nutz
 
 Mit der Nutzung von scrumlr.io bestätigen die Nutzer, dass sie die folgenden Anforderungen erfüllen:
 
-* Es gibt keine Einschränkungen für Nutzer in Bezug auf die Eigenschaft als Verbraucher oder Geschäftskunden;
-* Die Nutzer müssen nach geltendem Recht als volljährig anerkannt sein;
-* Minderjährige dürfen scrumlr.io nur unter elterlicher oder erwachsener Aufsicht nutzen;
+- Es gibt keine Einschränkungen für Nutzer in Bezug auf die Eigenschaft als Verbraucher oder Geschäftskunden;
+- Die Nutzer müssen nach geltendem Recht als volljährig anerkannt sein;
+- Minderjährige dürfen scrumlr.io nur unter elterlicher oder erwachsener Aufsicht nutzen;
 
 ### Konto-Registrierung
 
@@ -43,12 +44,14 @@ Die Nutzer sind verpflichtet, den Eigentümer unverzüglich und unmissverständl
 #### Bedingungen für die Registrierung von Konten
 
 Die Registrierung von Nutzerkonten auf scrumlr.io unterliegt den unten aufgeführten Bedingungen. Durch die Registrierung stimmen die Nutzer zu, diese Bedingungen zu erfüllen.
-* Die Registrierung von Konten durch Bots oder andere automatisierte Methoden ist nicht zulässig.
+
+- Die Registrierung von Konten durch Bots oder andere automatisierte Methoden ist nicht zulässig.
 
 #### Kontokündigung
 
 Benutzer können ihr Konto jederzeit kündigen und die Nutzung des Dienstes einstellen, indem sie Folgendes tun:
-* Durch direkte Kontaktaufnahme mit dem Eigentümer unter den in diesem Dokument angegebenen Kontaktdaten.
+
+- Durch direkte Kontaktaufnahme mit dem Eigentümer unter den in diesem Dokument angegebenen Kontaktdaten.
 
 #### Sperrung und Löschung des Kontos
 
@@ -82,10 +85,10 @@ Die Nutzer erkennen an, akzeptieren und bestätigen, dass alle Inhalte, die sie 
 
 Die Nutzer sind allein verantwortlich für alle Inhalte, die sie hochladen, posten, teilen oder über scrumlr.io bereitstellen. Die Nutzer erkennen an und akzeptieren, dass der Eigentümer solche Inhalte nicht filtert oder moderiert. Der Eigentümer behält sich jedoch das Recht vor, solche Inhalte nach eigenem Ermessen zu entfernen, zu löschen, zu sperren oder zu berichtigen und dem hochladenden Nutzer ohne vorherige Ankündigung den Zugang zu scrumlr.io zu verweigern:
 
-* wenn eine Beschwerde aufgrund eines solchen Inhalts eingeht;
-* wenn eine Mitteilung über die Verletzung von Rechten an geistigem Eigentum eingeht;
-* auf Anordnung einer öffentlichen Behörde; oder
-* wenn der Eigentümer darauf aufmerksam gemacht wird, dass der Inhalt, während er über scrumlr.io zugänglich ist, ein Risiko für Nutzer, Dritte und/oder die Verfügbarkeit des Dienstes darstellen kann.
+- wenn eine Beschwerde aufgrund eines solchen Inhalts eingeht;
+- wenn eine Mitteilung über die Verletzung von Rechten an geistigem Eigentum eingeht;
+- auf Anordnung einer öffentlichen Behörde; oder
+- wenn der Eigentümer darauf aufmerksam gemacht wird, dass der Inhalt, während er über scrumlr.io zugänglich ist, ein Risiko für Nutzer, Dritte und/oder die Verfügbarkeit des Dienstes darstellen kann.
 
 Die Entfernung, Löschung, Sperrung oder Berichtigung von Inhalten gibt den Nutzern, die diese Inhalte zur Verfügung gestellt haben oder für diese haften, keinen Anspruch auf Entschädigung, Schadenersatz oder Rückerstattung. Die Nutzer verpflichten sich, den Betreiber von jeglichen Ansprüchen und/oder Schäden freizustellen, die aufgrund von Inhalten, die sie scrumlr.io zur Verfügung gestellt haben oder über scrumlr.io zur Verfügung stellen, geltend gemacht werden.
 
@@ -115,46 +118,46 @@ Die Nutzer sind allein dafür verantwortlich, dass ihre Nutzung von scrumlr.io u
 
 #### Verhaltensbeschränkungen
 
-* Vortäuschen der Erfüllung möglicher Bedingungen oder Voraussetzungen für den Zugang zu scrumlr.io und/oder die Nutzung der Dienste, wie z.B. die Volljährigkeit nach dem Gesetz oder die Qualifikation als Verbraucher;
-* ihre Identität zu verschleiern oder die Identität eines anderen zu stehlen oder vorzugeben, ein Dritter zu sein oder einen Dritten zu vertreten, wenn dies von diesem Dritten nicht erlaubt ist;
-* Identifikatoren zu manipulieren, um die Herkunft ihrer Nachrichten oder der eingestellten Inhalte zu verschleiern oder anderweitig zu verbergen;
-* Verleumdung, Beschimpfung, Belästigung, Drohungen, Bedrohung oder Verletzung der Rechte anderer in sonstiger Weise
-* die Förderung von Aktivitäten, die das Leben des Nutzers oder das Leben anderer Nutzer gefährden oder zu körperlichen Schäden führen können. Dazu gehören unter anderem Selbstmorddrohungen oder -aufforderungen, absichtliche körperliche Verletzungen, der Konsum illegaler Drogen oder übermäßiger Alkoholkonsum. Unter keinen Umständen ist es Nutzern erlaubt, Inhalte auf scrumlr.io zu veröffentlichen, die selbstzerstörerisches oder gewalttätiges Verhalten fördern und/oder ermutigen und/oder zeigen;
-* das Ausprobieren, Scannen oder Testen der Verwundbarkeit von scrumlr.io, einschließlich der Dienste oder eines mit der Webseite verbundenen Netzwerks, noch die Verletzung der Sicherheits- oder Authentifizierungsmaßnahmen auf scrumlr.io, einschließlich der Dienste oder eines mit scrumlr.io verbundenen Netzwerks;
-* das Installieren, Einbetten, Hochladen oder anderweitige Einbinden von Malware in oder über scrumlr.io;
-* scrumlr.io oder die technische Infrastruktur in missbräuchlicher, übermäßiger oder anderweitig unangemessener Weise zu nutzen (z.B. für Spamming-Zwecke);
-* den Versuch, die technische Infrastruktur in einer Weise zu stören oder zu manipulieren, die scrumlr.io oder den Dienst schädigt oder unangemessen belastet;
+- Vortäuschen der Erfüllung möglicher Bedingungen oder Voraussetzungen für den Zugang zu scrumlr.io und/oder die Nutzung der Dienste, wie z.B. die Volljährigkeit nach dem Gesetz oder die Qualifikation als Verbraucher;
+- ihre Identität zu verschleiern oder die Identität eines anderen zu stehlen oder vorzugeben, ein Dritter zu sein oder einen Dritten zu vertreten, wenn dies von diesem Dritten nicht erlaubt ist;
+- Identifikatoren zu manipulieren, um die Herkunft ihrer Nachrichten oder der eingestellten Inhalte zu verschleiern oder anderweitig zu verbergen;
+- Verleumdung, Beschimpfung, Belästigung, Drohungen, Bedrohung oder Verletzung der Rechte anderer in sonstiger Weise
+- die Förderung von Aktivitäten, die das Leben des Nutzers oder das Leben anderer Nutzer gefährden oder zu körperlichen Schäden führen können. Dazu gehören unter anderem Selbstmorddrohungen oder -aufforderungen, absichtliche körperliche Verletzungen, der Konsum illegaler Drogen oder übermäßiger Alkoholkonsum. Unter keinen Umständen ist es Nutzern erlaubt, Inhalte auf scrumlr.io zu veröffentlichen, die selbstzerstörerisches oder gewalttätiges Verhalten fördern und/oder ermutigen und/oder zeigen;
+- das Ausprobieren, Scannen oder Testen der Verwundbarkeit von scrumlr.io, einschließlich der Dienste oder eines mit der Webseite verbundenen Netzwerks, noch die Verletzung der Sicherheits- oder Authentifizierungsmaßnahmen auf scrumlr.io, einschließlich der Dienste oder eines mit scrumlr.io verbundenen Netzwerks;
+- das Installieren, Einbetten, Hochladen oder anderweitige Einbinden von Malware in oder über scrumlr.io;
+- scrumlr.io oder die technische Infrastruktur in missbräuchlicher, übermäßiger oder anderweitig unangemessener Weise zu nutzen (z.B. für Spamming-Zwecke);
+- den Versuch, die technische Infrastruktur in einer Weise zu stören oder zu manipulieren, die scrumlr.io oder den Dienst schädigt oder unangemessen belastet;
 
 #### Exzessive Nutzung des Dienstes
 
-* Übermäßige Nutzung einer Ressource von scrumlr.io im Verhältnis zu anderen Nutzern von scrumlr.io - in solchen Fällen behält sich der Betreiber nach eigenem Ermessen zusätzlich das Recht vor, den Account des Nutzers zu sperren oder die damit verbundenen Aktivitäten einzuschränken, bis der Nutzer den übermäßigen Verbrauch reduziert;
+- Übermäßige Nutzung einer Ressource von scrumlr.io im Verhältnis zu anderen Nutzern von scrumlr.io - in solchen Fällen behält sich der Betreiber nach eigenem Ermessen zusätzlich das Recht vor, den Account des Nutzers zu sperren oder die damit verbundenen Aktivitäten einzuschränken, bis der Nutzer den übermäßigen Verbrauch reduziert;
 
 #### Exzessive Nutzung der API
 
-* das Senden missbräuchlicher oder übermäßig häufiger Anfragen an den Dienst über die API. Der Eigentümer bestimmt, was einen Missbrauch oder eine übermäßige Nutzung der API darstellt und behält sich außerdem das Recht vor, den Zugang des Nutzers zur API vorübergehend oder dauerhaft zu sperren. In solchen Fällen wird der Eigentümer einen angemessenen Versuch unternehmen, den Nutzer vor der Sperrung zu warnen;
+- das Senden missbräuchlicher oder übermäßig häufiger Anfragen an den Dienst über die API. Der Eigentümer bestimmt, was einen Missbrauch oder eine übermäßige Nutzung der API darstellt und behält sich außerdem das Recht vor, den Zugang des Nutzers zur API vorübergehend oder dauerhaft zu sperren. In solchen Fällen wird der Eigentümer einen angemessenen Versuch unternehmen, den Nutzer vor der Sperrung zu warnen;
 
 #### Scraping
 
-* die Anwendung jeglicher automatisierter Verfahren, um Informationen, Daten und/oder Inhalte von scrumlr.io und allen damit verbundenen digitalen Eigenschaften zu extrahieren, zu sammeln oder abzuschöpfen, es sei denn, der Eigentümer hat dies ausdrücklich erlaubt;
+- die Anwendung jeglicher automatisierter Verfahren, um Informationen, Daten und/oder Inhalte von scrumlr.io und allen damit verbundenen digitalen Eigenschaften zu extrahieren, zu sammeln oder abzuschöpfen, es sei denn, der Eigentümer hat dies ausdrücklich erlaubt;
 
 #### Inhaltliche Einschränkungen
 
-* Verbreitung oder Veröffentlichung von Inhalten, die ungesetzlich, obszön, unrechtmäßig, verleumderisch oder unangemessen sind;
-* Veröffentlichung von Inhalten, die direkt oder indirekt Hass, Rassismus, Diskriminierung, Pornografie oder Gewalt fördern;
-* Verbreitung oder Veröffentlichung von Inhalten, die falsch sind oder einen ungerechtfertigten Alarm auslösen können;
-* scrumlr.io zu nutzen, um Inhalte zu veröffentlichen, zu verbreiten oder anderweitig zur Verfügung zu stellen, die durch Gesetze zum Schutz des geistigen Eigentums geschützt sind, einschließlich, aber nicht beschränkt auf Patent-, Marken- oder Urheberrechtsgesetze, unrechtmäßig und ohne die Zustimmung des rechtmäßigen Rechteinhabers;
-* scrumlr.io zu nutzen, um andere Inhalte zu veröffentlichen, zu verbreiten oder anderweitig zur Verfügung zu stellen, die die Rechte Dritter verletzen, einschließlich, aber nicht beschränkt auf Staats-, Militär-, Geschäfts- oder Berufsgeheimnisse und persönliche Daten;
-* Inhalte zu veröffentlichen oder Aktivitäten auszuführen, die die Integrität von scrumlr.io oder die Erfahrung oder die Geräte anderer Nutzer stören, unterbrechen, schädigen oder anderweitig verletzen. Zu solchen Aktivitäten gehören: Spamming, Verbreitung von nicht autorisierter Werbung, Phishing, Betrug, Verbreitung von Malware oder Viren usw.;
+- Verbreitung oder Veröffentlichung von Inhalten, die ungesetzlich, obszön, unrechtmäßig, verleumderisch oder unangemessen sind;
+- Veröffentlichung von Inhalten, die direkt oder indirekt Hass, Rassismus, Diskriminierung, Pornografie oder Gewalt fördern;
+- Verbreitung oder Veröffentlichung von Inhalten, die falsch sind oder einen ungerechtfertigten Alarm auslösen können;
+- scrumlr.io zu nutzen, um Inhalte zu veröffentlichen, zu verbreiten oder anderweitig zur Verfügung zu stellen, die durch Gesetze zum Schutz des geistigen Eigentums geschützt sind, einschließlich, aber nicht beschränkt auf Patent-, Marken- oder Urheberrechtsgesetze, unrechtmäßig und ohne die Zustimmung des rechtmäßigen Rechteinhabers;
+- scrumlr.io zu nutzen, um andere Inhalte zu veröffentlichen, zu verbreiten oder anderweitig zur Verfügung zu stellen, die die Rechte Dritter verletzen, einschließlich, aber nicht beschränkt auf Staats-, Militär-, Geschäfts- oder Berufsgeheimnisse und persönliche Daten;
+- Inhalte zu veröffentlichen oder Aktivitäten auszuführen, die die Integrität von scrumlr.io oder die Erfahrung oder die Geräte anderer Nutzer stören, unterbrechen, schädigen oder anderweitig verletzen. Zu solchen Aktivitäten gehören: Spamming, Verbreitung von nicht autorisierter Werbung, Phishing, Betrug, Verbreitung von Malware oder Viren usw.;
 
 #### Schutz der Nutzer
 
-* Aneignung eines Kontos, das von einem anderen Nutzer verwendet wird;
-* das Sammeln von persönlichen Informationen anderer Nutzer, einschließlich, aber nicht beschränkt auf deren E-Mail-Adressen oder Kontaktinformationen, durch Umgehung der Datenschutzeinstellungen der Konten anderer Nutzer auf scrumlr.io oder durch andere Mittel;
-* die Verwendung von Informationen über andere Nutzer, einschließlich persönlicher Daten oder Kontaktinformationen, für andere Zwecke als die, für die scrumlr.io gedacht ist;
+- Aneignung eines Kontos, das von einem anderen Nutzer verwendet wird;
+- das Sammeln von persönlichen Informationen anderer Nutzer, einschließlich, aber nicht beschränkt auf deren E-Mail-Adressen oder Kontaktinformationen, durch Umgehung der Datenschutzeinstellungen der Konten anderer Nutzer auf scrumlr.io oder durch andere Mittel;
+- die Verwendung von Informationen über andere Nutzer, einschließlich persönlicher Daten oder Kontaktinformationen, für andere Zwecke als die, für die scrumlr.io gedacht ist;
 
 #### Einschränkungen der kommerziellen Nutzung
 
-* die Angabe oder der Versuch, in irgendeiner Weise anzudeuten, dass ein Nutzer in einer qualifizierten Beziehung zu scrumlr.io steht oder dass scrumlr.io den Nutzer, die Produkte oder Dienstleistungen des Nutzers oder die Produkte und Dienstleistungen eines Dritten für irgendeinen Zweck unterstützt hat;
+- die Angabe oder der Versuch, in irgendeiner Weise anzudeuten, dass ein Nutzer in einer qualifizierten Beziehung zu scrumlr.io steht oder dass scrumlr.io den Nutzer, die Produkte oder Dienstleistungen des Nutzers oder die Produkte und Dienstleistungen eines Dritten für irgendeinen Zweck unterstützt hat;
 
 ### Software-Lizenz
 
@@ -166,19 +169,21 @@ Dies bedeutet, dass den Nutzern weitreichende Rechte gewährt werden, einschlie�
 
 Nutzer können auf ihre Daten bezüglich scrumlr.io über das Application Program Interface (API) zugreifen. Jegliche Nutzung der API, einschließlich der Nutzung der API durch ein Produkt/einen Dienst eines Drittanbieters, der auf scrumlr.io zugreift, ist an diese Bedingungen und zusätzlich an die folgenden spezifischen Bedingungen gebunden:
 
-* Der Nutzer versteht ausdrücklich und stimmt zu, dass der Eigentümer keine Verantwortung trägt und nicht für Schäden oder Verluste haftbar gemacht werden kann, die aus der Nutzung der API durch den Nutzer oder der Nutzung von Produkten/Diensten Dritter, die über die API auf Daten zugreifen, entstehen.
+- Der Nutzer versteht ausdrücklich und stimmt zu, dass der Eigentümer keine Verantwortung trägt und nicht für Schäden oder Verluste haftbar gemacht werden kann, die aus der Nutzung der API durch den Nutzer oder der Nutzung von Produkten/Diensten Dritter, die über die API auf Daten zugreifen, entstehen.
 
 ## Haftung und Entschädigung
 
 ### Begrenzung der Haftung
+
 Sofern nicht ausdrücklich anders angegeben und unbeschadet der geltenden gesetzlichen Bestimmungen zur Produkthaftung hat der Nutzer keinen Anspruch auf Schadensersatz gegen den Vermieter (oder eine in seinem Namen handelnde natürliche oder juristische Person). Dies gilt nicht für Schäden aus der Verletzung des Lebens, der Gesundheit oder der körperlichen Unversehrtheit, für Schäden aus der Verletzung einer wesentlichen Vertragspflicht, die zur Erreichung des Vertragszwecks notwendig ist, und/oder für Schäden, die auf Vorsatz oder grober Fahrlässigkeit beruhen, sofern scrumlr.io vom Nutzer sachgerecht verwendet wurde. Für Schäden, die nicht auf Vorsatz oder grober Fahrlässigkeit beruhen oder die das Leben, die Gesundheit oder die körperliche Unversehrtheit betreffen, haftet der Betreiber nur in Höhe des typischen und bei Vertragsschluss vorhersehbaren Schadens. Insbesondere haftet der Vermieter im Rahmen der vorgenannten Grenzen nicht für:
 
-* den Verlust von Geschäftsmöglichkeiten und jeden anderen, auch indirekten Verlust, der dem Nutzer entstehen kann (wie z.B. Handelsverluste, Verlust von Einnahmen, Einkommen, Gewinnen oder erwarteten Einsparungen, Verlust von Verträgen oder Geschäftsbeziehungen, Verlust des Rufs oder des Firmenwerts, usw.);
-* Schäden oder Verluste, die durch Unterbrechungen oder Störungen von scrumlr.io aufgrund von höherer Gewalt oder unvorhergesehenen und unvorhersehbaren Ereignissen entstehen und in jedem Fall unabhängig vom Willen und außerhalb der Kontrolle des Eigentümers liegen, wie z.B., aber nicht beschränkt auf, Ausfälle oder Unterbrechungen von Telefon- oder Stromleitungen, des Internets und/oder anderer Übertragungswege, Nichtverfügbarkeit von Webseiten, Streiks, Naturkatastrophen, Viren und Cyberangriffe, Unterbrechungen bei der Lieferung von Produkten, Dienstleistungen oder Anwendungen Dritter;
-* Verluste, die nicht die unmittelbare Folge eines Verstoßes des Eigentümers gegen die Bedingungen sind;
-* Schäden, Beeinträchtigungen oder Verluste aufgrund von Viren oder anderer Malware, die in Dateien enthalten oder mit Dateien verbunden sind, die im Internet oder über scrumlr.io heruntergeladen werden können. Die Nutzer sind dafür verantwortlich, ausreichende Sicherheitsvorkehrungen zu treffen - wie z.B. Virenschutz und Firewalls - um eine solche Infektion oder einen solchen Angriff zu verhindern und Sicherungskopien aller Daten oder Informationen, die über scrumlr.io ausgetauscht oder hochgeladen werden, zu erstellen.
+- den Verlust von Geschäftsmöglichkeiten und jeden anderen, auch indirekten Verlust, der dem Nutzer entstehen kann (wie z.B. Handelsverluste, Verlust von Einnahmen, Einkommen, Gewinnen oder erwarteten Einsparungen, Verlust von Verträgen oder Geschäftsbeziehungen, Verlust des Rufs oder des Firmenwerts, usw.);
+- Schäden oder Verluste, die durch Unterbrechungen oder Störungen von scrumlr.io aufgrund von höherer Gewalt oder unvorhergesehenen und unvorhersehbaren Ereignissen entstehen und in jedem Fall unabhängig vom Willen und außerhalb der Kontrolle des Eigentümers liegen, wie z.B., aber nicht beschränkt auf, Ausfälle oder Unterbrechungen von Telefon- oder Stromleitungen, des Internets und/oder anderer Übertragungswege, Nichtverfügbarkeit von Webseiten, Streiks, Naturkatastrophen, Viren und Cyberangriffe, Unterbrechungen bei der Lieferung von Produkten, Dienstleistungen oder Anwendungen Dritter;
+- Verluste, die nicht die unmittelbare Folge eines Verstoßes des Eigentümers gegen die Bedingungen sind;
+- Schäden, Beeinträchtigungen oder Verluste aufgrund von Viren oder anderer Malware, die in Dateien enthalten oder mit Dateien verbunden sind, die im Internet oder über scrumlr.io heruntergeladen werden können. Die Nutzer sind dafür verantwortlich, ausreichende Sicherheitsvorkehrungen zu treffen - wie z.B. Virenschutz und Firewalls - um eine solche Infektion oder einen solchen Angriff zu verhindern und Sicherungskopien aller Daten oder Informationen, die über scrumlr.io ausgetauscht oder hochgeladen werden, zu erstellen.
 
 ### Entschädigung
+
 Der Nutzer erklärt sich damit einverstanden, den Eigentümer und seine Tochtergesellschaften, verbundenen Unternehmen, leitenden Angestellten, Direktoren, Agenten, Co-Brander, Partner und Mitarbeiter von jeglichen Ansprüchen oder Forderungen - einschließlich, aber nicht beschränkt auf Anwaltsgebühren und -kosten - freizustellen und schadlos zu halten, die von Dritten aufgrund oder im Zusammenhang mit einer schuldhaften Nutzung des Dienstes oder einer Verbindung zu diesem, einer Verletzung dieser Bedingungen, einer Verletzung von Rechten Dritter oder gesetzlicher Bestimmungen durch den Nutzer oder seine verbundenen Unternehmen, leitenden Angestellten, Direktoren, Agenten, Co-Brander, Partner und Mitarbeiter geltend gemacht werden, soweit dies nach geltendem Recht zulässig ist.
 
 ## Gemeinsame Bestimmungen
@@ -222,7 +227,6 @@ Die Nutzer dürfen ihre Rechte und Pflichten aus diesen Bedingungen ohne schrift
 ### Kontakte
 
 Alle Mitteilungen, die sich auf die Nutzung von scrumlr.io beziehen, müssen über die in diesem Dokument angegebenen Kontaktinformationen gesendet werden.
-
 
 ### Trennbarkeit
 

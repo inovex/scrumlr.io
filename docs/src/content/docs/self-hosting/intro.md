@@ -2,7 +2,7 @@
 title: Introduction
 description: Introduction to Self-hosting Scrumlr
 sidebar:
-    order: 1
+  order: 1
 ---
 
 We currently offer two ways to self-host Scrumlr: using Docker Compose or a Kubernetes manifest.

@@ -68,12 +68,12 @@ Wenn Sie eine natürliche Person im Europäischen Wirtschaftsraum (EWR) sind, sa
 wir nach geltendem EU-Recht eine rechtliche Grundlage dafür haben. Die Rechtsgrundlagen hängen von den Diensten ab, die Sie nutzen und
 wie Sie sie nutzen. Das bedeutet, dass wir Ihre Daten nur dann erfassen und verwenden, wenn:
 
-* Wir benötigen sie, um Ihnen den Dienst zur Verfügung zu stellen, einschließlich des Betriebs des Dienstes, der Bereitstellung von Kundensupport und personalisierten
+- Wir benötigen sie, um Ihnen den Dienst zur Verfügung zu stellen, einschließlich des Betriebs des Dienstes, der Bereitstellung von Kundensupport und personalisierten
   und um die Sicherheit des Dienstes zu schützen;
-* Sie dienen einem berechtigten Interesse (das nicht durch Ihre Datenschutzinteressen überlagert wird), z. B. für Forschung
+- Sie dienen einem berechtigten Interesse (das nicht durch Ihre Datenschutzinteressen überlagert wird), z. B. für Forschung
   und Entwicklung, zur Vermarktung und Förderung des Dienstes und zum Schutz unserer gesetzlichen Rechte und Interessen;
-* Sie geben uns Ihre Einwilligung für einen bestimmten Zweck; oder
-* Wir müssen Ihre Daten verarbeiten, um einer gesetzlichen Verpflichtung nachzukommen.
+- Sie geben uns Ihre Einwilligung für einen bestimmten Zweck; oder
+- Wir müssen Ihre Daten verarbeiten, um einer gesetzlichen Verpflichtung nachzukommen.
 
 Wenn Sie zugestimmt haben, dass wir Ihre Daten für einen bestimmten Zweck verwenden, haben Sie das Recht
 Sie haben das Recht, Ihre Meinung jederzeit zu ändern, was jedoch keine Auswirkungen auf eine bereits erfolgte Verarbeitung hat.
@@ -128,10 +128,11 @@ Wir verkaufen Ihre persönlichen Daten nicht. Wir geben Ihre Daten nicht an ande
 
 Diese Richtlinie beschreibt die Kategorien personenbezogener Daten, die wir erheben können, die Quellen dieser Daten,
 und unsere Richtlinien zur Löschung und Aufbewahrung. Wir haben auch Informationen darüber aufgenommen, wie wir Ihre Daten verarbeiten können
+
 - zum Beispiel zum Schutz vor illegalen Aktivitäten und zur Entwicklung neuer Produkte, Funktionen und
-Technologien. Wenn Sie Fragen zu den Kategorien von Informationen haben, die wir über Sie sammeln können, besuchen Sie bitte
-den Abschnitt "Welche Informationen wir über Sie erfassen". Weitere Einzelheiten zu unserer Verarbeitung
-finden Sie im Abschnitt "Wie wir die von uns gesammelten Daten verwenden".
+  Technologien. Wenn Sie Fragen zu den Kategorien von Informationen haben, die wir über Sie sammeln können, besuchen Sie bitte
+  den Abschnitt "Welche Informationen wir über Sie erfassen". Weitere Einzelheiten zu unserer Verarbeitung
+  finden Sie im Abschnitt "Wie wir die von uns gesammelten Daten verwenden".
 
 Wenn Sie Fragen haben oder Ihre Rechte ausüben möchten, können Sie sich an uns wenden unter
 [info@scrumlr.io](mailto:info@scrumlr.io).

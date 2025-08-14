@@ -44,7 +44,7 @@ services:
       nats:
         condition: service_started
     healthcheck:
-      test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:${SCRUMLR_SERVER_PORT:-8080}/api/health || exit 1" ]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:${SCRUMLR_SERVER_PORT:-8080}/api/health || exit 1"]
       start_period: 10s
       interval: 10s
       timeout: 5s
@@ -77,7 +77,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scrumlr} -d ${POSTGRES_DB:-scrumlr}" ]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-scrumlr} -d ${POSTGRES_DB:-scrumlr}"]
       start_period: 10s
       interval: 10s
       timeout: 5s
@@ -112,7 +112,5 @@ services:
       - "80:80"
       - "443:443"
 
-
 volumes:
   postgres_data:
-

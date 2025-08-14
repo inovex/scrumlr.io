@@ -6,7 +6,7 @@ services:
     ports:
       - "4222:4222"
     healthcheck:
-      test: [ "CMD", "ping", "nats", "-c", "2" ]
+      test: ["CMD", "ping", "nats", "-c", "2"]
       start_period: 5s
       interval: 10s
       timeout: 5s
@@ -25,7 +25,7 @@ services:
       POSTGRES_DB: &db_name "scrumlr"
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", *db_name, "-U", *db_user ]
+      test: ["CMD", "pg_isready", "-q", "-d", *db_name, "-U", *db_user]
       start_period: 10s
       interval: 10s
       timeout: 5s
