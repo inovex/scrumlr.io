@@ -3,7 +3,7 @@ name: Cleanup Feature Branch Deployment
 on:
   pull_request:
     branches: [main]
-    types: [closed,unlabeled]
+    types: [closed, unlabeled]
 jobs:
   cluster-cleanup:
     name: Clean Up Cluster Resources

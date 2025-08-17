@@ -12,9 +12,10 @@ Germany
 **Owner contact email:** [info@scrumlr.io](mailto:info@scrumlr.io)
 
 "scrumlr.io" refers to
-* this website, including its subdomains and any other website through which the Owner makes its Service available;
-* the Application Program Interfaces (API);
-* the Service;
+
+- this website, including its subdomains and any other website through which the Owner makes its Service available;
+- the Application Program Interfaces (API);
+- the Service;
 
 These Terms of Use shall accordingly be applicable to provision of new versions of scrumlr.io (e.g. patches, bug fixes, updates, upgrades, etc.).
 
@@ -28,9 +29,9 @@ Unless otherwise specified, the terms of use detailed in this section apply gene
 
 By using scrumlr.io, Users confirm to meet the following requirements:
 
-* There are no restrictions for Users in terms of being Consumers or Business Users;
-* Users must be recognized as adult by applicable law;
-* Minors may only use scrumlr.io under parental or adult supervision;
+- There are no restrictions for Users in terms of being Consumers or Business Users;
+- Users must be recognized as adult by applicable law;
+- Minors may only use scrumlr.io under parental or adult supervision;
 
 ### Account registration
 
@@ -44,12 +45,14 @@ Users are required to immediately and unambiguously inform the Owner via the con
 #### Conditions for account registration
 
 Registration of User accounts on scrumlr.io is subject to the conditions outlined below. By registering, Users agree to meet such conditions.
-* Accounts registered by bots or any other automated methods are not permitted.
+
+- Accounts registered by bots or any other automated methods are not permitted.
 
 #### Account termination
 
 Users can terminate their account and stop using the Service at any time by doing the following:
-* By directly contacting the Owner at the contact details provided in this document.
+
+- By directly contacting the Owner at the contact details provided in this document.
 
 #### Account suspension and deletion
 
@@ -90,10 +93,10 @@ Users acknowledge, accept and confirm that all content they provide through scru
 Users are solely liable for any content they upload, post, share, or provide through scrumlr.io. Users acknowledge and accept that the Owner does not filter or moderate such content.
 However, the Owner reserves the right to remove, delete, block or rectify such content at its own discretion and to, without prior notice, deny the uploading User access to scrumlr.io:
 
-* if any complaint based on such content is received;
-* if a notice of infringement of intellectual property rights is received;
-* upon order of a public authority; or
-* where the Owner is made aware that the content, while being accessible via scrumlr.io, may represent a risk for Users, third parties and/or the availability of the Service.
+- if any complaint based on such content is received;
+- if a notice of infringement of intellectual property rights is received;
+- upon order of a public authority; or
+- where the Owner is made aware that the content, while being accessible via scrumlr.io, may represent a risk for Users, third parties and/or the availability of the Service.
 
 The removal, deletion, blocking or rectification of content shall not entitle Users that have provided such content or that are liable for it, to any claims for compensation, damages or reimbursement.
 Users agree to hold the Owner harmless from and against any claim asserted and/or damage suffered due to content they provided to or provided through scrumlr.io.
@@ -127,46 +130,46 @@ Therefore, the Owner reserves the right to take any appropriate measure to prote
 
 #### Conduct restrictions
 
-* pretending to fulfill any possible condition or requirements for accessing scrumlr.io and/or using the Services, such as for instance being adult according to law or qualifying as a Consumer;
-* concealing their identity or stealing someone else's identity or pretend to be or represent a third-party, if not allowed to do so by such third-party;
-* manipulating identifiers to disguise or otherwise conceal the origin of their messages or of the content posted;
-* defaming, abusing, harassing, using threatening practices, threatening or violating the legal rights of others in any other way;
-* promoting activity that may endanger the User’s life or the life of any other User or lead to physical harm. This includes but is not limited to suicide threats or instigations, intentional physical trauma, the use of illegal drugs, or excessive drinking. Under no circumstance is any User allowed to post any content promoting and/or encouraging and/or showing any self-destructive or violent behavior on scrumlr.io;
-* probing, scanning or testing the vulnerability of scrumlr.io, including the services or any network connected to the website, nor breaching the security or authentication measures on scrumlr.io, including the services or any network connected to scrumlr.io;
-* installing, embedding, uploading or otherwise incorporating any malware into or via scrumlr.io;
-* using scrumlr.io or the technical infrastructure in an abusive, excessive or otherwise inappropriate way (for example: for spamming purposes);
-* attempting to disrupt or tamper with the technical infrastructure in a manner that harms or places an undue burden on scrumlr.io or the Service;
+- pretending to fulfill any possible condition or requirements for accessing scrumlr.io and/or using the Services, such as for instance being adult according to law or qualifying as a Consumer;
+- concealing their identity or stealing someone else's identity or pretend to be or represent a third-party, if not allowed to do so by such third-party;
+- manipulating identifiers to disguise or otherwise conceal the origin of their messages or of the content posted;
+- defaming, abusing, harassing, using threatening practices, threatening or violating the legal rights of others in any other way;
+- promoting activity that may endanger the User’s life or the life of any other User or lead to physical harm. This includes but is not limited to suicide threats or instigations, intentional physical trauma, the use of illegal drugs, or excessive drinking. Under no circumstance is any User allowed to post any content promoting and/or encouraging and/or showing any self-destructive or violent behavior on scrumlr.io;
+- probing, scanning or testing the vulnerability of scrumlr.io, including the services or any network connected to the website, nor breaching the security or authentication measures on scrumlr.io, including the services or any network connected to scrumlr.io;
+- installing, embedding, uploading or otherwise incorporating any malware into or via scrumlr.io;
+- using scrumlr.io or the technical infrastructure in an abusive, excessive or otherwise inappropriate way (for example: for spamming purposes);
+- attempting to disrupt or tamper with the technical infrastructure in a manner that harms or places an undue burden on scrumlr.io or the Service;
 
 #### Excessive use of the Service
 
-* using a resource of scrumlr.io excessively in relation to other Users of scrumlr.io – in such cases, the Owner, at its sole discretion, additionally reserves the right to suspend the User’s account or limit the related activity until the User reduces the excessive consumption;
+- using a resource of scrumlr.io excessively in relation to other Users of scrumlr.io – in such cases, the Owner, at its sole discretion, additionally reserves the right to suspend the User’s account or limit the related activity until the User reduces the excessive consumption;
 
 #### Excessive use of the API
 
-* sending abusive or excessively frequent requests to the Service via the API. The Owner will determine what constitutes abuse or excessive usage of the API and additionally reserves the right to temporarily or permanently suspend access to the API by the User. In such cases, the Owner will make a reasonable attempt to alert the User prior to suspension;
+- sending abusive or excessively frequent requests to the Service via the API. The Owner will determine what constitutes abuse or excessive usage of the API and additionally reserves the right to temporarily or permanently suspend access to the API by the User. In such cases, the Owner will make a reasonable attempt to alert the User prior to suspension;
 
 #### Scraping
 
-* adopting any automated process to extract, harvest or scrape information, data and/or content from scrumlr.io and all the digital properties thereto related unless where explicitly allowed to do so by the Owner;
+- adopting any automated process to extract, harvest or scrape information, data and/or content from scrumlr.io and all the digital properties thereto related unless where explicitly allowed to do so by the Owner;
 
 #### Content restrictions
 
-* disseminating or publishing content that is unlawful, obscene, illegitimate, libelous or inappropriate;
-* publishing any content that promotes, either directly or indirectly, hate, racism, discrimination, pornography, violence;
-* disseminating or publishing any content that is false or may create unjustified alarm;
-* using scrumlr.io to publish, disseminate or otherwise provide content protected by intellectual property laws, including but not limited to patent, trademark or copyright law, unlawfully and without the legitimate right-holder’s consent;
-* using scrumlr.io to publish, disseminate or otherwise make available any other content which infringes on any third-party rights, including but not limited to state, military, trade or professional secrets and personal data;
-* publishing any content or carrying out any activity that disrupts, interrupts, harms, or otherwise violates the integrity of scrumlr.io or another User's experience or devices. Such activities include: spamming, distributing unauthorized advertisements, phishing, defrauding others, spreading malware or viruses etc.;
+- disseminating or publishing content that is unlawful, obscene, illegitimate, libelous or inappropriate;
+- publishing any content that promotes, either directly or indirectly, hate, racism, discrimination, pornography, violence;
+- disseminating or publishing any content that is false or may create unjustified alarm;
+- using scrumlr.io to publish, disseminate or otherwise provide content protected by intellectual property laws, including but not limited to patent, trademark or copyright law, unlawfully and without the legitimate right-holder’s consent;
+- using scrumlr.io to publish, disseminate or otherwise make available any other content which infringes on any third-party rights, including but not limited to state, military, trade or professional secrets and personal data;
+- publishing any content or carrying out any activity that disrupts, interrupts, harms, or otherwise violates the integrity of scrumlr.io or another User's experience or devices. Such activities include: spamming, distributing unauthorized advertisements, phishing, defrauding others, spreading malware or viruses etc.;
 
 #### User protection
 
-* misappropriating any account in use by another User;
-* harvesting or collecting any personally identifying information of other Users including but not limited to their email addresses or contact information, by circumventing the privacy setting of other Users’ accounts on scrumlr.io or by any other means;
-* using any information relating to other Users, including personal or contact data, for purposes other than those scrumlr.io is intended for;
+- misappropriating any account in use by another User;
+- harvesting or collecting any personally identifying information of other Users including but not limited to their email addresses or contact information, by circumventing the privacy setting of other Users’ accounts on scrumlr.io or by any other means;
+- using any information relating to other Users, including personal or contact data, for purposes other than those scrumlr.io is intended for;
 
 #### Commercial use restrictions
 
-* indicating or trying to imply in any manner, that a User stands in a qualified relationship with scrumlr.io or that scrumlr.io has endorsed the User, the User’s products or services or any third party's products and services for any purpose;
+- indicating or trying to imply in any manner, that a User stands in a qualified relationship with scrumlr.io or that scrumlr.io has endorsed the User, the User’s products or services or any third party's products and services for any purpose;
 
 ### Software license
 
@@ -181,7 +184,7 @@ Users may find further information regarding the license terms here.
 
 Users may access their data relating to scrumlr.io via the Application Program Interface (API). Any use of the API, including use of the API through a third-party product/service that accesses scrumlr.io, is bound by these Terms and, in addition, by the following specific terms:
 
-* the User expressly understands and agrees that the Owner bears no responsibility and shall not be held liable for any damages or losses resulting from the User’s use of the API or their use of any third-party products/services that access data through the API.
+- the User expressly understands and agrees that the Owner bears no responsibility and shall not be held liable for any damages or losses resulting from the User’s use of the API or their use of any third-party products/services that access data through the API.
 
 ## Liability and indemnification
 
@@ -192,10 +195,10 @@ This does not apply to damages to life, health or physical integrity, damages re
 Unless damages have been caused by way of intent or gross negligence, or they affect life, health or physical integrity, the Owner shall only be liable to the extent of typical and foreseeable damages at the moment the contract was entered into.
 In particular, within the limits stated above, the Owner shall not be liable for:
 
-* any loss of business opportunities and any other loss, even indirect, that may be incurred by the User (such as, but not limited to, trading losses, loss of revenue, income, profits or anticipated savings, loss of contracts or business relationships, loss of reputation or goodwill, etc.);
-* damages or losses resulting from interruptions or malfunctions of scrumlr.io due to acts of force majeure, or unforeseen and unforeseeable events and, in any case, independent of the will and beyond the control of the Owner, such as, but not limited to, failures or disruptions of telephone or electrical lines, the Internet and / or other means of transmission, unavailability of websites, strikes, natural disasters, viruses and cyber attacks, interruptions in the delivery of products, third-party services or applications;
-* any losses that are not the direct consequence of a breach of the Terms by the Owner;
-* any damage, prejudice or loss occurring due to viruses or other malware contained in or connected to files available for download from the internet or via scrumlr.io. Users are responsible for implementing sufficient security measures – such as anti-viruses and firewalls to prevent any such infection or attack and for securing backup copies of all data or information exchanged via or uploaded to scrumlr.io.
+- any loss of business opportunities and any other loss, even indirect, that may be incurred by the User (such as, but not limited to, trading losses, loss of revenue, income, profits or anticipated savings, loss of contracts or business relationships, loss of reputation or goodwill, etc.);
+- damages or losses resulting from interruptions or malfunctions of scrumlr.io due to acts of force majeure, or unforeseen and unforeseeable events and, in any case, independent of the will and beyond the control of the Owner, such as, but not limited to, failures or disruptions of telephone or electrical lines, the Internet and / or other means of transmission, unavailability of websites, strikes, natural disasters, viruses and cyber attacks, interruptions in the delivery of products, third-party services or applications;
+- any losses that are not the direct consequence of a breach of the Terms by the Owner;
+- any damage, prejudice or loss occurring due to viruses or other malware contained in or connected to files available for download from the internet or via scrumlr.io. Users are responsible for implementing sufficient security measures – such as anti-viruses and firewalls to prevent any such infection or attack and for securing backup copies of all data or information exchanged via or uploaded to scrumlr.io.
 
 ### Indemnification
 

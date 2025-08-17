@@ -1,6 +1,7 @@
 package main
 
 import (
+  "encoding/json"
   "errors"
   "fmt"
   "log"
@@ -8,17 +9,53 @@ import (
   "os"
   "strings"
 
-  "scrumlr.io/server/common"
-
-  "scrumlr.io/server/auth"
-  "scrumlr.io/server/initialize"
-
+  unleash "github.com/Unleash/unleash-client-go/v4"
   "github.com/urfave/cli/v2"
   "github.com/urfave/cli/v2/altsrc"
   "scrumlr.io/server/api"
+  "scrumlr.io/server/auth"
+  "scrumlr.io/server/common"
+  "scrumlr.io/server/initialize"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/realtime"
 )
+
+type UnleashFrontendConfig struct {
+  URL         string `json:"url"`
+  ClientKey   string `json:"clientKey"`
+  Environment string `json:"environment,omitempty"`
+  AppName     string `json:"appName,omitempty"`
+}
+
+func readUnleashFrontendEnv() *UnleashFrontendConfig {
+  url := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_URL"))
+  key := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_TOKEN"))
+  if url == "" || key == "" {
+    return nil
+  }
+  return &UnleashFrontendConfig{
+    URL:         url,
+    ClientKey:   key,
+    Environment: strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_ENV")),
+    AppName:     strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_APPNAME")),
+  }
+}
+
+func unleashConfigHTTPHandler(cfg *UnleashFrontendConfig) http.HandlerFunc {
+  return func(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodGet {
+      w.WriteHeader(http.StatusMethodNotAllowed)
+      return
+    }
+    w.Header().Set("Content-Type", "application/json")
+    w.Header().Set("Cache-Control", "no-store")
+    if cfg == nil {
+      w.WriteHeader(http.StatusNoContent)
+      return
+    }
+    _ = json.NewEncoder(w).Encode(cfg)
+  }
+}
 
 func main() {
   app := &cli.App{
@@ -40,12 +77,12 @@ func main() {
         Aliases: []string{"n"},
         EnvVars: []string{"SCRUMLR_SERVER_NATS_URL"},
         Usage:   "the `url` of the nats server",
-        Value:   "nats://localhost:4222", // nats://nats:4222
+        Value:   "nats://localhost:4222",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "redis-address",
         EnvVars: []string{"SCRUMLR_SERVER_REDIS_HOST"},
-        Usage:   "the `address` of the redis server. Example `localhost:6379`. If redis-address is set, it's used over the default nats",
+        Usage:   "the `address` of the redis server. Example `localhost:6379`. If set, used over NATS",
         Value:   "",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
@@ -70,141 +107,71 @@ func main() {
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "unsafe-key",
         EnvVars: []string{"SCRUMLR_UNSAFE_PRIVATE_KEY"},
-        Usage:   "the private key which should be replaced by the new key, that'll be used to sign the jwt's - needed in ES512 (ecdsa)",
+        Usage:   "the private key which should be replaced by the new key (ES512)",
         Value:   "",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "key",
         EnvVars: []string{"SCRUMLR_PRIVATE_KEY"},
-        Usage:   "the private key, used to sign the jwt's - needed in ES512 (ecdsa)",
+        Usage:   "the private key to sign JWTs (ES512)",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "database",
         Aliases: []string{"d"},
         EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
         Usage:   "the connection `url` for the database",
-        Value:   "postgresql://localhost:5432", // postgres://YourUserName:YourPassword@YourHostname:5432/YourDatabaseName?sslmode=disable
+        Value:   "postgresql://localhost:5432",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "base-path",
-        Aliases:  []string{"b"},
-        EnvVars:  []string{"SCRUMLR_BASE_PATH"},
-        Usage:    "the base `path` of the application (e.g. '/api'); must start with '/'",
-        Required: false,
-        Value:    "/",
+        Name:    "base-path",
+        Aliases: []string{"b"},
+        EnvVars: []string{"SCRUMLR_BASE_PATH"},
+        Usage:   "the base `path` of the application (e.g. '/api'); must start with '/'",
+        Value:   "/",
       }),
       altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:     "disable-anonymous-login",
-        EnvVars:  []string{"SCRUMLR_DISABLE_ANONYMOUS_LOGIN"},
-        Usage:    "enables/disables the login of anonymous clients",
-        Required: false,
-        Value:    false,
+        Name:    "disable-anonymous-login",
+        EnvVars: []string{"SCRUMLR_DISABLE_ANONYMOUS_LOGIN"},
+        Usage:   "enables/disables the login of anonymous clients",
+        Value:   false,
       }),
       altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:     "allow-anonymous-custom-templates",
-        EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES"},
-        Usage:    "allows custom templates to be used for anonymous clients",
-        Required: false,
-        Value:    false,
+        Name:    "allow-anonymous-custom-templates",
+        EnvVars: []string{"SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES"},
+        Usage:   "allows custom templates to be used for anonymous clients",
+        Value:   false,
       }),
       altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:     "auth-enable-experimental-file-system-store",
-        EnvVars:  []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
-        Usage:    "enables/disables experimental file system store, in order to allow larger session cookie sizes",
-        Required: false,
-        Value:    false,
+        Name:    "auth-enable-experimental-file-system-store",
+        EnvVars: []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
+        Usage:   "enables experimental file system store (larger session cookies)",
+        Value:   false,
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-callback-host",
-        Aliases:  []string{"c"},
-        EnvVars:  []string{"SCRUMLR_AUTH_CALLBACK_HOST"},
-        Usage:    "the protocol and host for the auth provider callbacks (e.g. https://scrumlr.io)",
-        Required: false,
+        Name:    "auth-callback-host",
+        Aliases: []string{"c"},
+        EnvVars: []string{"SCRUMLR_AUTH_CALLBACK_HOST"},
+        Usage:   "protocol and host for auth callbacks (e.g. https://scrumlr.io)",
       }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-google-client-id",
-        EnvVars:  []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_ID"},
-        Usage:    "the client `id` for Google",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-google-client-secret",
-        EnvVars:  []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET"},
-        Usage:    "the client `secret` for Google",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-github-client-id",
-        EnvVars:  []string{"SCRUMLR_AUTH_GITHUB_CLIENT_ID"},
-        Usage:    "the client `id` for GitHub",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-github-client-secret",
-        EnvVars:  []string{"SCRUMLR_AUTH_GITHUB_CLIENT_SECRET"},
-        Usage:    "the client `secret` for GitHub",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-microsoft-client-id",
-        EnvVars:  []string{"SCRUMLR_AUTH_MICROSOFT_CLIENT_ID"},
-        Usage:    "the client `id` for Microsoft",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-microsoft-client-secret",
-        EnvVars:  []string{"SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET"},
-        Usage:    "the client `secret` for Microsoft",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-azure-ad-tenant-id",
-        EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_TENANT_ID"},
-        Usage:    "the tenant `id` for Azure AD",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-azure-ad-client-id",
-        EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_ID"},
-        Usage:    "the client `id` for Azure AD",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-azure-ad-client-secret",
-        EnvVars:  []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET"},
-        Usage:    "the client `secret` for Azure AD",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-apple-client-id",
-        EnvVars:  []string{"SCRUMLR_AUTH_APPLE_CLIENT_ID"},
-        Usage:    "the client `id` for Apple",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-apple-client-secret",
-        EnvVars:  []string{"SCRUMLR_AUTH_APPLE_CLIENT_SECRET"},
-        Usage:    "the client `secret` for Apple",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-oidc-client-id",
-        EnvVars:  []string{"SCRUMLR_AUTH_OIDC_CLIENT_ID"},
-        Usage:    "the client `id` for OpenID Connect",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-oidc-client-secret",
-        EnvVars:  []string{"SCRUMLR_AUTH_OIDC_CLIENT_SECRET"},
-        Usage:    "the client `secret` for OpenID Connect",
-        Required: false,
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "auth-oidc-discovery-url",
-        EnvVars:  []string{"SCRUMLR_AUTH_OIDC_DISCOVERY_URL"},
-        Usage:    "URL hosting the OIDC discovery document",
-        Required: false,
-      }),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-google-client-id", EnvVars: []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-google-client-secret", EnvVars: []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-github-client-id", EnvVars: []string{"SCRUMLR_AUTH_GITHUB_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-github-client-secret", EnvVars: []string{"SCRUMLR_AUTH_GITHUB_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-microsoft-client-id", EnvVars: []string{"SCRUMLR_AUTH_MICROSOFT_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-microsoft-client-secret", EnvVars: []string{"SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-azure-ad-tenant-id", EnvVars: []string{"SCRUMLR_AUTH_AZURE_AD_TENANT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-azure-ad-client-id", EnvVars: []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-azure-ad-client-secret", EnvVars: []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-apple-client-id", EnvVars: []string{"SCRUMLR_AUTH_APPLE_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-apple-client-secret", EnvVars: []string{"SCRUMLR_AUTH_APPLE_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-oidc-client-id", EnvVars: []string{"SCRUMLR_AUTH_OIDC_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-oidc-client-secret", EnvVars: []string{"SCRUMLR_AUTH_OIDC_CLIENT_SECRET"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-oidc-discovery-url", EnvVars: []string{"SCRUMLR_AUTH_OIDC_DISCOVERY_URL"}}),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "auth-oidc-user-ident-scope",
         EnvVars: []string{"SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE"},
@@ -218,33 +185,29 @@ func main() {
         Value:   "profile",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "session-secret",
-        EnvVars:  []string{"SESSION_SECRET"},
-        Usage:    "Session secret for the authentication provider. Must be provided if an authentication provider is used.",
-        Required: false,
+        Name:    "session-secret",
+        EnvVars: []string{"SESSION_SECRET"},
+        Usage:   "Session secret (required if any auth provider is configured)",
       }),
-      altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:    "verbose",
-        Aliases: []string{"v"},
-        Usage:   "enable verbose logging",
-        Value:   false,
-      }),
-      altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:  "disable-check-origin",
-        Usage: "disable check origin (strongly suggestion to only use this for development)",
-        Value: false,
+      altsrc.NewBoolFlag(&cli.BoolFlag{Name: "verbose", Aliases: []string{"v"}, Usage: "enable verbose logging", Value: false}),
+      altsrc.NewBoolFlag(&cli.BoolFlag{Name: "disable-check-origin", Usage: "disable check origin (dev only)", Value: false}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "feedback-webhook-url", EnvVars: []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"}, Usage: "feedback webhook URL"}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "unleash-backend-url",
+        EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_URL"},
+        Usage:   "Unleash backend URL for server-side SDK",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
-        Name:     "feedback-webhook-url",
-        EnvVars:  []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"},
-        Usage:    "the url where feedback will be sent to",
-        Required: false,
+        Name:    "unleash-backend-token",
+        EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_TOKEN"},
+        Usage:   "Unleash backend API token (Authorization header)",
       }),
+
       &cli.StringFlag{
-        Name:     "config",
-        EnvVars:  []string{"SCRUMLR_CONFIG_PATH"},
-        Usage:    "TOML `filepath` to be loaded ",
-        Required: false,
+        Name:    "config",
+        EnvVars: []string{"SCRUMLR_CONFIG_PATH"},
+        Usage:   "TOML `filepath` to be loaded",
       },
     },
   }
@@ -266,7 +229,7 @@ func run(c *cli.Context) error {
   }
 
   if !c.Bool("insecure") && c.String("key") == "" {
-    return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
+    return errors.New("you may not start the application without a private key. Use '--insecure' with caution to use default keypair")
   }
 
   var rt *realtime.Broker
@@ -294,10 +257,28 @@ func run(c *cli.Context) error {
     if !strings.HasPrefix(basePath, "/") {
       return errors.New("base path must start with '/'")
     }
-
     if len(basePath) > 1 {
       basePath = strings.TrimSuffix(basePath, "/")
     }
+  }
+
+  unleashURL := strings.TrimSpace(c.String("unleash-backend-url"))
+  unleashToken := strings.TrimSpace(c.String("unleash-backend-token"))
+  if unleashURL != "" && unleashToken != "" {
+    headers := http.Header{}
+    headers.Set("Authorization", unleashToken)
+    options := []unleash.ConfigOption{
+      unleash.WithAppName("scrumlr-backend"),
+      unleash.WithUrl(unleashURL),
+      unleash.WithCustomHeaders(headers),
+      unleash.WithEnvironment(strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_ENV"))),
+    }
+    if err := unleash.Initialize(options...); err != nil {
+      return fmt.Errorf("unleash init failed: %w", err)
+    }
+    logger.Get().Infow("unleash initialized", "url", unleashURL)
+  } else {
+    logger.Get().Info("unleash not configured (missing URL or token)")
   }
 
   providersMap := make(map[string]auth.AuthProviderConfiguration)
@@ -393,7 +374,6 @@ func run(c *cli.Context) error {
     basePath,
     rt,
     authConfig,
-
     boardService,
     columnService,
     votingService,
@@ -407,7 +387,6 @@ func run(c *cli.Context) error {
     boardReactionService,
     boardTemplateService,
     columnTemplateService,
-
     c.Bool("verbose"),
     !c.Bool("disable-check-origin"),
     c.Bool("disable-anonymous-login"),
@@ -415,7 +394,20 @@ func run(c *cli.Context) error {
     c.Bool("auth-enable-experimental-file-system-store"),
   )
 
+  mux := http.NewServeMux()
+  mux.Handle("/", s)
+
+  unleashPath := "/unleash-config"
+  if basePath != "/" {
+    unleashPath = strings.TrimSuffix(basePath, "/") + "/unleash-config"
+  }
+  mux.Handle(unleashPath, unleashConfigHTTPHandler(readUnleashFrontendEnv()))
+
   port := fmt.Sprintf(":%d", c.Int("port"))
-  logger.Get().Infow("starting server", "base-path", basePath, "port", port)
-  return http.ListenAndServe(port, s)
+  logger.Get().Infow("starting server",
+    "base-path", basePath,
+    "port", port,
+    "unleash-config-endpoint", unleashPath,
+  )
+  return http.ListenAndServe(port, mux)
 }

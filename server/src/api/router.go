@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 	"os"
-	"scrumlr.io/server/sessions"
 	"time"
 
 	"scrumlr.io/server/boards"
@@ -34,6 +33,7 @@ import (
 	"scrumlr.io/server/reactions"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessionrequests"
+	"scrumlr.io/server/sessions"
 )
 
 type Server struct {
@@ -61,7 +61,6 @@ type Server struct {
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
 	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
-
 	// note: if more options come with time, it might be sensible to wrap them into a struct
 	anonymousLoginDisabled        bool
 	allowAnonymousCustomTemplates bool

@@ -51,9 +51,9 @@ jobs:
         run: yarn test --coverage --watchAll=false --passWithNoTests
 
   test-backend:
-      name: Build and Test – Backend
-      runs-on: ubuntu-latest
-      steps:
+    name: Build and Test – Backend
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -102,7 +102,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - uses: actions/setup-go@v5
         with:
@@ -140,6 +140,10 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #  - name: Run SonarQube Scan (quiet)
+      #   run: |
+      #       echo "Running SonarQube scan quietly..."
+      #      SONAR_TOKEN=${{ secrets.SONAR_TOKEN }} sonar-scanner > /dev/null 2>&1 || echo "SonarQube scan completed with suppressed output"
 
       - name: SonarQube Quality Gate
         uses: SonarSource/sonarqube-quality-gate-action@v1
@@ -159,7 +163,7 @@ jobs:
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
 
   docs_changes:
-    if : ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
@@ -248,4 +252,4 @@ jobs:
             yarn install
             yarn run start
           working-directory: ./
-          wait-on: 'http://localhost:3000'
+          wait-on: "http://localhost:3000"
