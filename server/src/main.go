@@ -47,24 +47,12 @@ type UnleashFrontendConfig struct {
   AppName     string `json:"appName,omitempty"`
 }
 
-func firstNonEmpty(vals ...string) string {
-  for _, v := range vals {
-    if s := strings.TrimSpace(v); s != "" {
-      return s
-    }
-  }
-  return ""
-}
-
-// Reads env using only FRONTEND_* variables
 func readUnleashFrontendEnv() *UnleashFrontendConfig {
   url := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_URL"))
   key := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_TOKEN"))
-
   if url == "" || key == "" {
     return nil
   }
-
   return &UnleashFrontendConfig{
     URL:         url,
     ClientKey:   key,
@@ -81,7 +69,6 @@ func unleashConfigHTTPHandler(cfg *UnleashFrontendConfig) http.HandlerFunc {
     }
     w.Header().Set("Content-Type", "application/json")
     w.Header().Set("Cache-Control", "no-store")
-
     if cfg == nil {
       w.WriteHeader(http.StatusNoContent)
       return
@@ -664,6 +651,15 @@ func run(c *cli.Context) error {
         Required: false,
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "session-secret",
+        EnvVars: []string{"SESSION_SECRET"},
+        Usage:   "Session secret (required if any auth provider is configured)",
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{Name: "verbose", Aliases: []string{"v"}, Usage: "enable verbose logging", Value: false}),
+      altsrc.NewBoolFlag(&cli.BoolFlag{Name: "disable-check-origin", Usage: "disable check origin (dev only)", Value: false}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "feedback-webhook-url", EnvVars: []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"}, Usage: "feedback webhook URL"}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "unleash-backend-url",
         EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_URL"},
         Usage:   "The URL of the Unleash backend",
@@ -702,25 +698,30 @@ func run(c *cli.Context) error {
 
   db, err := initialize.InitializeDatabase(c.String("database"))
   if err != nil {
-    return fmt.Errorf("DB init failed: %w", err)
+    return fmt.Errorf("unable to migrate database: %w", err)
   }
 
   if !c.Bool("insecure") && c.String("key") == "" {
-    return errors.New("private key required unless running with --insecure")
+    return errors.New("you may not start the application without a private key. Use '--insecure' with caution to use default keypair")
   }
 
   var rt *realtime.Broker
   if c.String("redis-address") != "" {
+    logger.Get().Infof("Connecting to redis at %v", c.String("redis-address"))
     rt, err = realtime.NewRedis(realtime.RedisServer{
       Addr:     c.String("redis-address"),
       Username: c.String("redis-username"),
       Password: c.String("redis-password"),
     })
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
+    }
   } else {
+    logger.Get().Infof("Connecting to nats at %v", c.String("nats"))
     rt, err = realtime.NewNats(c.String("nats"))
-  }
-  if err != nil {
-    logger.Get().Fatalf("realtime init failed: %v", err)
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
+    }
   }
 
   basePath := c.String("base-path")
@@ -841,16 +842,19 @@ func run(c *cli.Context) error {
     basePath,
     rt,
     authConfig,
-    boards.NewBoardService(dbConn, rt),
-    votings.NewVotingService(dbConn, rt),
-    users.NewUserService(dbConn, rt),
-    notes.NewNoteService(dbConn, rt),
-    initialize.InitializeReactionService(bun, rt),
-    boards.NewBoardSessionService(dbConn, rt),
-    health.NewHealthService(dbConn, rt),
-    feedback.NewFeedbackService(c.String("feedback-webhook-url")),
-    board_reactions.NewReactionService(dbConn, rt),
-    board_templates.NewBoardTemplateService(dbConn),
+    boardService,
+    columnService,
+    votingService,
+    userService,
+    noteService,
+    reactionService,
+    sessionService,
+    sessionRequestService,
+    healthService,
+    feedbackService,
+    boardReactionService,
+    boardTemplateService,
+    columnTemplateService,
     c.Bool("verbose"),
     !c.Bool("disable-check-origin"),
     c.Bool("disable-anonymous-login"),
@@ -859,10 +863,19 @@ func run(c *cli.Context) error {
   )
 
   mux := http.NewServeMux()
-  mux.Handle("/api/unleash-config", unleashConfigHTTPHandler(readUnleashFrontendEnv()))
   mux.Handle("/", s)
 
-  addr := fmt.Sprintf(":%d", c.Int("port"))
-  logger.Get().Infow("starting server", "addr", addr)
-  return http.ListenAndServe(addr, mux)
+  unleashPath := "/unleash-config"
+  if basePath != "/" {
+    unleashPath = strings.TrimSuffix(basePath, "/") + "/unleash-config"
+  }
+  mux.Handle(unleashPath, unleashConfigHTTPHandler(readUnleashFrontendEnv()))
+
+  port := fmt.Sprintf(":%d", c.Int("port"))
+  logger.Get().Infow("starting server",
+    "base-path", basePath,
+    "port", port,
+    "unleash-config-endpoint", unleashPath,
+  )
+  return http.ListenAndServe(port, mux)
 }

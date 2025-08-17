@@ -2,7 +2,7 @@ module scrumlr.io/server
 
 go 1.23.0
 
-toolchain go1.23.6
+toolchain go1.24.5
 
 // https://github.com/inovex/scrumlr.io/security/dependabot/108
 replace github.com/opencontainers/runc v1.1.0 => github.com/opencontainers/runc v1.1.2
@@ -75,7 +75,6 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.10 // indirect
 	github.com/lestrrat-go/backoff/v2 v2.0.8 // indirect
@@ -141,3 +140,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace scrumlr.io/server => .
