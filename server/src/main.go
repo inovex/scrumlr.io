@@ -12,7 +12,6 @@ import (
   unleash "github.com/Unleash/unleash-client-go/v4"
   "github.com/urfave/cli/v2"
   "github.com/urfave/cli/v2/altsrc"
-
   "scrumlr.io/server/api"
   "scrumlr.io/server/auth"
   "scrumlr.io/server/common"
@@ -263,7 +262,6 @@ func run(c *cli.Context) error {
     }
   }
 
-  // Unleash Backend (server-side SDK)
   unleashURL := strings.TrimSpace(c.String("unleash-backend-url"))
   unleashToken := strings.TrimSpace(c.String("unleash-backend-token"))
   if unleashURL != "" && unleashToken != "" {
