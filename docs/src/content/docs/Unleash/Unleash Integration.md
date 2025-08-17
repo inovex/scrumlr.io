@@ -35,7 +35,7 @@ Choose the appropriate method to load environment variables based on your operat
 Run the following command from your project root to load variables from `.env.development.local`:
 
 ```bash
-export $(grep -v '^#' .env.development.local | xargs)
+source .env.deveplomnet.local
 ```
 
 ### Option B: Fish Shell (macOS/Linux)
@@ -51,7 +51,7 @@ bash
 2. Then run:
 
 ```bash
-export $(grep -v '^#' .env.development.local | xargs)
+source .env.deveplomnet.local
 ```
 
 ### Option C: Windows (CMD or PowerShell)
@@ -82,7 +82,7 @@ npm install -g dotenv-cli
 ```bash
 dotenv -e .env.development.local -- go run .
 ```
-
+clear
 ## 3. Start Services
 
 After loading your `.env` file, start the backend and frontend services.
@@ -90,7 +90,7 @@ After loading your `.env` file, start the backend and frontend services.
 - **Start Backend**:
 
 ```bash
-go run .
+go run . -d "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" -v --disable-check-origin --insecure
 ```
 
 - **Start Frontend**:

@@ -10,24 +10,15 @@ import (
   "strings"
 
   unleash "github.com/Unleash/unleash-client-go/v4"
-  "github.com/joho/godotenv"
   "github.com/urfave/cli/v2"
   "github.com/urfave/cli/v2/altsrc"
 
   "scrumlr.io/server/api"
   "scrumlr.io/server/auth"
-  "scrumlr.io/server/database"
+  "scrumlr.io/server/common"
   "scrumlr.io/server/initialize"
   "scrumlr.io/server/logger"
   "scrumlr.io/server/realtime"
-  "scrumlr.io/server/services/board_reactions"
-  "scrumlr.io/server/services/board_templates"
-  "scrumlr.io/server/services/boards"
-  "scrumlr.io/server/services/feedback"
-  "scrumlr.io/server/services/health"
-  "scrumlr.io/server/services/notes"
-  "scrumlr.io/server/services/users"
-  "scrumlr.io/server/services/votings"
 )
 
 type UnleashFrontendConfig struct {
@@ -37,24 +28,12 @@ type UnleashFrontendConfig struct {
   AppName     string `json:"appName,omitempty"`
 }
 
-func firstNonEmpty(vals ...string) string {
-  for _, v := range vals {
-    if s := strings.TrimSpace(v); s != "" {
-      return s
-    }
-  }
-  return ""
-}
-
-// Reads env using only FRONTEND_* variables
 func readUnleashFrontendEnv() *UnleashFrontendConfig {
   url := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_URL"))
   key := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_TOKEN"))
-
   if url == "" || key == "" {
     return nil
   }
-
   return &UnleashFrontendConfig{
     URL:         url,
     ClientKey:   key,
@@ -71,7 +50,6 @@ func unleashConfigHTTPHandler(cfg *UnleashFrontendConfig) http.HandlerFunc {
     }
     w.Header().Set("Content-Type", "application/json")
     w.Header().Set("Cache-Control", "no-store")
-
     if cfg == nil {
       w.WriteHeader(http.StatusNoContent)
       return
@@ -81,24 +59,9 @@ func unleashConfigHTTPHandler(cfg *UnleashFrontendConfig) http.HandlerFunc {
 }
 
 func main() {
-  goEnv := os.Getenv("GO_ENV")
-  if goEnv == "" {
-    goEnv = "development"
-  }
-
-  files := []string{
-    ".env",
-    ".env.local",
-    ".env." + goEnv,
-    ".env." + goEnv + ".local",
-  }
-  if err := godotenv.Load(files...); err != nil {
-    log.Printf("warn: could not load some env files: %v", err)
-  }
-
   app := &cli.App{
     Name:      "scrumlr.io",
-    Usage:     "Scalable server for the scrumlr.io application",
+    Usage:     "Awesome & scalable server for the scrumlr.io web application",
     HelpName:  "scrumlr",
     UsageText: "scrumlr [global options]",
     Action:    run,
@@ -107,104 +70,146 @@ func main() {
         Name:    "port",
         Aliases: []string{"p"},
         EnvVars: []string{"SCRUMLR_SERVER_PORT"},
+        Usage:   "the `port` of the server to launch",
         Value:   8080,
-        Usage:   "Port for the server",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "nats",
         Aliases: []string{"n"},
         EnvVars: []string{"SCRUMLR_SERVER_NATS_URL"},
+        Usage:   "the `url` of the nats server",
         Value:   "nats://localhost:4222",
-        Usage:   "NATS server URL",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "redis-address",
         EnvVars: []string{"SCRUMLR_SERVER_REDIS_HOST"},
+        Usage:   "the `address` of the redis server. Example `localhost:6379`. If set, used over NATS",
         Value:   "",
-        Usage:   "Redis server address (use instead of NATS)",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "redis-username",
         EnvVars: []string{"SCRUMLR_SERVER_REDIS_USERNAME"},
-        Usage:   "Redis username (optional)",
+        Usage:   "the redis user (if required)",
+        Value:   "",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "redis-password",
         EnvVars: []string{"SCRUMLR_SERVER_REDIS_PASSWORD"},
-        Usage:   "Redis password (optional)",
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:    "database",
-        Aliases: []string{"d"},
-        EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
-        Value:   "postgresql://localhost:5432/scrumlr?sslmode=disable",
-        Usage:   "Database connection URL",
-      }),
-      altsrc.NewStringFlag(&cli.StringFlag{
-        Name:    "base-path",
-        Aliases: []string{"b"},
-        EnvVars: []string{"SCRUMLR_BASE_PATH"},
-        Value:   "/",
-        Usage:   "Base API path",
+        Usage:   "the redis password (if required)",
+        Value:   "",
       }),
       altsrc.NewBoolFlag(&cli.BoolFlag{
         Name:    "insecure",
         Aliases: []string{"i"},
         EnvVars: []string{"SCRUMLR_INSECURE"},
+        Usage:   "use default and embedded key to sign jwt's",
         Value:   false,
-        Usage:   "Allow default JWT signing key",
+      }),
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "unsafe-key",
+        EnvVars: []string{"SCRUMLR_UNSAFE_PRIVATE_KEY"},
+        Usage:   "the private key which should be replaced by the new key (ES512)",
+        Value:   "",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "key",
         EnvVars: []string{"SCRUMLR_PRIVATE_KEY"},
-        Usage:   "Private key for JWT signing",
+        Usage:   "the private key to sign JWTs (ES512)",
       }),
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "database",
+        Aliases: []string{"d"},
+        EnvVars: []string{"SCRUMLR_SERVER_DATABASE_URL"},
+        Usage:   "the connection `url` for the database",
+        Value:   "postgresql://localhost:5432",
+      }),
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "base-path",
+        Aliases: []string{"b"},
+        EnvVars: []string{"SCRUMLR_BASE_PATH"},
+        Usage:   "the base `path` of the application (e.g. '/api'); must start with '/'",
+        Value:   "/",
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{
+        Name:    "disable-anonymous-login",
+        EnvVars: []string{"SCRUMLR_DISABLE_ANONYMOUS_LOGIN"},
+        Usage:   "enables/disables the login of anonymous clients",
+        Value:   false,
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{
+        Name:    "allow-anonymous-custom-templates",
+        EnvVars: []string{"SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES"},
+        Usage:   "allows custom templates to be used for anonymous clients",
+        Value:   false,
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{
+        Name:    "auth-enable-experimental-file-system-store",
+        EnvVars: []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
+        Usage:   "enables experimental file system store (larger session cookies)",
+        Value:   false,
+      }),
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "auth-callback-host",
+        Aliases: []string{"c"},
+        EnvVars: []string{"SCRUMLR_AUTH_CALLBACK_HOST"},
+        Usage:   "protocol and host for auth callbacks (e.g. https://scrumlr.io)",
+      }),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-google-client-id", EnvVars: []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-google-client-secret", EnvVars: []string{"SCRUMLR_AUTH_GOOGLE_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-github-client-id", EnvVars: []string{"SCRUMLR_AUTH_GITHUB_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-github-client-secret", EnvVars: []string{"SCRUMLR_AUTH_GITHUB_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-microsoft-client-id", EnvVars: []string{"SCRUMLR_AUTH_MICROSOFT_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-microsoft-client-secret", EnvVars: []string{"SCRUMLR_AUTH_MICROSOFT_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-azure-ad-tenant-id", EnvVars: []string{"SCRUMLR_AUTH_AZURE_AD_TENANT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-azure-ad-client-id", EnvVars: []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-azure-ad-client-secret", EnvVars: []string{"SCRUMLR_AUTH_AZURE_AD_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-apple-client-id", EnvVars: []string{"SCRUMLR_AUTH_APPLE_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-apple-client-secret", EnvVars: []string{"SCRUMLR_AUTH_APPLE_CLIENT_SECRET"}}),
+
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-oidc-client-id", EnvVars: []string{"SCRUMLR_AUTH_OIDC_CLIENT_ID"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-oidc-client-secret", EnvVars: []string{"SCRUMLR_AUTH_OIDC_CLIENT_SECRET"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "auth-oidc-discovery-url", EnvVars: []string{"SCRUMLR_AUTH_OIDC_DISCOVERY_URL"}}),
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "auth-oidc-user-ident-scope",
+        EnvVars: []string{"SCRUMLR_AUTH_OIDC_USER_IDENT_SCOPE"},
+        Usage:   "JWT claim to request for the user identifier",
+        Value:   "openid",
+      }),
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "auth-oidc-user-name-scope",
+        EnvVars: []string{"SCRUMLR_AUTH_OIDC_USER_NAME_SCOPE"},
+        Usage:   "JWT claim to request for the user name",
+        Value:   "profile",
+      }),
+      altsrc.NewStringFlag(&cli.StringFlag{
+        Name:    "session-secret",
+        EnvVars: []string{"SESSION_SECRET"},
+        Usage:   "Session secret (required if any auth provider is configured)",
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{Name: "verbose", Aliases: []string{"v"}, Usage: "enable verbose logging", Value: false}),
+      altsrc.NewBoolFlag(&cli.BoolFlag{Name: "disable-check-origin", Usage: "disable check origin (dev only)", Value: false}),
+      altsrc.NewStringFlag(&cli.StringFlag{Name: "feedback-webhook-url", EnvVars: []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"}, Usage: "feedback webhook URL"}),
+
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "unleash-backend-url",
         EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_URL"},
-        Usage:   "Unleash backend URL",
+        Usage:   "Unleash backend URL for server-side SDK",
       }),
       altsrc.NewStringFlag(&cli.StringFlag{
         Name:    "unleash-backend-token",
         EnvVars: []string{"SCRUMLR_UNLEASH_BACKEND_TOKEN"},
-        Usage:   "Unleash backend token",
+        Usage:   "Unleash backend API token (Authorization header)",
       }),
-      altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:  "unleash-debug",
-        Value: false,
-        Usage: "Enable Unleash debug logging",
-      }),
+
       &cli.StringFlag{
         Name:    "config",
         EnvVars: []string{"SCRUMLR_CONFIG_PATH"},
-        Usage:   "TOML config file path",
+        Usage:   "TOML `filepath` to be loaded",
       },
-      &cli.BoolFlag{
-        Name:    "verbose",
-        Aliases: []string{"v"},
-        Usage:   "Enable verbose logging",
-      },
-      &cli.BoolFlag{
-        Name:  "disable-check-origin",
-        Usage: "Disable origin check (development only)",
-      },
-      &cli.StringFlag{
-        Name:    "feedback-webhook-url",
-        EnvVars: []string{"SCRUMLR_FEEDBACK_WEBHOOK_URL"},
-        Usage:   "URL for feedback webhook",
-      },
-      altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:  "disable-anonymous-login",
-        Usage: "Disable anonymous login",
-      }),
-      altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:  "allow-anonymous-custom-templates",
-        Usage: "Allow anonymous custom templates",
-      }),
-      altsrc.NewBoolFlag(&cli.BoolFlag{
-        Name:  "auth-enable-experimental-file-system-store",
-        Usage: "Enable experimental file system store for auth",
-      }),
     },
   }
   app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
@@ -221,40 +226,46 @@ func run(c *cli.Context) error {
 
   db, err := initialize.InitializeDatabase(c.String("database"))
   if err != nil {
-    return fmt.Errorf("DB init failed: %w", err)
+    return fmt.Errorf("unable to migrate database: %w", err)
   }
 
   if !c.Bool("insecure") && c.String("key") == "" {
-    return errors.New("private key required unless running with --insecure")
+    return errors.New("you may not start the application without a private key. Use '--insecure' with caution to use default keypair")
   }
 
   var rt *realtime.Broker
   if c.String("redis-address") != "" {
+    logger.Get().Infof("Connecting to redis at %v", c.String("redis-address"))
     rt, err = realtime.NewRedis(realtime.RedisServer{
       Addr:     c.String("redis-address"),
       Username: c.String("redis-username"),
       Password: c.String("redis-password"),
     })
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
+    }
   } else {
+    logger.Get().Infof("Connecting to nats at %v", c.String("nats"))
     rt, err = realtime.NewNats(c.String("nats"))
-  }
-  if err != nil {
-    logger.Get().Fatalf("realtime init failed: %v", err)
-  }
-
-  basePath := c.String("base-path")
-  if !strings.HasPrefix(basePath, "/") {
-    return errors.New("base-path must start with '/'")
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
+    }
   }
 
-  providersMap := make(map[string]auth.AuthProviderConfiguration)
-
-  unleashURL := c.String("unleash-backend-url")
-  unleashToken := c.String("unleash-backend-token")
-  env := os.Getenv("SCRUMLR_UNLEASH_ENV")
-  if env == "" {
-    env = "development"
+  basePath := "/"
+  if c.IsSet("base-path") {
+    basePath = c.String("base-path")
+    if !strings.HasPrefix(basePath, "/") {
+      return errors.New("base path must start with '/'")
+    }
+    if len(basePath) > 1 {
+      basePath = strings.TrimSuffix(basePath, "/")
+    }
   }
+
+  // Unleash Backend (server-side SDK)
+  unleashURL := strings.TrimSpace(c.String("unleash-backend-url"))
+  unleashToken := strings.TrimSpace(c.String("unleash-backend-token"))
   if unleashURL != "" && unleashToken != "" {
     headers := http.Header{}
     headers.Set("Authorization", unleashToken)
@@ -262,39 +273,122 @@ func run(c *cli.Context) error {
       unleash.WithAppName("scrumlr-backend"),
       unleash.WithUrl(unleashURL),
       unleash.WithCustomHeaders(headers),
-      unleash.WithEnvironment(env),
-    }
-    if c.Bool("unleash-debug") {
-      options = append(options, unleash.WithListener(&unleash.DebugListener{}))
+      unleash.WithEnvironment(strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_ENV"))),
     }
     if err := unleash.Initialize(options...); err != nil {
-      return fmt.Errorf("Unleash init failed: %w", err)
+      return fmt.Errorf("unleash init failed: %w", err)
     }
+    logger.Get().Infow("unleash initialized", "url", unleashURL)
   } else {
-    logger.Get().Warn("Unleash backend not configured, skipping")
+    logger.Get().Info("unleash not configured (missing URL or token)")
+  }
+
+  providersMap := make(map[string]auth.AuthProviderConfiguration)
+  if c.String("auth-google-client-id") != "" && c.String("auth-google-client-secret") != "" && c.String("auth-callback-host") != "" {
+    logger.Get().Info("Using google authentication")
+    providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
+      ClientId:     c.String("auth-google-client-id"),
+      ClientSecret: c.String("auth-google-client-secret"),
+      RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+    }
+  }
+  if c.String("auth-github-client-id") != "" && c.String("auth-github-client-secret") != "" && c.String("auth-callback-host") != "" {
+    logger.Get().Info("Using github authentication")
+    providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
+      ClientId:     c.String("auth-github-client-id"),
+      ClientSecret: c.String("auth-github-client-secret"),
+      RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+    }
+  }
+  if c.String("auth-microsoft-client-id") != "" && c.String("auth-microsoft-client-secret") != "" && c.String("auth-callback-host") != "" {
+    logger.Get().Info("Using microsoft authentication")
+    providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
+      ClientId:     c.String("auth-microsoft-client-id"),
+      ClientSecret: c.String("auth-microsoft-client-secret"),
+      RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+    }
+  }
+  if c.String("auth-azure-ad-tenant-id") != "" && c.String("auth-azure-ad-client-id") != "" && c.String("auth-azure-ad-client-secret") != "" && c.String("auth-callback-host") != "" {
+    logger.Get().Info("Using azure authentication")
+    providersMap[(string)(common.AzureAd)] = auth.AuthProviderConfiguration{
+      TenantId:     c.String("auth-azure-ad-tenant-id"),
+      ClientId:     c.String("auth-azure-ad-client-id"),
+      ClientSecret: c.String("auth-azure-ad-client-secret"),
+      RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+    }
+  }
+  if c.String("auth-apple-client-id") != "" && c.String("auth-apple-client-secret") != "" && c.String("auth-callback-host") != "" {
+    logger.Get().Info("Using apple authentication.")
+    providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
+      ClientId:     c.String("auth-apple-client-id"),
+      ClientSecret: c.String("auth-apple-client-secret"),
+      RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+    }
+  }
+  if c.String("auth-oidc-discovery-url") != "" && c.String("auth-oidc-client-id") != "" && c.String("auth-oidc-client-secret") != "" && c.String("auth-callback-host") != "" {
+    logger.Get().Info("Using oicd authentication.")
+    providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
+      ClientId:       c.String("auth-oidc-client-id"),
+      ClientSecret:   c.String("auth-oidc-client-secret"),
+      RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+      DiscoveryUri:   c.String("auth-oidc-discovery-url"),
+      UserIdentScope: c.String("auth-oidc-user-ident-scope"),
+      UserNameScope:  c.String("auth-oidc-user-name-scope"),
+    }
+  }
+
+  if c.String("session-secret") == "" && len(providersMap) != 0 {
+    return errors.New("you may not start the application without a session secret if an authentication provider is configured")
   }
 
   bun := initialize.InitializeBun(db, c.Bool("verbose"))
-  dbConn := database.New(bun)
-  authConfig, err := auth.NewAuthConfiguration(providersMap, "", "", dbConn)
+  initializer := initialize.NewServiceInitializer(bun, rt)
+
+  websocket := initializer.InitializeWebsocket()
+  feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
+  healthService := initializer.InitializeHealthService()
+
+  boardReactionService := initializer.InitializeBoardReactionService()
+  reactionService := initializer.InitializeReactionService()
+
+  boardTemplateService := initializer.InitializeBoardTemplateService()
+  columnTemplateService := initializer.InitializeColumnTemplateService()
+
+  votingService := initializer.InitializeVotingService()
+  noteService := initializer.InitializeNotesService(votingService)
+  columnService := initializer.InitializeColumnService(noteService)
+
+  sessionService := initializer.InitializeSessionService(columnService, noteService)
+  sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
+
+  userService := initializer.InitializeUserService(sessionService)
+
+  keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
+  unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
+  authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
   if err != nil {
-    return fmt.Errorf("auth init failed: %w", err)
+    return fmt.Errorf("unable to setup authentication: %w", err)
   }
+
+  boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
 
   s := api.New(
     basePath,
     rt,
     authConfig,
-    boards.NewBoardService(dbConn, rt),
-    votings.NewVotingService(dbConn, rt),
-    users.NewUserService(dbConn, rt),
-    notes.NewNoteService(dbConn, rt),
-    initialize.InitializeReactionService(bun, rt),
-    boards.NewBoardSessionService(dbConn, rt),
-    health.NewHealthService(dbConn, rt),
-    feedback.NewFeedbackService(c.String("feedback-webhook-url")),
-    board_reactions.NewReactionService(dbConn, rt),
-    board_templates.NewBoardTemplateService(dbConn),
+    boardService,
+    columnService,
+    votingService,
+    userService,
+    noteService,
+    reactionService,
+    sessionService,
+    sessionRequestService,
+    healthService,
+    feedbackService,
+    boardReactionService,
+    boardTemplateService,
+    columnTemplateService,
     c.Bool("verbose"),
     !c.Bool("disable-check-origin"),
     c.Bool("disable-anonymous-login"),
@@ -303,10 +397,19 @@ func run(c *cli.Context) error {
   )
 
   mux := http.NewServeMux()
-  mux.Handle("/api/unleash-config", unleashConfigHTTPHandler(readUnleashFrontendEnv()))
   mux.Handle("/", s)
 
-  addr := fmt.Sprintf(":%d", c.Int("port"))
-  logger.Get().Infow("starting server", "addr", addr)
-  return http.ListenAndServe(addr, mux)
+  unleashPath := "/unleash-config"
+  if basePath != "/" {
+    unleashPath = strings.TrimSuffix(basePath, "/") + "/unleash-config"
+  }
+  mux.Handle(unleashPath, unleashConfigHTTPHandler(readUnleashFrontendEnv()))
+
+  port := fmt.Sprintf(":%d", c.Int("port"))
+  logger.Get().Infow("starting server",
+    "base-path", basePath,
+    "port", port,
+    "unleash-config-endpoint", unleashPath,
+  )
+  return http.ListenAndServe(port, mux)
 }
