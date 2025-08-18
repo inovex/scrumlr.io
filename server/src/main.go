@@ -41,40 +41,40 @@ import (
 )
 
 type UnleashFrontendConfig struct {
-  URL         string `json:"url"`
-  ClientKey   string `json:"clientKey"`
-  Environment string `json:"environment,omitempty"`
-  AppName     string `json:"appName,omitempty"`
+	URL         string `json:"url"`
+	ClientKey   string `json:"clientKey"`
+	Environment string `json:"environment,omitempty"`
+	AppName     string `json:"appName,omitempty"`
 }
 
 func readUnleashFrontendEnv() *UnleashFrontendConfig {
-  url := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_URL"))
-  key := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_TOKEN"))
-  if url == "" || key == "" {
-    return nil
-  }
-  return &UnleashFrontendConfig{
-    URL:         url,
-    ClientKey:   key,
-    Environment: strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_ENV")),
-    AppName:     strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_APPNAME")),
-  }
+	url := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_URL"))
+	key := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_TOKEN"))
+	if url == "" || key == "" {
+		return nil
+	}
+	return &UnleashFrontendConfig{
+		URL:         url,
+		ClientKey:   key,
+		Environment: strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_ENV")),
+		AppName:     strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_APPNAME")),
+	}
 }
 
 func unleashConfigHTTPHandler(cfg *UnleashFrontendConfig) http.HandlerFunc {
-  return func(w http.ResponseWriter, r *http.Request) {
-    if r.Method != http.MethodGet {
-      w.WriteHeader(http.StatusMethodNotAllowed)
-      return
-    }
-    w.Header().Set("Content-Type", "application/json")
-    w.Header().Set("Cache-Control", "no-store")
-    if cfg == nil {
-      w.WriteHeader(http.StatusNoContent)
-      return
-    }
-    _ = json.NewEncoder(w).Encode(cfg)
-  }
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			w.WriteHeader(http.StatusMethodNotAllowed)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Cache-Control", "no-store")
+		if cfg == nil {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		_ = json.NewEncoder(w).Encode(cfg)
+	}
 }
 
 func main() {
@@ -862,20 +862,20 @@ func run(c *cli.Context) error {
     c.Bool("auth-enable-experimental-file-system-store"),
   )
 
-  mux := http.NewServeMux()
-  mux.Handle("/", s)
+	mux := http.NewServeMux()
+	mux.Handle("/", s)
 
-  unleashPath := "/unleash-config"
-  if basePath != "/" {
-    unleashPath = strings.TrimSuffix(basePath, "/") + "/unleash-config"
-  }
-  mux.Handle(unleashPath, unleashConfigHTTPHandler(readUnleashFrontendEnv()))
+	unleashPath := "/unleash-config"
+	if basePath != "/" {
+		unleashPath = strings.TrimSuffix(basePath, "/") + "/unleash-config"
+	}
+	mux.Handle(unleashPath, unleashConfigHTTPHandler(readUnleashFrontendEnv()))
 
-  port := fmt.Sprintf(":%d", c.Int("port"))
-  logger.Get().Infow("starting server",
-    "base-path", basePath,
-    "port", port,
-    "unleash-config-endpoint", unleashPath,
-  )
-  return http.ListenAndServe(port, mux)
+	port := fmt.Sprintf(":%d", c.Int("port"))
+	logger.Get().Infow("starting server",
+		"base-path", basePath,
+		"port", port,
+		"unleash-config-endpoint", unleashPath,
+	)
+	return http.ListenAndServe(port, mux)
 }
