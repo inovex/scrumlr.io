@@ -107,7 +107,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     const newColumn: TemplateColumn = {
       id: uniqueId("col"),
       template: props.templateId,
-      name: t("Templates.ColumnsConfiguratorColumn.indexedColumnPlaceholder", {index: props.columns.length + 1}),
+      name: t("Templates.ColumnsConfiguratorColumn.indexedColumnName", {index: props.columns.length + 1}),
       description: "",
       color,
       visible: true,
