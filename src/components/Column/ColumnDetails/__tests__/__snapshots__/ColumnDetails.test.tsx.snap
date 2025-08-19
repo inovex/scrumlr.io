@@ -39,6 +39,14 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
         placeholder="Add description (optional)"
       />
       <div
+        class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty"
+        style="--top-distance: 0px;"
+      >
+        <ul
+          class="emoji-suggestions__list"
+        />
+      </div>
+      <div
         class="column-details__description-mini-menu mini-menu mini-menu--small mini-menu--transparent"
       >
         <button
@@ -47,7 +55,7 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
           data-cy="undefined-item-Cancel"
           data-tooltip-content="Cancel"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Cancel3"
+          id="mini-menu-Cancel5"
         >
           <svg>
             close.svg
@@ -59,7 +67,7 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
           data-cy="undefined-item-Save"
           data-tooltip-content="Save"
           data-tooltip-id="scrumlr-tooltip"
-          id="mini-menu-Save4"
+          id="mini-menu-Save6"
         >
           <svg>
             check-done.svg
@@ -67,6 +75,15 @@ exports[`ColumnDetails should render correctly (edit) 1`] = `
         </button>
       </div>
     </div>
+    <div
+      class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty emoji-suggestions__container--relative"
+      style="--top-distance: 0px;"
+    >
+      <ul
+        class="emoji-suggestions__list"
+      />
+    </div>
+     
   </div>
 </div>
 `;
@@ -113,6 +130,15 @@ exports[`ColumnDetails should render correctly (view) 1`] = `
         Add description (optional)
       </div>
     </div>
+    <div
+      class="emoji-suggestions emoji-suggestions__container emoji-suggestions__container--empty emoji-suggestions__container--relative"
+      style="--top-distance: 0px;"
+    >
+      <ul
+        class="emoji-suggestions__list"
+      />
+    </div>
+     
   </div>
 </div>
 `;

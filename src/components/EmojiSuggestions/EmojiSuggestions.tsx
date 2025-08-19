@@ -9,11 +9,12 @@ type EmojiSuggestionsProps = {
   suggestions: EmojiData[];
   keyboardFocusedIndex: number;
   acceptSuggestion: (insertedEmoji: string) => void;
+  positionRelative?: boolean;
 };
 
 const suggestionScrollPadding = 8;
 
-export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSuggestion}: EmojiSuggestionsProps) => {
+export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSuggestion, positionRelative}: EmojiSuggestionsProps) => {
   // the refs of the elements to scroll into view
   const suggestionsRef = useRef<HTMLLIElement[]>([]);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -49,7 +50,12 @@ export const EmojiSuggestions = ({suggestions, keyboardFocusedIndex, acceptSugge
 
   return (
     <div
-      className={classNames("emoji-suggestions", "emoji-suggestions__container", {"emoji-suggestions__container--empty": suggestions.length === 0})}
+      className={classNames(
+        "emoji-suggestions",
+        "emoji-suggestions__container",
+        {"emoji-suggestions__container--empty": suggestions.length === 0},
+        {"emoji-suggestions__container--relative": positionRelative}
+      )}
       style={{"--top-distance": `${containerRect?.top ?? 0}px`} as CSSProperties}
       ref={containerRef}
     >
