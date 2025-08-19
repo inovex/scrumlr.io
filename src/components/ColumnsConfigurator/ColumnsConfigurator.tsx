@@ -5,6 +5,7 @@ import {EditableTemplateColumn, TemplateColumn} from "store/features";
 import {Color, getColorClassName, getNextColor, getPreviousColor} from "constants/colors";
 import {closestCenter, DndContext, DragEndEvent, DragOverEvent, DragOverlay, DragStartEvent, PointerSensor, useSensor, useSensors} from "@dnd-kit/core";
 import {horizontalListSortingStrategy, SortableContext} from "@dnd-kit/sortable";
+import {useTranslation} from "react-i18next";
 import {ColumnsConfiguratorColumn} from "./ColumnsConfiguratorColumn/ColumnsConfiguratorColumn";
 import {AddTemplateColumn} from "./AddTemplateColumn/AddTemplateColumn";
 import {calcPlacement} from "./ColumnsConfigurator.utils";
@@ -28,6 +29,8 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
   const [dropElementId, setDropElementId] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor));
+
+  const {t} = useTranslation();
 
   const handleDragStart = (event: DragStartEvent) => {
     const activeId = event.active.id as string;
@@ -104,7 +107,7 @@ export const ColumnsConfigurator = (props: ColumnsConfiguratorProps) => {
     const newColumn: TemplateColumn = {
       id: uniqueId("col"),
       template: props.templateId,
-      name: `Column ${props.columns.length + 1}`,
+      name: t("Templates.ColumnsConfiguratorColumn.indexedColumnPlaceholder", {index: props.columns.length + 1}),
       description: "",
       color,
       visible: true,
