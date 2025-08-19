@@ -42,7 +42,8 @@
     "ColumnsConfiguratorColumn": {
       "defaultColumnName": "Column 1",
       "defaultActionsName": "Actions",
-      "indexedColumnPlaceholder": "Column {{index}}",
+      "indexedColumnName": "Column {{index}}",
+      "namePlaceholder": "Title",
       "descriptionPlaceholder": "Description (optional)",
       "save": "Save",
       "cancel": "Cancel"
