@@ -2,14 +2,14 @@ name: Continuous Integration
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
   merge_group:
-    types: [checks_requested]
+    types: [ checks_requested ]
   workflow_run:
-    workflows: ["Package"]
-    branches: [main]
+    workflows: [ "Package" ]
+    branches: [ main ]
     types:
       - completed
 env:
@@ -51,9 +51,9 @@ jobs:
         run: yarn test --coverage --watchAll=false --passWithNoTests
 
   test-backend:
-      name: Build and Test – Backend
-      runs-on: ubuntu-latest
-      steps:
+    name: Build and Test – Backend
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -119,7 +119,6 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('server/src/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      
       - name: Download Go Modules
         if: steps.cache-go-modules.outputs.cache-hit != 'true'
         working-directory: ./server/src
@@ -128,25 +127,24 @@ jobs:
       - name: Verify Go Modules
         working-directory: ./server/src
         run: go list -m all
-      
       - name: Get coverage report
         id: coverage
         working-directory: ./server
         run: |
           make test
           sed -i 's|scrumlr.io/server/|server/src/|g' src/coverage.txt
-        
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: SonarQube Quality Gate
+        if: ${{ vars.CHECK_QUALITY_GATE == 'true' }}   # set this var only when you want the status
         uses: SonarSource/sonarqube-quality-gate-action@v1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   package:
-    needs: [test-frontend, test-backend]
+    needs: [ test-frontend, test-backend ]
     uses: ./.github/workflows/package.yml
 
   deploy_to_dev_cluster:
@@ -159,7 +157,7 @@ jobs:
       server_image_tag: ${{ needs.package.outputs.server-image-tag }}
 
   docs_changes:
-    if : ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' || github.ref_name == 'main' }}
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
