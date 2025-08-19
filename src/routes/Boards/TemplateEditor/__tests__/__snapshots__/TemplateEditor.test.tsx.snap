@@ -74,8 +74,8 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
               <input
                 autocomplete="off"
                 class="column-configurator-column-name-details__name"
-                placeholder="Name"
-                value="Default Main"
+                placeholder="Title"
+                value="Column 1"
               />
               <div
                 class="column-configurator-column-name-details__inline-description"
@@ -137,8 +137,8 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
               <input
                 autocomplete="off"
                 class="column-configurator-column-name-details__name"
-                placeholder="Name"
-                value="Default Action"
+                placeholder="Title"
+                value="Actions"
               />
               <div
                 class="column-configurator-column-name-details__inline-description"
@@ -370,7 +370,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
               <input
                 autocomplete="off"
                 class="column-configurator-column-name-details__name"
-                placeholder="Name"
+                placeholder="Title"
                 value="sample templates col name 1"
               />
               <div
@@ -433,7 +433,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
               <input
                 autocomplete="off"
                 class="column-configurator-column-name-details__name"
-                placeholder="Name"
+                placeholder="Title"
                 value="sample templates col name 2"
               />
               <div
