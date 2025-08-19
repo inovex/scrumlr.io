@@ -2,7 +2,9 @@
 
 .template-editor {
   display: grid;
-  grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
+  grid-template-columns: subgrid;
+  grid-column: bleed-start / bleed-end;
+
   grid-template-rows:
     $spacing--xs
     min-content // <- name
@@ -16,19 +18,22 @@
     56px
     52px // <- buttons
     $spacing--xs;
+
+  // the subgrid inherits [auto, 1fr, 8fr, 1fr, auto] from the parent.
+  // we place content in the 3rd column (the 8fr track) and let `columns` span all 5.
   grid-template-areas:
-    ".          .           .         .         ."
-    ".          name        name      name      ."
-    ".          .           .         .         ."
-    ".          description description description ."
-    ".          .           .         .         ."
-    ".          debug        debug      debug      ."
-    ".          columns     columns   columns   ."
-    ".          .           .         .         ."
-    ".          info        info      info      ."
-    ".          .           .         .         ."
-    ".          buttons     buttons   buttons   ."
-    ".          .           .         .         .";
+    ".       .           .           .           ."
+    ".       name        name        name        ."
+    ".       .           .           .           ."
+    ".       description description description ."
+    ".       .           .           .           ."
+    ".       debug       debug       debug       ."
+    "columns columns     columns     columns     columns"
+    ".       .           .           .           ."
+    ".       info        info        info        ."
+    ".       .           .           .           ."
+    ".       buttons     buttons     buttons     ."
+    ".       .           .           .           .";
 
   justify-items: stretch;
 
@@ -37,6 +42,10 @@
   height: 100%;
 
   overflow: hidden auto;
+}
+
+.breakout-content {
+  overflow-x: scroll;
 }
 
 .template-editor__name {

@@ -250,7 +250,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
             </table>
           </div>
         )}
-        <div className="template-editor__columns-configurator-wrapper">
+        <div className="template-editor__columns-configurator-wrapper breakout-content">
           <ColumnsConfigurator
             className="template-editor__columns-configurator"
             templateId={templateId}
