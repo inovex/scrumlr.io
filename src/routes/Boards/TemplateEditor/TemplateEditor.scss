@@ -16,20 +16,34 @@ $stable-content-width: 80%;
 
 // name, description, debug. contained width
 .template-editor__header {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing--md;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "name"
+    "description"
+    "debug";
+  row-gap: $spacing--md;
   align-self: center;
 
-  width: $stable-content-width;
   min-width: 0;
+  width: $stable-content-width;
+}
+
+.template-editor__name {
+  grid-area: name;
+}
+.template-editor__description {
+  grid-area: description;
+}
+.template-editor__debug {
+  grid-area: debug;
+  color: $pink--500;
 }
 
 // columns, mini view. width extending up to inherited bleeding edges
 .template-editor__columns {
   display: grid;
   grid-template-columns: subgrid;
-
   grid-column: bleed-start / bleed-end; // defined by parent grid
   grid-template-rows: min-content $spacing--md min-content;
 
@@ -41,21 +55,20 @@ $stable-content-width: 80%;
 
 // info, buttons. contained width like header
 .template-editor__footer {
-  width: $stable-content-width;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "info"
+    "buttons";
   align-self: center;
-  min-width: 0;
+  row-gap: $spacing--lg;
 
-  display: flex;
-  flex-direction: column;
-  gap: $spacing--lg;
+  min-width: 0;
+  width: $stable-content-width;
 }
 
 .breakout-content {
   overflow-x: auto;
-}
-
-.template-editor__debug {
-  color: $pink--500;
 }
 
 .template-editor__columns-configurator-wrapper {
@@ -95,6 +108,7 @@ $stable-content-width: 80%;
 }
 
 .template-editor__buttons {
+  grid-area: buttons;
   display: flex;
   justify-content: flex-end;
   gap: $spacing--base;
@@ -103,6 +117,7 @@ $stable-content-width: 80%;
 }
 
 @media (screen and max-width: $breakpoint--smartphone) {
+  /*
   .template-editor {
     grid-template-rows:
       $spacing--xs
@@ -135,6 +150,8 @@ $stable-content-width: 80%;
       ".          buttons     buttons   buttons   ."
       ".          .           .         .         .";
   }
+
+  */
 
   .template-editor__columns-mini-view-wrapper {
     display: initial;
