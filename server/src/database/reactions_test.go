@@ -1,8 +1,10 @@
 package database
 
 import (
-	"scrumlr.io/server/sessions"
+	"context"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
 
@@ -34,7 +36,7 @@ var reactionUserJack *sessions.DatabaseUser
 
 func testGetReaction(t *testing.T) {
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
-	r, err := reactionDb.Get(reaction.ID)
+	r, err := reactionDb.Get(context.Background(), reaction.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, reaction.ID, r.ID)
@@ -45,7 +47,7 @@ func testGetReaction(t *testing.T) {
 
 func testGetReactionsForNote(t *testing.T) {
 	notesTestA1 = fixture.MustRow("DatabaseNote.notesTestA1").(*notes.DatabaseNote)
-	r, err := reactionDb.GetAllForNote(notesTestA1.ID)
+	r, err := reactionDb.GetAllForNote(context.Background(), notesTestA1.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(r))
@@ -53,7 +55,7 @@ func testGetReactionsForNote(t *testing.T) {
 
 func testGetReactions(t *testing.T) {
 	boardTestBoard = fixture.MustRow("DatabaseBoard.notesTestBoard").(*boards.DatabaseBoard)
-	r, err := reactionDb.GetAll(boardTestBoard.ID)
+	r, err := reactionDb.GetAll(context.Background(), boardTestBoard.ID)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(r))
@@ -64,7 +66,7 @@ func testCreateReaction(t *testing.T) {
 	notesTestA1 = fixture.MustRow("DatabaseNote.notesTestA1").(*notes.DatabaseNote)
 	reactionUserJay = fixture.MustRow("DatabaseUser.jay").(*sessions.DatabaseUser)
 
-	reaction, err := reactionDb.Create(boardTestBoard.ID, reactions.DatabaseReactionInsert{
+	reaction, err := reactionDb.Create(context.Background(), boardTestBoard.ID, reactions.DatabaseReactionInsert{
 		Note:         notesTestA1.ID,
 		User:         reactionUserJay.ID,
 		ReactionType: reactions.Like,
@@ -81,7 +83,7 @@ func testCreateReactionFailsBecauseUserAlreadyReactedOnThatNote(t *testing.T) {
 	notesTestA1 = fixture.MustRow("DatabaseNote.notesTestA1").(*notes.DatabaseNote)
 	reactionUserJack = fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
-	_, err := reactionDb.Create(boardTestBoard.ID, reactions.DatabaseReactionInsert{
+	_, err := reactionDb.Create(context.Background(), boardTestBoard.ID, reactions.DatabaseReactionInsert{
 		Note:         notesTestA1.ID,
 		User:         reactionUserJack.ID,
 		ReactionType: reactions.Like,
@@ -97,7 +99,7 @@ func testUpdateReaction(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	r, err := reactionDb.Update(board.ID, user.ID, reaction.ID, reactions.DatabaseReactionUpdate{
+	r, err := reactionDb.Update(context.Background(), board.ID, user.ID, reaction.ID, reactions.DatabaseReactionUpdate{
 		ReactionType: newReactionType,
 	})
 
@@ -113,7 +115,7 @@ func testUpdateReactionFailsBecauseForbidden(t *testing.T) {
 	wrongUser := fixture.MustRow("DatabaseUser.jane").(*sessions.DatabaseUser)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	_, err := reactionDb.Update(board.ID, wrongUser.ID, reaction.ID, reactions.DatabaseReactionUpdate{
+	_, err := reactionDb.Update(context.Background(), board.ID, wrongUser.ID, reaction.ID, reactions.DatabaseReactionUpdate{
 		ReactionType: newReactionType,
 	})
 
@@ -127,7 +129,7 @@ func testDeleteReaction(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.jane").(*sessions.DatabaseUser)
 	reaction := fixture.MustRow("DatabaseReaction.reactionB").(*reactions.DatabaseReaction)
 
-	err := reactionDb.Delete(board.ID, user.ID, reaction.ID)
+	err := reactionDb.Delete(context.Background(), board.ID, user.ID, reaction.ID)
 
 	assert.Nil(t, err)
 }
@@ -137,7 +139,7 @@ func testDeleteReactionFailsBecauseForbidden(t *testing.T) {
 	wrongUser := fixture.MustRow("DatabaseUser.jane").(*sessions.DatabaseUser)
 	reaction := fixture.MustRow("DatabaseReaction.reactionA").(*reactions.DatabaseReaction)
 
-	err := reactionDb.Delete(board.ID, wrongUser.ID, reaction.ID)
+	err := reactionDb.Delete(context.Background(), board.ID, wrongUser.ID, reaction.ID)
 
 	assert.NotNil(t, err)
 	assert.Error(t, err)
