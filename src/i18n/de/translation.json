@@ -29,7 +29,9 @@
       "column_one": "{{count}} Spalte",
       "column_other": "{{count}} Spalten",
       "start": "Starten",
-      "save": "Speichern"
+      "save": "Speichern",
+      "signInToCreateBoards": "Melde dich an, um eigene Boards zu erstellen.",
+      "anonymousCannotCreateBoards": "Anonyme Benutzer können keine neuen Boards erstellen"
     },
     "TemplateEditor": {
       "createTitle": "Erstelle eine Vorlage",

@@ -29,7 +29,9 @@
       "column_one": "{{count}} Column",
       "column_other": "{{count}} Columns",
       "start": "Start",
-      "save": "Save"
+      "save": "Save",
+      "signInToCreateBoards": "Sign in to create a board.",
+      "anonymousCannotCreateBoards": "Anonymous users cannot create new boards"
     },
     "TemplateEditor": {
       "createTitle": "Create a Template",
