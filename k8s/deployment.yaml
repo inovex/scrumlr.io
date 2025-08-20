@@ -89,6 +89,8 @@ spec:
               value: "/api"
             - name: SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES
               value: "true"
+            - name: SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION
+              value: "true"
           ports:
             - containerPort: 8080
 ---

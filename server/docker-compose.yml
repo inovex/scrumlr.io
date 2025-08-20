@@ -44,6 +44,7 @@ services:
       SCRUMLR_SERVER_NATS_URL: "nats://nats:4222"
       SCRUMLR_SERVER_DATABASE_URL: "postgres://admin:supersecret@database:5432/scrumlr?sslmode=disable"
       SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES: true
+      SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION: true
     depends_on:
       database:
         condition: service_healthy
