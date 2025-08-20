@@ -23,7 +23,7 @@ import (
 	"scrumlr.io/server/logger"
 )
 
-func SetupOTelSDK(ctx context.Context, otelGrpcEndpoint *string, otelHttpEndpoint *string) (shutdown func(context.Context) error, err error) {
+func SetupOTelSDK(ctx context.Context, otelGrpcEndpoint string, otelHttpEndpoint string) (shutdown func(context.Context) error, err error) {
 	var shutdownFuncs []func(context.Context) error
 
 	shutdown = func(ctx context.Context) error {
@@ -42,8 +42,8 @@ func SetupOTelSDK(ctx context.Context, otelGrpcEndpoint *string, otelHttpEndpoin
 	propagator := newPropagator()
 	otel.SetTextMapPropagator(propagator)
 
-	if otelGrpcEndpoint != nil {
-		grpcConnection, ex := initConnection(*otelGrpcEndpoint)
+	if otelGrpcEndpoint != "" {
+		grpcConnection, ex := initConnection(otelGrpcEndpoint)
 		if ex != nil {
 			handleErr(ex)
 			return
@@ -77,8 +77,8 @@ func SetupOTelSDK(ctx context.Context, otelGrpcEndpoint *string, otelHttpEndpoin
 		global.SetLoggerProvider(loggerProvider)
 		logger.EnableOtelLogging()
 
-	} else if otelHttpEndpoint != nil {
-		traceProvider, ex := newHttpTraceProvider(ctx, *otelHttpEndpoint)
+	} else if otelHttpEndpoint != "" {
+		traceProvider, ex := newHttpTraceProvider(ctx, otelHttpEndpoint)
 		if ex != nil {
 			handleErr(ex)
 			return
@@ -87,7 +87,7 @@ func SetupOTelSDK(ctx context.Context, otelGrpcEndpoint *string, otelHttpEndpoin
 		shutdownFuncs = append(shutdownFuncs, traceProvider.Shutdown)
 		otel.SetTracerProvider(traceProvider)
 
-		meterProvider, ex := newHttpMeterProvider(ctx, *otelHttpEndpoint)
+		meterProvider, ex := newHttpMeterProvider(ctx, otelHttpEndpoint)
 		if ex != nil {
 			handleErr(ex)
 			return
@@ -96,7 +96,7 @@ func SetupOTelSDK(ctx context.Context, otelGrpcEndpoint *string, otelHttpEndpoin
 		shutdownFuncs = append(shutdownFuncs, meterProvider.Shutdown)
 		otel.SetMeterProvider(meterProvider)
 
-		loggerProvider, ex := newHttpLoggerProvider(ctx, *otelHttpEndpoint)
+		loggerProvider, ex := newHttpLoggerProvider(ctx, otelHttpEndpoint)
 		if ex != nil {
 			handleErr(ex)
 			return

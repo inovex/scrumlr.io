@@ -233,6 +233,18 @@ func main() {
 				Required: false,
 			}),
 			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "otel-grpc",
+				EnvVars:  []string{"SCRUMLR_OTEL_GRPC"},
+				Usage:    "grpc connection string for an OpenTelemetry collector",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "otel-http",
+				EnvVars:  []string{"SCRUMLR_OTEL_HTTP"},
+				Usage:    "http connection string for an OpenTelemetry collector",
+				Required: false,
+			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
 				Name:     "log-level",
 				EnvVars:  []string{"SCRUMLR_LOG_LEVEL"},
 				Aliases:  []string{"l"},
@@ -278,6 +290,14 @@ func run(c *cli.Context) error {
 		logger.SetLogLevel("DEBUG")
 		logger.Get().Warnln("Verbose logging is set through the verbose flag. This will be deprecated. Use the SCRUMLR_LOG_LEVEL environment variable")
 	}
+
+	otelShutdown, err := initialize.SetupOTelSDK(c.Context, c.String("otel-grpc"), c.String("otel-http"))
+	if err != nil {
+		return fmt.Errorf("failed to setup OpenTelemetry: %w", err)
+	}
+	defer func() {
+		err = errors.Join(err, otelShutdown(c.Context))
+	}()
 
 	db, err := initialize.InitializeDatabase(c.String("database"))
 	if err != nil {
