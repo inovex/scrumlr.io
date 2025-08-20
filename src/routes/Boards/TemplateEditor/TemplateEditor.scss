@@ -153,6 +153,14 @@ $stable-content-width: 80%;
 
   */
 
+  // on smaller screens, align all content to bleeding edges
+  .template-editor__header,
+  .template-editor__footer {
+    width: 100%; // override stable content width
+    grid-template-columns: subgrid;
+    grid-column: bleed-start / bleed-end;
+  }
+
   .template-editor__columns-mini-view-wrapper {
     display: initial;
   }
