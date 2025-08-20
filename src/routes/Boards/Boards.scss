@@ -115,8 +115,7 @@ $side-padding--desktop: 14vw;
   justify-content: stretch;
 
   margin-top: $spacing--xl;
-
-  overflow-y: hidden;
+  overflow-y: auto;
 
   &--extended-top {
     margin-top: $spacing--xl;
