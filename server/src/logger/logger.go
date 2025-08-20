@@ -4,9 +4,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi/v5/middleware"
+	"go.opentelemetry.io/contrib/bridges/otelzap"
+	"go.opentelemetry.io/otel/log/global"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -62,6 +65,7 @@ func EnableDevelopmentLogger() {
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
 }
+
 // EnableOtelLogger constructs a logger that logs to the consol and to OpenTelemtry and overrites the default logger
 func EnableOtelLogging() {
 	provider := global.GetLoggerProvider()
