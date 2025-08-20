@@ -24,6 +24,7 @@ import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
 import {toggleRecommendedFavourite} from "store/features/templates";
+import {Tooltip} from "components/Tooltip";
 import sortBy from "lodash/sortBy";
 import "./Templates.scss";
 
@@ -45,6 +46,8 @@ export const Templates = () => {
 
   const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
   const allowAnonymousCustomTemplates = useAppSelector((state) => state.view.allowAnonymousCustomTemplates);
+  const allowAnonymousBoardCreation = useAppSelector((state) => state.view.allowAnonymousBoardCreation);
+  const canCreateBoard = !isAnonymous || allowAnonymousBoardCreation;
   const showCustomTemplates = !isAnonymous || allowAnonymousCustomTemplates;
 
   const showCreateTemplateView = () => navigate("../create");
@@ -199,6 +202,8 @@ export const Templates = () => {
                 template={mergeTemplateWithColumns(template)}
                 onSelectTemplate={onSelectTemplateWithColumns}
                 onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "RECOMMENDED")}
+                disabled={!canCreateBoard}
+                disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
                 key={template.id}
               />
             ))}
@@ -223,6 +228,8 @@ export const Templates = () => {
                   onDeleteTemplate={deleteTemplateAndColumns}
                   onNavigateToEdit={navigateToEdit}
                   onToggleFavourite={(id, fav) => toggleFavourite(id, fav, "CUSTOM")}
+                  disabled={!canCreateBoard}
+                  disabledReason={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
                   key={template.id}
                 />
               ))}
@@ -230,6 +237,7 @@ export const Templates = () => {
           </section>
         )}
       </div>
+      <Tooltip id="template-card-tooltip" />
     </>
   );
 };
