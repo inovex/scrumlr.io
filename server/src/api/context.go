@@ -189,6 +189,21 @@ func (s *Server) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
 	})
 }
 
+func (s *Server) AnonymousBoardCreationContext(next http.Handler) http.Handler {
+  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    log := logger.FromRequest(r)
+
+    if !s.allowAnonymousBoardCreation {
+      log.Errorw("it is not allowed to create new boards, when logged in anonymously")
+      common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to create boards anonymously")))
+      return
+    }
+
+    next.ServeHTTP(w, r)
+  })
+}
+
+
 func (s *Server) ColumnContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnParam := chi.URLParam(r, "column")

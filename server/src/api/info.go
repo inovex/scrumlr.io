@@ -12,6 +12,7 @@ type Info struct {
   AuthProvider                  []common.AccountType `json:"authProvider"`
   AnonymousLoginDisabled        bool                 `json:"anonymousLoginDisabled"`
   AllowAnonymousCustomTemplates bool                 `json:"allowAnonymousCustomTemplates"`
+  AllowAnonymousBoardCreation   bool                 `json:"allowAnonymousBoardCreation"`
   ServerTime                    time.Time            `json:"serverTime"`
   FeedbackEnabled               bool                 `json:"feedbackEnabled"`
 }
@@ -23,6 +24,8 @@ func (s *Server) getServerInfo(w http.ResponseWriter, r *http.Request) {
   info.AnonymousLoginDisabled = s.anonymousLoginDisabled
 
   info.AllowAnonymousCustomTemplates = s.allowAnonymousCustomTemplates
+
+  info.AllowAnonymousBoardCreation = s.allowAnonymousBoardCreation
 
   if s.auth.Exists(common.Google) {
     info.AuthProvider = append(info.AuthProvider, common.Google)
