@@ -184,6 +184,7 @@ export default (overwrite?: Partial<ApplicationState>): ApplicationState => ({
     serverTimeOffset: 0,
     anonymousLoginDisabled: false,
     allowAnonymousCustomTemplates: true,
+    allowAnonymousBoardCreation: true,
     enabledAuthProvider: [],
     feedbackEnabled: false,
     hotkeysAreActive: true,
