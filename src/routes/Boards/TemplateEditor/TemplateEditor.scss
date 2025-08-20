@@ -67,10 +67,6 @@ $stable-content-width: 80%;
   width: $stable-content-width;
 }
 
-.breakout-content {
-  overflow-x: auto;
-}
-
 .template-editor__columns-configurator-wrapper {
   grid-area: columns;
 
@@ -81,6 +77,8 @@ $stable-content-width: 80%;
   // lock scrolling
   max-width: 100%;
   height: max-content; // correct height!
+
+  overflow-x: auto;
 }
 
 .template-editor__columns-mini-view-wrapper {
