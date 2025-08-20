@@ -2,6 +2,8 @@
 
 $content-gap: 10px;
 $border-width: 2px;
+$height--default: 52px;
+$height--small: 46px;
 
 .button {
   all: unset;
@@ -13,6 +15,7 @@ $border-width: 2px;
   align-items: center;
   gap: $content-gap;
 
+  height: $height--default;
   box-sizing: border-box;
 
   @include compensate-padding($spacing--base $spacing--xl, $border-width);
@@ -28,6 +31,7 @@ $border-width: 2px;
   }
 
   &--small {
+    height: $height--small;
     gap: $spacing--xxs;
 
     @include compensate-padding(6px $spacing--base, $border-width);
