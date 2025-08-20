@@ -82,10 +82,14 @@ export const TemplateCard = (props: TemplateCardProps) => {
         }}
       />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={template.name} disabled />
+        <input className="template-card__title" type="text" value={props.templateType === "RECOMMENDED" ? t(template.name, {ns: "templates"}) : template.name} disabled />
       </div>
       {renderMenu()}
-      <TextareaAutosize className={classNames("template-card__description")} value={template.description} disabled />
+      <TextareaAutosize
+        className={classNames("template-card__description")}
+        value={props.templateType === "RECOMMENDED" ? t(template.description, {ns: "templates"}) : template.description}
+        disabled
+      />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: columns.length})}</div>
