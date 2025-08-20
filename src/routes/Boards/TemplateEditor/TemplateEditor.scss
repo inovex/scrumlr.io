@@ -1,63 +1,60 @@
 @import "src/constants/style";
 
+$stable-content-width: 80%;
+
 .template-editor {
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-column: bleed-start / bleed-end;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--xl;
 
-  grid-template-rows:
-    $spacing--xs
-    min-content // <- name
-    16px
-    min-content // <- description
-    36px
-    min-content // <- debug
-    min-content // <- columns config
-    24px
-    min-content // info
-    56px
-    52px // <- buttons
-    $spacing--xs;
-
-  // the subgrid inherits [auto, 1fr, 8fr, 1fr, auto] from the parent.
-  // we place content in the 3rd column (the 8fr track) and let `columns` span all 5.
-  grid-template-areas:
-    ".       .           .           .           ."
-    ".       name        name        name        ."
-    ".       .           .           .           ."
-    ".       description description description ."
-    ".       .           .           .           ."
-    ".       debug       debug       debug       ."
-    "columns columns     columns     columns     columns"
-    ".       .           .           .           ."
-    ".       info        info        info        ."
-    ".       .           .           .           ."
-    ".       buttons     buttons     buttons     ."
-    ".       .           .           .           .";
-
-  justify-items: stretch;
-
+  min-width: 0;
   width: 100%;
   max-width: 100%;
-  height: 100%;
 
-  overflow: hidden auto;
+  overflow: visible;
+}
+
+// name, description, debug. contained width
+.template-editor__header {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--md;
+  align-self: center;
+
+  width: $stable-content-width;
+  min-width: 0;
+}
+
+// columns, mini view. width extending up to inherited bleeding edges
+.template-editor__columns {
+  display: grid;
+  grid-template-columns: subgrid;
+
+  grid-column: bleed-start / bleed-end; // defined by parent grid
+  grid-template-rows: min-content $spacing--md min-content;
+
+  grid-template-areas:
+    "columns"
+    "."
+    "mini";
+}
+
+// info, buttons. contained width like header
+.template-editor__footer {
+  width: $stable-content-width;
+  align-self: center;
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--lg;
 }
 
 .breakout-content {
-  overflow-x: scroll;
-}
-
-.template-editor__name {
-  grid-area: name;
-}
-
-.template-editor__description {
-  grid-area: description;
+  overflow-x: auto;
 }
 
 .template-editor__debug {
-  grid-area: debug;
   color: $pink--500;
 }
 
@@ -98,12 +95,11 @@
 }
 
 .template-editor__buttons {
-  grid-area: buttons;
-  justify-self: end;
-
   display: flex;
-  flex-direction: row;
+  justify-content: flex-end;
   gap: $spacing--base;
+
+  width: 100%;
 }
 
 @media (screen and max-width: $breakpoint--smartphone) {
