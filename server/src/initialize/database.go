@@ -16,6 +16,8 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"scrumlr.io/server/logger"
 )
 
@@ -60,7 +62,7 @@ func InitializeDatabase(databaseUrl string) (*sql.DB, error) {
 	return nil, err
 }
 
-func InitializeBun(db *sql.DB, verbose bool) *bun.DB {
+func InitializeBun(db *sql.DB, logLevel zapcore.Level) *bun.DB {
 	d := bun.NewDB(db, pgdialect.New())
 	maxOpenConnections := 4 * runtime.GOMAXPROCS(0)
 	d.SetMaxOpenConns(maxOpenConnections)
@@ -71,7 +73,7 @@ func InitializeBun(db *sql.DB, verbose bool) *bun.DB {
 		bunotel.WithMeterProvider(meterProvider),
 	))
 
-	if verbose {
+	if logLevel == zap.DebugLevel {
 		d.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 	}
 

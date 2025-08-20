@@ -4,21 +4,54 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi/v5/middleware"
+	"go.opentelemetry.io/contrib/bridges/otelzap"
+	"go.opentelemetry.io/otel/log/global"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var _logger *zap.SugaredLogger
+var _logLevel zapcore.Level = zap.InfoLevel
 
 type ctxLoggerKey int
 
 const ctxRequestLogger ctxLoggerKey = iota
 
 func init() {
+	createLogger()
+}
+
+// Initialze a new logger with the given log level.
+// If the level does not match set the level to 'INFO'
+func SetLogLevel(logLevel string) {
+	switch logLevel {
+	case "DEBUG":
+		_logLevel = zap.DebugLevel
+	case "INFO":
+		_logLevel = zap.InfoLevel
+	case "WARN":
+		_logLevel = zap.WarnLevel
+	case "ERROR":
+		_logLevel = zap.ErrorLevel
+	case "FATAL":
+		_logLevel = zap.FatalLevel
+	default:
+		_logLevel = zap.InfoLevel
+	}
+	createLogger()
+}
+
+func GetLogLevel() zapcore.Level {
+	return _logLevel
+}
+
+func createLogger() {
 	loggerConfig := zap.NewProductionConfig()
-	loggerConfig.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
+	loggerConfig.Level = zap.NewAtomicLevelAt(_logLevel)
 	loggerConfig.EncoderConfig.StacktraceKey = "" //remove stacktrace from logging
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
@@ -28,10 +61,11 @@ func init() {
 // this is only for development
 func EnableDevelopmentLogger() {
 	loggerConfig := zap.NewDevelopmentConfig()
-	loggerConfig.Level = zap.NewAtomicLevelAt(zap.InfoLevel)
+	loggerConfig.Level = zap.NewAtomicLevelAt(_logLevel)
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
 }
+
 // EnableOtelLogger constructs a logger that logs to the consol and to OpenTelemtry and overrites the default logger
 func EnableOtelLogging() {
 	provider := global.GetLoggerProvider()

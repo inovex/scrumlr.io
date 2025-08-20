@@ -8,6 +8,7 @@ import (
 	"os"
 	"strings"
 
+	"go.uber.org/zap"
 	"scrumlr.io/server/common"
 
 	"scrumlr.io/server/auth"
@@ -242,6 +243,14 @@ func main() {
 				Usage:    "http connection string for an OpenTelemetry collector",
 				Required: false,
 			}),
+			altsrc.NewStringFlag(&cli.StringFlag{
+				Name:     "log-level",
+				EnvVars:  []string{"SCRUMLR_LOG_LEVEL"},
+				Aliases:  []string{"l"},
+				Usage:    "Log level for the logger. Can be one of 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'. Defaults to INFO.",
+				Required: false,
+				Value:    "INFO",
+			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:    "verbose",
 				Aliases: []string{"v"},
@@ -275,6 +284,12 @@ func main() {
 }
 
 func run(c *cli.Context) error {
+	logger.SetLogLevel(c.String("log-level"))
+	if c.Bool("verbose") {
+		logger.SetLogLevel("DEBUG")
+		logger.Get().Warnln("Verbose logging is set through the verbose flag. This will be deprecated. Use the SCRUMLR_LOG_LEVEL environment variable")
+	}
+
 	otelShutdown, err := initialize.SetupOTelSDK(c.Context, c.String("otel-grpc"), c.String("otel-http"))
 	if err != nil {
 		return fmt.Errorf("failed to setup OpenTelemetry: %w", err)
@@ -381,7 +396,7 @@ func run(c *cli.Context) error {
 		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
 
-	bun := initialize.InitializeBun(db, c.Bool("verbose"))
+	bun := initialize.InitializeBun(db, logger.GetLogLevel())
 	initializer := initialize.NewServiceInitializer(bun, rt)
 
 	websocket := initializer.InitializeWebsocket()
@@ -431,7 +446,7 @@ func run(c *cli.Context) error {
 		boardTemplateService,
 		columnTemplateService,
 
-		c.Bool("verbose"),
+		logger.GetLogLevel() == zap.DebugLevel || c.Bool("verbose"),
 		!c.Bool("disable-check-origin"),
 		c.Bool("disable-anonymous-login"),
 		c.Bool("allow-anonymous-custom-templates"),
