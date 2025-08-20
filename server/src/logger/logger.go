@@ -62,6 +62,20 @@ func EnableDevelopmentLogger() {
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
 }
+// EnableOtelLogger constructs a logger that logs to the consol and to OpenTelemtry and overrites the default logger
+func EnableOtelLogging() {
+	provider := global.GetLoggerProvider()
+
+	config := zap.NewProductionEncoderConfig()
+	config.StacktraceKey = ""
+
+	core := zapcore.NewTee(
+		zapcore.NewCore(zapcore.NewJSONEncoder(config), zapcore.AddSync(os.Stdout), _logLevel),
+		otelzap.NewCore("scrumlr.io/server/", otelzap.WithLoggerProvider(provider)),
+	)
+
+	_logger = zap.New(core).Sugar()
+}
 
 // Get returns the current default SugaredLogger
 func Get() *zap.SugaredLogger {
