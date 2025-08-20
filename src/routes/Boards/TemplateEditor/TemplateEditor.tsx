@@ -204,7 +204,7 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
   return (
     <>
       <div className="template-editor">
-        <section className="template-editor__header">
+        <section className={classNames("template-editor__header", {"template-editor__header--include-debug": debug})}>
           <div className="template-editor__name">
             <Input
               className="template-editor__name-input"

@@ -17,9 +17,9 @@ $side-padding--desktop: 14vw;
   grid-template-columns:
     $side-padding--desktop
     [bleed-start] auto // logo
-    1fr // left gutter for breakout
-    minmax(0, 8fr) // main content area (80%)
-    1fr // right gutter for breakout
+    auto // left gutter for breakout
+    1fr
+    auto // right gutter for breakout
     auto [bleed-end] // user
     $side-padding--desktop;
 
@@ -114,7 +114,6 @@ $side-padding--desktop: 14vw;
   display: flex;
   justify-content: stretch;
 
-  margin-top: $spacing--xl;
   overflow-y: auto;
 
   &--extended-top {
@@ -140,7 +139,7 @@ $side-padding--desktop: 14vw;
         ".  .      .      .     ."
         ".  logo   title  user  ."
         ".  .      title  .     ."
-        ".  .      main   .     ."
+        ".  main   main   main  ."
         ".  .      .      .     .";
     }
   }
@@ -164,9 +163,7 @@ $side-padding--desktop: 14vw;
       "main main     main    main    main    main     main";
 
     &--view-type-edit {
-      // stretch main to full width
       grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
-      // adds a row where the mobile search bar resides,
       grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 1fr;
       grid-template-areas:
         ".    .        .       .       .       .        ."
@@ -174,7 +171,7 @@ $side-padding--desktop: 14vw;
         ".    .        .       .       .       .        ."
         ".    title    title   title   title   title    ."
         ".    .        .       .       .       .        ."
-        "main main     main    main    main    main     main";
+        ".    main     main    main    main    main     .";
     }
   }
 
