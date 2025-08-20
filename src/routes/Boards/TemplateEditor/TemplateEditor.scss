@@ -120,42 +120,6 @@ $stable-content-width: 80%;
 }
 
 @media (screen and max-width: $breakpoint--smartphone) {
-  /*
-  .template-editor {
-    grid-template-rows:
-      $spacing--xs
-      min-content // <- name
-      20px
-      min-content // <- description
-      46px
-      min-content // <- debug
-      min-content // <- columns config
-      16px
-      min-content // <- mini columns
-      24px
-      min-content // info
-      56px
-      52px // <- buttons
-      $spacing--xs;
-    grid-template-areas:
-      ".          .           .         .         ."
-      ".          name        name      name      ."
-      ".          .           .         .         ."
-      ".          description description description ."
-      ".          .           .         .         ."
-      ".          debug        debug      debug      ."
-      ".          columns     columns   columns   ."
-      ".          .           .         .         ."
-      ".          mini        mini      mini      ."
-      ".          .           .         .         ."
-      ".          info        info      info      ."
-      ".          .           .         .         ."
-      ".          buttons     buttons   buttons   ."
-      ".          .           .         .         .";
-  }
-
-  */
-
   // on smaller screens, align all content to bleeding edges
   .template-editor__header,
   .template-editor__footer {
