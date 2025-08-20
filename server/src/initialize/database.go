@@ -12,6 +12,8 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"scrumlr.io/server/logger"
 )
 
@@ -53,13 +55,13 @@ func InitializeDatabase(databaseUrl string) (*sql.DB, error) {
 	return nil, err
 }
 
-func InitializeBun(db *sql.DB, verbose bool) *bun.DB {
+func InitializeBun(db *sql.DB, logLevel zapcore.Level) *bun.DB {
 	d := bun.NewDB(db, pgdialect.New())
 	maxOpenConnections := 4 * runtime.GOMAXPROCS(0)
 	d.SetMaxOpenConns(maxOpenConnections)
 	d.SetMaxIdleConns(maxOpenConnections)
 
-	if verbose {
+	if logLevel == zap.DebugLevel {
 		d.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
 	}
 
