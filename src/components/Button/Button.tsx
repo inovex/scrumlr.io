@@ -13,6 +13,9 @@ type ButtonProps = {
   disabled?: boolean;
   small?: boolean;
   icon?: ReactNode;
+  title?: string;
+  dataTooltipId?: string;
+  dataTooltipContent?: string;
 
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
 
@@ -33,6 +36,9 @@ export const Button = (props: ButtonProps) => (
     )}
     disabled={props.disabled}
     onClick={props.onClick}
+    title={props.title}
+    data-tooltip-id={props.dataTooltipId}
+    data-tooltip-content={props.dataTooltipContent}
     data-cy={props.dataCy}
   >
     {props.children}
