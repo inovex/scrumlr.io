@@ -1,16 +1,7 @@
 import classNames from "classnames";
 import {Outlet, useOutletContext, useNavigate, useLocation} from "react-router";
 import {useAppSelector, useAppDispatch} from "store";
-import {
-  createBoardFromTemplate,
-  CreateSessionAccessPolicy,
-  deleteTemplate,
-  getTemplates,
-  ImportReducedTemplateWithColumns,
-  setTemplateFavourite,
-  Template,
-  TemplateWithColumns,
-} from "store/features";
+import {createBoardFromTemplate, CreateSessionAccessPolicy, deleteTemplate, getTemplates, setTemplateFavourite, Template, TemplateWithColumns} from "store/features";
 import {useTranslation} from "react-i18next";
 import {useEffect, useRef, useState} from "react";
 import {CreateTemplateCard, TemplateCard} from "components/Templates";
@@ -19,7 +10,6 @@ import StanDark from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Dark.png";
 import StanLight from "assets/stan/Stan_Hanging_With_Coffee_Cropped_Light.png";
 import {ReactComponent as ArrowLeft} from "assets/icons/arrow-left.svg";
 import {ReactComponent as ArrowRight} from "assets/icons/arrow-right.svg";
-import templatesJsonRaw from "constants/recommendedTemplates.json";
 import {DEFAULT_TEMPLATE_ID} from "constants/templates";
 import {Portal} from "components/Portal";
 import {AccessSettings} from "components/Templates/AccessSettings/AccessSettings";
@@ -51,24 +41,6 @@ export const Templates = () => {
 
   const templates = useAppSelector((state) => state.templates);
   const templateColumns = useAppSelector((state) => state.templateColumns);
-
-  // Helper to get columns for recommended templates from JSON, matching by template id
-  // data like ids will be populated dynamically.
-  const recommendedTemplatesJson: ImportReducedTemplateWithColumns[] = templatesJsonRaw as ImportReducedTemplateWithColumns[];
-  const getRecommendedColumns = (templateId: string) => {
-    const idx = templates.findIndex((template) => template.id === templateId && template.type === "RECOMMENDED");
-    if (idx === -1) return [];
-    const jsonTemplate = recommendedTemplatesJson[idx];
-    if (!jsonTemplate) return [];
-    return jsonTemplate.columns.map((column, indexColumn) => ({
-      ...column,
-      id: `column-${idx}-${indexColumn}`,
-      template: templateId,
-      index: indexColumn,
-      name: t(column.name, {ns: "templates"}),
-      description: t(column.description, {ns: "templates"}),
-    }));
-  };
 
   // init templates
   useEffect(() => {
@@ -131,18 +103,8 @@ export const Templates = () => {
   // default template, which is in the state should not be shown.
   const excludeDefaultTemplate = (template: Template) => template.id !== DEFAULT_TEMPLATE_ID;
 
-  // ironically, since templates and their columns are handled separately, we need to stitch them back together
-  // to a common object in order to avoid losing information (since recommended templates don't have associated cols)
-  // merging template with columns, using JSON for recommended, Redux for custom
+  // stitch template and associated columns back together
   const mergeTemplateWithColumns = (template: Template): TemplateWithColumns => {
-    if (template.type === "RECOMMENDED") {
-      const translatedTemplate = {
-        ...template,
-        name: t(template.name, {ns: "templates"}),
-        description: t(template.description, {ns: "templates"}),
-      };
-      return {template: translatedTemplate, columns: getRecommendedColumns(template.id)};
-    }
     const associatedColumns = templateColumns.filter((tc) => tc.template === template.id);
     return {template, columns: associatedColumns};
   };
