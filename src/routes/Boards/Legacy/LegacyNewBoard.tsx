@@ -3,7 +3,7 @@ import React, {useRef, useState} from "react";
 import {AccessPolicy, BoardImportData, CreateSessionAccessPolicy} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
-import {useAppDispatch} from "store";
+import {useAppDispatch, useAppSelector} from "store";
 import {importBoard} from "store/features";
 import {Toast} from "utils/Toast";
 import {AccessPolicySelection} from "components/AccessPolicySelection";
@@ -29,6 +29,10 @@ export const LegacyNewBoard = () => {
   const [loadedFile, setFile] = useState<File>();
   const [completeBoard, setImportBoard] = useState<BoardImportData>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const isAnonymous = useAppSelector((state) => state.auth.user?.isAnonymous);
+  const allowAnonymousBoardCreation = useAppSelector((state) => state.view.allowAnonymousBoardCreation);
+  const canCreateBoard = !isAnonymous || allowAnonymousBoardCreation;
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -118,8 +122,8 @@ export const LegacyNewBoard = () => {
     }
   };
 
-  const isCreatedBoardDisabled = !columnTemplate || (accessPolicy === "BY_PASSPHRASE" && !passphrase);
-  const isImportBoardDisabled = !(loadedFile && loadedFile.size > 0) || accessPolicy === "BY_PASSPHRASE";
+  const isCreatedBoardDisabled = !canCreateBoard || !columnTemplate || (accessPolicy === "BY_PASSPHRASE" && !passphrase);
+  const isImportBoardDisabled = !canCreateBoard || !(loadedFile && loadedFile.size > 0) || accessPolicy === "BY_PASSPHRASE";
   return (
     <div className="new-board__wrapper">
       <div className="new-board">
@@ -198,11 +202,23 @@ export const LegacyNewBoard = () => {
       </div>
       <div className="new-board__actions">
         {!importFile ? (
-          <LegacyButton className="new-board__action" onClick={onCreateBoard} color="primary" disabled={isCreatedBoardDisabled}>
+          <LegacyButton
+            className="new-board__action"
+            onClick={onCreateBoard}
+            color="primary"
+            disabled={isCreatedBoardDisabled}
+            title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
+          >
             {t("LegacyNewBoard.createNewBoard")}
           </LegacyButton>
         ) : (
-          <LegacyButton className="new-board__action" onClick={onImportBoard} color="primary" disabled={isImportBoardDisabled}>
+          <LegacyButton
+            className="new-board__action"
+            onClick={onImportBoard}
+            color="primary"
+            disabled={isImportBoardDisabled}
+            title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
+          >
             {t("LegacyNewBoard.importNewBoard")}
           </LegacyButton>
         )}
