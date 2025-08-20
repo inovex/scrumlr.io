@@ -12,11 +12,18 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/extra/bundebug"
+	"github.com/uptrace/bun/extra/bunotel"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/logger"
 )
 
 //go:embed migrations/sql
 var Migrations embed.FS
+
+var traceProvider trace.TracerProvider = otel.GetTracerProvider()
+var meterProvider metric.MeterProvider = otel.GetMeterProvider()
 
 func InitializeDatabase(databaseUrl string) (*sql.DB, error) {
 	db, err := sql.Open("postgres", databaseUrl)
@@ -58,6 +65,11 @@ func InitializeBun(db *sql.DB, verbose bool) *bun.DB {
 	maxOpenConnections := 4 * runtime.GOMAXPROCS(0)
 	d.SetMaxOpenConns(maxOpenConnections)
 	d.SetMaxIdleConns(maxOpenConnections)
+	d.AddQueryHook(bunotel.NewQueryHook(
+		bunotel.WithDBName("scruml-database"),
+		bunotel.WithTracerProvider(traceProvider),
+		bunotel.WithMeterProvider(meterProvider),
+	))
 
 	if verbose {
 		d.AddQueryHook(bundebug.NewQueryHook(bundebug.WithVerbose(true)))
