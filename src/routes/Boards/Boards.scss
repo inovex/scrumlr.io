@@ -164,14 +164,15 @@ $side-padding--desktop: 14vw;
 
     &--view-type-edit {
       grid-template-columns: $spacing--md auto auto 1fr auto auto $spacing--md;
-      grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 1fr;
+      grid-template-rows: $spacing--md 56px $spacing--sm 32px $spacing--md 1fr $spacing--md;
       grid-template-areas:
         ".    .        .       .       .       .        ."
         ".    logo     .       .       .       user     ."
         ".    .        .       .       .       .        ."
         ".    title    title   title   title   title    ."
         ".    .        .       .       .       .        ."
-        ".    main     main    main    main    main     .";
+        ".    main     main    main    main    main     ."
+        ".    .        .       .       .       .        .";
     }
   }
 
