@@ -16,7 +16,7 @@ import (
 func TestGetReaction(t *testing.T) {
 	id := uuid.New()
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Get(id).Return(DatabaseReaction{ID: id, Note: uuid.New(), User: uuid.New(), ReactionType: Like}, nil)
+	mockReactionDb.EXPECT().Get(mock.Anything, id).Return(DatabaseReaction{ID: id, Note: uuid.New(), User: uuid.New(), ReactionType: Like}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -33,7 +33,7 @@ func TestGetReaction_NotFound(t *testing.T) {
 	id := uuid.New()
 	dbError := "Not found"
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Get(id).Return(DatabaseReaction{}, errors.New(dbError))
+	mockReactionDb.EXPECT().Get(mock.Anything, id).Return(DatabaseReaction{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -49,7 +49,7 @@ func TestGetReaction_NotFound(t *testing.T) {
 func TestListReactions(t *testing.T) {
 	boardId := uuid.New()
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().GetAll(boardId).Return([]DatabaseReaction{{bun.BaseModel{}, uuid.New(), uuid.New(), uuid.New(), Heart}, {bun.BaseModel{}, uuid.New(), uuid.New(), uuid.New(), Joy}}, nil)
+	mockReactionDb.EXPECT().GetAll(mock.Anything, boardId).Return([]DatabaseReaction{{bun.BaseModel{}, uuid.New(), uuid.New(), uuid.New(), Heart}, {bun.BaseModel{}, uuid.New(), uuid.New(), uuid.New(), Joy}}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -66,7 +66,7 @@ func TestListReactions_NotFound(t *testing.T) {
 	boardId := uuid.New()
 	dbError := "Not found"
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().GetAll(boardId).Return(nil, errors.New(dbError))
+	mockReactionDb.EXPECT().GetAll(mock.Anything, boardId).Return(nil, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -82,7 +82,7 @@ func TestListReactions_NotFound(t *testing.T) {
 func TestCreateReaction(t *testing.T) {
 	boardId := uuid.New()
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Create(boardId, DatabaseReactionInsert{}).Return(DatabaseReaction{}, nil)
+	mockReactionDb.EXPECT().Create(mock.Anything, boardId, DatabaseReactionInsert{}).Return(DatabaseReaction{}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -100,7 +100,7 @@ func TestCreateReaction_Failed(t *testing.T) {
 	boardId := uuid.New()
 	dbError := "Cannot create reaction"
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Create(boardId, DatabaseReactionInsert{}).Return(DatabaseReaction{}, errors.New(dbError))
+	mockReactionDb.EXPECT().Create(mock.Anything, boardId, DatabaseReactionInsert{}).Return(DatabaseReaction{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -118,7 +118,7 @@ func TestDeleteReaction(t *testing.T) {
 	userId := uuid.New()
 	reactionId := uuid.New()
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Delete(boardId, userId, reactionId).Return(nil)
+	mockReactionDb.EXPECT().Delete(mock.Anything, boardId, userId, reactionId).Return(nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -137,7 +137,7 @@ func TestDeleteReaction_Failed(t *testing.T) {
 	reactionId := uuid.New()
 	dbError := "Cannot delete reaction"
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Delete(boardId, userId, reactionId).Return(errors.New(dbError))
+	mockReactionDb.EXPECT().Delete(mock.Anything, boardId, userId, reactionId).Return(errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -155,7 +155,7 @@ func TestUpdateReaction(t *testing.T) {
 	userId := uuid.New()
 	reactionId := uuid.New()
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Update(boardId, userId, reactionId, DatabaseReactionUpdate{}).Return(DatabaseReaction{}, nil)
+	mockReactionDb.EXPECT().Update(mock.Anything, boardId, userId, reactionId, DatabaseReactionUpdate{}).Return(DatabaseReaction{}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
@@ -175,7 +175,7 @@ func TestUpdateReaction_Failed(t *testing.T) {
 	reactionId := uuid.New()
 	dbError := "Cannot update reaction"
 	mockReactionDb := NewMockReactionDatabase(t)
-	mockReactionDb.EXPECT().Update(boardId, userId, reactionId, DatabaseReactionUpdate{}).Return(DatabaseReaction{}, errors.New(dbError))
+	mockReactionDb.EXPECT().Update(mock.Anything, boardId, userId, reactionId, DatabaseReactionUpdate{}).Return(DatabaseReaction{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
