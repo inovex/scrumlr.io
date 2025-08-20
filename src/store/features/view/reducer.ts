@@ -28,6 +28,7 @@ const initialState: ViewState = {
   serverTimeOffset: 0,
   anonymousLoginDisabled: false,
   allowAnonymousCustomTemplates: false,
+  allowAnonymousBoardCreation: false,
   enabledAuthProvider: [],
   feedbackEnabled: false,
   hotkeysAreActive: true,

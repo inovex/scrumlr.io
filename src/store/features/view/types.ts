@@ -26,6 +26,8 @@ export interface View {
 
   allowAnonymousCustomTemplates: boolean;
 
+  allowAnonymousBoardCreation: boolean;
+
   enabledAuthProvider: string[];
 
   feedbackEnabled: boolean;
