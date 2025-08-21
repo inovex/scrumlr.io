@@ -1,5 +1,5 @@
 import {API} from "api";
-import React, {useRef, useState} from "react";
+import React, {useCallback, useMemo, useRef, useState} from "react";
 import {AccessPolicy, BoardImportData, CreateSessionAccessPolicy} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
@@ -122,8 +122,15 @@ export const LegacyNewBoard = () => {
     }
   };
 
-  const isCreatedBoardDisabled = !canCreateBoard || !columnTemplate || (accessPolicy === "BY_PASSPHRASE" && !passphrase);
-  const isImportBoardDisabled = !canCreateBoard || !(loadedFile && loadedFile.size > 0) || accessPolicy === "BY_PASSPHRASE";
+  const isCreateButtonDisabled = useMemo(
+    () => !canCreateBoard || !columnTemplate || (accessPolicy === "BY_PASSPHRASE" && !passphrase),
+    [canCreateBoard, columnTemplate, accessPolicy, passphrase]
+  );
+
+  const isImportButtonDisabled = useMemo(
+    () => !canCreateBoard || !(loadedFile && loadedFile.size > 0) || accessPolicy === "BY_PASSPHRASE",
+    [canCreateBoard, loadedFile, accessPolicy]
+  );
   return (
     <div className="new-board__wrapper">
       <div className="new-board">
@@ -206,7 +213,7 @@ export const LegacyNewBoard = () => {
             className="new-board__action"
             onClick={onCreateBoard}
             color="primary"
-            disabled={isCreatedBoardDisabled}
+            disabled={isCreateButtonDisabled}
             title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
           >
             {t("LegacyNewBoard.createNewBoard")}
@@ -216,7 +223,7 @@ export const LegacyNewBoard = () => {
             className="new-board__action"
             onClick={onImportBoard}
             color="primary"
-            disabled={isImportBoardDisabled}
+            disabled={isImportButtonDisabled}
             title={!canCreateBoard ? t("Templates.TemplateCard.signInToCreateBoards") : undefined}
           >
             {t("LegacyNewBoard.importNewBoard")}
