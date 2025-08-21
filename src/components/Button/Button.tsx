@@ -13,8 +13,11 @@ type ButtonProps = {
   disabled?: boolean;
   small?: boolean;
   icon?: ReactNode;
+  /** Tooltip text shown on hover */
   title?: string;
+  /** ID for react-tooltip integration */
   dataTooltipId?: string;
+  /** Content for react-tooltip */
   dataTooltipContent?: string;
 
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
