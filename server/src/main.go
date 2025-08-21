@@ -108,7 +108,7 @@ func main() {
 				Value:    false,
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
-				Name:     "allow-anonymous-user-board-creation",
+				Name:     "allow-anonymous-board-creation",
 				EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION"},
 				Usage:    "allows anonymous clients to create new boards",
 				Required: false,
@@ -419,7 +419,7 @@ func run(c *cli.Context) error {
     !c.Bool("disable-check-origin"),
     c.Bool("disable-anonymous-login"),
     c.Bool("allow-anonymous-custom-templates"),
-    c.Bool("allow-anonymous-user-board-creation"),
+    c.Bool("allow-anonymous-board-creation"),
     c.Bool("auth-enable-experimental-file-system-store"),
   )
 

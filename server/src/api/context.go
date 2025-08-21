@@ -193,7 +193,13 @@ func (s *Server) AnonymousBoardCreationContext(next http.Handler) http.Handler {
   return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     log := logger.FromRequest(r)
 
-    userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+    userIDValue := r.Context().Value(identifiers.UserIdentifier)
+    userID, ok := userIDValue.(uuid.UUID)
+    if !ok {
+      log.Errorw("invalid or missing user identifier in context")
+      common.Throw(w, r, common.InternalServerError)
+      return
+    }
 
     user, err := s.users.Get(r.Context(), userID)
     if err != nil {
@@ -202,8 +208,8 @@ func (s *Server) AnonymousBoardCreationContext(next http.Handler) http.Handler {
       return
     }
 
-    if user.AccountType == common.Anonymous && !s.allowAnonymousBoardCreation{
-      log.Errorw("it is not allowed to create new boards, when logged in anonymously")
+    if user.AccountType == common.Anonymous && !s.allowAnonymousBoardCreation {
+      log.Errorw("anonymous board creation not allowed")
       common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to create boards anonymously")))
       return
     }
@@ -211,7 +217,6 @@ func (s *Server) AnonymousBoardCreationContext(next http.Handler) http.Handler {
     next.ServeHTTP(w, r)
   })
 }
-
 
 func (s *Server) ColumnContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

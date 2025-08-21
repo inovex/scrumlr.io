@@ -46,7 +46,7 @@ func TestAnonymousBoardCreationContext(t *testing.T) {
 			expectedToCallNext:            true,
 		},
 		{
-			name:                          "anonymous user cannot create boards when flag is disabled",
+			name:                          "anonymous user receives 403 forbidden when allowAnonymousBoardCreation is false",
 			allowAnonymousBoardCreation:   false,
 			userAccountType:               common.Anonymous,
 			expectedStatus:                http.StatusForbidden,
