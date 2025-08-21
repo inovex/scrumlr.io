@@ -14,7 +14,9 @@ const renderRecommendedTemplateCard = (
     onSelectTemplate?: (template: TemplateWithColumns) => void;
     onToggleFavourite?: (templateId: string, favourite: boolean) => void;
   } = {},
-  favourite: boolean = false
+  favourite: boolean = false,
+  disabled: boolean = false,
+  disabledReason?: string
 ) => {
   const templateWithColumns = getTemplateAndColumnsByTemplateId({...getTestApplicationState()}, templateId)!;
   const patchedTemplateWithColumns = {
@@ -24,7 +26,16 @@ const renderRecommendedTemplateCard = (
       favourite,
     },
   };
-  return render(<TemplateCard template={patchedTemplateWithColumns} templateType="RECOMMENDED" onSelectTemplate={onSelectTemplate} onToggleFavourite={onToggleFavourite} />);
+  return render(
+    <TemplateCard
+      template={patchedTemplateWithColumns}
+      templateType="RECOMMENDED"
+      onSelectTemplate={onSelectTemplate}
+      onToggleFavourite={onToggleFavourite}
+      disabled={disabled}
+      disabledReason={disabledReason}
+    />
+  );
 };
 
 const renderCustomTemplateCard = (
@@ -39,7 +50,9 @@ const renderCustomTemplateCard = (
     onDeleteTemplate?: (templateId: string) => void;
     onToggleFavourite?: (templateId: string, favourite: boolean) => void;
     onNavigateToEdit?: (templateId: string) => void;
-  } = {}
+  } = {},
+  disabled: boolean = false,
+  disabledReason?: string
 ) => {
   const templateWithColumns = getTemplateAndColumnsByTemplateId({...getTestApplicationState()}, templateId)!;
 
@@ -51,6 +64,8 @@ const renderCustomTemplateCard = (
       onDeleteTemplate={onDeleteTemplate}
       onToggleFavourite={onToggleFavourite}
       onNavigateToEdit={onNavigateToEdit}
+      disabled={disabled}
+      disabledReason={disabledReason}
     />
   );
 };
@@ -156,5 +171,72 @@ describe("TemplateCard", () => {
     clickMiniMenuItem(container, "Edit");
 
     expect(onNavigateToEdit).toHaveBeenCalledWith("test-templates-id-1");
+  });
+
+  describe("disabled state", () => {
+    it("should render disabled template card with disabled styling", () => {
+      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {}, false, true, "Sign in to create boards");
+
+      expect(container.querySelector(".template-card")).toHaveClass("template-card--disabled");
+    });
+
+    it("should disable start button when template card is disabled", () => {
+      const onSelectTemplate = jest.fn();
+      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onSelectTemplate}, false, true, "Sign in to create boards");
+
+      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
+      expect(startButton).toBeDisabled();
+    });
+
+    it("should show tooltip on disabled start button", () => {
+      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {}, false, true, "Anonymous users cannot create boards");
+
+      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
+      expect(startButton).toHaveAttribute("data-tooltip-id", "template-card-tooltip");
+      expect(startButton).toHaveAttribute("data-tooltip-content", "Anonymous users cannot create boards");
+    });
+
+    it("should not call onSelectTemplate when disabled start button is clicked", () => {
+      const onSelectTemplate = jest.fn();
+      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onSelectTemplate}, false, true, "Sign in to create boards");
+
+      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
+      act(() => fireEvent.click(startButton));
+
+      expect(onSelectTemplate).not.toHaveBeenCalled();
+    });
+
+    it("should not show tooltip attributes when template card is enabled", () => {
+      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {}, false, false);
+
+      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
+      expect(startButton).not.toHaveAttribute("data-tooltip-id");
+      expect(startButton).not.toHaveAttribute("data-tooltip-content");
+      expect(startButton).not.toBeDisabled();
+    });
+
+    it("should still allow favourite functionality when template card is disabled", () => {
+      const onToggleFavourite = jest.fn();
+      const {container} = renderRecommendedTemplateCard("test-templates-id-1", {onToggleFavourite}, false, true, "Sign in to create boards");
+
+      const favouriteButton = container.querySelector<HTMLButtonElement>(".template-card__favourite")!;
+      act(() => fireEvent.click(favouriteButton));
+
+      expect(onToggleFavourite).toHaveBeenCalledWith("test-templates-id-1", true);
+    });
+
+    it("should work with custom template cards when disabled", () => {
+      const onSelectTemplate = jest.fn();
+      const {container} = renderCustomTemplateCard("test-templates-id-1", {onSelectTemplate}, true, "Custom disabled reason");
+
+      expect(container.querySelector(".template-card")).toHaveClass("template-card--disabled");
+
+      const startButton = container.querySelector<HTMLButtonElement>(".template-card__start-button--start")!;
+      expect(startButton).toBeDisabled();
+      expect(startButton).toHaveAttribute("data-tooltip-content", "Custom disabled reason");
+
+      act(() => fireEvent.click(startButton));
+      expect(onSelectTemplate).not.toHaveBeenCalled();
+    });
   });
 });

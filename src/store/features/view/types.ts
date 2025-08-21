@@ -9,6 +9,7 @@ export type ServerInfo = {
   anonymousLoginDisabled: boolean;
   enabledAuthProvider: string[];
   allowAnonymousCustomTemplates: boolean;
+  allowAnonymousBoardCreation: boolean;
   serverTime: number;
   feedbackEnabled: boolean;
 };
