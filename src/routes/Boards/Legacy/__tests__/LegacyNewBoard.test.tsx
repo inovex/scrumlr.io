@@ -3,6 +3,8 @@ import {LegacyNewBoard} from "../LegacyNewBoard";
 import {fireEvent, screen, waitFor} from "@testing-library/react";
 import {ApplicationState} from "store";
 import getTestApplicationState from "utils/test/getTestApplicationState";
+import getTestStore from "utils/test/getTestStore";
+import {Provider} from "react-redux";
 import {API} from "api";
 
 // Mock the API
@@ -28,21 +30,13 @@ describe("LegacyNewBoard", () => {
   });
 
   const renderLegacyNewBoard = (state?: Partial<ApplicationState>) => {
-    const mergedState = {
-      ...defaultState,
-      view: {
-        ...defaultState.view,
-        ...state?.view,
-      },
-      auth: {
-        ...defaultState.auth,
-        ...state?.auth,
-      },
-      ...state,
-    };
-    return render(<LegacyNewBoard />, {
-      preloadedState: mergedState,
-    });
+    const createLegacyNewBoardWithState = (
+      <Provider store={getTestStore(state)}>
+        <LegacyNewBoard />
+      </Provider>
+    );
+
+    return render(createLegacyNewBoardWithState);
   };
 
   it("should render correctly for authenticated users", () => {
@@ -73,6 +67,7 @@ describe("LegacyNewBoard", () => {
           name: "Anonymous User",
           isAnonymous: true,
         },
+        initializationSucceeded: true,
       },
       view: {
         allowAnonymousBoardCreation: true,
@@ -93,6 +88,7 @@ describe("LegacyNewBoard", () => {
           name: "Anonymous User",
           isAnonymous: true,
         },
+        initializationSucceeded: true,
       },
       view: {
         allowAnonymousBoardCreation: false,
@@ -113,6 +109,7 @@ describe("LegacyNewBoard", () => {
           name: "Anonymous User",
           isAnonymous: true,
         },
+        initializationSucceeded: true,
       },
       view: {
         allowAnonymousBoardCreation: false,
@@ -122,9 +119,8 @@ describe("LegacyNewBoard", () => {
     renderLegacyNewBoard(state);
 
     const createButton = screen.getByRole("button", {name: "Create new Board"});
-    // In the test environment, the tooltip logic might not be working as expected
-    // TODO: This needs investigation
     expect(createButton).toBeDisabled();
+    expect(createButton).toHaveAttribute("title", "Sign in to create a board.");
   });
 
   it("should disable import board button for anonymous users when board creation is disabled", () => {
@@ -135,6 +131,7 @@ describe("LegacyNewBoard", () => {
           name: "Anonymous User",
           isAnonymous: true,
         },
+        initializationSucceeded: true,
       },
       view: {
         allowAnonymousBoardCreation: false,
@@ -159,6 +156,7 @@ describe("LegacyNewBoard", () => {
           name: "Anonymous User",
           isAnonymous: true,
         },
+        initializationSucceeded: true,
       },
       view: {
         allowAnonymousBoardCreation: false,
@@ -172,9 +170,8 @@ describe("LegacyNewBoard", () => {
     fireEvent.click(importFileLabel);
 
     const importButton = screen.getByRole("button", {name: "Import now"});
-    // In the test environment, the tooltip logic might not be working as expected
-    // TODO: This needs investigation
     expect(importButton).toBeDisabled();
+    expect(importButton).toHaveAttribute("title", "Sign in to create a board.");
   });
 
   it("should enable create board button when template is selected and user can create boards", () => {
@@ -209,6 +206,7 @@ describe("LegacyNewBoard", () => {
           name: "Anonymous User",
           isAnonymous: true,
         },
+        initializationSucceeded: true,
       },
       view: {
         allowAnonymousBoardCreation: true,
@@ -262,6 +260,7 @@ describe("LegacyNewBoard", () => {
           name: "Anonymous User",
           isAnonymous: true,
         },
+        initializationSucceeded: true,
       },
       view: {
         allowAnonymousBoardCreation: false,
@@ -275,14 +274,17 @@ describe("LegacyNewBoard", () => {
     fireEvent.click(leanCoffeeOption);
 
     const createButton = screen.getByRole("button", {name: "Create new Board"});
+
+    // Button should be disabled because canCreateBoard is false
+    expect(createButton).toBeDisabled();
+
+    // Try to click the disabled button
     fireEvent.click(createButton);
 
-    // In the current test setup, the button is enabled after template selection
-    // This suggests the state management in tests isn't working as expected
-    // For now, we'll expect the API call to be made since the button becomes enabled
+    // Since the button is disabled, API should not be called
     await waitFor(() => {
-      expect(API.createBoard).toHaveBeenCalled();
-      expect(mockNavigate).toHaveBeenCalled();
+      expect(API.createBoard).not.toHaveBeenCalled();
+      expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
 
@@ -355,6 +357,7 @@ describe("LegacyNewBoard", () => {
           name: "Anonymous User",
           isAnonymous: true,
         },
+        initializationSucceeded: true,
       },
       view: {
         allowAnonymousBoardCreation: false,
@@ -373,9 +376,6 @@ describe("LegacyNewBoard", () => {
     fireEvent.click(leanCoffeeOption);
 
     // After selecting template, button should still be disabled because !canCreateBoard is true
-    // But the current implementation logic seems to have some issues with state merging in tests
-    // Let's update the test to reflect the actual working behavior for now
-    // TODO: This needs investigation - button becomes enabled even for anonymous users
-    expect(createButton).not.toBeDisabled(); // This is the current behavior
+    expect(createButton).toBeDisabled();
   });
 });
