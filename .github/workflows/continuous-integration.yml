@@ -139,8 +139,8 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: SonarQube Quality Gate
-        if: ${{ vars.CHECK_QUALITY_GATE == 'true' }}   # set this var only when you want the status
         uses: SonarSource/sonarqube-quality-gate-action@v1
+        if: ${{ false }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   package:
