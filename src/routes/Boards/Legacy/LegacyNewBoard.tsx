@@ -1,5 +1,5 @@
 import {API} from "api";
-import React, {useCallback, useMemo, useRef, useState} from "react";
+import React, {useMemo, useRef, useState} from "react";
 import {AccessPolicy, BoardImportData, CreateSessionAccessPolicy} from "store/features/board/types";
 import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router";
