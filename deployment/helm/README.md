@@ -13,7 +13,7 @@
 
 ### Development
 
-We provide a [Makefile](./scrumlr/Makefile) with the most commen commands you need to develop the helm chart
+We provide a [Makefile](./scrumlr/Makefile) with the most common commands you need to develop the helm chart
 
 - `make render`: renders the helm chart in the `.render` folder
 - `make clean`: removes the `.render` folder
@@ -49,7 +49,7 @@ The tiltfile deploys a minimal deployment for scrumlr, which consist out of a na
 the scrumlr helm chart.
 *Note*: For the scrumlr helm chart you need to provide a private key.
 
-*Note*: Befor you start tilt make sure to set the right kube config for the cluster you want to test the scrumlr helm chart.
+*Note*: Before you start tilt make sure to set the right kube config for the cluster you want to test the scrumlr helm chart.
 To start tilt change the directory and use
 
 ```bash
