@@ -213,8 +213,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
     if (
       USER_NOT_READY &&
       ((timerExpired && state.activeVoting) || // timer expired during voting
-        (USED_VOTES && state.activeVoting) || // used all votes during voting
-        (USED_VOTES && state.activeTimer)) // used all votes during timer
+        (USED_VOTES && state.activeVoting)) // used all votes during voting
     ) {
       timer = setTimeout(handleTimeout, 2000);
     }
