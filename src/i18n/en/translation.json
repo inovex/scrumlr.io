@@ -30,8 +30,7 @@
       "column_other": "{{count}} Columns",
       "start": "Start",
       "save": "Save",
-      "signInToCreateBoards": "Sign in to create a board.",
-      "anonymousCannotCreateBoards": "Anonymous users cannot create new boards"
+      "signInToCreateBoards": "To create a board, please sign in with your Google or Microsoft account."
     },
     "TemplateEditor": {
       "createTitle": "Create a Template",

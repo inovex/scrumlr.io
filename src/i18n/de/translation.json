@@ -30,8 +30,7 @@
       "column_other": "{{count}} Spalten",
       "start": "Starten",
       "save": "Speichern",
-      "signInToCreateBoards": "Melde dich an, um eigene Boards zu erstellen.",
-      "anonymousCannotCreateBoards": "Anonyme Benutzer können keine neuen Boards erstellen"
+      "signInToCreateBoards": "Um eigene Boards zu erstellen, melde dich bitte mit deinem Microsoft oder Google Konto an."
     },
     "TemplateEditor": {
       "createTitle": "Erstelle eine Vorlage",
