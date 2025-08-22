@@ -1,23 +1,23 @@
 package main
 
 import (
-  "errors"
-  "fmt"
-  "log"
-  "net/http"
-  "os"
-  "strings"
+	"errors"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"strings"
 
-  "scrumlr.io/server/common"
+	"scrumlr.io/server/common"
 
-  "scrumlr.io/server/auth"
-  "scrumlr.io/server/initialize"
+	"scrumlr.io/server/auth"
+	"scrumlr.io/server/initialize"
 
-  "github.com/urfave/cli/v2"
-  "github.com/urfave/cli/v2/altsrc"
-  "scrumlr.io/server/api"
-  "scrumlr.io/server/logger"
-  "scrumlr.io/server/realtime"
+	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v2/altsrc"
+	"scrumlr.io/server/api"
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/realtime"
 )
 
 func main() {
@@ -112,7 +112,7 @@ func main() {
 				EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION"},
 				Usage:    "allows anonymous clients to create new boards",
 				Required: false,
-				Value:    false,
+				Value:    true,
 			}),
 			altsrc.NewBoolFlag(&cli.BoolFlag{
 				Name:     "auth-enable-experimental-file-system-store",
@@ -257,173 +257,173 @@ func main() {
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
-  if err := app.Run(os.Args); err != nil {
-    log.Fatal(err)
-  }
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func run(c *cli.Context) error {
-  if c.Bool("verbose") {
-    logger.EnableDevelopmentLogger()
-  }
+	if c.Bool("verbose") {
+		logger.EnableDevelopmentLogger()
+	}
 
-  db, err := initialize.InitializeDatabase(c.String("database"))
-  if err != nil {
-    return fmt.Errorf("unable to migrate database: %w", err)
-  }
+	db, err := initialize.InitializeDatabase(c.String("database"))
+	if err != nil {
+		return fmt.Errorf("unable to migrate database: %w", err)
+	}
 
-  if !c.Bool("insecure") && c.String("key") == "" {
-    return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
-  }
+	if !c.Bool("insecure") && c.String("key") == "" {
+		return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
+	}
 
-  var rt *realtime.Broker
-  if c.String("redis-address") != "" {
-    logger.Get().Infof("Connecting to redis at %v", c.String("redis-address"))
-    rt, err = realtime.NewRedis(realtime.RedisServer{
-      Addr:     c.String("redis-address"),
-      Username: c.String("redis-username"),
-      Password: c.String("redis-password"),
-    })
-    if err != nil {
-      logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
-    }
-  } else {
-    logger.Get().Infof("Connecting to nats at %v", c.String("nats"))
-    rt, err = realtime.NewNats(c.String("nats"))
-    if err != nil {
-      logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
-    }
-  }
+	var rt *realtime.Broker
+	if c.String("redis-address") != "" {
+		logger.Get().Infof("Connecting to redis at %v", c.String("redis-address"))
+		rt, err = realtime.NewRedis(realtime.RedisServer{
+			Addr:     c.String("redis-address"),
+			Username: c.String("redis-username"),
+			Password: c.String("redis-password"),
+		})
+		if err != nil {
+			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
+		}
+	} else {
+		logger.Get().Infof("Connecting to nats at %v", c.String("nats"))
+		rt, err = realtime.NewNats(c.String("nats"))
+		if err != nil {
+			logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
+		}
+	}
 
-  basePath := "/"
-  if c.IsSet("base-path") {
-    basePath = c.String("base-path")
-    if !strings.HasPrefix(basePath, "/") {
-      return errors.New("base path must start with '/'")
-    }
+	basePath := "/"
+	if c.IsSet("base-path") {
+		basePath = c.String("base-path")
+		if !strings.HasPrefix(basePath, "/") {
+			return errors.New("base path must start with '/'")
+		}
 
-    if len(basePath) > 1 {
-      basePath = strings.TrimSuffix(basePath, "/")
-    }
-  }
+		if len(basePath) > 1 {
+			basePath = strings.TrimSuffix(basePath, "/")
+		}
+	}
 
-  providersMap := make(map[string]auth.AuthProviderConfiguration)
-  if c.String("auth-google-client-id") != "" && c.String("auth-google-client-secret") != "" && c.String("auth-callback-host") != "" {
-    logger.Get().Info("Using google authentication")
-    providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
-      ClientId:     c.String("auth-google-client-id"),
-      ClientSecret: c.String("auth-google-client-secret"),
-      RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
-    }
-  }
-  if c.String("auth-github-client-id") != "" && c.String("auth-github-client-secret") != "" && c.String("auth-callback-host") != "" {
-    logger.Get().Info("Using github authentication")
-    providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
-      ClientId:     c.String("auth-github-client-id"),
-      ClientSecret: c.String("auth-github-client-secret"),
-      RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
-    }
-  }
-  if c.String("auth-microsoft-client-id") != "" && c.String("auth-microsoft-client-secret") != "" && c.String("auth-callback-host") != "" {
-    logger.Get().Info("Using microsoft authentication")
-    providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
-      ClientId:     c.String("auth-microsoft-client-id"),
-      ClientSecret: c.String("auth-microsoft-client-secret"),
-      RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
-    }
-  }
-  if c.String("auth-azure-ad-tenant-id") != "" && c.String("auth-azure-ad-client-id") != "" && c.String("auth-azure-ad-client-secret") != "" && c.String("auth-callback-host") != "" {
-    logger.Get().Info("Using azure authentication")
-    providersMap[(string)(common.AzureAd)] = auth.AuthProviderConfiguration{
-      TenantId:     c.String("auth-azure-ad-tenant-id"),
-      ClientId:     c.String("auth-azure-ad-client-id"),
-      ClientSecret: c.String("auth-azure-ad-client-secret"),
-      RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
-    }
-  }
-  if c.String("auth-apple-client-id") != "" && c.String("auth-apple-client-secret") != "" && c.String("auth-callback-host") != "" {
-    logger.Get().Info("Using apple authentication.")
-    providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
-      ClientId:     c.String("auth-apple-client-id"),
-      ClientSecret: c.String("auth-apple-client-secret"),
-      RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
-    }
-  }
-  if c.String("auth-oidc-discovery-url") != "" && c.String("auth-oidc-client-id") != "" && c.String("auth-oidc-client-secret") != "" && c.String("auth-callback-host") != "" {
-    logger.Get().Info("Using oicd authentication.")
-    providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
-      ClientId:       c.String("auth-oidc-client-id"),
-      ClientSecret:   c.String("auth-oidc-client-secret"),
-      RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
-      DiscoveryUri:   c.String("auth-oidc-discovery-url"),
-      UserIdentScope: c.String("auth-oidc-user-ident-scope"),
-      UserNameScope:  c.String("auth-oidc-user-name-scope"),
-    }
-  }
+	providersMap := make(map[string]auth.AuthProviderConfiguration)
+	if c.String("auth-google-client-id") != "" && c.String("auth-google-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using google authentication")
+		providersMap[(string)(common.Google)] = auth.AuthProviderConfiguration{
+			ClientId:     c.String("auth-google-client-id"),
+			ClientSecret: c.String("auth-google-client-secret"),
+			RedirectUri:  fmt.Sprintf("%s%s/login/google/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+		}
+	}
+	if c.String("auth-github-client-id") != "" && c.String("auth-github-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using github authentication")
+		providersMap[(string)(common.GitHub)] = auth.AuthProviderConfiguration{
+			ClientId:     c.String("auth-github-client-id"),
+			ClientSecret: c.String("auth-github-client-secret"),
+			RedirectUri:  fmt.Sprintf("%s%s/login/github/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+		}
+	}
+	if c.String("auth-microsoft-client-id") != "" && c.String("auth-microsoft-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using microsoft authentication")
+		providersMap[(string)(common.Microsoft)] = auth.AuthProviderConfiguration{
+			ClientId:     c.String("auth-microsoft-client-id"),
+			ClientSecret: c.String("auth-microsoft-client-secret"),
+			RedirectUri:  fmt.Sprintf("%s%s/login/microsoft/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+		}
+	}
+	if c.String("auth-azure-ad-tenant-id") != "" && c.String("auth-azure-ad-client-id") != "" && c.String("auth-azure-ad-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using azure authentication")
+		providersMap[(string)(common.AzureAd)] = auth.AuthProviderConfiguration{
+			TenantId:     c.String("auth-azure-ad-tenant-id"),
+			ClientId:     c.String("auth-azure-ad-client-id"),
+			ClientSecret: c.String("auth-azure-ad-client-secret"),
+			RedirectUri:  fmt.Sprintf("%s%s/login/azure_ad/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+		}
+	}
+	if c.String("auth-apple-client-id") != "" && c.String("auth-apple-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using apple authentication.")
+		providersMap[(string)(common.Apple)] = auth.AuthProviderConfiguration{
+			ClientId:     c.String("auth-apple-client-id"),
+			ClientSecret: c.String("auth-apple-client-secret"),
+			RedirectUri:  fmt.Sprintf("%s%s/login/apple/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+		}
+	}
+	if c.String("auth-oidc-discovery-url") != "" && c.String("auth-oidc-client-id") != "" && c.String("auth-oidc-client-secret") != "" && c.String("auth-callback-host") != "" {
+		logger.Get().Info("Using oicd authentication.")
+		providersMap[(string)(common.TypeOIDC)] = auth.AuthProviderConfiguration{
+			ClientId:       c.String("auth-oidc-client-id"),
+			ClientSecret:   c.String("auth-oidc-client-secret"),
+			RedirectUri:    fmt.Sprintf("%s%s/login/oidc/callback", strings.TrimSuffix(c.String("auth-callback-host"), "/"), strings.TrimSuffix(basePath, "/")),
+			DiscoveryUri:   c.String("auth-oidc-discovery-url"),
+			UserIdentScope: c.String("auth-oidc-user-ident-scope"),
+			UserNameScope:  c.String("auth-oidc-user-name-scope"),
+		}
+	}
 
-  if c.String("session-secret") == "" && len(providersMap) != 0 {
-    return errors.New("you may not start the application without a session secret if an authentication provider is configured")
-  }
+	if c.String("session-secret") == "" && len(providersMap) != 0 {
+		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
+	}
 
-  bun := initialize.InitializeBun(db, c.Bool("verbose"))
-  initializer := initialize.NewServiceInitializer(bun, rt)
+	bun := initialize.InitializeBun(db, c.Bool("verbose"))
+	initializer := initialize.NewServiceInitializer(bun, rt)
 
-  websocket := initializer.InitializeWebsocket()
-  feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
-  healthService := initializer.InitializeHealthService()
+	websocket := initializer.InitializeWebsocket()
+	feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
+	healthService := initializer.InitializeHealthService()
 
-  boardReactionService := initializer.InitializeBoardReactionService()
-  reactionService := initializer.InitializeReactionService()
+	boardReactionService := initializer.InitializeBoardReactionService()
+	reactionService := initializer.InitializeReactionService()
 
-  boardTemplateService := initializer.InitializeBoardTemplateService()
-  columnTemplateService := initializer.InitializeColumnTemplateService()
+	boardTemplateService := initializer.InitializeBoardTemplateService()
+	columnTemplateService := initializer.InitializeColumnTemplateService()
 
-  votingService := initializer.InitializeVotingService()
-  noteService := initializer.InitializeNotesService(votingService)
-  columnService := initializer.InitializeColumnService(noteService)
+	votingService := initializer.InitializeVotingService()
+	noteService := initializer.InitializeNotesService(votingService)
+	columnService := initializer.InitializeColumnService(noteService)
 
-  sessionService := initializer.InitializeSessionService(columnService, noteService)
-  sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
+	sessionService := initializer.InitializeSessionService(columnService, noteService)
+	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
 
-  userService := initializer.InitializeUserService(sessionService)
+	userService := initializer.InitializeUserService(sessionService)
 
-  keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
-  unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
-  authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
-  if err != nil {
-    return fmt.Errorf("unable to setup authentication: %w", err)
-  }
+	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
+	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
+	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
+	if err != nil {
+		return fmt.Errorf("unable to setup authentication: %w", err)
+	}
 
-  boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
 
-  s := api.New(
-    basePath,
-    rt,
-    authConfig,
+	s := api.New(
+		basePath,
+		rt,
+		authConfig,
 
-    boardService,
-    columnService,
-    votingService,
-    userService,
-    noteService,
-    reactionService,
-    sessionService,
-    sessionRequestService,
-    healthService,
-    feedbackService,
-    boardReactionService,
-    boardTemplateService,
-    columnTemplateService,
+		boardService,
+		columnService,
+		votingService,
+		userService,
+		noteService,
+		reactionService,
+		sessionService,
+		sessionRequestService,
+		healthService,
+		feedbackService,
+		boardReactionService,
+		boardTemplateService,
+		columnTemplateService,
 
-    c.Bool("verbose"),
-    !c.Bool("disable-check-origin"),
-    c.Bool("disable-anonymous-login"),
-    c.Bool("allow-anonymous-custom-templates"),
-    c.Bool("allow-anonymous-board-creation"),
-    c.Bool("auth-enable-experimental-file-system-store"),
-  )
+		c.Bool("verbose"),
+		!c.Bool("disable-check-origin"),
+		c.Bool("disable-anonymous-login"),
+		c.Bool("allow-anonymous-custom-templates"),
+		c.Bool("allow-anonymous-board-creation"),
+		c.Bool("auth-enable-experimental-file-system-store"),
+	)
 
-  port := fmt.Sprintf(":%d", c.Int("port"))
-  logger.Get().Infow("starting server", "base-path", basePath, "port", port)
-  return http.ListenAndServe(port, s)
+	port := fmt.Sprintf(":%d", c.Int("port"))
+	logger.Get().Infow("starting server", "base-path", basePath, "port", port)
+	return http.ListenAndServe(port, s)
 }
