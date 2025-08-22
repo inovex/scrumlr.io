@@ -210,11 +210,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       setIsReadyTooltipClass("tooltip-button--content-extended");
       setTimeout(() => setIsReadyTooltipClass(""), 28000);
     };
-    if (
-      USER_NOT_READY &&
-      ((timerExpired && state.activeVoting) || // timer expired during voting
-        (USED_VOTES && state.activeVoting)) // used all votes during voting
-    ) {
+
+    // during an active voting, if timer expired or votes are used up, show tooltip to non-ready users
+    if (USER_NOT_READY && state.activeVoting && (timerExpired || USED_VOTES)) {
       timer = setTimeout(handleTimeout, 2000);
     }
     if (!USED_VOTES || !state.activeTimer || !USER_NOT_READY || !state.activeVoting) {
