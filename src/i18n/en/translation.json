@@ -40,7 +40,10 @@
       "info": "Changes can be made at any time, including on the board."
     },
     "ColumnsConfiguratorColumn": {
-      "namePlaceholder": "Name",
+      "defaultColumnName": "Column 1",
+      "defaultActionsName": "Actions",
+      "indexedColumnName": "Column {{index}}",
+      "namePlaceholder": "Title",
       "descriptionPlaceholder": "Description (optional)",
       "save": "Save",
       "cancel": "Cancel"

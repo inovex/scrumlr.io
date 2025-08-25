@@ -1,6 +1,7 @@
 import {TemplateWithColumns} from "store/features";
 
 import {uniqueId} from "underscore";
+import {t} from "i18next";
 
 export const DEFAULT_TEMPLATE_ID = "DEFAULT_TEMPLATE_ID";
 const DEFAULT_TEMPLATE_COLUMN_ID_PREFIX = "DEFAULT_TEMPLATE_COLUMN_ID-";
@@ -19,7 +20,7 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     {
       id: uniqueId(DEFAULT_TEMPLATE_COLUMN_ID_PREFIX),
       template: DEFAULT_TEMPLATE_ID,
-      name: "Default Main",
+      name: t("Templates.ColumnsConfiguratorColumn.defaultColumnName"),
       description: "",
       color: "backlog-blue",
       visible: true,
@@ -28,7 +29,7 @@ export const DEFAULT_TEMPLATE: TemplateWithColumns = {
     {
       id: uniqueId(DEFAULT_TEMPLATE_COLUMN_ID_PREFIX),
       template: DEFAULT_TEMPLATE_ID,
-      name: "Default Action",
+      name: t("Templates.ColumnsConfiguratorColumn.defaultActionsName"),
       description: "",
       color: "planning-pink",
       visible: false,

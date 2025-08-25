@@ -17,7 +17,7 @@ exports[`ColumnConfiguratorColumn render should render correctly 1`] = `
       <input
         autocomplete="off"
         class="column-configurator-column-name-details__name"
-        placeholder="Name"
+        placeholder="Title"
         value="sample templates col name 1"
       />
       <div

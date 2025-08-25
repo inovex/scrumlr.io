@@ -8,7 +8,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (clo
     <input
       autocomplete="off"
       class="column-configurator-column-name-details__name"
-      placeholder="Name"
+      placeholder="Title"
       value="Default Name"
     />
     <div
@@ -30,7 +30,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (des
     <input
       autocomplete="off"
       class="column-configurator-column-name-details__name column-configurator-column-name-details__name--editing"
-      placeholder="Name"
+      placeholder="Title"
       value="Default Name"
     />
     <div
@@ -87,7 +87,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nam
     <input
       autocomplete="off"
       class="column-configurator-column-name-details__name column-configurator-column-name-details__name--editing"
-      placeholder="Name"
+      placeholder="Title"
       value="Default Name"
     />
     <div
@@ -144,7 +144,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (vis
     <input
       autocomplete="off"
       class="column-configurator-column-name-details__name"
-      placeholder="Name"
+      placeholder="Title"
       value="Default Name"
     />
     <div

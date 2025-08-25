@@ -41,7 +41,10 @@
     },
 
     "ColumnsConfiguratorColumn": {
-      "namePlaceholder": "Name",
+      "defaultColumnName": "Spalte 1",
+      "defaultActionsName": "Aktionen",
+      "indexedColumnName": "Spalte {{index}}",
+      "namePlaceholder": "Titel",
       "descriptionPlaceholder": "Beschreibung (optional)",
       "save": "Speichern",
       "cancel": "Abbrechen"
