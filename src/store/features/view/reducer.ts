@@ -28,6 +28,7 @@ const initialState: ViewState = {
   serverTimeOffset: 0,
   anonymousLoginDisabled: false,
   allowAnonymousCustomTemplates: false,
+  allowAnonymousBoardCreation: false,
   enabledAuthProvider: [],
   feedbackEnabled: false,
   hotkeysAreActive: true,
@@ -58,6 +59,7 @@ export const viewReducer = createReducer(initialState, (builder) =>
       state.anonymousLoginDisabled = action.payload.anonymousLoginDisabled;
       state.enabledAuthProvider = action.payload.enabledAuthProvider;
       state.allowAnonymousCustomTemplates = action.payload.allowAnonymousCustomTemplates;
+      state.allowAnonymousBoardCreation = action.payload.allowAnonymousBoardCreation;
       state.serverTimeOffset = new Date().getTime() - action.payload.serverTime;
       state.feedbackEnabled = action.payload.feedbackEnabled;
     })

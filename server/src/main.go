@@ -108,6 +108,13 @@ func main() {
         Value:    false,
       }),
       altsrc.NewBoolFlag(&cli.BoolFlag{
+        Name:     "allow-anonymous-board-creation",
+        EnvVars:  []string{"SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION"},
+        Usage:    "allows anonymous clients to create new boards",
+        Required: false,
+        Value:    true,
+      }),
+      altsrc.NewBoolFlag(&cli.BoolFlag{
         Name:     "auth-enable-experimental-file-system-store",
         EnvVars:  []string{"SCRUMLR_ENABLE_EXPERIMENTAL_AUTH_FILE_SYSTEM_STORE"},
         Usage:    "enables/disables experimental file system store, in order to allow larger session cookie sizes",
@@ -412,6 +419,7 @@ func run(c *cli.Context) error {
     !c.Bool("disable-check-origin"),
     c.Bool("disable-anonymous-login"),
     c.Bool("allow-anonymous-custom-templates"),
+    c.Bool("allow-anonymous-board-creation"),
     c.Bool("auth-enable-experimental-file-system-store"),
   )
 

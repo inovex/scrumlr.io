@@ -21,6 +21,8 @@ type TemplateCardProps = {
   template: TemplateWithColumns;
   templateType: TemplateCardType;
   onSelectTemplate: (template: TemplateWithColumns) => void;
+  disabled?: boolean;
+  disabledReason?: string;
 } & (
   | {
       templateType: "CUSTOM";
@@ -73,7 +75,7 @@ export const TemplateCard = (props: TemplateCardProps) => {
   };
 
   return (
-    <div className="template-card" data-cy={`template-card--${props.templateType}`}>
+    <div className={classNames("template-card", {"template-card--disabled": props.disabled})} data-cy={`template-card--${props.templateType}`}>
       <FavouriteButton
         className="template-card__favourite"
         active={template.favourite}
@@ -100,7 +102,10 @@ export const TemplateCard = (props: TemplateCardProps) => {
         className={classNames("template-card__start-button", "template-card__start-button--start")}
         small
         icon={<NextIcon />}
-        onClick={() => props.onSelectTemplate({template, columns})}
+        onClick={props.disabled ? undefined : () => props.onSelectTemplate({template, columns})}
+        disabled={props.disabled}
+        dataTooltipId={props.disabled ? "template-card-tooltip" : undefined}
+        dataTooltipContent={props.disabled ? props.disabledReason : undefined}
         dataCy="template-card__start-button"
       >
         {t("Templates.TemplateCard.start")}

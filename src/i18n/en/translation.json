@@ -29,7 +29,8 @@
       "column_one": "{{count}} Column",
       "column_other": "{{count}} Columns",
       "start": "Start",
-      "save": "Save"
+      "save": "Save",
+      "signInToCreateBoards": "To create a board, please sign in with your Google or Microsoft account."
     },
     "TemplateEditor": {
       "createTitle": "Create a Template",

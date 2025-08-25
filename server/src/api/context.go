@@ -189,6 +189,35 @@ func (s *Server) AnonymousLoginDisabledContext(next http.Handler) http.Handler {
 	})
 }
 
+func (s *Server) AnonymousBoardCreationContext(next http.Handler) http.Handler {
+  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    log := logger.FromRequest(r)
+
+    userIDValue := r.Context().Value(identifiers.UserIdentifier)
+    userID, ok := userIDValue.(uuid.UUID)
+    if !ok {
+      log.Errorw("invalid or missing user identifier in context")
+      common.Throw(w, r, common.InternalServerError)
+      return
+    }
+
+    user, err := s.users.Get(r.Context(), userID)
+    if err != nil {
+      log.Errorw("Could not fetch user", "error", err)
+      common.Throw(w, r, common.InternalServerError)
+      return
+    }
+
+    if user.AccountType == common.Anonymous && !s.allowAnonymousBoardCreation {
+      log.Errorw("anonymous board creation not allowed")
+      common.Throw(w, r, common.ForbiddenError(errors.New("not authorized to create boards anonymously")))
+      return
+    }
+
+    next.ServeHTTP(w, r)
+  })
+}
+
 func (s *Server) ColumnContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		columnParam := chi.URLParam(r, "column")

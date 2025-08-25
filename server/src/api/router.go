@@ -63,9 +63,10 @@ type Server struct {
 	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
 
 	// note: if more options come with time, it might be sensible to wrap them into a struct
-	anonymousLoginDisabled        bool
-	allowAnonymousCustomTemplates bool
-	experimentalFileSystemStore   bool
+	anonymousLoginDisabled        	bool
+	allowAnonymousCustomTemplates  	bool
+	allowAnonymousBoardCreation 	  bool
+	experimentalFileSystemStore   	bool
 }
 
 func New(
@@ -91,6 +92,7 @@ func New(
 	checkOrigin bool,
 	anonymousLoginDisabled bool,
 	allowAnonymousCustomTemplates bool,
+	allowAnonymousBoardCreation bool,
 	experimentalFileSystemStore bool,
 ) chi.Router {
 	r := chi.NewRouter()
@@ -138,6 +140,7 @@ func New(
 
 		anonymousLoginDisabled:        anonymousLoginDisabled,
 		allowAnonymousCustomTemplates: allowAnonymousCustomTemplates,
+		allowAnonymousBoardCreation:   allowAnonymousBoardCreation,
 		experimentalFileSystemStore:   experimentalFileSystemStore,
 	}
 
@@ -223,8 +226,8 @@ func (s *Server) protectedRoutes(r chi.Router) {
 			})
 		})
 
-		r.Post("/boards", s.createBoard)
-		r.Post("/import", s.importBoard)
+		r.With(s.AnonymousBoardCreationContext).Post("/boards", s.createBoard)
+		r.With(s.AnonymousBoardCreationContext).Post("/import", s.importBoard)
 		r.Get("/boards", s.getBoards)
 		r.Route("/boards/{id}", func(r chi.Router) {
 			r.With(s.BoardParticipantContext).Get("/", s.getBoard)

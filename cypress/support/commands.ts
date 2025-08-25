@@ -4,7 +4,7 @@
 import translationEn from "../../src/i18n/en/translation.json"
 
 Cypress.Commands.add("acceptCookies", () => {
-    cy.contains(translationEn.CookieNotice.accept).click()
+    cy.get("[data-cy='cookie-notice__accept']").click()
 });
 
 Cypress.Commands.add("changeLanguageToEnglish", () => {

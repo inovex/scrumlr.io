@@ -80,7 +80,7 @@ export const CookieNotice = () => {
             {t("CookieNotice.decline")}
           </button>
 
-          <button className="cookie-notice__button-accept" type="button" color="primary" onClick={accept}>
+          <button className="cookie-notice__button-accept" type="button" color="primary" onClick={accept} data-cy="cookie-notice__accept">
             {t("CookieNotice.accept")}
           </button>
         </div>

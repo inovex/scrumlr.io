@@ -9,6 +9,7 @@ export type ServerInfo = {
   anonymousLoginDisabled: boolean;
   enabledAuthProvider: string[];
   allowAnonymousCustomTemplates: boolean;
+  allowAnonymousBoardCreation: boolean;
   serverTime: number;
   feedbackEnabled: boolean;
 };
@@ -25,6 +26,8 @@ export interface View {
   anonymousLoginDisabled: boolean;
 
   allowAnonymousCustomTemplates: boolean;
+
+  allowAnonymousBoardCreation: boolean;
 
   enabledAuthProvider: string[];
 
