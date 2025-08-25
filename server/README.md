@@ -4,7 +4,7 @@ This is the server application of [scrumlr.io](https://scrumlr.io) targeted by t
 
 ## Local development
 
-To run the scrumlr backend localy for development, you first need to run the needed services (postgres database and nats).
+To run the scrumlr backend locally for development, you first need to run the needed services (postgres database and nats).
 For that you can use the provided docker compose files.
 To start the docker containers either run
 
@@ -30,13 +30,13 @@ Also please make sure to read the [guidlines](./docs/guidelines.md).
 
 ## Testing
 
-To run the tests localy run
+To run the tests locally run
 
 ```bash
 make test
 ```
 
-For more information about the tests refere to the [testing documentation](./docs/testing.md).
+For more information about the tests refer to the [testing documentation](./docs/testing.md).
 
 ## API
 
@@ -46,7 +46,7 @@ at our documentation.
 
 ## Architecture
 
-In the picture below is a high level overwiev how scrumlr works
+In the picture below is a high level overview of how scrumlr works
 
 ![Architecture](./docs/architecture.png)
 
