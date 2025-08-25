@@ -203,27 +203,31 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Authenticator())
 		r.Use(auth.AuthContext)
 
-		r.With(s.BoardTemplateRateLimiter, s.AnonymousCustomTemplateCreationContext).Post("/templates", s.createBoardTemplate)
-		r.With(s.BoardTemplateRateLimiter, s.AnonymousCustomTemplateCreationContext).Get("/templates", s.getBoardTemplates)
-		r.Route("/templates/{id}", func(r chi.Router) {
+		r.Route("/templates", func(r chi.Router) {
 			r.Use(s.BoardTemplateRateLimiter)
-			r.Use(s.BoardTemplateContext)
-      r.Use(s.AnonymousCustomTemplateCreationContext)
+			r.Use(s.AnonymousCustomTemplateCreationContext)
+			
+			r.Post("/", s.createBoardTemplate)
+			r.Get("/", s.getBoardTemplates)
+			
+			r.Route("/{id}", func(r chi.Router) {
+				r.Use(s.BoardTemplateContext)
 
-			r.Get("/", s.getBoardTemplate)
-			r.Put("/", s.updateBoardTemplate)
-			r.Delete("/", s.deleteBoardTemplate)
+				r.Get("/", s.getBoardTemplate)
+				r.Put("/", s.updateBoardTemplate)
+				r.Delete("/", s.deleteBoardTemplate)
 
-			r.Route("/columns", func(r chi.Router) {
-				r.Post("/", s.createColumnTemplate)
-				r.Get("/", s.getColumnTemplates)
+				r.Route("/columns", func(r chi.Router) {
+					r.Post("/", s.createColumnTemplate)
+					r.Get("/", s.getColumnTemplates)
 
-				r.Route("/{columnTemplate}", func(r chi.Router) {
-					r.Use(s.ColumnTemplateContext)
+					r.Route("/{columnTemplate}", func(r chi.Router) {
+						r.Use(s.ColumnTemplateContext)
 
-					r.Get("/", s.getColumnTemplate)
-					r.Put("/", s.updateColumnTemplate)
-					r.Delete("/", s.deleteColumnTemplate)
+						r.Get("/", s.getColumnTemplate)
+						r.Put("/", s.updateColumnTemplate)
+						r.Delete("/", s.deleteColumnTemplate)
+					})
 				})
 			})
 		})
