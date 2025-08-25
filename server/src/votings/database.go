@@ -22,7 +22,7 @@ func NewVotingDatabase(database *bun.DB) VotingDatabase {
 	return db
 }
 
-func (d *DB) Create(insert DatabaseVotingInsert) (DatabaseVoting, error) {
+func (d *DB) Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error) {
 	if insert.Status != Open {
 		return DatabaseVoting{}, errors.New("unable to create voting with other state than 'OPEN'")
 	}
@@ -62,12 +62,12 @@ func (d *DB) Create(insert DatabaseVotingInsert) (DatabaseVoting, error) {
 		TableExpr("_values").
 		Column("board", "vote_limit", "show_votes_of_others", "allow_multiple_votes", "status", "is_anonymous").
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
+		Exec(common.ContextWithValues(ctx, "Database", d, "Result", &voting), &voting)
 
 	return voting, err
 }
 
-func (d *DB) Update(update DatabaseVotingUpdate) (DatabaseVoting, error) {
+func (d *DB) Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error) {
 	if update.Status == Open {
 		return DatabaseVoting{}, errors.New("only allowed to close or abort a voting")
 	}
@@ -94,7 +94,7 @@ func (d *DB) Update(update DatabaseVotingUpdate) (DatabaseVoting, error) {
 			With("rankUpdate", d.getRankUpdateQueryForClosedVoting("updateQuery")).
 			Model((*DatabaseVoting)(nil)).
 			ModelTableExpr("\"updateQuery\" AS voting").
-			Scan(common.ContextWithValues(context.Background(), "Database", d, "Result", &voting), &voting)
+			Scan(common.ContextWithValues(ctx, "Database", d, "Result", &voting), &voting)
 	}
 
 	return voting, err
@@ -121,39 +121,39 @@ func (d *DB) getRankUpdateQueryForClosedVoting(votingQuery string) *bun.UpdateQu
 	return rankUpdate
 }
 
-func (d *DB) Get(board, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error) {
+func (d *DB) Get(ctx context.Context, board, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error) {
 	var voting DatabaseVoting
 	err := d.db.NewSelect().
 		Model(&voting).
 		Where("board = ?", board).
 		Where("id = ?", id).
-		Scan(context.Background())
+		Scan(ctx)
 
 	if voting.Status == Closed {
-		votes, err := d.GetVotes(filter.VoteFilter{Board: board, Voting: &id})
+		votes, err := d.GetVotes(ctx, filter.VoteFilter{Board: board, Voting: &id})
 		return voting, votes, err
 	}
 
 	return voting, []DatabaseVote{}, err
 }
 
-func (d *DB) GetAll(board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error) {
+func (d *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error) {
 	var votings []DatabaseVoting
 	err := d.db.NewSelect().
 		Model(&votings).
 		Where("board = ?", board).
 		OrderExpr("array_position(array['OPEN', 'CLOSED', 'ABORTED']::voting_status[], status) ASC, created_at DESC").
-		Scan(context.Background())
+		Scan(ctx)
 
 	if err != nil {
 		return votings, []DatabaseVote{}, err
 	}
 
-	votes, err := d.GetVotes(filter.VoteFilter{Board: board})
+	votes, err := d.GetVotes(ctx, filter.VoteFilter{Board: board})
 	return votings, votes, err
 }
 
-func (d *DB) GetVotes(f filter.VoteFilter) ([]DatabaseVote, error) {
+func (d *DB) GetVotes(ctx context.Context, f filter.VoteFilter) ([]DatabaseVote, error) {
 	voteQuery := d.db.NewSelect().
 		Model((*Vote)(nil)).
 		Where("board = ?", f.Board)
@@ -169,12 +169,12 @@ func (d *DB) GetVotes(f filter.VoteFilter) ([]DatabaseVote, error) {
 	}
 
 	var votes []DatabaseVote
-	err := voteQuery.Scan(context.Background(), &votes)
+	err := voteQuery.Scan(ctx, &votes)
 
 	return votes, err
 }
 
-func (d *DB) AddVote(board, user, note uuid.UUID) (DatabaseVote, error) {
+func (d *DB) AddVote(ctx context.Context, board, user, note uuid.UUID) (DatabaseVote, error) {
 	openVotingQuery := d.db.NewSelect().
 		Model((*DatabaseVoting)(nil)).
 		Column("id", "vote_limit", "allow_multiple_votes").
@@ -222,12 +222,12 @@ func (d *DB) AddVote(board, user, note uuid.UUID) (DatabaseVote, error) {
 		TableExpr("_values").
 		Column("board", "voting", "user", "note").
 		Returning("*").
-		Exec(context.Background(), &result)
+		Exec(ctx, &result)
 
 	return result, err
 }
 
-func (d *DB) RemoveVote(board, user, note uuid.UUID) error {
+func (d *DB) RemoveVote(ctx context.Context, board, user, note uuid.UUID) error {
 	openVotingQuery := d.db.NewSelect().
 		Model((*Voting)(nil)).
 		Column("id").
@@ -248,18 +248,18 @@ func (d *DB) RemoveVote(board, user, note uuid.UUID) error {
 		Model(&deleteQuery).
 		Where("voting = (SELECT id FROM \"openVotingQuery\")").
 		Where("ctid IN (?)", limitQuery).
-		Exec(context.Background())
+		Exec(ctx)
 
 	return err
 }
 
-func (d *DB) GetOpenVoting(board uuid.UUID) (DatabaseVoting, error) {
+func (d *DB) GetOpenVoting(ctx context.Context, board uuid.UUID) (DatabaseVoting, error) {
 	var voting DatabaseVoting
 	err := d.db.NewSelect().
 		Model(&voting).
 		Where("board = ?", board).
 		Where("status = ?", "OPEN").
-		Scan(context.Background())
+		Scan(ctx)
 
 	return voting, err
 }

@@ -1,6 +1,7 @@
 package votings
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"log"
@@ -56,7 +57,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Create() {
 	anonymous := false
 	status := Open
 
-	dbVoting, err := database.Create(DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
+	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbVoting.Board)
@@ -79,7 +80,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Create_Duplicate() {
 	anonymous := false
 	status := Open
 
-	dbVoting, err := database.Create(DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
+	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -97,7 +98,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Create_NegativeVoteLimit() {
 	anonymous := false
 	status := Open
 
-	dbVoting, err := database.Create(DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
+	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, errors.New("vote limit shall not be a negative number"), err)
@@ -115,7 +116,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Create_HighVoteLimit() {
 	anonymous := false
 	status := Open
 
-	dbVoting, err := database.Create(DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
+	dbVoting, err := database.Create(context.Background(), DatabaseVotingInsert{Board: boardId, VoteLimit: voteLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showOfOthers, IsAnonymous: anonymous, Status: status})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, errors.New("vote limit shall not be greater than 99"), err)
@@ -129,7 +130,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Update() {
 	votingId := suite.votings["Update"].ID
 	boardId := suite.boards["Update"].id
 
-	dbVoting, err := database.Update(DatabaseVotingUpdate{ID: votingId, Board: boardId, Status: Closed})
+	dbVoting, err := database.Update(context.Background(), DatabaseVotingUpdate{ID: votingId, Board: boardId, Status: Closed})
 
 	assert.Nil(t, err)
 	assert.Equal(t, votingId, dbVoting.ID)
@@ -150,7 +151,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Update_ClosedToOpen() {
 	votingId := suite.votings["ClosedUpdate"].ID
 	boardId := suite.boards["ClosedUpdate"].id
 
-	dbVoting, err := database.Update(DatabaseVotingUpdate{ID: votingId, Board: boardId, Status: Open})
+	dbVoting, err := database.Update(context.Background(), DatabaseVotingUpdate{ID: votingId, Board: boardId, Status: Open})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, errors.New("only allowed to close or abort a voting"), err)
@@ -164,7 +165,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Get_Open() {
 	boardId := suite.boards["Read"].id
 	votingId := suite.votings["ReadOpen"].ID
 
-	dbVoting, votes, err := database.Get(boardId, votingId)
+	dbVoting, votes, err := database.Get(context.Background(), boardId, votingId)
 
 	assert.Nil(t, err)
 	assert.Len(t, votes, 0)
@@ -186,7 +187,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Get_Closed() {
 	boardId := suite.boards["Read"].id
 	votingId := suite.votings["ReadClosed"].ID
 
-	dbVoting, votes, err := database.Get(boardId, votingId)
+	dbVoting, votes, err := database.Get(context.Background(), boardId, votingId)
 
 	assert.Nil(t, err)
 	assert.Len(t, votes, 9)
@@ -207,7 +208,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_GetAll() {
 
 	boardId := suite.boards["Read"].id
 
-	dbVotings, votes, err := database.GetAll(boardId)
+	dbVotings, votes, err := database.GetAll(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbVotings, 2)
@@ -220,7 +221,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_GetOpenVoting() {
 
 	boardId := suite.boards["Read"].id
 
-	dbVoting, err := database.GetOpenVoting(boardId)
+	dbVoting, err := database.GetOpenVoting(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, suite.votings["ReadOpen"].ID, dbVoting.ID)
@@ -241,7 +242,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_AddVote() {
 	userId := suite.users["Santa"].id
 	noteId := suite.notes["WriteAdd"].id
 
-	dbVote, err := database.AddVote(boardId, userId, noteId)
+	dbVote, err := database.AddVote(context.Background(), boardId, userId, noteId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbVote.Board)
@@ -258,7 +259,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_AddVote_Closed() {
 	userId := suite.users["Santa"].id
 	noteId := suite.notes["WriteClosed"].id
 
-	dbVote, err := database.AddVote(boardId, userId, noteId)
+	dbVote, err := database.AddVote(context.Background(), boardId, userId, noteId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -273,7 +274,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_AddVote_AboveLimit() {
 	userId := suite.users["Stan"].id
 	noteId := suite.notes["WriteLimit"].id
 
-	dbVote, err := database.AddVote(boardId, userId, noteId)
+	dbVote, err := database.AddVote(context.Background(), boardId, userId, noteId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -288,7 +289,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_AddVote_MultipleNotAllowed()
 	userId := suite.users["Stan"].id
 	noteId := suite.notes["WriteMultiple"].id
 
-	dbVote, err := database.AddVote(boardId, userId, noteId)
+	dbVote, err := database.AddVote(context.Background(), boardId, userId, noteId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -303,7 +304,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_RemoveVote() {
 	userId := suite.users["Stan"].id
 	noteId := suite.notes["Delete"].id
 
-	err := database.RemoveVote(boardId, userId, noteId)
+	err := database.RemoveVote(context.Background(), boardId, userId, noteId)
 
 	assert.Nil(t, err)
 }
@@ -316,7 +317,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_RemoveVote_Closed() {
 	userId := suite.users["Stan"].id
 	noteId := suite.notes["WriteClosed"].id
 
-	err := database.RemoveVote(boardId, userId, noteId)
+	err := database.RemoveVote(context.Background(), boardId, userId, noteId)
 
 	assert.Nil(t, err)
 }
@@ -327,7 +328,7 @@ func (suite *DatabaseVotingTestSuite) Test_Database_GetVotes() {
 
 	boardId := suite.boards["Read"].id
 
-	dbVotes, err := database.GetVotes(filter.VoteFilter{Board: boardId})
+	dbVotes, err := database.GetVotes(context.Background(), filter.VoteFilter{Board: boardId})
 
 	assert.Nil(t, err)
 	assert.Len(t, dbVotes, 18)
