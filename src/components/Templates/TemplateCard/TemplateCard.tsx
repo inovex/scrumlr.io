@@ -82,17 +82,17 @@ export const TemplateCard = (props: TemplateCardProps) => {
         }}
       />
       <div className={classNames("template-card__head")}>
-        <input className="template-card__title" type="text" value={template.name} disabled />
+        <input className="template-card__title" type="text" value={t(template.name, {ns: "templates"})} disabled />
       </div>
       {renderMenu()}
-      <TextareaAutosize className={classNames("template-card__description")} value={template.description} disabled />
+      <TextareaAutosize className={classNames("template-card__description")} value={t(template.description, {ns: "templates"})} disabled />
       <ColumnsIcon className={classNames("template-card__icon", "template-card__icon--columns")} />
       <div className="template-card__columns">
         <div className="template-card__columns-title">{t("Templates.TemplateCard.column", {count: columns.length})}</div>
         <div className="template-card__columns-subtitle">
           {columns
             .toSorted((a, b) => a.index - b.index)
-            .map((c) => (props.templateType === "RECOMMENDED" ? t(c.name, {ns: "templates"}) : c.name))
+            .map((c) => t(c.name, {ns: "templates"}))
             .join(", ")}
         </div>
       </div>

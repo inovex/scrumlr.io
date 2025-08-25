@@ -1,7 +1,6 @@
 import recommendedTemplatesJson from "constants/recommendedTemplates.json";
 import {createReducer} from "@reduxjs/toolkit";
 import {DEFAULT_TEMPLATE} from "constants/templates";
-import {t} from "i18next";
 import {TemplateColumnsState, TemplateColumn} from "./types";
 import {ImportReducedTemplateWithColumns} from "../templates/types";
 import {deleteTemplate, getTemplates} from "../templates";
@@ -15,7 +14,6 @@ function withMeta(columns: Omit<TemplateColumn, "id" | "template" | "index">[], 
     id: `${templateId}-${idx}`,
     template: templateId,
     index: idx,
-    name: t(col.name, {ns: "templates"}),
   }));
 }
 
