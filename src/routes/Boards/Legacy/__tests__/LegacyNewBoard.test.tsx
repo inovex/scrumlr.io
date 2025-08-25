@@ -6,6 +6,7 @@ import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestStore from "utils/test/getTestStore";
 import {Provider} from "react-redux";
 import {API} from "api";
+import {resources} from "i18nTest";
 
 // Mock the API
 jest.mock("api", () => ({
@@ -23,6 +24,7 @@ jest.mock("react-router", () => ({
 
 describe("LegacyNewBoard", () => {
   const defaultState = getTestApplicationState();
+  const signInToCreateBoardText = resources.en.translation.Templates.TemplateCard.signInToCreateBoards;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -120,7 +122,7 @@ describe("LegacyNewBoard", () => {
 
     const createButton = screen.getByRole("button", {name: "Create new Board"});
     expect(createButton).toBeDisabled();
-    expect(createButton).toHaveAttribute("title", "Sign in to create a board.");
+    expect(createButton).toHaveAttribute("title", signInToCreateBoardText);
   });
 
   it("should disable import board button for anonymous users when board creation is disabled", () => {
@@ -171,7 +173,7 @@ describe("LegacyNewBoard", () => {
 
     const importButton = screen.getByRole("button", {name: "Import now"});
     expect(importButton).toBeDisabled();
-    expect(importButton).toHaveAttribute("title", "Sign in to create a board.");
+    expect(importButton).toHaveAttribute("title", signInToCreateBoardText);
   });
 
   it("should enable create board button when template is selected and user can create boards", () => {
