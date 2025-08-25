@@ -138,6 +138,27 @@ Default is `false`.
 SCRUMLR_DISABLE_ANONYMOUS_LOGIN=false
 ```
 
+### Allow Anonymous Template Creation
+
+If set to `false`, users won't be able to create custom templates anonymously (i.e., not using OAuth).
+They can still create boards using recommended templates.
+Default is `false`.
+
+```ini
+SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES=false
+```
+
+### Allow Anonymous Board Creation
+
+If set to `false`, users won't be able to create boards anonymously (i.e., not using OAuth).
+This applies to creating boards from both recommended and custom templates.
+They can still join existing boards.
+Default is `true`.
+
+```ini
+SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION=true
+```
+
 ### Enable Experimental File System Store
 
 Enables an experimental file store for session cookies, which is used during OAuth authentication to store session info
