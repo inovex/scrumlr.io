@@ -1,55 +1,75 @@
 @import "src/constants/style";
 
+$stable-content-width: 80%;
+
 .template-editor {
-  display: grid;
-  grid-template-columns: $spacing--xs auto $spacing--xs 1fr $spacing--xs;
-  grid-template-rows:
-    $spacing--xs
-    min-content // <- name
-    16px
-    min-content // <- description
-    36px
-    min-content // <- debug
-    min-content // <- columns config
-    24px
-    min-content // info
-    56px
-    52px // <- buttons
-    $spacing--xs;
-  grid-template-areas:
-    ".          .           .         .         ."
-    ".          name        name      name      ."
-    ".          .           .         .         ."
-    ".          description description description ."
-    ".          .           .         .         ."
-    ".          debug        debug      debug      ."
-    ".          columns     columns   columns   ."
-    ".          .           .         .         ."
-    ".          info        info      info      ."
-    ".          .           .         .         ."
-    ".          buttons     buttons   buttons   ."
-    ".          .           .         .         .";
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--base;
 
-  justify-items: stretch;
-
+  min-width: 0;
   width: 100%;
   max-width: 100%;
-  height: 100%;
 
-  overflow: hidden auto;
+  overflow: visible;
+}
+
+// name, description, debug. contained width
+.template-editor__header {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "name"
+    "description";
+  row-gap: $spacing--base;
+  align-self: center;
+
+  min-width: 0;
+  width: $stable-content-width;
+
+  &--include-debug {
+    grid-template-areas:
+      "name"
+      "description"
+      "debug";
+  }
 }
 
 .template-editor__name {
   grid-area: name;
 }
-
 .template-editor__description {
   grid-area: description;
 }
-
 .template-editor__debug {
   grid-area: debug;
+  justify-self: center;
   color: $pink--500;
+}
+
+// columns, mini view. width extending up to inherited bleeding edges
+.template-editor__columns {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: bleed-start / bleed-end; // defined by parent grid
+  grid-template-rows: min-content;
+  row-gap: $spacing--base;
+
+  grid-template-areas: "columns";
+}
+
+// info, buttons. contained width like header
+.template-editor__footer {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "info"
+    "buttons";
+  align-self: center;
+  row-gap: $spacing--lg;
+
+  min-width: 0;
+  width: $stable-content-width;
 }
 
 .template-editor__columns-configurator-wrapper {
@@ -62,6 +82,8 @@
   // lock scrolling
   max-width: 100%;
   height: max-content; // correct height!
+
+  overflow-x: auto;
 }
 
 .template-editor__columns-mini-view-wrapper {
@@ -69,6 +91,7 @@
   justify-self: center;
 
   max-width: 100%;
+  overflow-x: auto;
 
   display: none;
 }
@@ -90,45 +113,28 @@
 
 .template-editor__buttons {
   grid-area: buttons;
-  justify-self: end;
-
   display: flex;
-  flex-direction: row;
+  justify-content: flex-end;
   gap: $spacing--base;
+
+  width: 100%;
 }
 
 @media (screen and max-width: $breakpoint--smartphone) {
-  .template-editor {
-    grid-template-rows:
-      $spacing--xs
-      min-content // <- name
-      20px
-      min-content // <- description
-      46px
-      min-content // <- debug
-      min-content // <- columns config
-      16px
-      min-content // <- mini columns
-      24px
-      min-content // info
-      56px
-      52px // <- buttons
-      $spacing--xs;
+  // on smaller screens, align all content to bleeding edges
+  .template-editor__header,
+  .template-editor__footer {
+    width: 100%; // override stable content width
+    grid-template-columns: subgrid;
+    grid-column: bleed-start / bleed-end;
+  }
+
+  .template-editor__columns {
+    grid-template-rows: min-content min-content;
+
     grid-template-areas:
-      ".          .           .         .         ."
-      ".          name        name      name      ."
-      ".          .           .         .         ."
-      ".          description description description ."
-      ".          .           .         .         ."
-      ".          debug        debug      debug      ."
-      ".          columns     columns   columns   ."
-      ".          .           .         .         ."
-      ".          mini        mini      mini      ."
-      ".          .           .         .         ."
-      ".          info        info      info      ."
-      ".          .           .         .         ."
-      ".          buttons     buttons   buttons   ."
-      ".          .           .         .         .";
+      "columns"
+      "mini";
   }
 
   .template-editor__columns-mini-view-wrapper {

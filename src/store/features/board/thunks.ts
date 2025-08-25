@@ -26,17 +26,17 @@ export const createBoardFromTemplate = createAsyncThunk<string, {templateWithCol
   async (payload) => {
     // finally, translate names and descriptions, since only the keys were stored until this point
     const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
-        template: {
-          ...toBeTranslated.template,
-          name: i18n.t(toBeTranslated.template.name, {ns: "templates"}),
-          description: i18n.t(toBeTranslated.template.description, {ns: "templates"}),
-        },
-        columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
-          ...toBeTranslatedColumn,
-          name: i18n.t(toBeTranslatedColumn.name, {ns: "templates"}),
-          description: i18n.t(toBeTranslatedColumn.description, {ns: "templates"}),
-        })),
-      });
+      template: {
+        ...toBeTranslated.template,
+        name: i18n.t(toBeTranslated.template.name, {ns: "templates"}),
+        description: i18n.t(toBeTranslated.template.description, {ns: "templates"}),
+      },
+      columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
+        ...toBeTranslatedColumn,
+        name: i18n.t(toBeTranslatedColumn.name, {ns: "templates"}),
+        description: i18n.t(toBeTranslatedColumn.description, {ns: "templates"}),
+      })),
+    });
 
     const translatedTemplateWithColumns =
       payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
