@@ -1,220 +1,337 @@
 package votings
 
 import (
-  "context"
-  "database/sql"
-  "errors"
-  "github.com/google/uuid"
-  "scrumlr.io/server/common"
-  "scrumlr.io/server/common/filter"
+	"context"
+	"database/sql"
+	"errors"
 
-  "scrumlr.io/server/logger"
-  "scrumlr.io/server/realtime"
+	"github.com/google/uuid"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
+	"scrumlr.io/server/common"
+	"scrumlr.io/server/common/filter"
+
+	"scrumlr.io/server/logger"
+	"scrumlr.io/server/realtime"
 )
 
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/votings")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/votings")
+
 type VotingDatabase interface {
-  Create(insert DatabaseVotingInsert) (DatabaseVoting, error)
-  Update(update DatabaseVotingUpdate) (DatabaseVoting, error)
-  Get(board, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error)
-  GetAll(board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error)
-  GetVotes(f filter.VoteFilter) ([]DatabaseVote, error)
-  AddVote(board, user, note uuid.UUID) (DatabaseVote, error)
-  RemoveVote(board, user, note uuid.UUID) error
-  GetOpenVoting(board uuid.UUID) (DatabaseVoting, error)
+	Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error)
+	Update(ctx context.Context, update DatabaseVotingUpdate) (DatabaseVoting, error)
+	Get(ctx context.Context, board, id uuid.UUID) (DatabaseVoting, []DatabaseVote, error)
+	GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseVoting, []DatabaseVote, error)
+	GetVotes(ctx context.Context, f filter.VoteFilter) ([]DatabaseVote, error)
+	AddVote(ctx context.Context, board, user, note uuid.UUID) (DatabaseVote, error)
+	RemoveVote(ctx context.Context, board, user, note uuid.UUID) error
+	GetOpenVoting(ctx context.Context, board uuid.UUID) (DatabaseVoting, error)
 }
 
 type Service struct {
-  database VotingDatabase
-  realtime *realtime.Broker
+	database VotingDatabase
+	realtime *realtime.Broker
 }
 
 func NewVotingService(db VotingDatabase, rt *realtime.Broker) VotingService {
-  service := new(Service)
-  service.database = db
-  service.realtime = rt
+	service := new(Service)
+	service.database = db
+	service.realtime = rt
 
-  return service
+	return service
 }
 
 func (s *Service) AddVote(ctx context.Context, body VoteRequest) (*Vote, error) {
-  log := logger.FromContext(ctx)
-  v, err := s.database.AddVote(body.Board, body.User, body.Note)
-  if err != nil {
-    if err == sql.ErrNoRows {
-      return nil, common.ForbiddenError(errors.New("voting limit reached or no active voting session found"))
-    }
-    log.Warnw("unable to add vote", "board", body.Board, "user", body.User, "note", body.Note, "err", err)
-    return nil, err
-  }
-  return new(Vote).From(v), err
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "vote-add")
+	defer span.End()
+
+	span.SetAttributes(attribute.String("board", body.Board.String()), attribute.String("note", body.Note.String()))
+	vote, err := s.database.AddVote(ctx, body.Board, body.User, body.Note)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "No rows returned")
+			span.RecordError(err)
+			return nil, common.ForbiddenError(errors.New("voting limit reached or no active voting session found"))
+		}
+
+		span.SetStatus(codes.Error, "failed to add vote")
+		span.RecordError(err)
+		log.Warnw("unable to add vote", "board", body.Board, "user", body.User, "note", body.Note, "err", err)
+		return nil, err
+	}
+	return new(Vote).From(vote), err
 }
 
 func (s *Service) RemoveVote(ctx context.Context, body VoteRequest) error {
-  log := logger.FromContext(ctx)
-  err := s.database.RemoveVote(body.Board, body.User, body.Note)
-  if err != nil {
-    log.Errorw("unable to remove vote", "board", body.Board, "user", body.User)
-  }
-  return err
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "vote-remove")
+	defer span.End()
+
+	span.SetAttributes(attribute.String("board", body.Board.String()), attribute.String("note", body.Note.String()), attribute.String("user", body.User.String()))
+	err := s.database.RemoveVote(ctx, body.Board, body.User, body.Note)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to remove vote")
+		span.RecordError(err)
+		log.Errorw("unable to remove vote", "board", body.Board, "user", body.User)
+	}
+	return err
 }
 
 func (s *Service) GetVotes(ctx context.Context, f filter.VoteFilter) ([]*Vote, error) {
-  log := logger.FromContext(ctx)
-  votes, err := s.database.GetVotes(f)
-  if err != nil {
-    log.Errorw("unable to get votes", "err", err)
-  }
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "vote-get-all")
+	defer span.End()
 
-  return Votes(votes), err
+	span.SetAttributes(attribute.String("filter-board", f.Board.String()))
+	votes, err := s.database.GetVotes(ctx, f)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get votes")
+		span.RecordError(err)
+		log.Errorw("unable to get votes", "err", err)
+	}
+
+	return Votes(votes), err
 }
 
 func (s *Service) Create(ctx context.Context, body VotingCreateRequest) (*Voting, error) {
-  log := logger.FromContext(ctx)
-  voting, err := s.database.Create(DatabaseVotingInsert{
-    Board:              body.Board,
-    VoteLimit:          body.VoteLimit,
-    AllowMultipleVotes: body.AllowMultipleVotes,
-    ShowVotesOfOthers:  body.ShowVotesOfOthers,
-    IsAnonymous:        body.IsAnonymous,
-    Status:             Open,
-  })
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "voting-create")
+	defer span.End()
 
-  if err != nil {
-    if err == sql.ErrNoRows {
-      return nil, common.BadRequestError(errors.New("only one open voting session is allowed"))
-    }
-    log.Errorw("unable to create voting", "board", body.Board, "error", err)
-    return nil, common.InternalServerError
-  }
-  s.CreatedVoting(body.Board, voting.ID)
+	span.SetAttributes(
+		attribute.String("board", body.Board.String()),
+		attribute.Int("vote limit", body.VoteLimit),
+		attribute.Bool("allow multiple votes", body.AllowMultipleVotes),
+		attribute.Bool("is anonymous", body.IsAnonymous),
+		attribute.Bool("show voes of other users", body.ShowVotesOfOthers),
+	)
+	voting, err := s.database.Create(ctx, DatabaseVotingInsert{
+		Board:              body.Board,
+		VoteLimit:          body.VoteLimit,
+		AllowMultipleVotes: body.AllowMultipleVotes,
+		ShowVotesOfOthers:  body.ShowVotesOfOthers,
+		IsAnonymous:        body.IsAnonymous,
+		Status:             Open,
+	})
 
-  return new(Voting).From(voting, nil), err
+	if err != nil {
+		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "failed to create voting")
+			span.RecordError(err)
+			return nil, common.BadRequestError(errors.New("only one open voting session is allowed"))
+		}
+
+		span.SetStatus(codes.Error, "failed to create voting")
+		span.RecordError(err)
+		log.Errorw("unable to create voting", "board", body.Board, "error", err)
+		return nil, common.InternalServerError
+	}
+
+	s.CreatedVoting(ctx, body.Board, voting.ID)
+
+	return new(Voting).From(voting, nil), err
 }
 
 func (s *Service) Update(ctx context.Context, body VotingUpdateRequest, affectedNotes []Note) (*Voting, error) {
-  log := logger.FromContext(ctx)
-  if body.Status == Open {
-    return nil, common.BadRequestError(errors.New("not allowed ot change to open state"))
-  }
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "voting-update")
+	defer span.End()
 
-  voting, err := s.database.Update(DatabaseVotingUpdate{
-    ID:     body.ID,
-    Board:  body.Board,
-    Status: body.Status,
-  })
+	if body.Status == Open {
+		err := common.BadRequestError(errors.New("not allowed ot change to open state"))
+		span.SetStatus(codes.Error, "not alowed to change state to open")
+		span.RecordError(err)
+		return nil, err
+	}
 
-  if err != nil {
-    if err == sql.ErrNoRows {
-      return nil, common.NotFoundError
-    }
+	span.SetAttributes(
+		attribute.String("id", body.ID.String()),
+		attribute.String("board", body.Board.String()),
+		attribute.String("status", string(body.Status)),
+	)
+	voting, err := s.database.Update(ctx, DatabaseVotingUpdate{
+		ID:     body.ID,
+		Board:  body.Board,
+		Status: body.Status,
+	})
 
-    log.Errorw("unable to update voting", "err", err)
-    return nil, common.InternalServerError
-  }
+	if err != nil {
+		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "No vote found to update")
+			span.RecordError(err)
+			return nil, common.NotFoundError
+		}
 
-  if voting.Status == Closed {
-    receivedVotes, err := s.getVotes(ctx, body.Board, body.ID)
-    if err != nil {
-      log.Errorw("unable to get votes", "err", err)
-      return nil, err
-    }
+		span.SetStatus(codes.Error, "failed to update voting")
+		span.RecordError(err)
+		log.Errorw("unable to update voting", "err", err)
+		return nil, common.InternalServerError
+	}
 
-    s.UpdatedVoting(body.Board, voting, affectedNotes)
-    return new(Voting).From(voting, receivedVotes), err
-  }
+	if voting.Status == Closed {
+		receivedVotes, err := s.getVotes(ctx, body.Board, body.ID)
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to get votes")
+			span.RecordError(err)
+			log.Errorw("unable to get votes", "err", err)
+			return nil, err
+		}
 
-  s.UpdatedVoting(body.Board, voting, affectedNotes)
-  return new(Voting).From(voting, nil), err
+		s.UpdatedVoting(ctx, body.Board, voting, affectedNotes)
+		return new(Voting).From(voting, receivedVotes), err
+	}
+
+	s.UpdatedVoting(ctx, body.Board, voting, affectedNotes)
+	return new(Voting).From(voting, nil), err
 }
 
 func (s *Service) Get(ctx context.Context, boardID, id uuid.UUID) (*Voting, error) {
-  log := logger.FromContext(ctx)
-  voting, _, err := s.database.Get(boardID, id)
-  if err != nil {
-    if err == sql.ErrNoRows {
-      return nil, common.NotFoundError
-    }
-    log.Errorw("unable to get voting session", "voting", id, "error", err)
-    return nil, common.InternalServerError
-  }
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "voting-get")
+	defer span.End()
 
-  if voting.Status == Closed {
-    receivedVotes, err := s.getVotes(ctx, boardID, id)
-    if err != nil {
-      log.Errorw("unable to get votes", "voting", id, "error", err)
-      return nil, err
-    }
-    return new(Voting).From(voting, receivedVotes), err
-  }
-  return new(Voting).From(voting, nil), err
+	span.SetAttributes(attribute.String("board", boardID.String()))
+	voting, _, err := s.database.Get(ctx, boardID, id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "voting not found")
+			span.RecordError(err)
+			return nil, common.NotFoundError
+		}
+
+		span.SetStatus(codes.Error, "failed to get voting")
+		span.RecordError(err)
+		log.Errorw("unable to get voting session", "voting", id, "error", err)
+		return nil, common.InternalServerError
+	}
+
+	if voting.Status == Closed {
+		receivedVotes, err := s.getVotes(ctx, boardID, id)
+		if err != nil {
+			span.SetStatus(codes.Error, "")
+			span.RecordError(err)
+			log.Errorw("unable to get votes", "voting", id, "error", err)
+			return nil, err
+		}
+
+		return new(Voting).From(voting, receivedVotes), err
+	}
+
+	return new(Voting).From(voting, nil), err
 }
 
 func (s *Service) GetAll(ctx context.Context, boardID uuid.UUID) ([]*Voting, error) {
-  log := logger.FromContext(ctx)
-  votings, receivedVotes, err := s.database.GetAll(boardID)
-  if err != nil {
-    log.Errorw("unable to get votings", "board", boardID, "error", err)
-    return nil, err
-  }
-  return Votings(votings, receivedVotes), err
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "voting-get-all")
+	defer span.End()
+
+	span.SetAttributes(attribute.String("board", boardID.String()))
+	votings, receivedVotes, err := s.database.GetAll(ctx, boardID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get votings")
+		span.RecordError(err)
+		log.Errorw("unable to get votings", "board", boardID, "error", err)
+		return nil, err
+	}
+
+	return Votings(votings, receivedVotes), err
 }
 
 func (s *Service) GetOpen(ctx context.Context, boardID uuid.UUID) (*Voting, error) {
-  log := logger.FromContext(ctx)
-  voting, err := s.database.GetOpenVoting(boardID)
-  if err != nil {
-    log.Errorw("nable to get open votings", "board", boardID, "error", err)
-    return nil, err
-  }
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "voting-get-open")
+	defer span.End()
 
-  return new(Voting).From(voting, nil), err
+	span.SetAttributes(attribute.String("baord", boardID.String()))
+	voting, err := s.database.GetOpenVoting(ctx, boardID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get voting")
+		span.RecordError(err)
+		log.Errorw("unable to get open votings", "board", boardID, "error", err)
+		return nil, err
+	}
+
+	return new(Voting).From(voting, nil), err
 }
 
 func (s *Service) getVotes(ctx context.Context, boardID, id uuid.UUID) ([]DatabaseVote, error) {
-  log := logger.FromContext(ctx)
-  votes, err := s.database.GetVotes(filter.VoteFilter{Board: boardID, Voting: &id})
-  if err != nil {
-    log.Errorw("unable to get votes", "voting", id, "error", err)
-    return nil, err
-  }
-  return votes, err
+	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "votes-get")
+	defer span.End()
+
+	span.SetAttributes(attribute.String("board", boardID.String()), attribute.String("voting", id.String()))
+	votes, err := s.database.GetVotes(ctx, filter.VoteFilter{Board: boardID, Voting: &id})
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get votes")
+		span.RecordError(err)
+		log.Errorw("unable to get votes", "voting", id, "error", err)
+		return nil, err
+	}
+
+	return votes, err
 }
 
-func (s *Service) CreatedVoting(board, voting uuid.UUID) {
-  dbVoting, _, err := s.database.Get(board, voting)
-  if err != nil {
-    logger.Get().Errorw("unable to get voting in created voting", "err", err)
-    return
-  }
+func (s *Service) CreatedVoting(ctx context.Context, board, voting uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "voting-create")
+	defer span.End()
 
-  _ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-    Type: realtime.BoardEventVotingCreated,
-    Data: new(Voting).From(dbVoting, nil),
-  })
+	span.SetAttributes(attribute.String("board", board.String()), attribute.String("voting", voting.String()))
+	dbVoting, _, err := s.database.Get(ctx, board, voting)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to create voting")
+		span.RecordError(err)
+		logger.Get().Errorw("unable to get voting in created voting", "err", err)
+		return
+	}
+
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventVotingCreated,
+		Data: new(Voting).From(dbVoting, nil),
+	})
 }
 
-func (s *Service) UpdatedVoting(board uuid.UUID, voting DatabaseVoting, affectedNotes []Note) {
-  dbVoting, dbVotes, err := s.database.Get(board, voting.ID)
-  if err != nil {
-    logger.Get().Errorw("unable to retrieve voting in updated voting", "err", err)
-    return
-  }
+func (s *Service) UpdatedVoting(ctx context.Context, board uuid.UUID, voting DatabaseVoting, affectedNotes []Note) {
+	ctx, span := tracer.Start(ctx, "voting-update")
+	defer span.End()
 
-  if voting.Status == Closed {
-    if err != nil {
-      logger.Get().Errorw("unable to retrieve notes in updated voting", "err", err)
-    }
-  }
+	span.SetAttributes(
+		attribute.String("board", board.String()),
+		attribute.String("voting", voting.ID.String()),
+		attribute.Int("vote limit", voting.VoteLimit),
+		attribute.Bool("allow multiple votes", voting.AllowMultipleVotes),
+		attribute.Bool("is anonymous", voting.IsAnonymous),
+		attribute.Bool("show voes of other users", voting.ShowVotesOfOthers),
+	)
+	dbVoting, dbVotes, err := s.database.Get(ctx, board, voting.ID)
+	if err != nil {
+		span.SetStatus(codes.Error, "failed to get voting")
+		span.RecordError(err)
+		logger.Get().Errorw("unable to retrieve voting in updated voting", "err", err)
+		return
+	}
 
-  _ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
-    Type: realtime.BoardEventVotingUpdated,
-    Data: struct {
-      Voting *Voting `json:"voting"`
-      Notes  []Note  `json:"notes"`
-    }{
-      Voting: new(Voting).From(dbVoting, dbVotes),
-      Notes:  affectedNotes,
-    },
-  })
+	if voting.Status == Closed {
+		if err != nil {
+			span.SetStatus(codes.Error, "failed to retriev notes")
+			span.RecordError(err)
+			logger.Get().Errorw("unable to retrieve notes in updated voting", "err", err)
+		}
+	}
+
+	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+		Type: realtime.BoardEventVotingUpdated,
+		Data: struct {
+			Voting *Voting `json:"voting"`
+			Notes  []Note  `json:"notes"`
+		}{
+			Voting: new(Voting).From(dbVoting, dbVotes),
+			Notes:  affectedNotes,
+		},
+	})
 
 }
