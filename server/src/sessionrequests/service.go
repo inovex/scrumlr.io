@@ -9,18 +9,26 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/logger"
 	"scrumlr.io/server/realtime"
 	"scrumlr.io/server/sessions"
 )
 
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/sessionrequests")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/sessionrequests")
+
 type SessionRequestDatabase interface {
-	Create(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)
-	Update(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)
-	Get(board, user uuid.UUID) (DatabaseBoardSessionRequest, error)
-	GetAll(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error)
-	Exists(board, user uuid.UUID) (bool, error)
+	Create(ctx context.Context, request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)
+	Update(ctx context.Context, update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)
+	Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSessionRequest, error)
+	GetAll(ctx context.Context, board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error)
+	Exists(ctx context.Context, board, user uuid.UUID) (bool, error)
 }
 
 type Websocket interface {
@@ -48,12 +56,18 @@ func NewSessionRequestService(db SessionRequestDatabase, rt *realtime.Broker, we
 
 func (service *BoardSessionRequestService) Create(ctx context.Context, boardID, userID uuid.UUID) (*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
-	request, err := service.database.Create(DatabaseBoardSessionRequestInsert{
+	ctx, span := tracer.Start(ctx, "session-request-create")
+	defer span.End()
+
+	span.SetAttributes(attribute.String("board", boardID.String()), attribute.String("user", userID.String()))
+	request, err := service.database.Create(ctx, DatabaseBoardSessionRequestInsert{
 		Board: boardID,
 		User:  userID,
 	})
 
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to create board session request")
+		span.RecordError(err)
 		log.Errorw("unable to create BoardSessionRequest", "board", boardID, "user", userID, "error", err)
 		return nil, err
 	}
@@ -65,13 +79,23 @@ func (service *BoardSessionRequestService) Create(ctx context.Context, boardID, 
 
 func (service *BoardSessionRequestService) Update(ctx context.Context, body BoardSessionRequestUpdate) (*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
-	request, err := service.database.Update(DatabaseBoardSessionRequestUpdate{
+	ctx, span := tracer.Start(ctx, "session-request-update")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("board", body.Board.String()),
+		attribute.String("user", body.User.String()),
+		attribute.String("status", string(body.Status)),
+	)
+	request, err := service.database.Update(ctx, DatabaseBoardSessionRequestUpdate{
 		Board:  body.Board,
 		User:   body.User,
 		Status: body.Status,
 	})
 
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to update board session request")
+		span.RecordError(err)
 		log.Errorw("unable to update BoardSessionRequest", "board", body.Board, "user", body.User, "error", err)
 		return nil, err
 	}
@@ -79,6 +103,8 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 	if request.Status == RequestAccepted {
 		_, err := service.sessionService.Create(ctx, request.Board, request.User)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to create board session")
+			span.RecordError(err)
 			return nil, err
 		}
 	}
@@ -90,11 +116,20 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 
 func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, userID uuid.UUID) (*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
-	request, err := service.database.Get(boardID, userID)
+	ctx, span := tracer.Start(ctx, "session-request-get")
+	defer span.End()
+
+	span.SetAttributes(attribute.String("board", boardID.String()), attribute.String("user", userID.String()))
+	request, err := service.database.Get(ctx, boardID, userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			span.SetStatus(codes.Error, "board session request not found")
+			span.RecordError(err)
 			return nil, common.NotFoundError
 		}
+
+		span.SetStatus(codes.Error, "failed to get board session request")
+		span.RecordError(err)
 		log.Errorw("failed to load board session request", "board", boardID, "user", userID, "err", err)
 		return nil, fmt.Errorf("failed to load board session request: %w", err)
 	}
@@ -104,18 +139,30 @@ func (service *BoardSessionRequestService) Get(ctx context.Context, boardID, use
 
 func (service *BoardSessionRequestService) GetAll(ctx context.Context, boardID uuid.UUID, statusQuery string) ([]*BoardSessionRequest, error) {
 	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "session-request-get-all")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("board", boardID.String()),
+		attribute.String("status query", statusQuery),
+	)
 	var filters []RequestStatus
 	if statusQuery != "" {
 		if statusQuery == (string)(RequestPending) || statusQuery == (string)(RequestAccepted) || statusQuery == (string)(RequestRejected) {
 			f := (RequestStatus)(statusQuery)
 			filters = append(filters, f)
 		} else {
-			return nil, common.BadRequestError(errors.New("invalid status filter"))
+			err := common.BadRequestError(errors.New("invalid status filter"))
+			span.SetStatus(codes.Error, "invalide status filter")
+			span.RecordError(err)
+			return nil, err
 		}
 	}
 
-	requests, err := service.database.GetAll(boardID, filters...)
+	requests, err := service.database.GetAll(ctx, boardID, filters...)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board session requests")
+		span.RecordError(err)
 		log.Errorw("failed to load board session requests", "board", boardID, "err", err)
 		return nil, fmt.Errorf("failed to load board session requests: %w", err)
 	}
@@ -123,11 +170,18 @@ func (service *BoardSessionRequestService) GetAll(ctx context.Context, boardID u
 	return BoardSessionRequests(requests), nil
 }
 
-func (service *BoardSessionRequestService) Exists(_ context.Context, boardID, userID uuid.UUID) (bool, error) {
-	return service.database.Exists(boardID, userID)
+func (service *BoardSessionRequestService) Exists(ctx context.Context, boardID, userID uuid.UUID) (bool, error) {
+	ctx, span := tracer.Start(ctx, "session-request-exists")
+	defer span.End()
+
+	span.SetAttributes(attribute.String("board", boardID.String()), attribute.String("user", userID.String()))
+	return service.database.Exists(ctx, boardID, userID)
 }
 
-func (service *BoardSessionRequestService) OpenSocket(w http.ResponseWriter, r *http.Request) {
+func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	_, span := tracer.Start(ctx, "session-request-open-socket")
+	defer span.End()
+
 	service.websocket.OpenSocket(w, r)
 }
 
