@@ -22,7 +22,7 @@ require (
 	github.com/markbates/goth v1.82.0
 	github.com/nats-io/nats.go v1.45.0
 	github.com/ory/dockertest/v3 v3.12.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	github.com/uptrace/bun v1.2.15
 	github.com/uptrace/bun/dbfixture v1.2.15
 	github.com/uptrace/bun/dialect/pgdialect v1.2.15
