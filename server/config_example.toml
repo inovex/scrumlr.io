@@ -31,6 +31,12 @@ base-path = "/"
 # Enable/Disable the login of anonymous clients
 disable-anonymous-login = false
 
+# Enable/Disable the custom template creation for anonymous clients
+allow-anonymous-custom-templates = false
+
+# Enable/Disable the board creation for anonymous clients
+allow-anonymous-board-creation = true
+
 # enables/disables experimental file system store, in order to allow larger session cookie sizes
 auth-experimental-file-system-store = false
 

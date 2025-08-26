@@ -16,7 +16,7 @@ import (
 
 func TestAnonymousBoardCreationContext(t *testing.T) {
 	userID := uuid.New()
-	
+
 	tests := []struct {
 		name                          string
 		allowAnonymousBoardCreation   bool

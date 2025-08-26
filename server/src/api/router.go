@@ -1,39 +1,40 @@
 package api
 
 import (
-	"net/http"
-	"os"
-	"scrumlr.io/server/sessions"
-	"time"
+  "net/http"
+  "os"
+  "time"
 
-	"scrumlr.io/server/boards"
+  "scrumlr.io/server/sessions"
 
-	"scrumlr.io/server/votings"
+  "scrumlr.io/server/boards"
 
-	"scrumlr.io/server/boardreactions"
-	"scrumlr.io/server/boardtemplates"
-	"scrumlr.io/server/columns"
-	"scrumlr.io/server/columntemplates"
-	"scrumlr.io/server/notes"
+  "scrumlr.io/server/votings"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	"github.com/markbates/goth/gothic"
+  "scrumlr.io/server/boardreactions"
+  "scrumlr.io/server/boardtemplates"
+  "scrumlr.io/server/columns"
+  "scrumlr.io/server/columntemplates"
+  "scrumlr.io/server/notes"
 
-	"github.com/go-chi/cors"
-	"github.com/go-chi/httprate"
-	"github.com/go-chi/render"
-	"github.com/google/uuid"
-	gorillaSessions "github.com/gorilla/sessions"
-	"github.com/gorilla/websocket"
+  "github.com/go-chi/chi/v5"
+  "github.com/go-chi/chi/v5/middleware"
+  "github.com/markbates/goth/gothic"
 
-	"scrumlr.io/server/auth"
-	"scrumlr.io/server/feedback"
-	"scrumlr.io/server/health"
-	"scrumlr.io/server/logger"
-	"scrumlr.io/server/reactions"
-	"scrumlr.io/server/realtime"
-	"scrumlr.io/server/sessionrequests"
+  "github.com/go-chi/cors"
+  "github.com/go-chi/httprate"
+  "github.com/go-chi/render"
+  "github.com/google/uuid"
+  gorillaSessions "github.com/gorilla/sessions"
+  "github.com/gorilla/websocket"
+
+  "scrumlr.io/server/auth"
+  "scrumlr.io/server/feedback"
+  "scrumlr.io/server/health"
+  "scrumlr.io/server/logger"
+  "scrumlr.io/server/reactions"
+  "scrumlr.io/server/realtime"
+  "scrumlr.io/server/sessionrequests"
 )
 
 type Server struct {
@@ -202,26 +203,31 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Use(s.auth.Authenticator())
 		r.Use(auth.AuthContext)
 
-		r.With(s.BoardTemplateRateLimiter).Post("/templates", s.createBoardTemplate)
-		r.With(s.BoardTemplateRateLimiter).Get("/templates", s.getBoardTemplates)
-		r.Route("/templates/{id}", func(r chi.Router) {
+		r.Route("/templates", func(r chi.Router) {
 			r.Use(s.BoardTemplateRateLimiter)
-			r.Use(s.BoardTemplateContext)
+			r.Use(s.AnonymousCustomTemplateCreationContext)
+			
+			r.Post("/", s.createBoardTemplate)
+			r.Get("/", s.getBoardTemplates)
+			
+			r.Route("/{id}", func(r chi.Router) {
+				r.Use(s.BoardTemplateContext)
 
-			r.Get("/", s.getBoardTemplate)
-			r.Put("/", s.updateBoardTemplate)
-			r.Delete("/", s.deleteBoardTemplate)
+				r.Get("/", s.getBoardTemplate)
+				r.Put("/", s.updateBoardTemplate)
+				r.Delete("/", s.deleteBoardTemplate)
 
-			r.Route("/columns", func(r chi.Router) {
-				r.Post("/", s.createColumnTemplate)
-				r.Get("/", s.getColumnTemplates)
+				r.Route("/columns", func(r chi.Router) {
+					r.Post("/", s.createColumnTemplate)
+					r.Get("/", s.getColumnTemplates)
 
-				r.Route("/{columnTemplate}", func(r chi.Router) {
-					r.Use(s.ColumnTemplateContext)
+					r.Route("/{columnTemplate}", func(r chi.Router) {
+						r.Use(s.ColumnTemplateContext)
 
-					r.Get("/", s.getColumnTemplate)
-					r.Put("/", s.updateColumnTemplate)
-					r.Delete("/", s.deleteColumnTemplate)
+						r.Get("/", s.getColumnTemplate)
+						r.Put("/", s.updateColumnTemplate)
+						r.Delete("/", s.deleteColumnTemplate)
+					})
 				})
 			})
 		})
