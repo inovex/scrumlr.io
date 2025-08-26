@@ -22,7 +22,7 @@ func NewSessionRequestDatabase(database *bun.DB) SessionRequestDatabase {
 }
 
 // CreateBoardSessionRequest creates a new board session request with the state 'PENDING' and does nothing if it already exists
-func (database *SessionRequestDB) Create(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) Create(ctx context.Context, request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error) {
 	r := DatabaseBoardSessionRequest{Board: request.Board, User: request.User, Status: RequestPending}
 	insertQuery := database.db.NewInsert().
 		Model(&r).
@@ -36,7 +36,7 @@ func (database *SessionRequestDB) Create(request DatabaseBoardSessionRequestInse
 		ModelTableExpr("\"insertQuery\" AS s").
 		ColumnExpr("s.board, s.user, u.name, s.status, s.created_at").
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(common.ContextWithValues(context.Background(),
+		Scan(common.ContextWithValues(ctx,
 			"Database", database,
 			"Operation", "INSERT",
 			identifiers.BoardIdentifier, request.Board,
@@ -47,7 +47,7 @@ func (database *SessionRequestDB) Create(request DatabaseBoardSessionRequestInse
 }
 
 // UpdateBoardSessionRequest updates an existing board session request
-func (database *SessionRequestDB) Update(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) Update(ctx context.Context, update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error) {
 	var r DatabaseBoardSessionRequest
 	updateQuery := database.db.NewUpdate().
 		Model(&update).
@@ -64,7 +64,7 @@ func (database *SessionRequestDB) Update(update DatabaseBoardSessionRequestUpdat
 		Where("s.board = ?", update.Board).
 		Where("s.user = ?", update.User).
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(common.ContextWithValues(context.Background(),
+		Scan(common.ContextWithValues(ctx,
 			"Database", database,
 			"Operation", "UPDATE",
 			identifiers.BoardIdentifier, update.Board,
@@ -83,7 +83,7 @@ func (database *SessionRequestDB) Update(update DatabaseBoardSessionRequestUpdat
 }
 
 // GetBoardSessionRequest returns the board session request for the specified board and user
-func (database *SessionRequestDB) Get(board, user uuid.UUID) (DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) Get(ctx context.Context, board, user uuid.UUID) (DatabaseBoardSessionRequest, error) {
 	var request DatabaseBoardSessionRequest
 	err := database.db.NewSelect().
 		Model(&request).
@@ -92,13 +92,13 @@ func (database *SessionRequestDB) Get(board, user uuid.UUID) (DatabaseBoardSessi
 		Where("s.board = ?", board).
 		Where("s.user = ?", user).
 		Join("INNER JOIN users AS u ON u.id = s.user").
-		Scan(context.Background())
+		Scan(ctx)
 
 	return request, err
 }
 
 // GetBoardSessionRequests returns the list of all board session requests filtered by the status
-func (database *SessionRequestDB) GetAll(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error) {
+func (database *SessionRequestDB) GetAll(ctx context.Context, board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error) {
 	var requests []DatabaseBoardSessionRequest
 	query := database.db.NewSelect().
 		Model(&requests).
@@ -118,15 +118,15 @@ func (database *SessionRequestDB) GetAll(board uuid.UUID, status ...RequestStatu
 	err := query.
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Order("created_at ASC").
-		Scan(context.Background())
+		Scan(ctx)
 
 	return requests, err
 }
 
-func (database *SessionRequestDB) Exists(board, user uuid.UUID) (bool, error) {
+func (database *SessionRequestDB) Exists(ctx context.Context, board, user uuid.UUID) (bool, error) {
 	return database.db.NewSelect().
 		Table("board_session_requests").
 		Where("\"board\" = ?", board).
 		Where("\"user\" = ?", user).
-		Exists(context.Background())
+		Exists(ctx)
 }
