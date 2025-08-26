@@ -41,17 +41,22 @@ func (session *BoardSessionRequestSubscription) startListeningOnBoardSessionRequ
 }
 
 func (socket *WS) OpenSocket(w http.ResponseWriter, r *http.Request) {
-	id := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	userID := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	ctx := r.Context()
+	log := logger.FromContext(ctx)
+
+	id := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	userID := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	conn, err := socket.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		logger.FromRequest(r).Errorw("unable to upgrade websocket",
+		log.Errorw("unable to upgrade websocket",
 			"err", err,
 			"board", id,
 			"user", userID)
 		return
 	}
+
+	websocketOpenedCounter.Add(ctx, 1)
 	defer socket.closeSocket(conn)
 
 	socket.listenOnBoardSessionRequest(id, userID, conn)
@@ -60,12 +65,12 @@ func (socket *WS) OpenSocket(w http.ResponseWriter, r *http.Request) {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
 			if websocket.IsCloseError(err, websocket.CloseGoingAway) {
-				logger.Get().Debugw("websocket to user no longer available, about to disconnect", "user", userID)
+				log.Debugw("websocket to user no longer available, about to disconnect", "user", userID)
 				delete(socket.boardSessionRequestSubscriptions[id].clients, userID)
 			}
 			break
 		}
-		logger.Get().Debugw("received message", "message", message)
+		log.Debugw("received message", "message", message)
 	}
 }
 
@@ -89,4 +94,5 @@ func (socket *WS) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *w
 
 func (socket *WS) closeSocket(conn *websocket.Conn) {
 	_ = conn.Close()
+	websocketClosedCounter.Add(context.Background(), 1)
 }
