@@ -22,70 +22,70 @@ func NewUserDatabase(database *bun.DB) UserDatabase {
 	return db
 }
 
-func (db *DB) CreateAnonymousUser(name string) (DatabaseUser, error) {
+func (db *DB) CreateAnonymousUser(ctx context.Context, name string) (DatabaseUser, error) {
 	var user DatabaseUser
 	insert := DatabaseUserInsert{Name: strings.TrimSpace(name), AccountType: common.Anonymous}
 	_, err := db.db.NewInsert().
 		Model(&insert).
 		Returning("*").
-		Exec(context.Background(), &user)
+		Exec(ctx, &user)
 
 	return user, err
 }
 
-func (db *DB) CreateAppleUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, common.Apple, "apple_users")
+func (db *DB) CreateAppleUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.createExternalUser(ctx, id, name, avatarUrl, common.Apple, "apple_users")
 }
 
-func (db *DB) CreateAzureAdUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, common.AzureAd, "azure_ad_users")
+func (db *DB) CreateAzureAdUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.createExternalUser(ctx, id, name, avatarUrl, common.AzureAd, "azure_ad_users")
 }
 
-func (db *DB) CreateGitHubUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, common.GitHub, "github_users")
+func (db *DB) CreateGitHubUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.createExternalUser(ctx, id, name, avatarUrl, common.GitHub, "github_users")
 }
 
-func (db *DB) CreateGoogleUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, common.Google, "google_users")
+func (db *DB) CreateGoogleUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.createExternalUser(ctx, id, name, avatarUrl, common.Google, "google_users")
 }
 
-func (db *DB) CreateMicrosoftUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, common.Microsoft, "microsoft_users")
+func (db *DB) CreateMicrosoftUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.createExternalUser(ctx, id, name, avatarUrl, common.Microsoft, "microsoft_users")
 }
 
-func (db *DB) CreateOIDCUser(id, name, avatarUrl string) (DatabaseUser, error) {
-	return db.createExternalUser(id, name, avatarUrl, common.TypeOIDC, "oidc_users")
+func (db *DB) CreateOIDCUser(ctx context.Context, id, name, avatarUrl string) (DatabaseUser, error) {
+	return db.createExternalUser(ctx, id, name, avatarUrl, common.TypeOIDC, "oidc_users")
 }
 
-func (db *DB) UpdateUser(update DatabaseUserUpdate) (DatabaseUser, error) {
+func (db *DB) UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error) {
 	update.Name = strings.TrimSpace(update.Name)
 	var user DatabaseUser
 	_, err := db.db.NewUpdate().
 		Model(&update).
 		Where("id = ?", update.ID).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db), &user)
+		Exec(common.ContextWithValues(ctx, "Database", db), &user)
 
 	return user, err
 }
 
-func (db *DB) GetUser(id uuid.UUID) (DatabaseUser, error) {
+func (db *DB) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	var user DatabaseUser
 	err := db.db.NewSelect().
 		Model(&user).
 		Where("id = ?", id).
-		Scan(context.Background())
+		Scan(ctx)
 
 	return user, err
 }
 
-func (db *DB) IsUserAnonymous(id uuid.UUID) (bool, error) {
+func (db *DB) IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error) {
 	count, err := db.db.NewSelect().
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
 		Where("account_type = ?", common.Anonymous).
-		Count(context.Background())
+		Count(ctx)
 
 	if err != nil {
 		return false, err
@@ -94,14 +94,14 @@ func (db *DB) IsUserAnonymous(id uuid.UUID) (bool, error) {
 	return count > 0, nil
 }
 
-func (db *DB) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
+func (db *DB) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {
 	count, err := db.db.NewSelect().
 		Table("users").
 		Column("role").
 		Where("id = ?", id).
 		Where("account_type = ?", common.Anonymous).
 		Where("key_migration IS NULL").
-		Count(context.Background())
+		Count(ctx)
 
 	if err != nil {
 		return false, err
@@ -110,19 +110,19 @@ func (db *DB) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
 	return count > 0, nil
 }
 
-func (db *DB) SetKeyMigration(id uuid.UUID) (DatabaseUser, error) {
+func (db *DB) SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
 	var user DatabaseUser
 	_, err := db.db.NewUpdate().
 		Table("users").
 		Set("key_migration = ?", time.Now()).
 		Where("id = ?", id).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db), &user)
+		Exec(common.ContextWithValues(ctx, "Database", db), &user)
 
 	return user, err
 }
 
-func (db *DB) createExternalUser(id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
+func (db *DB) createExternalUser(ctx context.Context, id, name, avatarUrl string, accountType common.AccountType, table string) (DatabaseUser, error) {
 	name = strings.TrimSpace(name)
 	existingUser := db.db.NewSelect().
 		TableExpr(table).
@@ -170,7 +170,7 @@ func (db *DB) createExternalUser(id, name, avatarUrl string, accountType common.
 		TableExpr("select_existing_user").
 		ColumnExpr("*").
 		Join("FULL JOIN \"create_new_user\" ON true").
-		Exec(context.Background(), &user)
+		Exec(ctx, &user)
 
 	return user, err
 }

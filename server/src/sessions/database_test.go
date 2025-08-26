@@ -1,6 +1,7 @@
 package sessions
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"testing"
@@ -44,7 +45,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_AnonymousUser() {
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
 
-	dbUser, err := database.CreateAnonymousUser(userName)
+	dbUser, err := database.CreateAnonymousUser(context.Background(), userName)
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
@@ -59,7 +60,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_AppleUser() {
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
 
-	dbUser, err := database.CreateAppleUser("appleId", userName, "")
+	dbUser, err := database.CreateAppleUser(context.Background(), "appleId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
@@ -74,7 +75,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_AzureAdUser() {
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
 
-	dbUser, err := database.CreateAzureAdUser("azureId", userName, "")
+	dbUser, err := database.CreateAzureAdUser(context.Background(), "azureId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
@@ -89,7 +90,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_GitHubUser() {
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
 
-	dbUser, err := database.CreateGitHubUser("githubId", userName, "")
+	dbUser, err := database.CreateGitHubUser(context.Background(), "githubId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
@@ -104,7 +105,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_GoogleUser() {
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
 
-	dbUser, err := database.CreateGoogleUser("googleId", userName, "")
+	dbUser, err := database.CreateGoogleUser(context.Background(), "googleId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
@@ -119,7 +120,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_MicrosoftUser() {
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
 
-	dbUser, err := database.CreateMicrosoftUser("microsoftId", userName, "")
+	dbUser, err := database.CreateMicrosoftUser(context.Background(), "microsoftId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
@@ -134,7 +135,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_Create_OIDCUser() {
 	database := NewUserDatabase(suite.db)
 	userName := "Stan"
 
-	dbUser, err := database.CreateOIDCUser("oidcId", userName, "")
+	dbUser, err := database.CreateOIDCUser(context.Background(), "oidcId", userName, "")
 
 	assert.Nil(t, err)
 	assert.Equal(t, userName, dbUser.Name)
@@ -152,7 +153,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_UpdateUser() {
 	userName := "Stan"
 	avatar := common.Avatar{ClotheColor: avatar.ClotheColorBlack, ClotheType: avatar.ClotheTypeCollarSweater}
 
-	dbUser, err := database.UpdateUser(DatabaseUserUpdate{ID: userId, Name: userName, Avatar: &avatar})
+	dbUser, err := database.UpdateUser(context.Background(), DatabaseUserUpdate{ID: userId, Name: userName, Avatar: &avatar})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbUser.ID)
@@ -169,7 +170,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_GetUser() {
 
 	userId := suite.users["Stan"].ID
 
-	dbUser, err := database.GetUser(userId)
+	dbUser, err := database.GetUser(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, suite.users["Stan"].ID, dbUser.ID)
@@ -185,7 +186,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_GetUser_NotFound() {
 
 	userId := uuid.New()
 
-	dbUser, err := database.GetUser(userId)
+	dbUser, err := database.GetUser(context.Background(), userId)
 
 	assert.Equal(t, DatabaseUser{}, dbUser)
 	assert.NotNil(t, err)
@@ -198,7 +199,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_IsAnonymousUser_True() {
 
 	userId := suite.users["Friend"].ID
 
-	isAnonymous, err := database.IsUserAnonymous(userId)
+	isAnonymous, err := database.IsUserAnonymous(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.True(t, isAnonymous)
@@ -210,7 +211,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_IsAnonymousUser_False() {
 
 	userId := suite.users["Stan"].ID
 
-	isAnonymous, err := database.IsUserAnonymous(userId)
+	isAnonymous, err := database.IsUserAnonymous(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.False(t, isAnonymous)
@@ -222,7 +223,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_IsAvailableForKeyMigration_Tru
 
 	userId := suite.users["Friend"].ID
 
-	isAvailable, err := database.IsUserAvailableForKeyMigration(userId)
+	isAvailable, err := database.IsUserAvailableForKeyMigration(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.True(t, isAvailable)
@@ -234,7 +235,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_IsAvailableForKeyMigration_Fal
 
 	userId := suite.users["Stan"].ID
 
-	isAvailable, err := database.IsUserAvailableForKeyMigration(userId)
+	isAvailable, err := database.IsUserAvailableForKeyMigration(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.False(t, isAvailable)
@@ -246,7 +247,7 @@ func (suite *DatabaseUserTestSuite) Test_Database_SetKeyMigration() {
 
 	userId := suite.users["Santa"].ID
 
-	dbUser, err := database.SetKeyMigration(userId)
+	dbUser, err := database.SetKeyMigration(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, suite.users["Santa"].ID, dbUser.ID)

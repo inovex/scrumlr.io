@@ -1,6 +1,7 @@
 package sessions
 
 import (
+	"context"
 	"database/sql"
 	"errors"
 	"log"
@@ -48,7 +49,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Particpant() 
 	userId := suite.users["Luke"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Create(DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ParticipantRole})
+	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ParticipantRole})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbSession.User)
@@ -68,7 +69,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Moderator() {
 	userId := suite.users["Leia"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Create(DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ModeratorRole})
+	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ModeratorRole})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbSession.User)
@@ -88,7 +89,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Owner() {
 	userId := suite.users["Luke"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Create(DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.OwnerRole})
+	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.OwnerRole})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, errors.New("not allowed to create board session with owner role"))
@@ -102,7 +103,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_CreateSession_Duplicate() {
 	userId := suite.users["Han"].id
 	boardId := suite.boards["Write"].id
 
-	dbSession, err := database.Create(DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ParticipantRole})
+	dbSession, err := database.Create(context.Background(), DatabaseBoardSessionInsert{User: userId, Board: boardId, Role: common.ParticipantRole})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, DatabaseBoardSession{}, dbSession)
@@ -116,7 +117,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Connected() {
 	boardId := suite.boards["Write"].id
 	connected := true
 
-	dbSession, err := database.Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &connected})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbSession.User)
@@ -132,7 +133,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Ready() {
 	boardId := suite.boards["Write"].id
 	ready := true
 
-	dbSession, err := database.Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &ready})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Connected: &ready})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbSession.User)
@@ -148,7 +149,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_RaisedHand() 
 	boardId := suite.boards["Write"].id
 	raisedHand := true
 
-	dbSession, err := database.Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, RaisedHand: &raisedHand})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, RaisedHand: &raisedHand})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbSession.User)
@@ -164,7 +165,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_Banned() {
 	boardId := suite.boards["Write"].id
 	banned := true
 
-	dbSession, err := database.Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Banned: &banned})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Banned: &banned})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbSession.User)
@@ -180,7 +181,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantTo
 	boardId := suite.boards["Update"].id
 	role := common.ModeratorRole
 
-	dbSession, err := database.Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
 
 	assert.Nil(t, err)
 	assert.Equal(t, userId, dbSession.User)
@@ -196,7 +197,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ParticipantTo
 	boardId := suite.boards["update"].id
 	role := common.OwnerRole
 
-	dbSession, err := database.Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
@@ -211,7 +212,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateSession_ModeratorToOw
 	boardId := suite.boards["Write"].id
 	role := common.OwnerRole
 
-	dbSession, err := database.Update(DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
+	dbSession, err := database.Update(context.Background(), DatabaseBoardSessionUpdate{Board: boardId, User: userId, Role: &role})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
@@ -223,7 +224,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_UpdateAllSession() {
 	database := NewSessionDatabase(suite.db)
 	ready := true
 
-	dbSessions, err := database.UpdateAll(DatabaseBoardSessionUpdate{Board: suite.boards["UpdateAll"].id, Ready: &ready})
+	dbSessions, err := database.UpdateAll(context.Background(), DatabaseBoardSessionUpdate{Board: suite.boards["UpdateAll"].id, Ready: &ready})
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 4)
@@ -264,7 +265,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_Exists_True() {
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Stan"].id
 
-	exists, err := database.Exists(boardId, userId)
+	exists, err := database.Exists(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
@@ -277,7 +278,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_Exists_NotFound_Board() {
 	boardId := uuid.New()
 	userId := suite.users["Stan"].id
 
-	exists, err := database.Exists(boardId, userId)
+	exists, err := database.Exists(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.False(t, exists)
@@ -290,7 +291,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_Exists_NotFound_User() {
 	boardId := suite.boards["Read"].id
 	userId := uuid.New()
 
-	exists, err := database.Exists(boardId, userId)
+	exists, err := database.Exists(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.False(t, exists)
@@ -303,7 +304,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_ModeratorExists_Owner() {
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Stan"].id
 
-	exists, err := database.ModeratorExists(boardId, userId)
+	exists, err := database.ModeratorExists(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
@@ -316,7 +317,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_ModeratorExists_Moderator()
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Friend"].id
 
-	exists, err := database.ModeratorExists(boardId, userId)
+	exists, err := database.ModeratorExists(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
@@ -329,7 +330,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_ModeratorExists_Participant
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Santa"].id
 
-	exists, err := database.ModeratorExists(boardId, userId)
+	exists, err := database.ModeratorExists(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.False(t, exists)
@@ -342,7 +343,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_IsBanned() {
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Bob"].id
 
-	banned, err := database.IsParticipantBanned(boardId, userId)
+	banned, err := database.IsParticipantBanned(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.True(t, banned)
@@ -355,7 +356,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_IsNotBanned() {
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Santa"].id
 
-	banned, err := database.IsParticipantBanned(boardId, userId)
+	banned, err := database.IsParticipantBanned(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.False(t, banned)
@@ -368,7 +369,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetSession() {
 	boardId := suite.boards["Read"].id
 	userId := suite.users["Santa"].id
 
-	dbSession, err := database.Get(boardId, userId)
+	dbSession, err := database.Get(context.Background(), boardId, userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbSession.Board)
@@ -388,7 +389,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetSession_NotFound_Board()
 	boardId := uuid.New()
 	userId := suite.users["Santa"].id
 
-	dbSession, err := database.Get(boardId, userId)
+	dbSession, err := database.Get(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -402,7 +403,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetSession_NotFound_User() 
 	boardId := suite.boards["Read"].id
 	userId := uuid.New()
 
-	dbSession, err := database.Get(boardId, userId)
+	dbSession, err := database.Get(context.Background(), boardId, userId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -415,7 +416,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions() {
 
 	boardId := suite.boards["Read"].id
 
-	dbSessions, err := database.GetAll(boardId)
+	dbSessions, err := database.GetAll(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 4)
@@ -448,7 +449,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 	boardId := suite.boards["ReadFilter"].id
 	ready := true
 
-	dbSessions, err := database.GetAll(boardId, BoardSessionFilter{Ready: &ready})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Ready: &ready})
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
@@ -473,7 +474,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 	boardId := suite.boards["ReadFilter"].id
 	raisedHand := true
 
-	dbSessions, err := database.GetAll(boardId, BoardSessionFilter{RaisedHand: &raisedHand})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{RaisedHand: &raisedHand})
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
@@ -498,7 +499,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_C
 	boardId := suite.boards["ReadFilter"].id
 	connected := true
 
-	dbSessions, err := database.GetAll(boardId, BoardSessionFilter{Connected: &connected})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Connected: &connected})
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
@@ -523,7 +524,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithFilter_R
 	boardId := suite.boards["ReadFilter"].id
 	role := common.OwnerRole
 
-	dbSessions, err := database.GetAll(boardId, BoardSessionFilter{Role: &role})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{Role: &role})
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 1)
@@ -540,7 +541,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetAllSessions_WithMultiple
 	raisedHand := true
 	connected := true
 
-	dbSessions, err := database.GetAll(boardId, BoardSessionFilter{RaisedHand: &raisedHand, Connected: &connected})
+	dbSessions, err := database.GetAll(context.Background(), boardId, BoardSessionFilter{RaisedHand: &raisedHand, Connected: &connected})
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 1)
@@ -557,7 +558,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards() {
 
 	userId := suite.users["Stan"].id
 
-	dbSessions, err := database.GetUserConnectedBoards(userId)
+	dbSessions, err := database.GetUserConnectedBoards(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbSessions, 2)
@@ -581,7 +582,7 @@ func (suite *DatabaseSessionTestSuite) Test_Database_GetConnectedBoards_NotConne
 
 	userId := suite.users["Friend"].id
 
-	dbSessions, err := database.GetUserConnectedBoards(userId)
+	dbSessions, err := database.GetUserConnectedBoards(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, []DatabaseBoardSession(nil), dbSessions)

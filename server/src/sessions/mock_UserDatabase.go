@@ -5,6 +5,8 @@
 package sessions
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -37,8 +39,8 @@ func (_m *MockUserDatabase) EXPECT() *MockUserDatabase_Expecter {
 }
 
 // CreateAnonymousUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) CreateAnonymousUser(name string) (DatabaseUser, error) {
-	ret := _mock.Called(name)
+func (_mock *MockUserDatabase) CreateAnonymousUser(ctx context.Context, name string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, name)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateAnonymousUser")
@@ -46,16 +48,16 @@ func (_mock *MockUserDatabase) CreateAnonymousUser(name string) (DatabaseUser, e
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (DatabaseUser, error)); ok {
-		return returnFunc(name)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, name)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) DatabaseUser); ok {
-		r0 = returnFunc(name)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, name)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
-		r1 = returnFunc(name)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = returnFunc(ctx, name)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -68,19 +70,25 @@ type MockUserDatabase_CreateAnonymousUser_Call struct {
 }
 
 // CreateAnonymousUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - name string
-func (_e *MockUserDatabase_Expecter) CreateAnonymousUser(name interface{}) *MockUserDatabase_CreateAnonymousUser_Call {
-	return &MockUserDatabase_CreateAnonymousUser_Call{Call: _e.mock.On("CreateAnonymousUser", name)}
+func (_e *MockUserDatabase_Expecter) CreateAnonymousUser(ctx interface{}, name interface{}) *MockUserDatabase_CreateAnonymousUser_Call {
+	return &MockUserDatabase_CreateAnonymousUser_Call{Call: _e.mock.On("CreateAnonymousUser", ctx, name)}
 }
 
-func (_c *MockUserDatabase_CreateAnonymousUser_Call) Run(run func(name string)) *MockUserDatabase_CreateAnonymousUser_Call {
+func (_c *MockUserDatabase_CreateAnonymousUser_Call) Run(run func(ctx context.Context, name string)) *MockUserDatabase_CreateAnonymousUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -91,14 +99,14 @@ func (_c *MockUserDatabase_CreateAnonymousUser_Call) Return(databaseUser Databas
 	return _c
 }
 
-func (_c *MockUserDatabase_CreateAnonymousUser_Call) RunAndReturn(run func(name string) (DatabaseUser, error)) *MockUserDatabase_CreateAnonymousUser_Call {
+func (_c *MockUserDatabase_CreateAnonymousUser_Call) RunAndReturn(run func(ctx context.Context, name string) (DatabaseUser, error)) *MockUserDatabase_CreateAnonymousUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateAppleUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) CreateAppleUser(id string, name string, avatarUrl string) (DatabaseUser, error) {
-	ret := _mock.Called(id, name, avatarUrl)
+func (_mock *MockUserDatabase) CreateAppleUser(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, id, name, avatarUrl)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateAppleUser")
@@ -106,16 +114,16 @@ func (_mock *MockUserDatabase) CreateAppleUser(id string, name string, avatarUrl
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) (DatabaseUser, error)); ok {
-		return returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, id, name, avatarUrl)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) DatabaseUser); ok {
-		r0 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string, string, string) error); ok {
-		r1 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
+		r1 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -128,18 +136,19 @@ type MockUserDatabase_CreateAppleUser_Call struct {
 }
 
 // CreateAppleUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateAppleUser(id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateAppleUser_Call {
-	return &MockUserDatabase_CreateAppleUser_Call{Call: _e.mock.On("CreateAppleUser", id, name, avatarUrl)}
+func (_e *MockUserDatabase_Expecter) CreateAppleUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateAppleUser_Call {
+	return &MockUserDatabase_CreateAppleUser_Call{Call: _e.mock.On("CreateAppleUser", ctx, id, name, avatarUrl)}
 }
 
-func (_c *MockUserDatabase_CreateAppleUser_Call) Run(run func(id string, name string, avatarUrl string)) *MockUserDatabase_CreateAppleUser_Call {
+func (_c *MockUserDatabase_CreateAppleUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserDatabase_CreateAppleUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 string
 		if args[1] != nil {
@@ -149,10 +158,15 @@ func (_c *MockUserDatabase_CreateAppleUser_Call) Run(run func(id string, name st
 		if args[2] != nil {
 			arg2 = args[2].(string)
 		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
 		run(
 			arg0,
 			arg1,
 			arg2,
+			arg3,
 		)
 	})
 	return _c
@@ -163,14 +177,14 @@ func (_c *MockUserDatabase_CreateAppleUser_Call) Return(databaseUser DatabaseUse
 	return _c
 }
 
-func (_c *MockUserDatabase_CreateAppleUser_Call) RunAndReturn(run func(id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateAppleUser_Call {
+func (_c *MockUserDatabase_CreateAppleUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateAppleUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateAzureAdUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) CreateAzureAdUser(id string, name string, avatarUrl string) (DatabaseUser, error) {
-	ret := _mock.Called(id, name, avatarUrl)
+func (_mock *MockUserDatabase) CreateAzureAdUser(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, id, name, avatarUrl)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateAzureAdUser")
@@ -178,16 +192,16 @@ func (_mock *MockUserDatabase) CreateAzureAdUser(id string, name string, avatarU
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) (DatabaseUser, error)); ok {
-		return returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, id, name, avatarUrl)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) DatabaseUser); ok {
-		r0 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string, string, string) error); ok {
-		r1 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
+		r1 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -200,18 +214,19 @@ type MockUserDatabase_CreateAzureAdUser_Call struct {
 }
 
 // CreateAzureAdUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateAzureAdUser(id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateAzureAdUser_Call {
-	return &MockUserDatabase_CreateAzureAdUser_Call{Call: _e.mock.On("CreateAzureAdUser", id, name, avatarUrl)}
+func (_e *MockUserDatabase_Expecter) CreateAzureAdUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateAzureAdUser_Call {
+	return &MockUserDatabase_CreateAzureAdUser_Call{Call: _e.mock.On("CreateAzureAdUser", ctx, id, name, avatarUrl)}
 }
 
-func (_c *MockUserDatabase_CreateAzureAdUser_Call) Run(run func(id string, name string, avatarUrl string)) *MockUserDatabase_CreateAzureAdUser_Call {
+func (_c *MockUserDatabase_CreateAzureAdUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserDatabase_CreateAzureAdUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 string
 		if args[1] != nil {
@@ -221,10 +236,15 @@ func (_c *MockUserDatabase_CreateAzureAdUser_Call) Run(run func(id string, name 
 		if args[2] != nil {
 			arg2 = args[2].(string)
 		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
 		run(
 			arg0,
 			arg1,
 			arg2,
+			arg3,
 		)
 	})
 	return _c
@@ -235,14 +255,14 @@ func (_c *MockUserDatabase_CreateAzureAdUser_Call) Return(databaseUser DatabaseU
 	return _c
 }
 
-func (_c *MockUserDatabase_CreateAzureAdUser_Call) RunAndReturn(run func(id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateAzureAdUser_Call {
+func (_c *MockUserDatabase_CreateAzureAdUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateAzureAdUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateGitHubUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) CreateGitHubUser(id string, name string, avatarUrl string) (DatabaseUser, error) {
-	ret := _mock.Called(id, name, avatarUrl)
+func (_mock *MockUserDatabase) CreateGitHubUser(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, id, name, avatarUrl)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateGitHubUser")
@@ -250,16 +270,16 @@ func (_mock *MockUserDatabase) CreateGitHubUser(id string, name string, avatarUr
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) (DatabaseUser, error)); ok {
-		return returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, id, name, avatarUrl)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) DatabaseUser); ok {
-		r0 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string, string, string) error); ok {
-		r1 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
+		r1 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -272,18 +292,19 @@ type MockUserDatabase_CreateGitHubUser_Call struct {
 }
 
 // CreateGitHubUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateGitHubUser(id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateGitHubUser_Call {
-	return &MockUserDatabase_CreateGitHubUser_Call{Call: _e.mock.On("CreateGitHubUser", id, name, avatarUrl)}
+func (_e *MockUserDatabase_Expecter) CreateGitHubUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateGitHubUser_Call {
+	return &MockUserDatabase_CreateGitHubUser_Call{Call: _e.mock.On("CreateGitHubUser", ctx, id, name, avatarUrl)}
 }
 
-func (_c *MockUserDatabase_CreateGitHubUser_Call) Run(run func(id string, name string, avatarUrl string)) *MockUserDatabase_CreateGitHubUser_Call {
+func (_c *MockUserDatabase_CreateGitHubUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserDatabase_CreateGitHubUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 string
 		if args[1] != nil {
@@ -293,10 +314,15 @@ func (_c *MockUserDatabase_CreateGitHubUser_Call) Run(run func(id string, name s
 		if args[2] != nil {
 			arg2 = args[2].(string)
 		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
 		run(
 			arg0,
 			arg1,
 			arg2,
+			arg3,
 		)
 	})
 	return _c
@@ -307,14 +333,14 @@ func (_c *MockUserDatabase_CreateGitHubUser_Call) Return(databaseUser DatabaseUs
 	return _c
 }
 
-func (_c *MockUserDatabase_CreateGitHubUser_Call) RunAndReturn(run func(id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateGitHubUser_Call {
+func (_c *MockUserDatabase_CreateGitHubUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateGitHubUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateGoogleUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) CreateGoogleUser(id string, name string, avatarUrl string) (DatabaseUser, error) {
-	ret := _mock.Called(id, name, avatarUrl)
+func (_mock *MockUserDatabase) CreateGoogleUser(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, id, name, avatarUrl)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateGoogleUser")
@@ -322,16 +348,16 @@ func (_mock *MockUserDatabase) CreateGoogleUser(id string, name string, avatarUr
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) (DatabaseUser, error)); ok {
-		return returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, id, name, avatarUrl)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) DatabaseUser); ok {
-		r0 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string, string, string) error); ok {
-		r1 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
+		r1 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -344,18 +370,19 @@ type MockUserDatabase_CreateGoogleUser_Call struct {
 }
 
 // CreateGoogleUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateGoogleUser(id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateGoogleUser_Call {
-	return &MockUserDatabase_CreateGoogleUser_Call{Call: _e.mock.On("CreateGoogleUser", id, name, avatarUrl)}
+func (_e *MockUserDatabase_Expecter) CreateGoogleUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateGoogleUser_Call {
+	return &MockUserDatabase_CreateGoogleUser_Call{Call: _e.mock.On("CreateGoogleUser", ctx, id, name, avatarUrl)}
 }
 
-func (_c *MockUserDatabase_CreateGoogleUser_Call) Run(run func(id string, name string, avatarUrl string)) *MockUserDatabase_CreateGoogleUser_Call {
+func (_c *MockUserDatabase_CreateGoogleUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserDatabase_CreateGoogleUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 string
 		if args[1] != nil {
@@ -365,10 +392,15 @@ func (_c *MockUserDatabase_CreateGoogleUser_Call) Run(run func(id string, name s
 		if args[2] != nil {
 			arg2 = args[2].(string)
 		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
 		run(
 			arg0,
 			arg1,
 			arg2,
+			arg3,
 		)
 	})
 	return _c
@@ -379,14 +411,14 @@ func (_c *MockUserDatabase_CreateGoogleUser_Call) Return(databaseUser DatabaseUs
 	return _c
 }
 
-func (_c *MockUserDatabase_CreateGoogleUser_Call) RunAndReturn(run func(id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateGoogleUser_Call {
+func (_c *MockUserDatabase_CreateGoogleUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateGoogleUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateMicrosoftUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) CreateMicrosoftUser(id string, name string, avatarUrl string) (DatabaseUser, error) {
-	ret := _mock.Called(id, name, avatarUrl)
+func (_mock *MockUserDatabase) CreateMicrosoftUser(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, id, name, avatarUrl)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateMicrosoftUser")
@@ -394,16 +426,16 @@ func (_mock *MockUserDatabase) CreateMicrosoftUser(id string, name string, avata
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) (DatabaseUser, error)); ok {
-		return returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, id, name, avatarUrl)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) DatabaseUser); ok {
-		r0 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string, string, string) error); ok {
-		r1 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
+		r1 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -416,18 +448,19 @@ type MockUserDatabase_CreateMicrosoftUser_Call struct {
 }
 
 // CreateMicrosoftUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateMicrosoftUser(id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateMicrosoftUser_Call {
-	return &MockUserDatabase_CreateMicrosoftUser_Call{Call: _e.mock.On("CreateMicrosoftUser", id, name, avatarUrl)}
+func (_e *MockUserDatabase_Expecter) CreateMicrosoftUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateMicrosoftUser_Call {
+	return &MockUserDatabase_CreateMicrosoftUser_Call{Call: _e.mock.On("CreateMicrosoftUser", ctx, id, name, avatarUrl)}
 }
 
-func (_c *MockUserDatabase_CreateMicrosoftUser_Call) Run(run func(id string, name string, avatarUrl string)) *MockUserDatabase_CreateMicrosoftUser_Call {
+func (_c *MockUserDatabase_CreateMicrosoftUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserDatabase_CreateMicrosoftUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 string
 		if args[1] != nil {
@@ -437,10 +470,15 @@ func (_c *MockUserDatabase_CreateMicrosoftUser_Call) Run(run func(id string, nam
 		if args[2] != nil {
 			arg2 = args[2].(string)
 		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
 		run(
 			arg0,
 			arg1,
 			arg2,
+			arg3,
 		)
 	})
 	return _c
@@ -451,14 +489,14 @@ func (_c *MockUserDatabase_CreateMicrosoftUser_Call) Return(databaseUser Databas
 	return _c
 }
 
-func (_c *MockUserDatabase_CreateMicrosoftUser_Call) RunAndReturn(run func(id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateMicrosoftUser_Call {
+func (_c *MockUserDatabase_CreateMicrosoftUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateMicrosoftUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // CreateOIDCUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) CreateOIDCUser(id string, name string, avatarUrl string) (DatabaseUser, error) {
-	ret := _mock.Called(id, name, avatarUrl)
+func (_mock *MockUserDatabase) CreateOIDCUser(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, id, name, avatarUrl)
 
 	if len(ret) == 0 {
 		panic("no return value specified for CreateOIDCUser")
@@ -466,16 +504,16 @@ func (_mock *MockUserDatabase) CreateOIDCUser(id string, name string, avatarUrl 
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) (DatabaseUser, error)); ok {
-		return returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, id, name, avatarUrl)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string, string, string) DatabaseUser); ok {
-		r0 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string, string) DatabaseUser); ok {
+		r0 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(string, string, string) error); ok {
-		r1 = returnFunc(id, name, avatarUrl)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
+		r1 = returnFunc(ctx, id, name, avatarUrl)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -488,18 +526,19 @@ type MockUserDatabase_CreateOIDCUser_Call struct {
 }
 
 // CreateOIDCUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id string
 //   - name string
 //   - avatarUrl string
-func (_e *MockUserDatabase_Expecter) CreateOIDCUser(id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateOIDCUser_Call {
-	return &MockUserDatabase_CreateOIDCUser_Call{Call: _e.mock.On("CreateOIDCUser", id, name, avatarUrl)}
+func (_e *MockUserDatabase_Expecter) CreateOIDCUser(ctx interface{}, id interface{}, name interface{}, avatarUrl interface{}) *MockUserDatabase_CreateOIDCUser_Call {
+	return &MockUserDatabase_CreateOIDCUser_Call{Call: _e.mock.On("CreateOIDCUser", ctx, id, name, avatarUrl)}
 }
 
-func (_c *MockUserDatabase_CreateOIDCUser_Call) Run(run func(id string, name string, avatarUrl string)) *MockUserDatabase_CreateOIDCUser_Call {
+func (_c *MockUserDatabase_CreateOIDCUser_Call) Run(run func(ctx context.Context, id string, name string, avatarUrl string)) *MockUserDatabase_CreateOIDCUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 string
 		if args[1] != nil {
@@ -509,10 +548,15 @@ func (_c *MockUserDatabase_CreateOIDCUser_Call) Run(run func(id string, name str
 		if args[2] != nil {
 			arg2 = args[2].(string)
 		}
+		var arg3 string
+		if args[3] != nil {
+			arg3 = args[3].(string)
+		}
 		run(
 			arg0,
 			arg1,
 			arg2,
+			arg3,
 		)
 	})
 	return _c
@@ -523,14 +567,14 @@ func (_c *MockUserDatabase_CreateOIDCUser_Call) Return(databaseUser DatabaseUser
 	return _c
 }
 
-func (_c *MockUserDatabase_CreateOIDCUser_Call) RunAndReturn(run func(id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateOIDCUser_Call {
+func (_c *MockUserDatabase_CreateOIDCUser_Call) RunAndReturn(run func(ctx context.Context, id string, name string, avatarUrl string) (DatabaseUser, error)) *MockUserDatabase_CreateOIDCUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) GetUser(id uuid.UUID) (DatabaseUser, error) {
-	ret := _mock.Called(id)
+func (_mock *MockUserDatabase) GetUser(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetUser")
@@ -538,16 +582,16 @@ func (_mock *MockUserDatabase) GetUser(id uuid.UUID) (DatabaseUser, error) {
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (DatabaseUser, error)); ok {
-		return returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) DatabaseUser); ok {
-		r0 = returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) DatabaseUser); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(id)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -560,19 +604,25 @@ type MockUserDatabase_GetUser_Call struct {
 }
 
 // GetUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) GetUser(id interface{}) *MockUserDatabase_GetUser_Call {
-	return &MockUserDatabase_GetUser_Call{Call: _e.mock.On("GetUser", id)}
+func (_e *MockUserDatabase_Expecter) GetUser(ctx interface{}, id interface{}) *MockUserDatabase_GetUser_Call {
+	return &MockUserDatabase_GetUser_Call{Call: _e.mock.On("GetUser", ctx, id)}
 }
 
-func (_c *MockUserDatabase_GetUser_Call) Run(run func(id uuid.UUID)) *MockUserDatabase_GetUser_Call {
+func (_c *MockUserDatabase_GetUser_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockUserDatabase_GetUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -583,14 +633,14 @@ func (_c *MockUserDatabase_GetUser_Call) Return(databaseUser DatabaseUser, err e
 	return _c
 }
 
-func (_c *MockUserDatabase_GetUser_Call) RunAndReturn(run func(id uuid.UUID) (DatabaseUser, error)) *MockUserDatabase_GetUser_Call {
+func (_c *MockUserDatabase_GetUser_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (DatabaseUser, error)) *MockUserDatabase_GetUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // IsUserAnonymous provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) IsUserAnonymous(id uuid.UUID) (bool, error) {
-	ret := _mock.Called(id)
+func (_mock *MockUserDatabase) IsUserAnonymous(ctx context.Context, id uuid.UUID) (bool, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for IsUserAnonymous")
@@ -598,16 +648,16 @@ func (_mock *MockUserDatabase) IsUserAnonymous(id uuid.UUID) (bool, error) {
 
 	var r0 bool
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (bool, error)); ok {
-		return returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (bool, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) bool); ok {
-		r0 = returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) bool); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(id)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -620,19 +670,25 @@ type MockUserDatabase_IsUserAnonymous_Call struct {
 }
 
 // IsUserAnonymous is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) IsUserAnonymous(id interface{}) *MockUserDatabase_IsUserAnonymous_Call {
-	return &MockUserDatabase_IsUserAnonymous_Call{Call: _e.mock.On("IsUserAnonymous", id)}
+func (_e *MockUserDatabase_Expecter) IsUserAnonymous(ctx interface{}, id interface{}) *MockUserDatabase_IsUserAnonymous_Call {
+	return &MockUserDatabase_IsUserAnonymous_Call{Call: _e.mock.On("IsUserAnonymous", ctx, id)}
 }
 
-func (_c *MockUserDatabase_IsUserAnonymous_Call) Run(run func(id uuid.UUID)) *MockUserDatabase_IsUserAnonymous_Call {
+func (_c *MockUserDatabase_IsUserAnonymous_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockUserDatabase_IsUserAnonymous_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -643,14 +699,14 @@ func (_c *MockUserDatabase_IsUserAnonymous_Call) Return(b bool, err error) *Mock
 	return _c
 }
 
-func (_c *MockUserDatabase_IsUserAnonymous_Call) RunAndReturn(run func(id uuid.UUID) (bool, error)) *MockUserDatabase_IsUserAnonymous_Call {
+func (_c *MockUserDatabase_IsUserAnonymous_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (bool, error)) *MockUserDatabase_IsUserAnonymous_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // IsUserAvailableForKeyMigration provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) IsUserAvailableForKeyMigration(id uuid.UUID) (bool, error) {
-	ret := _mock.Called(id)
+func (_mock *MockUserDatabase) IsUserAvailableForKeyMigration(ctx context.Context, id uuid.UUID) (bool, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for IsUserAvailableForKeyMigration")
@@ -658,16 +714,16 @@ func (_mock *MockUserDatabase) IsUserAvailableForKeyMigration(id uuid.UUID) (boo
 
 	var r0 bool
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (bool, error)); ok {
-		return returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (bool, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) bool); ok {
-		r0 = returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) bool); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(id)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -680,19 +736,25 @@ type MockUserDatabase_IsUserAvailableForKeyMigration_Call struct {
 }
 
 // IsUserAvailableForKeyMigration is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) IsUserAvailableForKeyMigration(id interface{}) *MockUserDatabase_IsUserAvailableForKeyMigration_Call {
-	return &MockUserDatabase_IsUserAvailableForKeyMigration_Call{Call: _e.mock.On("IsUserAvailableForKeyMigration", id)}
+func (_e *MockUserDatabase_Expecter) IsUserAvailableForKeyMigration(ctx interface{}, id interface{}) *MockUserDatabase_IsUserAvailableForKeyMigration_Call {
+	return &MockUserDatabase_IsUserAvailableForKeyMigration_Call{Call: _e.mock.On("IsUserAvailableForKeyMigration", ctx, id)}
 }
 
-func (_c *MockUserDatabase_IsUserAvailableForKeyMigration_Call) Run(run func(id uuid.UUID)) *MockUserDatabase_IsUserAvailableForKeyMigration_Call {
+func (_c *MockUserDatabase_IsUserAvailableForKeyMigration_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockUserDatabase_IsUserAvailableForKeyMigration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -703,14 +765,14 @@ func (_c *MockUserDatabase_IsUserAvailableForKeyMigration_Call) Return(b bool, e
 	return _c
 }
 
-func (_c *MockUserDatabase_IsUserAvailableForKeyMigration_Call) RunAndReturn(run func(id uuid.UUID) (bool, error)) *MockUserDatabase_IsUserAvailableForKeyMigration_Call {
+func (_c *MockUserDatabase_IsUserAvailableForKeyMigration_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (bool, error)) *MockUserDatabase_IsUserAvailableForKeyMigration_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // SetKeyMigration provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) SetKeyMigration(id uuid.UUID) (DatabaseUser, error) {
-	ret := _mock.Called(id)
+func (_mock *MockUserDatabase) SetKeyMigration(ctx context.Context, id uuid.UUID) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for SetKeyMigration")
@@ -718,16 +780,16 @@ func (_mock *MockUserDatabase) SetKeyMigration(id uuid.UUID) (DatabaseUser, erro
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (DatabaseUser, error)); ok {
-		return returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) DatabaseUser); ok {
-		r0 = returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) DatabaseUser); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(id)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -740,19 +802,25 @@ type MockUserDatabase_SetKeyMigration_Call struct {
 }
 
 // SetKeyMigration is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockUserDatabase_Expecter) SetKeyMigration(id interface{}) *MockUserDatabase_SetKeyMigration_Call {
-	return &MockUserDatabase_SetKeyMigration_Call{Call: _e.mock.On("SetKeyMigration", id)}
+func (_e *MockUserDatabase_Expecter) SetKeyMigration(ctx interface{}, id interface{}) *MockUserDatabase_SetKeyMigration_Call {
+	return &MockUserDatabase_SetKeyMigration_Call{Call: _e.mock.On("SetKeyMigration", ctx, id)}
 }
 
-func (_c *MockUserDatabase_SetKeyMigration_Call) Run(run func(id uuid.UUID)) *MockUserDatabase_SetKeyMigration_Call {
+func (_c *MockUserDatabase_SetKeyMigration_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockUserDatabase_SetKeyMigration_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -763,14 +831,14 @@ func (_c *MockUserDatabase_SetKeyMigration_Call) Return(databaseUser DatabaseUse
 	return _c
 }
 
-func (_c *MockUserDatabase_SetKeyMigration_Call) RunAndReturn(run func(id uuid.UUID) (DatabaseUser, error)) *MockUserDatabase_SetKeyMigration_Call {
+func (_c *MockUserDatabase_SetKeyMigration_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (DatabaseUser, error)) *MockUserDatabase_SetKeyMigration_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // UpdateUser provides a mock function for the type MockUserDatabase
-func (_mock *MockUserDatabase) UpdateUser(update DatabaseUserUpdate) (DatabaseUser, error) {
-	ret := _mock.Called(update)
+func (_mock *MockUserDatabase) UpdateUser(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error) {
+	ret := _mock.Called(ctx, update)
 
 	if len(ret) == 0 {
 		panic("no return value specified for UpdateUser")
@@ -778,16 +846,16 @@ func (_mock *MockUserDatabase) UpdateUser(update DatabaseUserUpdate) (DatabaseUs
 
 	var r0 DatabaseUser
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseUserUpdate) (DatabaseUser, error)); ok {
-		return returnFunc(update)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseUserUpdate) (DatabaseUser, error)); ok {
+		return returnFunc(ctx, update)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseUserUpdate) DatabaseUser); ok {
-		r0 = returnFunc(update)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseUserUpdate) DatabaseUser); ok {
+		r0 = returnFunc(ctx, update)
 	} else {
 		r0 = ret.Get(0).(DatabaseUser)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseUserUpdate) error); ok {
-		r1 = returnFunc(update)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseUserUpdate) error); ok {
+		r1 = returnFunc(ctx, update)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -800,19 +868,25 @@ type MockUserDatabase_UpdateUser_Call struct {
 }
 
 // UpdateUser is a helper method to define mock.On call
+//   - ctx context.Context
 //   - update DatabaseUserUpdate
-func (_e *MockUserDatabase_Expecter) UpdateUser(update interface{}) *MockUserDatabase_UpdateUser_Call {
-	return &MockUserDatabase_UpdateUser_Call{Call: _e.mock.On("UpdateUser", update)}
+func (_e *MockUserDatabase_Expecter) UpdateUser(ctx interface{}, update interface{}) *MockUserDatabase_UpdateUser_Call {
+	return &MockUserDatabase_UpdateUser_Call{Call: _e.mock.On("UpdateUser", ctx, update)}
 }
 
-func (_c *MockUserDatabase_UpdateUser_Call) Run(run func(update DatabaseUserUpdate)) *MockUserDatabase_UpdateUser_Call {
+func (_c *MockUserDatabase_UpdateUser_Call) Run(run func(ctx context.Context, update DatabaseUserUpdate)) *MockUserDatabase_UpdateUser_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseUserUpdate
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseUserUpdate)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseUserUpdate
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseUserUpdate)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -823,7 +897,7 @@ func (_c *MockUserDatabase_UpdateUser_Call) Return(databaseUser DatabaseUser, er
 	return _c
 }
 
-func (_c *MockUserDatabase_UpdateUser_Call) RunAndReturn(run func(update DatabaseUserUpdate) (DatabaseUser, error)) *MockUserDatabase_UpdateUser_Call {
+func (_c *MockUserDatabase_UpdateUser_Call) RunAndReturn(run func(ctx context.Context, update DatabaseUserUpdate) (DatabaseUser, error)) *MockUserDatabase_UpdateUser_Call {
 	_c.Call.Return(run)
 	return _c
 }
