@@ -1,8 +1,10 @@
 package database
 
 import (
-	"scrumlr.io/server/sessions"
+	"context"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
 
@@ -225,7 +227,7 @@ func testDeleteLastColumn(t *testing.T) {
 }
 
 func testDeleteColumnContainingSharedNote(t *testing.T) {
-	note, createNoteError := notesDb.CreateNote(notes.DatabaseNoteInsert{
+	note, createNoteError := notesDb.CreateNote(context.Background(), notes.DatabaseNoteInsert{
 		Board:  boardForColumnsTest,
 		Column: columnInsertedSecond.ID,
 		Text:   "Lorem Ipsum",

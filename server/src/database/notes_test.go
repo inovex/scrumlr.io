@@ -1,8 +1,10 @@
 package database
 
 import (
-	"scrumlr.io/server/sessions"
+	"context"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
 
@@ -85,7 +87,7 @@ var deleteStack bool
 
 func testGetNote(t *testing.T) {
 	note := fixture.MustRow("DatabaseNote.notesTestA1").(*notes.DatabaseNote)
-	n, err := notesDb.Get(note.ID)
+	n, err := notesDb.Get(context.Background(), note.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, note.ID, n.ID)
 	assert.Equal(t, note.Board, n.Board)
@@ -98,7 +100,7 @@ func testGetNote(t *testing.T) {
 
 func testGetNotes(t *testing.T) {
 	notesTestBoard = fixture.MustRow("DatabaseBoard.notesTestBoard").(*boards.DatabaseBoard)
-	listOfNotes, err := notesDb.GetAll(notesTestBoard.ID)
+	listOfNotes, err := notesDb.GetAll(context.Background(), notesTestBoard.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 9, len(listOfNotes))
 }
@@ -106,18 +108,18 @@ func testGetNotes(t *testing.T) {
 func testGetFilterByColumn(t *testing.T) {
 	columnA = fixture.MustRow("DatabaseColumn.notesColumnA").(*columns.DatabaseColumn)
 	assert.NotNil(t, columnA)
-	notesInColumnA, err := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	notesInColumnA, err := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 5, len(notesInColumnA))
 
 	columnB = fixture.MustRow("DatabaseColumn.notesColumnB").(*columns.DatabaseColumn)
-	notesInColumnB, err := notesDb.GetAll(notesTestBoard.ID, columnB.ID)
+	notesInColumnB, err := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnB.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 3, len(notesInColumnB))
 }
 
 func testGetFilterByMultipleColumns(t *testing.T) {
-	listOfNotes, err := notesDb.GetAll(notesTestBoard.ID, columnA.ID, columnB.ID)
+	listOfNotes, err := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID, columnB.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, 8, len(listOfNotes))
 }
@@ -129,14 +131,14 @@ func testGetNotesAndVerifyOrder(t *testing.T) {
 	noteA4 = fixture.MustRow("DatabaseNote.notesTestA4").(*notes.DatabaseNote)
 	noteA5 = fixture.MustRow("DatabaseNote.notesTestA5").(*notes.DatabaseNote)
 
-	notesOnBoard, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	notesOnBoard, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, notesOnBoard, noteA1, noteA2, noteA4, noteA5, noteA3)
 
 	noteB1 = fixture.MustRow("DatabaseNote.notesTestB1").(*notes.DatabaseNote)
 	noteB2 = fixture.MustRow("DatabaseNote.notesTestB2").(*notes.DatabaseNote)
 	noteB3 = fixture.MustRow("DatabaseNote.notesTestB3").(*notes.DatabaseNote)
 
-	notesOnBoard, _ = notesDb.GetAll(notesTestBoard.ID, columnB.ID)
+	notesOnBoard, _ = notesDb.GetAll(context.Background(), notesTestBoard.ID, columnB.ID)
 	verifyNoteOrder(t, notesOnBoard, noteB1, noteB2, noteB3)
 }
 
@@ -144,7 +146,7 @@ func testGetStack(t *testing.T) {
 	noteA2 = fixture.MustRow("DatabaseNote.notesTestA2").(*notes.DatabaseNote)
 	noteA3 = fixture.MustRow("DatabaseNote.notesTestA3").(*notes.DatabaseNote)
 
-	noteStack, err := notesDb.GetStack(noteA2.ID)
+	noteStack, err := notesDb.GetStack(context.Background(), noteA2.ID)
 
 	assert.Nil(t, err)
 	verifyNoteOrder(t, noteStack, noteA2, noteA3)
@@ -159,7 +161,7 @@ func verifyNoteOrder(t *testing.T, notes []notes.DatabaseNote, expected ...*note
 func testCreateNote(t *testing.T) {
 	author = fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
 
-	note, err := notesDb.CreateNote(notes.DatabaseNoteInsert{
+	note, err := notesDb.CreateNote(context.Background(), notes.DatabaseNoteInsert{
 		Author: author.ID,
 		Board:  notesTestBoard.ID,
 		Column: columnA.ID,
@@ -178,7 +180,7 @@ func testCreateNote(t *testing.T) {
 
 func testCreateNoteWithEmptyTextShouldFail(t *testing.T) {
 	author = fixture.MustRow("DatabaseUser.jack").(*sessions.DatabaseUser)
-	_, err := notesDb.CreateNote(notes.DatabaseNoteInsert{
+	_, err := notesDb.CreateNote(context.Background(), notes.DatabaseNoteInsert{
 		Author: author.ID,
 		Board:  notesTestBoard.ID,
 		Column: columnA.ID,
@@ -190,7 +192,7 @@ func testCreateNoteWithEmptyTextShouldFail(t *testing.T) {
 func testUpdateOfNoteText(t *testing.T) {
 	newText := "I update the text and I like it"
 
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA6.ID,
 		Board: notesTestBoard.ID,
 		Text:  &newText,
@@ -201,7 +203,7 @@ func testUpdateOfNoteText(t *testing.T) {
 }
 
 func testOrderOnRaiseRankOfNote(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA1.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -213,12 +215,12 @@ func testOrderOnRaiseRankOfNote(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 3, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA1, noteA6, noteA2, noteA4, noteA5, noteA3)
 }
 
 func testOrderOnLowerRankOfNote(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA1.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -230,12 +232,12 @@ func testOrderOnLowerRankOfNote(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 2, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA6, noteA1, noteA2, noteA4, noteA5, noteA3)
 }
 
 func testOrderOnNegativeRankOfNote(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA6.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -247,12 +249,12 @@ func testOrderOnNegativeRankOfNote(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 0, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA1, noteA2, noteA4, noteA6, noteA5, noteA3)
 }
 
 func testOrderOnZeroRankOfNote(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA1.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -264,12 +266,12 @@ func testOrderOnZeroRankOfNote(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 0, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA2, noteA4, noteA6, noteA1, noteA5, noteA3)
 }
 
 func testOrderOnVeryHighRank(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA1.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -281,12 +283,12 @@ func testOrderOnVeryHighRank(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 3, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA1, noteA2, noteA4, noteA6, noteA5, noteA3)
 }
 
 func testOrderWhenMoveIntoStack(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA6.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -298,12 +300,12 @@ func testOrderWhenMoveIntoStack(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 1, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA1, noteA2, noteA4, noteA5, noteA6, noteA3)
 }
 
 func testOrderWhenMoveToOtherStack(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA6.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -315,12 +317,12 @@ func testOrderWhenMoveToOtherStack(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 1, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA1, noteA2, noteA4, noteA6, noteA5, noteA3)
 }
 
 func testOrderOnUnstack(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA6.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -332,12 +334,12 @@ func testOrderOnUnstack(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 3, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA6, noteA1, noteA2, noteA4, noteA5, noteA3)
 }
 
 func testOrderOnShiftToOtherColumn(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA6.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -349,15 +351,15 @@ func testOrderOnShiftToOtherColumn(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 2, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA1, noteA2, noteA4, noteA5, noteA3)
 
-	listOfNotes, _ = notesDb.GetAll(notesTestBoard.ID, columnB.ID)
+	listOfNotes, _ = notesDb.GetAll(context.Background(), notesTestBoard.ID, columnB.ID)
 	verifyNoteOrder(t, listOfNotes, noteA6, noteB1, noteB2, noteB3)
 }
 
 func testOrderOnShiftToStackWithinOtherColumn(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA6.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -369,12 +371,12 @@ func testOrderOnShiftToStackWithinOtherColumn(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 1, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, listOfNotes, noteA1, noteA2, noteA4, noteA5, noteA6, noteA3)
 }
 
 func testOrderWhenMergingStacks(t *testing.T) {
-	note, err := notesDb.UpdateNote(author.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), author.ID, notes.DatabaseNoteUpdate{
 		ID:    noteA2.ID,
 		Board: notesTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -386,7 +388,7 @@ func testOrderWhenMergingStacks(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 3, note.Rank)
 
-	mergedNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnA.ID)
+	mergedNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnA.ID)
 	verifyNoteOrder(t, mergedNotes, noteA1, noteA4, noteA2, noteA6, noteA3, noteA5)
 }
 
@@ -406,10 +408,10 @@ func testChangeOrderWhenMoveWithinStackToLower(t *testing.T) {
 	   D: Rank 2, Stack A
 	*/
 
-	notesOnBoard, _ := notesDb.GetAll(stackTestBoard.ID, stackTestColumnA.ID)
+	notesOnBoard, _ := notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnA.ID)
 	verifyNoteOrder(t, notesOnBoard, stackA, stackD, stackC, stackB)
 
-	note, err := notesDb.UpdateNote(stackUser.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), stackUser.ID, notes.DatabaseNoteUpdate{
 		ID:    stackD.ID,
 		Board: stackTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -422,12 +424,12 @@ func testChangeOrderWhenMoveWithinStackToLower(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 0, note.Rank)
 
-	notesOnBoard, _ = notesDb.GetAll(stackTestBoard.ID, stackTestColumnA.ID)
+	notesOnBoard, _ = notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnA.ID)
 	verifyNoteOrder(t, notesOnBoard, stackA, stackC, stackB, stackD)
 }
 
 func testChangeOrderWhenMoveWithinStackToHigher(t *testing.T) {
-	note, err := notesDb.UpdateNote(stackUser.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), stackUser.ID, notes.DatabaseNoteUpdate{
 		ID:    stackD.ID,
 		Board: stackTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -440,12 +442,12 @@ func testChangeOrderWhenMoveWithinStackToHigher(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 2, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(stackTestBoard.ID, stackTestColumnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnA.ID)
 	verifyNoteOrder(t, listOfNotes, stackA, stackD, stackC, stackB)
 }
 
 func testChangeOrderWhenMoveWithinStackToNegative(t *testing.T) {
-	note, err := notesDb.UpdateNote(stackUser.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), stackUser.ID, notes.DatabaseNoteUpdate{
 		ID:    stackD.ID,
 		Board: stackTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -458,12 +460,12 @@ func testChangeOrderWhenMoveWithinStackToNegative(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 0, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(stackTestBoard.ID, stackTestColumnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnA.ID)
 	verifyNoteOrder(t, listOfNotes, stackA, stackC, stackB, stackD)
 }
 
 func testChangeOrderWhenMoveWithinStackToLargeRank(t *testing.T) {
-	note, err := notesDb.UpdateNote(stackUser.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), stackUser.ID, notes.DatabaseNoteUpdate{
 		ID:    stackD.ID,
 		Board: stackTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -476,12 +478,12 @@ func testChangeOrderWhenMoveWithinStackToLargeRank(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 2, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(stackTestBoard.ID, stackTestColumnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnA.ID)
 	verifyNoteOrder(t, listOfNotes, stackA, stackD, stackC, stackB)
 }
 
 func testOrderWhenChangeStackParent(t *testing.T) {
-	note, err := notesDb.UpdateNote(stackUser.ID, notes.DatabaseNoteUpdate{
+	note, err := notesDb.UpdateNote(context.Background(), stackUser.ID, notes.DatabaseNoteUpdate{
 		ID:    stackA.ID,
 		Board: stackTestBoard.ID,
 		Position: &notes.NoteUpdatePosition{
@@ -494,15 +496,15 @@ func testOrderWhenChangeStackParent(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 2, note.Rank)
 
-	listOfNotes, _ := notesDb.GetAll(stackTestBoard.ID, stackTestColumnA.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnA.ID)
 	verifyNoteOrder(t, listOfNotes, stackD, stackA, stackC, stackB)
 }
 
 func testDeleteNote(t *testing.T) {
-	err := notesDb.DeleteNote(author.ID, notesTestBoard.ID, noteB1.ID, deleteStack)
+	err := notesDb.DeleteNote(context.Background(), author.ID, notesTestBoard.ID, noteB1.ID, deleteStack)
 	assert.Nil(t, err)
 
-	listOfNotes, _ := notesDb.GetAll(notesTestBoard.ID, columnB.ID)
+	listOfNotes, _ := notesDb.GetAll(context.Background(), notesTestBoard.ID, columnB.ID)
 	verifyNoteOrder(t, listOfNotes, noteB2, noteB3)
 }
 
@@ -520,7 +522,7 @@ func testDeleteSharedNote(t *testing.T) {
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: noteC1.ID, Valid: true})
 
-	deleteNoteError := notesDb.DeleteNote(author.ID, notesTestBoard.ID, noteC1.ID, deleteStack)
+	deleteNoteError := notesDb.DeleteNote(context.Background(), author.ID, notesTestBoard.ID, noteC1.ID, deleteStack)
 	assert.Nil(t, deleteNoteError)
 
 	updatedBoard, getUpdatedBoardError := boardDb.GetBoard(notesTestBoard.ID)
@@ -545,10 +547,10 @@ func testDeleteStackParent(t *testing.T) {
 	   H: Rank 2, Stack E
 	*/
 
-	err := notesDb.DeleteNote(stackUser.ID, stackTestBoard.ID, stackE.ID, deleteStack)
+	err := notesDb.DeleteNote(context.Background(), stackUser.ID, stackTestBoard.ID, stackE.ID, deleteStack)
 	assert.Nil(t, err)
 
-	stackNotes, _ := notesDb.GetAll(stackTestBoard.ID, stackTestColumnB.ID)
+	stackNotes, _ := notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnB.ID)
 
 	var newParent notes.DatabaseNote
 	for _, note := range stackNotes {
@@ -581,13 +583,13 @@ func testDeleteStack(t *testing.T) {
 	stackH = fixture.MustRow("DatabaseNote.stackTestNote8").(*notes.DatabaseNote)
 	stackUser = fixture.MustRow("DatabaseUser.justin").(*sessions.DatabaseUser)
 
-	notesInStack, _ := notesDb.GetAll(stackTestBoard.ID, stackTestColumnB.ID)
+	notesInStack, _ := notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnB.ID)
 	assert.Equal(t, 3, len(notesInStack))
 
 	deleteStack = true
-	err := notesDb.DeleteNote(stackUser.ID, stackTestBoard.ID, stackH.ID, deleteStack)
+	err := notesDb.DeleteNote(context.Background(), stackUser.ID, stackTestBoard.ID, stackH.ID, deleteStack)
 	assert.Nil(t, err)
 
-	notesInStack, _ = notesDb.GetAll(stackTestBoard.ID, stackTestColumnB.ID)
+	notesInStack, _ = notesDb.GetAll(context.Background(), stackTestBoard.ID, stackTestColumnB.ID)
 	assert.Equal(t, 0, len(notesInStack))
 }
