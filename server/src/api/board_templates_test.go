@@ -1,19 +1,122 @@
 package api
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/jwtauth/v5"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/auth"
+	"scrumlr.io/server/boardtemplates"
+	"scrumlr.io/server/columns"
+	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/sessions"
+	"github.com/markbates/goth"
 )
+
+// createValidBoardTemplateRequest creates a valid board template request for testing
+func createValidBoardTemplateRequest() boardtemplates.CreateBoardTemplateRequest {
+	name := "Test Template"
+	description := "Test Description"
+	favourite := false
+	visible := true
+	index := 0
+
+	return boardtemplates.CreateBoardTemplateRequest{
+		Name:        &name,
+		Description: &description,
+		Favourite:   &favourite,
+		Columns: []*columntemplates.ColumnTemplateRequest{
+			{
+				Name:        "To Do",
+				Description: "Tasks to be done",
+				Color:       columns.ColorBacklogBlue,
+				Visible:     &visible,
+				Index:       &index,
+			},
+		},
+	}
+}
+
+// createValidBoardTemplateUpdateRequest creates a valid board template update request for testing
+func createValidBoardTemplateUpdateRequest() boardtemplates.BoardTemplateUpdateRequest {
+	name := "Updated Template"
+	description := "Updated Description"
+	favourite := true
+
+	return boardtemplates.BoardTemplateUpdateRequest{
+		Name:        &name,
+		Description: &description,
+		Favourite:   &favourite,
+	}
+}
+
+// createTestAuth creates a minimal auth implementation for testing
+// This allows requests to pass through without actual authentication
+func createTestAuth() auth.Auth {
+	return &testAuthService{}
+}
+
+// testAuthService implements auth.Auth interface for testing purposes
+type testAuthService struct{}
+
+func (t *testAuthService) Sign(_ map[string]interface{}) (string, error) {
+	return "test-token", nil
+}
+
+func (t *testAuthService) Verifier() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Create proper JWT context using jwtauth library
+			// Extract user ID from context if present, otherwise use test user ID
+			userID := "test-user-id"
+			if uid := r.Context().Value(identifiers.UserIdentifier); uid != nil {
+				if userUUID, ok := uid.(uuid.UUID); ok {
+					userID = userUUID.String()
+				}
+			}
+			
+			// Create JWT token and context using jwtauth
+			tokenAuth := jwtauth.New("HS256", []byte("test-secret"), nil)
+			claims := map[string]interface{}{"id": userID}
+			token, _, _ := tokenAuth.Encode(claims)
+			
+			// Set the JWT context the way jwtauth expects it
+			ctx := jwtauth.NewContext(r.Context(), token, nil)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
+}
+
+func (t *testAuthService) Authenticator() func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// Pass through without authentication for testing
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func (t *testAuthService) Exists(_ common.AccountType) bool {
+	return true
+}
+
+func (t *testAuthService) ExtractUserInformation(accountType common.AccountType, _ *goth.User) (*auth.UserInformation, error) {
+	return &auth.UserInformation{
+		Provider:  accountType,
+		Ident:     "test-user",
+		Name:      "Test User",
+		AvatarURL: "",
+	}, nil
+}
 
 // Test suite for AnonymousCustomTemplateCreationContext middleware
 func TestAnonymousCustomTemplateCreationContext(t *testing.T) {
@@ -168,6 +271,8 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 		allowAnonymousCustomTemplates   bool
 		userAccountType                 common.AccountType
 		expectedStatus                  int
+		needsRequestBody                bool
+		requestBodyType                 string // "create" or "update"
 	}{
 		// POST /templates
 		{
@@ -184,7 +289,9 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			path:                            "/templates",
 			allowAnonymousCustomTemplates:   true,
 			userAccountType:                 common.Anonymous,
-			expectedStatus:                  http.StatusOK,
+			expectedStatus:                  http.StatusCreated,
+			needsRequestBody:                true,
+			requestBodyType:                 "create",
 		},
 		// GET /templates
 		{
@@ -229,7 +336,9 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 			path:                            "/templates",
 			allowAnonymousCustomTemplates:   false,
 			userAccountType:                 common.Google,
-			expectedStatus:                  http.StatusOK,
+			expectedStatus:                  http.StatusCreated,
+			needsRequestBody:                true,
+			requestBodyType:                 "create",
 		},
 	}
 
@@ -245,39 +354,84 @@ func TestTemplateRoutesMiddlewareIntegration(t *testing.T) {
 				AccountType: tt.userAccountType,
 			}, nil)
 
-			// Create server with middleware
-			server := &Server{
-				users:                         mockUsers,
-				allowAnonymousCustomTemplates: tt.allowAnonymousCustomTemplates,
+			// Create mock services for dependencies required by the actual router
+			mockBoardTemplates := boardtemplates.NewMockBoardTemplateService(t)
+			mockColumnTemplates := columntemplates.NewMockColumnTemplateService(t)
+			
+			// Create a simple auth mock that allows all requests to pass
+			mockAuth := createTestAuth()
+			
+			// Create mock handlers that return proper template objects
+			templateID := uuid.New()
+			templateName := "Test Template"
+			templateDescription := "Test Description"
+			favourite := false
+			
+			// Mock template response
+			mockTemplate := &boardtemplates.BoardTemplate{
+				ID:          templateID,
+				Creator:     userID,
+				Name:        &templateName,
+				Description: &templateDescription,
+				Favourite:   &favourite,
 			}
+			
+			// Mock template full response for GetAll
+			mockTemplateFull := &boardtemplates.BoardTemplateFull{
+				Template:        mockTemplate,
+				ColumnTemplates: []*columntemplates.ColumnTemplate{},
+			}
+			
+			mockBoardTemplates.EXPECT().Create(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
+			mockBoardTemplates.EXPECT().GetAll(mock.Anything, mock.Anything).Return([]*boardtemplates.BoardTemplateFull{mockTemplateFull}, nil).Maybe()
+			mockBoardTemplates.EXPECT().Get(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
+			mockBoardTemplates.EXPECT().Update(mock.Anything, mock.Anything).Return(mockTemplate, nil).Maybe()
+			mockBoardTemplates.EXPECT().Delete(mock.Anything, mock.Anything).Return(nil).Maybe()
+			
+			// Use the actual router from router.go with minimal mocked dependencies
+			r := New(
+				"/",                    // basePath
+				nil,                    // realtime (not needed for templates)
+				mockAuth,               // auth
+				nil,                    // boards
+				nil,                    // columns
+				nil,                    // votings
+				mockUsers,              // users
+				nil,                    // notes
+				nil,                    // reactions
+				nil,                    // sessions
+				nil,                    // sessionRequests
+				nil,                    // health
+				nil,                    // feedback
+				nil,                    // boardReactions
+				mockBoardTemplates,     // boardTemplates
+				mockColumnTemplates,    // columntemplates
+				false,                  // verbose
+				true,                   // checkOrigin
+				false,                  // anonymousLoginDisabled
+				tt.allowAnonymousCustomTemplates, // allowAnonymousCustomTemplates
+				false,                  // allowAnonymousBoardCreation
+				false,                  // experimentalFileSystemStore
+			)
 
-			// Create router with the same structure as the actual router
-			r := chi.NewRouter()
-			r.Route("/templates", func(r chi.Router) {
-				r.Use(server.AnonymousCustomTemplateCreationContext)
+			// Create request with body if needed
+			var req *http.Request
+			if tt.needsRequestBody {
+				var body interface{}
+				switch tt.requestBodyType {
+				case "create":
+					body = createValidBoardTemplateRequest()
+				case "update":
+					body = createValidBoardTemplateUpdateRequest()
+				}
 				
-				// Simple handlers that return 200 OK to test middleware behavior
-				r.Post("/", func(w http.ResponseWriter, r *http.Request) {
-					w.WriteHeader(http.StatusOK)
-				})
-				r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-					w.WriteHeader(http.StatusOK)
-				})
-				r.Route("/{id}", func(r chi.Router) {
-					r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-						w.WriteHeader(http.StatusOK)
-					})
-					r.Put("/", func(w http.ResponseWriter, r *http.Request) {
-						w.WriteHeader(http.StatusOK)
-					})
-					r.Delete("/", func(w http.ResponseWriter, r *http.Request) {
-						w.WriteHeader(http.StatusOK)
-					})
-				})
-			})
-
-			// Create request
-			req := httptest.NewRequest(tt.method, tt.path, nil)
+				bodyBytes, _ := json.Marshal(body)
+				req = httptest.NewRequest(tt.method, tt.path, bytes.NewReader(bodyBytes))
+				req.Header.Set("Content-Type", "application/json")
+			} else {
+				req = httptest.NewRequest(tt.method, tt.path, nil)
+			}
+			
 			ctx := context.WithValue(req.Context(), identifiers.UserIdentifier, userID)
 			req = req.WithContext(ctx)
 
