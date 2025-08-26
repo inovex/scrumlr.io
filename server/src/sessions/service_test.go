@@ -17,7 +17,7 @@ func TestGetUser(t *testing.T) {
 	userId := uuid.New()
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{ID: userId}, nil)
+	mockUserDatabase.EXPECT().GetUser(mock.Anything, userId).Return(DatabaseUser{ID: userId}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -37,7 +37,7 @@ func TestGetUser_NotFound(t *testing.T) {
 	userId := uuid.New()
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{}, sql.ErrNoRows)
+	mockUserDatabase.EXPECT().GetUser(mock.Anything, userId).Return(DatabaseUser{}, sql.ErrNoRows)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -59,7 +59,7 @@ func TestGetUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().GetUser(userId).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().GetUser(mock.Anything, userId).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -80,7 +80,7 @@ func TestCreateAnonymusUser(t *testing.T) {
 	name := "Stan"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAnonymousUser(name).Return(DatabaseUser{ID: uuid.New(), Name: name}, nil)
+	mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{ID: uuid.New(), Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -101,7 +101,7 @@ func TestCreateAnonymusUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAnonymousUser(name).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateAnonymousUser(mock.Anything, name).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -164,7 +164,7 @@ func TestCreateAppleUser(t *testing.T) {
 	avatarUrl := ""
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAppleUser(userId.String(), name, avatarUrl).
+	mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -188,7 +188,7 @@ func TestCreateAppleUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAppleUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateAppleUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -255,7 +255,7 @@ func TestCreateAzureUser(t *testing.T) {
 	avatarUrl := ""
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAzureAdUser(userId.String(), name, avatarUrl).
+	mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -279,7 +279,7 @@ func TestCreateAzureUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateAzureAdUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateAzureAdUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -346,7 +346,7 @@ func TestCreateGitHubUser(t *testing.T) {
 	avatarUrl := ""
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGitHubUser(userId.String(), name, avatarUrl).
+	mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -370,7 +370,7 @@ func TestCreateGitHubUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGitHubUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateGitHubUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -437,7 +437,7 @@ func TestCreateGoogleUser(t *testing.T) {
 	avatarUrl := ""
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGoogleUser(userId.String(), name, avatarUrl).
+	mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -461,7 +461,7 @@ func TestCreateGoogleUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateGoogleUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateGoogleUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -528,7 +528,7 @@ func TestCreateMicrosoftUser(t *testing.T) {
 	avatarUrl := ""
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateMicrosoftUser(userId.String(), name, avatarUrl).
+	mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -552,7 +552,7 @@ func TestCreateMicrosoftUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateMicrosoftUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateMicrosoftUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -619,7 +619,7 @@ func TestCreateOIDCUser(t *testing.T) {
 	avatarUrl := ""
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateOIDCUser(userId.String(), name, avatarUrl).
+	mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, userId.String(), name, avatarUrl).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -643,7 +643,7 @@ func TestCreateOIDCUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().CreateOIDCUser(userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().CreateOIDCUser(mock.Anything, userId.String(), name, avatarUrl).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -716,7 +716,7 @@ func TestUpdateUser(t *testing.T) {
 	}
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().UpdateUser(DatabaseUserUpdate{ID: userId, Name: name}).
+	mockUserDatabase.EXPECT().UpdateUser(mock.Anything, DatabaseUserUpdate{ID: userId, Name: name}).
 		Return(DatabaseUser{ID: userId, Name: name}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
@@ -725,14 +725,14 @@ func TestUpdateUser(t *testing.T) {
 	broker.Con = mockBroker
 
 	mockSessionService := NewMockSessionService(t)
-	mockSessionService.EXPECT().GetUserConnectedBoards(context.Background(), userId).
+	mockSessionService.EXPECT().GetUserConnectedBoards(mock.Anything, userId).
 		Return([]*BoardSession{
 			{User: user, Board: firstBoardId},
 			{User: user, Board: secondBoardId},
 		}, nil)
-	mockSessionService.EXPECT().Get(context.Background(), firstBoardId, userId).
+	mockSessionService.EXPECT().Get(mock.Anything, firstBoardId, userId).
 		Return(&BoardSession{User: user, Board: firstBoardId}, nil)
-	mockSessionService.EXPECT().Get(context.Background(), secondBoardId, userId).
+	mockSessionService.EXPECT().Get(mock.Anything, secondBoardId, userId).
 		Return(&BoardSession{User: user, Board: secondBoardId}, nil)
 
 	userService := NewUserService(mockUserDatabase, broker, mockSessionService)
@@ -749,7 +749,7 @@ func TestUpdateUser_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().UpdateUser(DatabaseUserUpdate{ID: userId, Name: name}).
+	mockUserDatabase.EXPECT().UpdateUser(mock.Anything, DatabaseUserUpdate{ID: userId, Name: name}).
 		Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
@@ -813,7 +813,7 @@ func TestAvailableForKeyMigration(t *testing.T) {
 	userId := uuid.New()
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(userId).Return(true, nil)
+	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, userId).Return(true, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -834,7 +834,7 @@ func TestAvailableForKeyMigration_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(userId).Return(false, errors.New(dbError))
+	mockUserDatabase.EXPECT().IsUserAvailableForKeyMigration(mock.Anything, userId).Return(false, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -855,7 +855,7 @@ func TestSetKeyMigration(t *testing.T) {
 	userId := uuid.New()
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().SetKeyMigration(userId).Return(DatabaseUser{ID: userId}, nil)
+	mockUserDatabase.EXPECT().SetKeyMigration(mock.Anything, userId).Return(DatabaseUser{ID: userId}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
@@ -876,7 +876,7 @@ func TestSetKeymigration_DatabaseError(t *testing.T) {
 	dbError := "unable to execute"
 
 	mockUserDatabase := NewMockUserDatabase(t)
-	mockUserDatabase.EXPECT().SetKeyMigration(userId).Return(DatabaseUser{}, errors.New(dbError))
+	mockUserDatabase.EXPECT().SetKeyMigration(mock.Anything, userId).Return(DatabaseUser{}, errors.New(dbError))
 
 	mockBroker := realtime.NewMockClient(t)
 	broker := new(realtime.Broker)
