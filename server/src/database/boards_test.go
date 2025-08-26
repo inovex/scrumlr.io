@@ -1,9 +1,11 @@
 package database
 
 import (
+	"context"
 	"database/sql"
-	"scrumlr.io/server/sessions"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
 	"scrumlr.io/server/common"
@@ -101,7 +103,7 @@ func testCreateBoardAlsoGeneratesOwnerSession(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	session, err := sessionDb.Get(board.ID, user.ID)
+	session, err := sessionDb.Get(context.Background(), board.ID, user.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, common.OwnerRole, session.Role)
 }
