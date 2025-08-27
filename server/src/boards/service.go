@@ -382,7 +382,7 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
-	service.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(ctx, board)
 
 	return new(Board).From(board), err
 }
@@ -406,7 +406,7 @@ func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, 
 		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
-	service.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(ctx, board)
 
 	return new(Board).From(board), err
 }
@@ -452,20 +452,20 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		return nil, err
 	}
 
-	service.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(ctx, board)
 
 	return new(Board).From(board), nil
 }
 
-func (service *Service) UpdatedBoardTimer(board DatabaseBoard) {
-	_ = service.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+func (service *Service) UpdatedBoardTimer(ctx context.Context, board DatabaseBoard) {
+	_ = service.realtime.BroadcastToBoard(ctx, board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardTimerUpdated,
 		Data: new(Board).From(board),
 	})
 }
 
 func (service *Service) UpdatedBoard(ctx context.Context, board DatabaseBoard) {
-	_ = service.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardUpdated,
 		Data: new(Board).From(board),
 	})
@@ -503,7 +503,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 		return err_msg, err
 	}
 
-	err = service.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
 		Data: notesOnBoard,
 	})
@@ -516,8 +516,8 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 	return "", err
 }
 
-func (service *Service) DeletedBoard(board uuid.UUID) {
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+func (service *Service) DeletedBoard(ctx context.Context, board uuid.UUID) {
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardDeleted,
 	})
 }

@@ -15,7 +15,7 @@ func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
 	ctx, span := tracer.Start(r.Context(), "health-api")
 	defer span.End()
 
-	realtimeHealthy := s.health.IsRealtimeHealthy()
+	realtimeHealthy := s.health.IsRealtimeHealthy(ctx)
 	databaseHealthy := s.health.IsDatabaseHealthy(ctx)
 
 	span.SetAttributes(attribute.Bool("database-healthy", databaseHealthy), attribute.Bool("realtime-healthy", realtimeHealthy))

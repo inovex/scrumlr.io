@@ -74,7 +74,7 @@ func (service *BoardSessionService) Create(ctx context.Context, boardID, userID 
 		return nil, err
 	}
 
-	service.createdSession(boardID, session)
+	service.createdSession(ctx, boardID, session)
 
 	return new(BoardSession).From(session), err
 }
@@ -173,7 +173,7 @@ func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSes
 		return nil, err
 	}
 
-	service.updatedSessions(body.Board, sessions)
+	service.updatedSessions(ctx, body.Board, sessions)
 
 	return BoardSessions(sessions), err
 }
@@ -352,8 +352,8 @@ func (service *BoardSessionService) BoardSessionFilterTypeFromQueryString(query 
 	return filter
 }
 
-func (service *BoardSessionService) createdSession(board uuid.UUID, session DatabaseBoardSession) {
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+func (service *BoardSessionService) createdSession(ctx context.Context, board uuid.UUID, session DatabaseBoardSession) {
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantCreated,
 		Data: new(BoardSession).From(session),
 	})
@@ -372,7 +372,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 			logger.Get().Errorw("unable to get board session of user", "board", session.Board, "user", session.User, "err", err)
 			return
 		}
-		_ = service.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
+		_ = service.realtime.BroadcastToBoard(ctx, session.Board, realtime.BoardEvent{
 			Type: realtime.BoardEventParticipantUpdated,
 			Data: new(BoardSession).From(userSession),
 		})
@@ -383,7 +383,7 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 	if err != nil {
 		logger.Get().Errorw("unable to get columns", "boardID", board, "err", err)
 	}
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: columns,
 	})
@@ -397,19 +397,19 @@ func (service *BoardSessionService) updatedSession(ctx context.Context, board uu
 	if err != nil {
 		logger.Get().Errorw("unable to get notes on a updatedsession call", "err", err)
 	}
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
 		Data: notes,
 	})
 }
 
-func (service *BoardSessionService) updatedSessions(board uuid.UUID, sessions []DatabaseBoardSession) {
+func (service *BoardSessionService) updatedSessions(ctx context.Context, board uuid.UUID, sessions []DatabaseBoardSession) {
 	eventSessions := make([]BoardSession, 0, len(sessions))
 	for _, session := range sessions {
 		eventSessions = append(eventSessions, *new(BoardSession).From(session))
 	}
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventParticipantsUpdated,
 		Data: eventSessions,
 	})

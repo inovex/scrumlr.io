@@ -289,7 +289,7 @@ func (s *Service) CreatedVoting(ctx context.Context, board, voting uuid.UUID) {
 		return
 	}
 
-	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingCreated,
 		Data: new(Voting).From(dbVoting, nil),
 	})
@@ -323,7 +323,7 @@ func (s *Service) UpdatedVoting(ctx context.Context, board uuid.UUID, voting Dat
 		}
 	}
 
-	_ = s.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = s.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotingUpdated,
 		Data: struct {
 			Voting *Voting `json:"voting"`

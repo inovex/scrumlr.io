@@ -13,7 +13,6 @@ require (
 	github.com/go-chi/httprate v0.15.0
 	github.com/go-chi/jwtauth/v5 v5.3.3
 	github.com/go-chi/render v1.0.3
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-migrate/migrate/v4 v4.18.3
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.4.0
@@ -22,6 +21,8 @@ require (
 	github.com/markbates/goth v1.82.0
 	github.com/nats-io/nats.go v1.45.0
 	github.com/ory/dockertest/v3 v3.12.0
+	github.com/redis/go-redis/extra/redisotel/v9 v9.12.1
+	github.com/redis/go-redis/v9 v9.12.1
 	github.com/stretchr/testify v1.11.0
 	github.com/uptrace/bun v1.2.15
 	github.com/uptrace/bun/dbfixture v1.2.15
@@ -106,6 +107,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
+	github.com/redis/go-redis/extra/rediscmd/v9 v9.12.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect

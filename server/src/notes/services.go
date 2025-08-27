@@ -228,7 +228,7 @@ func (service *Service) Delete(ctx context.Context, body NoteDeleteRequest, note
 		return err
 	}
 
-	service.deletedNote(user, board, noteID, votes, body.DeleteStack)
+	service.deletedNote(ctx, user, board, noteID, votes, body.DeleteStack)
 	return nil
 }
 
@@ -266,23 +266,23 @@ func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 		eventNotes = append(eventNotes, *new(Note).From(note))
 	}
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})
 }
 
-func (service *Service) deletedNote(user, board, note uuid.UUID, deletedVotes []*votings.Vote, deleteStack bool) {
+func (service *Service) deletedNote(ctx context.Context, user, board, note uuid.UUID, deletedVotes []*votings.Vote, deleteStack bool) {
 	noteData := map[string]interface{}{
 		"note":        note,
 		"deleteStack": deleteStack,
 	}
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventNoteDeleted,
 		Data: noteData,
 	})
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotesDeleted,
 		Data: deletedVotes,
 	})

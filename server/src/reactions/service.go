@@ -97,7 +97,7 @@ func (service *Service) Create(ctx context.Context, board uuid.UUID, body Reacti
 		return nil, common.InternalServerError
 	}
 
-	service.addReaction(board, reaction)
+	service.addReaction(ctx, board, reaction)
 	reactionCounter.Add(ctx, 1)
 	return new(Reaction).From(reaction), err
 }
@@ -116,7 +116,7 @@ func (service *Service) Delete(ctx context.Context, board, user, id uuid.UUID) e
 		return err
 	}
 
-	service.deleteReaction(board, id)
+	service.deleteReaction(ctx, board, id)
 
 	return err
 }
@@ -140,15 +140,16 @@ func (service *Service) Update(ctx context.Context, board, user, id uuid.UUID, b
 		return nil, common.InternalServerError
 	}
 
-	service.updateReaction(board, reaction)
+	service.updateReaction(ctx, board, reaction)
 
 	return new(Reaction).From(reaction), err
 }
 
-func (service *Service) addReaction(board uuid.UUID, reaction DatabaseReaction) {
+func (service *Service) addReaction(ctx context.Context, board uuid.UUID, reaction DatabaseReaction) {
 	eventReaction := *new(Reaction).From(reaction)
 
 	_ = service.realtime.BroadcastToBoard(
+		ctx,
 		board,
 		realtime.BoardEvent{
 			Type: realtime.BoardEventReactionAdded,
@@ -157,8 +158,9 @@ func (service *Service) addReaction(board uuid.UUID, reaction DatabaseReaction) 
 	)
 }
 
-func (service *Service) deleteReaction(board, reaction uuid.UUID) {
+func (service *Service) deleteReaction(ctx context.Context, board, reaction uuid.UUID) {
 	_ = service.realtime.BroadcastToBoard(
+		ctx,
 		board,
 		realtime.BoardEvent{
 			Type: realtime.BoardEventReactionDeleted,
@@ -167,10 +169,11 @@ func (service *Service) deleteReaction(board, reaction uuid.UUID) {
 	)
 }
 
-func (service *Service) updateReaction(board uuid.UUID, reaction DatabaseReaction) {
+func (service *Service) updateReaction(ctx context.Context, board uuid.UUID, reaction DatabaseReaction) {
 	eventReaction := *new(Reaction).From(reaction)
 
 	_ = service.realtime.BroadcastToBoard(
+		ctx,
 		board,
 		realtime.BoardEvent{
 			Type: realtime.BoardEventReactionUpdated,

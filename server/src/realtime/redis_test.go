@@ -1,6 +1,7 @@
 package realtime_test
 
 import (
+	"context"
 	"errors"
 	"log"
 	"sync"
@@ -47,7 +48,7 @@ func SetupRedisContainer(t *testing.T) realtime.RedisServer {
 			pool.MaxWait = 120 * time.Second
 			if err = pool.Retry(func() error {
 				rt, err := realtime.NewRedis(realtime.RedisServer{Addr: redisTestURL})
-				if err != nil || !rt.IsHealthy() {
+				if err != nil || !rt.IsHealthy(context.Background()) {
 					return errors.New("redis not healthy yet")
 				}
 				return nil

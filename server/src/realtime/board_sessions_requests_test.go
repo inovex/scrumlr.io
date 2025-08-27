@@ -26,7 +26,7 @@ func testRealtimeGetBoardSessionRequestChannel(t *testing.T, rt *realtime.Broker
 	const clients = 10
 	eventChannels := [clients]chan *realtime.BoardSessionRequestEventType{}
 	for i := range eventChannels {
-		eventChannels[i] = rt.GetBoardSessionRequestChannel(testBoard, testUser)
+		eventChannels[i] = rt.GetBoardSessionRequestChannel(context.Background(), testBoard, testUser)
 	}
 	readEvents := [clients][]realtime.BoardSessionRequestEventType{}
 	wg := sync.WaitGroup{}
@@ -49,7 +49,7 @@ func testRealtimeGetBoardSessionRequestChannel(t *testing.T, rt *realtime.Broker
 
 	for _, ev := range testEvents {
 		wg.Add(1 * clients)
-		err := rt.BroadcastUpdateOnBoardSessionRequest(testBoard, testUser, ev)
+		err := rt.BroadcastUpdateOnBoardSessionRequest(context.Background(), testBoard, testUser, ev)
 		assert.Nil(t, err)
 	}
 
