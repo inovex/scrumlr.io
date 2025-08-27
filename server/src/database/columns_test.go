@@ -63,7 +63,7 @@ func TestRunnerForColumns(t *testing.T) {
 
 func testGetColumn(t *testing.T) {
 	column := fixture.MustRow("DatabaseColumn.firstColumn").(*columns.DatabaseColumn)
-	gotColumn, err := columnDb.Get(boardForColumnsTest, column.ID)
+	gotColumn, err := columnDb.Get(context.Background(), boardForColumnsTest, column.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, column.ID, gotColumn.ID)
 	assert.Equal(t, column.Name, gotColumn.Name)
@@ -80,7 +80,7 @@ func testCreateColumnOnFirstIndex(t *testing.T) {
 	visible := true
 	index := 0
 
-	column, err := columnDb.Create(columns.DatabaseColumnInsert{
+	column, err := columnDb.Create(context.Background(), columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "0 Column",
 		Color:   columns.ColorBacklogBlue,
@@ -99,7 +99,7 @@ func testCreateColumnOnLastIndex(t *testing.T) {
 	visible := true
 	index := 4
 
-	column, err := columnDb.Create(columns.DatabaseColumnInsert{
+	column, err := columnDb.Create(context.Background(), columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "4 Column",
 		Color:   columns.ColorBacklogBlue,
@@ -118,7 +118,7 @@ func testCreateColumnOnNegativeIndex(t *testing.T) {
 	visible := true
 	index := -99
 
-	column, err := columnDb.Create(columns.DatabaseColumnInsert{
+	column, err := columnDb.Create(context.Background(), columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "-99 Column",
 		Color:   columns.ColorBacklogBlue,
@@ -137,7 +137,7 @@ func testCreateColumnWithExceptionallyHighIndex(t *testing.T) {
 	visible := true
 	index := 99
 
-	column, err := columnDb.Create(columns.DatabaseColumnInsert{
+	column, err := columnDb.Create(context.Background(), columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "99 Column",
 		Color:   columns.ColorBacklogBlue,
@@ -156,7 +156,7 @@ func testCreateColumnOnSecondIndex(t *testing.T) {
 	visible := true
 	index := 1
 
-	column, err := columnDb.Create(columns.DatabaseColumnInsert{
+	column, err := columnDb.Create(context.Background(), columns.DatabaseColumnInsert{
 		Board:   boardForColumnsTest,
 		Name:    "1 Column",
 		Color:   columns.ColorBacklogBlue,
@@ -172,7 +172,7 @@ func testCreateColumnOnSecondIndex(t *testing.T) {
 }
 
 func testCreateColumnWithEmptyName(t *testing.T) {
-	_, err := columnDb.Create(columns.DatabaseColumnInsert{
+	_, err := columnDb.Create(context.Background(), columns.DatabaseColumnInsert{
 		Board: boardForColumnsTest,
 		Name:  "",
 		Color: columns.ColorBacklogBlue,
@@ -181,7 +181,7 @@ func testCreateColumnWithEmptyName(t *testing.T) {
 }
 
 func testCreateColumnWithEmptyColor(t *testing.T) {
-	_, err := columnDb.Create(columns.DatabaseColumnInsert{
+	_, err := columnDb.Create(context.Background(), columns.DatabaseColumnInsert{
 		Board: boardForColumnsTest,
 		Name:  "Column",
 		Color: "",
@@ -191,7 +191,7 @@ func testCreateColumnWithEmptyColor(t *testing.T) {
 
 func testCreateColumnWithDescription(t *testing.T) {
 	aDescription := "A description"
-	column, err := columnDb.Create(columns.DatabaseColumnInsert{
+	column, err := columnDb.Create(context.Background(), columns.DatabaseColumnInsert{
 		Board:       boardForColumnsTest,
 		Name:        "Column",
 		Color:       columns.ColorBacklogBlue,
@@ -202,25 +202,25 @@ func testCreateColumnWithDescription(t *testing.T) {
 	assert.Equal(t, aDescription, column.Description)
 
 	// clean up to not crash other tests
-	_ = columnDb.Delete(boardForColumnsTest, column.ID, uuid.New())
+	_ = columnDb.Delete(context.Background(), boardForColumnsTest, column.ID, uuid.New())
 }
 
 func testDeleteColumnOnSecondIndex(t *testing.T) {
-	err := columnDb.Delete(boardForColumnsTest, columnInsertedFifth.ID, columnTestUser.ID)
+	err := columnDb.Delete(context.Background(), boardForColumnsTest, columnInsertedFifth.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedThird.ID, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID, columnInsertedFourth.ID)
 }
 
 func testDeleteColumnOnFirstIndex(t *testing.T) {
-	err := columnDb.Delete(boardForColumnsTest, columnInsertedThird.ID, columnTestUser.ID)
+	err := columnDb.Delete(context.Background(), boardForColumnsTest, columnInsertedThird.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID, columnInsertedFourth.ID)
 }
 
 func testDeleteLastColumn(t *testing.T) {
-	err := columnDb.Delete(boardForColumnsTest, columnInsertedFourth.ID, columnTestUser.ID)
+	err := columnDb.Delete(context.Background(), boardForColumnsTest, columnInsertedFourth.ID, columnTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyOrder(t, columnInsertedFirst.ID, firstColumn.ID, secondColumn.ID, thirdColumn.ID, columnInsertedSecond.ID)
@@ -246,7 +246,7 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: note.ID, Valid: true})
 
-	deleteColumnError := columnDb.Delete(boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
+	deleteColumnError := columnDb.Delete(context.Background(), boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
 	assert.Nil(t, deleteColumnError)
 
 	updatedBoard, getUpdatedBoardError := boardDb.GetBoard(boardForColumnsTest)
@@ -255,13 +255,13 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 }
 
 func testDeleteOthers(t *testing.T) {
-	_ = columnDb.Delete(boardForColumnsTest, columnInsertedFirst.ID, columnTestUser.ID)
+	_ = columnDb.Delete(context.Background(), boardForColumnsTest, columnInsertedFirst.ID, columnTestUser.ID)
 
 	verifyOrder(t, firstColumn.ID, secondColumn.ID, thirdColumn.ID)
 }
 
 func testUpdateName(t *testing.T) {
-	column, err := columnDb.Update(columns.DatabaseColumnUpdate{
+	column, err := columnDb.Update(context.Background(), columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "Updated name",
@@ -274,7 +274,7 @@ func testUpdateName(t *testing.T) {
 }
 
 func testUpdateColor(t *testing.T) {
-	column, err := columnDb.Update(columns.DatabaseColumnUpdate{
+	column, err := columnDb.Update(context.Background(), columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "Updated name",
@@ -287,7 +287,7 @@ func testUpdateColor(t *testing.T) {
 }
 
 func testUpdateVisibility(t *testing.T) {
-	column, err := columnDb.Update(columns.DatabaseColumnUpdate{
+	column, err := columnDb.Update(context.Background(), columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
@@ -300,7 +300,7 @@ func testUpdateVisibility(t *testing.T) {
 }
 
 func testMoveFirstColumnOnLastIndex(t *testing.T) {
-	_, err := columnDb.Update(columns.DatabaseColumnUpdate{
+	_, err := columnDb.Update(context.Background(), columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
@@ -313,7 +313,7 @@ func testMoveFirstColumnOnLastIndex(t *testing.T) {
 }
 
 func testMoveLastColumnOnFirstIndex(t *testing.T) {
-	_, err := columnDb.Update(columns.DatabaseColumnUpdate{
+	_, err := columnDb.Update(context.Background(), columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
@@ -326,7 +326,7 @@ func testMoveLastColumnOnFirstIndex(t *testing.T) {
 }
 
 func testMoveFirstColumnOnSecondIndex(t *testing.T) {
-	_, err := columnDb.Update(columns.DatabaseColumnUpdate{
+	_, err := columnDb.Update(context.Background(), columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
@@ -339,7 +339,7 @@ func testMoveFirstColumnOnSecondIndex(t *testing.T) {
 }
 
 func testMoveSecondColumnOnFirstIndex(t *testing.T) {
-	_, err := columnDb.Update(columns.DatabaseColumnUpdate{
+	_, err := columnDb.Update(context.Background(), columns.DatabaseColumnUpdate{
 		ID:      firstColumn.ID,
 		Board:   boardForColumnsTest,
 		Name:    "First column",
@@ -354,7 +354,7 @@ func testMoveSecondColumnOnFirstIndex(t *testing.T) {
 func verifyOrder(t *testing.T, ids ...uuid.UUID) {
 	expectedOrder := ids
 
-	columns, err := columnDb.GetAll(boardForColumnsTest)
+	columns, err := columnDb.GetAll(context.Background(), boardForColumnsTest)
 	assert.Nil(t, err)
 	assert.Equal(t, len(ids), len(columns))
 
@@ -365,7 +365,7 @@ func verifyOrder(t *testing.T, ids ...uuid.UUID) {
 }
 
 func testUpdateDescription(t *testing.T) {
-	column, err := columnDb.Update(columns.DatabaseColumnUpdate{
+	column, err := columnDb.Update(context.Background(), columns.DatabaseColumnUpdate{
 		ID:          firstColumn.ID,
 		Board:       boardForColumnsTest,
 		Name:        "FirstColumn",

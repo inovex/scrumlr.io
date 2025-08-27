@@ -129,7 +129,7 @@ func testCreateBoardAlsoGeneratesColumns(t *testing.T) {
 
 	assert.Nil(t, err)
 
-	columns, err := columnDb.GetAll(board.ID)
+	columns, err := columnDb.GetAll(context.Background(), board.ID)
 	assert.Nil(t, err)
 
 	assert.Equal(t, "A", columns[0].Name)
