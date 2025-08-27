@@ -1,6 +1,7 @@
 package realtime_test
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -61,7 +62,7 @@ func SetupNatsContainer(t *testing.T) string {
 			pool.MaxWait = 120 * time.Second
 			if err = pool.Retry(func() error {
 				rt, err := realtime.NewNats(natsTestURL)
-				if err != nil || !rt.IsHealthy() {
+				if err != nil || !rt.IsHealthy(context.Background()) {
 					return errors.New("nats not healthy yet")
 				}
 				return nil

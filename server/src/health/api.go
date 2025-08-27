@@ -4,7 +4,7 @@ import "context"
 
 type HealthService interface {
 	IsDatabaseHealthy(ctx context.Context) bool
-	IsRealtimeHealthy() bool
+	IsRealtimeHealthy(ctx context.Context) bool
 }
 
 type HealthApi struct {

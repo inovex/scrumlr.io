@@ -191,7 +191,7 @@ func (service *Service) updatedColumns(ctx context.Context, board uuid.UUID) {
 		return
 	}
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnsUpdated,
 		Data: Columns(dbColumns),
 	})
@@ -231,7 +231,7 @@ func (service *Service) syncNotesOnColumnChange(ctx context.Context, boardID uui
 		return err_msg, err
 	}
 
-	err = service.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
 		Data: notes,
 	})
@@ -250,7 +250,7 @@ func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UU
 	ctx, span := tracer.Start(ctx, "scrumlr.columns.service.delete")
 	defer span.End()
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventColumnDeleted,
 		Data: column,
 	})
@@ -263,7 +263,7 @@ func (service *Service) deletedColumn(ctx context.Context, board, column uuid.UU
 		return
 	}
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})

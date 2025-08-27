@@ -51,7 +51,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 	mockDB.EXPECT().GetAll(mock.Anything, boardID).Return([]DatabaseNote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, publishSubject, publishEvent).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -200,7 +200,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	}).Return(DatabaseNote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, publishSubject, publishEvent).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -236,7 +236,7 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	mockDB.EXPECT().DeleteNote(mock.Anything, callerID, boardID, noteID, deleteStack).Return(nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 

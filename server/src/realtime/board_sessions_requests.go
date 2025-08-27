@@ -1,9 +1,11 @@
 package realtime
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/codes"
 
 	"scrumlr.io/server/logger"
 )
@@ -15,16 +17,26 @@ const (
 	RequestRejected BoardSessionRequestEventType = "SESSION_REJECTED"
 )
 
-func (b *Broker) BroadcastUpdateOnBoardSessionRequest(board, user uuid.UUID, msg BoardSessionRequestEventType) error {
-	logger.Get().Debugw("broadcasting to board session request", "board", board, "user", user, "msg", msg)
-	return b.Con.Publish(requestSubject(board, user), msg)
+func (b *Broker) BroadcastUpdateOnBoardSessionRequest(ctx context.Context, board, user uuid.UUID, msg BoardSessionRequestEventType) error {
+	ctx, span := tracer.Start(ctx, "board-session-broadcast")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	log.Debugw("broadcasting to board session request", "board", board, "user", user, "msg", msg)
+	return b.Con.Publish(ctx, requestSubject(board, user), msg)
 }
 
-func (b *Broker) GetBoardSessionRequestChannel(board, user uuid.UUID) chan *BoardSessionRequestEventType {
-	c, err := b.Con.SubscribeToBoardSessionEvents(requestSubject(board, user))
+func (b *Broker) GetBoardSessionRequestChannel(ctx context.Context, board, user uuid.UUID) chan *BoardSessionRequestEventType {
+	ctx, span := tracer.Start(ctx, "board-session-subscribe")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	c, err := b.Con.SubscribeToBoardSessionEvents(ctx, requestSubject(board, user))
 	if err != nil {
 		// TODO: Bubble up this error, so the caller can retry to establish this subscription
-		logger.Get().Errorw("failed to subscribe to BoardSessionRequestChannel", "err", err)
+		span.SetStatus(codes.Error, "failed to subscribe to board session channel")
+		span.RecordError(err)
+		log.Errorw("failed to subscribe to BoardSessionRequestChannel", "err", err)
 	}
 	return c
 }

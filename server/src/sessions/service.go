@@ -361,7 +361,7 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 			span.RecordError(err)
 			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID, "err", err)
 		}
-		_ = service.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
+		_ = service.realtime.BroadcastToBoard(ctx, session.Board, realtime.BoardEvent{
 			Type: realtime.BoardEventParticipantUpdated,
 			Data: session,
 		})

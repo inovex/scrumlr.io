@@ -36,7 +36,7 @@ func (suite *VotingServiceTestSuite) TestCreateVoting() {
 		Return(DatabaseVoting{ID: votingId, Board: boardId, VoteLimit: votingLimit, AllowMultipleVotes: allowMultiple, ShowVotesOfOthers: showVotes, Status: Open}, []DatabaseVote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.On("Publish", mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -88,7 +88,7 @@ func (suite *VotingServiceTestSuite) TestUpdateVotingClose() {
 		Return([]DatabaseVote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.On("Publish", mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 

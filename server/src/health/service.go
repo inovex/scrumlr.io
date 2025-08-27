@@ -27,6 +27,6 @@ func (service *Service) IsDatabaseHealthy(ctx context.Context) bool {
 	return service.database.IsHealthy(ctx)
 }
 
-func (service *Service) IsRealtimeHealthy() bool {
-	return service.realtime.IsHealthy()
+func (service *Service) IsRealtimeHealthy(ctx context.Context) bool {
+	return service.realtime.IsHealthy(ctx)
 }

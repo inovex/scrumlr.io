@@ -45,12 +45,12 @@ func (service *Service) Create(ctx context.Context, board uuid.UUID, body BoardR
 
 	boardReactionsCreatedCounter.Add(ctx, 1)
 	// notify
-	service.addedReaction(board, boardReaction)
+	service.addedReaction(ctx, board, boardReaction)
 }
 
 // AddedReaction creates a broadcast for all connected boards with the added reaction as payload
-func (service *Service) addedReaction(board uuid.UUID, reaction BoardReaction) {
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+func (service *Service) addedReaction(ctx context.Context, board uuid.UUID, reaction BoardReaction) {
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardReactionAdded,
 		Data: reaction,
 	})

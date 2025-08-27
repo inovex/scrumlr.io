@@ -408,7 +408,7 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 		return nil, err
 	}
 
-	service.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(ctx, board)
 
 	boardTimerSetCounter.Add(ctx, 1)
 	return new(Board).From(board), err
@@ -437,7 +437,7 @@ func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, 
 		return nil, err
 	}
 
-	service.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(ctx, board)
 
 	boardTimerDeletedCounter.Add(ctx, 1)
 	return new(Board).From(board), err
@@ -487,20 +487,20 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		return nil, err
 	}
 
-	service.UpdatedBoardTimer(board)
+	service.UpdatedBoardTimer(ctx, board)
 
 	return new(Board).From(board), nil
 }
 
-func (service *Service) UpdatedBoardTimer(board DatabaseBoard) {
-	_ = service.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+func (service *Service) UpdatedBoardTimer(ctx context.Context, board DatabaseBoard) {
+	_ = service.realtime.BroadcastToBoard(ctx, board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardTimerUpdated,
 		Data: new(Board).From(board),
 	})
 }
 
 func (service *Service) UpdatedBoard(ctx context.Context, board DatabaseBoard) {
-	_ = service.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardUpdated,
 		Data: new(Board).From(board),
 	})
@@ -541,7 +541,7 @@ func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid
 		return err_msg, err
 	}
 
-	err = service.realtime.BroadcastToBoard(boardID, realtime.BoardEvent{
+	err = service.realtime.BroadcastToBoard(ctx, boardID, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesSync,
 		Data: notesOnBoard,
 	})
