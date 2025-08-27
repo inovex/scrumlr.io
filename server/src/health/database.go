@@ -17,13 +17,13 @@ func NewHealthDatabase(database *bun.DB) HealthDatabase {
 	return db
 }
 
-func (db *DB) IsHealthy() bool {
+func (db *DB) IsHealthy(ctx context.Context) bool {
 	var result int
 	err := db.db.NewSelect().
 		Model((*DatabaseHealth)(nil)).
 		ModelTableExpr("").
 		ColumnExpr("1").
-		Scan(context.Background(), &result)
+		Scan(ctx, &result)
 
 	return err == nil
 }
