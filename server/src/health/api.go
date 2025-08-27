@@ -1,7 +1,9 @@
 package health
 
+import "context"
+
 type HealthService interface {
-	IsDatabaseHealthy() bool
+	IsDatabaseHealthy(ctx context.Context) bool
 	IsRealtimeHealthy() bool
 }
 
