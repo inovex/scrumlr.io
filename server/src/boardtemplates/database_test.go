@@ -1,6 +1,7 @@
 package boardtemplates
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"testing"
@@ -49,7 +50,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Create() {
 	name := "My Template"
 	description := "This is a description"
 
-	dbTemplate, err := database.Create(
+	dbTemplate, err := database.Create(context.Background(),
 		DatabaseBoardTemplateInsert{Creator: userId, Name: &name, Description: &description},
 		[]columntemplates.DatabaseColumnTemplateInsert{
 			{Name: "Column 1", Description: "This is the first column", Color: columns.ColorBacklogBlue},
@@ -75,7 +76,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Update() {
 	description := "This description was updated"
 	favourite := true
 
-	dbTemplate, err := database.Update(DatabaseBoardTemplateUpdate{ID: templateId, Name: &name, Description: &description, Favourite: &favourite})
+	dbTemplate, err := database.Update(context.Background(), DatabaseBoardTemplateUpdate{ID: templateId, Name: &name, Description: &description, Favourite: &favourite})
 
 	assert.Nil(t, err)
 	assert.Equal(t, templateId, dbTemplate.ID)
@@ -91,7 +92,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Delete() {
 
 	templateId := suite.templates["Delete"].ID
 
-	err := database.Delete(templateId)
+	err := database.Delete(context.Background(), templateId)
 
 	assert.Nil(t, err)
 }
@@ -102,7 +103,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Delete_NoTemplate() {
 
 	templateId := uuid.New()
 
-	err := database.Delete(templateId)
+	err := database.Delete(context.Background(), templateId)
 
 	assert.Nil(t, err)
 }
@@ -112,7 +113,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Get() {
 	database := NewBoardTemplateDatabase(suite.db)
 
 	templateId := suite.templates["Read1"].ID
-	dbTemplate, err := database.Get(templateId)
+	dbTemplate, err := database.Get(context.Background(), templateId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, templateId, dbTemplate.ID)
@@ -127,7 +128,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Get_NotFound() {
 	t := suite.T()
 	database := NewBoardTemplateDatabase(suite.db)
 
-	dbTemplate, err := database.Get(uuid.New())
+	dbTemplate, err := database.Get(context.Background(), uuid.New())
 
 	assert.NotNil(t, err)
 	assert.Equal(t, sql.ErrNoRows, err)
@@ -140,7 +141,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll() {
 
 	userId := suite.users["Stan"].id
 
-	dbTemplates, err := database.GetAll(userId)
+	dbTemplates, err := database.GetAll(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbTemplates, 2)
@@ -168,7 +169,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll_NoTemplates() 
 
 	userId := suite.users["Bob"].id
 
-	dbTemplates, err := database.GetAll(userId)
+	dbTemplates, err := database.GetAll(context.Background(), userId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbTemplates, 0)
