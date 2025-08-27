@@ -6,6 +6,11 @@ import (
 	"fmt"
 	"time"
 
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
@@ -21,6 +26,9 @@ import (
 	"scrumlr.io/server/votings"
 )
 
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boards")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/boards")
+
 type Service struct {
 	clock    timeprovider.TimeProvider
 	database BoardDatabase
@@ -35,12 +43,12 @@ type Service struct {
 }
 
 type BoardDatabase interface {
-	CreateBoard(creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error)
-	UpdateBoardTimer(update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
-	UpdateBoard(update DatabaseBoardUpdate) (DatabaseBoard, error)
-	GetBoard(id uuid.UUID) (DatabaseBoard, error)
-	DeleteBoard(id uuid.UUID) error
-	GetBoards(userID uuid.UUID) ([]DatabaseBoard, error)
+	CreateBoard(ctx context.Context, creator uuid.UUID, board DatabaseBoardInsert, columns []columns.DatabaseColumnInsert) (DatabaseBoard, error)
+	UpdateBoardTimer(ctx context.Context, update DatabaseBoardTimerUpdate) (DatabaseBoard, error)
+	UpdateBoard(ctx context.Context, update DatabaseBoardUpdate) (DatabaseBoard, error)
+	GetBoard(ctx context.Context, id uuid.UUID) (DatabaseBoard, error)
+	DeleteBoard(ctx context.Context, id uuid.UUID) error
+	GetBoards(ctx context.Context, userID uuid.UUID) ([]DatabaseBoard, error)
 }
 
 func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestService sessionrequests.SessionRequestService, sessionService sessions.SessionService, columnService columns.ColumnService, noteService notes.NotesService, reactionService reactions.ReactionService, votingService votings.VotingService, clock timeprovider.TimeProvider) BoardService {
@@ -60,19 +68,38 @@ func NewBoardService(db BoardDatabase, rt *realtime.Broker, sessionRequestServic
 
 func (service *Service) Get(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
-	board, err := service.database.GetBoard(id)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.get.board", id.String()),
+	)
+
+	board, err := service.database.GetBoard(ctx, id)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board")
+		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
 		return nil, err
 	}
+
 	return new(Board).From(board), err
 }
 
 // get all associated boards of a given user
 func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
 	log := logger.FromContext(ctx)
-	boards, err := service.database.GetBoards(userID)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.get.all")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.get.all.user", userID.String()),
+	)
+
+	boards, err := service.database.GetBoards(ctx, userID)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board")
+		span.RecordError(err)
 		log.Errorw("unable to get boards of user", "userID", userID, "err", err)
 		return nil, err
 	}
@@ -81,11 +108,21 @@ func (service *Service) GetBoards(ctx context.Context, userID uuid.UUID) ([]uuid
 	for _, board := range boards {
 		result = append(result, board.ID)
 	}
+
 	return result, nil
 }
 
 func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*Board, error) {
 	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.create")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.create.user", body.Owner.String()),
+		attribute.String("scrumlr.boards.service.create.access_policy", string(body.AccessPolicy)),
+		attribute.Int("scrumlr.boards.service.crete.columns.count", len(body.Columns)),
+	)
+
 	// map request on board object to insert into database
 	var board DatabaseBoardInsert
 	switch body.AccessPolicy {
@@ -93,7 +130,10 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 		board = DatabaseBoardInsert{Name: body.Name, Description: body.Description, AccessPolicy: body.AccessPolicy}
 	case ByPassphrase:
 		if body.Passphrase == nil || len(*body.Passphrase) == 0 {
-			return nil, errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
+			err := errors.New("passphrase must be set on access policy 'BY_PASSPHRASE'")
+			span.SetStatus(codes.Error, "passphrase not set")
+			span.RecordError(err)
+			return nil, err
 		}
 
 		encodedPassphrase, salt, _ := common.Sha512WithSalt(*body.Passphrase)
@@ -113,63 +153,87 @@ func (service *Service) Create(ctx context.Context, body CreateBoardRequest) (*B
 	}
 
 	// create the board
-	b, err := service.database.CreateBoard(body.Owner, board, newColumns)
+	b, err := service.database.CreateBoard(ctx, body.Owner, board, newColumns)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to create board")
+		span.RecordError(err)
 		log.Errorw("unable to create board", "owner", body.Owner, "policy", body.AccessPolicy, "error", err)
 		return nil, err
 	}
 
+	boardCreatedCounter.Add(ctx, 1)
 	return new(Board).From(b), nil
 }
 
 func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*FullBoard, error) {
 	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.get.full")
+	defer span.End()
 
-	board, err := service.database.GetBoard(boardID)
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.get.full.board", boardID.String()),
+	)
+
+	board, err := service.database.GetBoard(ctx, boardID)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board")
+		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
 	boardRequests, err := service.sessionRequestService.GetAll(ctx, boardID, string(sessionrequests.RequestAccepted))
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get session requests")
+		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
 	boardSessions, err := service.sessionService.GetAll(ctx, boardID, sessions.BoardSessionFilter{})
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get sessions")
+		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
 	boardColumns, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get columns")
+		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
 	boardNotes, err := service.notesService.GetAll(ctx, boardID)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get notes")
+		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
 	boardReactions, err := service.reactionService.GetAll(ctx, boardID)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get reactions")
+		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
 	boardVotings, err := service.votingService.GetAll(ctx, boardID)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get votings")
+		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
 
 	boardVotes, err := service.votingService.GetVotes(ctx, filter.VoteFilter{Board: boardID})
-
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get votes")
+		span.RecordError(err)
 		log.Errorw("unable to get full board", "boardID", boardID, "err", err)
 		return nil, err
 	}
@@ -188,22 +252,35 @@ func (service *Service) FullBoard(ctx context.Context, boardID uuid.UUID) (*Full
 
 func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID, user uuid.UUID) ([]*BoardOverview, error) {
 	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.get.overview")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.get.overview.user", user.String()),
+	)
+
 	overviewBoards := make([]*BoardOverview, 0, len(boardIDs))
 	for _, id := range boardIDs {
-		board, err := service.database.GetBoard(id)
+		board, err := service.database.GetBoard(ctx, id)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to get board")
+			span.RecordError(err)
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
 
 		boardSessions, err := service.sessionService.GetAll(ctx, id, sessions.BoardSessionFilter{})
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to get sessions")
+			span.RecordError(err)
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
 
 		boardColumns, err := service.columnService.GetAll(ctx, id)
 		if err != nil {
+			span.SetStatus(codes.Error, "failed to get columns")
+			span.RecordError(err)
 			log.Errorw("unable to get board overview", "board", id, "err", err)
 			return nil, err
 		}
@@ -228,15 +305,33 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 
 func (service *Service) Delete(ctx context.Context, id uuid.UUID) error {
 	log := logger.FromContext(ctx)
-	err := service.database.DeleteBoard(id)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.delete.board", id.String()),
+	)
+
+	err := service.database.DeleteBoard(ctx, id)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete board")
+		span.RecordError(err)
 		log.Errorw("unable to delete board", "err", err)
 	}
+
+	boardDeletedCounter.Add(ctx, 1)
 	return err
 }
 
 func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*Board, error) {
 	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.update")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.update.board", body.ID.String()),
+	)
+
 	update := DatabaseBoardUpdate{
 		ID:                    body.ID,
 		Name:                  body.Name,
@@ -255,11 +350,16 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		update.AccessPolicy = body.AccessPolicy
 		if *body.AccessPolicy == ByPassphrase {
 			if body.Passphrase == nil {
-				return nil, common.BadRequestError(errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected"))
+				err := errors.New("passphrase must be set if policy 'BY_PASSPHRASE' is selected")
+				span.SetStatus(codes.Error, "no passphrase provided")
+				span.RecordError(err)
+				return nil, common.BadRequestError(err)
 			}
 
 			passphrase, salt, err := common.Sha512WithSalt(*body.Passphrase)
 			if err != nil {
+				span.SetStatus(codes.Error, "failed to encode passphrase")
+				span.RecordError(err)
 				log.Error("failed to encode passphrase")
 				return nil, fmt.Errorf("failed to encode passphrase: %w", err)
 			}
@@ -269,18 +369,29 @@ func (service *Service) Update(ctx context.Context, body BoardUpdateRequest) (*B
 		}
 	}
 
-	board, err := service.database.UpdateBoard(update)
+	board, err := service.database.UpdateBoard(ctx, update)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to update board")
+		span.RecordError(err)
 		log.Errorw("unable to update board", "err", err)
 		return nil, err
 	}
-	service.UpdatedBoard(board)
+
+	service.UpdatedBoard(ctx, board)
 
 	return new(Board).From(board), err
 }
 
 func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint8) (*Board, error) {
 	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.timer.set")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.timer.set.board", id.String()),
+		attribute.Int("scrumlr.boards.service.board.timer.set.minutes", int(minutes)),
+	)
+
 	timerStart := service.clock.Now().Local()
 	timerEnd := timerStart.Add(time.Minute * time.Duration(minutes))
 	update := DatabaseBoardTimerUpdate{
@@ -288,37 +399,63 @@ func (service *Service) SetTimer(ctx context.Context, id uuid.UUID, minutes uint
 		TimerStart: &timerStart,
 		TimerEnd:   &timerEnd,
 	}
-	board, err := service.database.UpdateBoardTimer(update)
+
+	board, err := service.database.UpdateBoardTimer(ctx, update)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to update board timer")
+		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+
 	service.UpdatedBoardTimer(board)
 
+	boardTimerSetCounter.Add(ctx, 1)
 	return new(Board).From(board), err
 }
 
 func (service *Service) DeleteTimer(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.timer.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.timer.delete.board", id.String()),
+	)
+
 	update := DatabaseBoardTimerUpdate{
 		ID:         id,
 		TimerStart: nil,
 		TimerEnd:   nil,
 	}
-	board, err := service.database.UpdateBoardTimer(update)
+
+	board, err := service.database.UpdateBoardTimer(ctx, update)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to delete board timer")
+		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+
 	service.UpdatedBoardTimer(board)
 
+	boardTimerDeletedCounter.Add(ctx, 1)
 	return new(Board).From(board), err
 }
 
 func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Board, error) {
 	log := logger.FromContext(ctx)
-	board, err := service.database.GetBoard(id)
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.timer.increment")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.timer.increment.board", id.String()),
+	)
+
+	board, err := service.database.GetBoard(ctx, id)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get board")
+		span.RecordError(err)
 		log.Errorw("unable to get board", "boardID", id, "err", err)
 		return nil, err
 	}
@@ -342,11 +479,14 @@ func (service *Service) IncrementTimer(ctx context.Context, id uuid.UUID) (*Boar
 		TimerEnd:   &timerEnd,
 	}
 
-	board, err = service.database.UpdateBoardTimer(update)
+	board, err = service.database.UpdateBoardTimer(ctx, update)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to update board timer")
+		span.RecordError(err)
 		log.Errorw("unable to update board timer", "err", err)
 		return nil, err
 	}
+
 	service.UpdatedBoardTimer(board)
 
 	return new(Board).From(board), nil
@@ -359,22 +499,31 @@ func (service *Service) UpdatedBoardTimer(board DatabaseBoard) {
 	})
 }
 
-func (service *Service) UpdatedBoard(board DatabaseBoard) {
+func (service *Service) UpdatedBoard(ctx context.Context, board DatabaseBoard) {
 	_ = service.realtime.BroadcastToBoard(board.ID, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardUpdated,
 		Data: new(Board).From(board),
 	})
 
-	err_msg, err := service.SyncBoardSettingChange(board.ID)
+	err_msg, err := service.SyncBoardSettingChange(ctx, board.ID)
 	if err != nil {
 		logger.Get().Errorw(err_msg, "err", err)
 	}
 }
 
-func (service *Service) SyncBoardSettingChange(boardID uuid.UUID) (string, error) {
+func (service *Service) SyncBoardSettingChange(ctx context.Context, boardID uuid.UUID) (string, error) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.sync")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.sync.board", boardID.String()),
+	)
+
 	var err_msg string
-	columnsOnBoard, err := service.columnService.GetAll(context.Background(), boardID)
+	columnsOnBoard, err := service.columnService.GetAll(ctx, boardID)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get columns")
+		span.RecordError(err)
 		err_msg = "unable to retrieve columns, following a updated board call"
 		return err_msg, err
 	}
@@ -383,8 +532,11 @@ func (service *Service) SyncBoardSettingChange(boardID uuid.UUID) (string, error
 	for _, column := range columnsOnBoard {
 		columnsID = append(columnsID, column.ID)
 	}
-	notesOnBoard, err := service.notesService.GetAll(context.Background(), boardID, columnsID...)
+
+	notesOnBoard, err := service.notesService.GetAll(ctx, boardID, columnsID...)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get notes")
+		span.RecordError(err)
 		err_msg = "unable to retrieve notes, following a updated board call"
 		return err_msg, err
 	}
@@ -393,15 +545,26 @@ func (service *Service) SyncBoardSettingChange(boardID uuid.UUID) (string, error
 		Type: realtime.BoardEventNotesSync,
 		Data: notesOnBoard,
 	})
+
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to broadcast notes")
+		span.RecordError(err)
 		err_msg = "unable to broadcast notes, following a updated board call"
 		return err_msg, err
 	}
+
 	return "", err
 }
 
-func (service *Service) DeletedBoard(board uuid.UUID) {
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+func (service *Service) DeletedBoard(ctx context.Context, board uuid.UUID) {
+	ctx, span := tracer.Start(ctx, "scrumlr.boards.service.board.delete")
+	defer span.End()
+
+	span.SetAttributes(
+		attribute.String("scrumlr.boards.service.board.delete.board", board.String()),
+	)
+
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventBoardDeleted,
 	})
 }
