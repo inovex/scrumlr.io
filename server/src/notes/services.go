@@ -302,7 +302,7 @@ func (service *Service) updatedNotes(ctx context.Context, board uuid.UUID) {
 		eventNotes = append(eventNotes, *new(Note).From(note))
 	}
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventNotesUpdated,
 		Data: eventNotes,
 	})
@@ -322,7 +322,7 @@ func (service *Service) deletedNote(ctx context.Context, board, note uuid.UUID, 
 		"note":        note,
 		"deleteStack": deleteStack,
 	}
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventNoteDeleted,
 		Data: struct {
 			Note        uuid.UUID `json:"note"`
@@ -333,7 +333,7 @@ func (service *Service) deletedNote(ctx context.Context, board, note uuid.UUID, 
 		},
 	})
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventVotesDeleted,
 		Data: deletedVotes,
 	})

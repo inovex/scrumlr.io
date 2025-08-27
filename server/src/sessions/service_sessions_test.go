@@ -293,7 +293,7 @@ func TestCreateSession(t *testing.T) {
 		Return(DatabaseBoardSession{Board: boardId, User: userId, Role: common.ParticipantRole}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -356,7 +356,7 @@ func TestUpdateSession_Role(t *testing.T) {
 		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -409,7 +409,7 @@ func TestUpdateSession_RaiseHand(t *testing.T) {
 		Return([]DatabaseBoardSession{{Board: boardId, User: userId}}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -682,7 +682,7 @@ func TestUpdateAllSessions(t *testing.T) {
 		}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -747,7 +747,7 @@ func TestConnectSession(t *testing.T) {
 		Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -815,7 +815,7 @@ func TestDisconnectSession(t *testing.T) {
 		Return(DatabaseBoardSession{Board: boardId, User: userId}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 

@@ -76,7 +76,7 @@ func (service *BoardSessionRequestService) Create(ctx context.Context, boardID, 
 		return nil, err
 	}
 
-	service.createdSessionRequest(boardID, request)
+	service.createdSessionRequest(ctx, boardID, request)
 
 	sessionRequestsCreatedCounter.Add(ctx, 1)
 	return new(BoardSessionRequest).From(request), err
@@ -115,7 +115,7 @@ func (service *BoardSessionRequestService) Update(ctx context.Context, body Boar
 		}
 	}
 
-	service.updatedSessionRequest(body.Board, request)
+	service.updatedSessionRequest(ctx, body.Board, request)
 
 	return new(BoardSessionRequest).From(request), err
 }
@@ -200,14 +200,14 @@ func (service *BoardSessionRequestService) OpenSocket(ctx context.Context, w htt
 	service.websocket.OpenSocket(w, r)
 }
 
-func (service *BoardSessionRequestService) createdSessionRequest(board uuid.UUID, request DatabaseBoardSessionRequest) {
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+func (service *BoardSessionRequestService) createdSessionRequest(ctx context.Context, board uuid.UUID, request DatabaseBoardSessionRequest) {
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestCreated,
 		Data: new(BoardSessionRequest).From(request),
 	})
 }
 
-func (service *BoardSessionRequestService) updatedSessionRequest(board uuid.UUID, request DatabaseBoardSessionRequest) {
+func (service *BoardSessionRequestService) updatedSessionRequest(ctx context.Context, board uuid.UUID, request DatabaseBoardSessionRequest) {
 	var status realtime.BoardSessionRequestEventType
 	if request.Status == RequestAccepted {
 		status = realtime.RequestAccepted
@@ -216,10 +216,10 @@ func (service *BoardSessionRequestService) updatedSessionRequest(board uuid.UUID
 	}
 
 	if status != "" {
-		_ = service.realtime.BroadcastUpdateOnBoardSessionRequest(board, request.User, status)
+		_ = service.realtime.BroadcastUpdateOnBoardSessionRequest(ctx, board, request.User, status)
 	}
 
-	_ = service.realtime.BroadcastToBoard(board, realtime.BoardEvent{
+	_ = service.realtime.BroadcastToBoard(ctx, board, realtime.BoardEvent{
 		Type: realtime.BoardEventSessionRequestUpdated,
 		Data: new(BoardSessionRequest).From(request),
 	})

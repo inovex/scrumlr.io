@@ -42,12 +42,12 @@ func TestRealtimeHealthy(t *testing.T) {
 	mockHealthDb := NewMockHealthDatabase(t)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish("health", "test").Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, "health", "test").Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	healthService := NewHealthService(mockHealthDb, broker)
-	healthRealTime := healthService.IsRealtimeHealthy()
+	healthRealTime := healthService.IsRealtimeHealthy(context.Background())
 
 	assert.True(t, healthRealTime)
 }
@@ -56,12 +56,12 @@ func TestRealtimeNotHealthy(t *testing.T) {
 	mockHealthDb := NewMockHealthDatabase(t)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish("health", "test").Return(errors.New("Failed to publish"))
+	mockBroker.EXPECT().Publish(mock.Anything, "health", "test").Return(errors.New("Failed to publish"))
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	healthService := NewHealthService(mockHealthDb, broker)
-	healthRealTime := healthService.IsRealtimeHealthy()
+	healthRealTime := healthService.IsRealtimeHealthy(context.Background())
 
 	assert.False(t, healthRealTime)
 }

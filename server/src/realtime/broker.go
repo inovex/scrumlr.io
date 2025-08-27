@@ -1,18 +1,29 @@
 package realtime
 
+import (
+	"context"
+
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/metric"
+	"go.opentelemetry.io/otel/trace"
+)
+
+var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/realtime")
+var meter metric.Meter = otel.Meter("scrumlr.io/server/realtime")
+
 // Client can publish data to an external queue and receive events from
 // that external queue
 type Client interface {
 	// Publish an event to the queue
-	Publish(subject string, event interface{}) error
+	Publish(ctx context.Context, subject string, event interface{}) error
 
 	// SubscribeToBoardSessionEvents subscribes to the given topic and return a channel
 	// with the received BoardSessionRequestEventType
-	SubscribeToBoardSessionEvents(subject string) (chan *BoardSessionRequestEventType, error)
+	SubscribeToBoardSessionEvents(ctx context.Context, subject string) (chan *BoardSessionRequestEventType, error)
 
 	// SubscribeToBoardEvents subscribes to the given topic and return a channel
 	//	// with the received BoardEvent
-	SubscribeToBoardEvents(subject string) (chan *BoardEvent, error)
+	SubscribeToBoardEvents(ctx context.Context, subject string) (chan *BoardEvent, error)
 }
 
 // The Broker enables a user to broadcast and receive events

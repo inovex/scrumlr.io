@@ -13,7 +13,6 @@ require (
 	github.com/go-chi/httprate v0.15.0
 	github.com/go-chi/jwtauth/v5 v5.3.3
 	github.com/go-chi/render v1.0.3
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-migrate/migrate/v4 v4.19.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/sessions v1.4.0
@@ -21,6 +20,8 @@ require (
 	github.com/lestrrat-go/jwx/v2 v2.1.6
 	github.com/markbates/goth v1.82.0
 	github.com/nats-io/nats.go v1.45.0
+	github.com/redis/go-redis/extra/redisotel/v9 v9.12.1
+	github.com/redis/go-redis/v9 v9.12.1
 	github.com/stretchr/testify v1.11.1
 	github.com/testcontainers/testcontainers-go v0.38.0
 	github.com/testcontainers/testcontainers-go/modules/nats v0.38.0
@@ -118,6 +119,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20210106213030-5aafc221ea8c // indirect
 	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
+	github.com/redis/go-redis/extra/rediscmd/v9 v9.12.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/segmentio/asm v1.2.0 // indirect
 	github.com/shirou/gopsutil/v4 v4.25.5 // indirect

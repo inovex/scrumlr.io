@@ -78,7 +78,7 @@ func (service *BoardSessionService) Create(ctx context.Context, boardID, userID 
 		return nil, err
 	}
 
-	service.createdSession(boardID, session)
+	service.createdSession(ctx, boardID, session)
 
 	sessionCreatedCounter.Add(ctx, 1)
 	return new(BoardSession).From(session), err
@@ -184,7 +184,7 @@ func (service *BoardSessionService) UpdateAll(ctx context.Context, body BoardSes
 		return nil, err
 	}
 
-	service.updatedSessions(body.Board, sessions)
+	service.updatedSessions(ctx, body.Board, sessions)
 
 	return BoardSessions(sessions), err
 }

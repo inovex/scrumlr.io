@@ -1,6 +1,7 @@
 package sessionrequests
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -87,7 +88,7 @@ func (socket *WS) listenOnBoardSessionRequest(boardID, userID uuid.UUID, conn *w
 
 	// if not already done, start listening to board session request changes
 	if _, exist := b.subscriptions[userID]; !exist {
-		b.subscriptions[userID] = socket.realtime.GetBoardSessionRequestChannel(boardID, userID)
+		b.subscriptions[userID] = socket.realtime.GetBoardSessionRequestChannel(context.Background(), boardID, userID)
 		go b.startListeningOnBoardSessionRequest(userID)
 	}
 }

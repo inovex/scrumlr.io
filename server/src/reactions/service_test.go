@@ -85,7 +85,7 @@ func TestCreateReaction(t *testing.T) {
 	mockReactionDb.EXPECT().Create(mock.Anything, boardId, DatabaseReactionInsert{}).Return(DatabaseReaction{}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -121,7 +121,7 @@ func TestDeleteReaction(t *testing.T) {
 	mockReactionDb.EXPECT().Delete(mock.Anything, boardId, userId, reactionId).Return(nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -158,7 +158,7 @@ func TestUpdateReaction(t *testing.T) {
 	mockReactionDb.EXPECT().Update(mock.Anything, boardId, userId, reactionId, DatabaseReactionUpdate{}).Return(DatabaseReaction{}, nil)
 
 	mockBroker := realtime.NewMockClient(t)
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 

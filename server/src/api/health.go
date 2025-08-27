@@ -16,7 +16,7 @@ func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
 	defer span.End()
 	log := logger.FromContext(ctx)
 
-	realtimeHealthy := s.health.IsRealtimeHealthy()
+	realtimeHealthy := s.health.IsRealtimeHealthy(ctx)
 	databaseHealthy := s.health.IsDatabaseHealthy(ctx)
 
 	span.SetAttributes(

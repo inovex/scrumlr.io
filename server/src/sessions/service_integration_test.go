@@ -277,7 +277,7 @@ func (suite *UserServiceIntegrationTestsuite) Test_Update() {
 	userDatabase := NewUserDatabase(suite.db)
 	userService := NewUserService(userDatabase, broker, sessionService)
 
-	events := broker.GetBoardChannel(boardId)
+	events := broker.GetBoardChannel(ctx, boardId)
 
 	user, err := userService.Update(ctx, UserUpdateRequest{ID: userId, Name: userName})
 
