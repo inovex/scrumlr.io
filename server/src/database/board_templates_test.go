@@ -1,9 +1,11 @@
 package database
 
 import (
+	"context"
 	"database/sql"
-	"scrumlr.io/server/sessions"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/stretchr/testify/assert"
 	"scrumlr.io/server/boardtemplates"
@@ -117,7 +119,7 @@ func testCreateBoardTemplateAlsoCreatesColumnTemplates(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, template)
 
-	columns, err := columnTemplateDb.GetAll(template.ID)
+	columns, err := columnTemplateDb.GetAll(context.Background(), template.ID)
 	assert.Nil(t, err)
 	assert.NotNil(t, columns)
 
