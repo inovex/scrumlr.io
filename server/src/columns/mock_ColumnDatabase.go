@@ -5,6 +5,8 @@
 package columns
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -37,8 +39,8 @@ func (_m *MockColumnDatabase) EXPECT() *MockColumnDatabase_Expecter {
 }
 
 // Create provides a mock function for the type MockColumnDatabase
-func (_mock *MockColumnDatabase) Create(column DatabaseColumnInsert) (DatabaseColumn, error) {
-	ret := _mock.Called(column)
+func (_mock *MockColumnDatabase) Create(ctx context.Context, column DatabaseColumnInsert) (DatabaseColumn, error) {
+	ret := _mock.Called(ctx, column)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Create")
@@ -46,16 +48,16 @@ func (_mock *MockColumnDatabase) Create(column DatabaseColumnInsert) (DatabaseCo
 
 	var r0 DatabaseColumn
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseColumnInsert) (DatabaseColumn, error)); ok {
-		return returnFunc(column)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseColumnInsert) (DatabaseColumn, error)); ok {
+		return returnFunc(ctx, column)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseColumnInsert) DatabaseColumn); ok {
-		r0 = returnFunc(column)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseColumnInsert) DatabaseColumn); ok {
+		r0 = returnFunc(ctx, column)
 	} else {
 		r0 = ret.Get(0).(DatabaseColumn)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseColumnInsert) error); ok {
-		r1 = returnFunc(column)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseColumnInsert) error); ok {
+		r1 = returnFunc(ctx, column)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -68,19 +70,25 @@ type MockColumnDatabase_Create_Call struct {
 }
 
 // Create is a helper method to define mock.On call
+//   - ctx context.Context
 //   - column DatabaseColumnInsert
-func (_e *MockColumnDatabase_Expecter) Create(column interface{}) *MockColumnDatabase_Create_Call {
-	return &MockColumnDatabase_Create_Call{Call: _e.mock.On("Create", column)}
+func (_e *MockColumnDatabase_Expecter) Create(ctx interface{}, column interface{}) *MockColumnDatabase_Create_Call {
+	return &MockColumnDatabase_Create_Call{Call: _e.mock.On("Create", ctx, column)}
 }
 
-func (_c *MockColumnDatabase_Create_Call) Run(run func(column DatabaseColumnInsert)) *MockColumnDatabase_Create_Call {
+func (_c *MockColumnDatabase_Create_Call) Run(run func(ctx context.Context, column DatabaseColumnInsert)) *MockColumnDatabase_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseColumnInsert
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseColumnInsert)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseColumnInsert
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseColumnInsert)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -91,22 +99,22 @@ func (_c *MockColumnDatabase_Create_Call) Return(databaseColumn DatabaseColumn, 
 	return _c
 }
 
-func (_c *MockColumnDatabase_Create_Call) RunAndReturn(run func(column DatabaseColumnInsert) (DatabaseColumn, error)) *MockColumnDatabase_Create_Call {
+func (_c *MockColumnDatabase_Create_Call) RunAndReturn(run func(ctx context.Context, column DatabaseColumnInsert) (DatabaseColumn, error)) *MockColumnDatabase_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Delete provides a mock function for the type MockColumnDatabase
-func (_mock *MockColumnDatabase) Delete(board uuid.UUID, column uuid.UUID) error {
-	ret := _mock.Called(board, column)
+func (_mock *MockColumnDatabase) Delete(ctx context.Context, board uuid.UUID, column uuid.UUID) error {
+	ret := _mock.Called(ctx, board, column)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) error); ok {
-		r0 = returnFunc(board, column)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, board, column)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -119,25 +127,31 @@ type MockColumnDatabase_Delete_Call struct {
 }
 
 // Delete is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board uuid.UUID
 //   - column uuid.UUID
-func (_e *MockColumnDatabase_Expecter) Delete(board interface{}, column interface{}) *MockColumnDatabase_Delete_Call {
-	return &MockColumnDatabase_Delete_Call{Call: _e.mock.On("Delete", board, column)}
+func (_e *MockColumnDatabase_Expecter) Delete(ctx interface{}, board interface{}, column interface{}) *MockColumnDatabase_Delete_Call {
+	return &MockColumnDatabase_Delete_Call{Call: _e.mock.On("Delete", ctx, board, column)}
 }
 
-func (_c *MockColumnDatabase_Delete_Call) Run(run func(board uuid.UUID, column uuid.UUID)) *MockColumnDatabase_Delete_Call {
+func (_c *MockColumnDatabase_Delete_Call) Run(run func(ctx context.Context, board uuid.UUID, column uuid.UUID)) *MockColumnDatabase_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 uuid.UUID
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -148,14 +162,14 @@ func (_c *MockColumnDatabase_Delete_Call) Return(err error) *MockColumnDatabase_
 	return _c
 }
 
-func (_c *MockColumnDatabase_Delete_Call) RunAndReturn(run func(board uuid.UUID, column uuid.UUID) error) *MockColumnDatabase_Delete_Call {
+func (_c *MockColumnDatabase_Delete_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, column uuid.UUID) error) *MockColumnDatabase_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Get provides a mock function for the type MockColumnDatabase
-func (_mock *MockColumnDatabase) Get(board uuid.UUID, id uuid.UUID) (DatabaseColumn, error) {
-	ret := _mock.Called(board, id)
+func (_mock *MockColumnDatabase) Get(ctx context.Context, board uuid.UUID, id uuid.UUID) (DatabaseColumn, error) {
+	ret := _mock.Called(ctx, board, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Get")
@@ -163,16 +177,16 @@ func (_mock *MockColumnDatabase) Get(board uuid.UUID, id uuid.UUID) (DatabaseCol
 
 	var r0 DatabaseColumn
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (DatabaseColumn, error)); ok {
-		return returnFunc(board, id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (DatabaseColumn, error)); ok {
+		return returnFunc(ctx, board, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) DatabaseColumn); ok {
-		r0 = returnFunc(board, id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) DatabaseColumn); ok {
+		r0 = returnFunc(ctx, board, id)
 	} else {
 		r0 = ret.Get(0).(DatabaseColumn)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) error); ok {
-		r1 = returnFunc(board, id)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, board, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -185,17 +199,91 @@ type MockColumnDatabase_Get_Call struct {
 }
 
 // Get is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board uuid.UUID
 //   - id uuid.UUID
-func (_e *MockColumnDatabase_Expecter) Get(board interface{}, id interface{}) *MockColumnDatabase_Get_Call {
-	return &MockColumnDatabase_Get_Call{Call: _e.mock.On("Get", board, id)}
+func (_e *MockColumnDatabase_Expecter) Get(ctx interface{}, board interface{}, id interface{}) *MockColumnDatabase_Get_Call {
+	return &MockColumnDatabase_Get_Call{Call: _e.mock.On("Get", ctx, board, id)}
 }
 
-func (_c *MockColumnDatabase_Get_Call) Run(run func(board uuid.UUID, id uuid.UUID)) *MockColumnDatabase_Get_Call {
+func (_c *MockColumnDatabase_Get_Call) Run(run func(ctx context.Context, board uuid.UUID, id uuid.UUID)) *MockColumnDatabase_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockColumnDatabase_Get_Call) Return(databaseColumn DatabaseColumn, err error) *MockColumnDatabase_Get_Call {
+	_c.Call.Return(databaseColumn, err)
+	return _c
+}
+
+func (_c *MockColumnDatabase_Get_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, id uuid.UUID) (DatabaseColumn, error)) *MockColumnDatabase_Get_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetAll provides a mock function for the type MockColumnDatabase
+func (_mock *MockColumnDatabase) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, error) {
+	ret := _mock.Called(ctx, board)
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetAll")
+	}
+
+	var r0 []DatabaseColumn
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]DatabaseColumn, error)); ok {
+		return returnFunc(ctx, board)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) []DatabaseColumn); ok {
+		r0 = returnFunc(ctx, board)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]DatabaseColumn)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, board)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockColumnDatabase_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
+type MockColumnDatabase_GetAll_Call struct {
+	*mock.Call
+}
+
+// GetAll is a helper method to define mock.On call
+//   - ctx context.Context
+//   - board uuid.UUID
+func (_e *MockColumnDatabase_Expecter) GetAll(ctx interface{}, board interface{}) *MockColumnDatabase_GetAll_Call {
+	return &MockColumnDatabase_GetAll_Call{Call: _e.mock.On("GetAll", ctx, board)}
+}
+
+func (_c *MockColumnDatabase_GetAll_Call) Run(run func(ctx context.Context, board uuid.UUID)) *MockColumnDatabase_GetAll_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 uuid.UUID
 		if args[1] != nil {
@@ -209,81 +297,19 @@ func (_c *MockColumnDatabase_Get_Call) Run(run func(board uuid.UUID, id uuid.UUI
 	return _c
 }
 
-func (_c *MockColumnDatabase_Get_Call) Return(databaseColumn DatabaseColumn, err error) *MockColumnDatabase_Get_Call {
-	_c.Call.Return(databaseColumn, err)
-	return _c
-}
-
-func (_c *MockColumnDatabase_Get_Call) RunAndReturn(run func(board uuid.UUID, id uuid.UUID) (DatabaseColumn, error)) *MockColumnDatabase_Get_Call {
-	_c.Call.Return(run)
-	return _c
-}
-
-// GetAll provides a mock function for the type MockColumnDatabase
-func (_mock *MockColumnDatabase) GetAll(board uuid.UUID) ([]DatabaseColumn, error) {
-	ret := _mock.Called(board)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetAll")
-	}
-
-	var r0 []DatabaseColumn
-	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]DatabaseColumn, error)); ok {
-		return returnFunc(board)
-	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) []DatabaseColumn); ok {
-		r0 = returnFunc(board)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]DatabaseColumn)
-		}
-	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(board)
-	} else {
-		r1 = ret.Error(1)
-	}
-	return r0, r1
-}
-
-// MockColumnDatabase_GetAll_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetAll'
-type MockColumnDatabase_GetAll_Call struct {
-	*mock.Call
-}
-
-// GetAll is a helper method to define mock.On call
-//   - board uuid.UUID
-func (_e *MockColumnDatabase_Expecter) GetAll(board interface{}) *MockColumnDatabase_GetAll_Call {
-	return &MockColumnDatabase_GetAll_Call{Call: _e.mock.On("GetAll", board)}
-}
-
-func (_c *MockColumnDatabase_GetAll_Call) Run(run func(board uuid.UUID)) *MockColumnDatabase_GetAll_Call {
-	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
-		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
-		}
-		run(
-			arg0,
-		)
-	})
-	return _c
-}
-
 func (_c *MockColumnDatabase_GetAll_Call) Return(databaseColumns []DatabaseColumn, err error) *MockColumnDatabase_GetAll_Call {
 	_c.Call.Return(databaseColumns, err)
 	return _c
 }
 
-func (_c *MockColumnDatabase_GetAll_Call) RunAndReturn(run func(board uuid.UUID) ([]DatabaseColumn, error)) *MockColumnDatabase_GetAll_Call {
+func (_c *MockColumnDatabase_GetAll_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, error)) *MockColumnDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Update provides a mock function for the type MockColumnDatabase
-func (_mock *MockColumnDatabase) Update(column DatabaseColumnUpdate) (DatabaseColumn, error) {
-	ret := _mock.Called(column)
+func (_mock *MockColumnDatabase) Update(ctx context.Context, column DatabaseColumnUpdate) (DatabaseColumn, error) {
+	ret := _mock.Called(ctx, column)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
@@ -291,16 +317,16 @@ func (_mock *MockColumnDatabase) Update(column DatabaseColumnUpdate) (DatabaseCo
 
 	var r0 DatabaseColumn
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseColumnUpdate) (DatabaseColumn, error)); ok {
-		return returnFunc(column)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseColumnUpdate) (DatabaseColumn, error)); ok {
+		return returnFunc(ctx, column)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseColumnUpdate) DatabaseColumn); ok {
-		r0 = returnFunc(column)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseColumnUpdate) DatabaseColumn); ok {
+		r0 = returnFunc(ctx, column)
 	} else {
 		r0 = ret.Get(0).(DatabaseColumn)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseColumnUpdate) error); ok {
-		r1 = returnFunc(column)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseColumnUpdate) error); ok {
+		r1 = returnFunc(ctx, column)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -313,19 +339,25 @@ type MockColumnDatabase_Update_Call struct {
 }
 
 // Update is a helper method to define mock.On call
+//   - ctx context.Context
 //   - column DatabaseColumnUpdate
-func (_e *MockColumnDatabase_Expecter) Update(column interface{}) *MockColumnDatabase_Update_Call {
-	return &MockColumnDatabase_Update_Call{Call: _e.mock.On("Update", column)}
+func (_e *MockColumnDatabase_Expecter) Update(ctx interface{}, column interface{}) *MockColumnDatabase_Update_Call {
+	return &MockColumnDatabase_Update_Call{Call: _e.mock.On("Update", ctx, column)}
 }
 
-func (_c *MockColumnDatabase_Update_Call) Run(run func(column DatabaseColumnUpdate)) *MockColumnDatabase_Update_Call {
+func (_c *MockColumnDatabase_Update_Call) Run(run func(ctx context.Context, column DatabaseColumnUpdate)) *MockColumnDatabase_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseColumnUpdate
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseColumnUpdate)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseColumnUpdate
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseColumnUpdate)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -336,7 +368,7 @@ func (_c *MockColumnDatabase_Update_Call) Return(databaseColumn DatabaseColumn, 
 	return _c
 }
 
-func (_c *MockColumnDatabase_Update_Call) RunAndReturn(run func(column DatabaseColumnUpdate) (DatabaseColumn, error)) *MockColumnDatabase_Update_Call {
+func (_c *MockColumnDatabase_Update_Call) RunAndReturn(run func(ctx context.Context, column DatabaseColumnUpdate) (DatabaseColumn, error)) *MockColumnDatabase_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }

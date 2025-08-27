@@ -24,7 +24,7 @@ func NewColumnsDatabase(database *bun.DB) ColumnDatabase {
 
 // Create creates a new column. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
-func (db *DB) Create(column DatabaseColumnInsert) (DatabaseColumn, error) {
+func (db *DB) Create(ctx context.Context, column DatabaseColumnInsert) (DatabaseColumn, error) {
 	maxIndexSelect := db.db.NewSelect().
 		Model((*Column)(nil)).
 		ColumnExpr("COUNT(*) as index").
@@ -56,13 +56,13 @@ func (db *DB) Create(column DatabaseColumnInsert) (DatabaseColumn, error) {
 		Model(&column).
 		Value("index", fmt.Sprintf("LEAST(coalesce((SELECT index FROM \"maxIndexSelect\"),0), %d)", newIndex)).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardIdentifier, column.Board), &c)
+		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardIdentifier, column.Board), &c)
 
 	return c, err
 }
 
 // Update updates the column and re-orders all indices of the columns if necessary.
-func (db *DB) Update(column DatabaseColumnUpdate) (DatabaseColumn, error) {
+func (db *DB) Update(ctx context.Context, column DatabaseColumnUpdate) (DatabaseColumn, error) {
 	newIndex := column.Index
 	if column.Index < 0 {
 		newIndex = 0
@@ -107,13 +107,13 @@ func (db *DB) Update(column DatabaseColumnUpdate) (DatabaseColumn, error) {
 		Value("index", fmt.Sprintf("LEAST((SELECT COUNT(*) FROM \"maxIndexSelect\")-1, %d)", newIndex)).
 		Where("id = ?", column.ID).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardIdentifier, column.Board), &c)
+		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardIdentifier, column.Board), &c)
 
 	return c, err
 }
 
 // Delete deletes a column and adapts all indices of the other columns.
-func (db *DB) Delete(affectedBoard, column uuid.UUID) error {
+func (db *DB) Delete(ctx context.Context, affectedBoard, column uuid.UUID) error {
 	var columns []DatabaseColumn
 	selectPreviousIndex := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
@@ -137,31 +137,31 @@ func (db *DB) Delete(affectedBoard, column uuid.UUID) error {
 		Model((*DatabaseColumn)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardIdentifier, affectedBoard, identifiers.ColumnIdentifier, column, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardIdentifier, affectedBoard, identifiers.ColumnIdentifier, column, "Result", &columns), &columns)
 
 	return err
 }
 
 // Get returns the column for the specified id.
-func (db *DB) Get(board, id uuid.UUID) (DatabaseColumn, error) {
+func (db *DB) Get(ctx context.Context, board, id uuid.UUID) (DatabaseColumn, error) {
 	var column DatabaseColumn
 	err := db.db.NewSelect().
 		Model(&column).
 		Where("board = ?", board).
 		Where("id = ?", id).
-		Scan(context.Background())
+		Scan(ctx)
 
 	return column, err
 }
 
 // GetAll returns all columns for the specified board.
-func (db *DB) GetAll(board uuid.UUID) ([]DatabaseColumn, error) {
+func (db *DB) GetAll(ctx context.Context, board uuid.UUID) ([]DatabaseColumn, error) {
 	var columns []DatabaseColumn
 	err := db.db.NewSelect().
 		Model(&columns).
 		Where("board = ?", board).
 		Order("index ASC").
-		Scan(context.Background())
+		Scan(ctx)
 
 	return columns, err
 }

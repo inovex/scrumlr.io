@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
@@ -51,7 +52,7 @@ func (suite *ColumnTestSuite) TestCreateColumn() {
 				AddToContext(identifiers.UserIdentifier, userID)
 			rr := httptest.NewRecorder()
 
-			columnMock.EXPECT().Create(req.req.Context(), columns.ColumnRequest{
+			columnMock.EXPECT().Create(mock.Anything, columns.ColumnRequest{
 				Name:    name,
 				Color:   color,
 				Visible: &visible,
@@ -100,7 +101,7 @@ func (suite *ColumnTestSuite) TestDeleteColumn() {
 				AddToContext(identifiers.ColumnIdentifier, columnID)
 			rr := httptest.NewRecorder()
 
-			columnMock.EXPECT().Delete(req.req.Context(), boardID, columnID, userID).Return(tt.err)
+			columnMock.EXPECT().Delete(mock.Anything, boardID, columnID, userID).Return(tt.err)
 
 			s.columns = columnMock
 			s.deleteColumn(rr, req.Request())
@@ -140,7 +141,7 @@ func (suite *ColumnTestSuite) TestUpdateColumn() {
 				AddToContext(identifiers.ColumnIdentifier, columnID)
 			rr := httptest.NewRecorder()
 
-			columnMock.EXPECT().Update(req.req.Context(), columns.ColumnUpdateRequest{
+			columnMock.EXPECT().Update(mock.Anything, columns.ColumnUpdateRequest{
 				Name:    colName,
 				Color:   color,
 				Visible: visible,
@@ -201,7 +202,7 @@ func (suite *ColumnTestSuite) TestGetColumn() {
 				AddToContext(identifiers.ColumnIdentifier, columnID)
 			rr := httptest.NewRecorder()
 
-			columnMock.EXPECT().Get(req.req.Context(), boardID, columnID).Return(column, tt.err)
+			columnMock.EXPECT().Get(mock.Anything, boardID, columnID).Return(column, tt.err)
 
 			s.columns = columnMock
 
@@ -247,7 +248,7 @@ func (suite *ColumnTestSuite) TestGetColumns() {
 			req := NewTestRequestBuilder("GET", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 			rr := httptest.NewRecorder()
-			columnsMock.EXPECT().GetAll(req.req.Context(), boardID).Return([]*columns.Column{column}, tt.err)
+			columnsMock.EXPECT().GetAll(mock.Anything, boardID).Return([]*columns.Column{column}, tt.err)
 
 			s.columns = columnsMock
 
