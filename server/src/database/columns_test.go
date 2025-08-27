@@ -235,21 +235,21 @@ func testDeleteColumnContainingSharedNote(t *testing.T) {
 	})
 	assert.Nil(t, createNoteError)
 
-	_, updateBoardError := boardDb.UpdateBoard(boards.DatabaseBoardUpdate{
+	_, updateBoardError := boardDb.UpdateBoard(context.Background(), boards.DatabaseBoardUpdate{
 		ID:         boardForColumnsTest,
 		SharedNote: uuid.NullUUID{UUID: note.ID, Valid: true},
 		ShowVoting: uuid.NullUUID{Valid: false},
 	})
 	assert.Nil(t, updateBoardError)
 
-	board, getBoardError := boardDb.GetBoard(boardForColumnsTest)
+	board, getBoardError := boardDb.GetBoard(context.Background(), boardForColumnsTest)
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: note.ID, Valid: true})
 
 	deleteColumnError := columnDb.Delete(context.Background(), boardForColumnsTest, columnInsertedSecond.ID, columnTestUser.ID)
 	assert.Nil(t, deleteColumnError)
 
-	updatedBoard, getUpdatedBoardError := boardDb.GetBoard(boardForColumnsTest)
+	updatedBoard, getUpdatedBoardError := boardDb.GetBoard(context.Background(), boardForColumnsTest)
 	assert.Nil(t, getUpdatedBoardError)
 	assert.Equal(t, updatedBoard.SharedNote, uuid.NullUUID{Valid: false})
 }

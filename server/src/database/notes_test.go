@@ -511,21 +511,21 @@ func testDeleteNote(t *testing.T) {
 func testDeleteSharedNote(t *testing.T) {
 	noteC1 = fixture.MustRow("DatabaseNote.notesTestC1").(*notes.DatabaseNote)
 
-	_, updateBoardError := boardDb.UpdateBoard(boards.DatabaseBoardUpdate{
+	_, updateBoardError := boardDb.UpdateBoard(context.Background(), boards.DatabaseBoardUpdate{
 		ID:         notesTestBoard.ID,
 		SharedNote: uuid.NullUUID{UUID: noteC1.ID, Valid: true},
 		ShowVoting: uuid.NullUUID{Valid: false},
 	})
 	assert.Nil(t, updateBoardError)
 
-	board, getBoardError := boardDb.GetBoard(notesTestBoard.ID)
+	board, getBoardError := boardDb.GetBoard(context.Background(), notesTestBoard.ID)
 	assert.Nil(t, getBoardError)
 	assert.Equal(t, board.SharedNote, uuid.NullUUID{UUID: noteC1.ID, Valid: true})
 
 	deleteNoteError := notesDb.DeleteNote(context.Background(), author.ID, notesTestBoard.ID, noteC1.ID, deleteStack)
 	assert.Nil(t, deleteNoteError)
 
-	updatedBoard, getUpdatedBoardError := boardDb.GetBoard(notesTestBoard.ID)
+	updatedBoard, getUpdatedBoardError := boardDb.GetBoard(context.Background(), notesTestBoard.ID)
 	assert.Nil(t, getUpdatedBoardError)
 	assert.Equal(t, uuid.NullUUID{Valid: false}, updatedBoard.SharedNote)
 }
