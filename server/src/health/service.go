@@ -1,9 +1,13 @@
 package health
 
-import "scrumlr.io/server/realtime"
+import (
+	"context"
+
+	"scrumlr.io/server/realtime"
+)
 
 type HealthDatabase interface {
-	IsHealthy() bool
+	IsHealthy(ctx context.Context) bool
 }
 
 type Service struct {
@@ -19,8 +23,8 @@ func NewHealthService(db HealthDatabase, rt *realtime.Broker) HealthService {
 	return service
 }
 
-func (service *Service) IsDatabaseHealthy() bool {
-	return service.database.IsHealthy()
+func (service *Service) IsDatabaseHealthy(ctx context.Context) bool {
+	return service.database.IsHealthy(ctx)
 }
 
 func (service *Service) IsRealtimeHealthy() bool {
