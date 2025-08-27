@@ -5,6 +5,8 @@
 package boardtemplates
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 	"scrumlr.io/server/columntemplates"
@@ -38,8 +40,8 @@ func (_m *MockBoardTemplateDatabase) EXPECT() *MockBoardTemplateDatabase_Expecte
 }
 
 // Create provides a mock function for the type MockBoardTemplateDatabase
-func (_mock *MockBoardTemplateDatabase) Create(board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error) {
-	ret := _mock.Called(board, columns)
+func (_mock *MockBoardTemplateDatabase) Create(ctx context.Context, board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error) {
+	ret := _mock.Called(ctx, board, columns)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Create")
@@ -47,16 +49,16 @@ func (_mock *MockBoardTemplateDatabase) Create(board DatabaseBoardTemplateInsert
 
 	var r0 DatabaseBoardTemplate
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseBoardTemplateInsert, []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error)); ok {
-		return returnFunc(board, columns)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardTemplateInsert, []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error)); ok {
+		return returnFunc(ctx, board, columns)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseBoardTemplateInsert, []columntemplates.DatabaseColumnTemplateInsert) DatabaseBoardTemplate); ok {
-		r0 = returnFunc(board, columns)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardTemplateInsert, []columntemplates.DatabaseColumnTemplateInsert) DatabaseBoardTemplate); ok {
+		r0 = returnFunc(ctx, board, columns)
 	} else {
 		r0 = ret.Get(0).(DatabaseBoardTemplate)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseBoardTemplateInsert, []columntemplates.DatabaseColumnTemplateInsert) error); ok {
-		r1 = returnFunc(board, columns)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseBoardTemplateInsert, []columntemplates.DatabaseColumnTemplateInsert) error); ok {
+		r1 = returnFunc(ctx, board, columns)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -69,25 +71,31 @@ type MockBoardTemplateDatabase_Create_Call struct {
 }
 
 // Create is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board DatabaseBoardTemplateInsert
 //   - columns []columntemplates.DatabaseColumnTemplateInsert
-func (_e *MockBoardTemplateDatabase_Expecter) Create(board interface{}, columns interface{}) *MockBoardTemplateDatabase_Create_Call {
-	return &MockBoardTemplateDatabase_Create_Call{Call: _e.mock.On("Create", board, columns)}
+func (_e *MockBoardTemplateDatabase_Expecter) Create(ctx interface{}, board interface{}, columns interface{}) *MockBoardTemplateDatabase_Create_Call {
+	return &MockBoardTemplateDatabase_Create_Call{Call: _e.mock.On("Create", ctx, board, columns)}
 }
 
-func (_c *MockBoardTemplateDatabase_Create_Call) Run(run func(board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert)) *MockBoardTemplateDatabase_Create_Call {
+func (_c *MockBoardTemplateDatabase_Create_Call) Run(run func(ctx context.Context, board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert)) *MockBoardTemplateDatabase_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseBoardTemplateInsert
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseBoardTemplateInsert)
+			arg0 = args[0].(context.Context)
 		}
-		var arg1 []columntemplates.DatabaseColumnTemplateInsert
+		var arg1 DatabaseBoardTemplateInsert
 		if args[1] != nil {
-			arg1 = args[1].([]columntemplates.DatabaseColumnTemplateInsert)
+			arg1 = args[1].(DatabaseBoardTemplateInsert)
+		}
+		var arg2 []columntemplates.DatabaseColumnTemplateInsert
+		if args[2] != nil {
+			arg2 = args[2].([]columntemplates.DatabaseColumnTemplateInsert)
 		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -98,22 +106,22 @@ func (_c *MockBoardTemplateDatabase_Create_Call) Return(databaseBoardTemplate Da
 	return _c
 }
 
-func (_c *MockBoardTemplateDatabase_Create_Call) RunAndReturn(run func(board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error)) *MockBoardTemplateDatabase_Create_Call {
+func (_c *MockBoardTemplateDatabase_Create_Call) RunAndReturn(run func(ctx context.Context, board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error)) *MockBoardTemplateDatabase_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Delete provides a mock function for the type MockBoardTemplateDatabase
-func (_mock *MockBoardTemplateDatabase) Delete(templateId uuid.UUID) error {
-	ret := _mock.Called(templateId)
+func (_mock *MockBoardTemplateDatabase) Delete(ctx context.Context, templateId uuid.UUID) error {
+	ret := _mock.Called(ctx, templateId)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) error); ok {
-		r0 = returnFunc(templateId)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, templateId)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -126,19 +134,25 @@ type MockBoardTemplateDatabase_Delete_Call struct {
 }
 
 // Delete is a helper method to define mock.On call
+//   - ctx context.Context
 //   - templateId uuid.UUID
-func (_e *MockBoardTemplateDatabase_Expecter) Delete(templateId interface{}) *MockBoardTemplateDatabase_Delete_Call {
-	return &MockBoardTemplateDatabase_Delete_Call{Call: _e.mock.On("Delete", templateId)}
+func (_e *MockBoardTemplateDatabase_Expecter) Delete(ctx interface{}, templateId interface{}) *MockBoardTemplateDatabase_Delete_Call {
+	return &MockBoardTemplateDatabase_Delete_Call{Call: _e.mock.On("Delete", ctx, templateId)}
 }
 
-func (_c *MockBoardTemplateDatabase_Delete_Call) Run(run func(templateId uuid.UUID)) *MockBoardTemplateDatabase_Delete_Call {
+func (_c *MockBoardTemplateDatabase_Delete_Call) Run(run func(ctx context.Context, templateId uuid.UUID)) *MockBoardTemplateDatabase_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -149,14 +163,14 @@ func (_c *MockBoardTemplateDatabase_Delete_Call) Return(err error) *MockBoardTem
 	return _c
 }
 
-func (_c *MockBoardTemplateDatabase_Delete_Call) RunAndReturn(run func(templateId uuid.UUID) error) *MockBoardTemplateDatabase_Delete_Call {
+func (_c *MockBoardTemplateDatabase_Delete_Call) RunAndReturn(run func(ctx context.Context, templateId uuid.UUID) error) *MockBoardTemplateDatabase_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Get provides a mock function for the type MockBoardTemplateDatabase
-func (_mock *MockBoardTemplateDatabase) Get(id uuid.UUID) (DatabaseBoardTemplate, error) {
-	ret := _mock.Called(id)
+func (_mock *MockBoardTemplateDatabase) Get(ctx context.Context, id uuid.UUID) (DatabaseBoardTemplate, error) {
+	ret := _mock.Called(ctx, id)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Get")
@@ -164,16 +178,16 @@ func (_mock *MockBoardTemplateDatabase) Get(id uuid.UUID) (DatabaseBoardTemplate
 
 	var r0 DatabaseBoardTemplate
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) (DatabaseBoardTemplate, error)); ok {
-		return returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) (DatabaseBoardTemplate, error)); ok {
+		return returnFunc(ctx, id)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) DatabaseBoardTemplate); ok {
-		r0 = returnFunc(id)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) DatabaseBoardTemplate); ok {
+		r0 = returnFunc(ctx, id)
 	} else {
 		r0 = ret.Get(0).(DatabaseBoardTemplate)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(id)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -186,19 +200,25 @@ type MockBoardTemplateDatabase_Get_Call struct {
 }
 
 // Get is a helper method to define mock.On call
+//   - ctx context.Context
 //   - id uuid.UUID
-func (_e *MockBoardTemplateDatabase_Expecter) Get(id interface{}) *MockBoardTemplateDatabase_Get_Call {
-	return &MockBoardTemplateDatabase_Get_Call{Call: _e.mock.On("Get", id)}
+func (_e *MockBoardTemplateDatabase_Expecter) Get(ctx interface{}, id interface{}) *MockBoardTemplateDatabase_Get_Call {
+	return &MockBoardTemplateDatabase_Get_Call{Call: _e.mock.On("Get", ctx, id)}
 }
 
-func (_c *MockBoardTemplateDatabase_Get_Call) Run(run func(id uuid.UUID)) *MockBoardTemplateDatabase_Get_Call {
+func (_c *MockBoardTemplateDatabase_Get_Call) Run(run func(ctx context.Context, id uuid.UUID)) *MockBoardTemplateDatabase_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -209,14 +229,14 @@ func (_c *MockBoardTemplateDatabase_Get_Call) Return(databaseBoardTemplate Datab
 	return _c
 }
 
-func (_c *MockBoardTemplateDatabase_Get_Call) RunAndReturn(run func(id uuid.UUID) (DatabaseBoardTemplate, error)) *MockBoardTemplateDatabase_Get_Call {
+func (_c *MockBoardTemplateDatabase_Get_Call) RunAndReturn(run func(ctx context.Context, id uuid.UUID) (DatabaseBoardTemplate, error)) *MockBoardTemplateDatabase_Get_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetAll provides a mock function for the type MockBoardTemplateDatabase
-func (_mock *MockBoardTemplateDatabase) GetAll(user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
-	ret := _mock.Called(user)
+func (_mock *MockBoardTemplateDatabase) GetAll(ctx context.Context, user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
+	ret := _mock.Called(ctx, user)
 
 	if len(ret) == 0 {
 		panic("no return value specified for GetAll")
@@ -224,18 +244,18 @@ func (_mock *MockBoardTemplateDatabase) GetAll(user uuid.UUID) ([]DatabaseBoardT
 
 	var r0 []DatabaseBoardTemplateFull
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) ([]DatabaseBoardTemplateFull, error)); ok {
-		return returnFunc(user)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) ([]DatabaseBoardTemplateFull, error)); ok {
+		return returnFunc(ctx, user)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID) []DatabaseBoardTemplateFull); ok {
-		r0 = returnFunc(user)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID) []DatabaseBoardTemplateFull); ok {
+		r0 = returnFunc(ctx, user)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]DatabaseBoardTemplateFull)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID) error); ok {
-		r1 = returnFunc(user)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, user)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -248,19 +268,25 @@ type MockBoardTemplateDatabase_GetAll_Call struct {
 }
 
 // GetAll is a helper method to define mock.On call
+//   - ctx context.Context
 //   - user uuid.UUID
-func (_e *MockBoardTemplateDatabase_Expecter) GetAll(user interface{}) *MockBoardTemplateDatabase_GetAll_Call {
-	return &MockBoardTemplateDatabase_GetAll_Call{Call: _e.mock.On("GetAll", user)}
+func (_e *MockBoardTemplateDatabase_Expecter) GetAll(ctx interface{}, user interface{}) *MockBoardTemplateDatabase_GetAll_Call {
+	return &MockBoardTemplateDatabase_GetAll_Call{Call: _e.mock.On("GetAll", ctx, user)}
 }
 
-func (_c *MockBoardTemplateDatabase_GetAll_Call) Run(run func(user uuid.UUID)) *MockBoardTemplateDatabase_GetAll_Call {
+func (_c *MockBoardTemplateDatabase_GetAll_Call) Run(run func(ctx context.Context, user uuid.UUID)) *MockBoardTemplateDatabase_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -271,14 +297,14 @@ func (_c *MockBoardTemplateDatabase_GetAll_Call) Return(databaseBoardTemplateFul
 	return _c
 }
 
-func (_c *MockBoardTemplateDatabase_GetAll_Call) RunAndReturn(run func(user uuid.UUID) ([]DatabaseBoardTemplateFull, error)) *MockBoardTemplateDatabase_GetAll_Call {
+func (_c *MockBoardTemplateDatabase_GetAll_Call) RunAndReturn(run func(ctx context.Context, user uuid.UUID) ([]DatabaseBoardTemplateFull, error)) *MockBoardTemplateDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Update provides a mock function for the type MockBoardTemplateDatabase
-func (_mock *MockBoardTemplateDatabase) Update(board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error) {
-	ret := _mock.Called(board)
+func (_mock *MockBoardTemplateDatabase) Update(ctx context.Context, board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error) {
+	ret := _mock.Called(ctx, board)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
@@ -286,16 +312,16 @@ func (_mock *MockBoardTemplateDatabase) Update(board DatabaseBoardTemplateUpdate
 
 	var r0 DatabaseBoardTemplate
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error)); ok {
-		return returnFunc(board)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error)); ok {
+		return returnFunc(ctx, board)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseBoardTemplateUpdate) DatabaseBoardTemplate); ok {
-		r0 = returnFunc(board)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardTemplateUpdate) DatabaseBoardTemplate); ok {
+		r0 = returnFunc(ctx, board)
 	} else {
 		r0 = ret.Get(0).(DatabaseBoardTemplate)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseBoardTemplateUpdate) error); ok {
-		r1 = returnFunc(board)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseBoardTemplateUpdate) error); ok {
+		r1 = returnFunc(ctx, board)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -308,19 +334,25 @@ type MockBoardTemplateDatabase_Update_Call struct {
 }
 
 // Update is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board DatabaseBoardTemplateUpdate
-func (_e *MockBoardTemplateDatabase_Expecter) Update(board interface{}) *MockBoardTemplateDatabase_Update_Call {
-	return &MockBoardTemplateDatabase_Update_Call{Call: _e.mock.On("Update", board)}
+func (_e *MockBoardTemplateDatabase_Expecter) Update(ctx interface{}, board interface{}) *MockBoardTemplateDatabase_Update_Call {
+	return &MockBoardTemplateDatabase_Update_Call{Call: _e.mock.On("Update", ctx, board)}
 }
 
-func (_c *MockBoardTemplateDatabase_Update_Call) Run(run func(board DatabaseBoardTemplateUpdate)) *MockBoardTemplateDatabase_Update_Call {
+func (_c *MockBoardTemplateDatabase_Update_Call) Run(run func(ctx context.Context, board DatabaseBoardTemplateUpdate)) *MockBoardTemplateDatabase_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseBoardTemplateUpdate
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseBoardTemplateUpdate)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseBoardTemplateUpdate
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseBoardTemplateUpdate)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -331,7 +363,7 @@ func (_c *MockBoardTemplateDatabase_Update_Call) Return(databaseBoardTemplate Da
 	return _c
 }
 
-func (_c *MockBoardTemplateDatabase_Update_Call) RunAndReturn(run func(board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error)) *MockBoardTemplateDatabase_Update_Call {
+func (_c *MockBoardTemplateDatabase_Update_Call) RunAndReturn(run func(ctx context.Context, board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error)) *MockBoardTemplateDatabase_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
