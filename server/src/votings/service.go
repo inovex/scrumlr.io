@@ -9,7 +9,6 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
@@ -19,7 +18,8 @@ import (
 )
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/votings")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/votings")
+
+//var meter metric.Meter = otel.Meter("scrumlr.io/server/votings")
 
 type VotingDatabase interface {
 	Create(ctx context.Context, insert DatabaseVotingInsert) (DatabaseVoting, error)
