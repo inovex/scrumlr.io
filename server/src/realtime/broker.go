@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 )
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/realtime")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/realtime")
+
+//var meter metric.Meter = otel.Meter("scrumlr.io/server/realtime")
 
 // Client can publish data to an external queue and receive events from
 // that external queue
