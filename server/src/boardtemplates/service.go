@@ -7,14 +7,14 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
-	"go.opentelemetry.io/otel/metric"
 	"go.opentelemetry.io/otel/trace"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/logger"
 )
 
 var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/boardtemplates")
-var meter metric.Meter = otel.Meter("scrumlr.io/server/boardtemplates")
+
+//var meter metric.Meter = otel.Meter("scrumlr.io/server/boardtemplates")
 
 type BoardTemplateDatabase interface {
 	Create(ctx context.Context, board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error)
