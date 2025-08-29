@@ -42,16 +42,16 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().CreateNote(DatabaseNoteInsert{
+	mockDB.EXPECT().CreateNote(mock.Anything, DatabaseNoteInsert{
 		Author: authorID,
 		Board:  boardID,
 		Column: colID,
 		Text:   txt,
 	}).Return(DatabaseNote{ID: noteID, Author: authorID, Board: boardID, Column: colID, Text: txt, Stack: uuid.NullUUID{}, Rank: 0, Edited: false}, nil)
-	mockDB.EXPECT().GetAll(boardID).Return([]DatabaseNote{}, nil)
+	mockDB.EXPECT().GetAll(mock.Anything, boardID).Return([]DatabaseNote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, publishSubject, publishEvent).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -59,7 +59,7 @@ func (suite *NoteServiceTestSuite) TestCreate() {
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
 
-	createdNote, err := service.Create(logger.InitTestLogger(context.Background()), NoteCreateRequest{
+	createdNote, err := service.Create(context.Background(), NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
@@ -120,7 +120,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetAll(boardID).Return(noteDBList, nil)
+	mockDB.EXPECT().GetAll(mock.Anything, boardID).Return(noteDBList, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
@@ -129,7 +129,7 @@ func (suite *NoteServiceTestSuite) TestGetNotes() {
 	mockVotingService := votings.NewMockVotingService(suite.T())
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
-	notes, err := service.GetAll(logger.InitTestLogger(context.Background()), boardID)
+	notes, err := service.GetAll(context.Background(), boardID)
 
 	assert.NoError(suite.T(), err)
 
@@ -190,8 +190,8 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	ctx = context.WithValue(ctx, identifiers.UserIdentifier, callerID)
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetAll(boardID).Return([]DatabaseNote{}, nil)
-	mockDB.EXPECT().UpdateNote(callerID, DatabaseNoteUpdate{
+	mockDB.EXPECT().GetAll(mock.Anything, boardID).Return([]DatabaseNote{}, nil)
+	mockDB.EXPECT().UpdateNote(mock.Anything, callerID, DatabaseNoteUpdate{
 		ID:       noteID,
 		Board:    boardID,
 		Text:     &txt,
@@ -200,7 +200,7 @@ func (suite *NoteServiceTestSuite) TestUpdateNote() {
 	}).Return(DatabaseNote{}, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(publishSubject, publishEvent).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, publishSubject, publishEvent).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
@@ -233,21 +233,21 @@ func (suite *NoteServiceTestSuite) TestDeleteNote() {
 	ctx = context.WithValue(ctx, identifiers.NoteIdentifier, noteID)
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().DeleteNote(callerID, boardID, noteID, deleteStack).Return(nil)
+	mockDB.EXPECT().DeleteNote(mock.Anything, callerID, boardID, noteID, deleteStack).Return(nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
-	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	mockBroker.EXPECT().Publish(mock.Anything, mock.AnythingOfType("string"), mock.Anything).Return(nil)
 	broker := new(realtime.Broker)
 	broker.Con = mockBroker
 
 	mockVotingService := votings.NewMockVotingService(suite.T())
-	mockVotingService.EXPECT().GetVotes(ctx, filter.VoteFilter{Note: &noteID}).
+	mockVotingService.EXPECT().GetVotes(mock.Anything, filter.VoteFilter{Note: &noteID}).
 		Return([]*votings.Vote{
 			{User: firstUserId, Note: noteID},
 			{User: secondUserId, Note: noteID},
 		}, nil)
-	mockVotingService.EXPECT().RemoveVote(ctx, votings.VoteRequest{Note: noteID, User: firstUserId}).Return(nil)
-	mockVotingService.EXPECT().RemoveVote(ctx, votings.VoteRequest{Note: noteID, User: secondUserId}).Return(nil)
+	mockVotingService.EXPECT().RemoveVote(mock.Anything, votings.VoteRequest{Note: noteID, User: firstUserId}).Return(nil)
+	mockVotingService.EXPECT().RemoveVote(mock.Anything, votings.VoteRequest{Note: noteID, User: secondUserId}).Return(nil)
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
 
@@ -269,7 +269,7 @@ func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().CreateNote(DatabaseNoteInsert{
+	mockDB.EXPECT().CreateNote(mock.Anything, DatabaseNoteInsert{
 		Author: authorID,
 		Board:  boardID,
 		Column: colID,
@@ -283,7 +283,7 @@ func (suite *NoteServiceTestSuite) TestBadInputOnCreate() {
 	mockVotingService := votings.NewMockVotingService(suite.T())
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
-	_, err := service.Create(logger.InitTestLogger(context.Background()), NoteCreateRequest{
+	_, err := service.Create(context.Background(), NoteCreateRequest{
 		User:   authorID,
 		Board:  boardID,
 		Column: colID,
@@ -299,7 +299,7 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 	expectedAPIError := &common.APIError{StatusCode: http.StatusNotFound, StatusText: "Resource not found."}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().Get(boardID).Return(DatabaseNote{}, sql.ErrNoRows)
+	mockDB.EXPECT().Get(mock.Anything, boardID).Return(DatabaseNote{}, sql.ErrNoRows)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
@@ -308,14 +308,13 @@ func (suite *NoteServiceTestSuite) TestNoEntryOnGetNote() {
 	mockVotingService := votings.NewMockVotingService(suite.T())
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
-	_, err := service.Get(logger.InitTestLogger(context.Background()), boardID)
+	_, err := service.Get(context.Background(), boardID)
 
 	assert.Error(suite.T(), err)
 	assert.Equal(suite.T(), expectedAPIError, err)
 }
 
 func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
-	ctx := context.Background()
 	noteID := uuid.New()
 	expectedNotes := []DatabaseNote{
 		{ID: uuid.New(), Text: "Note 1"},
@@ -323,7 +322,7 @@ func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
 	}
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetStack(noteID).Return(expectedNotes, nil)
+	mockDB.EXPECT().GetStack(mock.Anything, noteID).Return(expectedNotes, nil)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
@@ -332,7 +331,7 @@ func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
 	mockVotingService := votings.NewMockVotingService(suite.T())
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
-	result, err := service.GetStack(ctx, noteID)
+	result, err := service.GetStack(context.Background(), noteID)
 
 	assert.NoError(suite.T(), err)
 	assert.NotNil(suite.T(), result)
@@ -341,12 +340,11 @@ func (suite *NoteServiceTestSuite) TestGetStackSuccess() {
 }
 
 func (suite *NoteServiceTestSuite) TestGetStackError() {
-	ctx := context.Background()
 	noteID := uuid.New()
 	dbError := errors.New("database failure")
 
 	mockDB := NewMockNotesDatabase(suite.T())
-	mockDB.EXPECT().GetStack(noteID).Return(nil, dbError)
+	mockDB.EXPECT().GetStack(mock.Anything, noteID).Return(nil, dbError)
 
 	mockBroker := realtime.NewMockClient(suite.T())
 	broker := new(realtime.Broker)
@@ -355,7 +353,7 @@ func (suite *NoteServiceTestSuite) TestGetStackError() {
 	mockVotingService := votings.NewMockVotingService(suite.T())
 
 	service := NewNotesService(mockDB, broker, mockVotingService)
-	result, err := service.GetStack(ctx, noteID)
+	result, err := service.GetStack(context.Background(), noteID)
 
 	assert.Error(suite.T(), err)
 	assert.Nil(suite.T(), result)

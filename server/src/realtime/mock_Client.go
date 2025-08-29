@@ -5,6 +5,8 @@
 package realtime
 
 import (
+	"context"
+
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -36,16 +38,16 @@ func (_m *MockClient) EXPECT() *MockClient_Expecter {
 }
 
 // Publish provides a mock function for the type MockClient
-func (_mock *MockClient) Publish(subject string, event interface{}) error {
-	ret := _mock.Called(subject, event)
+func (_mock *MockClient) Publish(ctx context.Context, subject string, event interface{}) error {
+	ret := _mock.Called(ctx, subject, event)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Publish")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(string, interface{}) error); ok {
-		r0 = returnFunc(subject, event)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, interface{}) error); ok {
+		r0 = returnFunc(ctx, subject, event)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -58,25 +60,31 @@ type MockClient_Publish_Call struct {
 }
 
 // Publish is a helper method to define mock.On call
+//   - ctx context.Context
 //   - subject string
 //   - event interface{}
-func (_e *MockClient_Expecter) Publish(subject interface{}, event interface{}) *MockClient_Publish_Call {
-	return &MockClient_Publish_Call{Call: _e.mock.On("Publish", subject, event)}
+func (_e *MockClient_Expecter) Publish(ctx interface{}, subject interface{}, event interface{}) *MockClient_Publish_Call {
+	return &MockClient_Publish_Call{Call: _e.mock.On("Publish", ctx, subject, event)}
 }
 
-func (_c *MockClient_Publish_Call) Run(run func(subject string, event interface{})) *MockClient_Publish_Call {
+func (_c *MockClient_Publish_Call) Run(run func(ctx context.Context, subject string, event interface{})) *MockClient_Publish_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
 		}
-		var arg1 interface{}
+		var arg1 string
 		if args[1] != nil {
-			arg1 = args[1].(interface{})
+			arg1 = args[1].(string)
+		}
+		var arg2 interface{}
+		if args[2] != nil {
+			arg2 = args[2].(interface{})
 		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -87,14 +95,14 @@ func (_c *MockClient_Publish_Call) Return(err error) *MockClient_Publish_Call {
 	return _c
 }
 
-func (_c *MockClient_Publish_Call) RunAndReturn(run func(subject string, event interface{}) error) *MockClient_Publish_Call {
+func (_c *MockClient_Publish_Call) RunAndReturn(run func(ctx context.Context, subject string, event interface{}) error) *MockClient_Publish_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // SubscribeToBoardEvents provides a mock function for the type MockClient
-func (_mock *MockClient) SubscribeToBoardEvents(subject string) (chan *BoardEvent, error) {
-	ret := _mock.Called(subject)
+func (_mock *MockClient) SubscribeToBoardEvents(ctx context.Context, subject string) (chan *BoardEvent, error) {
+	ret := _mock.Called(ctx, subject)
 
 	if len(ret) == 0 {
 		panic("no return value specified for SubscribeToBoardEvents")
@@ -102,18 +110,18 @@ func (_mock *MockClient) SubscribeToBoardEvents(subject string) (chan *BoardEven
 
 	var r0 chan *BoardEvent
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (chan *BoardEvent, error)); ok {
-		return returnFunc(subject)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (chan *BoardEvent, error)); ok {
+		return returnFunc(ctx, subject)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) chan *BoardEvent); ok {
-		r0 = returnFunc(subject)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) chan *BoardEvent); ok {
+		r0 = returnFunc(ctx, subject)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(chan *BoardEvent)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
-		r1 = returnFunc(subject)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = returnFunc(ctx, subject)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -126,19 +134,25 @@ type MockClient_SubscribeToBoardEvents_Call struct {
 }
 
 // SubscribeToBoardEvents is a helper method to define mock.On call
+//   - ctx context.Context
 //   - subject string
-func (_e *MockClient_Expecter) SubscribeToBoardEvents(subject interface{}) *MockClient_SubscribeToBoardEvents_Call {
-	return &MockClient_SubscribeToBoardEvents_Call{Call: _e.mock.On("SubscribeToBoardEvents", subject)}
+func (_e *MockClient_Expecter) SubscribeToBoardEvents(ctx interface{}, subject interface{}) *MockClient_SubscribeToBoardEvents_Call {
+	return &MockClient_SubscribeToBoardEvents_Call{Call: _e.mock.On("SubscribeToBoardEvents", ctx, subject)}
 }
 
-func (_c *MockClient_SubscribeToBoardEvents_Call) Run(run func(subject string)) *MockClient_SubscribeToBoardEvents_Call {
+func (_c *MockClient_SubscribeToBoardEvents_Call) Run(run func(ctx context.Context, subject string)) *MockClient_SubscribeToBoardEvents_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -149,14 +163,14 @@ func (_c *MockClient_SubscribeToBoardEvents_Call) Return(boardEventCh chan *Boar
 	return _c
 }
 
-func (_c *MockClient_SubscribeToBoardEvents_Call) RunAndReturn(run func(subject string) (chan *BoardEvent, error)) *MockClient_SubscribeToBoardEvents_Call {
+func (_c *MockClient_SubscribeToBoardEvents_Call) RunAndReturn(run func(ctx context.Context, subject string) (chan *BoardEvent, error)) *MockClient_SubscribeToBoardEvents_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // SubscribeToBoardSessionEvents provides a mock function for the type MockClient
-func (_mock *MockClient) SubscribeToBoardSessionEvents(subject string) (chan *BoardSessionRequestEventType, error) {
-	ret := _mock.Called(subject)
+func (_mock *MockClient) SubscribeToBoardSessionEvents(ctx context.Context, subject string) (chan *BoardSessionRequestEventType, error) {
+	ret := _mock.Called(ctx, subject)
 
 	if len(ret) == 0 {
 		panic("no return value specified for SubscribeToBoardSessionEvents")
@@ -164,18 +178,18 @@ func (_mock *MockClient) SubscribeToBoardSessionEvents(subject string) (chan *Bo
 
 	var r0 chan *BoardSessionRequestEventType
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(string) (chan *BoardSessionRequestEventType, error)); ok {
-		return returnFunc(subject)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) (chan *BoardSessionRequestEventType, error)); ok {
+		return returnFunc(ctx, subject)
 	}
-	if returnFunc, ok := ret.Get(0).(func(string) chan *BoardSessionRequestEventType); ok {
-		r0 = returnFunc(subject)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string) chan *BoardSessionRequestEventType); ok {
+		r0 = returnFunc(ctx, subject)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(chan *BoardSessionRequestEventType)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(string) error); ok {
-		r1 = returnFunc(subject)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string) error); ok {
+		r1 = returnFunc(ctx, subject)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -188,19 +202,25 @@ type MockClient_SubscribeToBoardSessionEvents_Call struct {
 }
 
 // SubscribeToBoardSessionEvents is a helper method to define mock.On call
+//   - ctx context.Context
 //   - subject string
-func (_e *MockClient_Expecter) SubscribeToBoardSessionEvents(subject interface{}) *MockClient_SubscribeToBoardSessionEvents_Call {
-	return &MockClient_SubscribeToBoardSessionEvents_Call{Call: _e.mock.On("SubscribeToBoardSessionEvents", subject)}
+func (_e *MockClient_Expecter) SubscribeToBoardSessionEvents(ctx interface{}, subject interface{}) *MockClient_SubscribeToBoardSessionEvents_Call {
+	return &MockClient_SubscribeToBoardSessionEvents_Call{Call: _e.mock.On("SubscribeToBoardSessionEvents", ctx, subject)}
 }
 
-func (_c *MockClient_SubscribeToBoardSessionEvents_Call) Run(run func(subject string)) *MockClient_SubscribeToBoardSessionEvents_Call {
+func (_c *MockClient_SubscribeToBoardSessionEvents_Call) Run(run func(ctx context.Context, subject string)) *MockClient_SubscribeToBoardSessionEvents_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 string
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(string)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -211,7 +231,7 @@ func (_c *MockClient_SubscribeToBoardSessionEvents_Call) Return(boardSessionRequ
 	return _c
 }
 
-func (_c *MockClient_SubscribeToBoardSessionEvents_Call) RunAndReturn(run func(subject string) (chan *BoardSessionRequestEventType, error)) *MockClient_SubscribeToBoardSessionEvents_Call {
+func (_c *MockClient_SubscribeToBoardSessionEvents_Call) RunAndReturn(run func(ctx context.Context, subject string) (chan *BoardSessionRequestEventType, error)) *MockClient_SubscribeToBoardSessionEvents_Call {
 	_c.Call.Return(run)
 	return _c
 }

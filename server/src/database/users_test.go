@@ -1,9 +1,11 @@
 package database
 
 import (
+	"context"
 	"database/sql"
-	"scrumlr.io/server/sessions"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -21,7 +23,7 @@ func TestRunnerForUser(t *testing.T) {
 
 func testInsertUser(t *testing.T) {
 	name := "Some user"
-	user, err := userDb.CreateAnonymousUser(name)
+	user, err := userDb.CreateAnonymousUser(context.Background(), name)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, user.ID)
 	assert.Equal(t, common.Anonymous, user.AccountType)
@@ -31,7 +33,7 @@ func testInsertUser(t *testing.T) {
 func testGetUser(t *testing.T) {
 	user := fixture.MustRow("DatabaseUser.john").(*sessions.DatabaseUser)
 
-	gotUser, err := userDb.GetUser(user.ID)
+	gotUser, err := userDb.GetUser(context.Background(), user.ID)
 	assert.Nil(t, err)
 	assert.NotNil(t, gotUser)
 	assert.Equal(t, user.ID, gotUser.ID)
@@ -41,16 +43,16 @@ func testGetUser(t *testing.T) {
 
 func testGetUnknownUser(t *testing.T) {
 	id, _ := uuid.Parse("123e4567-e89b-12d3-a456-426614174000")
-	_, err := userDb.GetUser(id)
+	_, err := userDb.GetUser(context.Background(), id)
 	assert.Equal(t, sql.ErrNoRows, err)
 }
 
 func testUpdateUser(t *testing.T) {
-	user, err := userDb.CreateAnonymousUser("Some name")
+	user, err := userDb.CreateAnonymousUser(context.Background(), "Some name")
 	assert.Nil(t, err)
 
 	newName := "Piece Peace"
-	updatedUser, err := userDb.UpdateUser(sessions.DatabaseUserUpdate{ID: user.ID, Name: newName})
+	updatedUser, err := userDb.UpdateUser(context.Background(), sessions.DatabaseUserUpdate{ID: user.ID, Name: newName})
 	assert.Nil(t, err)
 
 	assert.Equal(t, newName, updatedUser.Name)

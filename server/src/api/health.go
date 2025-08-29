@@ -1,20 +1,31 @@
 package api
 
 import (
-	"github.com/go-chi/render"
 	"net/http"
+
+	"github.com/go-chi/render"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/logger"
 )
 
-func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
-	realtimeHealthy := s.health.IsRealtimeHealthy()
-	databaseHealthy := s.health.IsDatabaseHealthy()
+//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
 
+func (s *Server) healthCheck(w http.ResponseWriter, r *http.Request) {
+	ctx, span := tracer.Start(r.Context(), "health-api")
+	defer span.End()
+
+	realtimeHealthy := s.health.IsRealtimeHealthy(ctx)
+	databaseHealthy := s.health.IsDatabaseHealthy(ctx)
+
+	span.SetAttributes(attribute.Bool("database-healthy", databaseHealthy), attribute.Bool("realtime-healthy", realtimeHealthy))
 	if realtimeHealthy && databaseHealthy {
 		render.Status(r, http.StatusNoContent)
 		render.Respond(w, r, nil)
 		return
 	}
+
+	span.SetStatus(codes.Error, "service not healthy")
 	logger.Get().Errorw("service is not healthy", "realtime", realtimeHealthy, "database", databaseHealthy)
 	render.Status(r, http.StatusServiceUnavailable)
 	render.Respond(w, r, nil)

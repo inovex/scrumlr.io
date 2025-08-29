@@ -1,8 +1,10 @@
 package database
 
 import (
-	"scrumlr.io/server/sessions"
+	"context"
 	"testing"
+
+	"scrumlr.io/server/sessions"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -57,7 +59,7 @@ func TestRunnerForColumnTemplates(t *testing.T) {
 
 func testGetColumnTemplate(t *testing.T) {
 	column := fixture.MustRow("DatabaseColumnTemplate.firstColumnTemplate").(*columntemplates.DatabaseColumnTemplate)
-	gotColumn, err := columnTemplateDb.Get(boardForColumnTemplatesTest, column.ID)
+	gotColumn, err := columnTemplateDb.Get(context.Background(), boardForColumnTemplatesTest, column.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, column.ID, gotColumn.ID)
 	assert.Equal(t, column.BoardTemplate, gotColumn.BoardTemplate)
@@ -75,7 +77,7 @@ func testCreateColumnTemplateOnFirstIndex(t *testing.T) {
 	visible := true
 	index := 0
 
-	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
+	column, err := columnTemplateDb.Create(context.Background(), columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "0 Column",
 		Color:         columns.ColorBacklogBlue,
@@ -93,7 +95,7 @@ func testCreateColumnTemplateOnLastIndex(t *testing.T) {
 	visible := true
 	index := 4
 
-	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
+	column, err := columnTemplateDb.Create(context.Background(), columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "4 Column",
 		Description:   "Test description",
@@ -114,7 +116,7 @@ func testCreateColumnTemplateOnNegativeIndex(t *testing.T) {
 	index := -99
 	expectedIndex := 0
 
-	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
+	column, err := columnTemplateDb.Create(context.Background(), columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "-99 Column",
 		Color:         columns.ColorBacklogBlue,
@@ -133,7 +135,7 @@ func testCreateColumnTemplateWithExceptionallyHighIndex(t *testing.T) {
 	index := 99
 	expectedIndex := 6
 
-	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
+	column, err := columnTemplateDb.Create(context.Background(), columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "99 Column",
 		Color:         columns.ColorBacklogBlue,
@@ -151,7 +153,7 @@ func testCreateColumnTemplateOnSecondIndex(t *testing.T) {
 	visible := true
 	index := 1
 
-	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
+	column, err := columnTemplateDb.Create(context.Background(), columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "1 Column",
 		Color:         columns.ColorBacklogBlue,
@@ -167,7 +169,7 @@ func testCreateColumnTemplateOnSecondIndex(t *testing.T) {
 
 func testCreateColumnTemplateWithEmptyName(t *testing.T) {
 	index := 99
-	_, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
+	_, err := columnTemplateDb.Create(context.Background(), columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "",
 		Color:         columns.ColorBacklogBlue,
@@ -177,7 +179,7 @@ func testCreateColumnTemplateWithEmptyName(t *testing.T) {
 }
 
 func testCreateColumnTemplateWithEmptyColor(t *testing.T) {
-	_, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
+	_, err := columnTemplateDb.Create(context.Background(), columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "Column",
 		Color:         "",
@@ -187,7 +189,7 @@ func testCreateColumnTemplateWithEmptyColor(t *testing.T) {
 
 func testCreateColumnTemplateWithDescription(t *testing.T) {
 	aDescription := "A column template description"
-	column, err := columnTemplateDb.Create(columntemplates.DatabaseColumnTemplateInsert{
+	column, err := columnTemplateDb.Create(context.Background(), columntemplates.DatabaseColumnTemplateInsert{
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "Column",
 		Color:         columns.ColorBacklogBlue,
@@ -198,39 +200,39 @@ func testCreateColumnTemplateWithDescription(t *testing.T) {
 	assert.Equal(t, aDescription, column.Description)
 
 	// clean up to not crash other tests
-	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, column.ID, uuid.New())
+	_ = columnTemplateDb.Delete(context.Background(), boardForColumnTemplatesTest, column.ID, uuid.New())
 }
 
 func testDeleteColumnTemplateOnSecondIndex(t *testing.T) {
-	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFifth.ID, columnTemplateTestUser.ID)
+	err := columnTemplateDb.Delete(context.Background(), boardForColumnTemplatesTest, columnTemplateInsertedFifth.ID, columnTemplateTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedThird.ID, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID, columnTemplateInsertedFourth.ID)
 }
 
 func testDeleteColumnTemplateOnFirstIndex(t *testing.T) {
-	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedThird.ID, columnTemplateTestUser.ID)
+	err := columnTemplateDb.Delete(context.Background(), boardForColumnTemplatesTest, columnTemplateInsertedThird.ID, columnTemplateTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID, columnTemplateInsertedFourth.ID)
 }
 
 func testDeleteLastColumnTemplate(t *testing.T) {
-	err := columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFourth.ID, columnTemplateTestUser.ID)
+	err := columnTemplateDb.Delete(context.Background(), boardForColumnTemplatesTest, columnTemplateInsertedFourth.ID, columnTemplateTestUser.ID)
 	assert.Nil(t, err)
 
 	verifyColumnTemplateOrder(t, columnTemplateInsertedFirst.ID, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID, columnTemplateInsertedSecond.ID)
 }
 
 func testDeleteOtherColumnTemplates(t *testing.T) {
-	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedFirst.ID, columnTemplateTestUser.ID)
-	_ = columnTemplateDb.Delete(boardForColumnTemplatesTest, columnTemplateInsertedSecond.ID, columnTemplateTestUser.ID)
+	_ = columnTemplateDb.Delete(context.Background(), boardForColumnTemplatesTest, columnTemplateInsertedFirst.ID, columnTemplateTestUser.ID)
+	_ = columnTemplateDb.Delete(context.Background(), boardForColumnTemplatesTest, columnTemplateInsertedSecond.ID, columnTemplateTestUser.ID)
 
 	verifyColumnTemplateOrder(t, firstColumnTemplate.ID, secondColumnTemplate.ID, thirdColumnTemplate.ID)
 }
 
 func testUpdateColumnTemplateName(t *testing.T) {
-	column, err := columnTemplateDb.Update(columntemplates.DatabaseColumnTemplateUpdate{
+	column, err := columnTemplateDb.Update(context.Background(), columntemplates.DatabaseColumnTemplateUpdate{
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "Updated name",
@@ -243,7 +245,7 @@ func testUpdateColumnTemplateName(t *testing.T) {
 }
 
 func testUpdateColumnTemplateColor(t *testing.T) {
-	column, err := columnTemplateDb.Update(columntemplates.DatabaseColumnTemplateUpdate{
+	column, err := columnTemplateDb.Update(context.Background(), columntemplates.DatabaseColumnTemplateUpdate{
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "Updated name",
@@ -256,7 +258,7 @@ func testUpdateColumnTemplateColor(t *testing.T) {
 }
 
 func testUpdateColumnTemplateVisibility(t *testing.T) {
-	column, err := columnTemplateDb.Update(columntemplates.DatabaseColumnTemplateUpdate{
+	column, err := columnTemplateDb.Update(context.Background(), columntemplates.DatabaseColumnTemplateUpdate{
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
@@ -269,7 +271,7 @@ func testUpdateColumnTemplateVisibility(t *testing.T) {
 }
 
 func testMoveFirstColumnTemplateOnLastIndex(t *testing.T) {
-	_, err := columnTemplateDb.Update(columntemplates.DatabaseColumnTemplateUpdate{
+	_, err := columnTemplateDb.Update(context.Background(), columntemplates.DatabaseColumnTemplateUpdate{
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
@@ -282,7 +284,7 @@ func testMoveFirstColumnTemplateOnLastIndex(t *testing.T) {
 }
 
 func testMoveLastColumnTemplateOnFirstIndex(t *testing.T) {
-	_, err := columnTemplateDb.Update(columntemplates.DatabaseColumnTemplateUpdate{
+	_, err := columnTemplateDb.Update(context.Background(), columntemplates.DatabaseColumnTemplateUpdate{
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
@@ -295,7 +297,7 @@ func testMoveLastColumnTemplateOnFirstIndex(t *testing.T) {
 }
 
 func testMoveFirstColumnTemplateOnSecondIndex(t *testing.T) {
-	_, err := columnTemplateDb.Update(columntemplates.DatabaseColumnTemplateUpdate{
+	_, err := columnTemplateDb.Update(context.Background(), columntemplates.DatabaseColumnTemplateUpdate{
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
@@ -308,7 +310,7 @@ func testMoveFirstColumnTemplateOnSecondIndex(t *testing.T) {
 }
 
 func testMoveSecondColumnTemplateOnFirstIndex(t *testing.T) {
-	_, err := columnTemplateDb.Update(columntemplates.DatabaseColumnTemplateUpdate{
+	_, err := columnTemplateDb.Update(context.Background(), columntemplates.DatabaseColumnTemplateUpdate{
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "First column",
@@ -321,7 +323,7 @@ func testMoveSecondColumnTemplateOnFirstIndex(t *testing.T) {
 }
 
 func testUpdateColumnTemplateDescription(t *testing.T) {
-	column, err := columnTemplateDb.Update(columntemplates.DatabaseColumnTemplateUpdate{
+	column, err := columnTemplateDb.Update(context.Background(), columntemplates.DatabaseColumnTemplateUpdate{
 		ID:            firstColumnTemplate.ID,
 		BoardTemplate: boardForColumnTemplatesTest,
 		Name:          "FirstColumn",
@@ -337,7 +339,7 @@ func testUpdateColumnTemplateDescription(t *testing.T) {
 func verifyColumnTemplateOrder(t *testing.T, ids ...uuid.UUID) {
 	expectedOrder := ids
 
-	columns, err := columnTemplateDb.GetAll(boardForColumnTemplatesTest)
+	columns, err := columnTemplateDb.GetAll(context.Background(), boardForColumnTemplatesTest)
 	assert.Nil(t, err)
 	assert.Equal(t, len(ids), len(columns))
 

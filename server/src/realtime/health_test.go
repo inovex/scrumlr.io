@@ -1,6 +1,7 @@
 package realtime_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,7 +38,7 @@ func TestBroker_IsHealthy(t *testing.T) {
 	}
 	for _, tt := range testcases {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expected, tt.setupBroker(t).IsHealthy(), "healthy didn't return expected result")
+			assert.Equal(t, tt.expected, tt.setupBroker(t).IsHealthy(context.Background()), "healthy didn't return expected result")
 		})
 	}
 }

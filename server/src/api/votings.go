@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
@@ -13,21 +15,38 @@ import (
 	"github.com/google/uuid"
 )
 
+//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+
 // createVoting creates a new voting session
 func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "voting-api-create")
+	defer span.End()
+
+	log := logger.FromContext(ctx)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
 
 	var body votings.VotingCreateRequest
 	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "unable to decode body")
+		span.RecordError(err)
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
 	}
 
 	body.Board = board
-	voting, err := s.votings.Create(r.Context(), body)
+
+	span.SetAttributes(
+		attribute.String("board", board.String()),
+		attribute.Int("vote limit", body.VoteLimit),
+		attribute.Bool("allow multiple votes", body.AllowMultipleVotes),
+		attribute.Bool("is anonymous", body.IsAnonymous),
+		attribute.Bool("show voes of other users", body.ShowVotesOfOthers),
+	)
+	voting, err := s.votings.Create(ctx, body)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to create voting")
+		span.RecordError(err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -43,12 +62,17 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 
 // updateVoting updates a voting session
 func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	id := r.Context().Value(identifiers.VotingIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "voting-api-update")
+	defer span.End()
+
+	log := logger.FromContext(ctx)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	id := ctx.Value(identifiers.VotingIdentifier).(uuid.UUID)
 
 	var body votings.VotingUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "unable to decode body")
+		span.RecordError(err)
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
 		return
@@ -56,8 +80,15 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 	body.Board = board
 	body.ID = id
-	notes, err := s.notes.GetAll(r.Context(), board)
+	span.SetAttributes(
+		attribute.String("board", board.String()),
+		attribute.String("voting", id.String()),
+		attribute.String("status", string(body.Status)),
+	)
+	notes, err := s.notes.GetAll(ctx, board)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get notes")
+		span.RecordError(err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -77,9 +108,10 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	voting, err := s.votings.Update(r.Context(), body, affectedNotes)
+	voting, err := s.votings.Update(ctx, body, affectedNotes)
 	if err != nil {
-
+		span.SetStatus(codes.Error, "failed to update voting")
+		span.RecordError(err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -90,11 +122,17 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 // getVoting get a voting session
 func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	id := r.Context().Value(identifiers.VotingIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "voting-api-get")
+	defer span.End()
 
-	voting, err := s.votings.Get(r.Context(), board, id)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	id := ctx.Value(identifiers.VotingIdentifier).(uuid.UUID)
+
+	span.SetAttributes(attribute.String("board", board.String()), attribute.String("voting", id.String()))
+	voting, err := s.votings.Get(ctx, board, id)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get voting")
+		span.RecordError(err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -105,10 +143,16 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 
 // getVotings get all voting sessions
 func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "voting-api-update")
+	defer span.End()
 
-	votings, err := s.votings.GetAll(r.Context(), board)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	span.SetAttributes(attribute.String("board", board.String()))
+	votings, err := s.votings.GetAll(ctx, board)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get votings")
+		span.RecordError(err)
 		common.Throw(w, r, err)
 		return
 	}

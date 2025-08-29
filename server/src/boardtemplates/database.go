@@ -22,7 +22,7 @@ func NewBoardTemplateDatabase(database *bun.DB) BoardTemplateDatabase {
 	return db
 }
 
-func (db *DB) Create(board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error) {
+func (db *DB) Create(ctx context.Context, board DatabaseBoardTemplateInsert, columns []columntemplates.DatabaseColumnTemplateInsert) (DatabaseBoardTemplate, error) {
 	boardInsert := db.db.NewInsert().
 		Model(&board).
 		Returning("*")
@@ -44,7 +44,7 @@ func (db *DB) Create(board DatabaseBoardTemplateInsert, columns []columntemplate
 
 	err := query.Table("createdBoardTemplate").
 		Column("*").
-		Scan(context.Background(), &b)
+		Scan(ctx, &b)
 	if err != nil {
 		return DatabaseBoardTemplate{}, err
 	}
@@ -52,14 +52,14 @@ func (db *DB) Create(board DatabaseBoardTemplateInsert, columns []columntemplate
 	return b, err
 }
 
-func (db *DB) Get(id uuid.UUID) (DatabaseBoardTemplate, error) {
+func (db *DB) Get(ctx context.Context, id uuid.UUID) (DatabaseBoardTemplate, error) {
 	var tBoard DatabaseBoardTemplate
 
 	// Get settings
 	err := db.db.NewSelect().
 		Model(&tBoard).
 		Where("id = ?", id).
-		Scan(context.Background())
+		Scan(ctx)
 
 	if err != nil {
 		return DatabaseBoardTemplate{}, err
@@ -68,14 +68,14 @@ func (db *DB) Get(id uuid.UUID) (DatabaseBoardTemplate, error) {
 	return tBoard, err
 }
 
-func (db *DB) GetAll(user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
+func (db *DB) GetAll(ctx context.Context, user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
 	var tBoards []DatabaseBoardTemplate
 
 	err := db.db.NewSelect().
 		Model(&tBoards).
 		Where("creator = ?", user).
 		Order("created_at ASC").
-		Scan(context.Background())
+		Scan(ctx)
 
 	if err != nil {
 		return []DatabaseBoardTemplateFull{}, err
@@ -87,7 +87,7 @@ func (db *DB) GetAll(user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
 		err = db.db.NewSelect().
 			Model(&cols).
 			Where("board_template = ?", board.ID).
-			Scan(context.Background())
+			Scan(ctx)
 
 		if err != nil {
 			return []DatabaseBoardTemplateFull{}, err
@@ -103,7 +103,7 @@ func (db *DB) GetAll(user uuid.UUID) ([]DatabaseBoardTemplateFull, error) {
 	return templates, err
 }
 
-func (db *DB) Update(board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error) {
+func (db *DB) Update(ctx context.Context, board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, error) {
 	// General Settings
 	query_settings := db.db.NewUpdate().Model(&board)
 
@@ -123,7 +123,7 @@ func (db *DB) Update(board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, 
 	_, err := query_settings.
 		Where("id = ?", board.ID).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, "Result", &boardTemplate), &boardTemplate)
+		Exec(common.ContextWithValues(ctx, "Database", db, "Result", &boardTemplate), &boardTemplate)
 
 	if err != nil {
 		logger.Get().Errorw("failed to update board template settings", "board", board.ID, "err", err)
@@ -133,11 +133,11 @@ func (db *DB) Update(board DatabaseBoardTemplateUpdate) (DatabaseBoardTemplate, 
 	return boardTemplate, err
 }
 
-func (db *DB) Delete(templateId uuid.UUID) error {
+func (db *DB) Delete(ctx context.Context, templateId uuid.UUID) error {
 	_, err := db.db.NewDelete().
 		Model((*DatabaseBoardTemplate)(nil)).
 		Where("id = ?", templateId).
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardTemplateIdentifier, templateId))
+		Exec(common.ContextWithValues(ctx, "Database", db, identifiers.BoardTemplateIdentifier, templateId))
 
 	return err
 }

@@ -5,6 +5,8 @@
 package sessionrequests
 
 import (
+	"context"
+
 	"github.com/google/uuid"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -37,8 +39,8 @@ func (_m *MockSessionRequestDatabase) EXPECT() *MockSessionRequestDatabase_Expec
 }
 
 // Create provides a mock function for the type MockSessionRequestDatabase
-func (_mock *MockSessionRequestDatabase) Create(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error) {
-	ret := _mock.Called(request)
+func (_mock *MockSessionRequestDatabase) Create(ctx context.Context, request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error) {
+	ret := _mock.Called(ctx, request)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Create")
@@ -46,16 +48,16 @@ func (_mock *MockSessionRequestDatabase) Create(request DatabaseBoardSessionRequ
 
 	var r0 DatabaseBoardSessionRequest
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)); ok {
-		return returnFunc(request)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)); ok {
+		return returnFunc(ctx, request)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseBoardSessionRequestInsert) DatabaseBoardSessionRequest); ok {
-		r0 = returnFunc(request)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardSessionRequestInsert) DatabaseBoardSessionRequest); ok {
+		r0 = returnFunc(ctx, request)
 	} else {
 		r0 = ret.Get(0).(DatabaseBoardSessionRequest)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseBoardSessionRequestInsert) error); ok {
-		r1 = returnFunc(request)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseBoardSessionRequestInsert) error); ok {
+		r1 = returnFunc(ctx, request)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -68,19 +70,25 @@ type MockSessionRequestDatabase_Create_Call struct {
 }
 
 // Create is a helper method to define mock.On call
+//   - ctx context.Context
 //   - request DatabaseBoardSessionRequestInsert
-func (_e *MockSessionRequestDatabase_Expecter) Create(request interface{}) *MockSessionRequestDatabase_Create_Call {
-	return &MockSessionRequestDatabase_Create_Call{Call: _e.mock.On("Create", request)}
+func (_e *MockSessionRequestDatabase_Expecter) Create(ctx interface{}, request interface{}) *MockSessionRequestDatabase_Create_Call {
+	return &MockSessionRequestDatabase_Create_Call{Call: _e.mock.On("Create", ctx, request)}
 }
 
-func (_c *MockSessionRequestDatabase_Create_Call) Run(run func(request DatabaseBoardSessionRequestInsert)) *MockSessionRequestDatabase_Create_Call {
+func (_c *MockSessionRequestDatabase_Create_Call) Run(run func(ctx context.Context, request DatabaseBoardSessionRequestInsert)) *MockSessionRequestDatabase_Create_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseBoardSessionRequestInsert
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseBoardSessionRequestInsert)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseBoardSessionRequestInsert
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseBoardSessionRequestInsert)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -91,14 +99,14 @@ func (_c *MockSessionRequestDatabase_Create_Call) Return(databaseBoardSessionReq
 	return _c
 }
 
-func (_c *MockSessionRequestDatabase_Create_Call) RunAndReturn(run func(request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)) *MockSessionRequestDatabase_Create_Call {
+func (_c *MockSessionRequestDatabase_Create_Call) RunAndReturn(run func(ctx context.Context, request DatabaseBoardSessionRequestInsert) (DatabaseBoardSessionRequest, error)) *MockSessionRequestDatabase_Create_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Exists provides a mock function for the type MockSessionRequestDatabase
-func (_mock *MockSessionRequestDatabase) Exists(board uuid.UUID, user uuid.UUID) (bool, error) {
-	ret := _mock.Called(board, user)
+func (_mock *MockSessionRequestDatabase) Exists(ctx context.Context, board uuid.UUID, user uuid.UUID) (bool, error) {
+	ret := _mock.Called(ctx, board, user)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Exists")
@@ -106,16 +114,16 @@ func (_mock *MockSessionRequestDatabase) Exists(board uuid.UUID, user uuid.UUID)
 
 	var r0 bool
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (bool, error)); ok {
-		return returnFunc(board, user)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (bool, error)); ok {
+		return returnFunc(ctx, board, user)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) bool); ok {
-		r0 = returnFunc(board, user)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) bool); ok {
+		r0 = returnFunc(ctx, board, user)
 	} else {
 		r0 = ret.Get(0).(bool)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) error); ok {
-		r1 = returnFunc(board, user)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, board, user)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -128,25 +136,31 @@ type MockSessionRequestDatabase_Exists_Call struct {
 }
 
 // Exists is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionRequestDatabase_Expecter) Exists(board interface{}, user interface{}) *MockSessionRequestDatabase_Exists_Call {
-	return &MockSessionRequestDatabase_Exists_Call{Call: _e.mock.On("Exists", board, user)}
+func (_e *MockSessionRequestDatabase_Expecter) Exists(ctx interface{}, board interface{}, user interface{}) *MockSessionRequestDatabase_Exists_Call {
+	return &MockSessionRequestDatabase_Exists_Call{Call: _e.mock.On("Exists", ctx, board, user)}
 }
 
-func (_c *MockSessionRequestDatabase_Exists_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionRequestDatabase_Exists_Call {
+func (_c *MockSessionRequestDatabase_Exists_Call) Run(run func(ctx context.Context, board uuid.UUID, user uuid.UUID)) *MockSessionRequestDatabase_Exists_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 uuid.UUID
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -157,14 +171,14 @@ func (_c *MockSessionRequestDatabase_Exists_Call) Return(b bool, err error) *Moc
 	return _c
 }
 
-func (_c *MockSessionRequestDatabase_Exists_Call) RunAndReturn(run func(board uuid.UUID, user uuid.UUID) (bool, error)) *MockSessionRequestDatabase_Exists_Call {
+func (_c *MockSessionRequestDatabase_Exists_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, user uuid.UUID) (bool, error)) *MockSessionRequestDatabase_Exists_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Get provides a mock function for the type MockSessionRequestDatabase
-func (_mock *MockSessionRequestDatabase) Get(board uuid.UUID, user uuid.UUID) (DatabaseBoardSessionRequest, error) {
-	ret := _mock.Called(board, user)
+func (_mock *MockSessionRequestDatabase) Get(ctx context.Context, board uuid.UUID, user uuid.UUID) (DatabaseBoardSessionRequest, error) {
+	ret := _mock.Called(ctx, board, user)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Get")
@@ -172,16 +186,16 @@ func (_mock *MockSessionRequestDatabase) Get(board uuid.UUID, user uuid.UUID) (D
 
 	var r0 DatabaseBoardSessionRequest
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) (DatabaseBoardSessionRequest, error)); ok {
-		return returnFunc(board, user)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) (DatabaseBoardSessionRequest, error)); ok {
+		return returnFunc(ctx, board, user)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, uuid.UUID) DatabaseBoardSessionRequest); ok {
-		r0 = returnFunc(board, user)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) DatabaseBoardSessionRequest); ok {
+		r0 = returnFunc(ctx, board, user)
 	} else {
 		r0 = ret.Get(0).(DatabaseBoardSessionRequest)
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, uuid.UUID) error); ok {
-		r1 = returnFunc(board, user)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r1 = returnFunc(ctx, board, user)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -194,25 +208,31 @@ type MockSessionRequestDatabase_Get_Call struct {
 }
 
 // Get is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board uuid.UUID
 //   - user uuid.UUID
-func (_e *MockSessionRequestDatabase_Expecter) Get(board interface{}, user interface{}) *MockSessionRequestDatabase_Get_Call {
-	return &MockSessionRequestDatabase_Get_Call{Call: _e.mock.On("Get", board, user)}
+func (_e *MockSessionRequestDatabase_Expecter) Get(ctx interface{}, board interface{}, user interface{}) *MockSessionRequestDatabase_Get_Call {
+	return &MockSessionRequestDatabase_Get_Call{Call: _e.mock.On("Get", ctx, board, user)}
 }
 
-func (_c *MockSessionRequestDatabase_Get_Call) Run(run func(board uuid.UUID, user uuid.UUID)) *MockSessionRequestDatabase_Get_Call {
+func (_c *MockSessionRequestDatabase_Get_Call) Run(run func(ctx context.Context, board uuid.UUID, user uuid.UUID)) *MockSessionRequestDatabase_Get_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
 		var arg1 uuid.UUID
 		if args[1] != nil {
 			arg1 = args[1].(uuid.UUID)
 		}
+		var arg2 uuid.UUID
+		if args[2] != nil {
+			arg2 = args[2].(uuid.UUID)
+		}
 		run(
 			arg0,
 			arg1,
+			arg2,
 		)
 	})
 	return _c
@@ -223,18 +243,18 @@ func (_c *MockSessionRequestDatabase_Get_Call) Return(databaseBoardSessionReques
 	return _c
 }
 
-func (_c *MockSessionRequestDatabase_Get_Call) RunAndReturn(run func(board uuid.UUID, user uuid.UUID) (DatabaseBoardSessionRequest, error)) *MockSessionRequestDatabase_Get_Call {
+func (_c *MockSessionRequestDatabase_Get_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, user uuid.UUID) (DatabaseBoardSessionRequest, error)) *MockSessionRequestDatabase_Get_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // GetAll provides a mock function for the type MockSessionRequestDatabase
-func (_mock *MockSessionRequestDatabase) GetAll(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error) {
+func (_mock *MockSessionRequestDatabase) GetAll(ctx context.Context, board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error) {
 	var tmpRet mock.Arguments
 	if len(status) > 0 {
-		tmpRet = _mock.Called(board, status)
+		tmpRet = _mock.Called(ctx, board, status)
 	} else {
-		tmpRet = _mock.Called(board)
+		tmpRet = _mock.Called(ctx, board)
 	}
 	ret := tmpRet
 
@@ -244,18 +264,18 @@ func (_mock *MockSessionRequestDatabase) GetAll(board uuid.UUID, status ...Reque
 
 	var r0 []DatabaseBoardSessionRequest
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, ...RequestStatus) ([]DatabaseBoardSessionRequest, error)); ok {
-		return returnFunc(board, status...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, ...RequestStatus) ([]DatabaseBoardSessionRequest, error)); ok {
+		return returnFunc(ctx, board, status...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(uuid.UUID, ...RequestStatus) []DatabaseBoardSessionRequest); ok {
-		r0 = returnFunc(board, status...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, ...RequestStatus) []DatabaseBoardSessionRequest); ok {
+		r0 = returnFunc(ctx, board, status...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]DatabaseBoardSessionRequest)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(uuid.UUID, ...RequestStatus) error); ok {
-		r1 = returnFunc(board, status...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, uuid.UUID, ...RequestStatus) error); ok {
+		r1 = returnFunc(ctx, board, status...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -268,28 +288,34 @@ type MockSessionRequestDatabase_GetAll_Call struct {
 }
 
 // GetAll is a helper method to define mock.On call
+//   - ctx context.Context
 //   - board uuid.UUID
 //   - status ...RequestStatus
-func (_e *MockSessionRequestDatabase_Expecter) GetAll(board interface{}, status ...interface{}) *MockSessionRequestDatabase_GetAll_Call {
+func (_e *MockSessionRequestDatabase_Expecter) GetAll(ctx interface{}, board interface{}, status ...interface{}) *MockSessionRequestDatabase_GetAll_Call {
 	return &MockSessionRequestDatabase_GetAll_Call{Call: _e.mock.On("GetAll",
-		append([]interface{}{board}, status...)...)}
+		append([]interface{}{ctx, board}, status...)...)}
 }
 
-func (_c *MockSessionRequestDatabase_GetAll_Call) Run(run func(board uuid.UUID, status ...RequestStatus)) *MockSessionRequestDatabase_GetAll_Call {
+func (_c *MockSessionRequestDatabase_GetAll_Call) Run(run func(ctx context.Context, board uuid.UUID, status ...RequestStatus)) *MockSessionRequestDatabase_GetAll_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 uuid.UUID
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(uuid.UUID)
+			arg0 = args[0].(context.Context)
 		}
-		var arg1 []RequestStatus
+		var arg1 uuid.UUID
+		if args[1] != nil {
+			arg1 = args[1].(uuid.UUID)
+		}
+		var arg2 []RequestStatus
 		var variadicArgs []RequestStatus
-		if len(args) > 1 {
-			variadicArgs = args[1].([]RequestStatus)
+		if len(args) > 2 {
+			variadicArgs = args[2].([]RequestStatus)
 		}
-		arg1 = variadicArgs
+		arg2 = variadicArgs
 		run(
 			arg0,
-			arg1...,
+			arg1,
+			arg2...,
 		)
 	})
 	return _c
@@ -300,14 +326,14 @@ func (_c *MockSessionRequestDatabase_GetAll_Call) Return(databaseBoardSessionReq
 	return _c
 }
 
-func (_c *MockSessionRequestDatabase_GetAll_Call) RunAndReturn(run func(board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error)) *MockSessionRequestDatabase_GetAll_Call {
+func (_c *MockSessionRequestDatabase_GetAll_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, status ...RequestStatus) ([]DatabaseBoardSessionRequest, error)) *MockSessionRequestDatabase_GetAll_Call {
 	_c.Call.Return(run)
 	return _c
 }
 
 // Update provides a mock function for the type MockSessionRequestDatabase
-func (_mock *MockSessionRequestDatabase) Update(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error) {
-	ret := _mock.Called(update)
+func (_mock *MockSessionRequestDatabase) Update(ctx context.Context, update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error) {
+	ret := _mock.Called(ctx, update)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Update")
@@ -315,16 +341,16 @@ func (_mock *MockSessionRequestDatabase) Update(update DatabaseBoardSessionReque
 
 	var r0 DatabaseBoardSessionRequest
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)); ok {
-		return returnFunc(update)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)); ok {
+		return returnFunc(ctx, update)
 	}
-	if returnFunc, ok := ret.Get(0).(func(DatabaseBoardSessionRequestUpdate) DatabaseBoardSessionRequest); ok {
-		r0 = returnFunc(update)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, DatabaseBoardSessionRequestUpdate) DatabaseBoardSessionRequest); ok {
+		r0 = returnFunc(ctx, update)
 	} else {
 		r0 = ret.Get(0).(DatabaseBoardSessionRequest)
 	}
-	if returnFunc, ok := ret.Get(1).(func(DatabaseBoardSessionRequestUpdate) error); ok {
-		r1 = returnFunc(update)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, DatabaseBoardSessionRequestUpdate) error); ok {
+		r1 = returnFunc(ctx, update)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -337,19 +363,25 @@ type MockSessionRequestDatabase_Update_Call struct {
 }
 
 // Update is a helper method to define mock.On call
+//   - ctx context.Context
 //   - update DatabaseBoardSessionRequestUpdate
-func (_e *MockSessionRequestDatabase_Expecter) Update(update interface{}) *MockSessionRequestDatabase_Update_Call {
-	return &MockSessionRequestDatabase_Update_Call{Call: _e.mock.On("Update", update)}
+func (_e *MockSessionRequestDatabase_Expecter) Update(ctx interface{}, update interface{}) *MockSessionRequestDatabase_Update_Call {
+	return &MockSessionRequestDatabase_Update_Call{Call: _e.mock.On("Update", ctx, update)}
 }
 
-func (_c *MockSessionRequestDatabase_Update_Call) Run(run func(update DatabaseBoardSessionRequestUpdate)) *MockSessionRequestDatabase_Update_Call {
+func (_c *MockSessionRequestDatabase_Update_Call) Run(run func(ctx context.Context, update DatabaseBoardSessionRequestUpdate)) *MockSessionRequestDatabase_Update_Call {
 	_c.Call.Run(func(args mock.Arguments) {
-		var arg0 DatabaseBoardSessionRequestUpdate
+		var arg0 context.Context
 		if args[0] != nil {
-			arg0 = args[0].(DatabaseBoardSessionRequestUpdate)
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 DatabaseBoardSessionRequestUpdate
+		if args[1] != nil {
+			arg1 = args[1].(DatabaseBoardSessionRequestUpdate)
 		}
 		run(
 			arg0,
+			arg1,
 		)
 	})
 	return _c
@@ -360,7 +392,7 @@ func (_c *MockSessionRequestDatabase_Update_Call) Return(databaseBoardSessionReq
 	return _c
 }
 
-func (_c *MockSessionRequestDatabase_Update_Call) RunAndReturn(run func(update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)) *MockSessionRequestDatabase_Update_Call {
+func (_c *MockSessionRequestDatabase_Update_Call) RunAndReturn(run func(ctx context.Context, update DatabaseBoardSessionRequestUpdate) (DatabaseBoardSessionRequest, error)) *MockSessionRequestDatabase_Update_Call {
 	_c.Call.Return(run)
 	return _c
 }
