@@ -63,6 +63,15 @@ SCRUMLR_CLARITY_ID=''
 
 ## Backend
 
+### Log Level
+
+The log level for the backend.
+Can be one of `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`. Defaults to `INFO` if not set.
+
+```ini
+SCRUMLR_LOG_LEVEL='INFO'
+```
+
 ### Server Port
 
 The port on which the backend should listen for incoming connections.
