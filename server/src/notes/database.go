@@ -71,12 +71,10 @@ func (d *DB) GetChildNotes(parentNote uuid.UUID) ([]DatabaseNote, error) {
 	err := d.db.NewSelect().
 		Model((*DatabaseNote)(nil)).
 		Where("stack = ?", parentNote).
+		Order("rank ASC").
 		Scan(context.Background(), &notes)
 
-	if err != nil {
-		return nil, err
-	}
-	return notes, nil
+	return notes, err
 }
 
 func (d *DB) UpdateNote(caller uuid.UUID, update DatabaseNoteUpdate) (DatabaseNote, error) {
@@ -279,11 +277,7 @@ func (d *DB) updateNoteText(update DatabaseNoteUpdate) (DatabaseNote, error) {
 		Returning("*").
 		Exec(common.ContextWithValues(context.Background(), "Database", d, identifiers.BoardIdentifier, update.Board), &note)
 
-	if err != nil {
-		return note, err
-	}
-
-	return note, nil
+	return note, err
 }
 
 func (d *DB) updateNoteWithoutStack(update DatabaseNoteUpdate) (DatabaseNote, error) {
@@ -536,6 +530,7 @@ func (d *DB) GetStack(noteID uuid.UUID) ([]DatabaseNote, error) {
 		Model(&notes).
 		Where("id = ?", noteID).
 		WhereOr("stack = ?", noteID).
+		OrderExpr("rank ASC NULLS FIRST").
 		Scan(context.Background())
 
 	return notes, err

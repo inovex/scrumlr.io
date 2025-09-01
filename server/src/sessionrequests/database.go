@@ -103,14 +103,19 @@ func (database *SessionRequestDB) GetAll(board uuid.UUID, status ...RequestStatu
 	query := database.db.NewSelect().
 		Model(&requests).
 		ModelTableExpr("board_session_requests AS s").
-		ColumnExpr("s.board, s.user, u.name, s.status, s.created_at")
+		ColumnExpr("s.board, s.user, u.name, s.status, s.created_at").
+		Where("s.board = ?", board)
 
-	for _, value := range status {
-		query = query.WhereOr("s.status = ?", value)
+	if len(status) > 0 {
+		query.WhereGroup(" AND ", func(sq *bun.SelectQuery) *bun.SelectQuery {
+			for _, value := range status {
+				sq = sq.WhereOr("s.status = ?", value)
+			}
+			return sq
+		})
 	}
 
 	err := query.
-		Where("s.board = ?", board).
 		Join("INNER JOIN users AS u ON u.id = s.user").
 		Order("created_at ASC").
 		Scan(context.Background())

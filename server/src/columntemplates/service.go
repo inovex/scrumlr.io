@@ -13,7 +13,7 @@ type ColumnTemplateDatabase interface {
 	Get(board, id uuid.UUID) (DatabaseColumnTemplate, error)
 	GetAll(board uuid.UUID) ([]DatabaseColumnTemplate, error)
 	Update(column DatabaseColumnTemplateUpdate) (DatabaseColumnTemplate, error)
-	Delete(board, column, user uuid.UUID) error
+	Delete(board, column uuid.UUID) error
 }
 
 type Service struct {
@@ -81,7 +81,7 @@ func (service *Service) Update(ctx context.Context, body ColumnTemplateUpdateReq
 
 func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUID) error {
 	log := logger.FromContext(ctx)
-	err := service.database.Delete(board, column, user)
+	err := service.database.Delete(board, column)
 	if err != nil {
 		log.Errorw("unable to delete column template", "board", board, "column", column, "err", err)
 		return err

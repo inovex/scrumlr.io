@@ -277,7 +277,7 @@ func TestDeleteColumnTemplate(t *testing.T) {
 	userId := uuid.New()
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Delete(boardId, columnId, userId).Return(nil)
+	mockColumnTemplateDatabase.EXPECT().Delete(boardId, columnId).Return(nil)
 
 	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
 
@@ -293,7 +293,7 @@ func TestDeleteColumnTemplate_DatabaseError(t *testing.T) {
 	userId := uuid.New()
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
-	mockColumnTemplateDatabase.EXPECT().Delete(boardId, columnId, userId).Return(dbError)
+	mockColumnTemplateDatabase.EXPECT().Delete(boardId, columnId).Return(dbError)
 
 	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
 

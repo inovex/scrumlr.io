@@ -10,9 +10,10 @@ import (
 
 	"go.uber.org/zap"
 	"scrumlr.io/server/common"
+	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/serviceinitialize"
 
 	"scrumlr.io/server/auth"
-	"scrumlr.io/server/initialize"
 
 	"github.com/urfave/cli/v2"
 	"github.com/urfave/cli/v2/altsrc"
@@ -278,7 +279,7 @@ func run(c *cli.Context) error {
 		logger.Get().Warnln("Verbose logging is set through the verbose flag. This will be deprecated. Use the SCRUMLR_LOG_LEVEL environment variable")
 	}
 
-	db, err := initialize.InitializeDatabase(c.String("database"))
+	db, err := databaseinitialize.InitializeDatabase(c.String("database"))
 	if err != nil {
 		return fmt.Errorf("unable to migrate database: %w", err)
 	}
@@ -376,8 +377,8 @@ func run(c *cli.Context) error {
 		return errors.New("you may not start the application without a session secret if an authentication provider is configured")
 	}
 
-	bun := initialize.InitializeBun(db, logger.GetLogLevel())
-	initializer := initialize.NewServiceInitializer(bun, rt)
+	bun := databaseinitialize.InitializeBun(db, logger.GetLogLevel())
+	initializer := serviceinitialize.NewServiceInitializer(bun, rt)
 
 	websocket := initializer.InitializeWebsocket()
 	feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))

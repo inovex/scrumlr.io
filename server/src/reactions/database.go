@@ -29,6 +29,7 @@ func (d *DB) Get(id uuid.UUID) (DatabaseReaction, error) {
 		Model((*DatabaseReaction)(nil)).
 		Where("id = ?", id).
 		Scan(context.Background(), &reaction)
+
 	return reaction, err
 }
 
@@ -43,6 +44,7 @@ func (d *DB) GetAll(board uuid.UUID) ([]DatabaseReaction, error) {
 		Join("JOIN notes ON notes.id = reaction.note"). // important: 'reaction.note' instead of 'reactions.note'
 		Where("notes.board = ?", board).
 		Scan(context.Background())
+
 	return reactions, err
 }
 
@@ -60,10 +62,11 @@ func (d *DB) GetAllForNote(note uuid.UUID) ([]DatabaseReaction, error) {
 
 // Create inserts a new reaction
 func (d *DB) Create(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseReaction, error) {
-	var currentNoteReactions, err = d.GetAllForNote(insert.Note)
+	currentNoteReactions, err := d.GetAllForNote(insert.Note)
 	if err != nil {
 		return DatabaseReaction{}, err
 	}
+
 	// check if user has already made a reaction on this note
 	for _, r := range currentNoteReactions {
 		if r.User == insert.User {
@@ -82,11 +85,12 @@ func (d *DB) Create(board uuid.UUID, insert DatabaseReactionInsert) (DatabaseRea
 
 // Delete deletes a reaction
 func (d *DB) Delete(board, user, id uuid.UUID) error {
-	var r, err = d.Get(id)
+	reaction, err := d.Get(id)
 	if err != nil {
 		return err
 	}
-	if r.User != user {
+
+	if reaction.User != user {
 		return common.ForbiddenError(errors.New("forbidden"))
 	}
 	_, err = d.db.NewDelete().
@@ -99,10 +103,11 @@ func (d *DB) Delete(board, user, id uuid.UUID) error {
 
 // Update updates the reaction type
 func (d *DB) Update(board, user, id uuid.UUID, update DatabaseReactionUpdate) (DatabaseReaction, error) {
-	var r, err = d.Get(id)
+	r, err := d.Get(id)
 	if err != nil {
 		return DatabaseReaction{}, err
 	}
+
 	if r.User != user {
 		return DatabaseReaction{}, common.ForbiddenError(errors.New("forbidden"))
 	}

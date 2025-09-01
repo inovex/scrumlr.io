@@ -25,7 +25,10 @@ func NewColumnsDatabase(database *bun.DB) ColumnDatabase {
 // Create creates a new column. The index will be set to the highest available or the specified one. All other
 // indices will be adopted (increased by 1) to the new index.
 func (db *DB) Create(column DatabaseColumnInsert) (DatabaseColumn, error) {
-	maxIndexSelect := db.db.NewSelect().Model((*Column)(nil)).ColumnExpr("COUNT(*) as index").Where("board = ?", column.Board)
+	maxIndexSelect := db.db.NewSelect().
+		Model((*Column)(nil)).
+		ColumnExpr("COUNT(*) as index").
+		Where("board = ?", column.Board)
 
 	newIndex := math.MaxInt
 	if column.Index != nil {
@@ -110,7 +113,7 @@ func (db *DB) Update(column DatabaseColumnUpdate) (DatabaseColumn, error) {
 }
 
 // Delete deletes a column and adapts all indices of the other columns.
-func (db *DB) Delete(affectedBoard, column, user uuid.UUID) error {
+func (db *DB) Delete(affectedBoard, column uuid.UUID) error {
 	var columns []DatabaseColumn
 	selectPreviousIndex := db.db.NewSelect().
 		Model((*DatabaseColumn)(nil)).
@@ -134,7 +137,7 @@ func (db *DB) Delete(affectedBoard, column, user uuid.UUID) error {
 		Model((*DatabaseColumn)(nil)).
 		Where("id = ?", column).
 		Returning("*").
-		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardIdentifier, affectedBoard, identifiers.ColumnIdentifier, column, identifiers.UserIdentifier, user, "Result", &columns), &columns)
+		Exec(common.ContextWithValues(context.Background(), "Database", db, identifiers.BoardIdentifier, affectedBoard, identifiers.ColumnIdentifier, column, "Result", &columns), &columns)
 
 	return err
 }

@@ -27,9 +27,10 @@ func (db *DB) Create(board DatabaseBoardTemplateInsert, columns []columntemplate
 		Model(&board).
 		Returning("*")
 
-	var b DatabaseBoardTemplate
+	var template DatabaseBoardTemplate
 	query := db.db.NewSelect().
 		With("createdBoardTemplate", boardInsert)
+
 	if len(columns) > 0 {
 		for index := range columns {
 			newColumnIndex := index
@@ -44,12 +45,9 @@ func (db *DB) Create(board DatabaseBoardTemplateInsert, columns []columntemplate
 
 	err := query.Table("createdBoardTemplate").
 		Column("*").
-		Scan(context.Background(), &b)
-	if err != nil {
-		return DatabaseBoardTemplate{}, err
-	}
+		Scan(context.Background(), &template)
 
-	return b, err
+	return template, err
 }
 
 func (db *DB) Get(id uuid.UUID) (DatabaseBoardTemplate, error) {
@@ -60,10 +58,6 @@ func (db *DB) Get(id uuid.UUID) (DatabaseBoardTemplate, error) {
 		Model(&tBoard).
 		Where("id = ?", id).
 		Scan(context.Background())
-
-	if err != nil {
-		return DatabaseBoardTemplate{}, err
-	}
 
 	return tBoard, err
 }
