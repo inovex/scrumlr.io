@@ -5,8 +5,10 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"scrumlr.io/server/sessions"
 	"time"
+
+	"go.uber.org/zap"
+	"scrumlr.io/server/sessions"
 
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/boards"
@@ -62,7 +64,7 @@ func testMainWithDefer(m *testing.M) int {
 		exitCode = 1
 	}
 
-	bun := initialize.InitializeBun(database, true)
+	bun := initialize.InitializeBun(database, zap.DebugLevel)
 	testDb = bun
 
 	boardDb = boards.NewBoardDatabase(bun)
