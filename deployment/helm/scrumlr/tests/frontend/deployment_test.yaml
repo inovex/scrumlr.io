@@ -46,7 +46,7 @@ tests:
         template: /frontend/deployment.yaml
       - equal:
           path: spec.template.spec.containers[0].image
-          value: scrumlr/scrumlr-frontend:4.0.0
+          value: scrumlr/scrumlr-frontend:3.11.0
         template: /frontend/deployment.yaml
 
   - it: should set image tag
@@ -78,7 +78,7 @@ tests:
         template: /frontend/deployment.yaml
       - equal:
           path: spec.template.spec.imagePullSecrets
-          value: [{ name: Registry1Secrets }, { name: Registry2Secrets }]
+          value: [{name: Registry1Secrets}, {name: Registry2Secrets}]
         template: /frontend/deployment.yaml
 
   - it: should set image pull policy
