@@ -41,40 +41,40 @@ import (
 )
 
 type UnleashFrontendConfig struct {
-	URL         string `json:"url"`
-	ClientKey   string `json:"clientKey"`
-	Environment string `json:"environment,omitempty"`
-	AppName     string `json:"appName,omitempty"`
+  URL         string `json:"url"`
+  ClientKey   string `json:"clientKey"`
+  Environment string `json:"environment,omitempty"`
+  AppName     string `json:"appName,omitempty"`
 }
 
 func readUnleashFrontendEnv() *UnleashFrontendConfig {
-	url := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_URL"))
-	key := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_TOKEN"))
-	if url == "" || key == "" {
-		return nil
-	}
-	return &UnleashFrontendConfig{
-		URL:         url,
-		ClientKey:   key,
-		Environment: strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_ENV")),
-		AppName:     strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_APPNAME")),
-	}
+  url := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_URL"))
+  key := strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_FRONTEND_TOKEN"))
+  if url == "" || key == "" {
+    return nil
+  }
+  return &UnleashFrontendConfig{
+    URL:         url,
+    ClientKey:   key,
+    Environment: strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_ENV")),
+    AppName:     strings.TrimSpace(os.Getenv("SCRUMLR_UNLEASH_APPNAME")),
+  }
 }
 
-func unleashConfigHTTPHandler(cfg *UnleashFrontendConfig) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodGet {
-			w.WriteHeader(http.StatusMethodNotAllowed)
-			return
-		}
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Cache-Control", "no-store")
-		if cfg == nil {
-			w.WriteHeader(http.StatusNoContent)
-			return
-		}
-		_ = json.NewEncoder(w).Encode(cfg)
-	}
+func unleashConfigHTTPHandler(cfg *UnleashFrontendConfig) http.Handler {
+  return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+    if r.Method != http.MethodGet {
+      w.WriteHeader(http.StatusMethodNotAllowed)
+      return
+    }
+    w.Header().Set("Content-Type", "application/json")
+    w.Header().Set("Cache-Control", "no-store")
+    if cfg == nil {
+      w.WriteHeader(http.StatusNoContent) // 204 if not configured
+      return
+    }
+    _ = json.NewEncoder(w).Encode(cfg)
+  })
 }
 
 func main() {
@@ -322,9 +322,9 @@ func main() {
 	}
 	app.Before = altsrc.InitInputSourceWithContext(app.Flags, altsrc.NewTomlSourceFromFlagFunc("config"))
 
-	if err := app.Run(os.Args); err != nil {
-		log.Fatal(err)
-	}
+  if err := app.Run(os.Args); err != nil {
+    log.Fatal(err)
+  }
 }
 
 func run(c *cli.Context) error {
@@ -343,24 +343,24 @@ func run(c *cli.Context) error {
 		return errors.New("you may not start the application without a private key. Use 'insecure' flag with caution if you want to use default keypair to sign jwt's")
 	}
 
-	var rt *realtime.Broker
-	if c.String("redis-address") != "" {
-		logger.Get().Infof("Connecting to redis at %v", c.String("redis-address"))
-		rt, err = realtime.NewRedis(realtime.RedisServer{
-			Addr:     c.String("redis-address"),
-			Username: c.String("redis-username"),
-			Password: c.String("redis-password"),
-		})
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
-		}
-	} else {
-		logger.Get().Infof("Connecting to nats at %v", c.String("nats"))
-		rt, err = realtime.NewNats(c.String("nats"))
-		if err != nil {
-			logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
-		}
-	}
+  var rt *realtime.Broker
+  if c.String("redis-address") != "" {
+    logger.Get().Infof("Connecting to redis at %v", c.String("redis-address"))
+    rt, err = realtime.NewRedis(realtime.RedisServer{
+      Addr:     c.String("redis-address"),
+      Username: c.String("redis-username"),
+      Password: c.String("redis-password"),
+    })
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to redis message queue: %v", err)
+    }
+  } else {
+    logger.Get().Infof("Connecting to nats at %v", c.String("nats"))
+    rt, err = realtime.NewNats(c.String("nats"))
+    if err != nil {
+      logger.Get().Fatalf("failed to connect to nats message queue: %v", err)
+    }
+  }
 
 	basePath := "/"
 	if c.IsSet("base-path") {
@@ -740,33 +740,33 @@ func run(c *cli.Context) error {
 	bun := databaseinitialize.InitializeBun(db, logger.GetLogLevel())
 	initializer := serviceinitialize.NewServiceInitializer(bun, rt)
 
-	websocket := initializer.InitializeWebsocket()
-	feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
-	healthService := initializer.InitializeHealthService()
+  websocket := initializer.InitializeWebsocket()
+  feedbackService := initializer.InitializeFeedbackService(c.String("feedback-webhook-url"))
+  healthService := initializer.InitializeHealthService()
 
-	boardReactionService := initializer.InitializeBoardReactionService()
-	reactionService := initializer.InitializeReactionService()
+  boardReactionService := initializer.InitializeBoardReactionService()
+  reactionService := initializer.InitializeReactionService()
 
-	boardTemplateService := initializer.InitializeBoardTemplateService()
-	columnTemplateService := initializer.InitializeColumnTemplateService()
+  boardTemplateService := initializer.InitializeBoardTemplateService()
+  columnTemplateService := initializer.InitializeColumnTemplateService()
 
-	votingService := initializer.InitializeVotingService()
-	noteService := initializer.InitializeNotesService(votingService)
-	columnService := initializer.InitializeColumnService(noteService)
+  votingService := initializer.InitializeVotingService()
+  noteService := initializer.InitializeNotesService(votingService)
+  columnService := initializer.InitializeColumnService(noteService)
 
-	sessionService := initializer.InitializeSessionService(columnService, noteService)
-	sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
+  sessionService := initializer.InitializeSessionService(columnService, noteService)
+  sessionRequestService := initializer.InitializeSessionRequestService(websocket, sessionService)
 
-	userService := initializer.InitializeUserService(sessionService)
+  userService := initializer.InitializeUserService(sessionService)
 
-	keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
-	unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
-	authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
-	if err != nil {
-		return fmt.Errorf("unable to setup authentication: %w", err)
-	}
+  keyWithNewlines := strings.ReplaceAll(c.String("key"), "\\n", "\n")
+  unsafeKeyWithNewlines := strings.ReplaceAll(c.String("unsafe-key"), "\\n", "\n")
+  authConfig, err := auth.NewAuthConfiguration(providersMap, unsafeKeyWithNewlines, keyWithNewlines, bun, userService)
+  if err != nil {
+    return fmt.Errorf("unable to setup authentication: %w", err)
+  }
 
-	boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
+  boardService := initializer.InitializeBoardService(sessionRequestService, sessionService, columnService, noteService, reactionService, votingService)
 
 	s := api.New(
 		basePath,
@@ -862,20 +862,20 @@ func run(c *cli.Context) error {
     c.Bool("auth-enable-experimental-file-system-store"),
   )
 
-	mux := http.NewServeMux()
-	mux.Handle("/", s)
+  mux := http.NewServeMux()
+  mux.Handle("/", s)
 
-	unleashPath := "/unleash-config"
-	if basePath != "/" {
-		unleashPath = strings.TrimSuffix(basePath, "/") + "/unleash-config"
-	}
-	mux.Handle(unleashPath, unleashConfigHTTPHandler(readUnleashFrontendEnv()))
+  unleashPath := "/unleash-config"
+  if basePath != "/" {
+    unleashPath = strings.TrimSuffix(basePath, "/") + "/unleash-config"
+  }
+  mux.Handle(unleashPath, unleashConfigHTTPHandler(readUnleashFrontendEnv()))
 
-	port := fmt.Sprintf(":%d", c.Int("port"))
-	logger.Get().Infow("starting server",
-		"base-path", basePath,
-		"port", port,
-		"unleash-config-endpoint", unleashPath,
-	)
-	return http.ListenAndServe(port, mux)
+  port := fmt.Sprintf(":%d", c.Int("port"))
+  logger.Get().Infow("starting server",
+    "base-path", basePath,
+    "port", port,
+    "unleash-config-endpoint", unleashPath,
+  )
+  return http.ListenAndServe(port, mux)
 }
