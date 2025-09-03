@@ -1,6 +1,8 @@
 import React, {Suspense} from "react";
 import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
+import FlagProvider from "@unleash/proxy-client-react";
+import {UnleashClient} from "unleash-proxy-client";
 import "index.scss";
 import {CookieNotice} from "components/CookieNotice";
 import {store} from "store";
@@ -14,7 +16,7 @@ import {Tooltip} from "components/Tooltip";
 import {APP_VERSION_STORAGE_KEY} from "constants/storage";
 import {saveToStorage} from "utils/storage";
 import Plausible from "plausible-tracker";
-import {SHOW_LEGAL_DOCUMENTS, ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID} from "./config";
+import {ANALYTICS_DATA_DOMAIN, ANALYTICS_SRC, CLARITY_ID, fetchUnleashConfig, SHOW_LEGAL_DOCUMENTS} from "./config";
 import {initAuth} from "./store/features";
 import "react-tooltip/dist/react-tooltip.css";
 
@@ -24,11 +26,8 @@ if (APP_VERSION) {
 }
 
 if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
-  const {trackPageview} = Plausible({
-    domain: ANALYTICS_DATA_DOMAIN,
-    apiHost: ANALYTICS_SRC,
-  });
-  const handleAnalytics = async () => {
+  const {trackPageview} = Plausible({domain: ANALYTICS_DATA_DOMAIN, apiHost: ANALYTICS_SRC});
+  (async () => {
     if (window.location.href.includes("/board/")) {
       const [baseUrl, boardUrl] = window.location.href.split("/board/");
       const boardId = boardUrl.slice(0, 32);
@@ -36,37 +35,74 @@ if (ANALYTICS_DATA_DOMAIN && ANALYTICS_SRC) {
       const url = `${baseUrl}/board/${Array.from(new Uint8Array(hash))
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("")}`;
-      trackPageview({
-        url,
-      });
+      trackPageview({url});
     } else {
       trackPageview();
     }
-  };
-  handleAnalytics();
+  })();
 }
+
+if (CLARITY_ID && CLARITY_ID !== "") {
+  // Clarity.init(CLARITY_ID); // opt-in later
+}
+
+const AppContent: React.FC = () => (
+  <>
+    <Html />
+    <Suspense fallback={<LoadingScreen />}>
+      <Tooltip id="scrumlr-tooltip" />
+      <ToastContainer limit={2} />
+      <Router />
+      {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
+    </Suspense>
+  </>
+);
 
 const root = createRoot(document.getElementById("root") as HTMLDivElement);
 
-// If clarity ID is set and not empty in env variables, initialize Clarity
-if (CLARITY_ID && CLARITY_ID !== "") {
-  // TODO: tracking, including storing data using third party services has to be explicitly opt in!
-  // Clarity.init(CLARITY_ID);
+async function start() {
+  const cfg = await fetchUnleashConfig();
+
+  // Fallback: run without flags if backend returns 204/empty or fetch fails
+  if (!cfg) {
+    //  console.warn("[Unleash] No runtime config – running without flags.");
+    //  console.warn("[Unleash] No runtime config – running without flags.");
+    root.render(
+      <React.StrictMode>
+        <I18nextProvider i18n={i18n}>
+          <Provider store={store}>
+            <AppContent />
+          </Provider>
+        </I18nextProvider>
+      </React.StrictMode>
+    );
+    store.dispatch(initAuth());
+    return;
+  }
+
+  const unleashClient = new UnleashClient({
+    url: cfg.url,
+    clientKey: cfg.clientKey,
+    appName: cfg.appName ?? "scrumlr-frontend",
+    environment: cfg.environment ?? "development",
+    refreshInterval: 15,
+  });
+
+  unleashClient.start();
+
+  root.render(
+    <React.StrictMode>
+      <I18nextProvider i18n={i18n}>
+        <Provider store={store}>
+          <FlagProvider unleashClient={unleashClient}>
+            <AppContent />
+          </FlagProvider>
+        </Provider>
+      </I18nextProvider>
+    </React.StrictMode>
+  );
+
+  store.dispatch(initAuth());
 }
 
-root.render(
-  <React.StrictMode>
-    <I18nextProvider i18n={i18n}>
-      <Provider store={store}>
-        <Html />
-        <Suspense fallback={<LoadingScreen />}>
-          <Tooltip id="scrumlr-tooltip" />
-          <ToastContainer limit={2} />
-          <Router />
-          {SHOW_LEGAL_DOCUMENTS && <CookieNotice />}
-        </Suspense>
-      </Provider>
-    </I18nextProvider>
-  </React.StrictMode>
-);
-store.dispatch(initAuth());
+start();

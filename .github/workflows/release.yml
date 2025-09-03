@@ -7,5 +7,3 @@ on:
 jobs:
   package:
     uses: ./.github/workflows/package.yml
-
-

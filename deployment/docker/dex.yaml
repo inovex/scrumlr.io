@@ -1,26 +1,23 @@
 ---
-
-issuer: 'http://oidc.localhost:5556/dex'
+issuer: "http://oidc.localhost:5556/dex"
 
 storage:
   type: memory
 
 web:
-  http: '0.0.0.0:5556'
+  http: "0.0.0.0:5556"
 
 staticClients:
-  - id: ''
+  - id: ""
     redirectURIs:
-      - 'http://localhost:8080/api/login/oidc/callback'
-    name: ''
-    secret: ''
+      - "http://localhost:8080/api/login/oidc/callback"
+    name: ""
+    secret: ""
 
 enablePasswordDB: true
 staticPasswords:
-  - email: ''
+  - email: ""
     # bcrypt hash of the string "password": $(echo password | htpasswd -BinC 10 admin | cut -d: -f2)
-    hash: ''
-    username: ''
-    userID: ''
-
-
+    hash: ""
+    username: ""
+    userID: ""

@@ -1,6 +1,6 @@
-import { appendFile, readdir, writeFile, mkdir, readFile } from "fs/promises";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+import {appendFile, readdir, writeFile, mkdir, readFile} from "fs/promises";
+import {dirname, resolve} from "path";
+import {fileURLToPath} from "url";
 
 const inPath = resolve(dirname(fileURLToPath(import.meta.url)), "in/icons");
 const outPath = resolve(dirname(fileURLToPath(import.meta.url)), "out/src");
@@ -18,7 +18,10 @@ function iconNameToFilename(/** @type {string} */ iconName) {
 
 function iconNameToComponentName(/** @type {string} */ iconName) {
   // toCamelCase
-  return iconName.split('-').map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join('');
+  return iconName
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("");
 }
 
 const inputColors = /white/g;
@@ -31,9 +34,9 @@ const allowedResultColors = ["none", "currentColor"];
  * @param {string} filename the filename of the svg to print in case of error
  */
 function checkForInconsistentColors(svg, filename) {
-  const allColors = Array.from(svg.matchAll(/((fill)|(stroke))="(?<color>\w+)"/g)).map(match => match.groups?.color);
+  const allColors = Array.from(svg.matchAll(/((fill)|(stroke))="(?<color>\w+)"/g)).map((match) => match.groups?.color);
 
-  allColors.forEach(color => {
+  allColors.forEach((color) => {
     if (!color) return;
     if (!allowedResultColors.includes(color)) {
       console.error(`!! Inconsistent color in ${filename}: ${color}`);
@@ -59,20 +62,26 @@ async function main() {
   }
 
   // collect all unique icon names
-  const iconNames = Array.from(new Set(icons.map(filename => {
-    const name = filenameToIconName(filename);
-    if (!name) {
-      console.error(`!! Invalid filename: ${filename}`);
-    }
-    return name;
-  })));
+  const iconNames = Array.from(
+    new Set(
+      icons.map((filename) => {
+        const name = filenameToIconName(filename);
+        if (!name) {
+          console.error(`!! Invalid filename: ${filename}`);
+        }
+        return name;
+      })
+    )
+  );
 
   // setup index file
   const indexFile = resolve(outPath, "./components/Icon/index.ts");
-  await mkdir(dirname(indexFile), { recursive: true });
+  await mkdir(dirname(indexFile), {recursive: true});
   await writeFile(indexFile, "");
 
-  await appendFile(indexFile, `// This file was generated in convertFigmaIconExportToReact.mjs
+  await appendFile(
+    indexFile,
+    `// This file was generated in convertFigmaIconExportToReact.mjs
 
 import "./Icon.scss";
 
@@ -81,7 +90,7 @@ import "./Icon.scss";
 
   // setup icon output folder
   const iconOut = resolve(outPath, "assets/icons");
-  await mkdir(iconOut, { recursive: true });
+  await mkdir(iconOut, {recursive: true});
 
   console.log("Processing", iconNames.length, "icons...");
   for (const iconName of iconNames) {
@@ -89,7 +98,7 @@ import "./Icon.scss";
 
     // load the light variant of the icon
     const lightVariantFile = resolve(inPath, iconNameToFilename(iconName));
-    const iconFile = await readFile(lightVariantFile).then(f => f.toString());
+    const iconFile = await readFile(lightVariantFile).then((f) => f.toString());
 
     // change the color of the icon to currentColor and add a class "Icon"
     const iconComponentSVG = iconFile.replace(inputColors, "currentColor").replace("<svg", `<svg class="icon"`);

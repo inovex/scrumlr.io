@@ -2,11 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src/",
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "noFallthroughCasesInSwitch": true,
     "allowJs": true,
     "skipLibCheck": true,

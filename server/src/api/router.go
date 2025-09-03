@@ -21,12 +21,12 @@ import (
   "github.com/go-chi/chi/v5/middleware"
   "github.com/markbates/goth/gothic"
 
-  "github.com/go-chi/cors"
-  "github.com/go-chi/httprate"
-  "github.com/go-chi/render"
-  "github.com/google/uuid"
-  gorillaSessions "github.com/gorilla/sessions"
-  "github.com/gorilla/websocket"
+	"github.com/go-chi/cors"
+	"github.com/go-chi/httprate"
+	"github.com/go-chi/render"
+	"github.com/google/uuid"
+	gorillaSessions "github.com/gorilla/sessions"
+	"github.com/gorilla/websocket"
 
   "scrumlr.io/server/auth"
   "scrumlr.io/server/feedback"
@@ -38,7 +38,7 @@ import (
 )
 
 type Server struct {
-	basePath string
+  basePath string
 
 	realtime *realtime.Broker
 	auth     auth.Auth
@@ -62,7 +62,6 @@ type Server struct {
 	// map of boardSubscriptions with maps of users with connections
 	boardSubscriptions               map[uuid.UUID]*BoardSubscription
 	boardSessionRequestSubscriptions map[uuid.UUID]*sessionrequests.BoardSessionRequestSubscription
-
 	// note: if more options come with time, it might be sensible to wrap them into a struct
 	anonymousLoginDisabled        	bool
 	allowAnonymousCustomTemplates  	bool
@@ -206,10 +205,10 @@ func (s *Server) protectedRoutes(r chi.Router) {
 		r.Route("/templates", func(r chi.Router) {
 			r.Use(s.BoardTemplateRateLimiter)
 			r.Use(s.AnonymousCustomTemplateCreationContext)
-			
+
 			r.Post("/", s.createBoardTemplate)
 			r.Get("/", s.getBoardTemplates)
-			
+
 			r.Route("/{id}", func(r chi.Router) {
 				r.Use(s.BoardTemplateContext)
 
