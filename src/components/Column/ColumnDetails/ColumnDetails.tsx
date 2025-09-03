@@ -36,12 +36,14 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const isModerator = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const {isTextTruncated: isDescriptionTextTruncated, textRef: viewDescriptionRef} = useTextOverflow<HTMLTextAreaElement>(props.column.description);
   const {isTextTruncated: isNameTextTruncated, textRef: viewNameRef} = useTextOverflow<HTMLDivElement>(props.column.name);
 
   const [openSettings, setOpenSettings] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [focusTarget, setFocusTarget] = useState<"name" | "description">("name");
 
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
@@ -60,10 +62,14 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   // focus input upon entering edit mode
   useEffect(() => {
-    if (inputRef && inputRef.current) {
-      inputRef.current.focus();
+    if (props.mode === "edit") {
+      if (focusTarget === "name" && inputRef.current) {
+        inputRef.current.focus();
+      } else if (focusTarget === "description" && descriptionRef.current) {
+        descriptionRef.current.focus();
+      }
     }
-  }, [inputRef, props.mode]);
+  }, [props.mode, focusTarget]);
 
   const changeMode = (mode: ColumnDetailsMode) => {
     if (!isModerator) return;
@@ -138,7 +144,15 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const renderName = () =>
     props.mode === "view" ? (
       <>
-        <div ref={viewNameRef} id={`col-${props.column.id}-name`} className="column-details__name" onDoubleClick={() => changeMode("edit")}>
+        <div
+          ref={viewNameRef}
+          id={`col-${props.column.id}-name`}
+          className="column-details__name"
+          onDoubleClick={() => {
+            setFocusTarget("name");
+            changeMode("edit");
+          }}
+        >
           {props.column.name}
         </div>
         <div className="column-details__notes-count">{props.notesCount}</div>
@@ -153,7 +167,20 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     if (props.column.description)
       return (
         <>
-          <TextArea ref={viewDescriptionRef} input={props.column.description} setInput={() => {}} embedded extendable={isDescriptionExpanded} disabled border="none" rows={2} />
+          <TextArea
+            ref={viewDescriptionRef}
+            input={props.column.description}
+            setInput={() => {}}
+            embedded
+            extendable={isDescriptionExpanded}
+            disabled
+            border="none"
+            rows={2}
+            onDoubleClick={() => {
+              setFocusTarget("description");
+              changeMode("edit");
+            }}
+          />
           {(isDescriptionTextTruncated.vertical || isDescriptionExpanded) && (
             <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
               <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
@@ -163,7 +190,17 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       );
     if (isModerator) {
       // placeholder
-      return <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>;
+      return (
+        <div
+          className="column-details__description--placeholder"
+          onDoubleClick={() => {
+            setFocusTarget("description");
+            changeMode("edit");
+          }}
+        >
+          {t("Column.Header.descriptionPlaceholder")}
+        </div>
+      );
     }
     // empty placeholder space
     return <div className="column-details__description--placeholder" />;
@@ -172,6 +209,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const editableDescription = () => (
     <>
       <TextArea
+        ref={descriptionRef}
         className="column-details__description-text-area"
         input={localDescription}
         setInput={setLocalDescription}
@@ -199,7 +237,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           className={classNames("column-details__settings", "column-details__settings--open")}
           column={props.column}
           onClose={() => setOpenSettings(false)}
-          onNameEdit={() => changeMode("edit")}
+          onNameEdit={() => {
+            setFocusTarget("name");
+            changeMode("edit");
+          }}
         />
       );
     }
