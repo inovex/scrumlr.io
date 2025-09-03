@@ -6,21 +6,28 @@ import (
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"go.opentelemetry.io/otel/codes"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
 )
 
+//var tracer trace.Tracer = otel.Tracer("scrumlr.io/server/api")
+
 // createColumn creates a new column
 func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.create")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	var body columns.ColumnRequest
 	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "failed to decode body")
+		span.RecordError(err)
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -28,8 +35,11 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 	body.Board = board
 	body.User = user
-	column, err := s.columns.Create(r.Context(), body)
+	column, err := s.columns.Create(ctx, body)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to create column")
+		span.RecordError(err)
+		log.Errorw("Unable to create column", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}
@@ -44,11 +54,18 @@ func (s *Server) createColumn(w http.ResponseWriter, r *http.Request) {
 
 // deleteColumn deletes a column
 func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	column := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
-	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.delete")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	if err := s.columns.Delete(r.Context(), board, column, user); err != nil {
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	column := ctx.Value(identifiers.ColumnIdentifier).(uuid.UUID)
+	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	if err := s.columns.Delete(ctx, board, column, user); err != nil {
+		span.SetStatus(codes.Error, "failed to delete column")
+		span.RecordError(err)
+		log.Errorw("Unable to delete column", "err", err)
 		http.Error(w, "unable to delete column", http.StatusInternalServerError)
 		return
 	}
@@ -59,12 +76,17 @@ func (s *Server) deleteColumn(w http.ResponseWriter, r *http.Request) {
 
 // updateColumn updates a column
 func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
-	log := logger.FromRequest(r)
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	columnId := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.update")
+	defer span.End()
+	log := logger.FromContext(ctx)
+
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	columnId := ctx.Value(identifiers.ColumnIdentifier).(uuid.UUID)
 
 	var body columns.ColumnUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
+		span.SetStatus(codes.Error, "failed to decode body")
+		span.RecordError(err)
 		log.Errorw("Unable to decode body", "err", err)
 		http.Error(w, "unable to parse request body", http.StatusBadRequest)
 		return
@@ -73,8 +95,11 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 	body.ID = columnId
 	body.Board = board
 
-	column, err := s.columns.Update(r.Context(), body)
+	column, err := s.columns.Update(ctx, body)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to update column")
+		span.RecordError(err)
+		log.Errorw("Unable to update column", "err", err)
 		http.Error(w, "unable to update column", http.StatusInternalServerError)
 		return
 	}
@@ -85,11 +110,18 @@ func (s *Server) updateColumn(w http.ResponseWriter, r *http.Request) {
 
 // getColumn get a column
 func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
-	id := r.Context().Value(identifiers.ColumnIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.get")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	column, err := s.columns.Get(r.Context(), board, id)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+	id := ctx.Value(identifiers.ColumnIdentifier).(uuid.UUID)
+
+	column, err := s.columns.Get(ctx, board, id)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get column")
+		span.RecordError(err)
+		log.Errorw("Unable to get column", "err", err)
 		common.Throw(w, r, err)
 		return
 	}
@@ -100,10 +132,17 @@ func (s *Server) getColumn(w http.ResponseWriter, r *http.Request) {
 
 // getColumns get all columns
 func (s *Server) getColumns(w http.ResponseWriter, r *http.Request) {
-	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
+	ctx, span := tracer.Start(r.Context(), "scrumlr.columns.api.get.all")
+	defer span.End()
+	log := logger.FromContext(ctx)
 
-	columns, err := s.columns.GetAll(r.Context(), board)
+	board := ctx.Value(identifiers.BoardIdentifier).(uuid.UUID)
+
+	columns, err := s.columns.GetAll(ctx, board)
 	if err != nil {
+		span.SetStatus(codes.Error, "failed to get columns")
+		span.RecordError(err)
+		log.Errorw("Unable to create columns", "err", err)
 		common.Throw(w, r, common.InternalServerError)
 		return
 	}

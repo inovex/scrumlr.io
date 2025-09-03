@@ -1,6 +1,7 @@
 package sessionrequests
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"testing"
@@ -47,7 +48,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Create() {
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Stan"].id
 
-	dbRequest, err := database.Create(DatabaseBoardSessionRequestInsert{Board: boardId, User: userId})
+	dbRequest, err := database.Create(context.Background(), DatabaseBoardSessionRequestInsert{Board: boardId, User: userId})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbRequest.Board)
@@ -63,7 +64,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Create_Conflict() {
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Stan"].id
 
-	dbRequest, err := database.Create(DatabaseBoardSessionRequestInsert{Board: boardId, User: userId})
+	dbRequest, err := database.Create(context.Background(), DatabaseBoardSessionRequestInsert{Board: boardId, User: userId})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbRequest.Board)
@@ -79,7 +80,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_Accepted() {
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Santa"].id
 
-	dbRequest, err := database.Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
+	dbRequest, err := database.Update(context.Background(), DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestAccepted})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbRequest.Board)
@@ -95,7 +96,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_Rejected() {
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Friend"].id
 
-	dbRequest, err := database.Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestRejected})
+	dbRequest, err := database.Update(context.Background(), DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestRejected})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbRequest.Board)
@@ -111,7 +112,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_PendingFromRe
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Bob"].id
 
-	dbRequest, err := database.Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestPending})
+	dbRequest, err := database.Update(context.Background(), DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestPending})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
@@ -125,7 +126,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_PendingFromAc
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Luke"].id
 
-	dbRequest, err := database.Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestPending})
+	dbRequest, err := database.Update(context.Background(), DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestPending})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
@@ -139,7 +140,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Update_RejectedFromA
 	boardId := suite.boards["Write"].id
 	userId := suite.users["Leia"].id
 
-	dbRequest, err := database.Update(DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestRejected})
+	dbRequest, err := database.Update(context.Background(), DatabaseBoardSessionRequestUpdate{Board: boardId, User: userId, Status: RequestRejected})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
@@ -150,7 +151,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Get() {
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	dbRequest, err := database.Get(suite.sessionsRequests["Read1"].Board, suite.sessionsRequests["Read1"].User)
+	dbRequest, err := database.Get(context.Background(), suite.sessionsRequests["Read1"].Board, suite.sessionsRequests["Read1"].User)
 
 	assert.Nil(t, err)
 	assert.Equal(t, suite.sessionsRequests["Read1"].Board, dbRequest.Board)
@@ -163,7 +164,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Get_NotFound() {
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	dbRequest, err := database.Get(uuid.New(), uuid.New())
+	dbRequest, err := database.Get(context.Background(), uuid.New(), uuid.New())
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
@@ -174,7 +175,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_Accepted() {
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	dbRequests, err := database.GetAll(suite.boards["Read"].id, RequestAccepted)
+	dbRequests, err := database.GetAll(context.Background(), suite.boards["Read"].id, RequestAccepted)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbRequests, 1)
@@ -189,7 +190,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_Pending() {
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	dbRequests, err := database.GetAll(suite.boards["Read"].id, RequestPending)
+	dbRequests, err := database.GetAll(context.Background(), suite.boards["Read"].id, RequestPending)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbRequests, 2)
@@ -213,7 +214,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_Rejected() {
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	dbRequests, err := database.GetAll(suite.boards["Read"].id, RequestRejected)
+	dbRequests, err := database.GetAll(context.Background(), suite.boards["Read"].id, RequestRejected)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbRequests, 1)
@@ -228,7 +229,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_Multifilter()
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	dbRequests, err := database.GetAll(suite.boards["Read"].id, RequestAccepted, RequestPending)
+	dbRequests, err := database.GetAll(context.Background(), suite.boards["Read"].id, RequestAccepted, RequestPending)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbRequests, 3)
@@ -259,7 +260,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_GetAll_NotFound() {
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	dbRequests, err := database.GetAll(uuid.New(), RequestPending)
+	dbRequests, err := database.GetAll(context.Background(), uuid.New(), RequestPending)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbRequests, 0)
@@ -269,7 +270,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_Exists() {
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	exists, err := database.Exists(suite.boards["Read"].id, suite.users["Stan"].id)
+	exists, err := database.Exists(context.Background(), suite.boards["Read"].id, suite.users["Stan"].id)
 
 	assert.Nil(t, err)
 	assert.True(t, exists)
@@ -279,7 +280,7 @@ func (suite *DatabaseSessionRequestTestSuite) Test_Database_NotExists() {
 	t := suite.T()
 	database := NewSessionRequestDatabase(suite.db)
 
-	exists, err := database.Exists(uuid.New(), suite.users["Stan"].id)
+	exists, err := database.Exists(context.Background(), uuid.New(), suite.users["Stan"].id)
 
 	assert.Nil(t, err)
 	assert.False(t, exists)

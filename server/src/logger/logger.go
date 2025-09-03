@@ -4,9 +4,12 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/go-chi/chi/v5/middleware"
+	"go.opentelemetry.io/contrib/bridges/otelzap"
+	"go.opentelemetry.io/otel/log/global"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 )
@@ -61,6 +64,21 @@ func EnableDevelopmentLogger() {
 	loggerConfig.Level = zap.NewAtomicLevelAt(_logLevel)
 	logger, _ := loggerConfig.Build()
 	_logger = logger.Sugar()
+}
+
+// EnableOtelLogger constructs a logger that logs to the consol and to OpenTelemtry and overrites the default logger
+func EnableOtelLogging() {
+	provider := global.GetLoggerProvider()
+
+	config := zap.NewProductionEncoderConfig()
+	config.StacktraceKey = ""
+
+	core := zapcore.NewTee(
+		zapcore.NewCore(zapcore.NewJSONEncoder(config), zapcore.AddSync(os.Stdout), _logLevel),
+		otelzap.NewCore("scrumlr.io/server/", otelzap.WithLoggerProvider(provider)),
+	)
+
+	_logger = zap.New(core).Sugar()
 }
 
 // Get returns the current default SugaredLogger

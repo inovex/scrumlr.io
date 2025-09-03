@@ -5,15 +5,17 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/sessions"
 	"strings"
 	"testing"
 	"time"
+
+	"scrumlr.io/server/sessions"
 
 	"scrumlr.io/server/boards"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
@@ -84,7 +86,7 @@ func (suite *BoardTestSuite) TestCreateBoard() {
       }`, accessPolicy, colName, visible, color))).
 				AddToContext(identifiers.UserIdentifier, ownerID)
 
-			boardMock.EXPECT().Create(req.req.Context(), boards.CreateBoardRequest{
+			boardMock.EXPECT().Create(mock.Anything, boards.CreateBoardRequest{
 				Name:         nil,
 				Description:  nil,
 				AccessPolicy: accessPolicy,
@@ -132,7 +134,7 @@ func (suite *BoardTestSuite) TestDeleteBoard() {
 
 			req := NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
-			boardMock.EXPECT().Delete(req.req.Context(), boardID).Return(te.err)
+			boardMock.EXPECT().Delete(mock.Anything, boardID).Return(te.err)
 
 			rr := httptest.NewRecorder()
 
@@ -174,9 +176,9 @@ func (suite *BoardTestSuite) TestGetBoards() {
 			req := NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.UserIdentifier, userID)
 
-			boardMock.EXPECT().GetBoards(req.req.Context(), userID).Return(boardIDs, te.err)
+			boardMock.EXPECT().GetBoards(mock.Anything, userID).Return(boardIDs, te.err)
 			if te.err == nil {
-				boardMock.EXPECT().BoardOverview(req.req.Context(), boardIDs, userID).Return([]*boards.BoardOverview{{
+				boardMock.EXPECT().BoardOverview(mock.Anything, boardIDs, userID).Return([]*boards.BoardOverview{{
 					Board:        firstBoard,
 					Columns:      1,
 					CreatedAt:    time.Time{},
@@ -226,7 +228,7 @@ func (suite *BoardTestSuite) TestGetBoard() {
 			req := NewTestRequestBuilder("POST", "/", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().Get(req.req.Context(), boardID).Return(board, te.err)
+			boardMock.EXPECT().Get(mock.Anything, boardID).Return(board, te.err)
 
 			rr := httptest.NewRecorder()
 
@@ -276,22 +278,22 @@ func (suite *BoardTestSuite) TestJoinBoard() {
 			rctx.URLParams.Add("id", boardID.String())
 			req.AddToContext(chi.RouteCtxKey, rctx)
 
-			sessionMock.EXPECT().Exists(req.req.Context(), boardID, userID).Return(te.sessionExists, nil)
+			sessionMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(te.sessionExists, nil)
 
 			if te.sessionExists {
-				sessionMock.EXPECT().IsParticipantBanned(req.req.Context(), boardID, userID).Return(false, te.err)
+				sessionMock.EXPECT().IsParticipantBanned(mock.Anything, boardID, userID).Return(false, te.err)
 			} else {
-				boardMock.EXPECT().Get(req.req.Context(), boardID).Return(te.board, te.err)
+				boardMock.EXPECT().Get(mock.Anything, boardID).Return(te.board, te.err)
 			}
 
 			if te.board.AccessPolicy == boards.ByInvite {
-				sessionRequestMock.EXPECT().Exists(req.req.Context(), boardID, userID).Return(te.sessionRequestExists, te.err)
+				sessionRequestMock.EXPECT().Exists(mock.Anything, boardID, userID).Return(te.sessionRequestExists, te.err)
 				if !te.sessionRequestExists {
-					sessionRequestMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
+					sessionRequestMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessionrequests.BoardSessionRequest), te.err)
 				}
 			} else {
 				if !te.sessionExists {
-					sessionMock.EXPECT().Create(req.req.Context(), boardID, userID).Return(new(sessions.BoardSession), te.err)
+					sessionMock.EXPECT().Create(mock.Anything, boardID, userID).Return(new(sessions.BoardSession), te.err)
 				}
 
 			}
@@ -343,7 +345,7 @@ func (suite *BoardTestSuite) TestUpdateBoards() {
       }`, boardID, newName, newDescription))).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().Update(req.req.Context(), boardReq).Return(new(boards.Board), te.err)
+			boardMock.EXPECT().Update(mock.Anything, boardReq).Return(new(boards.Board), te.err)
 
 			rr := httptest.NewRecorder()
 
@@ -378,7 +380,7 @@ func (suite *BoardTestSuite) TestSetTimer() {
 			req := NewTestRequestBuilder("PUT", "/timer", strings.NewReader(fmt.Sprintf(`{"minutes": %d}`, minutes))).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().SetTimer(req.req.Context(), boardID, minutes).Return(new(boards.Board), te.err)
+			boardMock.EXPECT().SetTimer(mock.Anything, boardID, minutes).Return(new(boards.Board), te.err)
 
 			rr := httptest.NewRecorder()
 
@@ -411,7 +413,7 @@ func (suite *BoardTestSuite) TestDeleteTimer() {
 			req := NewTestRequestBuilder("DEL", "/timer", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().DeleteTimer(req.req.Context(), boardID).Return(new(boards.Board), tt.err)
+			boardMock.EXPECT().DeleteTimer(mock.Anything, boardID).Return(new(boards.Board), tt.err)
 
 			rr := httptest.NewRecorder()
 
@@ -444,7 +446,7 @@ func (suite *BoardTestSuite) TestIncrementTimer() {
 			req := NewTestRequestBuilder("POST", "/timer/increment", nil).
 				AddToContext(identifiers.BoardIdentifier, boardID)
 
-			boardMock.EXPECT().IncrementTimer(req.req.Context(), boardID).Return(new(boards.Board), tt.err)
+			boardMock.EXPECT().IncrementTimer(mock.Anything, boardID).Return(new(boards.Board), tt.err)
 
 			rr := httptest.NewRecorder()
 

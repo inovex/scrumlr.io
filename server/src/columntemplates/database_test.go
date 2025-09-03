@@ -1,6 +1,7 @@
 package columntemplates
 
 import (
+	"context"
 	"database/sql"
 	"log"
 	"testing"
@@ -51,7 +52,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create() {
 	color := columns.ColorYieldingYellow
 	visible := true
 
-	dbColumn, err := database.Create(DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.BoardTemplate)
@@ -73,7 +74,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_FirstIndex() 
 	visible := true
 	index := 0
 
-	dbColumn, err := database.Create(DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.BoardTemplate)
@@ -95,7 +96,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_LastIndex() {
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.BoardTemplate)
@@ -118,7 +119,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_NegativeIndex
 	index := -1
 	expectedIndex := 0
 
-	dbColumn, err := database.Create(DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.BoardTemplate)
@@ -141,7 +142,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_HighIndex() {
 	index := 10000
 	expectedIndex := 1
 
-	dbColumn, err := database.Create(DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.BoardTemplate)
@@ -163,7 +164,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_MiddleIndex()
 	visible := true
 	index := 1
 
-	dbColumn, err := database.Create(DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color, Visible: &visible, Index: &index})
 
 	assert.Nil(t, err)
 	assert.Equal(t, boardId, dbColumn.BoardTemplate)
@@ -183,7 +184,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_EmptyName() {
 	description := "This is inserted from the test"
 	color := columns.ColorYieldingYellow
 
-	dbColumn, err := database.Create(DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: color})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, DatabaseColumnTemplate{}, dbColumn)
@@ -197,7 +198,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create_EmptyColor() 
 	name := "Test"
 	description := "This is inserted from the test"
 
-	dbColumn, err := database.Create(DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: ""})
+	dbColumn, err := database.Create(context.Background(), DatabaseColumnTemplateInsert{BoardTemplate: boardId, Name: name, Description: description, Color: ""})
 
 	assert.NotNil(t, err)
 	assert.Equal(t, DatabaseColumnTemplate{}, dbColumn)
@@ -215,7 +216,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Update() {
 	index := 1
 	visible := true
 
-	dbColumn, err := database.Update(DatabaseColumnTemplateUpdate{ID: columnId, BoardTemplate: boardId, Name: name, Description: description, Color: color, Index: index, Visible: visible})
+	dbColumn, err := database.Update(context.Background(), DatabaseColumnTemplateUpdate{ID: columnId, BoardTemplate: boardId, Name: name, Description: description, Color: color, Index: index, Visible: visible})
 
 	assert.Nil(t, err)
 	assert.Equal(t, columnId, dbColumn.ID)
@@ -234,7 +235,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Delete() {
 	columnId := suite.columnTemplates["Delete"].ID
 	boardId := suite.columnTemplates["Delete"].BoardTemplate
 
-	err := database.Delete(boardId, columnId)
+	err := database.Delete(context.Background(), boardId, columnId)
 
 	assert.Nil(t, err)
 }
@@ -246,7 +247,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Get() {
 	columnId := suite.columnTemplates["Read1"].ID
 	boardId := suite.boardTemplates["Read1"].id
 
-	dbColumn, err := database.Get(boardId, columnId)
+	dbColumn, err := database.Get(context.Background(), boardId, columnId)
 
 	assert.Nil(t, err)
 	assert.Equal(t, columnId, dbColumn.ID)
@@ -262,7 +263,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Get_NotFound() {
 	t := suite.T()
 	database := NewColumnTemplateDatabase(suite.db)
 
-	dbColumn, err := database.Get(uuid.New(), uuid.New())
+	dbColumn, err := database.Get(context.Background(), uuid.New(), uuid.New())
 
 	assert.NotNil(t, err)
 	assert.Equal(t, err, sql.ErrNoRows)
@@ -275,7 +276,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_GetAll() {
 
 	boardId := suite.boardTemplates["Read1"].id
 
-	dbColumns, err := database.GetAll(boardId)
+	dbColumns, err := database.GetAll(context.Background(), boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbColumns, 2)
@@ -301,7 +302,7 @@ func (suite *DatabaseColumnTemplateTestSuite) Test_Database_GetAll_NotFound() {
 	t := suite.T()
 	database := NewColumnTemplateDatabase(suite.db)
 
-	dbColumns, err := database.GetAll(uuid.New())
+	dbColumns, err := database.GetAll(context.Background(), uuid.New())
 
 	assert.Nil(t, err)
 	assert.Len(t, dbColumns, 0)

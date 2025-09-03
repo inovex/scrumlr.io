@@ -15,6 +15,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -56,7 +57,7 @@ func (suite *VoteTestSuite) TestAddVote() {
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
 				AddToContext(identifiers.UserIdentifier, userId)
 
-			votingMock.EXPECT().AddVote(req.req.Context(), votings.VoteRequest{
+			votingMock.EXPECT().AddVote(mock.Anything, votings.VoteRequest{
 				Board: boardId,
 				User:  userId,
 				Note:  noteId,

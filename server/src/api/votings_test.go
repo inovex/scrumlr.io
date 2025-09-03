@@ -4,9 +4,10 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"scrumlr.io/server/notes"
 	"strings"
 	"testing"
+
+	"scrumlr.io/server/notes"
 
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
@@ -15,6 +16,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -48,7 +50,7 @@ func (suite *VotingTestSuite) TestCreateVoting() {
 			req.req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId)
 
-			votingMock.EXPECT().Create(req.req.Context(), votings.VotingCreateRequest{
+			votingMock.EXPECT().Create(mock.Anything, votings.VotingCreateRequest{
 				VoteLimit:          4,
 				AllowMultipleVotes: false,
 				ShowVotesOfOthers:  false,
@@ -93,9 +95,9 @@ func (suite *VotingTestSuite) TestUpdateVoting() {
 				AddToContext(identifiers.VotingIdentifier, votingId)
 			rr := httptest.NewRecorder()
 
-			notesMock.EXPECT().GetAll(req.req.Context(), boardId).Return([]*notes.Note{}, nil)
+			notesMock.EXPECT().GetAll(mock.Anything, boardId).Return([]*notes.Note{}, nil)
 
-			votingMock.EXPECT().Update(req.req.Context(), votings.VotingUpdateRequest{
+			votingMock.EXPECT().Update(mock.Anything, votings.VotingUpdateRequest{
 				Board:  boardId,
 				ID:     votingId,
 				Status: votings.Closed,
@@ -124,7 +126,7 @@ func (suite *VotingTestSuite) TestGetVoting() {
 		AddToContext(identifiers.VotingIdentifier, votingId)
 	rr := httptest.NewRecorder()
 
-	votingMock.EXPECT().Get(req.req.Context(), boardId, votingId).Return(&votings.Voting{
+	votingMock.EXPECT().Get(mock.Anything, boardId, votingId).Return(&votings.Voting{
 		ID:     votingId,
 		Status: votings.Closed,
 	}, nil)
