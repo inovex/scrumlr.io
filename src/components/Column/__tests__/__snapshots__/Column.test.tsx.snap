@@ -43,7 +43,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
           </button>
         </div>
         <div
-          class="column-details__description-wrapper column-details__description-wrapper--view"
+          class="column-details__description-wrapper column-details__description-wrapper--view column-details__description-wrapper--empty"
         >
           <div
             class="column-details__description--placeholder"
@@ -1279,7 +1279,7 @@ exports[`Column should render correctly column has correct accent-color 1`] = `
             </button>
           </div>
           <div
-            class="column-details__description-wrapper column-details__description-wrapper--view"
+            class="column-details__description-wrapper column-details__description-wrapper--view column-details__description-wrapper--empty"
           >
             <div
               class="column-details__description--placeholder"

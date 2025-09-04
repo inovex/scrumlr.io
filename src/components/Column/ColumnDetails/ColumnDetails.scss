@@ -82,6 +82,10 @@ $icon-size: $icon--large;
   &--edit {
     flex-direction: column;
   }
+
+  &--empty {
+    min-height: 0;
+  }
 }
 
 .column-details__description {
