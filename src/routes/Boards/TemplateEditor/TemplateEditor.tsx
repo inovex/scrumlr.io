@@ -224,7 +224,6 @@ export const TemplateEditor = ({mode, debug}: TemplateEditorProps) => {
               setInput={setDescriptionInput}
               placeholder="Description (optional)"
               border="transparent"
-              textDim
             />
           </div>
           {debug && (
