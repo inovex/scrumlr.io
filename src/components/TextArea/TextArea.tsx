@@ -1,6 +1,6 @@
 import TextareaAutosize from "react-textarea-autosize";
 import classNames from "classnames";
-import {Dispatch, FocusEvent, forwardRef, SetStateAction, useImperativeHandle, useRef} from "react";
+import {Dispatch, FocusEvent, forwardRef, MouseEvent, SetStateAction, useImperativeHandle, useRef} from "react";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {useSubmitOnShortcut} from "utils/hooks/useSubmitOnShortcut";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
@@ -26,10 +26,12 @@ type TextAreaProps = {
 
   maxLength?: number;
   disabled?: boolean;
+  readOnly?: boolean;
 
   autoFocus?: boolean;
   onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
+  onDoubleClick?: (e: MouseEvent<HTMLTextAreaElement>) => void;
   onSubmit?: () => void; // caused by shortcut
 };
 
@@ -75,7 +77,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
         autoFocus={props.autoFocus}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
+        onDoubleClick={props.onDoubleClick}
         disabled={props.disabled}
+        readOnly={props.readOnly}
       />
       {props.emojiSuggestions ? <EmojiSuggestions {...emoji.suggestionsProps} /> : null}
     </>
