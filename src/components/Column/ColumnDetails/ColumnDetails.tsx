@@ -173,7 +173,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
             setInput={() => {}}
             embedded
             extendable={isDescriptionExpanded}
-            disabled
+            readOnly
             border="none"
             rows={2}
             onDoubleClick={() => {
