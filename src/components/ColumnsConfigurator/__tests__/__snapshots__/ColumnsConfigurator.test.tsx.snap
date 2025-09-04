@@ -40,7 +40,7 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
             value="sample templates col name 1"
           />
           <div
-            class="column-configurator-column-name-details__inline-description"
+            class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
             role="button"
             tabindex="0"
           >
@@ -103,7 +103,7 @@ exports[`ColumnsConfigurator should render correctly 1`] = `
             value="sample templates col name 2"
           />
           <div
-            class="column-configurator-column-name-details__inline-description"
+            class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
             role="button"
             tabindex="0"
           >
