@@ -26,6 +26,7 @@ type TextAreaProps = {
 
   maxLength?: number;
   disabled?: boolean;
+  readOnly?: boolean;
 
   autoFocus?: boolean;
   onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
@@ -78,6 +79,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
         onBlur={props.onBlur}
         onDoubleClick={props.onDoubleClick}
         disabled={props.disabled}
+        readOnly={props.readOnly}
       />
       {props.emojiSuggestions ? <EmojiSuggestions {...emoji.suggestionsProps} /> : null}
     </>
