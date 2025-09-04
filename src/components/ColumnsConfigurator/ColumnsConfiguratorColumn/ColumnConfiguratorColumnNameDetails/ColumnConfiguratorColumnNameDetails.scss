@@ -49,6 +49,13 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+
+  // when description has content, apply specific styling for light theme
+  &--has-content {
+    font-size: 12px;
+    font-weight: 500;
+    color: $navy--900;
+  }
 }
 
 .column-configurator-column-name-details__description-wrapper {
@@ -79,5 +86,11 @@
 
   .column-configurator-column-name-details__inline-description {
     color: $gray--700;
+
+    &--has-content {
+      font-size: 12px;
+      font-weight: 500;
+      color: $gray--000;
+    }
   }
 }

@@ -108,6 +108,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         <div
           className={classNames("column-configurator-column-name-details__inline-description", {
             "column-configurator-column-name-details__inline-description--visual-feedback": props.openState === "visualFeedback",
+            "column-configurator-column-name-details__inline-description--has-content": props.description && props.description.trim().length > 0,
           })}
           role="button"
           tabIndex={0}
