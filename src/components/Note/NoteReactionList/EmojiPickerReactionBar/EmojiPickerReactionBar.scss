@@ -53,6 +53,9 @@
   cursor: pointer;
   font-size: $text--sm;
   transition: all 0.2s ease;
+  color: $gray--600;
+  line-height: 1;
+  padding: 0;
 
   &:hover {
     background: $gray--300;
@@ -122,6 +125,7 @@
   .emoji-picker-reaction-bar__more {
     background: $navy--600;
     border-color: $navy--300;
+    color: $gray--300;
 
     &:hover {
       background: $navy--300;
