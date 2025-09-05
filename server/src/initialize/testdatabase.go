@@ -8,6 +8,7 @@ import (
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
+	"go.uber.org/zap/zapcore"
 )
 
 const POSTGRES_IMAGE = "postgres:17.5-alpine"
@@ -40,7 +41,7 @@ func StartTestDatabase() (*postgres.PostgresContainer, *bun.DB) {
 		log.Fatalf("Failed to initialize database %s", err)
 	}
 
-	bunDb := InitializeBun(db, true) // setup bun
+	bunDb := InitializeBun(db, zapcore.DebugLevel) // setup bun
 
 	return pgcontainer, bunDb
 }
