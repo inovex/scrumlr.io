@@ -1,9 +1,11 @@
 import React, {useEffect, useState, useRef} from "react";
 import ReactFocusLock from "react-focus-lock";
 import {createPortal} from "react-dom";
-import EmojiPicker, {EmojiClickData, Emoji} from "emoji-picker-react";
+import EmojiPicker, {EmojiClickData, Emoji, Theme as EmojiPickerTheme} from "emoji-picker-react";
 import classNames from "classnames";
 import {QUICK_REACTIONS, ReactionType} from "store/features/reactions/types";
+import {useAppSelector} from "store";
+import {Theme} from "store/features/view/types";
 import {ReactionModeled} from "../NoteReactionList";
 import "./EmojiPickerReactionBar.scss";
 
@@ -24,10 +26,16 @@ const getPickerPosition = (buttonRect: DOMRect) => {
   };
 };
 
+const convertToEmojiPickerTheme = (appTheme: Theme): EmojiPickerTheme =>
+  // emoji-picker-react supports "light", "dark", and "auto"
+  // Our app uses the same values, so we can directly cast
+  appTheme as EmojiPickerTheme;
+
 export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
   const [showPicker, setShowPicker] = useState(false);
   const [pickerPosition, setPickerPosition] = useState({top: 0, left: 0});
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const theme = useAppSelector((state) => state.view.theme);
 
   const handleClickQuickReaction = (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => {
     e.preventDefault();
@@ -142,6 +150,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
                 skinTonesDisabled={false}
                 searchDisabled={false}
                 lazyLoadEmojis
+                theme={convertToEmojiPickerTheme(theme)}
               />
             </div>
           </ReactFocusLock>,
