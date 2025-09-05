@@ -44,6 +44,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
 
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
+  const showBoardReactions = useAppSelector((state) => state.view.showBoardReactions);
 
   /** helper function that converts a Reaction object to ReactionModeled object */
   const convertToModeled = (reaction: Reaction) => {
@@ -184,7 +185,7 @@ export const NoteReactionList = (props: NoteReactionListProps) => {
     setShowReactionPopup(false);
   };
 
-  if (!props.show) return null;
+  if (!props.show || !showBoardReactions) return null;
 
   return (
     <div className="note-reaction-list__root" ref={rootRef}>
