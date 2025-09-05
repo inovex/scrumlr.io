@@ -145,7 +145,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll() {
 	assert.Nil(t, err)
 	assert.Len(t, dbTemplates, 2)
 
-	firstTemplate := checkTemplateInList(dbTemplates, suite.templates["Read1"].ID)
+	firstTemplate := checkDatabaseBoardTemplateInList(dbTemplates, suite.templates["Read1"].ID)
 	assert.NotNil(t, firstTemplate)
 	assert.Equal(t, suite.templates["Read1"].ID, firstTemplate.Template.ID)
 	assert.Equal(t, userId, firstTemplate.Template.Creator)
@@ -153,7 +153,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll() {
 	assert.Equal(t, suite.templates["Read1"].Description, firstTemplate.Template.Description)
 	assert.NotNil(t, firstTemplate.Template.CreatedAt)
 
-	secondTemplate := checkTemplateInList(dbTemplates, suite.templates["Read2"].ID)
+	secondTemplate := checkDatabaseBoardTemplateInList(dbTemplates, suite.templates["Read2"].ID)
 	assert.NotNil(t, secondTemplate)
 	assert.Equal(t, suite.templates["Read2"].ID, secondTemplate.Template.ID)
 	assert.Equal(t, userId, secondTemplate.Template.Creator)
@@ -224,7 +224,7 @@ func (suite *DatabaseBoardTemplateTestSuite) SeedDatabase(db *bun.DB) {
 	}
 }
 
-func checkTemplateInList(list []DatabaseBoardTemplateFull, id uuid.UUID) *DatabaseBoardTemplateFull {
+func checkDatabaseBoardTemplateInList(list []DatabaseBoardTemplateFull, id uuid.UUID) *DatabaseBoardTemplateFull {
 	for _, template := range list {
 		if template.Template.ID == id {
 			return &template
