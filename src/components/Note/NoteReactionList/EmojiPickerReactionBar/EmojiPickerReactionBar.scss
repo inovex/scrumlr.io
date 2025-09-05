@@ -1,0 +1,206 @@
+@import "src/constants/style";
+
+.emoji-picker-reaction-bar__root {
+  position: relative;
+  background: $gray--000;
+  border-radius: $rounded--default;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid $gray--300;
+  padding: $reaction__padding--outer-top-bottom $reaction__padding--outer-left-right;
+}
+
+.emoji-picker-reaction-bar__quick-reactions {
+  display: flex;
+  gap: $reaction__gap-size;
+  align-items: center;
+}
+
+.emoji-picker-reaction-bar__reaction {
+  all: unset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $reaction__inner-size;
+  height: $reaction__inner-size;
+  padding: $reaction__padding--inner;
+  border-radius: $rounded--full;
+  cursor: pointer;
+  font-size: $text--md;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $gray--300;
+  }
+
+  &--active {
+    background: var(--accent-color--100);
+
+    &:hover {
+      background: var(--accent-color--200);
+    }
+  }
+}
+
+.emoji-picker-reaction-bar__more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: $reaction__inner-size;
+  height: $reaction__inner-size;
+  border: 1px solid $gray--300;
+  background: $gray--000;
+  border-radius: $rounded--full;
+  cursor: pointer;
+  font-size: $text--sm;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $gray--300;
+  }
+
+  &--active {
+    background: var(--accent-color--100);
+    border-color: var(--accent-color--100);
+
+    &:hover {
+      background: var(--accent-color--200);
+    }
+  }
+}
+
+.emoji-picker-reaction-bar__picker {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  margin-top: $reaction__gap-size;
+  border-radius: $rounded--default;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: $gray--000;
+  border: 1px solid $gray--300;
+
+  // Override emoji picker styles to match our theme
+  :global(.epr-main) {
+    border: none;
+    background: transparent;
+  }
+
+  :global(.epr-header) {
+    background: $gray--000;
+    border-bottom: 1px solid $gray--300;
+  }
+
+  :global(.epr-body) {
+    background: $gray--000;
+  }
+
+  :global(.epr-category-nav) {
+    background: $gray--000;
+    border-top: 1px solid $gray--300;
+  }
+}
+
+[theme="dark"] {
+  .emoji-picker-reaction-bar__root {
+    background: $navy--600;
+    border-color: $navy--300;
+  }
+
+  .emoji-picker-reaction-bar__reaction {
+    &:hover {
+      background: $navy--300;
+    }
+
+    &--active {
+      background: rgba(var(--accent-color--dark-rgb), 0.6);
+      &:hover {
+        background: rgba(var(--accent-color--dark-rgb), 0.8);
+      }
+    }
+  }
+
+  .emoji-picker-reaction-bar__more {
+    background: $navy--600;
+    border-color: $navy--300;
+
+    &:hover {
+      background: $navy--300;
+    }
+
+    &--active {
+      background: rgba(var(--accent-color--dark-rgb), 0.6);
+      border-color: rgba(var(--accent-color--dark-rgb), 0.6);
+
+      &:hover {
+        background: rgba(var(--accent-color--dark-rgb), 0.8);
+      }
+    }
+  }
+
+  .emoji-picker-reaction-bar__picker {
+    background: $navy--600;
+    border-color: $navy--300;
+
+    :global(.epr-header) {
+      background: $navy--600;
+      border-bottom-color: $navy--300;
+    }
+
+    :global(.epr-body) {
+      background: $navy--600;
+    }
+
+    :global(.epr-category-nav) {
+      background: $navy--600;
+      border-top-color: $navy--300;
+    }
+  }
+}
+
+.emoji-picker-reaction-bar__picker-portal {
+  border-radius: $rounded--default;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: $gray--000;
+  border: 1px solid $gray--300;
+
+  // Override emoji picker styles to match our theme
+  :global(.epr-main) {
+    border: none;
+    background: transparent;
+  }
+
+  :global(.epr-header) {
+    background: $gray--000;
+    border-bottom: 1px solid $gray--300;
+  }
+
+  :global(.epr-body) {
+    background: $gray--000;
+  }
+
+  :global(.epr-category-nav) {
+    background: $gray--000;
+    border-top: 1px solid $gray--300;
+  }
+}
+
+[theme="dark"] {
+  .emoji-picker-reaction-bar__picker-portal {
+    background: $navy--600;
+    border-color: $navy--300;
+
+    :global(.epr-header) {
+      background: $navy--600;
+      border-bottom-color: $navy--300;
+    }
+
+    :global(.epr-body) {
+      background: $navy--600;
+    }
+
+    :global(.epr-category-nav) {
+      background: $navy--600;
+      border-top-color: $navy--300;
+    }
+  }
+}
