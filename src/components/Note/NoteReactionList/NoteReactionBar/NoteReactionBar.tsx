@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import ReactFocusLock from "react-focus-lock";
 import classNames from "classnames";
-import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
+import {LEGACY_REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
 import "./NoteReactionBar.scss";
 import {useAppSelector} from "store";
 import {getEmojiWithSkinTone} from "utils/reactions";
@@ -38,7 +38,7 @@ export const NoteReactionBar = (props: NoteReactionBarProps) => {
   return (
     <div className="note-reaction-bar__root">
       <ReactFocusLock autoFocus={false}>
-        {[...REACTION_EMOJI_MAP.entries()].map(([type, emoji]) => {
+        {[...LEGACY_REACTION_EMOJI_MAP.entries()].map(([type, emoji]) => {
           // highlight reaction made by yourself
           const active = !!props.reactions.find((r) => r.reactionType === type && !!r.myReactionId);
           return (
