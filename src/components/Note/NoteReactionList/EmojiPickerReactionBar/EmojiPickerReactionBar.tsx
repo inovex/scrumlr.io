@@ -153,7 +153,7 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
       >
         {/* Quick reactions (recent or legacy emojis) */}
         <div className="emoji-picker-reaction-bar__quick-reactions">
-          {quickReactions.map((reaction, index) => {
+          {quickReactions.map((reaction) => {
             const active = !!props.reactions.find((r) => r.reactionType === reaction.type && !!r.myReactionId);
             return (
               <button
