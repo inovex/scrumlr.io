@@ -13,6 +13,17 @@ interface EmojiPickerReactionBarProps {
   handleClickReaction: (e: React.MouseEvent<HTMLButtonElement>, reactionType: ReactionType) => void;
 }
 
+const getPickerPosition = (buttonRect: DOMRect) => {
+  const [width, height, gap, margin] = [320, 350, 5, 20];
+  const spaceBelow = window.innerHeight - buttonRect.bottom;
+  const showAbove = spaceBelow < height + gap + margin;
+
+  return {
+    top: showAbove ? Math.max(buttonRect.top + window.scrollY - height - gap, window.scrollY + 10) : buttonRect.bottom + window.scrollY + gap,
+    left: Math.max(margin, Math.min(buttonRect.left + window.scrollX, window.innerWidth - width - margin)),
+  };
+};
+
 export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
   const [showPicker, setShowPicker] = useState(false);
   const [pickerPosition, setPickerPosition] = useState({top: 0, left: 0});
@@ -45,15 +56,11 @@ export const EmojiPickerReactionBar = (props: EmojiPickerReactionBarProps) => {
 
   const togglePicker = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    e.stopPropagation(); // Prevent note modal from opening
+    e.stopPropagation();
 
     if (!showPicker && buttonRef.current) {
-      // Calculate position relative to viewport
-      const rect = buttonRef.current.getBoundingClientRect();
-      setPickerPosition({
-        top: rect.bottom + window.scrollY + 5, // 5px gap
-        left: rect.left + window.scrollX,
-      });
+      const position = getPickerPosition(buttonRef.current.getBoundingClientRect());
+      setPickerPosition(position);
     }
 
     setShowPicker(!showPicker);
