@@ -1,57 +1,60 @@
 import {fireEvent, render, screen} from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import {LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {Provider} from "react-redux";
 import {ApplicationState} from "store";
-import getTestApplicationState from "utils/test/getTestApplicationState";
 import getTestStore from "utils/test/getTestStore";
-import {getEmojiWithSkinTone} from "utils/reactions";
-import {NoteReactionBar} from "./NoteReactionBar";
+import {EmojiPickerReactionBar} from "../EmojiPickerReactionBar/EmojiPickerReactionBar";
 
-const renderNoteReactionBar = (close?: () => void, click?: () => void, overwrite?: Partial<ApplicationState>) =>
+const renderEmojiPickerReactionBar = (close?: () => void, click?: () => void, overwrite?: Partial<ApplicationState>) =>
   render(
     <Provider store={getTestStore(overwrite)}>
-      <NoteReactionBar closeReactionBar={close ?? jest.fn()} reactions={[]} handleClickReaction={click ?? jest.fn()} />
+      <EmojiPickerReactionBar closeReactionBar={close ?? jest.fn()} reactions={[]} handleClickReaction={click ?? jest.fn()} />
     </Provider>
   );
 
-describe("NoteReactionBar", () => {
-  it("renders the reaction buttons correctly", () => {
-    renderNoteReactionBar();
-    LEGACY_REACTION_EMOJI_MAP.forEach((emoji) => {
-      expect(screen.getByText(emoji.emoji)).toBeInTheDocument();
-    });
+// Mock the emoji-picker-react to avoid test environment issues
+jest.mock("emoji-picker-react", () => ({
+  __esModule: true,
+  default: () => <div data-testid="emoji-picker">Mocked EmojiPicker</div>,
+  Emoji: ({unified, size}: {unified: string; size: number}) => (
+    <span data-testid={`emoji-${unified}`} style={{fontSize: `${size}px`}}>
+      Mock Emoji
+    </span>
+  ),
+}));
+
+describe("EmojiPickerReactionBar", () => {
+  it("renders the component with quick reactions", () => {
+    renderEmojiPickerReactionBar();
+    // Check that reaction buttons are rendered
+    const reactionButtons = screen.getAllByRole("button");
+    expect(reactionButtons).toHaveLength(6); // 5 reactions + 1 plus button
   });
 
-  it("calls handleClickBar when a reaction button is clicked", () => {
+  it("renders the plus button", () => {
+    renderEmojiPickerReactionBar();
+    expect(screen.getByText("➕")).toBeInTheDocument();
+  });
+
+  it("calls handleClickReaction when a reaction button is clicked", () => {
     const handleClickReactionFunction = jest.fn();
-    renderNoteReactionBar(undefined, handleClickReactionFunction);
-    fireEvent.click(screen.getByText("👍"));
+    renderEmojiPickerReactionBar(undefined, handleClickReactionFunction);
+    const reactionButtons = screen.getAllByRole("button");
+    // Click first reaction button (not the plus button)
+    fireEvent.click(reactionButtons[0]);
     expect(handleClickReactionFunction).toHaveBeenCalled();
   });
 
   it("closes the reaction bar when Escape key is pressed", () => {
     const closeReactionBarFunction = jest.fn();
-    renderNoteReactionBar(closeReactionBarFunction);
+    renderEmojiPickerReactionBar(closeReactionBarFunction);
     fireEvent.keyDown(document, {key: "Escape"});
     expect(closeReactionBarFunction).toHaveBeenCalled();
   });
 
-  it("focuses the first emoji button after TAB is pressed on the last emoji button", async () => {
-    renderNoteReactionBar(jest.fn(), jest.fn(), getTestApplicationState());
-    const firstEmojiButton = screen.getByText([...LEGACY_REACTION_EMOJI_MAP.values()].at(0)!.emoji);
-    const lastEmojiButton = screen.getByText([...LEGACY_REACTION_EMOJI_MAP.values()].at(-1)!.emoji);
-
-    lastEmojiButton.focus();
-    expect(lastEmojiButton).toHaveFocus();
-    await userEvent.tab();
-    expect(firstEmojiButton).toHaveFocus();
-  });
-
-  it("render emoji in different skin tone", () => {
-    renderNoteReactionBar(undefined, undefined, {skinTone: {name: "dark", component: "🏿"}});
-    LEGACY_REACTION_EMOJI_MAP.forEach((emoji) => {
-      expect(screen.getByText(getEmojiWithSkinTone(emoji, {name: "dark", component: "🏿"}))).toBeInTheDocument();
-    });
+  it("shows emoji picker when plus button is clicked", () => {
+    renderEmojiPickerReactionBar();
+    const plusButton = screen.getByText("➕");
+    fireEvent.click(plusButton);
+    expect(screen.getByTestId("emoji-picker")).toBeInTheDocument();
   });
 });
