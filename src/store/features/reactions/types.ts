@@ -7,14 +7,36 @@ export type Reaction = {
 
 export type ReactionState = Reaction[];
 
-export type ReactionType = "thinking" | "heart" | "like" | "dislike" | "joy" | "celebration" | "poop" | "tada" | "applause";
+export type ReactionType = string;
 
-export const REACTION_EMOJI_MAP = new Map<ReactionType, {emoji: string; skinToneSupported: boolean}>([
-  ["thinking", {emoji: "🤔", skinToneSupported: false}],
-  ["heart", {emoji: "💖", skinToneSupported: false}],
-  ["like", {emoji: "👍", skinToneSupported: true}],
-  ["dislike", {emoji: "👎", skinToneSupported: true}],
-  ["joy", {emoji: "😂", skinToneSupported: false}],
-  ["celebration", {emoji: "🥳", skinToneSupported: false}],
-  ["poop", {emoji: "💩", skinToneSupported: false}],
+// Legacy reaction mappings for backward compatibility
+export const LEGACY_REACTION_EMOJI_MAP = new Map<string, {emoji: string; unified: string; skinToneSupported: boolean}>([
+  ["thinking", {emoji: "🤔", unified: "1f914", skinToneSupported: false}],
+  ["heart", {emoji: "💖", unified: "1f496", skinToneSupported: false}],
+  ["like", {emoji: "👍", unified: "1f44d", skinToneSupported: true}],
+  ["dislike", {emoji: "👎", unified: "1f44e", skinToneSupported: true}],
+  ["joy", {emoji: "😂", unified: "1f602", skinToneSupported: false}],
+  ["celebration", {emoji: "🥳", unified: "1f973", skinToneSupported: false}],
+  ["poop", {emoji: "💩", unified: "1f4a9", skinToneSupported: false}],
 ]);
+
+// Quick access to legacy reactions for the reaction bar (limited for space)
+export const QUICK_REACTIONS = Array.from(LEGACY_REACTION_EMOJI_MAP.entries()).slice(0, 5); // Show only first 5 to make room for + button
+
+// Utility function to get emoji display from reaction type
+export const getEmojiDisplay = (reactionType: string): string => {
+  // First check if it's a legacy reaction
+  const legacyReaction = LEGACY_REACTION_EMOJI_MAP.get(reactionType);
+  if (legacyReaction) {
+    return legacyReaction.emoji;
+  }
+
+  // For new emoji reactions, the reactionType should already be the emoji or Unicode
+  return reactionType;
+};
+
+// Check if a reaction supports skin tone (for legacy reactions)
+export const reactionSupportsSkinTone = (reactionType: string): boolean => {
+  const legacyReaction = LEGACY_REACTION_EMOJI_MAP.get(reactionType);
+  return legacyReaction?.skinToneSupported ?? false;
+};
