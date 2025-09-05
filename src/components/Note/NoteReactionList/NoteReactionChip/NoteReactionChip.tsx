@@ -2,10 +2,10 @@ import classNames from "classnames";
 import React from "react";
 import {LongPressReactEvents, useLongPress} from "use-long-press";
 import {uniqueId} from "underscore";
-import {REACTION_EMOJI_MAP, ReactionType} from "store/features/reactions/types";
+import {getEmojiDisplay, ReactionType, LEGACY_REACTION_EMOJI_MAP} from "store/features/reactions/types";
 import {useAppSelector} from "store";
 import {TooltipPortal} from "components/TooltipPortal/TooltipPortal";
-import {getEmojiWithSkinTone} from "utils/reactions";
+import {Emoji} from "emoji-picker-react";
 import {ReactionModeled} from "../NoteReactionList";
 import "./NoteReactionChip.scss";
 
@@ -18,13 +18,15 @@ interface NoteReactionChipProps {
 }
 
 export const NoteReactionChip = (props: NoteReactionChipProps) => {
-  const reactionImage = REACTION_EMOJI_MAP.get(props.reaction.reactionType);
   const reactionUsers = props.reaction.users.map((u) => u.user.name).join(", ");
   // guarantee unique labels. without it tooltip may anchor at multiple places (ReactionList and ReactionPopup)
   const anchorId = uniqueId(`reaction-${props.reaction.noteId}-${props.reaction.reactionType}`);
-  const skinTone = useAppSelector((state) => state.skinTone);
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self!.role === role));
+
+  // Check if this is a legacy reaction with unified code
+  const legacyReaction = LEGACY_REACTION_EMOJI_MAP.get(props.reaction.reactionType);
+  const reactionDisplay = getEmojiDisplay(props.reaction.reactionType);
 
   const bindLongPress = useLongPress((e) => {
     if (props.handleLongPressReaction) {
@@ -49,7 +51,7 @@ export const NoteReactionChip = (props: NoteReactionChipProps) => {
         onTouchStart={(e) => e.stopPropagation()} // prevent note dragging from here
         {...bindLongPress()} // bind long press
       >
-        <div className="note-reaction-chip__reaction">{getEmojiWithSkinTone(reactionImage!, skinTone)}</div>
+        <div className="note-reaction-chip__reaction">{legacyReaction ? <Emoji unified={legacyReaction.unified} size={16} /> : reactionDisplay}</div>
         <div className="note-reaction-chip__amount">{props.reaction.amount}</div>
       </button>
       <TooltipPortal anchor={anchorId} place="top" show={props.showTooltip}>
