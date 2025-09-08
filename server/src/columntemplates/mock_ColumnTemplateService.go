@@ -107,16 +107,16 @@ func (_c *MockColumnTemplateService_Create_Call) RunAndReturn(run func(ctx conte
 }
 
 // Delete provides a mock function for the type MockColumnTemplateService
-func (_mock *MockColumnTemplateService) Delete(ctx context.Context, board uuid.UUID, column uuid.UUID, user uuid.UUID) error {
-	ret := _mock.Called(ctx, board, column, user)
+func (_mock *MockColumnTemplateService) Delete(ctx context.Context, board uuid.UUID, column uuid.UUID) error {
+	ret := _mock.Called(ctx, board, column)
 
 	if len(ret) == 0 {
 		panic("no return value specified for Delete")
 	}
 
 	var r0 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID, uuid.UUID) error); ok {
-		r0 = returnFunc(ctx, board, column, user)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, uuid.UUID, uuid.UUID) error); ok {
+		r0 = returnFunc(ctx, board, column)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -132,12 +132,11 @@ type MockColumnTemplateService_Delete_Call struct {
 //   - ctx context.Context
 //   - board uuid.UUID
 //   - column uuid.UUID
-//   - user uuid.UUID
-func (_e *MockColumnTemplateService_Expecter) Delete(ctx interface{}, board interface{}, column interface{}, user interface{}) *MockColumnTemplateService_Delete_Call {
-	return &MockColumnTemplateService_Delete_Call{Call: _e.mock.On("Delete", ctx, board, column, user)}
+func (_e *MockColumnTemplateService_Expecter) Delete(ctx interface{}, board interface{}, column interface{}) *MockColumnTemplateService_Delete_Call {
+	return &MockColumnTemplateService_Delete_Call{Call: _e.mock.On("Delete", ctx, board, column)}
 }
 
-func (_c *MockColumnTemplateService_Delete_Call) Run(run func(ctx context.Context, board uuid.UUID, column uuid.UUID, user uuid.UUID)) *MockColumnTemplateService_Delete_Call {
+func (_c *MockColumnTemplateService_Delete_Call) Run(run func(ctx context.Context, board uuid.UUID, column uuid.UUID)) *MockColumnTemplateService_Delete_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -151,15 +150,10 @@ func (_c *MockColumnTemplateService_Delete_Call) Run(run func(ctx context.Contex
 		if args[2] != nil {
 			arg2 = args[2].(uuid.UUID)
 		}
-		var arg3 uuid.UUID
-		if args[3] != nil {
-			arg3 = args[3].(uuid.UUID)
-		}
 		run(
 			arg0,
 			arg1,
 			arg2,
-			arg3,
 		)
 	})
 	return _c
@@ -170,7 +164,7 @@ func (_c *MockColumnTemplateService_Delete_Call) Return(err error) *MockColumnTe
 	return _c
 }
 
-func (_c *MockColumnTemplateService_Delete_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, column uuid.UUID, user uuid.UUID) error) *MockColumnTemplateService_Delete_Call {
+func (_c *MockColumnTemplateService_Delete_Call) RunAndReturn(run func(ctx context.Context, board uuid.UUID, column uuid.UUID) error) *MockColumnTemplateService_Delete_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -274,14 +274,13 @@ func TestUpdateColumnTemplate_DatabaseError(t *testing.T) {
 func TestDeleteColumnTemplate(t *testing.T) {
 	boardId := uuid.New()
 	columnId := uuid.New()
-	userId := uuid.New()
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
 	mockColumnTemplateDatabase.EXPECT().Delete(boardId, columnId).Return(nil)
 
 	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
 
-	err := columnTemplateService.Delete(context.Background(), boardId, columnId, userId)
+	err := columnTemplateService.Delete(context.Background(), boardId, columnId)
 
 	assert.Nil(t, err)
 }
@@ -290,14 +289,13 @@ func TestDeleteColumnTemplate_DatabaseError(t *testing.T) {
 	dbError := errors.New("Database error")
 	boardId := uuid.New()
 	columnId := uuid.New()
-	userId := uuid.New()
 
 	mockColumnTemplateDatabase := NewMockColumnTemplateDatabase(t)
 	mockColumnTemplateDatabase.EXPECT().Delete(boardId, columnId).Return(dbError)
 
 	columnTemplateService := NewColumnTemplateService(mockColumnTemplateDatabase)
 
-	err := columnTemplateService.Delete(context.Background(), boardId, columnId, userId)
+	err := columnTemplateService.Delete(context.Background(), boardId, columnId)
 
 	assert.NotNil(t, err)
 	assert.Equal(t, dbError, err)
