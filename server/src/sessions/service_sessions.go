@@ -319,7 +319,7 @@ func (service *BoardSessionService) updatedSessions(board uuid.UUID, sessions []
 
 func CheckSessionRole(clientID uuid.UUID, sessions []*BoardSession, sessionsRoles []common.SessionRole) bool {
 	for _, session := range sessions {
-		if clientID == session.User.ID {
+		if clientID == session.ID {
 			if slices.Contains(sessionsRoles, session.Role) {
 				return true
 			}

@@ -198,9 +198,9 @@ func (service *Service) updatedUser(ctx context.Context, user DatabaseUser) {
 	}
 
 	for _, session := range connectedBoards {
-		userSession, err := service.sessionService.Get(ctx, session.Board, session.User.ID)
+		userSession, err := service.sessionService.Get(ctx, session.Board, session.ID)
 		if err != nil {
-			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.User.ID, "err", err)
+			logger.Get().Errorw("unable to get board session", "board", userSession.Board, "user", userSession.ID, "err", err)
 		}
 		_ = service.realtime.BroadcastToBoard(session.Board, realtime.BoardEvent{
 			Type: realtime.BoardEventParticipantUpdated,

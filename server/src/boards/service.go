@@ -212,7 +212,7 @@ func (service *Service) BoardOverview(ctx context.Context, boardIDs []uuid.UUID,
 		columnNum := len(boardColumns)
 		dtoBoard := new(Board).From(board)
 		for _, session := range boardSessions {
-			if session.User.ID == user {
+			if session.ID == user {
 				sessionCreated := session.CreatedAt
 				overviewBoards = append(overviewBoards, &BoardOverview{
 					Board:        dtoBoard,

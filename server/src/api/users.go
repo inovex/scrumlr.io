@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/go-chi/chi/v5"
 	"net/http"
 
 	"github.com/go-chi/render"
@@ -16,6 +17,21 @@ func (s *Server) getUser(w http.ResponseWriter, r *http.Request) {
 	userId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
 	user, err := s.users.Get(r.Context(), userId)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, user)
+}
+
+func (s *Server) getUserByID(w http.ResponseWriter, r *http.Request) {
+	//callerId := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
+
+	userParam := chi.URLParam(r, "user")
+	requestedUserId, err := uuid.Parse(userParam)
+	user, err := s.users.Get(r.Context(), requestedUserId)
 	if err != nil {
 		common.Throw(w, r, err)
 		return
