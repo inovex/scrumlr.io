@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math"
 	"net/http"
-	"scrumlr.io/server/sessions"
+	"scrumlr.io/server/users"
 	"strings"
 	"time"
 
@@ -97,7 +97,7 @@ func (s *Server) verifyAuthProviderCallback(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	var internalUser *sessions.User
+	var internalUser *users.User
 	switch provider {
 	case common.Google:
 		internalUser, err = s.users.CreateGoogleUser(r.Context(), userInfo.Ident, userInfo.Name, userInfo.AvatarURL)
