@@ -92,9 +92,8 @@ func (s *Server) updateColumnTemplate(w http.ResponseWriter, r *http.Request) {
 func (s *Server) deleteColumnTemplate(w http.ResponseWriter, r *http.Request) {
 	boardTemplateId := r.Context().Value(identifiers.BoardTemplateIdentifier).(uuid.UUID)
 	columnTemplateId := r.Context().Value(identifiers.ColumnTemplateIdentifier).(uuid.UUID)
-	user := r.Context().Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	if err := s.columntemplates.Delete(r.Context(), boardTemplateId, columnTemplateId, user); err != nil {
+	if err := s.columntemplates.Delete(r.Context(), boardTemplateId, columnTemplateId); err != nil {
 		http.Error(w, "unable to delete column template", http.StatusInternalServerError)
 		return
 	}
