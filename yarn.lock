@@ -2017,50 +2017,50 @@
     "@react-hook/latest" "^1.0.2"
     "@react-hook/passive-layout-effect" "^1.2.0"
 
-"@react-spring/animated@~10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@react-spring/animated/-/animated-10.0.1.tgz#d081ff8986caebc653c7589fd54a248519109d69"
-  integrity sha512-BGL3hA66Y8Qm3KmRZUlfG/mFbDPYajgil2/jOP0VXf2+o2WPVmcDps/eEgdDqgf5Pv9eBbyj7LschLMuSjlW3Q==
+"@react-spring/animated@~10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@react-spring/animated/-/animated-10.0.2.tgz#51be92eacf3660762e5162adf0f25d9bb1f98bd4"
+  integrity sha512-GaVMfinZ6/Aid1v44ESf45H5jOj7cVbDuNVDDkvsVJAPRLgPl8+q8IJsmZGl77+cHpC/nw2X+4B9fOtil+LIOQ==
   dependencies:
-    "@react-spring/shared" "~10.0.1"
-    "@react-spring/types" "~10.0.1"
+    "@react-spring/shared" "~10.0.2"
+    "@react-spring/types" "~10.0.2"
 
-"@react-spring/core@~10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@react-spring/core/-/core-10.0.1.tgz#35b6b8fca4bc388baed9975904b88b69c5e712d1"
-  integrity sha512-KaMMsN1qHuVTsFpg/5ajAVye7OEqhYbCq0g4aKM9bnSZlDBBYpO7Uf+9eixyXN8YEbF+YXaYj9eoWDs+npZ+sA==
+"@react-spring/core@~10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@react-spring/core/-/core-10.0.2.tgz#0018df725079b29e46386f9051d971684b7a93f8"
+  integrity sha512-GTV2I3cHlE1nGqInn2vWHdMD8Wrszlmfq+G5UYrF8TRK/pWu+oMJE+7SI6NbYuCvLPLY9F2cmCiZsKqBSTXXbQ==
   dependencies:
-    "@react-spring/animated" "~10.0.1"
-    "@react-spring/shared" "~10.0.1"
-    "@react-spring/types" "~10.0.1"
+    "@react-spring/animated" "~10.0.2"
+    "@react-spring/shared" "~10.0.2"
+    "@react-spring/types" "~10.0.2"
 
-"@react-spring/rafz@~10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@react-spring/rafz/-/rafz-10.0.1.tgz#ee439b428b1f94fedb9a32486ec2dd4a3b6ab0de"
-  integrity sha512-UrzG/d6Is+9i0aCAjsjWRqIlFFiC4lFqFHrH63zK935z2YDU95TOFio4VKGISJ5SG0xq4ULy7c1V3KU+XvL+Yg==
+"@react-spring/rafz@~10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@react-spring/rafz/-/rafz-10.0.2.tgz#6e85a809c1d2f32159e9bfd1d41df5a159f69a2a"
+  integrity sha512-UaLbq3sE80YqBx5/g3PKE6zQ4R24/UGg/jjXbxhSyt4w+O52m3sj3xZxSru6dkXyC2QciXO1pg8sGWqpn8foUg==
 
-"@react-spring/shared@~10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@react-spring/shared/-/shared-10.0.1.tgz#51dc556a3b25f78984cdf27023e42ac3fe84515b"
-  integrity sha512-KR2tmjDShPruI/GGPfAZOOLvDgkhFseabjvxzZFFggJMPkyICLjO0J6mCIoGtdJSuHywZyc4Mmlgi+C88lS00g==
+"@react-spring/shared@~10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@react-spring/shared/-/shared-10.0.2.tgz#68372cc7324cad8fc6478a9c9a989ff65f925009"
+  integrity sha512-fG8UTo7iTx8+pbMIp41rrAYtBxJ56qqcNs6Sqy4meogbSfPlk5kJSSeKAvF02regPpgzi9rWZA+dR3HL240ilw==
   dependencies:
-    "@react-spring/rafz" "~10.0.1"
-    "@react-spring/types" "~10.0.1"
+    "@react-spring/rafz" "~10.0.2"
+    "@react-spring/types" "~10.0.2"
 
-"@react-spring/types@~10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@react-spring/types/-/types-10.0.1.tgz#749b5d11785555a14179c37b8f9d34c69ae5268d"
-  integrity sha512-Fk1wYVAKL+ZTYK+4YFDpHf3Slsy59pfFFvnnTfRjQQFGlyIo4VejPtDs3CbDiuBjM135YztRyZjIH2VbycB+ZQ==
+"@react-spring/types@~10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@react-spring/types/-/types-10.0.2.tgz#3a6b4b59df5ebf067dfc37866c21ce031fc5d9d8"
+  integrity sha512-BCJyfNrR0CVsyquRjEXvMFCa+jwFMC+qpdRvT8TNepD+JWB+8lsgbDKrrUbbhexUQhy5pTmk2wHTteYpLPEnig==
 
-"@react-spring/web@^10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@react-spring/web/-/web-10.0.1.tgz#5136954463290988280d1fe8314ac02ebd2c251d"
-  integrity sha512-FgQk02OqFrYyJBTTnBTWAU0WPzkHkKXauc6aeexcvATvLapUxwnfGuLlsLYF8BYjEVfkivPT04ziAue6zyRBtQ==
+"@react-spring/web@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@react-spring/web/-/web-10.0.2.tgz#7d5e6d33048709d7e309368a020415a3bd170950"
+  integrity sha512-94Gb91dWdua217UskhLYrX61HEn8Tm0xvlIfDiG7HIxXLHcu6sqVfmX2pp2C/n6MxCsWpYcVejVih1PJ2/y4HQ==
   dependencies:
-    "@react-spring/animated" "~10.0.1"
-    "@react-spring/core" "~10.0.1"
-    "@react-spring/shared" "~10.0.1"
-    "@react-spring/types" "~10.0.1"
+    "@react-spring/animated" "~10.0.2"
+    "@react-spring/core" "~10.0.2"
+    "@react-spring/shared" "~10.0.2"
+    "@react-spring/types" "~10.0.2"
 
 "@reduxjs/toolkit@^2.9.0":
   version "2.9.0"
