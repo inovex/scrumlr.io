@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/go-chi/chi/v5"
 	"net/http"
+	"scrumlr.io/server/users"
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -56,7 +57,7 @@ func (s *Server) updateUser(w http.ResponseWriter, r *http.Request) {
 
 	user := ctx.Value(identifiers.UserIdentifier).(uuid.UUID)
 
-	var body sessions.UserUpdateRequest
+	var body users.UserUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		span.SetStatus(codes.Error, "unable to decode body")
 		span.RecordError(err)
