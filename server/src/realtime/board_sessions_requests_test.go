@@ -1,81 +1,160 @@
-package realtime_test
+package realtime
 
 import (
-	"context"
-	"sync"
 	"testing"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
+	"github.com/testcontainers/testcontainers-go/modules/nats"
+	"github.com/testcontainers/testcontainers-go/modules/redis"
 
-	"scrumlr.io/server/realtime"
+	"scrumlr.io/server/initialize"
 )
 
-func testRealtimeGetBoardSessionRequestChannel(t *testing.T, rt *realtime.Broker) {
-	ctx, cancelFunc := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancelFunc()
-	testBoard := uuid.New()
-	testUser := uuid.New()
-
-	testEvents := []realtime.BoardSessionRequestEventType{
-		realtime.RequestRejected,
-		realtime.RequestAccepted,
-		"some undefined event",
-	}
-	const clients = 10
-	eventChannels := [clients]chan *realtime.BoardSessionRequestEventType{}
-	for i := range eventChannels {
-		eventChannels[i] = rt.GetBoardSessionRequestChannel(testBoard, testUser)
-	}
-	readEvents := [clients][]realtime.BoardSessionRequestEventType{}
-	wg := sync.WaitGroup{}
-
-	for i := range readEvents {
-		client := i
-		go func() {
-			for {
-				select {
-				case ev := <-eventChannels[client]:
-					assert.NotNil(t, ev)
-					readEvents[client] = append(readEvents[client], *ev)
-					wg.Done()
-				case <-ctx.Done():
-					return
-				}
-			}
-		}()
-	}
-
-	for _, ev := range testEvents {
-		wg.Add(1 * clients)
-		err := rt.BroadcastUpdateOnBoardSessionRequest(testBoard, testUser, ev)
-		assert.Nil(t, err)
-	}
-
-	go func() {
-		wg.Wait()
-		cancelFunc()
-	}()
-
-	<-ctx.Done()
-	for i := 0; i < clients; i++ {
-		assert.Equal(t, testEvents, readEvents[i])
-	}
+type RealtimeBoardSessionRequestTestSuite struct {
+	suite.Suite
+	natsContainer         *nats.NATSContainer
+	redisContainer        *redis.RedisContainer
+	natsConnectionString  string
+	redisConnectionString string
 }
 
-func TestRealtime_GetBoardSessionRequestChannel(t *testing.T) {
+func TestRealtimeBoardSessionRequestTestSuite(t *testing.T) {
+	suite.Run(t, new(RealtimeBoardSessionRequestTestSuite))
+}
 
-	t.Run("with nats", func(t *testing.T) {
-		rt, err := realtime.NewNats(SetupNatsContainer(t))
-		assert.Nil(t, err)
-		testRealtimeGetBoardSessionRequestChannel(t, rt)
-	})
+func (suite *RealtimeBoardSessionRequestTestSuite) SetupSuite() {
+	natsContainer, natsConnectionString := initialize.StartTestNats()
+	redisContainer, redisConnectionString := initialize.StartTestRedis()
 
-	t.Run("with redis", func(t *testing.T) {
-		rt, err := realtime.NewRedis(SetupRedisContainer(t))
-		assert.Nil(t, err)
-		testRealtimeGetBoardSessionRequestChannel(t, rt)
-	})
+	suite.natsContainer = natsContainer
+	suite.natsConnectionString = natsConnectionString
+	suite.redisContainer = redisContainer
+	suite.redisConnectionString = redisConnectionString
+}
 
+func (suite *RealtimeBoardSessionRequestTestSuite) TearDownSuite() {
+	initialize.StopTestNats(suite.natsContainer)
+	initialize.StopTestRedis(suite.redisContainer)
+}
+
+func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest_Accepted() {
+	t := suite.T()
+
+	boardId := uuid.New()
+	userId := uuid.New()
+	eventType := RequestAccepted
+
+	broker, err := NewNats(suite.natsConnectionString)
+	assert.Nil(t, err)
+
+	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+
+	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	assert.Nil(t, err)
+
+	event := <-eventChannel
+	assert.NotNil(t, event)
+	assert.Equal(t, &eventType, event)
+}
+
+func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionRequest_Accepted() {
+	t := suite.T()
+
+	boardId := uuid.New()
+	userId := uuid.New()
+	eventType := RequestAccepted
+
+	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
+	assert.Nil(t, err)
+
+	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+
+	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	assert.Nil(t, err)
+
+	event := <-eventChannel
+	assert.NotNil(t, event)
+	assert.Equal(t, &eventType, event)
+}
+
+func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest_Rejected() {
+	t := suite.T()
+
+	boardId := uuid.New()
+	userId := uuid.New()
+	eventType := RequestRejected
+
+	broker, err := NewNats(suite.natsConnectionString)
+	assert.Nil(t, err)
+
+	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+
+	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	assert.Nil(t, err)
+
+	event := <-eventChannel
+	assert.NotNil(t, event)
+	assert.Equal(t, &eventType, event)
+}
+
+func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionRequest_Rejected() {
+	t := suite.T()
+
+	boardId := uuid.New()
+	userId := uuid.New()
+	eventType := RequestRejected
+
+	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
+	assert.Nil(t, err)
+
+	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+
+	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	assert.Nil(t, err)
+
+	event := <-eventChannel
+	assert.NotNil(t, event)
+	assert.Equal(t, &eventType, event)
+}
+
+func (suite *RealtimeBoardSessionRequestTestSuite) Test_Nats_BoardSessionRequest_Undefined() {
+	t := suite.T()
+
+	boardId := uuid.New()
+	userId := uuid.New()
+	eventType := BoardSessionRequestEventType("undefined event")
+
+	broker, err := NewNats(suite.natsConnectionString)
+	assert.Nil(t, err)
+
+	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+
+	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	assert.Nil(t, err)
+
+	event := <-eventChannel
+	assert.NotNil(t, event)
+	assert.Equal(t, &eventType, event)
+}
+
+func (suite *RealtimeBoardSessionRequestTestSuite) Test_Redis_BoardSessionRequest_Undefined() {
+	t := suite.T()
+
+	boardId := uuid.New()
+	userId := uuid.New()
+	eventType := BoardSessionRequestEventType("undefined event")
+
+	broker, err := NewRedis(RedisServer{Addr: suite.redisConnectionString})
+	assert.Nil(t, err)
+
+	eventChannel := broker.GetBoardSessionRequestChannel(boardId, userId)
+
+	err = broker.BroadcastUpdateOnBoardSessionRequest(boardId, userId, eventType)
+	assert.Nil(t, err)
+
+	event := <-eventChannel
+	assert.NotNil(t, event)
+	assert.Equal(t, &eventType, event)
 }
