@@ -12,6 +12,16 @@ export interface Participant {
   banned?: boolean;
 }
 
+export interface ParticipantDTO {
+  id: string;
+  connected: boolean;
+  ready: boolean;
+  raisedHand: boolean;
+  showHiddenColumns: boolean;
+  role: ParticipantRole;
+  banned?: boolean;
+}
+
 export type ParticipantsState = {
   self?: Participant;
   others?: Participant[];
