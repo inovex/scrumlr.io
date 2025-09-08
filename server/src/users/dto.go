@@ -1,4 +1,4 @@
-package sessions
+package users
 
 import (
 	"net/http"
