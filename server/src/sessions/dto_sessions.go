@@ -79,13 +79,8 @@ type BoardSessionsUpdateRequest struct {
 }
 
 func (b *BoardSession) From(session DatabaseBoardSession) *BoardSession {
-	user := User{
-		ID:          session.User,
-		Name:        session.Name,
-		Avatar:      session.Avatar,
-		AccountType: session.AccountType,
-	}
-	b.ID = user.ID
+
+	b.ID = session.User
 	b.Connected = session.Connected
 	b.Ready = session.Ready
 	b.RaisedHand = session.RaisedHand
