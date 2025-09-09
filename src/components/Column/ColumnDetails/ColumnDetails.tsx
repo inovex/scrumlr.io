@@ -6,6 +6,7 @@ import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
 import {ReactComponent as SettingsIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
+import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import {TextArea} from "components/TextArea/TextArea";
@@ -19,7 +20,7 @@ import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useSubmitOnShortcut} from "utils/hooks/useSubmitOnShortcut";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
 
-export type ColumnDetailsMode = "view" | "edit";
+export type ColumnDetailsMode = "view" | "edit" | "moderator-view";
 
 export type ColumnDetailsProps = {
   column: Column;
@@ -142,13 +143,17 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   ];
 
   const renderName = () =>
-    props.mode === "view" ? (
+    props.mode === "edit" ? (
+      <input {...emoji.inputBindings} ref={inputRef} className={classNames("column-details__name", "column-details__name--editing")} maxLength={MAX_BOARD_NAME_LENGTH} />
+    ) : (
       <>
         <div
           ref={viewNameRef}
           id={`col-${props.column.id}-name`}
-          className="column-details__name"
-          onDoubleClick={() => {
+          className={classNames("column-details__name", {
+            "column-details__name--moderator": props.mode === "moderator-view",
+          })}
+          onClick={() => {
             setFocusTarget("name");
             changeMode("edit");
           }}
@@ -156,10 +161,17 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           {props.column.name}
         </div>
         <div className="column-details__notes-count">{props.notesCount}</div>
+        {props.mode === "moderator-view" && (
+          <EditIcon
+            className="column-details__edit-icon"
+            onClick={() => {
+              setFocusTarget("name");
+              changeMode("edit");
+            }}
+          />
+        )}
         {isNameTextTruncated.horizontal && <Tooltip anchorSelect={`#col-${props.column.id}-name`} content={props.column.name} color={props.column.color} />}
       </>
-    ) : (
-      <input {...emoji.inputBindings} ref={inputRef} className={classNames("column-details__name", "column-details__name--editing")} maxLength={MAX_BOARD_NAME_LENGTH} />
     );
 
   const viewableDescription = () => {
@@ -169,6 +181,9 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         <>
           <TextArea
             ref={viewDescriptionRef}
+            className={classNames({
+              "column-details__description--moderator": props.mode === "moderator-view",
+            })}
             input={props.column.description}
             setInput={() => {}}
             embedded
@@ -176,7 +191,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
             readOnly
             border="none"
             rows={2}
-            onDoubleClick={() => {
+            onClick={() => {
               setFocusTarget("description");
               changeMode("edit");
             }}
@@ -192,8 +207,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       // placeholder
       return (
         <div
-          className="column-details__description--placeholder"
-          onDoubleClick={() => {
+          className={classNames("column-details__description--placeholder", {
+            "column-details__description--placeholder-moderator": props.mode === "moderator-view",
+          })}
+          onClick={() => {
             setFocusTarget("description");
             changeMode("edit");
           }}
@@ -226,7 +243,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     </>
   );
 
-  const renderDescription = () => (props.mode === "view" ? viewableDescription() : editableDescription());
+  const renderDescription = () => (props.mode === "edit" ? editableDescription() : viewableDescription());
 
   const renderSettings = () => {
     if (!isModerator) return null;
@@ -255,7 +272,12 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   };
 
   return (
-    <div className="column-details" ref={containerRef}>
+    <div
+      className={classNames("column-details", {
+        "column-details--moderator-view": props.mode === "moderator-view",
+      })}
+      ref={containerRef}
+    >
       <div className="column-details__name-and-settings-wrapper">
         <div className="column-details__name-wrapper">{renderName()}</div>
         {renderSettings()}
