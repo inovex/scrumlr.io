@@ -41,7 +41,7 @@ describe("ColumnDetails", () => {
     const {container} = renderColumnDetails({changeMode: changeModeSpy});
     const columnDetailNameNode = container.querySelector<HTMLDivElement>(".column-details__name")!;
 
-    fireEvent.doubleClick(columnDetailNameNode);
+    fireEvent.click(columnDetailNameNode);
     expect(changeModeSpy).toHaveBeenCalledWith("edit");
   });
 
@@ -50,12 +50,12 @@ describe("ColumnDetails", () => {
     const {container} = renderColumnDetails({changeMode: changeModeSpy}, "PARTICIPANT");
     const columnDetailNameNode = container.querySelector<HTMLDivElement>(".column-details__name")!;
 
-    fireEvent.doubleClick(columnDetailNameNode);
+    fireEvent.click(columnDetailNameNode);
     expect(changeModeSpy).not.toHaveBeenCalledWith("edit");
   });
 
-  describe("Description double-click editing with readOnly TextArea", () => {
-    it("should switch to edit mode when double-clicking description placeholder (moderator)", () => {
+  describe("Description click editing with readOnly TextArea", () => {
+    it("should switch to edit mode when clicking description placeholder (moderator)", () => {
       const changeModeSpy = jest.fn();
       const columnWithoutDescription = {...getTestApplicationState().columns[0], description: ""};
       const {container} = renderColumnDetails({column: columnWithoutDescription, changeMode: changeModeSpy});
@@ -63,11 +63,11 @@ describe("ColumnDetails", () => {
       const placeholderNode = container.querySelector<HTMLDivElement>(".column-details__description--placeholder")!;
       expect(placeholderNode).toBeTruthy();
 
-      fireEvent.doubleClick(placeholderNode);
+      fireEvent.click(placeholderNode);
       expect(changeModeSpy).toHaveBeenCalledWith("edit");
     });
 
-    it("should not switch to edit mode when double-clicking description placeholder (participant)", () => {
+    it("should not switch to edit mode when clicking description placeholder (participant)", () => {
       const changeModeSpy = jest.fn();
       const columnWithoutDescription = {...getTestApplicationState().columns[0], description: ""};
       const {container} = renderColumnDetails({column: columnWithoutDescription, changeMode: changeModeSpy}, "PARTICIPANT");
@@ -75,11 +75,11 @@ describe("ColumnDetails", () => {
       const placeholderNode = container.querySelector<HTMLDivElement>(".column-details__description--placeholder")!;
       expect(placeholderNode).toBeTruthy();
 
-      fireEvent.doubleClick(placeholderNode);
+      fireEvent.click(placeholderNode);
       expect(changeModeSpy).not.toHaveBeenCalledWith("edit");
     });
 
-    it("should switch to edit mode when double-clicking filled description with readOnly TextArea (moderator)", () => {
+    it("should switch to edit mode when clicking filled description with readOnly TextArea (moderator)", () => {
       const changeModeSpy = jest.fn();
       const columnWithDescription = {...getTestApplicationState().columns[0], description: "Test description content"};
       const {container} = renderColumnDetails({column: columnWithDescription, changeMode: changeModeSpy});
@@ -93,12 +93,12 @@ describe("ColumnDetails", () => {
       expect(textArea.readOnly).toBe(true);
       expect(textArea.disabled).toBe(false);
 
-      // Double-click on the readOnly textarea should trigger edit mode
-      fireEvent.doubleClick(textArea);
+      // Click on the readOnly textarea should trigger edit mode
+      fireEvent.click(textArea);
       expect(changeModeSpy).toHaveBeenCalledWith("edit");
     });
 
-    it("should not switch to edit mode when double-clicking filled description (participant)", () => {
+    it("should not switch to edit mode when clicking filled description (participant)", () => {
       const changeModeSpy = jest.fn();
       const columnWithDescription = {...getTestApplicationState().columns[0], description: "Test description content"};
       const {container} = renderColumnDetails({column: columnWithDescription, changeMode: changeModeSpy}, "PARTICIPANT");
@@ -110,17 +110,17 @@ describe("ColumnDetails", () => {
       expect(textArea).toBeTruthy();
       expect(textArea.readOnly).toBe(true);
 
-      fireEvent.doubleClick(textArea);
+      fireEvent.click(textArea);
       expect(changeModeSpy).not.toHaveBeenCalledWith("edit");
     });
 
-    it("should focus description field when switching to edit mode via placeholder double-click", () => {
+    it("should focus description field when switching to edit mode via placeholder click", () => {
       const changeModeSpy = jest.fn();
       const columnWithoutDescription = {...getTestApplicationState().columns[0], description: ""};
       const {container, rerender} = renderColumnDetails({column: columnWithoutDescription, changeMode: changeModeSpy});
 
       const placeholderNode = container.querySelector<HTMLDivElement>(".column-details__description--placeholder")!;
-      fireEvent.doubleClick(placeholderNode);
+      fireEvent.click(placeholderNode);
       expect(changeModeSpy).toHaveBeenCalledWith("edit");
 
       // Simulate mode change by re-rendering with edit mode
@@ -138,13 +138,13 @@ describe("ColumnDetails", () => {
       expect(editTextArea.disabled).toBe(false);
     });
 
-    it("should focus description field when switching to edit mode via filled description double-click", () => {
+    it("should focus description field when switching to edit mode via filled description click", () => {
       const changeModeSpy = jest.fn();
       const columnWithDescription = {...getTestApplicationState().columns[0], description: "Test description content"};
       const {container, rerender} = renderColumnDetails({column: columnWithDescription, changeMode: changeModeSpy});
 
       const textArea = container.querySelector<HTMLTextAreaElement>("textarea")!;
-      fireEvent.doubleClick(textArea);
+      fireEvent.click(textArea);
       expect(changeModeSpy).toHaveBeenCalledWith("edit");
 
       // Simulate mode change by re-rendering with edit mode
@@ -197,7 +197,7 @@ describe("ColumnDetails", () => {
       }
     });
 
-    it("should preserve double-click functionality after expand/collapse", () => {
+    it("should preserve click functionality after expand/collapse", () => {
       const changeModeSpy = jest.fn();
       const longDescription = "This is a long description ".repeat(10);
       const columnWithLongDescription = {...getTestApplicationState().columns[0], description: longDescription};
@@ -211,8 +211,8 @@ describe("ColumnDetails", () => {
         fireEvent.click(expandButton);
       }
 
-      // Double-click should still work after expansion
-      fireEvent.doubleClick(textArea);
+      // Click should still work after expansion
+      fireEvent.click(textArea);
       expect(changeModeSpy).toHaveBeenCalledWith("edit");
     });
   });

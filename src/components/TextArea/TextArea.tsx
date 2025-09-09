@@ -31,6 +31,7 @@ type TextAreaProps = {
   autoFocus?: boolean;
   onFocus?: (e: FocusEvent<HTMLTextAreaElement>) => void;
   onBlur?: (e: FocusEvent<HTMLTextAreaElement>) => void;
+  onClick?: (e: MouseEvent<HTMLTextAreaElement>) => void;
   onDoubleClick?: (e: MouseEvent<HTMLTextAreaElement>) => void;
   onSubmit?: () => void; // caused by shortcut
 };
@@ -77,6 +78,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
         autoFocus={props.autoFocus}
         onFocus={props.onFocus}
         onBlur={props.onBlur}
+        onClick={props.onClick}
         onDoubleClick={props.onDoubleClick}
         disabled={props.disabled}
         readOnly={props.readOnly}
