@@ -164,10 +164,9 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Get_Open() {
 	boardId := suite.boards["Read"].id
 	votingId := suite.votings["ReadOpen"].ID
 
-	dbVoting, votes, err := database.Get(boardId, votingId)
+	dbVoting, err := database.Get(boardId, votingId)
 
 	assert.Nil(t, err)
-	assert.Len(t, votes, 0)
 
 	assert.Equal(t, votingId, dbVoting.ID)
 	assert.Equal(t, boardId, dbVoting.Board)
@@ -186,10 +185,9 @@ func (suite *DatabaseVotingTestSuite) Test_Database_Get_Closed() {
 	boardId := suite.boards["Read"].id
 	votingId := suite.votings["ReadClosed"].ID
 
-	dbVoting, votes, err := database.Get(boardId, votingId)
+	dbVoting, err := database.Get(boardId, votingId)
 
 	assert.Nil(t, err)
-	assert.Len(t, votes, 9)
 
 	assert.Equal(t, votingId, dbVoting.ID)
 	assert.Equal(t, boardId, dbVoting.Board)
@@ -207,11 +205,10 @@ func (suite *DatabaseVotingTestSuite) Test_Database_GetAll() {
 
 	boardId := suite.boards["Read"].id
 
-	dbVotings, votes, err := database.GetAll(boardId)
+	dbVotings, err := database.GetAll(boardId)
 
 	assert.Nil(t, err)
 	assert.Len(t, dbVotings, 2)
-	assert.Len(t, votes, 18)
 }
 
 func (suite *DatabaseVotingTestSuite) Test_Database_GetOpenVoting() {
@@ -476,28 +473,28 @@ func (suite *DatabaseVotingTestSuite) SeedDatabase(db *bun.DB) {
 	for _, column := range suite.columns {
 		err := initialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
 		if err != nil {
-			log.Fatalf("Failed to insert test board %s", err)
+			log.Fatalf("Failed to insert test column %s", err)
 		}
 	}
 
 	for _, note := range suite.notes {
 		err := initialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
 		if err != nil {
-			log.Fatalf("Failed to insert test board %s", err)
+			log.Fatalf("Failed to insert test note %s", err)
 		}
 	}
 
 	for _, voting := range suite.votings {
 		err := initialize.InsertVoting(db, voting.ID, voting.Board, voting.VoteLimit, voting.AllowMultipleVotes, voting.ShowVotesOfOthers, string(voting.Status), voting.IsAnonymous)
 		if err != nil {
-			log.Fatalf("Failed to insert test user %s", err)
+			log.Fatalf("Failed to insert test voting %s", err)
 		}
 	}
 
 	for _, vote := range suite.votes {
 		err := initialize.InsertVote(db, vote.Board, vote.Voting, vote.User, vote.Note)
 		if err != nil {
-			log.Fatalf("Failed to insert test user %s", err)
+			log.Fatalf("Failed to insert test vote %s", err)
 		}
 	}
 }
