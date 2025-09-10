@@ -12,7 +12,7 @@ import (
 	"github.com/testcontainers/testcontainers-go/modules/postgres"
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 )
 
 type DatabaseReactionTestSuite struct {
@@ -31,7 +31,7 @@ func TestDatabaseReactionTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseReactionTestSuite) SetupSuite() {
-	container, bun := databaseinitialize.StartTestDatabase()
+	container, bun := initialize.StartTestDatabase()
 
 	suite.SeedDatabase(bun)
 
@@ -40,7 +40,7 @@ func (suite *DatabaseReactionTestSuite) SetupSuite() {
 }
 
 func (suite *DatabaseReactionTestSuite) TearDownSuite() {
-	databaseinitialize.StopTestDatabase(suite.container)
+	initialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseReactionTestSuite) Test_Database_CreateReaction() {
@@ -310,35 +310,35 @@ func (suite *DatabaseReactionTestSuite) SeedDatabase(db *bun.DB) {
 	suite.reactions["Get3"] = DatabaseReaction{ID: uuid.New(), Note: suite.notes["Read2"].id, User: suite.users["Santa"].id, ReactionType: Heart}
 
 	for _, user := range suite.users {
-		err := databaseinitialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := databaseinitialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, column := range suite.columns {
-		err := databaseinitialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
+		err := initialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, note := range suite.notes {
-		err := databaseinitialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
+		err := initialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, reaction := range suite.reactions {
-		err := databaseinitialize.InsertReaction(db, reaction.ID, reaction.Note, reaction.User, string(reaction.ReactionType))
+		err := initialize.InsertReaction(db, reaction.ID, reaction.Note, reaction.User, string(reaction.ReactionType))
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}

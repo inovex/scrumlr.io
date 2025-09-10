@@ -79,7 +79,7 @@ func (service *Service) Update(ctx context.Context, body ColumnTemplateUpdateReq
 	return new(ColumnTemplate).From(column), err
 }
 
-func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUID) error {
+func (service *Service) Delete(ctx context.Context, board, column uuid.UUID) error {
 	log := logger.FromContext(ctx)
 	err := service.database.Delete(board, column)
 	if err != nil {

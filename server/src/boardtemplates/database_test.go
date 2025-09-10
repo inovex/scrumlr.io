@@ -13,7 +13,7 @@ import (
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/columntemplates"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 )
 
 type DatabaseBoardTemplateTestSuite struct {
@@ -29,7 +29,7 @@ func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseBoardTemplateTestSuite) SetupSuite() {
-	container, bun := databaseinitialize.StartTestDatabase()
+	container, bun := initialize.StartTestDatabase()
 
 	suite.SeedDatabase(bun)
 
@@ -38,7 +38,7 @@ func (suite *DatabaseBoardTemplateTestSuite) SetupSuite() {
 }
 
 func (suite *DatabaseBoardTemplateTestSuite) TearDownSuite() {
-	databaseinitialize.StopTestDatabase(suite.container)
+	initialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseBoardTemplateTestSuite) Test_Database_Create() {
@@ -145,7 +145,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll() {
 	assert.Nil(t, err)
 	assert.Len(t, dbTemplates, 2)
 
-	firstTemplate := checkTemplateInList(dbTemplates, suite.templates["Read1"].ID)
+	firstTemplate := checkDatabaseBoardTemplateInList(dbTemplates, suite.templates["Read1"].ID)
 	assert.NotNil(t, firstTemplate)
 	assert.Equal(t, suite.templates["Read1"].ID, firstTemplate.Template.ID)
 	assert.Equal(t, userId, firstTemplate.Template.Creator)
@@ -153,7 +153,7 @@ func (suite *DatabaseBoardTemplateTestSuite) Test_Database_GetAll() {
 	assert.Equal(t, suite.templates["Read1"].Description, firstTemplate.Template.Description)
 	assert.NotNil(t, firstTemplate.Template.CreatedAt)
 
-	secondTemplate := checkTemplateInList(dbTemplates, suite.templates["Read2"].ID)
+	secondTemplate := checkDatabaseBoardTemplateInList(dbTemplates, suite.templates["Read2"].ID)
 	assert.NotNil(t, secondTemplate)
 	assert.Equal(t, suite.templates["Read2"].ID, secondTemplate.Template.ID)
 	assert.Equal(t, userId, secondTemplate.Template.Creator)
@@ -210,21 +210,21 @@ func (suite *DatabaseBoardTemplateTestSuite) SeedDatabase(db *bun.DB) {
 	suite.templates["Read2"] = DatabaseBoardTemplate{ID: uuid.New(), Creator: suite.users["Stan"].id, Name: &name2, Description: &description2, Favourite: &favourite2}
 
 	for _, user := range suite.users {
-		err := databaseinitialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, template := range suite.templates {
-		err := databaseinitialize.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite)
+		err := initialize.InsertBoardTemplate(db, template.ID, template.Creator, *template.Name, *template.Description, *template.Favourite)
 		if err != nil {
 			log.Fatalf("Failed to insert test board templates %s", err)
 		}
 	}
 }
 
-func checkTemplateInList(list []DatabaseBoardTemplateFull, id uuid.UUID) *DatabaseBoardTemplateFull {
+func checkDatabaseBoardTemplateInList(list []DatabaseBoardTemplateFull, id uuid.UUID) *DatabaseBoardTemplateFull {
 	for _, template := range list {
 		if template.Template.ID == id {
 			return &template

@@ -35,6 +35,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const dispatch = useAppDispatch();
 
   const isModerator = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
+  const anyColumnHasDescription = useAppSelector((state) => state.columns.some((column) => column.description && column.description.trim().length > 0));
 
   const inputRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -282,7 +283,16 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
         <div className="column-details__name-wrapper">{renderName()}</div>
         {renderSettings()}
       </div>
-      <div className={classNames("column-details__description-wrapper", `column-details__description-wrapper--${props.mode}`)}>{renderDescription()}</div>
+      <div
+        className={classNames("column-details__description-wrapper", `column-details__description-wrapper--${props.mode}`, {
+          // Apply --empty class (min-height: 0) only when
+          // Component is in view mode (not edit) AND No other column on the board has a description
+          // This ensures visual consistency - if any column has content, all columns maintain the same height
+          "column-details__description-wrapper--empty": props.mode === "view" && !anyColumnHasDescription,
+        })}
+      >
+        {renderDescription()}
+      </div>
       <EmojiSuggestions positionRelative {...emoji.suggestionsProps} /> {/* suggestions for name input, as textarea has its own */}
     </div>
   );

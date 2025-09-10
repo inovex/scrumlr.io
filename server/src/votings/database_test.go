@@ -13,7 +13,7 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/common/filter"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 )
 
 type DatabaseVotingTestSuite struct {
@@ -33,7 +33,7 @@ func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseVotingTestSuite) SetupSuite() {
-	container, bun := databaseinitialize.StartTestDatabase()
+	container, bun := initialize.StartTestDatabase()
 
 	suite.SeedDatabase(bun)
 
@@ -42,7 +42,7 @@ func (suite *DatabaseVotingTestSuite) SetupSuite() {
 }
 
 func (suite *DatabaseVotingTestSuite) TearDownSuite() {
-	databaseinitialize.StopTestDatabase(suite.container)
+	initialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseVotingTestSuite) Test_Database_Create() {
@@ -460,42 +460,42 @@ func (suite *DatabaseVotingTestSuite) SeedDatabase(db *bun.DB) {
 	suite.votes["WriteMultiple"] = DatabaseVote{Board: suite.boards["WriteMultiple"].id, Voting: suite.votings["WriteMultiple"].ID, User: suite.users["Stan"].id, Note: suite.notes["WriteMultiple"].id}
 
 	for _, user := range suite.users {
-		err := databaseinitialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, board := range suite.boards {
-		err := databaseinitialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
+		err := initialize.InsertBoard(db, board.id, board.name, "", nil, nil, "PUBLIC", true, true, true, true, false)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, column := range suite.columns {
-		err := databaseinitialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
+		err := initialize.InsertColumn(db, column.id, column.boardId, column.name, "", "backlog-blue", true, column.index)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, note := range suite.notes {
-		err := databaseinitialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
+		err := initialize.InsertNote(db, note.id, note.authorId, note.boardId, note.columnId, note.text, uuid.NullUUID{UUID: uuid.Nil, Valid: false}, 0)
 		if err != nil {
 			log.Fatalf("Failed to insert test board %s", err)
 		}
 	}
 
 	for _, voting := range suite.votings {
-		err := databaseinitialize.InsertVoting(db, voting.ID, voting.Board, voting.VoteLimit, voting.AllowMultipleVotes, voting.ShowVotesOfOthers, string(voting.Status), voting.IsAnonymous)
+		err := initialize.InsertVoting(db, voting.ID, voting.Board, voting.VoteLimit, voting.AllowMultipleVotes, voting.ShowVotesOfOthers, string(voting.Status), voting.IsAnonymous)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, vote := range suite.votes {
-		err := databaseinitialize.InsertVote(db, vote.Board, vote.Voting, vote.User, vote.Note)
+		err := initialize.InsertVote(db, vote.Board, vote.Voting, vote.User, vote.Note)
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}

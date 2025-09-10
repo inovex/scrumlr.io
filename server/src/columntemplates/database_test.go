@@ -12,7 +12,7 @@ import (
 	"github.com/uptrace/bun"
 	"scrumlr.io/server/columns"
 	"scrumlr.io/server/common"
-	"scrumlr.io/server/databaseinitialize"
+	"scrumlr.io/server/initialize"
 )
 
 type DatabaseColumnTemplateTestSuite struct {
@@ -29,7 +29,7 @@ func TestDatabaseBoardTemplateTestSuite(t *testing.T) {
 }
 
 func (suite *DatabaseColumnTemplateTestSuite) SetupSuite() {
-	container, bun := databaseinitialize.StartTestDatabase()
+	container, bun := initialize.StartTestDatabase()
 
 	suite.SeedDatabase(bun)
 
@@ -38,7 +38,7 @@ func (suite *DatabaseColumnTemplateTestSuite) SetupSuite() {
 }
 
 func (suite *DatabaseColumnTemplateTestSuite) TearDownSuite() {
-	databaseinitialize.StopTestDatabase(suite.container)
+	initialize.StopTestDatabase(suite.container)
 }
 
 func (suite *DatabaseColumnTemplateTestSuite) Test_Database_Create() {
@@ -355,21 +355,21 @@ func (suite *DatabaseColumnTemplateTestSuite) SeedDatabase(db *bun.DB) {
 	suite.columnTemplates["Read2"] = DatabaseColumnTemplate{ID: uuid.New(), BoardTemplate: suite.boardTemplates["Read1"].id, Name: "Column2", Description: "This is a column description", Visible: true, Color: columns.ColorPokerPurple, Index: 1}
 
 	for _, user := range suite.users {
-		err := databaseinitialize.InsertUser(db, user.id, user.name, string(user.accountType))
+		err := initialize.InsertUser(db, user.id, user.name, string(user.accountType))
 		if err != nil {
 			log.Fatalf("Failed to insert test user %s", err)
 		}
 	}
 
 	for _, boardTemplate := range suite.boardTemplates {
-		err := databaseinitialize.InsertBoardTemplate(db, boardTemplate.id, boardTemplate.creator, boardTemplate.name, boardTemplate.description, boardTemplate.favourite)
+		err := initialize.InsertBoardTemplate(db, boardTemplate.id, boardTemplate.creator, boardTemplate.name, boardTemplate.description, boardTemplate.favourite)
 		if err != nil {
 			log.Fatalf("Failed to insert test board templates %s", err)
 		}
 	}
 
 	for _, columnTemplate := range suite.columnTemplates {
-		err := databaseinitialize.InsertColumnTemplate(db, columnTemplate.ID, columnTemplate.BoardTemplate, columnTemplate.Name, columnTemplate.Description, string(columnTemplate.Color), columnTemplate.Visible, columnTemplate.Index)
+		err := initialize.InsertColumnTemplate(db, columnTemplate.ID, columnTemplate.BoardTemplate, columnTemplate.Name, columnTemplate.Description, string(columnTemplate.Color), columnTemplate.Visible, columnTemplate.Index)
 		if err != nil {
 			log.Fatalf("Failed to insert test column templates %s", err)
 		}
