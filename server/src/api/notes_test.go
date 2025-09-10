@@ -185,10 +185,10 @@ func (suite *NotesTestSuite) TestDeleteNote() {
 			sessionMock.EXPECT().IsParticipantBanned(req.req.Context(), boardID, userID).Return(false, nil)
 
 			if tt.isLocked {
-				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID).
+				noteMock.EXPECT().Delete(mock.Anything, userID, notes.NoteDeleteRequest{ID: noteID, Board: boardID, DeleteStack: false}).
 					Return(nil)
 			} else {
-				noteMock.EXPECT().Delete(mock.Anything, notes.NoteDeleteRequest{DeleteStack: false}, noteID).
+				noteMock.EXPECT().Delete(mock.Anything, userID, notes.NoteDeleteRequest{ID: noteID, Board: boardID, DeleteStack: false}).
 					Return(tt.err)
 			}
 
@@ -221,6 +221,7 @@ func (suite *NotesTestSuite) TestEditNote() {
 
 			boardId, _ := uuid.NewRandom()
 			noteId, _ := uuid.NewRandom()
+			userId, _ := uuid.NewRandom()
 
 			s.notes = noteMock
 
@@ -228,9 +229,10 @@ func (suite *NotesTestSuite) TestEditNote() {
 				"text": "%s"}`, updatedText)))
 			req.req = logger.InitTestLoggerRequest(req.Request())
 			req.AddToContext(identifiers.BoardIdentifier, boardId).
-				AddToContext(identifiers.NoteIdentifier, noteId)
+				AddToContext(identifiers.NoteIdentifier, noteId).
+				AddToContext(identifiers.UserIdentifier, userId)
 
-			noteMock.EXPECT().Update(req.req.Context(), notes.NoteUpdateRequest{
+			noteMock.EXPECT().Update(req.req.Context(), userId, notes.NoteUpdateRequest{
 				Text:     &updatedText,
 				Position: nil,
 				Edited:   false,
