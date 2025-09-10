@@ -8,6 +8,9 @@ import {Voting} from "../votings";
 
 export type AccessPolicy = "PUBLIC" | "BY_PASSPHRASE" | "BY_INVITE";
 
+// smart type which comes with a passphrase for the respective access policy
+export type CreateSessionAccessPolicy = {policy: Extract<AccessPolicy, "PUBLIC" | "BY_INVITE">} | {policy: Extract<AccessPolicy, "BY_PASSPHRASE">; passphrase: string};
+
 export interface Board {
   id: string;
 

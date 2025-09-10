@@ -6,7 +6,7 @@ export const saveToStorage = (key: string, value: string): void => localStorage.
 /**
  * Retrieves value from local storage by key.
  */
-export const getFromStorage = (key: string): string | null => localStorage.getItem(key);
+export const getFromStorage = <T>(key: string): T | null => localStorage.getItem(key) as T | null;
 
 /**
  * Retrieves number from local storage by key. Returns alternative value on error.

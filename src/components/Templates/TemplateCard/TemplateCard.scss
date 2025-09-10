@@ -1,0 +1,177 @@
+@import "constants/style";
+
+$card-height: 220px;
+$card-description-height: 4 * 20px;
+
+.template-card {
+  display: grid;
+  grid-template-rows: 36px auto 10px 46px;
+  grid-template-columns: 36px $spacing--xs 1fr auto 36px;
+  grid-template-areas:
+    "fav-icon   .  head          head         menu"
+    ".          .  description   description   ."
+    ".          .  .             .             ."
+    "col-icon   .  columns       start         start";
+
+  width: 100%;
+  height: $card-height;
+  border-radius: $rounded--default;
+  padding: $spacing--base;
+
+  background-color: $gray--000;
+  box-shadow: 0 6px 9px 0 rgba($blue--500, 0.1);
+}
+
+.template-card__favourite {
+  grid-area: fav-icon;
+}
+
+.template-card__icon {
+  align-self: center;
+
+  width: 36px;
+  height: 36px;
+
+  color: $navy--900;
+
+  &--menu {
+    transform: rotate(90deg);
+    cursor: pointer;
+  }
+
+  &--columns {
+    grid-area: col-icon;
+  }
+}
+
+.template-card__head {
+  grid-area: head;
+  align-self: center;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: $spacing--xxs;
+}
+
+.template-card__title {
+  all: unset;
+
+  width: 100%;
+
+  font-size: $text--md;
+  font-weight: 700;
+  line-height: 24px; // decreased line height to change distance to bottom border
+
+  color: $navy--900;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.template-card__access-policy,
+.template-card__access-policy-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.template-card__menu {
+  grid-area: menu;
+
+  &--open {
+    // position menu over icon
+    transform: translate(calc(-50% - $spacing--xl), 2 * -$spacing--xxs);
+
+    box-shadow: 0 2px 20px 0 rgba(var($navy--400), 0.12);
+  }
+}
+
+.template-card__description {
+  grid-area: description;
+  align-self: start;
+
+  font-size: $text--sm;
+  font-weight: 500;
+  line-height: 20px;
+
+  height: $card-description-height;
+  max-height: $card-description-height;
+  margin: 0;
+  padding: 0;
+  resize: none;
+
+  background: none;
+  border: none;
+  border-radius: $rounded--small;
+  outline: none;
+
+  color: $navy--900;
+}
+
+.template-card__columns {
+  grid-area: columns;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.template-card__columns-title {
+  font-size: $text--sm;
+  font-weight: 600;
+  line-height: 16px;
+
+  color: $navy--400;
+}
+
+.template-card__columns-subtitle {
+  font-size: $text--xs;
+  font-weight: 600;
+  line-height: 16px;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: $gray--800;
+}
+
+.template-card__start-button {
+  grid-area: start;
+  justify-self: end;
+}
+
+[theme="dark"] {
+  .template-card {
+    background-color: $navy--400;
+    box-shadow: 0 2px 20px 0 rgba($navy--700, 0.5);
+  }
+
+  .template-card__title,
+  .template-card__access-policy,
+  .template-card__description,
+  .template-card__columns-title {
+    color: $gray--000;
+  }
+
+  .template-card__menu {
+    &--open {
+      box-shadow: 0 2px 20px 0 rgba($navy--700, 0.5);
+    }
+  }
+
+  .template-card__columns-subtitle {
+    color: $gray--800;
+  }
+
+  .template-card__icon {
+    &--menu,
+    &--columns {
+      color: $gray--000;
+    }
+  }
+}

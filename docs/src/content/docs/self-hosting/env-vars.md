@@ -63,6 +63,15 @@ SCRUMLR_CLARITY_ID=''
 
 ## Backend
 
+### Log Level
+
+The log level for the backend.
+Can be one of `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`. Defaults to `INFO` if not set.
+
+```ini
+SCRUMLR_LOG_LEVEL='INFO'
+```
+
 ### Server Port
 
 The port on which the backend should listen for incoming connections.
@@ -117,7 +126,7 @@ Credentials are passed in the URL.
 If you havent configured postgres for TLS, you can use the `?sslmode=disable` parameter.
 
 ```ini
-SCRUMLR_SERVER_DATABASE_URL='psql://user:password@host:port/database'
+SCRUMLR_SERVER_DATABASE_URL='postgres://user:password@host:port/database'
 ```
 
 ### Base Path
@@ -136,6 +145,27 @@ Default is `false`.
 
 ```ini
 SCRUMLR_DISABLE_ANONYMOUS_LOGIN=false
+```
+
+### Allow Anonymous Template Creation
+
+If set to `false`, users won't be able to create custom templates anonymously (i.e., not using OAuth).
+They can still create boards using recommended templates.
+Default is `false`.
+
+```ini
+SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES=false
+```
+
+### Allow Anonymous Board Creation
+
+If set to `false`, users won't be able to create boards anonymously (i.e., not using OAuth).
+This applies to creating boards from both recommended and custom templates.
+They can still join existing boards.
+Default is `true`.
+
+```ini
+SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION=true
 ```
 
 ### Enable Experimental File System Store

@@ -9,7 +9,7 @@ import {HeroIllustration} from "components/HeroIllustration";
 import {ScrumlrLogo} from "components/ScrumlrLogo";
 import {Refresh} from "components/Icon";
 import {TextInputAction} from "components/TextInputAction";
-import {Button} from "components/Button";
+import {LegacyButton} from "components/Button";
 import {TextInput} from "components/TextInput";
 import {TextInputLabel} from "components/TextInputLabel";
 import {ValidationError} from "components/ValidationError";
@@ -87,13 +87,20 @@ export const LoginBoard = () => {
                       <Refresh />
                     </TextInputAction>
                   }
+                  data-cy="login-board__username"
                 />
               </div>
               {!displayName && <ValidationError>{t("LoginBoard.usernameValidationError")}</ValidationError>}
 
               {SHOW_LEGAL_DOCUMENTS && (
                 <label className="login-board__form-element login-board__terms">
-                  <input type="checkbox" className="login-board__checkbox" defaultChecked={termsAccepted} onChange={() => setTermsAccepted(!termsAccepted)} />
+                  <input
+                    type="checkbox"
+                    className="login-board__checkbox"
+                    defaultChecked={termsAccepted}
+                    onChange={() => setTermsAccepted(!termsAccepted)}
+                    data-cy="login-board__checkbox"
+                  />
                   <span className="login-board__terms-label">
                     <Trans
                       i18nKey="LoginBoard.acceptTerms"
@@ -108,9 +115,15 @@ export const LoginBoard = () => {
             </fieldset>
             {submitted && !termsAccepted && <ValidationError>{t("LoginBoard.termsValidationError")}</ValidationError>}
 
-            <Button className="login-board__anonymous-login-button" color="primary" onClick={handleLogin} disabled={anonymousLoginDisabled}>
+            <LegacyButton
+              className="login-board__anonymous-login-button"
+              color="primary"
+              onClick={handleLogin}
+              disabled={anonymousLoginDisabled}
+              data-cy="login-board__anonymous-login-button"
+            >
               {t("LoginBoard.login")}
-            </Button>
+            </LegacyButton>
             {anonymousLoginDisabled && providersAvailable && <ValidationError>{t("LoginBoard.anonymousLoginDisabledError")}</ValidationError>}
             {/* admin messed something up */}
             {anonymousLoginDisabled && !providersAvailable && <ValidationError>{t("LoginBoard.noLoginAvailable")}</ValidationError>}

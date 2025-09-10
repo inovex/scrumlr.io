@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ColumnConfiguratorColumnNameDetails render should render correctly (closed) 1`] = `
+<div>
+  <div
+    class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
+  >
+    <input
+      autocomplete="off"
+      class="column-configurator-column-name-details__name"
+      placeholder="Title"
+      value="Default Name"
+    />
+    <div
+      class="column-configurator-column-name-details__inline-description"
+      role="button"
+      tabindex="0"
+    >
+      Default Description
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ColumnConfiguratorColumnNameDetails render should render correctly (descriptionFirst) 1`] = `
+<div>
+  <div
+    class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
+  >
+    <input
+      autocomplete="off"
+      class="column-configurator-column-name-details__name column-configurator-column-name-details__name--editing"
+      placeholder="Title"
+      value="Default Name"
+    />
+    <div
+      class="column-configurator-column-name-details__description-wrapper"
+    >
+      <style>
+        .text-area { --text-area-rows: 7 }
+      </style>
+      <textarea
+        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--text-dim text-area--border-normal text-area--text-align-left"
+        maxlength="1024"
+        placeholder="Description (optional)"
+      >
+        Default Description
+      </textarea>
+      <div
+        class="column-configurator-column-name-details__description-mini-menu mini-menu mini-menu--small mini-menu--transparent"
+      >
+        <button
+          aria-label="Cancel"
+          class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Cancel"
+          data-tooltip-content="Cancel"
+          data-tooltip-id="scrumlr-tooltip"
+          id="mini-menu-Cancel5"
+        >
+          <svg>
+            close.svg
+          </svg>
+        </button>
+        <button
+          aria-label="Save"
+          class="mini-menu-item--save mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Save"
+          data-tooltip-content="Save"
+          data-tooltip-id="scrumlr-tooltip"
+          id="mini-menu-Save6"
+        >
+          <svg>
+            check-done.svg
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nameFirst) 1`] = `
+<div>
+  <div
+    class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
+  >
+    <input
+      autocomplete="off"
+      class="column-configurator-column-name-details__name column-configurator-column-name-details__name--editing"
+      placeholder="Title"
+      value="Default Name"
+    />
+    <div
+      class="column-configurator-column-name-details__description-wrapper"
+    >
+      <style>
+        .text-area { --text-area-rows: 7 }
+      </style>
+      <textarea
+        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--text-dim text-area--border-normal text-area--text-align-left"
+        maxlength="1024"
+        placeholder="Description (optional)"
+      >
+        Default Description
+      </textarea>
+      <div
+        class="column-configurator-column-name-details__description-mini-menu mini-menu mini-menu--small mini-menu--transparent"
+      >
+        <button
+          aria-label="Cancel"
+          class="mini-menu-item--cancel mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Cancel"
+          data-tooltip-content="Cancel"
+          data-tooltip-id="scrumlr-tooltip"
+          id="mini-menu-Cancel3"
+        >
+          <svg>
+            close.svg
+          </svg>
+        </button>
+        <button
+          aria-label="Save"
+          class="mini-menu-item--save mini-menu__item mini-menu__item--small"
+          data-cy="undefined-item-Save"
+          data-tooltip-content="Save"
+          data-tooltip-id="scrumlr-tooltip"
+          id="mini-menu-Save4"
+        >
+          <svg>
+            check-done.svg
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ColumnConfiguratorColumnNameDetails render should render correctly (visualFeedback) 1`] = `
+<div>
+  <div
+    class="column-configurator-column-name-details column-configurator-column-name-details__name-wrapper"
+  >
+    <input
+      autocomplete="off"
+      class="column-configurator-column-name-details__name"
+      placeholder="Title"
+      value="Default Name"
+    />
+    <div
+      class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--visual-feedback"
+      role="button"
+      tabindex="0"
+    >
+      Default Description
+    </div>
+  </div>
+</div>
+`;

@@ -3,10 +3,11 @@ package api
 import (
 	"fmt"
 	"net/http"
+
 	"scrumlr.io/server/common"
 	"scrumlr.io/server/identifiers"
 	"scrumlr.io/server/logger"
-	"scrumlr.io/server/votes"
+	"scrumlr.io/server/votings"
 
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
@@ -17,7 +18,7 @@ func (s *Server) createVoting(w http.ResponseWriter, r *http.Request) {
 	log := logger.FromRequest(r)
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	var body votes.VotingCreateRequest
+	var body votings.VotingCreateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -46,7 +47,7 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 	id := r.Context().Value(identifiers.VotingIdentifier).(uuid.UUID)
 
-	var body votes.VotingUpdateRequest
+	var body votings.VotingUpdateRequest
 	if err := render.Decode(r, &body); err != nil {
 		log.Errorw("Unable to decode body", "err", err)
 		common.Throw(w, r, common.BadRequestError(err))
@@ -55,8 +56,28 @@ func (s *Server) updateVoting(w http.ResponseWriter, r *http.Request) {
 
 	body.Board = board
 	body.ID = id
+	notes, err := s.notes.GetAll(r.Context(), board)
+	if err != nil {
+		common.Throw(w, r, err)
+		return
+	}
+	var affectedNotes []votings.Note
 
-	voting, err := s.votings.Update(r.Context(), body)
+	for _, note := range notes {
+		affectedNotes = append(affectedNotes, votings.Note{
+			ID:     note.ID,
+			Author: note.Author,
+			Text:   note.Text,
+			Edited: note.Edited,
+			Position: votings.NotePosition{
+				Column: note.Position.Column,
+				Stack:  note.Position.Stack,
+				Rank:   note.Position.Rank,
+			},
+		})
+	}
+
+	voting, err := s.votings.Update(r.Context(), body, affectedNotes)
 	if err != nil {
 
 		common.Throw(w, r, err)
@@ -86,7 +107,7 @@ func (s *Server) getVoting(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getVotings(w http.ResponseWriter, r *http.Request) {
 	board := r.Context().Value(identifiers.BoardIdentifier).(uuid.UUID)
 
-	votings, err := s.votings.List(r.Context(), board)
+	votings, err := s.votings.GetAll(r.Context(), board)
 	if err != nil {
 		common.Throw(w, r, err)
 		return

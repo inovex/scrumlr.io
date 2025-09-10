@@ -5,6 +5,7 @@ import {ServerEvent} from "types/websocket";
 import {API} from "api";
 import {Timer} from "utils/timer";
 import {ApplicationState, retryable} from "store";
+import i18n from "i18n";
 import {initializeBoard, updatedBoard, updatedBoardTimer} from "./actions";
 import {deletedColumn, updatedColumns} from "../columns";
 import {deletedNote, syncNotes, updatedNotes} from "../notes";
@@ -14,9 +15,34 @@ import {createdVoting, updatedVoting} from "../votings";
 import {deletedVotes} from "../votes";
 import {createJoinRequest, updateJoinRequest} from "../requests";
 import {addedBoardReaction, removeBoardReaction} from "../boardReactions";
-import {EditBoardRequest} from "./types";
+import {CreateSessionAccessPolicy, EditBoardRequest} from "./types";
+import {TemplateWithColumns} from "../templates";
 
 let socket: Socket | null = null;
+
+// creates a board from a template and returns board id if successful
+export const createBoardFromTemplate = createAsyncThunk<string, {templateWithColumns: TemplateWithColumns; accessPolicy: CreateSessionAccessPolicy}>(
+  "board/createBoardFromTemplate",
+  async (payload) => {
+    // finally, translate names and descriptions, since only the keys were stored until this point
+    const translateRecommendedTemplate = (toBeTranslated: TemplateWithColumns): TemplateWithColumns => ({
+      template: {
+        ...toBeTranslated.template,
+        name: i18n.t(toBeTranslated.template.name, {ns: "templates"}),
+        description: i18n.t(toBeTranslated.template.description, {ns: "templates"}),
+      },
+      columns: toBeTranslated.columns.map((toBeTranslatedColumn) => ({
+        ...toBeTranslatedColumn,
+        name: i18n.t(toBeTranslatedColumn.name, {ns: "templates"}),
+        description: i18n.t(toBeTranslatedColumn.description, {ns: "templates"}),
+      })),
+    });
+
+    const translatedTemplateWithColumns =
+      payload.templateWithColumns.template.type === "RECOMMENDED" ? translateRecommendedTemplate(payload.templateWithColumns) : payload.templateWithColumns;
+    return API.createBoard(translatedTemplateWithColumns.template.name, payload.accessPolicy, translatedTemplateWithColumns.columns);
+  }
+);
 
 export const leaveBoard = createAsyncThunk("board/leaveBoard", async () => {
   if (socket) {

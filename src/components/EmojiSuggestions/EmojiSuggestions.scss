@@ -20,6 +20,11 @@
     &--empty {
       display: none;
     }
+
+    &--relative {
+      position: relative;
+      top: 0;
+    }
   }
 
   &__list {

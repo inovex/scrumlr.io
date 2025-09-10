@@ -26,10 +26,11 @@
     "noImplicitThis": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "noUnusedLocals": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
-    "ignoreDeprecations": "5.0"
+    "ignoreDeprecations": "5.0",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
   "include": ["src"]
 }

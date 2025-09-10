@@ -11,7 +11,7 @@ import {useLocation, useNavigate} from "react-router";
 import {useAppDispatch, useAppSelector} from "store";
 import {clearFocusInitiator, setFocusInitiator, setModerating, setRaisedHandStatus, setUserReadyStatus, stopSharing} from "store/features";
 import _ from "underscore";
-import {useTimer} from "../../utils/hooks/useTimerLeft";
+import {useTimer} from "utils/hooks/useTimerLeft";
 import "./MenuBars.scss";
 
 export interface MenuBarsProps {
@@ -193,6 +193,7 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
   /**
    * Logic for "Mark me as Done" tooltip.
    * https://github.com/inovex/scrumlr.io/issues/4269
+   * addendum: updated logic: https://github.com/inovex/scrumlr.io/issues/4846
    */
   const timerExpired = useTimer(state.timerEnd);
   const [isReadyTooltipClass, setIsReadyTooltipClass] = useState("");
@@ -209,7 +210,9 @@ export const MenuBars = ({showPreviousColumn, showNextColumn, onPreviousColumn, 
       setIsReadyTooltipClass("tooltip-button--content-extended");
       setTimeout(() => setIsReadyTooltipClass(""), 28000);
     };
-    if ((timerExpired || USED_VOTES) && USER_NOT_READY && (state.activeTimer || state.activeVoting)) {
+
+    // during an active voting, if timer expired or votes are used up, show tooltip to non-ready users
+    if (USER_NOT_READY && state.activeVoting && (timerExpired || USED_VOTES)) {
       timer = setTimeout(handleTimeout, 2000);
     }
     if (!USED_VOTES || !state.activeTimer || !USER_NOT_READY || !state.activeVoting) {

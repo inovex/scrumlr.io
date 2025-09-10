@@ -1,0 +1,147 @@
+@import "constants/style";
+
+$description-line-height: $line-height--medium;
+$description-target-height: 2 * $description-line-height;
+
+$icon-size: $icon--large;
+
+.column-details {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing--sm;
+}
+
+.column-details__name-and-settings-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.column-details__name-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+
+  overflow: hidden;
+}
+
+.column-details__name {
+  all: unset; // reset input properties
+
+  align-self: flex-start; // only take as much space as needed
+
+  padding: 0 $spacing--xxs $spacing--xxs 0; // extend border space to bottom, and also slightly to the right
+
+  font-size: $text--lg;
+  font-weight: 700;
+
+  color: $navy--900;
+
+  border-bottom: 3px solid var(--accent-color--light);
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  &--editing {
+    flex-grow: 1; // in edit mode, actually do take full space
+    border-bottom-style: dashed;
+  }
+}
+
+.column-details__notes-count {
+  color: $gray--800;
+  font-size: $text--base;
+  font-weight: 600;
+}
+
+.column-details__settings-icon-container {
+  all: unset;
+
+  width: $icon-size;
+  height: $icon-size;
+
+  cursor: pointer;
+}
+.column-details__settings-icon {
+  width: $icon-size;
+  height: $icon-size;
+
+  transform: rotate(90deg);
+}
+
+.column-details__description-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  min-height: $description-target-height;
+
+  &--edit {
+    flex-direction: column;
+  }
+}
+
+.column-details__description {
+  flex-grow: 1;
+  color: $navy--900;
+  font-size: $text--base;
+  font-weight: 600;
+  line-height: $description-line-height;
+  max-height: $description-target-height;
+  overflow: hidden;
+
+  &--expanded {
+    max-height: max-content;
+  }
+
+  &--placeholder {
+    color: $gray--800;
+  }
+}
+
+.column-details__description-expand-icon-container {
+  all: unset;
+  align-self: flex-end;
+
+  width: $icon-size;
+  height: $icon-size;
+
+  cursor: pointer;
+}
+
+.column-details__description-expand-icon {
+  width: $icon-size;
+  height: $icon-size;
+
+  &--expanded {
+    transform: rotate(180deg);
+  }
+}
+
+.column-details__description-mini-menu {
+  align-self: flex-end;
+}
+
+[theme="dark"] {
+  .column-details__name {
+    color: $gray--000;
+    border-bottom-color: var(--accent-color--dark);
+  }
+
+  .column-details__description {
+    &--placeholder {
+      color: $gray--700;
+    }
+  }
+
+  .column-details__settings-icon-container {
+    color: $gray--000;
+  }
+
+  .column-details__description-expand-icon {
+    color: rgba($gray--000, 0.7);
+  }
+}

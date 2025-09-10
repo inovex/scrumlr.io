@@ -9,28 +9,39 @@ import {hotkeyMap} from "constants/hotkeys";
 import {useEmojiAutocomplete} from "utils/hooks/useEmojiAutocomplete";
 import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useAppDispatch, useAppSelector} from "store";
+import {addNote, Column, editColumn} from "store/features";
 import "./NoteInput.scss";
-import {addNote} from "store/features";
 
 export interface NoteInputProps {
-  columnId: string;
-  columnIndex: number;
-  columnIsVisible: boolean;
-  toggleColumnVisibility: () => void;
-  hotkeyKey?: string;
+  column: Column;
 }
 
-export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnVisibility}: NoteInputProps) => {
+export const NoteInput = ({column}: NoteInputProps) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
+
+  const [noteValue, setNoteValue] = useState("");
+
   const [toastDisplayed, setToastDisplayed] = useState(false);
   const boardLocked = useAppSelector((state) => state.board.data!.isLocked);
   const isModerator = useAppSelector((state) => ["OWNER", "MODERATOR"].some((role) => state.participants!.self?.role === role));
 
+  const toggleColumnVisibility = () => {
+    dispatch(
+      editColumn({
+        id: column.id,
+        column: {
+          ...column,
+          visible: !column.visible,
+        },
+      })
+    );
+  };
+
   const dispatchAddNote = (content: string) => {
     if (!content.trim()) return;
-    dispatch(addNote({columnId, text: content}));
-    if (!columnIsVisible && !toastDisplayed) {
+    dispatch(addNote({columnId: column.id, text: content}));
+    if (!column.visible && !toastDisplayed) {
       Toast.info({
         title: t("Toast.noteToHiddenColumn"),
         buttons: [t("Toast.noteToHiddenColumnButton")],
@@ -40,11 +51,15 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
     }
   };
 
-  const {value, setValue, ...emoji} = useEmojiAutocomplete<HTMLFormElement>();
   const noteInputRef = useRef<HTMLTextAreaElement | null>(null);
+  const {value, ...emoji} = useEmojiAutocomplete<HTMLTextAreaElement, HTMLFormElement>({
+    inputRef: noteInputRef,
+    value: noteValue,
+    onValueChange: setNoteValue,
+  });
 
   const {SELECT_NOTE_INPUT_FIRST_KEY} = hotkeyMap;
-  const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${columnIndex + 1}`).join(",");
+  const hotkeyCombos = SELECT_NOTE_INPUT_FIRST_KEY.map((firstKey) => `${firstKey}+${column.index + 1}`).join(",");
   useHotkeys(
     hotkeyCombos,
     (e: KeyboardEvent) => {
@@ -52,7 +67,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       noteInputRef.current?.scrollIntoView({behavior: "smooth"});
       noteInputRef.current?.select();
     },
-    {enabled: columnIndex + 1 <= 9},
+    {enabled: column.index + 1 <= 9},
     [noteInputRef]
   );
 
@@ -64,7 +79,7 @@ export const NoteInput = ({columnIndex, columnId, columnIsVisible, toggleColumnV
       onSubmit={(e) => {
         e.preventDefault();
         dispatchAddNote(value);
-        setValue("");
+        setNoteValue("");
       }}
       ref={emoji.containerRef}
     >

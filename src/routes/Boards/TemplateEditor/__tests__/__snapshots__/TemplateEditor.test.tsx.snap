@@ -1,0 +1,602 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TemplateEditor create should render correctly (create) 1`] = `
+<div>
+  <div
+    class="template-editor"
+  >
+    <section
+      class="template-editor__header"
+    >
+      <div
+        class="template-editor__name"
+      >
+        <div
+          class="template-editor__name-input input__root"
+        >
+          <div
+            class="input input--text input--height-normal"
+          >
+            <input
+              class="input__input input__input--text"
+              data-cy="template-editor__name-input"
+              placeholder="Board name"
+              required=""
+              tabindex="0"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="template-editor__description"
+      >
+        <style>
+          .text-area { --text-area-rows: 7 }
+        </style>
+        <textarea
+          class="template-editor__description-text-area text-area text-area--text-dim text-area--border-transparent text-area--text-align-left"
+          placeholder="Description (optional)"
+        />
+      </div>
+    </section>
+    <section
+      class="template-editor__columns"
+    >
+      <div
+        class="template-editor__columns-configurator-wrapper"
+      >
+        <div
+          class="template-editor__columns-configurator columns-configurator accent-color__backlog-blue"
+        >
+          <div
+            class="add-template-column add-template-column--left accent-color__online-orange"
+          >
+            <button
+              class="add-template-column__button"
+            >
+              <svg
+                class="add-template-column__icon"
+              >
+                add-column.svg
+              </svg>
+            </button>
+          </div>
+          <div
+            class="columns-configurator__columns-wrapper"
+          >
+            <div
+              aria-describedby="DndDescribedBy-0"
+              aria-disabled="false"
+              aria-roledescription="sortable"
+              class="columns-configurator__column columns-configurator-column columns-configurator-column--border-first columns-configurator-column--even accent-color__backlog-blue"
+              role="button"
+              style="--stripe-offset: 0px;"
+              tabindex="0"
+            >
+              <div
+                class="columns-configurator-column__name-details column-configurator-column-name-details__name-wrapper"
+              >
+                <input
+                  autocomplete="off"
+                  class="column-configurator-column-name-details__name"
+                  placeholder="Title"
+                  value="Column 1"
+                />
+                <div
+                  class="column-configurator-column-name-details__inline-description"
+                  role="button"
+                  tabindex="0"
+                >
+                  Description (optional)
+                </div>
+              </div>
+              <div
+                class="columns-configurator-column__menu"
+              >
+                <svg
+                  class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+                  data-cy="columns-configurator-column__drag-element"
+                >
+                  drag-and-drop.svg
+                </svg>
+                <span
+                  aria-label="current colorBacklog Blue"
+                  class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
+                  data-cy="columns-configurator-column__color-picker"
+                  role="button"
+                  tabindex="0"
+                />
+                <button
+                  class="columns-configurator-column__button column-configurator-column__visibility-button"
+                >
+                  <svg
+                    class="columns-configurator-column__icon columns-configurator-column__icon--visible"
+                    data-cy="columns-configurator-column__icon--visibility"
+                  >
+                    visible.svg
+                  </svg>
+                </button>
+                <button
+                  class="columns-configurator-column__button column-configurator-column__delete-button"
+                >
+                  <svg
+                    class="columns-configurator-column__icon columns-configurator-column__icon--delete"
+                  >
+                    trash.svg
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              aria-describedby="DndDescribedBy-0"
+              aria-disabled="false"
+              aria-roledescription="sortable"
+              class="columns-configurator__column columns-configurator-column columns-configurator-column--border-last columns-configurator-column--odd columns-configurator-column--hidden accent-color__planning-pink"
+              role="button"
+              style="--stripe-offset: 0px;"
+              tabindex="0"
+            >
+              <div
+                class="columns-configurator-column__name-details column-configurator-column-name-details__name-wrapper"
+              >
+                <input
+                  autocomplete="off"
+                  class="column-configurator-column-name-details__name"
+                  placeholder="Title"
+                  value="Actions"
+                />
+                <div
+                  class="column-configurator-column-name-details__inline-description"
+                  role="button"
+                  tabindex="0"
+                >
+                  Description (optional)
+                </div>
+              </div>
+              <div
+                class="columns-configurator-column__menu"
+              >
+                <svg
+                  class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+                  data-cy="columns-configurator-column__drag-element"
+                >
+                  drag-and-drop.svg
+                </svg>
+                <span
+                  aria-label="current colorPlanning Pink"
+                  class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
+                  data-cy="columns-configurator-column__color-picker"
+                  role="button"
+                  tabindex="0"
+                />
+                <button
+                  class="columns-configurator-column__button column-configurator-column__visibility-button"
+                >
+                  <svg
+                    class="columns-configurator-column__icon columns-configurator-column__icon--hidden"
+                    data-cy="columns-configurator-column__icon--visibility"
+                  >
+                    hidden.svg
+                  </svg>
+                </button>
+                <button
+                  class="columns-configurator-column__button column-configurator-column__delete-button"
+                >
+                  <svg
+                    class="columns-configurator-column__icon columns-configurator-column__icon--delete"
+                  >
+                    trash.svg
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="add-template-column add-template-column--right accent-color__poker-purple"
+          >
+            <button
+              class="add-template-column__button"
+            >
+              <svg
+                class="add-template-column__icon"
+              >
+                add-column.svg
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div
+          id="DndDescribedBy-0"
+          style="display: none;"
+        >
+          
+    To pick up a draggable item, press the space bar.
+    While dragging, use the arrow keys to move the item.
+    Press space again to drop the item in its new position, or press escape to cancel.
+  
+        </div>
+        <div
+          aria-atomic="true"
+          aria-live="assertive"
+          id="DndLiveRegion-0"
+          role="status"
+          style="position: fixed; top: 0px; left: 0px; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip-path: inset(100%); white-space: nowrap;"
+        />
+      </div>
+      <div
+        class="template-editor__columns-mini-view-wrapper"
+      >
+        <div
+          class="columns-configurator__mini-view columns-mini-view"
+        >
+          <div
+            class="columns-mini-view__column columns-mini-view__column--border-first accent-color__backlog-blue"
+          >
+            <span
+              class="columns-mini-view__column-index"
+            >
+              1
+            </span>
+          </div>
+          <div
+            class="columns-mini-view__column columns-mini-view__column--hidden columns-mini-view__column--border-last accent-color__planning-pink"
+          >
+            <span
+              class="columns-mini-view__column-index"
+            >
+              2
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="template-editor__footer"
+    >
+      <div
+        class="template-editor__info"
+      >
+        <svg
+          class="template-editor__info-icon"
+        >
+          info.svg
+        </svg>
+        <div
+          class="template-editor__info-text"
+        >
+          Changes can be made at any time, including on the board.
+        </div>
+      </div>
+      <div
+        class="template-editor__buttons"
+      >
+        <button
+          class="template-editor__button template-editor__button--return button button--secondary accent-color__planning-pink"
+          data-cy="template-editor__button--return"
+        >
+          Cancel
+        </button>
+        <button
+          class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
+          data-cy="template-editor__button--create"
+          disabled=""
+        >
+          Create template
+          <svg>
+            plus.svg
+          </svg>
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
+`;
+
+exports[`TemplateEditor edit should render correctly (edit) 1`] = `
+<div>
+  <div
+    class="template-editor"
+  >
+    <section
+      class="template-editor__header"
+    >
+      <div
+        class="template-editor__name"
+      >
+        <div
+          class="template-editor__name-input input__root"
+        >
+          <div
+            class="input input--text input--height-normal"
+          >
+            <input
+              class="input__input input__input--text"
+              data-cy="template-editor__name-input"
+              placeholder="Board name"
+              required=""
+              tabindex="0"
+              type="text"
+              value="sample name 1"
+            />
+            <div
+              class="input__icon-container input__icon-container--clear-icon"
+              role="button"
+              tabindex="0"
+            >
+              <svg
+                aria-label="clear input"
+                class="input__icon"
+              >
+                close.svg
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="template-editor__description"
+      >
+        <style>
+          .text-area { --text-area-rows: 7 }
+        </style>
+        <textarea
+          class="template-editor__description-text-area text-area text-area--text-dim text-area--border-transparent text-area--text-align-left"
+          placeholder="Description (optional)"
+        >
+          sample description 1
+        </textarea>
+      </div>
+    </section>
+    <section
+      class="template-editor__columns"
+    >
+      <div
+        class="template-editor__columns-configurator-wrapper"
+      >
+        <div
+          class="template-editor__columns-configurator columns-configurator accent-color__backlog-blue"
+        >
+          <div
+            class="add-template-column add-template-column--left accent-color__online-orange"
+          >
+            <button
+              class="add-template-column__button"
+            >
+              <svg
+                class="add-template-column__icon"
+              >
+                add-column.svg
+              </svg>
+            </button>
+          </div>
+          <div
+            class="columns-configurator__columns-wrapper"
+          >
+            <div
+              aria-describedby="DndDescribedBy-2"
+              aria-disabled="false"
+              aria-roledescription="sortable"
+              class="columns-configurator__column columns-configurator-column columns-configurator-column--border-first columns-configurator-column--even accent-color__backlog-blue"
+              role="button"
+              style="--stripe-offset: 0px;"
+              tabindex="0"
+            >
+              <div
+                class="columns-configurator-column__name-details column-configurator-column-name-details__name-wrapper"
+              >
+                <input
+                  autocomplete="off"
+                  class="column-configurator-column-name-details__name"
+                  placeholder="Title"
+                  value="sample templates col name 1"
+                />
+                <div
+                  class="column-configurator-column-name-details__inline-description"
+                  role="button"
+                  tabindex="0"
+                >
+                  sample templates col name 1
+                </div>
+              </div>
+              <div
+                class="columns-configurator-column__menu"
+              >
+                <svg
+                  class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+                  data-cy="columns-configurator-column__drag-element"
+                >
+                  drag-and-drop.svg
+                </svg>
+                <span
+                  aria-label="current colorBacklog Blue"
+                  class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-first color-picker__color-option color-picker__color-option--selected"
+                  data-cy="columns-configurator-column__color-picker"
+                  role="button"
+                  tabindex="0"
+                />
+                <button
+                  class="columns-configurator-column__button column-configurator-column__visibility-button"
+                >
+                  <svg
+                    class="columns-configurator-column__icon columns-configurator-column__icon--visible"
+                    data-cy="columns-configurator-column__icon--visibility"
+                  >
+                    visible.svg
+                  </svg>
+                </button>
+                <button
+                  class="columns-configurator-column__button column-configurator-column__delete-button"
+                >
+                  <svg
+                    class="columns-configurator-column__icon columns-configurator-column__icon--delete"
+                  >
+                    trash.svg
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div
+              aria-describedby="DndDescribedBy-2"
+              aria-disabled="false"
+              aria-roledescription="sortable"
+              class="columns-configurator__column columns-configurator-column columns-configurator-column--border-last columns-configurator-column--odd columns-configurator-column--hidden accent-color__planning-pink"
+              role="button"
+              style="--stripe-offset: 0px;"
+              tabindex="0"
+            >
+              <div
+                class="columns-configurator-column__name-details column-configurator-column-name-details__name-wrapper"
+              >
+                <input
+                  autocomplete="off"
+                  class="column-configurator-column-name-details__name"
+                  placeholder="Title"
+                  value="sample templates col name 2"
+                />
+                <div
+                  class="column-configurator-column-name-details__inline-description"
+                  role="button"
+                  tabindex="0"
+                >
+                  sample templates col name 2
+                </div>
+              </div>
+              <div
+                class="columns-configurator-column__menu"
+              >
+                <svg
+                  class="columns-configurator-column__icon columns-configurator-column__icon--dnd columns-configurator-column__drag-element"
+                  data-cy="columns-configurator-column__drag-element"
+                >
+                  drag-and-drop.svg
+                </svg>
+                <span
+                  aria-label="current colorPlanning Pink"
+                  class="columns-configurator-column__color-picker columns-configurator-column__color-picker--column-last color-picker__color-option color-picker__color-option--selected"
+                  data-cy="columns-configurator-column__color-picker"
+                  role="button"
+                  tabindex="0"
+                />
+                <button
+                  class="columns-configurator-column__button column-configurator-column__visibility-button"
+                >
+                  <svg
+                    class="columns-configurator-column__icon columns-configurator-column__icon--hidden"
+                    data-cy="columns-configurator-column__icon--visibility"
+                  >
+                    hidden.svg
+                  </svg>
+                </button>
+                <button
+                  class="columns-configurator-column__button column-configurator-column__delete-button"
+                >
+                  <svg
+                    class="columns-configurator-column__icon columns-configurator-column__icon--delete"
+                  >
+                    trash.svg
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="add-template-column add-template-column--right accent-color__poker-purple"
+          >
+            <button
+              class="add-template-column__button"
+            >
+              <svg
+                class="add-template-column__icon"
+              >
+                add-column.svg
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div
+          id="DndDescribedBy-2"
+          style="display: none;"
+        >
+          
+    To pick up a draggable item, press the space bar.
+    While dragging, use the arrow keys to move the item.
+    Press space again to drop the item in its new position, or press escape to cancel.
+  
+        </div>
+        <div
+          aria-atomic="true"
+          aria-live="assertive"
+          id="DndLiveRegion-2"
+          role="status"
+          style="position: fixed; top: 0px; left: 0px; width: 1px; height: 1px; margin: -1px; border: 0px; padding: 0px; overflow: hidden; clip-path: inset(100%); white-space: nowrap;"
+        />
+      </div>
+      <div
+        class="template-editor__columns-mini-view-wrapper"
+      >
+        <div
+          class="columns-configurator__mini-view columns-mini-view"
+        >
+          <div
+            class="columns-mini-view__column columns-mini-view__column--border-first accent-color__backlog-blue"
+          >
+            <span
+              class="columns-mini-view__column-index"
+            >
+              1
+            </span>
+          </div>
+          <div
+            class="columns-mini-view__column columns-mini-view__column--hidden columns-mini-view__column--border-last accent-color__planning-pink"
+          >
+            <span
+              class="columns-mini-view__column-index"
+            >
+              2
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section
+      class="template-editor__footer"
+    >
+      <div
+        class="template-editor__info"
+      >
+        <svg
+          class="template-editor__info-icon"
+        >
+          info.svg
+        </svg>
+        <div
+          class="template-editor__info-text"
+        >
+          Changes can be made at any time, including on the board.
+        </div>
+      </div>
+      <div
+        class="template-editor__buttons"
+      >
+        <button
+          class="template-editor__button template-editor__button--return button button--secondary accent-color__planning-pink"
+          data-cy="template-editor__button--return"
+        >
+          Cancel
+        </button>
+        <button
+          class="template-editor__button template-editor__button--create button button--primary button--with-icon accent-color__planning-pink"
+          data-cy="template-editor__button--create"
+        >
+          Save
+          <svg>
+            plus.svg
+          </svg>
+        </button>
+      </div>
+    </section>
+  </div>
+</div>
+`;

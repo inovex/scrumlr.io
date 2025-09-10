@@ -1,0 +1,54 @@
+@import "constants/style";
+
+$icon-size: 36px;
+
+.favourite-button {
+  all: unset;
+  width: $icon-size;
+  height: $icon-size;
+  border: 2px solid transparent;
+  border-radius: $rounded--full;
+
+  color: rgba($navy--400, 0.5);
+
+  cursor: pointer;
+
+  &:hover {
+    color: $navy--600;
+    background-color: $gray--300;
+  }
+
+  &--active {
+    color: var(--accent-color--light);
+
+    &:hover {
+      color: var(--accent-color--light);
+    }
+  }
+}
+
+.favourite-icon {
+  width: $icon-size;
+  height: $icon-size;
+
+  color: inherit;
+}
+
+[theme="dark"] {
+  .favourite-button {
+    color: rgba($gray--000, 0.7);
+
+    &:hover {
+      color: $gray--000;
+      background-color: $navy--600;
+    }
+
+    &--active {
+      color: var(--accent-color--dark);
+
+      &:hover {
+        color: var(--accent-color--dark);
+      }
+    }
+  }
+}

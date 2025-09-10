@@ -1,118 +1,352 @@
 package columns
 
 import (
+	"context"
+	"errors"
+	"fmt"
+	"testing"
+
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/uptrace/bun"
-	"math/rand"
-	"scrumlr.io/server/database"
-	"scrumlr.io/server/database/types"
-	"testing"
+	"github.com/stretchr/testify/mock"
+	"scrumlr.io/server/notes"
+	"scrumlr.io/server/realtime"
 )
 
-func TestShouldFilterVisibleColumns(t *testing.T) {
+func TestCreateColumn(t *testing.T) {
+	columnId := uuid.New()
+	boardId := uuid.New()
+	columnName := "Column One"
+	columnDescription := "This is a column"
 
-	visibleColumnId := uuid.New()
-	hiddenColumnId := uuid.New()
+	mockColumnDatabase := NewMockColumnDatabase(t)
+	mockColumnDatabase.EXPECT().Create(DatabaseColumnInsert{
+		Board:       boardId,
+		Name:        columnName,
+		Description: columnDescription,
+	}).
+		Return(DatabaseColumn{
+			ID:          columnId,
+			Board:       boardId,
+			Name:        columnName,
+			Description: columnDescription,
+		}, nil)
+	mockColumnDatabase.EXPECT().GetAll(boardId).
+		Return([]DatabaseColumn{{ID: columnId, Board: boardId, Name: columnName, Description: columnDescription}}, nil)
 
-	visibleColumns := ColumnSlice{buildColumn(visibleColumnId, true), buildColumn(hiddenColumnId, false)}
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-	columns := visibleColumns.FilterVisibleColumns()
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+		Return([]*notes.Note{}, nil)
 
-	assert.Equal(t, visibleColumnId, columns[0].ID)
+	columnService := NewColumnService(mockColumnDatabase, broker, mockNoteService)
+
+	column, err := columnService.Create(context.Background(), ColumnRequest{
+		Name:        columnName,
+		Board:       boardId,
+		Description: columnDescription,
+	})
+
+	assert.Nil(t, err)
+	assert.NotNil(t, column)
+	assert.Equal(t, columnId, column.ID)
+	assert.Equal(t, columnName, column.Name)
+	assert.Equal(t, columnDescription, column.Description)
 }
 
-func TestFromMapping(t *testing.T) {
+func TestCreateColumn_DatabaseError(t *testing.T) {
+	dbError := errors.New("Database error")
+	boardId := uuid.New()
+	columnName := "Column One"
+	columnDescription := "This is a column"
 
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().Create(DatabaseColumnInsert{
+		Board:       boardId,
+		Name:        columnName,
+		Description: columnDescription,
+	}).
+		Return(DatabaseColumn{}, dbError)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockNoteService := notes.NewMockNotesService(t)
+
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+
+	column, err := columnService.Create(context.Background(), ColumnRequest{
+		Name:        columnName,
+		Board:       boardId,
+		Description: columnDescription,
+	})
+
+	assert.Nil(t, column)
+	assert.NotNil(t, err)
+	assert.Equal(t, dbError, err)
+}
+
+func TestDeleteColumn(t *testing.T) {
+	boardId := uuid.New()
+	columnId := uuid.New()
+	userId := uuid.New()
+
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().Delete(boardId, columnId).Return(nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+		Return([]*notes.Note{}, nil)
+
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+
+	err := columnService.Delete(context.Background(), boardId, columnId, userId)
+
+	assert.Nil(t, err)
+}
+
+func TestDeleteColumn_DatabaseError(t *testing.T) {
+	dbError := errors.New("Database error")
+	boardId := uuid.New()
+	columnId := uuid.New()
+	userId := uuid.New()
+
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().Delete(boardId, columnId).Return(dbError)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+		Return([]*notes.Note{}, nil)
+
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+
+	err := columnService.Delete(context.Background(), boardId, columnId, userId)
+
+	assert.NotNil(t, err)
+	assert.Equal(t, dbError, err)
+}
+
+func TestUpdateColumn(t *testing.T) {
+	boardId := uuid.New()
+	columnId := uuid.New()
+	columnName := "Column One"
+	columnDescription := "This is a column"
+
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().Update(DatabaseColumnUpdate{
+		ID:          columnId,
+		Board:       boardId,
+		Name:        columnName,
+		Description: columnDescription,
+	}).
+		Return(DatabaseColumn{
+			ID:          columnId,
+			Board:       boardId,
+			Name:        columnName,
+			Description: columnDescription,
+		}, nil)
+	mockColumndatabase.EXPECT().GetAll(boardId).
+		Return([]DatabaseColumn{{ID: columnId, Board: boardId, Name: columnName, Description: columnDescription}}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	mockBroker.EXPECT().Publish(mock.AnythingOfType("string"), mock.Anything).Return(nil)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockNoteService := notes.NewMockNotesService(t)
+	mockNoteService.EXPECT().GetAll(context.Background(), boardId, []uuid.UUID{columnId}).
+		Return([]*notes.Note{}, nil)
+
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+
+	column, err := columnService.Update(context.Background(), ColumnUpdateRequest{
+		ID:          columnId,
+		Board:       boardId,
+		Name:        columnName,
+		Description: columnDescription,
+	})
+
+	assert.Nil(t, err)
+	assert.NotNil(t, column)
+	assert.Equal(t, columnId, column.ID)
+	assert.Equal(t, columnName, column.Name)
+	assert.Equal(t, columnDescription, column.Description)
+}
+
+func TestUpdateColumn_DatabaseError(t *testing.T) {
+	dbError := errors.New("Database error")
+	boardId := uuid.New()
+	columnId := uuid.New()
+	columnName := "Column One"
+	columnDescription := "This is a column"
+
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().Update(DatabaseColumnUpdate{
+		ID:          columnId,
+		Board:       boardId,
+		Name:        columnName,
+		Description: columnDescription,
+	}).
+		Return(DatabaseColumn{}, dbError)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockNoteService := notes.NewMockNotesService(t)
+
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+
+	column, err := columnService.Update(context.Background(), ColumnUpdateRequest{
+		ID:          columnId,
+		Board:       boardId,
+		Name:        columnName,
+		Description: columnDescription,
+	})
+
+	assert.Nil(t, column)
+	assert.NotNil(t, err)
+	assert.Equal(t, dbError, err)
+}
+
+func TestGetColumn(t *testing.T) {
+	boardId := uuid.New()
+	columnId := uuid.New()
+	columnName := "Column One"
+	columnDescription := "This is a column"
+
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().Get(boardId, columnId).
+		Return(DatabaseColumn{
+			ID:          columnId,
+			Board:       boardId,
+			Name:        columnName,
+			Description: columnDescription,
+		}, nil)
+
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
+
+	mockNoteService := notes.NewMockNotesService(t)
+
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+
+	column, err := columnService.Get(context.Background(), boardId, columnId)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, column)
+	assert.Equal(t, columnId, column.ID)
+	assert.Equal(t, columnName, column.Name)
+	assert.Equal(t, columnDescription, column.Description)
+}
+
+func TestGetColumn_DatabaseError(t *testing.T) {
+	dbError := errors.New("Database error")
+	boardId := uuid.New()
 	columnId := uuid.New()
 
-	databaseColumn := database.Column{
-		BaseModel:   bun.BaseModel{},
-		ID:          uuid.New(),
-		Board:       uuid.New(),
-		Name:        *randSeq(10),
-		Description: *randSeq(10),
-		Color:       types.ColorBacklogBlue,
-		Visible:     false,
-		Index:       1,
-	}
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().Get(boardId, columnId).
+		Return(DatabaseColumn{}, dbError)
 
-	mappedColumn := buildColumn(columnId, true).From(databaseColumn)
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-	assert.Equal(t, databaseColumn.ID, mappedColumn.ID)
-	assert.Equal(t, databaseColumn.Name, mappedColumn.Name)
-	assert.Equal(t, databaseColumn.Description, mappedColumn.Description)
-	assert.Equal(t, databaseColumn.Color, mappedColumn.Color)
-	assert.Equal(t, databaseColumn.Visible, mappedColumn.Visible)
-	assert.Equal(t, databaseColumn.Index, mappedColumn.Index)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+
+	column, err := columnService.Get(context.Background(), boardId, columnId)
+
+	assert.Nil(t, column)
+	assert.NotNil(t, err)
+	assert.Equal(t, fmt.Errorf("unable to get column: %w", dbError), err)
 }
 
-func TestColumnDatabaseMapping(t *testing.T) {
+func TestGetAllColumns(t *testing.T) {
+	boardId := uuid.New()
+	firstColumnId := uuid.New()
+	secondColumnId := uuid.New()
+	firstColumnName := "Column One"
+	secondColumnName := "Column Two"
+	firstColumnDescription := "This is a column"
+	secondColumnDescription := "This is also a column"
 
-	databaseColumn := database.Column{
-		BaseModel:   bun.BaseModel{},
-		ID:          uuid.New(),
-		Board:       uuid.New(),
-		Name:        *randSeq(10),
-		Description: *randSeq(10),
-		Color:       types.ColorBacklogBlue,
-		Visible:     false,
-		Index:       1,
-	}
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().GetAll(boardId).
+		Return([]DatabaseColumn{
+			{
+				ID:          firstColumnId,
+				Board:       boardId,
+				Name:        firstColumnName,
+				Description: firstColumnDescription,
+			},
+			{
+				ID:          secondColumnId,
+				Board:       boardId,
+				Name:        secondColumnName,
+				Description: secondColumnDescription,
+			},
+		}, nil)
 
-	mappedColumn := Columns([]database.Column{databaseColumn})[0]
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-	assert.Equal(t, databaseColumn.ID, mappedColumn.ID)
-	assert.Equal(t, databaseColumn.Name, mappedColumn.Name)
-	assert.Equal(t, databaseColumn.Description, mappedColumn.Description)
-	assert.Equal(t, databaseColumn.Color, mappedColumn.Color)
-	assert.Equal(t, databaseColumn.Visible, mappedColumn.Visible)
-	assert.Equal(t, databaseColumn.Index, mappedColumn.Index)
+	mockNoteService := notes.NewMockNotesService(t)
+
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
+
+	columns, err := columnService.GetAll(context.Background(), boardId)
+
+	assert.Nil(t, err)
+	assert.NotNil(t, columns)
+	assert.Len(t, columns, 2)
+
+	assert.Equal(t, firstColumnId, columns[0].ID)
+	assert.Equal(t, firstColumnName, columns[0].Name)
+	assert.Equal(t, firstColumnDescription, columns[0].Description)
+
+	assert.Equal(t, secondColumnId, columns[1].ID)
+	assert.Equal(t, secondColumnName, columns[1].Name)
+	assert.Equal(t, secondColumnDescription, columns[1].Description)
 }
 
-func TestColumnDatabaseMappingNil(t *testing.T) {
+func TestGetAllColumns_DatabaseError(t *testing.T) {
+	dbError := errors.New("Database error")
+	boardId := uuid.New()
 
-	mappedColumns := Columns(nil)
+	mockColumndatabase := NewMockColumnDatabase(t)
+	mockColumndatabase.EXPECT().GetAll(boardId).
+		Return([]DatabaseColumn{}, dbError)
 
-	assert.Nil(t, mappedColumns)
-}
+	mockBroker := realtime.NewMockClient(t)
+	broker := new(realtime.Broker)
+	broker.Con = mockBroker
 
-func TestUnmarshallColumnData(t *testing.T) {
+	mockNoteService := notes.NewMockNotesService(t)
 
-	columns := ColumnSlice{buildColumn(uuid.New(), true)}
+	columnService := NewColumnService(mockColumndatabase, broker, mockNoteService)
 
-	columnSlice, err := UnmarshallColumnData(columns)
+	column, err := columnService.GetAll(context.Background(), boardId)
 
-	assert.NoError(t, err)
-	assert.NotEmpty(t, columnSlice)
-}
-
-func TestShouldReturnWithErrorUnmarshallColumnData(t *testing.T) {
-
-	column := buildColumn(uuid.New(), true)
-
-	columnSlice, err := UnmarshallColumnData(column)
-
-	assert.Error(t, err)
-	assert.Empty(t, columnSlice)
-}
-
-func buildColumn(id uuid.UUID, visible bool) *Column {
-	return &Column{
-		ID:      id,
-		Visible: visible,
-		Color:   types.ColorBacklogBlue,
-	}
-}
-
-func randSeq(n int) *string {
-	var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letters[rand.Intn(len(letters))]
-	}
-
-	s := string(b)
-	return &s
+	assert.Nil(t, column)
+	assert.NotNil(t, err)
+	assert.Equal(t, fmt.Errorf("unable to get columns: %w", dbError), err)
 }

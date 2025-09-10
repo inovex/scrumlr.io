@@ -1,0 +1,135 @@
+@import "constants/style";
+
+$padding--default: 16px;
+$padding--fitted: 8px;
+
+$line-height--default: $line-height--medium;
+$border-width--default: 2px;
+$border-width--thick: 3px;
+
+.text-area {
+  resize: none;
+  @include scrollbar();
+
+  width: 100%;
+
+  --text-area-padding: #{$padding--default};
+  --text-area-border-width: #{$border-width--default};
+
+  &--fitted {
+    --text-area-padding: #{$padding--fitted};
+  }
+
+  &--border {
+    &-none {
+      --text-area-border-width: 0;
+      --text-area-padding: 0;
+      border-radius: 0;
+    }
+
+    // used with non-embedded textareas to not mess with default state borders
+    &-transparent {
+      --text-area-border-width: #{$border-width--default};
+      border-radius: $rounded--default;
+      border-color: transparent;
+    }
+
+    &-normal {
+      --text-area-border-width: #{$border-width--default};
+      border-radius: $rounded--default;
+    }
+
+    &-thick {
+      --text-area-border-width: #{$border-width--thick};
+      border-radius: $rounded--default;
+    }
+  }
+
+  &--text-align {
+    &-left {
+      text-align: left;
+    }
+
+    &-center {
+      text-align: center;
+    }
+  }
+
+  $dynamic-height: calc(var(--text-area-rows) * $line-height--default + 2 * (var(--text-area-padding) + var(--text-area-border-width)));
+
+  min-height: $dynamic-height;
+  max-height: $dynamic-height;
+
+  padding: var(--text-area-padding);
+  margin: 0;
+  outline: none;
+
+  font-size: $text--base;
+  font-weight: 500;
+  line-height: $line-height--default;
+
+  color: $navy--400;
+  background-color: $gray--000;
+
+  &::placeholder {
+    color: $gray--800;
+  }
+
+  &--text-dim {
+    color: $gray--800;
+    &:hover,
+    &:focus-within {
+      color: $navy--400;
+      &::placeholder {
+        color: $gray--800;
+      }
+    }
+  }
+
+  &--extendable {
+    max-height: none;
+  }
+
+  &--embedded {
+    background: none;
+    border: var(--text-area-border-width) dashed var(--accent-color--light);
+  }
+
+  &--fitted {
+    font-size: $text--xs;
+    padding: $padding--fitted;
+    border-radius: 5px;
+  }
+
+  &:not(&--embedded) {
+    @include default-states($padding: $padding--fitted);
+  }
+  &:not(&--embedded):not(&--fitted) {
+    @include default-states($padding: $padding--default);
+  }
+}
+
+[theme="dark"] {
+  .text-area {
+    color: $gray--300;
+    &:not(&--embedded) {
+      background-color: $navy--400;
+    }
+
+    &::placeholder {
+      color: $gray--800;
+    }
+
+    &:hover,
+    &:focus-within {
+      color: $gray--300;
+      &::placeholder {
+        color: $gray--300;
+      }
+    }
+
+    &--embedded {
+      border-color: var(--accent-color--dark);
+    }
+  }
+}

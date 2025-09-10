@@ -8,6 +8,8 @@ export type AutoTheme = Omit<Theme, "auto">;
 export type ServerInfo = {
   anonymousLoginDisabled: boolean;
   enabledAuthProvider: string[];
+  allowAnonymousCustomTemplates: boolean;
+  allowAnonymousBoardCreation: boolean;
   serverTime: number;
   feedbackEnabled: boolean;
 };
@@ -22,6 +24,10 @@ export interface View {
   serverTimeOffset: number;
 
   anonymousLoginDisabled: boolean;
+
+  allowAnonymousCustomTemplates: boolean;
+
+  allowAnonymousBoardCreation: boolean;
 
   enabledAuthProvider: string[];
 
@@ -40,6 +46,8 @@ export interface View {
   hotkeyNotificationsEnabled: boolean;
 
   showBoardReactions: boolean;
+
+  readonly legacyCreateBoard?: boolean;
 
   snowfallEnabled: boolean;
 

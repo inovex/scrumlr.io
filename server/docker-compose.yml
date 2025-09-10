@@ -1,9 +1,8 @@
-version: "3.9"
-
+---
 name: scrumlr
 services:
   nats:
-    image: nats:2-alpine
+    image: nats:2.11.6-alpine
     ports:
       - "4222:4222"
     healthcheck:
@@ -17,7 +16,7 @@ services:
       - build
 
   database:
-    image: postgres:16.4
+    image: postgres:17.5
     ports:
       - "5432:5432"
     environment:
@@ -44,6 +43,8 @@ services:
       SCRUMLR_SERVER_PORT: 8080
       SCRUMLR_SERVER_NATS_URL: "nats://nats:4222"
       SCRUMLR_SERVER_DATABASE_URL: "postgres://admin:supersecret@database:5432/scrumlr?sslmode=disable"
+      SCRUMLR_ALLOW_ANONYMOUS_CUSTOM_TEMPLATES: true
+      SCRUMLR_ALLOW_ANONYMOUS_BOARD_CREATION: true
     depends_on:
       database:
         condition: service_healthy

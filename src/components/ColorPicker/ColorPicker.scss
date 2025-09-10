@@ -1,5 +1,10 @@
 @import "constants/style";
 
+$item-size--default: 40px;
+$option-size--default: 24px;
+$item-size--small: 24px;
+$option-size--small: 18px;
+
 .color-picker {
   display: flex;
   flex-direction: column;
@@ -13,6 +18,13 @@
   margin-top: auto;
   border-radius: $rounded--full;
 
+  // TODO make color picker always fitted
+  // not sure why this doesn't use gap/padding properly in the first place but i'm just gonna override it
+  &--fitted {
+    gap: 4px;
+    padding: 8px;
+  }
+
   &__item {
     display: flex;
     justify-content: center;
@@ -23,11 +35,22 @@
       border: none;
       background: none;
       padding: 0;
-      width: 40px;
-      height: 40px;
+      width: $item-size--default;
+      height: $item-size--default;
       display: flex;
       justify-content: center;
       align-items: center;
+
+      &--small {
+        width: $item-size--small;
+        height: $item-size--small;
+      }
+
+      // another override because we actually don't want to use the buttons' width+height as delimitation but padding+gap
+      &--fitted {
+        width: auto;
+        height: auto;
+      }
 
       &:focus-within {
         > .color-picker__color-option {
@@ -63,14 +86,21 @@
 }
 
 .color-picker__color-option {
-  width: 24px;
-  height: 24px;
+  width: $option-size--default;
+  height: $option-size--default;
   border-radius: $rounded--full;
   background-color: var(--accent-color--500);
   border: 3px solid $gray--300;
 
+  cursor: pointer;
+
   transition: 0.12s ease-out;
   transition-property: background-color, border, transform;
+
+  &--small {
+    width: $option-size--small;
+    height: $option-size--small;
+  }
 
   &--selected {
     background-color: var(--accent-color--500);
@@ -107,12 +137,14 @@
 
 @media #{$smartphone} {
   .color-picker {
-    flex-direction: row-reverse;
-    position: absolute;
-    right: 0;
-    margin: auto;
-    justify-self: center;
-    padding-right: $spacing--xxs;
+    &--allow-vertical {
+      flex-direction: row-reverse;
+      position: absolute;
+      right: 0;
+      margin: auto;
+      justify-self: center;
+      padding-right: $spacing--xxs;
+    }
   }
 
   .fix-focus-lock-placement {

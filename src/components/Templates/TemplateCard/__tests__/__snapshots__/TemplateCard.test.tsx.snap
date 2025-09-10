@@ -1,0 +1,143 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TemplateCard should render correctly (custom) 1`] = `
+<div>
+  <div
+    class="template-card"
+    data-cy="template-card--CUSTOM"
+  >
+    <button
+      class="template-card__favourite favourite-button accent-color__planning-pink"
+      id="favourite-icon-4"
+      tabindex="0"
+    >
+      <svg
+        class="favourite-icon"
+      >
+        star.svg
+      </svg>
+    </button>
+    <div
+      class="tooltip-container"
+    />
+    <div
+      class="template-card__head"
+    >
+      <input
+        class="template-card__title"
+        disabled=""
+        type="text"
+        value="sample name 1"
+      />
+    </div>
+    <svg
+      class="template-card__menu template-card__icon template-card__icon--menu"
+      data-cy="template-card__menu"
+    >
+      three-dots.svg
+    </svg>
+    <textarea
+      class="template-card__description"
+      disabled=""
+    >
+      sample description 1
+    </textarea>
+    <svg
+      class="template-card__icon template-card__icon--columns"
+    >
+      columns.svg
+    </svg>
+    <div
+      class="template-card__columns"
+    >
+      <div
+        class="template-card__columns-title"
+      >
+        2 Columns
+      </div>
+      <div
+        class="template-card__columns-subtitle"
+      >
+        sample templates col name 1, sample templates col name 2
+      </div>
+    </div>
+    <button
+      class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
+      data-cy="template-card__start-button"
+    >
+      Start
+      <svg>
+        next.svg
+      </svg>
+    </button>
+  </div>
+</div>
+`;
+
+exports[`TemplateCard should render correctly (recommended) 1`] = `
+<div>
+  <div
+    class="template-card"
+    data-cy="template-card--RECOMMENDED"
+  >
+    <button
+      class="template-card__favourite favourite-button accent-color__planning-pink"
+      id="favourite-icon-3"
+      tabindex="0"
+    >
+      <svg
+        class="favourite-icon"
+      >
+        star.svg
+      </svg>
+    </button>
+    <div
+      class="tooltip-container"
+    />
+    <div
+      class="template-card__head"
+    >
+      <input
+        class="template-card__title"
+        disabled=""
+        type="text"
+        value="sample name 1"
+      />
+    </div>
+    <textarea
+      class="template-card__description"
+      disabled=""
+    >
+      sample description 1
+    </textarea>
+    <svg
+      class="template-card__icon template-card__icon--columns"
+    >
+      columns.svg
+    </svg>
+    <div
+      class="template-card__columns"
+    >
+      <div
+        class="template-card__columns-title"
+      >
+        2 Columns
+      </div>
+      <div
+        class="template-card__columns-subtitle"
+      >
+        sample templates col name 1, sample templates col name 2
+      </div>
+    </div>
+    <button
+      class="template-card__start-button template-card__start-button--start button button--primary button--small button--with-icon accent-color__planning-pink"
+      data-cy="template-card__start-button"
+    >
+      Start
+      <svg>
+        next.svg
+      </svg>
+    </button>
+  </div>
+</div>
+`;

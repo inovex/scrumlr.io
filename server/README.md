@@ -2,58 +2,58 @@
 
 This is the server application of [scrumlr.io](https://scrumlr.io) targeted by the web client.
 
-The basic components of the server are visualized by the PlantUML `architecture.puml` or in this graphic:
-
-![Architecture](architecture.png)
-
 ## Local development
 
-First you need to either call `make run-docker-dev` or `docker-compose --profile dev up`,
-so that the database and the nats instance come up.
+To run the scrumlr backend locally for development, you first need to run the needed services (postgres database and nats).
+For that you can use the provided docker compose files.
+To start the docker containers either run
 
-Afterwards you can start the server by executing:
+```bash
+make run-docker-dev
+```
+
+or
+
+```bash
+docker compose --profile dev up
+```
+
+After the container started you can start the scrumlr backend with.
 
 ```bash
 cd src/
 go run . --database "postgres://admin:supersecret@localhost:5432/scrumlr?sslmode=disable" --disable-check-origin --insecure
 ```
 
-Or simply call `go run . -h` to see all available command line arguments. Many of those
-can also be set by environment variables so you don't have to worry about the run arguments
-each time.
+For more information read the [development documentation](./docs/development.md).
+Also please make sure to read the [guidlines](./docs/guidelines.md).
 
-## Configuration via TOML file
-You can also configure the server using a TOML file. To do this, pass the `--config` flag to the server executable, followed by the path to the TOML file.
+## Testing
 
-For example, to configure the server using a file named `config_example.toml`, you would run the following command:
+To run the tests locally run
 
 ```bash
-go run . --config config_example.toml
+make test
 ```
 
-To see all values that can be set and what purpose they serve, take a look at the provided `config_example.toml` file.
+For more information about the tests refer to the [testing documentation](./docs/testing.md).
 
 ## API
 
 The API is currently documented in the [Postman](https://www.postman.com/) collection `api.postman_collection.json`.
-Simply start Postman, import the collection, and you can immediately start to explore all
-resources and take a look at our documentation.
+Simply start Postman, import the collection, and you can immediately start to explore all resources and take a look
+at our documentation.
 
-Currently, you can also just open your browser on [http://localhost:8080](http://localhost:8080)
-to see our debug client. We'll disable it once everything got stable.
+## Architecture
 
+In the picture below is a high level overview of how scrumlr works
 
-## Testing and Mockery
+![Architecture](./docs/architecture.png)
 
-At a certain point, it is more convenient to use a framework to generate mocks for interfaces.
-This is where the use of Mockery comes into play (https://vektra.github.io/mockery/latest/installation/).
-Depending on the operating system (macOS via Homebrew),
-install Mockery and run it in the directory with .mockery.yaml (mockery). The mocks in the mocks directory will be automatically regenerated.
+For a detailed overview of the backend read the [architecture documentation](./docs/architecture.md).
 
-```bash
-# switch to src directory
-# and just run mockery to refresh the mocks
-mockery
-```
+## Refactoring
 
-Configuration of mockery is described in the .mockery.yaml file.
+Currently the backend is refactored.
+Not all parts of the backend are done.
+For a list of things that need refactorings see the [todos](./docs/todo.md)

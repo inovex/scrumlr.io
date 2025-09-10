@@ -1,6 +1,9 @@
 # Specify the port number for the server application to run on.
 port = 8080
 
+# Set the log level for the server
+log-level = "INFO"
+
 # Define the connection string for the NATS messaging system.
 nats = "nats://localhost:4222"
 
@@ -30,6 +33,12 @@ base-path = "/"
 
 # Enable/Disable the login of anonymous clients
 disable-anonymous-login = false
+
+# Enable/Disable the custom template creation for anonymous clients
+allow-anonymous-custom-templates = false
+
+# Enable/Disable the board creation for anonymous clients
+allow-anonymous-board-creation = true
 
 # enables/disables experimental file system store, in order to allow larger session cookie sizes
 auth-experimental-file-system-store = false
