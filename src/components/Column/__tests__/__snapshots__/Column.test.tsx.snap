@@ -657,9 +657,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     >
                       <div
                         class="note-reaction-chip__reaction"
-                      >
-                        👍
-                      </div>
+                      />
                       <div
                         class="note-reaction-chip__amount"
                       >
@@ -672,9 +670,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     >
                       <div
                         class="note-reaction-chip__reaction"
-                      >
-                        💖
-                      </div>
+                      />
                       <div
                         class="note-reaction-chip__amount"
                       >
@@ -1214,9 +1210,7 @@ exports[`Column should have correct style show column with correct style 1`] = `
                     >
                       <div
                         class="note-reaction-chip__reaction"
-                      >
-                        👍
-                      </div>
+                      />
                       <div
                         class="note-reaction-chip__amount"
                       >
@@ -1893,9 +1887,7 @@ exports[`Column should render correctly column has correct accent-color 1`] = `
                       >
                         <div
                           class="note-reaction-chip__reaction"
-                        >
-                          👍
-                        </div>
+                        />
                         <div
                           class="note-reaction-chip__amount"
                         >
@@ -1908,9 +1900,7 @@ exports[`Column should render correctly column has correct accent-color 1`] = `
                       >
                         <div
                           class="note-reaction-chip__reaction"
-                        >
-                          💖
-                        </div>
+                        />
                         <div
                           class="note-reaction-chip__amount"
                         >
@@ -2450,9 +2440,7 @@ exports[`Column should render correctly column has correct accent-color 1`] = `
                       >
                         <div
                           class="note-reaction-chip__reaction"
-                        >
-                          👍
-                        </div>
+                        />
                         <div
                           class="note-reaction-chip__amount"
                         >
