@@ -11,5 +11,5 @@ type ColumnTemplateService interface {
 	Get(ctx context.Context, boardID, columnID uuid.UUID) (*ColumnTemplate, error)
 	GetAll(ctx context.Context, board uuid.UUID) ([]*ColumnTemplate, error)
 	Update(ctx context.Context, body ColumnTemplateUpdateRequest) (*ColumnTemplate, error)
-	Delete(ctx context.Context, board, column, user uuid.UUID) error
+	Delete(ctx context.Context, board, column uuid.UUID) error
 }
