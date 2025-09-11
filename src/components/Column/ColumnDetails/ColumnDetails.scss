@@ -9,6 +9,10 @@ $icon-size: $icon--large;
   display: flex;
   flex-direction: column;
   gap: $spacing--sm;
+
+  &--moderator-view:hover .column-details__edit-icon {
+    opacity: 1;
+  }
 }
 
 .column-details__name-and-settings-wrapper {
@@ -48,12 +52,30 @@ $icon-size: $icon--large;
     flex-grow: 1; // in edit mode, actually do take full space
     border-bottom-style: dashed;
   }
+
+  &--moderator {
+    &:hover {
+      color: $navy--300;
+      cursor: pointer;
+    }
+  }
 }
 
 .column-details__notes-count {
   color: $gray--800;
   font-size: $text--base;
   font-weight: 600;
+}
+
+.column-details__edit-icon {
+  width: 18px;
+  height: 18px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+  align-self: center;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 .column-details__settings-icon-container {
@@ -88,6 +110,11 @@ $icon-size: $icon--large;
   }
 }
 
+.column-details__description-content {
+  position: relative;
+  flex-grow: 1;
+}
+
 .column-details__description {
   flex-grow: 1;
   color: $navy--900;
@@ -103,6 +130,20 @@ $icon-size: $icon--large;
 
   &--placeholder {
     color: $gray--800;
+
+    &-moderator {
+      &:hover {
+        cursor: pointer;
+        color: $navy--200;
+      }
+    }
+  }
+
+  &--moderator {
+    &:hover {
+      cursor: pointer;
+      color: $navy--200 !important;
+    }
   }
 }
 
@@ -129,15 +170,42 @@ $icon-size: $icon--large;
   align-self: flex-end;
 }
 
+.text-area.column-details__description--moderator {
+  &:hover {
+    cursor: pointer !important;
+    color: $navy--200 !important;
+  }
+}
+
 [theme="dark"] {
   .column-details__name {
     color: $gray--000;
     border-bottom-color: var(--accent-color--dark);
+
+    &--moderator {
+      &:hover {
+        color: $gray--800;
+        cursor: pointer;
+      }
+    }
   }
 
   .column-details__description {
     &--placeholder {
       color: $gray--700;
+      &-moderator {
+        &:hover {
+          cursor: pointer;
+          color: $navy--200;
+        }
+      }
+    }
+
+    &--moderator {
+      &:hover {
+        cursor: pointer;
+        color: $navy--200 !important;
+      }
     }
   }
 
