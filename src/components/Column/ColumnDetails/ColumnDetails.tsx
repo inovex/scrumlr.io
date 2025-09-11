@@ -158,6 +158,15 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
             setFocusTarget("name");
             changeMode("edit");
           }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setFocusTarget("name");
+              changeMode("edit");
+            }
+          }}
         >
           {props.column.name}
         </div>
@@ -214,6 +223,15 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           onClick={() => {
             setFocusTarget("description");
             changeMode("edit");
+          }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setFocusTarget("description");
+              changeMode("edit");
+            }
           }}
         >
           {t("Column.Header.descriptionPlaceholder")}
