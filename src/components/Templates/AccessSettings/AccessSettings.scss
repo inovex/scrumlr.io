@@ -6,12 +6,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: auto;
 }
 
 .access-settings {
   display: flex;
   flex-direction: column;
   gap: $spacing--xl;
+  overflow-y: auto;
 
   width: 37%;
 
@@ -45,9 +47,13 @@
 }
 
 @media screen and (max-width: $breakpoint--smartphone) {
-  .access-settings {
-    width: 75%;
+  .access-settings__wrapper {
+    align-items: flex-start;
+    padding: $spacing--xs;
+  }
 
+  .access-settings {
+    width: 85%;
     gap: $spacing--md;
 
     padding: $spacing--xl $spacing--base $spacing--base $spacing--base;
