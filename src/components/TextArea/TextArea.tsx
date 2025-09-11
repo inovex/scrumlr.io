@@ -80,6 +80,17 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, f
         onBlur={props.onBlur}
         onClick={props.onClick}
         onDoubleClick={props.onDoubleClick}
+        onKeyDown={(e) => {
+          // handle emoji input first
+          emoji.inputBindings.onKeyDown?.(e);
+          if (e.defaultPrevented) return;
+
+          // handle Enter key submission
+          if (e.key === "Enter" && !e.shiftKey && props.onSubmit) {
+            e.preventDefault();
+            props.onSubmit();
+          }
+        }}
         disabled={props.disabled}
         readOnly={props.readOnly}
       />
