@@ -210,25 +210,6 @@ jobs:
         with:
           POSTMAN_URL: ${{ env.BASE_URL }}/api
 
-  octomind_end_to_end_test:
-    name: Octomind End to End Test
-    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
-    needs: deployment_health_check
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Reachability check
-        uses: ./.github/actions/deployment_health_check
-        with:
-          HEALTH_URL: ${{ env.BASE_URL }}/api/health
-      - name: Run tests
-        uses: OctoMind-dev/automagically-action-execute@v2
-        with:
-          url: https://${{ github.event.pull_request.number }}.development.scrumlr.fra.ics.inovex.io
-          token: ${{ secrets.AUTOMAGICALLY_TOKEN }}
-          testTargetId: ${{ secrets.AUTOMAGICALLY_TEST_TARGET_ID }}
-
   cypress_end_to_end_test:
     name: Cypress End to End Test
     if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login != 'dependabot[bot]' }}
