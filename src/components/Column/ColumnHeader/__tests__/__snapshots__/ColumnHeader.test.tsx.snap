@@ -6,7 +6,7 @@ exports[`ColumnHeader should render correctly 1`] = `
     class="column-header"
   >
     <div
-      class="column-details"
+      class="column-details column-details--moderator-view"
     >
       <div
         class="column-details__name-and-settings-wrapper"
@@ -15,8 +15,10 @@ exports[`ColumnHeader should render correctly 1`] = `
           class="column-details__name-wrapper"
         >
           <div
-            class="column-details__name"
+            class="column-details__name column-details__name--moderator"
             id="col-test-columns-id-1-name"
+            role="button"
+            tabindex="0"
           >
             test-columns-name-1
           </div>
@@ -25,6 +27,11 @@ exports[`ColumnHeader should render correctly 1`] = `
           >
             1
           </div>
+          <svg
+            class="column-details__edit-icon"
+          >
+            edit.svg
+          </svg>
         </div>
         <button
           class="column-details__settings column-details__settings--closed column-details__settings-icon-container"
@@ -37,10 +44,12 @@ exports[`ColumnHeader should render correctly 1`] = `
         </button>
       </div>
       <div
-        class="column-details__description-wrapper column-details__description-wrapper--view column-details__description-wrapper--empty"
+        class="column-details__description-wrapper column-details__description-wrapper--moderator-view"
       >
         <div
-          class="column-details__description--placeholder"
+          class="column-details__description--placeholder column-details__description--placeholder-moderator"
+          role="button"
+          tabindex="0"
         >
           Add description (optional)
         </div>

@@ -102,6 +102,8 @@ exports[`ColumnDetails should render correctly (view) 1`] = `
         <div
           class="column-details__name"
           id="col-test-columns-id-1-name"
+          role="button"
+          tabindex="0"
         >
           test-columns-name-1
         </div>
@@ -126,6 +128,8 @@ exports[`ColumnDetails should render correctly (view) 1`] = `
     >
       <div
         class="column-details__description--placeholder"
+        role="button"
+        tabindex="0"
       >
         Add description (optional)
       </div>
