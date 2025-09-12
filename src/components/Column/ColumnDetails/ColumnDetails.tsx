@@ -6,6 +6,7 @@ import {ReactComponent as ArrowIcon} from "assets/icons/arrow-down.svg";
 import {ReactComponent as SettingsIcon} from "assets/icons/three-dots.svg";
 import {ReactComponent as CheckDoneIcon} from "assets/icons/check-done.svg";
 import {ReactComponent as CloseIcon} from "assets/icons/close.svg";
+import {ReactComponent as EditIcon} from "assets/icons/edit.svg";
 import {useTextOverflow} from "utils/hooks/useTextOverflow";
 import {ColumnSettings} from "components/Column/ColumnSettings";
 import {TextArea} from "components/TextArea/TextArea";
@@ -19,7 +20,7 @@ import {EmojiSuggestions} from "components/EmojiSuggestions";
 import {useSubmitOnShortcut} from "utils/hooks/useSubmitOnShortcut";
 import "components/Column/ColumnDetails/ColumnDetails.scss";
 
-export type ColumnDetailsMode = "view" | "edit";
+export type ColumnDetailsMode = "view" | "edit" | "moderator-view";
 
 export type ColumnDetailsProps = {
   column: Column;
@@ -34,14 +35,17 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const dispatch = useAppDispatch();
 
   const isModerator = useAppSelector((state) => state.participants?.self?.role === "OWNER" || state.participants?.self?.role === "MODERATOR");
+  const anyColumnHasDescription = useAppSelector((state) => state.columns.some((column) => column.description && column.description.trim().length > 0));
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
 
   const {isTextTruncated: isDescriptionTextTruncated, textRef: viewDescriptionRef} = useTextOverflow<HTMLTextAreaElement>(props.column.description);
   const {isTextTruncated: isNameTextTruncated, textRef: viewNameRef} = useTextOverflow<HTMLDivElement>(props.column.name);
 
   const [openSettings, setOpenSettings] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [focusTarget, setFocusTarget] = useState<"name" | "description">("name");
 
   const [localName, setLocalName] = useState(props.column.name);
   const [localDescription, setLocalDescription] = useState(props.column.description);
@@ -60,10 +64,14 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
 
   // focus input upon entering edit mode
   useEffect(() => {
-    if (inputRef && inputRef.current) {
-      inputRef.current.focus();
+    if (props.mode === "edit") {
+      if (focusTarget === "name" && inputRef.current) {
+        inputRef.current.focus();
+      } else if (focusTarget === "description" && descriptionRef.current) {
+        descriptionRef.current.focus();
+      }
     }
-  }, [inputRef, props.mode]);
+  }, [props.mode, focusTarget]);
 
   const changeMode = (mode: ColumnDetailsMode) => {
     if (!isModerator) return;
@@ -136,16 +144,44 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   ];
 
   const renderName = () =>
-    props.mode === "view" ? (
+    props.mode === "edit" ? (
+      <input {...emoji.inputBindings} ref={inputRef} className={classNames("column-details__name", "column-details__name--editing")} maxLength={MAX_BOARD_NAME_LENGTH} />
+    ) : (
       <>
-        <div ref={viewNameRef} id={`col-${props.column.id}-name`} className="column-details__name" onDoubleClick={() => changeMode("edit")}>
+        <div
+          ref={viewNameRef}
+          id={`col-${props.column.id}-name`}
+          className={classNames("column-details__name", {
+            "column-details__name--moderator": props.mode === "moderator-view",
+          })}
+          onClick={() => {
+            setFocusTarget("name");
+            changeMode("edit");
+          }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setFocusTarget("name");
+              changeMode("edit");
+            }
+          }}
+        >
           {props.column.name}
         </div>
         <div className="column-details__notes-count">{props.notesCount}</div>
+        {props.mode === "moderator-view" && (
+          <EditIcon
+            className="column-details__edit-icon"
+            onClick={() => {
+              setFocusTarget("name");
+              changeMode("edit");
+            }}
+          />
+        )}
         {isNameTextTruncated.horizontal && <Tooltip anchorSelect={`#col-${props.column.id}-name`} content={props.column.name} color={props.column.color} />}
       </>
-    ) : (
-      <input {...emoji.inputBindings} ref={inputRef} className={classNames("column-details__name", "column-details__name--editing")} maxLength={MAX_BOARD_NAME_LENGTH} />
     );
 
   const viewableDescription = () => {
@@ -153,7 +189,23 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     if (props.column.description)
       return (
         <>
-          <TextArea ref={viewDescriptionRef} input={props.column.description} setInput={() => {}} embedded extendable={isDescriptionExpanded} disabled border="none" rows={2} />
+          <TextArea
+            ref={viewDescriptionRef}
+            className={classNames({
+              "column-details__description--moderator": props.mode === "moderator-view",
+            })}
+            input={props.column.description}
+            setInput={() => {}}
+            embedded
+            extendable={isDescriptionExpanded}
+            readOnly
+            border="none"
+            rows={2}
+            onClick={() => {
+              setFocusTarget("description");
+              changeMode("edit");
+            }}
+          />
           {(isDescriptionTextTruncated.vertical || isDescriptionExpanded) && (
             <button className={classNames("column-details__description-expand-icon-container")} onClick={() => setIsDescriptionExpanded((expanded) => !expanded)}>
               <ArrowIcon className={classNames("column-details__description-expand-icon", {"column-details__description-expand-icon--expanded": isDescriptionExpanded})} />
@@ -163,7 +215,28 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
       );
     if (isModerator) {
       // placeholder
-      return <div className="column-details__description--placeholder">{t("Column.Header.descriptionPlaceholder")}</div>;
+      return (
+        <div
+          className={classNames("column-details__description--placeholder", {
+            "column-details__description--placeholder-moderator": props.mode === "moderator-view",
+          })}
+          onClick={() => {
+            setFocusTarget("description");
+            changeMode("edit");
+          }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              setFocusTarget("description");
+              changeMode("edit");
+            }
+          }}
+        >
+          {t("Column.Header.descriptionPlaceholder")}
+        </div>
+      );
     }
     // empty placeholder space
     return <div className="column-details__description--placeholder" />;
@@ -172,6 +245,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   const editableDescription = () => (
     <>
       <TextArea
+        ref={descriptionRef}
         className="column-details__description-text-area"
         input={localDescription}
         setInput={setLocalDescription}
@@ -188,7 +262,7 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
     </>
   );
 
-  const renderDescription = () => (props.mode === "view" ? viewableDescription() : editableDescription());
+  const renderDescription = () => (props.mode === "edit" ? editableDescription() : viewableDescription());
 
   const renderSettings = () => {
     if (!isModerator) return null;
@@ -199,7 +273,10 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
           className={classNames("column-details__settings", "column-details__settings--open")}
           column={props.column}
           onClose={() => setOpenSettings(false)}
-          onNameEdit={() => changeMode("edit")}
+          onNameEdit={() => {
+            setFocusTarget("name");
+            changeMode("edit");
+          }}
         />
       );
     }
@@ -214,12 +291,26 @@ export const ColumnDetails = (props: ColumnDetailsProps) => {
   };
 
   return (
-    <div className="column-details" ref={containerRef}>
+    <div
+      className={classNames("column-details", {
+        "column-details--moderator-view": props.mode === "moderator-view",
+      })}
+      ref={containerRef}
+    >
       <div className="column-details__name-and-settings-wrapper">
         <div className="column-details__name-wrapper">{renderName()}</div>
         {renderSettings()}
       </div>
-      <div className={classNames("column-details__description-wrapper", `column-details__description-wrapper--${props.mode}`)}>{renderDescription()}</div>
+      <div
+        className={classNames("column-details__description-wrapper", `column-details__description-wrapper--${props.mode}`, {
+          // Apply --empty class (min-height: 0) only when
+          // Component is in view mode (not edit) AND No other column on the board has a description
+          // This ensures visual consistency - if any column has content, all columns maintain the same height
+          "column-details__description-wrapper--empty": props.mode === "view" && !anyColumnHasDescription,
+        })}
+      >
+        {renderDescription()}
+      </div>
       <EmojiSuggestions positionRelative {...emoji.suggestionsProps} /> {/* suggestions for name input, as textarea has its own */}
     </div>
   );

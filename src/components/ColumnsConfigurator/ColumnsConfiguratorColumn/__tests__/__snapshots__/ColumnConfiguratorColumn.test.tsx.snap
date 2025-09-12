@@ -21,7 +21,7 @@ exports[`ColumnConfiguratorColumn render should render correctly 1`] = `
         value="sample templates col name 1"
       />
       <div
-        class="column-configurator-column-name-details__inline-description"
+        class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
         role="button"
         tabindex="0"
       >
