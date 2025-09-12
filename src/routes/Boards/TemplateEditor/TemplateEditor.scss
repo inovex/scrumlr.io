@@ -38,6 +38,16 @@ $stable-content-width: 80%;
 .template-editor__name {
   grid-area: name;
 }
+
+.template-editor__name-input {
+  .input__input {
+    color: $navy--600;
+
+    &:focus {
+      color: $navy--600;
+    }
+  }
+}
 .template-editor__description {
   grid-area: description;
 }
@@ -146,5 +156,15 @@ $stable-content-width: 80%;
   .template-editor__info,
   .template-editor__info-text {
     color: $gray--000;
+  }
+
+  .template-editor__name-input {
+    .input__input {
+      color: $gray--000;
+
+      &:focus {
+        color: $gray--000;
+      }
+    }
   }
 }

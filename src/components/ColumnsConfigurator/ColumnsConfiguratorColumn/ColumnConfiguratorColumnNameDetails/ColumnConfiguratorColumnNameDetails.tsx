@@ -97,7 +97,6 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
             placeholder={t("Templates.ColumnsConfiguratorColumn.descriptionPlaceholder")}
             embedded
             fitted
-            textDim
             autoFocus={props.openState === "descriptionFirst"}
             onBlur={handleBlurNameWrapperContents}
             maxLength={MAX_COLUMN_DESCRIPTION_LENGTH}
@@ -108,6 +107,7 @@ export const ColumnConfiguratorColumnNameDetails = (props: ColumnConfiguratorCol
         <div
           className={classNames("column-configurator-column-name-details__inline-description", {
             "column-configurator-column-name-details__inline-description--visual-feedback": props.openState === "visualFeedback",
+            "column-configurator-column-name-details__inline-description--has-content": props.description && props.description.trim().length > 0,
           })}
           role="button"
           tabIndex={0}

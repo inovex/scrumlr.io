@@ -36,7 +36,7 @@ exports[`TemplateEditor create should render correctly (create) 1`] = `
           .text-area { --text-area-rows: 7 }
         </style>
         <textarea
-          class="template-editor__description-text-area text-area text-area--text-dim text-area--border-transparent text-area--text-align-left"
+          class="template-editor__description-text-area text-area text-area--border-transparent text-area--text-align-left"
           placeholder="Description (optional)"
         />
       </div>
@@ -342,7 +342,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
           .text-area { --text-area-rows: 7 }
         </style>
         <textarea
-          class="template-editor__description-text-area text-area text-area--text-dim text-area--border-transparent text-area--text-align-left"
+          class="template-editor__description-text-area text-area text-area--border-transparent text-area--text-align-left"
           placeholder="Description (optional)"
         >
           sample description 1
@@ -393,7 +393,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
                   value="sample templates col name 1"
                 />
                 <div
-                  class="column-configurator-column-name-details__inline-description"
+                  class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
                   role="button"
                   tabindex="0"
                 >
@@ -456,7 +456,7 @@ exports[`TemplateEditor edit should render correctly (edit) 1`] = `
                   value="sample templates col name 2"
                 />
                 <div
-                  class="column-configurator-column-name-details__inline-description"
+                  class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
                   role="button"
                   tabindex="0"
                 >

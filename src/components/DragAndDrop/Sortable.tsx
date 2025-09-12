@@ -102,7 +102,7 @@ export const Sortable = ({id, children, disabled, className, columnId, setItems}
           const position = {
             column: event.collisions?.find(isColumn)?.id.toString() ?? columnId,
             stack: null,
-            rank: items.reverse().indexOf(id.toString()),
+            rank: [...items].reverse().indexOf(id.toString()),
           };
 
           dispatch(

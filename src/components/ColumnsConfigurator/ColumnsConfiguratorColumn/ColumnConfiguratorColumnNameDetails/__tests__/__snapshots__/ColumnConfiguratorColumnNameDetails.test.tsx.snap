@@ -12,7 +12,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (clo
       value="Default Name"
     />
     <div
-      class="column-configurator-column-name-details__inline-description"
+      class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--has-content"
       role="button"
       tabindex="0"
     >
@@ -40,7 +40,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (des
         .text-area { --text-area-rows: 7 }
       </style>
       <textarea
-        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--text-dim text-area--border-normal text-area--text-align-left"
+        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--border-normal text-area--text-align-left"
         maxlength="1024"
         placeholder="Description (optional)"
       >
@@ -97,7 +97,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (nam
         .text-area { --text-area-rows: 7 }
       </style>
       <textarea
-        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--text-dim text-area--border-normal text-area--text-align-left"
+        class="column-configurator-column-name-details__description-text-area text-area text-area--embedded text-area--fitted text-area--border-normal text-area--text-align-left"
         maxlength="1024"
         placeholder="Description (optional)"
       >
@@ -148,7 +148,7 @@ exports[`ColumnConfiguratorColumnNameDetails render should render correctly (vis
       value="Default Name"
     />
     <div
-      class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--visual-feedback"
+      class="column-configurator-column-name-details__inline-description column-configurator-column-name-details__inline-description--visual-feedback column-configurator-column-name-details__inline-description--has-content"
       role="button"
       tabindex="0"
     >
