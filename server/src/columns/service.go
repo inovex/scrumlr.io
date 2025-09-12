@@ -62,7 +62,7 @@ func (service *Service) Delete(ctx context.Context, board, column, user uuid.UUI
 	}
 
 	for _, note := range toBeDeletedNotes {
-		err := service.noteService.Delete(ctx, notes.NoteDeleteRequest{DeleteStack: true}, note.ID)
+		err := service.noteService.Delete(ctx, user, notes.NoteDeleteRequest{ID: note.ID, Board: board, DeleteStack: true})
 		if err != nil {
 			log.Errorw("unable to delete note", "err", err)
 			return err
